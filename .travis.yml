@@ -1,0 +1,44 @@
+language: node_js
+node_js:
+  - '9'
+  - '8'
+  - '6'
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+
+notifications:
+  irc:
+    channels:
+      - "irc.freenode.org#periodicjs"
+    template:
+      - "Build by %{author} :"
+      - "Git Info: %{branch} - %{commit} with the message %{commit_message}"
+      - "Travis states: %{message}"
+      - "Build Details: %{build_url}"
+      - "Change View: %{compare_url}"
+      - "result = %{result}"
+      - "elapsed time... %{duration}"
+    use_notice: true
+    skip_join: false
+
+before_script:
+  - npm install 
+
+install: 
+ - npm install  grunt-cli istanbul -g
+
+branches:
+  only:
+    - master
+    - devel
+git:
+  submodules: false  
+
+script: 
+  - npm set progress=false && grunt test

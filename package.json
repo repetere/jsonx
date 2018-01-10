@@ -1,0 +1,48 @@
+{
+  "name": "rjx",
+  "version": "0.0.1",
+  "description": "Reactive JSON - Zero-Configuration React components with JSON",
+  "main": "dist/rjx.cjs.js",
+  "module": "dist/rjx.esm.js",
+  "browser": "dist/rjx.umd.js",
+  "modules.root": "lib",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test_simple": "node test/test.js",
+    "test": "mocha -R spec --recursive",
+    "pretest": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/repetere/rjx.git"
+  },
+  "author": "Yaw Joseph Etse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/repetere/rjx/issues"
+  },
+  "homepage": "https://github.com/repetere/rjx#readme",
+  "devDependencies": {
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
+    "grunt": "^1.0.1",
+    "grunt-coveralls": "^1.0.1",
+    "grunt-jsdoc": "^2.2.0",
+    "grunt-mocha-cov": "^0.4.0",
+    "grunt-mocha-istanbul": "^5.0.2",
+    "grunt-simple-mocha": "^0.4.1",
+    "istanbul": "^0.4.5",
+    "jsdoc": "^3.5.5",
+    "jsdoc-to-markdown": "^3.0.4",
+    "mocha": "^4.1.0",
+    "rollup": "^0.53.4",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "sinon": "^4.1.4",
+    "sinon-chai": "^2.14.0"
+  }
+}
