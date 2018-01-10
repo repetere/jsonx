@@ -9,13 +9,13 @@ export default [
     input: 'src/main.js',
     output: {
       file: pkg.browser,
-      format: 'umd'
+      format: 'umd',
     },
     name: 'jskit-learn',
     plugins: [
       resolve(), // so Rollup can find `ms`
       babel({
-        exclude: 'node_modules/**' // only transpile our source code
+        exclude: 'node_modules/**', // only transpile our source code
       }),
       commonjs({
         namedExports: {
@@ -23,9 +23,9 @@ export default [
           // relative to the current directory, or the name
           // of a module in node_modules
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
-        }
-      }) // so Rollup can convert `ms` to an ES module
-    ]
+        },
+      }), // so Rollup can convert `ms` to an ES module
+    ],
   },
 
   // CommonJS (for Node) and ES module (for bundlers) build.
@@ -38,13 +38,16 @@ export default [
     input: 'src/main.js',
     // external: ['ms'],
     output: [
-      { file: pkg.main, format: 'cjs' },
-      { file: pkg.module, format: 'es' }
+      { file: pkg.main, format: 'cjs', },
+      { file: pkg.module, format: 'es', },
     ],
     plugins: [
       babel({
-        exclude: 'node_modules/**' // only transpile our source code
+        exclude: 'node_modules/**', // only transpile our source code
       }),
-    ]
-  }
+    ],
+    watch: {
+      include: 'src/**',
+    },
+  },
 ];
