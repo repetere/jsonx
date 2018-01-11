@@ -2,6 +2,20 @@ import React from 'react';
 
 var componentMap = Object.assign({}, React.DOM, window.__rjx_custom_elements);
 
+
+
+/**
+ * if (recharts[componentObject.component.replace('recharts.', '')]) {
+      return recharts[componentObject.component.replace('recharts.', '')];
+    }
+ */
+
+//pass querySelector and RJX render with react
+function renderRJX() {}
+
+//return rendered HTML string
+function rjxHTMLString() {}
+
 function getRenderedJSON(componentObject, resources) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -18,5 +32,5 @@ function getRenderedJSON(componentObject, resources) {
   }
 }
 
-export { getRenderedJSON };
+export { renderRJX, rjxHTMLString, getRenderedJSON };
 export default getRenderedJSON;

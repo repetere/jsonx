@@ -9,6 +9,20 @@ var React__default = _interopDefault(React);
 
 var componentMap = Object.assign({}, React__default.DOM, window.__rjx_custom_elements);
 
+
+
+/**
+ * if (recharts[componentObject.component.replace('recharts.', '')]) {
+      return recharts[componentObject.component.replace('recharts.', '')];
+    }
+ */
+
+//pass querySelector and RJX render with react
+function renderRJX() {}
+
+//return rendered HTML string
+function rjxHTMLString() {}
+
 function getRenderedJSON(componentObject, resources) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -25,5 +39,7 @@ function getRenderedJSON(componentObject, resources) {
   }
 }
 
+exports.renderRJX = renderRJX;
+exports.rjxHTMLString = rjxHTMLString;
 exports.getRenderedJSON = getRenderedJSON;
 exports['default'] = getRenderedJSON;

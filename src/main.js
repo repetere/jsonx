@@ -1,6 +1,15 @@
 import React, { createElement, } from 'react';
 import { componentMap, getComponentFromMap, } from './components';
 
+//pass querySelector and RJX render with react
+export function renderRJX() {
+
+}
+
+//return rendered HTML string
+export function rjxHTMLString() {
+
+}
 
 export function getRenderedJSON(componentObject, resources, options = {}) {
   const debug = options.debug;

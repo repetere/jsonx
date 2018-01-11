@@ -3,7 +3,7 @@ import React from 'react';
 export let componentMap = Object.assign({}, React.DOM, window.__rjx_custom_elements);
 
 export function getComponentFromMap(options = {}) {
-  const { componentObject, AppLayoutMap, } = options;
+  const { componentObject, AppLayoutMap, componentLibraries, } = options;
   const logError = options.logError || console.error;
   try {
     if (typeof componentObject.component !== 'string') {
@@ -22,3 +22,9 @@ export function getComponentFromMap(options = {}) {
     return null;
   }
 }
+
+/**
+ * if (recharts[componentObject.component.replace('recharts.', '')]) {
+      return recharts[componentObject.component.replace('recharts.', '')];
+    }
+ */
