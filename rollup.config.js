@@ -7,11 +7,13 @@ export default [
   // browser-friendly UMD build
   {
     input: 'src/main.js',
+    // external: [ 'react' ], // <-- suppresses the warning
     output: {
+      exports: 'named',
       file: pkg.browser,
       format: 'umd',
+      name: 'rjx',
     },
-    name: 'jskit-learn',
     plugins: [
       resolve(), // so Rollup can find `ms`
       babel({
@@ -37,9 +39,18 @@ export default [
   {
     input: 'src/main.js',
     // external: ['ms'],
+    external: ['react',], // <-- suppresses the warning
     output: [
-      { file: pkg.main, format: 'cjs', },
-      { file: pkg.module, format: 'es', },
+      {
+        name: 'rjx',
+        exports: 'named',
+        file: pkg.main, format: 'cjs',
+      },
+      {
+        name: 'rjx',
+        exports: 'named',
+        file: pkg.module, format: 'es',
+      },
     ],
     plugins: [
       babel({

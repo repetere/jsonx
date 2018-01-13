@@ -1,7 +1,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global['jskit-learn'] = {})));
+	(factory((global.rjx = {})));
 }(this, (function (exports) { 'use strict';
 
 function createCommonjsModule(fn, module) {
@@ -14,6 +14,7 @@ object-assign
 @license MIT
 */
 
+/* eslint-disable no-unused-vars */
 var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
@@ -113,6 +114,15 @@ if (process.env.NODE_ENV !== 'production') {
 
 var emptyObject_1 = emptyObject;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+
 function makeEmptyFunction(arg) {
   return function () {
     return arg;
@@ -162,6 +172,17 @@ var W=V&&U||V;var react_production_min=W["default"]?W["default"]:W;
  *
  */
 
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
 var validateFormat = function validateFormat(format) {};
 
 if (process.env.NODE_ENV !== 'production') {
@@ -194,6 +215,13 @@ function invariant(condition, format, a, b, c, d, e, f) {
 }
 
 var invariant_1 = invariant;
+
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
 
 var warning = emptyFunction_1;
 
@@ -1665,13 +1693,92 @@ if (process.env.NODE_ENV === 'production') {
 
 var componentMap = Object.assign({}, react.DOM, window.__rjx_custom_elements);
 
+function getComponentFromMap() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
+  // eslint-disable-next-line
+  var componentObject = options.componentObject,
+      AppLayoutMap = options.AppLayoutMap,
+      _options$componentLib = options.componentLibraries,
+      componentLibraries = _options$componentLib === undefined ? {} : _options$componentLib,
+      _options$logError = options.logError,
+      logError = _options$logError === undefined ? console.error : _options$logError;
+
+  try {
+    if (typeof componentObject.component !== 'string') {
+      return componentObject.component;
+    } else if (react.DOM[componentObject.component]) {
+      return componentObject.component;
+    } else {
+      Object.keys(componentLibraries).forEach(function (libraryName) {
+        if (componentLibraries[libraryName][componentObject.component.replace(libraryName + '.', '')]) {
+          return componentLibraries[libraryName][componentObject.component.replace(libraryName + '.', '')];
+        }
+      });
+      return AppLayoutMap[componentObject.component];
+    }
+  } catch (e) {
+    logError(e, e.stack ? e.stack : 'no stack');
+    return null;
+  }
+}
 
 /**
  * if (recharts[componentObject.component.replace('recharts.', '')]) {
       return recharts[componentObject.component.replace('recharts.', '')];
     }
  */
+
+if (typeof window$1 === 'undefined') {
+  var window$1 = {};
+}
+var componentMap$1 = Object.assign({}, React.DOM, window$1.__rjx_custom_elements);
+
+function getRenderedCompProps() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  // eslint-disable-next-line
+  var componentObject = options.componentObject,
+      resources = options.resources,
+      renderIndex = options.renderIndex,
+      _options$logError = options.logError,
+      logError = _options$logError === undefined ? console.error : _options$logError;
+
+  try {
+    return {};
+  } catch (e) {
+    logError(e, e.stack ? e.stack : 'no stack');
+    return null;
+  }
+}
+
+if (typeof window$2 === 'undefined') {
+  var window$2 = {};
+}
+var componentMap$2 = Object.assign({}, React.DOM, window$2.__rjx_custom_elements);
+
+function getComponentObjectChildren() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  // eslint-disable-next-line
+  var componentObject = options.componentObject,
+      resources = options.resources,
+      renderIndex = options.renderIndex,
+      _options$logError = options.logError,
+      logError = _options$logError === undefined ? console.error : _options$logError;
+
+  try {
+    return {};
+  } catch (e) {
+    logError(e, e.stack ? e.stack : 'no stack');
+    return null;
+  }
+}
+
+// import React, { createElement, } from 'react';
+// import { traverse, sortObject, } from './utils';
+var createElement = react.createElement;
+exports.renderIndex = 0;
 
 //pass querySelector and RJX render with react
 function renderRJX() {}
@@ -1682,10 +1789,20 @@ function rjxHTMLString() {}
 function getRenderedJSON(componentObject, resources) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-  var debug = options.debug;
-  var logError = options.logError || console.error;
+  // eslint-disable-next-line
+  var componentLibraries = options.componentLibraries,
+      debug = options.debug,
+      _options$logError = options.logError,
+      logError = _options$logError === undefined ? console.error : _options$logError;
+
+  if (!componentObject) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
   try {
     var AppLayoutMap = Object.assign({}, componentMap, options.AppLayoutMap);
+    exports.renderIndex++;
+    var element = getComponentFromMap({ componentObject: componentObject, AppLayoutMap: AppLayoutMap, componentLibraries: componentLibraries });
+    var props = getRenderedCompProps.call(this, { componentObject: componentObject, resources: resources, renderIndex: exports.renderIndex });
+    var children = getComponentObjectChildren.call(this, { componentObject: componentObject, resources: resources, renderIndex: exports.renderIndex });
+    return createElement(element, props, children);
   } catch (e) {
     if (debug) {
       logError({ componentObject: componentObject, resources: resources }, 'this', this);
