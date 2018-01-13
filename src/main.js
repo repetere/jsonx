@@ -1,9 +1,9 @@
 // import React, { createElement, } from 'react';
 import React from 'react';
-import { componentMap, getComponentFromMap, } from './components';
-import { getRenderedCompProps, } from './props';
+import { componentMap, getComponentFromMap, getBoundedComponents, } from './components';
+import { getComputedProps, } from './props';
 import { getComponentObjectChildren, } from './children';
-// import { traverse, sortObject, } from './utils';
+import { displayComponent, } from './utils';
 const createElement = React.createElement;
 export let renderIndex = 0;
 
@@ -19,15 +19,26 @@ export function rjxHTMLString() {
 
 export function getRenderedJSON(componentObject, resources, options = {}) {
   // eslint-disable-next-line
-  const { componentLibraries, debug, logError = console.error, } = options;
+  const { componentLibraries, debug, logError = console.error, boundedComponents=[], } = options;
   if (!componentObject) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
   try {
-    const AppLayoutMap = Object.assign({}, componentMap, options.AppLayoutMap);
+    const components = Object.assign({}, componentMap, options.reactComponents);
+    const reactComponents = (boundedComponents.length)
+      ? getBoundedComponents.call(this, { boundedComponents, reactComponents: components, })
+      : components;
     renderIndex++;
-    const element = getComponentFromMap({ componentObject, AppLayoutMap, componentLibraries, });
-    const props = getRenderedCompProps.call(this, { componentObject, resources, renderIndex, });
-    const children = getComponentObjectChildren.call(this, { componentObject, resources, renderIndex, });
-    return createElement(element, props, children);
+    const element = getComponentFromMap({ componentObject, reactComponents, componentLibraries, });
+    const props = getComputedProps.call(this, { componentObject, resources, renderIndex, componentLibraries, debug, });
+    const displayElement = (componentObject.comparisonprops)
+      ? displayComponent.call(this, { componentObject, props, renderIndex, componentLibraries, debug, })
+      : true;
+    
+    if (displayElement) {
+      const children = getComponentObjectChildren.call(this, { componentObject, props, renderIndex, });
+      return createElement(element, props, children);
+    } else {
+      return null;
+    }
   } catch (e) {
     if (debug) {
       logError({ componentObject, resources, }, 'this', this);

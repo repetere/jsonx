@@ -1,6 +1,9 @@
 if (typeof window === 'undefined') {
   var window = {};
 }
+import React from 'react';
+import { getRenderedJSON, } from './main';
+
 export let componentMap = Object.assign({}, React.DOM, window.__rjx_custom_elements);
 
 export function getComponentObjectChildren(options = {}) {

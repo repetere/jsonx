@@ -38,8 +38,10 @@ export default [
   // `file` and `format` for each target)
   {
     input: 'src/main.js',
-    // external: ['ms'],
-    external: ['react',], // <-- suppresses the warning
+    external: [
+      'react',
+      'ua-parser-js',
+    ], // <-- suppresses the warning
     output: [
       {
         name: 'rjx',

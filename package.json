@@ -47,6 +47,7 @@
     "sinon-chai": "^2.14.0"
   },
   "dependencies": {
-    "react": "^16.2.0"
+    "react": "^16.2.0",
+    "ua-parser-js": "^0.7.17"
   }
 }

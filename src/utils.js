@@ -1,4 +1,80 @@
-export function traverse (paths, data) {
+import UAParser from 'ua-parser-js';
+
+
+export function displayComponent(options = {}) {
+  const { componentObject, props, } = options;
+  const propsToCompare = componentObject.comparisonprops;
+  const comparisons = propsToCompare.map(comp => {
+    const compares = {};
+    if (Array.isArray(comp.left)) {
+      compares.left = comp.left;
+    }
+    if (Array.isArray(comp.right)) {
+      compares.right = comp.right;
+    }
+    const propcompares = traverse(compares, props);
+    const opscompares = Object.assign({}, comp, propcompares);
+    // console.debug({ opscompares, compares, renderedCompProps });
+    if (opscompares.operation === 'eq') {
+      // return opscompares.left == opscompares.right;
+      return opscompares.left === opscompares.right;
+    } else if (opscompares.operation === 'dneq') {
+      // return opscompares.left != opscompares.right;
+      return opscompares.left !== opscompares.right;
+    } else if (opscompares.operation === 'dnseq') {
+      return opscompares.left !== opscompares.right;
+    } else if (opscompares.operation === 'seq') {
+      return opscompares.left === opscompares.right;
+    } else if (opscompares.operation === 'lt') {
+      return opscompares.left < opscompares.right;
+    } else if (opscompares.operation === 'lte') {
+      return opscompares.left <= opscompares.right;
+    } else if (opscompares.operation === 'gt') {
+      return opscompares.left > opscompares.right;
+    } else if (opscompares.operation === 'gte') {
+      return opscompares.left >= opscompares.right;
+    } else if (opscompares.operation === 'dne') {
+      return opscompares.left === undefined || opscompares.left === null;
+    } else { //'exists'
+      return opscompares.left !== undefined || opscompares.left !== null;
+    }
+  });
+  const validProps = comparisons.filter(comp => comp === true);
+  if (componentObject.comparisonorprops && validProps.length<1) {
+    return false;
+  } else if (validProps.length !== comparisons.length) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+export function getAdvancedBinding() {
+  try {
+    if (window && window.navigator && window.navigator.userAgent &&  typeof window.navigator.userAgent==='string') {
+      if(window.navigator.userAgent.indexOf('Trident') !== -1) {
+        return false;
+      }
+      var uastring = window.navigator.userAgent;
+      var parser = new UAParser();
+      parser.setUA(uastring);
+      var parseUserAgent = parser.getResult();
+      // console.debug({ parseUserAgent, });
+      if ((parseUserAgent.browser.name === 'Chrome' || parseUserAgent.browser.name === 'Chrome WebView' ) && parseUserAgent.os.name === 'Android' && parseInt(parseUserAgent.browser.version, 10) < 50) {
+        return false;
+      }
+      if (parseUserAgent.browser.name === 'Android Browser') {
+        return false;
+      }
+    }
+  } catch (e) {
+    console.warn('could not detect browser support', e);
+    return false;
+  }
+  return true;
+}
+
+export function traverse(paths, data) {
   let keys = Object.keys(paths);
   if (!keys.length) return paths;
   return keys.reduce((result, key) => {
