@@ -1,6 +1,7 @@
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
+import builtins from 'rollup-plugin-node-builtins';
 import pkg from './package.json';
 
 export default [
@@ -15,7 +16,11 @@ export default [
       name: 'rjx',
     },
     plugins: [
-      resolve(), // so Rollup can find `ms`
+      resolve({
+        preferBuiltins: true,
+      }), // so Rollup can find `ms`
+      builtins({
+      }),
       babel({
         exclude: 'node_modules/**', // only transpile our source code
       }),
@@ -40,6 +45,8 @@ export default [
     input: 'src/main.js',
     external: [
       'react',
+      'react-dom',
+      'react-dom/server',
       'ua-parser-js',
     ], // <-- suppresses the warning
     output: [

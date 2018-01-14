@@ -1,5 +1,8 @@
 // import React, { createElement, } from 'react';
 import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
+
 import { componentMap, getComponentFromMap, getBoundedComponents, } from './components';
 import { getComputedProps, } from './props';
 import { getComponentObjectChildren, } from './children';
@@ -8,13 +11,19 @@ const createElement = React.createElement;
 export let renderIndex = 0;
 
 //pass querySelector and RJX render with react
-export function renderRJX() {
-
+export function rjxRender(config = {}) {
+  const { rjx, resources, querySelector, options, } = config;
+  ReactDOM.render(
+    getRenderedJSON(rjx, resources, options),
+    document.querySelector(querySelector)
+  );
 }
 
-//return rendered HTML string
-export function rjxHTMLString() {
 
+//return rendered HTML string
+export function rjxHTMLString(config = {}) {
+  const { rjx, resources, options, } = config;
+  return ReactDOMServer.renderToString(getRenderedJSON(rjx, resources, options));
 }
 
 export function getRenderedJSON(componentObject, resources, options = {}) {

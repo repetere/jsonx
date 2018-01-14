@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
 import UAParser from 'ua-parser-js';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -379,10 +381,25 @@ var createElement = React.createElement;
 var renderIndex = 0;
 
 //pass querySelector and RJX render with react
-function renderRJX() {}
+function rjxRender() {
+  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var rjx = config.rjx,
+      resources = config.resources,
+      querySelector = config.querySelector,
+      options = config.options;
+
+  ReactDOM.render(getRenderedJSON(rjx, resources, options), document.querySelector(querySelector));
+}
 
 //return rendered HTML string
-function rjxHTMLString() {}
+function rjxHTMLString() {
+  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var rjx = config.rjx,
+      resources = config.resources,
+      options = config.options;
+
+  return ReactDOMServer.renderToString(getRenderedJSON(rjx, resources, options));
+}
 
 function getRenderedJSON(componentObject, resources) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -419,5 +436,5 @@ function getRenderedJSON(componentObject, resources) {
   }
 }
 
-export { renderIndex, renderRJX, rjxHTMLString, getRenderedJSON };
+export { renderIndex, rjxRender, rjxHTMLString, getRenderedJSON };
 export default getRenderedJSON;

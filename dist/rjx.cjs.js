@@ -5,6 +5,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var React = _interopDefault(require('react'));
+var ReactDOM = _interopDefault(require('react-dom'));
+var ReactDOMServer = _interopDefault(require('react-dom/server'));
 var UAParser = _interopDefault(require('ua-parser-js'));
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -385,10 +387,25 @@ var createElement = React.createElement;
 exports.renderIndex = 0;
 
 //pass querySelector and RJX render with react
-function renderRJX() {}
+function rjxRender() {
+  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var rjx = config.rjx,
+      resources = config.resources,
+      querySelector = config.querySelector,
+      options = config.options;
+
+  ReactDOM.render(getRenderedJSON(rjx, resources, options), document.querySelector(querySelector));
+}
 
 //return rendered HTML string
-function rjxHTMLString() {}
+function rjxHTMLString() {
+  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var rjx = config.rjx,
+      resources = config.resources,
+      options = config.options;
+
+  return ReactDOMServer.renderToString(getRenderedJSON(rjx, resources, options));
+}
 
 function getRenderedJSON(componentObject, resources) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -425,7 +442,7 @@ function getRenderedJSON(componentObject, resources) {
   }
 }
 
-exports.renderRJX = renderRJX;
+exports.rjxRender = rjxRender;
 exports.rjxHTMLString = rjxHTMLString;
 exports.getRenderedJSON = getRenderedJSON;
 exports['default'] = getRenderedJSON;
