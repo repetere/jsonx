@@ -1,6 +1,10 @@
 import React from 'react';
+import * as ReactDOMElements from 'react-dom-factories';
 import { getAdvancedBinding, } from './utils';
-// import { reactComponents } from '../test/mock/legacy';
+
+if (typeof window === 'undefined') {
+  var window = {};
+}
 export let advancedBinding = getAdvancedBinding();
 export let componentMap = Object.assign({}, React.DOM, window.__rjx_custom_elements);
 
@@ -14,11 +18,11 @@ export function getBoundedComponents(options = {}) {
 
 export function getComponentFromMap(options = {}) {
   // eslint-disable-next-line
-  const { rjx, reactComponents, componentLibraries = {}, logError = console.error, } = options;
+  const { rjx, reactComponents, componentLibraries = {}, logError = console.error, debug} = options;
   try {
     if (typeof rjx.component !== 'string') {
       return rjx.component;
-    } else if (React.DOM[rjx.component]) {
+    } else if (ReactDOMElements[rjx.component]) {
       return rjx.component;
     } else {
       Object.keys(componentLibraries).forEach(libraryName => {
@@ -26,11 +30,15 @@ export function getComponentFromMap(options = {}) {
           return componentLibraries[ libraryName ][ rjx.component.replace(`${libraryName}.`, '') ];
         }
       });
-      return reactComponents[rjx.component];
+      if (reactComponents[ rjx.component ]) {
+        return reactComponents[rjx.component];
+      } else {
+        throw new ReferenceError(`Invalid React Component(${rjx.component})`);
+      }
     }
   } catch (e) {
-    logError(e, (e.stack) ? e.stack : 'no stack');
-    return null;
+    if(debug) logError(e, (e.stack) ? e.stack : 'no stack');
+    throw e;
   }
 }
 

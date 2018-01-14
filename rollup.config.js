@@ -47,6 +47,7 @@ export default [
       'react',
       'react-dom',
       'react-dom/server',
+      'react-dom-factories',
       'ua-parser-js',
     ], // <-- suppresses the warning
     output: [

@@ -6,7 +6,7 @@ if (typeof window === 'undefined') {
   var window = {};
 }
 
-export let componentMap = Object.assign({}, React.DOM, window.__rjx_custom_elements);
+export let componentMap = Object.assign({}, React.DOM, (typeof window!=='undefined') ? window.__rjx_custom_elements : {});
 
 export function getRJXProps(options = {}) {
   // eslint-disable-next-line

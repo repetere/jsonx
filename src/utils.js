@@ -68,7 +68,8 @@ export function getAdvancedBinding() {
       }
     }
   } catch (e) {
-    console.warn('could not detect browser support', e);
+    e;
+    // console.warn('could not detect browser support', e);
     return false;
   }
   return true;

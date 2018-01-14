@@ -29,22 +29,21 @@ export function rjxHTMLString(config = {}) {
   return ReactDOMServer.renderToString(getRenderedJSON(rjx, resources, options));
 }
 
-export function getRenderedJSON(rjx, resources, options = {}) {
+export function getRenderedJSON(rjx = {}, resources = {}, options = {}) {
   // eslint-disable-next-line
   const { componentLibraries, debug, logError = console.error, boundedComponents=[], } = options;
-  if (!rjx) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
+  if (!rjx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
   try {
     const components = Object.assign({}, componentMap, options.reactComponents);
     const reactComponents = (boundedComponents.length)
       ? getBoundedComponents.call(this, { boundedComponents, reactComponents: components, })
       : components;
     renderIndex++;
-    const element = getComponentFromMap({ rjx, reactComponents, componentLibraries, });
+    const element = getComponentFromMap({ rjx, reactComponents, componentLibraries, debug, });
     const props = getComputedProps.call(this, { rjx, resources, renderIndex, componentLibraries, debug, });
     const displayElement = (rjx.comparisonprops)
       ? displayComponent.call(this, { rjx, props, renderIndex, componentLibraries, debug, })
       : true;
-    
     
     if (displayElement) {
       const children = getRJXChildren.call(this, { rjx, props, resources, renderIndex, });

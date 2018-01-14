@@ -25528,6 +25528,182 @@ if (process.env.NODE_ENV === 'production') {
 
 var server = server_node;
 
+var reactDomFactories = createCommonjsModule(function (module, exports) {
+(function(f) {
+  {
+    module.exports = f(react);
+    /* global define */
+  }
+})(function(React) {
+  /**
+   * Create a factory that creates HTML tag elements.
+   */
+  function createDOMFactory(type) {
+    var factory = React.createElement.bind(null, type);
+    // Expose the type on the factory and the prototype so that it can be
+    // easily accessed on elements. E.g. `<Foo />.type === Foo`.
+    // This should not be named `constructor` since this may not be the function
+    // that created the element, and it may not even be a constructor.
+    factory.type = type;
+    return factory;
+  }
+
+  /**
+   * Creates a mapping from supported HTML tags to `ReactDOMComponent` classes.
+   */
+  var ReactDOMFactories = {
+    a: createDOMFactory('a'),
+    abbr: createDOMFactory('abbr'),
+    address: createDOMFactory('address'),
+    area: createDOMFactory('area'),
+    article: createDOMFactory('article'),
+    aside: createDOMFactory('aside'),
+    audio: createDOMFactory('audio'),
+    b: createDOMFactory('b'),
+    base: createDOMFactory('base'),
+    bdi: createDOMFactory('bdi'),
+    bdo: createDOMFactory('bdo'),
+    big: createDOMFactory('big'),
+    blockquote: createDOMFactory('blockquote'),
+    body: createDOMFactory('body'),
+    br: createDOMFactory('br'),
+    button: createDOMFactory('button'),
+    canvas: createDOMFactory('canvas'),
+    caption: createDOMFactory('caption'),
+    cite: createDOMFactory('cite'),
+    code: createDOMFactory('code'),
+    col: createDOMFactory('col'),
+    colgroup: createDOMFactory('colgroup'),
+    data: createDOMFactory('data'),
+    datalist: createDOMFactory('datalist'),
+    dd: createDOMFactory('dd'),
+    del: createDOMFactory('del'),
+    details: createDOMFactory('details'),
+    dfn: createDOMFactory('dfn'),
+    dialog: createDOMFactory('dialog'),
+    div: createDOMFactory('div'),
+    dl: createDOMFactory('dl'),
+    dt: createDOMFactory('dt'),
+    em: createDOMFactory('em'),
+    embed: createDOMFactory('embed'),
+    fieldset: createDOMFactory('fieldset'),
+    figcaption: createDOMFactory('figcaption'),
+    figure: createDOMFactory('figure'),
+    footer: createDOMFactory('footer'),
+    form: createDOMFactory('form'),
+    h1: createDOMFactory('h1'),
+    h2: createDOMFactory('h2'),
+    h3: createDOMFactory('h3'),
+    h4: createDOMFactory('h4'),
+    h5: createDOMFactory('h5'),
+    h6: createDOMFactory('h6'),
+    head: createDOMFactory('head'),
+    header: createDOMFactory('header'),
+    hgroup: createDOMFactory('hgroup'),
+    hr: createDOMFactory('hr'),
+    html: createDOMFactory('html'),
+    i: createDOMFactory('i'),
+    iframe: createDOMFactory('iframe'),
+    img: createDOMFactory('img'),
+    input: createDOMFactory('input'),
+    ins: createDOMFactory('ins'),
+    kbd: createDOMFactory('kbd'),
+    keygen: createDOMFactory('keygen'),
+    label: createDOMFactory('label'),
+    legend: createDOMFactory('legend'),
+    li: createDOMFactory('li'),
+    link: createDOMFactory('link'),
+    main: createDOMFactory('main'),
+    map: createDOMFactory('map'),
+    mark: createDOMFactory('mark'),
+    menu: createDOMFactory('menu'),
+    menuitem: createDOMFactory('menuitem'),
+    meta: createDOMFactory('meta'),
+    meter: createDOMFactory('meter'),
+    nav: createDOMFactory('nav'),
+    noscript: createDOMFactory('noscript'),
+    object: createDOMFactory('object'),
+    ol: createDOMFactory('ol'),
+    optgroup: createDOMFactory('optgroup'),
+    option: createDOMFactory('option'),
+    output: createDOMFactory('output'),
+    p: createDOMFactory('p'),
+    param: createDOMFactory('param'),
+    picture: createDOMFactory('picture'),
+    pre: createDOMFactory('pre'),
+    progress: createDOMFactory('progress'),
+    q: createDOMFactory('q'),
+    rp: createDOMFactory('rp'),
+    rt: createDOMFactory('rt'),
+    ruby: createDOMFactory('ruby'),
+    s: createDOMFactory('s'),
+    samp: createDOMFactory('samp'),
+    script: createDOMFactory('script'),
+    section: createDOMFactory('section'),
+    select: createDOMFactory('select'),
+    small: createDOMFactory('small'),
+    source: createDOMFactory('source'),
+    span: createDOMFactory('span'),
+    strong: createDOMFactory('strong'),
+    style: createDOMFactory('style'),
+    sub: createDOMFactory('sub'),
+    summary: createDOMFactory('summary'),
+    sup: createDOMFactory('sup'),
+    table: createDOMFactory('table'),
+    tbody: createDOMFactory('tbody'),
+    td: createDOMFactory('td'),
+    textarea: createDOMFactory('textarea'),
+    tfoot: createDOMFactory('tfoot'),
+    th: createDOMFactory('th'),
+    thead: createDOMFactory('thead'),
+    time: createDOMFactory('time'),
+    title: createDOMFactory('title'),
+    tr: createDOMFactory('tr'),
+    track: createDOMFactory('track'),
+    u: createDOMFactory('u'),
+    ul: createDOMFactory('ul'),
+    var: createDOMFactory('var'),
+    video: createDOMFactory('video'),
+    wbr: createDOMFactory('wbr'),
+
+    // SVG
+    circle: createDOMFactory('circle'),
+    clipPath: createDOMFactory('clipPath'),
+    defs: createDOMFactory('defs'),
+    ellipse: createDOMFactory('ellipse'),
+    g: createDOMFactory('g'),
+    image: createDOMFactory('image'),
+    line: createDOMFactory('line'),
+    linearGradient: createDOMFactory('linearGradient'),
+    mask: createDOMFactory('mask'),
+    path: createDOMFactory('path'),
+    pattern: createDOMFactory('pattern'),
+    polygon: createDOMFactory('polygon'),
+    polyline: createDOMFactory('polyline'),
+    radialGradient: createDOMFactory('radialGradient'),
+    rect: createDOMFactory('rect'),
+    stop: createDOMFactory('stop'),
+    svg: createDOMFactory('svg'),
+    text: createDOMFactory('text'),
+    tspan: createDOMFactory('tspan'),
+  };
+
+  // due to wrapper and conditionals at the top, this will either become
+  // `module.exports ReactDOMFactories` if that is available,
+  // otherwise it will be defined via `define(['react'], ReactDOMFactories)`
+  // if that is available,
+  // otherwise it will be defined as global variable.
+  return ReactDOMFactories;
+});
+});
+
+
+
+var ReactDOMElements = Object.freeze({
+	default: reactDomFactories,
+	__moduleExports: reactDomFactories
+});
+
 var uaParser = createCommonjsModule(function (module, exports) {
 /**
  * UAParser.js v0.7.17
@@ -26677,7 +26853,6 @@ function getAdvancedBinding() {
       }
     }
   } catch (e) {
-    console.warn('could not detect browser support', e);
     return false;
   }
   return true;
@@ -26744,8 +26919,11 @@ var rjxUtils = Object.freeze({
 	sortObject: sortObject
 });
 
+if (typeof window$1 === 'undefined') {
+  var window$1 = {};
+}
 var advancedBinding = getAdvancedBinding();
-var componentMap$1 = Object.assign({}, react.DOM, window.__rjx_custom_elements);
+var componentMap$1 = Object.assign({}, react.DOM, window$1.__rjx_custom_elements);
 
 function getBoundedComponents$1() {
   var _this = this;
@@ -26772,12 +26950,13 @@ function getComponentFromMap$1() {
       _options$componentLib = options.componentLibraries,
       componentLibraries = _options$componentLib === undefined ? {} : _options$componentLib,
       _options$logError = options.logError,
-      logError = _options$logError === undefined ? console.error : _options$logError;
+      logError = _options$logError === undefined ? console.error : _options$logError,
+      debug = options.debug;
 
   try {
     if (typeof rjx.component !== 'string') {
       return rjx.component;
-    } else if (react.DOM[rjx.component]) {
+    } else if (ReactDOMElements[rjx.component]) {
       return rjx.component;
     } else {
       Object.keys(componentLibraries).forEach(function (libraryName) {
@@ -26785,11 +26964,15 @@ function getComponentFromMap$1() {
           return componentLibraries[libraryName][rjx.component.replace(libraryName + '.', '')];
         }
       });
-      return reactComponents[rjx.component];
+      if (reactComponents[rjx.component]) {
+        return reactComponents[rjx.component];
+      } else {
+        throw new ReferenceError('Invalid React Component(' + rjx.component + ')');
+      }
     }
   } catch (e) {
-    logError(e, e.stack ? e.stack : 'no stack');
-    return null;
+    if (debug) logError(e, e.stack ? e.stack : 'no stack');
+    throw e;
   }
 }
 
@@ -26806,11 +26989,11 @@ var rjxComponents = Object.freeze({
 	getComponentFromMap: getComponentFromMap$1
 });
 
-if (typeof window$1 === 'undefined') {
-  var window$1 = {};
+if (typeof window$2 === 'undefined') {
+  var window$2 = {};
 }
 
-var componentMap$2 = Object.assign({}, react.DOM, window$1.__rjx_custom_elements);
+var componentMap$2 = Object.assign({}, react.DOM, typeof window$2 !== 'undefined' ? window$2.__rjx_custom_elements : {});
 
 function getRJXProps() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -26871,8 +27054,8 @@ function getFunctionFromProps(options) {
     return this.props.reduxRouter[propFunc.replace('func:this.props.reduxRouter.', '')];
   } else if (typeof propFunc === 'string' && propFunc.indexOf('func:this.props') !== -1) {
     return this.props[propFunc.replace('func:this.props.', '')].bind(this);
-  } else if (typeof propFunc === 'string' && propFunc.indexOf('func:window') !== -1 && typeof window$1[propFunc.replace('func:window.', '')] === 'function') {
-    return window$1[propFunc.replace('func:window.', '')].bind(this);
+  } else if (typeof propFunc === 'string' && propFunc.indexOf('func:window') !== -1 && typeof window$2[propFunc.replace('func:window.', '')] === 'function') {
+    return window$2[propFunc.replace('func:window.', '')].bind(this);
   } else if (typeof this.props[propFunc] === 'function') {
     return propFunc.bind(this);
   } else {
@@ -26907,8 +27090,8 @@ function getWindowComponents() {
   var windowComponents = rjx.__windowComponents;
   // if (rjx.hasWindowComponent && window.__rjx_custom_elements) {
   Object.keys(windowComponents).forEach(function (key) {
-    if (typeof windowComponents[key] === 'string' && windowComponents[key].indexOf('func:window.__rjx_custom_elements') !== -1 && typeof window$1.__rjx_custom_elements[windowComponents[key].replace('func:window.__rjx_custom_elements.', '')] === 'function') {
-      var windowComponentElement = window$1.__rjx_custom_elements[allProps[key].replace('func:window.__rjx_custom_elements.', '')];
+    if (typeof windowComponents[key] === 'string' && windowComponents[key].indexOf('func:window.__rjx_custom_elements') !== -1 && typeof window$2.__rjx_custom_elements[windowComponents[key].replace('func:window.__rjx_custom_elements.', '')] === 'function') {
+      var windowComponentElement = window$2.__rjx_custom_elements[allProps[key].replace('func:window.__rjx_custom_elements.', '')];
       var windowComponentProps = allProps['windowCompProps'] ? allProps['windowCompProps'] : _this3.props;
       allProps[key] = react.createElement(windowComponentElement, windowComponentProps, null);
     }
@@ -26941,7 +27124,7 @@ function getComputedProps$1() {
       }
     }, this.props, rjx.props, useReduxState && !rjx.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && !componentLibraries[rjx.component] ? this.props.getState() : {}) : undefined;
     var asyncprops = getRJXProps({ rjx: rjx, propName: 'asyncprops', traverseObject: resources });
-    var windowprops = getRJXProps({ rjx: rjx, propName: 'windowprops', traverseObject: window$1 });
+    var windowprops = getRJXProps({ rjx: rjx, propName: 'windowprops', traverseObject: window$2 });
     var thisprops = getRJXProps({ rjx: rjx, propName: 'thisprops', traverseObject: componentThisProp });
 
     //allowing javascript injections
@@ -27071,7 +27254,9 @@ function rjxHTMLString() {
   return server.renderToString(getRenderedJSON(rjx, resources, options));
 }
 
-function getRenderedJSON(rjx, resources) {
+function getRenderedJSON() {
+  var rjx = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var resources = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
   // eslint-disable-next-line
@@ -27082,12 +27267,12 @@ function getRenderedJSON(rjx, resources) {
       _options$boundedCompo = options.boundedComponents,
       boundedComponents = _options$boundedCompo === undefined ? [] : _options$boundedCompo;
 
-  if (!rjx) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
+  if (!rjx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
   try {
     var components = Object.assign({}, componentMap, options.reactComponents);
     var reactComponents = boundedComponents.length ? getBoundedComponents.call(this, { boundedComponents: boundedComponents, reactComponents: components }) : components;
     exports.renderIndex++;
-    var element = getComponentFromMap({ rjx: rjx, reactComponents: reactComponents, componentLibraries: componentLibraries });
+    var element = getComponentFromMap({ rjx: rjx, reactComponents: reactComponents, componentLibraries: componentLibraries, debug: debug });
     var props = getComputedProps.call(this, { rjx: rjx, resources: resources, renderIndex: exports.renderIndex, componentLibraries: componentLibraries, debug: debug });
     var displayElement = rjx.comparisonprops ? displayComponent.call(this, { rjx: rjx, props: props, renderIndex: exports.renderIndex, componentLibraries: componentLibraries, debug: debug }) : true;
 
