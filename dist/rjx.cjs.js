@@ -469,7 +469,17 @@ var displayComponent = displayComponent$1;
 
 exports.renderIndex = 0;
 
-//pass querySelector and RJX render with react
+/**
+ * Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
+ * @example
+ * // Uses react to create <!DOCTYPE html><body><div id="myApp"><div class="rjx-generated"><p style="color:red;">hello world</p></div></div></body>
+ * rjx.rjxRender({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, querySelector:'#myApp', });
+ * @param {object} config - options used to inject html via ReactDOM.render
+ * @param {object} config.rjx - any valid RJX JSON object
+ * @param {object} config.resources - any additional resource used for asynchronous properties
+ * @param {string} config.querySelector - selector for document.querySelector
+ * @param {object} config.options - options for getRenderedJSON
+ */
 function rjxRender() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var rjx = config.rjx,
@@ -480,7 +490,17 @@ function rjxRender() {
   ReactDOM.render(getRenderedJSON(rjx, resources, options), document.querySelector(querySelector));
 }
 
-//return rendered HTML string
+/**
+ * Use ReactDOMServer.renderToString to render html from RJX
+ * @example
+ * // Uses react to create <div class="rjx-generated"><p style="color:red;">hello world</p></div>
+ * rjx.rjxHTMLString({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
+ * @param {object} config - options used to inject html via ReactDOM.render
+ * @param {object} config.rjx - any valid RJX JSON object
+ * @param {object} config.resources - any additional resource used for asynchronous properties
+ * @param {object} config.options - options for getRenderedJSON
+ * @returns {string} React genereated html via RJX JSON
+ */
 function rjxHTMLString() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var rjx = config.rjx,
@@ -490,6 +510,20 @@ function rjxHTMLString() {
   return ReactDOMServer.renderToString(getRenderedJSON(rjx, resources, options));
 }
 
+/**
+ * Use ReactDOMServer.renderToString to render html from RJX
+ * @example
+ * // Uses react to create <div class="rjx-generated"><p style="color:red;">hello world</p></div>
+ * rjx.rjxHTMLString({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
+ * @param {object} rjx - any valid RJX JSON object
+ * @param {object} resources - any additional resource used for asynchronous properties
+ * @param {object} options - options for getRenderedJSON
+ * @param {Object} [options.componentLibraries] - react components to render with RJX
+ * @param {boolean} [options.debug=false] - use debug messages
+ * @param {function} [options.logError=console.error] - error logging function
+ * @param {string[]} [options.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
+ * @returns {function} React element via React.createElement
+ */
 function getRenderedJSON() {
   var rjx = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var resources = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -497,7 +531,8 @@ function getRenderedJSON() {
 
   // eslint-disable-next-line
   var componentLibraries = options.componentLibraries,
-      debug = options.debug,
+      _options$debug = options.debug,
+      debug = _options$debug === undefined ? false : _options$debug,
       _options$logError = options.logError,
       logError = _options$logError === undefined ? console.error : _options$logError,
       _options$boundedCompo = options.boundedComponents,
