@@ -6,19 +6,22 @@ if (typeof window === 'undefined') {
   var window = {};
 }
 export let advancedBinding = getAdvancedBinding();
-export let componentMap = Object.assign({}, React.DOM, window.__rjx_custom_elements);
+export let componentMap = Object.assign({}, ReactDOMElements, window.__rjx_custom_elements);
 
 export function getBoundedComponents(options = {}) {
   const { reactComponents, boundedComponents=[], } = options;
-  if (advancedBinding) {
-    return Object.assign(reactComponents, boundedComponents.map(componentName => reactComponents[ componentName ].bind(this)));
+  if (advancedBinding || options.advancedBinding) {
+    return Object.assign({}, reactComponents, boundedComponents.map(componentName => ({
+      [ componentName ]: reactComponents[ componentName ].bind(this),
+    })));
     // reactComponents.ResponsiveLink = ResponsiveLink.bind(this);
   } else return reactComponents;
 }
 
 export function getComponentFromMap(options = {}) {
   // eslint-disable-next-line
-  const { rjx, reactComponents, componentLibraries = {}, logError = console.error, debug} = options;
+  const { rjx, reactComponents, componentLibraries = {}, logError = console.error, debug } = options;
+
   try {
     if (typeof rjx.component !== 'string') {
       return rjx.component;
@@ -33,7 +36,7 @@ export function getComponentFromMap(options = {}) {
       if (reactComponents[ rjx.component ]) {
         return reactComponents[rjx.component];
       } else {
-        throw new ReferenceError(`Invalid React Component(${rjx.component})`);
+        throw new ReferenceError(`Invalid React Component (${rjx.component})`);
       }
     }
   } catch (e) {

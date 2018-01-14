@@ -43,16 +43,16 @@ describe('rjx', function () {
     });
     it('should handle errors with empty components', () => {
       const emptySpanComponent = rjx.getRenderedJSON({});
-      const emptySpanComponentDebugged = rjx.getRenderedJSON({}, {}, { debug: true, });
+      const emptySpanComponentDebugged = rjx.getRenderedJSON.call({ debug: true, },{}, {});
       expect(emptySpanComponent).to.be.an('object');
       expect(emptySpanComponentDebugged).to.be.an('object');
       expect(emptySpanComponentDebugged.props.children).to.eql('Error: Missing Component Object');
     });
     it('should throw an error with invalid components', () => {
       const loggerSpy = sinon.spy();
-      expect(rjx.getRenderedJSON.bind(null, { component: 'somethingInvalid', })).to.throw('Invalid React Component(somethingInvalid)');
+      expect(rjx.getRenderedJSON.bind({}, { component: 'somethingInvalid', })).to.throw('Invalid React Component (somethingInvalid)');
       try {
-        rjx.getRenderedJSON.call(null, { component: 'somethingInvalid', }, {}, { debug: true, logError: loggerSpy, });
+        rjx.getRenderedJSON.call({ debug: true, logError: loggerSpy, }, { component: 'somethingInvalid', }, {});
       } catch (e) {
         expect(loggerSpy.called).to.be.true;
         expect(e).to.be.an('error');

@@ -10,6 +10,39 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var defineProperty = function (obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+
 function displayComponent$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var rjx = options.rjx,
@@ -105,39 +138,109 @@ function traverse(paths, data) {
   }, {});
 }
 
-/**
- * custom object sort by field
- * @example
- * 			req.controllerData.searchdocuments = searchdocuments.sort(CoreUtilities.sortObject('desc', 'createdat'));
- * @param  {string} dir   either asc or desc
- * @param  {string} field object property to seach
- * @return {function}  object sort compare function
- */
-function sortObject(dir, field) {
-  var comparefunction = void 0;
-  if (dir === 'desc') {
-    comparefunction = function comparefunction(a, b) {
-      if (a[field] < b[field]) {
-        return 1;
-      }
-      if (a[field] > b[field]) {
-        return -1;
-      }
-      return 0;
-    };
-  } else {
-    comparefunction = function comparefunction(a, b) {
-      if (a[field] < b[field]) {
-        return -1;
-      }
-      if (a[field] > b[field]) {
-        return 1;
-      }
-      return 0;
-    };
+function validateRJX(rjx) {
+  var dynamicPropsNames = ['asyncprops', 'windowprops', 'thisprops'];
+  var evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps'];
+  var validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps'].concat(dynamicPropsNames, evalPropNames);
+  if (!rjx.component) {
+    throw new Error('Missing React Component');
   }
-
-  return comparefunction;
+  if (rjx.props) {
+    if (_typeof(rjx.props) !== 'object') {
+      throw new Error('props must be an Object / valid React props');
+    }
+    if (rjx.props.children) {
+      if (typeof rjx.props.children !== 'string' || !Array.isArray(rjx.props.children)) {
+        throw new Error('props.children must be an array of RJX JSON objects or a string');
+      }
+      if (typeof rjx.props._children !== 'string' || !Array.isArray(rjx.props._children)) {
+        throw new Error('props._children must be an array of RJX JSON objects or a string');
+      }
+    }
+  }
+  if (rjx.children) {
+    if (typeof rjx.children !== 'string' || !Array.isArray(rjx.children)) {
+      throw new Error('children must be an array of RJX JSON objects or a string');
+    }
+  }
+  dynamicPropsNames.forEach(function (dynamicprop) {
+    var rjxDynamicProps = rjx[dynamicprop];
+    if (rjxDynamicProps) {
+      if ((typeof rjxDynamicProps === 'undefined' ? 'undefined' : _typeof(rjxDynamicProps)) !== 'object') {
+        throw new TypeError(dynamicprop + ' must be an object');
+      }
+      Object.keys(rjxDynamicProps).forEach(function (resolvedDynamicProp) {
+        if (!Array.isArray(rjxDynamicProps[resolvedDynamicProp])) {
+          throw new TypeError('rjx.' + dynamicprop + '.' + resolvedDynamicProp + ' must be an array of strings');
+        }
+        var allStringArray = resolvedDynamicProp.filter(function (propArrayItem) {
+          return typeof propArrayItem === 'string';
+        });
+        if (allStringArray.length !== rjxDynamicProps[resolvedDynamicProp].length) {
+          throw new TypeError('rjx.' + dynamicprop + '.' + resolvedDynamicProp + ' must be an array of strings');
+        }
+      });
+    }
+  });
+  var evalProps = rjx.__dangerouslyEvalProps;
+  var boundEvalProps = rjx.__dangerouslyBindEvalProps;
+  if (evalProps || boundEvalProps) {
+    if (evalProps && (typeof evalProps === 'undefined' ? 'undefined' : _typeof(evalProps)) !== 'object' || boundEvalProps && (typeof boundEvalProps === 'undefined' ? 'undefined' : _typeof(boundEvalProps)) !== 'object') {
+      throw new TypeError('__dangerouslyEvalProps must be an object of strings to convert to valid javascript');
+    }
+    evalPropNames.filter(function (evalProp) {
+      return rjx[evalProp];
+    }).forEach(function (eProps) {
+      var evProp = rjx[eProps];
+      var scopedEval = eval;
+      Object.keys(evProp).forEach(function (propToEval) {
+        if (typeof evProp[propToEval] !== 'string') {
+          throw new TypeError('rjx.' + eProps + '.' + evProp + ' must be a string');
+        }
+        try {
+          scopedEval(evProp[propToEval]);
+        } catch (e) {
+          throw e;
+        }
+      });
+    });
+  }
+  if (rjx.__dangerouslyInsertComponents) {
+    Object.keys(rjx.__dangerouslyInsertComponents).forEach(function (insertedComponents) {
+      try {
+        validateRJX(rjx.__dangerouslyInsertComponents[insertedComponents]);
+      } catch (e) {
+        throw new TypeError('rjx.__dangerouslyInsertComponents.' + insertedComponents + ' must be a valid RJX JSON Object', e);
+      }
+    });
+  }
+  if (rjx.__functionProps) {
+    if (_typeof(rjx.__functionProps) !== 'object') {
+      throw new TypeError('rjx.__functionProps  must be an object');
+    }
+    Object.keys(rjx.__functionProps).forEach(function (fProp) {
+      if (fProp.indexOf('func:') === -1) {
+        throw new ReferenceError('rjx.__functionProps.' + fProp + ' must reference a function (i.e. func:this.props.logoutUser())');
+      }
+    });
+  }
+  if (rjx.windowCompProps && _typeof(rjx.windowCompProps)) {
+    throw new TypeError('rjx.windowCompProps  must be an object');
+  }
+  if (rjx.__windowComponents) {
+    if (_typeof(rjx.__windowComponents) !== 'object') {
+      throw new TypeError('rjx.__windowComponents must be an object');
+    }
+    Object.keys(rjx.__windowComponents).forEach(function (cProp) {
+      if (cProp.indexOf('func:') === -1) {
+        throw new ReferenceError('rjx.__windowComponents.' + cProp + ' must reference a window element on window.__rjx_custom_elements (i.e. func:window.__rjx_custom_elements.bootstrapModal)');
+      }
+    });
+  }
+  var invalidKeys = Object.keys(rjx).filter(function (key) {
+    return validKeys.indexOf(key) >= 0;
+  });
+  return invalidKeys.length ? 'Warning: Invalid Keys [' + invalidKeys.join() + ']' : true;
 }
 
 
@@ -146,14 +249,14 @@ var rjxUtils = Object.freeze({
 	displayComponent: displayComponent$1,
 	getAdvancedBinding: getAdvancedBinding,
 	traverse: traverse,
-	sortObject: sortObject
+	validateRJX: validateRJX
 });
 
 if (typeof window$1 === 'undefined') {
   var window$1 = {};
 }
 var advancedBinding = getAdvancedBinding();
-var componentMap$1 = Object.assign({}, React.DOM, window$1.__rjx_custom_elements);
+var componentMap$1 = Object.assign({}, ReactDOMElements, window$1.__rjx_custom_elements);
 
 function getBoundedComponents$1() {
   var _this = this;
@@ -163,9 +266,9 @@ function getBoundedComponents$1() {
       _options$boundedCompo = options.boundedComponents,
       boundedComponents = _options$boundedCompo === undefined ? [] : _options$boundedCompo;
 
-  if (advancedBinding) {
-    return Object.assign(reactComponents, boundedComponents.map(function (componentName) {
-      return reactComponents[componentName].bind(_this);
+  if (advancedBinding || options.advancedBinding) {
+    return Object.assign({}, reactComponents, boundedComponents.map(function (componentName) {
+      return defineProperty({}, componentName, reactComponents[componentName].bind(_this));
     }));
     // reactComponents.ResponsiveLink = ResponsiveLink.bind(this);
   } else return reactComponents;
@@ -183,6 +286,7 @@ function getComponentFromMap$1() {
       logError = _options$logError === undefined ? console.error : _options$logError,
       debug = options.debug;
 
+
   try {
     if (typeof rjx.component !== 'string') {
       return rjx.component;
@@ -197,7 +301,7 @@ function getComponentFromMap$1() {
       if (reactComponents[rjx.component]) {
         return reactComponents[rjx.component];
       } else {
-        throw new ReferenceError('Invalid React Component(' + rjx.component + ')');
+        throw new ReferenceError('Invalid React Component (' + rjx.component + ')');
       }
     }
   } catch (e) {
@@ -211,6 +315,8 @@ function getComponentFromMap$1() {
       return recharts[rjx.component.replace('recharts.', '')];
     }
  */
+
+
 
 var rjxComponents = Object.freeze({
 	advancedBinding: advancedBinding,
@@ -237,7 +343,7 @@ function getRJXProps() {
       _options$useReduxStat = options.useReduxState,
       useReduxState = _options$useReduxStat === undefined ? true : _options$useReduxStat,
       _options$propName = options.propName,
-      propName = _options$propName === undefined ? 'asyncProps' : _options$propName,
+      propName = _options$propName === undefined ? 'asyncprops' : _options$propName,
       _options$traverseObje = options.traverseObject,
       traverseObject = _options$traverseObje === undefined ? {} : _options$traverseObje;
   // return (rjx.asyncprops && typeof rjx.asyncprops === 'object')
@@ -347,12 +453,12 @@ function getComputedProps$1() {
       debug = options.debug;
 
   try {
-    var componentThisProp = rjx.asyncprops ? Object.assign({
+    var componentThisProp = rjx.thisprops ? Object.assign({
       __rjx: {
         _component: rjx,
         _resources: resources
       }
-    }, this.props, rjx.props, useReduxState && !rjx.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && !componentLibraries[rjx.component] ? this.props.getState() : {}) : undefined;
+    }, this.props, rjx.props, useReduxState && !rjx.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && !componentLibraries[rjx.component] ? this.props && this.props.getState ? this.props.getState() : {} : {}) : undefined;
     var asyncprops = getRJXProps({ rjx: rjx, propName: 'asyncprops', traverseObject: resources });
     var windowprops = getRJXProps({ rjx: rjx, propName: 'windowprops', traverseObject: window$2 });
     var thisprops = getRJXProps({ rjx: rjx, propName: 'thisprops', traverseObject: componentThisProp });
@@ -472,7 +578,7 @@ var renderIndex = 0;
  * @param {object} config.rjx - any valid RJX JSON object
  * @param {object} config.resources - any additional resource used for asynchronous properties
  * @param {string} config.querySelector - selector for document.querySelector
- * @param {object} config.options - options for getRenderedJSON
+ * @property {object} this - options for getRenderedJSON
  */
 function rjxRender() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -481,7 +587,7 @@ function rjxRender() {
       querySelector = config.querySelector,
       options = config.options;
 
-  ReactDOM.render(getRenderedJSON(rjx, resources, options), document.querySelector(querySelector));
+  ReactDOM.render(getRenderedJSON.call(this, rjx, resources, options), document.querySelector(querySelector));
 }
 
 /**
@@ -492,16 +598,15 @@ function rjxRender() {
  * @param {object} config - options used to inject html via ReactDOM.render
  * @param {object} config.rjx - any valid RJX JSON object
  * @param {object} config.resources - any additional resource used for asynchronous properties
- * @param {object} config.options - options for getRenderedJSON
+ * @property {object} this - options for getRenderedJSON
  * @returns {string} React genereated html via RJX JSON
  */
 function rjxHTMLString() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var rjx = config.rjx,
-      resources = config.resources,
-      options = config.options;
+      resources = config.resources;
 
-  return ReactDOMServer.renderToString(getRenderedJSON(rjx, resources, options));
+  return ReactDOMServer.renderToString(getRenderedJSON.call(this, rjx, resources));
 }
 
 /**
@@ -511,30 +616,32 @@ function rjxHTMLString() {
  * rjx.rjxHTMLString({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
  * @param {object} rjx - any valid RJX JSON object
  * @param {object} resources - any additional resource used for asynchronous properties
- * @param {object} options - options for getRenderedJSON
- * @param {Object} [options.componentLibraries] - react components to render with RJX
- * @param {boolean} [options.debug=false] - use debug messages
- * @param {function} [options.logError=console.error] - error logging function
- * @param {string[]} [options.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
+ * @property {object} this - options for getRenderedJSON
+ * @param {Object} [this.componentLibraries] - react components to render with RJX
+ * @param {boolean} [this.debug=false] - use debug messages
+ * @param {function} [this.logError=console.error] - error logging function
+ * @param {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
 function getRenderedJSON() {
   var rjx = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var resources = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
   // eslint-disable-next-line
-  var componentLibraries = options.componentLibraries,
-      _options$debug = options.debug,
-      debug = _options$debug === undefined ? false : _options$debug,
-      _options$logError = options.logError,
-      logError = _options$logError === undefined ? console.error : _options$logError,
-      _options$boundedCompo = options.boundedComponents,
-      boundedComponents = _options$boundedCompo === undefined ? [] : _options$boundedCompo;
+  var _componentLibraries = this.componentLibraries,
+      componentLibraries = _componentLibraries === undefined ? {} : _componentLibraries,
+      _debug = this.debug,
+      debug = _debug === undefined ? false : _debug,
+      _logError = this.logError,
+      logError = _logError === undefined ? console.error : _logError,
+      _boundedComponents = this.boundedComponents,
+      boundedComponents = _boundedComponents === undefined ? [] : _boundedComponents;
+  // const componentLibraries = this.componentLibraries;
 
   if (!rjx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
   try {
-    var components = Object.assign({}, componentMap, options.reactComponents);
+    var components = Object.assign({}, componentMap, this.reactComponents);
+
     var reactComponents = boundedComponents.length ? getBoundedComponents.call(this, { boundedComponents: boundedComponents, reactComponents: components }) : components;
     renderIndex++;
     var element = getComponentFromMap({ rjx: rjx, reactComponents: reactComponents, componentLibraries: componentLibraries, debug: debug, logError: logError });

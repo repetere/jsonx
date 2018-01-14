@@ -23,12 +23,12 @@ export let renderIndex = 0;
  * @param {object} config.rjx - any valid RJX JSON object
  * @param {object} config.resources - any additional resource used for asynchronous properties
  * @param {string} config.querySelector - selector for document.querySelector
- * @param {object} config.options - options for getRenderedJSON
+ * @property {object} this - options for getRenderedJSON
  */
 export function rjxRender(config = {}) {
   const { rjx, resources, querySelector, options, } = config;
   ReactDOM.render(
-    getRenderedJSON(rjx, resources, options),
+    getRenderedJSON.call(this, rjx, resources, options),
     document.querySelector(querySelector)
   );
 }
@@ -41,12 +41,12 @@ export function rjxRender(config = {}) {
  * @param {object} config - options used to inject html via ReactDOM.render
  * @param {object} config.rjx - any valid RJX JSON object
  * @param {object} config.resources - any additional resource used for asynchronous properties
- * @param {object} config.options - options for getRenderedJSON
+ * @property {object} this - options for getRenderedJSON
  * @returns {string} React genereated html via RJX JSON
  */
 export function rjxHTMLString(config = {}) {
-  const { rjx, resources, options, } = config;
-  return ReactDOMServer.renderToString(getRenderedJSON(rjx, resources, options));
+  const { rjx, resources, } = config;
+  return ReactDOMServer.renderToString(getRenderedJSON.call(this, rjx, resources));
 }
 
 /**
@@ -56,19 +56,22 @@ export function rjxHTMLString(config = {}) {
  * rjx.rjxHTMLString({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
  * @param {object} rjx - any valid RJX JSON object
  * @param {object} resources - any additional resource used for asynchronous properties
- * @param {object} options - options for getRenderedJSON
- * @param {Object} [options.componentLibraries] - react components to render with RJX
- * @param {boolean} [options.debug=false] - use debug messages
- * @param {function} [options.logError=console.error] - error logging function
- * @param {string[]} [options.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
+ * @property {object} this - options for getRenderedJSON
+ * @param {Object} [this.componentLibraries] - react components to render with RJX
+ * @param {boolean} [this.debug=false] - use debug messages
+ * @param {function} [this.logError=console.error] - error logging function
+ * @param {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
-export function getRenderedJSON(rjx = {}, resources = {}, options = {}) {
+export function getRenderedJSON(rjx = {}, resources = {}) {
   // eslint-disable-next-line
-  const { componentLibraries, debug=false, logError = console.error, boundedComponents=[], } = options;
+  const { componentLibraries = {}, debug = false, logError = console.error, boundedComponents = [], } = this;
+  // const componentLibraries = this.componentLibraries;
+
   if (!rjx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
   try {
-    const components = Object.assign({}, componentMap, options.reactComponents);
+    const components = Object.assign({}, componentMap, this.reactComponents);
+
     const reactComponents = (boundedComponents.length)
       ? getBoundedComponents.call(this, { boundedComponents, reactComponents: components, })
       : components;

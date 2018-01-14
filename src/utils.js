@@ -93,38 +93,107 @@ export function traverse(paths, data) {
   }, {});
 }
 
-
-/**
- * custom object sort by field
- * @example
- * 			req.controllerData.searchdocuments = searchdocuments.sort(CoreUtilities.sortObject('desc', 'createdat'));
- * @param  {string} dir   either asc or desc
- * @param  {string} field object property to seach
- * @return {function}  object sort compare function
- */
-export function sortObject(dir, field) {
-  let comparefunction;
-  if (dir === 'desc') {
-    comparefunction = function (a, b) {
-      if (a[field] < b[field]) {
-        return 1;
-      }
-      if (a[field] > b[field]) {
-        return -1;
-      }
-      return 0;
-    };
-  } else {
-    comparefunction = function (a, b) {
-      if (a[field] < b[field]) {
-        return -1;
-      }
-      if (a[field] > b[field]) {
-        return 1;
-      }
-      return 0;
-    };
+export function validateRJX(rjx) {
+  const dynamicPropsNames = ['asyncprops', 'windowprops', 'thisprops',];
+  const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps',];
+  const validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps',].concat(dynamicPropsNames, evalPropNames);
+  if (!rjx.component) {
+    throw new Error('Missing React Component');
   }
-
-  return comparefunction;
+  if (rjx.props) {
+    if (typeof rjx.props !== 'object') {
+      throw new Error('props must be an Object / valid React props');
+    }
+    if (rjx.props.children) {
+      if (typeof rjx.props.children !== 'string' || !Array.isArray(rjx.props.children)) {
+        throw new Error('props.children must be an array of RJX JSON objects or a string');
+      }
+      if (typeof rjx.props._children !== 'string' || !Array.isArray(rjx.props._children)) {
+        throw new Error('props._children must be an array of RJX JSON objects or a string');
+      }
+    }
+  }
+  if (rjx.children) {
+    if (typeof rjx.children !== 'string' || !Array.isArray(rjx.children)) {
+      throw new Error('children must be an array of RJX JSON objects or a string');
+    }
+  }
+  dynamicPropsNames.forEach(dynamicprop => {
+    const rjxDynamicProps = rjx[ dynamicprop ];
+    if (rjxDynamicProps) {
+      if (typeof rjxDynamicProps !== 'object') {
+        throw new TypeError(`${dynamicprop} must be an object`);
+      }
+      Object.keys(rjxDynamicProps).forEach(resolvedDynamicProp => {
+        if (!Array.isArray(rjxDynamicProps[ resolvedDynamicProp ])) {
+          throw new TypeError(`rjx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`);
+        }
+        const allStringArray = resolvedDynamicProp.filter(propArrayItem => typeof propArrayItem === 'string');
+        if (allStringArray.length !== rjxDynamicProps[ resolvedDynamicProp ].length) {
+          throw new TypeError(`rjx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`);
+        }
+      });
+    }
+  });
+  const evalProps = rjx.__dangerouslyEvalProps;
+  const boundEvalProps = rjx.__dangerouslyBindEvalProps;
+  if (evalProps || boundEvalProps) {
+    if ((evalProps && typeof evalProps !== 'object') || (boundEvalProps && typeof boundEvalProps !== 'object')) {
+      throw new TypeError('__dangerouslyEvalProps must be an object of strings to convert to valid javascript');
+    }
+    evalPropNames
+      .filter(evalProp => rjx[ evalProp ])
+      .forEach(eProps => {
+        const evProp = rjx[ eProps ];
+        const scopedEval = eval; 
+        Object.keys(evProp).forEach(propToEval => {
+          if (typeof evProp[ propToEval ] !== 'string') {
+            throw new TypeError(`rjx.${eProps}.${evProp} must be a string`);
+          }
+          try {
+            scopedEval(evProp[ propToEval ]);
+          } catch (e) {
+            throw e;
+          }
+        });
+      });
+  }
+  if (rjx.__dangerouslyInsertComponents) {
+    Object.keys(rjx.__dangerouslyInsertComponents).forEach(insertedComponents => {
+      try {
+        validateRJX(rjx.__dangerouslyInsertComponents[ insertedComponents ]);
+      } catch (e) {
+        throw new TypeError(`rjx.__dangerouslyInsertComponents.${insertedComponents} must be a valid RJX JSON Object`, e);
+      }
+    });
+  }
+  if (rjx.__functionProps) {
+    if (typeof rjx.__functionProps !== 'object') {
+      throw new TypeError('rjx.__functionProps  must be an object');
+    }
+    Object.keys(rjx.__functionProps)
+      .forEach(fProp => {
+        if (fProp.indexOf('func:') === -1) {
+          throw new ReferenceError(`rjx.__functionProps.${fProp} must reference a function (i.e. func:this.props.logoutUser())`);
+        }
+      });
+  }
+  if (rjx.windowCompProps && typeof rjx.windowCompProps) {
+    throw new TypeError('rjx.windowCompProps  must be an object');
+  }
+  if (rjx.__windowComponents) {
+    if (typeof rjx.__windowComponents !== 'object') {
+      throw new TypeError('rjx.__windowComponents must be an object');
+    }
+    Object.keys(rjx.__windowComponents)
+      .forEach(cProp => {
+        if (cProp.indexOf('func:') === -1) {
+          throw new ReferenceError(`rjx.__windowComponents.${cProp} must reference a window element on window.__rjx_custom_elements (i.e. func:window.__rjx_custom_elements.bootstrapModal)`);
+        }
+      });
+  }
+  const invalidKeys = Object.keys(rjx).filter(key => validKeys.indexOf(key) >= 0);
+  return invalidKeys.length
+    ? `Warning: Invalid Keys [${invalidKeys.join()}]`
+    : true;
 }

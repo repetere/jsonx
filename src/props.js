@@ -10,7 +10,7 @@ export let componentMap = Object.assign({}, React.DOM, (typeof window!=='undefin
 
 export function getRJXProps(options = {}) {
   // eslint-disable-next-line
-  const { rjx, resources, renderIndex, logError = console.error, useReduxState = true, propName = 'asyncProps', traverseObject = {}, } = options;
+  const { rjx, resources, renderIndex, logError = console.error, useReduxState = true, propName = 'asyncprops', traverseObject = {}, } = options;
   // return (rjx.asyncprops && typeof rjx.asyncprops === 'object')
   // ? utilities.traverse(rjx.asyncprops, resources)
   // : {};
@@ -93,7 +93,7 @@ export function getComputedProps(options = {}) {
   // eslint-disable-next-line
   const { rjx, resources, renderIndex, logError = console.error, useReduxState=true, ignoreReduxPropsInComponentLibraries=true, componentLibraries, debug, } = options;
   try {
-    const componentThisProp = (rjx.asyncprops)
+    const componentThisProp = (rjx.thisprops)
       ? Object.assign({
         __rjx: {
           _component: rjx,
@@ -102,7 +102,9 @@ export function getComputedProps(options = {}) {
       }, this.props,
       rjx.props,
       (useReduxState && !rjx.ignoreReduxProps && (ignoreReduxPropsInComponentLibraries && !componentLibraries[rjx.component])) 
-        ? this.props.getState() : {})
+        ? (this.props && this.props.getState) ? this.props.getState() : {}
+        : {}
+      )
       : undefined;
     const asyncprops = getRJXProps({ rjx, propName: 'asyncprops', traverseObject: resources, });
     const windowprops = getRJXProps({ rjx, propName: 'windowprops', traverseObject: window, });
@@ -118,7 +120,7 @@ export function getComputedProps(options = {}) {
     const allProps = Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
     const computedProps = Object.assign(allProps,
       rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
-      rjx.__windowComponents ? getWindowComponents.call(this,{ allProps, rjx, }) : {});
+      rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {});
     
     return computedProps;
   } catch (e) {
