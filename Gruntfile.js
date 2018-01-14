@@ -1,4 +1,3 @@
-'use strict';
 const path = require('path');
 const testPaths = 'test/**/*.js';
 
@@ -72,24 +71,6 @@ module.exports = function(grunt) {
         },
       },
     },
-    // browserify: {
-    //   dist: {
-    //     files: [{
-    //       expand: true,
-    //       cwd: __dirname,
-    //       src: ['./index.js'],
-    //       dest: 'bin'
-    //     }],
-    //     options: {
-    //       transform: [
-    //         ["babelify", {
-    //           presets: ["es2015","es2016","es2017","react"],
-    //           //plugins: ["proxy"]
-    //         }]
-    //       ]
-    //     }
-    //   }
-    // }
   });
 
   // Loading dependencies

@@ -3,11 +3,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 
-import { componentMap, getComponentFromMap, getBoundedComponents, } from './components';
-import { getComputedProps, } from './props';
-import { getRJXChildren, } from './children';
-import { displayComponent, } from './utils';
+import * as rjxComponents from './components';
+import * as rjxProps from './props';
+import * as rjxChildren from './children';
+import * as rjxUtils from './utils';
 const createElement = React.createElement;
+const { componentMap, getComponentFromMap, getBoundedComponents, } = rjxComponents;
+const { getComputedProps, } = rjxProps;
+const { getRJXChildren, } = rjxChildren;
+const { displayComponent, } = rjxUtils;
 export let renderIndex = 0;
 
 //pass querySelector and RJX render with react
@@ -56,5 +60,10 @@ export function getRenderedJSON(rjx, resources, options = {}) {
     throw e;
   }
 }
+
+export const _rjxChildren = rjxChildren;
+export const _rjxComponents = rjxComponents;
+export const _rjxProps = rjxProps;
+export const _rjxUtils = rjxUtils;
 
 export default getRenderedJSON;

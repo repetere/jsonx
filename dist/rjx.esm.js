@@ -9,7 +9,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
 
-function displayComponent() {
+function displayComponent$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var rjx = options.rjx,
       props = options.props;
@@ -113,11 +113,46 @@ function traverse(paths, data) {
  * @param  {string} field object property to seach
  * @return {function}  object sort compare function
  */
+function sortObject(dir, field) {
+  var comparefunction = void 0;
+  if (dir === 'desc') {
+    comparefunction = function comparefunction(a, b) {
+      if (a[field] < b[field]) {
+        return 1;
+      }
+      if (a[field] > b[field]) {
+        return -1;
+      }
+      return 0;
+    };
+  } else {
+    comparefunction = function comparefunction(a, b) {
+      if (a[field] < b[field]) {
+        return -1;
+      }
+      if (a[field] > b[field]) {
+        return 1;
+      }
+      return 0;
+    };
+  }
+
+  return comparefunction;
+}
+
+
+
+var rjxUtils = Object.freeze({
+	displayComponent: displayComponent$1,
+	getAdvancedBinding: getAdvancedBinding,
+	traverse: traverse,
+	sortObject: sortObject
+});
 
 var advancedBinding = getAdvancedBinding();
-var componentMap = Object.assign({}, React.DOM, window.__rjx_custom_elements);
+var componentMap$1 = Object.assign({}, React.DOM, window.__rjx_custom_elements);
 
-function getBoundedComponents() {
+function getBoundedComponents$1() {
   var _this = this;
 
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -133,7 +168,7 @@ function getBoundedComponents() {
   } else return reactComponents;
 }
 
-function getComponentFromMap() {
+function getComponentFromMap$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   // eslint-disable-next-line
@@ -169,11 +204,18 @@ function getComponentFromMap() {
     }
  */
 
+var rjxComponents = Object.freeze({
+	advancedBinding: advancedBinding,
+	componentMap: componentMap$1,
+	getBoundedComponents: getBoundedComponents$1,
+	getComponentFromMap: getComponentFromMap$1
+});
+
 if (typeof window$1 === 'undefined') {
   var window$1 = {};
 }
 
-var componentMap$1 = Object.assign({}, React.DOM, window$1.__rjx_custom_elements);
+var componentMap$2 = Object.assign({}, React.DOM, window$1.__rjx_custom_elements);
 
 function getRJXProps() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -280,7 +322,7 @@ function getWindowComponents() {
 }
 
 //any property that's prefixed with __ is a computedProperty
-function getComputedProps() {
+function getComputedProps$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   // eslint-disable-next-line
@@ -320,6 +362,25 @@ function getComputedProps() {
   }
 }
 
+
+
+var rjxProps = Object.freeze({
+	componentMap: componentMap$2,
+	getRJXProps: getRJXProps,
+	getEvalProps: getEvalProps,
+	getComponentProps: getComponentProps,
+	getFunctionFromProps: getFunctionFromProps,
+	getFunctionProps: getFunctionProps,
+	getWindowComponents: getWindowComponents,
+	getComputedProps: getComputedProps$1
+});
+
+function getChildrenArray() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  return options;
+}
+
 function getChildrenStringOrProp() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var rjx = options.rjx,
@@ -344,7 +405,7 @@ function getChildrenProps() {
   }) : childrjx;
 }
 
-function getRJXChildren() {
+function getRJXChildren$1() {
   var _this = this;
 
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -376,8 +437,22 @@ function getRJXChildren() {
   }
 }
 
+var rjxChildren = Object.freeze({
+	getChildrenArray: getChildrenArray,
+	getChildrenStringOrProp: getChildrenStringOrProp,
+	getChildrenProps: getChildrenProps,
+	getRJXChildren: getRJXChildren$1
+});
+
 // import React, { createElement, } from 'react';
 var createElement = React.createElement;
+var componentMap = componentMap$1;
+var getComponentFromMap = getComponentFromMap$1;
+var getBoundedComponents = getBoundedComponents$1;
+var getComputedProps = getComputedProps$1;
+var getRJXChildren = getRJXChildren$1;
+var displayComponent = displayComponent$1;
+
 var renderIndex = 0;
 
 //pass querySelector and RJX render with react
@@ -436,5 +511,10 @@ function getRenderedJSON(rjx, resources) {
   }
 }
 
-export { renderIndex, rjxRender, rjxHTMLString, getRenderedJSON };
+var _rjxChildren = rjxChildren;
+var _rjxComponents = rjxComponents;
+var _rjxProps = rjxProps;
+var _rjxUtils = rjxUtils;
+
+export { renderIndex, rjxRender, rjxHTMLString, getRenderedJSON, _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils };
 export default getRenderedJSON;
