@@ -2,8 +2,8 @@ import UAParser from 'ua-parser-js';
 
 
 export function displayComponent(options = {}) {
-  const { componentObject, props, } = options;
-  const propsToCompare = componentObject.comparisonprops;
+  const { rjx, props, } = options;
+  const propsToCompare = rjx.comparisonprops;
   const comparisons = propsToCompare.map(comp => {
     const compares = {};
     if (Array.isArray(comp.left)) {
@@ -40,7 +40,7 @@ export function displayComponent(options = {}) {
     }
   });
   const validProps = comparisons.filter(comp => comp === true);
-  if (componentObject.comparisonorprops && validProps.length<1) {
+  if (rjx.comparisonorprops && validProps.length<1) {
     return false;
   } else if (validProps.length !== comparisons.length) {
     return false;

@@ -5,50 +5,50 @@ export function getChildrenArray(options = {}) {
 }
 
 export function getChildrenStringOrProp(options = {}) {
-  const { componentObject, props, } = options;
+  const { rjx, props, } = options;
 
-  return (typeof componentObject.children === 'undefined')
+  return (typeof rjx.children === 'undefined')
     ? (props && props.children && (typeof props.children === 'string' || Array.isArray(props.children) ))
       ? props.children : null
-    : componentObject.children;
+    : rjx.children;
 }
 
 export function getChildrenProps(options = {}) {
-  const { componentObject, childComponentObject, props, renderIndex, } = options;
-  return (componentObject.bindprops)
+  const { rjx, childrjx, props, renderIndex, } = options;
+  return (rjx.bindprops)
     ? Object.assign({},
-      childComponentObject, {
+      childrjx, {
         props: Object.assign({},
           props,
-          ((childComponentObject.thisprops && childComponentObject.thisprops.style) // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
-            || (childComponentObject.asyncprops && childComponentObject.asyncprops.style)
-            || (childComponentObject.windowprops && childComponentObject.windowprops.style))
+          ((childrjx.thisprops && childrjx.thisprops.style) // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
+            || (childrjx.asyncprops && childrjx.asyncprops.style)
+            || (childrjx.windowprops && childrjx.windowprops.style))
             ? {}
             : {
               style: {},
             },
-          childComponentObject.props,
+          childrjx.props,
           { key: renderIndex + Math.random(), }),
       })
-    : childComponentObject;
+    : childrjx;
 }
 
-export function getComponentObjectChildren(options = {}) {
+export function getRJXChildren(options = {}) {
   // eslint-disable-next-line
-  const { componentObject, props, resources, renderIndex, logError = console.error, } = options;
+  const { rjx, props, resources, renderIndex, logError = console.error, } = options;
   try {
-    if (props._children /* && !componentObject.children */) {
+    if (props._children /* && !rjx.children */) {
       if (Array.isArray(props._children)) {
-        componentObject.children = [].concat(props._children);
+        rjx.children = [].concat(props._children);
       } else {
-        componentObject.children = props._children;
+        rjx.children = props._children;
       }
       delete props._children;
     }
 
-    return (componentObject.children && Array.isArray(componentObject.children) && typeof componentObject.children !== 'string')
-      ? componentObject.children.map(childComponentObject => getRenderedJSON.call(this, getChildrenProps({ componentObject, childComponentObject, props, renderIndex, }), resources))
-      : getChildrenStringOrProp({ componentObject, props, });
+    return (rjx.children && Array.isArray(rjx.children) && typeof rjx.children !== 'string')
+      ? rjx.children.map(childrjx => getRenderedJSON.call(this, getChildrenProps({ rjx, childrjx, props, renderIndex, }), resources))
+      : getChildrenStringOrProp({ rjx, props, });
 
   } catch (e) {
     logError(e, (e.stack) ? e.stack : 'no stack');

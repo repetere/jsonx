@@ -10,33 +10,33 @@ export let componentMap = Object.assign({}, React.DOM, window.__rjx_custom_eleme
 
 export function getRJXProps(options = {}) {
   // eslint-disable-next-line
-  const { componentObject, resources, renderIndex, logError = console.error, useReduxState = true, propName = 'asyncProps', traverseObject = {}, } = options;
-  // return (componentObject.asyncprops && typeof componentObject.asyncprops === 'object')
-  // ? utilities.traverse(componentObject.asyncprops, resources)
+  const { rjx, resources, renderIndex, logError = console.error, useReduxState = true, propName = 'asyncProps', traverseObject = {}, } = options;
+  // return (rjx.asyncprops && typeof rjx.asyncprops === 'object')
+  // ? utilities.traverse(rjx.asyncprops, resources)
   // : {};
-  return (componentObject[ propName ] && typeof componentObject[ propName ] === 'object')
-    ? utilities.traverse(componentObject[ propName ], traverseObject)
+  return (rjx[ propName ] && typeof rjx[ propName ] === 'object')
+    ? utilities.traverse(rjx[ propName ], traverseObject)
     : {};
 }
 
 export function getEvalProps(options = {}) {
-  const { componentObject, } = options;
+  const { rjx, } = options;
   const scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
-  return Object.keys(componentObject.__dangerouslyEvalProps).reduce((eprops, epropName) => {
+  return Object.keys(rjx.__dangerouslyEvalProps).reduce((eprops, epropName) => {
     // eslint-disable-next-line
-    eprops[ epropName ] = (componentObject.__dangerouslyBindEvalProps[ epropName ])
-      ? scopedEval(componentObject.__dangerouslyEvalProps[ epropName ]).bind(this)
-      : scopedEval(componentObject.__dangerouslyEvalProps[ epropName ]);
+    eprops[ epropName ] = (rjx.__dangerouslyBindEvalProps[ epropName ])
+      ? scopedEval(rjx.__dangerouslyEvalProps[ epropName ]).bind(this)
+      : scopedEval(rjx.__dangerouslyEvalProps[ epropName ]);
     return eprops;
   }, {});
 }
 
 
 export function getComponentProps(options = {}) {
-  const { componentObject, resources, debug, } = options;
-  return Object.keys(componentObject.__dangerouslyInsertComponents).reduce((cprops, cpropName) => {
+  const { rjx, resources, debug, } = options;
+  return Object.keys(rjx.__dangerouslyInsertComponents).reduce((cprops, cpropName) => {
     // eslint-disable-next-line
-    cprops[ cpropName ] = getRenderedJSON.call(this, componentObject.__dangerouslyInsertComponents[ cpropName ], resources, debug);
+    cprops[ cpropName ] = getRenderedJSON.call(this, rjx.__dangerouslyInsertComponents[ cpropName ], resources, debug);
     return cprops;
   }, {});
 }
@@ -58,9 +58,9 @@ export function getFunctionFromProps(options) {
 }
 
 export function getFunctionProps(options = {}) {
-  const { allProps, componentObject = {}, } = options;
+  const { allProps, rjx = {}, } = options;
   const getFunction = getFunctionFromProps.bind(this);
-  const funcProps = componentObject.__functionProps;
+  const funcProps = rjx.__functionProps;
   //Allowing for window functions
   Object.keys(funcProps).forEach(key => {
     if (typeof funcProps[key] ==='string' && funcProps[key].indexOf('func:') !== -1 ){
@@ -71,9 +71,9 @@ export function getFunctionProps(options = {}) {
 }
 
 export function getWindowComponents(options = {}) {
-  const { allProps, componentObject, } = options;
-  const windowComponents = componentObject.__windowComponents;
-  // if (componentObject.hasWindowComponent && window.__rjx_custom_elements) {
+  const { allProps, rjx, } = options;
+  const windowComponents = rjx.__windowComponents;
+  // if (rjx.hasWindowComponent && window.__rjx_custom_elements) {
   Object.keys(windowComponents).forEach(key => {
     if (typeof windowComponents[ key ] === 'string' && windowComponents[ key ].indexOf('func:window.__rjx_custom_elements') !== -1 && typeof window.__rjx_custom_elements[ windowComponents[ key ].replace('func:window.__rjx_custom_elements.', '') ] === 'function') {
       const windowComponentElement = window.__rjx_custom_elements[ allProps[ key ].replace('func:window.__rjx_custom_elements.', '') ];
@@ -91,34 +91,34 @@ export function getWindowComponents(options = {}) {
 //any property that's prefixed with __ is a computedProperty
 export function getComputedProps(options = {}) {
   // eslint-disable-next-line
-  const { componentObject, resources, renderIndex, logError = console.error, useReduxState=true, ignoreReduxPropsInComponentLibraries=true, componentLibraries, debug, } = options;
+  const { rjx, resources, renderIndex, logError = console.error, useReduxState=true, ignoreReduxPropsInComponentLibraries=true, componentLibraries, debug, } = options;
   try {
-    const componentThisProp = (componentObject.asyncprops)
+    const componentThisProp = (rjx.asyncprops)
       ? Object.assign({
         __rjx: {
-          _component: componentObject,
+          _component: rjx,
           _resources: resources,
         },
       }, this.props,
-      componentObject.props,
-      (useReduxState && !componentObject.ignoreReduxProps && (ignoreReduxPropsInComponentLibraries && !componentLibraries[componentObject.component])) 
+      rjx.props,
+      (useReduxState && !rjx.ignoreReduxProps && (ignoreReduxPropsInComponentLibraries && !componentLibraries[rjx.component])) 
         ? this.props.getState() : {})
       : undefined;
-    const asyncprops = getRJXProps({ componentObject, propName: 'asyncprops', traverseObject: resources, });
-    const windowprops = getRJXProps({ componentObject, propName: 'windowprops', traverseObject: window, });
-    const thisprops = getRJXProps({ componentObject, propName: 'thisprops', traverseObject: componentThisProp, });
+    const asyncprops = getRJXProps({ rjx, propName: 'asyncprops', traverseObject: resources, });
+    const windowprops = getRJXProps({ rjx, propName: 'windowprops', traverseObject: window, });
+    const thisprops = getRJXProps({ rjx, propName: 'thisprops', traverseObject: componentThisProp, });
 
     //allowing javascript injections
-    const evalProps = (componentObject.__dangerouslyEvalProps)
-      ? getEvalProps.call(this, { componentObject, })
+    const evalProps = (rjx.__dangerouslyEvalProps)
+      ? getEvalProps.call(this, { rjx, })
       : {};
-    const insertedComponents = (componentObject.__dangerouslyInsertComponents)
-      ? getComponentProps.call(this, { componentObject, resources, debug, })
+    const insertedComponents = (rjx.__dangerouslyInsertComponents)
+      ? getComponentProps.call(this, { rjx, resources, debug, })
       : {};
-    const allProps = Object.assign({ key: renderIndex, }, thisprops, componentObject.props, asyncprops, windowprops, evalProps, insertedComponents);
+    const allProps = Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
     const computedProps = Object.assign(allProps,
-      componentObject.__functionProps ? getFunctionProps.call(this, { allProps, componentObject, }) : {},
-      componentObject.__windowComponents ? getWindowComponents.call(this,{ allProps, componentObject, }) : {});
+      rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
+      rjx.__windowComponents ? getWindowComponents.call(this,{ allProps, rjx, }) : {});
     
     return computedProps;
   } catch (e) {

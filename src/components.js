@@ -14,19 +14,19 @@ export function getBoundedComponents(options = {}) {
 
 export function getComponentFromMap(options = {}) {
   // eslint-disable-next-line
-  const { componentObject, reactComponents, componentLibraries = {}, logError = console.error, } = options;
+  const { rjx, reactComponents, componentLibraries = {}, logError = console.error, } = options;
   try {
-    if (typeof componentObject.component !== 'string') {
-      return componentObject.component;
-    } else if (React.DOM[componentObject.component]) {
-      return componentObject.component;
+    if (typeof rjx.component !== 'string') {
+      return rjx.component;
+    } else if (React.DOM[rjx.component]) {
+      return rjx.component;
     } else {
       Object.keys(componentLibraries).forEach(libraryName => {
-        if (componentLibraries[ libraryName ][ componentObject.component.replace(`${libraryName}.`, '') ]) {
-          return componentLibraries[ libraryName ][ componentObject.component.replace(`${libraryName}.`, '') ];
+        if (componentLibraries[ libraryName ][ rjx.component.replace(`${libraryName}.`, '') ]) {
+          return componentLibraries[ libraryName ][ rjx.component.replace(`${libraryName}.`, '') ];
         }
       });
-      return reactComponents[componentObject.component];
+      return reactComponents[rjx.component];
     }
   } catch (e) {
     logError(e, (e.stack) ? e.stack : 'no stack');
@@ -35,7 +35,7 @@ export function getComponentFromMap(options = {}) {
 }
 
 /**
- * if (recharts[componentObject.component.replace('recharts.', '')]) {
-      return recharts[componentObject.component.replace('recharts.', '')];
+ * if (recharts[rjx.component.replace('recharts.', '')]) {
+      return recharts[rjx.component.replace('recharts.', '')];
     }
  */

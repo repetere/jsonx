@@ -53,12 +53,14 @@ export default [
       {
         name: 'rjx',
         exports: 'named',
-        file: pkg.main, format: 'cjs',
+        file: pkg.main,
+        format: 'cjs',
       },
       {
         name: 'rjx',
         exports: 'named',
-        file: pkg.module, format: 'es',
+        file: pkg.module,
+        format: 'es',
       },
     ],
     plugins: [

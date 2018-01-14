@@ -17,10 +17,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 function displayComponent() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var componentObject = options.componentObject,
+  var rjx = options.rjx,
       props = options.props;
 
-  var propsToCompare = componentObject.comparisonprops;
+  var propsToCompare = rjx.comparisonprops;
   var comparisons = propsToCompare.map(function (comp) {
     var compares = {};
     if (Array.isArray(comp.left)) {
@@ -60,7 +60,7 @@ function displayComponent() {
   var validProps = comparisons.filter(function (comp) {
     return comp === true;
   });
-  if (componentObject.comparisonorprops && validProps.length < 1) {
+  if (rjx.comparisonorprops && validProps.length < 1) {
     return false;
   } else if (validProps.length !== comparisons.length) {
     return false;
@@ -143,7 +143,7 @@ function getComponentFromMap() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   // eslint-disable-next-line
-  var componentObject = options.componentObject,
+  var rjx = options.rjx,
       reactComponents = options.reactComponents,
       _options$componentLib = options.componentLibraries,
       componentLibraries = _options$componentLib === undefined ? {} : _options$componentLib,
@@ -151,17 +151,17 @@ function getComponentFromMap() {
       logError = _options$logError === undefined ? console.error : _options$logError;
 
   try {
-    if (typeof componentObject.component !== 'string') {
-      return componentObject.component;
-    } else if (React.DOM[componentObject.component]) {
-      return componentObject.component;
+    if (typeof rjx.component !== 'string') {
+      return rjx.component;
+    } else if (React.DOM[rjx.component]) {
+      return rjx.component;
     } else {
       Object.keys(componentLibraries).forEach(function (libraryName) {
-        if (componentLibraries[libraryName][componentObject.component.replace(libraryName + '.', '')]) {
-          return componentLibraries[libraryName][componentObject.component.replace(libraryName + '.', '')];
+        if (componentLibraries[libraryName][rjx.component.replace(libraryName + '.', '')]) {
+          return componentLibraries[libraryName][rjx.component.replace(libraryName + '.', '')];
         }
       });
-      return reactComponents[componentObject.component];
+      return reactComponents[rjx.component];
     }
   } catch (e) {
     logError(e, e.stack ? e.stack : 'no stack');
@@ -170,8 +170,8 @@ function getComponentFromMap() {
 }
 
 /**
- * if (recharts[componentObject.component.replace('recharts.', '')]) {
-      return recharts[componentObject.component.replace('recharts.', '')];
+ * if (recharts[rjx.component.replace('recharts.', '')]) {
+      return recharts[rjx.component.replace('recharts.', '')];
     }
  */
 
@@ -185,7 +185,7 @@ function getRJXProps() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   // eslint-disable-next-line
-  var componentObject = options.componentObject,
+  var rjx = options.rjx,
       resources = options.resources,
       renderIndex$$1 = options.renderIndex,
       _options$logError = options.logError,
@@ -196,23 +196,23 @@ function getRJXProps() {
       propName = _options$propName === undefined ? 'asyncProps' : _options$propName,
       _options$traverseObje = options.traverseObject,
       traverseObject = _options$traverseObje === undefined ? {} : _options$traverseObje;
-  // return (componentObject.asyncprops && typeof componentObject.asyncprops === 'object')
-  // ? utilities.traverse(componentObject.asyncprops, resources)
+  // return (rjx.asyncprops && typeof rjx.asyncprops === 'object')
+  // ? utilities.traverse(rjx.asyncprops, resources)
   // : {};
 
-  return componentObject[propName] && _typeof(componentObject[propName]) === 'object' ? traverse(componentObject[propName], traverseObject) : {};
+  return rjx[propName] && _typeof(rjx[propName]) === 'object' ? traverse(rjx[propName], traverseObject) : {};
 }
 
 function getEvalProps() {
   var _this = this;
 
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var componentObject = options.componentObject;
+  var rjx = options.rjx;
 
   var scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
-  return Object.keys(componentObject.__dangerouslyEvalProps).reduce(function (eprops, epropName) {
+  return Object.keys(rjx.__dangerouslyEvalProps).reduce(function (eprops, epropName) {
     // eslint-disable-next-line
-    eprops[epropName] = componentObject.__dangerouslyBindEvalProps[epropName] ? scopedEval(componentObject.__dangerouslyEvalProps[epropName]).bind(_this) : scopedEval(componentObject.__dangerouslyEvalProps[epropName]);
+    eprops[epropName] = rjx.__dangerouslyBindEvalProps[epropName] ? scopedEval(rjx.__dangerouslyEvalProps[epropName]).bind(_this) : scopedEval(rjx.__dangerouslyEvalProps[epropName]);
     return eprops;
   }, {});
 }
@@ -221,13 +221,13 @@ function getComponentProps() {
   var _this2 = this;
 
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var componentObject = options.componentObject,
+  var rjx = options.rjx,
       resources = options.resources,
       debug = options.debug;
 
-  return Object.keys(componentObject.__dangerouslyInsertComponents).reduce(function (cprops, cpropName) {
+  return Object.keys(rjx.__dangerouslyInsertComponents).reduce(function (cprops, cpropName) {
     // eslint-disable-next-line
-    cprops[cpropName] = getRenderedJSON.call(_this2, componentObject.__dangerouslyInsertComponents[cpropName], resources, debug);
+    cprops[cpropName] = getRenderedJSON.call(_this2, rjx.__dangerouslyInsertComponents[cpropName], resources, debug);
     return cprops;
   }, {});
 }
@@ -252,11 +252,11 @@ function getFunctionFromProps(options) {
 function getFunctionProps() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var allProps = options.allProps,
-      _options$componentObj = options.componentObject,
-      componentObject = _options$componentObj === undefined ? {} : _options$componentObj;
+      _options$rjx = options.rjx,
+      rjx = _options$rjx === undefined ? {} : _options$rjx;
 
   var getFunction = getFunctionFromProps.bind(this);
-  var funcProps = componentObject.__functionProps;
+  var funcProps = rjx.__functionProps;
   //Allowing for window functions
   Object.keys(funcProps).forEach(function (key) {
     if (typeof funcProps[key] === 'string' && funcProps[key].indexOf('func:') !== -1) {
@@ -271,10 +271,10 @@ function getWindowComponents() {
 
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var allProps = options.allProps,
-      componentObject = options.componentObject;
+      rjx = options.rjx;
 
-  var windowComponents = componentObject.__windowComponents;
-  // if (componentObject.hasWindowComponent && window.__rjx_custom_elements) {
+  var windowComponents = rjx.__windowComponents;
+  // if (rjx.hasWindowComponent && window.__rjx_custom_elements) {
   Object.keys(windowComponents).forEach(function (key) {
     if (typeof windowComponents[key] === 'string' && windowComponents[key].indexOf('func:window.__rjx_custom_elements') !== -1 && typeof window$1.__rjx_custom_elements[windowComponents[key].replace('func:window.__rjx_custom_elements.', '')] === 'function') {
       var windowComponentElement = window$1.__rjx_custom_elements[allProps[key].replace('func:window.__rjx_custom_elements.', '')];
@@ -290,7 +290,7 @@ function getComputedProps() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   // eslint-disable-next-line
-  var componentObject = options.componentObject,
+  var rjx = options.rjx,
       resources = options.resources,
       renderIndex$$1 = options.renderIndex,
       _options$logError2 = options.logError,
@@ -303,21 +303,21 @@ function getComputedProps() {
       debug = options.debug;
 
   try {
-    var componentThisProp = componentObject.asyncprops ? Object.assign({
+    var componentThisProp = rjx.asyncprops ? Object.assign({
       __rjx: {
-        _component: componentObject,
+        _component: rjx,
         _resources: resources
       }
-    }, this.props, componentObject.props, useReduxState && !componentObject.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && !componentLibraries[componentObject.component] ? this.props.getState() : {}) : undefined;
-    var asyncprops = getRJXProps({ componentObject: componentObject, propName: 'asyncprops', traverseObject: resources });
-    var windowprops = getRJXProps({ componentObject: componentObject, propName: 'windowprops', traverseObject: window$1 });
-    var thisprops = getRJXProps({ componentObject: componentObject, propName: 'thisprops', traverseObject: componentThisProp });
+    }, this.props, rjx.props, useReduxState && !rjx.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && !componentLibraries[rjx.component] ? this.props.getState() : {}) : undefined;
+    var asyncprops = getRJXProps({ rjx: rjx, propName: 'asyncprops', traverseObject: resources });
+    var windowprops = getRJXProps({ rjx: rjx, propName: 'windowprops', traverseObject: window$1 });
+    var thisprops = getRJXProps({ rjx: rjx, propName: 'thisprops', traverseObject: componentThisProp });
 
     //allowing javascript injections
-    var evalProps = componentObject.__dangerouslyEvalProps ? getEvalProps.call(this, { componentObject: componentObject }) : {};
-    var insertedComponents = componentObject.__dangerouslyInsertComponents ? getComponentProps.call(this, { componentObject: componentObject, resources: resources, debug: debug }) : {};
-    var allProps = Object.assign({ key: renderIndex$$1 }, thisprops, componentObject.props, asyncprops, windowprops, evalProps, insertedComponents);
-    var computedProps = Object.assign(allProps, componentObject.__functionProps ? getFunctionProps.call(this, { allProps: allProps, componentObject: componentObject }) : {}, componentObject.__windowComponents ? getWindowComponents.call(this, { allProps: allProps, componentObject: componentObject }) : {});
+    var evalProps = rjx.__dangerouslyEvalProps ? getEvalProps.call(this, { rjx: rjx }) : {};
+    var insertedComponents = rjx.__dangerouslyInsertComponents ? getComponentProps.call(this, { rjx: rjx, resources: resources, debug: debug }) : {};
+    var allProps = Object.assign({ key: renderIndex$$1 }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+    var computedProps = Object.assign(allProps, rjx.__functionProps ? getFunctionProps.call(this, { allProps: allProps, rjx: rjx }) : {}, rjx.__windowComponents ? getWindowComponents.call(this, { allProps: allProps, rjx: rjx }) : {});
 
     return computedProps;
   } catch (e) {
@@ -328,35 +328,35 @@ function getComputedProps() {
 
 function getChildrenStringOrProp() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var componentObject = options.componentObject,
+  var rjx = options.rjx,
       props = options.props;
 
 
-  return typeof componentObject.children === 'undefined' ? props && props.children && (typeof props.children === 'string' || Array.isArray(props.children)) ? props.children : null : componentObject.children;
+  return typeof rjx.children === 'undefined' ? props && props.children && (typeof props.children === 'string' || Array.isArray(props.children)) ? props.children : null : rjx.children;
 }
 
 function getChildrenProps() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var componentObject = options.componentObject,
-      childComponentObject = options.childComponentObject,
+  var rjx = options.rjx,
+      childrjx = options.childrjx,
       props = options.props,
       renderIndex$$1 = options.renderIndex;
 
-  return componentObject.bindprops ? Object.assign({}, childComponentObject, {
-    props: Object.assign({}, props, childComponentObject.thisprops && childComponentObject.thisprops.style || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
-    childComponentObject.asyncprops && childComponentObject.asyncprops.style || childComponentObject.windowprops && childComponentObject.windowprops.style ? {} : {
+  return rjx.bindprops ? Object.assign({}, childrjx, {
+    props: Object.assign({}, props, childrjx.thisprops && childrjx.thisprops.style || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
+    childrjx.asyncprops && childrjx.asyncprops.style || childrjx.windowprops && childrjx.windowprops.style ? {} : {
       style: {}
-    }, childComponentObject.props, { key: renderIndex$$1 + Math.random() })
-  }) : childComponentObject;
+    }, childrjx.props, { key: renderIndex$$1 + Math.random() })
+  }) : childrjx;
 }
 
-function getComponentObjectChildren() {
+function getRJXChildren() {
   var _this = this;
 
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   // eslint-disable-next-line
-  var componentObject = options.componentObject,
+  var rjx = options.rjx,
       props = options.props,
       resources = options.resources,
       renderIndex$$1 = options.renderIndex,
@@ -364,18 +364,18 @@ function getComponentObjectChildren() {
       logError = _options$logError === undefined ? console.error : _options$logError;
 
   try {
-    if (props._children /* && !componentObject.children */) {
+    if (props._children /* && !rjx.children */) {
         if (Array.isArray(props._children)) {
-          componentObject.children = [].concat(props._children);
+          rjx.children = [].concat(props._children);
         } else {
-          componentObject.children = props._children;
+          rjx.children = props._children;
         }
         delete props._children;
       }
 
-    return componentObject.children && Array.isArray(componentObject.children) && typeof componentObject.children !== 'string' ? componentObject.children.map(function (childComponentObject) {
-      return getRenderedJSON.call(_this, getChildrenProps({ componentObject: componentObject, childComponentObject: childComponentObject, props: props, renderIndex: renderIndex$$1 }), resources);
-    }) : getChildrenStringOrProp({ componentObject: componentObject, props: props });
+    return rjx.children && Array.isArray(rjx.children) && typeof rjx.children !== 'string' ? rjx.children.map(function (childrjx) {
+      return getRenderedJSON.call(_this, getChildrenProps({ rjx: rjx, childrjx: childrjx, props: props, renderIndex: renderIndex$$1 }), resources);
+    }) : getChildrenStringOrProp({ rjx: rjx, props: props });
   } catch (e) {
     logError(e, e.stack ? e.stack : 'no stack');
     return null;
@@ -407,7 +407,7 @@ function rjxHTMLString() {
   return ReactDOMServer.renderToString(getRenderedJSON(rjx, resources, options));
 }
 
-function getRenderedJSON(componentObject, resources) {
+function getRenderedJSON(rjx, resources) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
   // eslint-disable-next-line
@@ -418,24 +418,24 @@ function getRenderedJSON(componentObject, resources) {
       _options$boundedCompo = options.boundedComponents,
       boundedComponents = _options$boundedCompo === undefined ? [] : _options$boundedCompo;
 
-  if (!componentObject) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
+  if (!rjx) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
   try {
     var components = Object.assign({}, componentMap, options.reactComponents);
     var reactComponents = boundedComponents.length ? getBoundedComponents.call(this, { boundedComponents: boundedComponents, reactComponents: components }) : components;
     exports.renderIndex++;
-    var element = getComponentFromMap({ componentObject: componentObject, reactComponents: reactComponents, componentLibraries: componentLibraries });
-    var props = getComputedProps.call(this, { componentObject: componentObject, resources: resources, renderIndex: exports.renderIndex, componentLibraries: componentLibraries, debug: debug });
-    var displayElement = componentObject.comparisonprops ? displayComponent.call(this, { componentObject: componentObject, props: props, renderIndex: exports.renderIndex, componentLibraries: componentLibraries, debug: debug }) : true;
+    var element = getComponentFromMap({ rjx: rjx, reactComponents: reactComponents, componentLibraries: componentLibraries });
+    var props = getComputedProps.call(this, { rjx: rjx, resources: resources, renderIndex: exports.renderIndex, componentLibraries: componentLibraries, debug: debug });
+    var displayElement = rjx.comparisonprops ? displayComponent.call(this, { rjx: rjx, props: props, renderIndex: exports.renderIndex, componentLibraries: componentLibraries, debug: debug }) : true;
 
     if (displayElement) {
-      var children = getComponentObjectChildren.call(this, { componentObject: componentObject, props: props, resources: resources, renderIndex: exports.renderIndex });
+      var children = getRJXChildren.call(this, { rjx: rjx, props: props, resources: resources, renderIndex: exports.renderIndex });
       return createElement(element, props, children);
     } else {
       return null;
     }
   } catch (e) {
     if (debug) {
-      logError({ componentObject: componentObject, resources: resources }, 'this', this);
+      logError({ rjx: rjx, resources: resources }, 'this', this);
       logError(e, e.stack ? e.stack : 'no stack');
     }
     throw e;
