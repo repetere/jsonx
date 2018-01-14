@@ -318,23 +318,56 @@ function getComputedProps() {
   }
 }
 
-if (typeof window$2 === 'undefined') {
-  var window$2 = {};
+function getChildrenStringOrProp() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var componentObject = options.componentObject,
+      props = options.props;
+
+
+  return typeof componentObject.children === 'undefined' ? props && props.children && (typeof props.children === 'string' || Array.isArray(props.children)) ? props.children : null : componentObject.children;
 }
-var componentMap$2 = Object.assign({}, React.DOM, window$2.__rjx_custom_elements);
+
+function getChildrenProps() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var componentObject = options.componentObject,
+      childComponentObject = options.childComponentObject,
+      props = options.props,
+      renderIndex$$1 = options.renderIndex;
+
+  return componentObject.bindprops ? Object.assign({}, childComponentObject, {
+    props: Object.assign({}, props, childComponentObject.thisprops && childComponentObject.thisprops.style || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
+    childComponentObject.asyncprops && childComponentObject.asyncprops.style || childComponentObject.windowprops && childComponentObject.windowprops.style ? {} : {
+      style: {}
+    }, childComponentObject.props, { key: renderIndex$$1 + Math.random() })
+  }) : childComponentObject;
+}
 
 function getComponentObjectChildren() {
+  var _this = this;
+
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   // eslint-disable-next-line
   var componentObject = options.componentObject,
+      props = options.props,
       resources = options.resources,
       renderIndex$$1 = options.renderIndex,
       _options$logError = options.logError,
       logError = _options$logError === undefined ? console.error : _options$logError;
 
   try {
-    return {};
+    if (props._children /* && !componentObject.children */) {
+        if (Array.isArray(props._children)) {
+          componentObject.children = [].concat(props._children);
+        } else {
+          componentObject.children = props._children;
+        }
+        delete props._children;
+      }
+
+    return componentObject.children && Array.isArray(componentObject.children) && typeof componentObject.children !== 'string' ? componentObject.children.map(function (childComponentObject) {
+      return getRenderedJSON.call(_this, getChildrenProps({ componentObject: componentObject, childComponentObject: childComponentObject, props: props, renderIndex: renderIndex$$1 }), resources);
+    }) : getChildrenStringOrProp({ componentObject: componentObject, props: props });
   } catch (e) {
     logError(e, e.stack ? e.stack : 'no stack');
     return null;
@@ -372,7 +405,7 @@ function getRenderedJSON(componentObject, resources) {
     var displayElement = componentObject.comparisonprops ? displayComponent.call(this, { componentObject: componentObject, props: props, renderIndex: renderIndex, componentLibraries: componentLibraries, debug: debug }) : true;
 
     if (displayElement) {
-      var children = getComponentObjectChildren.call(this, { componentObject: componentObject, props: props, renderIndex: renderIndex });
+      var children = getComponentObjectChildren.call(this, { componentObject: componentObject, props: props, resources: resources, renderIndex: renderIndex });
       return createElement(element, props, children);
     } else {
       return null;

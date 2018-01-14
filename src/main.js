@@ -34,7 +34,7 @@ export function getRenderedJSON(componentObject, resources, options = {}) {
       : true;
     
     if (displayElement) {
-      const children = getComponentObjectChildren.call(this, { componentObject, props, renderIndex, });
+      const children = getComponentObjectChildren.call(this, { componentObject, props, resources, renderIndex, });
       return createElement(element, props, children);
     } else {
       return null;
