@@ -502,8 +502,8 @@ function getRenderedJSON() {
     var components = Object.assign({}, componentMap, options.reactComponents);
     var reactComponents = boundedComponents.length ? getBoundedComponents.call(this, { boundedComponents: boundedComponents, reactComponents: components }) : components;
     renderIndex++;
-    var element = getComponentFromMap({ rjx: rjx, reactComponents: reactComponents, componentLibraries: componentLibraries, debug: debug });
-    var props = getComputedProps.call(this, { rjx: rjx, resources: resources, renderIndex: renderIndex, componentLibraries: componentLibraries, debug: debug });
+    var element = getComponentFromMap({ rjx: rjx, reactComponents: reactComponents, componentLibraries: componentLibraries, debug: debug, logError: logError });
+    var props = getComputedProps.call(this, { rjx: rjx, resources: resources, renderIndex: renderIndex, componentLibraries: componentLibraries, debug: debug, logError: logError });
     var displayElement = rjx.comparisonprops ? displayComponent.call(this, { rjx: rjx, props: props, renderIndex: renderIndex, componentLibraries: componentLibraries, debug: debug }) : true;
 
     if (displayElement) {

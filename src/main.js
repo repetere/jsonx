@@ -39,8 +39,8 @@ export function getRenderedJSON(rjx = {}, resources = {}, options = {}) {
       ? getBoundedComponents.call(this, { boundedComponents, reactComponents: components, })
       : components;
     renderIndex++;
-    const element = getComponentFromMap({ rjx, reactComponents, componentLibraries, debug, });
-    const props = getComputedProps.call(this, { rjx, resources, renderIndex, componentLibraries, debug, });
+    const element = getComponentFromMap({ rjx, reactComponents, componentLibraries, debug, logError, });
+    const props = getComputedProps.call(this, { rjx, resources, renderIndex, componentLibraries, debug, logError, });
     const displayElement = (rjx.comparisonprops)
       ? displayComponent.call(this, { rjx, props, renderIndex, componentLibraries, debug, })
       : true;
