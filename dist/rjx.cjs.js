@@ -804,8 +804,13 @@ function getChildrenProperty() {
 }
 
 /**
- * 
- * @param {*} options 
+ * Used to pass properties down to child components if passprops is set to true
+ * @param {Object} options
+ * @param {Object} [options.rjx ={}] - Valid RJX JSON 
+ * @param {Object} [options.childrjx ={}] - Valid RJX JSON 
+ * @param {Number} options.renderIndex - React key property 
+ * @param {Object} [options.props=options.rjx.props] - Props to pull children  Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) 
+ * @returns {Object|String} returns a valid  Valid RJX Child object or a string 
  */
 function getChildrenProps() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -824,6 +829,15 @@ function getChildrenProps() {
   }) : childrjx;
 }
 
+/**
+ * returns React Child Elements via RJX
+ * @param {*} options 
+ * @property {object} this - options for getRenderedJSON
+ * @property {Object} [this.componentLibraries] - react components to render with RJX
+ * @property {boolean} [this.debug=false] - use debug messages
+ * @property {function} [this.logError=console.error] - error logging function
+ * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
+ */
 function getRJXChildren$1() {
   var _this = this;
 
@@ -831,12 +845,12 @@ function getRJXChildren$1() {
 
   // eslint-disable-next-line
   var rjx = options.rjx,
-      props = options.props,
       resources = options.resources,
       renderIndex$$1 = options.renderIndex,
       _options$logError = options.logError,
       logError = _options$logError === undefined ? console.error : _options$logError;
 
+  var props = options.props || rjx.props || {};
   try {
     rjx.children = getChildrenProperty({ rjx: rjx, props: props });
 

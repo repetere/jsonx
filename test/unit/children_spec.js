@@ -52,6 +52,32 @@ const sampleRJX = {
   ],
 };
 
+const passableRJX = {
+  component: 'div',
+  props: {
+    title: 'this is passed',
+    style: {
+      color:'red',
+    },
+  },
+  passprops: true,
+  children: [
+    {
+      component: 'span',
+      children:'should have props',
+    },
+    {
+      component: 'p',
+      props: {
+        style: {
+          color:'blue',
+        },
+      },
+      children:'but no style',
+    },
+  ],
+};
+
 describe('rjx', function () { 
   describe('getChildrenProperty', () => {
     const getChildrenProperty = rjx._rjxChildren.getChildrenProperty;
@@ -180,31 +206,6 @@ describe('rjx', function () {
     });
     it('should pass props except for styles', () => {
       const renderIndex = 1;
-      const passableRJX = {
-        component: 'div',
-        props: {
-          title: 'this is passed',
-          style: {
-            color:'red',
-          },
-        },
-        passprops: true,
-        children: [
-          {
-            component: 'span',
-            children:'should have props',
-          },
-          {
-            component: 'p',
-            props: {
-              style: {
-                color:'blue',
-              },
-            },
-            children:'but no style',
-          },
-        ],
-      };
       const childrjx_span = getChildrenProperty({ rjx: passableRJX, })[0];
       const childrjx_p = getChildrenProperty({ rjx: passableRJX, })[1];
       const childProps_span = getChildrenProps({ rjx: passableRJX, childrjx:childrjx_span, renderIndex, });
@@ -216,33 +217,22 @@ describe('rjx', function () {
       expect(childProps_span.props.key).to.not.eq(renderIndex);
     });
   });
-  /*
-  describe('rjxHTMLString', () => {
-    it('should return an HTML string', () => {
-      const rjxString = rjx.rjxHTMLString({ rjx: sampleRJX, });
-      const dom = new JSDOM(`<!DOCTYPE html><body>${rjxString}</body>`);
-
-      expect(rjxString).to.be.a('string');
-      expect(dom.window.document.body.querySelector('p').innerHTML).to.eql('hello world');
-      expect(dom.window.document.body.querySelector('p').style.color).to.eql('red');
+  describe('getRJXChildren', () => {
+    const getRJXChildren = rjx._rjxChildren.getRJXChildren;
+    it('should return RJX Child Objects', () => {
+      const renderIndex = 1;
+      const RJXChildren = getRJXChildren.call({}, {
+        rjx: passableRJX,
+        renderIndex,
+      });
+      RJXChildren.forEach(ReactiveJSON => {
+        expect(ReactiveJSON).to.be.an('object');
+        expect(ReactiveJSON).to.haveOwnProperty('$$typeof');
+        expect(ReactiveJSON).to.haveOwnProperty('type');
+        expect(ReactiveJSON).to.haveOwnProperty('key');
+        expect(ReactiveJSON).to.haveOwnProperty('ref');
+        expect(ReactiveJSON).to.haveOwnProperty('props');
+      });
     });
   });
-  describe('rjxRender', () => {
-    before(function () {
-      this.jsdom = mochaJSDOM();
-    });
-    it('should render component inside of querySelector', function () {
-      const containerDiv = document.createElement('div');
-      containerDiv.setAttribute('id', 'reactContainer');
-      document.body.appendChild(containerDiv);
-      rjx.rjxRender({ rjx: sampleRJX, querySelector:'#reactContainer', });
-      
-      expect(document.body.querySelector('p').innerHTML).to.eql('hello world');
-      expect(document.body.querySelector('p').style.color).to.eql('red');
-    });    
-    after(function () {
-      this.jsdom();
-    });
-  });
-  */
 });
