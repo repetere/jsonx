@@ -1,16 +1,65 @@
 import { getRenderedJSON, } from './main';
 
-export function getChildrenArray(options = {}) {
-  return options;
-}
-
-export function getChildrenStringOrProp(options = {}) {
-  const { rjx, props, } = options;
-
-  return (typeof rjx.children === 'undefined')
-    ? (props && props.children && (typeof props.children === 'string' || Array.isArray(props.children) ))
-      ? props.children : null
-    : rjx.children;
+/**
+ * returns a valid rjx.children property
+ * @param {Object} options
+ * @param {Object} [options.rjx ={}]- Valid RJX JSON 
+ * @param {Object} [options.props=options.rjx.children] - Props to pull children  Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) 
+ * @returns {Object[]|String} returns a valid rjx.children property that's either an array of RJX objects or a string 
+ * @example 
+ * const sampleRJX = {
+  component: 'div',
+  props: {
+    id: 'generatedRJX',
+    className:'rjx',
+  },
+  children: [
+    {
+      component: 'p',
+      props: {
+        style: {
+          color: 'red',
+        },
+      },
+      children:'hello world',
+    },
+    {
+      component: 'div',
+      children: [
+        {
+          component: 'ul',
+          children: [
+            {
+              component: 'li',
+              children:'list',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+const RJXChildren = getChildrenProperty({ rjx: sampleRJX, }); //=> [ [rjx Object],[rjx Object]]
+const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], }); //=>hello world
+ */
+export function getChildrenProperty(options = {}) {
+  const { rjx = {}, } = options;
+  const props = options.props || rjx.props || {};
+  if (props._children /* && !rjx.children */) {
+    if (Array.isArray(props._children) || typeof props._children==='string'){
+      return props._children;
+    } else {
+      return rjx.children;
+    }
+  } else if (typeof rjx.children === 'undefined'){
+    if (props && props.children && (typeof props.children === 'string' || Array.isArray(props.children))) {
+      return props.children;
+    } else {
+      return null;  
+    }
+  } else {
+    return rjx.children;
+  }
 }
 
 export function getChildrenProps(options = {}) {
@@ -37,18 +86,11 @@ export function getRJXChildren(options = {}) {
   // eslint-disable-next-line
   const { rjx, props, resources, renderIndex, logError = console.error, } = options;
   try {
-    if (props._children /* && !rjx.children */) {
-      if (Array.isArray(props._children)) {
-        rjx.children = [].concat(props._children);
-      } else {
-        rjx.children = props._children;
-      }
-      delete props._children;
-    }
+    rjx.children = getChildrenProperty({ rjx, props, });
 
     return (rjx.children && Array.isArray(rjx.children) && typeof rjx.children !== 'string')
       ? rjx.children.map(childrjx => getRenderedJSON.call(this, getChildrenProps({ rjx, childrjx, props, renderIndex, }), resources))
-      : getChildrenStringOrProp({ rjx, props, });
+      : rjx.children;
 
   } catch (e) {
     logError(e, (e.stack) ? e.stack : 'no stack');

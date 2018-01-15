@@ -100,10 +100,10 @@ export function getComputedProps(options = {}) {
           _resources: resources,
         },
       }, this.props,
-      rjx.props,
-      (useReduxState && !rjx.ignoreReduxProps && (ignoreReduxPropsInComponentLibraries && !componentLibraries[rjx.component])) 
-        ? (this.props && this.props.getState) ? this.props.getState() : {}
-        : {}
+        rjx.props,
+        (useReduxState && !rjx.ignoreReduxProps && (ignoreReduxPropsInComponentLibraries && !componentLibraries[ rjx.component ]))
+          ? (this.props && this.props.getState) ? this.props.getState() : {}
+          : {}
       )
       : undefined;
     const asyncprops = getRJXProps({ rjx, propName: 'asyncprops', traverseObject: resources, });
@@ -118,7 +118,7 @@ export function getComputedProps(options = {}) {
       ? getComponentProps.call(this, { rjx, resources, debug, })
       : {};
     const allProps = Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
-    const computedProps = Object.assign(allProps,
+    const computedProps = Object.assign({}, allProps,
       rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
       rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {});
     

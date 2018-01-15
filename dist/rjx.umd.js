@@ -27477,7 +27477,7 @@ function getComputedProps$1() {
     var evalProps = rjx.__dangerouslyEvalProps ? getEvalProps.call(this, { rjx: rjx }) : {};
     var insertedComponents = rjx.__dangerouslyInsertComponents ? getComponentProps.call(this, { rjx: rjx, resources: resources, debug: debug }) : {};
     var allProps = Object.assign({ key: renderIndex$$1 }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
-    var computedProps = Object.assign(allProps, rjx.__functionProps ? getFunctionProps.call(this, { allProps: allProps, rjx: rjx }) : {}, rjx.__windowComponents ? getWindowComponents.call(this, { allProps: allProps, rjx: rjx }) : {});
+    var computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, { allProps: allProps, rjx: rjx }) : {}, rjx.__windowComponents ? getWindowComponents.call(this, { allProps: allProps, rjx: rjx }) : {});
 
     return computedProps;
   } catch (e) {
@@ -27499,19 +27499,27 @@ var rjxProps = Object.freeze({
 	getComputedProps: getComputedProps$1
 });
 
-function getChildrenArray() {
+function getChildrenProperty() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var _options$rjx = options.rjx,
+      rjx = _options$rjx === undefined ? {} : _options$rjx;
 
-  return options;
-}
-
-function getChildrenStringOrProp() {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var rjx = options.rjx,
-      props = options.props;
-
-
-  return typeof rjx.children === 'undefined' ? props && props.children && (typeof props.children === 'string' || Array.isArray(props.children)) ? props.children : null : rjx.children;
+  var props = options.props || rjx.props || {};
+  if (props._children /* && !rjx.children */) {
+      if (Array.isArray(props._children) || typeof props._children === 'string') {
+        return props._children;
+      } else {
+        return rjx.children;
+      }
+    } else if (typeof rjx.children === 'undefined') {
+    if (props && props.children && (typeof props.children === 'string' || Array.isArray(props.children))) {
+      return props.children;
+    } else {
+      return null;
+    }
+  } else {
+    return rjx.children;
+  }
 }
 
 function getChildrenProps() {
@@ -27543,18 +27551,11 @@ function getRJXChildren$1() {
       logError = _options$logError === undefined ? console.error : _options$logError;
 
   try {
-    if (props._children /* && !rjx.children */) {
-        if (Array.isArray(props._children)) {
-          rjx.children = [].concat(props._children);
-        } else {
-          rjx.children = props._children;
-        }
-        delete props._children;
-      }
+    rjx.children = getChildrenProperty({ rjx: rjx, props: props });
 
     return rjx.children && Array.isArray(rjx.children) && typeof rjx.children !== 'string' ? rjx.children.map(function (childrjx) {
       return getRenderedJSON.call(_this, getChildrenProps({ rjx: rjx, childrjx: childrjx, props: props, renderIndex: renderIndex$$1 }), resources);
-    }) : getChildrenStringOrProp({ rjx: rjx, props: props });
+    }) : rjx.children;
   } catch (e) {
     logError(e, e.stack ? e.stack : 'no stack');
     return null;
@@ -27562,8 +27563,7 @@ function getRJXChildren$1() {
 }
 
 var rjxChildren = Object.freeze({
-	getChildrenArray: getChildrenArray,
-	getChildrenStringOrProp: getChildrenStringOrProp,
+	getChildrenProperty: getChildrenProperty,
 	getChildrenProps: getChildrenProps,
 	getRJXChildren: getRJXChildren$1
 });
