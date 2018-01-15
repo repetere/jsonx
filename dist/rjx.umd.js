@@ -20,6 +20,7 @@ object-assign
 @license MIT
 */
 
+/* eslint-disable no-unused-vars */
 var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
@@ -119,6 +120,15 @@ if (process.env.NODE_ENV !== 'production') {
 
 var emptyObject_1 = emptyObject;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+
 function makeEmptyFunction(arg) {
   return function () {
     return arg;
@@ -168,6 +178,17 @@ var W=V&&U||V;var react_production_min=W["default"]?W["default"]:W;
  *
  */
 
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
 var validateFormat = function validateFormat(format) {};
 
 if (process.env.NODE_ENV !== 'production') {
@@ -200,6 +221,13 @@ function invariant(condition, format, a, b, c, d, e, f) {
 }
 
 var invariant_1 = invariant;
+
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
 
 var warning = emptyFunction_1;
 
@@ -1701,6 +1729,21 @@ var ExecutionEnvironment = {
 
 var ExecutionEnvironment_1 = ExecutionEnvironment;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+
+
+/**
+ * Upstream version of event listener. Does not take into account specific
+ * nature of platform.
+ */
 var EventListener = {
   /**
    * Listen to DOM events during the bubble phase.
@@ -1759,6 +1802,27 @@ var EventListener = {
 
 var EventListener_1 = EventListener;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+/* eslint-disable fb-www/typeof-undefined */
+
+/**
+ * Same as document.activeElement but wraps in a try-catch block. In IE it is
+ * not safe to call document.activeElement if there is nothing focused.
+ *
+ * The activeElement will be null only if the document or document body is not
+ * yet defined.
+ *
+ * @param {?DOMDocument} doc Defaults to current document.
+ * @return {?DOMElement}
+ */
 function getActiveElement(doc) /*?DOMElement*/{
   doc = doc || (typeof document !== 'undefined' ? document : undefined);
   if (typeof doc === 'undefined') {
@@ -1837,6 +1901,19 @@ function shallowEqual(objA, objB) {
 
 var shallowEqual_1 = shallowEqual;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+/**
+ * @param {*} object The object to check.
+ * @return {boolean} Whether or not the object is a DOM node.
+ */
 function isNode(object) {
   var doc = object ? object.ownerDocument || object : document;
   var defaultView = doc.defaultView || window;
@@ -1845,12 +1922,43 @@ function isNode(object) {
 
 var isNode_1 = isNode;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+
+
+/**
+ * @param {*} object The object to check.
+ * @return {boolean} Whether or not the object is a DOM text node.
+ */
 function isTextNode(object) {
   return isNode_1(object) && object.nodeType == 3;
 }
 
 var isTextNode_1 = isTextNode;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+
+
+
+/*eslint-disable no-bitwise */
+
+/**
+ * Checks if a given DOM node contains or is another DOM node.
+ */
 function containsNode(outerNode, innerNode) {
   if (!outerNode || !innerNode) {
     return false;
@@ -1877,6 +1985,10 @@ var containsNode_1 = containsNode;
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ */
+
+/**
+ * @param {DOMElement} node input/textarea to focus
  */
 
 function focusNode(node) {
@@ -2143,6 +2255,15 @@ var Sg={createPortal:Qg,findDOMNode:function(a){if(null==a)return null;if(1===a.
 E$1("40");return a._reactRootContainer?(Z.unbatchedUpdates(function(){Pg(null,null,a,!1,function(){a._reactRootContainer=null;});}), !0):!1},unstable_createPortal:Qg,unstable_batchedUpdates:tc,unstable_deferredUpdates:Z.deferredUpdates,flushSync:Z.flushSync,__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{EventPluginHub:mb,EventPluginRegistry:Va,EventPropagators:Cb,ReactControlledComponent:qc,ReactDOMComponentTree:sb,ReactDOMEventListener:xd}};
 Z.injectIntoDevTools({findFiberByHostInstance:pb,bundleType:0,version:"16.2.0",rendererPackageName:"react-dom"});var Tg=Object.freeze({default:Sg}); var Ug=Tg&&Sg||Tg;var reactDom_production_min=Ug["default"]?Ug["default"]:Ug;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
 var _uppercasePattern = /([A-Z])/g;
 
 /**
@@ -2186,6 +2307,15 @@ function hyphenateStyleName(string) {
 }
 
 var hyphenateStyleName_1 = hyphenateStyleName;
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
 
 var _hyphenPattern = /-(.)/g;
 
@@ -17667,6 +17797,10 @@ if (process.env.NODE_ENV === 'production') {
  * @typechecks static-only
  */
 
+/**
+ * Memoizes the return value of a function that accepts one string argument.
+ */
+
 function memoizeStringOnly(callback) {
   var cache = {};
   return function (string) {
@@ -17690,6 +17824,8 @@ EventHandlers.prototype = Object.create(null);
 function EventEmitter() {
   EventEmitter.init.call(this);
 }
+// nodejs oddity
+// require('events') === require('events').EventEmitter
 EventEmitter.EventEmitter = EventEmitter;
 
 EventEmitter.usingDomains = false;
@@ -18900,6 +19036,7 @@ function objectToString(o) {
 }
 
 
+// log is just a thin wrapper to console.log that prepends a timestamp
 
 
 
@@ -19172,9 +19309,6 @@ Buffer$1.TYPED_ARRAY_SUPPORT = global.TYPED_ARRAY_SUPPORT !== undefined
   ? global.TYPED_ARRAY_SUPPORT
   : true;
 
-/*
- * Export kMaxLength after typed array support is determined.
- */
 function kMaxLength () {
   return Buffer$1.TYPED_ARRAY_SUPPORT
     ? 0x7fffffff
@@ -22776,6 +22910,9 @@ Stream$1.PassThrough = PassThrough$1;
 
 // Backwards-compat with node 0.4.x
 Stream$1.Stream = Stream$1;
+
+// old-style streams.  Note that the pipe method (the only relevant
+// part of this class) is overridden in the Readable class.
 
 function Stream$1() {
   EventEmitter.call(this);
@@ -27499,6 +27636,48 @@ var rjxProps = Object.freeze({
 	getComputedProps: getComputedProps$1
 });
 
+/**
+ * returns a valid rjx.children property
+ * @param {Object} options
+ * @param {Object} [options.rjx ={}]- Valid RJX JSON 
+ * @param {Object} [options.props=options.rjx.children] - Props to pull children  Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) 
+ * @returns {Object[]|String} returns a valid rjx.children property that's either an array of RJX objects or a string 
+ * @example 
+ * const sampleRJX = {
+  component: 'div',
+  props: {
+    id: 'generatedRJX',
+    className:'rjx',
+  },
+  children: [
+    {
+      component: 'p',
+      props: {
+        style: {
+          color: 'red',
+        },
+      },
+      children:'hello world',
+    },
+    {
+      component: 'div',
+      children: [
+        {
+          component: 'ul',
+          children: [
+            {
+              component: 'li',
+              children:'list',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+const RJXChildren = getChildrenProperty({ rjx: sampleRJX, }); //=> [ [rjx Object],[rjx Object]]
+const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], }); //=>hello world
+ */
 function getChildrenProperty() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var _options$rjx = options.rjx,
