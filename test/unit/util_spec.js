@@ -167,28 +167,38 @@ describe('rjx utils', function () {
       }
     });
   });
-  describe('getComponentFromLibrary', () => {
-    const reactBootstrap = {
-      Welcome,
-      WelcomeNonBind,
+
+  */
+  describe('traverse', () => {
+    const testObj = {
+      user: {
+        name: 'rjx',
+        description: 'react withouth javascript',
+      },
+      stats: {
+        logins: 102,
+        comments: 3,
+      },
+      authentication: 'OAuth2',
     };
-    const componentLibraries = {
-      reactBootstrap,
-    };
-    it('should return undefined if not valid', () => {
-      expect(rjx._rjxComponents.getComponentFromLibrary()).to.be.undefined;
+    const traverse = rjx._rjxUtils.traverse;
+    it('should return properties from an object from the array of paths', () => {
+      const testVals = { auth: ['authentication',], username: ['user', 'name',], };
+      expect( traverse(testVals, testObj)).to.eql({ auth:testObj.authentication, username:testObj.user.name,  });
     });
-    it('should return a function if selecting valid component library', () => {
-      const rjxObj = {
-        rjx: {
-          component: 'reactBootstrap.Welcome',
-        },
-        componentLibraries,
-      };
-      expect(rjx._rjxComponents.getComponentFromLibrary(rjxObj)).to.be.eql(Welcome);
+    it('should return the entire object if no paths provided', () => {
+      const testVals = { wholeObj: [], };
+      expect( traverse(testVals, testObj)).to.eql({ wholeObj:testObj,  });
+    });
+    it('should return undefined if paths are invalid', () => {
+      const testVals = { emptyObj: ['invalid','path'], };
+      expect( traverse(testVals, testObj)).to.eql({ emptyObj:undefined, });
+    });
+    it('should throw an error if paths are not an array of strings or numeric indexes', () => {
+      const testVals = { emptyObj: ()=>undefined, };
+      expect(traverse.bind(null, testVals, testObj)).to.throw(Error);
     });
   });
-  */
   describe('validateRJX', () => {
     const validateRJX = rjx._rjxUtils.validateRJX;
     it('should return true if RJX is valid',  ()=> {

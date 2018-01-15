@@ -26922,7 +26922,10 @@ function getAdvancedBinding() {
   return true;
 }
 
-function traverse(paths, data) {
+function traverse() {
+  var paths = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
   var keys = Object.keys(paths);
   if (!keys.length) return paths;
   return keys.reduce(function (result, key) {
@@ -26934,7 +26937,7 @@ function traverse(paths, data) {
         value = value[prop];
       }
       result[key] = _path.length ? undefined : value;
-    } else throw new TypeError('asyncprop paths must be a string or an array of strings or numeric indexes');
+    } else throw new TypeError('dynamic property paths must be a string or an array of strings or numeric indexes');
     return result;
   }, {});
 }

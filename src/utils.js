@@ -75,7 +75,7 @@ export function getAdvancedBinding() {
   return true;
 }
 
-export function traverse(paths, data) {
+export function traverse(paths = [], data = {}) {
   let keys = Object.keys(paths);
   if (!keys.length) return paths;
   return keys.reduce((result, key) => {
@@ -88,7 +88,7 @@ export function traverse(paths, data) {
         value = value[prop];
       }
       result[key] = (_path.length) ? undefined : value;
-    } else throw new TypeError('asyncprop paths must be a string or an array of strings or numeric indexes');
+    } else throw new TypeError('dynamic property paths must be a string or an array of strings or numeric indexes');
     return result;
   }, {});
 }
