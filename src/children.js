@@ -62,9 +62,15 @@ export function getChildrenProperty(options = {}) {
   }
 }
 
+/**
+ * 
+ * @param {*} options 
+ */
 export function getChildrenProps(options = {}) {
-  const { rjx, childrjx, props, renderIndex, } = options;
-  return (rjx.bindprops)
+  const { rjx = {}, childrjx, renderIndex, } = options;
+  const props = options.props || rjx.props || {};
+
+  return (rjx.passprops && typeof childrjx==='object')
     ? Object.assign({},
       childrjx, {
         props: Object.assign({},

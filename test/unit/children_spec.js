@@ -169,6 +169,53 @@ describe('rjx', function () {
       expect(RJXChildren4).to.be.null;
     });
   });
+  describe('getChildrenProps', () => {
+    const getChildrenProps = rjx._rjxChildren.getChildrenProps;
+    const getChildrenProperty = rjx._rjxChildren.getChildrenProperty;
+    it('should return child RJX if not passing props', () => {
+      const renderIndex = 1;
+      const childrjx = getChildrenProperty({ rjx: sampleRJX, })[0];
+      const childProps = getChildrenProps({ rjx: sampleRJX, childrjx, renderIndex, });
+      expect(childProps).to.eq(childrjx);
+    });
+    it('should pass props except for styles', () => {
+      const renderIndex = 1;
+      const passableRJX = {
+        component: 'div',
+        props: {
+          title: 'this is passed',
+          style: {
+            color:'red',
+          },
+        },
+        passprops: true,
+        children: [
+          {
+            component: 'span',
+            children:'should have props',
+          },
+          {
+            component: 'p',
+            props: {
+              style: {
+                color:'blue',
+              },
+            },
+            children:'but no style',
+          },
+        ],
+      };
+      const childrjx_span = getChildrenProperty({ rjx: passableRJX, })[0];
+      const childrjx_p = getChildrenProperty({ rjx: passableRJX, })[1];
+      const childProps_span = getChildrenProps({ rjx: passableRJX, childrjx:childrjx_span, renderIndex, });
+      const childProps_p = getChildrenProps({ rjx: passableRJX, childrjx:childrjx_p, renderIndex, });
+      expect(childProps_span.props.title).to.eq(passableRJX.props.title);
+      expect(childProps_p.props.title).to.eq(passableRJX.props.title);
+      expect(childProps_p.props.style.color).to.eq(passableRJX.children[ 1 ].props.style.color);
+      expect(childProps_p.props.key).to.not.eq(renderIndex);
+      expect(childProps_span.props.key).to.not.eq(renderIndex);
+    });
+  });
   /*
   describe('rjxHTMLString', () => {
     it('should return an HTML string', () => {

@@ -205,9 +205,9 @@ export function traverse(paths = {}, data = {}) {
  * @throws {SyntaxError|TypeError|ReferenceError}
  */
 export function validateRJX(rjx = {}, returnAllErrors = false) {
-  const dynamicPropsNames = ['asyncprops', 'windowprops', 'thisprops', ];
-  const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps', ];
-  const validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps','comparisonprops','comparisonorprops'].concat(dynamicPropsNames, evalPropNames);
+  const dynamicPropsNames = ['asyncprops', 'windowprops', 'thisprops',];
+  const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps',];
+  const validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps', 'comparisonprops', 'comparisonorprops', 'passprops', ].concat(dynamicPropsNames, evalPropNames);
   let errors = [];
   if (!rjx.component) {
     errors.push(SyntaxError('[0001] Missing React Component'));
@@ -335,8 +335,11 @@ export function validateRJX(rjx = {}, returnAllErrors = false) {
         } else if(typeof c.left==='undefined') {
           errors.push(TypeError('[0019] rjx.comparisonprops  must be have a left comparison value'));
         }
-      })
+      });
     }
+  }
+  if (typeof rjx.passprops !== 'undefined' && typeof rjx.passprops !== 'boolean') {
+    errors.push(TypeError('[0020] rjx.passprops  must be boolean'));
   }
   const invalidKeys = Object.keys(rjx).filter(key => validKeys.indexOf(key) === -1);
   if (errors.length) {

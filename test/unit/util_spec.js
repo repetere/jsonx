@@ -648,6 +648,20 @@ describe('rjx utils', function () {
       expect(evalError2[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
+    it('should validate passprops is boolean', () => {
+      const rjxObj = {
+        component: 'myComponent',
+        passprops: 'should be an obj',
+      };
+      const rjxObjValid = {
+        component: 'myComponent',
+        passprops: true,
+      };
+      const evalError = validateRJX(rjxObj, true);
+      const validTest = validateRJX(rjxObjValid);
+      expect(evalError[ 0 ]).to.be.an('error');
+      expect(validTest).to.be.true;
+    });
   });
   
 });

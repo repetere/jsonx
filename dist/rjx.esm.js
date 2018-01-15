@@ -291,7 +291,7 @@ function validateRJX() {
 
   var dynamicPropsNames = ['asyncprops', 'windowprops', 'thisprops'];
   var evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps'];
-  var validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps', 'comparisonprops', 'comparisonorprops'].concat(dynamicPropsNames, evalPropNames);
+  var validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps', 'comparisonprops', 'comparisonorprops', 'passprops'].concat(dynamicPropsNames, evalPropNames);
   var errors = [];
   if (!rjx.component) {
     errors.push(SyntaxError('[0001] Missing React Component'));
@@ -425,6 +425,9 @@ function validateRJX() {
         }
       });
     }
+  }
+  if (typeof rjx.passprops !== 'undefined' && typeof rjx.passprops !== 'boolean') {
+    errors.push(TypeError('[0020] rjx.passprops  must be boolean'));
   }
   var invalidKeys = Object.keys(rjx).filter(function (key) {
     return validKeys.indexOf(key) === -1;
@@ -794,14 +797,20 @@ function getChildrenProperty() {
   }
 }
 
+/**
+ * 
+ * @param {*} options 
+ */
 function getChildrenProps() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var rjx = options.rjx,
+  var _options$rjx2 = options.rjx,
+      rjx = _options$rjx2 === undefined ? {} : _options$rjx2,
       childrjx = options.childrjx,
-      props = options.props,
       renderIndex$$1 = options.renderIndex;
 
-  return rjx.bindprops ? Object.assign({}, childrjx, {
+  var props = options.props || rjx.props || {};
+
+  return rjx.passprops && (typeof childrjx === 'undefined' ? 'undefined' : _typeof(childrjx)) === 'object' ? Object.assign({}, childrjx, {
     props: Object.assign({}, props, childrjx.thisprops && childrjx.thisprops.style || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
     childrjx.asyncprops && childrjx.asyncprops.style || childrjx.windowprops && childrjx.windowprops.style ? {} : {
       style: {}
@@ -833,6 +842,8 @@ function getRJXChildren$1() {
     return null;
   }
 }
+
+
 
 var rjxChildren = Object.freeze({
 	getChildrenProperty: getChildrenProperty,
