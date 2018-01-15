@@ -16,6 +16,70 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var toConsumableArray = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+};
+
 function displayComponent$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var rjx = options.rjx,
@@ -111,46 +175,64 @@ function traverse(paths, data) {
   }, {});
 }
 
-function validateRJX(rjx) {
+function validateRJX() {
+  var rjx = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var returnAllErrors = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
   var dynamicPropsNames = ['asyncprops', 'windowprops', 'thisprops'];
   var evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps'];
   var validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps'].concat(dynamicPropsNames, evalPropNames);
+  var errors = [];
   if (!rjx.component) {
-    throw new Error('Missing React Component');
+    errors.push(SyntaxError('[0001] Missing React Component'));
   }
   if (rjx.props) {
-    if (_typeof(rjx.props) !== 'object') {
-      throw new Error('props must be an Object / valid React props');
+    if (_typeof(rjx.props) !== 'object' || Array.isArray(rjx.props)) {
+      errors.push(TypeError('[0002] ' + rjx.component + ': props must be an Object / valid React props'));
     }
-    if (rjx.props.children) {
-      if (typeof rjx.props.children !== 'string' || !Array.isArray(rjx.props.children)) {
-        throw new Error('props.children must be an array of RJX JSON objects or a string');
-      }
-      if (typeof rjx.props._children !== 'string' || !Array.isArray(rjx.props._children)) {
-        throw new Error('props._children must be an array of RJX JSON objects or a string');
-      }
+    if (rjx.props.children && (typeof rjx.props.children !== 'string' || !Array.isArray(rjx.props.children))) {
+      errors.push(TypeError('[0003] ' + rjx.component + ': props.children must be an array of RJX JSON objects or a string'));
+    }
+    if (rjx.props._children && (typeof rjx.props._children !== 'string' || !Array.isArray(rjx.props._children))) {
+      errors.push(TypeError('[0004] ' + rjx.component + ': props._children must be an array of RJX JSON objects or a string'));
     }
   }
   if (rjx.children) {
-    if (typeof rjx.children !== 'string' || !Array.isArray(rjx.children)) {
-      throw new Error('children must be an array of RJX JSON objects or a string');
+    if (typeof rjx.children !== 'string' && !Array.isArray(rjx.children)) {
+      errors.push(TypeError('[0005] ' + rjx.component + ': children must be an array of RJX JSON objects or a string'));
+    }
+    if (Array.isArray(rjx.children)) {
+      var _errors;
+
+      var childrenErrors = rjx.children.filter(function (c) {
+        return (typeof c === 'undefined' ? 'undefined' : _typeof(c)) === 'object';
+      }).map(function (c) {
+        return validateRJX(c, returnAllErrors);
+      });
+      errors = (_errors = errors).concat.apply(_errors, toConsumableArray(childrenErrors));
     }
   }
   dynamicPropsNames.forEach(function (dynamicprop) {
     var rjxDynamicProps = rjx[dynamicprop];
     if (rjxDynamicProps) {
+      // if (dynamicprop === 'thisprops') {
+      //   console.log({ dynamicprop, rjxDynamicProps });
+      // }
       if ((typeof rjxDynamicProps === 'undefined' ? 'undefined' : _typeof(rjxDynamicProps)) !== 'object') {
-        throw new TypeError(dynamicprop + ' must be an object');
+        errors.push(TypeError('[0006] ' + dynamicprop + ' must be an object'));
       }
       Object.keys(rjxDynamicProps).forEach(function (resolvedDynamicProp) {
         if (!Array.isArray(rjxDynamicProps[resolvedDynamicProp])) {
-          throw new TypeError('rjx.' + dynamicprop + '.' + resolvedDynamicProp + ' must be an array of strings');
+          errors.push(TypeError('[0007] rjx.' + dynamicprop + '.' + resolvedDynamicProp + ' must be an array of strings'));
         }
-        var allStringArray = resolvedDynamicProp.filter(function (propArrayItem) {
-          return typeof propArrayItem === 'string';
-        });
-        if (allStringArray.length !== rjxDynamicProps[resolvedDynamicProp].length) {
-          throw new TypeError('rjx.' + dynamicprop + '.' + resolvedDynamicProp + ' must be an array of strings');
+        if (Array.isArray(rjxDynamicProps[resolvedDynamicProp])) {
+          var allStringArray = rjxDynamicProps[resolvedDynamicProp].filter(function (propArrayItem) {
+            return typeof propArrayItem === 'string';
+          });
+
+          if (allStringArray.length !== rjxDynamicProps[resolvedDynamicProp].length) {
+            errors.push(TypeError('[0008] rjx.' + dynamicprop + '.' + resolvedDynamicProp + ' must be an array of strings'));
+          }
         }
       });
     }
@@ -159,7 +241,7 @@ function validateRJX(rjx) {
   var boundEvalProps = rjx.__dangerouslyBindEvalProps;
   if (evalProps || boundEvalProps) {
     if (evalProps && (typeof evalProps === 'undefined' ? 'undefined' : _typeof(evalProps)) !== 'object' || boundEvalProps && (typeof boundEvalProps === 'undefined' ? 'undefined' : _typeof(boundEvalProps)) !== 'object') {
-      throw new TypeError('__dangerouslyEvalProps must be an object of strings to convert to valid javascript');
+      errors.push(TypeError('[0009] __dangerouslyEvalProps must be an object of strings to convert to valid javascript'));
     }
     evalPropNames.filter(function (evalProp) {
       return rjx[evalProp];
@@ -168,12 +250,18 @@ function validateRJX(rjx) {
       var scopedEval = eval;
       Object.keys(evProp).forEach(function (propToEval) {
         if (typeof evProp[propToEval] !== 'string') {
-          throw new TypeError('rjx.' + eProps + '.' + evProp + ' must be a string');
+          errors.push(TypeError('[0010] rjx.' + eProps + '.' + evProp + ' must be a string'));
         }
         try {
-          scopedEval(evProp[propToEval]);
+          // console.log({ eProps });
+          if (eProps === '__dangerouslyBindEvalProps') {
+            var funcToBind = scopedEval('(' + evProp[propToEval] + ')');
+            funcToBind.call({ bounded: true });
+          } else {
+            scopedEval(evProp[propToEval]);
+          }
         } catch (e) {
-          throw e;
+          errors.push(e);
         }
       });
     });
@@ -183,36 +271,42 @@ function validateRJX(rjx) {
       try {
         validateRJX(rjx.__dangerouslyInsertComponents[insertedComponents]);
       } catch (e) {
-        throw new TypeError('rjx.__dangerouslyInsertComponents.' + insertedComponents + ' must be a valid RJX JSON Object', e);
+        errors.push(TypeError('[0011] rjx.__dangerouslyInsertComponents.' + insertedComponents + ' must be a valid RJX JSON Object: ' + e.toString()));
       }
     });
   }
   if (rjx.__functionProps) {
     if (_typeof(rjx.__functionProps) !== 'object') {
-      throw new TypeError('rjx.__functionProps  must be an object');
+      errors.push(TypeError('[0012] rjx.__functionProps  must be an object'));
+    } else {
+
+      Object.keys(rjx.__functionProps).forEach(function (fProp) {
+        if (rjx.__functionProps[fProp] && (typeof rjx.__functionProps[fProp] !== 'string' || rjx.__functionProps[fProp].indexOf('func:') === -1)) {
+          errors.push(ReferenceError('[0013] rjx.__functionProps.' + fProp + ' must reference a function (i.e. func:this.props.logoutUser())'));
+        }
+      });
     }
-    Object.keys(rjx.__functionProps).forEach(function (fProp) {
-      if (fProp.indexOf('func:') === -1) {
-        throw new ReferenceError('rjx.__functionProps.' + fProp + ' must reference a function (i.e. func:this.props.logoutUser())');
-      }
-    });
   }
-  if (rjx.windowCompProps && _typeof(rjx.windowCompProps)) {
-    throw new TypeError('rjx.windowCompProps  must be an object');
+  if (rjx.windowCompProps && (_typeof(rjx.windowCompProps) !== 'object' || Array.isArray(rjx.windowCompProps))) {
+    errors.push(TypeError('[0013] rjx.windowCompProps  must be an object'));
   }
   if (rjx.__windowComponents) {
     if (_typeof(rjx.__windowComponents) !== 'object') {
-      throw new TypeError('rjx.__windowComponents must be an object');
+      errors.push(TypeError('[0014] rjx.__windowComponents must be an object'));
     }
     Object.keys(rjx.__windowComponents).forEach(function (cProp) {
-      if (cProp.indexOf('func:') === -1) {
-        throw new ReferenceError('rjx.__windowComponents.' + cProp + ' must reference a window element on window.__rjx_custom_elements (i.e. func:window.__rjx_custom_elements.bootstrapModal)');
+      if (typeof rjx.__windowComponents[cProp] !== 'string' || rjx.__windowComponents[cProp].indexOf('func:') === -1) {
+        errors.push(ReferenceError('[0015] rjx.__windowComponents.' + cProp + ' must reference a window element on window.__rjx_custom_elements (i.e. func:window.__rjx_custom_elements.bootstrapModal)'));
       }
     });
   }
   var invalidKeys = Object.keys(rjx).filter(function (key) {
-    return validKeys.indexOf(key) >= 0;
+    return validKeys.indexOf(key) === -1;
   });
+  if (errors.length) {
+    if (returnAllErrors) return errors;
+    throw errors[0];
+  }
   return invalidKeys.length ? 'Warning: Invalid Keys [' + invalidKeys.join() + ']' : true;
 }
 
