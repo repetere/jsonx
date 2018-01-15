@@ -572,19 +572,83 @@ if (typeof window$2 === 'undefined') {
   var window$2 = {};
 }
 
-var componentMap$2 = Object.assign({}, React.DOM, typeof window$2 !== 'undefined' ? window$2.__rjx_custom_elements : {});
+/**
+ * It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
+ * @param {Object} [traverseObject={}] - the object that contains values of propName
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+ * @param {Object} [options.propName='asyncprops'] - Property on RJX to resolve values onto, i.e (asyncprops,thisprops,windowprops) 
+ * @returns {Object} resolved object
+ * @example
+ const traverseObject = {
+  user: {
+    name: 'rjx',
+    description: 'react withouth javascript',
+  },
+  stats: {
+    logins: 102,
+    comments: 3,
+  },
+  authentication: 'OAuth2',
+};
+const testRJX = {
+  component: 'div',
+  props: {
+    id: 'generatedRJX',
+    className:'rjx',
+  },
+  asyncprops:{
+    auth: [ 'authentication', ],
+    username: [ 'user', 'name', ],
+  },
+  children: [
+    {
+      component: 'p',
+      props: {
+        style: {
+          color: 'red',
+          fontWeight:'bold',
+        },
+      },
+      children:'hello world',
+    },
+  ],
+};
+const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
+// => {
+//   auth: 'OAuth2',
+//   username: 'rjx'
+// }
 
+//finally resolves:
+const testRJX = {
+  component: 'div',
+  props: {
+    id: 'generatedRJX',
+    className:'rjx',
+    auth: 'OAuth2',
+    username: 'rjx',
+  },
+  children: [
+    {
+      component: 'p',
+      props: {
+        style: {
+          color: 'red',
+          fontWeight:'bold',
+        },
+      },
+      children:'hello world',
+    },
+  ],
+};
+ */
 function getRJXProps() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   // eslint-disable-next-line
-  var rjx = options.rjx,
-      resources = options.resources,
-      renderIndex$$1 = options.renderIndex,
-      _options$logError = options.logError,
-      logError = _options$logError === undefined ? console.error : _options$logError,
-      _options$useReduxStat = options.useReduxState,
-      useReduxState = _options$useReduxStat === undefined ? true : _options$useReduxStat,
+  var _options$rjx = options.rjx,
+      rjx = _options$rjx === undefined ? {} : _options$rjx,
       _options$propName = options.propName,
       propName = _options$propName === undefined ? 'asyncprops' : _options$propName,
       _options$traverseObje = options.traverseObject,
@@ -596,6 +660,28 @@ function getRJXProps() {
   return rjx[propName] && _typeof(rjx[propName]) === 'object' ? traverse(rjx[propName], traverseObject) : {};
 }
 
+/**
+ * Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+ * @returns {Object} returns resolved object with evaluated javascript
+ * @example
+ const testVals = {
+    auth: 'true',
+    username: '(user={})=>user.name',
+  };
+  const testRJX = Object.assign({}, sampleRJX, {
+    __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {
+      email: '(function getUser(user={}){ return this.testBound(); })',
+    },
+  });
+  const RJXP = getEvalProps.call({ testBound: () => 'bounded', }, { rjx: testRJX, });
+  const evalutedComputedFunc = RJXP.username({ name: 'bob', });
+  const evalutedComputedBoundFunc = RJXP.email({ email:'test@email.domain', });
+  // expect(RJXP.auth).to.be.true;
+  // expect(evalutedComputedFunc).to.eql('bob');
+  // expect(evalutedComputedBoundFunc).to.eql('bounded');
+ */
 function getEvalProps() {
   var _this = this;
 
@@ -603,24 +689,37 @@ function getEvalProps() {
   var rjx = options.rjx;
 
   var scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
-  return Object.keys(rjx.__dangerouslyEvalProps).reduce(function (eprops, epropName) {
+  var evProps = Object.keys(rjx.__dangerouslyEvalProps || {}).reduce(function (eprops, epropName) {
     // eslint-disable-next-line
-    eprops[epropName] = rjx.__dangerouslyBindEvalProps[epropName] ? scopedEval(rjx.__dangerouslyEvalProps[epropName]).bind(_this) : scopedEval(rjx.__dangerouslyEvalProps[epropName]);
+    eprops[epropName] = scopedEval(rjx.__dangerouslyEvalProps[epropName]);
     return eprops;
   }, {});
+  var evBindProps = Object.keys(rjx.__dangerouslyBindEvalProps || {}).reduce(function (eprops, epropName) {
+    // eslint-disable-next-line
+    eprops[epropName] = scopedEval(rjx.__dangerouslyBindEvalProps[epropName]).bind(_this);
+    return eprops;
+  }, {});
+
+  return Object.assign({}, evProps, evBindProps);
 }
 
+/**
+ * Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+ * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
+ * @returns {Object} resolved object of React Components
+ */
 function getComponentProps() {
   var _this2 = this;
 
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var rjx = options.rjx,
-      resources = options.resources,
-      debug = options.debug;
+      resources = options.resources;
 
   return Object.keys(rjx.__dangerouslyInsertComponents).reduce(function (cprops, cpropName) {
     // eslint-disable-next-line
-    cprops[cpropName] = getRenderedJSON.call(_this2, rjx.__dangerouslyInsertComponents[cpropName], resources, debug);
+    cprops[cpropName] = getRenderedJSON.call(_this2, rjx.__dangerouslyInsertComponents[cpropName], resources);
     return cprops;
   }, {});
 }
@@ -645,8 +744,8 @@ function getFunctionFromProps(options) {
 function getFunctionProps() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var allProps = options.allProps,
-      _options$rjx = options.rjx,
-      rjx = _options$rjx === undefined ? {} : _options$rjx;
+      _options$rjx2 = options.rjx,
+      rjx = _options$rjx2 === undefined ? {} : _options$rjx2;
 
   var getFunction = getFunctionFromProps.bind(this);
   var funcProps = rjx.__functionProps;
@@ -686,10 +785,10 @@ function getComputedProps$1() {
   var rjx = options.rjx,
       resources = options.resources,
       renderIndex$$1 = options.renderIndex,
-      _options$logError2 = options.logError,
-      logError = _options$logError2 === undefined ? console.error : _options$logError2,
-      _options$useReduxStat2 = options.useReduxState,
-      useReduxState = _options$useReduxStat2 === undefined ? true : _options$useReduxStat2,
+      _options$logError = options.logError,
+      logError = _options$logError === undefined ? console.error : _options$logError,
+      _options$useReduxStat = options.useReduxState,
+      useReduxState = _options$useReduxStat === undefined ? true : _options$useReduxStat,
       _options$ignoreReduxP = options.ignoreReduxPropsInComponentLibraries,
       ignoreReduxPropsInComponentLibraries = _options$ignoreReduxP === undefined ? true : _options$ignoreReduxP,
       componentLibraries = options.componentLibraries,
@@ -707,7 +806,7 @@ function getComputedProps$1() {
     var thisprops = getRJXProps({ rjx: rjx, propName: 'thisprops', traverseObject: componentThisProp });
 
     //allowing javascript injections
-    var evalProps = rjx.__dangerouslyEvalProps ? getEvalProps.call(this, { rjx: rjx }) : {};
+    var evalProps = rjx.__dangerouslyEvalProps || rjx.__dangerouslyBindEvalProps ? getEvalProps.call(this, { rjx: rjx }) : {};
     var insertedComponents = rjx.__dangerouslyInsertComponents ? getComponentProps.call(this, { rjx: rjx, resources: resources, debug: debug }) : {};
     var allProps = Object.assign({ key: renderIndex$$1 }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
     var computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, { allProps: allProps, rjx: rjx }) : {}, rjx.__windowComponents ? getWindowComponents.call(this, { allProps: allProps, rjx: rjx }) : {});
@@ -722,7 +821,6 @@ function getComputedProps$1() {
 
 
 var rjxProps = Object.freeze({
-	componentMap: componentMap$2,
 	getRJXProps: getRJXProps,
 	getEvalProps: getEvalProps,
 	getComponentProps: getComponentProps,
@@ -732,48 +830,6 @@ var rjxProps = Object.freeze({
 	getComputedProps: getComputedProps$1
 });
 
-/**
- * returns a valid rjx.children property
- * @param {Object} options
- * @param {Object} [options.rjx ={}]- Valid RJX JSON 
- * @param {Object} [options.props=options.rjx.children] - Props to pull children  Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) 
- * @returns {Object[]|String} returns a valid rjx.children property that's either an array of RJX objects or a string 
- * @example 
- * const sampleRJX = {
-  component: 'div',
-  props: {
-    id: 'generatedRJX',
-    className:'rjx',
-  },
-  children: [
-    {
-      component: 'p',
-      props: {
-        style: {
-          color: 'red',
-        },
-      },
-      children:'hello world',
-    },
-    {
-      component: 'div',
-      children: [
-        {
-          component: 'ul',
-          children: [
-            {
-              component: 'li',
-              children:'list',
-            },
-          ],
-        },
-      ],
-    },
-  ],
-};
-const RJXChildren = getChildrenProperty({ rjx: sampleRJX, }); //=> [ [rjx Object],[rjx Object]]
-const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], }); //=>hello world
- */
 function getChildrenProperty() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var _options$rjx = options.rjx,
