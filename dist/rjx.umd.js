@@ -26780,39 +26780,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var defineProperty = function (obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-};
-
 function displayComponent$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var rjx = options.rjx,
@@ -27023,11 +26990,22 @@ var rjxUtils = Object.freeze({
 });
 
 if (typeof window$1 === 'undefined') {
-  var window$1 = {};
+  var window$1 = global.window || {};
 }
 var advancedBinding = getAdvancedBinding();
+
+/**
+ * object of all react components available for RJX
+ */
 var componentMap$1 = Object.assign({}, ReactDOMElements, window$1.__rjx_custom_elements);
 
+/**
+ * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
+ * @param {Object} options - options for getBoundedComponents 
+ * @param {Object} options.reactComponents - all react components available for RJX
+ * @param {string[]} boundedComponents - list of components to bind RJX this context (usually helpful for navigation and redux-router)
+ * @returns {Object} reactComponents object of all react components available for RJX
+ */
 function getBoundedComponents$1() {
   var _this = this;
 
@@ -27037,42 +27015,79 @@ function getBoundedComponents$1() {
       boundedComponents = _options$boundedCompo === undefined ? [] : _options$boundedCompo;
 
   if (advancedBinding || options.advancedBinding) {
-    return Object.assign({}, reactComponents, boundedComponents.map(function (componentName) {
-      return defineProperty({}, componentName, reactComponents[componentName].bind(_this));
-    }));
+    return Object.assign({}, reactComponents, boundedComponents.reduce(function (result, componentName) {
+      result[componentName] = reactComponents[componentName].bind(_this);
+      return result;
+    }, {}));
     // reactComponents.ResponsiveLink = ResponsiveLink.bind(this);
   } else return reactComponents;
 }
 
+/**
+ * returns a react component from a component library
+ * @param {Object} options - options for getComponentFromLibrary
+ * @param {Object} [options.componentLibraries={}] - react component library like bootstrap
+ * @param {Object} [options.rjx={}] - any valid RJX JSON
+ * @returns {function|undefined} react component from react library like bootstrap, material design or bulma
+ */
+function getComponentFromLibrary() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var _options$componentLib = options.componentLibraries,
+      componentLibraries = _options$componentLib === undefined ? {} : _options$componentLib,
+      _options$rjx = options.rjx,
+      rjx = _options$rjx === undefined ? {} : _options$rjx;
+
+  var libComponent = Object.keys(componentLibraries).map(function (libraryName) {
+    if (typeof componentLibraries[libraryName][rjx.component.replace(libraryName + '.', '')] !== 'undefined') {
+      return componentLibraries[libraryName][rjx.component.replace(libraryName + '.', '')];
+    }
+  }).filter(function (val) {
+    return val;
+  })[0];
+  return libComponent;
+}
+
+/**
+ * returns a react element from rjx.component
+ * @example
+ * // returns react elements
+ * getComponentFromMap({rjx:{component:'div'}})=>div
+ * getComponentFromMap({rjx:{component:'MyModal'},reactComponents:{MyModal:MyModal extends React.Component}})=>MyModal
+ * getComponentFromMap({rjx:{component:'reactBootstap.nav'},componentLibraries:{reactBootstrap,}})=>reactBootstap.nav
+ * @param {Object} options - options for getComponentFromMap
+ * @param {object} [options.rjx={}] - any valid RJX JSON object
+ * @param {Object} [options.reactComponents={}] - react components to render
+ * @param {Object} [options.componentLibraries={}] - react components to render from another component library like bootstrap or bulma
+ * @param {function} [options.logError=console.error] - error logging function
+ * @param {boolean} [options.debug=false] - use debug messages
+ * @returns {string|function|class} valid react element
+ */
 function getComponentFromMap$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   // eslint-disable-next-line
-  var rjx = options.rjx,
-      reactComponents = options.reactComponents,
-      _options$componentLib = options.componentLibraries,
-      componentLibraries = _options$componentLib === undefined ? {} : _options$componentLib,
+  var _options$rjx2 = options.rjx,
+      rjx = _options$rjx2 === undefined ? {} : _options$rjx2,
+      _options$reactCompone = options.reactComponents,
+      reactComponents = _options$reactCompone === undefined ? {} : _options$reactCompone,
+      _options$componentLib2 = options.componentLibraries,
+      componentLibraries = _options$componentLib2 === undefined ? {} : _options$componentLib2,
       _options$logError = options.logError,
       logError = _options$logError === undefined ? console.error : _options$logError,
       debug = options.debug;
 
 
   try {
-    if (typeof rjx.component !== 'string') {
+    if (typeof rjx.component !== 'string' && typeof rjx.component === 'function') {
       return rjx.component;
     } else if (ReactDOMElements[rjx.component]) {
       return rjx.component;
+    } else if (reactComponents[rjx.component]) {
+      return reactComponents[rjx.component];
+    } else if (typeof rjx.component === 'string' && rjx.component.indexOf('.') > 0 && getComponentFromLibrary({ rjx: rjx, componentLibraries: componentLibraries })) {
+      return getComponentFromLibrary({ rjx: rjx, componentLibraries: componentLibraries });
     } else {
-      Object.keys(componentLibraries).forEach(function (libraryName) {
-        if (componentLibraries[libraryName][rjx.component.replace(libraryName + '.', '')]) {
-          return componentLibraries[libraryName][rjx.component.replace(libraryName + '.', '')];
-        }
-      });
-      if (reactComponents[rjx.component]) {
-        return reactComponents[rjx.component];
-      } else {
-        throw new ReferenceError('Invalid React Component (' + rjx.component + ')');
-      }
+      throw new ReferenceError('Invalid React Component (' + rjx.component + ')');
     }
   } catch (e) {
     if (debug) logError(e, e.stack ? e.stack : 'no stack');
@@ -27086,12 +27101,11 @@ function getComponentFromMap$1() {
     }
  */
 
-
-
 var rjxComponents = Object.freeze({
 	advancedBinding: advancedBinding,
 	componentMap: componentMap$1,
 	getBoundedComponents: getBoundedComponents$1,
+	getComponentFromLibrary: getComponentFromLibrary,
 	getComponentFromMap: getComponentFromMap$1
 });
 
@@ -27387,10 +27401,10 @@ function rjxHTMLString() {
  * @param {object} rjx - any valid RJX JSON object
  * @param {object} resources - any additional resource used for asynchronous properties
  * @property {object} this - options for getRenderedJSON
- * @param {Object} [this.componentLibraries] - react components to render with RJX
- * @param {boolean} [this.debug=false] - use debug messages
- * @param {function} [this.logError=console.error] - error logging function
- * @param {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
+ * @property {Object} [this.componentLibraries] - react components to render with RJX
+ * @property {boolean} [this.debug=false] - use debug messages
+ * @property {function} [this.logError=console.error] - error logging function
+ * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
 function getRenderedJSON() {

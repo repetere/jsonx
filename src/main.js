@@ -57,10 +57,10 @@ export function rjxHTMLString(config = {}) {
  * @param {object} rjx - any valid RJX JSON object
  * @param {object} resources - any additional resource used for asynchronous properties
  * @property {object} this - options for getRenderedJSON
- * @param {Object} [this.componentLibraries] - react components to render with RJX
- * @param {boolean} [this.debug=false] - use debug messages
- * @param {function} [this.logError=console.error] - error logging function
- * @param {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
+ * @property {Object} [this.componentLibraries] - react components to render with RJX
+ * @property {boolean} [this.debug=false] - use debug messages
+ * @property {function} [this.logError=console.error] - error logging function
+ * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
 export function getRenderedJSON(rjx = {}, resources = {}) {
