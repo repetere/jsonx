@@ -3,10 +3,38 @@ import UAParser from 'ua-parser-js';
 if (typeof window === 'undefined') {
   var window = global.window || {};
 }
+/**
+ * Used to evaluate whether or not to render a component
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+ * @param {Object} options.props - Props to test comparison values against, usually Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) 
+ * @returns {Boolean} returns true if all comparisons are true or if using or comparisons, at least one condition is true
+ * @example
+ const sampleRJX = {
+  component: 'div',
+  props: {
+    id: 'generatedRJX',
+    className: 'rjx',
+    bigNum: 1430931039,
+    smallNum: 0.425,
+    falsey: false,
+    truthy: true,
+  },
+  children: 'some div',
+};
+const testRJX = Object.assign({}, sampleRJX, {
+  comparisonprops: [{
+    left: ['truthy',],
+    operation:'==',
+    right:['falsey',],
+  }],
+});
+displayComponent({ rjx: testRJX, props: testRJX2.props, }) // => false
+ */
 export function displayComponent(options = {}) {
-  const { rjx, props, } = options;
+  const { rjx = {}, props, } = options;
   const propsToCompare = rjx.comparisonprops;
-  const comparisons = propsToCompare.map(comp => {
+  const comparisons = Array.isArray(propsToCompare) ? propsToCompare.map(comp => {
     const compares = {};
     if (Array.isArray(comp.left)) {
       compares.left = comp.left;
@@ -14,43 +42,90 @@ export function displayComponent(options = {}) {
     if (Array.isArray(comp.right)) {
       compares.right = comp.right;
     }
-    const propcompares = traverse(compares, props);
+    const propcompares = traverse(compares, props||rjx.props);
     const opscompares = Object.assign({}, comp, propcompares);
     // console.debug({ opscompares, compares, renderedCompProps });
-    if (opscompares.operation === 'eq') {
+    switch (opscompares.operation) {
+    case 'eq':
+    case '==':
       // return opscompares.left == opscompares.right;
-      return opscompares.left === opscompares.right;
-    } else if (opscompares.operation === 'dneq') {
+      // eslint-disable-next-line
+      return opscompares.left == opscompares.right;
+    case 'dneq':
+    case '!=':
+    case '!':
       // return opscompares.left != opscompares.right;
       return opscompares.left !== opscompares.right;
-    } else if (opscompares.operation === 'dnseq') {
+    case 'dnseq':
+    case '!==':
       return opscompares.left !== opscompares.right;
-    } else if (opscompares.operation === 'seq') {
+    case 'seq':
+    case '===':
       return opscompares.left === opscompares.right;
-    } else if (opscompares.operation === 'lt') {
+    case 'lt':
+    case '<':
       return opscompares.left < opscompares.right;
-    } else if (opscompares.operation === 'lte') {
+    case 'lte':
+    case '<=':
       return opscompares.left <= opscompares.right;
-    } else if (opscompares.operation === 'gt') {
+    case 'gt':
+    case '>':
       return opscompares.left > opscompares.right;
-    } else if (opscompares.operation === 'gte') {
+    case 'gte':
+    case '>=':
       return opscompares.left >= opscompares.right;
-    } else if (opscompares.operation === 'dne') {
-      return opscompares.left === undefined || opscompares.left === null;
-    } else { //'exists'
-      return opscompares.left !== undefined || opscompares.left !== null;
+    case 'dne':
+    case 'undefined':
+    case 'null':
+      return opscompares.left === undefined || opscompares.left === null; 
+    case '!null':
+    case '!undefined':
+    case 'exists':
+    default://'exists'
+      return opscompares.left !== undefined && opscompares.left !== null;
     }
-  });
+    // }
+    // if (opscompares.operation === 'eq') {
+    //   // return opscompares.left == opscompares.right;
+    //   // eslint-disable-next-line
+    //   return opscompares.left == opscompares.right;
+    // } else if (opscompares.operation === 'dneq') {
+    //   // return opscompares.left != opscompares.right;
+    //   return opscompares.left !== opscompares.right;
+    // } else if (opscompares.operation === 'dnseq') {
+    //   return opscompares.left !== opscompares.right;
+    // } else if (opscompares.operation === 'seq') {
+    //   return opscompares.left === opscompares.right;
+    // } else if (opscompares.operation === 'lt') {
+    //   return opscompares.left < opscompares.right;
+    // } else if (opscompares.operation === 'lte') {
+    //   return opscompares.left <= opscompares.right;
+    // } else if (opscompares.operation === 'gt') {
+    //   return opscompares.left > opscompares.right;
+    // } else if (opscompares.operation === 'gte') {
+    //   return opscompares.left >= opscompares.right;
+    // } else if (opscompares.operation === 'dne') {
+    //   return opscompares.left === undefined || opscompares.left === null;
+    // } else { //'exists'
+    //   return opscompares.left !== undefined && opscompares.left !== null;
+    // }
+  }) : [];
   const validProps = comparisons.filter(comp => comp === true);
-  if (rjx.comparisonorprops && validProps.length<1) {
+  if (!rjx.comparisonprops) {
+    return true;
+  } else if (rjx.comparisonorprops && validProps.length < 1) {
     return false;
-  } else if (validProps.length !== comparisons.length) {
+  } else if (validProps.length !== comparisons.length && !rjx.comparisonorprops) {
     return false;
   } else {
     return true;
   }
 }
 
+/**
+ * Use to test if can bind components this context for react-redux-router 
+ * @returns {Boolean} true if browser is not IE or old android / chrome
+ */
 export function getAdvancedBinding() {
   try {
     window = (typeof this.window!=='undefined')?this.window : window;
@@ -79,6 +154,28 @@ export function getAdvancedBinding() {
   return true;
 }
 
+/**
+ * take an object of array paths to traverse and resolve
+ * @example
+ * const testObj = {
+      user: {
+        name: 'rjx',
+        description: 'react withouth javascript',
+      },
+      stats: {
+        logins: 102,
+        comments: 3,
+      },
+      authentication: 'OAuth2',
+    };
+const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
+
+ traverse(testVals, testObj) // =>{ auth:'OAuth2', username:'rjx',  }
+ * @param {Object} paths - an object to resolve array property paths 
+ * @param {Object} data - object to traverse
+ * @returns {Object} resolved object with traversed properties
+ * @throws {TypeError} 
+ */
 export function traverse(paths = {}, data = {}) {
   let keys = Object.keys(paths);
   if (!keys.length) return paths;
@@ -97,10 +194,20 @@ export function traverse(paths = {}, data = {}) {
   }, {});
 }
 
+/**
+ * Validates RJX JSON Syntax
+ * @example
+ * validateRJX({component:'p',children:'hello world'})=>true
+ * validateRJX({children:'hello world'})=>throw SyntaxError('[0001] Missing React Component')
+ * @param {Object} rjx - RJX JSON to validate 
+ * @param {Boolean} [returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
+ * @returns {Boolean|Error[]} either returns true if RJX is valid, or throws validation error or returns list of errors in array
+ * @throws {SyntaxError|TypeError|ReferenceError}
+ */
 export function validateRJX(rjx = {}, returnAllErrors = false) {
   const dynamicPropsNames = ['asyncprops', 'windowprops', 'thisprops', ];
   const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps', ];
-  const validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps',].concat(dynamicPropsNames, evalPropNames);
+  const validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps','comparisonprops','comparisonorprops'].concat(dynamicPropsNames, evalPropNames);
   let errors = [];
   if (!rjx.component) {
     errors.push(SyntaxError('[0001] Missing React Component'));
@@ -214,6 +321,22 @@ export function validateRJX(rjx = {}, returnAllErrors = false) {
           errors.push(ReferenceError(`[0015] rjx.__windowComponents.${cProp} must reference a window element on window.__rjx_custom_elements (i.e. func:window.__rjx_custom_elements.bootstrapModal)`));
         }
       });
+  }
+  if (typeof rjx.comparisonorprops !== 'undefined' && typeof rjx.comparisonorprops !== 'boolean') {
+    errors.push(TypeError('[0016] rjx.comparisonorprops  must be boolean'));
+  }
+  if (rjx.comparisonprops) {
+    if(!Array.isArray(rjx.comparisonprops)) {
+      errors.push(TypeError('[0017] rjx.comparisonprops  must be an array or comparisons'));
+    } else {
+      rjx.comparisonprops.forEach(c => {
+        if (typeof c !== 'object') {
+          errors.push(TypeError('[0018] rjx.comparisonprops  must be an array or comparisons objects'));
+        } else if(typeof c.left==='undefined') {
+          errors.push(TypeError('[0019] rjx.comparisonprops  must be have a left comparison value'));
+        }
+      })
+    }
   }
   const invalidKeys = Object.keys(rjx).filter(key => validKeys.indexOf(key) === -1);
   if (errors.length) {

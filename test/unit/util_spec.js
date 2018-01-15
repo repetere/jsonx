@@ -15,160 +15,341 @@ const sampleRJX = {
   component: 'div',
   props: {
     id: 'generatedRJX',
-    className:'rjx',
+    className: 'rjx',
+    bigNum: 1430931039,
+    smallNum: 0.425,
+    falsey: false,
+    truthy: true,
   },
   children: 'some div',
 };
 
-const sampleCustomElementRJX = {
-  component: 'div',
-  props: {
-    id: 'customRJX',
-    className:'rjx',
-  },
-  thisprops: {
-    title: ['extraname',],
-  },
-  children: [
-    {
-      component: 'p',
-      children:'some text',
-    },
-    {
-      component: 'Welcome',
-      props: {
-        style: {
-          color: 'red',
-          fontWeight:'bold',
-        },
-        name:'fromCustom',
-      },
-      thisprops: {
-        title: ['elementProperties', 'title',],
-      },
-      children:'hello customElement2',
-    },
-    {
-      component: 'WelcomeBindSpy',
-      props: {
-        style: {
-          color: 'red',
-          fontWeight:'bold',
-        },
-        name:'fromCustom',
-      },
-      thisprops: {
-        title: ['elementProperties', 'title',],
-      },
-      children:'hello customElement2',
-    },
-    {
-      component: 'WelcomeNonBind',
-      props: {
-        style: {
-          color: 'red',
-          fontWeight:'bold',
-        },
-        name:'fromCustom',
-      },
-      thisprops: {
-        title: ['elementProperties', 'title',],
-      },
-      children:'hello customElement2',
-    },
-  ],
-};
-
-class DemoComponent extends React.Component {
-  render() {
-    return React.createElement('h1', { name: 'Welcome', }, `Hello, ${this.props.name} ${this.props.title||'NA'}`);
-  }
-}
-
 describe('rjx utils', function () { 
-  /*
-  describe('getBoundedComponents', () => {
-    it('should bind this to reactComponents', () => {
-      const bindSpy = sinon.spy();
-      WelcomeBindSpy.bind = bindSpy;
-      const reactComponents = {
-        Welcome,
-        WelcomeNonBind,
-        WelcomeBindSpy,
-      };
-      const boundedComponents = ['Welcome', 'WelcomeBindSpy', ];
-      const customComponents = rjx._rjxComponents.getBoundedComponents({ reactComponents, boundedComponents, advancedBinding:true, });
-      const customThis = {
-        props: {
-          name:'customElementTest',
-          extraname: 'customElementTestName',
-          elementProperties: {
-            title: 'AddedWithThis',
-          },
-        },
-        boundedComponents,
-        reactComponents,
-      };
-      const RJXPropCheck = rjx.getRenderedJSON.call(customThis, sampleCustomElementRJX);
-
-      expect(bindSpy.called).to.be.true;
-      expect(RJXPropCheck.props.title).to.eql(customThis.props.extraname);
-      expect(customComponents.length).to.eql(reactComponents.length);
+  describe('displayComponent', () => {
+    const displayComponent = rjx._rjxUtils.displayComponent;
+    it('should display by default return true', () => {
+      expect(displayComponent()).to.be.true;
     });
-  });
-  describe('getComponentFromMap', () => {
-    const reactBootstrap = {
-      Welcome,
-      WelcomeNonBind,
-    };
-    const componentLibraries = {
-      reactBootstrap,
-    };
-    it('should return a function if rjx.component is not a string', () => {
-      expect(rjx._rjxComponents.getComponentFromMap({
-        rjx: {
-          component:Welcome,
-        }, })).to.be.a('function').and.to.eql(Welcome);
-    });
-    it('should return the dom element string if a valid DOM elmenet in ReactDOM', () => {
-      [ 'div', 'span', 'p', 'section', ].forEach(el => {
-        const rjxObj = { rjx: { component: el, }, };
-        expect(rjx._rjxComponents.getComponentFromMap(rjxObj)).to.eql(el);
+    it('should display if left !== null||undefined', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+        }],
       });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['falsey',],
+          operation:'exists',
+        }],
+      });
+      const testRJX3 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: null,
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.false;
     });
-    it('should return a custom element', () => {
-      const rjxObj = {
-        rjx: {
-          component: 'Welcome',
-        },
-        reactComponents: {
-          Welcome,
-        },
-      };
-      expect(rjx._rjxComponents.getComponentFromMap(rjxObj)).to.eql(Welcome);
+    it('should display if left === null||undefined', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: [ 'truthy', ],
+          operation:'dne',
+        }],
+      });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['falsey',],
+          operation:'undefined',
+        }],
+      });
+      const testRJX3 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: null,
+          operation:'null',
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
+      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
     });
-    it('should return a component library react element', () => {
-      const rjxObj = {
-        rjx: {
-          component: 'reactBootstrap.Welcome',
-        },
-        componentLibraries,
-      };
-      expect(rjx._rjxComponents.getComponentFromMap(rjxObj)).to.eql(Welcome);
+    it('should display if left == right', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'eq',
+          right:['truthy',],
+        }],
+      });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'==',
+          right:['falsey',],
+        }],
+      });
+      const testRJX3 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'eq',
+          right:1,
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
+      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
     });
-    it('should handle errors', () => { 
-      const logError = sinon.spy();
-      expect(rjx._rjxComponents.getComponentFromMap.bind(null)).to.throw();
-      try {
-        rjx._rjxComponents.getComponentFromMap({ debug: true, logError, });
-      } catch (e) {
-        expect(e).to.be.a('error');
-        expect(logError.called).to.be.true;
-      }
+    it('should display if left === right', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'seq',
+          right:['truthy',],
+        }],
+      });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'===',
+          right:['falsey',],
+        }],
+      });
+      const testRJX3 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'seq',
+          right:1,
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
+      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.false;
+    });
+    it('should display if left != right', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'dneq',
+          right:['truthy',],
+        }],
+      });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'!=',
+          right:['falsey',],
+        }],
+      });
+      const testRJX3 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'dneq',
+          right:1,
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
+    });
+    it('should display if left !== right', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'dnseq',
+          right:['truthy',],
+        }],
+      });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'!==',
+          right:['falsey',],
+        }],
+      });
+      const testRJX3 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'dnseq',
+          right:1,
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
+    });
+    it('should display if left > right', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['bigNum',],
+          operation:'gt',
+          right:['smallNum',],
+        }],
+      });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['smallNum',],
+          operation:'>',
+          right:['bigNum',],
+        }],
+      });
+      const testRJX3 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['smallNum',],
+          operation:'gt',
+          right:['smallNum',],
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
+      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.false;
+    });
+    it('should display if left >= right', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['bigNum',],
+          operation:'gte',
+          right:['smallNum',],
+        }],
+      });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['smallNum',],
+          operation:'>=',
+          right:['bigNum',],
+        }],
+      });
+      const testRJX3 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['smallNum',],
+          operation:'gte',
+          right:['smallNum',],
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
+      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
+    });
+    it('should display if left < right', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['bigNum',],
+          operation:'<',
+          right:['smallNum',],
+        }],
+      });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['smallNum',],
+          operation:'lt',
+          right:['bigNum',],
+        }],
+      });
+      const testRJX3 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['smallNum',],
+          operation:'lt',
+          right:['smallNum',],
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.false;
+    });
+    it('should display if left <= right', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['bigNum',],
+          operation:'lte',
+          right:['smallNum',],
+        }],
+      });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['smallNum',],
+          operation:'<=',
+          right:['bigNum',],
+        }],
+      });
+      const testRJX3 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['smallNum',],
+          operation:'lte',
+          right:['smallNum',],
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
+    });
+    it('should display if multiple comprisons are true', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'eq',
+          right:['truthy',],
+        },{
+          left: ['smallNum',],
+          operation:'==',
+          right:['smallNum',],
+        }],
+      });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'eq',
+          right:['falsey',],
+        },{
+          left: ['smallNum',],
+          operation:'eq',
+          right:['smallNum',],
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
+    });
+    it('should display if one or more using comparisonorprops comprisons are true', () => {
+      const testRJX = Object.assign({}, sampleRJX, {
+        comparisonorprops:true,
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'eq',
+          right:['truthy',],
+        },{
+          left: ['smallNum',],
+          operation:'==',
+          right:['smallNum',],
+        }],
+      });
+      const testRJX2 = Object.assign({}, sampleRJX, {
+        comparisonorprops:true,
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'eq',
+          right:['falsey',],
+        },{
+          left: ['smallNum',],
+          operation:'eq',
+          right:['smallNum',],
+        }],
+      });
+      const testRJX3 = Object.assign({}, sampleRJX, {
+        comparisonorprops:true,
+        comparisonprops: [{
+          left: ['truthy',],
+          operation:'eq',
+          right:['falsey',],
+        },{
+          left: ['bigNum',],
+          operation:'eq',
+          right:['smallNum',],
+        }],
+      });
+      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
+      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.false;
     });
   });
-
-  */
   describe('getAdvancedBinding', () => {
     const getAdvancedBinding = rjx._rjxUtils.getAdvancedBinding;
     it('should return true if browser supports deep nesting', function () {
@@ -204,8 +385,6 @@ describe('rjx utils', function () {
       expect(getAdvancedBinding.call({ window, })).to.be.false;
     });    
     it('should return false unknown browser', function () {
-      const window = {
-      };
       expect(getAdvancedBinding.call({ })).to.be.false;
     });    
   });
@@ -223,7 +402,7 @@ describe('rjx utils', function () {
     };
     const traverse = rjx._rjxUtils.traverse;
     it('should return properties from an object from the array of paths', () => {
-      const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
+      const testVals = { auth: ['authentication',], username: ['user', 'name',], };
       expect( traverse(testVals, testObj)).to.eql({ auth:testObj.authentication, username:testObj.user.name,  });
     });
     it('should return the entire object if no paths provided', () => {
@@ -231,7 +410,7 @@ describe('rjx utils', function () {
       expect( traverse(testVals, testObj)).to.eql({ wholeObj:testObj,  });
     });
     it('should return undefined if paths are invalid', () => {
-      const testVals = { emptyObj: ['invalid', 'path',], };
+      const testVals = { emptyObj: ['invalid', 'path', ], };
       expect( traverse(testVals, testObj)).to.eql({ emptyObj:undefined, });
     });
     it('should throw an error if paths are not an array of strings or numeric indexes', () => {
@@ -296,10 +475,10 @@ describe('rjx utils', function () {
         component: 'myComponent',
         asyncprops: '[]',
         thisprops: {
-          notStrings: [undefined, {}, ],
+          notStrings: [undefined, {},],
         },
         windowprops: {
-          title:['navigator', 'userAgent', ],
+          title:['navigator', 'userAgent',],
         },
       };
       const dynamicerrors = validateRJX(rjxObj, true);
@@ -426,6 +605,46 @@ describe('rjx utils', function () {
       const evalError2 = validateRJX(rjxObj2, true);
       const validTest = validateRJX(rjxObjValid);
       expect(evalError[ 0 ]).to.be.an('error');
+      expect(evalError2[ 0 ]).to.be.an('error');
+      expect(validTest).to.be.true;
+    });
+    it('should validate comparisonorprops is boolean', () => {
+      const rjxObj = {
+        component: 'myComponent',
+        comparisonorprops: 'should be an obj',
+      };
+      const rjxObjValid = {
+        component: 'myComponent',
+        comparisonorprops: true,
+      };
+      const evalError = validateRJX(rjxObj, true);
+      const validTest = validateRJX(rjxObjValid);
+      expect(evalError[ 0 ]).to.be.an('error');
+      expect(validTest).to.be.true;
+    });
+    it('should validate comparisonprops is an array of comaprisons', () => {
+      const rjxObj = {
+        component: 'myComponent',
+        comparisonprops: 'should be an array',
+      };
+      const rjxObjValid = {
+        component: 'myComponent',
+        comparisonprops: [],
+      };
+      const rjxObjin1 = {
+        component: 'myComponent',
+        comparisonprops: [ {}],
+      };
+      const rjxObjin2 = {
+        component: 'myComponent',
+        comparisonprops: [ () => { }],
+      };
+      const evalError = validateRJX(rjxObj, true);
+      const evalError1 = validateRJX(rjxObjin1, true);
+      const evalError2 = validateRJX(rjxObjin2, true);
+      const validTest = validateRJX(rjxObjValid);
+      expect(evalError[ 0 ]).to.be.an('error');
+      expect(evalError1[ 0 ]).to.be.an('error');
       expect(evalError2[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });

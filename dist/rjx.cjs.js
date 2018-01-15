@@ -83,13 +83,42 @@ var toConsumableArray = function (arr) {
 if (typeof window$1 === 'undefined') {
   var window$1 = global.window || {};
 }
+/**
+ * Used to evaluate whether or not to render a component
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+ * @param {Object} options.props - Props to test comparison values against, usually Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) 
+ * @returns {Boolean} returns true if all comparisons are true or if using or comparisons, at least one condition is true
+ * @example
+ const sampleRJX = {
+  component: 'div',
+  props: {
+    id: 'generatedRJX',
+    className: 'rjx',
+    bigNum: 1430931039,
+    smallNum: 0.425,
+    falsey: false,
+    truthy: true,
+  },
+  children: 'some div',
+};
+const testRJX = Object.assign({}, sampleRJX, {
+  comparisonprops: [{
+    left: ['truthy',],
+    operation:'==',
+    right:['falsey',],
+  }],
+});
+displayComponent({ rjx: testRJX, props: testRJX2.props, }) // => false
+ */
 function displayComponent$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var rjx = options.rjx,
+  var _options$rjx = options.rjx,
+      rjx = _options$rjx === undefined ? {} : _options$rjx,
       props = options.props;
 
   var propsToCompare = rjx.comparisonprops;
-  var comparisons = propsToCompare.map(function (comp) {
+  var comparisons = Array.isArray(propsToCompare) ? propsToCompare.map(function (comp) {
     var compares = {};
     if (Array.isArray(comp.left)) {
       compares.left = comp.left;
@@ -97,46 +126,93 @@ function displayComponent$1() {
     if (Array.isArray(comp.right)) {
       compares.right = comp.right;
     }
-    var propcompares = traverse(compares, props);
+    var propcompares = traverse(compares, props || rjx.props);
     var opscompares = Object.assign({}, comp, propcompares);
     // console.debug({ opscompares, compares, renderedCompProps });
-    if (opscompares.operation === 'eq') {
-      // return opscompares.left == opscompares.right;
-      return opscompares.left === opscompares.right;
-    } else if (opscompares.operation === 'dneq') {
-      // return opscompares.left != opscompares.right;
-      return opscompares.left !== opscompares.right;
-    } else if (opscompares.operation === 'dnseq') {
-      return opscompares.left !== opscompares.right;
-    } else if (opscompares.operation === 'seq') {
-      return opscompares.left === opscompares.right;
-    } else if (opscompares.operation === 'lt') {
-      return opscompares.left < opscompares.right;
-    } else if (opscompares.operation === 'lte') {
-      return opscompares.left <= opscompares.right;
-    } else if (opscompares.operation === 'gt') {
-      return opscompares.left > opscompares.right;
-    } else if (opscompares.operation === 'gte') {
-      return opscompares.left >= opscompares.right;
-    } else if (opscompares.operation === 'dne') {
-      return opscompares.left === undefined || opscompares.left === null;
-    } else {
-      //'exists'
-      return opscompares.left !== undefined || opscompares.left !== null;
+    switch (opscompares.operation) {
+      case 'eq':
+      case '==':
+        // return opscompares.left == opscompares.right;
+        // eslint-disable-next-line
+        return opscompares.left == opscompares.right;
+      case 'dneq':
+      case '!=':
+      case '!':
+        // return opscompares.left != opscompares.right;
+        return opscompares.left !== opscompares.right;
+      case 'dnseq':
+      case '!==':
+        return opscompares.left !== opscompares.right;
+      case 'seq':
+      case '===':
+        return opscompares.left === opscompares.right;
+      case 'lt':
+      case '<':
+        return opscompares.left < opscompares.right;
+      case 'lte':
+      case '<=':
+        return opscompares.left <= opscompares.right;
+      case 'gt':
+      case '>':
+        return opscompares.left > opscompares.right;
+      case 'gte':
+      case '>=':
+        return opscompares.left >= opscompares.right;
+      case 'dne':
+      case 'undefined':
+      case 'null':
+        return opscompares.left === undefined || opscompares.left === null;
+      case '!null':
+      case '!undefined':
+      case 'exists':
+      default:
+        //'exists'
+        return opscompares.left !== undefined && opscompares.left !== null;
     }
-  });
+    // }
+    // if (opscompares.operation === 'eq') {
+    //   // return opscompares.left == opscompares.right;
+    //   // eslint-disable-next-line
+    //   return opscompares.left == opscompares.right;
+    // } else if (opscompares.operation === 'dneq') {
+    //   // return opscompares.left != opscompares.right;
+    //   return opscompares.left !== opscompares.right;
+    // } else if (opscompares.operation === 'dnseq') {
+    //   return opscompares.left !== opscompares.right;
+    // } else if (opscompares.operation === 'seq') {
+    //   return opscompares.left === opscompares.right;
+    // } else if (opscompares.operation === 'lt') {
+    //   return opscompares.left < opscompares.right;
+    // } else if (opscompares.operation === 'lte') {
+    //   return opscompares.left <= opscompares.right;
+    // } else if (opscompares.operation === 'gt') {
+    //   return opscompares.left > opscompares.right;
+    // } else if (opscompares.operation === 'gte') {
+    //   return opscompares.left >= opscompares.right;
+    // } else if (opscompares.operation === 'dne') {
+    //   return opscompares.left === undefined || opscompares.left === null;
+    // } else { //'exists'
+    //   return opscompares.left !== undefined && opscompares.left !== null;
+    // }
+  }) : [];
   var validProps = comparisons.filter(function (comp) {
     return comp === true;
   });
-  if (rjx.comparisonorprops && validProps.length < 1) {
+  if (!rjx.comparisonprops) {
+    return true;
+  } else if (rjx.comparisonorprops && validProps.length < 1) {
     return false;
-  } else if (validProps.length !== comparisons.length) {
+  } else if (validProps.length !== comparisons.length && !rjx.comparisonorprops) {
     return false;
   } else {
     return true;
   }
 }
 
+/**
+ * Use to test if can bind components this context for react-redux-router 
+ * @returns {Boolean} true if browser is not IE or old android / chrome
+ */
 function getAdvancedBinding() {
   try {
     window$1 = typeof this.window !== 'undefined' ? this.window : window$1;
@@ -163,6 +239,28 @@ function getAdvancedBinding() {
   return true;
 }
 
+/**
+ * take an object of array paths to traverse and resolve
+ * @example
+ * const testObj = {
+      user: {
+        name: 'rjx',
+        description: 'react withouth javascript',
+      },
+      stats: {
+        logins: 102,
+        comments: 3,
+      },
+      authentication: 'OAuth2',
+    };
+const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
+
+ traverse(testVals, testObj) // =>{ auth:'OAuth2', username:'rjx',  }
+ * @param {Object} paths - an object to resolve array property paths 
+ * @param {Object} data - object to traverse
+ * @returns {Object} resolved object with traversed properties
+ * @throws {TypeError} 
+ */
 function traverse() {
   var paths = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -183,13 +281,23 @@ function traverse() {
   }, {});
 }
 
+/**
+ * Validates RJX JSON Syntax
+ * @example
+ * validateRJX({component:'p',children:'hello world'})=>true
+ * validateRJX({children:'hello world'})=>throw SyntaxError('[0001] Missing React Component')
+ * @param {Object} rjx - RJX JSON to validate 
+ * @param {Boolean} [returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
+ * @returns {Boolean|Error[]} either returns true if RJX is valid, or throws validation error or returns list of errors in array
+ * @throws {SyntaxError|TypeError|ReferenceError}
+ */
 function validateRJX() {
   var rjx = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var returnAllErrors = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
   var dynamicPropsNames = ['asyncprops', 'windowprops', 'thisprops'];
   var evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps'];
-  var validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps'].concat(dynamicPropsNames, evalPropNames);
+  var validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps', 'comparisonprops', 'comparisonorprops'].concat(dynamicPropsNames, evalPropNames);
   var errors = [];
   if (!rjx.component) {
     errors.push(SyntaxError('[0001] Missing React Component'));
@@ -307,6 +415,22 @@ function validateRJX() {
         errors.push(ReferenceError('[0015] rjx.__windowComponents.' + cProp + ' must reference a window element on window.__rjx_custom_elements (i.e. func:window.__rjx_custom_elements.bootstrapModal)'));
       }
     });
+  }
+  if (typeof rjx.comparisonorprops !== 'undefined' && typeof rjx.comparisonorprops !== 'boolean') {
+    errors.push(TypeError('[0016] rjx.comparisonorprops  must be boolean'));
+  }
+  if (rjx.comparisonprops) {
+    if (!Array.isArray(rjx.comparisonprops)) {
+      errors.push(TypeError('[0017] rjx.comparisonprops  must be an array or comparisons'));
+    } else {
+      rjx.comparisonprops.forEach(function (c) {
+        if ((typeof c === 'undefined' ? 'undefined' : _typeof(c)) !== 'object') {
+          errors.push(TypeError('[0018] rjx.comparisonprops  must be an array or comparisons objects'));
+        } else if (typeof c.left === 'undefined') {
+          errors.push(TypeError('[0019] rjx.comparisonprops  must be have a left comparison value'));
+        }
+      });
+    }
   }
   var invalidKeys = Object.keys(rjx).filter(function (key) {
     return validKeys.indexOf(key) === -1;
