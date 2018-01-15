@@ -119,6 +119,8 @@ describe('rjx components', function () {
         },
         boundedComponents,
         reactComponents,
+        // debug: false,
+        // logError:()=>null,
       };
       const RJXPropCheck = rjx.getRenderedJSON.call(customThis, sampleCustomElementRJX);
 

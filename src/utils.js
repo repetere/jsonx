@@ -1,6 +1,8 @@
 import UAParser from 'ua-parser-js';
 
-
+if (typeof window === 'undefined') {
+  var window = global.window || {};
+}
 export function displayComponent(options = {}) {
   const { rjx, props, } = options;
   const propsToCompare = rjx.comparisonprops;
@@ -51,15 +53,17 @@ export function displayComponent(options = {}) {
 
 export function getAdvancedBinding() {
   try {
-    if (window && window.navigator && window.navigator.userAgent &&  typeof window.navigator.userAgent==='string') {
+    window = (typeof this.window!=='undefined')?this.window : window;
+    if (window && window.navigator && window.navigator.userAgent && typeof window.navigator.userAgent === 'string') {
+      // console.log('window.navigator.userAgent',window.navigator.userAgent)
       if(window.navigator.userAgent.indexOf('Trident') !== -1) {
         return false;
       }
-      var uastring = window.navigator.userAgent;
-      var parser = new UAParser();
+      const uastring = window.navigator.userAgent;
+      const parser = new UAParser();
       parser.setUA(uastring);
-      var parseUserAgent = parser.getResult();
-      // console.debug({ parseUserAgent, });
+      const parseUserAgent = parser.getResult();
+      // console.log({ parseUserAgent, });
       if ((parseUserAgent.browser.name === 'Chrome' || parseUserAgent.browser.name === 'Chrome WebView' ) && parseUserAgent.os.name === 'Android' && parseInt(parseUserAgent.browser.version, 10) < 50) {
         return false;
       }
@@ -75,7 +79,7 @@ export function getAdvancedBinding() {
   return true;
 }
 
-export function traverse(paths = [], data = {}) {
+export function traverse(paths = {}, data = {}) {
   let keys = Object.keys(paths);
   if (!keys.length) return paths;
   return keys.reduce((result, key) => {

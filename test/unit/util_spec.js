@@ -27,7 +27,7 @@ const sampleCustomElementRJX = {
     className:'rjx',
   },
   thisprops: {
-    title: ['extraname', ],
+    title: ['extraname',],
   },
   children: [
     {
@@ -44,7 +44,7 @@ const sampleCustomElementRJX = {
         name:'fromCustom',
       },
       thisprops: {
-        title: ['elementProperties', 'title', ],
+        title: ['elementProperties', 'title',],
       },
       children:'hello customElement2',
     },
@@ -58,7 +58,7 @@ const sampleCustomElementRJX = {
         name:'fromCustom',
       },
       thisprops: {
-        title: ['elementProperties', 'title', ],
+        title: ['elementProperties', 'title',],
       },
       children:'hello customElement2',
     },
@@ -72,7 +72,7 @@ const sampleCustomElementRJX = {
         name:'fromCustom',
       },
       thisprops: {
-        title: ['elementProperties', 'title', ],
+        title: ['elementProperties', 'title',],
       },
       children:'hello customElement2',
     },
@@ -169,6 +169,46 @@ describe('rjx utils', function () {
   });
 
   */
+  describe('getAdvancedBinding', () => {
+    const getAdvancedBinding = rjx._rjxUtils.getAdvancedBinding;
+    it('should return true if browser supports deep nesting', function () {
+      const window = {
+        navigator: {
+          userAgent: 'Webkit',
+        },
+      };
+      expect(getAdvancedBinding.call({ window, })).to.be.true;
+    });    
+    it('should return false on all versions of IE/Trident', function () {
+      const window = {
+        navigator: {
+          userAgent: 'Trident',
+        },
+      };
+      expect(getAdvancedBinding.call({ window, })).to.be.false;
+    });    
+    it('should return false on old Android Browser', function () {
+      const window = {
+        navigator: {
+          userAgent: 'Mozilla/5.0 (Linux; U; Android 1.5; de-de; HTC Magic Build/CRB17) AppleWebKit/528.5  (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1',
+        },
+      };
+      expect(getAdvancedBinding.call({ window, })).to.be.false;
+    });    
+    it('should return false on old Chrome Browser', function () {
+      const window = {
+        navigator: {
+          userAgent: 'Mozilla/5.0 (Linux; Android 4.1.2; GT-I9300 Build/JZO54K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.59 Mobile Safari/537.36',
+        },
+      };
+      expect(getAdvancedBinding.call({ window, })).to.be.false;
+    });    
+    it('should return false unknown browser', function () {
+      const window = {
+      };
+      expect(getAdvancedBinding.call({ })).to.be.false;
+    });    
+  });
   describe('traverse', () => {
     const testObj = {
       user: {
@@ -183,7 +223,7 @@ describe('rjx utils', function () {
     };
     const traverse = rjx._rjxUtils.traverse;
     it('should return properties from an object from the array of paths', () => {
-      const testVals = { auth: ['authentication',], username: ['user', 'name',], };
+      const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
       expect( traverse(testVals, testObj)).to.eql({ auth:testObj.authentication, username:testObj.user.name,  });
     });
     it('should return the entire object if no paths provided', () => {
@@ -191,7 +231,7 @@ describe('rjx utils', function () {
       expect( traverse(testVals, testObj)).to.eql({ wholeObj:testObj,  });
     });
     it('should return undefined if paths are invalid', () => {
-      const testVals = { emptyObj: ['invalid','path'], };
+      const testVals = { emptyObj: ['invalid', 'path',], };
       expect( traverse(testVals, testObj)).to.eql({ emptyObj:undefined, });
     });
     it('should throw an error if paths are not an array of strings or numeric indexes', () => {
@@ -256,10 +296,10 @@ describe('rjx utils', function () {
         component: 'myComponent',
         asyncprops: '[]',
         thisprops: {
-          notStrings: [undefined, {},],
+          notStrings: [undefined, {}, ],
         },
         windowprops: {
-          title:['navigator', 'userAgent',],
+          title:['navigator', 'userAgent', ],
         },
       };
       const dynamicerrors = validateRJX(rjxObj, true);

@@ -50,10 +50,10 @@ export function rjxHTMLString(config = {}) {
 }
 
 /**
- * Use ReactDOMServer.renderToString to render html from RJX
+ * Use React.createElement and RJX JSON to create React elements
  * @example
- * // Uses react to create <div class="rjx-generated"><p style="color:red;">hello world</p></div>
- * rjx.rjxHTMLString({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
+ * // Uses react to create the equivalent JSX <myComponent style={{color:blue}}>hello world</myComponent>
+ * rjx.getRenderedJSON({component:'myCompnent',props:{style:{color:'blue'}},children:'hello world'})
  * @param {object} rjx - any valid RJX JSON object
  * @param {object} resources - any additional resource used for asynchronous properties
  * @property {object} this - options for getRenderedJSON

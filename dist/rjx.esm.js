@@ -74,6 +74,9 @@ var toConsumableArray = function (arr) {
   }
 };
 
+if (typeof window$1 === 'undefined') {
+  var window$1 = global.window || {};
+}
 function displayComponent$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var rjx = options.rjx,
@@ -130,15 +133,17 @@ function displayComponent$1() {
 
 function getAdvancedBinding() {
   try {
-    if (window && window.navigator && window.navigator.userAgent && typeof window.navigator.userAgent === 'string') {
-      if (window.navigator.userAgent.indexOf('Trident') !== -1) {
+    window$1 = typeof this.window !== 'undefined' ? this.window : window$1;
+    if (window$1 && window$1.navigator && window$1.navigator.userAgent && typeof window$1.navigator.userAgent === 'string') {
+      // console.log('window.navigator.userAgent',window.navigator.userAgent)
+      if (window$1.navigator.userAgent.indexOf('Trident') !== -1) {
         return false;
       }
-      var uastring = window.navigator.userAgent;
+      var uastring = window$1.navigator.userAgent;
       var parser = new UAParser();
       parser.setUA(uastring);
       var parseUserAgent = parser.getResult();
-      // console.debug({ parseUserAgent, });
+      // console.log({ parseUserAgent, });
       if ((parseUserAgent.browser.name === 'Chrome' || parseUserAgent.browser.name === 'Chrome WebView') && parseUserAgent.os.name === 'Android' && parseInt(parseUserAgent.browser.version, 10) < 50) {
         return false;
       }
@@ -153,7 +158,7 @@ function getAdvancedBinding() {
 }
 
 function traverse() {
-  var paths = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var paths = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   var keys = Object.keys(paths);
@@ -316,15 +321,15 @@ var rjxUtils = Object.freeze({
 	validateRJX: validateRJX
 });
 
-if (typeof window$1 === 'undefined') {
-  var window$1 = global.window || {};
+if (typeof window === 'undefined') {
+  var window = global.window || {};
 }
 var advancedBinding = getAdvancedBinding();
 
 /**
  * object of all react components available for RJX
  */
-var componentMap$1 = Object.assign({}, ReactDOMElements, window$1.__rjx_custom_elements);
+var componentMap$1 = Object.assign({}, ReactDOMElements, window.__rjx_custom_elements);
 
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
@@ -721,10 +726,10 @@ function rjxHTMLString() {
 }
 
 /**
- * Use ReactDOMServer.renderToString to render html from RJX
+ * Use React.createElement and RJX JSON to create React elements
  * @example
- * // Uses react to create <div class="rjx-generated"><p style="color:red;">hello world</p></div>
- * rjx.rjxHTMLString({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
+ * // Uses react to create the equivalent JSX <myComponent style={{color:blue}}>hello world</myComponent>
+ * rjx.getRenderedJSON({component:'myCompnent',props:{style:{color:'blue'}},children:'hello world'})
  * @param {object} rjx - any valid RJX JSON object
  * @param {object} resources - any additional resource used for asynchronous properties
  * @property {object} this - options for getRenderedJSON
