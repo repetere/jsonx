@@ -2,6 +2,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import builtins from 'rollup-plugin-node-builtins';
+import globals from 'rollup-plugin-node-globals';
 import pkg from './package.json';
 
 export default [
@@ -16,6 +17,8 @@ export default [
       name: 'rjx',
     },
     plugins: [
+
+    
       resolve({
         preferBuiltins: true,
       }), // so Rollup can find `ms`
@@ -32,6 +35,8 @@ export default [
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
         },
       }), // so Rollup can convert `ms` to an ES module
+      globals({
+      }),
     ],
   },
 

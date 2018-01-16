@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>RJX TEST</title>
+    <script type="text/javascript" src="rjx.umd.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      const sampleRJX = {
+        component: 'div',
+        props: {
+          id: 'generatedRJX',
+          className:'rjx',
+        },
+        children: [
+          {
+            component: 'p',
+            props: {
+              style: {
+                color: 'red',
+                fontWeight:'bold',
+              },
+            },
+            __dangerouslyEvalProps:{
+              onClick:'()=>alert("click works")'
+            },
+            children:'hello world',
+          },
+        ],
+      };
+      const boundConfig = {
+        debug:true, 
+      };
+      rjx.rjxRender.call(boundConfig,{ rjx: sampleRJX, querySelector:'#root', });
+    </script>
+  </body>
+</html>

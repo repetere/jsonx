@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
-import * as ReactDOMElements from 'react-dom-factories';
+import ReactDOMElements from 'react-dom-factories';
 import UAParser from 'ua-parser-js';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -929,6 +929,48 @@ var rjxProps = Object.freeze({
 	getComputedProps: getComputedProps$1
 });
 
+/**
+ * returns a valid rjx.children property
+ * @param {Object} options
+ * @param {Object} [options.rjx ={}]- Valid RJX JSON 
+ * @param {Object} [options.props=options.rjx.children] - Props to pull children  Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) 
+ * @returns {Object[]|String} returns a valid rjx.children property that's either an array of RJX objects or a string 
+ * @example 
+ * const sampleRJX = {
+  component: 'div',
+  props: {
+    id: 'generatedRJX',
+    className:'rjx',
+  },
+  children: [
+    {
+      component: 'p',
+      props: {
+        style: {
+          color: 'red',
+        },
+      },
+      children:'hello world',
+    },
+    {
+      component: 'div',
+      children: [
+        {
+          component: 'ul',
+          children: [
+            {
+              component: 'li',
+              children:'list',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+const RJXChildren = getChildrenProperty({ rjx: sampleRJX, }); //=> [ [rjx Object],[rjx Object]]
+const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], }); //=>hello world
+ */
 function getChildrenProperty() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var _options$rjx = options.rjx,
@@ -1049,6 +1091,7 @@ function rjxRender() {
       querySelector = config.querySelector,
       options = config.options;
 
+  console.log({ querySelector: querySelector }, 'document.querySelector(querySelector)', document.querySelector(querySelector));
   ReactDOM.render(getRenderedJSON.call(this, rjx, resources, options), document.querySelector(querySelector));
 }
 

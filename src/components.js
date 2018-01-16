@@ -1,5 +1,5 @@
 import React from 'react';
-import * as ReactDOMElements from 'react-dom-factories';
+import { default as ReactDOMElements, } from 'react-dom-factories';
 import { getAdvancedBinding, } from './utils';
 
 if (typeof window === 'undefined') {

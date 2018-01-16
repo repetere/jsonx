@@ -48,6 +48,9 @@
 <dt><a href="#getFunctionFromProps">getFunctionFromProps(options)</a> ⇒ <code>function</code></dt>
 <dd><p>Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep</p>
 </dd>
+<dt><a href="#getFunctionProps">getFunctionProps(options)</a> ⇒ <code>Object</code></dt>
+<dd><p>Returns a resolved object from function strings that has functions pulled from rjx.__functionProps</p>
+</dd>
 <dt><a href="#getWindowComponents">getWindowComponents(options)</a> ⇒ <code>Object</code></dt>
 <dd><p>Returns a resolved object that has React Components pulled from window.__rjx_custom_elements</p>
 </dd>
@@ -429,6 +432,20 @@ Takes a function string and returns a function on either this.props or window. T
 ```js
 getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
 ```
+<a name="getFunctionProps"></a>
+
+## getFunctionProps(options) ⇒ <code>Object</code>
+Returns a resolved object from function strings that has functions pulled from rjx.__functionProps
+
+**Kind**: global function  
+**Returns**: <code>Object</code> - resolved object of functions from function strings  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| options | <code>Object</code> |  |  |
+| options.rjx | <code>Object</code> |  | Valid RJX JSON |
+| [options.allProps] | <code>Object</code> | <code>{}</code> | merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents); |
+
 <a name="getWindowComponents"></a>
 
 ## getWindowComponents(options) ⇒ <code>Object</code>
