@@ -44,75 +44,253 @@
 
     <section>
         <article><h1>rjx</h1><p><a href="https://coveralls.io/github/repetere/rjx?branch=master"><img src="https://coveralls.io/repos/github/repetere/rjx/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://travis-ci.org/repetere/rjx"><img src="https://travis-ci.org/repetere/rjx.svg?branch=master" alt="Build Status"></a></p>
-<h2>Description</h2><p><strong>rjx</strong> is a javascript module with simple and efficient tools for data mining and data analysis in JavaScript. <strong>rjx</strong> can be used with [ML.js]Reactive JSON - Zero-Configuration React components with JSON</p>
-<h2>Installation</h2><pre class="prettyprint source lang-sh"><code>$ npm i rjx #</code></pre><h3><a href="https://github.com/repetere/rjx/blob/master/docs/api.md">Full Documentation</a></h3><h3>Usage (basic)</h3><pre class="prettyprint source lang-javascript"><code>&quot;rjx&quot; : {
-  loadCSV: [Function: loadCSV], //asynchronously loads CSVs, either a filepath or a remote URI
-  cross_validation: {
-    train_test_split: [Function: train_test_split], // splits data into training and testing sets
-    cross_validation_split: [Function: kfolds], //splits data into k-folds
-  },
-  preprocessing: {
-    Class RawData: [ //class for manipulating an array of objects (typically from CSV data)
-      columnArray(columnName,options), // - returns a new array of a selected column from an array of objects, can filter, scale and replace values
-      columnReplace(columnName,options), // - returns a new array of a selected column from an array of objects and replaces empty values, encodes values and scales values
-      labelEncoder(columnName,options), // - returns a new array and label encodes a selected column
-      labelDecode(columnName,options), // - returns a new array and decodes an encoded column back to the original array values
-      oneHotEncoder(columnName,options), // - returns a new object of one hot encoded values
-      fitColumns(options), // - mutates data property of RawData by replacing multiple columns in a single command
-    ]
-  },
-  util: {
-    range: [Function], // range helper function
-    rangeRight: [Function], //range right helper function
-    scale: [Function: scale], //scale / normalize data
-    avg: [Function: arithmeticMean], // aritmatic mean
-    mean: [Function: arithmeticMean], // aritmatic mean
-    sum: [Function: sum],
-    max: [Function: max],
-    min: [Function: min],
-    sd: [Function: standardDeviation], // standard deviation
-    StandardScaler: [Function: StandardScaler], // standardization (z-scores)
-    MinMaxScaler: [Function: MinMaxScaler], // min-max scaling
-  },
-}</code></pre><h3>Examples (JavaScript / Python / R)</h3><h4>Loading CSV Data</h4><h5>Javascript</h5><pre class="prettyprint source lang-javascript"><code>import { default as jsk } from 'rjx';
-let dataset;
+<h2>Description</h2><p><strong>Reactive JSON (RJX)</strong> takes a RXJ JSON object and renders React components. <strong>RJX</strong> lets you get up and running with React without using JavaScript.</p>
+<p>RJX was created to remove all the complexities around environment setup, and configuration of React applications (Babel, Webpack, Rollup, etc) and make declarative user interfaces using Machine Learning and Natural Language Processing. Using RJX let's any back end application (Elixir, Go, Python, etc) render server side react application.</p>
+<h2>Installation</h2><pre class="prettyprint source lang-sh"><code>$ npm i rjx</code></pre><h3><a href="https://github.com/repetere/rjx/blob/master/docs/api.md">Full Documentation</a></h3><h3>Examples (basic)</h3><pre class="prettyprint source lang-javascript"><code>import { default as rjx } from 'rjx';
+//Rendering React Components
+rjx.getRenderedJSON({component:'p',props:{style:{color:'blue'}},children:'hello world'});
+// => JSX Equivalent: &lt;p style={{color:'blue'}}>hello world&lt;/p>
 
-//In JavaScript, by default most I/O Operations are asynchronous, see the notes section for more
-jsk.loadCSV('/some/file/path.csv')
-  .then(csvData=>{
-    dataset = new jsk.RawData(csvData);
-    console.log({csvData});
-    /* csvData [{
-      'Country': 'Brazil',
-      'Age': '44',
-      'Salary': '72000',
-      'Purchased': 'N',
-    },
-    ...
+//Generating HTML strings
+rjx.rjxHTMLString({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
+// => '&lt;div class=&quot;rjx-generated&quot;>&lt;p style=&quot;color:red;&quot;>hello world&lt;/p>&lt;/div>'
+
+//Rendering HTML Dom with React
+rjx.rjxRender({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, querySelector:'#myApp', });
+// &lt;!DOCTYPE html>
+//  &lt;body>
+//    &lt;div id=&quot;myApp&quot;>
+//      &lt;div class=&quot;rjx-generated&quot;>
+//        &lt;p style=&quot;color:red;&quot;>hello world&lt;/p>
+//      &lt;/div>
+//    &lt;/div>
+// &lt;/body></code></pre><h3>RJX JSON Spec</h3><p>RXJ JSON is valid JSON that more or less mimics JSX in JSON notation with a couple of special properties. The properties for RXJ JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+<pre class="prettyprint source lang-javascript"><code>React.createElement(
+  type,
+  [props],
+  [...children]
+)</code></pre><p>You can pass React component libraries for additional components, or you own custom components (see Advanced, also see Full Spec).</p>
+<pre class="prettyprint source lang-javascript"><code>//sample RJX
+{
+  component:'ul',
+  props:{
+    className:'list-class',
+  },
+  children:[
     {
-      'Country': 'Mexico',
-      'Age': '27',
-      'Salary': '48000',
-      'Purchased': 'Yes',
-    }] */
-  })
-  .catch(console.error);
+      component:'li',
+      children:'first bullet'
+    },
+    {
+      component:'li',
+      children:'second bullet',
+    }
+  ]
+}</code></pre><pre class="prettyprint source lang-JSX"><code>// Equivalent JSX
+&lt;ul className=&quot;list-class&quot;>
+  &lt;li>first bullet&lt;/li>
+  &lt;li>second bullet&lt;/li>
+&lt;/ul></code></pre><h4>Validating RJX JSON</h4><pre class="prettyprint source lang-javascript"><code>import { default as rjx } from 'rjx';
 
-// or from URL
-jsk.loadCSV('https://example.com/some/file/path.csv')</code></pre><h5>Python</h5><pre class="prettyprint source lang-python"><code>import pandas as pd
+//use built in RJX Validator
+const valid_rjx_json = {
+  component:'p',
+  props:{
+    className:'title',
+  },
+  children:'hello world'
+};
+const invalid_rjx_json = {
+  props:{
+    className:'title',
+  },
+  children:'hello world'
+};
+const multiple_invalid_rjx_json = {
+  props:'must be obj',
+  children:'hello world'
+};
 
-#Importing the dataset
-dataset = pd.read_csv('/some/file/path.csv')</code></pre><h5>R</h5><pre class="prettyprint source lang-R"><code># Importingd the dataset
-dataset = read.csv('Data.csv')</code></pre><h3>Development</h3><p>Note <em>Make sure you have grunt installed</em></p>
+rjx._rjxUtils.validateRJX(testRJXJSON) // => true
+rjx._rjxUtils.validateRJX(invalid_rjx_json) // => throws SyntaxError('[0001] Missing React Component')
+rjx._rjxUtils.validateRJX(multiple_invalid_rjx_json, true) // =>
+// [ [Error: [0001] Missing React Component],[ Error: [0002]  props must be an Object / valid React props] ]
+
+/**
+ * @param {Object} rjx - RJX JSON to validate 
+ * @param {Boolean} [returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
+ * /
+function validateRJX(rjx = {}, returnAllErrors= false);</code></pre><h3>RJX Module</h3><pre class="prettyprint source lang-javascript"><code>&quot;rjx&quot; : {
+  getRenderedJSON: [Function: getRenderedJSON], //Use React.createElement and RJX JSON to create React elements
+  rjxHTMLString: [Function: rjxHTMLString], //Use ReactDOMServer.renderToString to render html from RJX
+  rjxRender: [Function: getRenderedJSON], //Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
+  _rjxChildren: {
+    getChildrenProperty: [Function: getChildrenProperty], // returns a valid rjx.children property
+    getChildrenProps: [Function: getChildrenProps], // Used to pass properties down to child components if passprops is set to true
+    getRJXChildren: [Function: getRJXChildren], // returns React Child Elements via RJX
+  },
+  _rjxComponents: {
+    componentMap: {}, // object of all react components available for RJX
+    getBoundedComponents: [Function: getBoundedComponents], // getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
+    getComponentFromLibrary: [Function: getComponentFromLibrary], // returns a react component from a component library (like material-ui, or semantic-ui)
+    getComponentFromMap: [Function: getComponentFromMap], // rreturns a react element from rjx.component
+  },
+  _rjxProps: {
+    getRJXProps: [Function: getRJXProps], // It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
+    getEvalProps: [Function: getEvalProps], //Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
+    getComponentProps: [Function: getComponentProps], // Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+    getFunctionFromProps: [Function: getFunctionFromProps], // Takes a function string and returns a function on either this.props or window.
+    getFunctionProps: [Function: getFunctionProps], // Returns a resolved object from function strings that has functions pulled from rjx.__functionProps
+    getWindowComponents: [Function: getWindowComponents], // Returns a resolved object that has React Components pulled from window.__rjx_custom_elements
+    getComputedProps: [Function: getComputedProps], // Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty
+  },
+  _rjxUtils: {
+    validateRJX: [Function: validateRJX], //Validates RJX JSON Syntax
+    displayComponent: [Function displayComponent], // Used to evaluate whether or not to render a component
+    traverse: [Function traverse], //take an object of array paths to traverse and resolve
+    getAdvancedBinding: [Function: getAdvancedBinding], // Use to test if can bind components this context for react-redux-router
+  },
+}</code></pre><h3>Full RJX Spec</h3><pre class="prettyprint source lang-javascript"><code>rjx = {
+  //standard properties
+  component:String, // Any React DOM element, or custom component div,p, Boomer.Hero, MaterialUI.Button, myCustomComponent
+  props:Object, // Standard React component properties
+  children:Array|String, // Any String or Array of valid RJX JSON objects
+  //dynamic properties
+  asyncprops:Object, // An object from async resources to merge onto rjx.props once fully resolved
+  thisprops:Object, // An object to merge onto rjx.props from properties already bound to this.props
+  windowprops:Object, // An object to merge onto rjx.props from the window object
+  //evaluated properties
+  __dangerouslyEvalProps:Object, // An object of evaluated JavaScript strings, used as inline functions onto rjx.props
+  __dangerouslyBindEvalProps:Object, // An object of evaluated JavaScript functions that are bound to this, used as inline functions onto rjx.props
+  //computed properties
+  __functionProps:Object, // An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto rjx.props
+  __dangerouslyInsertComponents:Object, // An object that turns each RXJ JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+  __windowComponents:Object, // An object of components merged onto rjx.props from window.__rjx_custom_elements
+  __windowComponentProps:Object,
+  //display properties
+  comparisonprops:[Object], // An array of Objects used to conditionally display the current rjx.component
+  //flag properties
+  passprops:Boolean, // A flag to pass parent properties to children RJX objects (except for the style property)
+}</code></pre><h4>Advanced - Using Custom Components &amp; UI Libraries</h4><p>If you plan on using an entire UI library, then bind the library to this before using RJX.</p>
+<pre class="prettyprint source lang-javascript"><code>import { default as rjx } from 'rjx';
+import { * as Semantic } from 'semantic-ui-react';
+
+const getRenderedJSON = rjx.getRenderedJSON.bind({
+  componentLibraries:{
+    Semantic,
+  }
+});
+
+const myRJX = {
+  component:'Semantic.Container',
+  children:[
+    {
+      component:'Semantic.Header',
+      props:{
+        as:'h1',
+      },
+      children:'Hello World!',
+    },
+    {
+      component:'Semantic.Button',
+      props:{
+        content:'Discover docs',
+        href:'http://react.semantic-ui.com',
+        icon:'github',
+        labelPosition:'left',
+      }
+    }
+  ]
+}
+
+const myReactElements = getRenderedJSON(myRJX);</code></pre><h4>Advanced - Using New &amp; Custom Components</h4><p>If you're only adding single components or using your own components you can add them to RJX's component my individually.</p>
+<pre class="prettyprint source lang-javascript"><code>import React from 'react';
+import { default as rjx } from 'rjx';
+import { Header } from 'semantic-ui-react';
+
+class MyButton extends React.Component {
+  render() {
+    return &lt;a {...this.props}>{this.props.children}&lt;/a>
+  }
+}
+
+
+const getRenderedJSON = rjx.getRenderedJSON.bind({
+  reactComponents:{
+    Header,
+    MyButton,
+  }
+});
+
+const myRJX = {
+  component:'div',
+  children:[
+    {
+      component:'Header',
+      props:{
+        as:'h1',
+      },
+      children:'Hello World!',
+    },
+    {
+      component:'MyButton',
+      props:{
+        title:'Discover docs',
+        href:'http://react.semantic-ui.com',
+      },
+      __dangerouslyEvalProps:{
+        onClick:'()=>alert(&quot;click works&quot;)'
+      },
+      children:'click me',
+    }
+  ]
+}
+
+const myReactElements = getRenderedJSON(myRJX);</code></pre><h3>Development</h3><p>Note <em>Make sure you have grunt installed</em></p>
 <pre class="prettyprint source lang-sh"><code>$ npm i -g grunt-cli jsdoc-to-markdown</code></pre><p>For generating documentation</p>
 <pre class="prettyprint source lang-sh"><code>$ grunt doc
 $ jsdoc2md src/**/*.js  > docs/api.md</code></pre><h3>Notes</h3><p>Check out <a href="https://github.com/repetere/rjx">https://github.com/repetere/rjx</a> for the full rjx Documentation</p>
 <h3>Testing</h3><pre class="prettyprint source lang-sh"><code>$ npm i
 $ grunt test</code></pre><h3>Contributing</h3><p>Fork, write tests and create a pull request!</p>
-<h3>Misc</h3><p>As of Node 8, ES modules are still used behind a flag, when running natively as an ES module</p>
-<pre class="prettyprint source lang-sh"><code>$ node --experimental-modules my-machine-learning-script.mjs
-# Also there are native bindings that require Python 2.x, make sure if you're using Andaconda, you build with your Python 2.x bin
-$ npm i --python=/usr/bin/python</code></pre><p>License</p>
+<h3>Example Browser Usage</h3><pre class="prettyprint source lang-html"><code>&lt;!DOCTYPE html>
+&lt;html lang=&quot;en&quot;>
+  &lt;head>
+    &lt;meta charset=&quot;utf-8&quot;>
+    &lt;title>RJX TEST&lt;/title>
+    &lt;script type=&quot;text/javascript&quot; src=&quot;rjx.umd.js&quot;>&lt;/script>
+  &lt;/head>
+  &lt;body>
+    &lt;div id=&quot;root&quot;>&lt;/div>
+    &lt;script type=&quot;text/javascript&quot;>
+      const sampleRJX = {
+        component: 'div',
+        props: {
+          id: 'generatedRJX',
+          className:'rjx',
+        },
+        children: [
+          {
+            component: 'p',
+            props: {
+              style: {
+                color: 'red',
+                fontWeight:'bold',
+              },
+            },
+            __dangerouslyEvalProps:{
+              onClick:'()=>alert(&quot;click works&quot;)'
+            },
+            children:'hello world',
+          },
+        ],
+      };
+      const boundConfig = {
+        debug:true, 
+      };
+      rjx.rjxRender.call(boundConfig,{ rjx: sampleRJX, querySelector:'#root', });
+    &lt;/script>
+  &lt;/body>
+&lt;/html></code></pre><p>License</p>
 <hr>
 <p>MIT</p></article>
     </section>
@@ -131,7 +309,7 @@ $ npm i --python=/usr/bin/python</code></pre><p>License</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jan 15 2018 23:00:06 GMT-0500 (EST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 16 2018 00:21:43 GMT-0500 (EST)
 </footer>
 
 <script> prettyPrint(); </script>
