@@ -1,4 +1,4 @@
-# rjx
+# Reactive JSON (RJX)
 
 [![Coverage Status](https://coveralls.io/repos/github/repetere/rjx/badge.svg?branch=master)](https://coveralls.io/github/repetere/rjx?branch=master) [![Build Status](https://travis-ci.org/repetere/rjx.svg?branch=master)](https://travis-ci.org/repetere/rjx)
 
@@ -12,7 +12,7 @@ RJX was created to remove all the complexities around environment setup, and con
 ## Installation
 
 ```sh
-$ npm i rjx 
+$ npm i rjx
 ```
 
 ### [Full Documentation](https://github.com/repetere/rjx/blob/master/docs/api.md)
