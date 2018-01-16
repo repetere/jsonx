@@ -17,7 +17,7 @@ $ npm i rjx
 
 ### [Full Documentation](https://github.com/repetere/rjx/blob/master/docs/api.md)
 
-### Examples (basic)
+### Examples ( [HTML/Browser Example](https://github.com/repetere/rjx/blob/master/dist/example.html) ) 
 
 ```javascript
 import { default as rjx } from 'rjx';
