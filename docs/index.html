@@ -171,6 +171,8 @@ function validateRJX(rjx = {}, returnAllErrors= false);</code></pre><h3>RJX Modu
   comparisonprops:[Object], // An array of Objects used to conditionally display the current rjx.component
   //flag properties
   passprops:Boolean, // A flag to pass parent properties to children RJX objects (except for the style property)
+  comparisonorprops:Boolean, // A flag to use an or condition instead of and conditions between comparisions
+
 }</code></pre><h4>Advanced - Using Custom Components &amp; UI Libraries</h4><p>If you plan on using an entire UI library, then bind the library to this before using RJX.</p>
 <pre class="prettyprint source lang-javascript"><code>import { default as rjx } from 'rjx';
 import { * as Semantic } from 'semantic-ui-react';
@@ -246,7 +248,186 @@ const myRJX = {
   ]
 }
 
-const myReactElements = getRenderedJSON(myRJX);</code></pre><h3>Development</h3><p>Note <em>Make sure you have grunt installed</em></p>
+const myReactElements = getRenderedJSON(myRJX);</code></pre><h4>Advanced - Special properties</h4><h5>asyncprops / thisprops / windowprops</h5><p>The only different between asyncprops, thisprops and windowprops are the source of the transverse Object.</p>
+<p>Asyncprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).</p>
+<p>Thisprops transverse anything bound to <code>this.props</code>, a good example would be if you're storing and passing a user object on <code>this.props.user</code>, pulling the username would be where you would use thisprops.</p>
+<p>Windowprops transverse anything on the global window object, like the current page location <code>window.location.href</code>.</p>
+<p>Dynamic props are transversed by passing an array to the property value you want, so for a window's location (<code>window.location.href</code>) the property value is accessed by an array to the href <code>['location','href']</code> where you omit the transverse object from the array path.</p>
+<pre class="prettyprint source lang-javascript"><code>const traverseObject = {
+  user: {
+    name: 'rjx',
+    description: 'react withouth javascript',
+  },
+  stats: {
+    logins: 102,
+    comments: 3,
+  },
+  authentication: 'OAuth2',
+};
+const testRJX = {
+  component: 'div',
+  props: {
+    id: 'generatedRJX',
+    className:'rjx',
+  },
+  asyncprops:{
+    auth: [ 'authentication', ],
+    username: [ 'user', 'name', ],
+  },
+  children: [
+    {
+      component: 'p',
+      props: {
+        style: {
+          color: 'red',
+          fontWeight:'bold',
+        },
+      },
+      children:'hello world',
+    },
+  ],
+};
+const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
+// => {
+//   auth: 'OAuth2',
+//   username: 'rjx'
+// }
+
+//finally resolves:
+const testRJX = {
+  component: 'div',
+  props: {
+    id: 'generatedRJX',
+    className:'rjx',
+    auth: 'OAuth2',
+    username: 'rjx',
+  },
+  children: [
+    {
+      component: 'p',
+      props: {
+        style: {
+          color: 'red',
+          fontWeight:'bold',
+        },
+      },
+      children:'hello world',
+    },
+  ],
+};</code></pre><h5><strong>dangerouslyEvalProps / </strong>dangerouslyBindEvalProps</h5><p>The only difference between <code>__dangerouslyEvalProps</code> and <code>__dangerouslyBindEvalProps</code> is each  <code>__dangerouslyBindEvalProps</code> has to be a function, because it's returned as the bound instance of the function with <code>this</code>.</p>
+<pre class="prettyprint source lang-javascript"><code> const testVals = {
+    auth: 'true',
+    username: '(user={})=>user.name',
+  };
+  const testRJX = Object.assign({}, sampleRJX, {
+    __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {
+      email: '(function getUser(user={}){ return this.testBound(); })',
+    },
+  });
+  const RJXP = getEvalProps.call({ testBound: () => 'bounded', }, { rjx: testRJX, });
+  const evalutedComputedFunc = RJXP.username({ name: 'bob', });
+  const evalutedComputedBoundFunc = RJXP.email({ email:'test@email.domain', });
+  // expect(RJXP.auth).to.be.true;
+  // expect(evalutedComputedFunc).to.eql('bob');
+  // expect(evalutedComputedBoundFunc).to.eql('bounded');</code></pre><h5>__functionProps</h5><p>Function props merge onto rjx.props after evaluating each functon string.</p>
+<pre class="prettyprint source lang-javascript"><code>const thisProp = {
+  debug: true,
+  window: {
+    print: () => 'printed',
+    localStorage: {
+      getItem:()=>'gotItem',
+    },
+  },
+  props: {
+    onClick:()=>'clicked',
+    reduxRouter: {
+      push:()=>'pushed',
+      pop:()=>'poped',
+    },
+  },
+};
+const rxjTest = {
+  component:'div',
+  props: {
+    name:'test',
+  },
+  __functionProps: {
+    onclick:'func:this.props.onClick',
+    printPage: 'func:window.print',
+    nav:'func:this.props.reduxRouter.push',
+  },
+};
+const rxjObj = getFunctionProps.call(thisProp, {
+  rjx: rxjTest,
+});
+expect(rxjObj).is.an('object');
+expect(Object.keys(rxjObj)).to.eql(Object.keys(rxjTest.__functionProps));
+expect(rxjObj.onclick()).to.eq('clicked');
+expect(rxjObj.printPage()).to.eql('printed');
+expect(rxjObj.nav()).to.eql('pushed');</code></pre><h5>comparisionprops</h5><p>Comparison props are used to contionally show components if they're truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If <code>comparisonorprops:true</code> then only one condition needs to be true in order to render the component</p>
+<pre class="prettyprint source lang-javascript"><code>//and conditions
+rjx={
+  comparisonprops: [{
+    left: ['bigNum',],
+    operation:'lte',
+    right:['smallNum',],
+  },{
+    left: ['smallNum',],
+    operation:'&lt;=',
+    right:['bigNum',],
+  }],
+}
+//or conditions
+rjx={
+  comparisonorprops:true,
+  comparisonprops: [{
+    left: ['truthy',],
+    operation:'eq',
+    right:['falsey',],
+  },{
+    left: ['smallNum',],
+    operation:'eq',
+    right:['smallNum',],
+  }],
+}
+
+// All comparison operations
+switch (opscompares.operation) {
+  case 'eq':
+  case '==':
+    return opscompares.left == opscompares.right;
+  case 'dneq':
+  case '!=':
+  case '!':
+    return opscompares.left !== opscompares.right;
+  case 'dnseq':
+  case '!==':
+    return opscompares.left !== opscompares.right;
+  case 'seq':
+  case '===':
+    return opscompares.left === opscompares.right;
+  case 'lt':
+  case '&lt;':
+    return opscompares.left &lt; opscompares.right;
+  case 'lte':
+  case '&lt;=':
+    return opscompares.left &lt;= opscompares.right;
+  case 'gt':
+  case '>':
+    return opscompares.left > opscompares.right;
+  case 'gte':
+  case '>=':
+    return opscompares.left >= opscompares.right;
+  case 'dne':
+  case 'undefined':
+  case 'null':
+    return opscompares.left === undefined || opscompares.left === null; 
+  case '!null':
+  case '!undefined':
+  case 'exists':
+  default://'exists'
+    return opscompares.left !== undefined && opscompares.left !== null;
+}</code></pre><h3>Development</h3><p>Note <em>Make sure you have grunt installed</em></p>
 <pre class="prettyprint source lang-sh"><code>$ npm i -g grunt-cli jsdoc-to-markdown</code></pre><p>For generating documentation</p>
 <pre class="prettyprint source lang-sh"><code>$ grunt doc
 $ jsdoc2md src/**/*.js  > docs/api.md</code></pre><h3>Notes</h3><p>Check out <a href="https://github.com/repetere/rjx">https://github.com/repetere/rjx</a> for the full rjx Documentation</p>
@@ -290,7 +471,14 @@ $ grunt test</code></pre><h3>Contributing</h3><p>Fork, write tests and create a 
       rjx.rjxRender.call(boundConfig,{ rjx: sampleRJX, querySelector:'#root', });
     &lt;/script>
   &lt;/body>
-&lt;/html></code></pre><p>License</p>
+&lt;/html></code></pre><div style="text-align:center;">
+
+<img src="https://raw.githubusercontent.com/repetere/rjx/master/docs/rjx-logo.png" style="max-width:160px;">
+
+</div>
+
+
+<p>License</p>
 <hr>
 <p>MIT</p></article>
     </section>
@@ -309,7 +497,7 @@ $ grunt test</code></pre><h3>Contributing</h3><p>Fork, write tests and create a 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 16 2018 00:21:43 GMT-0500 (EST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 16 2018 00:48:52 GMT-0500 (EST)
 </footer>
 
 <script> prettyPrint(); </script>

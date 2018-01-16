@@ -28,7 +28,10 @@
     "reactive",
     "reactive-json"
   ],
-  "author": "Yaw Joseph Etse",
+  "author":{ 
+    "name":"Yaw Joseph Etse",
+    "email": "yaw@repetere.io"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/repetere/rjx/issues"
