@@ -48,8 +48,8 @@ describe('rjx props', function () {
     const getComputedProps = rjx._rjxProps.getComputedProps;
     it('should return resolved computed props', () => {
       const dynamicprops = {
-        auth: ['authentication',],
-        username: ['user', 'name',],
+        auth: ['authentication', ],
+        username: ['user', 'name', ],
       };
       const evalProps = {
         getUsername: '(user={})=>user.name',
@@ -88,8 +88,8 @@ describe('rjx props', function () {
     const getRJXProps = rjx._rjxProps.getRJXProps;
     it('should return resolved dynamic prop', () => {
       const testVals = {
-        auth: ['authentication',],
-        username: ['user', 'name',],
+        auth: ['authentication', ],
+        username: ['user', 'name', ],
       };
       const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
       const testRJX2 = Object.assign({}, sampleRJX, { thisprops: testVals, });
@@ -102,8 +102,8 @@ describe('rjx props', function () {
     });
     it('should return resolved dynamic prop with undefined values if reference is invalid', () => {
       const testVals = {
-        auth: ['wrong',],
-        username: ['no', 'ref',],
+        auth: ['wrong', ],
+        username: ['no', 'ref', ],
       };
       const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
       const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
@@ -176,6 +176,48 @@ describe('rjx props', function () {
     });    
     after(function () {
       this.jsdom();
+    });
+  });
+  describe('getFunctionProps', () => {
+    const getFunctionProps = rjx._rjxProps.getFunctionProps;
+    it('should resolve functions from rjx.__functionProps from function strings', () => {
+      const logError = sinon.spy();
+      const thisProp = {
+        logError,
+        debug: true,
+        window: {
+          print: () => 'printed',
+          localStorage: {
+            getItem:()=>'gotItem',
+          },
+        },
+        props: {
+          onClick:()=>'clicked',
+          reduxRouter: {
+            push:()=>'pushed',
+            pop:()=>'poped',
+          },
+        },
+      };
+      const rxjTest = {
+        component:'div',
+        props: {
+          name:'test',
+        },
+        __functionProps: {
+          onclick:'func:this.props.onClick',
+          printPage: 'func:window.print',
+          nav:'func:this.props.reduxRouter.push',
+        },
+      };
+      const rxjObj = getFunctionProps.call(thisProp, {
+        rjx: rxjTest,
+      });
+      expect(rxjObj).is.an('object');
+      expect(Object.keys(rxjObj)).to.eql(Object.keys(rxjTest.__functionProps));
+      expect(rxjObj.onclick()).to.eq('clicked');
+      expect(rxjObj.printPage()).to.eql('printed');
+      expect(rxjObj.nav()).to.eql('pushed');
     });
   });
   describe('getFunctionFromProps', () => {

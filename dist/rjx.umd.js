@@ -27540,9 +27540,17 @@ function getFunctionFromProps(options) {
   }
 }
 
+/**
+ * Returns a resolved object from function strings that has functions pulled from rjx.__functionProps
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+ * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+ * @returns {Object} resolved object of functions from function strings
+ */
 function getFunctionProps() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var allProps = options.allProps,
+  var _options$allProps = options.allProps,
+      allProps = _options$allProps === undefined ? {} : _options$allProps,
       _options$rjx2 = options.rjx,
       rjx = _options$rjx2 === undefined ? {} : _options$rjx2;
 
@@ -27551,7 +27559,7 @@ function getFunctionProps() {
   //Allowing for window functions
   Object.keys(funcProps).forEach(function (key) {
     if (typeof funcProps[key] === 'string' && funcProps[key].indexOf('func:') !== -1) {
-      allProps[key] = getFunction({ propFunc: allProps[key] });
+      allProps[key] = getFunction({ propFunc: funcProps[key] });
     }
   });
   return allProps;

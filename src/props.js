@@ -184,14 +184,21 @@ export function getFunctionFromProps(options) {
   }
 }
 
+/**
+ * Returns a resolved object from function strings that has functions pulled from rjx.__functionProps
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+ * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+ * @returns {Object} resolved object of functions from function strings
+ */
 export function getFunctionProps(options = {}) {
-  const { allProps, rjx = {}, } = options;
+  const { allProps = {}, rjx = {}, } = options;
   const getFunction = getFunctionFromProps.bind(this);
   const funcProps = rjx.__functionProps;
   //Allowing for window functions
   Object.keys(funcProps).forEach(key => {
     if (typeof funcProps[key] ==='string' && funcProps[key].indexOf('func:') !== -1 ){
-      allProps[ key ] = getFunction({ propFunc: allProps[ key ], });
+      allProps[ key ] = getFunction({ propFunc: funcProps[ key ], });
     } 
   });
   return allProps;
