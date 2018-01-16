@@ -177,6 +177,8 @@ rjx = {
   comparisonprops:[Object], // An array of Objects used to conditionally display the current rjx.component
   //flag properties
   passprops:Boolean, // A flag to pass parent properties to children RJX objects (except for the style property)
+  comparisonorprops:Boolean, // A flag to use an or condition instead of and conditions between comparisions
+
 }
 ```
 
@@ -268,6 +270,219 @@ const myRJX = {
 }
 
 const myReactElements = getRenderedJSON(myRJX);
+```
+
+#### Advanced - Special properties
+
+##### asyncprops / thisprops / windowprops
+
+The only different between asyncprops, thisprops and windowprops are the source of the transverse Object.
+
+Asyncprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).
+
+Thisprops transverse anything bound to `this.props`, a good example would be if you're storing and passing a user object on `this.props.user`, pulling the username would be where you would use thisprops.
+
+Windowprops transverse anything on the global window object, like the current page location `window.location.href`.
+
+Dynamic props are transversed by passing an array to the property value you want, so for a window's location (`window.location.href`) the property value is accessed by an array to the href `['location','href']` where you omit the transverse object from the array path.
+
+```javascript
+const traverseObject = {
+  user: {
+    name: 'rjx',
+    description: 'react withouth javascript',
+  },
+  stats: {
+    logins: 102,
+    comments: 3,
+  },
+  authentication: 'OAuth2',
+};
+const testRJX = {
+  component: 'div',
+  props: {
+    id: 'generatedRJX',
+    className:'rjx',
+  },
+  asyncprops:{
+    auth: [ 'authentication', ],
+    username: [ 'user', 'name', ],
+  },
+  children: [
+    {
+      component: 'p',
+      props: {
+        style: {
+          color: 'red',
+          fontWeight:'bold',
+        },
+      },
+      children:'hello world',
+    },
+  ],
+};
+const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
+// => {
+//   auth: 'OAuth2',
+//   username: 'rjx'
+// }
+
+//finally resolves:
+const testRJX = {
+  component: 'div',
+  props: {
+    id: 'generatedRJX',
+    className:'rjx',
+    auth: 'OAuth2',
+    username: 'rjx',
+  },
+  children: [
+    {
+      component: 'p',
+      props: {
+        style: {
+          color: 'red',
+          fontWeight:'bold',
+        },
+      },
+      children:'hello world',
+    },
+  ],
+};
+```
+
+##### __dangerouslyEvalProps / __dangerouslyBindEvalProps
+
+The only difference between `__dangerouslyEvalProps` and `__dangerouslyBindEvalProps` is each  `__dangerouslyBindEvalProps` has to be a function, because it's returned as the bound instance of the function with `this`.
+
+```javascript
+ const testVals = {
+    auth: 'true',
+    username: '(user={})=>user.name',
+  };
+  const testRJX = Object.assign({}, sampleRJX, {
+    __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {
+      email: '(function getUser(user={}){ return this.testBound(); })',
+    },
+  });
+  const RJXP = getEvalProps.call({ testBound: () => 'bounded', }, { rjx: testRJX, });
+  const evalutedComputedFunc = RJXP.username({ name: 'bob', });
+  const evalutedComputedBoundFunc = RJXP.email({ email:'test@email.domain', });
+  // expect(RJXP.auth).to.be.true;
+  // expect(evalutedComputedFunc).to.eql('bob');
+  // expect(evalutedComputedBoundFunc).to.eql('bounded');
+```
+
+##### __functionProps
+
+Function props merge onto rjx.props after evaluating each functon string.
+
+```javascript
+const thisProp = {
+  debug: true,
+  window: {
+    print: () => 'printed',
+    localStorage: {
+      getItem:()=>'gotItem',
+    },
+  },
+  props: {
+    onClick:()=>'clicked',
+    reduxRouter: {
+      push:()=>'pushed',
+      pop:()=>'poped',
+    },
+  },
+};
+const rxjTest = {
+  component:'div',
+  props: {
+    name:'test',
+  },
+  __functionProps: {
+    onclick:'func:this.props.onClick',
+    printPage: 'func:window.print',
+    nav:'func:this.props.reduxRouter.push',
+  },
+};
+const rxjObj = getFunctionProps.call(thisProp, {
+  rjx: rxjTest,
+});
+expect(rxjObj).is.an('object');
+expect(Object.keys(rxjObj)).to.eql(Object.keys(rxjTest.__functionProps));
+expect(rxjObj.onclick()).to.eq('clicked');
+expect(rxjObj.printPage()).to.eql('printed');
+expect(rxjObj.nav()).to.eql('pushed');
+```
+
+##### comparisionprops
+
+Comparison props are used to contionally show components if they're truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If `comparisonorprops:true` then only one condition needs to be true in order to render the component
+
+```javascript
+//and conditions
+rjx={
+  comparisonprops: [{
+    left: ['bigNum',],
+    operation:'lte',
+    right:['smallNum',],
+  },{
+    left: ['smallNum',],
+    operation:'<=',
+    right:['bigNum',],
+  }],
+}
+//or conditions
+rjx={
+  comparisonorprops:true,
+  comparisonprops: [{
+    left: ['truthy',],
+    operation:'eq',
+    right:['falsey',],
+  },{
+    left: ['smallNum',],
+    operation:'eq',
+    right:['smallNum',],
+  }],
+}
+
+// All comparison operations
+switch (opscompares.operation) {
+  case 'eq':
+  case '==':
+    return opscompares.left == opscompares.right;
+  case 'dneq':
+  case '!=':
+  case '!':
+    return opscompares.left !== opscompares.right;
+  case 'dnseq':
+  case '!==':
+    return opscompares.left !== opscompares.right;
+  case 'seq':
+  case '===':
+    return opscompares.left === opscompares.right;
+  case 'lt':
+  case '<':
+    return opscompares.left < opscompares.right;
+  case 'lte':
+  case '<=':
+    return opscompares.left <= opscompares.right;
+  case 'gt':
+  case '>':
+    return opscompares.left > opscompares.right;
+  case 'gte':
+  case '>=':
+    return opscompares.left >= opscompares.right;
+  case 'dne':
+  case 'undefined':
+  case 'null':
+    return opscompares.left === undefined || opscompares.left === null; 
+  case '!null':
+  case '!undefined':
+  case 'exists':
+  default://'exists'
+    return opscompares.left !== undefined && opscompares.left !== null;
+}
 ```
 
 ### Development
