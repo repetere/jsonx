@@ -4,100 +4,270 @@
 
 ## Description
 
-**rjx** is a javascript module with simple and efficient tools for data mining and data analysis in JavaScript. **rjx** can be used with [ML.js]Reactive JSON - Zero-Configuration React components with JSON
+**Reactive JSON (RJX)** takes a RXJ JSON object and renders React components. **RJX** lets you get up and running with React without using JavaScript.
+
+RJX was created to remove all the complexities around environment setup, and configuration of React applications (Babel, Webpack, Rollup, etc) and make declarative user interfaces using Machine Learning and Natural Language Processing. Using RJX let's any back end application (Elixir, Go, Python, etc) render server side react application.
 
 ## Installation
 
 ```sh
-$ npm i rjx #
+$ npm i rjx 
 ```
 
 ### [Full Documentation](https://github.com/repetere/rjx/blob/master/docs/api.md)
 
-### Usage (basic)
+### Examples (basic)
+
+```javascript
+import { default as rjx } from 'rjx';
+//Rendering React Components
+rjx.getRenderedJSON({component:'p',props:{style:{color:'blue'}},children:'hello world'});
+// => JSX Equivalent: <p style={{color:'blue'}}>hello world</p>
+
+//Generating HTML strings
+rjx.rjxHTMLString({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
+// => '<div class="rjx-generated"><p style="color:red;">hello world</p></div>'
+
+//Rendering HTML Dom with React
+rjx.rjxRender({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, querySelector:'#myApp', });
+// <!DOCTYPE html>
+//  <body>
+//    <div id="myApp">
+//      <div class="rjx-generated">
+//        <p style="color:red;">hello world</p>
+//      </div>
+//    </div>
+// </body>
+```
+
+### RJX JSON Spec
+
+RXJ JSON is valid JSON that more or less mimics JSX in JSON notation with a couple of special properties. The properties for RXJ JSON are the arguments passed to [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component (which is passed as the `type` argument)
+
+```javascript
+React.createElement(
+  type,
+  [props],
+  [...children]
+)
+```
+
+You can pass React component libraries for additional components, or you own custom components (see Advanced, also see Full Spec).
+
+```javascript
+//sample RJX
+{
+  component:'ul',
+  props:{
+    className:'list-class',
+  },
+  children:[
+    {
+      component:'li',
+      children:'first bullet'
+    },
+    {
+      component:'li',
+      children:'second bullet',
+    }
+  ]
+}
+```
+
+```JSX
+// Equivalent JSX
+<ul className="list-class">
+  <li>first bullet</li>
+  <li>second bullet</li>
+</ul>
+```
+
+#### Validating RJX JSON
+
+```javascript 
+import { default as rjx } from 'rjx';
+
+//use built in RJX Validator
+const valid_rjx_json = {
+  component:'p',
+  props:{
+    className:'title',
+  },
+  children:'hello world'
+};
+const invalid_rjx_json = {
+  props:{
+    className:'title',
+  },
+  children:'hello world'
+};
+const multiple_invalid_rjx_json = {
+  props:'must be obj',
+  children:'hello world'
+};
+
+rjx._rjxUtils.validateRJX(testRJXJSON) // => true
+rjx._rjxUtils.validateRJX(invalid_rjx_json) // => throws SyntaxError('[0001] Missing React Component')
+rjx._rjxUtils.validateRJX(multiple_invalid_rjx_json, true) // =>
+// [ [Error: [0001] Missing React Component],[ Error: [0002]  props must be an Object / valid React props] ]
+
+/**
+ * @param {Object} rjx - RJX JSON to validate 
+ * @param {Boolean} [returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
+ * /
+function validateRJX(rjx = {}, returnAllErrors= false);
+```
+
+### RJX Module
 
 ```javascript
 "rjx" : {
-  loadCSV: [Function: loadCSV], //asynchronously loads CSVs, either a filepath or a remote URI
-  cross_validation: {
-    train_test_split: [Function: train_test_split], // splits data into training and testing sets
-    cross_validation_split: [Function: kfolds], //splits data into k-folds
+  getRenderedJSON: [Function: getRenderedJSON], //Use React.createElement and RJX JSON to create React elements
+  rjxHTMLString: [Function: rjxHTMLString], //Use ReactDOMServer.renderToString to render html from RJX
+  rjxRender: [Function: getRenderedJSON], //Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
+  _rjxChildren: {
+    getChildrenProperty: [Function: getChildrenProperty], // returns a valid rjx.children property
+    getChildrenProps: [Function: getChildrenProps], // Used to pass properties down to child components if passprops is set to true
+    getRJXChildren: [Function: getRJXChildren], // returns React Child Elements via RJX
   },
-  preprocessing: {
-    Class RawData: [ //class for manipulating an array of objects (typically from CSV data)
-      columnArray(columnName,options), // - returns a new array of a selected column from an array of objects, can filter, scale and replace values
-      columnReplace(columnName,options), // - returns a new array of a selected column from an array of objects and replaces empty values, encodes values and scales values
-      labelEncoder(columnName,options), // - returns a new array and label encodes a selected column
-      labelDecode(columnName,options), // - returns a new array and decodes an encoded column back to the original array values
-      oneHotEncoder(columnName,options), // - returns a new object of one hot encoded values
-      fitColumns(options), // - mutates data property of RawData by replacing multiple columns in a single command
-    ]
+  _rjxComponents: {
+    componentMap: {}, // object of all react components available for RJX
+    getBoundedComponents: [Function: getBoundedComponents], // getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
+    getComponentFromLibrary: [Function: getComponentFromLibrary], // returns a react component from a component library (like material-ui, or semantic-ui)
+    getComponentFromMap: [Function: getComponentFromMap], // rreturns a react element from rjx.component
   },
-  util: {
-    range: [Function], // range helper function
-    rangeRight: [Function], //range right helper function
-    scale: [Function: scale], //scale / normalize data
-    avg: [Function: arithmeticMean], // aritmatic mean
-    mean: [Function: arithmeticMean], // aritmatic mean
-    sum: [Function: sum],
-    max: [Function: max],
-    min: [Function: min],
-    sd: [Function: standardDeviation], // standard deviation
-    StandardScaler: [Function: StandardScaler], // standardization (z-scores)
-    MinMaxScaler: [Function: MinMaxScaler], // min-max scaling
+  _rjxProps: {
+    getRJXProps: [Function: getRJXProps], // It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
+    getEvalProps: [Function: getEvalProps], //Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
+    getComponentProps: [Function: getComponentProps], // Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+    getFunctionFromProps: [Function: getFunctionFromProps], // Takes a function string and returns a function on either this.props or window.
+    getFunctionProps: [Function: getFunctionProps], // Returns a resolved object from function strings that has functions pulled from rjx.__functionProps
+    getWindowComponents: [Function: getWindowComponents], // Returns a resolved object that has React Components pulled from window.__rjx_custom_elements
+    getComputedProps: [Function: getComputedProps], // Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty
+  },
+  _rjxUtils: {
+    validateRJX: [Function: validateRJX], //Validates RJX JSON Syntax
+    displayComponent: [Function displayComponent], // Used to evaluate whether or not to render a component
+    traverse: [Function traverse], //take an object of array paths to traverse and resolve
+    getAdvancedBinding: [Function: getAdvancedBinding], // Use to test if can bind components this context for react-redux-router
   },
 }
 ```
 
-### Examples (JavaScript / Python / R)
+### Full RJX Spec
+```javascript
+rjx = {
+  //standard properties
+  component:String, // Any React DOM element, or custom component div,p, Boomer.Hero, MaterialUI.Button, myCustomComponent
+  props:Object, // Standard React component properties
+  children:Array|String, // Any String or Array of valid RJX JSON objects
+  //dynamic properties
+  asyncprops:Object, // An object from async resources to merge onto rjx.props once fully resolved
+  thisprops:Object, // An object to merge onto rjx.props from properties already bound to this.props
+  windowprops:Object, // An object to merge onto rjx.props from the window object
+  //evaluated properties
+  __dangerouslyEvalProps:Object, // An object of evaluated JavaScript strings, used as inline functions onto rjx.props
+  __dangerouslyBindEvalProps:Object, // An object of evaluated JavaScript functions that are bound to this, used as inline functions onto rjx.props
+  //computed properties
+  __functionProps:Object, // An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto rjx.props
+  __dangerouslyInsertComponents:Object, // An object that turns each RXJ JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+  __windowComponents:Object, // An object of components merged onto rjx.props from window.__rjx_custom_elements
+  __windowComponentProps:Object,
+  //display properties
+  comparisonprops:[Object], // An array of Objects used to conditionally display the current rjx.component
+  //flag properties
+  passprops:Boolean, // A flag to pass parent properties to children RJX objects (except for the style property)
+}
+```
 
-#### Loading CSV Data
+#### Advanced - Using Custom Components & UI Libraries
 
-##### Javascript
+If you plan on using an entire UI library, then bind the library to this before using RJX.
 
 ```javascript
-import { default as jsk } from 'rjx';
-let dataset;
+import { default as rjx } from 'rjx';
+import { * as Semantic } from 'semantic-ui-react';
 
-//In JavaScript, by default most I/O Operations are asynchronous, see the notes section for more
-jsk.loadCSV('/some/file/path.csv')
-  .then(csvData=>{
-    dataset = new jsk.RawData(csvData);
-    console.log({csvData});
-    /* csvData [{
-      'Country': 'Brazil',
-      'Age': '44',
-      'Salary': '72000',
-      'Purchased': 'N',
-    },
-    ...
+const getRenderedJSON = rjx.getRenderedJSON.bind({
+  componentLibraries:{
+    Semantic,
+  }
+});
+
+const myRJX = {
+  component:'Semantic.Container',
+  children:[
     {
-      'Country': 'Mexico',
-      'Age': '27',
-      'Salary': '48000',
-      'Purchased': 'Yes',
-    }] */
-  })
-  .catch(console.error);
+      component:'Semantic.Header',
+      props:{
+        as:'h1',
+      },
+      children:'Hello World!',
+    },
+    {
+      component:'Semantic.Button',
+      props:{
+        content:'Discover docs',
+        href:'http://react.semantic-ui.com',
+        icon:'github',
+        labelPosition:'left',
+      }
+    }
+  ]
+}
 
-// or from URL
-jsk.loadCSV('https://example.com/some/file/path.csv')
+const myReactElements = getRenderedJSON(myRJX);
 ```
 
-##### Python
 
-```python
-import pandas as pd
+#### Advanced - Using New & Custom Components
 
-#Importing the dataset
-dataset = pd.read_csv('/some/file/path.csv')
-```
+If you're only adding single components or using your own components you can add them to RJX's component my individually.
 
-##### R
+```javascript
+import React from 'react';
+import { default as rjx } from 'rjx';
+import { Header } from 'semantic-ui-react';
 
-```R
-# Importingd the dataset
-dataset = read.csv('Data.csv')
+class MyButton extends React.Component {
+  render() {
+    return <a {...this.props}>{this.props.children}</a>
+  }
+}
+
+
+const getRenderedJSON = rjx.getRenderedJSON.bind({
+  reactComponents:{
+    Header,
+    MyButton,
+  }
+});
+
+const myRJX = {
+  component:'div',
+  children:[
+    {
+      component:'Header',
+      props:{
+        as:'h1',
+      },
+      children:'Hello World!',
+    },
+    {
+      component:'MyButton',
+      props:{
+        title:'Discover docs',
+        href:'http://react.semantic-ui.com',
+      },
+      __dangerouslyEvalProps:{
+        onClick:'()=>alert("click works")'
+      },
+      children:'click me',
+    }
+  ]
+}
+
+const myReactElements = getRenderedJSON(myRJX);
 ```
 
 ### Development
@@ -130,14 +300,48 @@ $ grunt test
 
 Fork, write tests and create a pull request!
 
-### Misc
+### Example Browser Usage
 
-As of Node 8, ES modules are still used behind a flag, when running natively as an ES module
-
-```sh
-$ node --experimental-modules my-machine-learning-script.mjs
-# Also there are native bindings that require Python 2.x, make sure if you're using Andaconda, you build with your Python 2.x bin
-$ npm i --python=/usr/bin/python
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>RJX TEST</title>
+    <script type="text/javascript" src="rjx.umd.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      const sampleRJX = {
+        component: 'div',
+        props: {
+          id: 'generatedRJX',
+          className:'rjx',
+        },
+        children: [
+          {
+            component: 'p',
+            props: {
+              style: {
+                color: 'red',
+                fontWeight:'bold',
+              },
+            },
+            __dangerouslyEvalProps:{
+              onClick:'()=>alert("click works")'
+            },
+            children:'hello world',
+          },
+        ],
+      };
+      const boundConfig = {
+        debug:true, 
+      };
+      rjx.rjxRender.call(boundConfig,{ rjx: sampleRJX, querySelector:'#root', });
+    </script>
+  </body>
+</html>
  ```
 
 License
