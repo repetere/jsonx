@@ -4,11 +4,6 @@
 
 ## Description
 
-<div style="text-align:center;">
-
-<img src="https://raw.githubusercontent.com/repetere/rjx/master/docs/rjx-logo.png" style="max-width:160px;">
-
-</div>
 
 **Reactive JSON (RJX)** takes a RXJ JSON object and renders React components. **RJX** lets you get up and running with React without using JavaScript.
 
@@ -564,6 +559,13 @@ Fork, write tests and create a pull request!
   </body>
 </html>
  ```
+
+<div style="text-align:center;">
+
+<img src="https://raw.githubusercontent.com/repetere/rjx/master/docs/rjx-logo.png" style="max-width:160px;">
+
+</div>
+
 
 License
 
