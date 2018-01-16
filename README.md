@@ -7,7 +7,7 @@
 
 **Reactive JSON (RJX)** takes a RXJ JSON object and renders React components. **RJX** lets you get up and running with React without using JavaScript.
 
-RJX was created to remove all the complexities around environment setup, and configuration of React applications (Babel, Webpack, Rollup, etc) and make declarative user interfaces using Machine Learning and Natural Language Processing. Using RJX let's any back end application (Elixir, Go, Python, etc) render server side react application.
+RJX was created to remove all the complexities around environment setup, and configuration of React applications (Babel, Webpack, Rollup, etc) and make declarative user interfaces using Machine Learning and Natural Language Processing. Using RJX let's any back end application (Elixir, Go, Python, etc) render a server side React application.
 
 ## Installation
 
