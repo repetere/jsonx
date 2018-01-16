@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>rjx</h1><p><a href="https://coveralls.io/github/repetere/rjx?branch=master"><img src="https://coveralls.io/repos/github/repetere/rjx/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://travis-ci.org/repetere/rjx"><img src="https://travis-ci.org/repetere/rjx.svg?branch=master" alt="Build Status"></a></p>
+<h2>Description</h2><p><strong>rjx</strong> is a javascript module with simple and efficient tools for data mining and data analysis in JavaScript. <strong>rjx</strong> can be used with [ML.js]Reactive JSON - Zero-Configuration React components with JSON</p>
+<h2>Installation</h2><pre class="prettyprint source lang-sh"><code>$ npm i rjx #</code></pre><h3><a href="https://github.com/repetere/rjx/blob/master/docs/api.md">Full Documentation</a></h3><h3>Usage (basic)</h3><pre class="prettyprint source lang-javascript"><code>&quot;rjx&quot; : {
+  loadCSV: [Function: loadCSV], //asynchronously loads CSVs, either a filepath or a remote URI
+  cross_validation: {
+    train_test_split: [Function: train_test_split], // splits data into training and testing sets
+    cross_validation_split: [Function: kfolds], //splits data into k-folds
+  },
+  preprocessing: {
+    Class RawData: [ //class for manipulating an array of objects (typically from CSV data)
+      columnArray(columnName,options), // - returns a new array of a selected column from an array of objects, can filter, scale and replace values
+      columnReplace(columnName,options), // - returns a new array of a selected column from an array of objects and replaces empty values, encodes values and scales values
+      labelEncoder(columnName,options), // - returns a new array and label encodes a selected column
+      labelDecode(columnName,options), // - returns a new array and decodes an encoded column back to the original array values
+      oneHotEncoder(columnName,options), // - returns a new object of one hot encoded values
+      fitColumns(options), // - mutates data property of RawData by replacing multiple columns in a single command
+    ]
+  },
+  util: {
+    range: [Function], // range helper function
+    rangeRight: [Function], //range right helper function
+    scale: [Function: scale], //scale / normalize data
+    avg: [Function: arithmeticMean], // aritmatic mean
+    mean: [Function: arithmeticMean], // aritmatic mean
+    sum: [Function: sum],
+    max: [Function: max],
+    min: [Function: min],
+    sd: [Function: standardDeviation], // standard deviation
+    StandardScaler: [Function: StandardScaler], // standardization (z-scores)
+    MinMaxScaler: [Function: MinMaxScaler], // min-max scaling
+  },
+}</code></pre><h3>Examples (JavaScript / Python / R)</h3><h4>Loading CSV Data</h4><h5>Javascript</h5><pre class="prettyprint source lang-javascript"><code>import { default as jsk } from 'rjx';
+let dataset;
+
+//In JavaScript, by default most I/O Operations are asynchronous, see the notes section for more
+jsk.loadCSV('/some/file/path.csv')
+  .then(csvData=>{
+    dataset = new jsk.RawData(csvData);
+    console.log({csvData});
+    /* csvData [{
+      'Country': 'Brazil',
+      'Age': '44',
+      'Salary': '72000',
+      'Purchased': 'N',
+    },
+    ...
+    {
+      'Country': 'Mexico',
+      'Age': '27',
+      'Salary': '48000',
+      'Purchased': 'Yes',
+    }] */
+  })
+  .catch(console.error);
+
+// or from URL
+jsk.loadCSV('https://example.com/some/file/path.csv')</code></pre><h5>Python</h5><pre class="prettyprint source lang-python"><code>import pandas as pd
+
+#Importing the dataset
+dataset = pd.read_csv('/some/file/path.csv')</code></pre><h5>R</h5><pre class="prettyprint source lang-R"><code># Importingd the dataset
+dataset = read.csv('Data.csv')</code></pre><h3>Development</h3><p>Note <em>Make sure you have grunt installed</em></p>
+<pre class="prettyprint source lang-sh"><code>$ npm i -g grunt-cli jsdoc-to-markdown</code></pre><p>For generating documentation</p>
+<pre class="prettyprint source lang-sh"><code>$ grunt doc
+$ jsdoc2md src/**/*.js  > docs/api.md</code></pre><h3>Notes</h3><p>Check out <a href="https://github.com/repetere/rjx">https://github.com/repetere/rjx</a> for the full rjx Documentation</p>
+<h3>Testing</h3><pre class="prettyprint source lang-sh"><code>$ npm i
+$ grunt test</code></pre><h3>Contributing</h3><p>Fork, write tests and create a pull request!</p>
+<h3>Misc</h3><p>As of Node 8, ES modules are still used behind a flag, when running natively as an ES module</p>
+<pre class="prettyprint source lang-sh"><code>$ node --experimental-modules my-machine-learning-script.mjs
+# Also there are native bindings that require Python 2.x, make sure if you're using Andaconda, you build with your Python 2.x bin
+$ npm i --python=/usr/bin/python</code></pre><p>License</p>
+<hr>
+<p>MIT</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jan 15 2018 21:00:03 GMT-0500 (EST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
