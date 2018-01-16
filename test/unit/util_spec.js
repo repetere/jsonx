@@ -566,14 +566,14 @@ describe('rjx utils', function () {
       expect(evalError2[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
-    it('should validate windowCompProps is an object', () => {
+    it('should validate __windowComponentProps is an object', () => {
       const rjxObj = {
         component: 'myComponent',
-        windowCompProps: 'should be an obj',
+        __windowComponentProps: 'should be an obj',
       };
       const rjxObjValid = {
         component: 'myComponent',
-        windowCompProps: {
+        __windowComponentProps: {
           goodProps:'ok',
         },
       };

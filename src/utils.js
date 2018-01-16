@@ -207,7 +207,7 @@ export function traverse(paths = {}, data = {}) {
 export function validateRJX(rjx = {}, returnAllErrors = false) {
   const dynamicPropsNames = ['asyncprops', 'windowprops', 'thisprops',];
   const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps',];
-  const validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps', 'comparisonprops', 'comparisonorprops', 'passprops', ].concat(dynamicPropsNames, evalPropNames);
+  const validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', ].concat(dynamicPropsNames, evalPropNames);
   let errors = [];
   if (!rjx.component) {
     errors.push(SyntaxError('[0001] Missing React Component'));
@@ -308,8 +308,8 @@ export function validateRJX(rjx = {}, returnAllErrors = false) {
         });
     }
   }
-  if (rjx.windowCompProps && (typeof rjx.windowCompProps !=='object' || Array.isArray(rjx.windowCompProps))) {
-    errors.push(TypeError('[0013] rjx.windowCompProps  must be an object'));
+  if (rjx.__windowComponentProps && (typeof rjx.__windowComponentProps !=='object' || Array.isArray(rjx.__windowComponentProps))) {
+    errors.push(TypeError('[0013] rjx.__windowComponentProps  must be an object'));
   }
   if (rjx.__windowComponents) {
     if (typeof rjx.__windowComponents !== 'object') {

@@ -297,7 +297,7 @@ function validateRJX() {
 
   var dynamicPropsNames = ['asyncprops', 'windowprops', 'thisprops'];
   var evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps'];
-  var validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', 'windowCompProps', 'comparisonprops', 'comparisonorprops', 'passprops'].concat(dynamicPropsNames, evalPropNames);
+  var validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops'].concat(dynamicPropsNames, evalPropNames);
   var errors = [];
   if (!rjx.component) {
     errors.push(SyntaxError('[0001] Missing React Component'));
@@ -403,8 +403,8 @@ function validateRJX() {
       });
     }
   }
-  if (rjx.windowCompProps && (_typeof(rjx.windowCompProps) !== 'object' || Array.isArray(rjx.windowCompProps))) {
-    errors.push(TypeError('[0013] rjx.windowCompProps  must be an object'));
+  if (rjx.__windowComponentProps && (_typeof(rjx.__windowComponentProps) !== 'object' || Array.isArray(rjx.__windowComponentProps))) {
+    errors.push(TypeError('[0013] rjx.__windowComponentProps  must be an object'));
   }
   if (rjx.__windowComponents) {
     if (_typeof(rjx.__windowComponents) !== 'object') {
@@ -730,19 +730,48 @@ function getComponentProps() {
   }, {});
 }
 
+/**
+ * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
+ * @param {Object} options 
+ * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or this.props.onClick 
+ * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+ * @returns {Function} returns a function from this.props or window functions
+ * @example
+ * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
+ */
 function getFunctionFromProps(options) {
-  var propFunc = options.propFunc;
+  var _options$propFunc = options.propFunc,
+      propFunc = _options$propFunc === undefined ? 'func:' : _options$propFunc;
+  // eslint-disable-next-line
 
+  var _logError = this.logError,
+      logError = _logError === undefined ? console.error : _logError,
+      debug = this.debug;
 
-  if (typeof propFunc === 'string' && propFunc.indexOf('func:this.props.reduxRouter') !== -1) {
-    return this.props.reduxRouter[propFunc.replace('func:this.props.reduxRouter.', '')];
-  } else if (typeof propFunc === 'string' && propFunc.indexOf('func:this.props') !== -1) {
-    return this.props[propFunc.replace('func:this.props.', '')].bind(this);
-  } else if (typeof propFunc === 'string' && propFunc.indexOf('func:window') !== -1 && typeof window$2[propFunc.replace('func:window.', '')] === 'function') {
-    return window$2[propFunc.replace('func:window.', '')].bind(this);
-  } else if (typeof this.props[propFunc] === 'function') {
-    return propFunc.bind(this);
-  } else {
+  var window = this.window || global.window || window;
+
+  try {
+    var functionNameString = propFunc.split(':')[1] || '';
+    var functionNameArray = functionNameString.split('.');
+    var functionName = functionNameArray.length ? functionNameArray[functionNameArray.length - 1] : '';
+
+    if (propFunc.indexOf('func:window') !== -1) {
+      if (functionNameArray.length === 3) {
+        return window[functionNameArray[1]][functionName].bind(this);
+      } else {
+        return window[functionName].bind(this);
+      }
+    } else if (functionNameArray.length === 4) {
+      return this.props[functionNameArray[2]][functionName];
+    } else if (functionNameArray.length === 3) {
+      return this.props[functionName].bind(this);
+    } else {
+      return function () {};
+    }
+  } catch (e) {
+    if (debug) {
+      logError(e);
+    }
     return function () {};
   }
 }
@@ -764,6 +793,13 @@ function getFunctionProps() {
   return allProps;
 }
 
+/**
+ * Returns a resolved object that has React Components pulled from window.__rjx_custom_elements
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+ * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+ * @returns {Object} resolved object of with React Components from a window property window.__rjx_custom_elements
+ */
 function getWindowComponents() {
   var _this3 = this;
 
@@ -772,24 +808,79 @@ function getWindowComponents() {
       rjx = options.rjx;
 
   var windowComponents = rjx.__windowComponents;
+  var window = this.window || window;
+  var windowFuncPrefix = 'func:window.__rjx_custom_elements';
   // if (rjx.hasWindowComponent && window.__rjx_custom_elements) {
   Object.keys(windowComponents).forEach(function (key) {
-    if (typeof windowComponents[key] === 'string' && windowComponents[key].indexOf('func:window.__rjx_custom_elements') !== -1 && typeof window$2.__rjx_custom_elements[windowComponents[key].replace('func:window.__rjx_custom_elements.', '')] === 'function') {
-      var windowComponentElement = window$2.__rjx_custom_elements[allProps[key].replace('func:window.__rjx_custom_elements.', '')];
-      var windowComponentProps = allProps['windowCompProps'] ? allProps['windowCompProps'] : _this3.props;
+    var windowKEY = typeof windowComponents[key] === 'string' ? windowComponents[key].replace(windowFuncPrefix + '.', '') : '';
+    if (typeof windowComponents[key] === 'string' && windowComponents[key].indexOf(windowFuncPrefix) !== -1 && typeof window.__rjx_custom_elements[windowKEY] === 'function') {
+      var windowComponentElement = window.__rjx_custom_elements[windowKEY];
+      var windowComponentProps = allProps['__windowComponentProps'] ? allProps['__windowComponentProps'] : _this3.props;
       allProps[key] = React.createElement(windowComponentElement, windowComponentProps, null);
     }
   });
   return allProps;
 }
 
-//any property that's prefixed with __ is a computedProperty
+/**
+ * Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+ * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
+ * @param {Number} options.renderIndex - number used for React key prop
+ * @param {function} [options.logError=console.error] - error logging function
+ * @param {Object} [options.componentLibraries] - react components to render with RJX
+ * @param {Boolean} [options.useReduxState=true] - use redux props in this.props
+ * @param {Boolean} [options.ignoreReduxPropsInComponentLibraries=true] - ignore redux props in this.props for component libraries, this is helpful incase these properties collide with component library element properties
+ * @param {boolean} [options.debug=false] - use debug messages
+ * @example
+const testRJX = { component: 'div',
+  props: { id: 'generatedRJX', className: 'rjx' },
+  children: [ [Object] ],
+  asyncprops: { auth: [Array], username: [Array] },
+  __dangerouslyEvalProps: { getUsername: '(user={})=>user.name' },
+  __dangerouslyInsertComponents: { myComponent: [Object] } 
+const resources = {
+  user: {
+    name: 'rjx',
+    description: 'react withouth javascript',
+  },
+  stats: {
+    logins: 102,
+    comments: 3,
+  },
+  authentication: 'OAuth2',
+};
+const renderIndex = 1;
+getComputedProps.call({}, {
+        rjx: testRJX,
+        resources,
+        renderIndex,
+      });
+computedProps = { key: 1,
+     id: 'generatedRJX',
+     className: 'rjx',
+     auth: 'OAuth2',
+     username: 'rjx',
+     getUsername: [Function],
+     myComponent:
+      { '$$typeof': Symbol(react.element),
+        type: 'p',
+        key: '8',
+        ref: null,
+        props: [Object],
+        _owner: null,
+        _store: {} } } }
+ *
+ */
 function getComputedProps$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   // eslint-disable-next-line
-  var rjx = options.rjx,
-      resources = options.resources,
+  var _options$rjx3 = options.rjx,
+      rjx = _options$rjx3 === undefined ? {} : _options$rjx3,
+      _options$resources = options.resources,
+      resources = _options$resources === undefined ? {} : _options$resources,
       renderIndex$$1 = options.renderIndex,
       _options$logError = options.logError,
       logError = _options$logError === undefined ? console.error : _options$logError,
@@ -819,7 +910,7 @@ function getComputedProps$1() {
 
     return computedProps;
   } catch (e) {
-    logError(e, e.stack ? e.stack : 'no stack');
+    debug && logError(e, e.stack ? e.stack : 'no stack');
     return null;
   }
 }

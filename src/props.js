@@ -143,19 +143,44 @@ export function getComponentProps(options = {}) {
   }, {});
 }
 
+/**
+ * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
+ * @param {Object} options 
+ * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or this.props.onClick 
+ * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+ * @returns {Function} returns a function from this.props or window functions
+ * @example
+ * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
+ */
 export function getFunctionFromProps(options) {
-  const { propFunc, } = options;
+  const { propFunc='func:', } = options;
+  // eslint-disable-next-line
+  const { logError = console.error,  debug, } = this;
+  const window = this.window || global.window || window;
 
-  if (typeof propFunc === 'string' && propFunc.indexOf('func:this.props.reduxRouter') !== -1) {
-    return this.props.reduxRouter[ propFunc.replace('func:this.props.reduxRouter.', '') ];
-  } else if (typeof propFunc === 'string' && propFunc.indexOf('func:this.props') !== -1) {
-    return this.props[ propFunc.replace('func:this.props.', '') ].bind(this);
-  } else if (typeof propFunc === 'string' && propFunc.indexOf('func:window') !== -1 && typeof window[propFunc.replace('func:window.', '')] ==='function') {
-    return window[ propFunc.replace('func:window.', '') ].bind(this);
-  } else if(typeof this.props[propFunc] ==='function') {
-    return propFunc.bind(this);
-  } else {
-    return function () { }
+  try {
+    const functionNameString = propFunc.split(':')[ 1 ] || '';
+    const functionNameArray = functionNameString.split('.');
+    const functionName = (functionNameArray.length) ? functionNameArray[ functionNameArray.length - 1 ] : '';
+
+    if (propFunc.indexOf('func:window') !== -1) {
+      if (functionNameArray.length === 3) {
+        return window[ functionNameArray[ 1 ] ][ functionName ].bind(this);
+      } else {
+        return window[ functionName ].bind(this);
+      }
+    } else if (functionNameArray.length === 4) {
+      return this.props[ functionNameArray[ 2 ] ][ functionName ];
+    } else if (functionNameArray.length === 3) {
+      return this.props[ functionName ].bind(this);
+    } else {
+      return function () {};
+    }
+  } catch (e) {
+    if (debug) {
+      logError(e);
+    }
+    return function () {};
   }
 }
 
@@ -172,14 +197,26 @@ export function getFunctionProps(options = {}) {
   return allProps;
 }
 
+/**
+ * Returns a resolved object that has React Components pulled from window.__rjx_custom_elements
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+ * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+ * @returns {Object} resolved object of with React Components from a window property window.__rjx_custom_elements
+ */
 export function getWindowComponents(options = {}) {
   const { allProps, rjx, } = options;
   const windowComponents = rjx.__windowComponents;
+  const window = this.window || window;
+  const windowFuncPrefix = 'func:window.__rjx_custom_elements';
   // if (rjx.hasWindowComponent && window.__rjx_custom_elements) {
   Object.keys(windowComponents).forEach(key => {
-    if (typeof windowComponents[ key ] === 'string' && windowComponents[ key ].indexOf('func:window.__rjx_custom_elements') !== -1 && typeof window.__rjx_custom_elements[ windowComponents[ key ].replace('func:window.__rjx_custom_elements.', '') ] === 'function') {
-      const windowComponentElement = window.__rjx_custom_elements[ allProps[ key ].replace('func:window.__rjx_custom_elements.', '') ];
-      const windowComponentProps = (allProps[ 'windowCompProps' ]) ? allProps[ 'windowCompProps' ]
+    const windowKEY = (typeof windowComponents[ key ] === 'string')
+      ? windowComponents[ key ].replace(`${windowFuncPrefix}.`, '')
+      : '';
+    if (typeof windowComponents[ key ] === 'string' && windowComponents[ key ].indexOf(windowFuncPrefix) !== -1 && typeof window.__rjx_custom_elements[ windowKEY ] === 'function') {
+      const windowComponentElement = window.__rjx_custom_elements[ windowKEY ];
+      const windowComponentProps = (allProps[ '__windowComponentProps' ]) ? allProps[ '__windowComponentProps' ]
         : this.props;
       allProps[ key ] = React.createElement(
         windowComponentElement,
@@ -190,10 +227,60 @@ export function getWindowComponents(options = {}) {
   return allProps;
 }
 
-//any property that's prefixed with __ is a computedProperty
+/**
+ * Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+ * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
+ * @param {Number} options.renderIndex - number used for React key prop
+ * @param {function} [options.logError=console.error] - error logging function
+ * @param {Object} [options.componentLibraries] - react components to render with RJX
+ * @param {Boolean} [options.useReduxState=true] - use redux props in this.props
+ * @param {Boolean} [options.ignoreReduxPropsInComponentLibraries=true] - ignore redux props in this.props for component libraries, this is helpful incase these properties collide with component library element properties
+ * @param {boolean} [options.debug=false] - use debug messages
+ * @example
+const testRJX = { component: 'div',
+  props: { id: 'generatedRJX', className: 'rjx' },
+  children: [ [Object] ],
+  asyncprops: { auth: [Array], username: [Array] },
+  __dangerouslyEvalProps: { getUsername: '(user={})=>user.name' },
+  __dangerouslyInsertComponents: { myComponent: [Object] } 
+const resources = {
+  user: {
+    name: 'rjx',
+    description: 'react withouth javascript',
+  },
+  stats: {
+    logins: 102,
+    comments: 3,
+  },
+  authentication: 'OAuth2',
+};
+const renderIndex = 1;
+getComputedProps.call({}, {
+        rjx: testRJX,
+        resources,
+        renderIndex,
+      });
+computedProps = { key: 1,
+     id: 'generatedRJX',
+     className: 'rjx',
+     auth: 'OAuth2',
+     username: 'rjx',
+     getUsername: [Function],
+     myComponent:
+      { '$$typeof': Symbol(react.element),
+        type: 'p',
+        key: '8',
+        ref: null,
+        props: [Object],
+        _owner: null,
+        _store: {} } } }
+ *
+ */
 export function getComputedProps(options = {}) {
   // eslint-disable-next-line
-  const { rjx, resources, renderIndex, logError = console.error, useReduxState=true, ignoreReduxPropsInComponentLibraries=true, componentLibraries, debug, } = options;
+  const { rjx = {}, resources = {}, renderIndex, logError = console.error, useReduxState=true, ignoreReduxPropsInComponentLibraries=true, componentLibraries, debug, } = options;
   try {
     const componentThisProp = (rjx.thisprops)
       ? Object.assign({
@@ -202,10 +289,10 @@ export function getComputedProps(options = {}) {
           _resources: resources,
         },
       }, this.props,
-        rjx.props,
-        (useReduxState && !rjx.ignoreReduxProps && (ignoreReduxPropsInComponentLibraries && !componentLibraries[ rjx.component ]))
-          ? (this.props && this.props.getState) ? this.props.getState() : {}
-          : {}
+      rjx.props,
+      (useReduxState && !rjx.ignoreReduxProps && (ignoreReduxPropsInComponentLibraries && !componentLibraries[ rjx.component ]))
+        ? (this.props && this.props.getState) ? this.props.getState() : {}
+        : {}
       )
       : undefined;
     const asyncprops = getRJXProps({ rjx, propName: 'asyncprops', traverseObject: resources, });
@@ -226,7 +313,7 @@ export function getComputedProps(options = {}) {
     
     return computedProps;
   } catch (e) {
-    logError(e, (e.stack) ? e.stack : 'no stack');
+    debug && logError(e, (e.stack) ? e.stack : 'no stack');
     return null;
   }
 }
