@@ -6,7 +6,7 @@
 
 <div style="text-align:center;">
 
-![logo](https://raw.githubusercontent.com/repetere/rjx/master/docs/rjx-logo.svg)
+<img src="https://raw.githubusercontent.com/repetere/rjx/master/docs/rjx-logo.png" style="max-width:10rem;">
 
 </div>
 
