@@ -165,9 +165,23 @@ export function getFunctionFromProps(options) {
 
     if (propFunc.indexOf('func:window') !== -1) {
       if (functionNameArray.length === 3) {
-        return window[ functionNameArray[ 1 ] ][ functionName ].bind(this);
+        try {
+          return window[ functionNameArray[ 1 ] ][ functionName ].bind(this);
+        } catch (e) {
+          if (debug) {
+            logError(e);
+          }
+          return window[ functionNameArray[ 1 ] ][ functionName ];
+        }
       } else {
-        return window[ functionName ].bind(this);
+        try {
+          return window[ functionName ].bind(this);
+        } catch (e) {
+          if (debug) {
+            logError(e);
+          }
+          return window[ functionName ];
+        }
       }
     } else if (functionNameArray.length === 4) {
       return this.props[ functionNameArray[ 2 ] ][ functionName ];
