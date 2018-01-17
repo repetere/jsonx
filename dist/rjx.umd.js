@@ -27385,8 +27385,12 @@ function getComponentFromLibrary() {
       rjx = _options$rjx === undefined ? {} : _options$rjx;
 
   var libComponent = Object.keys(componentLibraries).map(function (libraryName) {
-    if (typeof componentLibraries[libraryName][rjx.component.replace(libraryName + '.', '')] !== 'undefined') {
-      return componentLibraries[libraryName][rjx.component.replace(libraryName + '.', '')];
+    var cleanLibraryName = rjx.component.replace(libraryName + '.', '');
+    var libraryNameArray = cleanLibraryName.split('.');
+    if (libraryNameArray.length === 2 && typeof componentLibraries[libraryName][libraryNameArray[0]][libraryNameArray[1]] !== 'undefined') {
+      return componentLibraries[libraryName][libraryNameArray[0]][libraryNameArray[1]];
+    } else if (typeof componentLibraries[libraryName][cleanLibraryName] !== 'undefined') {
+      return componentLibraries[libraryName][cleanLibraryName];
     }
   }).filter(function (val) {
     return val;
@@ -27979,7 +27983,6 @@ function rjxRender() {
       querySelector = config.querySelector,
       options = config.options;
 
-  console.log({ querySelector: querySelector }, 'document.querySelector(querySelector)', document.querySelector(querySelector));
   reactDom.render(getRenderedJSON.call(this, rjx, resources, options), document.querySelector(querySelector));
 }
 

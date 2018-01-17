@@ -41,8 +41,12 @@ export function getComponentFromLibrary(options = {}) {
   const { componentLibraries = {}, rjx = {}, } = options;
   const libComponent = Object.keys(componentLibraries)
     .map(libraryName => {
-      if (typeof componentLibraries[ libraryName ][ rjx.component.replace(`${libraryName}.`, '') ] !== 'undefined') {
-        return componentLibraries[ libraryName ][ rjx.component.replace(`${libraryName}.`, '') ];
+      const cleanLibraryName = rjx.component.replace(`${libraryName}.`, '');
+      const libraryNameArray = cleanLibraryName.split('.');
+      if (libraryNameArray.length === 2 && typeof componentLibraries[ libraryName ][ libraryNameArray[0] ][libraryNameArray[1]] !== 'undefined') {
+        return componentLibraries[ libraryName ][ libraryNameArray[ 0 ] ][ libraryNameArray[ 1 ] ];
+      } else if (typeof componentLibraries[ libraryName ][ cleanLibraryName ] !== 'undefined') {
+        return componentLibraries[ libraryName ][ cleanLibraryName ];
       }
     })
     .filter(val => val)[ 0 ];
