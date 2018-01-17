@@ -8,6 +8,7 @@
   <body>
     <div id="root"></div>
     <script type="text/javascript">
+    var dummyVar="some_window"
       const sampleRJX = {
         component: 'div',
         props: {
@@ -26,8 +27,14 @@
             __dangerouslyEvalProps:{
               onClick:'()=>alert("click works")'
             },
-            children:'hello world',
+            children:'hello world!',
           },
+          {
+            component:'p',
+            windowprops:{
+              _children:['location','href']
+            },
+          }
         ],
       };
       const boundConfig = {

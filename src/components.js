@@ -2,15 +2,15 @@ import React from 'react';
 import { default as ReactDOMElements, } from 'react-dom-factories';
 import { getAdvancedBinding, } from './utils';
 
-if (typeof window === 'undefined') {
-  var window = window || global.window || {};
-}
+// if (typeof window === 'undefined') {
+//   var window = window || global.window || {};
+// }
 export let advancedBinding = getAdvancedBinding();
 
 /**
  * object of all react components available for RJX
  */
-export let componentMap = Object.assign({}, ReactDOMElements, window.__rjx_custom_elements);
+export let componentMap = Object.assign({}, ReactDOMElements, (typeof window ==='object') ? window.__rjx_custom_elements : {});
 
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 

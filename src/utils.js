@@ -1,8 +1,6 @@
 import UAParser from 'ua-parser-js';
 
-if (typeof window === 'undefined') {
-  var window = window || global.window || {};
-}
+
 /**
  * Used to evaluate whether or not to render a component
  * @param {Object} options 
@@ -127,8 +125,14 @@ export function displayComponent(options = {}) {
  * @returns {Boolean} true if browser is not IE or old android / chrome
  */
 export function getAdvancedBinding() {
+  
+  if (typeof window === 'undefined') {
+    var window = (this && this.window)
+      ? this.window
+      : global.window || {};
+    if (!window.navigator) return false;
+  }
   try {
-    window = (typeof this.window!=='undefined')?this.window : window;
     if (window && window.navigator && window.navigator.userAgent && typeof window.navigator.userAgent === 'string') {
       // console.log('window.navigator.userAgent',window.navigator.userAgent)
       if(window.navigator.userAgent.indexOf('Trident') !== -1) {
@@ -148,6 +152,7 @@ export function getAdvancedBinding() {
     }
   } catch (e) {
     e;
+    console.error(e);
     // console.warn('could not detect browser support', e);
     return false;
   }

@@ -2,9 +2,9 @@ import React from 'react';
 import { getRenderedJSON, } from './main';
 import * as utilities from './utils';
 
-if (typeof window === 'undefined') {
-  var window = window || {};
-}
+// if (typeof window === 'undefined') {
+//   var window = window || {};
+// }
 
 /**
  * It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
@@ -316,8 +316,9 @@ export function getComputedProps(options = {}) {
         : {}
       )
       : undefined;
+    const windowTraverse = typeof window !== 'undefined' ? window : {};
     const asyncprops = getRJXProps({ rjx, propName: 'asyncprops', traverseObject: resources, });
-    const windowprops = getRJXProps({ rjx, propName: 'windowprops', traverseObject: window, });
+    const windowprops = getRJXProps({ rjx, propName: 'windowprops', traverseObject: windowTraverse, });
     const thisprops = getRJXProps({ rjx, propName: 'thisprops', traverseObject: componentThisProp, });
 
     //allowing javascript injections

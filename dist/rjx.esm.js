@@ -74,9 +74,6 @@ var toConsumableArray = function (arr) {
   }
 };
 
-if (typeof window$1 === 'undefined') {
-  var window$1 = window$1 || global.window || {};
-}
 /**
  * Used to evaluate whether or not to render a component
  * @param {Object} options 
@@ -208,14 +205,18 @@ function displayComponent$1() {
  * @returns {Boolean} true if browser is not IE or old android / chrome
  */
 function getAdvancedBinding() {
+
+  if (typeof window === 'undefined') {
+    var window = this && this.window ? this.window : global.window || {};
+    if (!window.navigator) return false;
+  }
   try {
-    window$1 = typeof this.window !== 'undefined' ? this.window : window$1;
-    if (window$1 && window$1.navigator && window$1.navigator.userAgent && typeof window$1.navigator.userAgent === 'string') {
+    if (window && window.navigator && window.navigator.userAgent && typeof window.navigator.userAgent === 'string') {
       // console.log('window.navigator.userAgent',window.navigator.userAgent)
-      if (window$1.navigator.userAgent.indexOf('Trident') !== -1) {
+      if (window.navigator.userAgent.indexOf('Trident') !== -1) {
         return false;
       }
-      var uastring = window$1.navigator.userAgent;
+      var uastring = window.navigator.userAgent;
       var parser = new UAParser();
       parser.setUA(uastring);
       var parseUserAgent = parser.getResult();
@@ -228,6 +229,8 @@ function getAdvancedBinding() {
       }
     }
   } catch (e) {
+    console.error(e);
+    // console.warn('could not detect browser support', e);
     return false;
   }
   return true;
@@ -448,15 +451,15 @@ var rjxUtils = Object.freeze({
 	validateRJX: validateRJX
 });
 
-if (typeof window === 'undefined') {
-  var window = window || global.window || {};
-}
+// if (typeof window === 'undefined') {
+//   var window = window || global.window || {};
+// }
 var advancedBinding = getAdvancedBinding();
 
 /**
  * object of all react components available for RJX
  */
-var componentMap$1 = Object.assign({}, ReactDOMElements, window.__rjx_custom_elements);
+var componentMap$1 = Object.assign({}, ReactDOMElements, (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' ? window.__rjx_custom_elements : {});
 
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
@@ -564,6 +567,8 @@ function getComponentFromMap$1() {
     }
  */
 
+
+
 var rjxComponents = Object.freeze({
 	advancedBinding: advancedBinding,
 	componentMap: componentMap$1,
@@ -572,9 +577,9 @@ var rjxComponents = Object.freeze({
 	getComponentFromMap: getComponentFromMap$1
 });
 
-if (typeof window$2 === 'undefined') {
-  var window$2 = window$2 || {};
-}
+// if (typeof window === 'undefined') {
+//   var window = window || {};
+// }
 
 /**
  * It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
@@ -918,8 +923,9 @@ function getComputedProps$1() {
         _resources: resources
       }
     }, this.props, rjx.props, useReduxState && !rjx.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && !componentLibraries[rjx.component] ? this.props && this.props.getState ? this.props.getState() : {} : {}) : undefined;
+    var windowTraverse = typeof window !== 'undefined' ? window : {};
     var asyncprops = getRJXProps({ rjx: rjx, propName: 'asyncprops', traverseObject: resources });
-    var windowprops = getRJXProps({ rjx: rjx, propName: 'windowprops', traverseObject: window$2 });
+    var windowprops = getRJXProps({ rjx: rjx, propName: 'windowprops', traverseObject: windowTraverse });
     var thisprops = getRJXProps({ rjx: rjx, propName: 'thisprops', traverseObject: componentThisProp });
 
     //allowing javascript injections
