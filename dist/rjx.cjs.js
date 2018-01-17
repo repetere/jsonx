@@ -81,7 +81,7 @@ var toConsumableArray = function (arr) {
 };
 
 if (typeof window$1 === 'undefined') {
-  var window$1 = global.window || {};
+  var window$1 = window$1 || global.window || {};
 }
 /**
  * Used to evaluate whether or not to render a component
@@ -455,7 +455,7 @@ var rjxUtils = Object.freeze({
 });
 
 if (typeof window === 'undefined') {
-  var window = global.window || {};
+  var window = window || global.window || {};
 }
 var advancedBinding = getAdvancedBinding();
 
@@ -579,7 +579,7 @@ var rjxComponents = Object.freeze({
 });
 
 if (typeof window$2 === 'undefined') {
-  var window$2 = {};
+  var window$2 = window$2 || {};
 }
 
 /**

@@ -1,7 +1,7 @@
 import UAParser from 'ua-parser-js';
 
 if (typeof window === 'undefined') {
-  var window = global.window || {};
+  var window = window || global.window || {};
 }
 /**
  * Used to evaluate whether or not to render a component

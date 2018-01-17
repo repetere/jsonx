@@ -3,7 +3,7 @@ import { getRenderedJSON, } from './main';
 import * as utilities from './utils';
 
 if (typeof window === 'undefined') {
-  var window = {};
+  var window = window || {};
 }
 
 /**

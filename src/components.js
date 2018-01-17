@@ -3,7 +3,7 @@ import { default as ReactDOMElements, } from 'react-dom-factories';
 import { getAdvancedBinding, } from './utils';
 
 if (typeof window === 'undefined') {
-  var window = global.window || {};
+  var window = window || global.window || {};
 }
 export let advancedBinding = getAdvancedBinding();
 

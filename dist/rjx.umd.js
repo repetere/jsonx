@@ -26963,7 +26963,7 @@ var toConsumableArray = function (arr) {
 };
 
 if (typeof window$2 === 'undefined') {
-  var window$2 = global$1.window || {};
+  var window$2 = window$2 || global$1.window || {};
 }
 /**
  * Used to evaluate whether or not to render a component
@@ -27337,7 +27337,7 @@ var rjxUtils = Object.freeze({
 });
 
 if (typeof window$1 === 'undefined') {
-  var window$1 = global$1.window || {};
+  var window$1 = window$1 || global$1.window || {};
 }
 var advancedBinding = getAdvancedBinding();
 
@@ -27461,7 +27461,7 @@ var rjxComponents = Object.freeze({
 });
 
 if (typeof window$3 === 'undefined') {
-  var window$3 = {};
+  var window$3 = window$3 || {};
 }
 
 /**
