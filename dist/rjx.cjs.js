@@ -9,6 +9,7 @@ var ReactDOM = _interopDefault(require('react-dom'));
 var ReactDOMServer = _interopDefault(require('react-dom/server'));
 var ReactDOMElements = _interopDefault(require('react-dom-factories'));
 var UAParser = _interopDefault(require('ua-parser-js'));
+var createReactClass = _interopDefault(require('create-react-class'));
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -568,6 +569,71 @@ function getComponentFromMap$1() {
 }
 
 /**
+ * Returns a new function from an options object
+ * @param {Object} options 
+ * @param {String} [options.body=''] - Function string body
+ * @param {String[]} [options.args=[]] - Function arguments
+ * @returns {Function} 
+ */
+function getFunctionFromEval() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var _options$body = options.body,
+      body = _options$body === undefined ? '' : _options$body,
+      _options$args = options.args,
+      args = _options$args === undefined ? [] : _options$args;
+
+  args.push(body);
+  return Function.prototype.constructor.apply({}, args);
+}
+
+/**
+ * Returns a new React Component
+ * @param {Object} options 
+ * @param {Object} [options.reactComponent={}] - an object of functions used for create-react-class
+ * @param {Object} options.reactComponent.render.body - Valid RJX JSON
+ * @param {String} options.reactComponent.getDefaultProps.body - return an object for the default props
+ * @param {String} options.reactComponent.getInitialState.body - return an object for the default state
+ * @returns {Function} 
+ * @see {@link https://reactjs.org/docs/react-without-es6.html} 
+ */
+function getReactComponent() {
+  var reactComponent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var rjc = Object.assign({
+    getDefaultProps: {
+      body: 'return {};'
+    },
+    getInitialState: {
+      body: 'return {};'
+    }
+  }, reactComponent);
+  var rjcKeys = Object.keys(rjc);
+  if (rjcKeys.includes('render') === false) {
+    throw new ReferenceError('React components require a render method');
+  }
+  var options = rjcKeys.reduce(function (result, val) {
+    var args = rjc[val].arguments;
+    var body = rjc[val].body;
+    if (!body) {
+      console.log({ rjc: rjc });
+      throw new SyntaxError('Function(' + val + ') requires a function body');
+    }
+    if (args && !Array.isArray(args) && args.length && args.length && args.filter(function (arg) {
+      return typeof arg === 'string';
+    }).length) {
+      throw new TypeError('Function(' + val + ') arguments must be an array or variable names');
+    }
+    result[val] = val === 'render' ? function () {
+      return getRenderedJSON.call(this, body);
+    } : getFunctionFromEval({
+      body: body,
+      args: args
+    });
+    return result;
+  }, {});
+  return createReactClass(options);
+}
+/**
  * if (recharts[rjx.component.replace('recharts.', '')]) {
       return recharts[rjx.component.replace('recharts.', '')];
     }
@@ -580,7 +646,9 @@ var rjxComponents = Object.freeze({
 	componentMap: componentMap$1,
 	getBoundedComponents: getBoundedComponents$1,
 	getComponentFromLibrary: getComponentFromLibrary,
-	getComponentFromMap: getComponentFromMap$1
+	getComponentFromMap: getComponentFromMap$1,
+	getFunctionFromEval: getFunctionFromEval,
+	getReactComponent: getReactComponent
 });
 
 // if (typeof window === 'undefined') {

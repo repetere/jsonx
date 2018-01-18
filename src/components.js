@@ -1,7 +1,8 @@
 import React from 'react';
 import { default as ReactDOMElements, } from 'react-dom-factories';
 import { getAdvancedBinding, } from './utils';
-
+import createReactClass from 'create-react-class';
+import { getRenderedJSON, } from './main';
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
@@ -90,6 +91,64 @@ export function getComponentFromMap(options = {}) {
   }
 }
 
+/**
+ * Returns a new function from an options object
+ * @param {Object} options 
+ * @param {String} [options.body=''] - Function string body
+ * @param {String[]} [options.args=[]] - Function arguments
+ * @returns {Function} 
+ */
+export function getFunctionFromEval(options = {}) {
+  const { body='', args = [], } = options;
+  args.push(body);
+  return Function.prototype.constructor.apply({}, args);
+}
+
+/**
+ * Returns a new React Component
+ * @param {Object} options 
+ * @param {Object} [options.reactComponent={}] - an object of functions used for create-react-class
+ * @param {Object} options.reactComponent.render.body - Valid RJX JSON
+ * @param {String} options.reactComponent.getDefaultProps.body - return an object for the default props
+ * @param {String} options.reactComponent.getInitialState.body - return an object for the default state
+ * @returns {Function} 
+ * @see {@link https://reactjs.org/docs/react-without-es6.html} 
+ */
+export function getReactComponent(reactComponent = {}) {
+  const rjc = Object.assign({
+    getDefaultProps: {
+      body:'return {};',
+    },
+    getInitialState: {
+      body:'return {};',
+    },
+  }, reactComponent);
+  const rjcKeys = Object.keys(rjc);
+  if (rjcKeys.includes('render') === false) {
+    throw new ReferenceError('React components require a render method');
+  }
+  const options = rjcKeys.reduce((result, val) => { 
+    const args = rjc[ val ].arguments;
+    const body = rjc[ val ].body;
+    if (!body) {
+      console.log({ rjc, });
+      throw new SyntaxError(`Function(${val}) requires a function body`);
+    }
+    if (args && !Array.isArray(args) && (args.length &&(args.length && args.filter(arg=>typeof arg==='string').length)) ) {
+      throw new TypeError(`Function(${val}) arguments must be an array or variable names`);
+    }
+    result[ val ] = (val === 'render')
+      ? function () {
+        return getRenderedJSON.call(this, body);
+      }
+      : getFunctionFromEval({
+        body,
+        args,
+      });
+    return result;
+  }, {});
+  return createReactClass(options);
+}
 /**
  * if (recharts[rjx.component.replace('recharts.', '')]) {
       return recharts[rjx.component.replace('recharts.', '')];

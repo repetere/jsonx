@@ -30,9 +30,9 @@
 import { getRenderedJSON, } from './main';
 import * as utilities from './utils';
 
-if (typeof window === 'undefined') {
-  var window = {};
-}
+// if (typeof window === 'undefined') {
+//   var window = window || {};
+// }
 
 /**
  * It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
@@ -193,9 +193,23 @@ export function getFunctionFromProps(options) {
 
     if (propFunc.indexOf('func:window') !== -1) {
       if (functionNameArray.length === 3) {
-        return window[ functionNameArray[ 1 ] ][ functionName ].bind(this);
+        try {
+          return window[ functionNameArray[ 1 ] ][ functionName ].bind(this);
+        } catch (e) {
+          if (debug) {
+            logError(e);
+          }
+          return window[ functionNameArray[ 1 ] ][ functionName ];
+        }
       } else {
-        return window[ functionName ].bind(this);
+        try {
+          return window[ functionName ].bind(this);
+        } catch (e) {
+          if (debug) {
+            logError(e);
+          }
+          return window[ functionName ];
+        }
       }
     } else if (functionNameArray.length === 4) {
       return this.props[ functionNameArray[ 2 ] ][ functionName ];
@@ -330,8 +344,9 @@ export function getComputedProps(options = {}) {
         : {}
       )
       : undefined;
+    const windowTraverse = typeof window !== 'undefined' ? window : {};
     const asyncprops = getRJXProps({ rjx, propName: 'asyncprops', traverseObject: resources, });
-    const windowprops = getRJXProps({ rjx, propName: 'windowprops', traverseObject: window, });
+    const windowprops = getRJXProps({ rjx, propName: 'windowprops', traverseObject: windowTraverse, });
     const thisprops = getRJXProps({ rjx, propName: 'thisprops', traverseObject: componentThisProp, });
 
     //allowing javascript injections
@@ -361,13 +376,13 @@ export function getComputedProps(options = {}) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 16 2018 00:59:33 GMT-0500 (EST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 17 2018 22:00:46 GMT-0500 (EST)
 </footer>
 
 <script> prettyPrint(); </script>

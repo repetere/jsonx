@@ -53,6 +53,7 @@ export default [
       'react-dom',
       'react-dom/server',
       'react-dom-factories',
+      'create-react-class',
       'ua-parser-js',
     ], // <-- suppresses the warning
     output: [

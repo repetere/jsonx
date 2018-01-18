@@ -27,7 +27,7 @@ const sampleCustomElementRJX = {
     className:'rjx',
   },
   thisprops: {
-    title: ['extraname', ],
+    title: ['extraname',],
   },
   children: [
     {
@@ -44,7 +44,7 @@ const sampleCustomElementRJX = {
         name:'fromCustom',
       },
       thisprops: {
-        title: ['elementProperties', 'title', ],
+        title: ['elementProperties', 'title',],
       },
       children:'hello customElement2',
     },
@@ -58,7 +58,7 @@ const sampleCustomElementRJX = {
         name:'fromCustom',
       },
       thisprops: {
-        title: ['elementProperties', 'title', ],
+        title: ['elementProperties', 'title',],
       },
       children:'hello customElement2',
     },
@@ -72,7 +72,7 @@ const sampleCustomElementRJX = {
         name:'fromCustom',
       },
       thisprops: {
-        title: ['elementProperties', 'title', ],
+        title: ['elementProperties', 'title',],
       },
       children:'hello customElement2',
     },
@@ -107,7 +107,7 @@ describe('rjx components', function () {
         WelcomeNonBind,
         WelcomeBindSpy,
       };
-      const boundedComponents = ['Welcome', 'WelcomeBindSpy', ];
+      const boundedComponents = ['Welcome', 'WelcomeBindSpy',];
       const customComponents = rjx._rjxComponents.getBoundedComponents({ reactComponents, boundedComponents, advancedBinding:true, });
       const customThis = {
         props: {
@@ -144,7 +144,7 @@ describe('rjx components', function () {
         }, })).to.be.a('function').and.to.eql(Welcome);
     });
     it('should return the dom element string if a valid DOM elmenet in ReactDOM', () => {
-      [ 'div', 'span', 'p', 'section', ].forEach(el => {
+      ['div', 'span', 'p', 'section',].forEach(el => {
         const rjxObj = { rjx: { component: el, }, };
         expect(rjx._rjxComponents.getComponentFromMap(rjxObj)).to.eql(el);
       });
@@ -220,6 +220,45 @@ describe('rjx components', function () {
     });    
     after(function () {
       this.jsdom();
+    });
+  });
+  describe('getFunctionFromEval', () => {
+    const getFunctionFromEval = rjx._rjxComponents.getFunctionFromEval;
+    it('should return a new function', () => {
+      const myFunc = getFunctionFromEval({
+        body: 'return 3;',
+      });
+      expect(myFunc()).to.eql(3);
+    });
+  });
+  describe('getReactComponent', () => {
+    const getReactComponent = rjx._rjxComponents.getReactComponent;
+    it('should create a React Component', () => {
+      const MyCustomComponent = getReactComponent({
+        componentDidMount:{
+          body:'console.log(\'mounted\',this.props)',
+          arguments:[],
+        },
+        render:{
+          body:{
+            component:'p',
+            children:[
+              {
+                component:'span',
+                children: 'My Custom React Component Status: ',
+              },
+              {
+                component:'span',
+                thisprops:{
+                  children:['status',],
+                },
+              },
+            ],
+          },
+        },
+      });
+      expect(MyCustomComponent).to.be.a('function');
+
     });
   });
 });

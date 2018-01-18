@@ -27,6 +27,12 @@
 <dt><a href="#getComponentFromMap">getComponentFromMap(options)</a> ⇒ <code>string</code> | <code>function</code> | <code>class</code></dt>
 <dd><p>returns a react element from rjx.component</p>
 </dd>
+<dt><a href="#getFunctionFromEval">getFunctionFromEval(options)</a> ⇒ <code>function</code></dt>
+<dd><p>Returns a new function from an options object</p>
+</dd>
+<dt><a href="#getReactComponent">getReactComponent(options)</a> ⇒ <code>function</code></dt>
+<dd><p>Returns a new React Component</p>
+</dd>
 <dt><a href="#rjxRender">rjxRender(config)</a></dt>
 <dd><p>Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render</p>
 </dd>
@@ -214,6 +220,35 @@ returns a react element from rjx.component
 ```js
 // returns react elementsgetComponentFromMap({rjx:{component:'div'}})=>divgetComponentFromMap({rjx:{component:'MyModal'},reactComponents:{MyModal:MyModal extends React.Component}})=>MyModalgetComponentFromMap({rjx:{component:'reactBootstap.nav'},componentLibraries:{reactBootstrap,}})=>reactBootstap.nav
 ```
+<a name="getFunctionFromEval"></a>
+
+## getFunctionFromEval(options) ⇒ <code>function</code>
+Returns a new function from an options object
+
+**Kind**: global function  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| options | <code>Object</code> |  |  |
+| [options.body] | <code>String</code> | <code>&#x27;&#x27;</code> | Function string body |
+| [options.args] | <code>Array.&lt;String&gt;</code> | <code>[]</code> | Function arguments |
+
+<a name="getReactComponent"></a>
+
+## getReactComponent(options) ⇒ <code>function</code>
+Returns a new React Component
+
+**Kind**: global function  
+**See**: [https://reactjs.org/docs/react-without-es6.html](https://reactjs.org/docs/react-without-es6.html)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| options | <code>Object</code> |  |  |
+| [options.reactComponent] | <code>Object</code> | <code>{}</code> | an object of functions used for create-react-class |
+| options.reactComponent.render.body | <code>Object</code> |  | Valid RJX JSON |
+| options.reactComponent.getDefaultProps.body | <code>String</code> |  | return an object for the default props |
+| options.reactComponent.getInitialState.body | <code>String</code> |  | return an object for the default state |
+
 <a name="rjxRender"></a>
 
 ## rjxRender(config)
