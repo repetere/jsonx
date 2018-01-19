@@ -1,6 +1,7 @@
 import React from 'react';
 import { getRenderedJSON, } from './main';
 import * as utilities from './utils';
+import { getComponentFromMap, } from './components';
 
 // if (typeof window === 'undefined') {
 //   var window = window || {};
@@ -139,6 +140,26 @@ export function getComponentProps(options = {}) {
   return Object.keys(rjx.__dangerouslyInsertComponents).reduce((cprops, cpropName) => {
     // eslint-disable-next-line
     cprops[ cpropName ] = getRenderedJSON.call(this, rjx.__dangerouslyInsertComponents[ cpropName ], resources);
+    return cprops;
+  }, {});
+}
+
+/**
+ * Resolves rjx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+//  * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
+ * @returns {Object} resolved object of React Components
+ */
+export function getReactComponentProps(options = {}) {
+  const { rjx,  } = options;
+  return Object.keys(rjx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) => {
+    // eslint-disable-next-line
+    cprops[ cpropName ] = getComponentFromMap({
+      rjx: { component: rjx.__dangerouslyInsertReactComponents[ cpropName ], },
+      reactComponents: this.reactComponents,
+      componentLibraries: this.componentLibraries,
+    });
     return cprops;
   }, {});
 }
@@ -328,7 +349,10 @@ export function getComputedProps(options = {}) {
     const insertedComponents = (rjx.__dangerouslyInsertComponents)
       ? getComponentProps.call(this, { rjx, resources, debug, })
       : {};
-    const allProps = Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+    const insertedReactComponents = (rjx.__dangerouslyInsertReactComponents)
+      ? getReactComponentProps.call(this, { rjx, debug, })
+      : {};
+    const allProps = Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps,
       rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
       rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {});

@@ -318,5 +318,17 @@ describe('rjx props', function () {
       expect(RJXP.myComponent).to.haveOwnProperty('props');
     });
   });
+  describe('getReactComponentProps', () => {
+    const getReactComponentProps = rjx._rjxProps.getReactComponentProps;
+    it('should return react component props dangerously using eval', () => {
+      const testVals = {
+        myComponent: 'p',
+      };
+      const testRJX = Object.assign({}, sampleRJX, { __dangerouslyInsertReactComponents: testVals,  });
+      const RJXP = getReactComponentProps.call({}, { rjx: testRJX, });
+      expect(RJXP.myComponent).to.be.an('string');
+      expect(RJXP.myComponent).to.eql('p');
+    });
+  });
 
 });

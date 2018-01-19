@@ -51,6 +51,9 @@
 <dt><a href="#getComponentProps">getComponentProps(options)</a> ⇒ <code>Object</code></dt>
 <dd><p>Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</p>
 </dd>
+<dt><a href="#getReactComponentProps">getReactComponentProps(options)</a> ⇒ <code>Object</code></dt>
+<dd><p>Resolves rjx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</p>
+</dd>
 <dt><a href="#getFunctionFromProps">getFunctionFromProps(options)</a> ⇒ <code>function</code></dt>
 <dd><p>Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep</p>
 </dd>
@@ -448,6 +451,19 @@ Resolves rjx.__dangerouslyInsertComponents into an object that turns each value 
 | options | <code>Object</code> |  |  |
 | options.rjx | <code>Object</code> |  | Valid RJX JSON |
 | [options.resources] | <code>Object</code> | <code>{}</code> | object to use for asyncprops, usually a result of an asynchronous call |
+
+<a name="getReactComponentProps"></a>
+
+## getReactComponentProps(options) ⇒ <code>Object</code>
+Resolves rjx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+
+**Kind**: global function  
+**Returns**: <code>Object</code> - resolved object of React Components  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| options | <code>Object</code> |  |
+| options.rjx | <code>Object</code> | Valid RJX JSON  //  * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call |
 
 <a name="getFunctionFromProps"></a>
 

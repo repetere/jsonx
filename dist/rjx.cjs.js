@@ -588,11 +588,11 @@ function getFunctionFromEval() {
 
 /**
  * Returns a new React Component
- * @param {Object} options 
- * @param {Object} [options.reactComponent={}] - an object of functions used for create-react-class
- * @param {Object} options.reactComponent.render.body - Valid RJX JSON
- * @param {String} options.reactComponent.getDefaultProps.body - return an object for the default props
- * @param {String} options.reactComponent.getInitialState.body - return an object for the default state
+ * @param {Object} [returnFactory=true] - returns a React component if true otherwise returns Component Class 
+ * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
+ * @param {Object} reactComponent.render.body - Valid RJX JSON
+ * @param {String} reactComponent.getDefaultProps.body - return an object for the default props
+ * @param {String} reactComponent.getInitialState.body - return an object for the default state
  * @returns {Function} 
  * @see {@link https://reactjs.org/docs/react-without-es6.html} 
  */
@@ -812,6 +812,30 @@ function getComponentProps() {
 }
 
 /**
+ * Resolves rjx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+//  * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
+ * @returns {Object} resolved object of React Components
+ */
+function getReactComponentProps() {
+  var _this3 = this;
+
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var rjx = options.rjx;
+
+  return Object.keys(rjx.__dangerouslyInsertReactComponents).reduce(function (cprops, cpropName) {
+    // eslint-disable-next-line
+    cprops[cpropName] = getComponentFromMap$1({
+      rjx: { component: rjx.__dangerouslyInsertReactComponents[cpropName] },
+      reactComponents: _this3.reactComponents,
+      componentLibraries: _this3.componentLibraries
+    });
+    return cprops;
+  }, {});
+}
+
+/**
  * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
  * @param {Object} options 
  * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or this.props.onClick 
@@ -904,7 +928,7 @@ function getFunctionProps() {
  * @returns {Object} resolved object of with React Components from a window property window.__rjx_custom_elements
  */
 function getWindowComponents() {
-  var _this3 = this;
+  var _this4 = this;
 
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var allProps = options.allProps,
@@ -918,7 +942,7 @@ function getWindowComponents() {
     var windowKEY = typeof windowComponents[key] === 'string' ? windowComponents[key].replace(windowFuncPrefix + '.', '') : '';
     if (typeof windowComponents[key] === 'string' && windowComponents[key].indexOf(windowFuncPrefix) !== -1 && typeof window.__rjx_custom_elements[windowKEY] === 'function') {
       var windowComponentElement = window.__rjx_custom_elements[windowKEY];
-      var windowComponentProps = allProps['__windowComponentProps'] ? allProps['__windowComponentProps'] : _this3.props;
+      var windowComponentProps = allProps['__windowComponentProps'] ? allProps['__windowComponentProps'] : _this4.props;
       allProps[key] = React.createElement(windowComponentElement, windowComponentProps, null);
     }
   });
@@ -1009,7 +1033,8 @@ function getComputedProps$1() {
     //allowing javascript injections
     var evalProps = rjx.__dangerouslyEvalProps || rjx.__dangerouslyBindEvalProps ? getEvalProps.call(this, { rjx: rjx }) : {};
     var insertedComponents = rjx.__dangerouslyInsertComponents ? getComponentProps.call(this, { rjx: rjx, resources: resources, debug: debug }) : {};
-    var allProps = Object.assign({ key: renderIndex$$1 }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+    var insertedReactComponents = rjx.__dangerouslyInsertReactComponents ? getReactComponentProps.call(this, { rjx: rjx, debug: debug }) : {};
+    var allProps = Object.assign({ key: renderIndex$$1 }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     var computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, { allProps: allProps, rjx: rjx }) : {}, rjx.__windowComponents ? getWindowComponents.call(this, { allProps: allProps, rjx: rjx }) : {});
 
     return computedProps;
@@ -1025,6 +1050,7 @@ var rjxProps = Object.freeze({
 	getRJXProps: getRJXProps,
 	getEvalProps: getEvalProps,
 	getComponentProps: getComponentProps,
+	getReactComponentProps: getReactComponentProps,
 	getFunctionFromProps: getFunctionFromProps,
 	getFunctionProps: getFunctionProps,
 	getWindowComponents: getWindowComponents,

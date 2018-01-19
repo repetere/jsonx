@@ -29,6 +29,7 @@
             <pre class="prettyprint source linenums"><code>import React from 'react';
 import { getRenderedJSON, } from './main';
 import * as utilities from './utils';
+import { getComponentFromMap, } from './components';
 
 // if (typeof window === 'undefined') {
 //   var window = window || {};
@@ -167,6 +168,26 @@ export function getComponentProps(options = {}) {
   return Object.keys(rjx.__dangerouslyInsertComponents).reduce((cprops, cpropName) => {
     // eslint-disable-next-line
     cprops[ cpropName ] = getRenderedJSON.call(this, rjx.__dangerouslyInsertComponents[ cpropName ], resources);
+    return cprops;
+  }, {});
+}
+
+/**
+ * Resolves rjx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
+ * @param {Object} options 
+ * @param {Object} options.rjx - Valid RJX JSON 
+//  * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
+ * @returns {Object} resolved object of React Components
+ */
+export function getReactComponentProps(options = {}) {
+  const { rjx,  } = options;
+  return Object.keys(rjx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) => {
+    // eslint-disable-next-line
+    cprops[ cpropName ] = getComponentFromMap({
+      rjx: { component: rjx.__dangerouslyInsertReactComponents[ cpropName ], },
+      reactComponents: this.reactComponents,
+      componentLibraries: this.componentLibraries,
+    });
     return cprops;
   }, {});
 }
@@ -356,7 +377,10 @@ export function getComputedProps(options = {}) {
     const insertedComponents = (rjx.__dangerouslyInsertComponents)
       ? getComponentProps.call(this, { rjx, resources, debug, })
       : {};
-    const allProps = Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+    const insertedReactComponents = (rjx.__dangerouslyInsertReactComponents)
+      ? getReactComponentProps.call(this, { rjx, debug, })
+      : {};
+    const allProps = Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps,
       rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
       rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {});
@@ -376,13 +400,13 @@ export function getComputedProps(options = {}) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getReactComponentProps">getReactComponentProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Jan 19 2018 16:51:25 GMT-0500 (EST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Jan 19 2018 18:07:07 GMT-0500 (EST)
 </footer>
 
 <script> prettyPrint(); </script>
