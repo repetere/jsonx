@@ -591,7 +591,10 @@ function getFunctionFromEval() {
  * @see {@link https://reactjs.org/docs/react-without-es6.html} 
  */
 function getReactComponent() {
+  var _this2 = this;
+
   var reactComponent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var returnFactory = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
   var rjc = Object.assign({
     getDefaultProps: {
@@ -618,14 +621,15 @@ function getReactComponent() {
       throw new TypeError('Function(' + val + ') arguments must be an array or variable names');
     }
     result[val] = val === 'render' ? function () {
-      return getRenderedJSON.call(this, body);
+      return getRenderedJSON.call(_this2, body);
     } : getFunctionFromEval({
       body: body,
       args: args
     });
     return result;
   }, {});
-  return createReactClass(options);
+  var reactComponentClass = createReactClass(options);
+  return returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
 }
 /**
  * if (recharts[rjx.component.replace('recharts.', '')]) {

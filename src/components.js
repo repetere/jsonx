@@ -106,15 +106,15 @@ export function getFunctionFromEval(options = {}) {
 
 /**
  * Returns a new React Component
- * @param {Object} options 
- * @param {Object} [options.reactComponent={}] - an object of functions used for create-react-class
- * @param {Object} options.reactComponent.render.body - Valid RJX JSON
- * @param {String} options.reactComponent.getDefaultProps.body - return an object for the default props
- * @param {String} options.reactComponent.getInitialState.body - return an object for the default state
+ * @param {Object} [returnFactory=true] - returns a React component if true otherwise returns Component Class 
+ * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
+ * @param {Object} reactComponent.render.body - Valid RJX JSON
+ * @param {String} reactComponent.getDefaultProps.body - return an object for the default props
+ * @param {String} reactComponent.getInitialState.body - return an object for the default state
  * @returns {Function} 
  * @see {@link https://reactjs.org/docs/react-without-es6.html} 
  */
-export function getReactComponent(reactComponent = {}) {
+export function getReactComponent(reactComponent = {},returnFactory = true) {
   const rjc = Object.assign({
     getDefaultProps: {
       body:'return {};',
@@ -138,16 +138,15 @@ export function getReactComponent(reactComponent = {}) {
       throw new TypeError(`Function(${val}) arguments must be an array or variable names`);
     }
     result[ val ] = (val === 'render')
-      ? function () {
-        return getRenderedJSON.call(this, body);
-      }
+      ? ()=>getRenderedJSON.call(this, body)
       : getFunctionFromEval({
         body,
         args,
       });
     return result;
   }, {});
-  return createReactClass(options);
+  const reactComponentClass = createReactClass(options);
+  return returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
 }
 /**
  * if (recharts[rjx.component.replace('recharts.', '')]) {

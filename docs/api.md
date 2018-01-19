@@ -30,7 +30,7 @@
 <dt><a href="#getFunctionFromEval">getFunctionFromEval(options)</a> ⇒ <code>function</code></dt>
 <dd><p>Returns a new function from an options object</p>
 </dd>
-<dt><a href="#getReactComponent">getReactComponent(options)</a> ⇒ <code>function</code></dt>
+<dt><a href="#getReactComponent">getReactComponent([returnFactory], [reactComponent])</a> ⇒ <code>function</code></dt>
 <dd><p>Returns a new React Component</p>
 </dd>
 <dt><a href="#rjxRender">rjxRender(config)</a></dt>
@@ -235,7 +235,7 @@ Returns a new function from an options object
 
 <a name="getReactComponent"></a>
 
-## getReactComponent(options) ⇒ <code>function</code>
+## getReactComponent([returnFactory], [reactComponent]) ⇒ <code>function</code>
 Returns a new React Component
 
 **Kind**: global function  
@@ -243,11 +243,11 @@ Returns a new React Component
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| options | <code>Object</code> |  |  |
-| [options.reactComponent] | <code>Object</code> | <code>{}</code> | an object of functions used for create-react-class |
-| options.reactComponent.render.body | <code>Object</code> |  | Valid RJX JSON |
-| options.reactComponent.getDefaultProps.body | <code>String</code> |  | return an object for the default props |
-| options.reactComponent.getInitialState.body | <code>String</code> |  | return an object for the default state |
+| [returnFactory] | <code>Object</code> | <code>true</code> | returns a React component if true otherwise returns Component Class |
+| [reactComponent] | <code>Object</code> | <code>{}</code> | an object of functions used for create-react-class |
+| reactComponent.render.body | <code>Object</code> |  | Valid RJX JSON |
+| reactComponent.getDefaultProps.body | <code>String</code> |  | return an object for the default props |
+| reactComponent.getInitialState.body | <code>String</code> |  | return an object for the default state |
 
 <a name="rjxRender"></a>
 
