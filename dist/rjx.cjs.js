@@ -588,7 +588,8 @@ function getFunctionFromEval() {
 
 /**
  * Returns a new React Component
- * @param {Object} [returnFactory=true] - returns a React component if true otherwise returns Component Class 
+ * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class 
+ * @param {Object} [options.resources={}] - asyncprops for component
  * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
  * @param {Object} reactComponent.render.body - Valid RJX JSON
  * @param {String} reactComponent.getDefaultProps.body - return an object for the default props
@@ -600,7 +601,11 @@ function getReactComponent() {
   var _this2 = this;
 
   var reactComponent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var returnFactory = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var _options$returnFactor = options.returnFactory,
+      returnFactory = _options$returnFactor === undefined ? true : _options$returnFactor,
+      _options$resources = options.resources,
+      resources = _options$resources === undefined ? {} : _options$resources;
 
   var rjc = Object.assign({
     getDefaultProps: {
@@ -614,7 +619,7 @@ function getReactComponent() {
   if (rjcKeys.includes('render') === false) {
     throw new ReferenceError('React components require a render method');
   }
-  var options = rjcKeys.reduce(function (result, val) {
+  var classOptions = rjcKeys.reduce(function (result, val) {
     var args = rjc[val].arguments;
     var body = rjc[val].body;
     if (!body) {
@@ -627,14 +632,14 @@ function getReactComponent() {
       throw new TypeError('Function(' + val + ') arguments must be an array or variable names');
     }
     result[val] = val === 'render' ? function () {
-      return getRenderedJSON.call(_this2, body);
+      return getRenderedJSON.call(_this2, body, resources);
     } : getFunctionFromEval({
       body: body,
       args: args
     });
     return result;
   }, {});
-  var reactComponentClass = createReactClass(options);
+  var reactComponentClass = createReactClass(classOptions);
   return returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
 }
 /**

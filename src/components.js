@@ -106,7 +106,8 @@ export function getFunctionFromEval(options = {}) {
 
 /**
  * Returns a new React Component
- * @param {Object} [returnFactory=true] - returns a React component if true otherwise returns Component Class 
+ * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class 
+ * @param {Object} [options.resources={}] - asyncprops for component
  * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
  * @param {Object} reactComponent.render.body - Valid RJX JSON
  * @param {String} reactComponent.getDefaultProps.body - return an object for the default props
@@ -114,7 +115,8 @@ export function getFunctionFromEval(options = {}) {
  * @returns {Function} 
  * @see {@link https://reactjs.org/docs/react-without-es6.html} 
  */
-export function getReactComponent(reactComponent = {},returnFactory = true) {
+export function getReactComponent(reactComponent = {}, options = {}) {
+  const { returnFactory = true, resources = {}, } = options;
   const rjc = Object.assign({
     getDefaultProps: {
       body:'return {};',
@@ -127,7 +129,7 @@ export function getReactComponent(reactComponent = {},returnFactory = true) {
   if (rjcKeys.includes('render') === false) {
     throw new ReferenceError('React components require a render method');
   }
-  const options = rjcKeys.reduce((result, val) => { 
+  const classOptions = rjcKeys.reduce((result, val) => { 
     const args = rjc[ val ].arguments;
     const body = rjc[ val ].body;
     if (!body) {
@@ -138,14 +140,14 @@ export function getReactComponent(reactComponent = {},returnFactory = true) {
       throw new TypeError(`Function(${val}) arguments must be an array or variable names`);
     }
     result[ val ] = (val === 'render')
-      ? ()=>getRenderedJSON.call(this, body)
+      ? ()=>getRenderedJSON.call(this, body, resources)
       : getFunctionFromEval({
         body,
         args,
       });
     return result;
   }, {});
-  const reactComponentClass = createReactClass(options);
+  const reactComponentClass = createReactClass(classOptions);
   return returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
 }
 /**
