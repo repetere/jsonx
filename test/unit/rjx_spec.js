@@ -4,6 +4,7 @@ const chai = require('chai');
 const sinon = require('sinon');
 const React = require('react');
 const ReactDOM = require('react-dom');
+const ReactTestUtils = require('react-dom/test-utils'); // ES6
 const expect = require('chai').expect;
 const jsdom = require('jsdom');
 const { JSDOM, } = jsdom;
@@ -30,10 +31,35 @@ const sampleRJX = {
   ],
 };
 
+const simpleRJX = {
+  div: {
+    props: {
+      id: 'generatedRJX',
+      className:'rjx',
+    },
+    children: [
+      {
+        p: {
+          props: {
+            style: {
+              color: 'red',
+              fontWeight:'bold',
+            },
+          },
+          children:'hello world',
+        }
+      }
+    ]
+  }
+};
+
 describe('rjx', function () { 
   describe('getRenderedJSON', () => {
     it('should return an instance of a react element', () => {
       const ReactiveJSON = rjx.getRenderedJSON(sampleRJX);
+      const ReactiveSimpleJSON = rjx.getRenderedJSON(simpleRJX);
+      expect(ReactTestUtils.isElement(ReactiveJSON));
+      expect(ReactTestUtils.isElement(ReactiveSimpleJSON));
       expect(ReactiveJSON).to.be.an('object');
       expect(ReactiveJSON).to.haveOwnProperty('$$typeof');
       expect(ReactiveJSON).to.haveOwnProperty('type');

@@ -4,7 +4,6 @@
 
 ## Description
 
-
 **Reactive JSON (RJX)** takes a RXJ JSON object and renders React components. **RJX** lets you get up and running with React without using JavaScript.
 
 RJX was created to remove all the complexities around environment setup, and configuration of React applications (Babel, Webpack, Rollup, etc) and make declarative user interfaces using Machine Learning and Natural Language Processing. Using RJX let's any back end application (Elixir, Go, Python, etc) render a server side React application.
@@ -73,6 +72,7 @@ You can pass React component libraries for additional components, or you own cus
     }
   ]
 }
+
 ```
 
 ```JSX
@@ -88,7 +88,7 @@ You can pass React component libraries for additional components, or you own cus
 ```javascript 
 import { default as rjx } from 'rjx';
 
-//use built in RJX Validator
+//use the built in RJX Validator
 const valid_rjx_json = {
   component:'p',
   props:{
@@ -117,6 +117,33 @@ rjx._rjxUtils.validateRJX(multiple_invalid_rjx_json, true) // =>
  * @param {Boolean} [returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
  * /
 function validateRJX(rjx = {}, returnAllErrors= false);
+```
+
+### Simple RJX Syntax
+
+If you want to save time, you can use the property name as the component and define properties for a cleaner simple syntax
+
+```javascript
+//shorthand simple rjx
+{
+  ul: {
+    props:{
+      className:'list-class',
+    },
+    children:[
+      {
+        li: {
+          children:'first bullet',
+        },
+      },
+      {
+        li: {
+          children:'second bullet',
+        },
+      }
+    ]
+  }
+}
 ```
 
 ### RJX Module

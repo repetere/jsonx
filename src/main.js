@@ -67,7 +67,8 @@ export function getRenderedJSON(rjx = {}, resources = {}) {
   // eslint-disable-next-line
   const { componentLibraries = {}, debug = false, logError = console.error, boundedComponents = [], } = this;
   // const componentLibraries = this.componentLibraries;
-
+  if (rjx.type) rjx.component = rjx.type;
+  if (rjxUtils.validSimpleRJXSyntax(rjx)) rjx = rjxUtils.simpleRJXSyntax(rjx);
   if (!rjx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
   try {
     const components = Object.assign({}, componentMap, this.reactComponents);

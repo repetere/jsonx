@@ -355,3 +355,41 @@ export function validateRJX(rjx = {}, returnAllErrors = false) {
     ? `Warning: Invalid Keys [${invalidKeys.join()}]`
     : true;
 }
+
+/**
+ * validates simple RJX Syntax {[component]:{props,children}}
+ * @param {Object} simpleRJX - Any valid simple RJX Syntax
+ * @return {Boolean} returns true if simpleRJX is valid
+ */
+export function validSimpleRJXSyntax(simpleRJX = {}) {
+  if (Object.keys(simpleRJX).length !== 1 && !simpleRJX.component) {
+    return false;
+  } else {
+    const componentName = Object.keys(simpleRJX)[ 0 ];
+    return (Object.keys(simpleRJX).length === 1  && !simpleRJX[componentName].component && typeof simpleRJX[componentName]==='object')
+      ? true
+      : false; 
+  }
+}
+
+/**
+ * Transforms SimpleRJX to Valid RJX JSON {[component]:{props,children}} => {component,props,children}
+ * @param {Object} simpleRJX JSON Object 
+ * @return {Object} - returns a valid RJX JSON Object from a simple RJX JSON Object
+ */
+export function simpleRJXSyntax(simpleRJX = {}) {
+  const component = Object.keys(simpleRJX)[ 0 ];
+  try {
+    return Object.assign({},
+      {
+        component,
+      },
+      simpleRJX[ component ], {
+        children: (simpleRJX[ component ].children && Array.isArray(simpleRJX[ component ].children))
+          ? simpleRJX[component].children.map(simpleRJXSyntax)
+          : simpleRJX[ component ].children,
+      });
+  } catch (e) {
+    throw SyntaxError('Invalid Simple RXJ Syntax', e);
+  }   
+}

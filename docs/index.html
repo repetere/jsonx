@@ -92,7 +92,7 @@ rjx.rjxRender({ rjx: { component: 'div', props:{className:'rjx-generated',childr
   &lt;li>second bullet&lt;/li>
 &lt;/ul></code></pre><h4>Validating RJX JSON</h4><pre class="prettyprint source lang-javascript"><code>import { default as rjx } from 'rjx';
 
-//use built in RJX Validator
+//use the built in RJX Validator
 const valid_rjx_json = {
   component:'p',
   props:{
@@ -120,7 +120,27 @@ rjx._rjxUtils.validateRJX(multiple_invalid_rjx_json, true) // =>
  * @param {Object} rjx - RJX JSON to validate 
  * @param {Boolean} [returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
  * /
-function validateRJX(rjx = {}, returnAllErrors= false);</code></pre><h3>RJX Module</h3><pre class="prettyprint source lang-javascript"><code>&quot;rjx&quot; : {
+function validateRJX(rjx = {}, returnAllErrors= false);</code></pre><h3>Simple RJX Syntax</h3><p>If you want to save time, you can use the property name as the component and define properties for a cleaner simple syntax</p>
+<pre class="prettyprint source lang-javascript"><code>//shorthand simple rjx
+{
+  ul: {
+    props:{
+      className:'list-class',
+    },
+    children:[
+      {
+        li: {
+          children:'first bullet',
+        },
+      },
+      {
+        li: {
+          children:'second bullet',
+        },
+      }
+    ]
+  }
+}</code></pre><h3>RJX Module</h3><pre class="prettyprint source lang-javascript"><code>&quot;rjx&quot; : {
   getRenderedJSON: [Function: getRenderedJSON], //Use React.createElement and RJX JSON to create React elements
   rjxHTMLString: [Function: rjxHTMLString], //Use ReactDOMServer.renderToString to render html from RJX
   rjxRender: [Function: getRenderedJSON], //Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
@@ -493,13 +513,13 @@ $ grunt test</code></pre><h3>Contributing</h3><p>Fork, write tests and create a 
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getReactComponentProps">getReactComponentProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getReactComponentProps">getReactComponentProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#simpleRJXSyntax">simpleRJXSyntax</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li><li><a href="global.html#validSimpleRJXSyntax">validSimpleRJXSyntax</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Jan 20 2018 14:56:53 GMT-0500 (EST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Jan 21 2018 18:11:08 GMT-0500 (EST)
 </footer>
 
 <script> prettyPrint(); </script>

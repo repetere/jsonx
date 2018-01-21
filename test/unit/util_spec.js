@@ -33,19 +33,19 @@ describe('rjx utils', function () {
     it('should display if left !== null||undefined', () => {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
-        }],
+          left: ['truthy', ],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['falsey',],
+          left: ['falsey', ],
           operation:'exists',
-        }],
+        },],
       });
       const testRJX3 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
           left: null,
-        }],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
@@ -54,21 +54,21 @@ describe('rjx utils', function () {
     it('should display if left === null||undefined', () => {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: [ 'truthy', ],
+          left: ['truthy',],
           operation:'dne',
-        }],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['falsey',],
+          left: ['falsey', ],
           operation:'undefined',
-        }],
+        },],
       });
       const testRJX3 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
           left: null,
           operation:'null',
-        }],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
@@ -77,24 +77,24 @@ describe('rjx utils', function () {
     it('should display if left == right', () => {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'eq',
-          right:['truthy',],
-        }],
+          right:['truthy', ],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'==',
-          right:['falsey',],
-        }],
+          right:['falsey', ],
+        },],
       });
       const testRJX3 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'eq',
           right:1,
-        }],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
@@ -103,24 +103,24 @@ describe('rjx utils', function () {
     it('should display if left === right', () => {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'seq',
-          right:['truthy',],
-        }],
+          right:['truthy', ],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'===',
-          right:['falsey',],
-        }],
+          right:['falsey', ],
+        },],
       });
       const testRJX3 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'seq',
           right:1,
-        }],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
@@ -129,24 +129,24 @@ describe('rjx utils', function () {
     it('should display if left != right', () => {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'dneq',
-          right:['truthy',],
-        }],
+          right:['truthy', ],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'!=',
-          right:['falsey',],
-        }],
+          right:['falsey', ],
+        },],
       });
       const testRJX3 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'dneq',
           right:1,
-        }],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
@@ -155,24 +155,24 @@ describe('rjx utils', function () {
     it('should display if left !== right', () => {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'dnseq',
-          right:['truthy',],
-        }],
+          right:['truthy', ],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'!==',
-          right:['falsey',],
-        }],
+          right:['falsey', ],
+        },],
       });
       const testRJX3 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'dnseq',
           right:1,
-        }],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
@@ -181,24 +181,24 @@ describe('rjx utils', function () {
     it('should display if left > right', () => {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['bigNum',],
+          left: ['bigNum', ],
           operation:'gt',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['smallNum',],
+          left: ['smallNum', ],
           operation:'>',
-          right:['bigNum',],
-        }],
+          right:['bigNum', ],
+        },],
       });
       const testRJX3 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['smallNum',],
+          left: ['smallNum', ],
           operation:'gt',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
@@ -207,24 +207,24 @@ describe('rjx utils', function () {
     it('should display if left >= right', () => {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['bigNum',],
+          left: ['bigNum', ],
           operation:'gte',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['smallNum',],
+          left: ['smallNum', ],
           operation:'>=',
-          right:['bigNum',],
-        }],
+          right:['bigNum', ],
+        },],
       });
       const testRJX3 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['smallNum',],
+          left: ['smallNum', ],
           operation:'gte',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
@@ -233,24 +233,24 @@ describe('rjx utils', function () {
     it('should display if left < right', () => {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['bigNum',],
+          left: ['bigNum', ],
           operation:'<',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['smallNum',],
+          left: ['smallNum', ],
           operation:'lt',
-          right:['bigNum',],
-        }],
+          right:['bigNum', ],
+        },],
       });
       const testRJX3 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['smallNum',],
+          left: ['smallNum', ],
           operation:'lt',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
@@ -259,24 +259,24 @@ describe('rjx utils', function () {
     it('should display if left <= right', () => {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['bigNum',],
+          left: ['bigNum', ],
           operation:'lte',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['smallNum',],
+          left: ['smallNum', ],
           operation:'<=',
-          right:['bigNum',],
-        }],
+          right:['bigNum', ],
+        },],
       });
       const testRJX3 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['smallNum',],
+          left: ['smallNum', ],
           operation:'lte',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
@@ -285,25 +285,25 @@ describe('rjx utils', function () {
     it('should display if multiple comprisons are true', () => {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'eq',
-          right:['truthy',],
-        },{
-          left: ['smallNum',],
+          right:['truthy', ],
+        }, {
+          left: ['smallNum', ],
           operation:'==',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'eq',
-          right:['falsey',],
-        },{
-          left: ['smallNum',],
+          right:['falsey', ],
+        }, {
+          left: ['smallNum', ],
           operation:'eq',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
@@ -312,38 +312,38 @@ describe('rjx utils', function () {
       const testRJX = Object.assign({}, sampleRJX, {
         comparisonorprops:true,
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'eq',
-          right:['truthy',],
-        },{
-          left: ['smallNum',],
+          right:['truthy', ],
+        }, {
+          left: ['smallNum', ],
           operation:'==',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       const testRJX2 = Object.assign({}, sampleRJX, {
         comparisonorprops:true,
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'eq',
-          right:['falsey',],
-        },{
-          left: ['smallNum',],
+          right:['falsey', ],
+        }, {
+          left: ['smallNum', ],
           operation:'eq',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       const testRJX3 = Object.assign({}, sampleRJX, {
         comparisonorprops:true,
         comparisonprops: [{
-          left: ['truthy',],
+          left: ['truthy', ],
           operation:'eq',
-          right:['falsey',],
-        },{
-          left: ['bigNum',],
+          right:['falsey', ],
+        }, {
+          left: ['bigNum', ],
           operation:'eq',
-          right:['smallNum',],
-        }],
+          right:['smallNum', ],
+        },],
       });
       expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
       expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
@@ -402,7 +402,7 @@ describe('rjx utils', function () {
     };
     const traverse = rjx._rjxUtils.traverse;
     it('should return properties from an object from the array of paths', () => {
-      const testVals = { auth: ['authentication',], username: ['user', 'name',], };
+      const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
       expect( traverse(testVals, testObj)).to.eql({ auth:testObj.authentication, username:testObj.user.name,  });
     });
     it('should return the entire object if no paths provided', () => {
@@ -410,7 +410,7 @@ describe('rjx utils', function () {
       expect( traverse(testVals, testObj)).to.eql({ wholeObj:testObj,  });
     });
     it('should return undefined if paths are invalid', () => {
-      const testVals = { emptyObj: ['invalid', 'path', ], };
+      const testVals = { emptyObj: ['invalid', 'path',], };
       expect( traverse(testVals, testObj)).to.eql({ emptyObj:undefined, });
     });
     it('should throw an error if paths are not an array of strings or numeric indexes', () => {
@@ -475,10 +475,10 @@ describe('rjx utils', function () {
         component: 'myComponent',
         asyncprops: '[]',
         thisprops: {
-          notStrings: [undefined, {},],
+          notStrings: [undefined, {}, ],
         },
         windowprops: {
-          title:['navigator', 'userAgent',],
+          title:['navigator', 'userAgent', ],
         },
       };
       const dynamicerrors = validateRJX(rjxObj, true);
@@ -633,11 +633,11 @@ describe('rjx utils', function () {
       };
       const rjxObjin1 = {
         component: 'myComponent',
-        comparisonprops: [ {}],
+        comparisonprops: [{},],
       };
       const rjxObjin2 = {
         component: 'myComponent',
-        comparisonprops: [ () => { }],
+        comparisonprops: [() => { },],
       };
       const evalError = validateRJX(rjxObj, true);
       const evalError1 = validateRJX(rjxObjin1, true);
@@ -663,5 +663,194 @@ describe('rjx utils', function () {
       expect(validTest).to.be.true;
     });
   });
-  
+  describe('validSimpleRJXSyntax', () => {
+    const validSimpleRJXSyntax = rjx._rjxUtils.validSimpleRJXSyntax;
+    it('should invalidate shorthard simple syntax', () => {
+      const invalidShorthand = {
+        component:'p',
+      };
+      const invalidShorthand2 = {
+        component: 'p',
+        props: {
+          style: {
+            background:'red',
+          },
+        },
+      };
+      const invalidShorthand3 = {
+        component: 'p',
+        props:'hey',
+      };
+      const invalidShorthand4 = {
+        component: 'p',
+        props: {
+          style: {
+            background:'red',
+          },
+        },
+        children:'hey',
+      };
+      const invalidShorthand5 = {
+        children:'p',
+      };
+      const invalidShorthand6 = {
+        anything:'p',
+      };
+      const invalidShorthand7 = {
+        anything: {
+          component: 'p',
+        },
+      };
+      expect(validSimpleRJXSyntax(invalidShorthand)).to.be.false;
+      expect(validSimpleRJXSyntax(invalidShorthand2)).to.be.false;
+      expect(validSimpleRJXSyntax(invalidShorthand3)).to.be.false;
+      expect(validSimpleRJXSyntax(invalidShorthand4)).to.be.false;
+      expect(validSimpleRJXSyntax(invalidShorthand5)).to.be.false;
+      expect(validSimpleRJXSyntax(invalidShorthand6)).to.be.false;
+    });
+    it('should validate shorthard simple syntax', () => {
+      const validShorthand = {
+        p:{},
+      };
+      const validShorthand2 = {
+        p: {
+          props: {
+            style: {
+              background:'red',
+            },
+          },
+        },
+      };
+      const validShorthand3 = {
+        p: {
+          props:'hey',
+        },
+      };
+      const validShorthand4 = {
+        p: {
+          props: {
+            style: {
+              background:'red',
+            },
+          },
+          children:'hey',
+        },
+      };
+      const validShorthand5 = {
+        children: {
+          children:'p',
+        },
+      };
+      expect(validSimpleRJXSyntax(validShorthand)).to.be.true;
+      expect(validSimpleRJXSyntax(validShorthand2)).to.be.true;
+      expect(validSimpleRJXSyntax(validShorthand3)).to.be.true;
+      expect(validSimpleRJXSyntax(validShorthand4)).to.be.true;
+      expect(validSimpleRJXSyntax(validShorthand5)).to.be.true;
+    });
+  });
+  describe('simpleRJXSyntax', () => {
+    const simpleRJXSyntax = rjx._rjxUtils.simpleRJXSyntax;
+    it('should return valid RJX from simple RJX syntax', () => {
+      const validShorthand = {
+        p:{},
+      };
+      const validShorthand2 = {
+        p: {
+          props: {
+            style: {
+              background:'red',
+            },
+          },
+        },
+      };
+      const validShorthand3 = {
+        p: {
+          props:'hey',
+        },
+      };
+      const validShorthand4 = {
+        div: {
+          props: {
+            style: {
+              background:'red',
+            },
+          },
+          children: [
+            {
+              p: { children: 'hey', },
+            },
+          ],
+        },
+      };
+      const validShorthand5 = {
+        children: {
+          children:'p',
+        },
+      };
+      const transformedSimpleSyntaxValid = rjx._rjxUtils.validateRJX(simpleRJXSyntax(validShorthand), true);
+      const transformedSimpleSyntaxValid2 = rjx._rjxUtils.validateRJX(simpleRJXSyntax(validShorthand2), true);
+      const transformedSimpleSyntaxValid3 = rjx._rjxUtils.validateRJX(simpleRJXSyntax(validShorthand3), true);
+      const transformedSimpleSyntaxValid4 = rjx._rjxUtils.validateRJX(simpleRJXSyntax(validShorthand4), true);
+      const transformedSimpleSyntaxValid5 = rjx._rjxUtils.validateRJX(simpleRJXSyntax(validShorthand5), true);
+     
+      expect((transformedSimpleSyntaxValid)).to.be.true;
+      expect((transformedSimpleSyntaxValid2)).to.be.true;
+      expect((transformedSimpleSyntaxValid3[0])).to.be.an('error');
+      expect((transformedSimpleSyntaxValid4[0])).to.be.true;
+      expect((transformedSimpleSyntaxValid5)).to.be.true;
+    });
+    it('should produce equivalent RXJ', () => {
+      const sampleRJX = {
+        component: 'div',
+        props: {
+          id: 'generatedRJX',
+          className: 'rjx',
+        },
+        asyncprops: {
+          test:['ok', 'cool',],
+        },
+        children: [
+          {
+            component: 'p',
+            props: {
+              style: {
+                color: 'red',
+                fontWeight: 'bold',
+              },
+            },
+            children: 'hello world',
+          },
+        ],
+      };
+
+      const simpleRJX = {
+        div: {
+          props: {
+            id: 'generatedRJX',
+            className: 'rjx',
+          },
+          asyncprops: {
+            test:['ok', 'cool',],
+          },
+          children: [
+            {
+              p: {
+                props: {
+                  style: {
+                    color: 'red',
+                    fontWeight: 'bold',
+                  },
+                },
+                children: 'hello world',
+              },
+            },
+          ],
+        },
+      };
+      const transformedRJXSTRING = simpleRJXSyntax(simpleRJX).toString();
+      const RJXSTRING = sampleRJX.toString();
+
+      expect(transformedRJXSTRING).to.eql(RJXSTRING);
+    });
+  });
 });

@@ -382,6 +382,44 @@ export function validateRJX(rjx = {}, returnAllErrors = false) {
   return invalidKeys.length
     ? `Warning: Invalid Keys [${invalidKeys.join()}]`
     : true;
+}
+
+/**
+ * validates simple RJX Syntax {[component]:{props,children}}
+ * @param {Object} simpleRJX - Any valid simple RJX Syntax
+ * @return {Boolean} returns true if simpleRJX is valid
+ */
+export function validSimpleRJXSyntax(simpleRJX = {}) {
+  if (Object.keys(simpleRJX).length !== 1 &amp;&amp; !simpleRJX.component) {
+    return false;
+  } else {
+    const componentName = Object.keys(simpleRJX)[ 0 ];
+    return (Object.keys(simpleRJX).length === 1  &amp;&amp; !simpleRJX[componentName].component &amp;&amp; typeof simpleRJX[componentName]==='object')
+      ? true
+      : false; 
+  }
+}
+
+/**
+ * Transforms SimpleRJX to Valid RJX JSON {[component]:{props,children}} => {component,props,children}
+ * @param {Object} simpleRJX JSON Object 
+ * @return {Object} - returns a valid RJX JSON Object from a simple RJX JSON Object
+ */
+export function simpleRJXSyntax(simpleRJX = {}) {
+  const component = Object.keys(simpleRJX)[ 0 ];
+  try {
+    return Object.assign({},
+      {
+        component,
+      },
+      simpleRJX[ component ], {
+        children: (simpleRJX[ component ].children &amp;&amp; Array.isArray(simpleRJX[ component ].children))
+          ? simpleRJX[component].children.map(simpleRJXSyntax)
+          : simpleRJX[ component ].children,
+      });
+  } catch (e) {
+    throw SyntaxError('Invalid Simple RXJ Syntax', e);
+  }   
 }</code></pre>
         </article>
     </section>
@@ -392,13 +430,13 @@ export function validateRJX(rjx = {}, returnAllErrors = false) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getReactComponentProps">getReactComponentProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getReactComponentProps">getReactComponentProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#simpleRJXSyntax">simpleRJXSyntax</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li><li><a href="global.html#validSimpleRJXSyntax">validSimpleRJXSyntax</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Jan 20 2018 14:56:53 GMT-0500 (EST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Jan 21 2018 18:11:08 GMT-0500 (EST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -78,6 +78,12 @@
 <dt><a href="#validateRJX">validateRJX(rjx, [returnAllErrors])</a> ⇒ <code>Boolean</code> | <code>Array.&lt;Error&gt;</code></dt>
 <dd><p>Validates RJX JSON Syntax</p>
 </dd>
+<dt><a href="#validSimpleRJXSyntax">validSimpleRJXSyntax(simpleRJX)</a> ⇒ <code>Boolean</code></dt>
+<dd><p>validates simple RJX Syntax {[component]:{props,children}}</p>
+</dd>
+<dt><a href="#simpleRJXSyntax">simpleRJXSyntax(simpleRJX)</a> ⇒ <code>Object</code></dt>
+<dd><p>Transforms SimpleRJX to Valid RJX JSON {[component]:{props,children}} =&gt; {component,props,children}</p>
+</dd>
 </dl>
 
 <a name="componentMap"></a>
@@ -670,3 +676,27 @@ Validates RJX JSON Syntax
 ```js
 validateRJX({component:'p',children:'hello world'})=>truevalidateRJX({children:'hello world'})=>throw SyntaxError('[0001] Missing React Component')
 ```
+<a name="validSimpleRJXSyntax"></a>
+
+## validSimpleRJXSyntax(simpleRJX) ⇒ <code>Boolean</code>
+validates simple RJX Syntax {[component]:{props,children}}
+
+**Kind**: global function  
+**Returns**: <code>Boolean</code> - returns true if simpleRJX is valid  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| simpleRJX | <code>Object</code> | Any valid simple RJX Syntax |
+
+<a name="simpleRJXSyntax"></a>
+
+## simpleRJXSyntax(simpleRJX) ⇒ <code>Object</code>
+Transforms SimpleRJX to Valid RJX JSON {[component]:{props,children}} => {component,props,children}
+
+**Kind**: global function  
+**Returns**: <code>Object</code> - - returns a valid RJX JSON Object from a simple RJX JSON Object  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| simpleRJX | <code>Object</code> | JSON Object |
+

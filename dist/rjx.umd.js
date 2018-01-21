@@ -27330,13 +27330,51 @@ function validateRJX() {
   return invalidKeys.length ? 'Warning: Invalid Keys [' + invalidKeys.join() + ']' : true;
 }
 
+/**
+ * validates simple RJX Syntax {[component]:{props,children}}
+ * @param {Object} simpleRJX - Any valid simple RJX Syntax
+ * @return {Boolean} returns true if simpleRJX is valid
+ */
+function validSimpleRJXSyntax() {
+  var simpleRJX = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  if (Object.keys(simpleRJX).length !== 1 && !simpleRJX.component) {
+    return false;
+  } else {
+    var componentName = Object.keys(simpleRJX)[0];
+    return Object.keys(simpleRJX).length === 1 && !simpleRJX[componentName].component && _typeof(simpleRJX[componentName]) === 'object' ? true : false;
+  }
+}
+
+/**
+ * Transforms SimpleRJX to Valid RJX JSON {[component]:{props,children}} => {component,props,children}
+ * @param {Object} simpleRJX JSON Object 
+ * @return {Object} - returns a valid RJX JSON Object from a simple RJX JSON Object
+ */
+function simpleRJXSyntax() {
+  var simpleRJX = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var component = Object.keys(simpleRJX)[0];
+  try {
+    return Object.assign({}, {
+      component: component
+    }, simpleRJX[component], {
+      children: simpleRJX[component].children && Array.isArray(simpleRJX[component].children) ? simpleRJX[component].children.map(simpleRJXSyntax) : simpleRJX[component].children
+    });
+  } catch (e) {
+    throw SyntaxError('Invalid Simple RXJ Syntax', e);
+  }
+}
+
 
 
 var rjxUtils = Object.freeze({
 	displayComponent: displayComponent$1,
 	getAdvancedBinding: getAdvancedBinding,
 	traverse: traverse,
-	validateRJX: validateRJX
+	validateRJX: validateRJX,
+	validSimpleRJXSyntax: validSimpleRJXSyntax,
+	simpleRJXSyntax: simpleRJXSyntax
 });
 
 if (process.env.NODE_ENV !== 'production') {
@@ -29028,6 +29066,8 @@ function getRenderedJSON() {
       boundedComponents = _boundedComponents === undefined ? [] : _boundedComponents;
   // const componentLibraries = this.componentLibraries;
 
+  if (rjx.type) rjx.component = rjx.type;
+  if (validSimpleRJXSyntax(rjx)) rjx = simpleRJXSyntax(rjx);
   if (!rjx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
   try {
     var components = Object.assign({}, componentMap, this.reactComponents);
