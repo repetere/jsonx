@@ -1143,13 +1143,13 @@ function getChildrenProperty() {
 
   var props = options.props || rjx.props || {};
   if (props._children /* && !rjx.children */) {
-      if (Array.isArray(props._children) || typeof props._children === 'string') {
+      if (Array.isArray(props._children) || typeof props._children !== 'undefined') {
         return props._children;
       } else {
         return rjx.children;
       }
     } else if (typeof rjx.children === 'undefined') {
-    if (props && props.children && (typeof props.children === 'string' || Array.isArray(props.children))) {
+    if (props && props.children && (typeof props.children !== 'undefined' || Array.isArray(props.children))) {
       return props.children;
     } else {
       return null;

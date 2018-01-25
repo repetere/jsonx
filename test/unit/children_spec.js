@@ -192,7 +192,7 @@ describe('rjx', function () {
       expect(RJXChildren2.length).to.eql(testRJX2.props.children.length);
       expect(RJXChildren3).to.be.a('array');
       expect(RJXChildren3).to.eql(testRJX3.children);
-      expect(RJXChildren4).to.be.null;
+      expect(RJXChildren4).to.be.a('function');
     });
   });
   describe('getChildrenProps', () => {
