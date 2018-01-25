@@ -1077,7 +1077,7 @@ function getComputedProps$1() {
     var evalProps = rjx.__dangerouslyEvalProps || rjx.__dangerouslyBindEvalProps ? getEvalProps.call(this, { rjx: rjx }) : {};
     var insertedComponents = rjx.__dangerouslyInsertComponents ? getComponentProps.call(this, { rjx: rjx, resources: resources, debug: debug }) : {};
     var insertedReactComponents = rjx.__dangerouslyInsertReactComponents ? getReactComponentProps.call(this, { rjx: rjx, debug: debug }) : {};
-    var allProps = Object.assign({ key: renderIndex$$1 }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
+    var allProps = Object.assign({}, { key: renderIndex$$1 }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     var computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, { allProps: allProps, rjx: rjx }) : {}, rjx.__windowComponents ? getWindowComponents.call(this, { allProps: allProps, rjx: rjx }) : {});
 
     return computedProps;
@@ -1260,9 +1260,10 @@ function rjxRender() {
   var rjx = config.rjx,
       resources = config.resources,
       querySelector = config.querySelector,
-      options = config.options;
+      options = config.options,
+      DOM = config.DOM;
 
-  ReactDOM.render(getRenderedJSON.call(this, rjx, resources, options), document.querySelector(querySelector));
+  ReactDOM.render(getRenderedJSON.call(this, rjx, resources, options), DOM || document.querySelector(querySelector));
 }
 
 /**

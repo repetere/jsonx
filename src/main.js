@@ -26,10 +26,10 @@ export let renderIndex = 0;
  * @property {object} this - options for getRenderedJSON
  */
 export function rjxRender(config = {}) {
-  const { rjx, resources, querySelector, options, } = config;
+  const { rjx, resources, querySelector, options, DOM, } = config;
   ReactDOM.render(
     getRenderedJSON.call(this, rjx, resources, options),
-    document.querySelector(querySelector)
+    DOM || document.querySelector(querySelector)
   );
 }
 
