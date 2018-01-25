@@ -547,7 +547,7 @@ function getComponentFromLibrary() {
   var libComponent = Object.keys(componentLibraries).map(function (libraryName) {
     var cleanLibraryName = rjx.component.replace(libraryName + '.', '');
     var libraryNameArray = cleanLibraryName.split('.');
-    if (libraryNameArray.length === 2 && typeof componentLibraries[libraryName][libraryNameArray[0]][libraryNameArray[1]] !== 'undefined') {
+    if (libraryNameArray.length === 2 && componentLibraries[libraryName] && componentLibraries[libraryName][libraryNameArray[0]] && typeof componentLibraries[libraryName][libraryNameArray[0]][libraryNameArray[1]] !== 'undefined') {
       return componentLibraries[libraryName][libraryNameArray[0]][libraryNameArray[1]];
     } else if (typeof componentLibraries[libraryName][cleanLibraryName] !== 'undefined') {
       return componentLibraries[libraryName][cleanLibraryName];
@@ -661,7 +661,7 @@ function getReactComponent() {
     var args = rjc[val].arguments;
     var body = rjc[val].body;
     if (!body) {
-      console.log({ rjc: rjc });
+      console.warn({ rjc: rjc });
       throw new SyntaxError('Function(' + val + ') requires a function body');
     }
     if (args && !Array.isArray(args) && args.length && args.length && args.filter(function (arg) {
