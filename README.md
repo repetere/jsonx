@@ -615,6 +615,9 @@ Console output after mounting
 {status: "not-loaded", name: "rjx test", customNumber: 1}
 ```
 
+Checkout the `dist/example.html` for example usage.
+![https://raw.githubusercontent.com/repetere/rjx/master/docs/dist-example-html.png](https://raw.githubusercontent.com/repetere/rjx/master/docs/dist-example-html.png)
+
 ### Development
 
 Note *Make sure you have grunt installed*
