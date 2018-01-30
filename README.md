@@ -515,6 +515,106 @@ switch (opscompares.operation) {
 }
 ```
 
+### Advanced - Custom React Components & Lifecycle Functions
+
+You can also create react components with lifecycle functions using `getReactComponent`.
+
+The only required function is a render function, the body of the function has to be valid rjx.
+
+```javascript
+const MyCustomComponent = rjx._rjxComponents.getReactComponent({
+    //
+    // Initialization function
+    //
+    getInitialState:{
+      body:'return { status:"not-loaded", name:"rjx test", customNumber:1, }',
+      arguments:[],
+    },
+    getDefaultProps:{
+      body:'return { someProp:1, someOtherProp:2, status:"original status" }',
+      arguments:[],
+    },
+    componentDidMount:{
+      body:`console.log('mounted', 'this.props',this.props, 'this.state',this.state)`,
+      arguments:[],
+    },
+    componentWillUnmount:{
+      body:`console.log('unmounted',this.props)`,
+      arguments:[],
+    },
+    //
+    // State change functions
+    //
+    shouldComponentUpdate:{
+      body:'console.log("should update component",{nextProps,nextState}); return true;',
+      arguments:['nextProps', 'nextState']
+    },
+    componentWillUpdate:{
+      body:'console.log("will update component",{nextProps,nextState}); return true;',
+      arguments:['nextProps', 'nextState']
+    },
+    componentDidUpdate:{
+      body:'console.log("did update component",{prevProps,prevState}); return true;',
+      arguments:['prevProps', 'prevState']
+    },
+    //
+    // Prop change functions
+    //
+    componentWillReceiveProps: {
+      body:'console.log("will recieve props",{nextProps}); return true;',
+      arguments:['nextProps']
+    },
+    //
+    // RENDER IS THE ONLY ***REQUIRED*** FUNCTION
+    //
+    render:{
+      body:{
+        component:'p',
+        props:{
+          status:'from inline prop'
+        },
+        passprops:true,
+        children:[
+          {
+            component:'span',
+            children: 'My Custom React Component Status: ',
+          },
+          {
+            component:'span',
+            thisprops:{
+              children:['status']
+            }
+          }
+        ]
+      },
+    }
+  });
+const sampleRJX = {
+  component:'MyCustomComponent',
+  props:{
+    status:'Amazing',
+  }
+};
+const boundConfig = {
+  debug:true, 
+  reactComponents:{
+    MyCustomComponent,
+  }
+};
+rjx.rjxRender.call(boundConfig, {
+  rjx: sampleRJX, 
+  querySelector:'#root', });
+```
+
+Console output after mounting
+```javascript
+[Log] mounted (4)
+"this.props"
+{status: "Amazing", children: {}, someProp: 1, someOtherProp: 2}
+"this.state"
+{status: "not-loaded", name: "rjx test", customNumber: 1}
+```
+
 ### Development
 
 Note *Make sure you have grunt installed*
