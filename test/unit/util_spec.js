@@ -470,10 +470,11 @@ describe('rjx utils', function () {
       expect(childrenErrors).to.be.an('array');
       expect(childrenErrors[ 0 ]).to.be.an('error');
     });
-    it('should validate dynamic props[asyncprops,thisprops,windowprops]', () => {
+    it('should validate dynamic props[asyncprops,resourceprops,thisprops,windowprops]', () => {
       const rjxObj = {
         component: 'myComponent',
         asyncprops: '[]',
+        resourceprops: '[]',
         thisprops: {
           notStrings: [undefined, {}, ],
         },
@@ -483,7 +484,7 @@ describe('rjx utils', function () {
       };
       const dynamicerrors = validateRJX(rjxObj, true);
       expect(dynamicerrors).to.be.an('array');
-      expect(dynamicerrors.length).to.eql(4);
+      expect(dynamicerrors.length).to.eql(7);
       expect(dynamicerrors[ 0 ]).to.be.an('error');
     });
     it('should validate eval props[__dangerouslyEvalProps,__dangerouslyBindEvalProps]', () => {

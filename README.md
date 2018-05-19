@@ -192,7 +192,8 @@ rjx = {
   props:Object, // Standard React component properties
   children:Array|String, // Any String or Array of valid RJX JSON objects
   //dynamic properties
-  asyncprops:Object, // An object from async resources to merge onto rjx.props once fully resolved
+  resourceprops:Object, // An object from async resources to merge onto rjx.props once fully resolved
+  asyncprops:Object, // An object from async resources to merge onto rjx.props once fully resolved (alias for resourceprops)
   thisprops:Object, // An object to merge onto rjx.props from properties already bound to this.props
   windowprops:Object, // An object to merge onto rjx.props from the window object
   //evaluated properties
@@ -304,11 +305,11 @@ const myReactElements = getRenderedJSON(myRJX);
 
 #### Advanced - Special properties
 
-##### asyncprops / thisprops / windowprops
+##### resourceprops (asyncprops) / thisprops / windowprops
 
-The only different between asyncprops, thisprops and windowprops are the source of the transverse Object.
+The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.
 
-Asyncprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).
+Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).
 
 Thisprops transverse anything bound to `this.props`, a good example would be if you're storing and passing a user object on `this.props.user`, pulling the username would be where you would use thisprops.
 
@@ -320,7 +321,7 @@ Dynamic props are transversed by passing an array to the property value you want
 const traverseObject = {
   user: {
     name: 'rjx',
-    description: 'react withouth javascript',
+    description: 'react without javascript',
   },
   stats: {
     logins: 102,
@@ -334,7 +335,7 @@ const testRJX = {
     id: 'generatedRJX',
     className:'rjx',
   },
-  asyncprops:{
+  resourceprops:{
     auth: [ 'authentication', ],
     username: [ 'user', 'name', ],
   },
@@ -346,6 +347,9 @@ const testRJX = {
           color: 'red',
           fontWeight:'bold',
         },
+      },
+      asyncprops:{
+        title: ['user','description']
       },
       children:'hello world',
     },
@@ -374,6 +378,7 @@ const testRJX = {
           color: 'red',
           fontWeight:'bold',
         },
+        title:'react without javascript',
       },
       children:'hello world',
     },

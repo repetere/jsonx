@@ -42,6 +42,9 @@
 <dt><a href="#getRenderedJSON">getRenderedJSON(rjx, resources)</a> ⇒ <code>function</code></dt>
 <dd><p>Use React.createElement and RJX JSON to create React elements</p>
 </dd>
+<dt><a href="#__express">__express(filePath, options, callback)</a></dt>
+<dd><p>Use RJX for express view rendering</p>
+</dd>
 <dt><a href="#getRJXProps">getRJXProps([traverseObject], options)</a> ⇒ <code>Object</code></dt>
 <dd><p>It uses traverse on a traverseObject to returns a resolved object on propName. So if you&#39;re making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths</p>
 </dd>
@@ -334,6 +337,21 @@ Use React.createElement and RJX JSON to create React elements
 ```js
 // Uses react to create the equivalent JSX <myComponent style={{color:blue}}>hello world</myComponent>rjx.getRenderedJSON({component:'myCompnent',props:{style:{color:'blue'}},children:'hello world'})
 ```
+<a name="__express"></a>
+
+## __express(filePath, options, callback)
+Use RJX for express view rendering
+
+**Kind**: global function  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| filePath | <code>string</code> |  | path to rjx express view |
+| options | <code>object</code> |  | property used for express view {locals} |
+| options.__boundConfig | <code>object</code> |  | property used to bind this object for RJX, can be used to add custom components |
+| [options.__DOCTYPE] | <code>string</code> | <code>&quot;\&quot;&lt;!DOCTYPE html&gt;\&quot;&quot;</code> | html doctype string |
+| callback | <code>\*</code> |  |  |
+
 <a name="getRJXProps"></a>
 
 ## getRJXProps([traverseObject], options) ⇒ <code>Object</code>
@@ -457,7 +475,7 @@ Resolves rjx.__dangerouslyInsertComponents into an object that turns each value 
 | --- | --- | --- | --- |
 | options | <code>Object</code> |  |  |
 | options.rjx | <code>Object</code> |  | Valid RJX JSON |
-| [options.resources] | <code>Object</code> | <code>{}</code> | object to use for asyncprops, usually a result of an asynchronous call |
+| [options.resources] | <code>Object</code> | <code>{}</code> | object to use for resourceprops(asyncprops), usually a result of an asynchronous call |
 
 <a name="getReactComponentProps"></a>
 
@@ -484,7 +502,7 @@ Takes a function string and returns a function on either this.props or window. T
 | --- | --- | --- | --- |
 | options | <code>Object</code> |  |  |
 | [options.propFunc] | <code>String</code> | <code>&#x27;func:&#x27;</code> | function string, like func:window.LocalStorage.getItem or this.props.onClick |
-| [options.allProps] | <code>Object</code> | <code>{}</code> | merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents); |
+| [options.allProps] | <code>Object</code> | <code>{}</code> | merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents); |
 
 **Example**  
 ```js

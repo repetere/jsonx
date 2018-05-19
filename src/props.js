@@ -80,7 +80,7 @@ const testRJX = {
  */
 export function getRJXProps(options = {}) {
   // eslint-disable-next-line
-  const { rjx = {}, propName = 'asyncprops', traverseObject = {}, } = options;
+  let { rjx = {}, propName = 'asyncprops', traverseObject = {}, } = options;
   // return (rjx.asyncprops && typeof rjx.asyncprops === 'object')
   // ? utilities.traverse(rjx.asyncprops, resources)
   // : {};
@@ -132,7 +132,7 @@ export function getEvalProps(options = {}) {
  * Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
  * @param {Object} options 
  * @param {Object} options.rjx - Valid RJX JSON 
- * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
+ * @param {Object} [options.resources={}] - object to use for resourceprops(asyncprops), usually a result of an asynchronous call
  * @returns {Object} resolved object of React Components
  */
 export function getComponentProps(options = {}) {
@@ -168,7 +168,7 @@ export function getReactComponentProps(options = {}) {
  * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
  * @param {Object} options 
  * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or this.props.onClick 
- * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+ * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Function} returns a function from this.props or window functions
  * @example
  * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
@@ -339,6 +339,7 @@ export function getComputedProps(options = {}) {
       : undefined;
     const windowTraverse = typeof window !== 'undefined' ? window : {};
     const asyncprops = getRJXProps({ rjx, propName: 'asyncprops', traverseObject: resources, });
+    const resourceprops = getRJXProps({ rjx, propName: 'resourceprops', traverseObject: resources, });
     const windowprops = getRJXProps({ rjx, propName: 'windowprops', traverseObject: windowTraverse, });
     const thisprops = getRJXProps({ rjx, propName: 'thisprops', traverseObject: componentThisProp, });
 
@@ -352,7 +353,7 @@ export function getComputedProps(options = {}) {
     const insertedReactComponents = (rjx.__dangerouslyInsertReactComponents)
       ? getReactComponentProps.call(this, { rjx, debug, })
       : {};
-    const allProps = Object.assign({}, { key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
+    const allProps = Object.assign({}, { key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps,
       rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
       rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {});

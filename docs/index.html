@@ -178,7 +178,8 @@ function validateRJX(rjx = {}, returnAllErrors= false);</code></pre><h3>Simple R
   props:Object, // Standard React component properties
   children:Array|String, // Any String or Array of valid RJX JSON objects
   //dynamic properties
-  asyncprops:Object, // An object from async resources to merge onto rjx.props once fully resolved
+  resourceprops:Object, // An object from async resources to merge onto rjx.props once fully resolved
+  asyncprops:Object, // An object from async resources to merge onto rjx.props once fully resolved (alias for resourceprops)
   thisprops:Object, // An object to merge onto rjx.props from properties already bound to this.props
   windowprops:Object, // An object to merge onto rjx.props from the window object
   //evaluated properties
@@ -270,15 +271,15 @@ const myRJX = {
   ]
 }
 
-const myReactElements = getRenderedJSON(myRJX);</code></pre><h4>Advanced - Special properties</h4><h5>asyncprops / thisprops / windowprops</h5><p>The only different between asyncprops, thisprops and windowprops are the source of the transverse Object.</p>
-<p>Asyncprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).</p>
+const myReactElements = getRenderedJSON(myRJX);</code></pre><h4>Advanced - Special properties</h4><h5>resourceprops (asyncprops) / thisprops / windowprops</h5><p>The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.</p>
+<p>Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).</p>
 <p>Thisprops transverse anything bound to <code>this.props</code>, a good example would be if you're storing and passing a user object on <code>this.props.user</code>, pulling the username would be where you would use thisprops.</p>
 <p>Windowprops transverse anything on the global window object, like the current page location <code>window.location.href</code>.</p>
 <p>Dynamic props are transversed by passing an array to the property value you want, so for a window's location (<code>window.location.href</code>) the property value is accessed by an array to the href <code>['location','href']</code> where you omit the transverse object from the array path.</p>
 <pre class="prettyprint source lang-javascript"><code>const traverseObject = {
   user: {
     name: 'rjx',
-    description: 'react withouth javascript',
+    description: 'react without javascript',
   },
   stats: {
     logins: 102,
@@ -292,7 +293,7 @@ const testRJX = {
     id: 'generatedRJX',
     className:'rjx',
   },
-  asyncprops:{
+  resourceprops:{
     auth: [ 'authentication', ],
     username: [ 'user', 'name', ],
   },
@@ -304,6 +305,9 @@ const testRJX = {
           color: 'red',
           fontWeight:'bold',
         },
+      },
+      asyncprops:{
+        title: ['user','description']
       },
       children:'hello world',
     },
@@ -332,6 +336,7 @@ const testRJX = {
           color: 'red',
           fontWeight:'bold',
         },
+        title:'react without javascript',
       },
       children:'hello world',
     },
@@ -537,7 +542,9 @@ rjx.rjxRender.call(boundConfig, {
 &quot;this.props&quot;
 {status: &quot;Amazing&quot;, children: {}, someProp: 1, someOtherProp: 2}
 &quot;this.state&quot;
-{status: &quot;not-loaded&quot;, name: &quot;rjx test&quot;, customNumber: 1}</code></pre><h3>Development</h3><p>Note <em>Make sure you have grunt installed</em></p>
+{status: &quot;not-loaded&quot;, name: &quot;rjx test&quot;, customNumber: 1}</code></pre><p>Checkout the <code>dist/example.html</code> for example usage.
+<img src="https://raw.githubusercontent.com/repetere/rjx/master/docs/dist-example-html.png" alt="https://raw.githubusercontent.com/repetere/rjx/master/docs/dist-example-html.png"></p>
+<h3>Development</h3><p>Note <em>Make sure you have grunt installed</em></p>
 <pre class="prettyprint source lang-sh"><code>$ npm i -g grunt-cli jsdoc-to-markdown</code></pre><p>For generating documentation</p>
 <pre class="prettyprint source lang-sh"><code>$ grunt doc
 $ jsdoc2md src/**/*.js  > docs/api.md</code></pre><h3>Notes</h3><p>Check out <a href="https://github.com/repetere/rjx">https://github.com/repetere/rjx</a> for the full rjx Documentation</p>
@@ -601,13 +608,13 @@ $ grunt test</code></pre><h3>Contributing</h3><p>Fork, write tests and create a 
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getReactComponentProps">getReactComponentProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#simpleRJXSyntax">simpleRJXSyntax</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li><li><a href="global.html#validSimpleRJXSyntax">validSimpleRJXSyntax</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#__express">__express</a></li><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getReactComponentProps">getReactComponentProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#simpleRJXSyntax">simpleRJXSyntax</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li><li><a href="global.html#validSimpleRJXSyntax">validSimpleRJXSyntax</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 30 2018 10:07:33 GMT-0500 (EST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat May 19 2018 07:54:31 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>
