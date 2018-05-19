@@ -98,22 +98,20 @@ describe('rjx', function () {
   });
   describe('__express', () => {
     const sampleRJXFilepath = path.resolve('./test/mock/sample.rjx');
-    const rjxMod = require(sampleRJXFilepath);
-    // console.log(rjxMod);
+    const spantext = 'should render in express';
     it('should return an HTML string', (done) => {
       rjx.__express(
         sampleRJXFilepath,
         {
-          spantext: 'should render in express',
+          spantext,
           __boundConfig: {
             debug:true,
           },
           __DOCTYPE:'',
         },
         ((err, renderedString) => {
-          // console.log({ renderedString, });
-          // const dom = new JSDOM(`<!DOCTYPE html><body>${renderedString}</body>`);
-          // expect(dom.window.document.body.querySelector('p').innerHTML).to.eql('hello world');
+          const dom = new JSDOM(renderedString);
+          expect(dom.window.document.querySelector('#generatedRJX').getAttribute('title')).to.eql(spantext);
           expect(err).to.be.null;
           expect(renderedString).to.be.a('String');
           done(err);
