@@ -2,6 +2,7 @@ const rjx = require('../../dist/rjx.cjs');
 const mochaJSDOM = require('jsdom-global');
 const chai = require('chai');
 const sinon = require('sinon');
+const path = require('path');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactTestUtils = require('react-dom/test-utils'); // ES6
@@ -47,10 +48,10 @@ const simpleRJX = {
             },
           },
           children:'hello world',
-        }
-      }
-    ]
-  }
+        },
+      },
+    ],
+  },
 };
 
 describe('rjx', function () { 
@@ -69,7 +70,7 @@ describe('rjx', function () {
     });
     it('should handle errors with empty components', () => {
       const emptySpanComponent = rjx.getRenderedJSON({});
-      const emptySpanComponentDebugged = rjx.getRenderedJSON.call({ debug: true, },{}, {});
+      const emptySpanComponentDebugged = rjx.getRenderedJSON.call({ debug: true, }, {}, {});
       expect(emptySpanComponent).to.be.an('object');
       expect(emptySpanComponentDebugged).to.be.an('object');
       expect(emptySpanComponentDebugged.props.children).to.eql('Error: Missing Component Object');
@@ -93,6 +94,31 @@ describe('rjx', function () {
       expect(rjxString).to.be.a('string');
       expect(dom.window.document.body.querySelector('p').innerHTML).to.eql('hello world');
       expect(dom.window.document.body.querySelector('p').style.color).to.eql('red');
+    });
+  });
+  describe('__express', () => {
+    const sampleRJXFilepath = path.resolve('./test/mock/sample.rjx');
+    const rjxMod = require(sampleRJXFilepath);
+    // console.log(rjxMod);
+    it('should return an HTML string', (done) => {
+      rjx.__express(
+        sampleRJXFilepath,
+        {
+          spantext: 'should render in express',
+          __boundConfig: {
+            debug:true,
+          },
+          __DOCTYPE:'',
+        },
+        ((err, renderedString) => {
+          // console.log({ renderedString, });
+          // const dom = new JSDOM(`<!DOCTYPE html><body>${renderedString}</body>`);
+          // expect(dom.window.document.body.querySelector('p').innerHTML).to.eql('hello world');
+          expect(err).to.be.null;
+          expect(renderedString).to.be.a('String');
+          done(err);
+        })
+      );
     });
   });
   describe('rjxRender', () => {

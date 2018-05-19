@@ -299,7 +299,7 @@ function validateRJX() {
   var rjx = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var returnAllErrors = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-  var dynamicPropsNames = ['asyncprops', 'windowprops', 'thisprops'];
+  var dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops'];
   var evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps'];
   var validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops'].concat(dynamicPropsNames, evalPropNames);
   var errors = [];
@@ -837,7 +837,7 @@ function getEvalProps() {
  * Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
  * @param {Object} options 
  * @param {Object} options.rjx - Valid RJX JSON 
- * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
+ * @param {Object} [options.resources={}] - object to use for resourceprops(asyncprops), usually a result of an asynchronous call
  * @returns {Object} resolved object of React Components
  */
 function getComponentProps() {
@@ -882,7 +882,7 @@ function getReactComponentProps() {
  * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
  * @param {Object} options 
  * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or this.props.onClick 
- * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+ * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Function} returns a function from this.props or window functions
  * @example
  * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
@@ -1070,6 +1070,7 @@ function getComputedProps$1() {
     }, this.props, rjx.props, useReduxState && !rjx.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && !componentLibraries[rjx.component] ? this.props && this.props.getState ? this.props.getState() : {} : {}) : undefined;
     var windowTraverse = typeof window !== 'undefined' ? window : {};
     var asyncprops = getRJXProps({ rjx: rjx, propName: 'asyncprops', traverseObject: resources });
+    var resourceprops = getRJXProps({ rjx: rjx, propName: 'resourceprops', traverseObject: resources });
     var windowprops = getRJXProps({ rjx: rjx, propName: 'windowprops', traverseObject: windowTraverse });
     var thisprops = getRJXProps({ rjx: rjx, propName: 'thisprops', traverseObject: componentThisProp });
 
@@ -1077,7 +1078,7 @@ function getComputedProps$1() {
     var evalProps = rjx.__dangerouslyEvalProps || rjx.__dangerouslyBindEvalProps ? getEvalProps.call(this, { rjx: rjx }) : {};
     var insertedComponents = rjx.__dangerouslyInsertComponents ? getComponentProps.call(this, { rjx: rjx, resources: resources, debug: debug }) : {};
     var insertedReactComponents = rjx.__dangerouslyInsertReactComponents ? getReactComponentProps.call(this, { rjx: rjx, debug: debug }) : {};
-    var allProps = Object.assign({}, { key: renderIndex$$1 }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
+    var allProps = Object.assign({}, { key: renderIndex$$1 }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     var computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, { allProps: allProps, rjx: rjx }) : {}, rjx.__windowComponents ? getWindowComponents.call(this, { allProps: allProps, rjx: rjx }) : {});
 
     return computedProps;
@@ -1341,6 +1342,30 @@ function getRenderedJSON() {
   }
 }
 
+/**
+ * Use RJX for express view rendering
+ * @param {string} filePath - path to rjx express view 
+ * @param {object} options - property used for express view {locals}
+ * @param {object} options.__boundConfig - property used to bind this object for RJX, can be used to add custom components
+ * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
+ * @param {*} callback 
+ */
+function __express(filePath, options, callback) {
+  try {
+    var resources = Object.assign({}, options);
+    delete resources.__boundConfig;
+    delete resources.__DOCTYPE;
+    var rjxModule = require(filePath);
+    var rjxRenderedString = rjxHTMLString.call(options.__boundConfig || {}, {
+      rjx: rjxModule,
+      resources: resources
+    });
+    callback(null, (options.__DOCTYPE || '<!DOCTYPE html>') + '\n' + rjxRenderedString);
+  } catch (e) {
+    callback(e);
+  }
+}
+
 var _rjxChildren = rjxChildren;
 var _rjxComponents = rjxComponents;
 var _rjxProps = rjxProps;
@@ -1349,6 +1374,7 @@ var _rjxUtils = rjxUtils;
 exports.rjxRender = rjxRender;
 exports.rjxHTMLString = rjxHTMLString;
 exports.getRenderedJSON = getRenderedJSON;
+exports.__express = __express;
 exports._rjxChildren = _rjxChildren;
 exports._rjxComponents = _rjxComponents;
 exports._rjxProps = _rjxProps;

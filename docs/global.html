@@ -170,6 +170,291 @@
     
 
     
+    <h4 class="name" id="__express"><span class="type-signature"></span>__express<span class="signature">(filePath, options, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Use RJX for express view rendering
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>filePath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">path to rjx express view</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">property used for express view {locals}
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>__boundConfig</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">property used to bind this object for RJX, can be used to add custom components</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>__DOCTYPE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "&lt;!DOCTYPE html>"
+                
+                </td>
+            
+
+            <td class="description last">html doctype string</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="main.js.html">main.js</a>, <a href="main.js.html#line109">line 109</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="displayComponent"><span class="type-signature"></span>displayComponent<span class="signature">(options)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
@@ -2226,7 +2511,7 @@ const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], }); 
                 </td>
             
 
-            <td class="description last">object to use for asyncprops, usually a result of an asynchronous call</td>
+            <td class="description last">object to use for resourceprops(asyncprops), usually a result of an asynchronous call</td>
         </tr>
 
     
@@ -3485,7 +3770,7 @@ computedProps = { key: 1,
                 </td>
             
 
-            <td class="description last">merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);</td>
+            <td class="description last">merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents);</td>
         </tr>
 
     
@@ -7183,13 +7468,13 @@ const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getReactComponentProps">getReactComponentProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#simpleRJXSyntax">simpleRJXSyntax</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li><li><a href="global.html#validSimpleRJXSyntax">validSimpleRJXSyntax</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#__express">__express</a></li><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getReactComponentProps">getReactComponentProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#simpleRJXSyntax">simpleRJXSyntax</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li><li><a href="global.html#validSimpleRJXSyntax">validSimpleRJXSyntax</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 30 2018 10:07:33 GMT-0500 (EST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat May 19 2018 07:54:31 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>
