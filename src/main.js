@@ -28,7 +28,7 @@ export let renderIndex = 0;
 export function rjxRender(config = {}) {
   const { rjx, resources, querySelector, options, DOM, } = config;
   ReactDOM.render(
-    getRenderedJSON.call(this, rjx, resources, options),
+    getRenderedJSON.call(this || {}, rjx, resources, options),
     DOM || document.querySelector(querySelector)
   );
 }
@@ -46,7 +46,7 @@ export function rjxRender(config = {}) {
  */
 export function rjxHTMLString(config = {}) {
   const { rjx, resources, } = config;
-  return ReactDOMServer.renderToString(getRenderedJSON.call(this, rjx, resources));
+  return ReactDOMServer.renderToString(getRenderedJSON.call(this || {}, rjx, resources));
 }
 
 /**
@@ -65,7 +65,7 @@ export function rjxHTMLString(config = {}) {
  */
 export function getRenderedJSON(rjx = {}, resources = {}) {
   // eslint-disable-next-line
-  const { componentLibraries = {}, debug = false, logError = console.error, boundedComponents = [], } = this;
+  const { componentLibraries = {}, debug = false, logError = console.error, boundedComponents = [], } = this || {};
   // const componentLibraries = this.componentLibraries;
   if (rjx.type) rjx.component = rjx.type;
   if (rjxUtils.validSimpleRJXSyntax(rjx)) rjx = rjxUtils.simpleRJXSyntax(rjx);
@@ -111,7 +111,8 @@ export function __express(filePath, options, callback) {
     const resources = Object.assign({}, options);
     delete resources.__boundConfig;
     delete resources.__DOCTYPE;
-    const rjxModule = require(filePath);
+    delete resources.__rjx;
+    const rjxModule = options.__rjx || require(filePath);
     const rjxRenderedString = rjxHTMLString.call(options.__boundConfig || {}, {
       rjx: rjxModule,
       resources,

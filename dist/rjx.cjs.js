@@ -1264,7 +1264,7 @@ function rjxRender() {
       options = config.options,
       DOM = config.DOM;
 
-  ReactDOM.render(getRenderedJSON.call(this, rjx, resources, options), DOM || document.querySelector(querySelector));
+  ReactDOM.render(getRenderedJSON.call(this || {}, rjx, resources, options), DOM || document.querySelector(querySelector));
 }
 
 /**
@@ -1283,7 +1283,7 @@ function rjxHTMLString() {
   var rjx = config.rjx,
       resources = config.resources;
 
-  return ReactDOMServer.renderToString(getRenderedJSON.call(this, rjx, resources));
+  return ReactDOMServer.renderToString(getRenderedJSON.call(this || {}, rjx, resources));
 }
 
 /**
@@ -1305,15 +1305,17 @@ function getRenderedJSON() {
   var resources = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   // eslint-disable-next-line
-  var _componentLibraries = this.componentLibraries,
-      componentLibraries = _componentLibraries === undefined ? {} : _componentLibraries,
-      _debug = this.debug,
-      debug = _debug === undefined ? false : _debug,
-      _logError = this.logError,
-      logError = _logError === undefined ? console.error : _logError,
-      _boundedComponents = this.boundedComponents,
-      boundedComponents = _boundedComponents === undefined ? [] : _boundedComponents;
+  var _ref = this || {},
+      _ref$componentLibrari = _ref.componentLibraries,
+      componentLibraries = _ref$componentLibrari === undefined ? {} : _ref$componentLibrari,
+      _ref$debug = _ref.debug,
+      debug = _ref$debug === undefined ? false : _ref$debug,
+      _ref$logError = _ref.logError,
+      logError = _ref$logError === undefined ? console.error : _ref$logError,
+      _ref$boundedComponent = _ref.boundedComponents,
+      boundedComponents = _ref$boundedComponent === undefined ? [] : _ref$boundedComponent;
   // const componentLibraries = this.componentLibraries;
+
 
   if (rjx.type) rjx.component = rjx.type;
   if (validSimpleRJXSyntax(rjx)) rjx = simpleRJXSyntax(rjx);
@@ -1355,7 +1357,8 @@ function __express(filePath, options, callback) {
     var resources = Object.assign({}, options);
     delete resources.__boundConfig;
     delete resources.__DOCTYPE;
-    var rjxModule = require(filePath);
+    delete resources.__rjx;
+    var rjxModule = options.__rjx || require(filePath);
     var rjxRenderedString = rjxHTMLString.call(options.__boundConfig || {}, {
       rjx: rjxModule,
       resources: resources
