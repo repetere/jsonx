@@ -854,4 +854,61 @@ describe('rjx utils', function () {
       expect(transformedRJXSTRING).to.eql(RJXSTRING);
     });
   });
+  describe('getSimplifiedRJX', () => {
+    const getSimplifiedRJX = rjx._rjxUtils.getSimplifiedRJX;
+    const simpleRJX = {
+      div: {
+        props: {
+          id: 'generatedRJX',
+          className: 'rjx',
+        },
+        asyncprops: {
+          test:['ok', 'cool',],
+        },
+        children: [
+          {
+            p: {
+              props: {
+                style: {
+                  color: 'red',
+                  fontWeight: 'bold',
+                },
+              },
+              children: 'hello world',
+            },
+          },
+        ],
+      },
+    };
+    const sampleRJX = {
+      component: 'div',
+      props: {
+        id: 'generatedRJX',
+        className: 'rjx',
+      },
+      asyncprops: {
+        test:['ok', 'cool',],
+      },
+      children: [
+        {
+          component: 'p',
+          props: {
+            style: {
+              color: 'red',
+              fontWeight: 'bold',
+            },
+          },
+          children: 'hello world',
+        },
+      ],
+    };
+    it('should produce equivalent SimpleRJX', () => {
+      const transformedRJXSTRING = getSimplifiedRJX(sampleRJX).toString();
+      const RJXSTRING = simpleRJX.toString();
+      expect(transformedRJXSTRING).to.eql(RJXSTRING);
+    });
+    it('should return SimpleRJX if already simple', () => {
+      expect(simpleRJX).to.eql(getSimplifiedRJX(simpleRJX));
+    });
+  });
 });

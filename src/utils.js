@@ -393,3 +393,24 @@ export function simpleRJXSyntax(simpleRJX = {}) {
     throw SyntaxError('Invalid Simple RXJ Syntax', e);
   }   
 }
+
+/**
+ * Transforms Valid RJX JSON to SimpleRJX  {component,props,children} => {[component]:{props,children}}
+ * @param {Object} rjx Valid RJX JSON object 
+ * @return {Object} - returns a simple RJX JSON Object from a valid RJX JSON Object 
+ */
+export function getSimplifiedRJX(rjx = {}) {
+  try {
+    if (!rjx.component) return rjx; //already simple
+    const componentName = rjx.component;
+    rjx.children = (Array.isArray(rjx.children))
+      ? rjx.children.map(getSimplifiedRJX) 
+      : rjx.children;
+    delete rjx.component;
+    return {
+      [ componentName ]: rjx,
+    };
+  } catch (e) {
+    throw e;
+  }
+}

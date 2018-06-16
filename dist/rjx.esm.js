@@ -29,7 +29,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
+var defineProperty = function (obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
 
+  return obj;
+};
 
 
 
@@ -479,6 +492,25 @@ function simpleRJXSyntax() {
   }
 }
 
+/**
+ * Transforms Valid RJX JSON to SimpleRJX  {component,props,children} => {[component]:{props,children}}
+ * @param {Object} rjx Valid RJX JSON object 
+ * @return {Object} - returns a simple RJX JSON Object from a valid RJX JSON Object 
+ */
+function getSimplifiedRJX() {
+  var rjx = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  try {
+    if (!rjx.component) return rjx; //already simple
+    var componentName = rjx.component;
+    rjx.children = Array.isArray(rjx.children) ? rjx.children.map(getSimplifiedRJX) : rjx.children;
+    delete rjx.component;
+    return defineProperty({}, componentName, rjx);
+  } catch (e) {
+    throw e;
+  }
+}
+
 
 
 var rjxUtils = Object.freeze({
@@ -487,7 +519,8 @@ var rjxUtils = Object.freeze({
 	traverse: traverse,
 	validateRJX: validateRJX,
 	validSimpleRJXSyntax: validSimpleRJXSyntax,
-	simpleRJXSyntax: simpleRJXSyntax
+	simpleRJXSyntax: simpleRJXSyntax,
+	getSimplifiedRJX: getSimplifiedRJX
 });
 
 // if (typeof window === 'undefined') {
