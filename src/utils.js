@@ -387,7 +387,6 @@ export function simpleRJXSyntax(simpleRJX = {}) {
       simpleRJX[ component ], {
         children: (simpleRJX[ component ].children && Array.isArray(simpleRJX[ component ].children))
           ? simpleRJX[ component ].children
-            .filter(child => child)//remove empty children
             .map(simpleRJXSyntax)
           : simpleRJX[ component ].children,
       });
@@ -406,7 +405,9 @@ export function getSimplifiedRJX(rjx = {}) {
     if (!rjx.component) return rjx; //already simple
     const componentName = rjx.component;
     rjx.children = (Array.isArray(rjx.children))
-      ? rjx.children.map(getSimplifiedRJX) 
+      ? rjx.children
+        .filter(child => child)//remove empty children
+        .map(getSimplifiedRJX) 
       : rjx.children;
     delete rjx.component;
     return {

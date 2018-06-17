@@ -28801,10 +28801,7 @@ function simpleRJXSyntax() {
     return Object.assign({}, {
       component: component
     }, simpleRJX[component], {
-      children: simpleRJX[component].children && Array.isArray(simpleRJX[component].children) ? simpleRJX[component].children.filter(function (child) {
-        return child;
-      }) //remove empty children
-      .map(simpleRJXSyntax) : simpleRJX[component].children
+      children: simpleRJX[component].children && Array.isArray(simpleRJX[component].children) ? simpleRJX[component].children.map(simpleRJXSyntax) : simpleRJX[component].children
     });
   } catch (e) {
     throw SyntaxError('Invalid Simple RXJ Syntax', e);
@@ -28822,7 +28819,10 @@ function getSimplifiedRJX() {
   try {
     if (!rjx.component) return rjx; //already simple
     var componentName = rjx.component;
-    rjx.children = Array.isArray(rjx.children) ? rjx.children.map(getSimplifiedRJX) : rjx.children;
+    rjx.children = Array.isArray(rjx.children) ? rjx.children.filter(function (child) {
+      return child;
+    }) //remove empty children
+    .map(getSimplifiedRJX) : rjx.children;
     delete rjx.component;
     return defineProperty({}, componentName, rjx);
   } catch (e) {
