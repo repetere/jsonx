@@ -386,7 +386,9 @@ export function simpleRJXSyntax(simpleRJX = {}) {
       },
       simpleRJX[ component ], {
         children: (simpleRJX[ component ].children && Array.isArray(simpleRJX[ component ].children))
-          ? simpleRJX[component].children.map(simpleRJXSyntax)
+          ? simpleRJX[ component ].children
+            .filter(child=>child)//remove empty children
+            .map(simpleRJXSyntax)
           : simpleRJX[ component ].children,
       });
   } catch (e) {

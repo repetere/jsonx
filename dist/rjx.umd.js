@@ -28801,7 +28801,10 @@ function simpleRJXSyntax() {
     return Object.assign({}, {
       component: component
     }, simpleRJX[component], {
-      children: simpleRJX[component].children && Array.isArray(simpleRJX[component].children) ? simpleRJX[component].children.map(simpleRJXSyntax) : simpleRJX[component].children
+      children: simpleRJX[component].children && Array.isArray(simpleRJX[component].children) ? simpleRJX[component].children.filter(function (child) {
+        return child;
+      }) //remove empty children
+      .map(simpleRJXSyntax) : simpleRJX[component].children
     });
   } catch (e) {
     throw SyntaxError('Invalid Simple RXJ Syntax', e);
