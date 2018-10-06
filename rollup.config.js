@@ -3,6 +3,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import builtins from 'rollup-plugin-node-builtins';
 import globals from 'rollup-plugin-node-globals';
+import replace from 'rollup-plugin-replace';
 import pkg from './package.json';
 
 export default [
@@ -18,14 +19,26 @@ export default [
     },
     plugins: [
 
-    
+      replace({
+        'process.env.NODE_ENV': JSON.stringify( 'production' )
+      }),
       resolve({
         preferBuiltins: true,
       }), // so Rollup can find `ms`
       builtins({
       }),
       babel({
-        exclude: 'node_modules/**', // only transpile our source code
+        runtimeHelpers: true,
+        // 'presets': [
+        //   ['@babel/env', { },],
+        // ],
+        plugins: [
+          [
+            '@babel/transform-runtime',
+            // { useESModules: output.format !== 'cjs' }
+          ],
+        ],
+        // exclude: 'node_modules/**', // only transpile our source code
       }),
       commonjs({
         namedExports: {
@@ -72,7 +85,19 @@ export default [
     ],
     plugins: [
       babel({
-        exclude: 'node_modules/**', // only transpile our source code
+        // exclude: 'node_modules/**', // only transpile our source code
+        runtimeHelpers: true,
+        // 'presets': [
+        //   // ['@babel/env', { },],
+        //   '@babel/env'
+        // ],
+        plugins: [
+          [
+            '@babel/transform-runtime',
+            // { useESModules: output.format !== 'cjs' }
+          ],
+        ],
+        // exclude: 'node_modules/**', // only transpile our source code
       }),
     ],
     watch: {

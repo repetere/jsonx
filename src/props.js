@@ -177,8 +177,7 @@ export function getFunctionFromProps(options) {
   const { propFunc='func:', } = options;
   // eslint-disable-next-line
   const { logError = console.error,  debug, } = this;
-  const window = this.window || global.window || window;
-
+  const window = this.window || global.window || {};
   try {
     const functionNameString = propFunc.split(':')[ 1 ] || '';
     const functionNameArray = functionNameString.split('.');
@@ -249,7 +248,7 @@ export function getFunctionProps(options = {}) {
 export function getWindowComponents(options = {}) {
   const { allProps, rjx, } = options;
   const windowComponents = rjx.__windowComponents;
-  const window = this.window || window;
+  const window = this.window || global.window || {};
   const windowFuncPrefix = 'func:window.__rjx_custom_elements';
   // if (rjx.hasWindowComponent && window.__rjx_custom_elements) {
   Object.keys(windowComponents).forEach(key => {
