@@ -14574,7 +14574,7 @@
 	    logError = console.error,
 	    debug
 	  } = this;
-	  const window = this.window || global$1.window || {};
+	  const windowObject = this.window || global$1.window || {};
 
 	  try {
 	    const functionNameString = propFunc.split(':')[1] || '';
@@ -14584,23 +14584,23 @@
 	    if (propFunc.indexOf('func:window') !== -1) {
 	      if (functionNameArray.length === 3) {
 	        try {
-	          return window[functionNameArray[1]][functionName].bind(this);
+	          return windowObject[functionNameArray[1]][functionName].bind(this);
 	        } catch (e) {
 	          if (debug) {
 	            logError(e);
 	          }
 
-	          return window[functionNameArray[1]][functionName];
+	          return windowObject[functionNameArray[1]][functionName];
 	        }
 	      } else {
 	        try {
-	          return window[functionName].bind(this);
+	          return windowObject[functionName].bind(this);
 	        } catch (e) {
 	          if (debug) {
 	            logError(e);
 	          }
 
-	          return window[functionName];
+	          return windowObject[functionName];
 	        }
 	      }
 	    } else if (functionNameArray.length === 4) {

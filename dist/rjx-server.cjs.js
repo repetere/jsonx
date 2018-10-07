@@ -1,9 +1,14 @@
-import UAParser from 'ua-parser-js';
-import React from 'react';
-import ReactDOMElements from 'react-dom-factories';
-import createReactClass from 'create-react-class';
-import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var UAParser = _interopDefault(require('ua-parser-js'));
+var React = _interopDefault(require('react'));
+var ReactDOMElements = _interopDefault(require('react-dom-factories'));
+var createReactClass = _interopDefault(require('create-react-class'));
+var ReactDOM = _interopDefault(require('react-dom/server'));
 
 /**
  * Used to evaluate whether or not to render a component
@@ -997,7 +1002,7 @@ function getComputedProps(options = {}) {
   const {
     rjx = {},
     resources = {},
-    renderIndex: renderIndex$$1,
+    renderIndex,
     logError = console.error,
     useReduxState = true,
     ignoreReduxPropsInComponentLibraries = true,
@@ -1047,7 +1052,7 @@ function getComputedProps(options = {}) {
       debug
     }) : {};
     const allProps = Object.assign({}, {
-      key: renderIndex$$1
+      key: renderIndex
     }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, {
       allProps,
@@ -1155,7 +1160,7 @@ function getChildrenProps(options = {}) {
   const {
     rjx = {},
     childrjx,
-    renderIndex: renderIndex$$1
+    renderIndex
   } = options;
   const props = options.props || rjx.props || {};
   return rjx.passprops && typeof childrjx === 'object' ? Object.assign({}, childrjx, {
@@ -1163,7 +1168,7 @@ function getChildrenProps(options = {}) {
     childrjx.asyncprops && childrjx.asyncprops.style || childrjx.windowprops && childrjx.windowprops.style ? {} : {
       style: {}
     }, childrjx.props, {
-      key: renderIndex$$1 + Math.random()
+      key: renderIndex + Math.random()
     })
   }) : childrjx;
 }
@@ -1182,7 +1187,7 @@ function getRJXChildren(options = {}) {
   const {
     rjx,
     resources,
-    renderIndex: renderIndex$$1,
+    renderIndex,
     logError = console.error
   } = options;
   const props = options.props || rjx.props || {};
@@ -1196,7 +1201,7 @@ function getRJXChildren(options = {}) {
       rjx,
       childrjx,
       props,
-      renderIndex: renderIndex$$1
+      renderIndex
     }), resources)) : rjx.children;
   } catch (e) {
     logError(e, e.stack ? e.stack : 'no stack');
@@ -1226,7 +1231,7 @@ const {
 const {
   displayComponent: displayComponent$1
 } = rjxUtils;
-let renderIndex = 0;
+exports.renderIndex = 0;
 /**
  * Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
  * @example
@@ -1266,7 +1271,7 @@ function rjxHTMLString(config = {}) {
     rjx,
     resources
   } = config;
-  return ReactDOMServer.renderToString(getRenderedJSON.call(this || {}, rjx, resources));
+  return ReactDOM.renderToString(getRenderedJSON.call(this || {}, rjx, resources));
 }
 /**
  * Use React.createElement and RJX JSON to create React elements
@@ -1302,7 +1307,7 @@ function getRenderedJSON(rjx = {}, resources = {}) {
       boundedComponents,
       reactComponents: components
     }) : components;
-    renderIndex++;
+    exports.renderIndex++;
     const element = getComponentFromMap$1({
       rjx,
       reactComponents,
@@ -1313,7 +1318,7 @@ function getRenderedJSON(rjx = {}, resources = {}) {
     const props = getComputedProps$1.call(this, {
       rjx,
       resources,
-      renderIndex,
+      renderIndex: exports.renderIndex,
       componentLibraries,
       debug,
       logError
@@ -1321,7 +1326,7 @@ function getRenderedJSON(rjx = {}, resources = {}) {
     const displayElement = rjx.comparisonprops ? displayComponent$1.call(this, {
       rjx,
       props,
-      renderIndex,
+      renderIndex: exports.renderIndex,
       componentLibraries,
       debug
     }) : true;
@@ -1331,7 +1336,7 @@ function getRenderedJSON(rjx = {}, resources = {}) {
         rjx,
         props,
         resources,
-        renderIndex
+        renderIndex: exports.renderIndex
       });
       return createElement(element, props, children);
     } else {
@@ -1382,5 +1387,12 @@ const _rjxComponents = rjxComponents;
 const _rjxProps = rjxProps;
 const _rjxUtils = rjxUtils;
 
-export default getRenderedJSON;
-export { renderIndex, rjxRender, rjxHTMLString, getRenderedJSON, __express, _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils };
+exports.rjxRender = rjxRender;
+exports.rjxHTMLString = rjxHTMLString;
+exports.getRenderedJSON = getRenderedJSON;
+exports.__express = __express;
+exports._rjxChildren = _rjxChildren;
+exports._rjxComponents = _rjxComponents;
+exports._rjxProps = _rjxProps;
+exports._rjxUtils = _rjxUtils;
+exports.default = getRenderedJSON;
