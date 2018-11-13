@@ -2,8 +2,7 @@ import UAParser from 'ua-parser-js';
 import React from 'react';
 import ReactDOMElements from 'react-dom-factories';
 import createReactClass from 'create-react-class';
-import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
+import ReactDOM from 'react-dom/server';
 
 /**
  * Used to evaluate whether or not to render a component
@@ -1266,7 +1265,7 @@ function rjxHTMLString(config = {}) {
     rjx,
     resources
   } = config;
-  return ReactDOMServer.renderToString(getRenderedJSON.call(this || {}, rjx, resources));
+  return ReactDOM.renderToString(getRenderedJSON.call(this || {}, rjx, resources));
 }
 /**
  * Use React.createElement and RJX JSON to create React elements

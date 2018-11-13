@@ -1,8 +1,6 @@
 {
   "presets": [
-    ["env", {
-      "modules": false
-    }]
+    ["env", { }]
   ],
   "plugins": ["external-helpers"]
 }
