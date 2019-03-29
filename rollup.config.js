@@ -1,4 +1,4 @@
-import path from 'path';
+// import path from 'path';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
@@ -7,18 +7,25 @@ import globals from 'rollup-plugin-node-globals';
 import replace from 'rollup-plugin-replace';
 // import alias from 'rollup-plugin-alias';
 import pkg from './package.json';
+import { terser, } from 'rollup-plugin-terser';
 
 export default [
   // browser-friendly UMD build
   {
     input: 'src/main.js',
     // external: [ 'react' ], // <-- suppresses the warning
-    output: {
+    output:[{
       exports: 'named',
       file: pkg.browser,
       format: 'umd',
       name: 'rjx',
+    }, {
+      exports: 'named',
+      file: pkg.web,
+      format: 'iife',
+      name: 'rjx',
     },
+    ],
     plugins: [
       replace({
         'process.env.NODE_ENV': JSON.stringify( 'production' ),
@@ -50,6 +57,10 @@ export default [
         },
       }), // so Rollup can convert `ms` to an ES module
       globals({
+      }),
+      terser({
+        // screwIE8 : true,
+        // sourceMap: false
       }),
     ],
   },
@@ -158,7 +169,7 @@ export default [
           ['babel-plugin-replace-imports', {
             'test': /react-dom$/,
             'replacer': 'react-dom/server',
-          },],
+          }, ],
         ],
         // exclude: 'node_modules/**', // only transpile our source code
       }),
