@@ -1,7 +1,7 @@
 <!DOCTYPE html><html><head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href>
-  <title data-ice="title">Source | RJX</title>
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/components.js | RJX</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -74,93 +74,197 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">28/40</span></h1>
+<div class="content" data-ice="content"><h1 data-ice="title">src/components.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, } from &apos;react&apos;;
+import { default as ReactDOMElements, } from &apos;react-dom-factories&apos;;
+import { getAdvancedBinding, } from &apos;./utils&apos;;
+import createReactClass from &apos;create-react-class&apos;;
+import { getRenderedJSON, } from &apos;./main&apos;;
+// if (typeof window === &apos;undefined&apos;) {
+//   var window = window || global.window || {};
+// }
+export let advancedBinding = getAdvancedBinding();
 
-<table class="files-summary" data-ice="files" data-use-coverage="true">
-  <thead>
-    <tr>
-      <td>File</td>
-      <td>Identifier</td>
-      <td class="coverage">Document</td>
-      <td style="display: none;">Size</td>
-      <td style="display: none;">Lines</td>
-      <td style="display: none;">Updated</td>
-    </tr>
-  </thead>
-  <tbody>
-    
-  <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/children.js.html">src/children.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-getChildrenProperty">getChildrenProperty</a></span>
-<span><a href="function/index.html#static-function-getChildrenProps">getChildrenProps</a></span>
-<span><a href="function/index.html#static-function-getRJXChildren">getRJXChildren</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
-      <td style="display: none;" data-ice="size">4333 byte</td>
-      <td style="display: none;" data-ice="lines">119</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 20:02:26 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/components.js.html#errorLines=157,9">src/components.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-advancedBinding">advancedBinding</a></span>
-<span><a href="variable/index.html#static-variable-componentMap">componentMap</a></span>
-<span><a href="function/index.html#static-function-getBoundedComponents">getBoundedComponents</a></span>
-<span><a href="function/index.html#static-function-getComponentFromLibrary">getComponentFromLibrary</a></span>
-<span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span>
-<span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span>
-<span><a href="function/index.html#static-function-getReactComponent">getReactComponent</a></span>
-<span><a href="function/index.html#static-function-getReactFunction">getReactFunction</a></span></td>
-      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">6/8</span></td>
-      <td style="display: none;" data-ice="size">8793 byte</td>
-      <td style="display: none;" data-ice="lines">188</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 21:17:42 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/main.js.html#errorLines=10,11,12,127,128,129,13,130,14,15">src/main.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-__express">__express</a></span>
-<span><a href="variable/index.html#static-variable-_rjxChildren">_rjxChildren</a></span>
-<span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span>
-<span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span>
-<span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span>
-<span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span>
-<span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span>
-<span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span>
-<span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></td>
-      <td class="coverage"><span data-ice="coverage">28 %</span><span data-ice="coverageCount" class="coverage-count">4/14</span></td>
-      <td style="display: none;" data-ice="size">6221 byte</td>
-      <td style="display: none;" data-ice="lines">131</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 15:44:21 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/props.js.html">src/props.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span>
-<span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span>
-<span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span>
-<span><a href="function/index.html#static-function-getFunctionFromProps">getFunctionFromProps</a></span>
-<span><a href="function/index.html#static-function-getFunctionProps">getFunctionProps</a></span>
-<span><a href="function/index.html#static-function-getRJXProps">getRJXProps</a></span>
-<span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span>
-<span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">8/8</span></td>
-      <td style="display: none;" data-ice="size">16073 byte</td>
-      <td style="display: none;" data-ice="lines">393</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 21:17:34 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/utils.js.html">src/utils.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-displayComponent">displayComponent</a></span>
-<span><a href="function/index.html#static-function-getAdvancedBinding">getAdvancedBinding</a></span>
-<span><a href="function/index.html#static-function-getSimplifiedRJX">getSimplifiedRJX</a></span>
-<span><a href="function/index.html#static-function-simpleRJXSyntax">simpleRJXSyntax</a></span>
-<span><a href="function/index.html#static-function-traverse">traverse</a></span>
-<span><a href="function/index.html#static-function-validSimpleRJXSyntax">validSimpleRJXSyntax</a></span>
-<span><a href="function/index.html#static-function-validateRJX">validateRJX</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">7/7</span></td>
-      <td style="display: none;" data-ice="size">16856 byte</td>
-      <td style="display: none;" data-ice="lines">418</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 20:59:28 (UTC)</td>
-    </tr>
-</tbody>
-</table>
+/**
+ * object of all react components available for RJX
+ */
+export let componentMap = Object.assign({}, ReactDOMElements, (typeof window ===&apos;object&apos;) ? window.__rjx_custom_elements : {});
+
+/**
+ * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
+ * @param {Object} options - options for getBoundedComponents 
+ * @param {Object} options.reactComponents - all react components available for RJX
+ * @param {string[]} boundedComponents - list of components to bind RJX this context (usually helpful for navigation and redux-router)
+ * @returns {Object} reactComponents object of all react components available for RJX
+ */
+export function getBoundedComponents(options = {}) {
+  const { reactComponents, boundedComponents=[], } = options;
+  if (advancedBinding || options.advancedBinding) {
+    return Object.assign({}, reactComponents, boundedComponents.reduce((result, componentName) =&gt; {
+      result[ componentName ] = reactComponents[ componentName ].bind(this);
+      return result;
+    }, {}));
+    // reactComponents.ResponsiveLink = ResponsiveLink.bind(this);
+  } else return reactComponents;
+}
+
+/**
+ * returns a react component from a component library
+ * @param {Object} options - options for getComponentFromLibrary
+ * @param {Object} [options.componentLibraries={}] - react component library like bootstrap
+ * @param {Object} [options.rjx={}] - any valid RJX JSON
+ * @returns {function|undefined} react component from react library like bootstrap, material design or bulma
+ */
+export function getComponentFromLibrary(options = {}) {
+  const { componentLibraries = {}, rjx = {}, } = options;
+  const libComponent = Object.keys(componentLibraries)
+    .map(libraryName =&gt; {
+      const cleanLibraryName = rjx.component.replace(`${libraryName}.`, &apos;&apos;);
+      const libraryNameArray = cleanLibraryName.split(&apos;.&apos;);
+      if (libraryNameArray.length === 2
+        &amp;&amp; componentLibraries[ libraryName ]
+        &amp;&amp; componentLibraries[ libraryName ][ libraryNameArray[ 0 ] ]
+        &amp;&amp; typeof componentLibraries[ libraryName ][ libraryNameArray[ 0 ] ][ libraryNameArray[ 1 ] ] !== &apos;undefined&apos;) {
+        return componentLibraries[ libraryName ][ libraryNameArray[ 0 ] ][ libraryNameArray[ 1 ] ];
+      } else if (typeof componentLibraries[ libraryName ][ cleanLibraryName ] !== &apos;undefined&apos;) {
+        return componentLibraries[ libraryName ][ cleanLibraryName ];
+      }
+    })
+    .filter(val =&gt; val)[ 0 ];
+  return libComponent;
+}
+
+/**
+ * returns a react element from rjx.component
+ * @example
+ * // returns react elements
+ * getComponentFromMap({rjx:{component:&apos;div&apos;}})=&gt;div
+ * getComponentFromMap({rjx:{component:&apos;MyModal&apos;},reactComponents:{MyModal:MyModal extends React.Component}})=&gt;MyModal
+ * getComponentFromMap({rjx:{component:&apos;reactBootstap.nav&apos;},componentLibraries:{reactBootstrap,}})=&gt;reactBootstap.nav
+ * @param {Object} options - options for getComponentFromMap
+ * @param {object} [options.rjx={}] - any valid RJX JSON object
+ * @param {Object} [options.reactComponents={}] - react components to render
+ * @param {Object} [options.componentLibraries={}] - react components to render from another component library like bootstrap or bulma
+ * @param {function} [options.logError=console.error] - error logging function
+ * @param {boolean} [options.debug=false] - use debug messages
+ * @returns {string|function|class} valid react element
+ */
+export function getComponentFromMap(options = {}) {
+  // eslint-disable-next-line
+  const { rjx = {}, reactComponents = {}, componentLibraries = {}, logError = console.error, debug } = options;
+
+  try {
+    if (typeof rjx.component !== &apos;string&apos; &amp;&amp; typeof rjx.component === &apos;function&apos;) {
+      return rjx.component;
+    } else if (ReactDOMElements[rjx.component]) {
+      return rjx.component;
+    } else if (reactComponents[ rjx.component ]) {
+      return reactComponents[rjx.component];
+    } else if (typeof rjx.component ===&apos;string&apos; &amp;&amp; rjx.component.indexOf(&apos;.&apos;) &gt; 0 &amp;&amp; getComponentFromLibrary({ rjx, componentLibraries, })) {
+      return getComponentFromLibrary({ rjx, componentLibraries, });
+    } else {
+      throw new ReferenceError(`Invalid React Component (${rjx.component})`);
+    }
+  } catch (e) {
+    if(debug) logError(e, (e.stack) ? e.stack : &apos;no stack&apos;);
+    throw e;
+  }
+}
+
+/**
+ * Returns a new function from an options object
+ * @param {Object} options 
+ * @param {String} [options.body=&apos;&apos;] - Function string body
+ * @param {String[]} [options.args=[]] - Function arguments
+ * @returns {Function} 
+ */
+export function getFunctionFromEval(options = {}) {
+  const { body=&apos;&apos;, args = [], } = options;
+  args.push(body);
+  return Function.prototype.constructor.apply({}, args);
+}
+
+/**
+ * Returns a new React Component
+ * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class 
+ * @param {Object} [options.resources={}] - asyncprops for component
+ * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
+ * @param {Object} reactComponent.render.body - Valid RJX JSON
+ * @param {String} reactComponent.getDefaultProps.body - return an object for the default props
+ * @param {String} reactComponent.getInitialState.body - return an object for the default state
+ * @returns {Function} 
+ * @see {@link https://reactjs.org/docs/react-without-es6.html} 
+ */
+export function getReactComponent(reactComponent = {}, options = {}) {
+  const { returnFactory = true, resources = {}, } = options;
+  const rjc = Object.assign({
+    getDefaultProps: {
+      body:&apos;return {};&apos;,
+    },
+    getInitialState: {
+      body:&apos;return {};&apos;,
+    },
+  }, reactComponent);
+  const rjcKeys = Object.keys(rjc);
+  if (rjcKeys.includes(&apos;render&apos;) === false) {
+    throw new ReferenceError(&apos;React components require a render method&apos;);
+  }
+  const classOptions = rjcKeys.reduce((result, val) =&gt; { 
+    const args = rjc[ val ].arguments;
+    const body = rjc[ val ].body;
+    if (!body) {
+      console.warn({ rjc, });
+      throw new SyntaxError(`Function(${val}) requires a function body`);
+    }
+    if (args &amp;&amp; !Array.isArray(args) &amp;&amp; (args.length &amp;&amp;(args.length &amp;&amp; args.filter(arg=&gt;typeof arg===&apos;string&apos;).length)) ) {
+      throw new TypeError(`Function(${val}) arguments must be an array or variable names`);
+    }
+    result[ val ] = (val === &apos;render&apos;)
+      ? ()=&gt;getRenderedJSON.call(this, body, resources)
+      : getFunctionFromEval({
+        body,
+        args,
+      });
+    return result;
+  }, {});
+  const reactComponentClass = createReactClass(classOptions);
+  return returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
+}
+
+export function getReactFunction(reactComponent = {}, functionBody = &apos;&apos;, options = {}) {
+  const { resources = {}, args=[], } = options;
+
+  const functionComponent = Function(&apos;React&apos;, &apos;useState&apos;, &apos;useEffect&apos;, &apos;useContext&apos;, &apos;useReducer&apos;, &apos;useCallback&apos;, &apos;useMemo&apos;, &apos;useRef&apos;, &apos;useImperativeHandle&apos;, &apos;useLayoutEffect&apos;, &apos;useDebugValue&apos;, &apos;getRenderedJSON&apos;, &apos;reactComponent&apos;, &apos;resources&apos;, &apos;props&apos;, `
+    return function ${options.name || &apos;Anonymous&apos;}(props){
+      ${functionBody}
+      if(typeof functionprops!==&apos;undefined&apos;){
+        reactComponent.props = Object.assign({},props,functionprops);
+        reactComponent.__functionargs = Object.keys(functionprops);
+      } else{
+        reactComponent.props =  props;
+      }
+      if(!props.children) delete props.children;
+
+      return getRenderedJSON.call(this, reactComponent);
+    }
+  `);
+  Object.defineProperty(
+    functionComponent,
+    &apos;name&apos;,
+    {
+      value: options.name || &apos;Anonymous functionComponent&apos;,
+    }
+  );
+  const props = reactComponent.props;
+  const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props];
+  return functionComponent(...functionArgs);
+}
+/**
+ * if (recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)]) {
+      return recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)];
+    }
+ */</code></pre>
+
 </div>
 
 <footer class="footer">

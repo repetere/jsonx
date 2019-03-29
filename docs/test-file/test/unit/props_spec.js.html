@@ -1,0 +1,428 @@
+<!DOCTYPE html><html><head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">test/unit/props_spec.js | RJX</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-112697260-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-112697260-2');
+  </script><meta name="description" content="Reactive JSON (RJX) takes a RXJ JSON object and renders React components. RJX lets you get up and running with React without using JavaScript."><meta property="og:type" content="website"><meta property="og:url" content="https://repetere.github.io/rjx"><meta property="og:site_name" content="RJX"><meta property="og:title" content="RJX"><meta property="og:image" content="https://rjx.io/favicon.png"><meta property="og:description" content="Reactive JSON (RJX) takes a RXJ JSON object and renders React components. RJX lets you get up and running with React without using JavaScript."><meta property="og:author" content="https://github.com/repetere"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="RJX"><meta property="twitter:description" content="Reactive JSON (RJX) takes a RXJ JSON object and renders React components. RJX lets you get up and running with React without using JavaScript."><meta property="twitter:image" content="https://rjx.io/favicon.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/repetere/rjx"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenProperty">getChildrenProperty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenProps">getChildrenProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRJXChildren">getRJXChildren</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBoundedComponents">getBoundedComponents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromLibrary">getComponentFromLibrary</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponent">getReactComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunction">getReactFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromProps">getFunctionFromProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionProps">getFunctionProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRJXProps">getRJXProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-displayComponent">displayComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getAdvancedBinding">getAdvancedBinding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getSimplifiedRJX">getSimplifiedRJX</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-simpleRJXSyntax">simpleRJXSyntax</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-traverse">traverse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validSimpleRJXSyntax">validSimpleRJXSyntax</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateRJX">validateRJX</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-advancedBinding">advancedBinding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-componentMap">componentMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxChildren">_rjxChildren</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">test/unit/props_spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const rjx = require(&apos;../../dist/rjx.cjs&apos;);
+const mochaJSDOM = require(&apos;jsdom-global&apos;);
+const chai = require(&apos;chai&apos;);
+const sinon = require(&apos;sinon&apos;);
+const React = require(&apos;react&apos;);
+const ReactDOM = require(&apos;react-dom&apos;);
+const ReactDOMElements = require(&apos;react-dom-factories&apos;);
+const expect = require(&apos;chai&apos;).expect;
+const jsdom = require(&apos;jsdom&apos;);
+const { JSDOM, } = jsdom;
+chai.use(require(&apos;sinon-chai&apos;));
+require(&apos;mocha-sinon&apos;);
+
+const sampleRJX = {
+  component: &apos;div&apos;,
+  props: {
+    id: &apos;generatedRJX&apos;,
+    className:&apos;rjx&apos;,
+  },
+  children: [
+    {
+      component: &apos;p&apos;,
+      props: {
+        style: {
+          color: &apos;red&apos;,
+          fontWeight:&apos;bold&apos;,
+        },
+      },
+      children:&apos;hello world&apos;,
+    },
+  ],
+};
+
+const traverseObject = {
+  user: {
+    name: &apos;rjx&apos;,
+    description: &apos;react withouth javascript&apos;,
+  },
+  stats: {
+    logins: 102,
+    comments: 3,
+  },
+  authentication: &apos;OAuth2&apos;,
+};
+
+describe(&apos;rjx props&apos;, function () { 
+  describe(&apos;getComputedProps&apos;, () =&gt; { 
+    const getComputedProps = rjx._rjxProps.getComputedProps;
+    it(&apos;should return resolved computed props&apos;, () =&gt; {
+      const dynamicprops = {
+        auth: [&apos;authentication&apos;, ],
+        username: [&apos;user&apos;, &apos;name&apos;, ],
+      };
+      const evalProps = {
+        getUsername: &apos;(user={})=&gt;user.name&apos;,
+      };
+      const compProps = {
+        myComponent: {
+          component: &apos;p&apos;,
+          children:&apos;hello world&apos;,
+        },
+      };
+      const renderIndex = 1;
+      const resources = traverseObject;
+      const testRJX = Object.assign({}, sampleRJX, {
+        asyncprops: dynamicprops,
+        __dangerouslyEvalProps: evalProps,
+        __dangerouslyInsertComponents: compProps,
+      });
+      const computedProps = getComputedProps.call({}, {
+        rjx: testRJX,
+        resources,
+        renderIndex,
+      });
+      expect(computedProps.auth).to.eql(resources.authentication);
+      expect(computedProps.username).to.eql(resources.user.name);
+      expect(computedProps.key).to.eql(renderIndex);
+      expect(computedProps.getUsername).to.be.a(&apos;function&apos;);
+      expect(computedProps.myComponent).to.be.an(&apos;object&apos;);
+      expect(computedProps.myComponent).to.haveOwnProperty(&apos;$$typeof&apos;);
+      expect(computedProps.myComponent).to.haveOwnProperty(&apos;type&apos;);
+      expect(computedProps.myComponent).to.haveOwnProperty(&apos;key&apos;);
+      expect(computedProps.myComponent).to.haveOwnProperty(&apos;ref&apos;);
+      expect(computedProps.myComponent).to.haveOwnProperty(&apos;props&apos;);
+    });
+  });
+  describe(&apos;getRJXProps&apos;, () =&gt; {
+    const getRJXProps = rjx._rjxProps.getRJXProps;
+    it(&apos;should return resolved dynamic prop&apos;, () =&gt; {
+      const testVals = {
+        auth: [&apos;authentication&apos;, ],
+        username: [&apos;user&apos;, &apos;name&apos;, ],
+      };
+      const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
+      const testRJX2 = Object.assign({}, sampleRJX, { thisprops: testVals, });
+      const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
+      const RJXP2 = getRJXProps({ rjx: testRJX2, traverseObject, propName:&apos;thisprops&apos;, });
+      expect(RJXP.auth).to.eql(traverseObject.authentication);
+      expect(RJXP.username).to.eql(traverseObject.user.name);
+      expect(RJXP2.auth).to.eql(traverseObject.authentication);
+      expect(RJXP2.username).to.eql(traverseObject.user.name);
+    });
+    it(&apos;should return resolved dynamic prop with undefined values if reference is invalid&apos;, () =&gt; {
+      const testVals = {
+        auth: [&apos;wrong&apos;, ],
+        username: [&apos;no&apos;, &apos;ref&apos;, ],
+      };
+      const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
+      const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
+      expect(RJXP.auth).to.be.undefined;
+      expect(RJXP.username).to.be.undefined;
+    });
+  });
+  describe(&apos;getEvalProps&apos;, () =&gt; {
+    const getEvalProps = rjx._rjxProps.getEvalProps;
+    it(&apos;should return evaluated props dangerously using eval&apos;, () =&gt; {
+      const testVals = {
+        auth: &apos;true&apos;,
+        username: &apos;(user={})=&gt;user.name&apos;,
+      };
+      const testRJX = Object.assign({}, sampleRJX, {
+        __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {
+          email: &apos;(function getUser(user={}){ return this.testBound(); })&apos;,
+        },
+      });
+      // console.log({ testRJX });
+      const RJXP = getEvalProps.call({ testBound: () =&gt; &apos;bounded&apos;, }, { rjx: testRJX, });
+      const evalutedComputedFunc = RJXP.username({ name: &apos;bob&apos;, });
+      const evalutedComputedBoundFunc = RJXP.email({ email:&apos;test@email.domain&apos;, });
+      expect(RJXP.auth).to.be.true;
+      expect(evalutedComputedFunc).to.eql(&apos;bob&apos;);
+      expect(evalutedComputedBoundFunc).to.eql(&apos;bounded&apos;);
+    });
+  });
+  describe(&apos;getWindowComponents&apos;, () =&gt; {
+    const getWindowComponents = rjx._rjxProps.getWindowComponents;
+    before(function () {
+      this.jsdom = mochaJSDOM();
+    });
+    it(&apos;should return react element from rjx.__windowComponents&apos;, function () {
+      class Welcome extends React.Component {
+        render() {
+          return React.createElement(&apos;h1&apos;, { name: &apos;Welcome&apos;, }, `Hello, ${this.props.name} ${this.props.title||&apos;NA&apos;}`);
+        }
+      }
+      const __windowComponents = {
+        myWelcome: &apos;Welcome&apos;,
+      };
+      const allProps = {
+        __windowComponents,
+        __windowComponentProps: {
+          name: &apos;from window&apos;,
+          title: &apos;pull it&apos;,
+        },
+      };
+      const testRJX = {
+        component: &apos;div&apos;,
+        children: &apos;hello world&apos;,
+        __windowComponents: {
+          useWelcome:&apos;func:window.__rjx_custom_elements.Welcome&apos;,
+        },
+      };
+      const thisProp = {
+        window: {
+          __rjx_custom_elements: {
+            Welcome,
+          },
+        },
+      };
+      const windowProps = getWindowComponents.call(thisProp, {
+        allProps,
+        rjx: testRJX,
+      });
+      expect(windowProps.useWelcome.type).to.eql(Welcome);
+      expect(windowProps.useWelcome.props.name).to.eql(allProps.__windowComponentProps.name);
+    });    
+    after(function () {
+      this.jsdom();
+    });
+  });
+  describe(&apos;getFunctionProps&apos;, () =&gt; {
+    const getFunctionProps = rjx._rjxProps.getFunctionProps;
+    it(&apos;should resolve functions from rjx.__functionProps from function strings&apos;, () =&gt; {
+      const logError = sinon.spy();
+      const thisProp = {
+        logError,
+        debug: true,
+        window: {
+          print: () =&gt; &apos;printed&apos;,
+          localStorage: {
+            getItem:()=&gt;&apos;gotItem&apos;,
+          },
+        },
+        props: {
+          onClick:()=&gt;&apos;clicked&apos;,
+          reduxRouter: {
+            push:()=&gt;&apos;pushed&apos;,
+            pop:()=&gt;&apos;poped&apos;,
+          },
+        },
+      };
+      const rxjTest = {
+        component:&apos;div&apos;,
+        props: {
+          name:&apos;test&apos;,
+        },
+        __functionProps: {
+          onclick:&apos;func:this.props.onClick&apos;,
+          printPage: &apos;func:window.print&apos;,
+          nav:&apos;func:this.props.reduxRouter.push&apos;,
+        },
+      };
+      const rxjObj = getFunctionProps.call(thisProp, {
+        rjx: rxjTest,
+      });
+      expect(rxjObj).is.an(&apos;object&apos;);
+      expect(Object.keys(rxjObj)).to.eql(Object.keys(rxjTest.__functionProps));
+      expect(rxjObj.onclick()).to.eq(&apos;clicked&apos;);
+      expect(rxjObj.printPage()).to.eql(&apos;printed&apos;);
+      expect(rxjObj.nav()).to.eql(&apos;pushed&apos;);
+    });
+  });
+  describe(&apos;getFunctionFromProps&apos;, () =&gt; {
+    const getFunctionFromProps = rjx._rjxProps.getFunctionFromProps;
+    it(&apos;should return an empty function by default&apos;, () =&gt; {
+      const logError = sinon.spy();
+      const thisProp = {
+        logError,
+        debug:true,
+      };
+      const func = getFunctionFromProps.call(thisProp, {
+        propFunc: () =&gt; { },
+      });
+      const defaultFunc = getFunctionFromProps.call(thisProp, {});
+      // const emptyFunction = function () {};
+      expect(func).to.be.a(&apos;function&apos;);
+      expect(defaultFunc).to.be.a(&apos;function&apos;);
+      // expect(func.toString()).to.eq(emptyFunction.toString());
+      // expect(defaultFunc.toString()).to.eq(emptyFunction.toString());
+      expect(logError.called).to.be.true;
+    });
+    it(&apos;should return a library function like this.props.reduxRouter.push&apos;, () =&gt; {
+      const logError = sinon.spy();
+      const thisProp = {
+        logError,
+        debug: true,
+        props: {
+          reduxRouter: {
+            push:()=&gt;&apos;pushed&apos;,
+            pop:()=&gt;&apos;poped&apos;,
+          },
+        },
+      };
+      const func = getFunctionFromProps.call(thisProp, {
+        propFunc: &apos;func:this.props.reduxRouter.push&apos;,
+      });
+      expect(func).to.be.a(&apos;function&apos;);
+      expect(func()).to.eq(&apos;pushed&apos;);
+      expect(logError.called).to.be.false;
+    });
+    it(&apos;should return a function on this.props like this.props.onClick&apos;, () =&gt; {
+      const logError = sinon.spy();
+      const thisProp = {
+        logError,
+        debug: true,
+        props: {
+          onClick:()=&gt;&apos;clicked&apos;,
+        },
+      };
+      const func = getFunctionFromProps.call(thisProp, {
+        propFunc: &apos;func:this.props.onClick&apos;,
+      });
+      expect(func).to.be.a(&apos;function&apos;);
+      expect(func()).to.eq(&apos;clicked&apos;);
+      expect(logError.called).to.be.false;
+    });
+    it(&apos;should return a window function like window.print or window.localStorage.getItem&apos;, () =&gt; {
+      const logError = sinon.spy();
+      const thisProp = {
+        logError,
+        debug: true,
+        window: {
+          print: () =&gt; &apos;printed&apos;,
+          localStorage: {
+            getItem:()=&gt;&apos;gotItem&apos;,
+          },
+        },
+      };
+      const func = getFunctionFromProps.call(thisProp, {
+        propFunc: &apos;func:window.print&apos;,
+      });
+      const funcDeep = getFunctionFromProps.call(thisProp, {
+        propFunc: &apos;func:window.localStorage.getItem&apos;,
+      });
+      expect(func).to.be.a(&apos;function&apos;);
+      expect(funcDeep).to.be.a(&apos;function&apos;);
+      expect(func()).to.eq(&apos;printed&apos;);
+      expect(funcDeep()).to.eq(&apos;gotItem&apos;);
+      expect(logError.called).to.be.false;
+    });
+  });
+  describe(&apos;getComponentProps&apos;, () =&gt; {
+    const getComponentProps = rjx._rjxProps.getComponentProps;
+    it(&apos;should return evaluated props dangerously using eval&apos;, () =&gt; {
+      const testVals = {
+        myComponent: {
+          component: &apos;p&apos;,
+          children:&apos;hello world&apos;,
+        },
+      };
+      const testRJX = Object.assign({}, sampleRJX, { __dangerouslyInsertComponents: testVals,  });
+      const RJXP = getComponentProps.call({ }, { rjx: testRJX, });
+      expect(RJXP.myComponent).to.be.an(&apos;object&apos;);
+      expect(RJXP.myComponent).to.haveOwnProperty(&apos;$$typeof&apos;);
+      expect(RJXP.myComponent).to.haveOwnProperty(&apos;type&apos;);
+      expect(RJXP.myComponent).to.haveOwnProperty(&apos;key&apos;);
+      expect(RJXP.myComponent).to.haveOwnProperty(&apos;ref&apos;);
+      expect(RJXP.myComponent).to.haveOwnProperty(&apos;props&apos;);
+    });
+  });
+  describe(&apos;getReactComponentProps&apos;, () =&gt; {
+    const getReactComponentProps = rjx._rjxProps.getReactComponentProps;
+    it(&apos;should return react component props dangerously using eval&apos;, () =&gt; {
+      const testVals = {
+        myComponent: &apos;p&apos;,
+      };
+      const testRJX = Object.assign({}, sampleRJX, { __dangerouslyInsertReactComponents: testVals,  });
+      const RJXP = getReactComponentProps.call({}, { rjx: testRJX, });
+      expect(RJXP.myComponent).to.be.an(&apos;string&apos;);
+      expect(RJXP.myComponent).to.eql(&apos;p&apos;);
+    });
+  });
+
+});</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+
+
+</body></html>

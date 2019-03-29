@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue } from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 import ReactDOMElements from 'react-dom-factories';
@@ -237,7 +237,7 @@ function traverse(paths = {}, data = {}) {
 function validateRJX(rjx = {}, returnAllErrors = false) {
   const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops'];
   const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps'];
-  const validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops'].concat(dynamicPropsNames, evalPropNames);
+  const validKeys = ['component', 'props', 'children', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops'].concat(dynamicPropsNames, evalPropNames);
   let errors = [];
 
   if (!rjx.component) {
@@ -637,6 +637,32 @@ function getReactComponent(reactComponent = {}, options = {}) {
   const reactComponentClass = createReactClass(classOptions);
   return returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
 }
+function getReactFunction(reactComponent = {}, functionBody = '', options = {}) {
+  const {
+    resources = {},
+    args = []
+  } = options;
+  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
+    return function ${options.name || 'Anonymous'}(props){
+      ${functionBody}
+      if(typeof functionprops!=='undefined'){
+        reactComponent.props = Object.assign({},props,functionprops);
+        reactComponent.__functionargs = Object.keys(functionprops);
+      } else{
+        reactComponent.props =  props;
+      }
+      if(!props.children) delete props.children;
+
+      return getRenderedJSON.call(this, reactComponent);
+    }
+  `);
+  Object.defineProperty(functionComponent, 'name', {
+    value: options.name || 'Anonymous functionComponent'
+  });
+  const props = reactComponent.props;
+  const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props];
+  return functionComponent(...functionArgs);
+}
 /**
  * if (recharts[rjx.component.replace('recharts.', '')]) {
       return recharts[rjx.component.replace('recharts.', '')];
@@ -650,7 +676,8 @@ var rjxComponents = /*#__PURE__*/Object.freeze({
   getComponentFromLibrary: getComponentFromLibrary,
   getComponentFromMap: getComponentFromMap,
   getFunctionFromEval: getFunctionFromEval,
-  getReactComponent: getReactComponent
+  getReactComponent: getReactComponent,
+  getReactFunction: getReactFunction
 });
 
 //   var window = window || {};
@@ -827,7 +854,7 @@ function getReactComponentProps(options = {}) {
 /**
  * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
  * @param {Object} options 
- * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or this.props.onClick 
+ * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or func:this.props.onClick  or func:inline.myInlineFunction
  * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Function} returns a function from this.props or window functions
  * @example
@@ -836,7 +863,9 @@ function getReactComponentProps(options = {}) {
 
 function getFunctionFromProps(options) {
   const {
-    propFunc = 'func:'
+    propFunc = 'func:',
+    propBody,
+    rjx
   } = options; // eslint-disable-next-line
 
   const {
@@ -850,7 +879,30 @@ function getFunctionFromProps(options) {
     const functionNameArray = functionNameString.split('.');
     const functionName = functionNameArray.length ? functionNameArray[functionNameArray.length - 1] : '';
 
-    if (propFunc.indexOf('func:window') !== -1) {
+    if (propFunc.includes('func:inline')) {
+      // eslint-disable-next-line
+      let InlineFunction;
+
+      if (rjx.__functionargs) {
+        const args = [].concat(rjx.__functionargs);
+        args.push(propBody);
+        InlineFunction = Function.prototype.constructor.apply({}, args);
+      } else {
+        InlineFunction = Function('param1', 'param2', '"use strict";' + propBody);
+      }
+
+      const [propFuncName, funcName] = propFunc.split('.');
+      Object.defineProperty(InlineFunction, 'name', {
+        value: funcName
+      });
+
+      if (rjx.__functionargs) {
+        const boundArgs = [this].concat(rjx.__functionargs.map(arg => rjx.props[arg]));
+        return InlineFunction.bind(...boundArgs);
+      } else {
+        return InlineFunction.bind(this);
+      }
+    } else if (propFunc.indexOf('func:window') !== -1) {
       if (functionNameArray.length === 3) {
         try {
           return windowObject[functionNameArray[1]][functionName].bind(this);
@@ -906,7 +958,9 @@ function getFunctionProps(options = {}) {
   Object.keys(funcProps).forEach(key => {
     if (typeof funcProps[key] === 'string' && funcProps[key].indexOf('func:') !== -1) {
       allProps[key] = getFunction({
-        propFunc: funcProps[key]
+        propFunc: funcProps[key],
+        propBody: rjx.__inline ? rjx.__inline[key] : '',
+        rjx
       });
     }
   });

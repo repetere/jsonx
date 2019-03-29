@@ -28,6 +28,7 @@ export default [
     ],
     plugins: [
       replace({
+        // 'process.env.NODE_ENV': JSON.stringify( 'development' ),
         'process.env.NODE_ENV': JSON.stringify( 'production' ),
       }),
       resolve({
@@ -54,13 +55,14 @@ export default [
           // relative to the current directory, or the name
           // of a module in node_modules
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
+          'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
+
         },
       }), // so Rollup can convert `ms` to an ES module
       globals({
       }),
       terser({
-        // screwIE8 : true,
-        // sourceMap: false
+        sourcemap: true
       }),
     ],
   },

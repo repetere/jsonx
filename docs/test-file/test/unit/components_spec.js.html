@@ -1,7 +1,7 @@
 <!DOCTYPE html><html><head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href>
-  <title data-ice="title">Source | RJX</title>
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">test/unit/components_spec.js | RJX</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -74,93 +74,272 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">28/40</span></h1>
+<div class="content" data-ice="content"><h1 data-ice="title">test/unit/components_spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const rjx = require(&apos;../../dist/rjx.cjs&apos;);
+const mochaJSDOM = require(&apos;jsdom-global&apos;);
+const chai = require(&apos;chai&apos;);
+const sinon = require(&apos;sinon&apos;);
+const React = require(&apos;react&apos;);
+const ReactDOM = require(&apos;react-dom&apos;);
+const ReactDOMElements = require(&apos;react-dom-factories&apos;);
+const expect = require(&apos;chai&apos;).expect;
+const jsdom = require(&apos;jsdom&apos;);
+const { JSDOM, } = jsdom;
+chai.use(require(&apos;sinon-chai&apos;));
+require(&apos;mocha-sinon&apos;);
 
-<table class="files-summary" data-ice="files" data-use-coverage="true">
-  <thead>
-    <tr>
-      <td>File</td>
-      <td>Identifier</td>
-      <td class="coverage">Document</td>
-      <td style="display: none;">Size</td>
-      <td style="display: none;">Lines</td>
-      <td style="display: none;">Updated</td>
-    </tr>
-  </thead>
-  <tbody>
-    
-  <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/children.js.html">src/children.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-getChildrenProperty">getChildrenProperty</a></span>
-<span><a href="function/index.html#static-function-getChildrenProps">getChildrenProps</a></span>
-<span><a href="function/index.html#static-function-getRJXChildren">getRJXChildren</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
-      <td style="display: none;" data-ice="size">4333 byte</td>
-      <td style="display: none;" data-ice="lines">119</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 20:02:26 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/components.js.html#errorLines=157,9">src/components.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-advancedBinding">advancedBinding</a></span>
-<span><a href="variable/index.html#static-variable-componentMap">componentMap</a></span>
-<span><a href="function/index.html#static-function-getBoundedComponents">getBoundedComponents</a></span>
-<span><a href="function/index.html#static-function-getComponentFromLibrary">getComponentFromLibrary</a></span>
-<span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span>
-<span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span>
-<span><a href="function/index.html#static-function-getReactComponent">getReactComponent</a></span>
-<span><a href="function/index.html#static-function-getReactFunction">getReactFunction</a></span></td>
-      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">6/8</span></td>
-      <td style="display: none;" data-ice="size">8793 byte</td>
-      <td style="display: none;" data-ice="lines">188</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 21:17:42 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/main.js.html#errorLines=10,11,12,127,128,129,13,130,14,15">src/main.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-__express">__express</a></span>
-<span><a href="variable/index.html#static-variable-_rjxChildren">_rjxChildren</a></span>
-<span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span>
-<span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span>
-<span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span>
-<span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span>
-<span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span>
-<span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span>
-<span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></td>
-      <td class="coverage"><span data-ice="coverage">28 %</span><span data-ice="coverageCount" class="coverage-count">4/14</span></td>
-      <td style="display: none;" data-ice="size">6221 byte</td>
-      <td style="display: none;" data-ice="lines">131</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 15:44:21 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/props.js.html">src/props.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span>
-<span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span>
-<span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span>
-<span><a href="function/index.html#static-function-getFunctionFromProps">getFunctionFromProps</a></span>
-<span><a href="function/index.html#static-function-getFunctionProps">getFunctionProps</a></span>
-<span><a href="function/index.html#static-function-getRJXProps">getRJXProps</a></span>
-<span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span>
-<span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">8/8</span></td>
-      <td style="display: none;" data-ice="size">16073 byte</td>
-      <td style="display: none;" data-ice="lines">393</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 21:17:34 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/utils.js.html">src/utils.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-displayComponent">displayComponent</a></span>
-<span><a href="function/index.html#static-function-getAdvancedBinding">getAdvancedBinding</a></span>
-<span><a href="function/index.html#static-function-getSimplifiedRJX">getSimplifiedRJX</a></span>
-<span><a href="function/index.html#static-function-simpleRJXSyntax">simpleRJXSyntax</a></span>
-<span><a href="function/index.html#static-function-traverse">traverse</a></span>
-<span><a href="function/index.html#static-function-validSimpleRJXSyntax">validSimpleRJXSyntax</a></span>
-<span><a href="function/index.html#static-function-validateRJX">validateRJX</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">7/7</span></td>
-      <td style="display: none;" data-ice="size">16856 byte</td>
-      <td style="display: none;" data-ice="lines">418</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 20:59:28 (UTC)</td>
-    </tr>
-</tbody>
-</table>
+const sampleRJX = {
+  component: &apos;div&apos;,
+  props: {
+    id: &apos;generatedRJX&apos;,
+    className:&apos;rjx&apos;,
+  },
+  children: &apos;some div&apos;,
+};
+
+const sampleCustomElementRJX = {
+  component: &apos;div&apos;,
+  props: {
+    id: &apos;customRJX&apos;,
+    className:&apos;rjx&apos;,
+  },
+  thisprops: {
+    title: [&apos;extraname&apos;,],
+  },
+  children: [
+    {
+      component: &apos;p&apos;,
+      children:&apos;some text&apos;,
+    },
+    {
+      component: &apos;Welcome&apos;,
+      props: {
+        style: {
+          color: &apos;red&apos;,
+          fontWeight:&apos;bold&apos;,
+        },
+        name:&apos;fromCustom&apos;,
+      },
+      thisprops: {
+        title: [&apos;elementProperties&apos;, &apos;title&apos;,],
+      },
+      children:&apos;hello customElement2&apos;,
+    },
+    {
+      component: &apos;WelcomeBindSpy&apos;,
+      props: {
+        style: {
+          color: &apos;red&apos;,
+          fontWeight:&apos;bold&apos;,
+        },
+        name:&apos;fromCustom&apos;,
+      },
+      thisprops: {
+        title: [&apos;elementProperties&apos;, &apos;title&apos;,],
+      },
+      children:&apos;hello customElement2&apos;,
+    },
+    {
+      component: &apos;WelcomeNonBind&apos;,
+      props: {
+        style: {
+          color: &apos;red&apos;,
+          fontWeight:&apos;bold&apos;,
+        },
+        name:&apos;fromCustom&apos;,
+      },
+      thisprops: {
+        title: [&apos;elementProperties&apos;, &apos;title&apos;,],
+      },
+      children:&apos;hello customElement2&apos;,
+    },
+  ],
+};
+
+class Welcome extends React.Component {
+  render() {
+    return React.createElement(&apos;h1&apos;, { name: &apos;Welcome&apos;, }, `Hello, ${this.props.name} ${this.props.title||&apos;NA&apos;}`);
+  }
+}
+
+class WelcomeBindSpy extends React.Component {
+  render() {
+    return React.createElement(&apos;h1&apos;, { name: &apos;Welcome&apos;, }, `Hello, ${this.props.name} ${this.props.title||&apos;NA&apos;}`);
+  }
+}
+
+class WelcomeNonBind extends React.Component {
+  render() {
+    return React.createElement(&apos;h1&apos;, { name: &apos;Welcome&apos;, }, `Hello, ${this.props.name} ${this.props.title||&apos;NA&apos;}`);
+  }
+}
+
+describe(&apos;rjx components&apos;, function () { 
+  describe(&apos;getBoundedComponents&apos;, () =&gt; {
+    it(&apos;should bind this to reactComponents&apos;, () =&gt; {
+      const bindSpy = sinon.spy();
+      WelcomeBindSpy.bind = bindSpy;
+      const reactComponents = {
+        Welcome,
+        WelcomeNonBind,
+        WelcomeBindSpy,
+      };
+      const boundedComponents = [&apos;Welcome&apos;, &apos;WelcomeBindSpy&apos;,];
+      const customComponents = rjx._rjxComponents.getBoundedComponents({ reactComponents, boundedComponents, advancedBinding:true, });
+      const customThis = {
+        props: {
+          name:&apos;customElementTest&apos;,
+          extraname: &apos;customElementTestName&apos;,
+          elementProperties: {
+            title: &apos;AddedWithThis&apos;,
+          },
+        },
+        boundedComponents,
+        reactComponents,
+        // debug: false,
+        // logError:()=&gt;null,
+      };
+      const RJXPropCheck = rjx.getRenderedJSON.call(customThis, sampleCustomElementRJX);
+
+      expect(bindSpy.called).to.be.true;
+      expect(RJXPropCheck.props.title).to.eql(customThis.props.extraname);
+      expect(customComponents.length).to.eql(reactComponents.length);
+    });
+  });
+  describe(&apos;getComponentFromMap&apos;, () =&gt; {
+    const reactBootstrap = {
+      Welcome,
+      WelcomeNonBind,
+    };
+    const componentLibraries = {
+      reactBootstrap,
+    };
+    it(&apos;should return a function if rjx.component is not a string&apos;, () =&gt; {
+      expect(rjx._rjxComponents.getComponentFromMap({
+        rjx: {
+          component:Welcome,
+        }, })).to.be.a(&apos;function&apos;).and.to.eql(Welcome);
+    });
+    it(&apos;should return the dom element string if a valid DOM elmenet in ReactDOM&apos;, () =&gt; {
+      [&apos;div&apos;, &apos;span&apos;, &apos;p&apos;, &apos;section&apos;,].forEach(el =&gt; {
+        const rjxObj = { rjx: { component: el, }, };
+        expect(rjx._rjxComponents.getComponentFromMap(rjxObj)).to.eql(el);
+      });
+    });
+    it(&apos;should return a custom element&apos;, () =&gt; {
+      const rjxObj = {
+        rjx: {
+          component: &apos;Welcome&apos;,
+        },
+        reactComponents: {
+          Welcome,
+        },
+      };
+      expect(rjx._rjxComponents.getComponentFromMap(rjxObj)).to.eql(Welcome);
+    });
+    it(&apos;should return a component library react element&apos;, () =&gt; {
+      const rjxObj = {
+        rjx: {
+          component: &apos;reactBootstrap.Welcome&apos;,
+        },
+        componentLibraries,
+      };
+      expect(rjx._rjxComponents.getComponentFromMap(rjxObj)).to.eql(Welcome);
+    });
+    it(&apos;should handle errors&apos;, () =&gt; { 
+      const logError = sinon.spy();
+      expect(rjx._rjxComponents.getComponentFromMap.bind(null)).to.throw();
+      try {
+        rjx._rjxComponents.getComponentFromMap({ debug: true, logError, });
+      } catch (e) {
+        expect(e).to.be.a(&apos;error&apos;);
+        expect(logError.called).to.be.true;
+      }
+    });
+  });
+  describe(&apos;getComponentFromLibrary&apos;, () =&gt; {
+    const reactBootstrap = {
+      Welcome,
+      WelcomeNonBind,
+    };
+    const componentLibraries = {
+      reactBootstrap,
+    };
+    it(&apos;should return undefined if not valid&apos;, () =&gt; {
+      expect(rjx._rjxComponents.getComponentFromLibrary()).to.be.undefined;
+    });
+    it(&apos;should return a function if selecting valid component library&apos;, () =&gt; {
+      const rjxObj = {
+        rjx: {
+          component: &apos;reactBootstrap.Welcome&apos;,
+        },
+        componentLibraries,
+      };
+      expect(rjx._rjxComponents.getComponentFromLibrary(rjxObj)).to.be.eql(Welcome);
+    });
+  });
+  describe(&apos;componentMap&apos;, () =&gt; {
+    before(function () {
+      this.jsdom = mochaJSDOM();
+    });
+    it(&apos;should accept components from a window property&apos;, function () {
+      global.window.__rjx_custom_elements = {
+        Welcome,
+        WelcomeNonBind,
+        WelcomeBindSpy,
+      };
+      delete require.cache[ require.resolve(&apos;../../dist/rjx.cjs&apos;) ];
+      const window_test_rjx = require(&apos;../../dist/rjx.cjs&apos;);
+
+      expect(window_test_rjx._rjxComponents.componentMap).to.haveOwnProperty(&apos;Welcome&apos;);
+      expect(window_test_rjx._rjxComponents.componentMap).to.haveOwnProperty(&apos;WelcomeNonBind&apos;);
+      expect(window_test_rjx._rjxComponents.componentMap).to.haveOwnProperty(&apos;WelcomeBindSpy&apos;);
+    });    
+    after(function () {
+      this.jsdom();
+    });
+  });
+  describe(&apos;getFunctionFromEval&apos;, () =&gt; {
+    const getFunctionFromEval = rjx._rjxComponents.getFunctionFromEval;
+    it(&apos;should return a new function&apos;, () =&gt; {
+      const myFunc = getFunctionFromEval({
+        body: &apos;return 3;&apos;,
+      });
+      expect(myFunc()).to.eql(3);
+    });
+  });
+  describe(&apos;getReactComponent&apos;, () =&gt; {
+    const getReactComponent = rjx._rjxComponents.getReactComponent;
+    it(&apos;should create a React Component&apos;, () =&gt; {
+      const MyCustomComponent = getReactComponent({
+        componentDidMount:{
+          body:&apos;console.log(\&apos;mounted\&apos;,this.props)&apos;,
+          arguments:[],
+        },
+        render:{
+          body:{
+            component:&apos;p&apos;,
+            children:[
+              {
+                component:&apos;span&apos;,
+                children: &apos;My Custom React Component Status: &apos;,
+              },
+              {
+                component:&apos;span&apos;,
+                thisprops:{
+                  children:[&apos;status&apos;,],
+                },
+              },
+            ],
+          },
+        },
+      });
+      expect(MyCustomComponent).to.be.a(&apos;function&apos;);
+
+    });
+  });
+});</code></pre>
+
 </div>
 
 <footer class="footer">

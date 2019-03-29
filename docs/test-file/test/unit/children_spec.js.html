@@ -1,7 +1,7 @@
 <!DOCTYPE html><html><head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href>
-  <title data-ice="title">Source | RJX</title>
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">test/unit/children_spec.js | RJX</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -74,93 +74,246 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">28/40</span></h1>
+<div class="content" data-ice="content"><h1 data-ice="title">test/unit/children_spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const rjx = require(&apos;../../dist/rjx.cjs&apos;);
+const mochaJSDOM = require(&apos;jsdom-global&apos;);
+const chai = require(&apos;chai&apos;);
+const sinon = require(&apos;sinon&apos;);
+const React = require(&apos;react&apos;);
+const ReactDOM = require(&apos;react-dom&apos;);
+const expect = require(&apos;chai&apos;).expect;
+const jsdom = require(&apos;jsdom&apos;);
+const { JSDOM, } = jsdom;
+chai.use(require(&apos;sinon-chai&apos;));
+require(&apos;mocha-sinon&apos;);
 
-<table class="files-summary" data-ice="files" data-use-coverage="true">
-  <thead>
-    <tr>
-      <td>File</td>
-      <td>Identifier</td>
-      <td class="coverage">Document</td>
-      <td style="display: none;">Size</td>
-      <td style="display: none;">Lines</td>
-      <td style="display: none;">Updated</td>
-    </tr>
-  </thead>
-  <tbody>
-    
-  <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/children.js.html">src/children.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-getChildrenProperty">getChildrenProperty</a></span>
-<span><a href="function/index.html#static-function-getChildrenProps">getChildrenProps</a></span>
-<span><a href="function/index.html#static-function-getRJXChildren">getRJXChildren</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
-      <td style="display: none;" data-ice="size">4333 byte</td>
-      <td style="display: none;" data-ice="lines">119</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 20:02:26 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/components.js.html#errorLines=157,9">src/components.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-advancedBinding">advancedBinding</a></span>
-<span><a href="variable/index.html#static-variable-componentMap">componentMap</a></span>
-<span><a href="function/index.html#static-function-getBoundedComponents">getBoundedComponents</a></span>
-<span><a href="function/index.html#static-function-getComponentFromLibrary">getComponentFromLibrary</a></span>
-<span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span>
-<span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span>
-<span><a href="function/index.html#static-function-getReactComponent">getReactComponent</a></span>
-<span><a href="function/index.html#static-function-getReactFunction">getReactFunction</a></span></td>
-      <td class="coverage"><span data-ice="coverage">75 %</span><span data-ice="coverageCount" class="coverage-count">6/8</span></td>
-      <td style="display: none;" data-ice="size">8793 byte</td>
-      <td style="display: none;" data-ice="lines">188</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 21:17:42 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/main.js.html#errorLines=10,11,12,127,128,129,13,130,14,15">src/main.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-__express">__express</a></span>
-<span><a href="variable/index.html#static-variable-_rjxChildren">_rjxChildren</a></span>
-<span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span>
-<span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span>
-<span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span>
-<span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span>
-<span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span>
-<span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span>
-<span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></td>
-      <td class="coverage"><span data-ice="coverage">28 %</span><span data-ice="coverageCount" class="coverage-count">4/14</span></td>
-      <td style="display: none;" data-ice="size">6221 byte</td>
-      <td style="display: none;" data-ice="lines">131</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 15:44:21 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/props.js.html">src/props.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span>
-<span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span>
-<span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span>
-<span><a href="function/index.html#static-function-getFunctionFromProps">getFunctionFromProps</a></span>
-<span><a href="function/index.html#static-function-getFunctionProps">getFunctionProps</a></span>
-<span><a href="function/index.html#static-function-getRJXProps">getRJXProps</a></span>
-<span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span>
-<span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">8/8</span></td>
-      <td style="display: none;" data-ice="size">16073 byte</td>
-      <td style="display: none;" data-ice="lines">393</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 21:17:34 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/utils.js.html">src/utils.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-displayComponent">displayComponent</a></span>
-<span><a href="function/index.html#static-function-getAdvancedBinding">getAdvancedBinding</a></span>
-<span><a href="function/index.html#static-function-getSimplifiedRJX">getSimplifiedRJX</a></span>
-<span><a href="function/index.html#static-function-simpleRJXSyntax">simpleRJXSyntax</a></span>
-<span><a href="function/index.html#static-function-traverse">traverse</a></span>
-<span><a href="function/index.html#static-function-validSimpleRJXSyntax">validSimpleRJXSyntax</a></span>
-<span><a href="function/index.html#static-function-validateRJX">validateRJX</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">7/7</span></td>
-      <td style="display: none;" data-ice="size">16856 byte</td>
-      <td style="display: none;" data-ice="lines">418</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 20:59:28 (UTC)</td>
-    </tr>
-</tbody>
-</table>
+const sampleRJX = {
+  component: &apos;div&apos;,
+  props: {
+    id: &apos;generatedRJX&apos;,
+    className:&apos;rjx&apos;,
+  },
+  children: [
+    {
+      component: &apos;p&apos;,
+      props: {
+        style: {
+          color: &apos;red&apos;,
+          fontWeight:&apos;bold&apos;,
+        },
+      },
+      children:&apos;hello world&apos;,
+    },
+    {
+      component: &apos;div&apos;,
+      children: [
+        {
+          component: &apos;ul&apos;,
+          children: [
+            {
+              component: &apos;li&apos;,
+              children:&apos;hey&apos;,
+            },
+            {
+              component: &apos;li&apos;,
+              children:&apos;in&apos;,
+            },
+            {
+              component: &apos;li&apos;,
+              children:&apos;list&apos;,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+const passableRJX = {
+  component: &apos;div&apos;,
+  props: {
+    title: &apos;this is passed&apos;,
+    style: {
+      color:&apos;red&apos;,
+    },
+  },
+  passprops: true,
+  children: [
+    {
+      component: &apos;span&apos;,
+      children:&apos;should have props&apos;,
+    },
+    {
+      component: &apos;p&apos;,
+      props: {
+        style: {
+          color:&apos;blue&apos;,
+        },
+      },
+      children:&apos;but no style&apos;,
+    },
+  ],
+};
+
+describe(&apos;rjx&apos;, function () { 
+  describe(&apos;getChildrenProperty&apos;, () =&gt; {
+    const getChildrenProperty = rjx._rjxChildren.getChildrenProperty;
+    it(&apos;should return the children of an RJX Object&apos;, () =&gt; {
+      const RJXChildren = getChildrenProperty({ rjx: sampleRJX, });
+      const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], });
+      expect(RJXChildren).to.be.an(&apos;array&apos;);
+      expect(RJXChildren.length).to.eql(sampleRJX.children.length);
+      expect(RJXChildrenPTag).to.be.a(&apos;string&apos;);
+      expect(RJXChildrenPTag).to.eql(sampleRJX.children[0].children);
+    });
+    it(&apos;should get the children from rjx.props._children property&apos;, () =&gt; {
+      const testRJX = {
+        component: &apos;div&apos;,
+        props: {
+          _children:&apos;some text&apos;,
+        },
+      };
+      const testRJX2 = {
+        component: &apos;div&apos;,
+        props: {
+          _children: [
+            {
+              component: &apos;p&apos;,
+              children:&apos;nested p tag&apos;,
+            },
+            {
+              component: &apos;p&apos;,
+              children:&apos;nested p tag&apos;,
+            },
+          ],
+        },
+      };
+      const testRJX3 = {
+        component: &apos;div&apos;,
+        props: {
+          _children: &apos;some text&apos;,
+          children:&apos;ignore this prop for children&apos;,
+        },
+        children:[
+          {
+            component: &apos;p&apos;,
+            children:&apos;should ignore nested p tag&apos;,
+          },
+          {
+            component: &apos;p&apos;,
+            children:&apos;should ignore nested p tag&apos;,
+          },
+        ],
+      };
+      const RJXChildren = getChildrenProperty({ rjx: testRJX, });
+      const RJXChildren2 = getChildrenProperty({ rjx: testRJX2, });
+      const RJXChildren3 = getChildrenProperty({ rjx: testRJX3, });
+      expect(RJXChildren).to.be.a(&apos;string&apos;);
+      expect(RJXChildren).to.eql(testRJX.props._children);
+      expect(RJXChildren2).to.be.an(&apos;array&apos;);
+      expect(RJXChildren2.length).to.eql(testRJX2.props._children.length);
+      expect(RJXChildren3).to.be.a(&apos;string&apos;);
+      expect(RJXChildren3).to.eql(testRJX3.props._children);
+    });
+    it(&apos;should get the children from rjx.props.children property&apos;, () =&gt; {
+      const testRJX = {
+        component: &apos;div&apos;,
+        props: {
+          children:&apos;some text&apos;,
+        },
+      };
+      const testRJX2 = {
+        component: &apos;div&apos;,
+        props: {
+          children: [
+            {
+              component: &apos;p&apos;,
+              children:&apos;nested p tag&apos;,
+            },
+            {
+              component: &apos;p&apos;,
+              children:&apos;nested p tag&apos;,
+            },
+          ],
+        },
+      };
+      const testRJX3 = {
+        component: &apos;div&apos;,
+        props: {
+          children:&apos;ignore this prop for children&apos;,
+        },
+        children:[
+          {
+            component: &apos;p&apos;,
+            children:&apos;should ignore nested p tag&apos;,
+          },
+          {
+            component: &apos;p&apos;,
+            children:&apos;should ignore nested p tag&apos;,
+          },
+        ],
+      };
+      const testRJX4 = {
+        component: &apos;div&apos;,
+        props: {
+          children:()=&gt;&apos;not valid, should be null&apos;,
+        },
+      };
+      const RJXChildren = getChildrenProperty({ rjx: testRJX, });
+      const RJXChildren2 = getChildrenProperty({ rjx: testRJX2, });
+      const RJXChildren3 = getChildrenProperty({ rjx: testRJX3, });
+      const RJXChildren4 = getChildrenProperty({ rjx: testRJX4, });
+      expect(RJXChildren).to.be.a(&apos;string&apos;);
+      expect(RJXChildren).to.eql(testRJX.props.children);
+      expect(RJXChildren2).to.be.an(&apos;array&apos;);
+      expect(RJXChildren2.length).to.eql(testRJX2.props.children.length);
+      expect(RJXChildren3).to.be.a(&apos;array&apos;);
+      expect(RJXChildren3).to.eql(testRJX3.children);
+      expect(RJXChildren4).to.be.a(&apos;function&apos;);
+    });
+  });
+  describe(&apos;getChildrenProps&apos;, () =&gt; {
+    const getChildrenProps = rjx._rjxChildren.getChildrenProps;
+    const getChildrenProperty = rjx._rjxChildren.getChildrenProperty;
+    it(&apos;should return child RJX if not passing props&apos;, () =&gt; {
+      const renderIndex = 1;
+      const childrjx = getChildrenProperty({ rjx: sampleRJX, })[0];
+      const childProps = getChildrenProps({ rjx: sampleRJX, childrjx, renderIndex, });
+      expect(childProps).to.eq(childrjx);
+    });
+    it(&apos;should pass props except for styles&apos;, () =&gt; {
+      const renderIndex = 1;
+      const childrjx_span = getChildrenProperty({ rjx: passableRJX, })[0];
+      const childrjx_p = getChildrenProperty({ rjx: passableRJX, })[1];
+      const childProps_span = getChildrenProps({ rjx: passableRJX, childrjx:childrjx_span, renderIndex, });
+      const childProps_p = getChildrenProps({ rjx: passableRJX, childrjx:childrjx_p, renderIndex, });
+      expect(childProps_span.props.title).to.eq(passableRJX.props.title);
+      expect(childProps_p.props.title).to.eq(passableRJX.props.title);
+      expect(childProps_p.props.style.color).to.eq(passableRJX.children[ 1 ].props.style.color);
+      expect(childProps_p.props.key).to.not.eq(renderIndex);
+      expect(childProps_span.props.key).to.not.eq(renderIndex);
+    });
+  });
+  describe(&apos;getRJXChildren&apos;, () =&gt; {
+    const getRJXChildren = rjx._rjxChildren.getRJXChildren;
+    it(&apos;should return RJX Child Objects&apos;, () =&gt; {
+      const renderIndex = 1;
+      const RJXChildren = getRJXChildren.call({}, {
+        rjx: passableRJX,
+        renderIndex,
+      });
+      RJXChildren.forEach(ReactiveJSON =&gt; {
+        expect(ReactiveJSON).to.be.an(&apos;object&apos;);
+        expect(ReactiveJSON).to.haveOwnProperty(&apos;$$typeof&apos;);
+        expect(ReactiveJSON).to.haveOwnProperty(&apos;type&apos;);
+        expect(ReactiveJSON).to.haveOwnProperty(&apos;key&apos;);
+        expect(ReactiveJSON).to.haveOwnProperty(&apos;ref&apos;);
+        expect(ReactiveJSON).to.haveOwnProperty(&apos;props&apos;);
+      });
+    });
+  });
+});</code></pre>
+
 </div>
 
 <footer class="footer">

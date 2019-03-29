@@ -167,14 +167,14 @@ export function getReactComponentProps(options = {}) {
 /**
  * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
  * @param {Object} options 
- * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or this.props.onClick 
+ * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or func:this.props.onClick  or func:inline.myInlineFunction
  * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Function} returns a function from this.props or window functions
  * @example
  * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
  */
 export function getFunctionFromProps(options) {
-  const { propFunc='func:', } = options;
+  const { propFunc='func:', propBody, rjx, } = options;
   // eslint-disable-next-line
   const { logError = console.error,  debug, } = this;
   const windowObject = this.window || global.window || {};
@@ -183,7 +183,32 @@ export function getFunctionFromProps(options) {
     const functionNameArray = functionNameString.split('.');
     const functionName = (functionNameArray.length) ? functionNameArray[ functionNameArray.length - 1 ] : '';
 
-    if (propFunc.indexOf('func:window') !== -1) {
+    if (propFunc.includes('func:inline')) {
+      // eslint-disable-next-line
+      let InlineFunction;
+      if (rjx.__functionargs) {
+        const args = [].concat(rjx.__functionargs);
+        args.push(propBody);
+        InlineFunction = Function.prototype.constructor.apply({}, args);
+      } else {
+        InlineFunction = Function('param1', 'param2', '"use strict";' + propBody);
+      }
+      const [propFuncName, funcName, ] = propFunc.split('.');
+      
+      Object.defineProperty(
+        InlineFunction,
+        'name',
+        {
+          value: funcName,
+        }
+      );
+      if (rjx.__functionargs) {
+        const boundArgs = [this,].concat(rjx.__functionargs.map(arg => rjx.props[ arg ]));
+        return InlineFunction.bind(...boundArgs);
+      } else {
+        return InlineFunction.bind(this);
+      }
+    } else if (propFunc.indexOf('func:window') !== -1) {
       if (functionNameArray.length === 3) {
         try {
           return windowObject[ functionNameArray[ 1 ] ][ functionName ].bind(this);
@@ -232,7 +257,11 @@ export function getFunctionProps(options = {}) {
   //Allowing for window functions
   Object.keys(funcProps).forEach(key => {
     if (typeof funcProps[key] ==='string' && funcProps[key].indexOf('func:') !== -1 ){
-      allProps[ key ] = getFunction({ propFunc: funcProps[ key ], });
+      allProps[ key ] = getFunction({
+        propFunc: funcProps[ key ],
+        propBody: (rjx.__inline)?rjx.__inline[ key ]:'',
+        rjx,
+      });
     } 
   });
   return allProps;
