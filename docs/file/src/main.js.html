@@ -1,0 +1,231 @@
+<!DOCTYPE html><html><head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/main.js | RJX</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-112697260-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-112697260-2');
+  </script><meta name="description" content="Reactive JSON (RJX) takes a RXJ JSON object and renders React components. RJX lets you get up and running with React without using JavaScript."><meta property="og:type" content="website"><meta property="og:url" content="https://repetere.github.io/rjx"><meta property="og:site_name" content="RJX"><meta property="og:title" content="RJX"><meta property="og:image" content="https://rjx.io/favicon.png"><meta property="og:description" content="Reactive JSON (RJX) takes a RXJ JSON object and renders React components. RJX lets you get up and running with React without using JavaScript."><meta property="og:author" content="https://github.com/repetere"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="RJX"><meta property="twitter:description" content="Reactive JSON (RJX) takes a RXJ JSON object and renders React components. RJX lets you get up and running with React without using JavaScript."><meta property="twitter:image" content="https://rjx.io/favicon.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/repetere/rjx"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenProperty">getChildrenProperty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenProps">getChildrenProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRJXChildren">getRJXChildren</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBoundedComponents">getBoundedComponents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromLibrary">getComponentFromLibrary</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponent">getReactComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunction">getReactFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromProps">getFunctionFromProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionProps">getFunctionProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRJXProps">getRJXProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-displayComponent">displayComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getAdvancedBinding">getAdvancedBinding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getSimplifiedRJX">getSimplifiedRJX</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-simpleRJXSyntax">simpleRJXSyntax</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-traverse">traverse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validSimpleRJXSyntax">validSimpleRJXSyntax</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateRJX">validateRJX</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-advancedBinding">advancedBinding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-componentMap">componentMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxChildren">_rjxChildren</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/main.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">// import React, { createElement, } from &apos;react&apos;;
+import React from &apos;react&apos;;
+import ReactDOM from &apos;react-dom&apos;;
+import ReactDOMServer from &apos;react-dom/server&apos;;
+
+import * as rjxComponents from &apos;./components&apos;;
+import * as rjxProps from &apos;./props&apos;;
+import * as rjxChildren from &apos;./children&apos;;
+import * as rjxUtils from &apos;./utils&apos;;
+const createElement = React.createElement;
+const { componentMap, getComponentFromMap, getBoundedComponents, } = rjxComponents;
+const { getComputedProps, } = rjxProps;
+const { getRJXChildren, } = rjxChildren;
+const { displayComponent, } = rjxUtils;
+export let renderIndex = 0;
+
+/**
+ * Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
+ * @example
+ * // Uses react to create &lt;!DOCTYPE html&gt;&lt;body&gt;&lt;div id=&quot;myApp&quot;&gt;&lt;div class=&quot;rjx-generated&quot;&gt;&lt;p style=&quot;color:red;&quot;&gt;hello world&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&lt;/body&gt;
+ * rjx.rjxRender({ rjx: { component: &apos;div&apos;, props:{className:&apos;rjx-generated&apos;,children:[{ component:&apos;p&apos;,props:{style:{color:&apos;red&apos;}}, children:&apos;hello world&apos; }]}}, querySelector:&apos;#myApp&apos;, });
+ * @param {object} config - options used to inject html via ReactDOM.render
+ * @param {object} config.rjx - any valid RJX JSON object
+ * @param {object} config.resources - any additional resource used for asynchronous properties
+ * @param {string} config.querySelector - selector for document.querySelector
+ * @property {object} this - options for getRenderedJSON
+ */
+export function rjxRender(config = {}) {
+  const { rjx, resources, querySelector, options, DOM, } = config;
+  ReactDOM.render(
+    getRenderedJSON.call(this || {}, rjx, resources, options),
+    DOM || document.querySelector(querySelector)
+  );
+}
+
+/**
+ * Use ReactDOMServer.renderToString to render html from RJX
+ * @example
+ * // Uses react to create &lt;div class=&quot;rjx-generated&quot;&gt;&lt;p style=&quot;color:red;&quot;&gt;hello world&lt;/p&gt;&lt;/div&gt;
+ * rjx.rjxHTMLString({ rjx: { component: &apos;div&apos;, props:{className:&apos;rjx-generated&apos;,children:[{ component:&apos;p&apos;,props:{style:{color:&apos;red&apos;}}, children:&apos;hello world&apos; }]}}, });
+ * @param {object} config - options used to inject html via ReactDOM.render
+ * @param {object} config.rjx - any valid RJX JSON object
+ * @param {object} config.resources - any additional resource used for asynchronous properties
+ * @property {object} this - options for getRenderedJSON
+ * @returns {string} React genereated html via RJX JSON
+ */
+export function rjxHTMLString(config = {}) {
+  const { rjx, resources, } = config;
+  return ReactDOMServer.renderToString(getRenderedJSON.call(this || {}, rjx, resources));
+}
+
+/**
+ * Use React.createElement and RJX JSON to create React elements
+ * @example
+ * // Uses react to create the equivalent JSX &lt;myComponent style={{color:blue}}&gt;hello world&lt;/myComponent&gt;
+ * rjx.getRenderedJSON({component:&apos;myCompnent&apos;,props:{style:{color:&apos;blue&apos;}},children:&apos;hello world&apos;})
+ * @param {object} rjx - any valid RJX JSON object
+ * @param {object} resources - any additional resource used for asynchronous properties
+ * @property {object} this - options for getRenderedJSON
+ * @property {Object} [this.componentLibraries] - react components to render with RJX
+ * @property {boolean} [this.debug=false] - use debug messages
+ * @property {function} [this.logError=console.error] - error logging function
+ * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
+ * @returns {function} React element via React.createElement
+ */
+export function getRenderedJSON(rjx = {}, resources = {}) {
+  // eslint-disable-next-line
+  const { componentLibraries = {}, debug = false, logError = console.error, boundedComponents = [], } = this || {};
+  // const componentLibraries = this.componentLibraries;
+  if (rjx.type) rjx.component = rjx.type;
+  if (rjxUtils.validSimpleRJXSyntax(rjx)) rjx = rjxUtils.simpleRJXSyntax(rjx);
+  if (!rjx.component) return createElement(&apos;span&apos;, {}, debug ? &apos;Error: Missing Component Object&apos; : &apos;&apos;);
+  try {
+    const components = Object.assign({}, componentMap, this.reactComponents);
+
+    const reactComponents = (boundedComponents.length)
+      ? getBoundedComponents.call(this, { boundedComponents, reactComponents: components, })
+      : components;
+    renderIndex++;
+    const element = getComponentFromMap({ rjx, reactComponents, componentLibraries, debug, logError, });
+    const props = getComputedProps.call(this, { rjx, resources, renderIndex, componentLibraries, debug, logError, });
+    const displayElement = (rjx.comparisonprops)
+      ? displayComponent.call(this, { rjx, props, renderIndex, componentLibraries, debug, })
+      : true;
+    
+    if (displayElement) {
+      const children = getRJXChildren.call(this, { rjx, props, resources, renderIndex, });
+      return createElement(element, props, children);
+    } else {
+      return null;
+    }
+  } catch (e) {
+    if (debug) {
+      logError({ rjx, resources, }, &apos;this&apos;, this);
+      logError(e, (e.stack) ? e.stack : &apos;no stack&apos;);
+    }
+    throw e;
+  }
+}
+
+/**
+ * Use RJX for express view rendering
+ * @param {string} filePath - path to rjx express view 
+ * @param {object} options - property used for express view {locals}
+ * @param {object} options.__boundConfig - property used to bind this object for RJX, can be used to add custom components
+ * @param {string} [options.__DOCTYPE=&quot;&lt;!DOCTYPE html&gt;&quot;] - html doctype string
+ * @param {*} callback 
+ */
+export function __express(filePath, options, callback) {
+  try {
+    const resources = Object.assign({}, options);
+    delete resources.__boundConfig;
+    delete resources.__DOCTYPE;
+    delete resources.__rjx;
+    const rjxModule = options.__rjx || require(filePath);
+    const rjxRenderedString = rjxHTMLString.call(options.__boundConfig || {}, {
+      rjx: rjxModule,
+      resources,
+    });
+    callback(null, `${options.__DOCTYPE || &apos;&lt;!DOCTYPE html&gt;&apos;}
+${rjxRenderedString}`);
+  } catch (e) {
+    callback(e);
+  }
+}
+
+export function __getReact() {
+  return React;
+}
+
+export const _rjxChildren = rjxChildren;
+export const _rjxComponents = rjxComponents;
+export const _rjxProps = rjxProps;
+export const _rjxUtils = rjxUtils;
+
+export default getRenderedJSON;</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+
+
+</body></html>

@@ -1,146 +1,193 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+<!DOCTYPE html><html><head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">Home | RJX</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-112697260-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-112697260-2');
+  </script><meta name="description" content="Reactive JSON (RJX) takes a RXJ JSON object and renders React components. RJX lets you get up and running with React without using JavaScript."><meta property="og:type" content="website"><meta property="og:url" content="https://repetere.github.io/rjx"><meta property="og:site_name" content="RJX"><meta property="og:title" content="RJX"><meta property="og:image" content="https://rjx.io/favicon.png"><meta property="og:description" content="Reactive JSON (RJX) takes a RXJ JSON object and renders React components. RJX lets you get up and running with React without using JavaScript."><meta property="og:author" content="https://github.com/repetere"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="RJX"><meta property="twitter:description" content="Reactive JSON (RJX) takes a RXJ JSON object and renders React components. RJX lets you get up and running with React without using JavaScript."><meta property="twitter:image" content="https://rjx.io/favicon.png"></head>
+<body class="layout-container" data-ice="rootContainer">
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-</head>
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/repetere/rjx"><img width="20px" src="./image/github.png"></a></header>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Home</h1>
-
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
     
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenProperty">getChildrenProperty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenProps">getChildrenProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRJXChildren">getRJXChildren</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBoundedComponents">getBoundedComponents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromLibrary">getComponentFromLibrary</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponent">getReactComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunction">getReactFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromProps">getFunctionFromProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionProps">getFunctionProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRJXProps">getRJXProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-displayComponent">displayComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getAdvancedBinding">getAdvancedBinding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getSimplifiedRJX">getSimplifiedRJX</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-simpleRJXSyntax">simpleRJXSyntax</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-traverse">traverse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validSimpleRJXSyntax">validSimpleRJXSyntax</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateRJX">validateRJX</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-advancedBinding">advancedBinding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-componentMap">componentMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxChildren">_rjxChildren</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
+</ul>
+</div>
+</nav>
 
-
-
-    
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-    <section>
-        <article><h1>Reactive JSON (RJX)</h1><p><a href="https://coveralls.io/github/repetere/rjx?branch=master"><img src="https://coveralls.io/repos/github/repetere/rjx/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://travis-ci.org/repetere/rjx"><img src="https://travis-ci.org/repetere/rjx.svg?branch=master" alt="Build Status"></a></p>
-<h2>Description</h2><p><strong>Reactive JSON (RJX)</strong> takes a RXJ JSON object and renders React components. <strong>RJX</strong> lets you get up and running with React without using JavaScript.</p>
-<p>RJX was created to remove all the complexities around environment setup, and configuration of React applications (Babel, Webpack, Rollup, etc) and make declarative user interfaces using Machine Learning and Natural Language Processing. Using RJX let's any back end application (Elixir, Go, Python, etc) render a server side React application.</p>
-<h2>Installation</h2><pre class="prettyprint source lang-sh"><code>$ npm i rjx</code></pre><h3><a href="https://github.com/repetere/rjx/blob/master/docs/api.md">Full Documentation</a></h3><h3>Examples ( <a href="https://github.com/repetere/rjx/blob/master/dist/example.html">HTML/Browser Example</a> )</h3><pre class="prettyprint source lang-javascript"><code>import { default as rjx } from 'rjx';
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="reactive-json--rjx-">Reactive JSON (RJX)</h1><p><a href="https://coveralls.io/github/repetere/rjx?branch=master"><img src="https://coveralls.io/repos/github/repetere/rjx/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://travis-ci.org/repetere/rjx"><img src="https://travis-ci.org/repetere/rjx.svg?branch=master" alt="Build Status"></a></p>
+<h2 id="description">Description</h2><p><strong>Reactive JSON (RJX)</strong> takes a RXJ JSON object and renders React components. <strong>RJX</strong> lets you get up and running with React without using JavaScript.</p>
+<p>RJX was created to remove all the complexities around environment setup, and configuration of React applications (Babel, Webpack, Rollup, etc) and make declarative user interfaces using Machine Learning and Natural Language Processing. Using RJX let&apos;s any back end application (Elixir, Go, Python, etc) render a server side React application.</p>
+<h2 id="installation">Installation</h2><pre><code class="lang-sh"><code class="source-code prettyprint">$ npm i rjx</code>
+</code></pre>
+<h3 id="-a-href--https---github-com-repetere-rjx-blob-master-docs-api-md--full-documentation--a-"><a href="https://github.com/repetere/rjx/blob/master/docs/api.md">Full Documentation</a></h3><h3 id="examples----a-href--https---github-com-repetere-rjx-blob-master-dist-example-html--html-browser-example--a---">Examples ( <a href="https://github.com/repetere/rjx/blob/master/dist/example.html">HTML/Browser Example</a> )</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">import { default as rjx } from &apos;rjx&apos;;
 //Rendering React Components
-rjx.getRenderedJSON({component:'p',props:{style:{color:'blue'}},children:'hello world'});
-// => JSX Equivalent: &lt;p style={{color:'blue'}}>hello world&lt;/p>
+rjx.getRenderedJSON({component:&apos;p&apos;,props:{style:{color:&apos;blue&apos;}},children:&apos;hello world&apos;});
+// =&gt; JSX Equivalent: &lt;p style={{color:&apos;blue&apos;}}&gt;hello world&lt;/p&gt;
 
 //Generating HTML strings
-rjx.rjxHTMLString({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
-// => '&lt;div class=&quot;rjx-generated&quot;>&lt;p style=&quot;color:red;&quot;>hello world&lt;/p>&lt;/div>'
+rjx.rjxHTMLString({ rjx: { component: &apos;div&apos;, props:{className:&apos;rjx-generated&apos;,children:[{ component:&apos;p&apos;,props:{style:{color:&apos;red&apos;}}, children:&apos;hello world&apos; }]}}, });
+// =&gt; &apos;&lt;div class=&quot;rjx-generated&quot;&gt;&lt;p style=&quot;color:red;&quot;&gt;hello world&lt;/p&gt;&lt;/div&gt;&apos;
 
 //Rendering HTML Dom with React
-rjx.rjxRender({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, querySelector:'#myApp', });
-// &lt;!DOCTYPE html>
-//  &lt;body>
-//    &lt;div id=&quot;myApp&quot;>
-//      &lt;div class=&quot;rjx-generated&quot;>
-//        &lt;p style=&quot;color:red;&quot;>hello world&lt;/p>
-//      &lt;/div>
-//    &lt;/div>
-// &lt;/body></code></pre><h3>RJX JSON Spec</h3><p>RXJ JSON is valid JSON that more or less mimics JSX in JSON notation with a couple of special properties. The properties for RXJ JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
-<pre class="prettyprint source lang-javascript"><code>React.createElement(
+rjx.rjxRender({ rjx: { component: &apos;div&apos;, props:{className:&apos;rjx-generated&apos;,children:[{ component:&apos;p&apos;,props:{style:{color:&apos;red&apos;}}, children:&apos;hello world&apos; }]}}, querySelector:&apos;#myApp&apos;, });
+// &lt;!DOCTYPE html&gt;
+//  &lt;body&gt;
+//    &lt;div id=&quot;myApp&quot;&gt;
+//      &lt;div class=&quot;rjx-generated&quot;&gt;
+//        &lt;p style=&quot;color:red;&quot;&gt;hello world&lt;/p&gt;
+//      &lt;/div&gt;
+//    &lt;/div&gt;
+// &lt;/body&gt;</code>
+</code></pre>
+<h3 id="rjx-json-spec">RJX JSON Spec</h3><p>RXJ JSON is valid JSON that more or less mimics JSX in JSON notation with a couple of special properties. The properties for RXJ JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">React.createElement(
   type,
   [props],
   [...children]
-)</code></pre><p>You can pass React component libraries for additional components, or you own custom components (see Advanced, also see Full Spec).</p>
-<pre class="prettyprint source lang-javascript"><code>//sample RJX
+)</code>
+</code></pre>
+<p>You can pass React component libraries for additional components, or you own custom components (see Advanced, also see Full Spec).</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">//sample RJX
 {
-  component:'ul',
+  component:&apos;ul&apos;,
   props:{
-    className:'list-class',
+    className:&apos;list-class&apos;,
   },
   children:[
     {
-      component:'li',
-      children:'first bullet'
+      component:&apos;li&apos;,
+      children:&apos;first bullet&apos;
     },
     {
-      component:'li',
-      children:'second bullet',
+      component:&apos;li&apos;,
+      children:&apos;second bullet&apos;,
     }
   ]
-}</code></pre><pre class="prettyprint source lang-JSX"><code>// Equivalent JSX
-&lt;ul className=&quot;list-class&quot;>
-  &lt;li>first bullet&lt;/li>
-  &lt;li>second bullet&lt;/li>
-&lt;/ul></code></pre><h4>Validating RJX JSON</h4><pre class="prettyprint source lang-javascript"><code>import { default as rjx } from 'rjx';
+}
+</code>
+</code></pre>
+<pre><code class="lang-JSX"><code class="source-code prettyprint">// Equivalent JSX
+&lt;ul className=&quot;list-class&quot;&gt;
+  &lt;li&gt;first bullet&lt;/li&gt;
+  &lt;li&gt;second bullet&lt;/li&gt;
+&lt;/ul&gt;</code>
+</code></pre>
+<h4 id="validating-rjx-json">Validating RJX JSON</h4><pre><code class="lang-javascript"><code class="source-code prettyprint">import { default as rjx } from &apos;rjx&apos;;
 
 //use the built in RJX Validator
 const valid_rjx_json = {
-  component:'p',
+  component:&apos;p&apos;,
   props:{
-    className:'title',
+    className:&apos;title&apos;,
   },
-  children:'hello world'
+  children:&apos;hello world&apos;
 };
 const invalid_rjx_json = {
   props:{
-    className:'title',
+    className:&apos;title&apos;,
   },
-  children:'hello world'
+  children:&apos;hello world&apos;
 };
 const multiple_invalid_rjx_json = {
-  props:'must be obj',
-  children:'hello world'
+  props:&apos;must be obj&apos;,
+  children:&apos;hello world&apos;
 };
 
-rjx._rjxUtils.validateRJX(testRJXJSON) // => true
-rjx._rjxUtils.validateRJX(invalid_rjx_json) // => throws SyntaxError('[0001] Missing React Component')
-rjx._rjxUtils.validateRJX(multiple_invalid_rjx_json, true) // =>
+rjx._rjxUtils.validateRJX(testRJXJSON) // =&gt; true
+rjx._rjxUtils.validateRJX(invalid_rjx_json) // =&gt; throws SyntaxError(&apos;[0001] Missing React Component&apos;)
+rjx._rjxUtils.validateRJX(multiple_invalid_rjx_json, true) // =&gt;
 // [ [Error: [0001] Missing React Component],[ Error: [0002]  props must be an Object / valid React props] ]
 
 /**
  * @param {Object} rjx - RJX JSON to validate 
  * @param {Boolean} [returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
  * /
-function validateRJX(rjx = {}, returnAllErrors= false);</code></pre><h3>Simple RJX Syntax</h3><p>If you want to save time, you can use the property name as the component and define properties for a cleaner simple syntax</p>
-<pre class="prettyprint source lang-javascript"><code>//shorthand simple rjx
+function validateRJX(rjx = {}, returnAllErrors= false);</code>
+</code></pre>
+<h3 id="simple-rjx-syntax">Simple RJX Syntax</h3><p>If you want to save time, you can use the property name as the component and define properties for a cleaner simple syntax</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">//shorthand simple rjx
 {
   ul: {
     props:{
-      className:'list-class',
+      className:&apos;list-class&apos;,
     },
     children:[
       {
         li: {
-          children:'first bullet',
+          children:&apos;first bullet&apos;,
         },
       },
       {
         li: {
-          children:'second bullet',
+          children:&apos;second bullet&apos;,
         },
       }
     ]
   }
-}</code></pre><h3>RJX Module</h3><pre class="prettyprint source lang-javascript"><code>&quot;rjx&quot; : {
+}</code>
+</code></pre>
+<h3 id="rjx-module">RJX Module</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">&quot;rjx&quot; : {
   getRenderedJSON: [Function: getRenderedJSON], //Use React.createElement and RJX JSON to create React elements
   rjxHTMLString: [Function: rjxHTMLString], //Use ReactDOMServer.renderToString to render html from RJX
   rjxRender: [Function: getRenderedJSON], //Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
@@ -157,14 +204,14 @@ function validateRJX(rjx = {}, returnAllErrors= false);</code></pre><h3>Simple R
     getReactComponent: [Function: getReactComponent], // returns a react component and support lifecycle functions
   },
   _rjxProps: {
-    getRJXProps: [Function: getRJXProps], // It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
+    getRJXProps: [Function: getRJXProps], // It uses traverse on a traverseObject to returns a resolved object on propName. So if you&apos;re making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
     getEvalProps: [Function: getEvalProps], //Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
     getComponentProps: [Function: getComponentProps], // Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
     getReactComponentProps: [Function: getReactComponentProps], // Resolves rjx.__dangerouslyInsertReactComponents into an object that turns each value into a the React component from reactComponents, componentLibraries or ReactDOM.
     getFunctionFromProps: [Function: getFunctionFromProps], // Takes a function string and returns a function on either this.props or window.
     getFunctionProps: [Function: getFunctionProps], // Returns a resolved object from function strings that has functions pulled from rjx.__functionProps
     getWindowComponents: [Function: getWindowComponents], // Returns a resolved object that has React Components pulled from window.__rjx_custom_elements
-    getComputedProps: [Function: getComputedProps], // Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty
+    getComputedProps: [Function: getComputedProps], // Returns computed properties for React Components and any property that&apos;s prefixed with __ is a computedProperty
   },
   _rjxUtils: {
     validateRJX: [Function: validateRJX], //Validates RJX JSON Syntax
@@ -172,7 +219,9 @@ function validateRJX(rjx = {}, returnAllErrors= false);</code></pre><h3>Simple R
     traverse: [Function traverse], //take an object of array paths to traverse and resolve
     getAdvancedBinding: [Function: getAdvancedBinding], // Use to test if can bind components this context for react-redux-router
   },
-}</code></pre><h3>Full RJX Spec</h3><pre class="prettyprint source lang-javascript"><code>rjx = {
+}</code>
+</code></pre>
+<h3 id="full-rjx-spec">Full RJX Spec</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">rjx = {
   //standard properties
   component:String, // Any React DOM element, or custom component div,p, Boomer.Hero, MaterialUI.Button, myCustomComponent
   props:Object, // Standard React component properties
@@ -196,9 +245,11 @@ function validateRJX(rjx = {}, returnAllErrors= false);</code></pre><h3>Simple R
   //flag properties
   passprops:Boolean, // A flag to pass parent properties to children RJX objects (except for the style property)
   comparisonorprops:Boolean, // A flag to use an or condition instead of and conditions between comparisions
-}</code></pre><h4>Advanced - Using Custom Components &amp; UI Libraries</h4><p>If you plan on using an entire UI library, then bind the library to this before using RJX.</p>
-<pre class="prettyprint source lang-javascript"><code>import { default as rjx } from 'rjx';
-import { * as Semantic } from 'semantic-ui-react';
+}</code>
+</code></pre>
+<h4 id="advanced---using-custom-components--amp--ui-libraries">Advanced - Using Custom Components &amp; UI Libraries</h4><p>If you plan on using an entire UI library, then bind the library to this before using RJX.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { default as rjx } from &apos;rjx&apos;;
+import { * as Semantic } from &apos;semantic-ui-react&apos;;
 
 const getRenderedJSON = rjx.getRenderedJSON.bind({
   componentLibraries:{
@@ -207,35 +258,37 @@ const getRenderedJSON = rjx.getRenderedJSON.bind({
 });
 
 const myRJX = {
-  component:'Semantic.Container',
+  component:&apos;Semantic.Container&apos;,
   children:[
     {
-      component:'Semantic.Header',
+      component:&apos;Semantic.Header&apos;,
       props:{
-        as:'h1',
+        as:&apos;h1&apos;,
       },
-      children:'Hello World!',
+      children:&apos;Hello World!&apos;,
     },
     {
-      component:'Semantic.Button',
+      component:&apos;Semantic.Button&apos;,
       props:{
-        content:'Discover docs',
-        href:'http://react.semantic-ui.com',
-        icon:'github',
-        labelPosition:'left',
+        content:&apos;Discover docs&apos;,
+        href:&apos;http://react.semantic-ui.com&apos;,
+        icon:&apos;github&apos;,
+        labelPosition:&apos;left&apos;,
       }
     }
   ]
 }
 
-const myReactElements = getRenderedJSON(myRJX);</code></pre><h4>Advanced - Using New &amp; Custom Components</h4><p>If you're only adding single components or using your own components you can add them to RJX's component my individually.</p>
-<pre class="prettyprint source lang-javascript"><code>import React from 'react';
-import { default as rjx } from 'rjx';
-import { Header } from 'semantic-ui-react';
+const myReactElements = getRenderedJSON(myRJX);</code>
+</code></pre>
+<h4 id="advanced---using-new--amp--custom-components">Advanced - Using New &amp; Custom Components</h4><p>If you&apos;re only adding single components or using your own components you can add them to RJX&apos;s component my individually.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import React from &apos;react&apos;;
+import { default as rjx } from &apos;rjx&apos;;
+import { Header } from &apos;semantic-ui-react&apos;;
 
 class MyButton extends React.Component {
   render() {
-    return &lt;a {...this.props}>{this.props.children}&lt;/a>
+    return &lt;a {...this.props}&gt;{this.props.children}&lt;/a&gt;
   }
 }
 
@@ -248,275 +301,285 @@ const getRenderedJSON = rjx.getRenderedJSON.bind({
 });
 
 const myRJX = {
-  component:'div',
+  component:&apos;div&apos;,
   children:[
     {
-      component:'Header',
+      component:&apos;Header&apos;,
       props:{
-        as:'h1',
+        as:&apos;h1&apos;,
       },
-      children:'Hello World!',
+      children:&apos;Hello World!&apos;,
     },
     {
-      component:'MyButton',
+      component:&apos;MyButton&apos;,
       props:{
-        title:'Discover docs',
-        href:'http://react.semantic-ui.com',
+        title:&apos;Discover docs&apos;,
+        href:&apos;http://react.semantic-ui.com&apos;,
       },
       __dangerouslyEvalProps:{
-        onClick:'()=>alert(&quot;click works&quot;)'
+        onClick:&apos;()=&gt;alert(&quot;click works&quot;)&apos;
       },
-      children:'click me',
+      children:&apos;click me&apos;,
     }
   ]
 }
 
-const myReactElements = getRenderedJSON(myRJX);</code></pre><h4>Advanced - Special properties</h4><h5>resourceprops (asyncprops) / thisprops / windowprops</h5><p>The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.</p>
+const myReactElements = getRenderedJSON(myRJX);</code>
+</code></pre>
+<h4 id="advanced---special-properties">Advanced - Special properties</h4><h5 id="resourceprops--asyncprops----thisprops---windowprops">resourceprops (asyncprops) / thisprops / windowprops</h5><p>The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.</p>
 <p>Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).</p>
-<p>Thisprops transverse anything bound to <code>this.props</code>, a good example would be if you're storing and passing a user object on <code>this.props.user</code>, pulling the username would be where you would use thisprops.</p>
+<p>Thisprops transverse anything bound to <code>this.props</code>, a good example would be if you&apos;re storing and passing a user object on <code>this.props.user</code>, pulling the username would be where you would use thisprops.</p>
 <p>Windowprops transverse anything on the global window object, like the current page location <code>window.location.href</code>.</p>
-<p>Dynamic props are transversed by passing an array to the property value you want, so for a window's location (<code>window.location.href</code>) the property value is accessed by an array to the href <code>['location','href']</code> where you omit the transverse object from the array path.</p>
-<pre class="prettyprint source lang-javascript"><code>const traverseObject = {
+<p>Dynamic props are transversed by passing an array to the property value you want, so for a window&apos;s location (<code>window.location.href</code>) the property value is accessed by an array to the href <code>[&apos;location&apos;,&apos;href&apos;]</code> where you omit the transverse object from the array path.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const traverseObject = {
   user: {
-    name: 'rjx',
-    description: 'react without javascript',
+    name: &apos;rjx&apos;,
+    description: &apos;react without javascript&apos;,
   },
   stats: {
     logins: 102,
     comments: 3,
   },
-  authentication: 'OAuth2',
+  authentication: &apos;OAuth2&apos;,
 };
 const testRJX = {
-  component: 'div',
+  component: &apos;div&apos;,
   props: {
-    id: 'generatedRJX',
-    className:'rjx',
+    id: &apos;generatedRJX&apos;,
+    className:&apos;rjx&apos;,
   },
   resourceprops:{
-    auth: [ 'authentication', ],
-    username: [ 'user', 'name', ],
+    auth: [ &apos;authentication&apos;, ],
+    username: [ &apos;user&apos;, &apos;name&apos;, ],
   },
   children: [
     {
-      component: 'p',
+      component: &apos;p&apos;,
       props: {
         style: {
-          color: 'red',
-          fontWeight:'bold',
+          color: &apos;red&apos;,
+          fontWeight:&apos;bold&apos;,
         },
       },
       asyncprops:{
-        title: ['user','description']
+        title: [&apos;user&apos;,&apos;description&apos;]
       },
-      children:'hello world',
+      children:&apos;hello world&apos;,
     },
   ],
 };
 const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
-// => {
-//   auth: 'OAuth2',
-//   username: 'rjx'
+// =&gt; {
+//   auth: &apos;OAuth2&apos;,
+//   username: &apos;rjx&apos;
 // }
 
 //finally resolves:
 const testRJX = {
-  component: 'div',
+  component: &apos;div&apos;,
   props: {
-    id: 'generatedRJX',
-    className:'rjx',
-    auth: 'OAuth2',
-    username: 'rjx',
+    id: &apos;generatedRJX&apos;,
+    className:&apos;rjx&apos;,
+    auth: &apos;OAuth2&apos;,
+    username: &apos;rjx&apos;,
   },
   children: [
     {
-      component: 'p',
+      component: &apos;p&apos;,
       props: {
         style: {
-          color: 'red',
-          fontWeight:'bold',
+          color: &apos;red&apos;,
+          fontWeight:&apos;bold&apos;,
         },
-        title:'react without javascript',
+        title:&apos;react without javascript&apos;,
       },
-      children:'hello world',
+      children:&apos;hello world&apos;,
     },
   ],
-};</code></pre><h5><strong>dangerouslyEvalProps / </strong>dangerouslyBindEvalProps</h5><p>The only difference between <code>__dangerouslyEvalProps</code> and <code>__dangerouslyBindEvalProps</code> is each  <code>__dangerouslyBindEvalProps</code> has to be a function, because it's returned as the bound instance of the function with <code>this</code>.</p>
-<pre class="prettyprint source lang-javascript"><code> const testVals = {
-    auth: 'true',
-    username: '(user={})=>user.name',
+};</code>
+</code></pre>
+<h5 id="-strong-dangerouslyevalprops-----strong-dangerouslybindevalprops"><strong>dangerouslyEvalProps / </strong>dangerouslyBindEvalProps</h5><p>The only difference between <code>__dangerouslyEvalProps</code> and <code>__dangerouslyBindEvalProps</code> is each  <code>__dangerouslyBindEvalProps</code> has to be a function, because it&apos;s returned as the bound instance of the function with <code>this</code>.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint"> const testVals = {
+    auth: &apos;true&apos;,
+    username: &apos;(user={})=&gt;user.name&apos;,
   };
   const testRJX = Object.assign({}, sampleRJX, {
     __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {
-      email: '(function getUser(user={}){ return this.testBound(); })',
+      email: &apos;(function getUser(user={}){ return this.testBound(); })&apos;,
     },
   });
-  const RJXP = getEvalProps.call({ testBound: () => 'bounded', }, { rjx: testRJX, });
-  const evalutedComputedFunc = RJXP.username({ name: 'bob', });
-  const evalutedComputedBoundFunc = RJXP.email({ email:'test@email.domain', });
+  const RJXP = getEvalProps.call({ testBound: () =&gt; &apos;bounded&apos;, }, { rjx: testRJX, });
+  const evalutedComputedFunc = RJXP.username({ name: &apos;bob&apos;, });
+  const evalutedComputedBoundFunc = RJXP.email({ email:&apos;test@email.domain&apos;, });
   // expect(RJXP.auth).to.be.true;
-  // expect(evalutedComputedFunc).to.eql('bob');
-  // expect(evalutedComputedBoundFunc).to.eql('bounded');</code></pre><h5>__functionProps</h5><p>Function props merge onto rjx.props after evaluating each functon string.</p>
-<pre class="prettyprint source lang-javascript"><code>const thisProp = {
+  // expect(evalutedComputedFunc).to.eql(&apos;bob&apos;);
+  // expect(evalutedComputedBoundFunc).to.eql(&apos;bounded&apos;);</code>
+</code></pre>
+<h5 id="--functionprops">__functionProps</h5><p>Function props merge onto rjx.props after evaluating each functon string.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const thisProp = {
   debug: true,
   window: {
-    print: () => 'printed',
+    print: () =&gt; &apos;printed&apos;,
     localStorage: {
-      getItem:()=>'gotItem',
+      getItem:()=&gt;&apos;gotItem&apos;,
     },
   },
   props: {
-    onClick:()=>'clicked',
+    onClick:()=&gt;&apos;clicked&apos;,
     reduxRouter: {
-      push:()=>'pushed',
-      pop:()=>'poped',
+      push:()=&gt;&apos;pushed&apos;,
+      pop:()=&gt;&apos;poped&apos;,
     },
   },
 };
 const rxjTest = {
-  component:'div',
+  component:&apos;div&apos;,
   props: {
-    name:'test',
+    name:&apos;test&apos;,
   },
   __functionProps: {
-    onclick:'func:this.props.onClick',
-    printPage: 'func:window.print',
-    nav:'func:this.props.reduxRouter.push',
+    onclick:&apos;func:this.props.onClick&apos;,
+    printPage: &apos;func:window.print&apos;,
+    nav:&apos;func:this.props.reduxRouter.push&apos;,
   },
 };
 const rxjObj = getFunctionProps.call(thisProp, {
   rjx: rxjTest,
 });
-expect(rxjObj).is.an('object');
+expect(rxjObj).is.an(&apos;object&apos;);
 expect(Object.keys(rxjObj)).to.eql(Object.keys(rxjTest.__functionProps));
-expect(rxjObj.onclick()).to.eq('clicked');
-expect(rxjObj.printPage()).to.eql('printed');
-expect(rxjObj.nav()).to.eql('pushed');</code></pre><h5>comparisionprops</h5><p>Comparison props are used to contionally show components if they're truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If <code>comparisonorprops:true</code> then only one condition needs to be true in order to render the component</p>
-<pre class="prettyprint source lang-javascript"><code>//and conditions
+expect(rxjObj.onclick()).to.eq(&apos;clicked&apos;);
+expect(rxjObj.printPage()).to.eql(&apos;printed&apos;);
+expect(rxjObj.nav()).to.eql(&apos;pushed&apos;);</code>
+</code></pre>
+<h5 id="comparisionprops">comparisionprops</h5><p>Comparison props are used to contionally show components if they&apos;re truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If <code>comparisonorprops:true</code> then only one condition needs to be true in order to render the component</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">//and conditions
 rjx={
   comparisonprops: [{
-    left: ['bigNum',],
-    operation:'lte',
-    right:['smallNum',],
+    left: [&apos;bigNum&apos;,],
+    operation:&apos;lte&apos;,
+    right:[&apos;smallNum&apos;,],
   },{
-    left: ['smallNum',],
-    operation:'&lt;=',
-    right:['bigNum',],
+    left: [&apos;smallNum&apos;,],
+    operation:&apos;&lt;=&apos;,
+    right:[&apos;bigNum&apos;,],
   }],
 }
 //or conditions
 rjx={
   comparisonorprops:true,
   comparisonprops: [{
-    left: ['truthy',],
-    operation:'eq',
-    right:['falsey',],
+    left: [&apos;truthy&apos;,],
+    operation:&apos;eq&apos;,
+    right:[&apos;falsey&apos;,],
   },{
-    left: ['smallNum',],
-    operation:'eq',
-    right:['smallNum',],
+    left: [&apos;smallNum&apos;,],
+    operation:&apos;eq&apos;,
+    right:[&apos;smallNum&apos;,],
   }],
 }
 
 // All comparison operations
 switch (opscompares.operation) {
-  case 'eq':
-  case '==':
+  case &apos;eq&apos;:
+  case &apos;==&apos;:
     return opscompares.left == opscompares.right;
-  case 'dneq':
-  case '!=':
-  case '!':
+  case &apos;dneq&apos;:
+  case &apos;!=&apos;:
+  case &apos;!&apos;:
     return opscompares.left !== opscompares.right;
-  case 'dnseq':
-  case '!==':
+  case &apos;dnseq&apos;:
+  case &apos;!==&apos;:
     return opscompares.left !== opscompares.right;
-  case 'seq':
-  case '===':
+  case &apos;seq&apos;:
+  case &apos;===&apos;:
     return opscompares.left === opscompares.right;
-  case 'lt':
-  case '&lt;':
+  case &apos;lt&apos;:
+  case &apos;&lt;&apos;:
     return opscompares.left &lt; opscompares.right;
-  case 'lte':
-  case '&lt;=':
+  case &apos;lte&apos;:
+  case &apos;&lt;=&apos;:
     return opscompares.left &lt;= opscompares.right;
-  case 'gt':
-  case '>':
-    return opscompares.left > opscompares.right;
-  case 'gte':
-  case '>=':
-    return opscompares.left >= opscompares.right;
-  case 'dne':
-  case 'undefined':
-  case 'null':
+  case &apos;gt&apos;:
+  case &apos;&gt;&apos;:
+    return opscompares.left &gt; opscompares.right;
+  case &apos;gte&apos;:
+  case &apos;&gt;=&apos;:
+    return opscompares.left &gt;= opscompares.right;
+  case &apos;dne&apos;:
+  case &apos;undefined&apos;:
+  case &apos;null&apos;:
     return opscompares.left === undefined || opscompares.left === null; 
-  case '!null':
-  case '!undefined':
-  case 'exists':
-  default://'exists'
-    return opscompares.left !== undefined && opscompares.left !== null;
-}</code></pre><h3>Advanced - Custom React Components &amp; Lifecycle Functions</h3><p>You can also create react components with lifecycle functions using <code>getReactComponent</code>.</p>
+  case &apos;!null&apos;:
+  case &apos;!undefined&apos;:
+  case &apos;exists&apos;:
+  default://&apos;exists&apos;
+    return opscompares.left !== undefined &amp;&amp; opscompares.left !== null;
+}</code>
+</code></pre>
+<h3 id="advanced---custom-react-components--amp--lifecycle-functions">Advanced - Custom React Components &amp; Lifecycle Functions</h3><p>You can also create react components with lifecycle functions using <code>getReactComponent</code>.</p>
 <p>The only required function is a render function, the body of the function has to be valid rjx.</p>
-<pre class="prettyprint source lang-javascript"><code>const MyCustomComponent = rjx._rjxComponents.getReactComponent({
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const MyCustomComponent = rjx._rjxComponents.getReactComponent({
     //
     // Initialization function
     //
     getInitialState:{
-      body:'return { status:&quot;not-loaded&quot;, name:&quot;rjx test&quot;, customNumber:1, }',
+      body:&apos;return { status:&quot;not-loaded&quot;, name:&quot;rjx test&quot;, customNumber:1, }&apos;,
       arguments:[],
     },
     getDefaultProps:{
-      body:'return { someProp:1, someOtherProp:2, status:&quot;original status&quot; }',
+      body:&apos;return { someProp:1, someOtherProp:2, status:&quot;original status&quot; }&apos;,
       arguments:[],
     },
     componentDidMount:{
-      body:`console.log('mounted', 'this.props',this.props, 'this.state',this.state)`,
+      body:`console.log(&apos;mounted&apos;, &apos;this.props&apos;,this.props, &apos;this.state&apos;,this.state)`,
       arguments:[],
     },
     componentWillUnmount:{
-      body:`console.log('unmounted',this.props)`,
+      body:`console.log(&apos;unmounted&apos;,this.props)`,
       arguments:[],
     },
     //
     // State change functions
     //
     shouldComponentUpdate:{
-      body:'console.log(&quot;should update component&quot;,{nextProps,nextState}); return true;',
-      arguments:['nextProps', 'nextState']
+      body:&apos;console.log(&quot;should update component&quot;,{nextProps,nextState}); return true;&apos;,
+      arguments:[&apos;nextProps&apos;, &apos;nextState&apos;]
     },
     componentWillUpdate:{
-      body:'console.log(&quot;will update component&quot;,{nextProps,nextState}); return true;',
-      arguments:['nextProps', 'nextState']
+      body:&apos;console.log(&quot;will update component&quot;,{nextProps,nextState}); return true;&apos;,
+      arguments:[&apos;nextProps&apos;, &apos;nextState&apos;]
     },
     componentDidUpdate:{
-      body:'console.log(&quot;did update component&quot;,{prevProps,prevState}); return true;',
-      arguments:['prevProps', 'prevState']
+      body:&apos;console.log(&quot;did update component&quot;,{prevProps,prevState}); return true;&apos;,
+      arguments:[&apos;prevProps&apos;, &apos;prevState&apos;]
     },
     //
     // Prop change functions
     //
     componentWillReceiveProps: {
-      body:'console.log(&quot;will recieve props&quot;,{nextProps}); return true;',
-      arguments:['nextProps']
+      body:&apos;console.log(&quot;will recieve props&quot;,{nextProps}); return true;&apos;,
+      arguments:[&apos;nextProps&apos;]
     },
     //
     // RENDER IS THE ONLY ***REQUIRED*** FUNCTION
     //
     render:{
       body:{
-        component:'p',
+        component:&apos;p&apos;,
         props:{
-          status:'from inline prop'
+          status:&apos;from inline prop&apos;
         },
         passprops:true,
         children:[
           {
-            component:'span',
-            children: 'My Custom React Component Status: ',
+            component:&apos;span&apos;,
+            children: &apos;My Custom React Component Status: &apos;,
           },
           {
-            component:'span',
+            component:&apos;span&apos;,
             thisprops:{
-              children:['status']
+              children:[&apos;status&apos;]
             }
           }
         ]
@@ -524,9 +587,9 @@ switch (opscompares.operation) {
     }
   });
 const sampleRJX = {
-  component:'MyCustomComponent',
+  component:&apos;MyCustomComponent&apos;,
   props:{
-    status:'Amazing',
+    status:&apos;Amazing&apos;,
   }
 };
 const boundConfig = {
@@ -537,87 +600,94 @@ const boundConfig = {
 };
 rjx.rjxRender.call(boundConfig, {
   rjx: sampleRJX, 
-  querySelector:'#root', });</code></pre><p>Console output after mounting</p>
-<pre class="prettyprint source lang-javascript"><code>[Log] mounted (4)
+  querySelector:&apos;#root&apos;, });</code>
+</code></pre>
+<p>Console output after mounting</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">[Log] mounted (4)
 &quot;this.props&quot;
 {status: &quot;Amazing&quot;, children: {}, someProp: 1, someOtherProp: 2}
 &quot;this.state&quot;
-{status: &quot;not-loaded&quot;, name: &quot;rjx test&quot;, customNumber: 1}</code></pre><p>Checkout the <code>dist/example.html</code> for example usage.
+{status: &quot;not-loaded&quot;, name: &quot;rjx test&quot;, customNumber: 1}</code>
+</code></pre>
+<p>Checkout the <code>dist/example.html</code> for example usage.
 <img src="https://raw.githubusercontent.com/repetere/rjx/master/docs/dist-example-html.png" alt="https://raw.githubusercontent.com/repetere/rjx/master/docs/dist-example-html.png"></p>
-<h3>Development</h3><p>Note <em>Make sure you have grunt installed</em></p>
-<pre class="prettyprint source lang-sh"><code>$ npm i -g grunt-cli jsdoc-to-markdown</code></pre><p>For generating documentation</p>
-<pre class="prettyprint source lang-sh"><code>$ grunt doc
-$ jsdoc2md src/**/*.js  > docs/api.md</code></pre><h3>Notes</h3><p>Check out <a href="https://github.com/repetere/rjx">https://github.com/repetere/rjx</a> for the full rjx Documentation</p>
-<h3>Testing</h3><pre class="prettyprint source lang-sh"><code>$ npm i
-$ grunt test</code></pre><h3>Contributing</h3><p>Fork, write tests and create a pull request!</p>
-<h3>Example Browser Usage</h3><pre class="prettyprint source lang-html"><code>&lt;!DOCTYPE html>
-&lt;html lang=&quot;en&quot;>
-  &lt;head>
-    &lt;meta charset=&quot;utf-8&quot;>
-    &lt;title>RJX TEST&lt;/title>
-    &lt;script type=&quot;text/javascript&quot; src=&quot;rjx.umd.js&quot;>&lt;/script>
-  &lt;/head>
-  &lt;body>
-    &lt;div id=&quot;root&quot;>&lt;/div>
-    &lt;script type=&quot;text/javascript&quot;>
+<h3 id="development">Development</h3><p>Note <em>Make sure you have grunt installed</em></p>
+<pre><code class="lang-sh"><code class="source-code prettyprint">$ npm i -g grunt-cli jsdoc-to-markdown</code>
+</code></pre>
+<p>For generating documentation</p>
+<pre><code class="lang-sh"><code class="source-code prettyprint">$ grunt doc
+$ jsdoc2md src/**/*.js  &gt; docs/api.md</code>
+</code></pre>
+<h3 id="notes">Notes</h3><p>Check out <a href="https://github.com/repetere/rjx">https://github.com/repetere/rjx</a> for the full rjx Documentation</p>
+<h3 id="testing">Testing</h3><pre><code class="lang-sh"><code class="source-code prettyprint">$ npm i
+$ grunt test</code>
+</code></pre>
+<h3 id="contributing">Contributing</h3><p>Fork, write tests and create a pull request!</p>
+<h3 id="example-browser-usage">Example Browser Usage</h3><pre><code class="lang-html"><code class="source-code prettyprint">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;RJX TEST&lt;/title&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;rjx.umd.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&quot;root&quot;&gt;&lt;/div&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
       const sampleRJX = {
-        component: 'div',
+        component: &apos;div&apos;,
         props: {
-          id: 'generatedRJX',
-          className:'rjx',
+          id: &apos;generatedRJX&apos;,
+          className:&apos;rjx&apos;,
         },
         children: [
           {
-            component: 'p',
+            component: &apos;p&apos;,
             props: {
               style: {
-                color: 'red',
-                fontWeight:'bold',
+                color: &apos;red&apos;,
+                fontWeight:&apos;bold&apos;,
               },
             },
             __dangerouslyEvalProps:{
-              onClick:'()=>alert(&quot;click works&quot;)'
+              onClick:&apos;()=&gt;alert(&quot;click works&quot;)&apos;
             },
-            children:'hello world',
+            children:&apos;hello world&apos;,
           },
         ],
       };
       const boundConfig = {
         debug:true, 
       };
-      rjx.rjxRender.call(boundConfig,{ rjx: sampleRJX, querySelector:'#root', });
-    &lt;/script>
-  &lt;/body>
-&lt;/html></code></pre><div style="text-align:center;">
+      rjx.rjxRender.call(boundConfig,{ rjx: sampleRJX, querySelector:&apos;#root&apos;, });
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code>
+</code></pre>
+<p></p><div>
 
-<img src="https://raw.githubusercontent.com/repetere/rjx/master/docs/rjx-logo.png" style="max-width:160px;">
+<img src="https://raw.githubusercontent.com/repetere/rjx/master/docs/rjx-logo.png">
 
 </div>
 
 
+<p></p>
 <p>License</p>
 <hr>
-<p>MIT</p></article>
-    </section>
-
-
-
-
-
-
+<p>MIT</p>
+</div>
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#__express">__express</a></li><li><a href="global.html#componentMap">componentMap</a></li><li><a href="global.html#displayComponent">displayComponent</a></li><li><a href="global.html#getAdvancedBinding">getAdvancedBinding</a></li><li><a href="global.html#getBoundedComponents">getBoundedComponents</a></li><li><a href="global.html#getChildrenProperty">getChildrenProperty</a></li><li><a href="global.html#getChildrenProps">getChildrenProps</a></li><li><a href="global.html#getComponentFromLibrary">getComponentFromLibrary</a></li><li><a href="global.html#getComponentFromMap">getComponentFromMap</a></li><li><a href="global.html#getComponentProps">getComponentProps</a></li><li><a href="global.html#getComputedProps">getComputedProps</a></li><li><a href="global.html#getEvalProps">getEvalProps</a></li><li><a href="global.html#getFunctionFromEval">getFunctionFromEval</a></li><li><a href="global.html#getFunctionFromProps">getFunctionFromProps</a></li><li><a href="global.html#getFunctionProps">getFunctionProps</a></li><li><a href="global.html#getReactComponent">getReactComponent</a></li><li><a href="global.html#getReactComponentProps">getReactComponentProps</a></li><li><a href="global.html#getRenderedJSON">getRenderedJSON</a></li><li><a href="global.html#getRJXChildren">getRJXChildren</a></li><li><a href="global.html#getRJXProps">getRJXProps</a></li><li><a href="global.html#getWindowComponents">getWindowComponents</a></li><li><a href="global.html#rjxHTMLString">rjxHTMLString</a></li><li><a href="global.html#rjxRender">rjxRender</a></li><li><a href="global.html#simpleRJXSyntax">simpleRJXSyntax</a></li><li><a href="global.html#traverse">traverse</a></li><li><a href="global.html#validateRJX">validateRJX</a></li><li><a href="global.html#validSimpleRJXSyntax">validSimpleRJXSyntax</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat May 19 2018 07:54:31 GMT-0500 (CDT)
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
-</body>
-</html>
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+
+
+</body></html>

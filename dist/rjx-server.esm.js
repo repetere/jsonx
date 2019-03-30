@@ -1,8 +1,8 @@
-import UAParser from 'ua-parser-js';
-import React from 'react';
-import ReactDOMElements from 'react-dom-factories';
-import createReactClass from 'create-react-class';
+import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue } from 'react';
 import ReactDOM from 'react-dom/server';
+import ReactDOMElements from 'react-dom-factories';
+import UAParser from 'ua-parser-js';
+import createReactClass from 'create-react-class';
 
 /**
  * Used to evaluate whether or not to render a component
@@ -236,7 +236,7 @@ function traverse(paths = {}, data = {}) {
 function validateRJX(rjx = {}, returnAllErrors = false) {
   const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops'];
   const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps'];
-  const validKeys = ['component', 'props', 'children', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops'].concat(dynamicPropsNames, evalPropNames);
+  const validKeys = ['component', 'props', 'children', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops'].concat(dynamicPropsNames, evalPropNames);
   let errors = [];
 
   if (!rjx.component) {
@@ -637,6 +637,69 @@ function getReactComponent(reactComponent = {}, options = {}) {
   return returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
 }
 /**
+ * Returns new React Function Component
+ * @todo set 'functionprops' to set arguments for function
+ * @param {*} reactComponent - Valid RJX to render
+ * @param {String} functionBody - String of function component body
+ * @param {String} options.name - Function Component name 
+ * @returns {Function}
+ * @see {@link https://reactjs.org/docs/hooks-intro.html}
+ * @example
+  const rjxRender = {
+   component:'div',
+   passprops:'true',
+   children:[ 
+     {
+      component:'input',
+      thisprops:{
+          value:['count'],
+        },
+     },
+      {
+        component:'button',
+        __functionProps:{
+          onClick:'func:inline.onClick'
+        },
+        __functionargs:['count','setCount'],
+        __inline:{
+          onClick:`return setCount(count+1)`,
+        },
+        children:'Click me'
+      }
+   ]
+  };
+  const functionBody = 'const [count, setCount] = useState(0); const functionprops = {count,setCount};'
+  const options = { name: IntroHook}
+  const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunction({rjxRender, functionBody, options});
+   */
+
+function getReactFunction(reactComponent = {}, functionBody = '', options = {}) {
+  const {
+    resources = {},
+    args = []
+  } = options;
+  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
+    return function ${options.name || 'Anonymous'}(props){
+      ${functionBody}
+      if(typeof functionprops!=='undefined'){
+        reactComponent.props = Object.assign({},props,functionprops);
+        reactComponent.__functionargs = Object.keys(functionprops);
+      } else{
+        reactComponent.props =  props;
+      }
+      if(!props.children) delete props.children;
+
+      return getRenderedJSON.call(this, reactComponent);
+    }
+  `);
+  Object.defineProperty(functionComponent, 'name', {
+    value: options.name || 'Anonymous functionComponent'
+  });
+  const props = reactComponent.props;
+  const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props];
+  return functionComponent(...functionArgs);
+}
+/**
  * if (recharts[rjx.component.replace('recharts.', '')]) {
       return recharts[rjx.component.replace('recharts.', '')];
     }
@@ -649,7 +712,8 @@ var rjxComponents = /*#__PURE__*/Object.freeze({
   getComponentFromLibrary: getComponentFromLibrary,
   getComponentFromMap: getComponentFromMap,
   getFunctionFromEval: getFunctionFromEval,
-  getReactComponent: getReactComponent
+  getReactComponent: getReactComponent,
+  getReactFunction: getReactFunction
 });
 
 //   var window = window || {};
@@ -826,7 +890,7 @@ function getReactComponentProps(options = {}) {
 /**
  * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
  * @param {Object} options 
- * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or this.props.onClick 
+ * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or func:this.props.onClick  or func:inline.myInlineFunction
  * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Function} returns a function from this.props or window functions
  * @example
@@ -835,7 +899,9 @@ function getReactComponentProps(options = {}) {
 
 function getFunctionFromProps(options) {
   const {
-    propFunc = 'func:'
+    propFunc = 'func:',
+    propBody,
+    rjx
   } = options; // eslint-disable-next-line
 
   const {
@@ -849,7 +915,30 @@ function getFunctionFromProps(options) {
     const functionNameArray = functionNameString.split('.');
     const functionName = functionNameArray.length ? functionNameArray[functionNameArray.length - 1] : '';
 
-    if (propFunc.indexOf('func:window') !== -1) {
+    if (propFunc.includes('func:inline')) {
+      // eslint-disable-next-line
+      let InlineFunction;
+
+      if (rjx.__functionargs) {
+        const args = [].concat(rjx.__functionargs);
+        args.push(propBody);
+        InlineFunction = Function.prototype.constructor.apply({}, args);
+      } else {
+        InlineFunction = Function('param1', 'param2', '"use strict";' + propBody);
+      }
+
+      const [propFuncName, funcName] = propFunc.split('.');
+      Object.defineProperty(InlineFunction, 'name', {
+        value: funcName
+      });
+
+      if (rjx.__functionargs) {
+        const boundArgs = [this].concat(rjx.__functionargs.map(arg => rjx.props[arg]));
+        return InlineFunction.bind(...boundArgs);
+      } else {
+        return InlineFunction.bind(this);
+      }
+    } else if (propFunc.indexOf('func:window') !== -1) {
       if (functionNameArray.length === 3) {
         try {
           return windowObject[functionNameArray[1]][functionName].bind(this);
@@ -905,7 +994,9 @@ function getFunctionProps(options = {}) {
   Object.keys(funcProps).forEach(key => {
     if (typeof funcProps[key] === 'string' && funcProps[key].indexOf('func:') !== -1) {
       allProps[key] = getFunction({
-        propFunc: funcProps[key]
+        propFunc: funcProps[key],
+        propBody: rjx.__inline ? rjx.__inline[key] : '',
+        rjx
       });
     }
   });
@@ -996,7 +1087,7 @@ function getComputedProps(options = {}) {
   const {
     rjx = {},
     resources = {},
-    renderIndex: renderIndex$$1,
+    renderIndex,
     logError = console.error,
     useReduxState = true,
     ignoreReduxPropsInComponentLibraries = true,
@@ -1046,7 +1137,7 @@ function getComputedProps(options = {}) {
       debug
     }) : {};
     const allProps = Object.assign({}, {
-      key: renderIndex$$1
+      key: renderIndex
     }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, {
       allProps,
@@ -1154,7 +1245,7 @@ function getChildrenProps(options = {}) {
   const {
     rjx = {},
     childrjx,
-    renderIndex: renderIndex$$1
+    renderIndex
   } = options;
   const props = options.props || rjx.props || {};
   return rjx.passprops && typeof childrjx === 'object' ? Object.assign({}, childrjx, {
@@ -1162,7 +1253,7 @@ function getChildrenProps(options = {}) {
     childrjx.asyncprops && childrjx.asyncprops.style || childrjx.windowprops && childrjx.windowprops.style ? {} : {
       style: {}
     }, childrjx.props, {
-      key: renderIndex$$1 + Math.random()
+      key: renderIndex + Math.random()
     })
   }) : childrjx;
 }
@@ -1181,7 +1272,7 @@ function getRJXChildren(options = {}) {
   const {
     rjx,
     resources,
-    renderIndex: renderIndex$$1,
+    renderIndex,
     logError = console.error
   } = options;
   const props = options.props || rjx.props || {};
@@ -1195,7 +1286,7 @@ function getRJXChildren(options = {}) {
       rjx,
       childrjx,
       props,
-      renderIndex: renderIndex$$1
+      renderIndex
     }), resources)) : rjx.children;
   } catch (e) {
     logError(e, e.stack ? e.stack : 'no stack');
@@ -1376,10 +1467,13 @@ ${rjxRenderedString}`);
     callback(e);
   }
 }
+function __getReact() {
+  return React;
+}
 const _rjxChildren = rjxChildren;
 const _rjxComponents = rjxComponents;
 const _rjxProps = rjxProps;
 const _rjxUtils = rjxUtils;
 
 export default getRenderedJSON;
-export { renderIndex, rjxRender, rjxHTMLString, getRenderedJSON, __express, _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils };
+export { __express, __getReact, _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils, getRenderedJSON, renderIndex, rjxHTMLString, rjxRender };

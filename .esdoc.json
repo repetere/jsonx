@@ -1,0 +1,59 @@
+{
+  "source": "./src",
+  "destination": "./docs",
+  "plugins": [
+    {
+      "name": "@repetere/esdoc-inject-gtm-plugin", 
+      "option": {
+        "enable": true, 
+        "id": "UA-112697260-2"
+      }
+    },
+    {
+      "name": "esdoc-ecmascript-proposal-plugin",
+      "option": {"all": true}
+    },
+    {
+      "name": "esdoc-standard-plugin",
+      "option":{
+        "typeInference": {
+          "enable": false
+        },
+        "lint": {
+          "enable": false
+        },
+        "brand": {
+          "title": "RJX",
+          "description": "Reactive JSON (RJX) takes a RXJ JSON object and renders React components. RJX lets you get up and running with React without using JavaScript.",
+          "repository": "https://github.com/repetere/rjx",
+          "site": "https://repetere.github.io/rjx",
+          "author": "https://github.com/repetere",
+          "image": "https://rjx.io/favicon.png"
+        },
+        "manual": {
+          "index": "./README.md",
+          "asset": "./manual/asset",
+          "files": [
+            "./manual/overview.md",
+            "./manual/usage.md",
+            "./manual/faq.md",
+            "./CHANGELOG.md"
+          ]
+        },
+        "test": {
+          "source": "./test/",
+          "interfaces": ["describe", "it", "context", "suite", "test"],
+          "includes": ["(spec|Spec|test|Test)\\.mjs$","(spec|Spec|test|Test)\\.js$"],
+          "excludes": ["\\.config\\.js$"]
+        }
+      }
+    },
+    {
+      "name": "esdoc-publish-markdown-plugin",
+      "option": {
+        "filename":"./API.md"
+      }
+    }
+  ],
+  "includes": ["\\.mjs$","\\.js$"]
+}

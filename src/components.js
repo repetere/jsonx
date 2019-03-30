@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, } from 'react';
 import { default as ReactDOMElements, } from 'react-dom-factories';
 import { getAdvancedBinding, } from './utils';
 import createReactClass from 'create-react-class';
@@ -152,6 +152,71 @@ export function getReactComponent(reactComponent = {}, options = {}) {
   }, {});
   const reactComponentClass = createReactClass(classOptions);
   return returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
+}
+
+/**
+ * Returns new React Function Component
+ * @todo set 'functionprops' to set arguments for function
+ * @param {*} reactComponent - Valid RJX to render
+ * @param {String} functionBody - String of function component body
+ * @param {String} options.name - Function Component name 
+ * @returns {Function}
+ * @see {@link https://reactjs.org/docs/hooks-intro.html}
+ * @example
+  const rjxRender = {
+   component:'div',
+   passprops:'true',
+   children:[ 
+     {
+      component:'input',
+      thisprops:{
+          value:['count'],
+        },
+     },
+      {
+        component:'button',
+        __functionProps:{
+          onClick:'func:inline.onClick'
+        },
+        __functionargs:['count','setCount'],
+        __inline:{
+          onClick:`return setCount(count+1)`,
+        },
+        children:'Click me'
+      }
+   ]
+  };
+  const functionBody = 'const [count, setCount] = useState(0); const functionprops = {count,setCount};'
+  const options = { name: IntroHook}
+  const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunction({rjxRender, functionBody, options});
+   */
+export function getReactFunction(reactComponent = {}, functionBody = '', options = {}) {
+  const { resources = {}, args=[], } = options;
+
+  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
+    return function ${options.name || 'Anonymous'}(props){
+      ${functionBody}
+      if(typeof functionprops!=='undefined'){
+        reactComponent.props = Object.assign({},props,functionprops);
+        reactComponent.__functionargs = Object.keys(functionprops);
+      } else{
+        reactComponent.props =  props;
+      }
+      if(!props.children) delete props.children;
+
+      return getRenderedJSON.call(this, reactComponent);
+    }
+  `);
+  Object.defineProperty(
+    functionComponent,
+    'name',
+    {
+      value: options.name || 'Anonymous functionComponent',
+    }
+  );
+  const props = reactComponent.props;
+  const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props,];
+  return functionComponent(...functionArgs);
 }
 /**
  * if (recharts[rjx.component.replace('recharts.', '')]) {
