@@ -3,7 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>RJX TEST</title>
-    <script type="text/javascript" src="rjx.umd.js"></script>
+    <script type="text/javascript" src="rjx.iife.js"></script>
+    <script type="text/javascript">
+    window.React = rjx.__getReact();
+    shallowEqual=()=>{};
+    console.log({rjx});
+    console.log({React});
+    </script>
+    <!-- <script type="text/javascript" src="../node_modules/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script> -->
+    <!-- <script type="text/javascript" src="../semantic.umd.js"></script> -->
   </head>
   <body>
     <div id="root"></div>

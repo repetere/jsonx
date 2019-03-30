@@ -180,4 +180,68 @@ export default [
       include: 'src/**',
     },
   },
+  // BROWSER MIN
+  {
+    input: 'src/main.js',
+    // external: [ 'react' ], // <-- suppresses the warning
+    output:[{
+      exports: 'named',
+      file: 'dist/rjx.umd.min.js',
+      format: 'umd',
+      name: 'rjx',
+    }, {
+      exports: 'named',
+      file: 'dist/rjx.web.min.js',
+      format: 'iife',
+      name: 'rjx',
+    },
+    ],
+    plugins: [
+      replace({
+        // 'process.env.NODE_ENV': JSON.stringify( 'development' ),
+        'process.env.NODE_ENV': JSON.stringify( 'production' ),
+      }),
+      resolve({
+        preferBuiltins: true,
+      }), // so Rollup can find `ms`
+      builtins({
+      }),
+      babel({
+        runtimeHelpers: true,
+        plugins: [
+          [
+            '@babel/transform-runtime',
+          ],
+          ['babel-plugin-replace-imports', {
+            'test': /react-dom\/server/,
+            'replacer': '../test/mock/_mock_react-dom-server',
+          }, ],
+          ['babel-plugin-replace-imports', {
+            'test': /react$/,
+            'replacer': 'react/cjs/react.production.min.js',
+          },'r-rename' ],
+          ['babel-plugin-replace-imports', {
+            'test': /ua-parser-js$/,
+            'replacer': '../test/mock/_mock_react-dom-server',
+          },'u-rename' ],
+        ],
+        // exclude: 'node_modules/**', // only transpile our source code
+      }),
+      commonjs({
+        namedExports: {
+          // left-hand side can be an absolute path, a path
+          // relative to the current directory, or the name
+          // of a module in node_modules
+          // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
+          'node_modules/react/cjs/react.production.min.js': ['Children', 'Component', 'PropTypes', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
+
+        },
+      }), // so Rollup can convert `ms` to an ES module
+      globals({
+      }),
+      terser({
+        sourcemap: true
+      }),
+    ],
+  },
 ];

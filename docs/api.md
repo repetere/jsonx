@@ -88,10 +88,15 @@ Returns a new React Component
 | reactComponent.getDefaultProps.body | String |  | return an object for the default props |
 | reactComponent.getInitialState.body | String |  | return an object for the default state |
 
-## `getReactFunction()`
+## `getReactFunction(reactComponent: *, functionBody: String, options.name: String): Function`
+
+Returns new React Function Component
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
+| reactComponent | * |  | Valid RJX to render |
+| functionBody | String |  | String of function component body |
+| options.name | String |  | Function Component name |
 
 ## `rjxRender(config: object, config.rjx: object, config.resources: object, config.querySelector: string)`
 
@@ -134,6 +139,11 @@ Use RJX for express view rendering
 | options.__boundConfig | object |  | property used to bind this object for RJX, can be used to add custom components |
 | options.__DOCTYPE | string | optional: true, default: "<!DOCTYPE html>" | html doctype string |
 | callback | * |  |
+
+## `__getReact()`
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
 
 ## `getRJXProps(traverseObject: Object, options: Object, options.rjx: Object, options.propName: Object): Object`
 

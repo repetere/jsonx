@@ -124,6 +124,10 @@ ${rjxRenderedString}`);
   }
 }
 
+export function __getReact() {
+  return React;
+}
+
 export const _rjxChildren = rjxChildren;
 export const _rjxComponents = rjxComponents;
 export const _rjxProps = rjxProps;

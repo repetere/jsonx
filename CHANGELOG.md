@@ -1,11 +1,11 @@
 # Changelog
 
-## 1.0.0 (2018-07-30)
+## 2.0.0 (2019-03-29)
 
 - **Feat**
-  - First Initial Release
+  - Added support for Function Components
+  - Added support for Hooks
 - **Fix**
-  - N/A
+  - Supports refs on __functionProps
 - **Chore**
-  - Allow for multistep future forecasts in multivariate timeseries.
-  - Add basic clustering example.
+  - Update Documentation

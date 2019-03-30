@@ -154,6 +154,42 @@ export function getReactComponent(reactComponent = {}, options = {}) {
   return returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
 }
 
+/**
+ * Returns new React Function Component
+ * @todo set 'functionprops' to set arguments for function
+ * @param {*} reactComponent - Valid RJX to render
+ * @param {String} functionBody - String of function component body
+ * @param {String} options.name - Function Component name 
+ * @returns {Function}
+ * @see {@link https://reactjs.org/docs/hooks-intro.html}
+ * @example
+  const rjxRender = {
+   component:'div',
+   passprops:'true',
+   children:[ 
+     {
+      component:'input',
+      thisprops:{
+          value:['count'],
+        },
+     },
+      {
+        component:'button',
+        __functionProps:{
+          onClick:'func:inline.onClick'
+        },
+        __functionargs:['count','setCount'],
+        __inline:{
+          onClick:`return setCount(count+1)`,
+        },
+        children:'Click me'
+      }
+   ]
+  };
+  const functionBody = 'const [count, setCount] = useState(0); const functionprops = {count,setCount};'
+  const options = { name: IntroHook}
+  const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunction({rjxRender, functionBody, options});
+   */
 export function getReactFunction(reactComponent = {}, functionBody = '', options = {}) {
   const { resources = {}, args=[], } = options;
 
@@ -179,7 +215,7 @@ export function getReactFunction(reactComponent = {}, functionBody = '', options
     }
   );
   const props = reactComponent.props;
-  const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props];
+  const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props,];
   return functionComponent(...functionArgs);
 }
 /**

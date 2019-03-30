@@ -644,6 +644,43 @@ function getReactComponent(reactComponent = {}, options = {}) {
   const reactComponentClass = createReactClass(classOptions);
   return returnFactory ? React__default.createFactory(reactComponentClass) : reactComponentClass;
 }
+/**
+ * Returns new React Function Component
+ * @todo set 'functionprops' to set arguments for function
+ * @param {*} reactComponent - Valid RJX to render
+ * @param {String} functionBody - String of function component body
+ * @param {String} options.name - Function Component name 
+ * @returns {Function}
+ * @see {@link https://reactjs.org/docs/hooks-intro.html}
+ * @example
+  const rjxRender = {
+   component:'div',
+   passprops:'true',
+   children:[ 
+     {
+      component:'input',
+      thisprops:{
+          value:['count'],
+        },
+     },
+      {
+        component:'button',
+        __functionProps:{
+          onClick:'func:inline.onClick'
+        },
+        __functionargs:['count','setCount'],
+        __inline:{
+          onClick:`return setCount(count+1)`,
+        },
+        children:'Click me'
+      }
+   ]
+  };
+  const functionBody = 'const [count, setCount] = useState(0); const functionprops = {count,setCount};'
+  const options = { name: IntroHook}
+  const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunction({rjxRender, functionBody, options});
+   */
+
 function getReactFunction(reactComponent = {}, functionBody = '', options = {}) {
   const {
     resources = {},
@@ -1438,12 +1475,16 @@ ${rjxRenderedString}`);
     callback(e);
   }
 }
+function __getReact() {
+  return React__default;
+}
 const _rjxChildren = rjxChildren;
 const _rjxComponents = rjxComponents;
 const _rjxProps = rjxProps;
 const _rjxUtils = rjxUtils;
 
 exports.__express = __express;
+exports.__getReact = __getReact;
 exports._rjxChildren = _rjxChildren;
 exports._rjxComponents = _rjxComponents;
 exports._rjxProps = _rjxProps;
