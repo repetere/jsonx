@@ -5,9 +5,6 @@
 */
 /* global define */
 
-// (function () {
-
-
 var hasOwn = {}.hasOwnProperty;
 
 function classNames () {
@@ -37,8 +34,4 @@ function classNames () {
 
   return classes.join(' ');
 }
-
 export default classNames;
-window.classNames = classNames;
-
-// }());

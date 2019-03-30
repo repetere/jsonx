@@ -1478,6 +1478,9 @@ ${rjxRenderedString}`);
 function __getReact() {
   return React__default;
 }
+function __getReactDOM() {
+  return ReactDOM;
+}
 const _rjxChildren = rjxChildren;
 const _rjxComponents = rjxComponents;
 const _rjxProps = rjxProps;
@@ -1485,6 +1488,7 @@ const _rjxUtils = rjxUtils;
 
 exports.__express = __express;
 exports.__getReact = __getReact;
+exports.__getReactDOM = __getReactDOM;
 exports._rjxChildren = _rjxChildren;
 exports._rjxComponents = _rjxComponents;
 exports._rjxProps = _rjxProps;

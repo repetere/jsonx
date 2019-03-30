@@ -6,12 +6,20 @@
     <script type="text/javascript" src="rjx.iife.js"></script>
     <script type="text/javascript">
     window.React = rjx.__getReact();
-    shallowEqual=()=>{};
-    console.log({rjx});
-    console.log({React});
+    window.ReactDOM = rjx.__getReactDOM();
+    // shallowEqual=()=>{};
+    // console.log({rjx});
+    // console.log({React});
     </script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/react-md@1.9.2/dist/react-md.js"></script> -->
+    <!-- <link rel="stylesheet" href="../node_modules/react-md/dist/react-md.amber-blue.min.css"> -->
+    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre-icons.min.css">
+    <!-- <script type="text/javascript" src="../node_modules/react-md/dist/react-md.js"></script> -->
     <!-- <script type="text/javascript" src="../node_modules/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script> -->
     <!-- <script type="text/javascript" src="../semantic.umd.js"></script> -->
+    <script type="text/javascript" src="../design/spectre.umd.js"></script>
   </head>
   <body>
     <div id="root"></div>
@@ -146,13 +154,16 @@
       `,{
         name:'IntroHook'
       })
-      console.log({MyCustomFunctionComponent});
+      // console.log({MyCustomFunctionComponent});
       const sampleRJX = {
         component: 'div',
         props: {
           id: 'generatedRJX',
           className:'rjx',
-          otherProp: 'testing Other Prop'
+          otherProp: 'testing Other Prop',
+          style:{
+            padding:'1rem',
+          }
         },
         children: [
           {
@@ -229,6 +240,118 @@
                 },
               ],
             }
+          },
+          // {
+          //   component:'Button',
+          //   props:{
+          //     flat:true,
+          //   },
+          //   children:'Hello World'
+          // },
+          // {
+          //   component:'ReactMD.Button',
+          //   props:{
+          //     flat:true,
+          //     primary:true,
+          //     //  iconChildren:"chat_bubble_outline"
+          //   },
+          //   children:'Hello World Lib'
+          // },
+          {
+            div:{
+              children:[
+                { h3:{children:'Component Libraries'}},
+                {
+                  ul:{
+                    children:[
+                      {title:'Semantic UI', link:'https://react.semantic-ui.com/'},
+                      {title:'Bulma',link:'https://github.com/couds/react-bulma-components'},
+                      {title:'Material',link:'https://github.com/react-materialize/react-materialize'},
+                      {title:'Bootstrap',link:'https://react-bootstrap.github.io'},
+                      {title:'Spectre',link:'https://github.com/react-spectre/react-spectre'},
+                    ].map(com=>({
+                      li:{
+                        children:[
+                          {
+                            a:{
+                              props:{
+                                href:com.link,
+                                target:'_blank'
+                              },
+                              children:com.title,
+                            }
+                          }
+                        ]
+                      }
+                    }))
+                  }
+                }
+              ]
+            }
+          },
+          {
+            'Spectre.Button.Button':{
+              props:{
+                primary:true,
+              },
+              children:'test'
+
+            }
+          },
+          {
+            'Spectre.Accordion.Accordion':{
+              children:[
+                {
+                  'Spectre.Accordion.Header':{
+                    props:{
+                      id:'acc-1',
+                    },
+                    children:'Element'
+                  }
+                },
+                {
+                  'Spectre.Accordion.Body':{
+                    
+                    children:[
+                      
+                    {
+                              div:{
+                                children:'Buttons'
+                              }
+                            },
+                      {
+                        'Spectre.Button.Group':{
+                          children:[
+                            {
+                              'Spectre.Button.Button':{
+                                props:{},
+                                children:'Regular'
+                              }
+                            },
+                            {
+                              'Spectre.Button.Button':{
+                                props:{
+                                  primary:true
+                                },
+                                children:'Primary'
+                              }
+                            },
+                            {
+                              'Spectre.Button.Button':{
+                                props:{
+                                  success:true
+                                },
+                                children:'Success'
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
           }
         ],
       };
@@ -237,8 +360,16 @@
         reactComponents:{
           MyCustomComponent,
           MyCustomFunctionComponent,
+          // Accordion:Spectre.Accordion.Accordion,
+          // AccordionHeader:Spectre.Accordion.Header,
+          // Button:ReactMD.Button,
+        },
+        componentLibraries:{
+          // ReactMD,
+          Spectre,
         }
       };
+      console.log({boundConfig})
       rjx.rjxRender.call(boundConfig,{ 
         rjx: sampleRJX, 
         resources: { 

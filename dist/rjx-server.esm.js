@@ -1470,10 +1470,13 @@ ${rjxRenderedString}`);
 function __getReact() {
   return React;
 }
+function __getReactDOM() {
+  return ReactDOM;
+}
 const _rjxChildren = rjxChildren;
 const _rjxComponents = rjxComponents;
 const _rjxProps = rjxProps;
 const _rjxUtils = rjxUtils;
 
 export default getRenderedJSON;
-export { __express, __getReact, _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils, getRenderedJSON, renderIndex, rjxHTMLString, rjxRender };
+export { __express, __getReact, __getReactDOM, _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils, getRenderedJSON, renderIndex, rjxHTMLString, rjxRender };

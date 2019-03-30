@@ -145,6 +145,11 @@ Use RJX for express view rendering
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 
+## `__getReactDOM()`
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+
 ## `getRJXProps(traverseObject: Object, options: Object, options.rjx: Object, options.propName: Object): Object`
 
 It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths

@@ -14,7 +14,7 @@ RJX was created to remove all the complexities around environment setup, and con
 $ npm i rjx
 ```
 
-### [Full Documentation](https://github.com/repetere/rjx/blob/master/docs/api.md)
+### [Full Documentation](https://repetere.github.io/rjx/)
 
 ### Examples ( [HTML/Browser Example](https://github.com/repetere/rjx/blob/master/dist/example.html) ) 
 
@@ -640,7 +640,7 @@ $ jsdoc2md src/**/*.js  > docs/api.md
 
 ### Notes
 
-Check out [https://github.com/repetere/rjx](https://github.com/repetere/rjx) for the full rjx Documentation
+Check out [https://repetere.github.io/rjx/](https://repetere.github.io/rjx/) for the full rjx Documentation
 
 ### Testing
 
