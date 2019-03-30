@@ -477,7 +477,9 @@ let advancedBinding = getAdvancedBinding();
  * object of all react components available for RJX
  */
 
-let componentMap = Object.assign({}, ReactDOMElements, typeof window === 'object' ? window.__rjx_custom_elements : {});
+let componentMap = Object.assign({
+  Fragment: React.Fragment
+}, ReactDOMElements, typeof window === 'object' ? window.__rjx_custom_elements : {});
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
  * @param {Object} options - options for getBoundedComponents 

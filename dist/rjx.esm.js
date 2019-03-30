@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue } from 'react';
+import React, { Fragment, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue } from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 import ReactDOMElements from 'react-dom-factories';
@@ -470,7 +470,9 @@ let advancedBinding = getAdvancedBinding();
  * object of all react components available for RJX
  */
 
-let componentMap = Object.assign({}, ReactDOMElements, typeof window === 'object' ? window.__rjx_custom_elements : {});
+let componentMap = Object.assign({
+  Fragment
+}, ReactDOMElements, typeof window === 'object' ? window.__rjx_custom_elements : {});
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
  * @param {Object} options - options for getBoundedComponents 

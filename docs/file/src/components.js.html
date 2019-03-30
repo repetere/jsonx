@@ -77,7 +77,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/components.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, } from &apos;react&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, } from &apos;react&apos;;
 import { default as ReactDOMElements, } from &apos;react-dom-factories&apos;;
 import { getAdvancedBinding, } from &apos;./utils&apos;;
 import createReactClass from &apos;create-react-class&apos;;
@@ -90,7 +90,7 @@ export let advancedBinding = getAdvancedBinding();
 /**
  * object of all react components available for RJX
  */
-export let componentMap = Object.assign({}, ReactDOMElements, (typeof window ===&apos;object&apos;) ? window.__rjx_custom_elements : {});
+export let componentMap = Object.assign({ Fragment, }, ReactDOMElements, (typeof window ===&apos;object&apos;) ? window.__rjx_custom_elements : {});
 
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 

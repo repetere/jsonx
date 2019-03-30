@@ -7,7 +7,8 @@ import builtins from 'rollup-plugin-node-builtins';
 import globals from 'rollup-plugin-node-globals';
 import replace from 'rollup-plugin-replace';
 // import alias from 'rollup-plugin-alias';
-import { terser, } from 'rollup-plugin-terser';
+// import { terser, } from 'rollup-plugin-terser';
+import terser from 'rollup-plugin-terser-js';
 // const inputPath = path.resolve(__dirname, 'node_modules/semantic-ui-react/src');
 
 export default [
@@ -81,9 +82,10 @@ export default [
       globals({
       }),
       terser({
-        sourcemaps:false,
+        sourcemaps:true,
         compress:true,
-        mangle:true
+        mangle:true,
+        verbose:true,
       }),
     ],
   },

@@ -7,7 +7,8 @@ import globals from 'rollup-plugin-node-globals';
 import replace from 'rollup-plugin-replace';
 // import alias from 'rollup-plugin-alias';
 import pkg from './package.json';
-import { terser, } from 'rollup-plugin-terser';
+// import { terser, } from 'rollup-plugin-terser';
+import terser from 'rollup-plugin-terser-js';
 
 export default [
   // browser-friendly UMD build
@@ -55,7 +56,7 @@ export default [
           // relative to the current directory, or the name
           // of a module in node_modules
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
-          'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
+          'node_modules/react/index.js': ['Children', 'Component', 'PropTypes','Fragment', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
 
         },
       }), // so Rollup can convert `ms` to an ES module
@@ -233,14 +234,17 @@ export default [
           // relative to the current directory, or the name
           // of a module in node_modules
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
-          'node_modules/react/cjs/react.production.min.js': ['Children', 'Component', 'PropTypes', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
+          'node_modules/react/cjs/react.production.min.js': ['Children', 'Component', 'PropTypes','Fragment', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
 
         },
       }), // so Rollup can convert `ms` to an ES module
       globals({
       }),
       terser({
-        sourcemap: true
+        sourcemaps:true,
+        compress:true,
+        mangle:true,
+        verbose:true,
       }),
     ],
   },
