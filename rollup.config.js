@@ -29,8 +29,8 @@ export default [
     ],
     plugins: [
       replace({
-        // 'process.env.NODE_ENV': JSON.stringify( 'development' ),
-        'process.env.NODE_ENV': JSON.stringify( 'production' ),
+        'process.env.NODE_ENV': JSON.stringify( 'development' ),
+        // 'process.env.NODE_ENV': JSON.stringify( 'production' ),
       }),
       resolve({
         preferBuiltins: true,
@@ -217,10 +217,10 @@ export default [
             'test': /react-dom\/server/,
             'replacer': '../test/mock/_mock_react-dom-server',
           }, ],
-          ['babel-plugin-replace-imports', {
-            'test': /react$/,
-            'replacer': 'react/cjs/react.production.min.js',
-          },'r-rename' ],
+          // ['babel-plugin-replace-imports', {
+          //   'test': /react$/,
+          //   'replacer': 'react/cjs/react.production.min.js',
+          // },'r-rename' ],
           ['babel-plugin-replace-imports', {
             'test': /ua-parser-js$/,
             'replacer': '../test/mock/_mock_react-dom-server',
@@ -234,7 +234,10 @@ export default [
           // relative to the current directory, or the name
           // of a module in node_modules
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
-          'node_modules/react/cjs/react.production.min.js': ['Children', 'Component', 'PropTypes','Fragment', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
+          'node_modules/react/index.js':[
+          // 'node_modules/react/cjs/react.production.min.js': [
+            'Children', 'Component', 'PropTypes', 'Fragment', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',
+          ],
 
         },
       }), // so Rollup can convert `ms` to an ES module
@@ -242,9 +245,8 @@ export default [
       }),
       terser({
         sourcemaps:true,
-        compress:true,
-        mangle:true,
-        verbose:true,
+        compress: true,
+        mangle: true,
       }),
     ],
   },
