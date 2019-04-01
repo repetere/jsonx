@@ -1,5 +1,17 @@
 window.esdocSearchIndex = [
   [
+    "rjx/src/props.js~argument_names",
+    "variable/index.html#static-variable-ARGUMENT_NAMES",
+    "<span>ARGUMENT_NAMES</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "variable"
+  ],
+  [
+    "rjx/src/props.js~strip_comments",
+    "variable/index.html#static-variable-STRIP_COMMENTS",
+    "<span>STRIP_COMMENTS</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "variable"
+  ],
+  [
     "rjx/src/main.js~__express",
     "function/index.html#static-function-__express",
     "<span>__express</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
@@ -132,6 +144,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "rjx/src/props.js~getparamnames",
+    "function/index.html#static-function-getParamNames",
+    "<span>getParamNames</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "function"
+  ],
+  [
     "rjx/src/children.js~getrjxchildren",
     "function/index.html#static-function-getRJXChildren",
     "<span>getRJXChildren</span> <span class=\"search-result-import-path\">rjx/src/children.js</span>",
@@ -223,13 +241,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber57",
+    "test-file/test/unit/children_spec.js.html#lineNumber81",
     "rjx",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber81",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber57",
     "rjx",
     "test"
   ],

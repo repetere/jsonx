@@ -55,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromProps">getFunctionFromProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionProps">getFunctionProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getParamNames">getParamNames</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRJXProps">getRJXProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></span></li>
@@ -72,11 +73,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ARGUMENT_NAMES">ARGUMENT_NAMES</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRIP_COMMENTS">STRIP_COMMENTS</a></span></span></li>
 </ul>
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">29/42</span></h1>
+<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">30/45</span></h1>
 
 <table class="files-summary" data-ice="files" data-use-coverage="true">
   <thead>
@@ -135,19 +138,22 @@
       <td style="display: none;" data-ice="updated">2019-03-07 12:57:54 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/props.js.html">src/props.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span>
+      <td data-ice="filePath"><span><a href="file/src/props.js.html#errorLines=11,12">src/props.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-ARGUMENT_NAMES">ARGUMENT_NAMES</a></span>
+<span><a href="variable/index.html#static-variable-STRIP_COMMENTS">STRIP_COMMENTS</a></span>
+<span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span>
 <span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span>
 <span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span>
 <span><a href="function/index.html#static-function-getFunctionFromProps">getFunctionFromProps</a></span>
 <span><a href="function/index.html#static-function-getFunctionProps">getFunctionProps</a></span>
+<span><a href="function/index.html#static-function-getParamNames">getParamNames</a></span>
 <span><a href="function/index.html#static-function-getRJXProps">getRJXProps</a></span>
 <span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span>
 <span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">8/8</span></td>
-      <td style="display: none;" data-ice="size">16073 byte</td>
-      <td style="display: none;" data-ice="lines">393</td>
-      <td style="display: none;" data-ice="updated">2019-03-07 12:33:11 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">81 %</span><span data-ice="coverageCount" class="coverage-count">9/11</span></td>
+      <td style="display: none;" data-ice="size">18924 byte</td>
+      <td style="display: none;" data-ice="lines">471</td>
+      <td style="display: none;" data-ice="updated">2019-04-02 21:48:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/utils.js.html">src/utils.js</a></span></td>
@@ -159,9 +165,9 @@
 <span><a href="function/index.html#static-function-validSimpleRJXSyntax">validSimpleRJXSyntax</a></span>
 <span><a href="function/index.html#static-function-validateRJX">validateRJX</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">7/7</span></td>
-      <td style="display: none;" data-ice="size">16856 byte</td>
+      <td style="display: none;" data-ice="size">16937 byte</td>
       <td style="display: none;" data-ice="lines">418</td>
-      <td style="display: none;" data-ice="updated">2019-03-07 12:33:11 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-04-02 17:36:06 (UTC)</td>
     </tr>
 </tbody>
 </table>

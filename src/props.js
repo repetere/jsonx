@@ -7,6 +7,28 @@ import { getComponentFromMap, } from './components';
 //   var window = window || {};
 // }
 
+//https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically
+export const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+export const ARGUMENT_NAMES = /([^\s,]+)/g;
+/**
+ * returns the names of parameters from a function declaration
+ * @example
+ * const arrowFunctionAdd = (a,b)=>a+b;
+ * function regularFunctionAdd(c,d){return c+d;}
+ * getParamNames(arrowFunctionAdd) // => ['a','b']
+ * getParamNames(regularFunctionAdd) // => ['c','d']
+ * @param {Function} func 
+ * @todo write tests
+ */
+export function getParamNames(func) {
+  var fnStr = func.toString().replace(STRIP_COMMENTS, '');
+  var result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+  if(result === null){
+    result = [];
+  }
+  return result;
+}
+
 /**
  * It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
  * @param {Object} [traverseObject={}] - the object that contains values of propName
@@ -115,13 +137,35 @@ export function getEvalProps(options = {}) {
   const { rjx, } = options;
   const scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
   const evProps = Object.keys(rjx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
-    // eslint-disable-next-line
-    eprops[ epropName ] = scopedEval(rjx.__dangerouslyEvalProps[ epropName ]);
+    let evVal;
+    try {
+      // eslint-disable-next-line
+      evVal = scopedEval(rjx.__dangerouslyEvalProps[ epropName ]);
+    } catch (e) { 
+      if (this.debug || rjx.debug) evVal = e;
+    }
+    eprops[ epropName ] = evVal;
     return eprops;
   }, {});
   const evBindProps = Object.keys(rjx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
+    let evVal;
+    try {
+      let args;
+      // InlineFunction = Function.prototype.constructor.apply({}, args);
+      const functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[ epropName ]);
+      if (rjx.__functionargs && rjx.__functionargs[ epropName ]) {
+        args = [this,].concat(rjx.__functionargs[ epropName ].map(arg => rjx.props[ arg ]));
+      } else {
+        const functionDefArgs = getParamNames(functionDefinition);
+        args = [this,].concat(functionDefArgs);
+      }
+      // eslint-disable-next-line
+      evVal = functionDefinition.bind(...args);
+    } catch (e) { 
+      if (this.debug || rjx.debug) evVal = e;
+    }
     // eslint-disable-next-line
-    eprops[ epropName ] = scopedEval(rjx.__dangerouslyBindEvalProps[ epropName ]).bind(this);
+    eprops[ epropName ] = evVal;
     return eprops;
   }, {});
 
@@ -138,8 +182,14 @@ export function getEvalProps(options = {}) {
 export function getComponentProps(options = {}) {
   const { rjx, resources, } = options;
   return Object.keys(rjx.__dangerouslyInsertComponents).reduce((cprops, cpropName) => {
-    // eslint-disable-next-line
-    cprops[ cpropName ] = getRenderedJSON.call(this, rjx.__dangerouslyInsertComponents[ cpropName ], resources);
+    let componentVal;
+    try {
+      // eslint-disable-next-line
+      componentVal = getRenderedJSON.call(this, rjx.__dangerouslyInsertComponents[ cpropName ], resources);
+    } catch (e) {
+      if (this.debug || rjx.debug) componentVal = e;
+    }
+    cprops[ cpropName ] = componentVal;
     return cprops;
   }, {});
 }
@@ -152,16 +202,43 @@ export function getComponentProps(options = {}) {
  * @returns {Object} resolved object of React Components
  */
 export function getReactComponentProps(options = {}) {
-  const { rjx,  } = options;
-  return Object.keys(rjx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) => {
-    // eslint-disable-next-line
-    cprops[ cpropName ] = getComponentFromMap({
-      rjx: { component: rjx.__dangerouslyInsertReactComponents[ cpropName ], },
-      reactComponents: this.reactComponents,
-      componentLibraries: this.componentLibraries,
-    });
-    return cprops;
-  }, {});
+  const { rjx, } = options;
+  if (rjx.__dangerouslyInsertRJXComponents && Object.keys(rjx.__dangerouslyInsertRJXComponents).length) { 
+    return Object.keys(rjx.__dangerouslyInsertRJXComponents).reduce((cprops, cpropName) => {
+      let componentVal;
+      try {
+        componentVal = getComponentFromMap({
+          rjx: rjx.__dangerouslyInsertRJXComponents[ cpropName ],
+          reactComponents: this.reactComponents,
+          componentLibraries: this.componentLibraries,
+        });
+      } catch (e) {
+        if (this.debug || rjx.debug) componentVal = e;
+      }
+      // eslint-disable-next-line
+      cprops[ cpropName ] = componentVal;
+      return cprops;
+    }, {});
+  } else {
+    return Object.keys(rjx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) => {
+      let componentVal;
+      try {
+        componentVal = getComponentFromMap({
+          rjx: {
+            component: rjx.__dangerouslyInsertReactComponents[ cpropName ],
+            props: rjx.__dangerouslyInsertComponentProps[ cpropName ],
+          },
+          reactComponents: this.reactComponents,
+          componentLibraries: this.componentLibraries,
+        });
+      } catch (e) {
+        if (this.debug || rjx.debug) componentVal = e;
+      }
+      // eslint-disable-next-line
+      cprops[ cpropName ] = componentVal;
+      return cprops;
+    }, {});
+  }
 }
 
 /**
@@ -174,7 +251,7 @@ export function getReactComponentProps(options = {}) {
  * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
  */
 export function getFunctionFromProps(options) {
-  const { propFunc='func:', propBody, rjx, } = options;
+  const { propFunc='func:', propBody, rjx, functionProperty='', } = options;
   // eslint-disable-next-line
   const { logError = console.error,  debug, } = this;
   const windowObject = this.window || global.window || {};
@@ -187,7 +264,7 @@ export function getFunctionFromProps(options) {
       // eslint-disable-next-line
       let InlineFunction;
       if (rjx.__functionargs) {
-        const args = [].concat(rjx.__functionargs);
+        const args = [].concat(rjx.__functionargs[functionProperty]);
         args.push(propBody);
         InlineFunction = Function.prototype.constructor.apply({}, args);
       } else {
@@ -203,7 +280,7 @@ export function getFunctionFromProps(options) {
         }
       );
       if (rjx.__functionargs) {
-        const boundArgs = [this,].concat(rjx.__functionargs.map(arg => rjx.props[ arg ]));
+        const boundArgs = [this,].concat(rjx.__functionargs[functionProperty].map(arg => rjx.props[ arg ]));
         return InlineFunction.bind(...boundArgs);
       } else {
         return InlineFunction.bind(this);
@@ -261,6 +338,7 @@ export function getFunctionProps(options = {}) {
         propFunc: funcProps[ key ],
         propBody: (rjx.__inline)?rjx.__inline[ key ]:'',
         rjx,
+        functionProperty:key,
       });
     } 
   });
@@ -378,14 +456,14 @@ export function getComputedProps(options = {}) {
     const insertedComponents = (rjx.__dangerouslyInsertComponents)
       ? getComponentProps.call(this, { rjx, resources, debug, })
       : {};
-    const insertedReactComponents = (rjx.__dangerouslyInsertReactComponents)
+    const insertedReactComponents = (rjx.__dangerouslyInsertReactComponents || rjx.__dangerouslyInsertRJXComponents)
       ? getReactComponentProps.call(this, { rjx, debug, })
       : {};
     const allProps = Object.assign({}, { key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps,
       rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
       rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {});
-    
+    if (rjx.debug) console.debug({ rjx, computedProps, });
     return computedProps;
   } catch (e) {
     debug && logError(e, (e.stack) ? e.stack : 'no stack');

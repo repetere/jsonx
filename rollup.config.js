@@ -215,7 +215,7 @@ export default [
           ],
           ['babel-plugin-replace-imports', {
             'test': /react-dom\/server/,
-            'replacer': '../test/mock/_mock_react-dom-server',
+            'replacer': '../design/_mock_react-dom-server',
           }, ],
           // ['babel-plugin-replace-imports', {
           //   'test': /react$/,
@@ -223,7 +223,7 @@ export default [
           // },'r-rename' ],
           ['babel-plugin-replace-imports', {
             'test': /ua-parser-js$/,
-            'replacer': '../test/mock/_mock_react-dom-server',
+            'replacer': '../design/_mock_react-dom-server',
           },'u-rename' ],
         ],
         // exclude: 'node_modules/**', // only transpile our source code

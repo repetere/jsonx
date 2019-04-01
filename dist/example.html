@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>RJX TEST</title>
-    <script type="text/javascript" src="rjx.iife.js"></script>
+    <script type="text/javascript" src="rjx.web.js"></script>
     <script type="text/javascript">
     window.React = rjx.__getReact();
     window.ReactDOM = rjx.__getReactDOM();
@@ -131,17 +131,32 @@
               ]
           },
           {
-            component:'button',
-            // props:{
-            //   onClick:()=>{console.log('CLICKED THIS')}
+            // component:'button',
+            // // props:{
+            // //   onClick:()=>{console.log('CLICKED THIS')}
+            // // },
+            // __functionProps:{
+            //   onClick:'func:inline.onClick'
+            //   // onclick:'func:this.props.onClick'
             // },
-            __functionProps:{
-              onClick:'func:inline.onClick'
-              // onclick:'func:this.props.onClick'
+            // __functionargs:{
+            //   onClick:['count','setCount'],
+            // },
+            // __inline:{
+            //   onClick:`return setCount(count+1)//console.log('this is inline',{count,setCount}); `,
+            // },
+            // children:'Click me'
+
+
+            component:'button',
+            __functionargs:{
+              onClick:['count','setCount'],
             },
-            __functionargs:['count','setCount'],
-            __inline:{
-              onClick:`return setCount(count+1)//console.log('this is inline',{count,setCount}); `,
+            __dangerouslyBindEvalProps:{
+              onClick:`(function(count,setCount){
+                setCount(count+1)
+                console.log('this is inline',{count,setCount});
+              })`,
             },
             children:'Click me'
           }
@@ -218,6 +233,11 @@
                   color:'blue'
                 },
                 testProps:' syntax '
+              },
+              debug:true,
+              __dangerouslyBindEvalProps:{
+                onClick:" (function testEvalFunc(e){ 'use strict'; console.log('evalprop test this',this,{e}); return 'CLICKED from EVAL'; })",
+                throwTest:'throw new Error("testing error handling")'
               },
               passprops:true,
               children:[

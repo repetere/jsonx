@@ -212,7 +212,7 @@ export function traverse(paths = {}, data = {}) {
 export function validateRJX(rjx = {}, returnAllErrors = false) {
   const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops',];
   const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps',];
-  const validKeys = ['component', 'props', 'children','__inline','__functionargs', '__dangerouslyInsertComponents', '__functionProps', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', ].concat(dynamicPropsNames, evalPropNames);
+  const validKeys = ['component', 'props', 'children','__inline','__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertRJXComponents', '__functionProps', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'debug' ].concat(dynamicPropsNames, evalPropNames);
   let errors = [];
   if (!rjx.component) {
     errors.push(SyntaxError('[0001] Missing React Component'));
