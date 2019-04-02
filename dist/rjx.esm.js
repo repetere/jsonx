@@ -237,7 +237,7 @@ function traverse(paths = {}, data = {}) {
 function validateRJX(rjx = {}, returnAllErrors = false) {
   const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops'];
   const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps'];
-  const validKeys = ['component', 'props', 'children', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertRJXComponents', '__functionProps', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'debug'].concat(dynamicPropsNames, evalPropNames);
+  const validKeys = ['component', 'props', 'children', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertRJXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'debug'].concat(dynamicPropsNames, evalPropNames);
   let errors = [];
 
   if (!rjx.component) {
@@ -591,6 +591,8 @@ function getFunctionFromEval(options = {}) {
  * @param {Object} [options.resources={}] - asyncprops for component
  * @param {String} [options.name ] - Component name
  * @param {Function} [options.lazy ] - function that resolves {reactComponent,options} to lazy load component for code splitting
+ * @param {Boolean} [options.use_getState=true] - define getState prop
+ * @param {Boolean} [options.bindContext=true] - bind class this reference to render function components
  * @param {Boolean} [options.passprops ] - pass props to rendered component
  * @param {Boolean} [options.passstate] - pass state as props to rendered component
  * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
@@ -615,7 +617,9 @@ function getReactClassComponent(reactComponent = {}, options = {}) {
   const context = this || {};
   const {
     returnFactory = true,
-    resources = {}
+    resources = {},
+    use_getState = true,
+    bindContext = true
   } = options;
   const rjc = Object.assign({
     getDefaultProps: {
@@ -650,7 +654,11 @@ function getReactClassComponent(reactComponent = {}, options = {}) {
       result[val] = function () {
         if (options.passprops && this.props) body.props = Object.assign({}, body.props, this.props);
         if (options.passstate && this.state) body.props = Object.assign({}, body.props, this.state);
-        return getRenderedJSON.call(Object.assign({}, context, this), body, resources);
+        return getRenderedJSON.call(Object.assign({}, context, bindContext ? this : {}, {
+          props: use_getState ? Object.assign({}, this.props, {
+            getState: () => this.state
+          }) : this.props
+        }), body, resources);
       };
     } else {
       result[val] = getFunctionFromEval({
@@ -929,9 +937,11 @@ function getEvalProps(options = {}) {
 
       if (rjx.__functionargs && rjx.__functionargs[epropName]) {
         args = [this].concat(rjx.__functionargs[epropName].map(arg => rjx.props[arg]));
-      } else {
+      } else if (rjx.__functionparams) {
         const functionDefArgs = getParamNames(functionDefinition);
         args = [this].concat(functionDefArgs);
+      } else {
+        args = [this];
       } // eslint-disable-next-line
 
 

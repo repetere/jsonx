@@ -113,6 +113,8 @@ export function getFunctionFromEval(options = {}) {
  * @param {Object} [options.resources={}] - asyncprops for component
  * @param {String} [options.name ] - Component name
  * @param {Function} [options.lazy ] - function that resolves {reactComponent,options} to lazy load component for code splitting
+ * @param {Boolean} [options.use_getState=true] - define getState prop
+ * @param {Boolean} [options.bindContext=true] - bind class this reference to render function components
  * @param {Boolean} [options.passprops ] - pass props to rendered component
  * @param {Boolean} [options.passstate] - pass state as props to rendered component
  * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
@@ -131,7 +133,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
     }));
   }
   const context = this || {};
-  const { returnFactory = true, resources = {}, } = options;
+  const { returnFactory = true, resources = {}, use_getState=true, bindContext=true,} = options;
   const rjc = Object.assign({
     getDefaultProps: {
       body:'return {};',
@@ -158,7 +160,16 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
       result[ val ] = function () {
         if (options.passprops && this.props) body.props = Object.assign({}, body.props, this.props);
         if (options.passstate && this.state) body.props = Object.assign({}, body.props, this.state);
-        return getRenderedJSON.call(Object.assign({}, context, this), body, resources);
+        return getRenderedJSON.call(Object.assign(
+          {},
+          context,
+          bindContext ? this : {},
+          {
+            props: use_getState
+              ? Object.assign({}, this.props, { getState: () => this.state, })
+              : this.props,
+          }
+        ), body, resources);
       };
     } else {
       result[ val ] = getFunctionFromEval({
@@ -254,7 +265,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
     );
   }
   const props = reactComponent.props;
-  const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props,];
+  const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props, ];
   return functionComponent(...functionArgs);
 }
 /**
