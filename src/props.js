@@ -226,7 +226,9 @@ export function getReactComponentProps(options = {}) {
         componentVal = getComponentFromMap({
           rjx: {
             component: rjx.__dangerouslyInsertReactComponents[ cpropName ],
-            props: rjx.__dangerouslyInsertComponentProps[ cpropName ],
+            props: rjx.__dangerouslyInsertComponentProps
+              ? rjx.__dangerouslyInsertComponentProps[ cpropName ]
+              : {},
           },
           reactComponents: this.reactComponents,
           componentLibraries: this.componentLibraries,
@@ -306,15 +308,20 @@ export function getFunctionFromProps(options) {
         }
       }
     } else if (functionNameArray.length === 4) {
-      return this.props[ functionNameArray[ 2 ] ][ functionName ];
+      return (this.props)
+        ? this.props[ functionNameArray[ 2 ] ][ functionName ]
+        : rjx.props[ functionNameArray[ 2 ] ][ functionName ];
     } else if (functionNameArray.length === 3) {
-      return this.props[ functionName ].bind(this);
+      return (this.props)
+        ? this.props[ functionName ].bind(this)
+        : rjx.props[ functionName ].bind(this);
     } else {
       return function () {};
     }
   } catch (e) {
-    if (debug) {
+    if (this.debug){
       logError(e);
+      if (rjx && rjx.debug) return e;
     }
     return function () {};
   }
@@ -333,7 +340,7 @@ export function getFunctionProps(options = {}) {
   const funcProps = rjx.__functionProps;
   //Allowing for window functions
   Object.keys(funcProps).forEach(key => {
-    if (typeof funcProps[key] ==='string' && funcProps[key].indexOf('func:') !== -1 ){
+    if (typeof funcProps[ key ] === 'string' && funcProps[ key ].indexOf('func:') !== -1) {
       allProps[ key ] = getFunction({
         propFunc: funcProps[ key ],
         propBody: (rjx.__inline)?rjx.__inline[ key ]:'',

@@ -226,6 +226,29 @@
               punc:['punc']
             }
           },
+          // {
+          //   component:'form',
+          //   debug:true,
+          //   __dangerouslyBindEvalProps:{
+          //     submitForm:`(function(){
+          //       console.log('custom submit form');
+          //     })`,
+          //   },
+          //   passprops:true,
+          //   children:[
+          //     {
+          //       component:'a',
+          //       debug:true,
+          //       props:{
+          //         type:'button',
+          //       },
+          //       __functionProps:{
+          //         onClick:'func:this.props.submitForm',
+          //       },
+          //       children:'test pass',
+          //     },
+          //   ]
+          // },
           {
             p:{
               props:{
@@ -234,10 +257,13 @@
                 },
                 testProps:' syntax '
               },
-              debug:true,
+              // debug:true,
               __dangerouslyBindEvalProps:{
                 onClick:" (function testEvalFunc(e){ 'use strict'; console.log('evalprop test this',this,{e}); return 'CLICKED from EVAL'; })",
-                throwTest:'throw new Error("testing error handling")'
+                throwTest:'throw new Error("testing error handling")',
+                submitForm:`(function(){
+                  console.log('custom submit form');
+                })`,
               },
               passprops:true,
               children:[
