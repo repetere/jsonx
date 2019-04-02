@@ -1,0 +1,31 @@
+{
+  "name": "@react-spectre/components",
+  "version": "1.0.0-16",
+  "description": "React components for Spectre.css components.",
+  "jsnext:main": "src/index.js",
+  "main": "dist/components.js",
+  "browser": "dist/components.umd.js",
+  "module": "dist/components.es.js",
+  "repository": "https://github.com/react-spectre/react-spectre/blob/master/packages/components",
+  "author": "Rubens Mariuzzo <rubens@mariuzzo.com> (http://github.com/rmariuzzo)",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "dependencies": {
+    "@react-spectre/accordion": "file:../accordion",
+    "@react-spectre/autocomplete": "file:../autocomplete",
+    "@react-spectre/avatar": "file:../avatar",
+    "@react-spectre/badge": "file:../badge",
+    "@react-spectre/bar": "file:../bar",
+    "@react-spectre/toast": "file:../toast"
+  }
+}

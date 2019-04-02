@@ -1,0 +1,27 @@
+{
+  "name": "@react-spectre/bar",
+  "version": "1.0.0-16",
+  "description": "React components for Spectre.css bar.",
+  "jsnext:main": "src/index.js",
+  "main": "dist/bar.js",
+  "browser": "dist/bar.umd.js",
+  "module": "dist/bar.es.js",
+  "repository": "https://github.com/react-spectre/react-spectre/blob/master/packages/bar",
+  "author": "Rubens Mariuzzo <rubens@mariuzzo.com> (http://github.com/rmariuzzo)",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "prop-types": "^15.6.0"
+  }
+}

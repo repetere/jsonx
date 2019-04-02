@@ -25,7 +25,7 @@
     <div id="root"></div>
     <script type="text/javascript">
       let c = rjx._rjxComponents.getFunctionFromEval({body:'console.log("hello")'});
-      const MyCustomComponent = rjx._rjxComponents.getReactComponent({
+      const MyCustomComponent = rjx._rjxComponents.getReactClassComponent({
         //
         // Initialization function
         //
@@ -92,7 +92,7 @@
           },
         }
       })
-      const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunction({
+      const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunctionComponent({
         component:'div',
         props:{
           extra:'ok'
@@ -169,6 +169,35 @@
       `,{
         name:'IntroHook'
       })
+      const dynamicClassComponent = rjx._rjxComponents.getReactClassComponent({ 
+        render:{
+          body:{
+            component:'div',children:'LOADED FROM LAZY Class',
+          }
+        }
+       },{
+        lazy:(comp,options)=>{
+          return new Promise((resolve)=>{
+            setTimeout(()=>{
+              resolve([comp,{lazy:false}]);
+            },3000);
+          })
+        }
+      })
+      const dynamicFunctionComponent = rjx._rjxComponents.getReactFunctionComponent(
+        { 
+        component:'div',children:'LOADED FROM LAZY Function',
+       },
+       'console.log("lazy function body");',
+       {
+        lazy:(comp,body,options)=>{
+          return new Promise((resolve)=>{
+            setTimeout(()=>{
+              resolve([comp,body,{lazy:false}]);
+            },2000);
+          })
+        }
+      })
       // console.log({MyCustomFunctionComponent});
       const sampleRJX = {
         component: 'div',
@@ -181,6 +210,39 @@
           }
         },
         children: [
+          {
+            component:'Suspense',
+            debug:true,
+            __dangerouslyInsertComponents:{
+              fallback:{
+                component:'Spectre.Button.Group',
+                children:[
+                  {
+                    component:'div',
+                    children:'React Suspense/Lazy Test'
+                  },
+                  {
+
+                    component:'Spectre.Button.Button',
+                    props:{
+                      loading:true,
+                    },
+                    children:'loading'
+                  }
+                ]
+              }
+            },
+            children:[
+              {
+                component:'Spectre.Card.Card',
+                children:[
+                  {component:'h3',children:'React Suspense Test'},
+                  {component:'dynamicClassComponent'},
+                  {component:'dynamicFunctionComponent'},
+                ],
+              }
+            ]
+          },
           {
             component: 'h1',
             props: {
@@ -385,7 +447,8 @@
                             {
                               'Spectre.Button.Button':{
                                 props:{
-                                  success:true
+                                  success:true,
+                                  loading:true,
                                 },
                                 children:'Success'
                               }
@@ -406,6 +469,8 @@
         reactComponents:{
           MyCustomComponent,
           MyCustomFunctionComponent,
+          dynamicClassComponent,
+          dynamicFunctionComponent,
           // Accordion:Spectre.Accordion.Accordion,
           // AccordionHeader:Spectre.Accordion.Header,
           // Button:ReactMD.Button,

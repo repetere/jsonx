@@ -1,0 +1,32 @@
+{
+  "name": "@react-spectre/elements",
+  "version": "1.0.0-16",
+  "description": "React components for Spectre.css elements.",
+  "jsnext:main": "src/index.js",
+  "main": "dist/elements.js",
+  "browser": "dist/elements.umd.js",
+  "module": "dist/elements.es.js",
+  "repository": "https://github.com/react-spectre/react-spectre/blob/master/packages/elements",
+  "author": "Rubens Mariuzzo <rubens@mariuzzo.com> (http://github.com/rmariuzzo)",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "dependencies": {
+    "@react-spectre/button": "file:../button",
+    "@react-spectre/form": "file:../form",
+    "@react-spectre/icon": "file:../icon",
+    "@react-spectre/label": "file:../label",
+    "@react-spectre/media": "file:../media",
+    "@react-spectre/table": "file:../table",
+    "@react-spectre/typography": "file:../typography"
+  }
+}

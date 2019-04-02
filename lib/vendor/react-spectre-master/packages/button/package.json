@@ -1,0 +1,27 @@
+{
+  "name": "@react-spectre/button",
+  "version": "1.0.0-16",
+  "description": "React components for Spectre.css's buttons.",
+  "jsnext:main": "src/index.js",
+  "main": "dist/button.js",
+  "browser": "dist/button.umd.js",
+  "module": "dist/button.es.js",
+  "repository": "https://github.com/react-spectre/react-spectre/tree/master/packages/button",
+  "author": "Rubens Mariuzzo <rubens@mariuzzo.com> (http://github.com/rmariuzzo)",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "prop-types": "^15.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
+}

@@ -42,8 +42,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromLibrary">getComponentFromLibrary</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponent">getReactComponent</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunction">getReactFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactClassComponent">getReactClassComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunctionComponent">getReactFunctionComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
@@ -80,7 +80,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/components.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, } from &apos;react&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, } from &apos;react&apos;;
 import { default as ReactDOMElements, } from &apos;react-dom-factories&apos;;
 import { getAdvancedBinding, } from &apos;./utils&apos;;
 import createReactClass from &apos;create-react-class&apos;;
@@ -93,7 +93,7 @@ export let advancedBinding = getAdvancedBinding();
 /**
  * object of all react components available for RJX
  */
-export let componentMap = Object.assign({ Fragment, }, ReactDOMElements, (typeof window ===&apos;object&apos;) ? window.__rjx_custom_elements : {});
+export let componentMap = Object.assign({ Fragment, Suspense, }, ReactDOMElements, (typeof window ===&apos;object&apos;) ? window.__rjx_custom_elements : {});
 
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
@@ -193,6 +193,10 @@ export function getFunctionFromEval(options = {}) {
  * Returns a new React Component
  * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class 
  * @param {Object} [options.resources={}] - asyncprops for component
+ * @param {String} [options.name ] - Component name
+ * @param {Function} [options.lazy ] - function that resolves {reactComponent,options} to lazy load component for code splitting
+ * @param {Boolean} [options.passprops ] - pass props to rendered component
+ * @param {Boolean} [options.passstate] - pass state as props to rendered component
  * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
  * @param {Object} reactComponent.render.body - Valid RJX JSON
  * @param {String} reactComponent.getDefaultProps.body - return an object for the default props
@@ -200,7 +204,14 @@ export function getFunctionFromEval(options = {}) {
  * @returns {Function} 
  * @see {@link https://reactjs.org/docs/react-without-es6.html} 
  */
-export function getReactComponent(reactComponent = {}, options = {}) {
+export function getReactClassComponent(reactComponent = {}, options = {}) {
+  if (options.lazy) {
+    return lazy(() =&gt; options.lazy(reactComponent, Object.assign({}, options, { lazy: false, })).then((lazyComponent) =&gt; {
+      return {
+        default: getReactClassComponent(...lazyComponent),
+      };
+    }));
+  }
   const context = this || {};
   const { returnFactory = true, resources = {}, } = options;
   const rjc = Object.assign({
@@ -225,18 +236,33 @@ export function getReactComponent(reactComponent = {}, options = {}) {
     if (args &amp;&amp; !Array.isArray(args) &amp;&amp; (args.length &amp;&amp;(args.length &amp;&amp; args.filter(arg=&gt;typeof arg===&apos;string&apos;).length)) ) {
       throw new TypeError(`Function(${val}) arguments must be an array or variable names`);
     }
-    result[ val ] = (val === &apos;render&apos;)
-      ? function () {
+    if (val === &apos;render&apos;) {
+      result[ val ] = function () {
+        if (options.passprops &amp;&amp; this.props) body.props = Object.assign({}, body.props, this.props);
+        if (options.passstate &amp;&amp; this.state) body.props = Object.assign({}, body.props, this.state);
         return getRenderedJSON.call(Object.assign({}, context, this), body, resources);
-      }
-      : getFunctionFromEval({
+      };
+    } else {
+      result[ val ] = getFunctionFromEval({
         body,
         args,
       });
+    }
+
     return result;
   }, {});
   const reactComponentClass = createReactClass(classOptions);
-  return returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
+  if (options.name) {
+    Object.defineProperty(
+      reactComponentClass,
+      &apos;name&apos;,
+      {
+        value: options.name,
+      }
+    );
+  }
+  const reactClass = returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
+  return reactClass;
 }
 
 /**
@@ -273,9 +299,17 @@ export function getReactComponent(reactComponent = {}, options = {}) {
   };
   const functionBody = &apos;const [count, setCount] = useState(0); const functionprops = {count,setCount};&apos;
   const options = { name: IntroHook}
-  const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunction({rjxRender, functionBody, options});
+  const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunctionComponent({rjxRender, functionBody, options});
    */
-export function getReactFunction(reactComponent = {}, functionBody = &apos;&apos;, options = {}) {
+export function getReactFunctionComponent(reactComponent = {}, functionBody = &apos;&apos;, options = {}) {
+  
+  if (options.lazy) {
+    return lazy(() =&gt; options.lazy(reactComponent, functionBody, Object.assign({}, options, { lazy: false, })).then((lazyComponent) =&gt; {
+      return {
+        default: getReactFunctionComponent(...lazyComponent),
+      };
+    }));
+  }
   const { resources = {}, args=[], } = options;
 
   const functionComponent = Function(&apos;React&apos;, &apos;useState&apos;, &apos;useEffect&apos;, &apos;useContext&apos;, &apos;useReducer&apos;, &apos;useCallback&apos;, &apos;useMemo&apos;, &apos;useRef&apos;, &apos;useImperativeHandle&apos;, &apos;useLayoutEffect&apos;, &apos;useDebugValue&apos;, &apos;getRenderedJSON&apos;, &apos;reactComponent&apos;, &apos;resources&apos;, &apos;props&apos;, `
@@ -292,13 +326,15 @@ export function getReactFunction(reactComponent = {}, functionBody = &apos;&apos
       return getRenderedJSON.call(this, reactComponent);
     }
   `);
-  Object.defineProperty(
-    functionComponent,
-    &apos;name&apos;,
-    {
-      value: options.name || &apos;Anonymous functionComponent&apos;,
-    }
-  );
+  if (options.name) {
+    Object.defineProperty(
+      functionComponent,
+      &apos;name&apos;,
+      {
+        value: options.name,
+      }
+    );
+  }
   const props = reactComponent.props;
   const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props,];
   return functionComponent(...functionArgs);

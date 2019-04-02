@@ -162,9 +162,9 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "rjx/src/components.js~getreactcomponent",
-    "function/index.html#static-function-getReactComponent",
-    "<span>getReactComponent</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "rjx/src/components.js~getreactclasscomponent",
+    "function/index.html#static-function-getReactClassComponent",
+    "<span>getReactClassComponent</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
     "function"
   ],
   [
@@ -174,9 +174,9 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "rjx/src/components.js~getreactfunction",
-    "function/index.html#static-function-getReactFunction",
-    "<span>getReactFunction</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "rjx/src/components.js~getreactfunctioncomponent",
+    "function/index.html#static-function-getReactFunctionComponent",
+    "<span>getReactFunctionComponent</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
     "function"
   ],
   [
@@ -362,13 +362,13 @@ window.esdocSearchIndex = [
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber234",
-    "rjx components getReactComponent",
+    "rjx components getReactClassComponent",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber236",
-    "rjx components getReactComponent should create a React Component",
+    "rjx components getReactClassComponent should create a React Component",
     "test"
   ],
   [

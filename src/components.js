@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, } from 'react';
+import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, } from 'react';
 import { default as ReactDOMElements, } from 'react-dom-factories';
 import { getAdvancedBinding, } from './utils';
 import createReactClass from 'create-react-class';
@@ -11,7 +11,7 @@ export let advancedBinding = getAdvancedBinding();
 /**
  * object of all react components available for RJX
  */
-export let componentMap = Object.assign({ Fragment, }, ReactDOMElements, (typeof window ==='object') ? window.__rjx_custom_elements : {});
+export let componentMap = Object.assign({ Fragment, Suspense, }, ReactDOMElements, (typeof window ==='object') ? window.__rjx_custom_elements : {});
 
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
@@ -111,6 +111,10 @@ export function getFunctionFromEval(options = {}) {
  * Returns a new React Component
  * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class 
  * @param {Object} [options.resources={}] - asyncprops for component
+ * @param {String} [options.name ] - Component name
+ * @param {Function} [options.lazy ] - function that resolves {reactComponent,options} to lazy load component for code splitting
+ * @param {Boolean} [options.passprops ] - pass props to rendered component
+ * @param {Boolean} [options.passstate] - pass state as props to rendered component
  * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
  * @param {Object} reactComponent.render.body - Valid RJX JSON
  * @param {String} reactComponent.getDefaultProps.body - return an object for the default props
@@ -118,7 +122,14 @@ export function getFunctionFromEval(options = {}) {
  * @returns {Function} 
  * @see {@link https://reactjs.org/docs/react-without-es6.html} 
  */
-export function getReactComponent(reactComponent = {}, options = {}) {
+export function getReactClassComponent(reactComponent = {}, options = {}) {
+  if (options.lazy) {
+    return lazy(() => options.lazy(reactComponent, Object.assign({}, options, { lazy: false, })).then((lazyComponent) => {
+      return {
+        default: getReactClassComponent(...lazyComponent),
+      };
+    }));
+  }
   const context = this || {};
   const { returnFactory = true, resources = {}, } = options;
   const rjc = Object.assign({
@@ -143,18 +154,33 @@ export function getReactComponent(reactComponent = {}, options = {}) {
     if (args && !Array.isArray(args) && (args.length &&(args.length && args.filter(arg=>typeof arg==='string').length)) ) {
       throw new TypeError(`Function(${val}) arguments must be an array or variable names`);
     }
-    result[ val ] = (val === 'render')
-      ? function () {
+    if (val === 'render') {
+      result[ val ] = function () {
+        if (options.passprops && this.props) body.props = Object.assign({}, body.props, this.props);
+        if (options.passstate && this.state) body.props = Object.assign({}, body.props, this.state);
         return getRenderedJSON.call(Object.assign({}, context, this), body, resources);
-      }
-      : getFunctionFromEval({
+      };
+    } else {
+      result[ val ] = getFunctionFromEval({
         body,
         args,
       });
+    }
+
     return result;
   }, {});
   const reactComponentClass = createReactClass(classOptions);
-  return returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
+  if (options.name) {
+    Object.defineProperty(
+      reactComponentClass,
+      'name',
+      {
+        value: options.name,
+      }
+    );
+  }
+  const reactClass = returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
+  return reactClass;
 }
 
 /**
@@ -191,9 +217,17 @@ export function getReactComponent(reactComponent = {}, options = {}) {
   };
   const functionBody = 'const [count, setCount] = useState(0); const functionprops = {count,setCount};'
   const options = { name: IntroHook}
-  const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunction({rjxRender, functionBody, options});
+  const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunctionComponent({rjxRender, functionBody, options});
    */
-export function getReactFunction(reactComponent = {}, functionBody = '', options = {}) {
+export function getReactFunctionComponent(reactComponent = {}, functionBody = '', options = {}) {
+  
+  if (options.lazy) {
+    return lazy(() => options.lazy(reactComponent, functionBody, Object.assign({}, options, { lazy: false, })).then((lazyComponent) => {
+      return {
+        default: getReactFunctionComponent(...lazyComponent),
+      };
+    }));
+  }
   const { resources = {}, args=[], } = options;
 
   const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
@@ -210,13 +244,15 @@ export function getReactFunction(reactComponent = {}, functionBody = '', options
       return getRenderedJSON.call(this, reactComponent);
     }
   `);
-  Object.defineProperty(
-    functionComponent,
-    'name',
-    {
-      value: options.name || 'Anonymous functionComponent',
-    }
-  );
+  if (options.name) {
+    Object.defineProperty(
+      functionComponent,
+      'name',
+      {
+        value: options.name,
+      }
+    );
+  }
   const props = reactComponent.props;
   const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props,];
   return functionComponent(...functionArgs);

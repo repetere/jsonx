@@ -21,4 +21,9 @@ export * as Avatar from '@react-spectre/avatar/src';
 export * as Badge from '@react-spectre/badge/src';
 export * as Bar from '@react-spectre/bar/src';
 export * as Toast from '@react-spectre/toast/src';
+export * as Card from '../lib/vendor/react-spectre-master/packages/card/src/index';
+export * as Panel from '../lib/vendor/react-spectre-master/packages/panel/src/index';
+export * as Step from '../lib/vendor/react-spectre-master/packages/step/src/index';
+export * as Popover from '../lib/vendor/react-spectre-master/packages/popover/src/index';
+export * as Tile from '../lib/vendor/react-spectre-master/packages/tile/src/index';
 
