@@ -226,29 +226,29 @@
               punc:['punc']
             }
           },
-          // {
-          //   component:'form',
-          //   debug:true,
-          //   __dangerouslyBindEvalProps:{
-          //     submitForm:`(function(){
-          //       console.log('custom submit form');
-          //     })`,
-          //   },
-          //   passprops:true,
-          //   children:[
-          //     {
-          //       component:'a',
-          //       debug:true,
-          //       props:{
-          //         type:'button',
-          //       },
-          //       __functionProps:{
-          //         onClick:'func:this.props.submitForm',
-          //       },
-          //       children:'test pass',
-          //     },
-          //   ]
-          // },
+          {
+            component:'form',
+            debug:true,
+            __dangerouslyBindEvalProps:{
+              submitForm:`(function(){
+                console.log('custom submit form this', this);
+              })`,
+            },
+            passprops:true,
+            children:[
+              {
+                component:'a',
+                debug:true,
+                props:{
+                  type:'button',
+                },
+                __functionProps:{
+                  onClick:'func:this.props.submitForm',
+                },
+                children:'test pass',
+              },
+            ]
+          },
           {
             p:{
               props:{

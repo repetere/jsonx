@@ -603,6 +603,7 @@ function getFunctionFromEval(options = {}) {
  */
 
 function getReactComponent(reactComponent = {}, options = {}) {
+  const context = this || {};
   const {
     returnFactory = true,
     resources = {}
@@ -636,7 +637,9 @@ function getReactComponent(reactComponent = {}, options = {}) {
       throw new TypeError(`Function(${val}) arguments must be an array or variable names`);
     }
 
-    result[val] = val === 'render' ? () => getRenderedJSON.call(this, body, resources) : getFunctionFromEval({
+    result[val] = val === 'render' ? function () {
+      return getRenderedJSON.call(Object.assign({}, context, this), body, resources);
+    } : getFunctionFromEval({
       body,
       args
     });

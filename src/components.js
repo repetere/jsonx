@@ -119,6 +119,7 @@ export function getFunctionFromEval(options = {}) {
  * @see {@link https://reactjs.org/docs/react-without-es6.html} 
  */
 export function getReactComponent(reactComponent = {}, options = {}) {
+  const context = this || {};
   const { returnFactory = true, resources = {}, } = options;
   const rjc = Object.assign({
     getDefaultProps: {
@@ -143,7 +144,9 @@ export function getReactComponent(reactComponent = {}, options = {}) {
       throw new TypeError(`Function(${val}) arguments must be an array or variable names`);
     }
     result[ val ] = (val === 'render')
-      ? ()=>getRenderedJSON.call(this, body, resources)
+      ? function () {
+        return getRenderedJSON.call(Object.assign({}, context, this), body, resources);
+      }
       : getFunctionFromEval({
         body,
         args,

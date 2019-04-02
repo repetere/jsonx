@@ -1,6 +1,6 @@
 {
   "name": "rjx",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Reactive JSON - Zero-Compilation React components with JSON. Reactive JSON (RJX) takes a RJX JSON object and renders React components. RJX lets you get up and running with React without using JavaScript. RJX was created to remove all the complexities around environment setup, and configuration of React applications (Babel, Webpack, Rollup, etc) and make declarative user interfaces using Machine Learning and Natural Language Processing. Using RJX let's any back end application (Elixir, Go, Python, etc) render server side React components or simply use JSON to generate React components.",
   "main": "dist/rjx.cjs.js",
   "module": "dist/rjx.esm.js",
