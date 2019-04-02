@@ -65,6 +65,8 @@
     <ul class="manual-toc">
       
     <li data-ice="manualNav" class="indent-h1" data-link="manual/CHANGELOG.html"><a href="manual/CHANGELOG.html" data-ice="link">Changelog</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/CHANGELOG.html"><a href="manual/CHANGELOG.html#2-2-0--2019-04-01-" data-ice="link">2.2.0 (2019-04-01)</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/CHANGELOG.html"><a href="manual/CHANGELOG.html#2-1-0--2019-04-01-" data-ice="link">2.1.0 (2019-04-01)</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/CHANGELOG.html"><a href="manual/CHANGELOG.html#2-0-0--2019-03-29-" data-ice="link">2.0.0 (2019-03-29)</a></li>
 </ul>
   </div>
@@ -77,7 +79,7 @@
 <p>RJX was created to remove all the complexities around environment setup, and configuration of React applications (Babel, Webpack, Rollup, etc) and make declarative user interfaces using Machine Learning and Natural Language Processing. Using RJX let&apos;s any back end application (Elixir, Go, Python, etc) render a server side React application.</p>
 <h2 id="installation">Installation</h2><pre><code class="lang-sh"><code class="source-code prettyprint">$ npm i rjx</code>
 </code></pre>
-<h3 id="-a-href--https---github-com-repetere-rjx-blob-master-docs-api-md--full-documentation--a-"><a href="https://github.com/repetere/rjx/blob/master/docs/api.md">Full Documentation</a></h3><h3 id="examples----a-href--https---github-com-repetere-rjx-blob-master-dist-example-html--html-browser-example--a---">Examples ( <a href="https://github.com/repetere/rjx/blob/master/dist/example.html">HTML/Browser Example</a> )</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">import { default as rjx } from &apos;rjx&apos;;
+<h3 id="-a-href--https---repetere-github-io-rjx---full-documentation--a-"><a href="https://repetere.github.io/rjx/">Full Documentation</a></h3><h3 id="examples----a-href--https---github-com-repetere-rjx-blob-master-dist-example-html--html-browser-example--a---">Examples ( <a href="https://github.com/repetere/rjx/blob/master/dist/example.html">HTML/Browser Example</a> )</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">import { default as rjx } from &apos;rjx&apos;;
 //Rendering React Components
 rjx.getRenderedJSON({component:&apos;p&apos;,props:{style:{color:&apos;blue&apos;}},children:&apos;hello world&apos;});
 // =&gt; JSX Equivalent: &lt;p style={{color:&apos;blue&apos;}}&gt;hello world&lt;/p&gt;
@@ -198,7 +200,7 @@ function validateRJX(rjx = {}, returnAllErrors= false);</code>
     getBoundedComponents: [Function: getBoundedComponents], // getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
     getComponentFromLibrary: [Function: getComponentFromLibrary], // returns a react component from a component library (like material-ui, or semantic-ui)
     getComponentFromMap: [Function: getComponentFromMap], // returns a react element from rjx.component
-    getReactComponent: [Function: getReactComponent], // returns a react component and support lifecycle functions
+    getReactClassComponent: [Function: getReactClassComponent], // returns a react component and support lifecycle functions
   },
   _rjxProps: {
     getRJXProps: [Function: getRJXProps], // It uses traverse on a traverseObject to returns a resolved object on propName. So if you&apos;re making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
@@ -514,9 +516,9 @@ switch (opscompares.operation) {
     return opscompares.left !== undefined &amp;&amp; opscompares.left !== null;
 }</code>
 </code></pre>
-<h3 id="advanced---custom-react-components--amp--lifecycle-functions">Advanced - Custom React Components &amp; Lifecycle Functions</h3><p>You can also create react components with lifecycle functions using <code>getReactComponent</code>.</p>
+<h3 id="advanced---custom-react-components--amp--lifecycle-functions">Advanced - Custom React Components &amp; Lifecycle Functions</h3><p>You can also create react components with lifecycle functions using <code>getReactClassComponent</code>.</p>
 <p>The only required function is a render function, the body of the function has to be valid rjx.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">const MyCustomComponent = rjx._rjxComponents.getReactComponent({
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const MyCustomComponent = rjx._rjxComponents.getReactClassComponent({
     //
     // Initialization function
     //
@@ -615,7 +617,7 @@ rjx.rjxRender.call(boundConfig, {
 <pre><code class="lang-sh"><code class="source-code prettyprint">$ grunt doc
 $ jsdoc2md src/**/*.js  &gt; docs/api.md</code>
 </code></pre>
-<h3 id="notes">Notes</h3><p>Check out <a href="https://github.com/repetere/rjx">https://github.com/repetere/rjx</a> for the full rjx Documentation</p>
+<h3 id="notes">Notes</h3><p>Check out <a href="https://repetere.github.io/rjx/">https://repetere.github.io/rjx/</a> for the full rjx Documentation</p>
 <h3 id="testing">Testing</h3><pre><code class="lang-sh"><code class="source-code prettyprint">$ npm i
 $ grunt test</code>
 </code></pre>
@@ -759,7 +761,31 @@ async function main(){
     </div>
 <div class="manual-card-wrap" data-ice="cards">
       <div class="manual-card">
-        <div data-ice="card"><h1>Changelog</h1><h2>2.0.0 (2019-03-29)</h2><ul>
+        <div data-ice="card"><h1>Changelog</h1><h2>2.2.0 (2019-04-01)</h2><ul>
+<li><strong>Feat</strong><ul>
+<li>Added React.lazy support</li>
+<li>Added React.Suspense support</li>
+</ul>
+</li>
+<li><strong>Fix</strong><ul>
+<li>Named class support via options</li>
+<li>passing state and props to class render component via options</li>
+</ul>
+</li>
+<li><strong>Chore</strong></li>
+</ul><h2>2.1.0 (2019-04-01)</h2><ul>
+<li><strong>Feat</strong></li>
+<li><strong>Fix</strong><ul>
+<li>Improved inline function support</li>
+<li>Improved debugging support</li>
+<li>Automated parameter detection</li>
+</ul>
+</li>
+<li><strong>Chore</strong><ul>
+<li>Update Documentation</li>
+</ul>
+</li>
+</ul><h2>2.0.0 (2019-03-29)</h2><ul>
 <li><strong>Feat</strong><ul>
 <li>Added support for Function Components</li>
 <li>Added support for Hooks</li>

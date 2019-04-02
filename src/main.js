@@ -128,6 +128,10 @@ export function __getReact() {
   return React;
 }
 
+export function __getReactDOM() {
+  return ReactDOM;
+}
+
 export const _rjxChildren = rjxChildren;
 export const _rjxComponents = rjxComponents;
 export const _rjxProps = rjxProps;

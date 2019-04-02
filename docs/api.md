@@ -75,7 +75,7 @@ Returns a new function from an options object
 | options.body | String | optional: true, default: '' | Function string body |
 | options.args | String[] | optional: true, default: [] | Function arguments |
 
-## `getReactComponent(options.returnFactory: Boolean, options.resources: Object, reactComponent: Object, reactComponent.render.body: Object, reactComponent.getDefaultProps.body: String, reactComponent.getInitialState.body: String): Function`
+## `getReactClassComponent(options.returnFactory: Boolean, options.resources: Object, options.name: String, options.lazy: Function, options.use_getState: Boolean, options.bindContext: Boolean, options.passprops: Boolean, options.passstate: Boolean, reactComponent: Object, reactComponent.render.body: Object, reactComponent.getDefaultProps.body: String, reactComponent.getInitialState.body: String): Function`
 
 Returns a new React Component
 
@@ -83,12 +83,18 @@ Returns a new React Component
 | --- | --- | --- | --- |
 | options.returnFactory | Boolean | optional: true, default: true | returns a React component if true otherwise returns Component Class |
 | options.resources | Object | optional: true, default: {} | asyncprops for component |
+| options.name | String | optional: true | Component name |
+| options.lazy | Function | optional: true | function that resolves {reactComponent,options} to lazy load component for code splitting |
+| options.use_getState | Boolean | optional: true, default: true | define getState prop |
+| options.bindContext | Boolean | optional: true, default: true | bind class this reference to render function components |
+| options.passprops | Boolean | optional: true | pass props to rendered component |
+| options.passstate | Boolean | optional: true | pass state as props to rendered component |
 | reactComponent | Object | optional: true, default: {} | an object of functions used for create-react-class |
 | reactComponent.render.body | Object |  | Valid RJX JSON |
 | reactComponent.getDefaultProps.body | String |  | return an object for the default props |
 | reactComponent.getInitialState.body | String |  | return an object for the default state |
 
-## `getReactFunction(reactComponent: *, functionBody: String, options.name: String): Function`
+## `getReactFunctionComponent(reactComponent: *, functionBody: String, options.name: String): Function`
 
 Returns new React Function Component
 
@@ -144,6 +150,19 @@ Use RJX for express view rendering
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
+
+## `__getReactDOM()`
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+
+## `getParamNames(func: Function)`
+
+returns the names of parameters from a function declaration
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+| func | Function |  |
 
 ## `getRJXProps(traverseObject: Object, options: Object, options.rjx: Object, options.propName: Object): Object`
 

@@ -1,0 +1,26 @@
+{
+  "name": "@react-spectre/label",
+  "version": "1.0.0-16",
+  "description": "React components for Spectre.css labels.",
+  "jsnext:main": "src/index.js",
+  "main": "dist/label.js",
+  "browser": "dist/label.umd.js",
+  "module": "dist/label.es.js",
+  "repository": "https://github.com/react-spectre/react-spectre/blob/master/packages/label",
+  "author": "Rubens Mariuzzo <rubens@mariuzzo.com> (http://github.com/rmariuzzo)",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@react-spectre/typography",
+  "version": "1.0.0-16",
+  "description": "React components for Spectre.css's typography.",
+  "jsnext:main": "src/index.js",
+  "main": "dist/typography.js",
+  "browser": "dist/typography.umd.js",
+  "module": "dist/typography.es.js",
+  "repository": "https://github.com/react-spectre/react-spectre/tree/master/packages/typography",
+  "author": "Rubens Mariuzzo <rubens@mariuzzo.com> (http://github.com/rmariuzzo)",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "prop-types": "^15.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
+}

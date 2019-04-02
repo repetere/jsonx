@@ -1,6 +1,6 @@
 const rjx = require('../../dist/rjx.cjs');
 let c = rjx._rjxComponents.getFunctionFromEval({ body: 'console.log("hello")', });
-const MyCustomComponent = rjx._rjxComponents.getReactComponent({
+const MyCustomComponent = rjx._rjxComponents.getReactClassComponent({
   //
   // Initialization function
   //

@@ -1,0 +1,29 @@
+{
+  "name": "@react-spectre/autocomplete",
+  "version": "1.0.0-16",
+  "description": "React components for Spectre.css autocomplete element.",
+  "jsnext:main": "src/index.js",
+  "main": "dist/autocomplete.js",
+  "browser": "dist/autocomplete.umd.js",
+  "module": "dist/autocomplete.es.js",
+  "repository": "https://github.com/react-spectre/react-spectre/blob/master/packages/autocomplete",
+  "author": "Rubens Mariuzzo <rubens@mariuzzo.com> (http://github.com/rmariuzzo)",
+  "contributors": [
+    "Ángel Piña <six.aps@gmail.com> (https://github.com/0aps)"
+  ],
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5"
+  }
+}

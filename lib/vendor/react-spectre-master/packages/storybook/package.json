@@ -1,0 +1,37 @@
+{
+  "name": "@react-spectre/storybook",
+  "version": "1.0.0-16",
+  "description": "Stories for React Spectre.",
+  "main": "index.js",
+  "repository": "https://github.com/react-spectre/react-spectre/tree/master/packages/storybook",
+  "author": "Rubens Mariuzzo <rubens@mariuzzo.com> (http://github.com/rmariuzzo)",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "dependencies": {
+    "@react-spectre/accordion": "^1.0.0-16",
+    "@react-spectre/autocomplete": "^1.0.0-16",
+    "@react-spectre/avatar": "^1.0.0-16",
+    "@react-spectre/badge": "^1.0.0-16",
+    "@react-spectre/bar": "^1.0.0-16",
+    "@react-spectre/button": "^1.0.0-16",
+    "@react-spectre/card": "^1.0.0-16",
+    "@react-spectre/form": "^1.0.0-16",
+    "@react-spectre/grid": "^1.0.0-16",
+    "@react-spectre/icon": "^1.0.0-16",
+    "@react-spectre/label": "^1.0.0-16",
+    "@react-spectre/media": "^1.0.0-16",
+    "@react-spectre/navbar": "^1.0.0-16",
+    "@react-spectre/popover": "^1.0.0-16",
+    "@react-spectre/step": "^1.0.0-16",
+    "@react-spectre/tab": "^1.0.0-16",
+    "@react-spectre/table": "^1.0.0-16",
+    "@react-spectre/tile": "^1.0.0-16",
+    "@react-spectre/toast": "^1.0.0-16",
+    "@react-spectre/typography": "^1.0.0-16",
+    "@react-spectre/panel": "^1.0.0-16"
+  },
+  "private": true
+}

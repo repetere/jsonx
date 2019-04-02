@@ -42,10 +42,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromLibrary">getComponentFromLibrary</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponent">getReactComponent</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunction">getReactFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactClassComponent">getReactClassComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunctionComponent">getReactFunctionComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
@@ -54,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromProps">getFunctionFromProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionProps">getFunctionProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getParamNames">getParamNames</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRJXProps">getRJXProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></span></li>
@@ -71,11 +73,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ARGUMENT_NAMES">ARGUMENT_NAMES</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRIP_COMMENTS">STRIP_COMMENTS</a></span></span></li>
 </ul>
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">29/41</span></h1>
+<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">30/45</span></h1>
 
 <table class="files-summary" data-ice="files" data-use-coverage="true">
   <thead>
@@ -108,17 +112,18 @@
 <span><a href="function/index.html#static-function-getComponentFromLibrary">getComponentFromLibrary</a></span>
 <span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span>
 <span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span>
-<span><a href="function/index.html#static-function-getReactComponent">getReactComponent</a></span>
-<span><a href="function/index.html#static-function-getReactFunction">getReactFunction</a></span></td>
+<span><a href="function/index.html#static-function-getReactClassComponent">getReactClassComponent</a></span>
+<span><a href="function/index.html#static-function-getReactFunctionComponent">getReactFunctionComponent</a></span></td>
       <td class="coverage"><span data-ice="coverage">87 %</span><span data-ice="coverageCount" class="coverage-count">7/8</span></td>
-      <td style="display: none;" data-ice="size">9914 byte</td>
-      <td style="display: none;" data-ice="lines">224</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 21:49:06 (UTC)</td>
+      <td style="display: none;" data-ice="size">11831 byte</td>
+      <td style="display: none;" data-ice="lines">274</td>
+      <td style="display: none;" data-ice="updated">2019-04-03 19:39:02 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/main.js.html#errorLines=10,11,12,127,13,131,132,133,134,14,15">src/main.js</a></span></td>
+      <td data-ice="filePath"><span><a href="file/src/main.js.html#errorLines=10,11,12,127,13,131,135,136,137,138,14,15">src/main.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-__express">__express</a></span>
 <span><a href="function/index.html#static-function-__getReact">__getReact</a></span>
+<span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span>
 <span><a href="variable/index.html#static-variable-_rjxChildren">_rjxChildren</a></span>
 <span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span>
 <span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span>
@@ -127,25 +132,28 @@
 <span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span>
 <span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span>
 <span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></td>
-      <td class="coverage"><span data-ice="coverage">26 %</span><span data-ice="coverageCount" class="coverage-count">4/15</span></td>
-      <td style="display: none;" data-ice="size">6275 byte</td>
-      <td style="display: none;" data-ice="lines">135</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 22:20:42 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">25 %</span><span data-ice="coverageCount" class="coverage-count">4/16</span></td>
+      <td style="display: none;" data-ice="size">6335 byte</td>
+      <td style="display: none;" data-ice="lines">139</td>
+      <td style="display: none;" data-ice="updated">2019-03-07 12:57:54 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/props.js.html">src/props.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span>
+      <td data-ice="filePath"><span><a href="file/src/props.js.html#errorLines=11,12">src/props.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-ARGUMENT_NAMES">ARGUMENT_NAMES</a></span>
+<span><a href="variable/index.html#static-variable-STRIP_COMMENTS">STRIP_COMMENTS</a></span>
+<span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span>
 <span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span>
 <span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span>
 <span><a href="function/index.html#static-function-getFunctionFromProps">getFunctionFromProps</a></span>
 <span><a href="function/index.html#static-function-getFunctionProps">getFunctionProps</a></span>
+<span><a href="function/index.html#static-function-getParamNames">getParamNames</a></span>
 <span><a href="function/index.html#static-function-getRJXProps">getRJXProps</a></span>
 <span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span>
 <span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">8/8</span></td>
-      <td style="display: none;" data-ice="size">16073 byte</td>
-      <td style="display: none;" data-ice="lines">393</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 21:17:34 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">81 %</span><span data-ice="coverageCount" class="coverage-count">9/11</span></td>
+      <td style="display: none;" data-ice="size">19275 byte</td>
+      <td style="display: none;" data-ice="lines">480</td>
+      <td style="display: none;" data-ice="updated">2019-04-03 19:51:34 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/utils.js.html">src/utils.js</a></span></td>
@@ -157,9 +165,9 @@
 <span><a href="function/index.html#static-function-validSimpleRJXSyntax">validSimpleRJXSyntax</a></span>
 <span><a href="function/index.html#static-function-validateRJX">validateRJX</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">7/7</span></td>
-      <td style="display: none;" data-ice="size">16856 byte</td>
+      <td style="display: none;" data-ice="size">16957 byte</td>
       <td style="display: none;" data-ice="lines">418</td>
-      <td style="display: none;" data-ice="updated">2019-03-06 20:59:28 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-04-03 19:51:45 (UTC)</td>
     </tr>
 </tbody>
 </table>

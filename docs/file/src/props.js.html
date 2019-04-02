@@ -42,10 +42,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromLibrary">getComponentFromLibrary</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponent">getReactComponent</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunction">getReactFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactClassComponent">getReactClassComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunctionComponent">getReactFunctionComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
@@ -54,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromProps">getFunctionFromProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionProps">getFunctionProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getParamNames">getParamNames</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRJXProps">getRJXProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></span></li>
@@ -71,6 +73,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ARGUMENT_NAMES">ARGUMENT_NAMES</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRIP_COMMENTS">STRIP_COMMENTS</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -84,6 +88,28 @@ import { getComponentFromMap, } from &apos;./components&apos;;
 // if (typeof window === &apos;undefined&apos;) {
 //   var window = window || {};
 // }
+
+//https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically
+export const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+export const ARGUMENT_NAMES = /([^\s,]+)/g;
+/**
+ * returns the names of parameters from a function declaration
+ * @example
+ * const arrowFunctionAdd = (a,b)=&gt;a+b;
+ * function regularFunctionAdd(c,d){return c+d;}
+ * getParamNames(arrowFunctionAdd) // =&gt; [&apos;a&apos;,&apos;b&apos;]
+ * getParamNames(regularFunctionAdd) // =&gt; [&apos;c&apos;,&apos;d&apos;]
+ * @param {Function} func 
+ * @todo write tests
+ */
+export function getParamNames(func) {
+  var fnStr = func.toString().replace(STRIP_COMMENTS, &apos;&apos;);
+  var result = fnStr.slice(fnStr.indexOf(&apos;(&apos;)+1, fnStr.indexOf(&apos;)&apos;)).match(ARGUMENT_NAMES);
+  if(result === null){
+    result = [];
+  }
+  return result;
+}
 
 /**
  * It uses traverse on a traverseObject to returns a resolved object on propName. So if you&apos;re making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
@@ -193,13 +219,37 @@ export function getEvalProps(options = {}) {
   const { rjx, } = options;
   const scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
   const evProps = Object.keys(rjx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) =&gt; {
-    // eslint-disable-next-line
-    eprops[ epropName ] = scopedEval(rjx.__dangerouslyEvalProps[ epropName ]);
+    let evVal;
+    try {
+      // eslint-disable-next-line
+      evVal = scopedEval(rjx.__dangerouslyEvalProps[ epropName ]);
+    } catch (e) { 
+      if (this.debug || rjx.debug) evVal = e;
+    }
+    eprops[ epropName ] = evVal;
     return eprops;
   }, {});
   const evBindProps = Object.keys(rjx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) =&gt; {
+    let evVal;
+    try {
+      let args;
+      // InlineFunction = Function.prototype.constructor.apply({}, args);
+      const functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[ epropName ]);
+      if (rjx.__functionargs &amp;&amp; rjx.__functionargs[ epropName ]) {
+        args = [this,].concat(rjx.__functionargs[ epropName ].map(arg =&gt; rjx.props[ arg ]));
+      }  else if (rjx.__functionparams) {
+        const functionDefArgs = getParamNames(functionDefinition);
+        args = [this,].concat(functionDefArgs);
+      } else {
+        args = [this,];
+      } 
+      // eslint-disable-next-line
+      evVal = functionDefinition.bind(...args);
+    } catch (e) { 
+      if (this.debug || rjx.debug) evVal = e;
+    }
     // eslint-disable-next-line
-    eprops[ epropName ] = scopedEval(rjx.__dangerouslyBindEvalProps[ epropName ]).bind(this);
+    eprops[ epropName ] = evVal;
     return eprops;
   }, {});
 
@@ -216,8 +266,14 @@ export function getEvalProps(options = {}) {
 export function getComponentProps(options = {}) {
   const { rjx, resources, } = options;
   return Object.keys(rjx.__dangerouslyInsertComponents).reduce((cprops, cpropName) =&gt; {
-    // eslint-disable-next-line
-    cprops[ cpropName ] = getRenderedJSON.call(this, rjx.__dangerouslyInsertComponents[ cpropName ], resources);
+    let componentVal;
+    try {
+      // eslint-disable-next-line
+      componentVal = getRenderedJSON.call(this, rjx.__dangerouslyInsertComponents[ cpropName ], resources);
+    } catch (e) {
+      if (this.debug || rjx.debug) componentVal = e;
+    }
+    cprops[ cpropName ] = componentVal;
     return cprops;
   }, {});
 }
@@ -230,16 +286,45 @@ export function getComponentProps(options = {}) {
  * @returns {Object} resolved object of React Components
  */
 export function getReactComponentProps(options = {}) {
-  const { rjx,  } = options;
-  return Object.keys(rjx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) =&gt; {
-    // eslint-disable-next-line
-    cprops[ cpropName ] = getComponentFromMap({
-      rjx: { component: rjx.__dangerouslyInsertReactComponents[ cpropName ], },
-      reactComponents: this.reactComponents,
-      componentLibraries: this.componentLibraries,
-    });
-    return cprops;
-  }, {});
+  const { rjx, } = options;
+  if (rjx.__dangerouslyInsertRJXComponents &amp;&amp; Object.keys(rjx.__dangerouslyInsertRJXComponents).length) { 
+    return Object.keys(rjx.__dangerouslyInsertRJXComponents).reduce((cprops, cpropName) =&gt; {
+      let componentVal;
+      try {
+        componentVal = getComponentFromMap({
+          rjx: rjx.__dangerouslyInsertRJXComponents[ cpropName ],
+          reactComponents: this.reactComponents,
+          componentLibraries: this.componentLibraries,
+        });
+      } catch (e) {
+        if (this.debug || rjx.debug) componentVal = e;
+      }
+      // eslint-disable-next-line
+      cprops[ cpropName ] = componentVal;
+      return cprops;
+    }, {});
+  } else {
+    return Object.keys(rjx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) =&gt; {
+      let componentVal;
+      try {
+        componentVal = getComponentFromMap({
+          rjx: {
+            component: rjx.__dangerouslyInsertReactComponents[ cpropName ],
+            props: rjx.__dangerouslyInsertComponentProps
+              ? rjx.__dangerouslyInsertComponentProps[ cpropName ]
+              : {},
+          },
+          reactComponents: this.reactComponents,
+          componentLibraries: this.componentLibraries,
+        });
+      } catch (e) {
+        if (this.debug || rjx.debug) componentVal = e;
+      }
+      // eslint-disable-next-line
+      cprops[ cpropName ] = componentVal;
+      return cprops;
+    }, {});
+  }
 }
 
 /**
@@ -252,7 +337,7 @@ export function getReactComponentProps(options = {}) {
  * getFunctionFromProps({ propFunc=&apos;func:this.props.onClick&apos;, }) // =&gt; this.props.onClick
  */
 export function getFunctionFromProps(options) {
-  const { propFunc=&apos;func:&apos;, propBody, rjx, } = options;
+  const { propFunc=&apos;func:&apos;, propBody, rjx, functionProperty=&apos;&apos;, } = options;
   // eslint-disable-next-line
   const { logError = console.error,  debug, } = this;
   const windowObject = this.window || global.window || {};
@@ -265,13 +350,13 @@ export function getFunctionFromProps(options) {
       // eslint-disable-next-line
       let InlineFunction;
       if (rjx.__functionargs) {
-        const args = [].concat(rjx.__functionargs);
+        const args = [].concat(rjx.__functionargs[functionProperty]);
         args.push(propBody);
         InlineFunction = Function.prototype.constructor.apply({}, args);
       } else {
         InlineFunction = Function(&apos;param1&apos;, &apos;param2&apos;, &apos;&quot;use strict&quot;;&apos; + propBody);
       }
-      const [propFuncName, funcName, ] = propFunc.split(&apos;.&apos;);
+      const [propFuncName, funcName,] = propFunc.split(&apos;.&apos;);
       
       Object.defineProperty(
         InlineFunction,
@@ -281,7 +366,7 @@ export function getFunctionFromProps(options) {
         }
       );
       if (rjx.__functionargs) {
-        const boundArgs = [this,].concat(rjx.__functionargs.map(arg =&gt; rjx.props[ arg ]));
+        const boundArgs = [this, ].concat(rjx.__functionargs[functionProperty].map(arg =&gt; rjx.props[ arg ]));
         return InlineFunction.bind(...boundArgs);
       } else {
         return InlineFunction.bind(this);
@@ -307,15 +392,20 @@ export function getFunctionFromProps(options) {
         }
       }
     } else if (functionNameArray.length === 4) {
-      return this.props[ functionNameArray[ 2 ] ][ functionName ];
+      return (this.props)
+        ? this.props[ functionNameArray[ 2 ] ][ functionName ]
+        : rjx.props[ functionNameArray[ 2 ] ][ functionName ];
     } else if (functionNameArray.length === 3) {
-      return this.props[ functionName ].bind(this);
+      return (this.props)
+        ? this.props[ functionName ].bind(this)
+        : rjx.props[ functionName ].bind(this);
     } else {
       return function () {};
     }
   } catch (e) {
-    if (debug) {
+    if (this.debug){
       logError(e);
+      if (rjx &amp;&amp; rjx.debug) return e;
     }
     return function () {};
   }
@@ -334,11 +424,12 @@ export function getFunctionProps(options = {}) {
   const funcProps = rjx.__functionProps;
   //Allowing for window functions
   Object.keys(funcProps).forEach(key =&gt; {
-    if (typeof funcProps[key] ===&apos;string&apos; &amp;&amp; funcProps[key].indexOf(&apos;func:&apos;) !== -1 ){
+    if (typeof funcProps[ key ] === &apos;string&apos; &amp;&amp; funcProps[ key ].indexOf(&apos;func:&apos;) !== -1) {
       allProps[ key ] = getFunction({
         propFunc: funcProps[ key ],
         propBody: (rjx.__inline)?rjx.__inline[ key ]:&apos;&apos;,
         rjx,
+        functionProperty:key,
       });
     } 
   });
@@ -456,14 +547,14 @@ export function getComputedProps(options = {}) {
     const insertedComponents = (rjx.__dangerouslyInsertComponents)
       ? getComponentProps.call(this, { rjx, resources, debug, })
       : {};
-    const insertedReactComponents = (rjx.__dangerouslyInsertReactComponents)
+    const insertedReactComponents = (rjx.__dangerouslyInsertReactComponents || rjx.__dangerouslyInsertRJXComponents)
       ? getReactComponentProps.call(this, { rjx, debug, })
       : {};
     const allProps = Object.assign({}, { key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps,
       rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
       rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {});
-    
+    if (rjx.debug) console.debug({ rjx, computedProps, });
     return computedProps;
   } catch (e) {
     debug &amp;&amp; logError(e, (e.stack) ? e.stack : &apos;no stack&apos;);

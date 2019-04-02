@@ -1,5 +1,17 @@
 window.esdocSearchIndex = [
   [
+    "rjx/src/props.js~argument_names",
+    "variable/index.html#static-variable-ARGUMENT_NAMES",
+    "<span>ARGUMENT_NAMES</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "variable"
+  ],
+  [
+    "rjx/src/props.js~strip_comments",
+    "variable/index.html#static-variable-STRIP_COMMENTS",
+    "<span>STRIP_COMMENTS</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "variable"
+  ],
+  [
     "rjx/src/main.js~__express",
     "function/index.html#static-function-__express",
     "<span>__express</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
@@ -9,6 +21,12 @@ window.esdocSearchIndex = [
     "rjx/src/main.js~__getreact",
     "function/index.html#static-function-__getReact",
     "<span>__getReact</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "function"
+  ],
+  [
+    "rjx/src/main.js~__getreactdom",
+    "function/index.html#static-function-__getReactDOM",
+    "<span>__getReactDOM</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
     "function"
   ],
   [
@@ -126,6 +144,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "rjx/src/props.js~getparamnames",
+    "function/index.html#static-function-getParamNames",
+    "<span>getParamNames</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "function"
+  ],
+  [
     "rjx/src/children.js~getrjxchildren",
     "function/index.html#static-function-getRJXChildren",
     "<span>getRJXChildren</span> <span class=\"search-result-import-path\">rjx/src/children.js</span>",
@@ -138,9 +162,9 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "rjx/src/components.js~getreactcomponent",
-    "function/index.html#static-function-getReactComponent",
-    "<span>getReactComponent</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "rjx/src/components.js~getreactclasscomponent",
+    "function/index.html#static-function-getReactClassComponent",
+    "<span>getReactClassComponent</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
     "function"
   ],
   [
@@ -150,9 +174,9 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "rjx/src/components.js~getreactfunction",
-    "function/index.html#static-function-getReactFunction",
-    "<span>getReactFunction</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "rjx/src/components.js~getreactfunctioncomponent",
+    "function/index.html#static-function-getReactFunctionComponent",
+    "<span>getReactFunctionComponent</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
     "function"
   ],
   [
@@ -217,13 +241,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber57",
+    "test-file/test/unit/children_spec.js.html#lineNumber81",
     "rjx",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber81",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber57",
     "rjx",
     "test"
   ],
@@ -338,13 +362,13 @@ window.esdocSearchIndex = [
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber234",
-    "rjx components getReactComponent",
+    "rjx components getReactClassComponent",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber236",
-    "rjx components getReactComponent should create a React Component",
+    "rjx components getReactClassComponent should create a React Component",
     "test"
   ],
   [

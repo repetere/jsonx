@@ -231,10 +231,10 @@ describe('rjx components', function () {
       expect(myFunc()).to.eql(3);
     });
   });
-  describe('getReactComponent', () => {
-    const getReactComponent = rjx._rjxComponents.getReactComponent;
+  describe('getReactClassComponent', () => {
+    const getReactClassComponent = rjx._rjxComponents.getReactClassComponent;
     it('should create a React Component', () => {
-      const MyCustomComponent = getReactComponent({
+      const MyCustomComponent = getReactClassComponent({
         componentDidMount:{
           body:'console.log(\'mounted\',this.props)',
           arguments:[],

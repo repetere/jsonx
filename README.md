@@ -14,7 +14,7 @@ RJX was created to remove all the complexities around environment setup, and con
 $ npm i rjx
 ```
 
-### [Full Documentation](https://github.com/repetere/rjx/blob/master/docs/api.md)
+### [Full Documentation](https://repetere.github.io/rjx/)
 
 ### Examples ( [HTML/Browser Example](https://github.com/repetere/rjx/blob/master/dist/example.html) ) 
 
@@ -163,7 +163,7 @@ If you want to save time, you can use the property name as the component and def
     getBoundedComponents: [Function: getBoundedComponents], // getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
     getComponentFromLibrary: [Function: getComponentFromLibrary], // returns a react component from a component library (like material-ui, or semantic-ui)
     getComponentFromMap: [Function: getComponentFromMap], // returns a react element from rjx.component
-    getReactComponent: [Function: getReactComponent], // returns a react component and support lifecycle functions
+    getReactClassComponent: [Function: getReactClassComponent], // returns a react component and support lifecycle functions
   },
   _rjxProps: {
     getRJXProps: [Function: getRJXProps], // It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
@@ -522,12 +522,12 @@ switch (opscompares.operation) {
 
 ### Advanced - Custom React Components & Lifecycle Functions
 
-You can also create react components with lifecycle functions using `getReactComponent`.
+You can also create react components with lifecycle functions using `getReactClassComponent`.
 
 The only required function is a render function, the body of the function has to be valid rjx.
 
 ```javascript
-const MyCustomComponent = rjx._rjxComponents.getReactComponent({
+const MyCustomComponent = rjx._rjxComponents.getReactClassComponent({
     //
     // Initialization function
     //
@@ -640,7 +640,7 @@ $ jsdoc2md src/**/*.js  > docs/api.md
 
 ### Notes
 
-Check out [https://github.com/repetere/rjx](https://github.com/repetere/rjx) for the full rjx Documentation
+Check out [https://repetere.github.io/rjx/](https://repetere.github.io/rjx/) for the full rjx Documentation
 
 ### Testing
 

@@ -7,7 +7,8 @@ import globals from 'rollup-plugin-node-globals';
 import replace from 'rollup-plugin-replace';
 // import alias from 'rollup-plugin-alias';
 import pkg from './package.json';
-import { terser, } from 'rollup-plugin-terser';
+// import { terser, } from 'rollup-plugin-terser';
+import terser from 'rollup-plugin-terser-js';
 
 export default [
   // browser-friendly UMD build
@@ -28,8 +29,8 @@ export default [
     ],
     plugins: [
       replace({
-        // 'process.env.NODE_ENV': JSON.stringify( 'development' ),
-        'process.env.NODE_ENV': JSON.stringify( 'production' ),
+        'process.env.NODE_ENV': JSON.stringify( 'development' ),
+        // 'process.env.NODE_ENV': JSON.stringify( 'production' ),
       }),
       resolve({
         preferBuiltins: true,
@@ -55,15 +56,15 @@ export default [
           // relative to the current directory, or the name
           // of a module in node_modules
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
-          'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
+          'node_modules/react/index.js': ['Children', 'Component', 'PropTypes','Fragment','Suspense','lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
 
         },
       }), // so Rollup can convert `ms` to an ES module
       globals({
       }),
-      terser({
-        sourcemap: true
-      }),
+      // terser({
+      //   sourcemap: true
+      // }),
     ],
   },
 
@@ -214,15 +215,15 @@ export default [
           ],
           ['babel-plugin-replace-imports', {
             'test': /react-dom\/server/,
-            'replacer': '../test/mock/_mock_react-dom-server',
+            'replacer': '../design/_mock_react-dom-server',
           }, ],
-          ['babel-plugin-replace-imports', {
-            'test': /react$/,
-            'replacer': 'react/cjs/react.production.min.js',
-          },'r-rename' ],
+          // ['babel-plugin-replace-imports', {
+          //   'test': /react$/,
+          //   'replacer': 'react/cjs/react.production.min.js',
+          // },'r-rename' ],
           ['babel-plugin-replace-imports', {
             'test': /ua-parser-js$/,
-            'replacer': '../test/mock/_mock_react-dom-server',
+            'replacer': '../design/_mock_react-dom-server',
           },'u-rename' ],
         ],
         // exclude: 'node_modules/**', // only transpile our source code
@@ -233,14 +234,19 @@ export default [
           // relative to the current directory, or the name
           // of a module in node_modules
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
-          'node_modules/react/cjs/react.production.min.js': ['Children', 'Component', 'PropTypes', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
+          'node_modules/react/index.js':[
+          // 'node_modules/react/cjs/react.production.min.js': [
+            'Children', 'Component', 'PropTypes', 'Fragment','Suspense','lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',
+          ],
 
         },
       }), // so Rollup can convert `ms` to an ES module
       globals({
       }),
       terser({
-        sourcemap: true
+        sourcemaps:true,
+        compress: true,
+        mangle: true,
       }),
     ],
   },
