@@ -4,13 +4,13 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var UAParser = _interopDefault(require('ua-parser-js'));
 var React = require('react');
 var React__default = _interopDefault(React);
+var ReactDOMElements = _interopDefault(require('react-dom-factories'));
+var createReactClass = _interopDefault(require('create-react-class'));
 var ReactDOM = _interopDefault(require('react-dom'));
 var ReactDOMServer = _interopDefault(require('react-dom/server'));
-var ReactDOMElements = _interopDefault(require('react-dom-factories'));
-var UAParser = _interopDefault(require('ua-parser-js'));
-var createReactClass = _interopDefault(require('create-react-class'));
 
 /**
  * Used to evaluate whether or not to render a component
@@ -1645,6 +1645,9 @@ const _rjxComponents = rjxComponents;
 const _rjxProps = rjxProps;
 const _rjxUtils = rjxUtils;
 
+exports.rjxRender = rjxRender;
+exports.rjxHTMLString = rjxHTMLString;
+exports.getRenderedJSON = getRenderedJSON;
 exports.__express = __express;
 exports.__getReact = __getReact;
 exports.__getReactDOM = __getReactDOM;
@@ -1653,6 +1656,3 @@ exports._rjxComponents = _rjxComponents;
 exports._rjxProps = _rjxProps;
 exports._rjxUtils = _rjxUtils;
 exports.default = getRenderedJSON;
-exports.getRenderedJSON = getRenderedJSON;
-exports.rjxHTMLString = rjxHTMLString;
-exports.rjxRender = rjxRender;
