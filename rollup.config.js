@@ -239,10 +239,10 @@ export default [
             'test': /react-dom\/server/,
             'replacer': '../design/_mock_react-dom-server',
           }, ],
-          ['babel-plugin-replace-imports', {
-            'test': /ua-parser-js$/,
-            'replacer': '../design/_mock_react-dom-server',
-          },'u-rename' ],
+          // ['babel-plugin-replace-imports', {
+          //   'test': /ua-parser-js$/,
+          //   'replacer': '../design/_mock_react-dom-server',
+          // },'u-rename' ],
         ],
       }),
       terser({
