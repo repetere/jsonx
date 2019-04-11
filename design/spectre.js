@@ -21,9 +21,15 @@ export * as Avatar from '@react-spectre/avatar/src';
 export * as Badge from '@react-spectre/badge/src';
 export * as Bar from '@react-spectre/bar/src';
 export * as Toast from '@react-spectre/toast/src';
-export * as Card from '../lib/vendor/react-spectre-master/packages/card/src/index';
-export * as Panel from '../lib/vendor/react-spectre-master/packages/panel/src/index';
-export * as Step from '../lib/vendor/react-spectre-master/packages/step/src/index';
-export * as Popover from '../lib/vendor/react-spectre-master/packages/popover/src/index';
-export * as Tile from '../lib/vendor/react-spectre-master/packages/tile/src/index';
+import * as CardModule from '../lib/vendor/react-spectre-master/packages/card/src/index';
+import * as PanelModule from '../lib/vendor/react-spectre-master/packages/panel/src/index';
+import * as StepModule from '../lib/vendor/react-spectre-master/packages/step/src/index';
+import * as PopoverModule from '../lib/vendor/react-spectre-master/packages/popover/src/index';
+import * as TileModule from '../lib/vendor/react-spectre-master/packages/tile/src/index';
+
+export const Card = Object.assign({ Card: CardModule.Card, }, CardModule.Card, CardModule);
+export const Panel = Object.assign({ Panel: PanelModule.Panel, }, PanelModule.Panel, PanelModule);
+export const Step = Object.assign({ Step: StepModule.Step, }, StepModule.Step, StepModule);
+export const Popover = Object.assign({ Popover: PopoverModule.Popover, }, PopoverModule.Popover, PopoverModule);
+export const Tile = Object.assign({ Tile: TileModule.Tile, }, TileModule.Tile, TileModule);
 
