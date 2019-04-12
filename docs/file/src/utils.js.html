@@ -43,6 +43,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactClassComponent">getReactClassComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactContext">getReactContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunctionComponent">getReactFunctionComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
@@ -50,6 +51,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenComponents">getChildrenComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span></span></li>
@@ -294,7 +296,7 @@ export function traverse(paths = {}, data = {}) {
 export function validateRJX(rjx = {}, returnAllErrors = false) {
   const dynamicPropsNames = [&apos;asyncprops&apos;, &apos;resourceprops&apos;, &apos;windowprops&apos;, &apos;thisprops&apos;,];
   const evalPropNames = [&apos;__dangerouslyEvalProps&apos;, &apos;__dangerouslyBindEvalProps&apos;,];
-  const validKeys = [&apos;component&apos;, &apos;props&apos;, &apos;children&apos;,&apos;__inline&apos;,&apos;__functionargs&apos;, &apos;__dangerouslyInsertComponents&apos;, &apos;__dangerouslyInsertComponentProps&apos;, &apos;__dangerouslyInsertRJXComponents&apos;, &apos;__functionProps&apos;, &apos;__functionparams&apos;, &apos;__windowComponents&apos;, &apos;__windowComponentProps&apos;, &apos;comparisonprops&apos;, &apos;comparisonorprops&apos;, &apos;passprops&apos;, &apos;debug&apos; ].concat(dynamicPropsNames, evalPropNames);
+  const validKeys = [&apos;component&apos;, &apos;props&apos;, &apos;children&apos;, &apos;__spreadComponent&apos;, &apos;__inline&apos;,&apos;__functionargs&apos;, &apos;__dangerouslyInsertComponents&apos;, &apos;__dangerouslyInsertComponentProps&apos;, &apos;__dangerouslyInsertRJXComponents&apos;, &apos;__functionProps&apos;, &apos;__functionparams&apos;, &apos;__windowComponents&apos;, &apos;__windowComponentProps&apos;, &apos;comparisonprops&apos;, &apos;comparisonorprops&apos;, &apos;passprops&apos;, &apos;debug&apos; ].concat(dynamicPropsNames, evalPropNames);
   let errors = [];
   if (!rjx.component) {
     errors.push(SyntaxError(&apos;[0001] Missing React Component&apos;));

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, } from 'react';
+import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, createContext, } from 'react';
 import { default as ReactDOMElements, } from 'react-dom-factories';
 import { getAdvancedBinding, } from './utils';
 import createReactClass from 'create-react-class';
@@ -172,10 +172,12 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
         ), body, resources);
       };
     } else {
-      result[ val ] = getFunctionFromEval({
-        body,
-        args,
-      });
+      result[ val ] = typeof body === 'function'
+        ? body
+        : getFunctionFromEval({
+          body,
+          args,
+        });
     }
 
     return result;
@@ -241,35 +243,47 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
   }
   const { resources = {}, args=[], } = options;
 
-  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
-    return function ${options.name || 'Anonymous'}(props){
-      ${functionBody}
-      if(typeof functionprops!=='undefined'){
-        reactComponent.props = Object.assign({},props,functionprops);
-        reactComponent.__functionargs = Object.keys(functionprops);
-      } else{
-        reactComponent.props =  props;
-      }
-      if(!props.children) delete props.children;
-
-      return getRenderedJSON.call(this, reactComponent);
-    }
-  `);
-  if (options.name) {
-    Object.defineProperty(
-      functionComponent,
-      'name',
-      {
-        value: options.name,
-      }
-    );
-  }
   const props = reactComponent.props;
-  const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props, ];
-  return functionComponent(...functionArgs);
+  const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props, ];
+  if (typeof functionBody === 'function') {
+    const functionComponent = function (React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props) {
+      return functionBody;
+    };
+    return functionComponent(...functionArgs);
+  } else {
+    const functionComponent = typeof functionBody === 'function'
+      ? functionBody
+      : Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
+      return function ${options.name || 'Anonymous'}(props){
+        ${functionBody}
+        if(typeof functionprops!=='undefined'){
+          reactComponent.props = Object.assign({},props,functionprops);
+          reactComponent.__functionargs = Object.keys(functionprops);
+        } else{
+          reactComponent.props =  props;
+        }
+        if(!props.children) delete props.children;
+  
+        return getRenderedJSON.call(this, reactComponent);
+      }
+    `);
+    if (options.name) {
+      Object.defineProperty(
+        functionComponent,
+        'name',
+        {
+          value: options.name,
+        }
+      );
+    }
+    return functionComponent(...functionArgs);
+  }
 }
 /**
  * if (recharts[rjx.component.replace('recharts.', '')]) {
       return recharts[rjx.component.replace('recharts.', '')];
     }
  */
+export function getReactContext(options = {}) {
+  return createContext(options.value);
+}

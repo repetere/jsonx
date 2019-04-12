@@ -43,6 +43,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFunctionFromEval">getFunctionFromEval</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactClassComponent">getReactClassComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactContext">getReactContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunctionComponent">getReactFunctionComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
@@ -50,6 +51,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenComponents">getChildrenComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getEvalProps">getEvalProps</a></span></span></li>
@@ -80,7 +82,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/components.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, } from &apos;react&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, createContext, } from &apos;react&apos;;
 import { default as ReactDOMElements, } from &apos;react-dom-factories&apos;;
 import { getAdvancedBinding, } from &apos;./utils&apos;;
 import createReactClass from &apos;create-react-class&apos;;
@@ -254,10 +256,12 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
         ), body, resources);
       };
     } else {
-      result[ val ] = getFunctionFromEval({
-        body,
-        args,
-      });
+      result[ val ] = typeof body === &apos;function&apos;
+        ? body
+        : getFunctionFromEval({
+          body,
+          args,
+        });
     }
 
     return result;
@@ -323,38 +327,50 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = &a
   }
   const { resources = {}, args=[], } = options;
 
-  const functionComponent = Function(&apos;React&apos;, &apos;useState&apos;, &apos;useEffect&apos;, &apos;useContext&apos;, &apos;useReducer&apos;, &apos;useCallback&apos;, &apos;useMemo&apos;, &apos;useRef&apos;, &apos;useImperativeHandle&apos;, &apos;useLayoutEffect&apos;, &apos;useDebugValue&apos;, &apos;getRenderedJSON&apos;, &apos;reactComponent&apos;, &apos;resources&apos;, &apos;props&apos;, `
-    return function ${options.name || &apos;Anonymous&apos;}(props){
-      ${functionBody}
-      if(typeof functionprops!==&apos;undefined&apos;){
-        reactComponent.props = Object.assign({},props,functionprops);
-        reactComponent.__functionargs = Object.keys(functionprops);
-      } else{
-        reactComponent.props =  props;
-      }
-      if(!props.children) delete props.children;
-
-      return getRenderedJSON.call(this, reactComponent);
-    }
-  `);
-  if (options.name) {
-    Object.defineProperty(
-      functionComponent,
-      &apos;name&apos;,
-      {
-        value: options.name,
-      }
-    );
-  }
   const props = reactComponent.props;
-  const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props, ];
-  return functionComponent(...functionArgs);
+  const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props, ];
+  if (typeof functionBody === &apos;function&apos;) {
+    const functionComponent = function (React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props) {
+      return functionBody;
+    };
+    return functionComponent(...functionArgs);
+  } else {
+    const functionComponent = typeof functionBody === &apos;function&apos;
+      ? functionBody
+      : Function(&apos;React&apos;, &apos;useState&apos;, &apos;useEffect&apos;, &apos;useContext&apos;, &apos;useReducer&apos;, &apos;useCallback&apos;, &apos;useMemo&apos;, &apos;useRef&apos;, &apos;useImperativeHandle&apos;, &apos;useLayoutEffect&apos;, &apos;useDebugValue&apos;, &apos;getRenderedJSON&apos;, &apos;reactComponent&apos;, &apos;resources&apos;, &apos;props&apos;, `
+      return function ${options.name || &apos;Anonymous&apos;}(props){
+        ${functionBody}
+        if(typeof functionprops!==&apos;undefined&apos;){
+          reactComponent.props = Object.assign({},props,functionprops);
+          reactComponent.__functionargs = Object.keys(functionprops);
+        } else{
+          reactComponent.props =  props;
+        }
+        if(!props.children) delete props.children;
+  
+        return getRenderedJSON.call(this, reactComponent);
+      }
+    `);
+    if (options.name) {
+      Object.defineProperty(
+        functionComponent,
+        &apos;name&apos;,
+        {
+          value: options.name,
+        }
+      );
+    }
+    return functionComponent(...functionArgs);
+  }
 }
 /**
  * if (recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)]) {
       return recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)];
     }
- */</code></pre>
+ */
+export function getReactContext(options = {}) {
+  return createContext(options.value);
+}</code></pre>
 
 </div>
 

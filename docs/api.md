@@ -104,6 +104,13 @@ Returns new React Function Component
 | functionBody | String |  | String of function component body |
 | options.name | String |  | Function Component name |
 
+## `getReactContext()`
+
+if (recharts[rjx.component.replace('recharts.', '')]) { return recharts[rjx.component.replace('recharts.', '')]; }
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+
 ## `rjxRender(config: object, config.rjx: object, config.resources: object, config.querySelector: string)`
 
 Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
@@ -174,6 +181,14 @@ It uses traverse on a traverseObject to returns a resolved object on propName. S
 | options | Object |  |
 | options.rjx | Object |  | Valid RJX JSON |
 | options.propName | Object | optional: true, default: 'asyncprops' | Property on RJX to resolve values onto, i.e (asyncprops,thisprops,windowprops) |
+
+## `getChildrenComponents(options: *)`
+
+returns children rjx components defined on __spreadComponent spread over an array on props.__spread
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+| options | * |  |
 
 ## `getEvalProps(options: Object, options.rjx: Object): Object`
 

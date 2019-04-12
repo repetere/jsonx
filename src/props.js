@@ -112,6 +112,34 @@ export function getRJXProps(options = {}) {
 }
 
 /**
+ * returns children rjx components defined on __spreadComponent spread over an array on props.__spread
+ * @param {*} options 
+ */
+export function getChildrenComponents(options = {}) {
+  const { allProps, rjx, } = options;
+  // const asyncprops = getRJXProps({ rjx, propName: 'spreadprops', traverseObject: allProps, });
+  if (Array.isArray(allProps.__spread) === false) {
+    if (this.debug || rjx.debug) {
+      return {
+        children: new Error('Using __spreadComponent requires an array prop \'__spread\'').toString(),
+      };
+    } else {
+      return { children:undefined, };
+    }
+  } else {
+    return {
+      _children: allProps.__spread.map(__item => {
+        const clonedChild = Object.assign({}, rjx.__spreadComponent);
+        const clonedChildProps = Object.assign({}, clonedChild.props);
+        clonedChildProps.__item = __item;
+        clonedChild.props = clonedChildProps;
+        return clonedChild;
+      }),
+    };
+  }
+}
+
+/**
  * Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
  * @param {Object} options 
  * @param {Object} options.rjx - Valid RJX JSON 
@@ -151,16 +179,22 @@ export function getEvalProps(options = {}) {
     let evVal;
     try {
       let args;
+      const functionBody = rjx.__dangerouslyBindEvalProps[ epropName ];
       // InlineFunction = Function.prototype.constructor.apply({}, args);
-      const functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[ epropName ]);
-      if (rjx.__functionargs && rjx.__functionargs[ epropName ]) {
-        args = [this,].concat(rjx.__functionargs[ epropName ].map(arg => rjx.props[ arg ]));
-      }  else if (rjx.__functionparams) {
-        const functionDefArgs = getParamNames(functionDefinition);
-        args = [this,].concat(functionDefArgs);
+      let functionDefinition;
+      if (typeof functionBody === 'function') {
+        functionDefinition = functionBody;
       } else {
-        args = [this,];
-      } 
+        functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[ epropName ]);
+        if (rjx.__functionargs && rjx.__functionargs[ epropName ]) {
+          args = [this, ].concat(rjx.__functionargs[ epropName ].map(arg => rjx.props[ arg ]));
+        }  else if (rjx.__functionparams) {
+          const functionDefArgs = getParamNames(functionDefinition);
+          args = [this, ].concat(functionDefArgs);
+        } else {
+          args = [this, ];
+        } 
+      }
       // eslint-disable-next-line
       evVal = functionDefinition.bind(...args);
     } catch (e) { 
@@ -274,7 +308,7 @@ export function getFunctionFromProps(options) {
       } else {
         InlineFunction = Function('param1', 'param2', '"use strict";' + propBody);
       }
-      const [propFuncName, funcName,] = propFunc.split('.');
+      const [propFuncName, funcName, ] = propFunc.split('.');
       
       Object.defineProperty(
         InlineFunction,
@@ -284,7 +318,7 @@ export function getFunctionFromProps(options) {
         }
       );
       if (rjx.__functionargs) {
-        const boundArgs = [this, ].concat(rjx.__functionargs[functionProperty].map(arg => rjx.props[ arg ]));
+        const boundArgs = [this,].concat(rjx.__functionargs[functionProperty].map(arg => rjx.props[ arg ]));
         return InlineFunction.bind(...boundArgs);
       } else {
         return InlineFunction.bind(this);
@@ -471,7 +505,8 @@ export function getComputedProps(options = {}) {
     const allProps = Object.assign({}, { key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps,
       rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
-      rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {});
+      rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {},
+      rjx.__spreadComponent ? getChildrenComponents.call(this, { allProps, rjx, }) : {});
     if (rjx.debug) console.debug({ rjx, computedProps, });
     return computedProps;
   } catch (e) {

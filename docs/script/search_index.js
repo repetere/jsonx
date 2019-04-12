@@ -84,6 +84,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "rjx/src/props.js~getchildrencomponents",
+    "function/index.html#static-function-getChildrenComponents",
+    "<span>getChildrenComponents</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "function"
+  ],
+  [
     "rjx/src/children.js~getchildrenproperty",
     "function/index.html#static-function-getChildrenProperty",
     "<span>getChildrenProperty</span> <span class=\"search-result-import-path\">rjx/src/children.js</span>",
@@ -171,6 +177,12 @@ window.esdocSearchIndex = [
     "rjx/src/props.js~getreactcomponentprops",
     "function/index.html#static-function-getReactComponentProps",
     "<span>getReactComponentProps</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "function"
+  ],
+  [
+    "rjx/src/components.js~getreactcontext",
+    "function/index.html#static-function-getReactContext",
+    "<span>getReactContext</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
     "function"
   ],
   [

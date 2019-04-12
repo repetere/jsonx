@@ -56,7 +56,7 @@ export default [
           // relative to the current directory, or the name
           // of a module in node_modules
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
-          'node_modules/react/index.js': ['Children', 'Component', 'PropTypes','Fragment','Suspense','lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
+          'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createContext','Fragment','Suspense','lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
 
         },
       }), // so Rollup can convert `ms` to an ES module
@@ -214,7 +214,7 @@ export default [
           'node_modules/react/index.js':[
           // 'node_modules/react/cjs/react.production.min.js': [
             // 'default',
-            'Children', 'Component', 'PropTypes', 'Fragment','Suspense','lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',
+            'Children', 'Component', 'PropTypes', 'createContext', 'Fragment','Suspense','lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',
           ],
         },
       }), // so Rollup can convert `ms` to an ES module

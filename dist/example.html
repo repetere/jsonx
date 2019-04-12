@@ -184,6 +184,12 @@
           })
         }
       })
+      const textContext = rjx._rjxComponents.getReactContext({
+        value:{
+          user:{ name:'john smith', activated: true, },
+          settings: { use_offline: true, },
+        },
+      });
       const dynamicFunctionComponent = rjx._rjxComponents.getReactFunctionComponent(
         { 
         component:'div',children:'LOADED FROM LAZY Function',
@@ -210,6 +216,25 @@
           }
         },
         children: [
+        
+          {
+            component:'ul',
+            // debug:true,
+            props:{
+              // __spread:"ok here"
+              __spread:[
+                { title:'spread'},
+                { title:'component'},
+              ],
+            },
+            __spreadComponent:{
+              component:'li',
+              thisprops:{
+                children:['__item','title']
+              }
+            },
+            children:'def'
+          },
           {
             component:'Suspense',
             debug:true,
@@ -478,6 +503,7 @@
         componentLibraries:{
           // ReactMD,
           Spectre,
+          textContext,
         }
       };
       console.log({boundConfig})
