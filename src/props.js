@@ -172,7 +172,9 @@ export function getEvalProps(options = {}) {
     } catch (e) { 
       if (this.debug || rjx.debug) evVal = e;
     }
-    eprops[ epropName ] = evVal;
+    eprops[ epropName ] = (typeof evVal === 'function')
+      ? evVal.call(this)
+      : evVal;
     return eprops;
   }, {});
   const evBindProps = Object.keys(rjx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
