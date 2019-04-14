@@ -1,6 +1,7 @@
 import React, { Fragment, Suspense, lazy, createContext, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue } from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
+import useGlobalHook from 'use-global-hook';
 import ReactDOMElements from 'react-dom-factories';
 import UAParser from 'ua-parser-js';
 import createReactClass from 'create-react-class';
@@ -971,7 +972,9 @@ function getEvalProps(options = {}) {
       if (this.debug || rjx.debug) evVal = e;
     }
 
-    eprops[epropName] = evVal;
+    eprops[epropName] = typeof evVal === 'function' ? evVal.call(this, {
+      rjx
+    }) : evVal;
     return eprops;
   }, {});
   const evBindProps = Object.keys(rjx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
@@ -1691,10 +1694,13 @@ function __getReact() {
 function __getReactDOM() {
   return ReactDOM;
 }
+function __getUseGlobalHook() {
+  return useGlobalHook;
+}
 const _rjxChildren = rjxChildren;
 const _rjxComponents = rjxComponents;
 const _rjxProps = rjxProps;
 const _rjxUtils = rjxUtils;
 
 export default getRenderedJSON;
-export { __express, __getReact, __getReactDOM, _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils, getRenderedJSON, renderIndex, rjxHTMLString, rjxRender };
+export { __express, __getReact, __getReactDOM, __getUseGlobalHook, _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils, getRenderedJSON, renderIndex, rjxHTMLString, rjxRender };

@@ -15603,6 +15603,50 @@
 
 	var server = server_node;
 
+	function setState(newState) {
+	  this.state = { ...this.state,
+	    ...newState
+	  };
+	  this.listeners.forEach(listener => {
+	    listener(this.state);
+	  });
+	}
+
+	function useCustom(React) {
+	  const newListener = React.useState()[1];
+	  React.useEffect(() => {
+	    this.listeners.push(newListener);
+	    return () => {
+	      this.listeners = this.listeners.filter(listener => listener !== newListener);
+	    };
+	  }, []);
+	  return [this.state, this.actions];
+	}
+
+	function associateActions(store, actions) {
+	  const associatedActions = {};
+	  Object.keys(actions).forEach(key => {
+	    if (typeof actions[key] === 'function') {
+	      associatedActions[key] = actions[key].bind(null, store);
+	    }
+
+	    if (typeof actions[key] === 'object') {
+	      associatedActions[key] = associateActions(store, actions[key]);
+	    }
+	  });
+	  return associatedActions;
+	}
+
+	const useStore = (React, initialState, actions) => {
+	  const store = {
+	    state: initialState,
+	    listeners: []
+	  };
+	  store.setState = setState.bind(store);
+	  store.actions = associateActions(store, actions);
+	  return useCustom.bind(store, React);
+	};
+
 	var reactDomFactories = createCommonjsModule(function (module, exports) {
 	/**
 	 * Copyright (c) 2015-present, Facebook, Inc.
@@ -18445,7 +18489,9 @@
 	      if (this.debug || rjx.debug) evVal = e;
 	    }
 
-	    eprops[epropName] = evVal;
+	    eprops[epropName] = typeof evVal === 'function' ? evVal.call(this, {
+	      rjx
+	    }) : evVal;
 	    return eprops;
 	  }, {});
 	  const evBindProps = Object.keys(rjx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
@@ -19165,6 +19211,9 @@ ${rjxRenderedString}`);
 	function __getReactDOM() {
 	  return reactDom;
 	}
+	function __getUseGlobalHook() {
+	  return useStore;
+	}
 	const _rjxChildren = rjxChildren;
 	const _rjxComponents = rjxComponents;
 	const _rjxProps = rjxProps;
@@ -19173,6 +19222,7 @@ ${rjxRenderedString}`);
 	exports.__express = __express;
 	exports.__getReact = __getReact;
 	exports.__getReactDOM = __getReactDOM;
+	exports.__getUseGlobalHook = __getUseGlobalHook;
 	exports._rjxChildren = _rjxChildren;
 	exports._rjxComponents = _rjxComponents;
 	exports._rjxProps = _rjxProps;

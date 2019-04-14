@@ -2,6 +2,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
+import useGlobalHook from 'use-global-hook';
+
 
 import * as rjxComponents from './components';
 import * as rjxProps from './props';
@@ -130,6 +132,10 @@ export function __getReact() {
 
 export function __getReactDOM() {
   return ReactDOM;
+}
+
+export function __getUseGlobalHook() {
+  return useGlobalHook;
 }
 
 export const _rjxChildren = rjxChildren;

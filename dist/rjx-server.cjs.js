@@ -7,6 +7,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var React = require('react');
 var React__default = _interopDefault(React);
 var ReactDOM = _interopDefault(require('react-dom/server'));
+var useGlobalHook = _interopDefault(require('use-global-hook'));
 var ReactDOMElements = _interopDefault(require('react-dom-factories'));
 var UAParser = _interopDefault(require('ua-parser-js'));
 var createReactClass = _interopDefault(require('create-react-class'));
@@ -977,7 +978,9 @@ function getEvalProps(options = {}) {
       if (this.debug || rjx.debug) evVal = e;
     }
 
-    eprops[epropName] = evVal;
+    eprops[epropName] = typeof evVal === 'function' ? evVal.call(this, {
+      rjx
+    }) : evVal;
     return eprops;
   }, {});
   const evBindProps = Object.keys(rjx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
@@ -1697,6 +1700,9 @@ function __getReact() {
 function __getReactDOM() {
   return ReactDOM;
 }
+function __getUseGlobalHook() {
+  return useGlobalHook;
+}
 const _rjxChildren = rjxChildren;
 const _rjxComponents = rjxComponents;
 const _rjxProps = rjxProps;
@@ -1705,6 +1711,7 @@ const _rjxUtils = rjxUtils;
 exports.__express = __express;
 exports.__getReact = __getReact;
 exports.__getReactDOM = __getReactDOM;
+exports.__getUseGlobalHook = __getUseGlobalHook;
 exports._rjxChildren = _rjxChildren;
 exports._rjxComponents = _rjxComponents;
 exports._rjxProps = _rjxProps;

@@ -85,6 +85,7 @@ export default [
       'react-dom/server',
       'react-dom-factories',
       'create-react-class',
+      'use-global-hook',
       'ua-parser-js',
     ], // <-- suppresses the warning
     output: [
@@ -136,6 +137,7 @@ export default [
       'react-dom/server',
       'react-dom-factories',
       'create-react-class',
+      'use-global-hook',
       'ua-parser-js',
     ], // <-- suppresses the warning
     output: [

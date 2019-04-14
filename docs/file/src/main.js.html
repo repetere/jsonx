@@ -48,6 +48,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
@@ -86,6 +87,8 @@
 import React from &apos;react&apos;;
 import ReactDOM from &apos;react-dom&apos;;
 import ReactDOMServer from &apos;react-dom/server&apos;;
+import useGlobalHook from &apos;use-global-hook&apos;;
+
 
 import * as rjxComponents from &apos;./components&apos;;
 import * as rjxProps from &apos;./props&apos;;
@@ -214,6 +217,10 @@ export function __getReact() {
 
 export function __getReactDOM() {
   return ReactDOM;
+}
+
+export function __getUseGlobalHook() {
+  return useGlobalHook;
 }
 
 export const _rjxChildren = rjxChildren;

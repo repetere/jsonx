@@ -163,6 +163,11 @@ Use RJX for express view rendering
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 
+## `__getUseGlobalHook()`
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+
 ## `getParamNames(func: Function)`
 
 returns the names of parameters from a function declaration

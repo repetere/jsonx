@@ -30,6 +30,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "rjx/src/main.js~__getuseglobalhook",
+    "function/index.html#static-function-__getUseGlobalHook",
+    "<span>__getUseGlobalHook</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "function"
+  ],
+  [
     "rjx/src/main.js~_rjxchildren",
     "variable/index.html#static-variable-_rjxChildren",
     "<span>_rjxChildren</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",

@@ -48,6 +48,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
@@ -1049,6 +1050,34 @@ return recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)];
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -1831,11 +1860,11 @@ getComponentFromMap({rjx:{component:&apos;reactBootstap.nav&apos;},componentLibr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber218">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComponentProps} from &apos;<span><a href="file/src/props.js.html#lineNumber218">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComponentProps} from &apos;<span><a href="file/src/props.js.html#lineNumber220">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. </p>
@@ -1919,11 +1948,11 @@ getComponentFromMap({rjx:{component:&apos;reactBootstap.nav&apos;},componentLibr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber472">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber474">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComputedProps} from &apos;<span><a href="file/src/props.js.html#lineNumber472">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComputedProps} from &apos;<span><a href="file/src/props.js.html#lineNumber474">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Returns computed properties for React Components and any property that&apos;s prefixed with __ is a computedProperty</p>
@@ -2272,11 +2301,11 @@ const evalutedComputedBoundFunc = RJXP.email({ email:&apos;test@email.domain&apo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber291">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber293">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionFromProps} from &apos;<span><a href="file/src/props.js.html#lineNumber291">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionFromProps} from &apos;<span><a href="file/src/props.js.html#lineNumber293">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep</p>
@@ -2368,11 +2397,11 @@ const evalutedComputedBoundFunc = RJXP.email({ email:&apos;test@email.domain&apo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber373">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber375">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionProps} from &apos;<span><a href="file/src/props.js.html#lineNumber373">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionProps} from &apos;<span><a href="file/src/props.js.html#lineNumber375">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Returns a resolved object from function strings that has functions pulled from rjx.__functionProps</p>
@@ -2905,11 +2934,11 @@ children:&apos;hello world&apos;,
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber240">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber242">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactComponentProps} from &apos;<span><a href="file/src/props.js.html#lineNumber240">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactComponentProps} from &apos;<span><a href="file/src/props.js.html#lineNumber242">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Resolves rjx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. </p>
@@ -3151,11 +3180,11 @@ const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunctionComponent({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber66">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getRenderedJSON} from &apos;<span><a href="file/src/main.js.html#lineNumber66">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getRenderedJSON} from &apos;<span><a href="file/src/main.js.html#lineNumber68">rjx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Use React.createElement and RJX JSON to create React elements</p>
@@ -3362,11 +3391,11 @@ rjx.getRenderedJSON({component:&apos;myCompnent&apos;,props:{style:{color:&apos;
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber398">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber400">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getWindowComponents} from &apos;<span><a href="file/src/props.js.html#lineNumber398">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getWindowComponents} from &apos;<span><a href="file/src/props.js.html#lineNumber400">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Returns a resolved object that has React Components pulled from window.__rjx_custom_elements</p>
@@ -3450,11 +3479,11 @@ rjx.getRenderedJSON({component:&apos;myCompnent&apos;,props:{style:{color:&apos;
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber47">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber49">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {rjxHTMLString} from &apos;<span><a href="file/src/main.js.html#lineNumber47">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {rjxHTMLString} from &apos;<span><a href="file/src/main.js.html#lineNumber49">rjx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Use ReactDOMServer.renderToString to render html from RJX</p>
@@ -3563,11 +3592,11 @@ rjx.rjxHTMLString({ rjx: { component: &apos;div&apos;, props:{className:&apos;rj
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber30">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {rjxRender} from &apos;<span><a href="file/src/main.js.html#lineNumber28">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {rjxRender} from &apos;<span><a href="file/src/main.js.html#lineNumber30">rjx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render</p>
@@ -4016,11 +4045,11 @@ validateRJX({children:&apos;hello world&apos;})=&gt;throw SyntaxError(&apos;[000
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber109">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber111">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__express} from &apos;<span><a href="file/src/main.js.html#lineNumber109">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__express} from &apos;<span><a href="file/src/main.js.html#lineNumber111">rjx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Use RJX for express view rendering</p>
@@ -4105,11 +4134,11 @@ validateRJX({children:&apos;hello world&apos;})=&gt;throw SyntaxError(&apos;[000
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber127">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber129">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReact} from &apos;<span><a href="file/src/main.js.html#lineNumber127">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReact} from &apos;<span><a href="file/src/main.js.html#lineNumber129">rjx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   
@@ -4148,11 +4177,54 @@ validateRJX({children:&apos;hello world&apos;})=&gt;throw SyntaxError(&apos;[000
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber131">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber133">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReactDOM} from &apos;<span><a href="file/src/main.js.html#lineNumber131">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReactDOM} from &apos;<span><a href="file/src/main.js.html#lineNumber133">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-__getUseGlobalHook">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">__getUseGlobalHook</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber137">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getUseGlobalHook} from &apos;<span><a href="file/src/main.js.html#lineNumber137">rjx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   

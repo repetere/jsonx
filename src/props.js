@@ -173,7 +173,7 @@ export function getEvalProps(options = {}) {
       if (this.debug || rjx.debug) evVal = e;
     }
     eprops[ epropName ] = (typeof evVal === 'function')
-      ? evVal.call(this)
+      ? evVal.call(this, { rjx, })
       : evVal;
     return eprops;
   }, {});
