@@ -27646,9 +27646,9 @@
                                     "line": 496,
                                     "column": 35
                                   },
-                                  "identifierName": "thisprops"
+                                  "identifierName": "thisstate"
                                 },
-                                "name": "thisprops"
+                                "name": "thisstate"
                               },
                               "computed": false
                             },
@@ -27803,10 +27803,10 @@
                                           }
                                         },
                                         "extra": {
-                                          "rawValue": "thisprops",
-                                          "raw": "'thisprops'"
+                                          "rawValue": "thisstate",
+                                          "raw": "'thisstate'"
                                         },
-                                        "value": "thisprops"
+                                        "value": "thisstate"
                                       }
                                     },
                                     {
@@ -29316,7 +29316,7 @@
                                 ]
                               },
                               {
-                                "type": "Identifier",
+                                "type": "MemberExpression",
                                 "start": 20238,
                                 "end": 20247,
                                 "loc": {
@@ -29327,10 +29327,43 @@
                                   "end": {
                                     "line": 508,
                                     "column": 71
-                                  },
-                                  "identifierName": "thisprops"
+                                  }
                                 },
-                                "name": "thisprops"
+                                "object": {
+                                  "type": "Identifier",
+                                  "start": 20238,
+                                  "end": 20241,
+                                  "loc": {
+                                    "start": {
+                                      "line": 508,
+                                      "column": 62
+                                    },
+                                    "end": {
+                                      "line": 508,
+                                      "column": 65
+                                    },
+                                    "identifierName": "rjx"
+                                  },
+                                  "name": "rjx"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "start": 20242,
+                                  "end": 20247,
+                                  "loc": {
+                                    "start": {
+                                      "line": 508,
+                                      "column": 66
+                                    },
+                                    "end": {
+                                      "line": 508,
+                                      "column": 71
+                                    },
+                                    "identifierName": "props"
+                                  },
+                                  "name": "props"
+                                },
+                                "computed": false
                               },
                               {
                                 "type": "Identifier",
@@ -29345,12 +29378,12 @@
                                     "line": 508,
                                     "column": 82
                                   },
-                                  "identifierName": "thisstate"
+                                  "identifierName": "thisprops"
                                 },
-                                "name": "thisstate"
+                                "name": "thisprops"
                               },
                               {
-                                "type": "MemberExpression",
+                                "type": "Identifier",
                                 "start": 20260,
                                 "end": 20269,
                                 "loc": {
@@ -29361,43 +29394,10 @@
                                   "end": {
                                     "line": 508,
                                     "column": 93
-                                  }
-                                },
-                                "object": {
-                                  "type": "Identifier",
-                                  "start": 20260,
-                                  "end": 20263,
-                                  "loc": {
-                                    "start": {
-                                      "line": 508,
-                                      "column": 84
-                                    },
-                                    "end": {
-                                      "line": 508,
-                                      "column": 87
-                                    },
-                                    "identifierName": "rjx"
                                   },
-                                  "name": "rjx"
+                                  "identifierName": "thisstate"
                                 },
-                                "property": {
-                                  "type": "Identifier",
-                                  "start": 20264,
-                                  "end": 20269,
-                                  "loc": {
-                                    "start": {
-                                      "line": 508,
-                                      "column": 88
-                                    },
-                                    "end": {
-                                      "line": 508,
-                                      "column": 93
-                                    },
-                                    "identifierName": "props"
-                                  },
-                                  "name": "props"
-                                },
-                                "computed": false
+                                "name": "thisstate"
                               },
                               {
                                 "type": "Identifier",
@@ -86138,7 +86138,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "thisprops",
+      "value": "thisstate",
       "start": 19564,
       "end": 19573,
       "loc": {
@@ -86371,7 +86371,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "thisprops",
+      "value": "thisstate",
       "start": 19605,
       "end": 19616,
       "loc": {
@@ -89418,13 +89418,65 @@
         "postfix": false,
         "binop": null
       },
-      "value": "thisprops",
+      "value": "rjx",
       "start": 20238,
-      "end": 20247,
+      "end": 20241,
       "loc": {
         "start": {
           "line": 508,
           "column": 62
+        },
+        "end": {
+          "line": 508,
+          "column": 65
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 20241,
+      "end": 20242,
+      "loc": {
+        "start": {
+          "line": 508,
+          "column": 65
+        },
+        "end": {
+          "line": 508,
+          "column": 66
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "props",
+      "start": 20242,
+      "end": 20247,
+      "loc": {
+        "start": {
+          "line": 508,
+          "column": 66
         },
         "end": {
           "line": 508,
@@ -89470,7 +89522,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "thisstate",
+      "value": "thisprops",
       "start": 20249,
       "end": 20258,
       "loc": {
@@ -89522,65 +89574,13 @@
         "postfix": false,
         "binop": null
       },
-      "value": "rjx",
+      "value": "thisstate",
       "start": 20260,
-      "end": 20263,
-      "loc": {
-        "start": {
-          "line": 508,
-          "column": 84
-        },
-        "end": {
-          "line": 508,
-          "column": 87
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ".",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 20263,
-      "end": 20264,
-      "loc": {
-        "start": {
-          "line": 508,
-          "column": 87
-        },
-        "end": {
-          "line": 508,
-          "column": 88
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "props",
-      "start": 20264,
       "end": 20269,
       "loc": {
         "start": {
           "line": 508,
-          "column": 88
+          "column": 84
         },
         "end": {
           "line": 508,

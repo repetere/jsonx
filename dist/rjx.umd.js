@@ -18850,9 +18850,9 @@
 	      propName: 'thisprops',
 	      traverseObject: componentThisProp
 	    }) : {};
-	    const thisstate = rjx.thisprops ? getRJXProps({
+	    const thisstate = rjx.thisstate ? getRJXProps({
 	      rjx,
-	      propName: 'thisprops',
+	      propName: 'thisstate',
 	      traverseObject: this.state
 	    }) : {}; //allowing javascript injections
 
@@ -18870,7 +18870,7 @@
 	    }) : {};
 	    const allProps = Object.assign({}, {
 	      key: renderIndex
-	    }, thisprops, thisstate, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
+	    }, rjx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
 	    const computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, {
 	      allProps,
 	      rjx

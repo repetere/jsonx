@@ -493,7 +493,7 @@ export function getComputedProps(options = {}) {
     const resourceprops = rjx.resourceprops ? getRJXProps({ rjx, propName: 'resourceprops', traverseObject: resources, }) : {};
     const windowprops = rjx.windowprops ? getRJXProps({ rjx, propName: 'windowprops', traverseObject: windowTraverse, }) : {};
     const thisprops = rjx.thisprops ? getRJXProps({ rjx, propName: 'thisprops', traverseObject: componentThisProp, }) : {};
-    const thisstate = rjx.thisprops ? getRJXProps({ rjx, propName: 'thisprops', traverseObject: this.state, }) : {};
+    const thisstate = rjx.thisstate ? getRJXProps({ rjx, propName: 'thisstate', traverseObject: this.state, }) : {};
 
     //allowing javascript injections
     const evalProps = (rjx.__dangerouslyEvalProps || rjx.__dangerouslyBindEvalProps)
@@ -505,7 +505,7 @@ export function getComputedProps(options = {}) {
     const insertedReactComponents = (rjx.__dangerouslyInsertReactComponents || rjx.__dangerouslyInsertRJXComponents)
       ? getReactComponentProps.call(this, { rjx, debug, })
       : {};
-    const allProps = Object.assign({}, { key: renderIndex, }, thisprops, thisstate, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
+    const allProps = Object.assign({}, { key: renderIndex, }, rjx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps,
       rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
       rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {},
