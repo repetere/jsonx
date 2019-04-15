@@ -242,7 +242,7 @@ function traverse(paths = {}, data = {}) {
  */
 
 function validateRJX(rjx = {}, returnAllErrors = false) {
-  const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops'];
+  const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops', 'thisstate'];
   const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps'];
   const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertRJXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'debug'].concat(dynamicPropsNames, evalPropNames);
   let errors = [];
@@ -1319,26 +1319,31 @@ function getComputedProps(options = {}) {
       }
     }, this.props, rjx.props, useReduxState && !rjx.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && !componentLibraries[rjx.component] ? this.props && this.props.getState ? this.props.getState() : {} : {}) : undefined;
     const windowTraverse = typeof window !== 'undefined' ? window : {};
-    const asyncprops = getRJXProps({
+    const asyncprops = rjx.asyncprops ? getRJXProps({
       rjx,
       propName: 'asyncprops',
       traverseObject: resources
-    });
-    const resourceprops = getRJXProps({
+    }) : {};
+    const resourceprops = rjx.resourceprops ? getRJXProps({
       rjx,
       propName: 'resourceprops',
       traverseObject: resources
-    });
-    const windowprops = getRJXProps({
+    }) : {};
+    const windowprops = rjx.windowprops ? getRJXProps({
       rjx,
       propName: 'windowprops',
       traverseObject: windowTraverse
-    });
-    const thisprops = getRJXProps({
+    }) : {};
+    const thisprops = rjx.thisprops ? getRJXProps({
       rjx,
       propName: 'thisprops',
       traverseObject: componentThisProp
-    }); //allowing javascript injections
+    }) : {};
+    const thisstate = rjx.thisprops ? getRJXProps({
+      rjx,
+      propName: 'thisprops',
+      traverseObject: this.state
+    }) : {}; //allowing javascript injections
 
     const evalProps = rjx.__dangerouslyEvalProps || rjx.__dangerouslyBindEvalProps ? getEvalProps.call(this, {
       rjx
@@ -1354,7 +1359,7 @@ function getComputedProps(options = {}) {
     }) : {};
     const allProps = Object.assign({}, {
       key: renderIndex
-    }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
+    }, thisprops, thisstate, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, {
       allProps,
       rjx

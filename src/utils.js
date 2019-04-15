@@ -210,7 +210,7 @@ export function traverse(paths = {}, data = {}) {
  * @throws {SyntaxError|TypeError|ReferenceError}
  */
 export function validateRJX(rjx = {}, returnAllErrors = false) {
-  const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops',];
+  const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops', 'thisstate',];
   const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps',];
   const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline','__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertRJXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'debug' ].concat(dynamicPropsNames, evalPropNames);
   let errors = [];
