@@ -1,5 +1,4 @@
 import { getRenderedJSON, } from './main';
-
 /**
  * returns a valid rjx.children property
  * @param {Object} options
@@ -46,7 +45,7 @@ export function getChildrenProperty(options = {}) {
   const { rjx = {}, } = options;
   const props = options.props || rjx.props || {};
   if (props._children /* && !rjx.children */) {
-    if (Array.isArray(props._children) || typeof props._children !== 'undefined'){
+    if (Array.isArray(props._children) || typeof props._children === 'string'){
       return props._children;
     } else {
       return rjx.children;
@@ -105,8 +104,8 @@ export function getChildrenProps(options = {}) {
 export function getRJXChildren(options = {}) {
   // eslint-disable-next-line
   const { rjx, resources, renderIndex, logError = console.error, } = options;
-  const props = options.props || rjx.props || {};
   try {
+    const props = options.props || rjx.props || {};
     rjx.children = getChildrenProperty({ rjx, props, });
 
     return (rjx.children && Array.isArray(rjx.children) && typeof rjx.children !== 'string')
@@ -114,7 +113,7 @@ export function getRJXChildren(options = {}) {
       : rjx.children;
 
   } catch (e) {
-    logError(e, (e.stack) ? e.stack : 'no stack');
+    logError(e);
     return null;
   }
 }

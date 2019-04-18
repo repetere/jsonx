@@ -6,7 +6,7 @@ import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils'; // ES6
 import ReactDOM from 'react-dom';
 import ReactDOMElements from 'react-dom-factories';
-import { expect } from 'chai';
+import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
 import 'mocha-sinon';
@@ -88,7 +88,19 @@ describe('rjx', function () {
       expect(RJXChildren).to.be.an('array');
       expect(RJXChildren.length).to.eql(sampleRJX.children.length);
       expect(RJXChildrenPTag).to.be.a('string');
-      expect(RJXChildrenPTag).to.eql(sampleRJX.children[0].children);
+      expect(RJXChildrenPTag).to.eql(sampleRJX.children[ 0 ].children);
+      expect(getChildrenProperty({
+        rjx: {
+          props: { _children: {}, },
+          children:'hello',
+        },
+      })).to.eql('hello');
+      expect(getChildrenProperty({
+        rjx: {
+        },
+      })).to.eql(null);
+      expect(getChildrenProperty({ props: { children: [1, 2, 3,], }, })).to.be.an('array');
+      expect(getChildrenProperty({ rjx:{ props: { children: 'hello', }, },  })).to.eql('hello');
     });
     it('should get the children from rjx.props._children property', () => {
       const testRJX = {
@@ -234,6 +246,10 @@ describe('rjx', function () {
         expect(ReactiveJSON).to.haveOwnProperty('ref');
         expect(ReactiveJSON).to.haveOwnProperty('props');
       });
+    });
+    it('should return null on error', () => {
+      expect(getRJXChildren({ logError: () => { }, })).to.eql(null);
+
     });
   });
 });

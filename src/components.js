@@ -6,7 +6,6 @@ import { getRenderedJSON, } from './main';
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
-
 export let advancedBinding = getAdvancedBinding();
 
 /**
@@ -234,7 +233,6 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
   const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunctionComponent({rjxRender, functionBody, options});
    */
 export function getReactFunctionComponent(reactComponent = {}, functionBody = '', options = {}) {
-  
   if (options.lazy) {
     return lazy(() => options.lazy(reactComponent, functionBody, Object.assign({}, options, { lazy: false, })).then((lazyComponent) => {
       return {
@@ -246,15 +244,9 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
 
   const props = reactComponent.props;
   const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props, ];
-  if (typeof functionBody === 'function') {
-    const functionComponent = function (React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props) {
-      return functionBody;
-    };
-    return functionComponent(...functionArgs);
-  } else {
-    const functionComponent = typeof functionBody === 'function'
-      ? functionBody
-      : Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
+  const functionComponent = typeof functionBody === 'function'
+    ? functionBody
+    : Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
       return function ${options.name || 'Anonymous'}(props){
         ${functionBody}
         if(typeof functionprops!=='undefined'){
@@ -268,17 +260,16 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
         return getRenderedJSON.call(this, reactComponent);
       }
     `);
-    if (options.name) {
-      Object.defineProperty(
-        functionComponent,
-        'name',
-        {
-          value: options.name,
-        }
-      );
-    }
-    return functionComponent(...functionArgs);
+  if (options.name) {
+    Object.defineProperty(
+      functionComponent,
+      'name',
+      {
+        value: options.name,
+      }
+    );
   }
+  return functionComponent(...functionArgs);
 }
 /**
  * if (recharts[rjx.component.replace('recharts.', '')]) {

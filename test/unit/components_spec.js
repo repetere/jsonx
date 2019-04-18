@@ -99,6 +99,11 @@ class WelcomeNonBind extends React.Component {
 }
 
 describe('rjx components', function () { 
+  describe('componentMap', () => {
+    it('should export an object of components', () => {
+      expect(_rjxComponents.componentMap).to.be.a('object');
+    });
+  });
   describe('getBoundedComponents', () => {
     it('should bind this to reactComponents', () => {
       const bindSpy = sinon.spy();
@@ -259,7 +264,31 @@ describe('rjx components', function () {
         },
       });
       expect(MyCustomComponent).to.be.a('function');
-
+    });
+  });
+  describe('getReactFunctionComponent', () => {
+    const getReactFunctionComponent = _rjxComponents.getReactFunctionComponent;
+    it('should create a React Component', () => {
+      const MyCustomComponent = getReactFunctionComponent(
+        {
+          component:'p',
+          children:[
+            {
+              component:'span',
+              children: 'My Custom React Component Status: ',
+            },
+            {
+              component:'span',
+              thisprops:{
+                children:['status',],
+              },
+            },
+          ],
+        },
+        'console.log("lazy function body");',
+        { name:'myComp', },
+      );
+      expect(MyCustomComponent).to.be.a('function');
     });
   });
 });
