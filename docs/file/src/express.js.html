@@ -108,7 +108,6 @@ export function __express(filePath, options, callback) {
     });
     callback(null, `${options.__DOCTYPE || &apos;&lt;!DOCTYPE html&gt;&apos;}
 ${rjxRenderedString}`);
-  
   } catch (e) {
     callback(e);
   }

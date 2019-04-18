@@ -4,13 +4,13 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var UAParser = _interopDefault(require('ua-parser-js'));
 var React = require('react');
 var React__default = _interopDefault(React);
-var ReactDOMElements = _interopDefault(require('react-dom-factories'));
-var createReactClass = _interopDefault(require('create-react-class'));
 var ReactDOM = _interopDefault(require('react-dom'));
 var ReactDOMServer = _interopDefault(require('react-dom/server'));
+var ReactDOMElements = _interopDefault(require('react-dom-factories'));
+var UAParser = _interopDefault(require('ua-parser-js'));
+var createReactClass = _interopDefault(require('create-react-class'));
 
 function setState(newState) {
   this.state = { ...this.state,
@@ -21,9 +21,9 @@ function setState(newState) {
   });
 }
 
-function useCustom(React$$1) {
-  const newListener = React$$1.useState()[1];
-  React$$1.useEffect(() => {
+function useCustom(React) {
+  const newListener = React.useState()[1];
+  React.useEffect(() => {
     this.listeners.push(newListener);
     return () => {
       this.listeners = this.listeners.filter(listener => listener !== newListener);
@@ -46,7 +46,7 @@ function associateActions(store, actions) {
   return associatedActions;
 }
 
-const useStore = (React$$1, initialState, actions, initializer) => {
+const useStore = (React, initialState, actions, initializer) => {
   const store = {
     state: initialState,
     listeners: []
@@ -54,7 +54,7 @@ const useStore = (React$$1, initialState, actions, initializer) => {
   store.setState = setState.bind(store);
   store.actions = associateActions(store, actions);
   if (initializer) initializer(store);
-  return useCustom.bind(store, React$$1);
+  return useCustom.bind(store, React);
 };
 
 /**
@@ -788,7 +788,7 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
   const functionArgs = [React__default, React.useState, React.useEffect, React.useContext, React.useReducer, React.useCallback, React.useMemo, React.useRef, React.useImperativeHandle, React.useLayoutEffect, React.useDebugValue, getRenderedJSON, reactComponent, resources, props];
 
   if (typeof functionBody === 'function') {
-    const functionComponent = function (React$$1, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON$$1, reactComponent, resources, props) {
+    const functionComponent = function (React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props) {
       return functionBody;
     };
 
@@ -1484,7 +1484,7 @@ const RJXChildren = getChildrenProperty({ rjx: sampleRJX, }); //=> [ [rjx Object
 const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], }); //=>hello world
  */
 
-function getChildrenProperty$$1(options = {}) {
+function getChildrenProperty(options = {}) {
   const {
     rjx = {}
   } = options;
@@ -1518,7 +1518,7 @@ function getChildrenProperty$$1(options = {}) {
  * @returns {Object|String} returns a valid  Valid RJX Child object or a string 
  */
 
-function getChildrenProps$$1(options = {}) {
+function getChildrenProps(options = {}) {
   const {
     rjx = {},
     childrjx,
@@ -1544,7 +1544,7 @@ function getChildrenProps$$1(options = {}) {
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  */
 
-function getRJXChildren$$1(options = {}) {
+function getRJXChildren(options = {}) {
   // eslint-disable-next-line
   const {
     rjx,
@@ -1555,11 +1555,11 @@ function getRJXChildren$$1(options = {}) {
   const props = options.props || rjx.props || {};
 
   try {
-    rjx.children = getChildrenProperty$$1({
+    rjx.children = getChildrenProperty({
       rjx,
       props
     });
-    return rjx.children && Array.isArray(rjx.children) && typeof rjx.children !== 'string' ? rjx.children.map(childrjx => getRenderedJSON.call(this, getChildrenProps$$1({
+    return rjx.children && Array.isArray(rjx.children) && typeof rjx.children !== 'string' ? rjx.children.map(childrjx => getRenderedJSON.call(this, getChildrenProps({
       rjx,
       childrjx,
       props,
@@ -1572,9 +1572,9 @@ function getRJXChildren$$1(options = {}) {
 }
 
 var rjxChildren = /*#__PURE__*/Object.freeze({
-  getChildrenProperty: getChildrenProperty$$1,
-  getChildrenProps: getChildrenProps$$1,
-  getRJXChildren: getRJXChildren$$1
+  getChildrenProperty: getChildrenProperty,
+  getChildrenProps: getChildrenProps,
+  getRJXChildren: getRJXChildren
 });
 
 /**
@@ -1586,7 +1586,7 @@ var rjxChildren = /*#__PURE__*/Object.freeze({
  * @param {*} callback 
  */
 
-function __express$$1(filePath, options, callback) {
+function __express(filePath, options, callback) {
   try {
     const rjxModule = options.__rjx || require(filePath);
 
@@ -1815,22 +1815,22 @@ function __getReactDOM() {
 function __getUseGlobalHook() {
   return useStore;
 }
-
+const _rjxChildren = rjxChildren;
 const _rjxComponents = rjxComponents;
 const _rjxProps = rjxProps;
 const _rjxUtils = rjxUtils;
 
-exports.rjxRender = rjxRender;
-exports.rjxHTMLString = rjxHTMLString;
-exports.getRenderedJSON = getRenderedJSON;
-exports.getReactElementFromJSON = getReactElementFromJSON;
-exports.compile = compile;
+exports.__express = __express;
 exports.__getReact = __getReact;
 exports.__getReactDOM = __getReactDOM;
 exports.__getUseGlobalHook = __getUseGlobalHook;
-exports._rjxChildren = rjxChildren;
+exports._rjxChildren = _rjxChildren;
 exports._rjxComponents = _rjxComponents;
 exports._rjxProps = _rjxProps;
 exports._rjxUtils = _rjxUtils;
+exports.compile = compile;
 exports.default = getRenderedJSON;
-exports.__express = __express$$1;
+exports.getReactElementFromJSON = getReactElementFromJSON;
+exports.getRenderedJSON = getRenderedJSON;
+exports.rjxHTMLString = rjxHTMLString;
+exports.rjxRender = rjxRender;

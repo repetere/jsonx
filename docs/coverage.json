@@ -12,7 +12,7 @@
       "expectCount": 9,
       "actualCount": 8,
       "undocumentLines": [
-        9
+        10
       ]
     },
     "src/express.js": {
@@ -40,8 +40,8 @@
       "expectCount": 12,
       "actualCount": 10,
       "undocumentLines": [
-        11,
-        12
+        10,
+        11
       ]
     },
     "src/utils.js": {

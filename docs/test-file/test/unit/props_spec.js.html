@@ -85,7 +85,8 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">test/unit/props_spec.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import * as rjx from &apos;../../src/main&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import * as _rjxProps from &apos;../../src/props&apos;;
+import { getComputedProps, } from &apos;../../src/props&apos;;
 import mochaJSDOM from &apos;jsdom-global&apos;;
 import chai from &apos;chai&apos;;
 import sinon from &apos;sinon&apos;;
@@ -131,7 +132,6 @@ const traverseObject = {
 
 describe(&apos;rjx props&apos;, function () { 
   describe(&apos;getComputedProps&apos;, () =&gt; { 
-    const getComputedProps = rjx._rjxProps.getComputedProps;
     it(&apos;should return resolved computed props&apos;, () =&gt; {
       const dynamicprops = {
         auth: [&apos;authentication&apos;,],
@@ -176,7 +176,7 @@ describe(&apos;rjx props&apos;, function () {
     });
   });
   describe(&apos;getRJXProps&apos;, () =&gt; {
-    const getRJXProps = rjx._rjxProps.getRJXProps;
+    const getRJXProps = _rjxProps.getRJXProps;
     it(&apos;should return resolved dynamic prop&apos;, () =&gt; {
       const testVals = {
         auth: [&apos;authentication&apos;,],
@@ -203,7 +203,7 @@ describe(&apos;rjx props&apos;, function () {
     });
   });
   describe(&apos;getEvalProps&apos;, () =&gt; {
-    const getEvalProps = rjx._rjxProps.getEvalProps;
+    const getEvalProps = _rjxProps.getEvalProps;
     it(&apos;should return evaluated props dangerously using eval&apos;, () =&gt; {
       const testVals = {
         auth: &apos;true&apos;,
@@ -224,7 +224,7 @@ describe(&apos;rjx props&apos;, function () {
     });
   });
   describe(&apos;getWindowComponents&apos;, () =&gt; {
-    const getWindowComponents = rjx._rjxProps.getWindowComponents;
+    const getWindowComponents = _rjxProps.getWindowComponents;
     before(function () {
       this.jsdom = mochaJSDOM();
     });
@@ -270,7 +270,7 @@ describe(&apos;rjx props&apos;, function () {
     });
   });
   describe(&apos;getFunctionProps&apos;, () =&gt; {
-    const getFunctionProps = rjx._rjxProps.getFunctionProps;
+    const getFunctionProps = _rjxProps.getFunctionProps;
     it(&apos;should resolve functions from rjx.__functionProps from function strings&apos;, () =&gt; {
       const logError = sinon.spy();
       const thisProp = {
@@ -312,7 +312,7 @@ describe(&apos;rjx props&apos;, function () {
     });
   });
   describe(&apos;getFunctionFromProps&apos;, () =&gt; {
-    const getFunctionFromProps = rjx._rjxProps.getFunctionFromProps;
+    const getFunctionFromProps = _rjxProps.getFunctionFromProps;
     it(&apos;should return an empty function by default&apos;, () =&gt; {
       const logError = sinon.spy();
       const thisProp = {
@@ -391,7 +391,7 @@ describe(&apos;rjx props&apos;, function () {
     });
   });
   describe(&apos;getComponentProps&apos;, () =&gt; {
-    const getComponentProps = rjx._rjxProps.getComponentProps;
+    const getComponentProps = _rjxProps.getComponentProps;
     it(&apos;should return evaluated props dangerously using eval&apos;, () =&gt; {
       const testVals = {
         myComponent: {
@@ -410,7 +410,7 @@ describe(&apos;rjx props&apos;, function () {
     });
   });
   describe(&apos;getReactComponentProps&apos;, () =&gt; {
-    const getReactComponentProps = rjx._rjxProps.getReactComponentProps;
+    const getReactComponentProps = _rjxProps.getReactComponentProps;
     it(&apos;should return react component props dangerously using eval&apos;, () =&gt; {
       const testVals = {
         myComponent: &apos;p&apos;,

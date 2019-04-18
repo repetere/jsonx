@@ -295,109 +295,109 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber100",
+    "test-file/test/unit/components_spec.js.html#lineNumber101",
     "rjx components",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber204",
+    "test-file/test/unit/components_spec.js.html#lineNumber205",
     "rjx components componentMap",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber208",
+    "test-file/test/unit/components_spec.js.html#lineNumber209",
     "rjx components componentMap should accept components from a window property",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber101",
+    "test-file/test/unit/components_spec.js.html#lineNumber102",
     "rjx components getBoundedComponents",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber102",
+    "test-file/test/unit/components_spec.js.html#lineNumber103",
     "rjx components getBoundedComponents should bind this to reactComponents",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber183",
+    "test-file/test/unit/components_spec.js.html#lineNumber184",
     "rjx components getComponentFromLibrary",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber194",
+    "test-file/test/unit/components_spec.js.html#lineNumber195",
     "rjx components getComponentFromLibrary should return a function if selecting valid component library",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber191",
+    "test-file/test/unit/components_spec.js.html#lineNumber192",
     "rjx components getComponentFromLibrary should return undefined if not valid",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber132",
+    "test-file/test/unit/components_spec.js.html#lineNumber133",
     "rjx components getComponentFromMap",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber172",
+    "test-file/test/unit/components_spec.js.html#lineNumber173",
     "rjx components getComponentFromMap should handle errors",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber163",
+    "test-file/test/unit/components_spec.js.html#lineNumber164",
     "rjx components getComponentFromMap should return a component library react element",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber152",
+    "test-file/test/unit/components_spec.js.html#lineNumber153",
     "rjx components getComponentFromMap should return a custom element",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber140",
+    "test-file/test/unit/components_spec.js.html#lineNumber141",
     "rjx components getComponentFromMap should return a function if rjx.component is not a string",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber146",
+    "test-file/test/unit/components_spec.js.html#lineNumber147",
     "rjx components getComponentFromMap should return the dom element string if a valid DOM elmenet in ReactDOM",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber225",
+    "test-file/test/unit/components_spec.js.html#lineNumber226",
     "rjx components getFunctionFromEval",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber227",
+    "test-file/test/unit/components_spec.js.html#lineNumber228",
     "rjx components getFunctionFromEval should return a new function",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber234",
+    "test-file/test/unit/components_spec.js.html#lineNumber235",
     "rjx components getReactClassComponent",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber236",
+    "test-file/test/unit/components_spec.js.html#lineNumber237",
     "rjx components getReactClassComponent should create a React Component",
     "test"
   ],
@@ -481,7 +481,7 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber45",
+    "test-file/test/unit/props_spec.js.html#lineNumber46",
     "rjx props",
     "test"
   ],
@@ -499,7 +499,7 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber46",
+    "test-file/test/unit/props_spec.js.html#lineNumber47",
     "rjx props getComputedProps",
     "test"
   ],
@@ -631,325 +631,325 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber27",
+    "test-file/test/unit/util_spec.js.html#lineNumber29",
     "rjx utils",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber28",
+    "test-file/test/unit/util_spec.js.html#lineNumber30",
     "rjx utils displayComponent",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber30",
+    "test-file/test/unit/util_spec.js.html#lineNumber32",
     "rjx utils displayComponent should display by default return true",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber129",
+    "test-file/test/unit/util_spec.js.html#lineNumber131",
     "rjx utils displayComponent should display if left != right",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber33",
+    "test-file/test/unit/util_spec.js.html#lineNumber35",
     "rjx utils displayComponent should display if left !== null||undefined",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber155",
+    "test-file/test/unit/util_spec.js.html#lineNumber157",
     "rjx utils displayComponent should display if left !== right",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber233",
+    "test-file/test/unit/util_spec.js.html#lineNumber235",
     "rjx utils displayComponent should display if left < right",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber259",
+    "test-file/test/unit/util_spec.js.html#lineNumber261",
     "rjx utils displayComponent should display if left <= right",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber77",
+    "test-file/test/unit/util_spec.js.html#lineNumber79",
     "rjx utils displayComponent should display if left == right",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber54",
+    "test-file/test/unit/util_spec.js.html#lineNumber56",
     "rjx utils displayComponent should display if left === null||undefined",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber103",
+    "test-file/test/unit/util_spec.js.html#lineNumber105",
     "rjx utils displayComponent should display if left === right",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber181",
+    "test-file/test/unit/util_spec.js.html#lineNumber183",
     "rjx utils displayComponent should display if left > right",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber207",
+    "test-file/test/unit/util_spec.js.html#lineNumber209",
     "rjx utils displayComponent should display if left >= right",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber285",
+    "test-file/test/unit/util_spec.js.html#lineNumber287",
     "rjx utils displayComponent should display if multiple comprisons are true",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber311",
+    "test-file/test/unit/util_spec.js.html#lineNumber313",
     "rjx utils displayComponent should display if one or more using comparisonorprops comprisons are true",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber353",
+    "test-file/test/unit/util_spec.js.html#lineNumber355",
     "rjx utils getAdvancedBinding",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber363",
+    "test-file/test/unit/util_spec.js.html#lineNumber365",
     "rjx utils getAdvancedBinding should return false on all versions of IE/Trident",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber371",
+    "test-file/test/unit/util_spec.js.html#lineNumber373",
     "rjx utils getAdvancedBinding should return false on old Android Browser",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber379",
+    "test-file/test/unit/util_spec.js.html#lineNumber381",
     "rjx utils getAdvancedBinding should return false on old Chrome Browser",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber387",
+    "test-file/test/unit/util_spec.js.html#lineNumber389",
     "rjx utils getAdvancedBinding should return false unknown browser",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber355",
+    "test-file/test/unit/util_spec.js.html#lineNumber357",
     "rjx utils getAdvancedBinding should return true if browser supports deep nesting",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber857",
+    "test-file/test/unit/util_spec.js.html#lineNumber859",
     "rjx utils getSimplifiedRJX",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber905",
+    "test-file/test/unit/util_spec.js.html#lineNumber907",
     "rjx utils getSimplifiedRJX should produce equivalent SimpleRJX",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber910",
+    "test-file/test/unit/util_spec.js.html#lineNumber912",
     "rjx utils getSimplifiedRJX should return SimpleRJX if already simple",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber752",
+    "test-file/test/unit/util_spec.js.html#lineNumber754",
     "rjx utils simpleRJXSyntax",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber803",
+    "test-file/test/unit/util_spec.js.html#lineNumber805",
     "rjx utils simpleRJXSyntax should produce equivalent RXJ",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber754",
+    "test-file/test/unit/util_spec.js.html#lineNumber756",
     "rjx utils simpleRJXSyntax should return valid RJX from simple RJX syntax",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber391",
+    "test-file/test/unit/util_spec.js.html#lineNumber393",
     "rjx utils traverse",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber404",
+    "test-file/test/unit/util_spec.js.html#lineNumber406",
     "rjx utils traverse should return properties from an object from the array of paths",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber408",
+    "test-file/test/unit/util_spec.js.html#lineNumber410",
     "rjx utils traverse should return the entire object if no paths provided",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber412",
+    "test-file/test/unit/util_spec.js.html#lineNumber414",
     "rjx utils traverse should return undefined if paths are invalid",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber416",
+    "test-file/test/unit/util_spec.js.html#lineNumber418",
     "rjx utils traverse should throw an error if paths are not an array of strings or numeric indexes",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber667",
+    "test-file/test/unit/util_spec.js.html#lineNumber669",
     "rjx utils validSimpleRJXSyntax",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber669",
+    "test-file/test/unit/util_spec.js.html#lineNumber671",
     "rjx utils validSimpleRJXSyntax should invalidate shorthard simple syntax",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber712",
+    "test-file/test/unit/util_spec.js.html#lineNumber714",
     "rjx utils validSimpleRJXSyntax should validate shorthard simple syntax",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber421",
+    "test-file/test/unit/util_spec.js.html#lineNumber423",
     "rjx utils validateRJX",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber426",
+    "test-file/test/unit/util_spec.js.html#lineNumber428",
     "rjx utils validateRJX should return string and warn of invalid RJX props",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber423",
+    "test-file/test/unit/util_spec.js.html#lineNumber425",
     "rjx utils validateRJX should return true if RJX is valid",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber433",
+    "test-file/test/unit/util_spec.js.html#lineNumber435",
     "rjx utils validateRJX should throw a syntax error if RJX is missing a component",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber452",
+    "test-file/test/unit/util_spec.js.html#lineNumber454",
     "rjx utils validateRJX should throw a type error if RJX children is not an array or RJX docs or a string",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber445",
+    "test-file/test/unit/util_spec.js.html#lineNumber447",
     "rjx utils validateRJX should throw a type error if RJX props is not an object, props.children or props._children",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber438",
+    "test-file/test/unit/util_spec.js.html#lineNumber440",
     "rjx utils validateRJX should throw multiple errors if returnAllErrors is true",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber521",
+    "test-file/test/unit/util_spec.js.html#lineNumber523",
     "rjx utils validateRJX should validate __dangerouslyBindEvalProps as a function that can be bound javascript",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber511",
+    "test-file/test/unit/util_spec.js.html#lineNumber513",
     "rjx utils validateRJX should validate __dangerouslyEvalProps javascript",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber531",
+    "test-file/test/unit/util_spec.js.html#lineNumber533",
     "rjx utils validateRJX should validate __dangerouslyInsertComponents are valid RJX objects",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber544",
+    "test-file/test/unit/util_spec.js.html#lineNumber546",
     "rjx utils validateRJX should validate __functionProps are valid function strings",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber570",
+    "test-file/test/unit/util_spec.js.html#lineNumber572",
     "rjx utils validateRJX should validate __windowComponentProps is an object",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber586",
+    "test-file/test/unit/util_spec.js.html#lineNumber588",
     "rjx utils validateRJX should validate __windowComponents are valid function strings",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber455",
+    "test-file/test/unit/util_spec.js.html#lineNumber457",
     "rjx utils validateRJX should validate child objects",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber612",
+    "test-file/test/unit/util_spec.js.html#lineNumber614",
     "rjx utils validateRJX should validate comparisonorprops is boolean",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber626",
+    "test-file/test/unit/util_spec.js.html#lineNumber628",
     "rjx utils validateRJX should validate comparisonprops is an array of comaprisons",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber473",
+    "test-file/test/unit/util_spec.js.html#lineNumber475",
     "rjx utils validateRJX should validate dynamic props[asyncprops,resourceprops,thisprops,windowprops]",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber490",
+    "test-file/test/unit/util_spec.js.html#lineNumber492",
     "rjx utils validateRJX should validate eval props[__dangerouslyEvalProps,__dangerouslyBindEvalProps]",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/util_spec.js.html#lineNumber652",
+    "test-file/test/unit/util_spec.js.html#lineNumber654",
     "rjx utils validateRJX should validate passprops is boolean",
     "test"
   ],

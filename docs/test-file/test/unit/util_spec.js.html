@@ -86,6 +86,8 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">test/unit/util_spec.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import * as rjx from &apos;../../src/main&apos;;
+import * as _rjxUtils from &apos;../../src/utils&apos;;
+
 import mochaJSDOM from &apos;jsdom-global&apos;;
 import chai from &apos;chai&apos;;
 import sinon from &apos;sinon&apos;;
@@ -113,7 +115,7 @@ const sampleRJX = {
 
 describe(&apos;rjx utils&apos;, function () { 
   describe(&apos;displayComponent&apos;, () =&gt; {
-    const displayComponent = rjx._rjxUtils.displayComponent;
+    const displayComponent = _rjxUtils.displayComponent;
     it(&apos;should display by default return true&apos;, () =&gt; {
       expect(displayComponent()).to.be.true;
     });
@@ -438,7 +440,7 @@ describe(&apos;rjx utils&apos;, function () {
     });
   });
   describe(&apos;getAdvancedBinding&apos;, () =&gt; {
-    const getAdvancedBinding = rjx._rjxUtils.getAdvancedBinding;
+    const getAdvancedBinding = _rjxUtils.getAdvancedBinding;
     it(&apos;should return true if browser supports deep nesting&apos;, function () {
       const window = {
         navigator: {
@@ -487,7 +489,7 @@ describe(&apos;rjx utils&apos;, function () {
       },
       authentication: &apos;OAuth2&apos;,
     };
-    const traverse = rjx._rjxUtils.traverse;
+    const traverse = _rjxUtils.traverse;
     it(&apos;should return properties from an object from the array of paths&apos;, () =&gt; {
       const testVals = { auth: [&apos;authentication&apos;, ], username: [&apos;user&apos;, &apos;name&apos;, ], };
       expect( traverse(testVals, testObj)).to.eql({ auth:testObj.authentication, username:testObj.user.name,  });
@@ -506,7 +508,7 @@ describe(&apos;rjx utils&apos;, function () {
     });
   });
   describe(&apos;validateRJX&apos;, () =&gt; {
-    const validateRJX = rjx._rjxUtils.validateRJX;
+    const validateRJX = _rjxUtils.validateRJX;
     it(&apos;should return true if RJX is valid&apos;,  ()=&gt; {
       expect(validateRJX(sampleRJX)).to.be.true;
     });
@@ -752,7 +754,7 @@ describe(&apos;rjx utils&apos;, function () {
     });
   });
   describe(&apos;validSimpleRJXSyntax&apos;, () =&gt; {
-    const validSimpleRJXSyntax = rjx._rjxUtils.validSimpleRJXSyntax;
+    const validSimpleRJXSyntax = _rjxUtils.validSimpleRJXSyntax;
     it(&apos;should invalidate shorthard simple syntax&apos;, () =&gt; {
       const invalidShorthand = {
         component:&apos;p&apos;,
@@ -837,7 +839,7 @@ describe(&apos;rjx utils&apos;, function () {
     });
   });
   describe(&apos;simpleRJXSyntax&apos;, () =&gt; {
-    const simpleRJXSyntax = rjx._rjxUtils.simpleRJXSyntax;
+    const simpleRJXSyntax = _rjxUtils.simpleRJXSyntax;
     it(&apos;should return valid RJX from simple RJX syntax&apos;, () =&gt; {
       const validShorthand = {
         p:{},
@@ -875,11 +877,11 @@ describe(&apos;rjx utils&apos;, function () {
           children:&apos;p&apos;,
         },
       };
-      const transformedSimpleSyntaxValid = rjx._rjxUtils.validateRJX(simpleRJXSyntax(validShorthand), true);
-      const transformedSimpleSyntaxValid2 = rjx._rjxUtils.validateRJX(simpleRJXSyntax(validShorthand2), true);
-      const transformedSimpleSyntaxValid3 = rjx._rjxUtils.validateRJX(simpleRJXSyntax(validShorthand3), true);
-      const transformedSimpleSyntaxValid4 = rjx._rjxUtils.validateRJX(simpleRJXSyntax(validShorthand4), true);
-      const transformedSimpleSyntaxValid5 = rjx._rjxUtils.validateRJX(simpleRJXSyntax(validShorthand5), true);
+      const transformedSimpleSyntaxValid = _rjxUtils.validateRJX(simpleRJXSyntax(validShorthand), true);
+      const transformedSimpleSyntaxValid2 = _rjxUtils.validateRJX(simpleRJXSyntax(validShorthand2), true);
+      const transformedSimpleSyntaxValid3 = _rjxUtils.validateRJX(simpleRJXSyntax(validShorthand3), true);
+      const transformedSimpleSyntaxValid4 = _rjxUtils.validateRJX(simpleRJXSyntax(validShorthand4), true);
+      const transformedSimpleSyntaxValid5 = _rjxUtils.validateRJX(simpleRJXSyntax(validShorthand5), true);
      
       expect((transformedSimpleSyntaxValid)).to.be.true;
       expect((transformedSimpleSyntaxValid2)).to.be.true;
@@ -942,7 +944,7 @@ describe(&apos;rjx utils&apos;, function () {
     });
   });
   describe(&apos;getSimplifiedRJX&apos;, () =&gt; {
-    const getSimplifiedRJX = rjx._rjxUtils.getSimplifiedRJX;
+    const getSimplifiedRJX = _rjxUtils.getSimplifiedRJX;
     const simpleRJX = {
       div: {
         props: {

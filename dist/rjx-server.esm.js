@@ -1,8 +1,8 @@
-import UAParser from 'ua-parser-js';
-import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, createContext } from 'react';
-import ReactDOMElements from 'react-dom-factories';
-import createReactClass from 'create-react-class';
+import React, { Fragment, Suspense, lazy, createContext, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue } from 'react';
 import ReactDOM from 'react-dom/server';
+import ReactDOMElements from 'react-dom-factories';
+import UAParser from 'ua-parser-js';
+import createReactClass from 'create-react-class';
 
 function setState(newState) {
   this.state = { ...this.state,
@@ -13,9 +13,9 @@ function setState(newState) {
   });
 }
 
-function useCustom(React$$1) {
-  const newListener = React$$1.useState()[1];
-  React$$1.useEffect(() => {
+function useCustom(React) {
+  const newListener = React.useState()[1];
+  React.useEffect(() => {
     this.listeners.push(newListener);
     return () => {
       this.listeners = this.listeners.filter(listener => listener !== newListener);
@@ -38,7 +38,7 @@ function associateActions(store, actions) {
   return associatedActions;
 }
 
-const useStore = (React$$1, initialState, actions, initializer) => {
+const useStore = (React, initialState, actions, initializer) => {
   const store = {
     state: initialState,
     listeners: []
@@ -46,7 +46,7 @@ const useStore = (React$$1, initialState, actions, initializer) => {
   store.setState = setState.bind(store);
   store.actions = associateActions(store, actions);
   if (initializer) initializer(store);
-  return useCustom.bind(store, React$$1);
+  return useCustom.bind(store, React);
 };
 
 /**
@@ -780,7 +780,7 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
   const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props];
 
   if (typeof functionBody === 'function') {
-    const functionComponent = function (React$$1, useState$$1, useEffect$$1, useContext$$1, useReducer$$1, useCallback$$1, useMemo$$1, useRef$$1, useImperativeHandle$$1, useLayoutEffect$$1, useDebugValue$$1, getRenderedJSON$$1, reactComponent, resources, props) {
+    const functionComponent = function (React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props) {
       return functionBody;
     };
 
@@ -1340,7 +1340,7 @@ function getComputedProps(options = {}) {
   const {
     rjx = {},
     resources = {},
-    renderIndex: renderIndex$$1,
+    renderIndex,
     logError = console.error,
     useReduxState = true,
     ignoreReduxPropsInComponentLibraries = true,
@@ -1395,7 +1395,7 @@ function getComputedProps(options = {}) {
       debug
     }) : {};
     const allProps = Object.assign({}, {
-      key: renderIndex$$1
+      key: renderIndex
     }, rjx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, {
       allProps,
@@ -1476,7 +1476,7 @@ const RJXChildren = getChildrenProperty({ rjx: sampleRJX, }); //=> [ [rjx Object
 const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], }); //=>hello world
  */
 
-function getChildrenProperty$$1(options = {}) {
+function getChildrenProperty(options = {}) {
   const {
     rjx = {}
   } = options;
@@ -1510,11 +1510,11 @@ function getChildrenProperty$$1(options = {}) {
  * @returns {Object|String} returns a valid  Valid RJX Child object or a string 
  */
 
-function getChildrenProps$$1(options = {}) {
+function getChildrenProps(options = {}) {
   const {
     rjx = {},
     childrjx,
-    renderIndex: renderIndex$$1
+    renderIndex
   } = options;
   const props = options.props || rjx.props || {};
   return rjx.passprops && typeof childrjx === 'object' ? Object.assign({}, childrjx, {
@@ -1522,7 +1522,7 @@ function getChildrenProps$$1(options = {}) {
     childrjx.asyncprops && childrjx.asyncprops.style || childrjx.windowprops && childrjx.windowprops.style ? {} : {
       style: {}
     }, childrjx.props, {
-      key: renderIndex$$1 + Math.random()
+      key: renderIndex + Math.random()
     })
   }) : childrjx;
 }
@@ -1536,26 +1536,26 @@ function getChildrenProps$$1(options = {}) {
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  */
 
-function getRJXChildren$$1(options = {}) {
+function getRJXChildren(options = {}) {
   // eslint-disable-next-line
   const {
     rjx,
     resources,
-    renderIndex: renderIndex$$1,
+    renderIndex,
     logError = console.error
   } = options;
   const props = options.props || rjx.props || {};
 
   try {
-    rjx.children = getChildrenProperty$$1({
+    rjx.children = getChildrenProperty({
       rjx,
       props
     });
-    return rjx.children && Array.isArray(rjx.children) && typeof rjx.children !== 'string' ? rjx.children.map(childrjx => getRenderedJSON.call(this, getChildrenProps$$1({
+    return rjx.children && Array.isArray(rjx.children) && typeof rjx.children !== 'string' ? rjx.children.map(childrjx => getRenderedJSON.call(this, getChildrenProps({
       rjx,
       childrjx,
       props,
-      renderIndex: renderIndex$$1
+      renderIndex
     }), resources)) : rjx.children;
   } catch (e) {
     logError(e, e.stack ? e.stack : 'no stack');
@@ -1564,9 +1564,9 @@ function getRJXChildren$$1(options = {}) {
 }
 
 var rjxChildren = /*#__PURE__*/Object.freeze({
-  getChildrenProperty: getChildrenProperty$$1,
-  getChildrenProps: getChildrenProps$$1,
-  getRJXChildren: getRJXChildren$$1
+  getChildrenProperty: getChildrenProperty,
+  getChildrenProps: getChildrenProps,
+  getRJXChildren: getRJXChildren
 });
 
 /**
@@ -1578,7 +1578,7 @@ var rjxChildren = /*#__PURE__*/Object.freeze({
  * @param {*} callback 
  */
 
-function __express$$1(filePath, options, callback) {
+function __express(filePath, options, callback) {
   try {
     const rjxModule = options.__rjx || require(filePath);
 
@@ -1807,10 +1807,10 @@ function __getReactDOM() {
 function __getUseGlobalHook() {
   return useStore;
 }
-
+const _rjxChildren = rjxChildren;
 const _rjxComponents = rjxComponents;
 const _rjxProps = rjxProps;
 const _rjxUtils = rjxUtils;
 
 export default getRenderedJSON;
-export { renderIndex, rjxRender, rjxHTMLString, getRenderedJSON, getReactElementFromJSON, compile, __getReact, __getReactDOM, __getUseGlobalHook, rjxChildren as _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils, __express$$1 as __express };
+export { __express, __getReact, __getReactDOM, __getUseGlobalHook, _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils, compile, getReactElementFromJSON, getRenderedJSON, renderIndex, rjxHTMLString, rjxRender };

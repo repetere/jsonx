@@ -85,7 +85,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">test/unit/children_spec.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import * as rjx from &apos;../../src/main&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import * as _rjxChildren from &apos;../../src/children&apos;;
 import mochaJSDOM from &apos;jsdom-global&apos;;
 import chai from &apos;chai&apos;;
 import sinon from &apos;sinon&apos;;
@@ -168,7 +168,7 @@ const passableRJX = {
 
 describe(&apos;rjx&apos;, function () { 
   describe(&apos;getChildrenProperty&apos;, () =&gt; {
-    const getChildrenProperty = rjx._rjxChildren.getChildrenProperty;
+    const getChildrenProperty = _rjxChildren.getChildrenProperty;
     it(&apos;should return the children of an RJX Object&apos;, () =&gt; {
       const RJXChildren = getChildrenProperty({ rjx: sampleRJX, });
       const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], });
@@ -284,8 +284,8 @@ describe(&apos;rjx&apos;, function () {
     });
   });
   describe(&apos;getChildrenProps&apos;, () =&gt; {
-    const getChildrenProps = rjx._rjxChildren.getChildrenProps;
-    const getChildrenProperty = rjx._rjxChildren.getChildrenProperty;
+    const getChildrenProps = _rjxChildren.getChildrenProps;
+    const getChildrenProperty = _rjxChildren.getChildrenProperty;
     it(&apos;should return child RJX if not passing props&apos;, () =&gt; {
       const renderIndex = 1;
       const childrjx = getChildrenProperty({ rjx: sampleRJX, })[0];
@@ -306,7 +306,7 @@ describe(&apos;rjx&apos;, function () {
     });
   });
   describe(&apos;getRJXChildren&apos;, () =&gt; {
-    const getRJXChildren = rjx._rjxChildren.getRJXChildren;
+    const getRJXChildren = _rjxChildren.getRJXChildren;
     it(&apos;should return RJX Child Objects&apos;, () =&gt; {
       const renderIndex = 1;
       const RJXChildren = getRJXChildren.call({}, {
