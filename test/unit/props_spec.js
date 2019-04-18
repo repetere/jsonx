@@ -1,15 +1,15 @@
-const rjx = require('../../dist/rjx.cjs');
-const mochaJSDOM = require('jsdom-global');
-const chai = require('chai');
-const sinon = require('sinon');
-const React = require('react');
-const ReactDOM = require('react-dom');
-const ReactDOMElements = require('react-dom-factories');
-const expect = require('chai').expect;
-const jsdom = require('jsdom');
-const { JSDOM, } = jsdom;
+import * as _rjxProps from '../../src/props';
+import { getComputedProps, } from '../../src/props';
+import mochaJSDOM from 'jsdom-global';
+import chai from 'chai';
+import sinon from 'sinon';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactDOMElements from 'react-dom-factories';
+import { expect } from 'chai';
+import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
-require('mocha-sinon');
+import 'mocha-sinon';
 
 const sampleRJX = {
   component: 'div',
@@ -45,14 +45,16 @@ const traverseObject = {
 
 describe('rjx props', function () { 
   describe('getComputedProps', () => { 
-    const getComputedProps = rjx._rjxProps.getComputedProps;
     it('should return resolved computed props', () => {
       const dynamicprops = {
-        auth: ['authentication', ],
-        username: ['user', 'name', ],
+        auth: ['authentication',],
+        username: ['user', 'name',],
       };
       const evalProps = {
-        getUsername: '(user={})=>user.name',
+        getUsername: '()=>\'rjx\'',
+      };
+      const bindEvalProps = {
+        getUsernameFunction: '(function () { return "rjx"; })',
       };
       const compProps = {
         myComponent: {
@@ -65,6 +67,7 @@ describe('rjx props', function () {
       const testRJX = Object.assign({}, sampleRJX, {
         asyncprops: dynamicprops,
         __dangerouslyEvalProps: evalProps,
+        __dangerouslyBindEvalProps: bindEvalProps,
         __dangerouslyInsertComponents: compProps,
       });
       const computedProps = getComputedProps.call({}, {
@@ -75,7 +78,8 @@ describe('rjx props', function () {
       expect(computedProps.auth).to.eql(resources.authentication);
       expect(computedProps.username).to.eql(resources.user.name);
       expect(computedProps.key).to.eql(renderIndex);
-      expect(computedProps.getUsername).to.be.a('function');
+      expect(computedProps.getUsername).to.be.a('string');
+      expect(computedProps.getUsernameFunction).to.be.a('function');
       expect(computedProps.myComponent).to.be.an('object');
       expect(computedProps.myComponent).to.haveOwnProperty('$$typeof');
       expect(computedProps.myComponent).to.haveOwnProperty('type');
@@ -85,11 +89,11 @@ describe('rjx props', function () {
     });
   });
   describe('getRJXProps', () => {
-    const getRJXProps = rjx._rjxProps.getRJXProps;
+    const getRJXProps = _rjxProps.getRJXProps;
     it('should return resolved dynamic prop', () => {
       const testVals = {
-        auth: ['authentication', ],
-        username: ['user', 'name', ],
+        auth: ['authentication',],
+        username: ['user', 'name',],
       };
       const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
       const testRJX2 = Object.assign({}, sampleRJX, { thisprops: testVals, });
@@ -102,8 +106,8 @@ describe('rjx props', function () {
     });
     it('should return resolved dynamic prop with undefined values if reference is invalid', () => {
       const testVals = {
-        auth: ['wrong', ],
-        username: ['no', 'ref', ],
+        auth: ['wrong',],
+        username: ['no', 'ref',],
       };
       const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
       const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
@@ -112,11 +116,11 @@ describe('rjx props', function () {
     });
   });
   describe('getEvalProps', () => {
-    const getEvalProps = rjx._rjxProps.getEvalProps;
+    const getEvalProps = _rjxProps.getEvalProps;
     it('should return evaluated props dangerously using eval', () => {
       const testVals = {
         auth: 'true',
-        username: '(user={})=>user.name',
+        username: '()=>(user={})=>user.name',
       };
       const testRJX = Object.assign({}, sampleRJX, {
         __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {
@@ -133,7 +137,7 @@ describe('rjx props', function () {
     });
   });
   describe('getWindowComponents', () => {
-    const getWindowComponents = rjx._rjxProps.getWindowComponents;
+    const getWindowComponents = _rjxProps.getWindowComponents;
     before(function () {
       this.jsdom = mochaJSDOM();
     });
@@ -179,7 +183,7 @@ describe('rjx props', function () {
     });
   });
   describe('getFunctionProps', () => {
-    const getFunctionProps = rjx._rjxProps.getFunctionProps;
+    const getFunctionProps = _rjxProps.getFunctionProps;
     it('should resolve functions from rjx.__functionProps from function strings', () => {
       const logError = sinon.spy();
       const thisProp = {
@@ -221,7 +225,7 @@ describe('rjx props', function () {
     });
   });
   describe('getFunctionFromProps', () => {
-    const getFunctionFromProps = rjx._rjxProps.getFunctionFromProps;
+    const getFunctionFromProps = _rjxProps.getFunctionFromProps;
     it('should return an empty function by default', () => {
       const logError = sinon.spy();
       const thisProp = {
@@ -300,7 +304,7 @@ describe('rjx props', function () {
     });
   });
   describe('getComponentProps', () => {
-    const getComponentProps = rjx._rjxProps.getComponentProps;
+    const getComponentProps = _rjxProps.getComponentProps;
     it('should return evaluated props dangerously using eval', () => {
       const testVals = {
         myComponent: {
@@ -319,7 +323,7 @@ describe('rjx props', function () {
     });
   });
   describe('getReactComponentProps', () => {
-    const getReactComponentProps = rjx._rjxProps.getReactComponentProps;
+    const getReactComponentProps = _rjxProps.getReactComponentProps;
     it('should return react component props dangerously using eval', () => {
       const testVals = {
         myComponent: 'p',

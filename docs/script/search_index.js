@@ -12,9 +12,9 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "rjx/src/main.js~__express",
+    "rjx/src/express.js~__express",
     "function/index.html#static-function-__express",
-    "<span>__express</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>__express</span> <span class=\"search-result-import-path\">rjx/src/express.js</span>",
     "function"
   ],
   [
@@ -64,6 +64,12 @@ window.esdocSearchIndex = [
     "variable/index.html#static-variable-advancedBinding",
     "<span>advancedBinding</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
     "variable"
+  ],
+  [
+    "rjx/src/main.js~compile",
+    "function/index.html#static-function-compile",
+    "<span>compile</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "function"
   ],
   [
     "rjx/src/components.js~componentmap",
@@ -192,6 +198,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "rjx/src/main.js~getreactelementfromjson",
+    "function/index.html#static-function-getReactElementFromJSON",
+    "<span>getReactElementFromJSON</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "function"
+  ],
+  [
     "rjx/src/components.js~getreactfunctioncomponent",
     "function/index.html#static-function-getReactFunctionComponent",
     "<span>getReactFunctionComponent</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
@@ -259,7 +271,7 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber81",
+    "test-file/test/unit/children_spec.js.html#lineNumber82",
     "rjx",
     "test"
   ],
@@ -391,55 +403,55 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber82",
+    "test-file/test/unit/children_spec.js.html#lineNumber83",
     "rjx getChildrenProperty",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber92",
+    "test-file/test/unit/children_spec.js.html#lineNumber93",
     "rjx getChildrenProperty should get the children from rjx.props._children property",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber141",
+    "test-file/test/unit/children_spec.js.html#lineNumber142",
     "rjx getChildrenProperty should get the children from rjx.props.children property",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber84",
+    "test-file/test/unit/children_spec.js.html#lineNumber85",
     "rjx getChildrenProperty should return the children of an RJX Object",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber198",
+    "test-file/test/unit/children_spec.js.html#lineNumber199",
     "rjx getChildrenProps",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber207",
+    "test-file/test/unit/children_spec.js.html#lineNumber208",
     "rjx getChildrenProps should pass props except for styles",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber201",
+    "test-file/test/unit/children_spec.js.html#lineNumber202",
     "rjx getChildrenProps should return child RJX if not passing props",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber220",
+    "test-file/test/unit/children_spec.js.html#lineNumber221",
     "rjx getRJXChildren",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber222",
+    "test-file/test/unit/children_spec.js.html#lineNumber223",
     "rjx getRJXChildren should return RJX Child Objects",
     "test"
   ],
@@ -469,127 +481,127 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber46",
+    "test-file/test/unit/props_spec.js.html#lineNumber45",
     "rjx props",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber302",
+    "test-file/test/unit/props_spec.js.html#lineNumber306",
     "rjx props getComponentProps",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber304",
+    "test-file/test/unit/props_spec.js.html#lineNumber308",
     "rjx props getComponentProps should return evaluated props dangerously using eval",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber47",
+    "test-file/test/unit/props_spec.js.html#lineNumber46",
     "rjx props getComputedProps",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber49",
+    "test-file/test/unit/props_spec.js.html#lineNumber48",
     "rjx props getComputedProps should return resolved computed props",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber114",
+    "test-file/test/unit/props_spec.js.html#lineNumber118",
     "rjx props getEvalProps",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber116",
+    "test-file/test/unit/props_spec.js.html#lineNumber120",
     "rjx props getEvalProps should return evaluated props dangerously using eval",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber223",
+    "test-file/test/unit/props_spec.js.html#lineNumber227",
     "rjx props getFunctionFromProps",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber261",
+    "test-file/test/unit/props_spec.js.html#lineNumber265",
     "rjx props getFunctionFromProps should return a function on this.props like this.props.onClick",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber242",
+    "test-file/test/unit/props_spec.js.html#lineNumber246",
     "rjx props getFunctionFromProps should return a library function like this.props.reduxRouter.push",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber277",
+    "test-file/test/unit/props_spec.js.html#lineNumber281",
     "rjx props getFunctionFromProps should return a window function like window.print or window.localStorage.getItem",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber225",
+    "test-file/test/unit/props_spec.js.html#lineNumber229",
     "rjx props getFunctionFromProps should return an empty function by default",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber181",
+    "test-file/test/unit/props_spec.js.html#lineNumber185",
     "rjx props getFunctionProps",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber183",
+    "test-file/test/unit/props_spec.js.html#lineNumber187",
     "rjx props getFunctionProps should resolve functions from rjx.__functionProps from function strings",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber87",
+    "test-file/test/unit/props_spec.js.html#lineNumber91",
     "rjx props getRJXProps",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber89",
+    "test-file/test/unit/props_spec.js.html#lineNumber93",
     "rjx props getRJXProps should return resolved dynamic prop",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber103",
+    "test-file/test/unit/props_spec.js.html#lineNumber107",
     "rjx props getRJXProps should return resolved dynamic prop with undefined values if reference is invalid",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber321",
+    "test-file/test/unit/props_spec.js.html#lineNumber325",
     "rjx props getReactComponentProps",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber323",
+    "test-file/test/unit/props_spec.js.html#lineNumber327",
     "rjx props getReactComponentProps should return react component props dangerously using eval",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber135",
+    "test-file/test/unit/props_spec.js.html#lineNumber139",
     "rjx props getWindowComponents",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/props_spec.js.html#lineNumber140",
+    "test-file/test/unit/props_spec.js.html#lineNumber144",
     "rjx props getWindowComponents should return react element from rjx.__windowComponents",
     "test"
   ],
@@ -607,13 +619,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber122",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber124",
     "rjx rjxRender",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber126",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber128",
     "rjx rjxRender should render component inside of querySelector",
     "test"
   ],
@@ -1233,6 +1245,12 @@ window.esdocSearchIndex = [
     "src/components.js",
     "file/src/components.js.html",
     "src/components.js",
+    "file"
+  ],
+  [
+    "src/express.js",
+    "file/src/express.js.html",
+    "src/express.js",
     "file"
   ],
   [

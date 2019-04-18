@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 import useGlobalHook from 'use-global-hook';
 
-
 import * as rjxComponents from './components';
 import * as rjxProps from './props';
 import * as rjxChildren from './children';
@@ -61,13 +60,14 @@ export function rjxHTMLString(config = {}) {
  * @property {object} this - options for getRenderedJSON
  * @property {Object} [this.componentLibraries] - react components to render with RJX
  * @property {boolean} [this.debug=false] - use debug messages
+ * @property {boolean} [this.returnJSON=false] - return json object of {type,props,children} instead of react element
  * @property {function} [this.logError=console.error] - error logging function
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
 export function getRenderedJSON(rjx = {}, resources = {}) {
   // eslint-disable-next-line
-  const { componentLibraries = {}, debug = false, logError = console.error, boundedComponents = [], } = this || {};
+  const { componentLibraries = {}, debug = false, returnJSON=false, logError = console.error, boundedComponents = [], } = this || {};
   // const componentLibraries = this.componentLibraries;
   if (rjx.type) rjx.component = rjx.type;
   if (rjxUtils.validSimpleRJXSyntax(rjx)) rjx = rjxUtils.simpleRJXSyntax(rjx);
@@ -84,9 +84,9 @@ export function getRenderedJSON(rjx = {}, resources = {}) {
     const displayElement = (rjx.comparisonprops)
       ? displayComponent.call(this, { rjx, props, renderIndex, componentLibraries, debug, })
       : true;
-    
     if (displayElement) {
       const children = getRJXChildren.call(this, { rjx, props, resources, renderIndex, });
+      if (this.returnJSON) return { type:element, props, children, };
       return createElement(element, props, children);
     } else {
       return null;
@@ -100,40 +100,58 @@ export function getRenderedJSON(rjx = {}, resources = {}) {
   }
 }
 
-/**
- * Use RJX for express view rendering
- * @param {string} filePath - path to rjx express view 
- * @param {object} options - property used for express view {locals}
- * @param {object} options.__boundConfig - property used to bind this object for RJX, can be used to add custom components
- * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
- * @param {*} callback 
- */
-export function __express(filePath, options, callback) {
-  try {
-    const resources = Object.assign({}, options);
-    delete resources.__boundConfig;
-    delete resources.__DOCTYPE;
-    delete resources.__rjx;
-    const rjxModule = options.__rjx || require(filePath);
-    const rjxRenderedString = rjxHTMLString.call(options.__boundConfig || {}, {
-      rjx: rjxModule,
-      resources,
-    });
-    callback(null, `${options.__DOCTYPE || '<!DOCTYPE html>'}
-${rjxRenderedString}`);
-  } catch (e) {
-    callback(e);
-  }
+/** converts a json object {type,props,children} into a react element 
+ * @example
+ * rjx.getReactElementFromJSON({type:'div',props:{title:'some title attribute'},children:'inner html text'})
+ * @param {Object|String} options.type - 'div' or react component
+ * @param {Object} options.props - props for react element
+ * @param {String|[Object]} options.children - children elements
+ * @returns {function} React element via React.createElement
+*/
+export function getReactElementFromJSON({ type, props, children, }) {
+  return createElement(type, props, Array.isArray(children)
+    ? children.map(getReactElementFromJSON)
+    : children);
 }
 
+/** converts a rjx json object into a react function component 
+ * @example
+ * rjx.compile({rjx:{component:'div',props:{title:'some title attribute'},children:'inner html text'}}) //=>React Function
+ * @param {Object} rjx - valid RJX JSON
+ * @param {Object} resources - props for react element
+ * @returns {function} React element via React.createElement
+*/
+export function compile(rjx, resources) {
+  const context = Object.assign({}, this, { returnJSON: true, });
+  const json = getRenderedJSON.call(context, rjx, resources);
+  const func = function compiledRJX(props) {
+    json.props = Object.assign({}, json.props, props);
+    return getReactElementFromJSON(json);
+  };
+  Object.defineProperty(func, 'name', { value: this.name, });
+  return func;
+}
+
+/**
+ * Exposes react module used in RJX
+ * @returns {Object} React
+ */
 export function __getReact() {
   return React;
 }
 
+/**
+ * Exposes react dom module used in RJX
+ * @returns {Object} ReactDOM
+ */
 export function __getReactDOM() {
   return ReactDOM;
 }
 
+/**
+ * Exposes global hook used in RJX
+ * @returns {Object} useGlobalHook
+ */
 export function __getUseGlobalHook() {
   return useGlobalHook;
 }
@@ -142,5 +160,6 @@ export const _rjxChildren = rjxChildren;
 export const _rjxComponents = rjxComponents;
 export const _rjxProps = rjxProps;
 export const _rjxUtils = rjxUtils;
+export { __express, } from './express';
 
 export default getRenderedJSON;

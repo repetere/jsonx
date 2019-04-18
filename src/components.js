@@ -6,6 +6,7 @@ import { getRenderedJSON, } from './main';
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
+
 export let advancedBinding = getAdvancedBinding();
 
 /**

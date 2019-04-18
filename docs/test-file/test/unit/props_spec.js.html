@@ -49,6 +49,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compile">compile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactElementFromJSON">getReactElementFromJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
@@ -83,18 +85,17 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">test/unit/props_spec.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const rjx = require(&apos;../../dist/rjx.cjs&apos;);
-const mochaJSDOM = require(&apos;jsdom-global&apos;);
-const chai = require(&apos;chai&apos;);
-const sinon = require(&apos;sinon&apos;);
-const React = require(&apos;react&apos;);
-const ReactDOM = require(&apos;react-dom&apos;);
-const ReactDOMElements = require(&apos;react-dom-factories&apos;);
-const expect = require(&apos;chai&apos;).expect;
-const jsdom = require(&apos;jsdom&apos;);
-const { JSDOM, } = jsdom;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import * as rjx from &apos;../../src/main&apos;;
+import mochaJSDOM from &apos;jsdom-global&apos;;
+import chai from &apos;chai&apos;;
+import sinon from &apos;sinon&apos;;
+import React from &apos;react&apos;;
+import ReactDOM from &apos;react-dom&apos;;
+import ReactDOMElements from &apos;react-dom-factories&apos;;
+import { expect } from &apos;chai&apos;;
+import { JSDOM, } from &apos;jsdom&apos;;
 chai.use(require(&apos;sinon-chai&apos;));
-require(&apos;mocha-sinon&apos;);
+import &apos;mocha-sinon&apos;;
 
 const sampleRJX = {
   component: &apos;div&apos;,
@@ -133,11 +134,14 @@ describe(&apos;rjx props&apos;, function () {
     const getComputedProps = rjx._rjxProps.getComputedProps;
     it(&apos;should return resolved computed props&apos;, () =&gt; {
       const dynamicprops = {
-        auth: [&apos;authentication&apos;, ],
-        username: [&apos;user&apos;, &apos;name&apos;, ],
+        auth: [&apos;authentication&apos;,],
+        username: [&apos;user&apos;, &apos;name&apos;,],
       };
       const evalProps = {
-        getUsername: &apos;(user={})=&gt;user.name&apos;,
+        getUsername: &apos;()=&gt;\&apos;rjx\&apos;&apos;,
+      };
+      const bindEvalProps = {
+        getUsernameFunction: &apos;(function () { return &quot;rjx&quot;; })&apos;,
       };
       const compProps = {
         myComponent: {
@@ -150,6 +154,7 @@ describe(&apos;rjx props&apos;, function () {
       const testRJX = Object.assign({}, sampleRJX, {
         asyncprops: dynamicprops,
         __dangerouslyEvalProps: evalProps,
+        __dangerouslyBindEvalProps: bindEvalProps,
         __dangerouslyInsertComponents: compProps,
       });
       const computedProps = getComputedProps.call({}, {
@@ -160,7 +165,8 @@ describe(&apos;rjx props&apos;, function () {
       expect(computedProps.auth).to.eql(resources.authentication);
       expect(computedProps.username).to.eql(resources.user.name);
       expect(computedProps.key).to.eql(renderIndex);
-      expect(computedProps.getUsername).to.be.a(&apos;function&apos;);
+      expect(computedProps.getUsername).to.be.a(&apos;string&apos;);
+      expect(computedProps.getUsernameFunction).to.be.a(&apos;function&apos;);
       expect(computedProps.myComponent).to.be.an(&apos;object&apos;);
       expect(computedProps.myComponent).to.haveOwnProperty(&apos;$$typeof&apos;);
       expect(computedProps.myComponent).to.haveOwnProperty(&apos;type&apos;);
@@ -173,8 +179,8 @@ describe(&apos;rjx props&apos;, function () {
     const getRJXProps = rjx._rjxProps.getRJXProps;
     it(&apos;should return resolved dynamic prop&apos;, () =&gt; {
       const testVals = {
-        auth: [&apos;authentication&apos;, ],
-        username: [&apos;user&apos;, &apos;name&apos;, ],
+        auth: [&apos;authentication&apos;,],
+        username: [&apos;user&apos;, &apos;name&apos;,],
       };
       const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
       const testRJX2 = Object.assign({}, sampleRJX, { thisprops: testVals, });
@@ -187,8 +193,8 @@ describe(&apos;rjx props&apos;, function () {
     });
     it(&apos;should return resolved dynamic prop with undefined values if reference is invalid&apos;, () =&gt; {
       const testVals = {
-        auth: [&apos;wrong&apos;, ],
-        username: [&apos;no&apos;, &apos;ref&apos;, ],
+        auth: [&apos;wrong&apos;,],
+        username: [&apos;no&apos;, &apos;ref&apos;,],
       };
       const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
       const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
@@ -201,7 +207,7 @@ describe(&apos;rjx props&apos;, function () {
     it(&apos;should return evaluated props dangerously using eval&apos;, () =&gt; {
       const testVals = {
         auth: &apos;true&apos;,
-        username: &apos;(user={})=&gt;user.name&apos;,
+        username: &apos;()=&gt;(user={})=&gt;user.name&apos;,
       };
       const testRJX = Object.assign({}, sampleRJX, {
         __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {

@@ -111,6 +111,18 @@ if (recharts[rjx.component.replace('recharts.', '')]) { return recharts[rjx.comp
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 
+## `__express(filePath: string, options: object, options.__boundConfig: object, options.__DOCTYPE: string, callback: *)`
+
+Use RJX for express view rendering
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+| filePath | string |  | path to rjx express view |
+| options | object |  | property used for express view {locals} |
+| options.__boundConfig | object |  | property used to bind this object for RJX, can be used to add custom components |
+| options.__DOCTYPE | string | optional: true, default: "<!DOCTYPE html>" | html doctype string |
+| callback | * |  |
+
 ## `rjxRender(config: object, config.rjx: object, config.resources: object, config.querySelector: string)`
 
 Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
@@ -141,29 +153,42 @@ Use React.createElement and RJX JSON to create React elements
 | rjx | object |  | any valid RJX JSON object |
 | resources | object |  | any additional resource used for asynchronous properties |
 
-## `__express(filePath: string, options: object, options.__boundConfig: object, options.__DOCTYPE: string, callback: *)`
+## `getReactElementFromJSON(options.type: Object|String, options.props: Object, options.children: String|[Object]): function`
 
-Use RJX for express view rendering
-
-| Name | Type | Attribute | Description |
-| --- | --- | --- | --- |
-| filePath | string |  | path to rjx express view |
-| options | object |  | property used for express view {locals} |
-| options.__boundConfig | object |  | property used to bind this object for RJX, can be used to add custom components |
-| options.__DOCTYPE | string | optional: true, default: "<!DOCTYPE html>" | html doctype string |
-| callback | * |  |
-
-## `__getReact()`
+converts a json object {type,props,children} into a react element
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
+| options.type | Object|String |  | 'div' or react component |
+| options.props | Object |  | props for react element |
+| options.children | String|[Object] |  | children elements |
 
-## `__getReactDOM()`
+## `compile(rjx: Object, resources: Object): function`
+
+converts a rjx json object into a react function component
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+| rjx | Object |  | valid RJX JSON |
+| resources | Object |  | props for react element |
+
+## `__getReact(): Object`
+
+Exposes react module used in RJX
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 
-## `__getUseGlobalHook()`
+## `__getReactDOM(): Object`
+
+Exposes react dom module used in RJX
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+
+## `__getUseGlobalHook(): Object`
+
+Exposes global hook used in RJX
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |

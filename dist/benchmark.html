@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>RJX Benchmark</title>
+    <script  type="text/javascript" src="https://raw.githubusercontent.com/lodash/lodash/4.17.11-npm/lodash.js"></script>
+    <script  type="text/javascript" src="https://raw.githubusercontent.com/bestiejs/platform.js/master/platform.js"></script>
+    <script  type="text/javascript" src="https://raw.githubusercontent.com/bestiejs/benchmark.js/master/benchmark.js"></script>
+    <script type="text/javascript" src="rjx.web.js"></script>
+    <script type="text/javascript">
+    window.React = rjx.__getReact();
+    window.ReactDOM = rjx.__getReactDOM();
+    // shallowEqual=()=>{};
+    // console.log({rjx});
+    // console.log({React});
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      // var suite = new Benchmark.Suite('app', {
+      //   setup: function() {
+      //     document.querySelector('#root').innerHTML='';
+      //   },
+      //   teardown: function() {
+      //     document.querySelector('#root').innerHTML='';
+      //   },
+      // });
+      // rjx.rjxRender.call(boundConfig,{ 
+      //   rjx: sampleRJX, 
+      //   resources: { 
+      //     addedStatus:'LIVE',
+      //     punc:'   !!!!'
+      //   },
+      //   querySelector:'#root', });
+    </script>
+  </body>
+</html>

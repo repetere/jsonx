@@ -1,4 +1,4 @@
-const rjx = require('../../dist/rjx.cjs');
+const rjx = require('../../dist/rjx.cjs.js');
 let c = rjx._rjxComponents.getFunctionFromEval({ body: 'console.log("hello")', });
 const MyCustomComponent = rjx._rjxComponents.getReactClassComponent({
   //
@@ -111,7 +111,7 @@ const sampleRJX = {
                 },
               },
               __dangerouslyEvalProps: {
-                onClick: '()=>alert("click works")',
+                onClick: '()=>()=>alert("click works")',
               },
               children: 'Hello RJX World!',
             },

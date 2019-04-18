@@ -47,6 +47,10 @@ export default [
             '@babel/transform-runtime',
             // { useESModules: output.format !== 'cjs' }
           ],
+
+          [
+            '@babel/plugin-proposal-export-namespace-from',
+          ],
         ],
         // exclude: 'node_modules/**', // only transpile our source code
       }),
@@ -56,7 +60,7 @@ export default [
           // relative to the current directory, or the name
           // of a module in node_modules
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
-          'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createContext','Fragment','Suspense','lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',],
+          'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createContext', 'Fragment', 'Suspense', 'lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', ],
 
         },
       }), // so Rollup can convert `ms` to an ES module
@@ -67,8 +71,8 @@ export default [
       // }),
     ],
     watch: {
-      exclude: 'node_modules/**'
-    }
+      exclude: 'node_modules/**',
+    },
   },
 
   // CommonJS (for Node) and ES module (for bundlers) build.
@@ -85,7 +89,7 @@ export default [
       'react-dom/server',
       'react-dom-factories',
       'create-react-class',
-      'use-global-hook',
+      // 'use-global-hook',
       'ua-parser-js',
     ], // <-- suppresses the warning
     output: [
@@ -103,6 +107,9 @@ export default [
       },
     ],
     plugins: [
+      resolve({
+        preferBuiltins: true,
+      }),
       babel({
         // exclude: 'node_modules/**', // only transpile our source code
         runtimeHelpers: true,
@@ -114,6 +121,10 @@ export default [
           [
             '@babel/transform-runtime',
             // { useESModules: output.format !== 'cjs' }
+          ],
+
+          [
+            '@babel/plugin-proposal-export-namespace-from',
           ],
         ],
         // exclude: 'node_modules/**', // only transpile our source code
@@ -137,7 +148,7 @@ export default [
       'react-dom/server',
       'react-dom-factories',
       'create-react-class',
-      'use-global-hook',
+      // 'use-global-hook',
       'ua-parser-js',
     ], // <-- suppresses the warning
     output: [
@@ -162,6 +173,10 @@ export default [
       //   'react-dom': path.resolve('./node_modules/react-dom/server.node.js'),
       //   ReactDOM: path.resolve('./node_modules/react-dom/server.node.js'),
       // }),
+
+      resolve({
+        preferBuiltins: true,
+      }),
       babel({
         // exclude: 'node_modules/**', // only transpile our source code
         runtimeHelpers: true,
@@ -174,10 +189,14 @@ export default [
             '@babel/transform-runtime',
             // { useESModules: output.format !== 'cjs' }
           ],
+
+          [
+            '@babel/plugin-proposal-export-namespace-from',
+          ],
           ['babel-plugin-replace-imports', {
             'test': /react-dom$/,
             'replacer': 'react-dom/server',
-          }, ],
+          },],
         ],
         // exclude: 'node_modules/**', // only transpile our source code
       }),
@@ -210,19 +229,17 @@ export default [
       resolve({
         preferBuiltins: true,
       }), // so Rollup can find `ms`
-
       commonjs({
         namedExports: {
           'node_modules/react/index.js':[
           // 'node_modules/react/cjs/react.production.min.js': [
             // 'default',
-            'Children', 'Component', 'PropTypes', 'createContext', 'Fragment','Suspense','lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',
+            'Children', 'Component', 'PropTypes', 'createContext', 'Fragment', 'Suspense', 'lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',
           ],
         },
       }), // so Rollup can convert `ms` to an ES module
       builtins({
       }),
-
       globals({
       }),
       babel({
@@ -231,16 +248,23 @@ export default [
         // exclude: 'node_modules/@babel/runtime/**',
         exclude: 'node_modules/@babel/runtime/helpers/typeof.js',
         'presets': [
-          ['@babel/env', {},],
+          ['@babel/env', {}, ],
         ],
         plugins: [
           [
             '@babel/transform-runtime',
           ],
+          [
+            '@babel/plugin-proposal-export-namespace-from',
+          ],
           ['babel-plugin-replace-imports', {
             'test': /react-dom\/server/,
             'replacer': '../design/_mock_react-dom-server',
-          }, ],
+          },],
+          ['babel-plugin-replace-imports', {
+            'test': /express/,
+            'replacer': '../design/_mock_express',
+          },'u-rename-express' ],
           // ['babel-plugin-replace-imports', {
           //   'test': /ua-parser-js$/,
           //   'replacer': '../design/_mock_react-dom-server',

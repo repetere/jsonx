@@ -2,7 +2,6 @@ import React from 'react';
 import { getRenderedJSON, } from './main';
 import * as utilities from './utils';
 import { getComponentFromMap, } from './components';
-
 // if (typeof window === 'undefined') {
 //   var window = window || {};
 // }

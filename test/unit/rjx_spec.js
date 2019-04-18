@@ -1,16 +1,16 @@
-const rjx = require('../../dist/rjx.cjs');
-const mochaJSDOM = require('jsdom-global');
-const chai = require('chai');
-const sinon = require('sinon');
-const path = require('path');
-const React = require('react');
-const ReactDOM = require('react-dom');
-const ReactTestUtils = require('react-dom/test-utils'); // ES6
-const expect = require('chai').expect;
-const jsdom = require('jsdom');
-const { JSDOM, } = jsdom;
+import * as rjx from '../../src/main';
+import mochaJSDOM from 'jsdom-global';
+import path from 'path';
+import chai from 'chai';
+import sinon from 'sinon';
+import React from 'react';
+import ReactTestUtils from 'react-dom/test-utils'; // ES6
+import ReactDOM from 'react-dom';
+import ReactDOMElements from 'react-dom-factories';
+import { expect } from 'chai';
+import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
-require('mocha-sinon');
+import 'mocha-sinon';
 
 const sampleRJX = {
   component: 'div',
@@ -111,9 +111,11 @@ describe('rjx', function () {
         },
         ((err, renderedString) => {
           const dom = new JSDOM(renderedString);
-          expect(dom.window.document.querySelector('#generatedRJX').getAttribute('title')).to.eql(spantext);
-          expect(err).to.be.null;
-          expect(renderedString).to.be.a('String');
+          if (renderedString) {
+            expect(dom.window.document.querySelector('#generatedRJX').getAttribute('title')).to.eql(spantext);
+            expect(err).to.be.null;
+            expect(renderedString).to.be.a('String');
+          }
           done(err);
         })
       );

@@ -1,15 +1,16 @@
-const rjx = require('../../dist/rjx.cjs');
-const mochaJSDOM = require('jsdom-global');
-const chai = require('chai');
-const sinon = require('sinon');
-const React = require('react');
-const ReactDOM = require('react-dom');
-const ReactDOMElements = require('react-dom-factories');
-const expect = require('chai').expect;
-const jsdom = require('jsdom');
-const { JSDOM, } = jsdom;
+import * as rjx from '../../src/main';
+import * as _rjxComponents from '../../src/components';
+import mochaJSDOM from 'jsdom-global';
+import chai from 'chai';
+import sinon from 'sinon';
+import React from 'react';
+import ReactTestUtils from 'react-dom/test-utils'; // ES6
+import ReactDOM from 'react-dom';
+import ReactDOMElements from 'react-dom-factories';
+import { expect } from 'chai';
+import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
-require('mocha-sinon');
+import 'mocha-sinon';
 
 const sampleRJX = {
   component: 'div',
@@ -108,7 +109,7 @@ describe('rjx components', function () {
         WelcomeBindSpy,
       };
       const boundedComponents = ['Welcome', 'WelcomeBindSpy',];
-      const customComponents = rjx._rjxComponents.getBoundedComponents({ reactComponents, boundedComponents, advancedBinding:true, });
+      const customComponents = _rjxComponents.getBoundedComponents({ reactComponents, boundedComponents, advancedBinding:true, });
       const customThis = {
         props: {
           name:'customElementTest',
@@ -138,7 +139,7 @@ describe('rjx components', function () {
       reactBootstrap,
     };
     it('should return a function if rjx.component is not a string', () => {
-      expect(rjx._rjxComponents.getComponentFromMap({
+      expect(_rjxComponents.getComponentFromMap({
         rjx: {
           component:Welcome,
         }, })).to.be.a('function').and.to.eql(Welcome);
@@ -146,7 +147,7 @@ describe('rjx components', function () {
     it('should return the dom element string if a valid DOM elmenet in ReactDOM', () => {
       ['div', 'span', 'p', 'section',].forEach(el => {
         const rjxObj = { rjx: { component: el, }, };
-        expect(rjx._rjxComponents.getComponentFromMap(rjxObj)).to.eql(el);
+        expect(_rjxComponents.getComponentFromMap(rjxObj)).to.eql(el);
       });
     });
     it('should return a custom element', () => {
@@ -158,7 +159,7 @@ describe('rjx components', function () {
           Welcome,
         },
       };
-      expect(rjx._rjxComponents.getComponentFromMap(rjxObj)).to.eql(Welcome);
+      expect(_rjxComponents.getComponentFromMap(rjxObj)).to.eql(Welcome);
     });
     it('should return a component library react element', () => {
       const rjxObj = {
@@ -167,13 +168,13 @@ describe('rjx components', function () {
         },
         componentLibraries,
       };
-      expect(rjx._rjxComponents.getComponentFromMap(rjxObj)).to.eql(Welcome);
+      expect(_rjxComponents.getComponentFromMap(rjxObj)).to.eql(Welcome);
     });
     it('should handle errors', () => { 
       const logError = sinon.spy();
-      expect(rjx._rjxComponents.getComponentFromMap.bind(null)).to.throw();
+      expect(_rjxComponents.getComponentFromMap.bind(null)).to.throw();
       try {
-        rjx._rjxComponents.getComponentFromMap({ debug: true, logError, });
+        _rjxComponents.getComponentFromMap({ debug: true, logError, });
       } catch (e) {
         expect(e).to.be.a('error');
         expect(logError.called).to.be.true;
@@ -189,7 +190,7 @@ describe('rjx components', function () {
       reactBootstrap,
     };
     it('should return undefined if not valid', () => {
-      expect(rjx._rjxComponents.getComponentFromLibrary()).to.be.undefined;
+      expect(_rjxComponents.getComponentFromLibrary()).to.be.undefined;
     });
     it('should return a function if selecting valid component library', () => {
       const rjxObj = {
@@ -198,7 +199,7 @@ describe('rjx components', function () {
         },
         componentLibraries,
       };
-      expect(rjx._rjxComponents.getComponentFromLibrary(rjxObj)).to.be.eql(Welcome);
+      expect(_rjxComponents.getComponentFromLibrary(rjxObj)).to.be.eql(Welcome);
     });
   });
   describe('componentMap', () => {
@@ -223,7 +224,7 @@ describe('rjx components', function () {
     });
   });
   describe('getFunctionFromEval', () => {
-    const getFunctionFromEval = rjx._rjxComponents.getFunctionFromEval;
+    const getFunctionFromEval = _rjxComponents.getFunctionFromEval;
     it('should return a new function', () => {
       const myFunc = getFunctionFromEval({
         body: 'return 3;',
@@ -232,7 +233,7 @@ describe('rjx components', function () {
     });
   });
   describe('getReactClassComponent', () => {
-    const getReactClassComponent = rjx._rjxComponents.getReactClassComponent;
+    const getReactClassComponent = _rjxComponents.getReactClassComponent;
     it('should create a React Component', () => {
       const MyCustomComponent = getReactClassComponent({
         componentDidMount:{

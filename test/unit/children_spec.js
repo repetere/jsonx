@@ -1,14 +1,15 @@
-const rjx = require('../../dist/rjx.cjs');
-const mochaJSDOM = require('jsdom-global');
-const chai = require('chai');
-const sinon = require('sinon');
-const React = require('react');
-const ReactDOM = require('react-dom');
-const expect = require('chai').expect;
-const jsdom = require('jsdom');
-const { JSDOM, } = jsdom;
+import * as _rjxChildren from '../../src/children';
+import mochaJSDOM from 'jsdom-global';
+import chai from 'chai';
+import sinon from 'sinon';
+import React from 'react';
+import ReactTestUtils from 'react-dom/test-utils'; // ES6
+import ReactDOM from 'react-dom';
+import ReactDOMElements from 'react-dom-factories';
+import { expect } from 'chai';
+import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
-require('mocha-sinon');
+import 'mocha-sinon';
 
 const sampleRJX = {
   component: 'div',
@@ -80,7 +81,7 @@ const passableRJX = {
 
 describe('rjx', function () { 
   describe('getChildrenProperty', () => {
-    const getChildrenProperty = rjx._rjxChildren.getChildrenProperty;
+    const getChildrenProperty = _rjxChildren.getChildrenProperty;
     it('should return the children of an RJX Object', () => {
       const RJXChildren = getChildrenProperty({ rjx: sampleRJX, });
       const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], });
@@ -196,8 +197,8 @@ describe('rjx', function () {
     });
   });
   describe('getChildrenProps', () => {
-    const getChildrenProps = rjx._rjxChildren.getChildrenProps;
-    const getChildrenProperty = rjx._rjxChildren.getChildrenProperty;
+    const getChildrenProps = _rjxChildren.getChildrenProps;
+    const getChildrenProperty = _rjxChildren.getChildrenProperty;
     it('should return child RJX if not passing props', () => {
       const renderIndex = 1;
       const childrjx = getChildrenProperty({ rjx: sampleRJX, })[0];
@@ -218,7 +219,7 @@ describe('rjx', function () {
     });
   });
   describe('getRJXChildren', () => {
-    const getRJXChildren = rjx._rjxChildren.getRJXChildren;
+    const getRJXChildren = _rjxChildren.getRJXChildren;
     it('should return RJX Child Objects', () => {
       const renderIndex = 1;
       const RJXChildren = getRJXChildren.call({}, {

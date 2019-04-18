@@ -49,6 +49,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compile">compile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactElementFromJSON">getReactElementFromJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
@@ -83,18 +85,18 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">test/unit/components_spec.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const rjx = require(&apos;../../dist/rjx.cjs&apos;);
-const mochaJSDOM = require(&apos;jsdom-global&apos;);
-const chai = require(&apos;chai&apos;);
-const sinon = require(&apos;sinon&apos;);
-const React = require(&apos;react&apos;);
-const ReactDOM = require(&apos;react-dom&apos;);
-const ReactDOMElements = require(&apos;react-dom-factories&apos;);
-const expect = require(&apos;chai&apos;).expect;
-const jsdom = require(&apos;jsdom&apos;);
-const { JSDOM, } = jsdom;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import * as rjx from &apos;../../src/main&apos;;
+import mochaJSDOM from &apos;jsdom-global&apos;;
+import chai from &apos;chai&apos;;
+import sinon from &apos;sinon&apos;;
+import React from &apos;react&apos;;
+import ReactTestUtils from &apos;react-dom/test-utils&apos;; // ES6
+import ReactDOM from &apos;react-dom&apos;;
+import ReactDOMElements from &apos;react-dom-factories&apos;;
+import { expect } from &apos;chai&apos;;
+import { JSDOM, } from &apos;jsdom&apos;;
 chai.use(require(&apos;sinon-chai&apos;));
-require(&apos;mocha-sinon&apos;);
+import &apos;mocha-sinon&apos;;
 
 const sampleRJX = {
   component: &apos;div&apos;,

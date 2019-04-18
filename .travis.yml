@@ -31,7 +31,7 @@ before_script:
   - npm install 
 
 install: 
- - npm install mocha nyc @std/esm -g
+ - npm install mocha nyc esm -g
 
 branches:
   only:

@@ -1,0 +1,9 @@
+{
+  "instrument": true,
+  "include": [
+    "src/*.js"
+  ],
+  "exclude": [
+    "dist/**/*.js"
+  ]
+}
