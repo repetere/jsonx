@@ -268,7 +268,7 @@ describe('rjx components', function () {
   });
   describe('getReactFunctionComponent', () => {
     const getReactFunctionComponent = _rjxComponents.getReactFunctionComponent;
-    it('should create a React Component', () => {
+    it('should create a React Function Component', () => {
       const MyCustomComponent = getReactFunctionComponent(
         {
           component:'p',
@@ -290,5 +290,6 @@ describe('rjx components', function () {
       );
       expect(MyCustomComponent).to.be.a('function');
     });
+
   });
 });
