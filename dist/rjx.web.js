@@ -18509,17 +18509,16 @@ var rjx = (function (exports) {
 	        functionDefinition = functionBody;
 	      } else {
 	        functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[epropName]);
-
-	        if (rjx.__functionargs && rjx.__functionargs[epropName]) {
-	          args = [this].concat(rjx.__functionargs[epropName].map(arg => rjx.props[arg]));
-	        } else if (rjx.__functionparams) {
-	          const functionDefArgs = getParamNames(functionDefinition);
-	          args = [this].concat(functionDefArgs);
-	        } else {
-	          args = [this];
-	        }
-	      } // eslint-disable-next-line
-
+	        
+				} // eslint-disable-next-line
+				if (rjx.__functionargs && rjx.__functionargs[epropName]) {
+					args = [this].concat(rjx.__functionargs[epropName].map(arg => rjx.props[arg]));
+				} else if (rjx.__functionparams===false) {
+					args = [this];
+				} else {
+					const functionDefArgs = getParamNames(functionDefinition);
+					args = [this].concat(functionDefArgs.map(arg => rjx.props[arg]));
+				}
 
 	      evVal = functionDefinition.bind(...args);
 	    } catch (e) {

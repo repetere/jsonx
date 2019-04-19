@@ -149,14 +149,18 @@
 
 
             component:'button',
-            __functionargs:{
-              onClick:['count','setCount'],
-            },
+            // __functionargs:{
+            //   onClick:['count','setCount'],
+            // },
             __dangerouslyBindEvalProps:{
-              onClick:`(function(count,setCount){
-                setCount(count+1)
+              onClick:function(count,setCount){
+                setCount(count+1);
                 console.log('this is inline',{count,setCount});
-              })`,
+              },
+              // onClick:`(function(count,setCount){
+              //   setCount(count+1)
+              //   console.log('this is inline',{count,setCount});
+              // })`,
             },
             children:'Click me'
           }

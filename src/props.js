@@ -186,15 +186,15 @@ export function getEvalProps(options = {}) {
       if (typeof functionBody === 'function') {
         functionDefinition = functionBody;
       } else {
-        functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[ epropName ]);
-        if (rjx.__functionargs && rjx.__functionargs[ epropName ]) {
-          args = [this, ].concat(rjx.__functionargs[ epropName ].map(arg => rjx.props[ arg ]));
-        }  else if (rjx.__functionparams) {
-          const functionDefArgs = getParamNames(functionDefinition);
-          args = [this, ].concat(functionDefArgs);
-        } else {
-          args = [this, ];
-        } 
+        functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[epropName]);
+      } // eslint-disable-next-line
+      if (rjx.__functionargs && rjx.__functionargs[epropName]) {
+        args = [this,].concat(rjx.__functionargs[epropName].map(arg => rjx.props[arg]));
+      } else if (rjx.__functionparams===false) {
+        args = [this,];
+      } else {
+        const functionDefArgs = getParamNames(functionDefinition);
+        args = [this,].concat(functionDefArgs.map(arg => rjx.props[arg]));
       }
       // eslint-disable-next-line
       evVal = functionDefinition.bind(...args);
@@ -309,7 +309,7 @@ export function getFunctionFromProps(options) {
       } else {
         InlineFunction = Function('param1', 'param2', '"use strict";' + propBody);
       }
-      const [propFuncName, funcName, ] = propFunc.split('.');
+      const [propFuncName, funcName,] = propFunc.split('.');
       
       Object.defineProperty(
         InlineFunction,
@@ -319,7 +319,7 @@ export function getFunctionFromProps(options) {
         }
       );
       if (rjx.__functionargs) {
-        const boundArgs = [this,].concat(rjx.__functionargs[functionProperty].map(arg => rjx.props[ arg ]));
+        const boundArgs = [this, ].concat(rjx.__functionargs[functionProperty].map(arg => rjx.props[ arg ]));
         return InlineFunction.bind(...boundArgs);
       } else {
         return InlineFunction.bind(this);
