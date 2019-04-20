@@ -243,6 +243,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
     throw new ReferenceError(&apos;React components require a render method&apos;);
   }
   const classOptions = rjcKeys.reduce((result, val) =&gt; { 
+    if (typeof rjc[ val ] === &apos;function&apos;) rjc[ val ] = { body: rjc[ val ], };
     const args = rjc[ val ].arguments;
     const body = rjc[ val ].body;
     if (!body) {
@@ -315,13 +316,15 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
      },
       {
         component:&apos;button&apos;,
-        __functionProps:{
-          onClick:&apos;func:inline.onClick&apos;
+       __dangerouslyBindEvalProps:{
+        onClick:function(count,setCount){
+          setCount(count+1);
+          console.log(&apos;this is inline&apos;,{count,setCount});
         },
-        __functionargs:[&apos;count&apos;,&apos;setCount&apos;],
-        __inline:{
-          onClick:`return setCount(count+1)`,
-        },
+        // onClick:`(function(count,setCount){
+        //   setCount(count+1)
+        //   console.log(&apos;this is inline&apos;,{count,setCount});
+        // })`,
         children:&apos;Click me&apos;
       }
    ]
@@ -342,9 +345,8 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = &a
 
   const props = reactComponent.props;
   const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props, ];
-  const functionComponent = typeof functionBody === &apos;function&apos;
-    ? functionBody
-    : Function(&apos;React&apos;, &apos;useState&apos;, &apos;useEffect&apos;, &apos;useContext&apos;, &apos;useReducer&apos;, &apos;useCallback&apos;, &apos;useMemo&apos;, &apos;useRef&apos;, &apos;useImperativeHandle&apos;, &apos;useLayoutEffect&apos;, &apos;useDebugValue&apos;, &apos;getRenderedJSON&apos;, &apos;reactComponent&apos;, &apos;resources&apos;, &apos;props&apos;, `
+  if (typeof functionBody === &apos;function&apos;) functionBody = functionBody.toString();
+  const functionComponent = Function(&apos;React&apos;, &apos;useState&apos;, &apos;useEffect&apos;, &apos;useContext&apos;, &apos;useReducer&apos;, &apos;useCallback&apos;, &apos;useMemo&apos;, &apos;useRef&apos;, &apos;useImperativeHandle&apos;, &apos;useLayoutEffect&apos;, &apos;useDebugValue&apos;, &apos;getRenderedJSON&apos;, &apos;reactComponent&apos;, &apos;resources&apos;, &apos;props&apos;, `
       return function ${options.name || &apos;Anonymous&apos;}(props){
         ${functionBody}
         if(typeof functionprops!==&apos;undefined&apos;){

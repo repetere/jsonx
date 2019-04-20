@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMElements from 'react-dom-factories';
-import { expect } from 'chai';
+import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
 import 'mocha-sinon';
@@ -47,8 +47,8 @@ describe('rjx props', function () {
   describe('getComputedProps', () => { 
     it('should return resolved computed props', () => {
       const dynamicprops = {
-        auth: ['authentication',],
-        username: ['user', 'name',],
+        auth: ['authentication', ],
+        username: ['user', 'name', ],
       };
       const evalProps = {
         getUsername: '()=>\'rjx\'',
@@ -92,8 +92,8 @@ describe('rjx props', function () {
     const getRJXProps = _rjxProps.getRJXProps;
     it('should return resolved dynamic prop', () => {
       const testVals = {
-        auth: ['authentication',],
-        username: ['user', 'name',],
+        auth: ['authentication', ],
+        username: ['user', 'name', ],
       };
       const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
       const testRJX2 = Object.assign({}, sampleRJX, { thisprops: testVals, });
@@ -106,13 +106,44 @@ describe('rjx props', function () {
     });
     it('should return resolved dynamic prop with undefined values if reference is invalid', () => {
       const testVals = {
-        auth: ['wrong',],
-        username: ['no', 'ref',],
+        auth: ['wrong', ],
+        username: ['no', 'ref', ],
       };
       const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
       const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
       expect(RJXP.auth).to.be.undefined;
       expect(RJXP.username).to.be.undefined;
+    });
+  });
+  describe('getChildrenComponents', () => {
+    const getChildrenComponents = _rjxProps.getChildrenComponents;
+    it('should return undefined children if missing __spread prop', () => {
+      expect(getChildrenComponents().children).to.be.undefined;
+    });
+    it('should return error in children if missing __spread prop and if in debug mode', () => {
+      expect(getChildrenComponents({ rjx:{ debug:true ,}, }).children).to.be.a('string');
+      expect(getChildrenComponents.call({ debug:true ,}).children).to.be.a('string');
+    });
+    it('should spread data as a component on __spread prop', () => {
+      const options = {
+        allProps: {
+          __spread: [ 1, 2, 3, 4, 5, ],
+        },
+        rjx: {
+          __spreadComponent: {
+            component: 'div',
+          },
+        },
+      };
+      const spreadChilds = getChildrenComponents(options);
+      expect(spreadChilds).to.haveOwnProperty('_children');
+      expect(spreadChilds._children).to.have.lengthOf(options.allProps.__spread.length);
+      // expect(getChildrenComponents({ rjx:{ debug:true ,}, }).children).to.be.a('string');
+    });
+  });
+  describe('boundArgsReducer', () => { 
+    it('should return reducer function', () => {
+      expect(_rjxProps.boundArgsReducer.bind()).to.be.a('function');
     });
   });
   describe('getEvalProps', () => {

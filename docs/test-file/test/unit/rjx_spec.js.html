@@ -327,8 +327,12 @@ describe(&apos;rjx&apos;, function () {
         })
       );
     });
-    it(&apos;it should handle errors&apos;, () =&gt; {
+    it(&apos;it should handle errors&apos;, (done) =&gt; {
       expect(rjx.__express.bind()).to.throw;
+      rjx.__express(null,null, (err) =&gt; {
+        expect(err).to.be.a(&apos;error&apos;);
+        done();
+      })
     });
   });
   describe(&apos;rjxRender&apos;, () =&gt; {

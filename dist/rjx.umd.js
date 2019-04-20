@@ -18163,6 +18163,9 @@
 	  }
 
 	  const classOptions = rjcKeys.reduce((result, val) => {
+	    if (typeof rjc[val] === 'function') rjc[val] = {
+	      body: rjc[val]
+	    };
 	    const args = rjc[val].arguments;
 	    const body = rjc[val].body;
 
@@ -18228,13 +18231,15 @@
 	     },
 	      {
 	        component:'button',
-	        __functionProps:{
-	          onClick:'func:inline.onClick'
+	       __dangerouslyBindEvalProps:{
+	        onClick:function(count,setCount){
+	          setCount(count+1);
+	          console.log('this is inline',{count,setCount});
 	        },
-	        __functionargs:['count','setCount'],
-	        __inline:{
-	          onClick:`return setCount(count+1)`,
-	        },
+	        // onClick:`(function(count,setCount){
+	        //   setCount(count+1)
+	        //   console.log('this is inline',{count,setCount});
+	        // })`,
 	        children:'Click me'
 	      }
 	   ]
@@ -18261,7 +18266,8 @@
 	  } = options;
 	  const props = reactComponent.props;
 	  const functionArgs = [react, react_9, react_10, react_11, react_12, react_13, react_14, react_15, react_16, react_17, react_18, getRenderedJSON, reactComponent, resources, props];
-	  const functionComponent = typeof functionBody === 'function' ? functionBody : Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
+	  if (typeof functionBody === 'function') functionBody = functionBody.toString();
+	  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
       return function ${options.name || 'Anonymous'}(props){
         ${functionBody}
         if(typeof functionprops!=='undefined'){
@@ -18424,12 +18430,12 @@
 
 	function getChildrenComponents(options = {}) {
 	  const {
-	    allProps,
-	    rjx
+	    allProps = {},
+	    rjx = {}
 	  } = options; // const asyncprops = getRJXProps({ rjx, propName: 'spreadprops', traverseObject: allProps, });
 
 	  if (Array.isArray(allProps.__spread) === false) {
-	    if (this.debug || rjx.debug) {
+	    if (this && this.debug || rjx.debug) {
 	      return {
 	        children: new Error('Using __spreadComponent requires an array prop \'__spread\'').toString()
 	      };
@@ -18450,7 +18456,7 @@
 	    };
 	  }
 	}
-	function boundArgsReducer(rjx) {
+	function boundArgsReducer(rjx = {}) {
 	  return (args, arg) => {
 	    if (this && this.state && this.state[arg]) args.push(this.state[arg]);else if (this && this.props && this.props[arg]) args.push(this.props[arg]);else if (rjx.props && rjx.props[arg]) args.push(rjx.props[arg]);
 	    return args;

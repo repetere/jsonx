@@ -234,8 +234,12 @@ describe('rjx', function () {
         })
       );
     });
-    it('it should handle errors', () => {
+    it('it should handle errors', (done) => {
       expect(rjx.__express.bind()).to.throw;
+      rjx.__express(null,null, (err) => {
+        expect(err).to.be.a('error');
+        done();
+      })
     });
   });
   describe('rjxRender', () => {

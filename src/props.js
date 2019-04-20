@@ -115,10 +115,10 @@ export function getRJXProps(options = {}) {
  * @param {*} options 
  */
 export function getChildrenComponents(options = {}) {
-  const { allProps, rjx, } = options;
+  const { allProps = {}, rjx = {}, } = options;
   // const asyncprops = getRJXProps({ rjx, propName: 'spreadprops', traverseObject: allProps, });
   if (Array.isArray(allProps.__spread) === false) {
-    if (this.debug || rjx.debug) {
+    if ((this && this.debug) || rjx.debug) {
       return {
         children: new Error('Using __spreadComponent requires an array prop \'__spread\'').toString(),
       };
@@ -138,7 +138,7 @@ export function getChildrenComponents(options = {}) {
   }
 }
 
-export function boundArgsReducer(rjx) {
+export function boundArgsReducer(rjx = {}) {
   return (args, arg) => {
     if (this && this.state && this.state[ arg ]) args.push(this.state[ arg ]);
     else if (this && this.props && this.props[ arg ]) args.push(this.props[ arg ]);

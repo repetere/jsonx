@@ -99,7 +99,7 @@ import sinon from &apos;sinon&apos;;
 import React from &apos;react&apos;;
 import ReactDOM from &apos;react-dom&apos;;
 import ReactDOMElements from &apos;react-dom-factories&apos;;
-import { expect } from &apos;chai&apos;;
+import { expect, } from &apos;chai&apos;;
 import { JSDOM, } from &apos;jsdom&apos;;
 chai.use(require(&apos;sinon-chai&apos;));
 import &apos;mocha-sinon&apos;;
@@ -140,8 +140,8 @@ describe(&apos;rjx props&apos;, function () {
   describe(&apos;getComputedProps&apos;, () =&gt; { 
     it(&apos;should return resolved computed props&apos;, () =&gt; {
       const dynamicprops = {
-        auth: [&apos;authentication&apos;,],
-        username: [&apos;user&apos;, &apos;name&apos;,],
+        auth: [&apos;authentication&apos;, ],
+        username: [&apos;user&apos;, &apos;name&apos;, ],
       };
       const evalProps = {
         getUsername: &apos;()=&gt;\&apos;rjx\&apos;&apos;,
@@ -185,8 +185,8 @@ describe(&apos;rjx props&apos;, function () {
     const getRJXProps = _rjxProps.getRJXProps;
     it(&apos;should return resolved dynamic prop&apos;, () =&gt; {
       const testVals = {
-        auth: [&apos;authentication&apos;,],
-        username: [&apos;user&apos;, &apos;name&apos;,],
+        auth: [&apos;authentication&apos;, ],
+        username: [&apos;user&apos;, &apos;name&apos;, ],
       };
       const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
       const testRJX2 = Object.assign({}, sampleRJX, { thisprops: testVals, });
@@ -199,13 +199,44 @@ describe(&apos;rjx props&apos;, function () {
     });
     it(&apos;should return resolved dynamic prop with undefined values if reference is invalid&apos;, () =&gt; {
       const testVals = {
-        auth: [&apos;wrong&apos;,],
-        username: [&apos;no&apos;, &apos;ref&apos;,],
+        auth: [&apos;wrong&apos;, ],
+        username: [&apos;no&apos;, &apos;ref&apos;, ],
       };
       const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
       const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
       expect(RJXP.auth).to.be.undefined;
       expect(RJXP.username).to.be.undefined;
+    });
+  });
+  describe(&apos;getChildrenComponents&apos;, () =&gt; {
+    const getChildrenComponents = _rjxProps.getChildrenComponents;
+    it(&apos;should return undefined children if missing __spread prop&apos;, () =&gt; {
+      expect(getChildrenComponents().children).to.be.undefined;
+    });
+    it(&apos;should return error in children if missing __spread prop and if in debug mode&apos;, () =&gt; {
+      expect(getChildrenComponents({ rjx:{ debug:true ,}, }).children).to.be.a(&apos;string&apos;);
+      expect(getChildrenComponents.call({ debug:true ,}).children).to.be.a(&apos;string&apos;);
+    });
+    it(&apos;should spread data as a component on __spread prop&apos;, () =&gt; {
+      const options = {
+        allProps: {
+          __spread: [ 1, 2, 3, 4, 5, ],
+        },
+        rjx: {
+          __spreadComponent: {
+            component: &apos;div&apos;,
+          },
+        },
+      };
+      const spreadChilds = getChildrenComponents(options);
+      expect(spreadChilds).to.haveOwnProperty(&apos;_children&apos;);
+      expect(spreadChilds._children).to.have.lengthOf(options.allProps.__spread.length);
+      // expect(getChildrenComponents({ rjx:{ debug:true ,}, }).children).to.be.a(&apos;string&apos;);
+    });
+  });
+  describe(&apos;boundArgsReducer&apos;, () =&gt; { 
+    it(&apos;should return reducer function&apos;, () =&gt; {
+      expect(_rjxProps.boundArgsReducer.bind()).to.be.a(&apos;function&apos;);
     });
   });
   describe(&apos;getEvalProps&apos;, () =&gt; {
