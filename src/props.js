@@ -138,6 +138,15 @@ export function getChildrenComponents(options = {}) {
   }
 }
 
+export function boundArgsReducer(rjx) {
+  return (args, arg) => {
+    if (this && this.state && this.state[ arg ]) args.push(this.state[ arg ]);
+    else if (this && this.props && this.props[ arg ]) args.push(this.props[ arg ]);
+    else if (rjx.props && rjx.props[ arg ]) args.push(rjx.props[ arg ]);
+    return args;
+  };
+}
+
 /**
  * Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
  * @param {Object} options 
@@ -165,19 +174,24 @@ export function getEvalProps(options = {}) {
   const scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
   const evProps = Object.keys(rjx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
     let evVal;
+    let evValString;
     try {
       // eslint-disable-next-line
       evVal = scopedEval(rjx.__dangerouslyEvalProps[ epropName ]);
+      evValString = evVal.toString();
     } catch (e) { 
       if (this.debug || rjx.debug) evVal = e;
     }
     eprops[ epropName ] = (typeof evVal === 'function')
       ? evVal.call(this, { rjx, })
       : evVal;
+    if (this.exposeEval) eprops[ `__eval_${epropName}` ] = evValString;
     return eprops;
   }, {});
   const evBindProps = Object.keys(rjx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
     let evVal;
+    let evValString;
+
     try {
       let args;
       const functionBody = rjx.__dangerouslyBindEvalProps[ epropName ];
@@ -186,15 +200,17 @@ export function getEvalProps(options = {}) {
       if (typeof functionBody === 'function') {
         functionDefinition = functionBody;
       } else {
-        functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[epropName]);
+        functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[ epropName ]);
+        evValString = functionDefinition.toString();
+
       } // eslint-disable-next-line
       if (rjx.__functionargs && rjx.__functionargs[epropName]) {
-        args = [this,].concat(rjx.__functionargs[epropName].map(arg => rjx.props[arg]));
+        args = [this,].concat(rjx.__functionargs[epropName].reduce(boundArgsReducer(rjx),[]));
       } else if (rjx.__functionparams===false) {
         args = [this,];
       } else {
         const functionDefArgs = getParamNames(functionDefinition);
-        args = [this,].concat(functionDefArgs.map(arg => rjx.props[arg]));
+        args = [this,].concat(functionDefArgs.reduce(boundArgsReducer(rjx),[]));
       }
       // eslint-disable-next-line
       evVal = functionDefinition.bind(...args);
@@ -203,6 +219,7 @@ export function getEvalProps(options = {}) {
     }
     // eslint-disable-next-line
     eprops[ epropName ] = evVal;
+    if (this.exposeEval) eprops[ `__eval_${epropName}` ] = evValString;
     return eprops;
   }, {});
 

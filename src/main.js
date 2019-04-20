@@ -100,6 +100,8 @@ export function getRenderedJSON(rjx = {}, resources = {}) {
   }
 }
 
+export const getReactElementFromRJX = getRenderedJSON;
+
 /** converts a json object {type,props,children} into a react element 
  * @example
  * rjx.getReactElementFromJSON({type:'div',props:{title:'some title attribute'},children:'inner html text'})
@@ -116,7 +118,7 @@ export function getReactElementFromJSON({ type, props, children, }) {
 
 /** converts a rjx json object into a react function component 
  * @example
- * rjx.compile({rjx:{component:'div',props:{title:'some title attribute'},children:'inner html text'}}) //=>React Function
+ * rjx.compile({rjx:{component:'div',props:{title:'some title attribute'},children:'inner html text'}}) //=>React Function Component
  * @param {Object} rjx - valid RJX JSON
  * @param {Object} resources - props for react element
  * @returns {function} React element via React.createElement
@@ -132,6 +134,62 @@ export function compile(rjx, resources) {
   return func;
 }
 
+/**
+ * converts RJX JSON IR to JSX
+ * @example
+ * rjx.jsonToJSX({ type: 'div', props: { key: 5, title: 'test' }, children: 'hello' }) // => '<div key={5} title="test">hello</div>'
+ * @param {Object} json - {type,props,children}
+ * @returns {String} jsx string
+ */
+export function compileJSX(rjx, resources) {
+  const context = Object.assign({}, this, { returnJSON: true, });
+  const json = getRenderedJSON.call(context, rjx, resources);
+  return jsonToJSX(json);
+}
+
+/**
+ * Compiles RJX into JSON IR format for react create element
+ * @example
+ * rjx.compileJSON({ component: 'div', props: { title: 'test', }, children: 'hello', }); //=> { type: 'div',
+ props: { key: 5, title: 'test' },
+ children: 'hello' }
+ * @property {object} this - options for getRenderedJSON
+ * @param {object} rjx - any valid RJX JSON object
+ * @param {object} resources - any additional resource used for asynchronous properties
+ * @returns {Object} json - {type,props,children}
+ */
+export function compileJSON(rjx, resources) {
+  const context = Object.assign({}, this, { returnJSON: true, });
+  return getRenderedJSON.call(context, rjx, resources);
+}
+export const compileHTML = rjxHTMLString;
+
+/**
+ * converts RJX JSON IR to JSX
+ * @example
+ * rjx.jsonToJSX({ type: 'div', props: { key: 5, title: 'test' }, children: 'hello' }) // => '<div key={5} title="test">hello</div>'
+ * @param {Object} json - {type,props,children}
+ * @returns {String} jsx string
+ */
+export function jsonToJSX(json) {
+  const propsString = json.props
+    ? Object.keys(json.props)
+      .filter(prop => prop.includes('__eval_') === false)
+      .reduce((propString, prop) => {
+        propString += ` ${prop.toString()}=${
+          typeof json.props[ prop ] === 'string'
+            ? `"${json.props[ prop ].toString()}"`
+            : `{${(json.props[ `__eval_${prop}` ]||json.props[ prop ]).toString()}}`
+        }`;
+        return propString;
+      }, '')
+    : '';
+  return Array.isArray(json.children)
+    ? `<${json.type} ${propsString}>
+  ${json.children.map(jsonToJSX)}
+</${json.type}>`
+    : `<${json.type}${propsString}>${json.children}</${json.type}>`;
+}
 /**
  * Exposes react module used in RJX
  * @returns {Object} React

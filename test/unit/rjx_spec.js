@@ -7,10 +7,13 @@ import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils'; // ES6
 import ReactDOM from 'react-dom';
 import ReactDOMElements from 'react-dom-factories';
-import { expect } from 'chai';
+import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
 import 'mocha-sinon';
+
+import useGlobalHook from 'use-global-hook';
+
 
 const sampleRJX = {
   component: 'div',
@@ -31,7 +34,6 @@ const sampleRJX = {
     },
   ],
 };
-
 const simpleRJX = {
   div: {
     props: {
@@ -53,8 +55,54 @@ const simpleRJX = {
     ],
   },
 };
+const sampleRJXJSON = rjx.getRenderedJSON.call({ returnJSON: true }, sampleRJX);
+const simpleRJXJSON = rjx.getRenderedJSON.call({ returnJSON: true }, simpleRJX);
+
+const simpleDiv = {
+  component: 'div',
+  props: { title: 'test', },
+  children: 'hello',
+};
+const complexDiv = {
+  component: 'div',
+  props: { title: 'test', },
+  children: [
+    {
+      button: {
+        props: {
+          onClick: function (e) {
+            console.log({ e, });
+          },
+        },
+        children:'log event',
+      },
+    },
+    {
+      component: 'button',
+      __dangerouslyBindEvalProps: {
+        onClick:`(function(e){
+          console.log({ e });
+        })`,
+      },
+      children:'log even two',
+    },
+  ],
+};
+const simpleDivJSON = rjx.getRenderedJSON.call({ returnJSON: true, }, simpleDiv);
+const complexDivJSON = rjx.getRenderedJSON.call({ returnJSON: true, exposeEval:true, }, complexDiv);
 
 describe('rjx', function () { 
+  describe('helper functions', () => {
+    it('should return useGlobalHook', () => {
+      expect(rjx.__getUseGlobalHook()).to.eql(useGlobalHook);
+    });
+    it('should return React', () => {
+      expect(rjx.__getReact()).to.eql(React);
+    });
+    it('should return ReactDOM', () => {
+      expect(rjx.__getReactDOM()).to.eql(ReactDOM);
+    });
+  });
   describe('getRenderedJSON', () => {
     it('should return an instance of a react element', () => {
       const ReactiveJSON = rjx.getRenderedJSON(sampleRJX);
@@ -84,6 +132,72 @@ describe('rjx', function () {
         expect(loggerSpy.called).to.be.true;
         expect(e).to.be.an('error');
       }
+    });
+  });
+  describe('getReactElementFromJSON', () => {
+    it('should return an instance of a react element', () => {
+      const ReactiveJSON = rjx.getReactElementFromJSON(sampleRJXJSON);
+      const ReactiveSimpleJSON = rjx.getReactElementFromJSON(simpleRJXJSON);
+      expect(ReactTestUtils.isElement(ReactiveJSON)).to.be.true;
+      expect(ReactTestUtils.isElement(ReactiveSimpleJSON)).to.be.true;
+      expect(ReactiveJSON).to.be.an('object');
+      expect(ReactiveJSON).to.haveOwnProperty('$$typeof');
+      expect(ReactiveJSON).to.haveOwnProperty('type');
+      expect(ReactiveJSON).to.haveOwnProperty('key');
+      expect(ReactiveJSON).to.haveOwnProperty('ref');
+      expect(ReactiveJSON).to.haveOwnProperty('props');
+    });
+  });
+  describe('compile', () => { 
+    it('should convert RJX to React Element', () => {
+      const dom = new JSDOM(`<!DOCTYPE html>
+      <body>
+        <div id="root"/>
+      </body>`);
+      // global.document = dom.window.document;
+      // global.document.createElement = React.createElement;
+      // console.log('dom.window',dom.window)
+      global.window = dom.window;
+      global.window.React = React;
+      global.document = global.window.document;
+      // console.log("dom.window.document.querySelector('#root')",dom.window.document.querySelector('#root'));
+      const ReactiveJSON = rjx.compile(sampleRJXJSON);
+      const testDOM = ReactTestUtils.renderIntoDocument(ReactiveJSON());
+      // console.log({testDOM});
+      expect(ReactTestUtils.isDOMComponent(testDOM)).to.be.true;
+      expect(ReactiveJSON).to.be.a('function');
+      // expect(ReactTestUtils.isCompositeComponent(ReactiveJSON)).to.be.true;
+    });
+  });
+  describe('compileJSON', () => { 
+    it('should convert RJX to JSON', () => {
+      const compiledJSON = rjx.compileJSON(simpleDiv);
+      const compiledRJXJSON = rjx.getRenderedJSON.call({ returnJSON: true, }, simpleDiv);
+      expect(compiledJSON.children).to.eql(compiledRJXJSON.children);
+      expect(compiledJSON.type).to.eql(compiledRJXJSON.type);
+    });
+  });
+  describe('compileJSX', () => {
+    it('should compile to JSX String', () => {
+      const JSXString = rjx.compileJSX(simpleDiv);
+      expect(JSXString).to.include('title="test">hello</div>');
+      // console.log({ JSXString, complexJSXString, });
+    });
+  });
+  describe('jsonToJSX', () => {
+    // const util = require('util');
+    // console.log(util.inspect({ simpleDivJSON, complexDivJSON, },{depth:20}));
+    it('should compile to JSX String', () => {
+      const JSXString = rjx.jsonToJSX(simpleDivJSON);
+      const complexJSXString = rjx.jsonToJSX(complexDivJSON);
+      expect(JSXString).to.include('title="test">hello</div>');
+      expect(complexJSXString).to.be.a('string');
+      // console.log({ JSXString, complexJSXString, });
+    });
+  });
+  describe('compileHTML', () => {
+    it('should be an alias for rjxHTMLString', () => {
+      expect(rjx.compileHTML).to.eql(rjx.rjxHTMLString);
     });
   });
   describe('rjxHTMLString', () => {
@@ -119,6 +233,9 @@ describe('rjx', function () {
           done(err);
         })
       );
+    });
+    it('it should handle errors', () => {
+      expect(rjx.__express.bind()).to.throw;
     });
   });
   describe('rjxRender', () => {

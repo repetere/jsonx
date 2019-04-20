@@ -264,6 +264,8 @@ describe('rjx components', function () {
         },
       });
       expect(MyCustomComponent).to.be.a('function');
+      expect(ReactTestUtils.isElement(MyCustomComponent)).to.be.false;
+      // expect(ReactTestUtils.isCompositeComponent(MyCustomComponent)).to.be.true;
     });
   });
   describe('getReactFunctionComponent', () => {
@@ -290,6 +292,13 @@ describe('rjx components', function () {
       );
       expect(MyCustomComponent).to.be.a('function');
     });
-
+  });
+  describe('getReactContext', () => {
+    const getReactContext = _rjxComponents.getReactContext;
+    it('should return a React Context Object', () => {
+      const context = getReactContext({ some: 'c' });
+      expect(ReactTestUtils.isElement(context)).to.be.false;
+      // expect(context).to.be.an.instanceOf(React.createContext);
+    });
   });
 });
