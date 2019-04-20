@@ -78,24 +78,6 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "rjx/src/main.js~compilehtml",
-    "variable/index.html#static-variable-compileHTML",
-    "<span>compileHTML</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
-    "variable"
-  ],
-  [
-    "rjx/src/main.js~compilejson",
-    "function/index.html#static-function-compileJSON",
-    "<span>compileJSON</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
-    "function"
-  ],
-  [
-    "rjx/src/main.js~compilejsx",
-    "function/index.html#static-function-compileJSX",
-    "<span>compileJSX</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
-    "function"
-  ],
-  [
     "rjx/src/components.js~componentmap",
     "variable/index.html#static-variable-componentMap",
     "<span>componentMap</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
@@ -222,6 +204,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "rjx/src/main.js~getreactelement",
+    "variable/index.html#static-variable-getReactElement",
+    "<span>getReactElement</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "variable"
+  ],
+  [
     "rjx/src/main.js~getreactelementfromjson",
     "function/index.html#static-function-getReactElementFromJSON",
     "<span>getReactElementFromJSON</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
@@ -229,9 +217,9 @@ window.esdocSearchIndex = [
   ],
   [
     "rjx/src/main.js~getreactelementfromrjx",
-    "variable/index.html#static-variable-getReactElementFromRJX",
+    "function/index.html#static-function-getReactElementFromRJX",
     "<span>getReactElementFromRJX</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
-    "variable"
+    "function"
   ],
   [
     "rjx/src/components.js~getreactfunctioncomponent",
@@ -241,9 +229,9 @@ window.esdocSearchIndex = [
   ],
   [
     "rjx/src/main.js~getrenderedjson",
-    "function/index.html#static-function-getRenderedJSON",
+    "variable/index.html#static-variable-getRenderedJSON",
     "<span>getRenderedJSON</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
-    "function"
+    "variable"
   ],
   [
     "rjx/src/utils.js~getsimplifiedrjx",
@@ -264,6 +252,24 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "rjx/src/main.js~outputhtml",
+    "function/index.html#static-function-outputHTML",
+    "<span>outputHTML</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "function"
+  ],
+  [
+    "rjx/src/main.js~outputjson",
+    "function/index.html#static-function-outputJSON",
+    "<span>outputJSON</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "function"
+  ],
+  [
+    "rjx/src/main.js~outputjsx",
+    "function/index.html#static-function-outputJSX",
+    "<span>outputJSX</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "function"
+  ],
+  [
     "rjx/src/main.js~renderindex",
     "variable/index.html#static-variable-renderIndex",
     "<span>renderIndex</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
@@ -271,9 +277,9 @@ window.esdocSearchIndex = [
   ],
   [
     "rjx/src/main.js~rjxhtmlstring",
-    "function/index.html#static-function-rjxHTMLString",
+    "variable/index.html#static-variable-rjxHTMLString",
     "<span>rjxHTMLString</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
-    "function"
+    "variable"
   ],
   [
     "rjx/src/main.js~rjxrender",
@@ -345,42 +351,6 @@ window.esdocSearchIndex = [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber152",
     "rjx compile should convert RJX to React Element",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber198",
-    "rjx compileHTML",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber199",
-    "rjx compileHTML should be an alias for rjxHTMLString",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber172",
-    "rjx compileJSON",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber173",
-    "rjx compileJSON should convert RJX to JSON",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber180",
-    "rjx compileJSX",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber181",
-    "rjx compileJSX should compile to JSX String",
     "test"
   ],
   [
@@ -656,25 +626,25 @@ window.esdocSearchIndex = [
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber106",
-    "rjx getRenderedJSON",
+    "rjx getReactElementFromRJX",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber119",
-    "rjx getRenderedJSON should handle errors with empty components",
+    "rjx getReactElementFromRJX should handle errors with empty components",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber107",
-    "rjx getRenderedJSON should return an instance of a react element",
+    "rjx getReactElementFromRJX should return an instance of a react element",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber126",
-    "rjx getRenderedJSON should throw an error with invalid components",
+    "rjx getReactElementFromRJX should throw an error with invalid components",
     "test"
   ],
   [
@@ -711,6 +681,42 @@ window.esdocSearchIndex = [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber190",
     "rjx jsonToJSX should compile to JSX String",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber198",
+    "rjx outputHTML",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber199",
+    "rjx outputHTML should be an alias for rjxHTMLString",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber172",
+    "rjx outputJSON",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber173",
+    "rjx outputJSON should convert RJX to JSON",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber180",
+    "rjx outputJSX",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber181",
+    "rjx outputJSX should compile to JSX String",
     "test"
   ],
   [

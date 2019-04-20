@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useReducer, useCallback, useMem
 import { default as ReactDOMElements, } from 'react-dom-factories';
 import { getAdvancedBinding, } from './utils';
 import createReactClass from 'create-react-class';
-import { getRenderedJSON, } from './main';
+import { getReactElementFromRJX, } from './main';
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
@@ -164,7 +164,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
       result[ val ] = function () {
         if (options.passprops && this.props) body.props = Object.assign({}, body.props, this.props);
         if (options.passstate && this.state) body.props = Object.assign({}, body.props, this.state);
-        return getRenderedJSON.call(Object.assign(
+        return getReactElementFromRJX.call(Object.assign(
           {},
           context,
           bindContext ? this : {},
@@ -251,9 +251,9 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
   const { resources = {}, args=[], } = options;
 
   const props = reactComponent.props;
-  const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props, ];
+  const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getReactElementFromRJX, reactComponent, resources, props, ];
   if (typeof functionBody === 'function') functionBody = functionBody.toString();
-  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
+  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromRJX', 'reactComponent', 'resources', 'props', `
       return function ${options.name || 'Anonymous'}(props){
         ${functionBody}
         if(typeof functionprops!=='undefined'){
@@ -264,7 +264,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
         }
         if(!props.children) delete props.children;
   
-        return getRenderedJSON.call(this, reactComponent);
+        return getReactElementFromRJX.call(this, reactComponent);
       }
     `);
   if (options.name) {

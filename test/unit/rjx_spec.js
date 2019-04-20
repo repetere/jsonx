@@ -55,8 +55,8 @@ const simpleRJX = {
     ],
   },
 };
-const sampleRJXJSON = rjx.getRenderedJSON.call({ returnJSON: true }, sampleRJX);
-const simpleRJXJSON = rjx.getRenderedJSON.call({ returnJSON: true }, simpleRJX);
+const sampleRJXJSON = rjx.getReactElementFromRJX.call({ returnJSON: true }, sampleRJX);
+const simpleRJXJSON = rjx.getReactElementFromRJX.call({ returnJSON: true }, simpleRJX);
 
 const simpleDiv = {
   component: 'div',
@@ -88,8 +88,8 @@ const complexDiv = {
     },
   ],
 };
-const simpleDivJSON = rjx.getRenderedJSON.call({ returnJSON: true, }, simpleDiv);
-const complexDivJSON = rjx.getRenderedJSON.call({ returnJSON: true, exposeEval:true, }, complexDiv);
+const simpleDivJSON = rjx.getReactElementFromRJX.call({ returnJSON: true, }, simpleDiv);
+const complexDivJSON = rjx.getReactElementFromRJX.call({ returnJSON: true, exposeEval:true, }, complexDiv);
 
 describe('rjx', function () { 
   describe('helper functions', () => {
@@ -103,10 +103,10 @@ describe('rjx', function () {
       expect(rjx.__getReactDOM()).to.eql(ReactDOM);
     });
   });
-  describe('getRenderedJSON', () => {
+  describe('getReactElementFromRJX', () => {
     it('should return an instance of a react element', () => {
-      const ReactiveJSON = rjx.getRenderedJSON(sampleRJX);
-      const ReactiveSimpleJSON = rjx.getRenderedJSON(simpleRJX);
+      const ReactiveJSON = rjx.getReactElementFromRJX(sampleRJX);
+      const ReactiveSimpleJSON = rjx.getReactElementFromRJX(simpleRJX);
       expect(ReactTestUtils.isElement(ReactiveJSON));
       expect(ReactTestUtils.isElement(ReactiveSimpleJSON));
       expect(ReactiveJSON).to.be.an('object');
@@ -117,17 +117,17 @@ describe('rjx', function () {
       expect(ReactiveJSON).to.haveOwnProperty('props');
     });
     it('should handle errors with empty components', () => {
-      const emptySpanComponent = rjx.getRenderedJSON({});
-      const emptySpanComponentDebugged = rjx.getRenderedJSON.call({ debug: true, }, {}, {});
+      const emptySpanComponent = rjx.getReactElementFromRJX({});
+      const emptySpanComponentDebugged = rjx.getReactElementFromRJX.call({ debug: true, }, {}, {});
       expect(emptySpanComponent).to.be.an('object');
       expect(emptySpanComponentDebugged).to.be.an('object');
       expect(emptySpanComponentDebugged.props.children).to.eql('Error: Missing Component Object');
     });
     it('should throw an error with invalid components', () => {
       const loggerSpy = sinon.spy();
-      expect(rjx.getRenderedJSON.bind({}, { component: 'somethingInvalid', })).to.throw('Invalid React Component (somethingInvalid)');
+      expect(rjx.getReactElementFromRJX.bind({}, { component: 'somethingInvalid', })).to.throw('Invalid React Component (somethingInvalid)');
       try {
-        rjx.getRenderedJSON.call({ debug: true, logError: loggerSpy, }, { component: 'somethingInvalid', }, {});
+        rjx.getReactElementFromRJX.call({ debug: true, logError: loggerSpy, }, { component: 'somethingInvalid', }, {});
       } catch (e) {
         expect(loggerSpy.called).to.be.true;
         expect(e).to.be.an('error');
@@ -169,17 +169,17 @@ describe('rjx', function () {
       // expect(ReactTestUtils.isCompositeComponent(ReactiveJSON)).to.be.true;
     });
   });
-  describe('compileJSON', () => { 
+  describe('outputJSON', () => { 
     it('should convert RJX to JSON', () => {
-      const compiledJSON = rjx.compileJSON(simpleDiv);
-      const compiledRJXJSON = rjx.getRenderedJSON.call({ returnJSON: true, }, simpleDiv);
+      const compiledJSON = rjx.outputJSON(simpleDiv);
+      const compiledRJXJSON = rjx.getReactElementFromRJX.call({ returnJSON: true, }, simpleDiv);
       expect(compiledJSON.children).to.eql(compiledRJXJSON.children);
       expect(compiledJSON.type).to.eql(compiledRJXJSON.type);
     });
   });
-  describe('compileJSX', () => {
+  describe('outputJSX', () => {
     it('should compile to JSX String', () => {
-      const JSXString = rjx.compileJSX(simpleDiv);
+      const JSXString = rjx.outputJSX(simpleDiv);
       expect(JSXString).to.include('title="test">hello</div>');
       // console.log({ JSXString, complexJSXString, });
     });
@@ -195,9 +195,9 @@ describe('rjx', function () {
       // console.log({ JSXString, complexJSXString, });
     });
   });
-  describe('compileHTML', () => {
+  describe('outputHTML', () => {
     it('should be an alias for rjxHTMLString', () => {
-      expect(rjx.compileHTML).to.eql(rjx.rjxHTMLString);
+      expect(rjx.outputHTML).to.eql(rjx.rjxHTMLString);
     });
   });
   describe('rjxHTMLString', () => {

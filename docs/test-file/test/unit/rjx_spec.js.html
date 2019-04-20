@@ -50,12 +50,12 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compile">compile</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compileJSON">compileJSON</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compileJSX">compileJSX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactElementFromJSON">getReactElementFromJSON</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactElementFromRJX">getReactElementFromRJX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-jsonToJSX">jsonToJSX</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-outputHTML">outputHTML</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-outputJSON">outputJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-outputJSX">outputJSX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-boundArgsReducer">boundArgsReducer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenComponents">getChildrenComponents</a></span></span></li>
@@ -81,9 +81,10 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-compileHTML">compileHTML</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getReactElementFromRJX">getReactElementFromRJX</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getReactElement">getReactElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getRenderedJSON">getRenderedJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ARGUMENT_NAMES">ARGUMENT_NAMES</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRIP_COMMENTS">STRIP_COMMENTS</a></span></span></li>
 </ul>
@@ -148,8 +149,8 @@ const simpleRJX = {
     ],
   },
 };
-const sampleRJXJSON = rjx.getRenderedJSON.call({ returnJSON: true }, sampleRJX);
-const simpleRJXJSON = rjx.getRenderedJSON.call({ returnJSON: true }, simpleRJX);
+const sampleRJXJSON = rjx.getReactElementFromRJX.call({ returnJSON: true }, sampleRJX);
+const simpleRJXJSON = rjx.getReactElementFromRJX.call({ returnJSON: true }, simpleRJX);
 
 const simpleDiv = {
   component: &apos;div&apos;,
@@ -181,8 +182,8 @@ const complexDiv = {
     },
   ],
 };
-const simpleDivJSON = rjx.getRenderedJSON.call({ returnJSON: true, }, simpleDiv);
-const complexDivJSON = rjx.getRenderedJSON.call({ returnJSON: true, exposeEval:true, }, complexDiv);
+const simpleDivJSON = rjx.getReactElementFromRJX.call({ returnJSON: true, }, simpleDiv);
+const complexDivJSON = rjx.getReactElementFromRJX.call({ returnJSON: true, exposeEval:true, }, complexDiv);
 
 describe(&apos;rjx&apos;, function () { 
   describe(&apos;helper functions&apos;, () =&gt; {
@@ -196,10 +197,10 @@ describe(&apos;rjx&apos;, function () {
       expect(rjx.__getReactDOM()).to.eql(ReactDOM);
     });
   });
-  describe(&apos;getRenderedJSON&apos;, () =&gt; {
+  describe(&apos;getReactElementFromRJX&apos;, () =&gt; {
     it(&apos;should return an instance of a react element&apos;, () =&gt; {
-      const ReactiveJSON = rjx.getRenderedJSON(sampleRJX);
-      const ReactiveSimpleJSON = rjx.getRenderedJSON(simpleRJX);
+      const ReactiveJSON = rjx.getReactElementFromRJX(sampleRJX);
+      const ReactiveSimpleJSON = rjx.getReactElementFromRJX(simpleRJX);
       expect(ReactTestUtils.isElement(ReactiveJSON));
       expect(ReactTestUtils.isElement(ReactiveSimpleJSON));
       expect(ReactiveJSON).to.be.an(&apos;object&apos;);
@@ -210,17 +211,17 @@ describe(&apos;rjx&apos;, function () {
       expect(ReactiveJSON).to.haveOwnProperty(&apos;props&apos;);
     });
     it(&apos;should handle errors with empty components&apos;, () =&gt; {
-      const emptySpanComponent = rjx.getRenderedJSON({});
-      const emptySpanComponentDebugged = rjx.getRenderedJSON.call({ debug: true, }, {}, {});
+      const emptySpanComponent = rjx.getReactElementFromRJX({});
+      const emptySpanComponentDebugged = rjx.getReactElementFromRJX.call({ debug: true, }, {}, {});
       expect(emptySpanComponent).to.be.an(&apos;object&apos;);
       expect(emptySpanComponentDebugged).to.be.an(&apos;object&apos;);
       expect(emptySpanComponentDebugged.props.children).to.eql(&apos;Error: Missing Component Object&apos;);
     });
     it(&apos;should throw an error with invalid components&apos;, () =&gt; {
       const loggerSpy = sinon.spy();
-      expect(rjx.getRenderedJSON.bind({}, { component: &apos;somethingInvalid&apos;, })).to.throw(&apos;Invalid React Component (somethingInvalid)&apos;);
+      expect(rjx.getReactElementFromRJX.bind({}, { component: &apos;somethingInvalid&apos;, })).to.throw(&apos;Invalid React Component (somethingInvalid)&apos;);
       try {
-        rjx.getRenderedJSON.call({ debug: true, logError: loggerSpy, }, { component: &apos;somethingInvalid&apos;, }, {});
+        rjx.getReactElementFromRJX.call({ debug: true, logError: loggerSpy, }, { component: &apos;somethingInvalid&apos;, }, {});
       } catch (e) {
         expect(loggerSpy.called).to.be.true;
         expect(e).to.be.an(&apos;error&apos;);
@@ -262,17 +263,17 @@ describe(&apos;rjx&apos;, function () {
       // expect(ReactTestUtils.isCompositeComponent(ReactiveJSON)).to.be.true;
     });
   });
-  describe(&apos;compileJSON&apos;, () =&gt; { 
+  describe(&apos;outputJSON&apos;, () =&gt; { 
     it(&apos;should convert RJX to JSON&apos;, () =&gt; {
-      const compiledJSON = rjx.compileJSON(simpleDiv);
-      const compiledRJXJSON = rjx.getRenderedJSON.call({ returnJSON: true, }, simpleDiv);
+      const compiledJSON = rjx.outputJSON(simpleDiv);
+      const compiledRJXJSON = rjx.getReactElementFromRJX.call({ returnJSON: true, }, simpleDiv);
       expect(compiledJSON.children).to.eql(compiledRJXJSON.children);
       expect(compiledJSON.type).to.eql(compiledRJXJSON.type);
     });
   });
-  describe(&apos;compileJSX&apos;, () =&gt; {
+  describe(&apos;outputJSX&apos;, () =&gt; {
     it(&apos;should compile to JSX String&apos;, () =&gt; {
-      const JSXString = rjx.compileJSX(simpleDiv);
+      const JSXString = rjx.outputJSX(simpleDiv);
       expect(JSXString).to.include(&apos;title=&quot;test&quot;&gt;hello&lt;/div&gt;&apos;);
       // console.log({ JSXString, complexJSXString, });
     });
@@ -288,9 +289,9 @@ describe(&apos;rjx&apos;, function () {
       // console.log({ JSXString, complexJSXString, });
     });
   });
-  describe(&apos;compileHTML&apos;, () =&gt; {
+  describe(&apos;outputHTML&apos;, () =&gt; {
     it(&apos;should be an alias for rjxHTMLString&apos;, () =&gt; {
-      expect(rjx.compileHTML).to.eql(rjx.rjxHTMLString);
+      expect(rjx.outputHTML).to.eql(rjx.rjxHTMLString);
     });
   });
   describe(&apos;rjxHTMLString&apos;, () =&gt; {

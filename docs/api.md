@@ -134,7 +134,7 @@ Use RJX without any configuration to render RJX JSON to HTML and insert RJX into
 | config.resources | object |  | any additional resource used for asynchronous properties |
 | config.querySelector | string |  | selector for document.querySelector |
 
-## `rjxHTMLString(config: object, config.rjx: object, config.resources: object): string`
+## `outputHTML(config: object, config.rjx: object, config.resources: object): string`
 
 Use ReactDOMServer.renderToString to render html from RJX
 
@@ -144,7 +144,7 @@ Use ReactDOMServer.renderToString to render html from RJX
 | config.rjx | object |  | any valid RJX JSON object |
 | config.resources | object |  | any additional resource used for asynchronous properties |
 
-## `getRenderedJSON(rjx: object, resources: object): function`
+## `getReactElementFromRJX(rjx: object, resources: object): function`
 
 Use React.createElement and RJX JSON to create React elements
 
@@ -172,7 +172,7 @@ converts a rjx json object into a react function component
 | rjx | Object |  | valid RJX JSON |
 | resources | Object |  | props for react element |
 
-## `compileJSX(json: Object): String`
+## `outputJSX(json: Object): String`
 
 converts RJX JSON IR to JSX
 
@@ -180,7 +180,7 @@ converts RJX JSON IR to JSX
 | --- | --- | --- | --- |
 | json | Object |  | {type,props,children} |
 
-## `compileJSON(rjx: object, resources: object): Object`
+## `outputJSON(rjx: object, resources: object): Object`
 
 Compiles RJX into JSON IR format for react create element
 

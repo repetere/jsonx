@@ -1,12 +1,11 @@
-# Reactive JSON (RJX)
+# React JSON Syntax (RJX)
 
 [![Coverage Status](https://coveralls.io/repos/github/repetere/rjx/badge.svg?branch=master)](https://coveralls.io/github/repetere/rjx?branch=master) [![Build Status](https://travis-ci.org/repetere/rjx.svg?branch=master)](https://travis-ci.org/repetere/rjx)
 
 ## Description
 
-**Reactive JSON (RJX)** takes a RXJ JSON object and renders React components. **RJX** lets you get up and running with React without using JavaScript.
+**React JSON Syntax (RJX)** takes a RXJ JSON object and can create (Suspense, Lazy, Functional and Class) React Components, output HTML and JSX and render React components without transpilers. **RJX** lets you get up and running with React without extra configuration management of more complicated tool chains.
 
-RJX was created to remove all the complexities around environment setup, and configuration of React applications (Babel, Webpack, Rollup, etc) and make declarative user interfaces using Machine Learning and Natural Language Processing. Using RJX let's any back end application (Elixir, Go, Python, etc) render a server side React application.
 
 ## Installation
 
@@ -20,13 +19,32 @@ $ npm i rjx
 
 ```javascript
 import { default as rjx } from 'rjx';
+const exampleRJX = {
+  component:'p',
+  props:{style:{color:'blue'}},
+  children:'hello world'
+};
 //Rendering React Components
-rjx.getRenderedJSON({component:'p',props:{style:{color:'blue'}},children:'hello world'});
+rjx.getReactElement(exampleRJX);
 // => JSX Equivalent: <p style={{color:'blue'}}>hello world</p>
 
+const exampleToHTMLandJSX = {
+  component: 'div',
+  props:{  className:'rjx-generated', },
+  children:[
+    {  
+      component:'p',
+      props:{ style:{ color:'red', }, },
+      children:'hello world',
+    }
+  ]
+};
 //Generating HTML strings
-rjx.rjxHTMLString({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
+rjx.outputHTML({ rjx: exampleToHTMLandJSX, });
 // => '<div class="rjx-generated"><p style="color:red;">hello world</p></div>'
+//Generating JSX strings
+rjx.outputJSX({ rjx: exampleToHTMLandJSX, });
+// => '<div class="rjx-generated"><p style={{color:red,}}>hello world</p></div>'
 
 //Rendering HTML Dom with React
 rjx.rjxRender({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, querySelector:'#myApp', });
@@ -86,7 +104,7 @@ You can pass React component libraries for additional components, or you own cus
 #### Validating RJX JSON
 
 ```javascript 
-import { default as rjx } from 'rjx';
+import * as rjx from 'rjx';
 
 //use the built in RJX Validator
 const valid_rjx_json = {
@@ -150,10 +168,22 @@ If you want to save time, you can use the property name as the component and def
 
 ```javascript
 "rjx" : {
-  getRenderedJSON: [Function: getRenderedJSON], //Use React.createElement and RJX JSON to create React elements
-  rjxHTMLString: [Function: rjxHTMLString], //Use ReactDOMServer.renderToString to render html from RJX
+  getReactElement: [Function: getReactElement], {aliases:[getRenderedJSON,getReactElementFromRJX]} //Use React.createElement and RJX JSON to create React elements
+  getReactElementFromJSON: [Function: getReactElementFromJSON], // Use compiledJSON object {type,props,children} to create React elements
   rjxRender: [Function: getRenderedJSON], //Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
-  _rjxChildren: {
+  outputHTML: [Function: outputHTML], //Use ReactDOMServer.renderToString to render html from RJX
+  outputJSX: [Function: outputJSX], //Generate valid JSX from RJX
+  outputJSON: [Function: outputJSON], //Generate computed static values from RJX into JSON
+  compile: [Function: compile], //Generate React Function Component from RJX
+
+  jsonToJSX: [Function: jsonToJSX], //Converts JSON to JSX
+  __express: [Function: __express], //render express views with RJX
+  __getReact: [Function: __getReact], //Expose reference to React
+  __getReactDOM: [Function: __getReactDOM], //Expose reference to ReactDOM
+  __getUseGlobalHook: [Function: __getUseGlobalHook], //Expose reference to useGlobalHook
+
+
+_rjxChildren: {
     getChildrenProperty: [Function: getChildrenProperty], // returns a valid rjx.children property
     getChildrenProps: [Function: getChildrenProps], // Used to pass properties down to child components if passprops is set to true
     getRJXChildren: [Function: getRJXChildren], // returns React Child Elements via RJX
@@ -163,7 +193,8 @@ If you want to save time, you can use the property name as the component and def
     getBoundedComponents: [Function: getBoundedComponents], // getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
     getComponentFromLibrary: [Function: getComponentFromLibrary], // returns a react component from a component library (like material-ui, or semantic-ui)
     getComponentFromMap: [Function: getComponentFromMap], // returns a react element from rjx.component
-    getReactClassComponent: [Function: getReactClassComponent], // returns a react component and support lifecycle functions
+    getReactClassComponent: [Function: getReactClassComponent], // returns a react class component and support lifecycle functions, lazy and suspense components
+    getReactFunctionComponent: [Function: getReactFunctionComponent], // returns a react function component and support lifecycle functions, hooks, lazy and suspense components
   },
   _rjxProps: {
     getRJXProps: [Function: getRJXProps], // It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
@@ -188,23 +219,30 @@ If you want to save time, you can use the property name as the component and def
 ```javascript
 rjx = {
   //standard properties
-  component:String, // Any React DOM element, or custom component div,p, Boomer.Hero, MaterialUI.Button, myCustomComponent
+  component:String, // Any React DOM element, or custom component div,p, Boomer.Hero, MaterialUI.Button, myCustomComponent (can also use the property 'type' instead of 'component')
   props:Object, // Standard React component properties
   children:Array|String, // Any String or Array of valid RJX JSON objects
+
+
   //dynamic properties
   resourceprops:Object, // An object from async resources to merge onto rjx.props once fully resolved
   asyncprops:Object, // An object from async resources to merge onto rjx.props once fully resolved (alias for resourceprops)
   thisprops:Object, // An object to merge onto rjx.props from properties already bound to this.props
   windowprops:Object, // An object to merge onto rjx.props from the window object
+
+
   //evaluated properties
-  __dangerouslyEvalProps:Object, // An object of evaluated JavaScript strings, used as inline functions onto rjx.props
+  __dangerouslyEvalProps:Object, // An object of evaluated JavaScript strings, used as inline functions onto rjx.props, if the prop is a function it will be called bound to 'this' and the returned value will be assigned
   __dangerouslyBindEvalProps:Object, // An object of evaluated JavaScript functions that are bound to this, used as inline functions onto rjx.props
   //computed properties
   __functionProps:Object, // An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto rjx.props
   __dangerouslyInsertComponents:Object, // An object that turns each RXJ JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
   __dangerouslyInsertReactComponents:Object, // An object that returns the react element from either ReactDOM, reactComponents or componentLibraries.
+  __spreadComponent:Object, // A RJX element that is mapped on any array prop called  __spread
   __windowComponents:Object, // An object of components merged onto rjx.props from window.__rjx_custom_elements
   __windowComponentProps:Object,
+
+
   //display properties
   comparisonprops:[Object], // An array of Objects used to conditionally display the current rjx.component
   //flag properties
@@ -218,10 +256,10 @@ rjx = {
 If you plan on using an entire UI library, then bind the library to this before using RJX.
 
 ```javascript
-import { default as rjx } from 'rjx';
+import * as rjx from 'rjx';
 import { * as Semantic } from 'semantic-ui-react';
 
-const getRenderedJSON = rjx.getRenderedJSON.bind({
+const getReactElement = rjx.getReactElement.bind({
   componentLibraries:{
     Semantic,
   }
@@ -249,7 +287,7 @@ const myRJX = {
   ]
 }
 
-const myReactElements = getRenderedJSON(myRJX);
+const myReactElements = getReactElement(myRJX);
 ```
 
 
@@ -259,7 +297,7 @@ If you're only adding single components or using your own components you can add
 
 ```javascript
 import React from 'react';
-import { default as rjx } from 'rjx';
+import * as rjx from 'rjx';
 import { Header } from 'semantic-ui-react';
 
 class MyButton extends React.Component {
@@ -269,7 +307,7 @@ class MyButton extends React.Component {
 }
 
 
-const getRenderedJSON = rjx.getRenderedJSON.bind({
+const getReactElement = rjx.getReactElement.bind({
   reactComponents:{
     Header,
     MyButton,
@@ -300,7 +338,7 @@ const myRJX = {
   ]
 }
 
-const myReactElements = getRenderedJSON(myRJX);
+const myReactElements = getReactElement(myRJX);
 ```
 
 #### Advanced - Special properties
@@ -393,7 +431,7 @@ The only difference between `__dangerouslyEvalProps` and `__dangerouslyBindEvalP
 ```javascript
  const testVals = {
     auth: 'true',
-    username: '(user={})=>user.name',
+    username: '()=>(user={})=>user.name',
   };
   const testRJX = Object.assign({}, sampleRJX, {
     __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {

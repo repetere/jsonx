@@ -24,12 +24,12 @@ export let renderIndex = 0;
  * @param {object} config.rjx - any valid RJX JSON object
  * @param {object} config.resources - any additional resource used for asynchronous properties
  * @param {string} config.querySelector - selector for document.querySelector
- * @property {object} this - options for getRenderedJSON
+ * @property {object} this - options for getReactElementFromRJX
  */
 export function rjxRender(config = {}) {
   const { rjx, resources, querySelector, options, DOM, } = config;
   ReactDOM.render(
-    getRenderedJSON.call(this || {}, rjx, resources, options),
+    getReactElementFromRJX.call(this || {}, rjx, resources, options),
     DOM || document.querySelector(querySelector)
   );
 }
@@ -38,26 +38,26 @@ export function rjxRender(config = {}) {
  * Use ReactDOMServer.renderToString to render html from RJX
  * @example
  * // Uses react to create <div class="rjx-generated"><p style="color:red;">hello world</p></div>
- * rjx.rjxHTMLString({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
+ * rjx.outputHTML({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
  * @param {object} config - options used to inject html via ReactDOM.render
  * @param {object} config.rjx - any valid RJX JSON object
  * @param {object} config.resources - any additional resource used for asynchronous properties
- * @property {object} this - options for getRenderedJSON
+ * @property {object} this - options for getReactElementFromRJX
  * @returns {string} React genereated html via RJX JSON
  */
-export function rjxHTMLString(config = {}) {
+export function outputHTML(config = {}) {
   const { rjx, resources, } = config;
-  return ReactDOMServer.renderToString(getRenderedJSON.call(this || {}, rjx, resources));
+  return ReactDOMServer.renderToString(getReactElementFromRJX.call(this || {}, rjx, resources));
 }
 
 /**
  * Use React.createElement and RJX JSON to create React elements
  * @example
  * // Uses react to create the equivalent JSX <myComponent style={{color:blue}}>hello world</myComponent>
- * rjx.getRenderedJSON({component:'myCompnent',props:{style:{color:'blue'}},children:'hello world'})
+ * rjx.getReactElementFromRJX({component:'myCompnent',props:{style:{color:'blue'}},children:'hello world'})
  * @param {object} rjx - any valid RJX JSON object
  * @param {object} resources - any additional resource used for asynchronous properties
- * @property {object} this - options for getRenderedJSON
+ * @property {object} this - options for getReactElementFromRJX
  * @property {Object} [this.componentLibraries] - react components to render with RJX
  * @property {boolean} [this.debug=false] - use debug messages
  * @property {boolean} [this.returnJSON=false] - return json object of {type,props,children} instead of react element
@@ -65,7 +65,7 @@ export function rjxHTMLString(config = {}) {
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
-export function getRenderedJSON(rjx = {}, resources = {}) {
+export function getReactElementFromRJX(rjx = {}, resources = {}) {
   // eslint-disable-next-line
   const { componentLibraries = {}, debug = false, returnJSON=false, logError = console.error, boundedComponents = [], } = this || {};
   // const componentLibraries = this.componentLibraries;
@@ -100,7 +100,8 @@ export function getRenderedJSON(rjx = {}, resources = {}) {
   }
 }
 
-export const getReactElementFromRJX = getRenderedJSON;
+export const getRenderedJSON = getReactElementFromRJX;
+export const getReactElement = getReactElementFromRJX;
 
 /** converts a json object {type,props,children} into a react element 
  * @example
@@ -125,7 +126,7 @@ export function getReactElementFromJSON({ type, props, children, }) {
 */
 export function compile(rjx, resources) {
   const context = Object.assign({}, this, { returnJSON: true, });
-  const json = getRenderedJSON.call(context, rjx, resources);
+  const json = getReactElementFromRJX.call(context, rjx, resources);
   const func = function compiledRJX(props) {
     json.props = Object.assign({}, json.props, props);
     return getReactElementFromJSON(json);
@@ -141,28 +142,28 @@ export function compile(rjx, resources) {
  * @param {Object} json - {type,props,children}
  * @returns {String} jsx string
  */
-export function compileJSX(rjx, resources) {
+export function outputJSX(rjx, resources) {
   const context = Object.assign({}, this, { returnJSON: true, });
-  const json = getRenderedJSON.call(context, rjx, resources);
+  const json = getReactElementFromRJX.call(context, rjx, resources);
   return jsonToJSX(json);
 }
 
 /**
  * Compiles RJX into JSON IR format for react create element
  * @example
- * rjx.compileJSON({ component: 'div', props: { title: 'test', }, children: 'hello', }); //=> { type: 'div',
+ * rjx.outputJSON({ component: 'div', props: { title: 'test', }, children: 'hello', }); //=> { type: 'div',
  props: { key: 5, title: 'test' },
  children: 'hello' }
- * @property {object} this - options for getRenderedJSON
+ * @property {object} this - options for getReactElementFromRJX
  * @param {object} rjx - any valid RJX JSON object
  * @param {object} resources - any additional resource used for asynchronous properties
  * @returns {Object} json - {type,props,children}
  */
-export function compileJSON(rjx, resources) {
+export function outputJSON(rjx, resources) {
   const context = Object.assign({}, this, { returnJSON: true, });
-  return getRenderedJSON.call(context, rjx, resources);
+  return getReactElementFromRJX.call(context, rjx, resources);
 }
-export const compileHTML = rjxHTMLString;
+export const rjxHTMLString = outputHTML;
 
 /**
  * converts RJX JSON IR to JSX
@@ -220,4 +221,4 @@ export const _rjxProps = rjxProps;
 export const _rjxUtils = rjxUtils;
 export { __express, } from './express';
 
-export default getRenderedJSON;
+export default getReactElementFromRJX;

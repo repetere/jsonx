@@ -1,4 +1,4 @@
-import { getRenderedJSON, } from './main';
+import { getReactElementFromRJX, } from './main';
 /**
  * returns a valid rjx.children property
  * @param {Object} options
@@ -95,7 +95,7 @@ export function getChildrenProps(options = {}) {
 /**
  * returns React Child Elements via RJX
  * @param {*} options 
- * @property {object} this - options for getRenderedJSON
+ * @property {object} this - options for getReactElementFromRJX
  * @property {Object} [this.componentLibraries] - react components to render with RJX
  * @property {boolean} [this.debug=false] - use debug messages
  * @property {function} [this.logError=console.error] - error logging function
@@ -109,7 +109,7 @@ export function getRJXChildren(options = {}) {
     rjx.children = getChildrenProperty({ rjx, props, });
 
     return (rjx.children && Array.isArray(rjx.children) && typeof rjx.children !== 'string')
-      ? rjx.children.map(childrjx => getRenderedJSON.call(this, getChildrenProps({ rjx, childrjx, props, renderIndex, }), resources))
+      ? rjx.children.map(childrjx => getReactElementFromRJX.call(this, getChildrenProps({ rjx, childrjx, props, renderIndex, }), resources))
       : rjx.children;
 
   } catch (e) {

@@ -1,9 +1,14 @@
 # Changelog
 
+## 3.0.0 (2019-04-20)
+
+- **Chore**
+  - Update Documentation
+
 ## 2.6.0 (2019-04-19)
 
 - **Feat**
-  - Added new compilation options rjx.compile, rjx.compileJSON, rjx.compileHTML, rjx.compileJSX
+  - Added new compilation options rjx.compile, rjx.outputJSON, rjx.outputHTML, rjx.outputJSX
 - **Fix**
   - pass functions in rjx object values
 - **Chore**
