@@ -99,6 +99,11 @@ class WelcomeNonBind extends React.Component {
 }
 
 describe('rjx components', function () { 
+  describe('advancedBinding', () => {
+    it('should use advancedBinding based on user agent', () => {
+      expect(_rjxComponents.advancedBinding).to.be.false;
+    });
+  });
   describe('componentMap', () => {
     it('should export an object of components', () => {
       expect(_rjxComponents.componentMap).to.be.a('object');
@@ -239,33 +244,38 @@ describe('rjx components', function () {
   });
   describe('getReactClassComponent', () => {
     const getReactClassComponent = _rjxComponents.getReactClassComponent;
+    const classBody = {
+      componentDidMount: {
+        body: 'console.log(\'mounted\',this.props)',
+        arguments: [],
+      },
+      render: {
+        body: {
+          component: 'p',
+          children: [
+            {
+              component: 'span',
+              children: 'My Custom React Component Status: ',
+            },
+            {
+              component: 'span',
+              thisprops: {
+                children: [ 'status', ],
+              },
+            },
+          ],
+        },
+      },
+    };
     it('should create a React Component', () => {
-      const MyCustomComponent = getReactClassComponent({
-        componentDidMount:{
-          body:'console.log(\'mounted\',this.props)',
-          arguments:[],
-        },
-        render:{
-          body:{
-            component:'p',
-            children:[
-              {
-                component:'span',
-                children: 'My Custom React Component Status: ',
-              },
-              {
-                component:'span',
-                thisprops:{
-                  children:['status',],
-                },
-              },
-            ],
-          },
-        },
-      });
+      const MyCustomComponent = getReactClassComponent(classBody);
+      const MyCustomComponentClass = getReactClassComponent(classBody,{ returnFactory:false, });
+      // const MyCustomComponentFactory = getReactClassComponent(classBody);
+      // console.log({MyCustomComponentClass});
       expect(MyCustomComponent).to.be.a('function');
+      expect(MyCustomComponentClass).to.be.a('function');
       expect(ReactTestUtils.isElement(MyCustomComponent)).to.be.false;
-      // expect(ReactTestUtils.isCompositeComponent(MyCustomComponent)).to.be.true;
+      // expect(ReactTestUtils.isCompositeComponent(MyCustomComponentClass())).to.be.true;
     });
   });
   describe('getReactFunctionComponent', () => {

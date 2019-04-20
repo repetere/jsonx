@@ -510,7 +510,8 @@ var rjxUtils = /*#__PURE__*/Object.freeze({
 //   var window = window || global.window || {};
 // }
 
-let advancedBinding = getAdvancedBinding();
+let advancedBinding = getAdvancedBinding(); // require;
+
 /**
  * object of all react components available for RJX
  */
@@ -627,8 +628,9 @@ function getFunctionFromEval(options = {}) {
     body = '',
     args = []
   } = options;
-  args.push(body);
-  return Function.prototype.constructor.apply({}, args);
+  const argus = [].concat(args);
+  argus.push(body);
+  return Function.prototype.constructor.apply({}, argus);
 }
 /**
  * Returns a new React Component
@@ -649,6 +651,8 @@ function getFunctionFromEval(options = {}) {
  */
 
 function getReactClassComponent(reactComponent = {}, options = {}) {
+  // const util = require('util');
+  // console.log(util.inspect({ reactComponent },{depth:20}));
   if (options.lazy) {
     return lazy(() => options.lazy(reactComponent, Object.assign({}, options, {
       lazy: false
@@ -779,15 +783,7 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
   } = options;
   const props = reactComponent.props;
   const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props];
-
-  if (typeof functionBody === 'function') {
-    const functionComponent = function (React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props) {
-      return functionBody;
-    };
-
-    return functionComponent(...functionArgs);
-  } else {
-    const functionComponent = typeof functionBody === 'function' ? functionBody : Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
+  const functionComponent = typeof functionBody === 'function' ? functionBody : Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
       return function ${options.name || 'Anonymous'}(props){
         ${functionBody}
         if(typeof functionprops!=='undefined'){
@@ -802,14 +798,13 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
       }
     `);
 
-    if (options.name) {
-      Object.defineProperty(functionComponent, 'name', {
-        value: options.name
-      });
-    }
-
-    return functionComponent(...functionArgs);
+  if (options.name) {
+    Object.defineProperty(functionComponent, 'name', {
+      value: options.name
+    });
   }
+
+  return functionComponent(...functionArgs);
 }
 /**
  * if (recharts[rjx.component.replace('recharts.', '')]) {
@@ -977,6 +972,12 @@ function getChildrenComponents(options = {}) {
     };
   }
 }
+function boundArgsReducer(rjx) {
+  return (args, arg) => {
+    if (this && this.state && this.state[arg]) args.push(this.state[arg]);else if (this && this.props && this.props[arg]) args.push(this.props[arg]);else if (rjx.props && rjx.props[arg]) args.push(rjx.props[arg]);
+    return args;
+  };
+}
 /**
  * Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
  * @param {Object} options 
@@ -1008,10 +1009,12 @@ function getEvalProps(options = {}) {
 
   const evProps = Object.keys(rjx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
     let evVal;
+    let evValString;
 
     try {
       // eslint-disable-next-line
       evVal = scopedEval(rjx.__dangerouslyEvalProps[epropName]);
+      evValString = evVal.toString();
     } catch (e) {
       if (this.debug || rjx.debug) evVal = e;
     }
@@ -1019,10 +1022,12 @@ function getEvalProps(options = {}) {
     eprops[epropName] = typeof evVal === 'function' ? evVal.call(this, {
       rjx
     }) : evVal;
+    if (this.exposeEval) eprops[`__eval_${epropName}`] = evValString;
     return eprops;
   }, {});
   const evBindProps = Object.keys(rjx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
     let evVal;
+    let evValString;
 
     try {
       let args;
@@ -1034,15 +1039,17 @@ function getEvalProps(options = {}) {
         functionDefinition = functionBody;
       } else {
         functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[epropName]);
+        evValString = functionDefinition.toString();
+      } // eslint-disable-next-line
 
-        if (rjx.__functionargs && rjx.__functionargs[epropName]) {
-          args = [this].concat(rjx.__functionargs[epropName].map(arg => rjx.props[arg]));
-        } else if (rjx.__functionparams) {
-          const functionDefArgs = getParamNames(functionDefinition);
-          args = [this].concat(functionDefArgs);
-        } else {
-          args = [this];
-        }
+
+      if (rjx.__functionargs && rjx.__functionargs[epropName]) {
+        args = [this].concat(rjx.__functionargs[epropName].reduce(boundArgsReducer(rjx), []));
+      } else if (rjx.__functionparams === false) {
+        args = [this];
+      } else {
+        const functionDefArgs = getParamNames(functionDefinition);
+        args = [this].concat(functionDefArgs.reduce(boundArgsReducer(rjx), []));
       } // eslint-disable-next-line
 
 
@@ -1053,6 +1060,7 @@ function getEvalProps(options = {}) {
 
 
     eprops[epropName] = evVal;
+    if (this.exposeEval) eprops[`__eval_${epropName}`] = evValString;
     return eprops;
   }, {});
   return Object.assign({}, evProps, evBindProps);
@@ -1425,6 +1433,7 @@ var rjxProps = /*#__PURE__*/Object.freeze({
   getParamNames: getParamNames,
   getRJXProps: getRJXProps,
   getChildrenComponents: getChildrenComponents,
+  boundArgsReducer: boundArgsReducer,
   getEvalProps: getEvalProps,
   getComponentProps: getComponentProps,
   getReactComponentProps: getReactComponentProps,
@@ -1486,7 +1495,7 @@ function getChildrenProperty(options = {}) {
   if (props._children
   /* && !rjx.children */
   ) {
-      if (Array.isArray(props._children) || typeof props._children !== 'undefined') {
+      if (Array.isArray(props._children) || typeof props._children === 'string') {
         return props._children;
       } else {
         return rjx.children;
@@ -1545,9 +1554,9 @@ function getRJXChildren(options = {}) {
     renderIndex,
     logError = console.error
   } = options;
-  const props = options.props || rjx.props || {};
 
   try {
+    const props = options.props || rjx.props || {};
     rjx.children = getChildrenProperty({
       rjx,
       props
@@ -1559,7 +1568,7 @@ function getRJXChildren(options = {}) {
       renderIndex
     }), resources)) : rjx.children;
   } catch (e) {
-    logError(e, e.stack ? e.stack : 'no stack');
+    logError(e);
     return null;
   }
 }
@@ -1744,6 +1753,7 @@ function getRenderedJSON(rjx = {}, resources = {}) {
     throw e;
   }
 }
+const getReactElementFromRJX = getRenderedJSON;
 /** converts a json object {type,props,children} into a react element 
  * @example
  * rjx.getReactElementFromJSON({type:'div',props:{title:'some title attribute'},children:'inner html text'})
@@ -1762,7 +1772,7 @@ function getReactElementFromJSON({
 }
 /** converts a rjx json object into a react function component 
  * @example
- * rjx.compile({rjx:{component:'div',props:{title:'some title attribute'},children:'inner html text'}}) //=>React Function
+ * rjx.compile({rjx:{component:'div',props:{title:'some title attribute'},children:'inner html text'}}) //=>React Function Component
  * @param {Object} rjx - valid RJX JSON
  * @param {Object} resources - props for react element
  * @returns {function} React element via React.createElement
@@ -1783,6 +1793,57 @@ function compile(rjx, resources) {
     value: this.name
   });
   return func;
+}
+/**
+ * converts RJX JSON IR to JSX
+ * @example
+ * rjx.jsonToJSX({ type: 'div', props: { key: 5, title: 'test' }, children: 'hello' }) // => '<div key={5} title="test">hello</div>'
+ * @param {Object} json - {type,props,children}
+ * @returns {String} jsx string
+ */
+
+function compileJSX(rjx, resources) {
+  const context = Object.assign({}, this, {
+    returnJSON: true
+  });
+  const json = getRenderedJSON.call(context, rjx, resources);
+  return jsonToJSX(json);
+}
+/**
+ * Compiles RJX into JSON IR format for react create element
+ * @example
+ * rjx.compileJSON({ component: 'div', props: { title: 'test', }, children: 'hello', }); //=> { type: 'div',
+ props: { key: 5, title: 'test' },
+ children: 'hello' }
+ * @property {object} this - options for getRenderedJSON
+ * @param {object} rjx - any valid RJX JSON object
+ * @param {object} resources - any additional resource used for asynchronous properties
+ * @returns {Object} json - {type,props,children}
+ */
+
+function compileJSON(rjx, resources) {
+  const context = Object.assign({}, this, {
+    returnJSON: true
+  });
+  return getRenderedJSON.call(context, rjx, resources);
+}
+const compileHTML = rjxHTMLString;
+/**
+ * converts RJX JSON IR to JSX
+ * @example
+ * rjx.jsonToJSX({ type: 'div', props: { key: 5, title: 'test' }, children: 'hello' }) // => '<div key={5} title="test">hello</div>'
+ * @param {Object} json - {type,props,children}
+ * @returns {String} jsx string
+ */
+
+function jsonToJSX(json) {
+  const propsString = json.props ? Object.keys(json.props).filter(prop => prop.includes('__eval_') === false).reduce((propString, prop) => {
+    propString += ` ${prop.toString()}=${typeof json.props[prop] === 'string' ? `"${json.props[prop].toString()}"` : `{${(json.props[`__eval_${prop}`] || json.props[prop]).toString()}}`}`;
+    return propString;
+  }, '') : '';
+  return Array.isArray(json.children) ? `<${json.type} ${propsString}>
+  ${json.children.map(jsonToJSX)}
+</${json.type}>` : `<${json.type}${propsString}>${json.children}</${json.type}>`;
 }
 /**
  * Exposes react module used in RJX
@@ -1814,4 +1875,4 @@ const _rjxProps = rjxProps;
 const _rjxUtils = rjxUtils;
 
 export default getRenderedJSON;
-export { __express, __getReact, __getReactDOM, __getUseGlobalHook, _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils, compile, getReactElementFromJSON, getRenderedJSON, renderIndex, rjxHTMLString, rjxRender };
+export { __express, __getReact, __getReactDOM, __getUseGlobalHook, _rjxChildren, _rjxComponents, _rjxProps, _rjxUtils, compile, compileHTML, compileJSON, compileJSX, getReactElementFromJSON, getReactElementFromRJX, getRenderedJSON, jsonToJSX, renderIndex, rjxHTMLString, rjxRender };

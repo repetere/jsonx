@@ -66,9 +66,33 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "rjx/src/props.js~boundargsreducer",
+    "function/index.html#static-function-boundArgsReducer",
+    "<span>boundArgsReducer</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "function"
+  ],
+  [
     "rjx/src/main.js~compile",
     "function/index.html#static-function-compile",
     "<span>compile</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "function"
+  ],
+  [
+    "rjx/src/main.js~compilehtml",
+    "variable/index.html#static-variable-compileHTML",
+    "<span>compileHTML</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "variable"
+  ],
+  [
+    "rjx/src/main.js~compilejson",
+    "function/index.html#static-function-compileJSON",
+    "<span>compileJSON</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "function"
+  ],
+  [
+    "rjx/src/main.js~compilejsx",
+    "function/index.html#static-function-compileJSX",
+    "<span>compileJSX</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
     "function"
   ],
   [
@@ -204,6 +228,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "rjx/src/main.js~getreactelementfromrjx",
+    "variable/index.html#static-variable-getReactElementFromRJX",
+    "<span>getReactElementFromRJX</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "variable"
+  ],
+  [
     "rjx/src/components.js~getreactfunctioncomponent",
     "function/index.html#static-function-getReactFunctionComponent",
     "<span>getReactFunctionComponent</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
@@ -225,6 +255,12 @@ window.esdocSearchIndex = [
     "rjx/src/props.js~getwindowcomponents",
     "function/index.html#static-function-getWindowComponents",
     "<span>getWindowComponents</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "function"
+  ],
+  [
+    "rjx/src/main.js~jsontojsx",
+    "function/index.html#static-function-jsonToJSX",
+    "<span>jsonToJSX</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
     "function"
   ],
   [
@@ -277,20 +313,74 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber57",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber94",
     "rjx",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber99",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber213",
     "rjx __express",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber102",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber237",
+    "rjx __express it should handle errors",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber216",
     "rjx __express should return an HTML string",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber151",
+    "rjx compile",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber152",
+    "rjx compile should convert RJX to React Element",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber198",
+    "rjx compileHTML",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber199",
+    "rjx compileHTML should be an alias for rjxHTMLString",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber172",
+    "rjx compileJSON",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber173",
+    "rjx compileJSON should convert RJX to JSON",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber180",
+    "rjx compileJSX",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber181",
+    "rjx compileJSX should compile to JSX String",
     "test"
   ],
   [
@@ -301,104 +391,152 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber205",
-    "rjx components componentMap",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/components_spec.js.html#lineNumber209",
-    "rjx components componentMap should accept components from a window property",
-    "test"
-  ],
-  [
-    "",
     "test-file/test/unit/components_spec.js.html#lineNumber102",
-    "rjx components getBoundedComponents",
+    "rjx components advancedBinding",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber103",
+    "rjx components advancedBinding should use advancedBinding based on user agent",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/components_spec.js.html#lineNumber215",
+    "rjx components componentMap",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/components_spec.js.html#lineNumber107",
+    "rjx components componentMap",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/components_spec.js.html#lineNumber219",
+    "rjx components componentMap should accept components from a window property",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/components_spec.js.html#lineNumber108",
+    "rjx components componentMap should export an object of components",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/components_spec.js.html#lineNumber112",
+    "rjx components getBoundedComponents",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/components_spec.js.html#lineNumber113",
     "rjx components getBoundedComponents should bind this to reactComponents",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber184",
+    "test-file/test/unit/components_spec.js.html#lineNumber194",
     "rjx components getComponentFromLibrary",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber195",
+    "test-file/test/unit/components_spec.js.html#lineNumber205",
     "rjx components getComponentFromLibrary should return a function if selecting valid component library",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber192",
+    "test-file/test/unit/components_spec.js.html#lineNumber202",
     "rjx components getComponentFromLibrary should return undefined if not valid",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber133",
+    "test-file/test/unit/components_spec.js.html#lineNumber143",
     "rjx components getComponentFromMap",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber173",
+    "test-file/test/unit/components_spec.js.html#lineNumber183",
     "rjx components getComponentFromMap should handle errors",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber164",
+    "test-file/test/unit/components_spec.js.html#lineNumber174",
     "rjx components getComponentFromMap should return a component library react element",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber153",
+    "test-file/test/unit/components_spec.js.html#lineNumber163",
     "rjx components getComponentFromMap should return a custom element",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber141",
+    "test-file/test/unit/components_spec.js.html#lineNumber151",
     "rjx components getComponentFromMap should return a function if rjx.component is not a string",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber147",
+    "test-file/test/unit/components_spec.js.html#lineNumber157",
     "rjx components getComponentFromMap should return the dom element string if a valid DOM elmenet in ReactDOM",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber226",
+    "test-file/test/unit/components_spec.js.html#lineNumber236",
     "rjx components getFunctionFromEval",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber228",
+    "test-file/test/unit/components_spec.js.html#lineNumber238",
     "rjx components getFunctionFromEval should return a new function",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber235",
+    "test-file/test/unit/components_spec.js.html#lineNumber245",
     "rjx components getReactClassComponent",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber237",
+    "test-file/test/unit/components_spec.js.html#lineNumber270",
     "rjx components getReactClassComponent should create a React Component",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/components_spec.js.html#lineNumber306",
+    "rjx components getReactContext",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/components_spec.js.html#lineNumber308",
+    "rjx components getReactContext should return a React Context Object",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/components_spec.js.html#lineNumber281",
+    "rjx components getReactFunctionComponent",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/components_spec.js.html#lineNumber283",
+    "rjx components getReactFunctionComponent should create a React Function Component",
     "test"
   ],
   [
@@ -409,13 +547,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber93",
+    "test-file/test/unit/children_spec.js.html#lineNumber105",
     "rjx getChildrenProperty should get the children from rjx.props._children property",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber142",
+    "test-file/test/unit/children_spec.js.html#lineNumber154",
     "rjx getChildrenProperty should get the children from rjx.props.children property",
     "test"
   ],
@@ -427,56 +565,110 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber199",
+    "test-file/test/unit/children_spec.js.html#lineNumber211",
     "rjx getChildrenProps",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber208",
+    "test-file/test/unit/children_spec.js.html#lineNumber220",
     "rjx getChildrenProps should pass props except for styles",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber202",
+    "test-file/test/unit/children_spec.js.html#lineNumber214",
     "rjx getChildrenProps should return child RJX if not passing props",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber221",
+    "test-file/test/unit/children_spec.js.html#lineNumber233",
     "rjx getRJXChildren",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/children_spec.js.html#lineNumber223",
+    "test-file/test/unit/children_spec.js.html#lineNumber235",
     "rjx getRJXChildren should return RJX Child Objects",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber58",
+    "test-file/test/unit/children_spec.js.html#lineNumber250",
+    "rjx getRJXChildren should return null on error",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber137",
+    "rjx getReactElementFromJSON",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber138",
+    "rjx getReactElementFromJSON should return an instance of a react element",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber106",
     "rjx getRenderedJSON",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber71",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber119",
     "rjx getRenderedJSON should handle errors with empty components",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber59",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber107",
     "rjx getRenderedJSON should return an instance of a react element",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber78",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber126",
     "rjx getRenderedJSON should throw an error with invalid components",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber95",
+    "rjx helper functions",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber99",
+    "rjx helper functions should return React",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber102",
+    "rjx helper functions should return ReactDOM",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber96",
+    "rjx helper functions should return useGlobalHook",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber187",
+    "rjx jsonToJSX",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber190",
+    "rjx jsonToJSX should compile to JSX String",
     "test"
   ],
   [
@@ -607,25 +799,25 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber89",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber203",
     "rjx rjxHTMLString",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber90",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber204",
     "rjx rjxHTMLString should return an HTML string",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber124",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber241",
     "rjx rjxRender",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber128",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber245",
     "rjx rjxRender should render component inside of querySelector",
     "test"
   ],

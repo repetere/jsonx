@@ -50,10 +50,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compile">compile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compileJSON">compileJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compileJSX">compileJSX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactElementFromJSON">getReactElementFromJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-jsonToJSX">jsonToJSX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-boundArgsReducer">boundArgsReducer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenComponents">getChildrenComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span></span></li>
@@ -77,6 +81,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-compileHTML">compileHTML</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getReactElementFromRJX">getReactElementFromRJX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ARGUMENT_NAMES">ARGUMENT_NAMES</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRIP_COMMENTS">STRIP_COMMENTS</a></span></span></li>
@@ -187,6 +193,8 @@ export function getRenderedJSON(rjx = {}, resources = {}) {
   }
 }
 
+export const getReactElementFromRJX = getRenderedJSON;
+
 /** converts a json object {type,props,children} into a react element 
  * @example
  * rjx.getReactElementFromJSON({type:&apos;div&apos;,props:{title:&apos;some title attribute&apos;},children:&apos;inner html text&apos;})
@@ -203,7 +211,7 @@ export function getReactElementFromJSON({ type, props, children, }) {
 
 /** converts a rjx json object into a react function component 
  * @example
- * rjx.compile({rjx:{component:&apos;div&apos;,props:{title:&apos;some title attribute&apos;},children:&apos;inner html text&apos;}}) //=&gt;React Function
+ * rjx.compile({rjx:{component:&apos;div&apos;,props:{title:&apos;some title attribute&apos;},children:&apos;inner html text&apos;}}) //=&gt;React Function Component
  * @param {Object} rjx - valid RJX JSON
  * @param {Object} resources - props for react element
  * @returns {function} React element via React.createElement
@@ -219,6 +227,62 @@ export function compile(rjx, resources) {
   return func;
 }
 
+/**
+ * converts RJX JSON IR to JSX
+ * @example
+ * rjx.jsonToJSX({ type: &apos;div&apos;, props: { key: 5, title: &apos;test&apos; }, children: &apos;hello&apos; }) // =&gt; &apos;&lt;div key={5} title=&quot;test&quot;&gt;hello&lt;/div&gt;&apos;
+ * @param {Object} json - {type,props,children}
+ * @returns {String} jsx string
+ */
+export function compileJSX(rjx, resources) {
+  const context = Object.assign({}, this, { returnJSON: true, });
+  const json = getRenderedJSON.call(context, rjx, resources);
+  return jsonToJSX(json);
+}
+
+/**
+ * Compiles RJX into JSON IR format for react create element
+ * @example
+ * rjx.compileJSON({ component: &apos;div&apos;, props: { title: &apos;test&apos;, }, children: &apos;hello&apos;, }); //=&gt; { type: &apos;div&apos;,
+ props: { key: 5, title: &apos;test&apos; },
+ children: &apos;hello&apos; }
+ * @property {object} this - options for getRenderedJSON
+ * @param {object} rjx - any valid RJX JSON object
+ * @param {object} resources - any additional resource used for asynchronous properties
+ * @returns {Object} json - {type,props,children}
+ */
+export function compileJSON(rjx, resources) {
+  const context = Object.assign({}, this, { returnJSON: true, });
+  return getRenderedJSON.call(context, rjx, resources);
+}
+export const compileHTML = rjxHTMLString;
+
+/**
+ * converts RJX JSON IR to JSX
+ * @example
+ * rjx.jsonToJSX({ type: &apos;div&apos;, props: { key: 5, title: &apos;test&apos; }, children: &apos;hello&apos; }) // =&gt; &apos;&lt;div key={5} title=&quot;test&quot;&gt;hello&lt;/div&gt;&apos;
+ * @param {Object} json - {type,props,children}
+ * @returns {String} jsx string
+ */
+export function jsonToJSX(json) {
+  const propsString = json.props
+    ? Object.keys(json.props)
+      .filter(prop =&gt; prop.includes(&apos;__eval_&apos;) === false)
+      .reduce((propString, prop) =&gt; {
+        propString += ` ${prop.toString()}=${
+          typeof json.props[ prop ] === &apos;string&apos;
+            ? `&quot;${json.props[ prop ].toString()}&quot;`
+            : `{${(json.props[ `__eval_${prop}` ]||json.props[ prop ]).toString()}}`
+        }`;
+        return propString;
+      }, &apos;&apos;)
+    : &apos;&apos;;
+  return Array.isArray(json.children)
+    ? `&lt;${json.type} ${propsString}&gt;
+  ${json.children.map(jsonToJSX)}
+&lt;/${json.type}&gt;`
+    : `&lt;${json.type}${propsString}&gt;${json.children}&lt;/${json.type}&gt;`;
+}
 /**
  * Exposes react module used in RJX
  * @returns {Object} React

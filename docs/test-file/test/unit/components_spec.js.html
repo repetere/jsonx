@@ -50,10 +50,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compile">compile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compileJSON">compileJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compileJSX">compileJSX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactElementFromJSON">getReactElementFromJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-jsonToJSX">jsonToJSX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-boundArgsReducer">boundArgsReducer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenComponents">getChildrenComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span></span></li>
@@ -77,6 +81,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-compileHTML">compileHTML</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getReactElementFromRJX">getReactElementFromRJX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ARGUMENT_NAMES">ARGUMENT_NAMES</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRIP_COMMENTS">STRIP_COMMENTS</a></span></span></li>
@@ -186,6 +192,16 @@ class WelcomeNonBind extends React.Component {
 }
 
 describe(&apos;rjx components&apos;, function () { 
+  describe(&apos;advancedBinding&apos;, () =&gt; {
+    it(&apos;should use advancedBinding based on user agent&apos;, () =&gt; {
+      expect(_rjxComponents.advancedBinding).to.be.false;
+    });
+  });
+  describe(&apos;componentMap&apos;, () =&gt; {
+    it(&apos;should export an object of components&apos;, () =&gt; {
+      expect(_rjxComponents.componentMap).to.be.a(&apos;object&apos;);
+    });
+  });
   describe(&apos;getBoundedComponents&apos;, () =&gt; {
     it(&apos;should bind this to reactComponents&apos;, () =&gt; {
       const bindSpy = sinon.spy();
@@ -321,32 +337,71 @@ describe(&apos;rjx components&apos;, function () {
   });
   describe(&apos;getReactClassComponent&apos;, () =&gt; {
     const getReactClassComponent = _rjxComponents.getReactClassComponent;
+    const classBody = {
+      componentDidMount: {
+        body: &apos;console.log(\&apos;mounted\&apos;,this.props)&apos;,
+        arguments: [],
+      },
+      render: {
+        body: {
+          component: &apos;p&apos;,
+          children: [
+            {
+              component: &apos;span&apos;,
+              children: &apos;My Custom React Component Status: &apos;,
+            },
+            {
+              component: &apos;span&apos;,
+              thisprops: {
+                children: [ &apos;status&apos;, ],
+              },
+            },
+          ],
+        },
+      },
+    };
     it(&apos;should create a React Component&apos;, () =&gt; {
-      const MyCustomComponent = getReactClassComponent({
-        componentDidMount:{
-          body:&apos;console.log(\&apos;mounted\&apos;,this.props)&apos;,
-          arguments:[],
-        },
-        render:{
-          body:{
-            component:&apos;p&apos;,
-            children:[
-              {
-                component:&apos;span&apos;,
-                children: &apos;My Custom React Component Status: &apos;,
-              },
-              {
-                component:&apos;span&apos;,
-                thisprops:{
-                  children:[&apos;status&apos;,],
-                },
-              },
-            ],
-          },
-        },
-      });
+      const MyCustomComponent = getReactClassComponent(classBody);
+      const MyCustomComponentClass = getReactClassComponent(classBody,{ returnFactory:false, });
+      // const MyCustomComponentFactory = getReactClassComponent(classBody);
+      // console.log({MyCustomComponentClass});
       expect(MyCustomComponent).to.be.a(&apos;function&apos;);
-
+      expect(MyCustomComponentClass).to.be.a(&apos;function&apos;);
+      expect(ReactTestUtils.isElement(MyCustomComponent)).to.be.false;
+      // expect(ReactTestUtils.isCompositeComponent(MyCustomComponentClass())).to.be.true;
+    });
+  });
+  describe(&apos;getReactFunctionComponent&apos;, () =&gt; {
+    const getReactFunctionComponent = _rjxComponents.getReactFunctionComponent;
+    it(&apos;should create a React Function Component&apos;, () =&gt; {
+      const MyCustomComponent = getReactFunctionComponent(
+        {
+          component:&apos;p&apos;,
+          children:[
+            {
+              component:&apos;span&apos;,
+              children: &apos;My Custom React Component Status: &apos;,
+            },
+            {
+              component:&apos;span&apos;,
+              thisprops:{
+                children:[&apos;status&apos;,],
+              },
+            },
+          ],
+        },
+        &apos;console.log(&quot;lazy function body&quot;);&apos;,
+        { name:&apos;myComp&apos;, },
+      );
+      expect(MyCustomComponent).to.be.a(&apos;function&apos;);
+    });
+  });
+  describe(&apos;getReactContext&apos;, () =&gt; {
+    const getReactContext = _rjxComponents.getReactContext;
+    it(&apos;should return a React Context Object&apos;, () =&gt; {
+      const context = getReactContext({ some: &apos;c&apos; });
+      expect(ReactTestUtils.isElement(context)).to.be.false;
+      // expect(context).to.be.an.instanceOf(React.createContext);
     });
   });
 });</code></pre>

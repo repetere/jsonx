@@ -50,10 +50,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compile">compile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compileJSON">compileJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compileJSX">compileJSX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactElementFromJSON">getReactElementFromJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-jsonToJSX">jsonToJSX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-boundArgsReducer">boundArgsReducer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenComponents">getChildrenComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span></span></li>
@@ -77,6 +81,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-compileHTML">compileHTML</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getReactElementFromRJX">getReactElementFromRJX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ARGUMENT_NAMES">ARGUMENT_NAMES</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRIP_COMMENTS">STRIP_COMMENTS</a></span></span></li>
@@ -103,6 +109,34 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-boundArgsReducer">boundArgsReducer</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="function/index.html#static-function-compile">compile</a></span></span><span class="code" data-ice="signature">(rjx: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, resources: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span></span>
         </p>
       </div>
@@ -110,6 +144,64 @@
         
         
         <div data-ice="description"><p>converts a rjx json object into a react function component </p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-compileJSON">compileJSON</a></span></span><span class="code" data-ice="signature">(rjx: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>, resources: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Compiles RJX into JSON IR format for react create element</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-compileJSX">compileJSX</a></span></span><span class="code" data-ice="signature">(json: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>converts RJX JSON IR to JSX</p>
 </div>
       </div>
     </td>
@@ -859,6 +951,35 @@ return recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)];
           
           
           
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-jsonToJSX">jsonToJSX</a></span></span><span class="code" data-ice="signature">(json: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>converts RJX JSON IR to JSX</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span><span class="code" data-ice="signature">(config: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
         </p>
       </div>
@@ -1147,6 +1268,49 @@ return recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)];
 <div data-ice="details"><h2 data-ice="title">Static Public </h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-boundArgsReducer">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">boundArgsReducer</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber141">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {boundArgsReducer} from &apos;<span><a href="file/src/props.js.html#lineNumber141">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="static-function-compile">
     <span class="access" data-ice="access">public</span>
     
@@ -1158,11 +1322,11 @@ return recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)];
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber124">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber126">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {compile} from &apos;<span><a href="file/src/main.js.html#lineNumber124">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {compile} from &apos;<span><a href="file/src/main.js.html#lineNumber126">rjx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>converts a rjx json object into a react function component </p>
@@ -1225,7 +1389,195 @@ return recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)];
     
   <div class="example-doc" data-ice="exampleDoc">
       
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">rjx.compile({rjx:{component:&apos;div&apos;,props:{title:&apos;some title attribute&apos;},children:&apos;inner html text&apos;}}) //=&gt;React Function</code></pre>
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">rjx.compile({rjx:{component:&apos;div&apos;,props:{title:&apos;some title attribute&apos;},children:&apos;inner html text&apos;}}) //=&gt;React Function Component</code></pre>
+    </div>
+</div>
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-compileJSON">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">compileJSON</span><span class="code" data-ice="signature">(rjx: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>, resources: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber161">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {compileJSON} from &apos;<span><a href="file/src/main.js.html#lineNumber161">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Compiles RJX into JSON IR format for react create element</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">rjx</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>any valid RJX JSON object</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">resources</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>any additional resource used for asynchronous properties</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>json - {type,props,children}</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties"><div data-ice="properties">
+  <h4 data-ice="title">Return Properties:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">this</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>options for getRenderedJSON</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">rjx.compileJSON({ component: &apos;div&apos;, props: { title: &apos;test&apos;, }, children: &apos;hello&apos;, }); //=&gt; { type: &apos;div&apos;,
+props: { key: 5, title: &apos;test&apos; },
+children: &apos;hello&apos; }</code></pre>
+    </div>
+</div>
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-compileJSX">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">compileJSX</span><span class="code" data-ice="signature">(json: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber144">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {compileJSX} from &apos;<span><a href="file/src/main.js.html#lineNumber144">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>converts RJX JSON IR to JSX</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">json</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>{type,props,children}</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>jsx string</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">rjx.jsonToJSX({ type: &apos;div&apos;, props: { key: 5, title: &apos;test&apos; }, children: &apos;hello&apos; }) // =&gt; &apos;&lt;div key={5} title=&quot;test&quot;&gt;hello&lt;/div&gt;&apos;</code></pre>
     </div>
 </div>
 
@@ -1416,11 +1768,11 @@ displayComponent({ rjx: testRJX, props: testRJX2.props, }) // =&gt; false</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber23">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getBoundedComponents} from &apos;<span><a href="file/src/components.js.html#lineNumber24">rjx/src/components.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getBoundedComponents} from &apos;<span><a href="file/src/components.js.html#lineNumber23">rjx/src/components.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list </p>
@@ -1564,11 +1916,11 @@ displayComponent({ rjx: testRJX, props: testRJX2.props, }) // =&gt; false</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/children.js.html#lineNumber45">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/children.js.html#lineNumber44">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getChildrenProperty} from &apos;<span><a href="file/src/children.js.html#lineNumber45">rjx/src/children.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getChildrenProperty} from &apos;<span><a href="file/src/children.js.html#lineNumber44">rjx/src/children.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>returns a valid rjx.children property</p>
@@ -1693,11 +2045,11 @@ const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], }); 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/children.js.html#lineNumber74">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/children.js.html#lineNumber73">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getChildrenProps} from &apos;<span><a href="file/src/children.js.html#lineNumber74">rjx/src/children.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getChildrenProps} from &apos;<span><a href="file/src/children.js.html#lineNumber73">rjx/src/children.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Used to pass properties down to child components if passprops is set to true</p>
@@ -1797,11 +2149,11 @@ const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], }); 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber42">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber41">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComponentFromLibrary} from &apos;<span><a href="file/src/components.js.html#lineNumber42">rjx/src/components.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComponentFromLibrary} from &apos;<span><a href="file/src/components.js.html#lineNumber41">rjx/src/components.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>returns a react component from a component library</p>
@@ -1887,11 +2239,11 @@ const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], }); 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber76">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber75">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComponentFromMap} from &apos;<span><a href="file/src/components.js.html#lineNumber76">rjx/src/components.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComponentFromMap} from &apos;<span><a href="file/src/components.js.html#lineNumber75">rjx/src/components.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>returns a react element from rjx.component</p>
@@ -2011,11 +2363,11 @@ getComponentFromMap({rjx:{component:&apos;reactBootstap.nav&apos;},componentLibr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber219">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber236">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComponentProps} from &apos;<span><a href="file/src/props.js.html#lineNumber219">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComponentProps} from &apos;<span><a href="file/src/props.js.html#lineNumber236">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. </p>
@@ -2099,11 +2451,11 @@ getComponentFromMap({rjx:{component:&apos;reactBootstap.nav&apos;},componentLibr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber473">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber490">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComputedProps} from &apos;<span><a href="file/src/props.js.html#lineNumber473">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComputedProps} from &apos;<span><a href="file/src/props.js.html#lineNumber490">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Returns computed properties for React Components and any property that&apos;s prefixed with __ is a computedProperty</p>
@@ -2263,11 +2615,11 @@ _store: {} } } }</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber163">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber172">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getEvalProps} from &apos;<span><a href="file/src/props.js.html#lineNumber163">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getEvalProps} from &apos;<span><a href="file/src/props.js.html#lineNumber172">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Used to evalute javascript and set those variables as props. getEvalProps evaluates <strong>dangerouslyEvalProps and </strong>dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, <strong>dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For </strong>dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})</p>
@@ -2364,11 +2716,11 @@ const evalutedComputedBoundFunc = RJXP.email({ email:&apos;test@email.domain&apo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber105">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber104">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionFromEval} from &apos;<span><a href="file/src/components.js.html#lineNumber105">rjx/src/components.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionFromEval} from &apos;<span><a href="file/src/components.js.html#lineNumber104">rjx/src/components.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Returns a new function from an options object</p>
@@ -2452,11 +2804,11 @@ const evalutedComputedBoundFunc = RJXP.email({ email:&apos;test@email.domain&apo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber292">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber309">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionFromProps} from &apos;<span><a href="file/src/props.js.html#lineNumber292">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionFromProps} from &apos;<span><a href="file/src/props.js.html#lineNumber309">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep</p>
@@ -2548,11 +2900,11 @@ const evalutedComputedBoundFunc = RJXP.email({ email:&apos;test@email.domain&apo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber374">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber391">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionProps} from &apos;<span><a href="file/src/props.js.html#lineNumber374">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionProps} from &apos;<span><a href="file/src/props.js.html#lineNumber391">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Returns a resolved object from function strings that has functions pulled from rjx.__functionProps</p>
@@ -2706,11 +3058,11 @@ getParamNames(regularFunctionAdd) // =&gt; [&apos;c&apos;,&apos;d&apos;]</code><
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/children.js.html#lineNumber105">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/children.js.html#lineNumber104">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getRJXChildren} from &apos;<span><a href="file/src/children.js.html#lineNumber105">rjx/src/children.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getRJXChildren} from &apos;<span><a href="file/src/children.js.html#lineNumber104">rjx/src/children.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>returns React Child Elements via RJX</p>
@@ -3085,11 +3437,11 @@ children:&apos;hello world&apos;,
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber241">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber258">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactComponentProps} from &apos;<span><a href="file/src/props.js.html#lineNumber241">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactComponentProps} from &apos;<span><a href="file/src/props.js.html#lineNumber258">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Resolves rjx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. </p>
@@ -3166,11 +3518,11 @@ children:&apos;hello world&apos;,
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber288">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber284">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactContext} from &apos;<span><a href="file/src/components.js.html#lineNumber288">rjx/src/components.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactContext} from &apos;<span><a href="file/src/components.js.html#lineNumber284">rjx/src/components.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>if (recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)]) {
@@ -3212,11 +3564,11 @@ return recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)];
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber113">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactElementFromJSON} from &apos;<span><a href="file/src/main.js.html#lineNumber111">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactElementFromJSON} from &apos;<span><a href="file/src/main.js.html#lineNumber113">rjx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>converts a json object {type,props,children} into a react element </p>
@@ -3307,11 +3659,11 @@ return recharts[rjx.component.replace(&apos;recharts.&apos;, &apos;&apos;)];
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber236">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber240">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactFunctionComponent} from &apos;<span><a href="file/src/components.js.html#lineNumber236">rjx/src/components.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactFunctionComponent} from &apos;<span><a href="file/src/components.js.html#lineNumber240">rjx/src/components.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Returns new React Function Component</p>
@@ -3645,11 +3997,11 @@ rjx.getRenderedJSON({component:&apos;myCompnent&apos;,props:{style:{color:&apos;
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber399">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber416">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getWindowComponents} from &apos;<span><a href="file/src/props.js.html#lineNumber399">rjx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getWindowComponents} from &apos;<span><a href="file/src/props.js.html#lineNumber416">rjx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Returns a resolved object that has React Components pulled from window.__rjx_custom_elements</p>
@@ -3715,6 +4067,87 @@ rjx.getRenderedJSON({component:&apos;myCompnent&apos;,props:{style:{color:&apos;
   
 
   
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-jsonToJSX">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">jsonToJSX</span><span class="code" data-ice="signature">(json: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber174">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {jsonToJSX} from &apos;<span><a href="file/src/main.js.html#lineNumber174">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>converts RJX JSON IR to JSX</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">json</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>{type,props,children}</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>jsx string</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">rjx.jsonToJSX({ type: &apos;div&apos;, props: { key: 5, title: &apos;test&apos; }, children: &apos;hello&apos; }) // =&gt; &apos;&lt;div key={5} title=&quot;test&quot;&gt;hello&lt;/div&gt;&apos;</code></pre>
+    </div>
+</div>
 
   
 
@@ -4388,11 +4821,11 @@ validateRJX({children:&apos;hello world&apos;})=&gt;throw SyntaxError(&apos;[000
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber139">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber197">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReact} from &apos;<span><a href="file/src/main.js.html#lineNumber139">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReact} from &apos;<span><a href="file/src/main.js.html#lineNumber197">rjx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Exposes react module used in RJX</p>
@@ -4445,11 +4878,11 @@ validateRJX({children:&apos;hello world&apos;})=&gt;throw SyntaxError(&apos;[000
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber147">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber205">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReactDOM} from &apos;<span><a href="file/src/main.js.html#lineNumber147">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReactDOM} from &apos;<span><a href="file/src/main.js.html#lineNumber205">rjx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Exposes react dom module used in RJX</p>
@@ -4502,11 +4935,11 @@ validateRJX({children:&apos;hello world&apos;})=&gt;throw SyntaxError(&apos;[000
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber155">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber213">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getUseGlobalHook} from &apos;<span><a href="file/src/main.js.html#lineNumber155">rjx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getUseGlobalHook} from &apos;<span><a href="file/src/main.js.html#lineNumber213">rjx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Exposes global hook used in RJX</p>

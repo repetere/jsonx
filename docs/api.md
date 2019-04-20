@@ -172,6 +172,31 @@ converts a rjx json object into a react function component
 | rjx | Object |  | valid RJX JSON |
 | resources | Object |  | props for react element |
 
+## `compileJSX(json: Object): String`
+
+converts RJX JSON IR to JSX
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+| json | Object |  | {type,props,children} |
+
+## `compileJSON(rjx: object, resources: object): Object`
+
+Compiles RJX into JSON IR format for react create element
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+| rjx | object |  | any valid RJX JSON object |
+| resources | object |  | any additional resource used for asynchronous properties |
+
+## `jsonToJSX(json: Object): String`
+
+converts RJX JSON IR to JSX
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+| json | Object |  | {type,props,children} |
+
 ## `__getReact(): Object`
 
 Exposes react module used in RJX
@@ -219,6 +244,11 @@ returns children rjx components defined on __spreadComponent spread over an arra
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | options | * |  |
+
+## `boundArgsReducer()`
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
 
 ## `getEvalProps(options: Object, options.rjx: Object): Object`
 

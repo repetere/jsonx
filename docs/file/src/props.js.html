@@ -50,10 +50,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compile">compile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compileJSON">compileJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-compileJSX">compileJSX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactElementFromJSON">getReactElementFromJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRenderedJSON">getRenderedJSON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-jsonToJSX">jsonToJSX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxHTMLString">rjxHTMLString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rjxRender">rjxRender</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-boundArgsReducer">boundArgsReducer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenComponents">getChildrenComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentProps">getComponentProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComputedProps">getComputedProps</a></span></span></li>
@@ -77,6 +81,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-compileHTML">compileHTML</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getReactElementFromRJX">getReactElementFromRJX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ARGUMENT_NAMES">ARGUMENT_NAMES</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRIP_COMMENTS">STRIP_COMMENTS</a></span></span></li>
@@ -225,6 +231,15 @@ export function getChildrenComponents(options = {}) {
   }
 }
 
+export function boundArgsReducer(rjx) {
+  return (args, arg) =&gt; {
+    if (this &amp;&amp; this.state &amp;&amp; this.state[ arg ]) args.push(this.state[ arg ]);
+    else if (this &amp;&amp; this.props &amp;&amp; this.props[ arg ]) args.push(this.props[ arg ]);
+    else if (rjx.props &amp;&amp; rjx.props[ arg ]) args.push(rjx.props[ arg ]);
+    return args;
+  };
+}
+
 /**
  * Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
  * @param {Object} options 
@@ -252,19 +267,24 @@ export function getEvalProps(options = {}) {
   const scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
   const evProps = Object.keys(rjx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) =&gt; {
     let evVal;
+    let evValString;
     try {
       // eslint-disable-next-line
       evVal = scopedEval(rjx.__dangerouslyEvalProps[ epropName ]);
+      evValString = evVal.toString();
     } catch (e) { 
       if (this.debug || rjx.debug) evVal = e;
     }
     eprops[ epropName ] = (typeof evVal === &apos;function&apos;)
       ? evVal.call(this, { rjx, })
       : evVal;
+    if (this.exposeEval) eprops[ `__eval_${epropName}` ] = evValString;
     return eprops;
   }, {});
   const evBindProps = Object.keys(rjx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) =&gt; {
     let evVal;
+    let evValString;
+
     try {
       let args;
       const functionBody = rjx.__dangerouslyBindEvalProps[ epropName ];
@@ -274,14 +294,16 @@ export function getEvalProps(options = {}) {
         functionDefinition = functionBody;
       } else {
         functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[ epropName ]);
-        if (rjx.__functionargs &amp;&amp; rjx.__functionargs[ epropName ]) {
-          args = [this, ].concat(rjx.__functionargs[ epropName ].map(arg =&gt; rjx.props[ arg ]));
-        }  else if (rjx.__functionparams) {
-          const functionDefArgs = getParamNames(functionDefinition);
-          args = [this, ].concat(functionDefArgs);
-        } else {
-          args = [this, ];
-        } 
+        evValString = functionDefinition.toString();
+
+      } // eslint-disable-next-line
+      if (rjx.__functionargs &amp;&amp; rjx.__functionargs[epropName]) {
+        args = [this,].concat(rjx.__functionargs[epropName].reduce(boundArgsReducer(rjx),[]));
+      } else if (rjx.__functionparams===false) {
+        args = [this,];
+      } else {
+        const functionDefArgs = getParamNames(functionDefinition);
+        args = [this,].concat(functionDefArgs.reduce(boundArgsReducer(rjx),[]));
       }
       // eslint-disable-next-line
       evVal = functionDefinition.bind(...args);
@@ -290,6 +312,7 @@ export function getEvalProps(options = {}) {
     }
     // eslint-disable-next-line
     eprops[ epropName ] = evVal;
+    if (this.exposeEval) eprops[ `__eval_${epropName}` ] = evValString;
     return eprops;
   }, {});
 
@@ -396,7 +419,7 @@ export function getFunctionFromProps(options) {
       } else {
         InlineFunction = Function(&apos;param1&apos;, &apos;param2&apos;, &apos;&quot;use strict&quot;;&apos; + propBody);
       }
-      const [propFuncName, funcName, ] = propFunc.split(&apos;.&apos;);
+      const [propFuncName, funcName,] = propFunc.split(&apos;.&apos;);
       
       Object.defineProperty(
         InlineFunction,
@@ -406,7 +429,7 @@ export function getFunctionFromProps(options) {
         }
       );
       if (rjx.__functionargs) {
-        const boundArgs = [this,].concat(rjx.__functionargs[functionProperty].map(arg =&gt; rjx.props[ arg ]));
+        const boundArgs = [this, ].concat(rjx.__functionargs[functionProperty].map(arg =&gt; rjx.props[ arg ]));
         return InlineFunction.bind(...boundArgs);
       } else {
         return InlineFunction.bind(this);

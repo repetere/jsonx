@@ -7,7 +7,7 @@ import { getRenderedJSON, } from './main';
 //   var window = window || global.window || {};
 // }
 export let advancedBinding = getAdvancedBinding();
-
+// require;
 /**
  * object of all react components available for RJX
  */
@@ -102,9 +102,10 @@ export function getComponentFromMap(options = {}) {
  * @returns {Function} 
  */
 export function getFunctionFromEval(options = {}) {
-  const { body='', args = [], } = options;
-  args.push(body);
-  return Function.prototype.constructor.apply({}, args);
+  const { body = '', args = [], } = options;
+  const argus = [].concat(args);
+  argus.push(body);
+  return Function.prototype.constructor.apply({}, argus);
 }
 
 /**
@@ -125,6 +126,8 @@ export function getFunctionFromEval(options = {}) {
  * @see {@link https://reactjs.org/docs/react-without-es6.html} 
  */
 export function getReactClassComponent(reactComponent = {}, options = {}) {
+  // const util = require('util');
+  // console.log(util.inspect({ reactComponent },{depth:20}));
   if (options.lazy) {
     return lazy(() => options.lazy(reactComponent, Object.assign({}, options, { lazy: false, })).then((lazyComponent) => {
       return {
@@ -192,7 +195,9 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
       }
     );
   }
-  const reactClass = returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
+  const reactClass = returnFactory
+    ? React.createFactory(reactComponentClass)
+    : reactComponentClass;
   return reactClass;
 }
 
