@@ -44,6 +44,10 @@ const RJXJ = rjx.getRenderedJSON.call({
 },
 sampleRJX);
 const RJXC = rjx.compile(sampleRJX);
+const compiledReact = React.createElement('section', {}, [
+  React.createElement('div', { title: 'this is a div', 'data-attr': 5, key: 1, }, 'inside of div'),
+  React.createElement('img', { src: 'https://rjx.io/favicon.png', alt: 'rjx', key: 2, }),
+]);
 
 // const RE = React.createElement('div', { title: 'hello', }, 'hey there');
 
@@ -85,6 +89,9 @@ suite.add('React', function () {
 suite.add('React & RJX', function () {
   React.createElement('div', { }, [RJXE,]);
 });
+suite.add('React & React', function () {
+  React.createElement('div', { }, [compiledReact,]);
+});
 // suite.add('RJX', function () {
 //   rjx.getRenderedJSON({
 //     component: 'div',
@@ -98,6 +105,12 @@ suite.add('React & RJX', function () {
 //   React.createElement(RE);
 // });
 // add listeners
+// suite.on('start', function (event) {
+//   console.log('start', String(event.target));
+// });
+// suite.on('cycle', function (event) {
+//   console.log(String(event.target));
+// });
 suite.on('cycle', function (event) {
   console.log(String(event.target));
 });
@@ -106,5 +119,4 @@ suite.on('complete', function () {
 });
 // run async
 suite.run({ 'async': true, });
-
-console.log({ suite, });
+// console.log({ suite, });
