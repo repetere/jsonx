@@ -150,6 +150,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
     throw new ReferenceError('React components require a render method');
   }
   const classOptions = rjcKeys.reduce((result, val) => { 
+    if (typeof rjc[ val ] === 'function') rjc[ val ] = { body: rjc[ val ], };
     const args = rjc[ val ].arguments;
     const body = rjc[ val ].body;
     if (!body) {
@@ -222,13 +223,15 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
      },
       {
         component:'button',
-        __functionProps:{
-          onClick:'func:inline.onClick'
+       __dangerouslyBindEvalProps:{
+        onClick:function(count,setCount){
+          setCount(count+1);
+          console.log('this is inline',{count,setCount});
         },
-        __functionargs:['count','setCount'],
-        __inline:{
-          onClick:`return setCount(count+1)`,
-        },
+        // onClick:`(function(count,setCount){
+        //   setCount(count+1)
+        //   console.log('this is inline',{count,setCount});
+        // })`,
         children:'Click me'
       }
    ]
@@ -249,9 +252,8 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
 
   const props = reactComponent.props;
   const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getRenderedJSON, reactComponent, resources, props, ];
-  const functionComponent = typeof functionBody === 'function'
-    ? functionBody
-    : Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
+  if (typeof functionBody === 'function') functionBody = functionBody.toString();
+  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getRenderedJSON', 'reactComponent', 'resources', 'props', `
       return function ${options.name || 'Anonymous'}(props){
         ${functionBody}
         if(typeof functionprops!=='undefined'){

@@ -7,7 +7,7 @@ import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils'; // ES6
 import ReactDOM from 'react-dom';
 import ReactDOMElements from 'react-dom-factories';
-import { expect } from 'chai';
+import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
 import 'mocha-sinon';
@@ -28,7 +28,7 @@ const sampleCustomElementRJX = {
     className:'rjx',
   },
   thisprops: {
-    title: ['extraname',],
+    title: ['extraname', ],
   },
   children: [
     {
@@ -45,7 +45,7 @@ const sampleCustomElementRJX = {
         name:'fromCustom',
       },
       thisprops: {
-        title: ['elementProperties', 'title',],
+        title: ['elementProperties', 'title', ],
       },
       children:'hello customElement2',
     },
@@ -59,7 +59,7 @@ const sampleCustomElementRJX = {
         name:'fromCustom',
       },
       thisprops: {
-        title: ['elementProperties', 'title',],
+        title: ['elementProperties', 'title', ],
       },
       children:'hello customElement2',
     },
@@ -73,7 +73,7 @@ const sampleCustomElementRJX = {
         name:'fromCustom',
       },
       thisprops: {
-        title: ['elementProperties', 'title',],
+        title: ['elementProperties', 'title', ],
       },
       children:'hello customElement2',
     },
@@ -108,6 +108,16 @@ describe('rjx components', function () {
     it('should export an object of components', () => {
       expect(_rjxComponents.componentMap).to.be.a('object');
     });
+    // it('should export an object of components', () => {
+    //   global.window = {
+    //     __rjx_custom_elements: {
+    //       cusEl: {},
+    //     },
+    //   };
+    //   const comps = _rjxComponents.componentMap;
+    //   console.log({ comps });
+    //   expect(_rjxComponents.componentMap.cusEl).to.eql(global.window.__rjx_custom_elements.cusEl);
+    // });
   });
   describe('getBoundedComponents', () => {
     it('should bind this to reactComponents', () => {
@@ -118,7 +128,7 @@ describe('rjx components', function () {
         WelcomeNonBind,
         WelcomeBindSpy,
       };
-      const boundedComponents = ['Welcome', 'WelcomeBindSpy',];
+      const boundedComponents = ['Welcome', 'WelcomeBindSpy', ];
       const customComponents = _rjxComponents.getBoundedComponents({ reactComponents, boundedComponents, advancedBinding:true, });
       const customThis = {
         props: {
@@ -155,7 +165,7 @@ describe('rjx components', function () {
         }, })).to.be.a('function').and.to.eql(Welcome);
     });
     it('should return the dom element string if a valid DOM elmenet in ReactDOM', () => {
-      ['div', 'span', 'p', 'section',].forEach(el => {
+      ['div', 'span', 'p', 'section', ].forEach(el => {
         const rjxObj = { rjx: { component: el, }, };
         expect(_rjxComponents.getComponentFromMap(rjxObj)).to.eql(el);
       });
@@ -184,7 +194,7 @@ describe('rjx components', function () {
       const logError = sinon.spy();
       expect(_rjxComponents.getComponentFromMap.bind(null)).to.throw();
       try {
-        _rjxComponents.getComponentFromMap({ debug: true, logError, });
+        _rjxComponents.getComponentFromMap({ debug: true, logError, rjx:false, });
       } catch (e) {
         expect(e).to.be.a('error');
         expect(logError.called).to.be.true;
@@ -198,6 +208,11 @@ describe('rjx components', function () {
     };
     const componentLibraries = {
       reactBootstrap,
+      testLib: {
+        testGrouping: {
+          testComponent: {},
+        },
+      },
     };
     it('should return undefined if not valid', () => {
       expect(_rjxComponents.getComponentFromLibrary()).to.be.undefined;
@@ -210,6 +225,14 @@ describe('rjx components', function () {
         componentLibraries,
       };
       expect(_rjxComponents.getComponentFromLibrary(rjxObj)).to.be.eql(Welcome);
+      const rjxObjDeep = {
+        rjx: {
+          component: 'testLib.testGrouping.testComponent',
+        },
+        componentLibraries,
+      };
+      expect(_rjxComponents.getComponentFromLibrary(rjxObjDeep)).to.be.eql(componentLibraries.testLib.testGrouping.testComponent);
+
     });
   });
   describe('componentMap', () => {
@@ -260,7 +283,7 @@ describe('rjx components', function () {
             {
               component: 'span',
               thisprops: {
-                children: [ 'status', ],
+                children: ['status',],
               },
             },
           ],
@@ -269,7 +292,7 @@ describe('rjx components', function () {
     };
     it('should create a React Component', () => {
       const MyCustomComponent = getReactClassComponent(classBody);
-      const MyCustomComponentClass = getReactClassComponent(classBody,{ returnFactory:false, });
+      const MyCustomComponentClass = getReactClassComponent(classBody, { returnFactory:false, });
       // const MyCustomComponentFactory = getReactClassComponent(classBody);
       // console.log({MyCustomComponentClass});
       expect(MyCustomComponent).to.be.a('function');
@@ -277,10 +300,71 @@ describe('rjx components', function () {
       expect(ReactTestUtils.isElement(MyCustomComponent)).to.be.false;
       // expect(ReactTestUtils.isCompositeComponent(MyCustomComponentClass())).to.be.true;
     });
+    it('should allow for functions as object props', () => {
+      const classBodyOpts = Object.assign({}, classBody);
+      classBodyOpts.componentDidMount = function () {
+        console.log('mounted!');
+      };
+      expect(getReactClassComponent.bind(null, classBodyOpts)).to.not.throw;
+    });
+    it('should allow for custom class names', () => { 
+      const MyCustomComponentNameClass = getReactClassComponent(classBody, '', { name: 'myClass', });
+      expect(MyCustomComponentNameClass).to.be.a('function');
+    });
+    it('should throw an error if missing a render function', () => { 
+      expect(getReactClassComponent.bind()).to.throw;
+    });
+    it('should throw an error if missing a function is missing a body', () => { 
+      expect(getReactClassComponent.bind({ render: {}, })).to.throw;
+    });
+    it('should create suspense/lazy components', () => {
+      const MyCustomLazyComponent = getReactClassComponent(
+        {
+          component: 'p',
+          children: [
+            {
+              component: 'span',
+              children: 'My Custom React Component Status: ',
+            },
+            {
+              component: 'span',
+              thisprops: {
+                children: ['status',],
+              },
+            },
+          ],
+        },
+        {
+          name: 'myComp',
+          lazy: (comp, options) => {
+            return new Promise((resolve) => {
+              setTimeout(() => {
+                resolve([
+                  comp, Object.assign(options, { lazy: false, }),]);
+              }, 3000);
+            });
+          },
+        },
+      );
+      
+      expect(MyCustomLazyComponent).to.be.a('object');
+    });
   });
   describe('getReactFunctionComponent', () => {
     const getReactFunctionComponent = _rjxComponents.getReactFunctionComponent;
-    it('should create a React Function Component', () => {
+    it('should react a React Function Component', () => { 
+      const MyCustomComponentNameless = getReactFunctionComponent(
+        {
+          component:'p',
+          children:'hello',
+        },
+        'console.log("lazy function body");',
+        { },
+      );
+      expect(MyCustomComponentNameless.name).to.eql('Anonymous');
+      expect(MyCustomComponentNameless).to.be.a('function');
+    });
+    it('should create a React Function Component with a name', () => {
       const MyCustomComponent = getReactFunctionComponent(
         {
           component:'p',
@@ -292,7 +376,7 @@ describe('rjx components', function () {
             {
               component:'span',
               thisprops:{
-                children:['status',],
+                children:['status', ],
               },
             },
           ],
@@ -300,13 +384,47 @@ describe('rjx components', function () {
         'console.log("lazy function body");',
         { name:'myComp', },
       );
+      expect(MyCustomComponent.name).to.eql('myComp');
       expect(MyCustomComponent).to.be.a('function');
+    });
+    it('should create suspense/lazy components', () => {
+      const MyCustomLazyComponent = getReactFunctionComponent(
+        {
+          component: 'p',
+          children: [
+            {
+              component: 'span',
+              children: 'My Custom React Component Status: ',
+            },
+            {
+              component: 'span',
+              thisprops: {
+                children: ['status',],
+              },
+            },
+          ],
+        },
+        'console.log("lazy function body");',
+        {
+          name: 'myComp',
+          lazy: (comp, options) => {
+            return new Promise((resolve) => {
+              setTimeout(() => {
+                resolve([
+                  comp, Object.assign(options, { lazy: false, }),]);
+              }, 3000);
+            });
+          },
+        },
+      );
+      
+      expect(MyCustomLazyComponent).to.be.a('object');
     });
   });
   describe('getReactContext', () => {
     const getReactContext = _rjxComponents.getReactContext;
     it('should return a React Context Object', () => {
-      const context = getReactContext({ some: 'c' });
+      const context = getReactContext({ some: 'c', });
       expect(ReactTestUtils.isElement(context)).to.be.false;
       // expect(context).to.be.an.instanceOf(React.createContext);
     });
