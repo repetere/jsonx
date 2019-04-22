@@ -1,6 +1,6 @@
 {
   "name": "rjx",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. RJX support React Function and Class Components, React Lazy and Suspense Content, and full support for React Hooks",
   "main": "dist/rjx.cjs.js",
   "module": "dist/rjx.esm.js",

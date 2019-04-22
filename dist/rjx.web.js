@@ -19179,6 +19179,7 @@ ${rjxRenderedString}`);
 	    disableRenderIndexKey = false
 	  } = this || {}; // const componentLibraries = this.componentLibraries;
 
+	  if (!rjx) return null;
 	  if (rjx.type) rjx.component = rjx.type;
 	  if (validSimpleRJXSyntax(rjx)) rjx = simpleRJXSyntax(rjx);
 	  if (!rjx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');

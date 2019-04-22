@@ -164,6 +164,7 @@ export function getReactElementFromRJX(rjx = {}, resources = {}) {
   // eslint-disable-next-line
   const { componentLibraries = {}, debug = false, returnJSON=false, logError = console.error, boundedComponents = [], disableRenderIndexKey = false, } = this || {};
   // const componentLibraries = this.componentLibraries;
+  if (!rjx) return null;
   if (rjx.type) rjx.component = rjx.type;
   if (rjxUtils.validSimpleRJXSyntax(rjx)) rjx = rjxUtils.simpleRJXSyntax(rjx);
   if (!rjx.component) return createElement(&apos;span&apos;, {}, debug ? &apos;Error: Missing Component Object&apos; : &apos;&apos;);
