@@ -136,7 +136,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
     }));
   }
   const context = this || {};
-  const { returnFactory = true, resources = {}, use_getState=true, bindContext=true,} = options;
+  const { returnFactory = true, resources = {}, use_getState=true, bindContext=true, disableRenderIndexKey = true, } = options;
   const rjc = Object.assign({
     getDefaultProps: {
       body:'return {};',
@@ -168,6 +168,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
           {},
           context,
           bindContext ? this : {},
+          { disableRenderIndexKey, },
           {
             props: use_getState
               ? Object.assign({}, this.props, { getState: () => this.state, })
@@ -263,8 +264,9 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
           reactComponent.props =  props;
         }
         if(!props.children) delete props.children;
-  
-        return getReactElementFromRJX.call(this, reactComponent);
+        const context = Object.assign({},this,{   disableRenderIndexKey:true,
+        })
+        return getReactElementFromRJX.call(context, reactComponent);
       }
     `);
   if (options.name) {
