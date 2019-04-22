@@ -234,9 +234,11 @@ export function getChildrenComponents(options = {}) {
 
 export function boundArgsReducer(rjx = {}) {
   return (args, arg) =&gt; {
-    if (this &amp;&amp; this.state &amp;&amp; this.state[ arg ]) args.push(this.state[ arg ]);
-    else if (this &amp;&amp; this.props &amp;&amp; this.props[ arg ]) args.push(this.props[ arg ]);
-    else if (rjx.props &amp;&amp; rjx.props[ arg ]) args.push(rjx.props[ arg ]);
+    let val;
+    if (this &amp;&amp; this.state &amp;&amp; typeof this.state[ arg ] !== undefined) val = (this.state[ arg ]);
+    else if (this &amp;&amp; this.props &amp;&amp; typeof this.props[ arg ] !== undefined) val = (this.props[ arg ]);
+    else if (rjx.props &amp;&amp; typeof rjx.props[ arg ] !== undefined) val = (rjx.props[ arg ]);
+    if (typeof val !== undefined) args.push(val);
     return args;
   };
 }
@@ -299,12 +301,12 @@ export function getEvalProps(options = {}) {
 
       } // eslint-disable-next-line
       if (rjx.__functionargs &amp;&amp; rjx.__functionargs[epropName]) {
-        args = [this,].concat(rjx.__functionargs[epropName].reduce(boundArgsReducer(rjx),[]));
+        args = [this, ].concat(rjx.__functionargs[epropName].reduce(boundArgsReducer.call(this, rjx), []));
       } else if (rjx.__functionparams===false) {
-        args = [this,];
+        args = [this, ];
       } else {
         const functionDefArgs = getParamNames(functionDefinition);
-        args = [this,].concat(functionDefArgs.reduce(boundArgsReducer(rjx),[]));
+        args = [this, ].concat(functionDefArgs.reduce(boundArgsReducer.call(this, rjx), []));
       }
       // eslint-disable-next-line
       evVal = functionDefinition.bind(...args);
@@ -420,7 +422,7 @@ export function getFunctionFromProps(options) {
       } else {
         InlineFunction = Function(&apos;param1&apos;, &apos;param2&apos;, &apos;&quot;use strict&quot;;&apos; + propBody);
       }
-      const [propFuncName, funcName,] = propFunc.split(&apos;.&apos;);
+      const [propFuncName, funcName, ] = propFunc.split(&apos;.&apos;);
       
       Object.defineProperty(
         InlineFunction,
@@ -430,7 +432,7 @@ export function getFunctionFromProps(options) {
         }
       );
       if (rjx.__functionargs) {
-        const boundArgs = [this, ].concat(rjx.__functionargs[functionProperty].map(arg =&gt; rjx.props[ arg ]));
+        const boundArgs = [this,].concat(rjx.__functionargs[functionProperty].map(arg =&gt; rjx.props[ arg ]));
         return InlineFunction.bind(...boundArgs);
       } else {
         return InlineFunction.bind(this);
@@ -615,7 +617,7 @@ export function getComputedProps(options = {}) {
     const insertedReactComponents = (rjx.__dangerouslyInsertReactComponents || rjx.__dangerouslyInsertRJXComponents)
       ? getReactComponentProps.call(this, { rjx, debug, })
       : {};
-    const allProps = Object.assign({}, { key: renderIndex, }, rjx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
+    const allProps = Object.assign({}, this.disableRenderIndexKey ? {}: { key: renderIndex, }, rjx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps,
       rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
       rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {},

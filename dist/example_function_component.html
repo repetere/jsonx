@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>RJX TEST</title>
+    <script type="text/javascript" src="rjx.web.js"></script>
+    <script type="text/javascript">
+    window.React = rjx.__getReact();
+    window.ReactDOM = rjx.__getReactDOM();
+    // shallowEqual=()=>{};
+    // console.log({rjx});
+    // console.log({React});
+    </script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/react-md@1.9.2/dist/react-md.js"></script> -->
+    <!-- <link rel="stylesheet" href="../node_modules/react-md/dist/react-md.amber-blue.min.css"> -->
+    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre-icons.min.css">
+    <!-- <script type="text/javascript" src="../node_modules/react-md/dist/react-md.js"></script> -->
+    <!-- <script type="text/javascript" src="../node_modules/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script> -->
+    <script type="text/javascript" src="../design/spectre.umd.js"></script>
+    <!-- <script type="text/javascript" src="../design/semantic.web.js"></script> -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      
+      
+      const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunctionComponent({
+        component:'div',
+        props:{
+          extra:'ok'
+        },
+        passprops:true,
+        children:[
+          {
+            component:'p',
+            children: 'This is from Function Component'
+          },
+          
+          {
+              component:'p',
+              passprops:true,
+              children:[
+                {
+                  component:'span',
+                  children:'You clicked ',
+                },
+                {
+                  component:'input',
+                  thisprops:{
+                    value:['count'],
+                  },
+                  // __functionProps:{
+                  //   ref:'func:inline.ref',
+                  // },
+                  // __inline:{
+                  //   ref:`window.INPUTREF = param1; console.log('testing INPUTREF',{param1});`,
+                  // },
+                },
+                {
+                  component:'span',
+                  children:' times'
+                }
+              ]
+          },
+          {
+            component:'button',
+            // __functionargs:{
+            //   onClick:['count','setCount'],
+            // },
+            debug:true,
+            __dangerouslyBindEvalProps:{
+              onClick:function(count,setCount){
+                console.log('this is inline',{count,setCount},'arguments',arguments);
+                setCount(count+1);
+              },
+              // onClick:`(function(count,setCount){
+              //   setCount(count+1)
+              //   console.log('this is inline',{count,setCount});
+              // })`,
+            },
+            children:'Click me'
+          }
+        ],
+      },`
+      const [count, setCount] = useState(0);
+      const exposeProps = {count,setCount};
+      `,{
+        name:'IntroHook'
+      })
+
+      const sampleRJX = {
+        component: 'div',
+        props: {
+          id: 'generatedRJX',
+          className:'rjx',
+          otherProp: 'testing Other Prop',
+          style:{
+            padding:'1rem',
+          }
+        },
+        children: [
+          {
+            component:'MyCustomFunctionComponent',
+            props:{
+              status:'Amazing',
+            },
+            resourceprops:{
+              punc:['punc']
+            }
+          },
+        ],
+      };
+      const boundConfig = {
+        debug:true, 
+        reactComponents:{
+          MyCustomFunctionComponent,
+        },
+        componentLibraries:{
+          // ReactMD,
+          Spectre,
+        }
+      };
+      console.log({boundConfig})
+      rjx.rjxRender.call(boundConfig,{ 
+        rjx: sampleRJX, 
+        resources: { 
+        },
+        querySelector:'#root', });
+    </script>
+  </body>
+</html>

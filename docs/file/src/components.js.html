@@ -230,7 +230,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
     }));
   }
   const context = this || {};
-  const { returnFactory = true, resources = {}, use_getState=true, bindContext=true,} = options;
+  const { returnFactory = true, resources = {}, use_getState=true, bindContext=true, disableRenderIndexKey = true, } = options;
   const rjc = Object.assign({
     getDefaultProps: {
       body:&apos;return {};&apos;,
@@ -262,6 +262,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
           {},
           context,
           bindContext ? this : {},
+          { disableRenderIndexKey, },
           {
             props: use_getState
               ? Object.assign({}, this.props, { getState: () =&gt; this.state, })
@@ -350,9 +351,9 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = &a
   const functionComponent = Function(&apos;React&apos;, &apos;useState&apos;, &apos;useEffect&apos;, &apos;useContext&apos;, &apos;useReducer&apos;, &apos;useCallback&apos;, &apos;useMemo&apos;, &apos;useRef&apos;, &apos;useImperativeHandle&apos;, &apos;useLayoutEffect&apos;, &apos;useDebugValue&apos;, &apos;getReactElementFromRJX&apos;, &apos;reactComponent&apos;, &apos;resources&apos;, &apos;props&apos;, `
       return function ${options.name || &apos;Anonymous&apos;}(props){
         ${functionBody}
-        if(typeof functionprops!==&apos;undefined&apos;){
-          reactComponent.props = Object.assign({},props,functionprops);
-          reactComponent.__functionargs = Object.keys(functionprops);
+        if(typeof exposeProps!==&apos;undefined&apos;){
+          reactComponent.props = Object.assign({},props,exposeProps);
+          // reactComponent.__functionargs = Object.keys(exposeProps);
         } else{
           reactComponent.props =  props;
         }

@@ -257,16 +257,15 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
   const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromRJX', 'reactComponent', 'resources', 'props', `
       return function ${options.name || 'Anonymous'}(props){
         ${functionBody}
-        if(typeof functionprops!=='undefined'){
-          reactComponent.props = Object.assign({},props,functionprops);
-          reactComponent.__functionargs = Object.keys(functionprops);
+        if(typeof exposeProps!=='undefined'){
+          reactComponent.props = Object.assign({},props,exposeProps);
+          // reactComponent.__functionargs = Object.keys(exposeProps);
         } else{
           reactComponent.props =  props;
         }
         if(!props.children) delete props.children;
-        const context = Object.assign({},this,{   disableRenderIndexKey:true,
-        })
-        return getReactElementFromRJX.call(context, reactComponent);
+  
+        return getReactElementFromRJX.call(this, reactComponent);
       }
     `);
   if (options.name) {

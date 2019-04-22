@@ -140,9 +140,11 @@ export function getChildrenComponents(options = {}) {
 
 export function boundArgsReducer(rjx = {}) {
   return (args, arg) => {
-    if (this && this.state && this.state[ arg ]) args.push(this.state[ arg ]);
-    else if (this && this.props && this.props[ arg ]) args.push(this.props[ arg ]);
-    else if (rjx.props && rjx.props[ arg ]) args.push(rjx.props[ arg ]);
+    let val;
+    if (this && this.state && typeof this.state[ arg ] !== undefined) val = (this.state[ arg ]);
+    else if (this && this.props && typeof this.props[ arg ] !== undefined) val = (this.props[ arg ]);
+    else if (rjx.props && typeof rjx.props[ arg ] !== undefined) val = (rjx.props[ arg ]);
+    if (typeof val !== undefined) args.push(val);
     return args;
   };
 }
@@ -205,12 +207,12 @@ export function getEvalProps(options = {}) {
 
       } // eslint-disable-next-line
       if (rjx.__functionargs && rjx.__functionargs[epropName]) {
-        args = [this,].concat(rjx.__functionargs[epropName].reduce(boundArgsReducer(rjx),[]));
+        args = [this, ].concat(rjx.__functionargs[epropName].reduce(boundArgsReducer.call(this, rjx), []));
       } else if (rjx.__functionparams===false) {
-        args = [this,];
+        args = [this, ];
       } else {
         const functionDefArgs = getParamNames(functionDefinition);
-        args = [this,].concat(functionDefArgs.reduce(boundArgsReducer(rjx),[]));
+        args = [this, ].concat(functionDefArgs.reduce(boundArgsReducer.call(this, rjx), []));
       }
       // eslint-disable-next-line
       evVal = functionDefinition.bind(...args);
@@ -326,7 +328,7 @@ export function getFunctionFromProps(options) {
       } else {
         InlineFunction = Function('param1', 'param2', '"use strict";' + propBody);
       }
-      const [propFuncName, funcName,] = propFunc.split('.');
+      const [propFuncName, funcName, ] = propFunc.split('.');
       
       Object.defineProperty(
         InlineFunction,
@@ -336,7 +338,7 @@ export function getFunctionFromProps(options) {
         }
       );
       if (rjx.__functionargs) {
-        const boundArgs = [this, ].concat(rjx.__functionargs[functionProperty].map(arg => rjx.props[ arg ]));
+        const boundArgs = [this,].concat(rjx.__functionargs[functionProperty].map(arg => rjx.props[ arg ]));
         return InlineFunction.bind(...boundArgs);
       } else {
         return InlineFunction.bind(this);

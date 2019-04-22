@@ -152,10 +152,11 @@
             // __functionargs:{
             //   onClick:['count','setCount'],
             // },
+            debug:true,
             __dangerouslyBindEvalProps:{
               onClick:function(count,setCount){
+                console.log('this is inline',{count,setCount},'arguments',arguments);
                 setCount(count+1);
-                console.log('this is inline',{count,setCount});
               },
               // onClick:`(function(count,setCount){
               //   setCount(count+1)
@@ -167,8 +168,8 @@
         ],
       },`
       const [count, setCount] = useState(0);
-      const functionprops = {count,setCount};
-      // console.log({ reactComponent, })
+      const exposeProps = {count,setCount};
+      // console.log({ reactComponent, count, setCount, })
       // console.log('HELLO',{resources, props,},arguments)
       `,{
         name:'IntroHook'

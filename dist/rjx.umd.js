@@ -18146,7 +18146,8 @@
 	    returnFactory = true,
 	    resources = {},
 	    use_getState = true,
-	    bindContext = true
+	    bindContext = true,
+	    disableRenderIndexKey = true
 	  } = options;
 	  const rjc = Object.assign({
 	    getDefaultProps: {
@@ -18185,6 +18186,8 @@
 	        if (options.passprops && this.props) body.props = Object.assign({}, body.props, this.props);
 	        if (options.passstate && this.state) body.props = Object.assign({}, body.props, this.state);
 	        return getReactElementFromRJX.call(Object.assign({}, context, bindContext ? this : {}, {
+	          disableRenderIndexKey
+	        }, {
 	          props: use_getState ? Object.assign({}, this.props, {
 	            getState: () => this.state
 	          }) : this.props
@@ -18270,9 +18273,9 @@
 	  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromRJX', 'reactComponent', 'resources', 'props', `
       return function ${options.name || 'Anonymous'}(props){
         ${functionBody}
-        if(typeof functionprops!=='undefined'){
-          reactComponent.props = Object.assign({},props,functionprops);
-          reactComponent.__functionargs = Object.keys(functionprops);
+        if(typeof exposeProps!=='undefined'){
+          reactComponent.props = Object.assign({},props,exposeProps);
+          // reactComponent.__functionargs = Object.keys(exposeProps);
         } else{
           reactComponent.props =  props;
         }
@@ -18458,7 +18461,9 @@
 	}
 	function boundArgsReducer(rjx = {}) {
 	  return (args, arg) => {
-	    if (this && this.state && this.state[arg]) args.push(this.state[arg]);else if (this && this.props && this.props[arg]) args.push(this.props[arg]);else if (rjx.props && rjx.props[arg]) args.push(rjx.props[arg]);
+	    let val;
+	    if (this && this.state && typeof this.state[arg] !== undefined) val = this.state[arg];else if (this && this.props && typeof this.props[arg] !== undefined) val = this.props[arg];else if (rjx.props && typeof rjx.props[arg] !== undefined) val = rjx.props[arg];
+	    if (typeof val !== undefined) args.push(val);
 	    return args;
 	  };
 	}
@@ -18528,12 +18533,12 @@
 
 
 	      if (rjx.__functionargs && rjx.__functionargs[epropName]) {
-	        args = [this].concat(rjx.__functionargs[epropName].reduce(boundArgsReducer(rjx), []));
+	        args = [this].concat(rjx.__functionargs[epropName].reduce(boundArgsReducer.call(this, rjx), []));
 	      } else if (rjx.__functionparams === false) {
 	        args = [this];
 	      } else {
 	        const functionDefArgs = getParamNames(functionDefinition);
-	        args = [this].concat(functionDefArgs.reduce(boundArgsReducer(rjx), []));
+	        args = [this].concat(functionDefArgs.reduce(boundArgsReducer.call(this, rjx), []));
 	      } // eslint-disable-next-line
 
 
@@ -18887,7 +18892,7 @@
 	      rjx,
 	      debug
 	    }) : {};
-	    const allProps = Object.assign({}, {
+	    const allProps = Object.assign({}, this.disableRenderIndexKey ? {} : {
 	      key: renderIndex
 	    }, rjx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
 	    const computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, {
@@ -19160,6 +19165,7 @@ ${rjxRenderedString}`);
 	 * @property {Object} [this.componentLibraries] - react components to render with RJX
 	 * @property {boolean} [this.debug=false] - use debug messages
 	 * @property {boolean} [this.returnJSON=false] - return json object of {type,props,children} instead of react element
+	 * @property {boolean} [this.disableRenderIndexKey=false] - disables auto assign a key prop
 	 * @property {function} [this.logError=console.error] - error logging function
 	 * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
 	 * @returns {function} React element via React.createElement
@@ -19172,7 +19178,8 @@ ${rjxRenderedString}`);
 	    debug = false,
 	    returnJSON = false,
 	    logError = console.error,
-	    boundedComponents = []
+	    boundedComponents = [],
+	    disableRenderIndexKey = false
 	  } = this || {}; // const componentLibraries = this.componentLibraries;
 
 	  if (rjx.type) rjx.component = rjx.type;

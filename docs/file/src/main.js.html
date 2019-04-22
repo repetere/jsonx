@@ -155,13 +155,14 @@ export function outputHTML(config = {}) {
  * @property {Object} [this.componentLibraries] - react components to render with RJX
  * @property {boolean} [this.debug=false] - use debug messages
  * @property {boolean} [this.returnJSON=false] - return json object of {type,props,children} instead of react element
+ * @property {boolean} [this.disableRenderIndexKey=false] - disables auto assign a key prop
  * @property {function} [this.logError=console.error] - error logging function
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
 export function getReactElementFromRJX(rjx = {}, resources = {}) {
   // eslint-disable-next-line
-  const { componentLibraries = {}, debug = false, returnJSON=false, logError = console.error, boundedComponents = [], } = this || {};
+  const { componentLibraries = {}, debug = false, returnJSON=false, logError = console.error, boundedComponents = [], disableRenderIndexKey = false, } = this || {};
   // const componentLibraries = this.componentLibraries;
   if (rjx.type) rjx.component = rjx.type;
   if (rjxUtils.validSimpleRJXSyntax(rjx)) rjx = rjxUtils.simpleRJXSyntax(rjx);
