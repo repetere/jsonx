@@ -18461,7 +18461,7 @@ var rjx = (function (exports) {
 	    let val;
 	    if (this && this.state && typeof this.state[arg] !== undefined) val = this.state[arg];else if (this && this.props && typeof this.props[arg] !== undefined) val = this.props[arg];else if (rjx.props && typeof rjx.props[arg] !== undefined) val = rjx.props[arg];
 	    if (typeof val !== undefined) args.push(val);
-	    return args;
+	    return args.filter(a => typeof a !== 'undefined');
 	  };
 	}
 	/**
