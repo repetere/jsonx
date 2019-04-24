@@ -1,4 +1,4 @@
-import * as _rjxChildren from '../../src/children';
+import * as _jsonxChildren from '../../src/children';
 import mochaJSDOM from 'jsdom-global';
 import chai from 'chai';
 import sinon from 'sinon';
@@ -11,11 +11,11 @@ import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
 import 'mocha-sinon';
 
-const sampleRJX = {
+const sampleJSONX = {
   component: 'div',
   props: {
-    id: 'generatedRJX',
-    className:'rjx',
+    id: 'generatedJSONX',
+    className:'jsonx',
   },
   children: [
     {
@@ -53,7 +53,7 @@ const sampleRJX = {
   ],
 };
 
-const passableRJX = {
+const passableJSONX = {
   component: 'div',
   props: {
     title: 'this is passed',
@@ -79,37 +79,37 @@ const passableRJX = {
   ],
 };
 
-describe('rjx', function () { 
+describe('jsonx', function () { 
   describe('getChildrenProperty', () => {
-    const getChildrenProperty = _rjxChildren.getChildrenProperty;
-    it('should return the children of an RJX Object', () => {
-      const RJXChildren = getChildrenProperty({ rjx: sampleRJX, });
-      const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], });
-      expect(RJXChildren).to.be.an('array');
-      expect(RJXChildren.length).to.eql(sampleRJX.children.length);
-      expect(RJXChildrenPTag).to.be.a('string');
-      expect(RJXChildrenPTag).to.eql(sampleRJX.children[ 0 ].children);
+    const getChildrenProperty = _jsonxChildren.getChildrenProperty;
+    it('should return the children of an JSONX Object', () => {
+      const JSONXChildren = getChildrenProperty({ jsonx: sampleJSONX, });
+      const JSONXChildrenPTag = getChildrenProperty({ jsonx: sampleJSONX.children[ 0 ], });
+      expect(JSONXChildren).to.be.an('array');
+      expect(JSONXChildren.length).to.eql(sampleJSONX.children.length);
+      expect(JSONXChildrenPTag).to.be.a('string');
+      expect(JSONXChildrenPTag).to.eql(sampleJSONX.children[ 0 ].children);
       expect(getChildrenProperty({
-        rjx: {
+        jsonx: {
           props: { _children: {}, },
           children:'hello',
         },
       })).to.eql('hello');
       expect(getChildrenProperty({
-        rjx: {
+        jsonx: {
         },
       })).to.eql(null);
       expect(getChildrenProperty({ props: { children: [1, 2, 3,], }, })).to.be.an('array');
-      expect(getChildrenProperty({ rjx:{ props: { children: 'hello', }, },  })).to.eql('hello');
+      expect(getChildrenProperty({ jsonx:{ props: { children: 'hello', }, },  })).to.eql('hello');
     });
-    it('should get the children from rjx.props._children property', () => {
-      const testRJX = {
+    it('should get the children from jsonx.props._children property', () => {
+      const testJSONX = {
         component: 'div',
         props: {
           _children:'some text',
         },
       };
-      const testRJX2 = {
+      const testJSONX2 = {
         component: 'div',
         props: {
           _children: [
@@ -124,7 +124,7 @@ describe('rjx', function () {
           ],
         },
       };
-      const testRJX3 = {
+      const testJSONX3 = {
         component: 'div',
         props: {
           _children: 'some text',
@@ -141,24 +141,24 @@ describe('rjx', function () {
           },
         ],
       };
-      const RJXChildren = getChildrenProperty({ rjx: testRJX, });
-      const RJXChildren2 = getChildrenProperty({ rjx: testRJX2, });
-      const RJXChildren3 = getChildrenProperty({ rjx: testRJX3, });
-      expect(RJXChildren).to.be.a('string');
-      expect(RJXChildren).to.eql(testRJX.props._children);
-      expect(RJXChildren2).to.be.an('array');
-      expect(RJXChildren2.length).to.eql(testRJX2.props._children.length);
-      expect(RJXChildren3).to.be.a('string');
-      expect(RJXChildren3).to.eql(testRJX3.props._children);
+      const JSONXChildren = getChildrenProperty({ jsonx: testJSONX, });
+      const JSONXChildren2 = getChildrenProperty({ jsonx: testJSONX2, });
+      const JSONXChildren3 = getChildrenProperty({ jsonx: testJSONX3, });
+      expect(JSONXChildren).to.be.a('string');
+      expect(JSONXChildren).to.eql(testJSONX.props._children);
+      expect(JSONXChildren2).to.be.an('array');
+      expect(JSONXChildren2.length).to.eql(testJSONX2.props._children.length);
+      expect(JSONXChildren3).to.be.a('string');
+      expect(JSONXChildren3).to.eql(testJSONX3.props._children);
     });
-    it('should get the children from rjx.props.children property', () => {
-      const testRJX = {
+    it('should get the children from jsonx.props.children property', () => {
+      const testJSONX = {
         component: 'div',
         props: {
           children:'some text',
         },
       };
-      const testRJX2 = {
+      const testJSONX2 = {
         component: 'div',
         props: {
           children: [
@@ -173,7 +173,7 @@ describe('rjx', function () {
           ],
         },
       };
-      const testRJX3 = {
+      const testJSONX3 = {
         component: 'div',
         props: {
           children:'ignore this prop for children',
@@ -189,56 +189,56 @@ describe('rjx', function () {
           },
         ],
       };
-      const testRJX4 = {
+      const testJSONX4 = {
         component: 'div',
         props: {
           children:()=>'not valid, should be null',
         },
       };
-      const RJXChildren = getChildrenProperty({ rjx: testRJX, });
-      const RJXChildren2 = getChildrenProperty({ rjx: testRJX2, });
-      const RJXChildren3 = getChildrenProperty({ rjx: testRJX3, });
-      const RJXChildren4 = getChildrenProperty({ rjx: testRJX4, });
-      expect(RJXChildren).to.be.a('string');
-      expect(RJXChildren).to.eql(testRJX.props.children);
-      expect(RJXChildren2).to.be.an('array');
-      expect(RJXChildren2.length).to.eql(testRJX2.props.children.length);
-      expect(RJXChildren3).to.be.a('array');
-      expect(RJXChildren3).to.eql(testRJX3.children);
-      expect(RJXChildren4).to.be.a('function');
+      const JSONXChildren = getChildrenProperty({ jsonx: testJSONX, });
+      const JSONXChildren2 = getChildrenProperty({ jsonx: testJSONX2, });
+      const JSONXChildren3 = getChildrenProperty({ jsonx: testJSONX3, });
+      const JSONXChildren4 = getChildrenProperty({ jsonx: testJSONX4, });
+      expect(JSONXChildren).to.be.a('string');
+      expect(JSONXChildren).to.eql(testJSONX.props.children);
+      expect(JSONXChildren2).to.be.an('array');
+      expect(JSONXChildren2.length).to.eql(testJSONX2.props.children.length);
+      expect(JSONXChildren3).to.be.a('array');
+      expect(JSONXChildren3).to.eql(testJSONX3.children);
+      expect(JSONXChildren4).to.be.a('function');
     });
   });
   describe('getChildrenProps', () => {
-    const getChildrenProps = _rjxChildren.getChildrenProps;
-    const getChildrenProperty = _rjxChildren.getChildrenProperty;
-    it('should return child RJX if not passing props', () => {
+    const getChildrenProps = _jsonxChildren.getChildrenProps;
+    const getChildrenProperty = _jsonxChildren.getChildrenProperty;
+    it('should return child JSONX if not passing props', () => {
       const renderIndex = 1;
-      const childrjx = getChildrenProperty({ rjx: sampleRJX, })[0];
-      const childProps = getChildrenProps({ rjx: sampleRJX, childrjx, renderIndex, });
-      expect(childProps).to.eq(childrjx);
+      const childjsonx = getChildrenProperty({ jsonx: sampleJSONX, })[0];
+      const childProps = getChildrenProps({ jsonx: sampleJSONX, childjsonx, renderIndex, });
+      expect(childProps).to.eq(childjsonx);
     });
     it('should pass props except for styles', () => {
       const renderIndex = 1;
-      const childrjx_span = getChildrenProperty({ rjx: passableRJX, })[0];
-      const childrjx_p = getChildrenProperty({ rjx: passableRJX, })[1];
-      const childProps_span = getChildrenProps({ rjx: passableRJX, childrjx:childrjx_span, renderIndex, });
-      const childProps_p = getChildrenProps({ rjx: passableRJX, childrjx:childrjx_p, renderIndex, });
-      expect(childProps_span.props.title).to.eq(passableRJX.props.title);
-      expect(childProps_p.props.title).to.eq(passableRJX.props.title);
-      expect(childProps_p.props.style.color).to.eq(passableRJX.children[ 1 ].props.style.color);
+      const childjsonx_span = getChildrenProperty({ jsonx: passableJSONX, })[0];
+      const childjsonx_p = getChildrenProperty({ jsonx: passableJSONX, })[1];
+      const childProps_span = getChildrenProps({ jsonx: passableJSONX, childjsonx:childjsonx_span, renderIndex, });
+      const childProps_p = getChildrenProps({ jsonx: passableJSONX, childjsonx:childjsonx_p, renderIndex, });
+      expect(childProps_span.props.title).to.eq(passableJSONX.props.title);
+      expect(childProps_p.props.title).to.eq(passableJSONX.props.title);
+      expect(childProps_p.props.style.color).to.eq(passableJSONX.children[ 1 ].props.style.color);
       expect(childProps_p.props.key).to.not.eq(renderIndex);
       expect(childProps_span.props.key).to.not.eq(renderIndex);
     });
   });
-  describe('getRJXChildren', () => {
-    const getRJXChildren = _rjxChildren.getRJXChildren;
-    it('should return RJX Child Objects', () => {
+  describe('getJSONXChildren', () => {
+    const getJSONXChildren = _jsonxChildren.getJSONXChildren;
+    it('should return JSONX Child Objects', () => {
       const renderIndex = 1;
-      const RJXChildren = getRJXChildren.call({}, {
-        rjx: passableRJX,
+      const JSONXChildren = getJSONXChildren.call({}, {
+        jsonx: passableJSONX,
         renderIndex,
       });
-      RJXChildren.forEach(ReactiveJSON => {
+      JSONXChildren.forEach(ReactiveJSON => {
         expect(ReactiveJSON).to.be.an('object');
         expect(ReactiveJSON).to.haveOwnProperty('$$typeof');
         expect(ReactiveJSON).to.haveOwnProperty('type');
@@ -248,7 +248,7 @@ describe('rjx', function () {
       });
     });
     it('should return null on error', () => {
-      expect(getRJXChildren({ logError: () => { }, })).to.eql(null);
+      expect(getJSONXChildren({ logError: () => { }, })).to.eql(null);
 
     });
   });

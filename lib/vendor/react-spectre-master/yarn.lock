@@ -1089,7 +1089,7 @@
 "@lerna/get-npm-exec-opts@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@lerna/get-npm-exec-opts/-/get-npm-exec-opts-3.0.0.tgz#8fc7866e8d8e9a2f2dc385287ba32eb44de8bdeb"
-  integrity sha512-arcYUm+4xS8J3Palhl+5rRJXnZnFHsLFKHBxznkPIxjwGQeAEw7df38uHdVjEQ+HNeFmHnBgSqfbxl1VIw5DHg==
+  integrity sha512-arcYUm+4xS8J3Palhl+5rJSONXnZnFHsLFKHBxznkPIxjwGQeAEw7df38uHdVjEQ+HNeFmHnBgSqfbxl1VIw5DHg==
   dependencies:
     npmlog "^4.1.2"
 

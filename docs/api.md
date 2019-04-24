@@ -2,31 +2,31 @@
 
 # Function
 
-## `getChildrenProperty(options: Object, options.rjx: Object, options.props: Object): Object[]|String`
+## `getChildrenProperty(options: Object, options.jsonx: Object, options.props: Object): Object[]|String`
 
-returns a valid rjx.children property
+returns a valid jsonx.children property
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | options | Object |  |
-| options.rjx | Object | optional: true, default: {} | Valid RJX JSON |
-| options.props | Object | optional: true, default: options.rjx.children | Props to pull children Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) |
+| options.jsonx | Object | optional: true, default: {} | Valid JSONX JSON |
+| options.props | Object | optional: true, default: options.jsonx.children | Props to pull children Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops) |
 
-## `getChildrenProps(options: Object, options.rjx: Object, options.childrjx: Object, options.renderIndex: Number, options.props: Object): Object|String`
+## `getChildrenProps(options: Object, options.jsonx: Object, options.childjsonx: Object, options.renderIndex: Number, options.props: Object): Object|String`
 
 Used to pass properties down to child components if passprops is set to true
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | options | Object |  |
-| options.rjx | Object | optional: true, default: {} | Valid RJX JSON |
-| options.childrjx | Object | optional: true, default: {} | Valid RJX JSON |
+| options.jsonx | Object | optional: true, default: {} | Valid JSONX JSON |
+| options.childjsonx | Object | optional: true, default: {} | Valid JSONX JSON |
 | options.renderIndex | Number |  | React key property |
-| options.props | Object | optional: true, default: options.rjx.props | Props to pull children Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) |
+| options.props | Object | optional: true, default: options.jsonx.props | Props to pull children Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops) |
 
-## `getRJXChildren(options: *)`
+## `getJSONXChildren(options: *)`
 
-returns React Child Elements via RJX
+returns React Child Elements via JSONX
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
@@ -39,10 +39,10 @@ getBoundedComponents returns reactComponents with certain elements that have thi
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | options | Object |  | options for getBoundedComponents |
-| options.reactComponents | Object |  | all react components available for RJX |
-| boundedComponents | string[] |  | list of components to bind RJX this context (usually helpful for navigation and redux-router) |
+| options.reactComponents | Object |  | all react components available for JSONX |
+| boundedComponents | string[] |  | list of components to bind JSONX this context (usually helpful for navigation and redux-router) |
 
-## `getComponentFromLibrary(options: Object, options.componentLibraries: Object, options.rjx: Object): function|undefined`
+## `getComponentFromLibrary(options: Object, options.componentLibraries: Object, options.jsonx: Object): function|undefined`
 
 returns a react component from a component library
 
@@ -50,16 +50,16 @@ returns a react component from a component library
 | --- | --- | --- | --- |
 | options | Object |  | options for getComponentFromLibrary |
 | options.componentLibraries | Object | optional: true, default: {} | react component library like bootstrap |
-| options.rjx | Object | optional: true, default: {} | any valid RJX JSON |
+| options.jsonx | Object | optional: true, default: {} | any valid JSONX JSON |
 
-## `getComponentFromMap(options: Object, options.rjx: object, options.reactComponents: Object, options.componentLibraries: Object, options.logError: function, options.debug: boolean): string|function|class`
+## `getComponentFromMap(options: Object, options.jsonx: object, options.reactComponents: Object, options.componentLibraries: Object, options.logError: function, options.debug: boolean): string|function|class`
 
-returns a react element from rjx.component
+returns a react element from jsonx.component
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | options | Object |  | options for getComponentFromMap |
-| options.rjx | object | optional: true, default: {} | any valid RJX JSON object |
+| options.jsonx | object | optional: true, default: {} | any valid JSONX JSON object |
 | options.reactComponents | Object | optional: true, default: {} | react components to render |
 | options.componentLibraries | Object | optional: true, default: {} | react components to render from another component library like bootstrap or bulma |
 | options.logError | function | optional: true, default: console.error | error logging function |
@@ -90,7 +90,7 @@ Returns a new React Component
 | options.passprops | Boolean | optional: true | pass props to rendered component |
 | options.passstate | Boolean | optional: true | pass state as props to rendered component |
 | reactComponent | Object | optional: true, default: {} | an object of functions used for create-react-class |
-| reactComponent.render.body | Object |  | Valid RJX JSON |
+| reactComponent.render.body | Object |  | Valid JSONX JSON |
 | reactComponent.getDefaultProps.body | String |  | return an object for the default props |
 | reactComponent.getInitialState.body | String |  | return an object for the default state |
 
@@ -100,7 +100,7 @@ Returns new React Function Component
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
-| reactComponent | * |  | Valid RJX to render |
+| reactComponent | * |  | Valid JSONX to render |
 | functionBody | String |  | String of function component body |
 | options.name | String |  | Function Component name |
 
@@ -111,44 +111,44 @@ Returns new React Function Component
 
 ## `__express(filePath: string, options: object, options.__boundConfig: object, options.__DOCTYPE: string, callback: *)`
 
-Use RJX for express view rendering
+Use JSONX for express view rendering
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
-| filePath | string |  | path to rjx express view |
+| filePath | string |  | path to jsonx express view |
 | options | object |  | property used for express view {locals} |
-| options.__boundConfig | object |  | property used to bind this object for RJX, can be used to add custom components |
+| options.__boundConfig | object |  | property used to bind this object for JSONX, can be used to add custom components |
 | options.__DOCTYPE | string | optional: true, default: "<!DOCTYPE html>" | html doctype string |
 | callback | * |  |
 
-## `rjxRender(config: object, config.rjx: object, config.resources: object, config.querySelector: string)`
+## `jsonxRender(config: object, config.jsonx: object, config.resources: object, config.querySelector: string)`
 
-Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
+Use JSONX without any configuration to render JSONX JSON to HTML and insert JSONX into querySelector using ReactDOM.render
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | config | object |  | options used to inject html via ReactDOM.render |
-| config.rjx | object |  | any valid RJX JSON object |
+| config.jsonx | object |  | any valid JSONX JSON object |
 | config.resources | object |  | any additional resource used for asynchronous properties |
 | config.querySelector | string |  | selector for document.querySelector |
 
-## `outputHTML(config: object, config.rjx: object, config.resources: object): string`
+## `outputHTML(config: object, config.jsonx: object, config.resources: object): string`
 
-Use ReactDOMServer.renderToString to render html from RJX
+Use ReactDOMServer.renderToString to render html from JSONX
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | config | object |  | options used to inject html via ReactDOM.render |
-| config.rjx | object |  | any valid RJX JSON object |
+| config.jsonx | object |  | any valid JSONX JSON object |
 | config.resources | object |  | any additional resource used for asynchronous properties |
 
-## `getReactElementFromRJX(rjx: object, resources: object): function`
+## `getReactElementFromJSONX(jsonx: object, resources: object): function`
 
-Use React.createElement and RJX JSON to create React elements
+Use React.createElement and JSONX JSON to create React elements
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
-| rjx | object |  | any valid RJX JSON object |
+| jsonx | object |  | any valid JSONX JSON object |
 | resources | object |  | any additional resource used for asynchronous properties |
 
 ## `getReactElementFromJSON(options.type: Object|String, options.props: Object, options.children: String|[Object]): function`
@@ -161,35 +161,35 @@ converts a json object {type,props,children} into a react element
 | options.props | Object |  | props for react element |
 | options.children | String|[Object] |  | children elements |
 
-## `compile(rjx: Object, resources: Object): function`
+## `compile(jsonx: Object, resources: Object): function`
 
-converts a rjx json object into a react function component
+converts a jsonx json object into a react function component
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
-| rjx | Object |  | valid RJX JSON |
+| jsonx | Object |  | valid JSONX JSON |
 | resources | Object |  | props for react element |
 
 ## `outputJSX(json: Object): String`
 
-converts RJX JSON IR to JSX
+converts JSONX JSON IR to JSX
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | json | Object |  | {type,props,children} |
 
-## `outputJSON(rjx: object, resources: object): Object`
+## `outputJSON(jsonx: object, resources: object): Object`
 
-Compiles RJX into JSON IR format for react create element
+Compiles JSONX into JSON IR format for react create element
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
-| rjx | object |  | any valid RJX JSON object |
+| jsonx | object |  | any valid JSONX JSON object |
 | resources | object |  | any additional resource used for asynchronous properties |
 
 ## `jsonToJSX(json: Object): String`
 
-converts RJX JSON IR to JSX
+converts JSONX JSON IR to JSX
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
@@ -197,21 +197,21 @@ converts RJX JSON IR to JSX
 
 ## `__getReact(): Object`
 
-Exposes react module used in RJX
+Exposes react module used in JSONX
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 
 ## `__getReactDOM(): Object`
 
-Exposes react dom module used in RJX
+Exposes react dom module used in JSONX
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 
 ## `__getUseGlobalHook(): Object`
 
-Exposes global hook used in RJX
+Exposes global hook used in JSONX
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
@@ -224,7 +224,7 @@ returns the names of parameters from a function declaration
 | --- | --- | --- | --- |
 | func | Function |  |
 
-## `getRJXProps(traverseObject: Object, options: Object, options.rjx: Object, options.propName: Object): Object`
+## `getJSONXProps(traverseObject: Object, options: Object, options.jsonx: Object, options.propName: Object): Object`
 
 It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
 
@@ -232,12 +232,12 @@ It uses traverse on a traverseObject to returns a resolved object on propName. S
 | --- | --- | --- | --- |
 | traverseObject | Object | optional: true, default: {} | the object that contains values of propName |
 | options | Object |  |
-| options.rjx | Object |  | Valid RJX JSON |
-| options.propName | Object | optional: true, default: 'asyncprops' | Property on RJX to resolve values onto, i.e (asyncprops,thisprops,windowprops) |
+| options.jsonx | Object |  | Valid JSONX JSON |
+| options.propName | Object | optional: true, default: 'asyncprops' | Property on JSONX to resolve values onto, i.e (asyncprops,thisprops,windowprops) |
 
 ## `getChildrenComponents(options: *)`
 
-returns children rjx components defined on __spreadComponent spread over an array on props.__spread
+returns children jsonx components defined on __spreadComponent spread over an array on props.__spread
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
@@ -248,33 +248,33 @@ returns children rjx components defined on __spreadComponent spread over an arra
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 
-## `getEvalProps(options: Object, options.rjx: Object): Object`
+## `getEvalProps(options: Object, options.jsonx: Object): Object`
 
 Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | options | Object |  |
-| options.rjx | Object |  | Valid RJX JSON |
+| options.jsonx | Object |  | Valid JSONX JSON |
 
-## `getComponentProps(options: Object, options.rjx: Object, options.resources: Object): Object`
+## `getComponentProps(options: Object, options.jsonx: Object, options.resources: Object): Object`
 
-Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+Resolves jsonx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | options | Object |  |
-| options.rjx | Object |  | Valid RJX JSON |
+| options.jsonx | Object |  | Valid JSONX JSON |
 | options.resources | Object | optional: true, default: {} | object to use for resourceprops(asyncprops), usually a result of an asynchronous call |
 
-## `getReactComponentProps(options: Object, options.rjx: Object): Object`
+## `getReactComponentProps(options: Object, options.jsonx: Object): Object`
 
-Resolves rjx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | options | Object |  |
-| options.rjx | Object |  | Valid RJX JSON // * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call |
+| options.jsonx | Object |  | Valid JSONX JSON // * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call |
 
 ## `getFunctionFromProps(options: Object, options.propFunc: String, options.allProps: Object): Function`
 
@@ -284,53 +284,53 @@ Takes a function string and returns a function on either this.props or window. T
 | --- | --- | --- | --- |
 | options | Object |  |
 | options.propFunc | String | optional: true, default: 'func:' | function string, like func:window.LocalStorage.getItem or func:this.props.onClick or func:inline.myInlineFunction |
-| options.allProps | Object | optional: true, default: {} | merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents); |
+| options.allProps | Object | optional: true, default: {} | merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents); |
 
-## `getFunctionProps(options: Object, options.rjx: Object, options.allProps: Object): Object`
+## `getFunctionProps(options: Object, options.jsonx: Object, options.allProps: Object): Object`
 
-Returns a resolved object from function strings that has functions pulled from rjx.__functionProps
-
-| Name | Type | Attribute | Description |
-| --- | --- | --- | --- |
-| options | Object |  |
-| options.rjx | Object |  | Valid RJX JSON |
-| options.allProps | Object | optional: true, default: {} | merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents); |
-
-## `getWindowComponents(options: Object, options.rjx: Object, options.allProps: Object): Object`
-
-Returns a resolved object that has React Components pulled from window.__rjx_custom_elements
+Returns a resolved object from function strings that has functions pulled from jsonx.__functionProps
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | options | Object |  |
-| options.rjx | Object |  | Valid RJX JSON |
-| options.allProps | Object | optional: true, default: {} | merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents); |
+| options.jsonx | Object |  | Valid JSONX JSON |
+| options.allProps | Object | optional: true, default: {} | merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents); |
 
-## `getComputedProps(options: Object, options.rjx: Object, options.resources: Object, options.renderIndex: Number, options.logError: function, options.componentLibraries: Object, options.useReduxState: Boolean, options.ignoreReduxPropsInComponentLibraries: Boolean, options.debug: boolean)`
+## `getWindowComponents(options: Object, options.jsonx: Object, options.allProps: Object): Object`
+
+Returns a resolved object that has React Components pulled from window.__jsonx_custom_elements
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+| options | Object |  |
+| options.jsonx | Object |  | Valid JSONX JSON |
+| options.allProps | Object | optional: true, default: {} | merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents); |
+
+## `getComputedProps(options: Object, options.jsonx: Object, options.resources: Object, options.renderIndex: Number, options.logError: function, options.componentLibraries: Object, options.useReduxState: Boolean, options.ignoreReduxPropsInComponentLibraries: Boolean, options.debug: boolean)`
 
 Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | options | Object |  |
-| options.rjx | Object |  | Valid RJX JSON |
+| options.jsonx | Object |  | Valid JSONX JSON |
 | options.resources | Object | optional: true, default: {} | object to use for asyncprops, usually a result of an asynchronous call |
 | options.renderIndex | Number |  | number used for React key prop |
 | options.logError | function | optional: true, default: console.error | error logging function |
-| options.componentLibraries | Object | optional: true | react components to render with RJX |
+| options.componentLibraries | Object | optional: true | react components to render with JSONX |
 | options.useReduxState | Boolean | optional: true, default: true | use redux props in this.props |
 | options.ignoreReduxPropsInComponentLibraries | Boolean | optional: true, default: true | ignore redux props in this.props for component libraries, this is helpful incase these properties collide with component library element properties |
 | options.debug | boolean | optional: true, default: false | use debug messages |
 
-## `displayComponent(options: Object, options.rjx: Object, options.props: Object): Boolean`
+## `displayComponent(options: Object, options.jsonx: Object, options.props: Object): Boolean`
 
 Used to evaluate whether or not to render a component
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 | options | Object |  |
-| options.rjx | Object |  | Valid RJX JSON |
-| options.props | Object |  | Props to test comparison values against, usually Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) |
+| options.jsonx | Object |  | Valid JSONX JSON |
+| options.props | Object |  | Props to test comparison values against, usually Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops) |
 
 ## `getAdvancedBinding(): Boolean`
 
@@ -348,35 +348,35 @@ take an object of array paths to traverse and resolve
 | paths | Object |  | an object to resolve array property paths |
 | data | Object |  | object to traverse |
 
-## `validateRJX(rjx: Object, returnAllErrors: Boolean): Boolean|Error[]`
+## `validateJSONX(jsonx: Object, returnAllErrors: Boolean): Boolean|Error[]`
 
-Validates RJX JSON Syntax
+Validates JSONX JSON Syntax
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
-| rjx | Object |  | RJX JSON to validate |
+| jsonx | Object |  | JSONX JSON to validate |
 | returnAllErrors | Boolean | optional: true, default: false | flag to either throw error or to return all errors in an array of errors |
 
-## `validSimpleRJXSyntax(simpleRJX: Object): Boolean`
+## `validSimpleJSONXSyntax(simpleJSONX: Object): Boolean`
 
-validates simple RJX Syntax {[component]:{props,children}}
-
-| Name | Type | Attribute | Description |
-| --- | --- | --- | --- |
-| simpleRJX | Object |  | Any valid simple RJX Syntax |
-
-## `simpleRJXSyntax(simpleRJX: Object): Object`
-
-Transforms SimpleRJX to Valid RJX JSON {[component]:{props,children}} => {component,props,children}
+validates simple JSONX Syntax {[component]:{props,children}}
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
-| simpleRJX | Object |  | JSON Object |
+| simpleJSONX | Object |  | Any valid simple JSONX Syntax |
 
-## `getSimplifiedRJX(rjx: Object): Object`
+## `simpleJSONXSyntax(simpleJSONX: Object): Object`
 
-Transforms Valid RJX JSON to SimpleRJX {component,props,children} => {[component]:{props,children}}
+Transforms SimpleJSONX to Valid JSONX JSON {[component]:{props,children}} => {component,props,children}
 
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
-| rjx | Object |  | Valid RJX JSON object |
+| simpleJSONX | Object |  | JSON Object |
+
+## `getSimplifiedJSONX(jsonx: Object): Object`
+
+Transforms Valid JSONX JSON to SimpleJSONX {component,props,children} => {[component]:{props,children}}
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+| jsonx | Object |  | Valid JSONX JSON object |

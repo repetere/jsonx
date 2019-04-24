@@ -23,12 +23,12 @@
           "enable": false
         },
         "brand": {
-          "title": "RJX",
-          "description": "Reactive JSON (RJX) takes a RXJ JSON object and renders React components. RJX lets you get up and running with React without using JavaScript.",
-          "repository": "https://github.com/repetere/rjx",
-          "site": "https://repetere.github.io/rjx",
+          "title": "JSONX",
+          "description": "Reactive JSON (JSONX) takes a RXJ JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript.",
+          "repository": "https://github.com/repetere/jsonx",
+          "site": "https://repetere.github.io/jsonx",
           "author": "https://github.com/repetere",
-          "image": "https://rjx.io/favicon.png"
+          "image": "https://jsonx.io/favicon.png"
         },
         "manual": {
           "index": "./README.md",

@@ -1,11 +1,11 @@
 {
-  "name": "rjx",
-  "version": "3.0.3",
-  "description": "React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. RJX support React Function and Class Components, React Lazy and Suspense Content, and full support for React Hooks",
-  "main": "dist/rjx.cjs.js",
-  "module": "dist/rjx.esm.js",
-  "browser": "dist/rjx.umd.js",
-  "web": "dist/rjx.web.js",
+  "name": "jsonx",
+  "version": "0.9.0",
+  "description": "React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX support React Function and Class Components, React Lazy and Suspense Content, and full support for React Hooks",
+  "main": "dist/jsonx.cjs.js",
+  "module": "dist/jsonx.esm.js",
+  "browser": "dist/jsonx.umd.js",
+  "web": "dist/jsonx.web.js",
   "modules.root": "lib",
   "scripts": {
     "dev": "rollup -c -w",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/repetere/rjx.git"
+    "url": "git+https://github.com/repetere/jsonx.git"
   },
   "keywords": [
     "jsx",
@@ -27,7 +27,7 @@
     "json jsx",
     "jamstack",
     "json",
-    "rjx",
+    "jsonx",
     "reactive",
     "react-json",
     "react-json-schema",
@@ -40,9 +40,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/repetere/rjx/issues"
+    "url": "https://github.com/repetere/jsonx/issues"
   },
-  "homepage": "https://github.com/repetere/rjx#readme",
+  "homepage": "https://github.com/repetere/jsonx#readme",
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/plugin-external-helpers": "^7.2.0",

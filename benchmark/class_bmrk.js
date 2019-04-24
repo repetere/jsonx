@@ -1,31 +1,31 @@
 import Benchmark from 'benchmark';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-// import * as rjx from '../dist/rjx-server.esm';
-import * as rjx from '../src/main';
-import * as rjxComponents from '../src/components';
+// import * as jsonx from '../dist/jsonx-server.esm';
+import * as jsonx from '../src/main';
+import * as jsonxComponents from '../src/components';
 
 import util from 'util';
 
 /**
  * BASELINE
  * ---
-RJX Class x 20,260 ops/sec ±4.05% (76 runs sampled)
-RJX Function x 179,251 ops/sec ±0.66% (86 runs sampled)
+JSONX Class x 20,260 ops/sec ±4.05% (76 runs sampled)
+JSONX Function x 179,251 ops/sec ±0.66% (86 runs sampled)
 React Class x 952,871 ops/sec ±3.14% (70 runs sampled)
 React Function x 767,292,810 ops/sec ±1.00% (88 runs sampled)
-RJX & RJX Class x 6,296 ops/sec ±0.96% (86 runs sampled)
-RJX & RJX Function x 11,839 ops/sec ±0.88% (88 runs sampled)
+JSONX & JSONX Class x 6,296 ops/sec ±0.96% (86 runs sampled)
+JSONX & JSONX Function x 11,839 ops/sec ±0.88% (88 runs sampled)
 React & React Class x 806,450 ops/sec ±0.82% (87 runs sampled)
 React & React Function x 810,213 ops/sec ±0.82% (88 runs sampled)
-RJX & React Class x 11,981 ops/sec ±1.13% (87 runs sampled)
-RJX & React Function x 11,833 ops/sec ±2.16% (83 runs sampled)
-React & RJX Class x 732,506 ops/sec ±3.27% (82 runs sampled)
-React & RJX Function x 810,262 ops/sec ±0.72% (86 runs sampled)
+JSONX & React Class x 11,981 ops/sec ±1.13% (87 runs sampled)
+JSONX & React Function x 11,833 ops/sec ±2.16% (83 runs sampled)
+React & JSONX Class x 732,506 ops/sec ±3.27% (82 runs sampled)
+React & JSONX Function x 810,262 ops/sec ±0.72% (86 runs sampled)
 Fastest is React Function
  */
 
-const sampleRJX = {
+const sampleJSONX = {
   component: 'section',
   children: [
     {
@@ -42,10 +42,10 @@ const sampleRJX = {
       img: {
         // debug:true,
         props: {
-          src:'https://rjx.io/favicon.png',
+          src:'https://jsonx.io/favicon.png',
         },
         __dangerouslyEvalProps: {
-          alt:'"rjx"',
+          alt:'"jsonx"',
         },
         __dangerouslyBindEvalProps:{
           onClick:`(function(e){ 
@@ -59,12 +59,12 @@ const sampleRJX = {
 
 const sampleReact = React.createElement('section', {}, [
   React.createElement('div', { title: 'this is a div', 'data-attr': 5, key: 1, }, 'inside of div'),
-  React.createElement('img', { src: 'https://rjx.io/favicon.png', alt: 'rjx', key: 2, }),
+  React.createElement('img', { src: 'https://jsonx.io/favicon.png', alt: 'jsonx', key: 2, }),
 ]);
 
-const rjxClass = rjxComponents.getReactClassComponent({ render: { body: sampleRJX, }, });
+const jsonxClass = jsonxComponents.getReactClassComponent({ render: { body: sampleJSONX, }, });
 
-const rjxFunction = rjxComponents.getReactFunctionComponent(sampleRJX, '', {});
+const jsonxFunction = jsonxComponents.getReactFunctionComponent(sampleJSONX, '', {});
 
 class reactClass extends React.Component{
   render() {
@@ -78,11 +78,11 @@ const reactFunction = function reactFunction(props) {
 
 const suite = new Benchmark.Suite;
 // add tests
-suite.add('RJX Class', function () {
-  const rjxClass = rjxComponents.getReactClassComponent({ render: { body: sampleRJX, }, });
+suite.add('JSONX Class', function () {
+  const jsonxClass = jsonxComponents.getReactClassComponent({ render: { body: sampleJSONX, }, });
 });
-suite.add('RJX Function', function () {
-  const rjxFunction = rjxComponents.getReactFunctionComponent(sampleRJX, '', {});
+suite.add('JSONX Function', function () {
+  const jsonxFunction = jsonxComponents.getReactFunctionComponent(sampleJSONX, '', {});
 });
 suite.add('React Class', function () {
   class reactClass extends React.Component{
@@ -96,17 +96,17 @@ suite.add('React Function', function () {
     return sampleReact(props);
   };
 });
-suite.add('RJX & RJX Class', function () {
-  rjx.getRenderedJSON({
+suite.add('JSONX & JSONX Class', function () {
+  jsonx.getRenderedJSON({
     component: 'div', children: [
-      rjxClass,
+      jsonxClass,
     ],
   });
 });
-suite.add('RJX & RJX Function', function () {
-  rjx.getRenderedJSON({
+suite.add('JSONX & JSONX Function', function () {
+  jsonx.getRenderedJSON({
     component: 'div', children: [
-      rjxFunction,
+      jsonxFunction,
     ],
   });
 });
@@ -116,25 +116,25 @@ suite.add('React & React Class', function () {
 suite.add('React & React Function', function () {
   React.createElement('div', { }, [reactFunction,]);
 });
-suite.add('RJX & React Class', function () {
-  rjx.getRenderedJSON({
+suite.add('JSONX & React Class', function () {
+  jsonx.getRenderedJSON({
     component: 'div', children: [
       reactClass,
     ],
   });
 });
-suite.add('RJX & React Function', function () {
-  rjx.getRenderedJSON({
+suite.add('JSONX & React Function', function () {
+  jsonx.getRenderedJSON({
     component: 'div', children: [
       reactFunction,
     ],
   });
 });
-suite.add('React & RJX Class', function () {
-  React.createElement('div', { }, [rjxClass,]);
+suite.add('React & JSONX Class', function () {
+  React.createElement('div', { }, [jsonxClass,]);
 });
-suite.add('React & RJX Function', function () {
-  React.createElement('div', { }, [rjxFunction,]);
+suite.add('React & JSONX Function', function () {
+  React.createElement('div', { }, [jsonxFunction,]);
 });
 suite.on('cycle', function (event) {
   console.log(String(event.target));

@@ -8,9 +8,9 @@
 ## 2.6.0 (2019-04-19)
 
 - **Feat**
-  - Added new compilation options rjx.compile, rjx.outputJSON, rjx.outputHTML, rjx.outputJSX
+  - Added new compilation options jsonx.compile, jsonx.outputJSON, jsonx.outputHTML, jsonx.outputJSX
 - **Fix**
-  - pass functions in rjx object values
+  - pass functions in jsonx object values
 - **Chore**
   - added new benchmark tests
 

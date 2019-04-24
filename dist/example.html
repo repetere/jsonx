@@ -2,13 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>RJX TEST</title>
-    <script type="text/javascript" src="rjx.web.js"></script>
+    <title>JSONX TEST</title>
+    <script type="text/javascript" src="jsonx.web.js"></script>
     <script type="text/javascript">
-    window.React = rjx.__getReact();
-    window.ReactDOM = rjx.__getReactDOM();
+    window.React = jsonx.__getReact();
+    window.ReactDOM = jsonx.__getReactDOM();
     // shallowEqual=()=>{};
-    // console.log({rjx});
+    // console.log({jsonx});
     // console.log({React});
     </script>
     <!-- <script type="text/javascript" src="https://unpkg.com/react-md@1.9.2/dist/react-md.js"></script> -->
@@ -24,13 +24,13 @@
   <body>
     <div id="root"></div>
     <script type="text/javascript">
-      let c = rjx._rjxComponents.getFunctionFromEval({body:'console.log("hello")'});
-      const MyCustomComponent = rjx._rjxComponents.getReactClassComponent({
+      let c = jsonx._jsonxComponents.getFunctionFromEval({body:'console.log("hello")'});
+      const MyCustomComponent = jsonx._jsonxComponents.getReactClassComponent({
         //
         // Initialization function
         //
         getInitialState:{
-          body:'return { status:"not-loaded", name:"rjx test", customNumber:1, }',
+          body:'return { status:"not-loaded", name:"jsonx test", customNumber:1, }',
           arguments:[],
         },
         getDefaultProps:{
@@ -92,7 +92,7 @@
           },
         }
       })
-      const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunctionComponent({
+      const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({
         component:'div',
         props:{
           extra:'ok'
@@ -174,7 +174,7 @@
       `,{
         name:'IntroHook'
       })
-      const dynamicClassComponent = rjx._rjxComponents.getReactClassComponent({ 
+      const dynamicClassComponent = jsonx._jsonxComponents.getReactClassComponent({ 
         render:{
           body:{
             component:'div',children:'LOADED FROM LAZY Class',
@@ -189,13 +189,13 @@
           })
         }
       })
-      const textContext = rjx._rjxComponents.getReactContext({
+      const textContext = jsonx._jsonxComponents.getReactContext({
         value:{
           user:{ name:'john smith', activated: true, },
           settings: { use_offline: true, },
         },
       });
-      const dynamicFunctionComponent = rjx._rjxComponents.getReactFunctionComponent(
+      const dynamicFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
         { 
         component:'div',children:'LOADED FROM LAZY Function',
        },
@@ -210,11 +210,11 @@
         }
       })
       // console.log({MyCustomFunctionComponent});
-      const sampleRJX = {
+      const sampleJSONX = {
         component: 'div',
         props: {
-          id: 'generatedRJX',
-          className:'rjx',
+          id: 'generatedJSONX',
+          className:'jsonx',
           otherProp: 'testing Other Prop',
           style:{
             padding:'1rem',
@@ -285,7 +285,7 @@
             __dangerouslyEvalProps:{
               onClick:'()=>()=>alert("click works")'
             },
-            children:'Hello RJX World!',
+            children:'Hello JSONX World!',
           },
           {
             component:'p',
@@ -360,7 +360,7 @@
               passprops:true,
               children:[
                 {
-                  span:{children:'this is using shorthand rjx'}
+                  span:{children:'this is using shorthand jsonx'}
                 },
                 {
                   span:{
@@ -512,8 +512,8 @@
         }
       };
       console.log({boundConfig})
-      rjx.rjxRender.call(boundConfig,{ 
-        rjx: sampleRJX, 
+      jsonx.jsonxRender.call(boundConfig,{ 
+        jsonx: sampleJSONX, 
         resources: { 
           addedStatus:'LIVE',
           punc:'   !!!!'

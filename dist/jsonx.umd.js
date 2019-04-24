@@ -1,5 +1,8 @@
-var rjx = (function (exports) {
-	'use strict';
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(global = global || self, factory(global.jsonx = {}));
+}(this, function (exports) { 'use strict';
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -16580,15 +16583,15 @@ var rjx = (function (exports) {
 	/**
 	 * Used to evaluate whether or not to render a component
 	 * @param {Object} options 
-	 * @param {Object} options.rjx - Valid RJX JSON 
-	 * @param {Object} options.props - Props to test comparison values against, usually Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) 
+	 * @param {Object} options.jsonx - Valid JSONX JSON 
+	 * @param {Object} options.props - Props to test comparison values against, usually Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops) 
 	 * @returns {Boolean} returns true if all comparisons are true or if using or comparisons, at least one condition is true
 	 * @example
-	 const sampleRJX = {
+	 const sampleJSONX = {
 	  component: 'div',
 	  props: {
-	    id: 'generatedRJX',
-	    className: 'rjx',
+	    id: 'generatedJSONX',
+	    className: 'jsonx',
 	    bigNum: 1430931039,
 	    smallNum: 0.425,
 	    falsey: false,
@@ -16596,22 +16599,22 @@ var rjx = (function (exports) {
 	  },
 	  children: 'some div',
 	};
-	const testRJX = Object.assign({}, sampleRJX, {
+	const testJSONX = Object.assign({}, sampleJSONX, {
 	  comparisonprops: [{
 	    left: ['truthy',],
 	    operation:'==',
 	    right:['falsey',],
 	  }],
 	});
-	displayComponent({ rjx: testRJX, props: testRJX2.props, }) // => false
+	displayComponent({ jsonx: testJSONX, props: testJSONX2.props, }) // => false
 	 */
 
 	function displayComponent(options = {}) {
 	  const {
-	    rjx = {},
+	    jsonx = {},
 	    props
 	  } = options;
-	  const propsToCompare = rjx.comparisonprops;
+	  const propsToCompare = jsonx.comparisonprops;
 	  const comparisons = Array.isArray(propsToCompare) ? propsToCompare.map(comp => {
 	    const compares = {};
 
@@ -16623,7 +16626,7 @@ var rjx = (function (exports) {
 	      compares.right = comp.right;
 	    }
 
-	    const propcompares = traverse(compares, props || rjx.props);
+	    const propcompares = traverse(compares, props || jsonx.props);
 	    const opscompares = Object.assign({}, comp, propcompares); // console.debug({ opscompares, compares, renderedCompProps });
 
 	    switch (opscompares.operation) {
@@ -16703,11 +16706,11 @@ var rjx = (function (exports) {
 	  }) : [];
 	  const validProps = comparisons.filter(comp => comp === true);
 
-	  if (!rjx.comparisonprops) {
+	  if (!jsonx.comparisonprops) {
 	    return true;
-	  } else if (rjx.comparisonorprops && validProps.length < 1) {
+	  } else if (jsonx.comparisonorprops && validProps.length < 1) {
 	    return false;
-	  } else if (validProps.length !== comparisons.length && !rjx.comparisonorprops) {
+	  } else if (validProps.length !== comparisons.length && !jsonx.comparisonorprops) {
 	    return false;
 	  } else {
 	    return true;
@@ -16757,7 +16760,7 @@ var rjx = (function (exports) {
 	 * @example
 	 * const testObj = {
 	      user: {
-	        name: 'rjx',
+	        name: 'jsonx',
 	        description: 'react withouth javascript',
 	      },
 	      stats: {
@@ -16768,7 +16771,7 @@ var rjx = (function (exports) {
 	    };
 	const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
 
-	 traverse(testVals, testObj) // =>{ auth:'OAuth2', username:'rjx',  }
+	 traverse(testVals, testObj) // =>{ auth:'OAuth2', username:'jsonx',  }
 	 * @param {Object} paths - an object to resolve array property paths 
 	 * @param {Object} data - object to traverse
 	 * @returns {Object} resolved object with traversed properties
@@ -16796,91 +16799,91 @@ var rjx = (function (exports) {
 	  }, {});
 	}
 	/**
-	 * Validates RJX JSON Syntax
+	 * Validates JSONX JSON Syntax
 	 * @example
-	 * validateRJX({component:'p',children:'hello world'})=>true
-	 * validateRJX({children:'hello world'})=>throw SyntaxError('[0001] Missing React Component')
-	 * @param {Object} rjx - RJX JSON to validate 
+	 * validateJSONX({component:'p',children:'hello world'})=>true
+	 * validateJSONX({children:'hello world'})=>throw SyntaxError('[0001] Missing React Component')
+	 * @param {Object} jsonx - JSONX JSON to validate 
 	 * @param {Boolean} [returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
-	 * @returns {Boolean|Error[]} either returns true if RJX is valid, or throws validation error or returns list of errors in array
+	 * @returns {Boolean|Error[]} either returns true if JSONX is valid, or throws validation error or returns list of errors in array
 	 * @throws {SyntaxError|TypeError|ReferenceError}
 	 */
 
-	function validateRJX(rjx = {}, returnAllErrors = false) {
+	function validateJSONX(jsonx = {}, returnAllErrors = false) {
 	  const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops', 'thisstate'];
 	  const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps'];
-	  const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertRJXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'debug'].concat(dynamicPropsNames, evalPropNames);
+	  const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertJSONXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'debug'].concat(dynamicPropsNames, evalPropNames);
 	  let errors = [];
 
-	  if (!rjx.component) {
+	  if (!jsonx.component) {
 	    errors.push(SyntaxError('[0001] Missing React Component'));
 	  }
 
-	  if (rjx.props) {
-	    if (typeof rjx.props !== 'object' || Array.isArray(rjx.props)) {
-	      errors.push(TypeError('[0002] ' + rjx.component + ': props must be an Object / valid React props'));
+	  if (jsonx.props) {
+	    if (typeof jsonx.props !== 'object' || Array.isArray(jsonx.props)) {
+	      errors.push(TypeError('[0002] ' + jsonx.component + ': props must be an Object / valid React props'));
 	    }
 
-	    if (rjx.props.children && (typeof rjx.props.children !== 'string' || !Array.isArray(rjx.props.children))) {
-	      errors.push(TypeError('[0003] ' + rjx.component + ': props.children must be an array of RJX JSON objects or a string'));
+	    if (jsonx.props.children && (typeof jsonx.props.children !== 'string' || !Array.isArray(jsonx.props.children))) {
+	      errors.push(TypeError('[0003] ' + jsonx.component + ': props.children must be an array of JSONX JSON objects or a string'));
 	    }
 
-	    if (rjx.props._children && (typeof rjx.props._children !== 'string' || !Array.isArray(rjx.props._children))) {
-	      errors.push(TypeError('[0004] ' + rjx.component + ': props._children must be an array of RJX JSON objects or a string'));
+	    if (jsonx.props._children && (typeof jsonx.props._children !== 'string' || !Array.isArray(jsonx.props._children))) {
+	      errors.push(TypeError('[0004] ' + jsonx.component + ': props._children must be an array of JSONX JSON objects or a string'));
 	    }
 	  }
 
-	  if (rjx.children) {
-	    if (typeof rjx.children !== 'string' && !Array.isArray(rjx.children)) {
-	      errors.push(TypeError('[0005] ' + rjx.component + ': children must be an array of RJX JSON objects or a string'));
+	  if (jsonx.children) {
+	    if (typeof jsonx.children !== 'string' && !Array.isArray(jsonx.children)) {
+	      errors.push(TypeError('[0005] ' + jsonx.component + ': children must be an array of JSONX JSON objects or a string'));
 	    }
 
-	    if (Array.isArray(rjx.children)) {
-	      const childrenErrors = rjx.children.filter(c => typeof c === 'object').map(c => validateRJX(c, returnAllErrors));
+	    if (Array.isArray(jsonx.children)) {
+	      const childrenErrors = jsonx.children.filter(c => typeof c === 'object').map(c => validateJSONX(c, returnAllErrors));
 	      errors = errors.concat(...childrenErrors);
 	    }
 	  }
 
 	  dynamicPropsNames.forEach(dynamicprop => {
-	    const rjxDynamicProps = rjx[dynamicprop];
+	    const jsonxDynamicProps = jsonx[dynamicprop];
 
-	    if (rjxDynamicProps) {
+	    if (jsonxDynamicProps) {
 	      // if (dynamicprop === 'thisprops') {
-	      //   console.log({ dynamicprop, rjxDynamicProps });
+	      //   console.log({ dynamicprop, jsonxDynamicProps });
 	      // }
-	      if (typeof rjxDynamicProps !== 'object') {
+	      if (typeof jsonxDynamicProps !== 'object') {
 	        errors.push(TypeError(`[0006] ${dynamicprop} must be an object`));
 	      }
 
-	      Object.keys(rjxDynamicProps).forEach(resolvedDynamicProp => {
-	        if (!Array.isArray(rjxDynamicProps[resolvedDynamicProp])) {
-	          errors.push(TypeError(`[0007] rjx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
+	      Object.keys(jsonxDynamicProps).forEach(resolvedDynamicProp => {
+	        if (!Array.isArray(jsonxDynamicProps[resolvedDynamicProp])) {
+	          errors.push(TypeError(`[0007] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
 	        }
 
-	        if (Array.isArray(rjxDynamicProps[resolvedDynamicProp])) {
-	          const allStringArray = rjxDynamicProps[resolvedDynamicProp].filter(propArrayItem => typeof propArrayItem === 'string');
+	        if (Array.isArray(jsonxDynamicProps[resolvedDynamicProp])) {
+	          const allStringArray = jsonxDynamicProps[resolvedDynamicProp].filter(propArrayItem => typeof propArrayItem === 'string');
 
-	          if (allStringArray.length !== rjxDynamicProps[resolvedDynamicProp].length) {
-	            errors.push(TypeError(`[0008] rjx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
+	          if (allStringArray.length !== jsonxDynamicProps[resolvedDynamicProp].length) {
+	            errors.push(TypeError(`[0008] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
 	          }
 	        }
 	      });
 	    }
 	  });
-	  const evalProps = rjx.__dangerouslyEvalProps;
-	  const boundEvalProps = rjx.__dangerouslyBindEvalProps;
+	  const evalProps = jsonx.__dangerouslyEvalProps;
+	  const boundEvalProps = jsonx.__dangerouslyBindEvalProps;
 
 	  if (evalProps || boundEvalProps) {
 	    if (evalProps && typeof evalProps !== 'object' || boundEvalProps && typeof boundEvalProps !== 'object') {
 	      errors.push(TypeError('[0009] __dangerouslyEvalProps must be an object of strings to convert to valid javascript'));
 	    }
 
-	    evalPropNames.filter(evalProp => rjx[evalProp]).forEach(eProps => {
-	      const evProp = rjx[eProps];
+	    evalPropNames.filter(evalProp => jsonx[evalProp]).forEach(eProps => {
+	      const evProp = jsonx[eProps];
 	      const scopedEval = eval;
 	      Object.keys(evProp).forEach(propToEval => {
 	        if (typeof evProp[propToEval] !== 'string') {
-	          errors.push(TypeError(`[0010] rjx.${eProps}.${evProp} must be a string`));
+	          errors.push(TypeError(`[0010] jsonx.${eProps}.${evProp} must be a string`));
 	        }
 
 	        try {
@@ -16900,67 +16903,67 @@ var rjx = (function (exports) {
 	    });
 	  }
 
-	  if (rjx.__dangerouslyInsertComponents) {
-	    Object.keys(rjx.__dangerouslyInsertComponents).forEach(insertedComponents => {
+	  if (jsonx.__dangerouslyInsertComponents) {
+	    Object.keys(jsonx.__dangerouslyInsertComponents).forEach(insertedComponents => {
 	      try {
-	        validateRJX(rjx.__dangerouslyInsertComponents[insertedComponents]);
+	        validateJSONX(jsonx.__dangerouslyInsertComponents[insertedComponents]);
 	      } catch (e) {
-	        errors.push(TypeError(`[0011] rjx.__dangerouslyInsertComponents.${insertedComponents} must be a valid RJX JSON Object: ${e.toString()}`));
+	        errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${e.toString()}`));
 	      }
 	    });
 	  }
 
-	  if (rjx.__functionProps) {
-	    if (typeof rjx.__functionProps !== 'object') {
-	      errors.push(TypeError('[0012] rjx.__functionProps  must be an object'));
+	  if (jsonx.__functionProps) {
+	    if (typeof jsonx.__functionProps !== 'object') {
+	      errors.push(TypeError('[0012] jsonx.__functionProps  must be an object'));
 	    } else {
-	      Object.keys(rjx.__functionProps).forEach(fProp => {
-	        if (rjx.__functionProps[fProp] && (typeof rjx.__functionProps[fProp] !== 'string' || rjx.__functionProps[fProp].indexOf('func:') === -1)) {
-	          errors.push(ReferenceError(`[0013] rjx.__functionProps.${fProp} must reference a function (i.e. func:this.props.logoutUser())`));
+	      Object.keys(jsonx.__functionProps).forEach(fProp => {
+	        if (jsonx.__functionProps[fProp] && (typeof jsonx.__functionProps[fProp] !== 'string' || jsonx.__functionProps[fProp].indexOf('func:') === -1)) {
+	          errors.push(ReferenceError(`[0013] jsonx.__functionProps.${fProp} must reference a function (i.e. func:this.props.logoutUser())`));
 	        }
 	      });
 	    }
 	  }
 
-	  if (rjx.__windowComponentProps && (typeof rjx.__windowComponentProps !== 'object' || Array.isArray(rjx.__windowComponentProps))) {
-	    errors.push(TypeError('[0013] rjx.__windowComponentProps  must be an object'));
+	  if (jsonx.__windowComponentProps && (typeof jsonx.__windowComponentProps !== 'object' || Array.isArray(jsonx.__windowComponentProps))) {
+	    errors.push(TypeError('[0013] jsonx.__windowComponentProps  must be an object'));
 	  }
 
-	  if (rjx.__windowComponents) {
-	    if (typeof rjx.__windowComponents !== 'object') {
-	      errors.push(TypeError('[0014] rjx.__windowComponents must be an object'));
+	  if (jsonx.__windowComponents) {
+	    if (typeof jsonx.__windowComponents !== 'object') {
+	      errors.push(TypeError('[0014] jsonx.__windowComponents must be an object'));
 	    }
 
-	    Object.keys(rjx.__windowComponents).forEach(cProp => {
-	      if (typeof rjx.__windowComponents[cProp] !== 'string' || rjx.__windowComponents[cProp].indexOf('func:') === -1) {
-	        errors.push(ReferenceError(`[0015] rjx.__windowComponents.${cProp} must reference a window element on window.__rjx_custom_elements (i.e. func:window.__rjx_custom_elements.bootstrapModal)`));
+	    Object.keys(jsonx.__windowComponents).forEach(cProp => {
+	      if (typeof jsonx.__windowComponents[cProp] !== 'string' || jsonx.__windowComponents[cProp].indexOf('func:') === -1) {
+	        errors.push(ReferenceError(`[0015] jsonx.__windowComponents.${cProp} must reference a window element on window.__jsonx_custom_elements (i.e. func:window.__jsonx_custom_elements.bootstrapModal)`));
 	      }
 	    });
 	  }
 
-	  if (typeof rjx.comparisonorprops !== 'undefined' && typeof rjx.comparisonorprops !== 'boolean') {
-	    errors.push(TypeError('[0016] rjx.comparisonorprops  must be boolean'));
+	  if (typeof jsonx.comparisonorprops !== 'undefined' && typeof jsonx.comparisonorprops !== 'boolean') {
+	    errors.push(TypeError('[0016] jsonx.comparisonorprops  must be boolean'));
 	  }
 
-	  if (rjx.comparisonprops) {
-	    if (!Array.isArray(rjx.comparisonprops)) {
-	      errors.push(TypeError('[0017] rjx.comparisonprops  must be an array or comparisons'));
+	  if (jsonx.comparisonprops) {
+	    if (!Array.isArray(jsonx.comparisonprops)) {
+	      errors.push(TypeError('[0017] jsonx.comparisonprops  must be an array or comparisons'));
 	    } else {
-	      rjx.comparisonprops.forEach(c => {
+	      jsonx.comparisonprops.forEach(c => {
 	        if (typeof c !== 'object') {
-	          errors.push(TypeError('[0018] rjx.comparisonprops  must be an array or comparisons objects'));
+	          errors.push(TypeError('[0018] jsonx.comparisonprops  must be an array or comparisons objects'));
 	        } else if (typeof c.left === 'undefined') {
-	          errors.push(TypeError('[0019] rjx.comparisonprops  must be have a left comparison value'));
+	          errors.push(TypeError('[0019] jsonx.comparisonprops  must be have a left comparison value'));
 	        }
 	      });
 	    }
 	  }
 
-	  if (typeof rjx.passprops !== 'undefined' && typeof rjx.passprops !== 'boolean') {
-	    errors.push(TypeError('[0020] rjx.passprops  must be boolean'));
+	  if (typeof jsonx.passprops !== 'undefined' && typeof jsonx.passprops !== 'boolean') {
+	    errors.push(TypeError('[0020] jsonx.passprops  must be boolean'));
 	  }
 
-	  const invalidKeys = Object.keys(rjx).filter(key => validKeys.indexOf(key) === -1);
+	  const invalidKeys = Object.keys(jsonx).filter(key => validKeys.indexOf(key) === -1);
 
 	  if (errors.length) {
 	    if (returnAllErrors) return errors;
@@ -16970,68 +16973,68 @@ var rjx = (function (exports) {
 	  return invalidKeys.length ? `Warning: Invalid Keys [${invalidKeys.join()}]` : true;
 	}
 	/**
-	 * validates simple RJX Syntax {[component]:{props,children}}
-	 * @param {Object} simpleRJX - Any valid simple RJX Syntax
-	 * @return {Boolean} returns true if simpleRJX is valid
+	 * validates simple JSONX Syntax {[component]:{props,children}}
+	 * @param {Object} simpleJSONX - Any valid simple JSONX Syntax
+	 * @return {Boolean} returns true if simpleJSONX is valid
 	 */
 
-	function validSimpleRJXSyntax(simpleRJX = {}) {
-	  if (Object.keys(simpleRJX).length !== 1 && !simpleRJX.component) {
+	function validSimpleJSONXSyntax(simpleJSONX = {}) {
+	  if (Object.keys(simpleJSONX).length !== 1 && !simpleJSONX.component) {
 	    return false;
 	  } else {
-	    const componentName = Object.keys(simpleRJX)[0];
-	    return Object.keys(simpleRJX).length === 1 && !simpleRJX[componentName].component && typeof simpleRJX[componentName] === 'object' ? true : false;
+	    const componentName = Object.keys(simpleJSONX)[0];
+	    return Object.keys(simpleJSONX).length === 1 && !simpleJSONX[componentName].component && typeof simpleJSONX[componentName] === 'object' ? true : false;
 	  }
 	}
 	/**
-	 * Transforms SimpleRJX to Valid RJX JSON {[component]:{props,children}} => {component,props,children}
-	 * @param {Object} simpleRJX JSON Object 
-	 * @return {Object} - returns a valid RJX JSON Object from a simple RJX JSON Object
+	 * Transforms SimpleJSONX to Valid JSONX JSON {[component]:{props,children}} => {component,props,children}
+	 * @param {Object} simpleJSONX JSON Object 
+	 * @return {Object} - returns a valid JSONX JSON Object from a simple JSONX JSON Object
 	 */
 
-	function simpleRJXSyntax(simpleRJX = {}) {
-	  const component = Object.keys(simpleRJX)[0];
+	function simpleJSONXSyntax(simpleJSONX = {}) {
+	  const component = Object.keys(simpleJSONX)[0];
 
 	  try {
 	    return Object.assign({}, {
 	      component
-	    }, simpleRJX[component], {
-	      children: simpleRJX[component].children && Array.isArray(simpleRJX[component].children) ? simpleRJX[component].children.map(simpleRJXSyntax) : simpleRJX[component].children
+	    }, simpleJSONX[component], {
+	      children: simpleJSONX[component].children && Array.isArray(simpleJSONX[component].children) ? simpleJSONX[component].children.map(simpleJSONXSyntax) : simpleJSONX[component].children
 	    });
 	  } catch (e) {
 	    throw SyntaxError('Invalid Simple RXJ Syntax', e);
 	  }
 	}
 	/**
-	 * Transforms Valid RJX JSON to SimpleRJX  {component,props,children} => {[component]:{props,children}}
-	 * @param {Object} rjx Valid RJX JSON object 
-	 * @return {Object} - returns a simple RJX JSON Object from a valid RJX JSON Object 
+	 * Transforms Valid JSONX JSON to SimpleJSONX  {component,props,children} => {[component]:{props,children}}
+	 * @param {Object} jsonx Valid JSONX JSON object 
+	 * @return {Object} - returns a simple JSONX JSON Object from a valid JSONX JSON Object 
 	 */
 
-	function getSimplifiedRJX(rjx = {}) {
+	function getSimplifiedJSONX(jsonx = {}) {
 	  try {
-	    if (!rjx.component) return rjx; //already simple
+	    if (!jsonx.component) return jsonx; //already simple
 
-	    const componentName = rjx.component;
-	    rjx.children = Array.isArray(rjx.children) ? rjx.children.filter(child => child) //remove empty children
-	    .map(getSimplifiedRJX) : rjx.children;
-	    delete rjx.component;
+	    const componentName = jsonx.component;
+	    jsonx.children = Array.isArray(jsonx.children) ? jsonx.children.filter(child => child) //remove empty children
+	    .map(getSimplifiedJSONX) : jsonx.children;
+	    delete jsonx.component;
 	    return {
-	      [componentName]: rjx
+	      [componentName]: jsonx
 	    };
 	  } catch (e) {
 	    throw e;
 	  }
 	}
 
-	var rjxUtils = /*#__PURE__*/Object.freeze({
+	var jsonxUtils = /*#__PURE__*/Object.freeze({
 		displayComponent: displayComponent,
 		getAdvancedBinding: getAdvancedBinding,
 		traverse: traverse,
-		validateRJX: validateRJX,
-		validSimpleRJXSyntax: validSimpleRJXSyntax,
-		simpleRJXSyntax: simpleRJXSyntax,
-		getSimplifiedRJX: getSimplifiedRJX
+		validateJSONX: validateJSONX,
+		validSimpleJSONXSyntax: validSimpleJSONXSyntax,
+		simpleJSONXSyntax: simpleJSONXSyntax,
+		getSimplifiedJSONX: getSimplifiedJSONX
 	});
 
 	/**
@@ -17992,21 +17995,21 @@ var rjx = (function (exports) {
 	let advancedBinding = getAdvancedBinding(); // require;
 
 	/**
-	 * object of all react components available for RJX
+	 * object of all react components available for JSONX
 	 * @memberOf components
 	 */
 
 	let componentMap = Object.assign({
 	  Fragment: react_5,
 	  Suspense: react_6
-	}, reactDomFactories, typeof window === 'object' ? window.__rjx_custom_elements : {});
+	}, reactDomFactories, typeof window === 'object' ? window.__jsonx_custom_elements : {});
 	/**
 	 * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
 	 * @memberOf components
 	 * @param {Object} options - options for getBoundedComponents 
-	 * @param {Object} options.reactComponents - all react components available for RJX
-	 * @param {string[]} boundedComponents - list of components to bind RJX this context (usually helpful for navigation and redux-router)
-	 * @returns {Object} reactComponents object of all react components available for RJX
+	 * @param {Object} options.reactComponents - all react components available for JSONX
+	 * @param {string[]} boundedComponents - list of components to bind JSONX this context (usually helpful for navigation and redux-router)
+	 * @returns {Object} reactComponents object of all react components available for JSONX
 	 */
 
 	function getBoundedComponents(options = {}) {
@@ -18027,17 +18030,17 @@ var rjx = (function (exports) {
 	 * @memberOf components
 	 * @param {Object} options - options for getComponentFromLibrary
 	 * @param {Object} [options.componentLibraries={}] - react component library like bootstrap
-	 * @param {Object} [options.rjx={}] - any valid RJX JSON
+	 * @param {Object} [options.jsonx={}] - any valid JSONX JSON
 	 * @returns {function|undefined} react component from react library like bootstrap, material design or bulma
 	 */
 
 	function getComponentFromLibrary(options = {}) {
 	  const {
 	    componentLibraries = {},
-	    rjx = {}
+	    jsonx = {}
 	  } = options;
 	  const libComponent = Object.keys(componentLibraries).map(libraryName => {
-	    const cleanLibraryName = rjx.component.replace(`${libraryName}.`, '');
+	    const cleanLibraryName = jsonx.component.replace(`${libraryName}.`, '');
 	    const libraryNameArray = cleanLibraryName.split('.');
 
 	    if (libraryNameArray.length === 2 && componentLibraries[libraryName] && componentLibraries[libraryName][libraryNameArray[0]] && typeof componentLibraries[libraryName][libraryNameArray[0]][libraryNameArray[1]] !== 'undefined') {
@@ -18049,15 +18052,15 @@ var rjx = (function (exports) {
 	  return libComponent;
 	}
 	/**
-	 * returns a react element from rjx.component
+	 * returns a react element from jsonx.component
 	 * @memberOf components
 	 * @example
 	 * // returns react elements
-	 * getComponentFromMap({rjx:{component:'div'}})=>div
-	 * getComponentFromMap({rjx:{component:'MyModal'},reactComponents:{MyModal:MyModal extends React.Component}})=>MyModal
-	 * getComponentFromMap({rjx:{component:'reactBootstap.nav'},componentLibraries:{reactBootstrap,}})=>reactBootstap.nav
+	 * getComponentFromMap({jsonx:{component:'div'}})=>div
+	 * getComponentFromMap({jsonx:{component:'MyModal'},reactComponents:{MyModal:MyModal extends React.Component}})=>MyModal
+	 * getComponentFromMap({jsonx:{component:'reactBootstap.nav'},componentLibraries:{reactBootstrap,}})=>reactBootstap.nav
 	 * @param {Object} options - options for getComponentFromMap
-	 * @param {object} [options.rjx={}] - any valid RJX JSON object
+	 * @param {object} [options.jsonx={}] - any valid JSONX JSON object
 	 * @param {Object} [options.reactComponents={}] - react components to render
 	 * @param {Object} [options.componentLibraries={}] - react components to render from another component library like bootstrap or bulma
 	 * @param {function} [options.logError=console.error] - error logging function
@@ -18068,7 +18071,7 @@ var rjx = (function (exports) {
 	function getComponentFromMap(options = {}) {
 	  // eslint-disable-next-line
 	  const {
-	    rjx = {},
+	    jsonx = {},
 	    reactComponents = {},
 	    componentLibraries = {},
 	    logError = console.error,
@@ -18076,22 +18079,22 @@ var rjx = (function (exports) {
 	  } = options;
 
 	  try {
-	    if (typeof rjx.component !== 'string' && typeof rjx.component === 'function') {
-	      return rjx.component;
-	    } else if (reactDomFactories[rjx.component]) {
-	      return rjx.component;
-	    } else if (reactComponents[rjx.component]) {
-	      return reactComponents[rjx.component];
-	    } else if (typeof rjx.component === 'string' && rjx.component.indexOf('.') > 0 && getComponentFromLibrary({
-	      rjx,
+	    if (typeof jsonx.component !== 'string' && typeof jsonx.component === 'function') {
+	      return jsonx.component;
+	    } else if (reactDomFactories[jsonx.component]) {
+	      return jsonx.component;
+	    } else if (reactComponents[jsonx.component]) {
+	      return reactComponents[jsonx.component];
+	    } else if (typeof jsonx.component === 'string' && jsonx.component.indexOf('.') > 0 && getComponentFromLibrary({
+	      jsonx,
 	      componentLibraries
 	    })) {
 	      return getComponentFromLibrary({
-	        rjx,
+	        jsonx,
 	        componentLibraries
 	      });
 	    } else {
-	      throw new ReferenceError(`Invalid React Component (${rjx.component})`);
+	      throw new ReferenceError(`Invalid React Component (${jsonx.component})`);
 	    }
 	  } catch (e) {
 	    if (debug) logError(e, e.stack ? e.stack : 'no stack');
@@ -18128,7 +18131,7 @@ var rjx = (function (exports) {
 	 * @param {Boolean} [options.passprops ] - pass props to rendered component
 	 * @param {Boolean} [options.passstate] - pass state as props to rendered component
 	 * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
-	 * @param {Object} reactComponent.render.body - Valid RJX JSON
+	 * @param {Object} reactComponent.render.body - Valid JSONX JSON
 	 * @param {String} reactComponent.getDefaultProps.body - return an object for the default props
 	 * @param {String} reactComponent.getInitialState.body - return an object for the default state
 	 * @returns {Function} 
@@ -18192,7 +18195,7 @@ var rjx = (function (exports) {
 	      result[val] = function () {
 	        if (options.passprops && this.props) body.props = Object.assign({}, body.props, this.props);
 	        if (options.passstate && this.state) body.props = Object.assign({}, body.props, this.state);
-	        return getReactElementFromRJX.call(Object.assign({}, context, bindContext ? this : {}, {
+	        return getReactElementFromJSONX.call(Object.assign({}, context, bindContext ? this : {}, {
 	          disableRenderIndexKey
 	        }, {
 	          props: use_getState ? Object.assign({}, this.props, {
@@ -18224,13 +18227,13 @@ var rjx = (function (exports) {
 	 * Returns new React Function Component
 	 * @memberOf components
 	 * @todo set 'functionprops' to set arguments for function
-	 * @param {*} reactComponent - Valid RJX to render
+	 * @param {*} reactComponent - Valid JSONX to render
 	 * @param {String} functionBody - String of function component body
 	 * @param {String} options.name - Function Component name 
 	 * @returns {Function}
 	 * @see {@link https://reactjs.org/docs/hooks-intro.html}
 	 * @example
-	  const rjxRender = {
+	  const jsonxRender = {
 	   component:'div',
 	   passprops:'true',
 	   children:[ 
@@ -18257,7 +18260,7 @@ var rjx = (function (exports) {
 	  };
 	  const functionBody = 'const [count, setCount] = useState(0); const functionprops = {count,setCount};'
 	  const options = { name: IntroHook}
-	  const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunctionComponent({rjxRender, functionBody, options});
+	  const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({jsonxRender, functionBody, options});
 	   */
 
 	function getReactFunctionComponent(reactComponent = {}, functionBody = '', options = {}) {
@@ -18276,9 +18279,9 @@ var rjx = (function (exports) {
 	    args = []
 	  } = options;
 	  const props = reactComponent.props;
-	  const functionArgs = [react, react_9, react_10, react_11, react_12, react_13, react_14, react_15, react_16, react_17, react_18, getReactElementFromRJX, reactComponent, resources, props];
+	  const functionArgs = [react, react_9, react_10, react_11, react_12, react_13, react_14, react_15, react_16, react_17, react_18, getReactElementFromJSONX, reactComponent, resources, props];
 	  if (typeof functionBody === 'function') functionBody = functionBody.toString();
-	  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromRJX', 'reactComponent', 'resources', 'props', `
+	  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromJSONX', 'reactComponent', 'resources', 'props', `
       return function ${options.name || 'Anonymous'}(props){
         ${functionBody}
         if(typeof exposeProps!=='undefined'){
@@ -18289,7 +18292,7 @@ var rjx = (function (exports) {
         }
         if(!props.children) delete props.children;
   
-        return getReactElementFromRJX.call(this, reactComponent);
+        return getReactElementFromJSONX.call(this, reactComponent);
       }
     `);
 
@@ -18309,7 +18312,7 @@ var rjx = (function (exports) {
 	  return react_4(options.value);
 	}
 
-	var rjxComponents = /*#__PURE__*/Object.freeze({
+	var jsonxComponents = /*#__PURE__*/Object.freeze({
 		advancedBinding: advancedBinding,
 		componentMap: componentMap,
 		getBoundedComponents: getBoundedComponents,
@@ -18352,13 +18355,13 @@ var rjx = (function (exports) {
 	 * It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
 	 * @param {Object} [traverseObject={}] - the object that contains values of propName
 	 * @param {Object} options 
-	 * @param {Object} options.rjx - Valid RJX JSON 
-	 * @param {Object} [options.propName='asyncprops'] - Property on RJX to resolve values onto, i.e (asyncprops,thisprops,windowprops) 
+	 * @param {Object} options.jsonx - Valid JSONX JSON 
+	 * @param {Object} [options.propName='asyncprops'] - Property on JSONX to resolve values onto, i.e (asyncprops,thisprops,windowprops) 
 	 * @returns {Object} resolved object
 	 * @example
 	 const traverseObject = {
 	  user: {
-	    name: 'rjx',
+	    name: 'jsonx',
 	    description: 'react withouth javascript',
 	  },
 	  stats: {
@@ -18367,11 +18370,11 @@ var rjx = (function (exports) {
 	  },
 	  authentication: 'OAuth2',
 	};
-	const testRJX = {
+	const testJSONX = {
 	  component: 'div',
 	  props: {
-	    id: 'generatedRJX',
-	    className:'rjx',
+	    id: 'generatedJSONX',
+	    className:'jsonx',
 	  },
 	  asyncprops:{
 	    auth: [ 'authentication', ],
@@ -18390,20 +18393,20 @@ var rjx = (function (exports) {
 	    },
 	  ],
 	};
-	const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
+	const JSONXP = getJSONXProps({ jsonx: testJSONX, traverseObject, });
 	// => {
 	//   auth: 'OAuth2',
-	//   username: 'rjx'
+	//   username: 'jsonx'
 	// }
 
 	//finally resolves:
-	const testRJX = {
+	const testJSONX = {
 	  component: 'div',
 	  props: {
-	    id: 'generatedRJX',
-	    className:'rjx',
+	    id: 'generatedJSONX',
+	    className:'jsonx',
 	    auth: 'OAuth2',
-	    username: 'rjx',
+	    username: 'jsonx',
 	  },
 	  children: [
 	    {
@@ -18420,31 +18423,31 @@ var rjx = (function (exports) {
 	};
 	 */
 
-	function getRJXProps(options = {}) {
+	function getJSONXProps(options = {}) {
 	  // eslint-disable-next-line
 	  let {
-	    rjx = {},
+	    jsonx = {},
 	    propName = 'asyncprops',
 	    traverseObject = {}
-	  } = options; // return (rjx.asyncprops && typeof rjx.asyncprops === 'object')
-	  // ? utilities.traverse(rjx.asyncprops, resources)
+	  } = options; // return (jsonx.asyncprops && typeof jsonx.asyncprops === 'object')
+	  // ? utilities.traverse(jsonx.asyncprops, resources)
 	  // : {};
 
-	  return rjx[propName] && typeof rjx[propName] === 'object' ? traverse(rjx[propName], traverseObject) : {};
+	  return jsonx[propName] && typeof jsonx[propName] === 'object' ? traverse(jsonx[propName], traverseObject) : {};
 	}
 	/**
-	 * returns children rjx components defined on __spreadComponent spread over an array on props.__spread
+	 * returns children jsonx components defined on __spreadComponent spread over an array on props.__spread
 	 * @param {*} options 
 	 */
 
 	function getChildrenComponents(options = {}) {
 	  const {
 	    allProps = {},
-	    rjx = {}
-	  } = options; // const asyncprops = getRJXProps({ rjx, propName: 'spreadprops', traverseObject: allProps, });
+	    jsonx = {}
+	  } = options; // const asyncprops = getJSONXProps({ jsonx, propName: 'spreadprops', traverseObject: allProps, });
 
 	  if (Array.isArray(allProps.__spread) === false) {
-	    if (this && this.debug || rjx.debug) {
+	    if (this && this.debug || jsonx.debug) {
 	      return {
 	        children: new Error('Using __spreadComponent requires an array prop \'__spread\'').toString()
 	      };
@@ -18456,7 +18459,7 @@ var rjx = (function (exports) {
 	  } else {
 	    return {
 	      _children: allProps.__spread.map(__item => {
-	        const clonedChild = Object.assign({}, rjx.__spreadComponent);
+	        const clonedChild = Object.assign({}, jsonx.__spreadComponent);
 	        const clonedChildProps = Object.assign({}, clonedChild.props);
 	        clonedChildProps.__item = __item;
 	        clonedChild.props = clonedChildProps;
@@ -18465,10 +18468,10 @@ var rjx = (function (exports) {
 	    };
 	  }
 	}
-	function boundArgsReducer(rjx = {}) {
+	function boundArgsReducer(jsonx = {}) {
 	  return (args, arg) => {
 	    let val;
-	    if (this && this.state && typeof this.state[arg] !== undefined) val = this.state[arg];else if (this && this.props && typeof this.props[arg] !== undefined) val = this.props[arg];else if (rjx.props && typeof rjx.props[arg] !== undefined) val = rjx.props[arg];
+	    if (this && this.state && typeof this.state[arg] !== undefined) val = this.state[arg];else if (this && this.props && typeof this.props[arg] !== undefined) val = this.props[arg];else if (jsonx.props && typeof jsonx.props[arg] !== undefined) val = jsonx.props[arg];
 	    if (typeof val !== undefined) args.push(val);
 	    return args.filter(a => typeof a !== 'undefined');
 	  };
@@ -18476,98 +18479,98 @@ var rjx = (function (exports) {
 	/**
 	 * Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
 	 * @param {Object} options 
-	 * @param {Object} options.rjx - Valid RJX JSON 
+	 * @param {Object} options.jsonx - Valid JSONX JSON 
 	 * @returns {Object} returns resolved object with evaluated javascript
 	 * @example
 	 const testVals = {
 	    auth: 'true',
 	    username: '(user={})=>user.name',
 	  };
-	  const testRJX = Object.assign({}, sampleRJX, {
+	  const testJSONX = Object.assign({}, sampleJSONX, {
 	    __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {
 	      email: '(function getUser(user={}){ return this.testBound(); })',
 	    },
 	  });
-	  const RJXP = getEvalProps.call({ testBound: () => 'bounded', }, { rjx: testRJX, });
-	  const evalutedComputedFunc = RJXP.username({ name: 'bob', });
-	  const evalutedComputedBoundFunc = RJXP.email({ email:'test@email.domain', });
-	  // expect(RJXP.auth).to.be.true;
+	  const JSONXP = getEvalProps.call({ testBound: () => 'bounded', }, { jsonx: testJSONX, });
+	  const evalutedComputedFunc = JSONXP.username({ name: 'bob', });
+	  const evalutedComputedBoundFunc = JSONXP.email({ email:'test@email.domain', });
+	  // expect(JSONXP.auth).to.be.true;
 	  // expect(evalutedComputedFunc).to.eql('bob');
 	  // expect(evalutedComputedBoundFunc).to.eql('bounded');
 	 */
 
 	function getEvalProps(options = {}) {
 	  const {
-	    rjx
+	    jsonx
 	  } = options;
 	  const scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
 
 	  let evAllProps = {};
 
-	  if (rjx.__dangerouslyEvalAllProps) {
+	  if (jsonx.__dangerouslyEvalAllProps) {
 	    let evVal;
 
 	    try {
 	      // eslint-disable-next-line
-	      evVal = typeof evVal === 'function' ? rjx.__dangerouslyEvalAllProps : scopedEval(rjx.__dangerouslyEvalAllProps);
+	      evVal = typeof evVal === 'function' ? jsonx.__dangerouslyEvalAllProps : scopedEval(jsonx.__dangerouslyEvalAllProps);
 	    } catch (e) {
-	      if (this.debug || rjx.debug) evVal = e;
+	      if (this.debug || jsonx.debug) evVal = e;
 	    }
 
 	    evAllProps = evVal.call(this, {
-	      rjx
+	      jsonx
 	    });
 	  }
 
-	  const evProps = Object.keys(rjx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
+	  const evProps = Object.keys(jsonx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
 	    let evVal;
 	    let evValString;
 
 	    try {
 	      // eslint-disable-next-line
-	      evVal = scopedEval(rjx.__dangerouslyEvalProps[epropName]);
+	      evVal = scopedEval(jsonx.__dangerouslyEvalProps[epropName]);
 	      evValString = evVal.toString();
 	    } catch (e) {
-	      if (this.debug || rjx.debug) evVal = e;
+	      if (this.debug || jsonx.debug) evVal = e;
 	    }
 
 	    eprops[epropName] = typeof evVal === 'function' ? evVal.call(this, {
-	      rjx
+	      jsonx
 	    }) : evVal;
 	    if (this.exposeEval) eprops[`__eval_${epropName}`] = evValString;
 	    return eprops;
 	  }, {});
-	  const evBindProps = Object.keys(rjx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
+	  const evBindProps = Object.keys(jsonx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
 	    let evVal;
 	    let evValString;
 
 	    try {
 	      let args;
-	      const functionBody = rjx.__dangerouslyBindEvalProps[epropName]; // InlineFunction = Function.prototype.constructor.apply({}, args);
+	      const functionBody = jsonx.__dangerouslyBindEvalProps[epropName]; // InlineFunction = Function.prototype.constructor.apply({}, args);
 
 	      let functionDefinition;
 
 	      if (typeof functionBody === 'function') {
 	        functionDefinition = functionBody;
 	      } else {
-	        functionDefinition = scopedEval(rjx.__dangerouslyBindEvalProps[epropName]);
+	        functionDefinition = scopedEval(jsonx.__dangerouslyBindEvalProps[epropName]);
 	        evValString = functionDefinition.toString();
 	      } // eslint-disable-next-line
 
 
-	      if (rjx.__functionargs && rjx.__functionargs[epropName]) {
-	        args = [this].concat(rjx.__functionargs[epropName].reduce(boundArgsReducer.call(this, rjx), []));
-	      } else if (rjx.__functionparams === false) {
+	      if (jsonx.__functionargs && jsonx.__functionargs[epropName]) {
+	        args = [this].concat(jsonx.__functionargs[epropName].reduce(boundArgsReducer.call(this, jsonx), []));
+	      } else if (jsonx.__functionparams === false) {
 	        args = [this];
 	      } else {
 	        const functionDefArgs = getParamNames(functionDefinition);
-	        args = [this].concat(functionDefArgs.reduce(boundArgsReducer.call(this, rjx), []));
+	        args = [this].concat(functionDefArgs.reduce(boundArgsReducer.call(this, jsonx), []));
 	      } // eslint-disable-next-line
 
 
 	      evVal = functionDefinition.bind(...args);
 	    } catch (e) {
-	      if (this.debug || rjx.debug) evVal = e;
+	      if (this.debug || jsonx.debug) evVal = e;
 	    } // eslint-disable-next-line
 
 
@@ -18578,26 +18581,26 @@ var rjx = (function (exports) {
 	  return Object.assign({}, evProps, evBindProps, evAllProps);
 	}
 	/**
-	 * Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
+	 * Resolves jsonx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
 	 * @param {Object} options 
-	 * @param {Object} options.rjx - Valid RJX JSON 
+	 * @param {Object} options.jsonx - Valid JSONX JSON 
 	 * @param {Object} [options.resources={}] - object to use for resourceprops(asyncprops), usually a result of an asynchronous call
 	 * @returns {Object} resolved object of React Components
 	 */
 
 	function getComponentProps(options = {}) {
 	  const {
-	    rjx,
+	    jsonx,
 	    resources
 	  } = options;
-	  return Object.keys(rjx.__dangerouslyInsertComponents).reduce((cprops, cpropName) => {
+	  return Object.keys(jsonx.__dangerouslyInsertComponents).reduce((cprops, cpropName) => {
 	    let componentVal;
 
 	    try {
 	      // eslint-disable-next-line
-	      componentVal = getRenderedJSON.call(this, rjx.__dangerouslyInsertComponents[cpropName], resources);
+	      componentVal = getRenderedJSON.call(this, jsonx.__dangerouslyInsertComponents[cpropName], resources);
 	    } catch (e) {
-	      if (this.debug || rjx.debug) componentVal = e;
+	      if (this.debug || jsonx.debug) componentVal = e;
 	    }
 
 	    cprops[cpropName] = componentVal;
@@ -18605,30 +18608,30 @@ var rjx = (function (exports) {
 	  }, {});
 	}
 	/**
-	 * Resolves rjx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
+	 * Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
 	 * @param {Object} options 
-	 * @param {Object} options.rjx - Valid RJX JSON 
+	 * @param {Object} options.jsonx - Valid JSONX JSON 
 	//  * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
 	 * @returns {Object} resolved object of React Components
 	 */
 
 	function getReactComponentProps(options = {}) {
 	  const {
-	    rjx
+	    jsonx
 	  } = options;
 
-	  if (rjx.__dangerouslyInsertRJXComponents && Object.keys(rjx.__dangerouslyInsertRJXComponents).length) {
-	    return Object.keys(rjx.__dangerouslyInsertRJXComponents).reduce((cprops, cpropName) => {
+	  if (jsonx.__dangerouslyInsertJSONXComponents && Object.keys(jsonx.__dangerouslyInsertJSONXComponents).length) {
+	    return Object.keys(jsonx.__dangerouslyInsertJSONXComponents).reduce((cprops, cpropName) => {
 	      let componentVal;
 
 	      try {
 	        componentVal = getComponentFromMap({
-	          rjx: rjx.__dangerouslyInsertRJXComponents[cpropName],
+	          jsonx: jsonx.__dangerouslyInsertJSONXComponents[cpropName],
 	          reactComponents: this.reactComponents,
 	          componentLibraries: this.componentLibraries
 	        });
 	      } catch (e) {
-	        if (this.debug || rjx.debug) componentVal = e;
+	        if (this.debug || jsonx.debug) componentVal = e;
 	      } // eslint-disable-next-line
 
 
@@ -18636,20 +18639,20 @@ var rjx = (function (exports) {
 	      return cprops;
 	    }, {});
 	  } else {
-	    return Object.keys(rjx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) => {
+	    return Object.keys(jsonx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) => {
 	      let componentVal;
 
 	      try {
 	        componentVal = getComponentFromMap({
-	          rjx: {
-	            component: rjx.__dangerouslyInsertReactComponents[cpropName],
-	            props: rjx.__dangerouslyInsertComponentProps ? rjx.__dangerouslyInsertComponentProps[cpropName] : {}
+	          jsonx: {
+	            component: jsonx.__dangerouslyInsertReactComponents[cpropName],
+	            props: jsonx.__dangerouslyInsertComponentProps ? jsonx.__dangerouslyInsertComponentProps[cpropName] : {}
 	          },
 	          reactComponents: this.reactComponents,
 	          componentLibraries: this.componentLibraries
 	        });
 	      } catch (e) {
-	        if (this.debug || rjx.debug) componentVal = e;
+	        if (this.debug || jsonx.debug) componentVal = e;
 	      } // eslint-disable-next-line
 
 
@@ -18662,7 +18665,7 @@ var rjx = (function (exports) {
 	 * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
 	 * @param {Object} options 
 	 * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or func:this.props.onClick  or func:inline.myInlineFunction
-	 * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents);
+	 * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents);
 	 * @returns {Function} returns a function from this.props or window functions
 	 * @example
 	 * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
@@ -18672,7 +18675,7 @@ var rjx = (function (exports) {
 	  const {
 	    propFunc = 'func:',
 	    propBody,
-	    rjx,
+	    jsonx,
 	    functionProperty = ''
 	  } = options; // eslint-disable-next-line
 
@@ -18691,8 +18694,8 @@ var rjx = (function (exports) {
 	      // eslint-disable-next-line
 	      let InlineFunction;
 
-	      if (rjx.__functionargs) {
-	        const args = [].concat(rjx.__functionargs[functionProperty]);
+	      if (jsonx.__functionargs) {
+	        const args = [].concat(jsonx.__functionargs[functionProperty]);
 	        args.push(propBody);
 	        InlineFunction = Function.prototype.constructor.apply({}, args);
 	      } else {
@@ -18704,8 +18707,8 @@ var rjx = (function (exports) {
 	        value: funcName
 	      });
 
-	      if (rjx.__functionargs) {
-	        const boundArgs = [this].concat(rjx.__functionargs[functionProperty].map(arg => rjx.props[arg]));
+	      if (jsonx.__functionargs) {
+	        const boundArgs = [this].concat(jsonx.__functionargs[functionProperty].map(arg => jsonx.props[arg]));
 	        return InlineFunction.bind(...boundArgs);
 	      } else {
 	        return InlineFunction.bind(this);
@@ -18733,43 +18736,43 @@ var rjx = (function (exports) {
 	        }
 	      }
 	    } else if (functionNameArray.length === 4) {
-	      return this.props ? this.props[functionNameArray[2]][functionName] : rjx.props[functionNameArray[2]][functionName];
+	      return this.props ? this.props[functionNameArray[2]][functionName] : jsonx.props[functionNameArray[2]][functionName];
 	    } else if (functionNameArray.length === 3) {
-	      return this.props ? this.props[functionName].bind(this) : rjx.props[functionName].bind(this);
+	      return this.props ? this.props[functionName].bind(this) : jsonx.props[functionName].bind(this);
 	    } else {
 	      return function () {};
 	    }
 	  } catch (e) {
 	    if (this.debug) {
 	      logError(e);
-	      if (rjx && rjx.debug) return e;
+	      if (jsonx && jsonx.debug) return e;
 	    }
 
 	    return function () {};
 	  }
 	}
 	/**
-	 * Returns a resolved object from function strings that has functions pulled from rjx.__functionProps
+	 * Returns a resolved object from function strings that has functions pulled from jsonx.__functionProps
 	 * @param {Object} options 
-	 * @param {Object} options.rjx - Valid RJX JSON 
-	 * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
+	 * @param {Object} options.jsonx - Valid JSONX JSON 
+	 * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents);
 	 * @returns {Object} resolved object of functions from function strings
 	 */
 
 	function getFunctionProps(options = {}) {
 	  const {
 	    allProps = {},
-	    rjx = {}
+	    jsonx = {}
 	  } = options;
 	  const getFunction = getFunctionFromProps.bind(this);
-	  const funcProps = rjx.__functionProps; //Allowing for window functions
+	  const funcProps = jsonx.__functionProps; //Allowing for window functions
 
 	  Object.keys(funcProps).forEach(key => {
 	    if (typeof funcProps[key] === 'string' && funcProps[key].indexOf('func:') !== -1) {
 	      allProps[key] = getFunction({
 	        propFunc: funcProps[key],
-	        propBody: rjx.__inline ? rjx.__inline[key] : '',
-	        rjx,
+	        propBody: jsonx.__inline ? jsonx.__inline[key] : '',
+	        jsonx,
 	        functionProperty: key
 	      });
 	    }
@@ -18777,27 +18780,27 @@ var rjx = (function (exports) {
 	  return allProps;
 	}
 	/**
-	 * Returns a resolved object that has React Components pulled from window.__rjx_custom_elements
+	 * Returns a resolved object that has React Components pulled from window.__jsonx_custom_elements
 	 * @param {Object} options 
-	 * @param {Object} options.rjx - Valid RJX JSON 
-	 * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, rjx.props, asyncprops, windowprops, evalProps, insertedComponents);
-	 * @returns {Object} resolved object of with React Components from a window property window.__rjx_custom_elements
+	 * @param {Object} options.jsonx - Valid JSONX JSON 
+	 * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents);
+	 * @returns {Object} resolved object of with React Components from a window property window.__jsonx_custom_elements
 	 */
 
 	function getWindowComponents(options = {}) {
 	  const {
 	    allProps,
-	    rjx
+	    jsonx
 	  } = options;
-	  const windowComponents = rjx.__windowComponents;
+	  const windowComponents = jsonx.__windowComponents;
 	  const window = this.window || global$1.window || {};
-	  const windowFuncPrefix = 'func:window.__rjx_custom_elements'; // if (rjx.hasWindowComponent && window.__rjx_custom_elements) {
+	  const windowFuncPrefix = 'func:window.__jsonx_custom_elements'; // if (jsonx.hasWindowComponent && window.__jsonx_custom_elements) {
 
 	  Object.keys(windowComponents).forEach(key => {
 	    const windowKEY = typeof windowComponents[key] === 'string' ? windowComponents[key].replace(`${windowFuncPrefix}.`, '') : '';
 
-	    if (typeof windowComponents[key] === 'string' && windowComponents[key].indexOf(windowFuncPrefix) !== -1 && typeof window.__rjx_custom_elements[windowKEY] === 'function') {
-	      const windowComponentElement = window.__rjx_custom_elements[windowKEY];
+	    if (typeof windowComponents[key] === 'string' && windowComponents[key].indexOf(windowFuncPrefix) !== -1 && typeof window.__jsonx_custom_elements[windowKEY] === 'function') {
+	      const windowComponentElement = window.__jsonx_custom_elements[windowKEY];
 	      const windowComponentProps = allProps['__windowComponentProps'] ? allProps['__windowComponentProps'] : this.props;
 	      allProps[key] = react.createElement(windowComponentElement, windowComponentProps, null);
 	    }
@@ -18807,24 +18810,24 @@ var rjx = (function (exports) {
 	/**
 	 * Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty
 	 * @param {Object} options 
-	 * @param {Object} options.rjx - Valid RJX JSON 
+	 * @param {Object} options.jsonx - Valid JSONX JSON 
 	 * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
 	 * @param {Number} options.renderIndex - number used for React key prop
 	 * @param {function} [options.logError=console.error] - error logging function
-	 * @param {Object} [options.componentLibraries] - react components to render with RJX
+	 * @param {Object} [options.componentLibraries] - react components to render with JSONX
 	 * @param {Boolean} [options.useReduxState=true] - use redux props in this.props
 	 * @param {Boolean} [options.ignoreReduxPropsInComponentLibraries=true] - ignore redux props in this.props for component libraries, this is helpful incase these properties collide with component library element properties
 	 * @param {boolean} [options.debug=false] - use debug messages
 	 * @example
-	const testRJX = { component: 'div',
-	  props: { id: 'generatedRJX', className: 'rjx' },
+	const testJSONX = { component: 'div',
+	  props: { id: 'generatedJSONX', className: 'jsonx' },
 	  children: [ [Object] ],
 	  asyncprops: { auth: [Array], username: [Array] },
 	  __dangerouslyEvalProps: { getUsername: '(user={})=>user.name' },
 	  __dangerouslyInsertComponents: { myComponent: [Object] } 
 	const resources = {
 	  user: {
-	    name: 'rjx',
+	    name: 'jsonx',
 	    description: 'react withouth javascript',
 	  },
 	  stats: {
@@ -18835,15 +18838,15 @@ var rjx = (function (exports) {
 	};
 	const renderIndex = 1;
 	getComputedProps.call({}, {
-	        rjx: testRJX,
+	        jsonx: testJSONX,
 	        resources,
 	        renderIndex,
 	      });
 	computedProps = { key: 1,
-	     id: 'generatedRJX',
-	     className: 'rjx',
+	     id: 'generatedJSONX',
+	     className: 'jsonx',
 	     auth: 'OAuth2',
-	     username: 'rjx',
+	     username: 'jsonx',
 	     getUsername: [Function],
 	     myComponent:
 	      { '$$typeof': Symbol(react.element),
@@ -18859,7 +18862,7 @@ var rjx = (function (exports) {
 	function getComputedProps(options = {}) {
 	  // eslint-disable-next-line
 	  const {
-	    rjx = {},
+	    jsonx = {},
 	    resources = {},
 	    renderIndex,
 	    logError = console.error,
@@ -18870,69 +18873,69 @@ var rjx = (function (exports) {
 	  } = options;
 
 	  try {
-	    const componentThisProp = rjx.thisprops ? Object.assign({
-	      __rjx: {
-	        _component: rjx,
+	    const componentThisProp = jsonx.thisprops ? Object.assign({
+	      __jsonx: {
+	        _component: jsonx,
 	        _resources: resources
 	      }
-	    }, this.props, rjx.props, useReduxState && !rjx.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && !componentLibraries[rjx.component] ? this.props && this.props.getState ? this.props.getState() : {} : {}) : undefined;
+	    }, this.props, jsonx.props, useReduxState && !jsonx.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && !componentLibraries[jsonx.component] ? this.props && this.props.getState ? this.props.getState() : {} : {}) : undefined;
 	    const windowTraverse = typeof window !== 'undefined' ? window : {};
-	    const asyncprops = rjx.asyncprops ? getRJXProps({
-	      rjx,
+	    const asyncprops = jsonx.asyncprops ? getJSONXProps({
+	      jsonx,
 	      propName: 'asyncprops',
 	      traverseObject: resources
 	    }) : {};
-	    const resourceprops = rjx.resourceprops ? getRJXProps({
-	      rjx,
+	    const resourceprops = jsonx.resourceprops ? getJSONXProps({
+	      jsonx,
 	      propName: 'resourceprops',
 	      traverseObject: resources
 	    }) : {};
-	    const windowprops = rjx.windowprops ? getRJXProps({
-	      rjx,
+	    const windowprops = jsonx.windowprops ? getJSONXProps({
+	      jsonx,
 	      propName: 'windowprops',
 	      traverseObject: windowTraverse
 	    }) : {};
-	    const thisprops = rjx.thisprops ? getRJXProps({
-	      rjx,
+	    const thisprops = jsonx.thisprops ? getJSONXProps({
+	      jsonx,
 	      propName: 'thisprops',
 	      traverseObject: componentThisProp
 	    }) : {};
-	    const thisstate = rjx.thisstate ? getRJXProps({
-	      rjx,
+	    const thisstate = jsonx.thisstate ? getJSONXProps({
+	      jsonx,
 	      propName: 'thisstate',
 	      traverseObject: this.state
 	    }) : {}; //allowing javascript injections
 
-	    const evalProps = rjx.__dangerouslyEvalProps || rjx.__dangerouslyBindEvalProps ? getEvalProps.call(this, {
-	      rjx
+	    const evalProps = jsonx.__dangerouslyEvalProps || jsonx.__dangerouslyBindEvalProps ? getEvalProps.call(this, {
+	      jsonx
 	    }) : {};
-	    const insertedComponents = rjx.__dangerouslyInsertComponents ? getComponentProps.call(this, {
-	      rjx,
+	    const insertedComponents = jsonx.__dangerouslyInsertComponents ? getComponentProps.call(this, {
+	      jsonx,
 	      resources,
 	      debug
 	    }) : {};
-	    const insertedReactComponents = rjx.__dangerouslyInsertReactComponents || rjx.__dangerouslyInsertRJXComponents ? getReactComponentProps.call(this, {
-	      rjx,
+	    const insertedReactComponents = jsonx.__dangerouslyInsertReactComponents || jsonx.__dangerouslyInsertJSONXComponents ? getReactComponentProps.call(this, {
+	      jsonx,
 	      debug
 	    }) : {};
-	    const evalAllProps = rjx.__dangerouslyEvalAllProps ? getEvalProps.call(this, {
-	      rjx
+	    const evalAllProps = jsonx.__dangerouslyEvalAllProps ? getEvalProps.call(this, {
+	      jsonx
 	    }) : {};
 	    const allProps = Object.assign({}, this.disableRenderIndexKey ? {} : {
 	      key: renderIndex
-	    }, rjx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
-	    const computedProps = Object.assign({}, allProps, rjx.__functionProps ? getFunctionProps.call(this, {
+	    }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
+	    const computedProps = Object.assign({}, allProps, jsonx.__functionProps ? getFunctionProps.call(this, {
 	      allProps,
-	      rjx
-	    }) : {}, rjx.__windowComponents ? getWindowComponents.call(this, {
+	      jsonx
+	    }) : {}, jsonx.__windowComponents ? getWindowComponents.call(this, {
 	      allProps,
-	      rjx
-	    }) : {}, rjx.__spreadComponent ? getChildrenComponents.call(this, {
+	      jsonx
+	    }) : {}, jsonx.__spreadComponent ? getChildrenComponents.call(this, {
 	      allProps,
-	      rjx
+	      jsonx
 	    }) : {}, evalAllProps);
-	    if (rjx.debug) console.debug({
-	      rjx,
+	    if (jsonx.debug) console.debug({
+	      jsonx,
 	      computedProps
 	    });
 	    return computedProps;
@@ -18942,11 +18945,11 @@ var rjx = (function (exports) {
 	  }
 	}
 
-	var rjxProps = /*#__PURE__*/Object.freeze({
+	var jsonxProps = /*#__PURE__*/Object.freeze({
 		STRIP_COMMENTS: STRIP_COMMENTS,
 		ARGUMENT_NAMES: ARGUMENT_NAMES,
 		getParamNames: getParamNames,
-		getRJXProps: getRJXProps,
+		getJSONXProps: getJSONXProps,
 		getChildrenComponents: getChildrenComponents,
 		boundArgsReducer: boundArgsReducer,
 		getEvalProps: getEvalProps,
@@ -18959,17 +18962,17 @@ var rjx = (function (exports) {
 	});
 
 	/**
-	 * returns a valid rjx.children property
+	 * returns a valid jsonx.children property
 	 * @param {Object} options
-	 * @param {Object} [options.rjx ={}]- Valid RJX JSON 
-	 * @param {Object} [options.props=options.rjx.children] - Props to pull children  Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) 
-	 * @returns {Object[]|String} returns a valid rjx.children property that's either an array of RJX objects or a string 
+	 * @param {Object} [options.jsonx ={}]- Valid JSONX JSON 
+	 * @param {Object} [options.props=options.jsonx.children] - Props to pull children  Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops) 
+	 * @returns {Object[]|String} returns a valid jsonx.children property that's either an array of JSONX objects or a string 
 	 * @example 
-	 * const sampleRJX = {
+	 * const sampleJSONX = {
 	  component: 'div',
 	  props: {
-	    id: 'generatedRJX',
-	    className:'rjx',
+	    id: 'generatedJSONX',
+	    className:'jsonx',
 	  },
 	  children: [
 	    {
@@ -18997,101 +19000,101 @@ var rjx = (function (exports) {
 	    },
 	  ],
 	};
-	const RJXChildren = getChildrenProperty({ rjx: sampleRJX, }); //=> [ [rjx Object],[rjx Object]]
-	const RJXChildrenPTag = getChildrenProperty({ rjx: sampleRJX.children[ 0 ], }); //=>hello world
+	const JSONXChildren = getChildrenProperty({ jsonx: sampleJSONX, }); //=> [ [jsonx Object],[jsonx Object]]
+	const JSONXChildrenPTag = getChildrenProperty({ jsonx: sampleJSONX.children[ 0 ], }); //=>hello world
 	 */
 
 	function getChildrenProperty(options = {}) {
 	  const {
-	    rjx = {}
+	    jsonx = {}
 	  } = options;
-	  const props = options.props || rjx.props || {};
+	  const props = options.props || jsonx.props || {};
 
 	  if (props._children
-	  /* && !rjx.children */
+	  /* && !jsonx.children */
 	  ) {
 	      if (Array.isArray(props._children) || typeof props._children === 'string') {
 	        return props._children;
 	      } else {
-	        return rjx.children;
+	        return jsonx.children;
 	      }
-	    } else if (typeof rjx.children === 'undefined') {
+	    } else if (typeof jsonx.children === 'undefined') {
 	    if (props && props.children && (typeof props.children !== 'undefined' || Array.isArray(props.children))) {
 	      return props.children;
 	    } else {
 	      return null;
 	    }
 	  } else {
-	    return rjx.children;
+	    return jsonx.children;
 	  }
 	}
 	/**
 	 * Used to pass properties down to child components if passprops is set to true
 	 * @param {Object} options
-	 * @param {Object} [options.rjx ={}] - Valid RJX JSON 
-	 * @param {Object} [options.childrjx ={}] - Valid RJX JSON 
+	 * @param {Object} [options.jsonx ={}] - Valid JSONX JSON 
+	 * @param {Object} [options.childjsonx ={}] - Valid JSONX JSON 
 	 * @param {Number} options.renderIndex - React key property 
-	 * @param {Object} [options.props=options.rjx.props] - Props to pull children  Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) 
-	 * @returns {Object|String} returns a valid  Valid RJX Child object or a string 
+	 * @param {Object} [options.props=options.jsonx.props] - Props to pull children  Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops) 
+	 * @returns {Object|String} returns a valid  Valid JSONX Child object or a string 
 	 */
 
 	function getChildrenProps(options = {}) {
 	  const {
-	    rjx = {},
-	    childrjx,
+	    jsonx = {},
+	    childjsonx,
 	    renderIndex
 	  } = options;
-	  const props = options.props || rjx.props || {};
-	  return rjx.passprops && typeof childrjx === 'object' ? Object.assign({}, childrjx, {
-	    props: Object.assign({}, props, childrjx.thisprops && childrjx.thisprops.style || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
-	    childrjx.asyncprops && childrjx.asyncprops.style || childrjx.windowprops && childrjx.windowprops.style ? {} : {
+	  const props = options.props || jsonx.props || {};
+	  return jsonx.passprops && typeof childjsonx === 'object' ? Object.assign({}, childjsonx, {
+	    props: Object.assign({}, props, childjsonx.thisprops && childjsonx.thisprops.style || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
+	    childjsonx.asyncprops && childjsonx.asyncprops.style || childjsonx.windowprops && childjsonx.windowprops.style ? {} : {
 	      style: {}
-	    }, childrjx.props, {
+	    }, childjsonx.props, {
 	      key: renderIndex + Math.random()
 	    })
-	  }) : childrjx;
+	  }) : childjsonx;
 	}
 	/**
-	 * returns React Child Elements via RJX
+	 * returns React Child Elements via JSONX
 	 * @param {*} options 
-	 * @property {object} this - options for getReactElementFromRJX
-	 * @property {Object} [this.componentLibraries] - react components to render with RJX
+	 * @property {object} this - options for getReactElementFromJSONX
+	 * @property {Object} [this.componentLibraries] - react components to render with JSONX
 	 * @property {boolean} [this.debug=false] - use debug messages
 	 * @property {function} [this.logError=console.error] - error logging function
 	 * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
 	 */
 
-	function getRJXChildren(options = {}) {
+	function getJSONXChildren(options = {}) {
 	  // eslint-disable-next-line
 	  const {
-	    rjx,
+	    jsonx,
 	    resources,
 	    renderIndex,
 	    logError = console.error
 	  } = options;
 
 	  try {
-	    const props = options.props || rjx.props || {};
-	    rjx.children = getChildrenProperty({
-	      rjx,
+	    const props = options.props || jsonx.props || {};
+	    jsonx.children = getChildrenProperty({
+	      jsonx,
 	      props
 	    });
-	    return rjx.children && Array.isArray(rjx.children) && typeof rjx.children !== 'string' ? rjx.children.map(childrjx => getReactElementFromRJX.call(this, getChildrenProps({
-	      rjx,
-	      childrjx,
+	    return jsonx.children && Array.isArray(jsonx.children) && typeof jsonx.children !== 'string' ? jsonx.children.map(childjsonx => getReactElementFromJSONX.call(this, getChildrenProps({
+	      jsonx,
+	      childjsonx,
 	      props,
 	      renderIndex
-	    }), resources)) : rjx.children;
+	    }), resources)) : jsonx.children;
 	  } catch (e) {
 	    logError(e);
 	    return null;
 	  }
 	}
 
-	var rjxChildren = /*#__PURE__*/Object.freeze({
+	var jsonxChildren = /*#__PURE__*/Object.freeze({
 		getChildrenProperty: getChildrenProperty,
 		getChildrenProps: getChildrenProps,
-		getRJXChildren: getRJXChildren
+		getJSONXChildren: getJSONXChildren
 	});
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -19324,30 +19327,30 @@ var rjx = (function (exports) {
 	};
 
 	/**
-	 * Use RJX for express view rendering
-	 * @param {string} filePath - path to rjx express view 
+	 * Use JSONX for express view rendering
+	 * @param {string} filePath - path to jsonx express view 
 	 * @param {object} options - property used for express view {locals}
-	 * @param {object} options.__boundConfig - property used to bind this object for RJX, can be used to add custom components
+	 * @param {object} options.__boundConfig - property used to bind this object for JSONX, can be used to add custom components
 	 * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
 	 * @param {*} callback 
 	 */
 
 	function __express(filePath, options, callback) {
 	  try {
-	    const rjxModule = options.__rjx || require(filePath);
+	    const jsonxModule = options.__jsonx || require(filePath);
 
 	    const resources = Object.assign({}, options);
 	    delete resources.__boundConfig;
 	    delete resources.__DOCTYPE;
-	    delete resources.__rjx;
+	    delete resources.__jsonx;
 	    const context = Object.assign({}, options.__boundConfig);
 	    if (path.extname('.json')) context.useJSON = true;
-	    const rjxRenderedString = outputHTML.call(context, {
-	      rjx: rjxModule,
+	    const jsonxRenderedString = outputHTML.call(context, {
+	      jsonx: jsonxModule,
 	      resources
 	    });
 	    const template = `${options.__DOCTYPE || '<!DOCTYPE html>'}
-${rjxRenderedString}`;
+${jsonxRenderedString}`;
 	    if (typeof callback === 'function') callback(null, template);else return template;
 	  } catch (e) {
 	    if (typeof callback === 'function') callback(e);else throw e;
@@ -19360,67 +19363,67 @@ ${rjxRenderedString}`;
 	  componentMap: componentMap$1,
 	  getComponentFromMap: getComponentFromMap$1,
 	  getBoundedComponents: getBoundedComponents$1
-	} = rjxComponents;
+	} = jsonxComponents;
 	const {
 	  getComputedProps: getComputedProps$1
-	} = rjxProps;
+	} = jsonxProps;
 	const {
-	  getRJXChildren: getRJXChildren$1
-	} = rjxChildren;
+	  getJSONXChildren: getJSONXChildren$1
+	} = jsonxChildren;
 	const {
 	  displayComponent: displayComponent$1
-	} = rjxUtils;
+	} = jsonxUtils;
 	exports.renderIndex = 0;
 	/**
-	 * Use RJX without any configuration to render RJX JSON to HTML and insert RJX into querySelector using ReactDOM.render
+	 * Use JSONX without any configuration to render JSONX JSON to HTML and insert JSONX into querySelector using ReactDOM.render
 	 * @example
-	 * // Uses react to create <!DOCTYPE html><body><div id="myApp"><div class="rjx-generated"><p style="color:red;">hello world</p></div></div></body>
-	 * rjx.rjxRender({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, querySelector:'#myApp', });
+	 * // Uses react to create <!DOCTYPE html><body><div id="myApp"><div class="jsonx-generated"><p style="color:red;">hello world</p></div></div></body>
+	 * jsonx.jsonxRender({ jsonx: { component: 'div', props:{className:'jsonx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, querySelector:'#myApp', });
 	 * @param {object} config - options used to inject html via ReactDOM.render
-	 * @param {object} config.rjx - any valid RJX JSON object
+	 * @param {object} config.jsonx - any valid JSONX JSON object
 	 * @param {object} config.resources - any additional resource used for asynchronous properties
 	 * @param {string} config.querySelector - selector for document.querySelector
-	 * @property {object} this - options for getReactElementFromRJX
+	 * @property {object} this - options for getReactElementFromJSONX
 	 */
 
-	function rjxRender(config = {}) {
+	function jsonxRender(config = {}) {
 	  const {
-	    rjx,
+	    jsonx,
 	    resources,
 	    querySelector,
 	    options,
 	    DOM
 	  } = config;
-	  reactDom.render(getReactElementFromRJX.call(this || {}, rjx, resources, options), DOM || document.querySelector(querySelector));
+	  reactDom.render(getReactElementFromJSONX.call(this || {}, jsonx, resources, options), DOM || document.querySelector(querySelector));
 	}
 	/**
-	 * Use ReactDOMServer.renderToString to render html from RJX
+	 * Use ReactDOMServer.renderToString to render html from JSONX
 	 * @example
-	 * // Uses react to create <div class="rjx-generated"><p style="color:red;">hello world</p></div>
-	 * rjx.outputHTML({ rjx: { component: 'div', props:{className:'rjx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
+	 * // Uses react to create <div class="jsonx-generated"><p style="color:red;">hello world</p></div>
+	 * jsonx.outputHTML({ jsonx: { component: 'div', props:{className:'jsonx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
 	 * @param {object} config - options used to inject html via ReactDOM.render
-	 * @param {object} config.rjx - any valid RJX JSON object
+	 * @param {object} config.jsonx - any valid JSONX JSON object
 	 * @param {object} config.resources - any additional resource used for asynchronous properties
-	 * @property {object} this - options for getReactElementFromRJX
-	 * @returns {string} React genereated html via RJX JSON
+	 * @property {object} this - options for getReactElementFromJSONX
+	 * @returns {string} React genereated html via JSONX JSON
 	 */
 
 	function outputHTML(config = {}) {
 	  const {
-	    rjx,
+	    jsonx,
 	    resources
 	  } = config;
-	  return this && this.useJSON ? server.renderToString(getReactElementFromJSON.call(this || {}, rjx, resources)) : server.renderToString(getReactElementFromRJX.call(this || {}, rjx, resources));
+	  return this && this.useJSON ? server.renderToString(getReactElementFromJSON.call(this || {}, jsonx, resources)) : server.renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
 	}
 	/**
-	 * Use React.createElement and RJX JSON to create React elements
+	 * Use React.createElement and JSONX JSON to create React elements
 	 * @example
 	 * // Uses react to create the equivalent JSX <myComponent style={{color:blue}}>hello world</myComponent>
-	 * rjx.getReactElementFromRJX({component:'myCompnent',props:{style:{color:'blue'}},children:'hello world'})
-	 * @param {object} rjx - any valid RJX JSON object
+	 * jsonx.getReactElementFromJSONX({component:'myCompnent',props:{style:{color:'blue'}},children:'hello world'})
+	 * @param {object} jsonx - any valid JSONX JSON object
 	 * @param {object} resources - any additional resource used for asynchronous properties
-	 * @property {object} this - options for getReactElementFromRJX
-	 * @property {Object} [this.componentLibraries] - react components to render with RJX
+	 * @property {object} this - options for getReactElementFromJSONX
+	 * @property {Object} [this.componentLibraries] - react components to render with JSONX
 	 * @property {boolean} [this.debug=false] - use debug messages
 	 * @property {boolean} [this.returnJSON=false] - return json object of {type,props,children} instead of react element
 	 * @property {boolean} [this.disableRenderIndexKey=false] - disables auto assign a key prop
@@ -19429,7 +19432,7 @@ ${rjxRenderedString}`;
 	 * @returns {function} React element via React.createElement
 	 */
 
-	function getReactElementFromRJX(rjx = {}, resources = {}) {
+	function getReactElementFromJSONX(jsonx = {}, resources = {}) {
 	  // eslint-disable-next-line
 	  const {
 	    componentLibraries = {},
@@ -19440,10 +19443,10 @@ ${rjxRenderedString}`;
 	    disableRenderIndexKey = false
 	  } = this || {}; // const componentLibraries = this.componentLibraries;
 
-	  if (!rjx) return null;
-	  if (rjx.type) rjx.component = rjx.type;
-	  if (validSimpleRJXSyntax(rjx)) rjx = simpleRJXSyntax(rjx);
-	  if (!rjx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
+	  if (!jsonx) return null;
+	  if (jsonx.type) jsonx.component = jsonx.type;
+	  if (validSimpleJSONXSyntax(jsonx)) jsonx = simpleJSONXSyntax(jsonx);
+	  if (!jsonx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
 
 	  try {
 	    const components = Object.assign({}, componentMap$1, this.reactComponents);
@@ -19453,22 +19456,22 @@ ${rjxRenderedString}`;
 	    }) : components;
 	    exports.renderIndex++;
 	    const element = getComponentFromMap$1({
-	      rjx,
+	      jsonx,
 	      reactComponents,
 	      componentLibraries,
 	      debug,
 	      logError
 	    });
 	    const props = getComputedProps$1.call(this, {
-	      rjx,
+	      jsonx,
 	      resources,
 	      renderIndex: exports.renderIndex,
 	      componentLibraries,
 	      debug,
 	      logError
 	    });
-	    const displayElement = rjx.comparisonprops ? displayComponent$1.call(this, {
-	      rjx,
+	    const displayElement = jsonx.comparisonprops ? displayComponent$1.call(this, {
+	      jsonx,
 	      props,
 	      renderIndex: exports.renderIndex,
 	      componentLibraries,
@@ -19476,8 +19479,8 @@ ${rjxRenderedString}`;
 	    }) : true;
 
 	    if (displayElement) {
-	      const children = getRJXChildren$1.call(this, {
-	        rjx,
+	      const children = getJSONXChildren$1.call(this, {
+	        jsonx,
 	        props,
 	        resources,
 	        renderIndex: exports.renderIndex
@@ -19494,7 +19497,7 @@ ${rjxRenderedString}`;
 	  } catch (e) {
 	    if (debug) {
 	      logError({
-	        rjx,
+	        jsonx,
 	        resources
 	      }, 'this', this);
 	      logError(e, e.stack ? e.stack : 'no stack');
@@ -19503,11 +19506,11 @@ ${rjxRenderedString}`;
 	    throw e;
 	  }
 	}
-	const getRenderedJSON = getReactElementFromRJX;
-	const getReactElement = getReactElementFromRJX;
+	const getRenderedJSON = getReactElementFromJSONX;
+	const getReactElement = getReactElementFromJSONX;
 	/** converts a json object {type,props,children} into a react element 
 	 * @example
-	 * rjx.getReactElementFromJSON({type:'div',props:{title:'some title attribute'},children:'inner html text'})
+	 * jsonx.getReactElementFromJSON({type:'div',props:{title:'some title attribute'},children:'inner html text'})
 	 * @param {Object|String} options.type - 'div' or react component
 	 * @param {Object} options.props - props for react element
 	 * @param {String|[Object]} options.children - children elements
@@ -19521,21 +19524,21 @@ ${rjxRenderedString}`;
 	}) {
 	  return createElement(type, props, Array.isArray(children) ? children.map(getReactElementFromJSON) : children);
 	}
-	/** converts a rjx json object into a react function component 
+	/** converts a jsonx json object into a react function component 
 	 * @example
-	 * rjx.compile({rjx:{component:'div',props:{title:'some title attribute'},children:'inner html text'}}) //=>React Function Component
-	 * @param {Object} rjx - valid RJX JSON
+	 * jsonx.compile({jsonx:{component:'div',props:{title:'some title attribute'},children:'inner html text'}}) //=>React Function Component
+	 * @param {Object} jsonx - valid JSONX JSON
 	 * @param {Object} resources - props for react element
 	 * @returns {function} React element via React.createElement
 	*/
 
-	function compile(rjx, resources) {
+	function compile(jsonx, resources) {
 	  const context = Object.assign({}, this, {
 	    returnJSON: true
 	  });
-	  const json = getReactElementFromRJX.call(context, rjx, resources);
+	  const json = getReactElementFromJSONX.call(context, jsonx, resources);
 
-	  const func = function compiledRJX(props) {
+	  const func = function compiledJSONX(props) {
 	    json.props = Object.assign({}, json.props, props);
 	    return getReactElementFromJSON(json);
 	  };
@@ -19546,43 +19549,43 @@ ${rjxRenderedString}`;
 	  return func;
 	}
 	/**
-	 * converts RJX JSON IR to JSX
+	 * converts JSONX JSON IR to JSX
 	 * @example
-	 * rjx.jsonToJSX({ type: 'div', props: { key: 5, title: 'test' }, children: 'hello' }) // => '<div key={5} title="test">hello</div>'
+	 * jsonx.jsonToJSX({ type: 'div', props: { key: 5, title: 'test' }, children: 'hello' }) // => '<div key={5} title="test">hello</div>'
 	 * @param {Object} json - {type,props,children}
 	 * @returns {String} jsx string
 	 */
 
-	function outputJSX(rjx, resources) {
+	function outputJSX(jsonx, resources) {
 	  const context = Object.assign({}, this, {
 	    returnJSON: true
 	  });
-	  const json = getReactElementFromRJX.call(context, rjx, resources);
+	  const json = getReactElementFromJSONX.call(context, jsonx, resources);
 	  return jsonToJSX(json);
 	}
 	/**
-	 * Compiles RJX into JSON IR format for react create element
+	 * Compiles JSONX into JSON IR format for react create element
 	 * @example
-	 * rjx.outputJSON({ component: 'div', props: { title: 'test', }, children: 'hello', }); //=> { type: 'div',
+	 * jsonx.outputJSON({ component: 'div', props: { title: 'test', }, children: 'hello', }); //=> { type: 'div',
 	 props: { key: 5, title: 'test' },
 	 children: 'hello' }
-	 * @property {object} this - options for getReactElementFromRJX
-	 * @param {object} rjx - any valid RJX JSON object
+	 * @property {object} this - options for getReactElementFromJSONX
+	 * @param {object} jsonx - any valid JSONX JSON object
 	 * @param {object} resources - any additional resource used for asynchronous properties
 	 * @returns {Object} json - {type,props,children}
 	 */
 
-	function outputJSON(rjx, resources) {
+	function outputJSON(jsonx, resources) {
 	  const context = Object.assign({}, this, {
 	    returnJSON: true
 	  });
-	  return getReactElementFromRJX.call(context, rjx, resources);
+	  return getReactElementFromJSONX.call(context, jsonx, resources);
 	}
-	const rjxHTMLString = outputHTML;
+	const jsonxHTMLString = outputHTML;
 	/**
-	 * converts RJX JSON IR to JSX
+	 * converts JSONX JSON IR to JSX
 	 * @example
-	 * rjx.jsonToJSX({ type: 'div', props: { key: 5, title: 'test' }, children: 'hello' }) // => '<div key={5} title="test">hello</div>'
+	 * jsonx.jsonToJSX({ type: 'div', props: { key: 5, title: 'test' }, children: 'hello' }) // => '<div key={5} title="test">hello</div>'
 	 * @param {Object} json - {type,props,children}
 	 * @returns {String} jsx string
 	 */
@@ -19597,7 +19600,7 @@ ${rjxRenderedString}`;
 </${json.type}>` : `<${json.type}${propsString}>${json.children}</${json.type}>`;
 	}
 	/**
-	 * Exposes react module used in RJX
+	 * Exposes react module used in JSONX
 	 * @returns {Object} React
 	 */
 
@@ -19605,7 +19608,7 @@ ${rjxRenderedString}`;
 	  return react;
 	}
 	/**
-	 * Exposes react dom module used in RJX
+	 * Exposes react dom module used in JSONX
 	 * @returns {Object} ReactDOM
 	 */
 
@@ -19613,44 +19616,40 @@ ${rjxRenderedString}`;
 	  return reactDom;
 	}
 	/**
-	 * Exposes global hook used in RJX
+	 * Exposes global hook used in JSONX
 	 * @returns {Object} useGlobalHook
 	 */
 
 	function __getUseGlobalHook() {
 	  return useStore;
 	}
-	const _rjxChildren = rjxChildren;
-	/**
-	 * @namespace
-	 */
-
-	const components = rjxComponents;
-	const _rjxProps = rjxProps;
-	const _rjxUtils = rjxUtils; // export * as components from './components';
+	const _jsonxChildren = jsonxChildren;
+	const _jsonxComponents = jsonxComponents;
+	const _jsonxProps = jsonxProps;
+	const _jsonxUtils = jsonxUtils;
 
 	exports.__express = __express;
 	exports.__getReact = __getReact;
 	exports.__getReactDOM = __getReactDOM;
 	exports.__getUseGlobalHook = __getUseGlobalHook;
-	exports._rjxChildren = _rjxChildren;
-	exports._rjxProps = _rjxProps;
-	exports._rjxUtils = _rjxUtils;
+	exports._jsonxChildren = _jsonxChildren;
+	exports._jsonxComponents = _jsonxComponents;
+	exports._jsonxProps = _jsonxProps;
+	exports._jsonxUtils = _jsonxUtils;
 	exports.compile = compile;
-	exports.components = components;
-	exports.default = getReactElementFromRJX;
+	exports.default = getReactElementFromJSONX;
 	exports.getReactElement = getReactElement;
 	exports.getReactElementFromJSON = getReactElementFromJSON;
-	exports.getReactElementFromRJX = getReactElementFromRJX;
+	exports.getReactElementFromJSONX = getReactElementFromJSONX;
 	exports.getRenderedJSON = getRenderedJSON;
 	exports.jsonToJSX = jsonToJSX;
+	exports.jsonxHTMLString = jsonxHTMLString;
+	exports.jsonxRender = jsonxRender;
 	exports.outputHTML = outputHTML;
 	exports.outputJSON = outputJSON;
 	exports.outputJSX = outputJSX;
 	exports.renderFile = __express;
-	exports.rjxHTMLString = rjxHTMLString;
-	exports.rjxRender = rjxRender;
 
-	return exports;
+	Object.defineProperty(exports, '__esModule', { value: true });
 
-}({}));
+}));
