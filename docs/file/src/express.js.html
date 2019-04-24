@@ -78,9 +78,9 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-advancedBinding">advancedBinding</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-componentMap">componentMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxChildren">_rjxChildren</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-components">components</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getReactElement">getReactElement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getRenderedJSON">getRenderedJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
@@ -92,7 +92,8 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/express.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { rjxHTMLString, } from &apos;./main&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { outputHTML, } from &apos;./main&apos;;
+import path from &apos;path&apos;;
 /**
  * Use RJX for express view rendering
  * @param {string} filePath - path to rjx express view 
@@ -108,15 +109,20 @@ export function __express(filePath, options, callback) {
     delete resources.__boundConfig;
     delete resources.__DOCTYPE;
     delete resources.__rjx;
+    const context = Object.assign({}, options.__boundConfig);
+    if (path.extname(&apos;.json&apos;)) context.useJSON = true;
   
-    const rjxRenderedString = rjxHTMLString.call(options.__boundConfig || {}, {
+    const rjxRenderedString = outputHTML.call(context, {
       rjx: rjxModule,
       resources,
     });
-    callback(null, `${options.__DOCTYPE || &apos;&lt;!DOCTYPE html&gt;&apos;}
-${rjxRenderedString}`);
+    const template = `${options.__DOCTYPE || &apos;&lt;!DOCTYPE html&gt;&apos;}
+${rjxRenderedString}`;
+    if (typeof callback === &apos;function&apos;) callback(null, template);
+    else return template;
   } catch (e) {
-    callback(e);
+    if (typeof callback === &apos;function&apos;) callback(e);
+    else throw e;
   }
 }
 </code></pre>

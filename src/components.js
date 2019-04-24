@@ -6,15 +6,20 @@ import { getReactElementFromRJX, } from './main';
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
+/**
+ * @memberOf components
+ */
 export let advancedBinding = getAdvancedBinding();
 // require;
 /**
  * object of all react components available for RJX
+ * @memberOf components
  */
 export let componentMap = Object.assign({ Fragment, Suspense, }, ReactDOMElements, (typeof window ==='object') ? window.__rjx_custom_elements : {});
 
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
+ * @memberOf components
  * @param {Object} options - options for getBoundedComponents 
  * @param {Object} options.reactComponents - all react components available for RJX
  * @param {string[]} boundedComponents - list of components to bind RJX this context (usually helpful for navigation and redux-router)
@@ -33,6 +38,7 @@ export function getBoundedComponents(options = {}) {
 
 /**
  * returns a react component from a component library
+ * @memberOf components
  * @param {Object} options - options for getComponentFromLibrary
  * @param {Object} [options.componentLibraries={}] - react component library like bootstrap
  * @param {Object} [options.rjx={}] - any valid RJX JSON
@@ -59,6 +65,7 @@ export function getComponentFromLibrary(options = {}) {
 
 /**
  * returns a react element from rjx.component
+ * @memberOf components
  * @example
  * // returns react elements
  * getComponentFromMap({rjx:{component:'div'}})=>div
@@ -96,6 +103,7 @@ export function getComponentFromMap(options = {}) {
 
 /**
  * Returns a new function from an options object
+ * @memberOf components
  * @param {Object} options 
  * @param {String} [options.body=''] - Function string body
  * @param {String[]} [options.args=[]] - Function arguments
@@ -110,6 +118,7 @@ export function getFunctionFromEval(options = {}) {
 
 /**
  * Returns a new React Component
+ * @memberOf components
  * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class 
  * @param {Object} [options.resources={}] - asyncprops for component
  * @param {String} [options.name ] - Component name
@@ -205,6 +214,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
 
 /**
  * Returns new React Function Component
+ * @memberOf components
  * @todo set 'functionprops' to set arguments for function
  * @param {*} reactComponent - Valid RJX to render
  * @param {String} functionBody - String of function component body
@@ -280,9 +290,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
   return functionComponent(...functionArgs);
 }
 /**
- * if (recharts[rjx.component.replace('recharts.', '')]) {
-      return recharts[rjx.component.replace('recharts.', '')];
-    }
+ * @memberOf components
  */
 export function getReactContext(options = {}) {
   return createContext(options.value);

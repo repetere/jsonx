@@ -11,6 +11,7 @@ var ReactDOMServer = _interopDefault(require('react-dom/server'));
 var ReactDOMElements = _interopDefault(require('react-dom-factories'));
 var UAParser = _interopDefault(require('ua-parser-js'));
 var createReactClass = _interopDefault(require('create-react-class'));
+var path = _interopDefault(require('path'));
 
 function setState(newState) {
   this.state = { ...this.state,
@@ -517,10 +518,15 @@ var rjxUtils = /*#__PURE__*/Object.freeze({
 //   var window = window || global.window || {};
 // }
 
+/**
+ * @memberOf components
+ */
+
 let advancedBinding = getAdvancedBinding(); // require;
 
 /**
  * object of all react components available for RJX
+ * @memberOf components
  */
 
 let componentMap = Object.assign({
@@ -529,6 +535,7 @@ let componentMap = Object.assign({
 }, ReactDOMElements, typeof window === 'object' ? window.__rjx_custom_elements : {});
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
+ * @memberOf components
  * @param {Object} options - options for getBoundedComponents 
  * @param {Object} options.reactComponents - all react components available for RJX
  * @param {string[]} boundedComponents - list of components to bind RJX this context (usually helpful for navigation and redux-router)
@@ -550,6 +557,7 @@ function getBoundedComponents(options = {}) {
 }
 /**
  * returns a react component from a component library
+ * @memberOf components
  * @param {Object} options - options for getComponentFromLibrary
  * @param {Object} [options.componentLibraries={}] - react component library like bootstrap
  * @param {Object} [options.rjx={}] - any valid RJX JSON
@@ -575,6 +583,7 @@ function getComponentFromLibrary(options = {}) {
 }
 /**
  * returns a react element from rjx.component
+ * @memberOf components
  * @example
  * // returns react elements
  * getComponentFromMap({rjx:{component:'div'}})=>div
@@ -624,6 +633,7 @@ function getComponentFromMap(options = {}) {
 }
 /**
  * Returns a new function from an options object
+ * @memberOf components
  * @param {Object} options 
  * @param {String} [options.body=''] - Function string body
  * @param {String[]} [options.args=[]] - Function arguments
@@ -641,6 +651,7 @@ function getFunctionFromEval(options = {}) {
 }
 /**
  * Returns a new React Component
+ * @memberOf components
  * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class 
  * @param {Object} [options.resources={}] - asyncprops for component
  * @param {String} [options.name ] - Component name
@@ -744,6 +755,7 @@ function getReactClassComponent(reactComponent = {}, options = {}) {
 }
 /**
  * Returns new React Function Component
+ * @memberOf components
  * @todo set 'functionprops' to set arguments for function
  * @param {*} reactComponent - Valid RJX to render
  * @param {String} functionBody - String of function component body
@@ -823,9 +835,7 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
   return functionComponent(...functionArgs);
 }
 /**
- * if (recharts[rjx.component.replace('recharts.', '')]) {
-      return recharts[rjx.component.replace('recharts.', '')];
-    }
+ * @memberOf components
  */
 
 function getReactContext(options = {}) {
@@ -1025,6 +1035,23 @@ function getEvalProps(options = {}) {
   } = options;
   const scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
 
+  let evAllProps = {};
+
+  if (rjx.__dangerouslyEvalAllProps) {
+    let evVal;
+
+    try {
+      // eslint-disable-next-line
+      evVal = typeof evVal === 'function' ? rjx.__dangerouslyEvalAllProps : scopedEval(rjx.__dangerouslyEvalAllProps);
+    } catch (e) {
+      if (this.debug || rjx.debug) evVal = e;
+    }
+
+    evAllProps = evVal.call(this, {
+      rjx
+    });
+  }
+
   const evProps = Object.keys(rjx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
     let evVal;
     let evValString;
@@ -1081,7 +1108,7 @@ function getEvalProps(options = {}) {
     if (this.exposeEval) eprops[`__eval_${epropName}`] = evValString;
     return eprops;
   }, {});
-  return Object.assign({}, evProps, evBindProps);
+  return Object.assign({}, evProps, evBindProps, evAllProps);
 }
 /**
  * Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
@@ -1421,6 +1448,9 @@ function getComputedProps(options = {}) {
       rjx,
       debug
     }) : {};
+    const evalAllProps = rjx.__dangerouslyEvalAllProps ? getEvalProps.call(this, {
+      rjx
+    }) : {};
     const allProps = Object.assign({}, this.disableRenderIndexKey ? {} : {
       key: renderIndex
     }, rjx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
@@ -1433,7 +1463,7 @@ function getComputedProps(options = {}) {
     }) : {}, rjx.__spreadComponent ? getChildrenComponents.call(this, {
       allProps,
       rjx
-    }) : {});
+    }) : {}, evalAllProps);
     if (rjx.debug) console.debug({
       rjx,
       computedProps
@@ -1614,14 +1644,17 @@ function __express(filePath, options, callback) {
     delete resources.__boundConfig;
     delete resources.__DOCTYPE;
     delete resources.__rjx;
-    const rjxRenderedString = rjxHTMLString.call(options.__boundConfig || {}, {
+    const context = Object.assign({}, options.__boundConfig);
+    if (path.extname('.json')) context.useJSON = true;
+    const rjxRenderedString = outputHTML.call(context, {
       rjx: rjxModule,
       resources
     });
-    callback(null, `${options.__DOCTYPE || '<!DOCTYPE html>'}
-${rjxRenderedString}`);
+    const template = `${options.__DOCTYPE || '<!DOCTYPE html>'}
+${rjxRenderedString}`;
+    if (typeof callback === 'function') callback(null, template);else return template;
   } catch (e) {
-    callback(e);
+    if (typeof callback === 'function') callback(e);else throw e;
   }
 }
 
@@ -1681,7 +1714,7 @@ function outputHTML(config = {}) {
     rjx,
     resources
   } = config;
-  return ReactDOMServer.renderToString(getReactElementFromRJX.call(this || {}, rjx, resources));
+  return this && this.useJSON ? ReactDOMServer.renderToString(getReactElementFromJSON.call(this || {}, rjx, resources)) : ReactDOMServer.renderToString(getReactElementFromRJX.call(this || {}, rjx, resources));
 }
 /**
  * Use React.createElement and RJX JSON to create React elements
@@ -1892,19 +1925,23 @@ function __getUseGlobalHook() {
   return useStore;
 }
 const _rjxChildren = rjxChildren;
-const _rjxComponents = rjxComponents;
+/**
+ * @namespace
+ */
+
+const components = rjxComponents;
 const _rjxProps = rjxProps;
-const _rjxUtils = rjxUtils;
+const _rjxUtils = rjxUtils; // export * as components from './components';
 
 exports.__express = __express;
 exports.__getReact = __getReact;
 exports.__getReactDOM = __getReactDOM;
 exports.__getUseGlobalHook = __getUseGlobalHook;
 exports._rjxChildren = _rjxChildren;
-exports._rjxComponents = _rjxComponents;
 exports._rjxProps = _rjxProps;
 exports._rjxUtils = _rjxUtils;
 exports.compile = compile;
+exports.components = components;
 exports.default = getReactElementFromRJX;
 exports.getReactElement = getReactElement;
 exports.getReactElementFromJSON = getReactElementFromJSON;
@@ -1914,5 +1951,6 @@ exports.jsonToJSX = jsonToJSX;
 exports.outputHTML = outputHTML;
 exports.outputJSON = outputJSON;
 exports.outputJSX = outputJSX;
+exports.renderFile = __express;
 exports.rjxHTMLString = rjxHTMLString;
 exports.rjxRender = rjxRender;

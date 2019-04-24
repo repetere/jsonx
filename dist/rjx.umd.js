@@ -17988,10 +17988,15 @@
 	//   var window = window || global.window || {};
 	// }
 
+	/**
+	 * @memberOf components
+	 */
+
 	let advancedBinding = getAdvancedBinding(); // require;
 
 	/**
 	 * object of all react components available for RJX
+	 * @memberOf components
 	 */
 
 	let componentMap = Object.assign({
@@ -18000,6 +18005,7 @@
 	}, reactDomFactories, typeof window === 'object' ? window.__rjx_custom_elements : {});
 	/**
 	 * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
+	 * @memberOf components
 	 * @param {Object} options - options for getBoundedComponents 
 	 * @param {Object} options.reactComponents - all react components available for RJX
 	 * @param {string[]} boundedComponents - list of components to bind RJX this context (usually helpful for navigation and redux-router)
@@ -18021,6 +18027,7 @@
 	}
 	/**
 	 * returns a react component from a component library
+	 * @memberOf components
 	 * @param {Object} options - options for getComponentFromLibrary
 	 * @param {Object} [options.componentLibraries={}] - react component library like bootstrap
 	 * @param {Object} [options.rjx={}] - any valid RJX JSON
@@ -18046,6 +18053,7 @@
 	}
 	/**
 	 * returns a react element from rjx.component
+	 * @memberOf components
 	 * @example
 	 * // returns react elements
 	 * getComponentFromMap({rjx:{component:'div'}})=>div
@@ -18095,6 +18103,7 @@
 	}
 	/**
 	 * Returns a new function from an options object
+	 * @memberOf components
 	 * @param {Object} options 
 	 * @param {String} [options.body=''] - Function string body
 	 * @param {String[]} [options.args=[]] - Function arguments
@@ -18112,6 +18121,7 @@
 	}
 	/**
 	 * Returns a new React Component
+	 * @memberOf components
 	 * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class 
 	 * @param {Object} [options.resources={}] - asyncprops for component
 	 * @param {String} [options.name ] - Component name
@@ -18215,6 +18225,7 @@
 	}
 	/**
 	 * Returns new React Function Component
+	 * @memberOf components
 	 * @todo set 'functionprops' to set arguments for function
 	 * @param {*} reactComponent - Valid RJX to render
 	 * @param {String} functionBody - String of function component body
@@ -18294,9 +18305,7 @@
 	  return functionComponent(...functionArgs);
 	}
 	/**
-	 * if (recharts[rjx.component.replace('recharts.', '')]) {
-	      return recharts[rjx.component.replace('recharts.', '')];
-	    }
+	 * @memberOf components
 	 */
 
 	function getReactContext(options = {}) {
@@ -18496,6 +18505,23 @@
 	  } = options;
 	  const scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
 
+	  let evAllProps = {};
+
+	  if (rjx.__dangerouslyEvalAllProps) {
+	    let evVal;
+
+	    try {
+	      // eslint-disable-next-line
+	      evVal = typeof evVal === 'function' ? rjx.__dangerouslyEvalAllProps : scopedEval(rjx.__dangerouslyEvalAllProps);
+	    } catch (e) {
+	      if (this.debug || rjx.debug) evVal = e;
+	    }
+
+	    evAllProps = evVal.call(this, {
+	      rjx
+	    });
+	  }
+
 	  const evProps = Object.keys(rjx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
 	    let evVal;
 	    let evValString;
@@ -18552,7 +18578,7 @@
 	    if (this.exposeEval) eprops[`__eval_${epropName}`] = evValString;
 	    return eprops;
 	  }, {});
-	  return Object.assign({}, evProps, evBindProps);
+	  return Object.assign({}, evProps, evBindProps, evAllProps);
 	}
 	/**
 	 * Resolves rjx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
@@ -18892,6 +18918,9 @@
 	      rjx,
 	      debug
 	    }) : {};
+	    const evalAllProps = rjx.__dangerouslyEvalAllProps ? getEvalProps.call(this, {
+	      rjx
+	    }) : {};
 	    const allProps = Object.assign({}, this.disableRenderIndexKey ? {} : {
 	      key: renderIndex
 	    }, rjx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
@@ -18904,7 +18933,7 @@
 	    }) : {}, rjx.__spreadComponent ? getChildrenComponents.call(this, {
 	      allProps,
 	      rjx
-	    }) : {});
+	    }) : {}, evalAllProps);
 	    if (rjx.debug) console.debug({
 	      rjx,
 	      computedProps
@@ -19068,6 +19097,235 @@
 		getRJXChildren: getRJXChildren
 	});
 
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+	// resolves . and .. elements in a path array with directory names there
+	// must be no slashes, empty elements, or device names (c:\) in the array
+	// (so also no leading and trailing slashes - it does not distinguish
+	// relative and absolute paths)
+	function normalizeArray(parts, allowAboveRoot) {
+	  // if the path tries to go above the root, `up` ends up > 0
+	  var up = 0;
+
+	  for (var i = parts.length - 1; i >= 0; i--) {
+	    var last = parts[i];
+
+	    if (last === '.') {
+	      parts.splice(i, 1);
+	    } else if (last === '..') {
+	      parts.splice(i, 1);
+	      up++;
+	    } else if (up) {
+	      parts.splice(i, 1);
+	      up--;
+	    }
+	  } // if the path is allowed to go above the root, restore leading ..s
+
+
+	  if (allowAboveRoot) {
+	    for (; up--; up) {
+	      parts.unshift('..');
+	    }
+	  }
+
+	  return parts;
+	} // Split a filename into [root, dir, basename, ext], unix version
+	// 'root' is just a slash, or nothing.
+
+
+	var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+
+	var splitPath = function (filename) {
+	  return splitPathRe.exec(filename).slice(1);
+	}; // path.resolve([from ...], to)
+	// posix version
+
+
+	function resolve() {
+	  var resolvedPath = '',
+	      resolvedAbsolute = false;
+
+	  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+	    var path = i >= 0 ? arguments[i] : '/'; // Skip empty and invalid entries
+
+	    if (typeof path !== 'string') {
+	      throw new TypeError('Arguments to path.resolve must be strings');
+	    } else if (!path) {
+	      continue;
+	    }
+
+	    resolvedPath = path + '/' + resolvedPath;
+	    resolvedAbsolute = path.charAt(0) === '/';
+	  } // At this point the path should be resolved to a full absolute path, but
+	  // handle relative paths to be safe (might happen when process.cwd() fails)
+	  // Normalize the path
+
+
+	  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function (p) {
+	    return !!p;
+	  }), !resolvedAbsolute).join('/');
+	  return (resolvedAbsolute ? '/' : '') + resolvedPath || '.';
+	}
+	// posix version
+
+	function normalize(path) {
+	  var isPathAbsolute = isAbsolute(path),
+	      trailingSlash = substr(path, -1) === '/'; // Normalize the path
+
+	  path = normalizeArray(filter(path.split('/'), function (p) {
+	    return !!p;
+	  }), !isPathAbsolute).join('/');
+
+	  if (!path && !isPathAbsolute) {
+	    path = '.';
+	  }
+
+	  if (path && trailingSlash) {
+	    path += '/';
+	  }
+
+	  return (isPathAbsolute ? '/' : '') + path;
+	}
+
+	function isAbsolute(path) {
+	  return path.charAt(0) === '/';
+	} // posix version
+
+	function join() {
+	  var paths = Array.prototype.slice.call(arguments, 0);
+	  return normalize(filter(paths, function (p, index) {
+	    if (typeof p !== 'string') {
+	      throw new TypeError('Arguments to path.join must be strings');
+	    }
+
+	    return p;
+	  }).join('/'));
+	} // path.relative(from, to)
+	// posix version
+
+	function relative(from, to) {
+	  from = resolve(from).substr(1);
+	  to = resolve(to).substr(1);
+
+	  function trim(arr) {
+	    var start = 0;
+
+	    for (; start < arr.length; start++) {
+	      if (arr[start] !== '') break;
+	    }
+
+	    var end = arr.length - 1;
+
+	    for (; end >= 0; end--) {
+	      if (arr[end] !== '') break;
+	    }
+
+	    if (start > end) return [];
+	    return arr.slice(start, end - start + 1);
+	  }
+
+	  var fromParts = trim(from.split('/'));
+	  var toParts = trim(to.split('/'));
+	  var length = Math.min(fromParts.length, toParts.length);
+	  var samePartsLength = length;
+
+	  for (var i = 0; i < length; i++) {
+	    if (fromParts[i] !== toParts[i]) {
+	      samePartsLength = i;
+	      break;
+	    }
+	  }
+
+	  var outputParts = [];
+
+	  for (var i = samePartsLength; i < fromParts.length; i++) {
+	    outputParts.push('..');
+	  }
+
+	  outputParts = outputParts.concat(toParts.slice(samePartsLength));
+	  return outputParts.join('/');
+	}
+	var sep = '/';
+	var delimiter = ':';
+	function dirname(path) {
+	  var result = splitPath(path),
+	      root = result[0],
+	      dir = result[1];
+
+	  if (!root && !dir) {
+	    // No dirname whatsoever
+	    return '.';
+	  }
+
+	  if (dir) {
+	    // It has a dirname, strip trailing slash
+	    dir = dir.substr(0, dir.length - 1);
+	  }
+
+	  return root + dir;
+	}
+	function basename(path, ext) {
+	  var f = splitPath(path)[2]; // TODO: make this comparison case-insensitive on windows?
+
+	  if (ext && f.substr(-1 * ext.length) === ext) {
+	    f = f.substr(0, f.length - ext.length);
+	  }
+
+	  return f;
+	}
+	function extname(path) {
+	  return splitPath(path)[3];
+	}
+	var path = {
+	  extname: extname,
+	  basename: basename,
+	  dirname: dirname,
+	  sep: sep,
+	  delimiter: delimiter,
+	  relative: relative,
+	  join: join,
+	  isAbsolute: isAbsolute,
+	  normalize: normalize,
+	  resolve: resolve
+	};
+
+	function filter(xs, f) {
+	  if (xs.filter) return xs.filter(f);
+	  var res = [];
+
+	  for (var i = 0; i < xs.length; i++) {
+	    if (f(xs[i], i, xs)) res.push(xs[i]);
+	  }
+
+	  return res;
+	} // String.prototype.substr - negative index don't work in IE8
+
+
+	var substr = 'ab'.substr(-1) === 'b' ? function (str, start, len) {
+	  return str.substr(start, len);
+	} : function (str, start, len) {
+	  if (start < 0) start = str.length + start;
+	  return str.substr(start, len);
+	};
+
 	/**
 	 * Use RJX for express view rendering
 	 * @param {string} filePath - path to rjx express view 
@@ -19085,14 +19343,17 @@
 	    delete resources.__boundConfig;
 	    delete resources.__DOCTYPE;
 	    delete resources.__rjx;
-	    const rjxRenderedString = rjxHTMLString.call(options.__boundConfig || {}, {
+	    const context = Object.assign({}, options.__boundConfig);
+	    if (path.extname('.json')) context.useJSON = true;
+	    const rjxRenderedString = outputHTML.call(context, {
 	      rjx: rjxModule,
 	      resources
 	    });
-	    callback(null, `${options.__DOCTYPE || '<!DOCTYPE html>'}
-${rjxRenderedString}`);
+	    const template = `${options.__DOCTYPE || '<!DOCTYPE html>'}
+${rjxRenderedString}`;
+	    if (typeof callback === 'function') callback(null, template);else return template;
 	  } catch (e) {
-	    callback(e);
+	    if (typeof callback === 'function') callback(e);else throw e;
 	  }
 	}
 
@@ -19152,7 +19413,7 @@ ${rjxRenderedString}`);
 	    rjx,
 	    resources
 	  } = config;
-	  return server.renderToString(getReactElementFromRJX.call(this || {}, rjx, resources));
+	  return this && this.useJSON ? server.renderToString(getReactElementFromJSON.call(this || {}, rjx, resources)) : server.renderToString(getReactElementFromRJX.call(this || {}, rjx, resources));
 	}
 	/**
 	 * Use React.createElement and RJX JSON to create React elements
@@ -19363,19 +19624,23 @@ ${rjxRenderedString}`);
 	  return useStore;
 	}
 	const _rjxChildren = rjxChildren;
-	const _rjxComponents = rjxComponents;
+	/**
+	 * @namespace
+	 */
+
+	const components = rjxComponents;
 	const _rjxProps = rjxProps;
-	const _rjxUtils = rjxUtils;
+	const _rjxUtils = rjxUtils; // export * as components from './components';
 
 	exports.__express = __express;
 	exports.__getReact = __getReact;
 	exports.__getReactDOM = __getReactDOM;
 	exports.__getUseGlobalHook = __getUseGlobalHook;
 	exports._rjxChildren = _rjxChildren;
-	exports._rjxComponents = _rjxComponents;
 	exports._rjxProps = _rjxProps;
 	exports._rjxUtils = _rjxUtils;
 	exports.compile = compile;
+	exports.components = components;
 	exports.default = getReactElementFromRJX;
 	exports.getReactElement = getReactElement;
 	exports.getReactElementFromJSON = getReactElementFromJSON;
@@ -19385,6 +19650,7 @@ ${rjxRenderedString}`);
 	exports.outputHTML = outputHTML;
 	exports.outputJSON = outputJSON;
 	exports.outputJSX = outputJSX;
+	exports.renderFile = __express;
 	exports.rjxHTMLString = rjxHTMLString;
 	exports.rjxRender = rjxRender;
 

@@ -174,6 +174,19 @@ export function boundArgsReducer(rjx = {}) {
 export function getEvalProps(options = {}) {
   const { rjx, } = options;
   const scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
+  let evAllProps = {};
+  if (rjx.__dangerouslyEvalAllProps) {
+    let evVal;
+    try {
+      // eslint-disable-next-line
+      evVal = (typeof evVal === 'function')
+        ? rjx.__dangerouslyEvalAllProps
+        : scopedEval(rjx.__dangerouslyEvalAllProps);
+    } catch (e) { 
+      if (this.debug || rjx.debug) evVal = e;
+    }
+    evAllProps = evVal.call(this, { rjx, });
+  }
   const evProps = Object.keys(rjx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
     let evVal;
     let evValString;
@@ -225,7 +238,7 @@ export function getEvalProps(options = {}) {
     return eprops;
   }, {});
 
-  return Object.assign({}, evProps, evBindProps);
+  return Object.assign({}, evProps, evBindProps, evAllProps);
 }
 
 /**
@@ -523,11 +536,16 @@ export function getComputedProps(options = {}) {
     const insertedReactComponents = (rjx.__dangerouslyInsertReactComponents || rjx.__dangerouslyInsertRJXComponents)
       ? getReactComponentProps.call(this, { rjx, debug, })
       : {};
+    
+    const evalAllProps = (rjx.__dangerouslyEvalAllProps)
+      ? getEvalProps.call(this, { rjx, })
+      : {};
     const allProps = Object.assign({}, this.disableRenderIndexKey ? {}: { key: renderIndex, }, rjx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps,
       rjx.__functionProps ? getFunctionProps.call(this, { allProps, rjx, }) : {},
       rjx.__windowComponents ? getWindowComponents.call(this, { allProps, rjx, }) : {},
-      rjx.__spreadComponent ? getChildrenComponents.call(this, { allProps, rjx, }) : {});
+      rjx.__spreadComponent ? getChildrenComponents.call(this, { allProps, rjx, }) : {},
+      evalAllProps);
     if (rjx.debug) console.debug({ rjx, computedProps, });
     return computedProps;
   } catch (e) {

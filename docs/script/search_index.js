@@ -42,12 +42,6 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "rjx/src/main.js~_rjxcomponents",
-    "variable/index.html#static-variable-_rjxComponents",
-    "<span>_rjxComponents</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
-    "variable"
-  ],
-  [
     "rjx/src/main.js~_rjxprops",
     "variable/index.html#static-variable-_rjxProps",
     "<span>_rjxProps</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
@@ -81,6 +75,12 @@ window.esdocSearchIndex = [
     "rjx/src/components.js~componentmap",
     "variable/index.html#static-variable-componentMap",
     "<span>componentMap</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "variable"
+  ],
+  [
+    "rjx/src/main.js~components",
+    "variable/index.html#static-variable-components",
+    "<span>components</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
     "variable"
   ],
   [

@@ -78,9 +78,9 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-advancedBinding">advancedBinding</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-componentMap">componentMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxChildren">_rjxChildren</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxComponents">_rjxComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxProps">_rjxProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_rjxUtils">_rjxUtils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-components">components</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getReactElement">getReactElement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getRenderedJSON">getRenderedJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-renderIndex">renderIndex</a></span></span></li>
@@ -141,7 +141,10 @@ export function rjxRender(config = {}) {
  */
 export function outputHTML(config = {}) {
   const { rjx, resources, } = config;
-  return ReactDOMServer.renderToString(getReactElementFromRJX.call(this || {}, rjx, resources));
+  
+  return (this &amp;&amp; this.useJSON)
+    ? ReactDOMServer.renderToString(getReactElementFromJSON.call(this || {}, rjx, resources))
+    : ReactDOMServer.renderToString(getReactElementFromRJX.call(this || {}, rjx, resources));
 }
 
 /**
@@ -312,10 +315,14 @@ export function __getUseGlobalHook() {
 }
 
 export const _rjxChildren = rjxChildren;
-export const _rjxComponents = rjxComponents;
+/**
+ * @namespace
+ */
+export const components = rjxComponents;
 export const _rjxProps = rjxProps;
 export const _rjxUtils = rjxUtils;
-export { __express, } from &apos;./express&apos;;
+// export * as components from &apos;./components&apos;;
+export { __express, __express as renderFile, } from &apos;./express&apos;;
 
 export default getReactElementFromRJX;</code></pre>
 

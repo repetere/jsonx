@@ -7,8 +7,8 @@ import globals from 'rollup-plugin-node-globals';
 import replace from 'rollup-plugin-replace';
 // import alias from 'rollup-plugin-alias';
 import pkg from './package.json';
-// import { terser, } from 'rollup-plugin-terser';
-import terser from 'rollup-plugin-terser-js';
+import { terser, } from 'rollup-plugin-terser';
+// import terser from 'rollup-plugin-terser-js';
 
 export default [
   // browser-friendly UMD build
@@ -84,6 +84,7 @@ export default [
   {
     input: 'src/main.js',
     external: [
+      'path',
       'react',
       'react-dom',
       'react-dom/server',
@@ -143,6 +144,7 @@ export default [
   {
     input: 'src/main.js',
     external: [
+      'path',
       'react',
       'react-dom',
       'react-dom/server',
@@ -214,11 +216,18 @@ export default [
       file: 'dist/rjx.umd.min.js',
       format: 'umd',
       name: 'rjx',
+      sourcemap:true,
+      compress: true,
+      mangle: true,
     }, {
       exports: 'named',
       file: 'dist/rjx.web.min.js',
       format: 'iife',
       name: 'rjx',
+      sourcemap:true,
+      compress: true,
+      mangle: true,
+
     },
     ],
     plugins: [
@@ -272,10 +281,19 @@ export default [
         ],
       }),
       terser({
-        sourcemaps:true,
+        // sourceMap: {
+        //   filename: 'dist/rjx.web.min.js',
+        //   url: 'dist/rjx.web.min.js.map',
+        // },
+        // sourcemaps:true,
+        // sourcemap:true,
         compress: true,
         mangle: true,
       }),
+
+      // terser({
+      //   sourcemap: true
+      // }),
     ],
   },
 ];

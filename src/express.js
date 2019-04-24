@@ -1,4 +1,5 @@
-import { rjxHTMLString, } from './main';
+import { outputHTML, } from './main';
+import path from 'path';
 /**
  * Use RJX for express view rendering
  * @param {string} filePath - path to rjx express view 
@@ -14,14 +15,19 @@ export function __express(filePath, options, callback) {
     delete resources.__boundConfig;
     delete resources.__DOCTYPE;
     delete resources.__rjx;
+    const context = Object.assign({}, options.__boundConfig);
+    if (path.extname('.json')) context.useJSON = true;
   
-    const rjxRenderedString = rjxHTMLString.call(options.__boundConfig || {}, {
+    const rjxRenderedString = outputHTML.call(context, {
       rjx: rjxModule,
       resources,
     });
-    callback(null, `${options.__DOCTYPE || '<!DOCTYPE html>'}
-${rjxRenderedString}`);
+    const template = `${options.__DOCTYPE || '<!DOCTYPE html>'}
+${rjxRenderedString}`;
+    if (typeof callback === 'function') callback(null, template);
+    else return template;
   } catch (e) {
-    callback(e);
+    if (typeof callback === 'function') callback(e);
+    else throw e;
   }
 }

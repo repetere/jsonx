@@ -47,7 +47,10 @@ export function rjxRender(config = {}) {
  */
 export function outputHTML(config = {}) {
   const { rjx, resources, } = config;
-  return ReactDOMServer.renderToString(getReactElementFromRJX.call(this || {}, rjx, resources));
+  
+  return (this && this.useJSON)
+    ? ReactDOMServer.renderToString(getReactElementFromJSON.call(this || {}, rjx, resources))
+    : ReactDOMServer.renderToString(getReactElementFromRJX.call(this || {}, rjx, resources));
 }
 
 /**
@@ -221,6 +224,6 @@ export const _rjxChildren = rjxChildren;
 export const _rjxComponents = rjxComponents;
 export const _rjxProps = rjxProps;
 export const _rjxUtils = rjxUtils;
-export { __express, } from './express';
+export { __express, __express as renderFile, } from './express';
 
 export default getReactElementFromRJX;

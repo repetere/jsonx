@@ -106,8 +106,6 @@ Returns new React Function Component
 
 ## `getReactContext()`
 
-if (recharts[rjx.component.replace('recharts.', '')]) { return recharts[rjx.component.replace('recharts.', '')]; }
-
 | Name | Type | Attribute | Description |
 | --- | --- | --- | --- |
 
