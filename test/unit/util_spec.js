@@ -1,5 +1,5 @@
-import * as rjx from '../../src/main';
-import * as _rjxUtils from '../../src/utils';
+import * as jsonx from '../../src/main';
+import * as _jsonxUtils from '../../src/utils';
 
 import mochaJSDOM from 'jsdom-global';
 import chai from 'chai';
@@ -13,11 +13,11 @@ import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
 import 'mocha-sinon';
 
-const sampleRJX = {
+const sampleJSONX = {
   component: 'div',
   props: {
-    id: 'generatedRJX',
-    className: 'rjx',
+    id: 'generatedJSONX',
+    className: 'jsonx',
     bigNum: 1430931039,
     smallNum: 0.425,
     falsey: false,
@@ -26,266 +26,266 @@ const sampleRJX = {
   children: 'some div',
 };
 
-describe('rjx utils', function () { 
+describe('jsonx utils', function () { 
   describe('displayComponent', () => {
-    const displayComponent = _rjxUtils.displayComponent;
+    const displayComponent = _jsonxUtils.displayComponent;
     it('should display by default return true', () => {
       expect(displayComponent()).to.be.true;
     });
     it('should display if left !== null||undefined', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['falsey', ],
           operation:'exists',
         },],
       });
-      const testRJX3 = Object.assign({}, sampleRJX, {
+      const testJSONX3 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: null,
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.false;
     });
     it('should display if left === null||undefined', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy',],
           operation:'dne',
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['falsey', ],
           operation:'undefined',
         },],
       });
-      const testRJX3 = Object.assign({}, sampleRJX, {
+      const testJSONX3 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: null,
           operation:'null',
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
-      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if left == right', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'eq',
           right:['truthy', ],
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'==',
           right:['falsey', ],
         },],
       });
-      const testRJX3 = Object.assign({}, sampleRJX, {
+      const testJSONX3 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'eq',
           right:1,
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
-      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if left === right', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'seq',
           right:['truthy', ],
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'===',
           right:['falsey', ],
         },],
       });
-      const testRJX3 = Object.assign({}, sampleRJX, {
+      const testJSONX3 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'seq',
           right:1,
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
-      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.false;
     });
     it('should display if left != right', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'dneq',
           right:['truthy', ],
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'!=',
           right:['falsey', ],
         },],
       });
-      const testRJX3 = Object.assign({}, sampleRJX, {
+      const testJSONX3 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'dneq',
           right:1,
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if left !== right', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'dnseq',
           right:['truthy', ],
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'!==',
           right:['falsey', ],
         },],
       });
-      const testRJX3 = Object.assign({}, sampleRJX, {
+      const testJSONX3 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'dnseq',
           right:1,
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if left > right', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['bigNum', ],
           operation:'gt',
           right:['smallNum', ],
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['smallNum', ],
           operation:'>',
           right:['bigNum', ],
         },],
       });
-      const testRJX3 = Object.assign({}, sampleRJX, {
+      const testJSONX3 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['smallNum', ],
           operation:'gt',
           right:['smallNum', ],
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
-      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.false;
     });
     it('should display if left >= right', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['bigNum', ],
           operation:'gte',
           right:['smallNum', ],
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['smallNum', ],
           operation:'>=',
           right:['bigNum', ],
         },],
       });
-      const testRJX3 = Object.assign({}, sampleRJX, {
+      const testJSONX3 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['smallNum', ],
           operation:'gte',
           right:['smallNum', ],
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
-      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if left < right', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['bigNum', ],
           operation:'<',
           right:['smallNum', ],
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['smallNum', ],
           operation:'lt',
           right:['bigNum', ],
         },],
       });
-      const testRJX3 = Object.assign({}, sampleRJX, {
+      const testJSONX3 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['smallNum', ],
           operation:'lt',
           right:['smallNum', ],
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.false;
     });
     it('should display if left <= right', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['bigNum', ],
           operation:'lte',
           right:['smallNum', ],
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['smallNum', ],
           operation:'<=',
           right:['bigNum', ],
         },],
       });
-      const testRJX3 = Object.assign({}, sampleRJX, {
+      const testJSONX3 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['smallNum', ],
           operation:'lte',
           right:['smallNum', ],
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.false;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if multiple comprisons are true', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'eq',
@@ -296,7 +296,7 @@ describe('rjx utils', function () {
           right:['smallNum', ],
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonprops: [{
           left: ['truthy', ],
           operation:'eq',
@@ -307,11 +307,11 @@ describe('rjx utils', function () {
           right:['smallNum', ],
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
     });
     it('should display if one or more using comparisonorprops comprisons are true', () => {
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         comparisonorprops:true,
         comparisonprops: [{
           left: ['truthy', ],
@@ -323,7 +323,7 @@ describe('rjx utils', function () {
           right:['smallNum', ],
         },],
       });
-      const testRJX2 = Object.assign({}, sampleRJX, {
+      const testJSONX2 = Object.assign({}, sampleJSONX, {
         comparisonorprops:true,
         comparisonprops: [{
           left: ['truthy', ],
@@ -335,7 +335,7 @@ describe('rjx utils', function () {
           right:['smallNum', ],
         },],
       });
-      const testRJX3 = Object.assign({}, sampleRJX, {
+      const testJSONX3 = Object.assign({}, sampleJSONX, {
         comparisonorprops:true,
         comparisonprops: [{
           left: ['truthy', ],
@@ -347,13 +347,13 @@ describe('rjx utils', function () {
           right:['smallNum', ],
         },],
       });
-      expect(displayComponent({ rjx: testRJX, props: testRJX.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX2, props: testRJX2.props, })).to.be.true;
-      expect(displayComponent({ rjx: testRJX3, props: testRJX3.props, })).to.be.false;
+      expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.false;
     });
   });
   describe('getAdvancedBinding', () => {
-    const getAdvancedBinding = _rjxUtils.getAdvancedBinding;
+    const getAdvancedBinding = _jsonxUtils.getAdvancedBinding;
     it('should return true if browser supports deep nesting', function () {
       const window = {
         navigator: {
@@ -393,7 +393,7 @@ describe('rjx utils', function () {
   describe('traverse', () => {
     const testObj = {
       user: {
-        name: 'rjx',
+        name: 'jsonx',
         description: 'react withouth javascript',
       },
       stats: {
@@ -402,7 +402,7 @@ describe('rjx utils', function () {
       },
       authentication: 'OAuth2',
     };
-    const traverse = _rjxUtils.traverse;
+    const traverse = _jsonxUtils.traverse;
     it('should return properties from an object from the array of paths', () => {
       const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
       expect( traverse(testVals, testObj)).to.eql({ auth:testObj.authentication, username:testObj.user.name,  });
@@ -420,42 +420,42 @@ describe('rjx utils', function () {
       expect(traverse.bind(null, testVals, testObj)).to.throw(Error);
     });
   });
-  describe('validateRJX', () => {
-    const validateRJX = _rjxUtils.validateRJX;
-    it('should return true if RJX is valid',  ()=> {
-      expect(validateRJX(sampleRJX)).to.be.true;
+  describe('validateJSONX', () => {
+    const validateJSONX = _jsonxUtils.validateJSONX;
+    it('should return true if JSONX is valid',  ()=> {
+      expect(validateJSONX(sampleJSONX)).to.be.true;
     });
-    it('should return string and warn of invalid RJX props', () => {
+    it('should return string and warn of invalid JSONX props', () => {
       const invalidKeys = { incorrect: true, extra: true, };
-      const invalidKeyRJX = Object.assign({}, sampleRJX, invalidKeys);
-      const validationTest = validateRJX(invalidKeyRJX);
+      const invalidKeyJSONX = Object.assign({}, sampleJSONX, invalidKeys);
+      const validationTest = validateJSONX(invalidKeyJSONX);
       expect(validationTest).to.be.a('string').and.to.be.ok;
       expect(validationTest).to.eql(`Warning: Invalid Keys [${Object.keys(invalidKeys).join()}]`);
     });
-    it('should throw a syntax error if RJX is missing a component', () => {
-      const validationTest = validateRJX.bind({});
+    it('should throw a syntax error if JSONX is missing a component', () => {
+      const validationTest = validateJSONX.bind({});
       expect(validationTest).to.throw('Missing React Component');
       expect(validationTest).to.throw(SyntaxError);
     });
     it('should throw multiple errors if returnAllErrors is true', () => {
-      const validationTest = validateRJX( {
+      const validationTest = validateJSONX( {
         props: [],
       }, true);
       expect(validationTest).to.be.an('array');
       expect(validationTest[ 0 ]).to.be.an('error');
     });
-    it('should throw a type error if RJX props is not an object, props.children or props._children', () => {
-      const badPropTest1 = validateRJX.bind(null, { component:'div', props:{ children:{}, }, });
-      expect(validateRJX.bind(null, { component:'div', props:'bad', })).to.throw(TypeError);
-      expect(validateRJX.bind(null, { component:'div', props:[], })).to.throw(TypeError);
+    it('should throw a type error if JSONX props is not an object, props.children or props._children', () => {
+      const badPropTest1 = validateJSONX.bind(null, { component:'div', props:{ children:{}, }, });
+      expect(validateJSONX.bind(null, { component:'div', props:'bad', })).to.throw(TypeError);
+      expect(validateJSONX.bind(null, { component:'div', props:[], })).to.throw(TypeError);
       expect(badPropTest1).to.throw(TypeError);
-      expect(validateRJX.bind(null, { component: 'div', props: { _children: {}, }, })).to.throw(TypeError);
+      expect(validateJSONX.bind(null, { component: 'div', props: { _children: {}, }, })).to.throw(TypeError);
     });
-    it('should throw a type error if RJX children is not an array or RJX docs or a string', () => {
-      expect(validateRJX.bind(null, { component:'div', children:{}, })).to.throw(TypeError);
+    it('should throw a type error if JSONX children is not an array or JSONX docs or a string', () => {
+      expect(validateJSONX.bind(null, { component:'div', children:{}, })).to.throw(TypeError);
     });
     it('should validate child objects', () => {
-      const rjxObj = {
+      const jsonxObj = {
         component: 'div',
         children: [
           {
@@ -468,12 +468,12 @@ describe('rjx utils', function () {
           },
         ],
       };
-      const childrenErrors = validateRJX(rjxObj, true);
+      const childrenErrors = validateJSONX(jsonxObj, true);
       expect(childrenErrors).to.be.an('array');
       expect(childrenErrors[ 0 ]).to.be.an('error');
     });
     it('should validate dynamic props[asyncprops,resourceprops,thisprops,windowprops]', () => {
-      const rjxObj = {
+      const jsonxObj = {
         component: 'myComponent',
         asyncprops: '[]',
         resourceprops: '[]',
@@ -484,25 +484,25 @@ describe('rjx utils', function () {
           title:['navigator', 'userAgent', ],
         },
       };
-      const dynamicerrors = validateRJX(rjxObj, true);
+      const dynamicerrors = validateJSONX(jsonxObj, true);
       expect(dynamicerrors).to.be.an('array');
       expect(dynamicerrors.length).to.eql(7);
       expect(dynamicerrors[ 0 ]).to.be.an('error');
     });
     it('should validate eval props[__dangerouslyEvalProps,__dangerouslyBindEvalProps]', () => {
-      const rjxObj = {
+      const jsonxObj = {
         component: 'myComponent',
         __dangerouslyEvalProps: 'badobj',
       };
-      const rjxObj2 = {
+      const jsonxObj2 = {
         component: 'myComponent',
         __dangerouslyEvalProps: {
           testJS:'()=>true',
           testJS1:'3',
         },
       };
-      const evalError = validateRJX(rjxObj, true);
-      const evalError2 = validateRJX(rjxObj2);
+      const evalError = validateJSONX(jsonxObj, true);
+      const evalError2 = validateJSONX(jsonxObj2);
       expect(evalError[ 0 ]).to.be.an('error');
       expect(evalError2).to.be.true;
       // console.log({ evalError3 });
@@ -511,27 +511,27 @@ describe('rjx utils', function () {
       // expect(dynamicerrors[ 0 ]).to.be.an('error');
     });
     it('should validate __dangerouslyEvalProps javascript', () => {
-      const rjxObj3 = {
+      const jsonxObj3 = {
         component: 'myComponent',
         __dangerouslyEvalProps: {
           testJS: '(=>true',
         },
       };
-      const evalError3 = validateRJX(rjxObj3, true);
+      const evalError3 = validateJSONX(jsonxObj3, true);
       expect(evalError3[ 0 ]).to.be.an('error');
     });
     it('should validate __dangerouslyBindEvalProps as a function that can be bound javascript', () => {
-      const rjxObj4 = {
+      const jsonxObj4 = {
         component: 'myComponent',
         __dangerouslyBindEvalProps: {
           testJS1: '{}',
         },
       };
-      const evalError4 = validateRJX(rjxObj4, true);
+      const evalError4 = validateJSONX(jsonxObj4, true);
       expect(evalError4[ 0 ]).to.be.an('error');
     });
-    it('should validate __dangerouslyInsertComponents are valid RJX objects', () => {
-      const rjxObj = {
+    it('should validate __dangerouslyInsertComponents are valid JSONX objects', () => {
+      const jsonxObj = {
         component: 'myComponent',
         __dangerouslyInsertComponents: {
           testComponent: {
@@ -540,11 +540,11 @@ describe('rjx utils', function () {
           },
         },
       };
-      const evalError = validateRJX(rjxObj, true);
+      const evalError = validateJSONX(jsonxObj, true);
       expect(evalError[ 0 ]).to.be.an('error');
     });
     it('should validate __functionProps are valid function strings', () => {
-      const rjxObj = {
+      const jsonxObj = {
         component: 'myComponent',
         __functionProps: {
           invalidFunc: {
@@ -552,41 +552,41 @@ describe('rjx utils', function () {
           },
         },
       };
-      const rjxObj2 = {
+      const jsonxObj2 = {
         component: 'myComponent',
         __functionProps: 'should be an obj',
       };
-      const rjxObjValid = {
+      const jsonxObjValid = {
         component: 'myComponent',
         __functionProps: {
           goodFunc:'func:this.someFunc',
         },
       };
-      const evalError = validateRJX(rjxObj, true);
-      const evalError2 = validateRJX(rjxObj2, true);
-      const validTest = validateRJX(rjxObjValid);
+      const evalError = validateJSONX(jsonxObj, true);
+      const evalError2 = validateJSONX(jsonxObj2, true);
+      const validTest = validateJSONX(jsonxObjValid);
       expect(evalError[ 0 ]).to.be.an('error');
       expect(evalError2[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
     it('should validate __windowComponentProps is an object', () => {
-      const rjxObj = {
+      const jsonxObj = {
         component: 'myComponent',
         __windowComponentProps: 'should be an obj',
       };
-      const rjxObjValid = {
+      const jsonxObjValid = {
         component: 'myComponent',
         __windowComponentProps: {
           goodProps:'ok',
         },
       };
-      const evalError = validateRJX(rjxObj, true);
-      const validTest = validateRJX(rjxObjValid);
+      const evalError = validateJSONX(jsonxObj, true);
+      const validTest = validateJSONX(jsonxObjValid);
       expect(evalError[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
     it('should validate __windowComponents are valid function strings', () => {
-      const rjxObj = {
+      const jsonxObj = {
         component: 'myComponent',
         __windowComponents: {
           invalidFunc: {
@@ -594,80 +594,80 @@ describe('rjx utils', function () {
           },
         },
       };
-      const rjxObj2 = {
+      const jsonxObj2 = {
         component: 'myComponent',
         __windowComponents: 'should be an obj',
       };
-      const rjxObjValid = {
+      const jsonxObjValid = {
         component: 'myComponent',
         __windowComponents: {
           goodFunc:'func:this.someFunc',
         },
       };
-      const evalError = validateRJX(rjxObj, true);
-      const evalError2 = validateRJX(rjxObj2, true);
-      const validTest = validateRJX(rjxObjValid);
+      const evalError = validateJSONX(jsonxObj, true);
+      const evalError2 = validateJSONX(jsonxObj2, true);
+      const validTest = validateJSONX(jsonxObjValid);
       expect(evalError[ 0 ]).to.be.an('error');
       expect(evalError2[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
     it('should validate comparisonorprops is boolean', () => {
-      const rjxObj = {
+      const jsonxObj = {
         component: 'myComponent',
         comparisonorprops: 'should be an obj',
       };
-      const rjxObjValid = {
+      const jsonxObjValid = {
         component: 'myComponent',
         comparisonorprops: true,
       };
-      const evalError = validateRJX(rjxObj, true);
-      const validTest = validateRJX(rjxObjValid);
+      const evalError = validateJSONX(jsonxObj, true);
+      const validTest = validateJSONX(jsonxObjValid);
       expect(evalError[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
     it('should validate comparisonprops is an array of comaprisons', () => {
-      const rjxObj = {
+      const jsonxObj = {
         component: 'myComponent',
         comparisonprops: 'should be an array',
       };
-      const rjxObjValid = {
+      const jsonxObjValid = {
         component: 'myComponent',
         comparisonprops: [],
       };
-      const rjxObjin1 = {
+      const jsonxObjin1 = {
         component: 'myComponent',
         comparisonprops: [{},],
       };
-      const rjxObjin2 = {
+      const jsonxObjin2 = {
         component: 'myComponent',
         comparisonprops: [() => { },],
       };
-      const evalError = validateRJX(rjxObj, true);
-      const evalError1 = validateRJX(rjxObjin1, true);
-      const evalError2 = validateRJX(rjxObjin2, true);
-      const validTest = validateRJX(rjxObjValid);
+      const evalError = validateJSONX(jsonxObj, true);
+      const evalError1 = validateJSONX(jsonxObjin1, true);
+      const evalError2 = validateJSONX(jsonxObjin2, true);
+      const validTest = validateJSONX(jsonxObjValid);
       expect(evalError[ 0 ]).to.be.an('error');
       expect(evalError1[ 0 ]).to.be.an('error');
       expect(evalError2[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
     it('should validate passprops is boolean', () => {
-      const rjxObj = {
+      const jsonxObj = {
         component: 'myComponent',
         passprops: 'should be an obj',
       };
-      const rjxObjValid = {
+      const jsonxObjValid = {
         component: 'myComponent',
         passprops: true,
       };
-      const evalError = validateRJX(rjxObj, true);
-      const validTest = validateRJX(rjxObjValid);
+      const evalError = validateJSONX(jsonxObj, true);
+      const validTest = validateJSONX(jsonxObjValid);
       expect(evalError[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
   });
-  describe('validSimpleRJXSyntax', () => {
-    const validSimpleRJXSyntax = _rjxUtils.validSimpleRJXSyntax;
+  describe('validSimpleJSONXSyntax', () => {
+    const validSimpleJSONXSyntax = _jsonxUtils.validSimpleJSONXSyntax;
     it('should invalidate shorthard simple syntax', () => {
       const invalidShorthand = {
         component:'p',
@@ -704,12 +704,12 @@ describe('rjx utils', function () {
           component: 'p',
         },
       };
-      expect(validSimpleRJXSyntax(invalidShorthand)).to.be.false;
-      expect(validSimpleRJXSyntax(invalidShorthand2)).to.be.false;
-      expect(validSimpleRJXSyntax(invalidShorthand3)).to.be.false;
-      expect(validSimpleRJXSyntax(invalidShorthand4)).to.be.false;
-      expect(validSimpleRJXSyntax(invalidShorthand5)).to.be.false;
-      expect(validSimpleRJXSyntax(invalidShorthand6)).to.be.false;
+      expect(validSimpleJSONXSyntax(invalidShorthand)).to.be.false;
+      expect(validSimpleJSONXSyntax(invalidShorthand2)).to.be.false;
+      expect(validSimpleJSONXSyntax(invalidShorthand3)).to.be.false;
+      expect(validSimpleJSONXSyntax(invalidShorthand4)).to.be.false;
+      expect(validSimpleJSONXSyntax(invalidShorthand5)).to.be.false;
+      expect(validSimpleJSONXSyntax(invalidShorthand6)).to.be.false;
     });
     it('should validate shorthard simple syntax', () => {
       const validShorthand = {
@@ -744,16 +744,16 @@ describe('rjx utils', function () {
           children:'p',
         },
       };
-      expect(validSimpleRJXSyntax(validShorthand)).to.be.true;
-      expect(validSimpleRJXSyntax(validShorthand2)).to.be.true;
-      expect(validSimpleRJXSyntax(validShorthand3)).to.be.true;
-      expect(validSimpleRJXSyntax(validShorthand4)).to.be.true;
-      expect(validSimpleRJXSyntax(validShorthand5)).to.be.true;
+      expect(validSimpleJSONXSyntax(validShorthand)).to.be.true;
+      expect(validSimpleJSONXSyntax(validShorthand2)).to.be.true;
+      expect(validSimpleJSONXSyntax(validShorthand3)).to.be.true;
+      expect(validSimpleJSONXSyntax(validShorthand4)).to.be.true;
+      expect(validSimpleJSONXSyntax(validShorthand5)).to.be.true;
     });
   });
-  describe('simpleRJXSyntax', () => {
-    const simpleRJXSyntax = _rjxUtils.simpleRJXSyntax;
-    it('should return valid RJX from simple RJX syntax', () => {
+  describe('simpleJSONXSyntax', () => {
+    const simpleJSONXSyntax = _jsonxUtils.simpleJSONXSyntax;
+    it('should return valid JSONX from simple JSONX syntax', () => {
       const validShorthand = {
         p:{},
       };
@@ -790,11 +790,11 @@ describe('rjx utils', function () {
           children:'p',
         },
       };
-      const transformedSimpleSyntaxValid = _rjxUtils.validateRJX(simpleRJXSyntax(validShorthand), true);
-      const transformedSimpleSyntaxValid2 = _rjxUtils.validateRJX(simpleRJXSyntax(validShorthand2), true);
-      const transformedSimpleSyntaxValid3 = _rjxUtils.validateRJX(simpleRJXSyntax(validShorthand3), true);
-      const transformedSimpleSyntaxValid4 = _rjxUtils.validateRJX(simpleRJXSyntax(validShorthand4), true);
-      const transformedSimpleSyntaxValid5 = _rjxUtils.validateRJX(simpleRJXSyntax(validShorthand5), true);
+      const transformedSimpleSyntaxValid = _jsonxUtils.validateJSONX(simpleJSONXSyntax(validShorthand), true);
+      const transformedSimpleSyntaxValid2 = _jsonxUtils.validateJSONX(simpleJSONXSyntax(validShorthand2), true);
+      const transformedSimpleSyntaxValid3 = _jsonxUtils.validateJSONX(simpleJSONXSyntax(validShorthand3), true);
+      const transformedSimpleSyntaxValid4 = _jsonxUtils.validateJSONX(simpleJSONXSyntax(validShorthand4), true);
+      const transformedSimpleSyntaxValid5 = _jsonxUtils.validateJSONX(simpleJSONXSyntax(validShorthand5), true);
      
       expect((transformedSimpleSyntaxValid)).to.be.true;
       expect((transformedSimpleSyntaxValid2)).to.be.true;
@@ -803,11 +803,11 @@ describe('rjx utils', function () {
       expect((transformedSimpleSyntaxValid5)).to.be.true;
     });
     it('should produce equivalent RXJ', () => {
-      const sampleRJX = {
+      const sampleJSONX = {
         component: 'div',
         props: {
-          id: 'generatedRJX',
-          className: 'rjx',
+          id: 'generatedJSONX',
+          className: 'jsonx',
         },
         asyncprops: {
           test:['ok', 'cool',],
@@ -826,11 +826,11 @@ describe('rjx utils', function () {
         ],
       };
 
-      const simpleRJX = {
+      const simpleJSONX = {
         div: {
           props: {
-            id: 'generatedRJX',
-            className: 'rjx',
+            id: 'generatedJSONX',
+            className: 'jsonx',
           },
           asyncprops: {
             test:['ok', 'cool',],
@@ -850,19 +850,19 @@ describe('rjx utils', function () {
           ],
         },
       };
-      const transformedRJXSTRING = simpleRJXSyntax(simpleRJX).toString();
-      const RJXSTRING = sampleRJX.toString();
+      const transformedJSONXSTRING = simpleJSONXSyntax(simpleJSONX).toString();
+      const JSONXSTRING = sampleJSONX.toString();
 
-      expect(transformedRJXSTRING).to.eql(RJXSTRING);
+      expect(transformedJSONXSTRING).to.eql(JSONXSTRING);
     });
   });
-  describe('getSimplifiedRJX', () => {
-    const getSimplifiedRJX = _rjxUtils.getSimplifiedRJX;
-    const simpleRJX = {
+  describe('getSimplifiedJSONX', () => {
+    const getSimplifiedJSONX = _jsonxUtils.getSimplifiedJSONX;
+    const simpleJSONX = {
       div: {
         props: {
-          id: 'generatedRJX',
-          className: 'rjx',
+          id: 'generatedJSONX',
+          className: 'jsonx',
         },
         asyncprops: {
           test:['ok', 'cool',],
@@ -882,11 +882,11 @@ describe('rjx utils', function () {
         ],
       },
     };
-    const sampleRJX = {
+    const sampleJSONX = {
       component: 'div',
       props: {
-        id: 'generatedRJX',
-        className: 'rjx',
+        id: 'generatedJSONX',
+        className: 'jsonx',
       },
       asyncprops: {
         test:['ok', 'cool',],
@@ -904,13 +904,13 @@ describe('rjx utils', function () {
         },
       ],
     };
-    it('should produce equivalent SimpleRJX', () => {
-      const transformedRJXSTRING = getSimplifiedRJX(sampleRJX).toString();
-      const RJXSTRING = simpleRJX.toString();
-      expect(transformedRJXSTRING).to.eql(RJXSTRING);
+    it('should produce equivalent SimpleJSONX', () => {
+      const transformedJSONXSTRING = getSimplifiedJSONX(sampleJSONX).toString();
+      const JSONXSTRING = simpleJSONX.toString();
+      expect(transformedJSONXSTRING).to.eql(JSONXSTRING);
     });
-    it('should return SimpleRJX if already simple', () => {
-      expect(simpleRJX).to.eql(getSimplifiedRJX(simpleRJX));
+    it('should return SimpleJSONX if already simple', () => {
+      expect(simpleJSONX).to.eql(getSimplifiedJSONX(simpleJSONX));
     });
   });
 });

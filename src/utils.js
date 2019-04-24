@@ -4,15 +4,15 @@ import UAParser from 'ua-parser-js';
 /**
  * Used to evaluate whether or not to render a component
  * @param {Object} options 
- * @param {Object} options.rjx - Valid RJX JSON 
- * @param {Object} options.props - Props to test comparison values against, usually Object.assign(rjx.props,rjx.asyncprops,rjx.thisprops,rjx.windowprops) 
+ * @param {Object} options.jsonx - Valid JSONX JSON 
+ * @param {Object} options.props - Props to test comparison values against, usually Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops) 
  * @returns {Boolean} returns true if all comparisons are true or if using or comparisons, at least one condition is true
  * @example
- const sampleRJX = {
+ const sampleJSONX = {
   component: 'div',
   props: {
-    id: 'generatedRJX',
-    className: 'rjx',
+    id: 'generatedJSONX',
+    className: 'jsonx',
     bigNum: 1430931039,
     smallNum: 0.425,
     falsey: false,
@@ -20,18 +20,18 @@ import UAParser from 'ua-parser-js';
   },
   children: 'some div',
 };
-const testRJX = Object.assign({}, sampleRJX, {
+const testJSONX = Object.assign({}, sampleJSONX, {
   comparisonprops: [{
     left: ['truthy',],
     operation:'==',
     right:['falsey',],
   }],
 });
-displayComponent({ rjx: testRJX, props: testRJX2.props, }) // => false
+displayComponent({ jsonx: testJSONX, props: testJSONX2.props, }) // => false
  */
 export function displayComponent(options = {}) {
-  const { rjx = {}, props, } = options;
-  const propsToCompare = rjx.comparisonprops;
+  const { jsonx = {}, props, } = options;
+  const propsToCompare = jsonx.comparisonprops;
   const comparisons = Array.isArray(propsToCompare) ? propsToCompare.map(comp => {
     const compares = {};
     if (Array.isArray(comp.left)) {
@@ -40,7 +40,7 @@ export function displayComponent(options = {}) {
     if (Array.isArray(comp.right)) {
       compares.right = comp.right;
     }
-    const propcompares = traverse(compares, props||rjx.props);
+    const propcompares = traverse(compares, props||jsonx.props);
     const opscompares = Object.assign({}, comp, propcompares);
     // console.debug({ opscompares, compares, renderedCompProps });
     switch (opscompares.operation) {
@@ -109,11 +109,11 @@ export function displayComponent(options = {}) {
     // }
   }) : [];
   const validProps = comparisons.filter(comp => comp === true);
-  if (!rjx.comparisonprops) {
+  if (!jsonx.comparisonprops) {
     return true;
-  } else if (rjx.comparisonorprops && validProps.length < 1) {
+  } else if (jsonx.comparisonorprops && validProps.length < 1) {
     return false;
-  } else if (validProps.length !== comparisons.length && !rjx.comparisonorprops) {
+  } else if (validProps.length !== comparisons.length && !jsonx.comparisonorprops) {
     return false;
   } else {
     return true;
@@ -164,7 +164,7 @@ export function getAdvancedBinding() {
  * @example
  * const testObj = {
       user: {
-        name: 'rjx',
+        name: 'jsonx',
         description: 'react withouth javascript',
       },
       stats: {
@@ -175,7 +175,7 @@ export function getAdvancedBinding() {
     };
 const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
 
- traverse(testVals, testObj) // =>{ auth:'OAuth2', username:'rjx',  }
+ traverse(testVals, testObj) // =>{ auth:'OAuth2', username:'jsonx',  }
  * @param {Object} paths - an object to resolve array property paths 
  * @param {Object} data - object to traverse
  * @returns {Object} resolved object with traversed properties
@@ -200,82 +200,82 @@ export function traverse(paths = {}, data = {}) {
 }
 
 /**
- * Validates RJX JSON Syntax
+ * Validates JSONX JSON Syntax
  * @example
- * validateRJX({component:'p',children:'hello world'})=>true
- * validateRJX({children:'hello world'})=>throw SyntaxError('[0001] Missing React Component')
- * @param {Object} rjx - RJX JSON to validate 
+ * validateJSONX({component:'p',children:'hello world'})=>true
+ * validateJSONX({children:'hello world'})=>throw SyntaxError('[0001] Missing React Component')
+ * @param {Object} jsonx - JSONX JSON to validate 
  * @param {Boolean} [returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
- * @returns {Boolean|Error[]} either returns true if RJX is valid, or throws validation error or returns list of errors in array
+ * @returns {Boolean|Error[]} either returns true if JSONX is valid, or throws validation error or returns list of errors in array
  * @throws {SyntaxError|TypeError|ReferenceError}
  */
-export function validateRJX(rjx = {}, returnAllErrors = false) {
+export function validateJSONX(jsonx = {}, returnAllErrors = false) {
   const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops', 'thisstate',];
   const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps',];
-  const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline','__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertRJXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'debug' ].concat(dynamicPropsNames, evalPropNames);
+  const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline','__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertJSONXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'debug' ].concat(dynamicPropsNames, evalPropNames);
   let errors = [];
-  if (!rjx.component) {
+  if (!jsonx.component) {
     errors.push(SyntaxError('[0001] Missing React Component'));
   }
-  if (rjx.props) {
-    if (typeof rjx.props !== 'object' || Array.isArray(rjx.props)) {
-      errors.push(TypeError('[0002] '+rjx.component+': props must be an Object / valid React props'));
+  if (jsonx.props) {
+    if (typeof jsonx.props !== 'object' || Array.isArray(jsonx.props)) {
+      errors.push(TypeError('[0002] '+jsonx.component+': props must be an Object / valid React props'));
     }
-    if (rjx.props.children && (typeof rjx.props.children !== 'string' || !Array.isArray(rjx.props.children))) {
-      errors.push(TypeError('[0003] '+rjx.component+': props.children must be an array of RJX JSON objects or a string'));
+    if (jsonx.props.children && (typeof jsonx.props.children !== 'string' || !Array.isArray(jsonx.props.children))) {
+      errors.push(TypeError('[0003] '+jsonx.component+': props.children must be an array of JSONX JSON objects or a string'));
     }
-    if (rjx.props._children && (typeof rjx.props._children !== 'string' || !Array.isArray(rjx.props._children))) {
-      errors.push(TypeError('[0004] '+rjx.component+': props._children must be an array of RJX JSON objects or a string'));
+    if (jsonx.props._children && (typeof jsonx.props._children !== 'string' || !Array.isArray(jsonx.props._children))) {
+      errors.push(TypeError('[0004] '+jsonx.component+': props._children must be an array of JSONX JSON objects or a string'));
     }
   }
-  if (rjx.children) {
-    if (typeof rjx.children !== 'string' && !Array.isArray(rjx.children)) {
-      errors.push(TypeError('[0005] '+rjx.component+': children must be an array of RJX JSON objects or a string'));
+  if (jsonx.children) {
+    if (typeof jsonx.children !== 'string' && !Array.isArray(jsonx.children)) {
+      errors.push(TypeError('[0005] '+jsonx.component+': children must be an array of JSONX JSON objects or a string'));
     }
-    if (Array.isArray(rjx.children)) {
-      const childrenErrors = rjx.children
+    if (Array.isArray(jsonx.children)) {
+      const childrenErrors = jsonx.children
         .filter(c => typeof c === 'object')
-        .map(c => validateRJX(c, returnAllErrors));
+        .map(c => validateJSONX(c, returnAllErrors));
       errors = errors.concat(...childrenErrors);
     }
   }
   dynamicPropsNames.forEach(dynamicprop => {
-    const rjxDynamicProps = rjx[ dynamicprop ];
-    if (rjxDynamicProps) {
+    const jsonxDynamicProps = jsonx[ dynamicprop ];
+    if (jsonxDynamicProps) {
       // if (dynamicprop === 'thisprops') {
-      //   console.log({ dynamicprop, rjxDynamicProps });
+      //   console.log({ dynamicprop, jsonxDynamicProps });
       // }
-      if (typeof rjxDynamicProps !== 'object') {
+      if (typeof jsonxDynamicProps !== 'object') {
         errors.push(TypeError(`[0006] ${dynamicprop} must be an object`));
       }
-      Object.keys(rjxDynamicProps).forEach(resolvedDynamicProp => {
-        if (!Array.isArray(rjxDynamicProps[ resolvedDynamicProp ])) {
-          errors.push(TypeError(`[0007] rjx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
+      Object.keys(jsonxDynamicProps).forEach(resolvedDynamicProp => {
+        if (!Array.isArray(jsonxDynamicProps[ resolvedDynamicProp ])) {
+          errors.push(TypeError(`[0007] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
         }
-        if (Array.isArray(rjxDynamicProps[resolvedDynamicProp])) {
-          const allStringArray = rjxDynamicProps[resolvedDynamicProp].filter(propArrayItem => typeof propArrayItem === 'string');
+        if (Array.isArray(jsonxDynamicProps[resolvedDynamicProp])) {
+          const allStringArray = jsonxDynamicProps[resolvedDynamicProp].filter(propArrayItem => typeof propArrayItem === 'string');
           
-          if (allStringArray.length !== rjxDynamicProps[ resolvedDynamicProp ].length) {
-            errors.push(TypeError(`[0008] rjx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
+          if (allStringArray.length !== jsonxDynamicProps[ resolvedDynamicProp ].length) {
+            errors.push(TypeError(`[0008] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
           }
         }
       });
     }
   });
-  const evalProps = rjx.__dangerouslyEvalProps;
-  const boundEvalProps = rjx.__dangerouslyBindEvalProps;
+  const evalProps = jsonx.__dangerouslyEvalProps;
+  const boundEvalProps = jsonx.__dangerouslyBindEvalProps;
   if (evalProps || boundEvalProps) {
     if ((evalProps && typeof evalProps !== 'object') || (boundEvalProps && typeof boundEvalProps !== 'object')) {
       errors.push(TypeError('[0009] __dangerouslyEvalProps must be an object of strings to convert to valid javascript'));
     }
     evalPropNames
-      .filter(evalProp => rjx[ evalProp ])
+      .filter(evalProp => jsonx[ evalProp ])
       .forEach(eProps => {
-        const evProp = rjx[ eProps ];
+        const evProp = jsonx[ eProps ];
         const scopedEval = eval; 
         Object.keys(evProp).forEach(propToEval => {
           if (typeof evProp[ propToEval ] !== 'string') {
-            errors.push(TypeError(`[0010] rjx.${eProps}.${evProp} must be a string`));
+            errors.push(TypeError(`[0010] jsonx.${eProps}.${evProp} must be a string`));
           }
           try {
             // console.log({ eProps });
@@ -291,62 +291,62 @@ export function validateRJX(rjx = {}, returnAllErrors = false) {
         });
       });
   }
-  if (rjx.__dangerouslyInsertComponents) {
-    Object.keys(rjx.__dangerouslyInsertComponents).forEach(insertedComponents => {
+  if (jsonx.__dangerouslyInsertComponents) {
+    Object.keys(jsonx.__dangerouslyInsertComponents).forEach(insertedComponents => {
       try {
-        validateRJX(rjx.__dangerouslyInsertComponents[ insertedComponents ]);
+        validateJSONX(jsonx.__dangerouslyInsertComponents[ insertedComponents ]);
       } catch (e) {
-        errors.push(TypeError(`[0011] rjx.__dangerouslyInsertComponents.${insertedComponents} must be a valid RJX JSON Object: ${e.toString()}`));
+        errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${e.toString()}`));
       }
     });
   }
-  if (rjx.__functionProps) {
-    if (typeof rjx.__functionProps !== 'object') {
-      errors.push(TypeError('[0012] rjx.__functionProps  must be an object'));
+  if (jsonx.__functionProps) {
+    if (typeof jsonx.__functionProps !== 'object') {
+      errors.push(TypeError('[0012] jsonx.__functionProps  must be an object'));
     } else {
       
-      Object.keys(rjx.__functionProps)
+      Object.keys(jsonx.__functionProps)
         .forEach(fProp => {
-          if (rjx.__functionProps[fProp] &&( typeof rjx.__functionProps[fProp] !=='string' || rjx.__functionProps[fProp].indexOf('func:') === -1)) {
-            errors.push(ReferenceError(`[0013] rjx.__functionProps.${fProp} must reference a function (i.e. func:this.props.logoutUser())`));
+          if (jsonx.__functionProps[fProp] &&( typeof jsonx.__functionProps[fProp] !=='string' || jsonx.__functionProps[fProp].indexOf('func:') === -1)) {
+            errors.push(ReferenceError(`[0013] jsonx.__functionProps.${fProp} must reference a function (i.e. func:this.props.logoutUser())`));
           }
         });
     }
   }
-  if (rjx.__windowComponentProps && (typeof rjx.__windowComponentProps !=='object' || Array.isArray(rjx.__windowComponentProps))) {
-    errors.push(TypeError('[0013] rjx.__windowComponentProps  must be an object'));
+  if (jsonx.__windowComponentProps && (typeof jsonx.__windowComponentProps !=='object' || Array.isArray(jsonx.__windowComponentProps))) {
+    errors.push(TypeError('[0013] jsonx.__windowComponentProps  must be an object'));
   }
-  if (rjx.__windowComponents) {
-    if (typeof rjx.__windowComponents !== 'object') {
-      errors.push(TypeError('[0014] rjx.__windowComponents must be an object'));
+  if (jsonx.__windowComponents) {
+    if (typeof jsonx.__windowComponents !== 'object') {
+      errors.push(TypeError('[0014] jsonx.__windowComponents must be an object'));
     }
-    Object.keys(rjx.__windowComponents)
+    Object.keys(jsonx.__windowComponents)
       .forEach(cProp => {
-        if (typeof rjx.__windowComponents[cProp]!=='string'||rjx.__windowComponents[cProp].indexOf('func:') === -1) {
-          errors.push(ReferenceError(`[0015] rjx.__windowComponents.${cProp} must reference a window element on window.__rjx_custom_elements (i.e. func:window.__rjx_custom_elements.bootstrapModal)`));
+        if (typeof jsonx.__windowComponents[cProp]!=='string'||jsonx.__windowComponents[cProp].indexOf('func:') === -1) {
+          errors.push(ReferenceError(`[0015] jsonx.__windowComponents.${cProp} must reference a window element on window.__jsonx_custom_elements (i.e. func:window.__jsonx_custom_elements.bootstrapModal)`));
         }
       });
   }
-  if (typeof rjx.comparisonorprops !== 'undefined' && typeof rjx.comparisonorprops !== 'boolean') {
-    errors.push(TypeError('[0016] rjx.comparisonorprops  must be boolean'));
+  if (typeof jsonx.comparisonorprops !== 'undefined' && typeof jsonx.comparisonorprops !== 'boolean') {
+    errors.push(TypeError('[0016] jsonx.comparisonorprops  must be boolean'));
   }
-  if (rjx.comparisonprops) {
-    if(!Array.isArray(rjx.comparisonprops)) {
-      errors.push(TypeError('[0017] rjx.comparisonprops  must be an array or comparisons'));
+  if (jsonx.comparisonprops) {
+    if(!Array.isArray(jsonx.comparisonprops)) {
+      errors.push(TypeError('[0017] jsonx.comparisonprops  must be an array or comparisons'));
     } else {
-      rjx.comparisonprops.forEach(c => {
+      jsonx.comparisonprops.forEach(c => {
         if (typeof c !== 'object') {
-          errors.push(TypeError('[0018] rjx.comparisonprops  must be an array or comparisons objects'));
+          errors.push(TypeError('[0018] jsonx.comparisonprops  must be an array or comparisons objects'));
         } else if(typeof c.left==='undefined') {
-          errors.push(TypeError('[0019] rjx.comparisonprops  must be have a left comparison value'));
+          errors.push(TypeError('[0019] jsonx.comparisonprops  must be have a left comparison value'));
         }
       });
     }
   }
-  if (typeof rjx.passprops !== 'undefined' && typeof rjx.passprops !== 'boolean') {
-    errors.push(TypeError('[0020] rjx.passprops  must be boolean'));
+  if (typeof jsonx.passprops !== 'undefined' && typeof jsonx.passprops !== 'boolean') {
+    errors.push(TypeError('[0020] jsonx.passprops  must be boolean'));
   }
-  const invalidKeys = Object.keys(rjx).filter(key => validKeys.indexOf(key) === -1);
+  const invalidKeys = Object.keys(jsonx).filter(key => validKeys.indexOf(key) === -1);
   if (errors.length) {
     if (returnAllErrors) return errors;
     throw errors[ 0 ];
@@ -357,38 +357,38 @@ export function validateRJX(rjx = {}, returnAllErrors = false) {
 }
 
 /**
- * validates simple RJX Syntax {[component]:{props,children}}
- * @param {Object} simpleRJX - Any valid simple RJX Syntax
- * @return {Boolean} returns true if simpleRJX is valid
+ * validates simple JSONX Syntax {[component]:{props,children}}
+ * @param {Object} simpleJSONX - Any valid simple JSONX Syntax
+ * @return {Boolean} returns true if simpleJSONX is valid
  */
-export function validSimpleRJXSyntax(simpleRJX = {}) {
-  if (Object.keys(simpleRJX).length !== 1 && !simpleRJX.component) {
+export function validSimpleJSONXSyntax(simpleJSONX = {}) {
+  if (Object.keys(simpleJSONX).length !== 1 && !simpleJSONX.component) {
     return false;
   } else {
-    const componentName = Object.keys(simpleRJX)[ 0 ];
-    return (Object.keys(simpleRJX).length === 1  && !simpleRJX[componentName].component && typeof simpleRJX[componentName]==='object')
+    const componentName = Object.keys(simpleJSONX)[ 0 ];
+    return (Object.keys(simpleJSONX).length === 1  && !simpleJSONX[componentName].component && typeof simpleJSONX[componentName]==='object')
       ? true
       : false; 
   }
 }
 
 /**
- * Transforms SimpleRJX to Valid RJX JSON {[component]:{props,children}} => {component,props,children}
- * @param {Object} simpleRJX JSON Object 
- * @return {Object} - returns a valid RJX JSON Object from a simple RJX JSON Object
+ * Transforms SimpleJSONX to Valid JSONX JSON {[component]:{props,children}} => {component,props,children}
+ * @param {Object} simpleJSONX JSON Object 
+ * @return {Object} - returns a valid JSONX JSON Object from a simple JSONX JSON Object
  */
-export function simpleRJXSyntax(simpleRJX = {}) {
-  const component = Object.keys(simpleRJX)[ 0 ];
+export function simpleJSONXSyntax(simpleJSONX = {}) {
+  const component = Object.keys(simpleJSONX)[ 0 ];
   try {
     return Object.assign({},
       {
         component,
       },
-      simpleRJX[ component ], {
-        children: (simpleRJX[ component ].children && Array.isArray(simpleRJX[ component ].children))
-          ? simpleRJX[ component ].children
-            .map(simpleRJXSyntax)
-          : simpleRJX[ component ].children,
+      simpleJSONX[ component ], {
+        children: (simpleJSONX[ component ].children && Array.isArray(simpleJSONX[ component ].children))
+          ? simpleJSONX[ component ].children
+            .map(simpleJSONXSyntax)
+          : simpleJSONX[ component ].children,
       });
   } catch (e) {
     throw SyntaxError('Invalid Simple RXJ Syntax', e);
@@ -396,22 +396,22 @@ export function simpleRJXSyntax(simpleRJX = {}) {
 }
 
 /**
- * Transforms Valid RJX JSON to SimpleRJX  {component,props,children} => {[component]:{props,children}}
- * @param {Object} rjx Valid RJX JSON object 
- * @return {Object} - returns a simple RJX JSON Object from a valid RJX JSON Object 
+ * Transforms Valid JSONX JSON to SimpleJSONX  {component,props,children} => {[component]:{props,children}}
+ * @param {Object} jsonx Valid JSONX JSON object 
+ * @return {Object} - returns a simple JSONX JSON Object from a valid JSONX JSON Object 
  */
-export function getSimplifiedRJX(rjx = {}) {
+export function getSimplifiedJSONX(jsonx = {}) {
   try {
-    if (!rjx.component) return rjx; //already simple
-    const componentName = rjx.component;
-    rjx.children = (Array.isArray(rjx.children))
-      ? rjx.children
+    if (!jsonx.component) return jsonx; //already simple
+    const componentName = jsonx.component;
+    jsonx.children = (Array.isArray(jsonx.children))
+      ? jsonx.children
         .filter(child => child)//remove empty children
-        .map(getSimplifiedRJX) 
-      : rjx.children;
-    delete rjx.component;
+        .map(getSimplifiedJSONX) 
+      : jsonx.children;
+    delete jsonx.component;
     return {
-      [ componentName ]: rjx,
+      [ componentName ]: jsonx,
     };
   } catch (e) {
     throw e;

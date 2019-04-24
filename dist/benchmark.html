@@ -2,16 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>RJX Benchmark</title>
+    <title>JSONX Benchmark</title>
     <script  type="text/javascript" src="https://raw.githubusercontent.com/lodash/lodash/4.17.11-npm/lodash.js"></script>
     <script  type="text/javascript" src="https://raw.githubusercontent.com/bestiejs/platform.js/master/platform.js"></script>
     <script  type="text/javascript" src="https://raw.githubusercontent.com/bestiejs/benchmark.js/master/benchmark.js"></script>
-    <script type="text/javascript" src="rjx.web.js"></script>
+    <script type="text/javascript" src="jsonx.web.js"></script>
     <script type="text/javascript">
-    window.React = rjx.__getReact();
-    window.ReactDOM = rjx.__getReactDOM();
+    window.React = jsonx.__getReact();
+    window.ReactDOM = jsonx.__getReactDOM();
     // shallowEqual=()=>{};
-    // console.log({rjx});
+    // console.log({jsonx});
     // console.log({React});
     </script>
   </head>
@@ -26,8 +26,8 @@
       //     document.querySelector('#root').innerHTML='';
       //   },
       // });
-      // rjx.rjxRender.call(boundConfig,{ 
-      //   rjx: sampleRJX, 
+      // jsonx.jsonxRender.call(boundConfig,{ 
+      //   jsonx: sampleJSONX, 
       //   resources: { 
       //     addedStatus:'LIVE',
       //     punc:'   !!!!'

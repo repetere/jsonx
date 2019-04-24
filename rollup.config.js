@@ -19,12 +19,12 @@ export default [
       exports: 'named',
       file: pkg.browser,
       format: 'umd',
-      name: 'rjx',
+      name: 'jsonx',
     }, {
       exports: 'named',
       file: pkg.web,
       format: 'iife',
-      name: 'rjx',
+      name: 'jsonx',
     },
     ],
     plugins: [
@@ -95,13 +95,13 @@ export default [
     ], // <-- suppresses the warning
     output: [
       {
-        name: 'rjx',
+        name: 'jsonx',
         exports: 'named',
         file: pkg.main,
         format: 'cjs',
       },
       {
-        name: 'rjx',
+        name: 'jsonx',
         exports: 'named',
         file: pkg.module,
         format: 'es',
@@ -155,15 +155,15 @@ export default [
     ], // <-- suppresses the warning
     output: [
       {
-        name: 'rjx',
+        name: 'jsonx',
         exports: 'named',
-        file: 'dist/rjx-server.cjs.js',
+        file: 'dist/jsonx-server.cjs.js',
         format: 'cjs',
       },
       {
-        name: 'rjx',
+        name: 'jsonx',
         exports: 'named',
-        file: 'dist/rjx-server.esm.js',
+        file: 'dist/jsonx-server.esm.js',
         format: 'es',
       },
     ],
@@ -213,17 +213,17 @@ export default [
     // external: [ 'react' ], // <-- suppresses the warning
     output:[{
       exports: 'named',
-      file: 'dist/rjx.umd.min.js',
+      file: 'dist/jsonx.umd.min.js',
       format: 'umd',
-      name: 'rjx',
+      name: 'jsonx',
       sourcemap:true,
       compress: true,
       mangle: true,
     }, {
       exports: 'named',
-      file: 'dist/rjx.web.min.js',
+      file: 'dist/jsonx.web.min.js',
       format: 'iife',
-      name: 'rjx',
+      name: 'jsonx',
       sourcemap:true,
       compress: true,
       mangle: true,
@@ -282,8 +282,8 @@ export default [
       }),
       terser({
         // sourceMap: {
-        //   filename: 'dist/rjx.web.min.js',
-        //   url: 'dist/rjx.web.min.js.map',
+        //   filename: 'dist/jsonx.web.min.js',
+        //   url: 'dist/jsonx.web.min.js.map',
         // },
         // sourcemaps:true,
         // sourcemap:true,

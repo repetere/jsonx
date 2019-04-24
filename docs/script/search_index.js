@@ -1,1232 +1,1232 @@
 window.esdocSearchIndex = [
   [
-    "rjx/src/props.js~argument_names",
+    "jsonx/src/props.js~argument_names",
     "variable/index.html#static-variable-ARGUMENT_NAMES",
-    "<span>ARGUMENT_NAMES</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>ARGUMENT_NAMES</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "variable"
   ],
   [
-    "rjx/src/props.js~strip_comments",
+    "jsonx/src/props.js~strip_comments",
     "variable/index.html#static-variable-STRIP_COMMENTS",
-    "<span>STRIP_COMMENTS</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>STRIP_COMMENTS</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "variable"
   ],
   [
-    "rjx/src/express.js~__express",
+    "jsonx/src/express.js~__express",
     "function/index.html#static-function-__express",
-    "<span>__express</span> <span class=\"search-result-import-path\">rjx/src/express.js</span>",
+    "<span>__express</span> <span class=\"search-result-import-path\">jsonx/src/express.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~__getreact",
+    "jsonx/src/main.js~__getreact",
     "function/index.html#static-function-__getReact",
-    "<span>__getReact</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>__getReact</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~__getreactdom",
+    "jsonx/src/main.js~__getreactdom",
     "function/index.html#static-function-__getReactDOM",
-    "<span>__getReactDOM</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>__getReactDOM</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~__getuseglobalhook",
+    "jsonx/src/main.js~__getuseglobalhook",
     "function/index.html#static-function-__getUseGlobalHook",
-    "<span>__getUseGlobalHook</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>__getUseGlobalHook</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~_rjxchildren",
-    "variable/index.html#static-variable-_rjxChildren",
-    "<span>_rjxChildren</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "jsonx/src/main.js~_jsonxchildren",
+    "variable/index.html#static-variable-_jsonxChildren",
+    "<span>_jsonxChildren</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "variable"
   ],
   [
-    "rjx/src/main.js~_rjxprops",
-    "variable/index.html#static-variable-_rjxProps",
-    "<span>_rjxProps</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "jsonx/src/main.js~_jsonxcomponents",
+    "variable/index.html#static-variable-_jsonxComponents",
+    "<span>_jsonxComponents</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "variable"
   ],
   [
-    "rjx/src/main.js~_rjxutils",
-    "variable/index.html#static-variable-_rjxUtils",
-    "<span>_rjxUtils</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "jsonx/src/main.js~_jsonxprops",
+    "variable/index.html#static-variable-_jsonxProps",
+    "<span>_jsonxProps</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "variable"
   ],
   [
-    "rjx/src/components.js~advancedbinding",
+    "jsonx/src/main.js~_jsonxutils",
+    "variable/index.html#static-variable-_jsonxUtils",
+    "<span>_jsonxUtils</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
+    "variable"
+  ],
+  [
+    "jsonx/src/components.js~advancedbinding",
     "variable/index.html#static-variable-advancedBinding",
-    "<span>advancedBinding</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "<span>advancedBinding</span> <span class=\"search-result-import-path\">jsonx/src/components.js</span>",
     "variable"
   ],
   [
-    "rjx/src/props.js~boundargsreducer",
+    "jsonx/src/props.js~boundargsreducer",
     "function/index.html#static-function-boundArgsReducer",
-    "<span>boundArgsReducer</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>boundArgsReducer</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~compile",
+    "jsonx/src/main.js~compile",
     "function/index.html#static-function-compile",
-    "<span>compile</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>compile</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "function"
   ],
   [
-    "rjx/src/components.js~componentmap",
+    "jsonx/src/components.js~componentmap",
     "variable/index.html#static-variable-componentMap",
-    "<span>componentMap</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "<span>componentMap</span> <span class=\"search-result-import-path\">jsonx/src/components.js</span>",
     "variable"
   ],
   [
-    "rjx/src/main.js~components",
-    "variable/index.html#static-variable-components",
-    "<span>components</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
-    "variable"
-  ],
-  [
-    "rjx/src/utils.js~displaycomponent",
+    "jsonx/src/utils.js~displaycomponent",
     "function/index.html#static-function-displayComponent",
-    "<span>displayComponent</span> <span class=\"search-result-import-path\">rjx/src/utils.js</span>",
+    "<span>displayComponent</span> <span class=\"search-result-import-path\">jsonx/src/utils.js</span>",
     "function"
   ],
   [
-    "rjx/src/utils.js~getadvancedbinding",
+    "jsonx/src/utils.js~getadvancedbinding",
     "function/index.html#static-function-getAdvancedBinding",
-    "<span>getAdvancedBinding</span> <span class=\"search-result-import-path\">rjx/src/utils.js</span>",
+    "<span>getAdvancedBinding</span> <span class=\"search-result-import-path\">jsonx/src/utils.js</span>",
     "function"
   ],
   [
-    "rjx/src/components.js~getboundedcomponents",
+    "jsonx/src/components.js~getboundedcomponents",
     "function/index.html#static-function-getBoundedComponents",
-    "<span>getBoundedComponents</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "<span>getBoundedComponents</span> <span class=\"search-result-import-path\">jsonx/src/components.js</span>",
     "function"
   ],
   [
-    "rjx/src/props.js~getchildrencomponents",
+    "jsonx/src/props.js~getchildrencomponents",
     "function/index.html#static-function-getChildrenComponents",
-    "<span>getChildrenComponents</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>getChildrenComponents</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "function"
   ],
   [
-    "rjx/src/children.js~getchildrenproperty",
+    "jsonx/src/children.js~getchildrenproperty",
     "function/index.html#static-function-getChildrenProperty",
-    "<span>getChildrenProperty</span> <span class=\"search-result-import-path\">rjx/src/children.js</span>",
+    "<span>getChildrenProperty</span> <span class=\"search-result-import-path\">jsonx/src/children.js</span>",
     "function"
   ],
   [
-    "rjx/src/children.js~getchildrenprops",
+    "jsonx/src/children.js~getchildrenprops",
     "function/index.html#static-function-getChildrenProps",
-    "<span>getChildrenProps</span> <span class=\"search-result-import-path\">rjx/src/children.js</span>",
+    "<span>getChildrenProps</span> <span class=\"search-result-import-path\">jsonx/src/children.js</span>",
     "function"
   ],
   [
-    "rjx/src/components.js~getcomponentfromlibrary",
+    "jsonx/src/components.js~getcomponentfromlibrary",
     "function/index.html#static-function-getComponentFromLibrary",
-    "<span>getComponentFromLibrary</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "<span>getComponentFromLibrary</span> <span class=\"search-result-import-path\">jsonx/src/components.js</span>",
     "function"
   ],
   [
-    "rjx/src/components.js~getcomponentfrommap",
+    "jsonx/src/components.js~getcomponentfrommap",
     "function/index.html#static-function-getComponentFromMap",
-    "<span>getComponentFromMap</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "<span>getComponentFromMap</span> <span class=\"search-result-import-path\">jsonx/src/components.js</span>",
     "function"
   ],
   [
-    "rjx/src/props.js~getcomponentprops",
+    "jsonx/src/props.js~getcomponentprops",
     "function/index.html#static-function-getComponentProps",
-    "<span>getComponentProps</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>getComponentProps</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "function"
   ],
   [
-    "rjx/src/props.js~getcomputedprops",
+    "jsonx/src/props.js~getcomputedprops",
     "function/index.html#static-function-getComputedProps",
-    "<span>getComputedProps</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>getComputedProps</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "function"
   ],
   [
-    "rjx/src/props.js~getevalprops",
+    "jsonx/src/props.js~getevalprops",
     "function/index.html#static-function-getEvalProps",
-    "<span>getEvalProps</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>getEvalProps</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "function"
   ],
   [
-    "rjx/src/components.js~getfunctionfromeval",
+    "jsonx/src/components.js~getfunctionfromeval",
     "function/index.html#static-function-getFunctionFromEval",
-    "<span>getFunctionFromEval</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "<span>getFunctionFromEval</span> <span class=\"search-result-import-path\">jsonx/src/components.js</span>",
     "function"
   ],
   [
-    "rjx/src/props.js~getfunctionfromprops",
+    "jsonx/src/props.js~getfunctionfromprops",
     "function/index.html#static-function-getFunctionFromProps",
-    "<span>getFunctionFromProps</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>getFunctionFromProps</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "function"
   ],
   [
-    "rjx/src/props.js~getfunctionprops",
+    "jsonx/src/props.js~getfunctionprops",
     "function/index.html#static-function-getFunctionProps",
-    "<span>getFunctionProps</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>getFunctionProps</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "function"
   ],
   [
-    "rjx/src/props.js~getparamnames",
+    "jsonx/src/children.js~getjsonxchildren",
+    "function/index.html#static-function-getJSONXChildren",
+    "<span>getJSONXChildren</span> <span class=\"search-result-import-path\">jsonx/src/children.js</span>",
+    "function"
+  ],
+  [
+    "jsonx/src/props.js~getjsonxprops",
+    "function/index.html#static-function-getJSONXProps",
+    "<span>getJSONXProps</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
+    "function"
+  ],
+  [
+    "jsonx/src/props.js~getparamnames",
     "function/index.html#static-function-getParamNames",
-    "<span>getParamNames</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>getParamNames</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "function"
   ],
   [
-    "rjx/src/children.js~getrjxchildren",
-    "function/index.html#static-function-getRJXChildren",
-    "<span>getRJXChildren</span> <span class=\"search-result-import-path\">rjx/src/children.js</span>",
-    "function"
-  ],
-  [
-    "rjx/src/props.js~getrjxprops",
-    "function/index.html#static-function-getRJXProps",
-    "<span>getRJXProps</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
-    "function"
-  ],
-  [
-    "rjx/src/components.js~getreactclasscomponent",
+    "jsonx/src/components.js~getreactclasscomponent",
     "function/index.html#static-function-getReactClassComponent",
-    "<span>getReactClassComponent</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "<span>getReactClassComponent</span> <span class=\"search-result-import-path\">jsonx/src/components.js</span>",
     "function"
   ],
   [
-    "rjx/src/props.js~getreactcomponentprops",
+    "jsonx/src/props.js~getreactcomponentprops",
     "function/index.html#static-function-getReactComponentProps",
-    "<span>getReactComponentProps</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>getReactComponentProps</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "function"
   ],
   [
-    "rjx/src/components.js~getreactcontext",
+    "jsonx/src/components.js~getreactcontext",
     "function/index.html#static-function-getReactContext",
-    "<span>getReactContext</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "<span>getReactContext</span> <span class=\"search-result-import-path\">jsonx/src/components.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~getreactelement",
+    "jsonx/src/main.js~getreactelement",
     "variable/index.html#static-variable-getReactElement",
-    "<span>getReactElement</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>getReactElement</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "variable"
   ],
   [
-    "rjx/src/main.js~getreactelementfromjson",
+    "jsonx/src/main.js~getreactelementfromjson",
     "function/index.html#static-function-getReactElementFromJSON",
-    "<span>getReactElementFromJSON</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>getReactElementFromJSON</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~getreactelementfromrjx",
-    "function/index.html#static-function-getReactElementFromRJX",
-    "<span>getReactElementFromRJX</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "jsonx/src/main.js~getreactelementfromjsonx",
+    "function/index.html#static-function-getReactElementFromJSONX",
+    "<span>getReactElementFromJSONX</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "function"
   ],
   [
-    "rjx/src/components.js~getreactfunctioncomponent",
+    "jsonx/src/components.js~getreactfunctioncomponent",
     "function/index.html#static-function-getReactFunctionComponent",
-    "<span>getReactFunctionComponent</span> <span class=\"search-result-import-path\">rjx/src/components.js</span>",
+    "<span>getReactFunctionComponent</span> <span class=\"search-result-import-path\">jsonx/src/components.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~getrenderedjson",
+    "jsonx/src/main.js~getrenderedjson",
     "variable/index.html#static-variable-getRenderedJSON",
-    "<span>getRenderedJSON</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>getRenderedJSON</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "variable"
   ],
   [
-    "rjx/src/utils.js~getsimplifiedrjx",
-    "function/index.html#static-function-getSimplifiedRJX",
-    "<span>getSimplifiedRJX</span> <span class=\"search-result-import-path\">rjx/src/utils.js</span>",
+    "jsonx/src/utils.js~getsimplifiedjsonx",
+    "function/index.html#static-function-getSimplifiedJSONX",
+    "<span>getSimplifiedJSONX</span> <span class=\"search-result-import-path\">jsonx/src/utils.js</span>",
     "function"
   ],
   [
-    "rjx/src/props.js~getwindowcomponents",
+    "jsonx/src/props.js~getwindowcomponents",
     "function/index.html#static-function-getWindowComponents",
-    "<span>getWindowComponents</span> <span class=\"search-result-import-path\">rjx/src/props.js</span>",
+    "<span>getWindowComponents</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~jsontojsx",
+    "jsonx/src/main.js~jsontojsx",
     "function/index.html#static-function-jsonToJSX",
-    "<span>jsonToJSX</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>jsonToJSX</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~outputhtml",
+    "jsonx/src/main.js~jsonxhtmlstring",
+    "variable/index.html#static-variable-jsonxHTMLString",
+    "<span>jsonxHTMLString</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
+    "variable"
+  ],
+  [
+    "jsonx/src/main.js~jsonxrender",
+    "function/index.html#static-function-jsonxRender",
+    "<span>jsonxRender</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
+    "function"
+  ],
+  [
+    "jsonx/src/main.js~outputhtml",
     "function/index.html#static-function-outputHTML",
-    "<span>outputHTML</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>outputHTML</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~outputjson",
+    "jsonx/src/main.js~outputjson",
     "function/index.html#static-function-outputJSON",
-    "<span>outputJSON</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>outputJSON</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~outputjsx",
+    "jsonx/src/main.js~outputjsx",
     "function/index.html#static-function-outputJSX",
-    "<span>outputJSX</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>outputJSX</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "function"
   ],
   [
-    "rjx/src/main.js~renderindex",
+    "jsonx/src/main.js~renderindex",
     "variable/index.html#static-variable-renderIndex",
-    "<span>renderIndex</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "<span>renderIndex</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "variable"
   ],
   [
-    "rjx/src/main.js~rjxhtmlstring",
-    "variable/index.html#static-variable-rjxHTMLString",
-    "<span>rjxHTMLString</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
-    "variable"
-  ],
-  [
-    "rjx/src/main.js~rjxrender",
-    "function/index.html#static-function-rjxRender",
-    "<span>rjxRender</span> <span class=\"search-result-import-path\">rjx/src/main.js</span>",
+    "jsonx/src/utils.js~simplejsonxsyntax",
+    "function/index.html#static-function-simpleJSONXSyntax",
+    "<span>simpleJSONXSyntax</span> <span class=\"search-result-import-path\">jsonx/src/utils.js</span>",
     "function"
   ],
   [
-    "rjx/src/utils.js~simplerjxsyntax",
-    "function/index.html#static-function-simpleRJXSyntax",
-    "<span>simpleRJXSyntax</span> <span class=\"search-result-import-path\">rjx/src/utils.js</span>",
-    "function"
-  ],
-  [
-    "rjx/src/utils.js~traverse",
+    "jsonx/src/utils.js~traverse",
     "function/index.html#static-function-traverse",
-    "<span>traverse</span> <span class=\"search-result-import-path\">rjx/src/utils.js</span>",
+    "<span>traverse</span> <span class=\"search-result-import-path\">jsonx/src/utils.js</span>",
     "function"
   ],
   [
-    "rjx/src/utils.js~validsimplerjxsyntax",
-    "function/index.html#static-function-validSimpleRJXSyntax",
-    "<span>validSimpleRJXSyntax</span> <span class=\"search-result-import-path\">rjx/src/utils.js</span>",
+    "jsonx/src/utils.js~validsimplejsonxsyntax",
+    "function/index.html#static-function-validSimpleJSONXSyntax",
+    "<span>validSimpleJSONXSyntax</span> <span class=\"search-result-import-path\">jsonx/src/utils.js</span>",
     "function"
   ],
   [
-    "rjx/src/utils.js~validaterjx",
-    "function/index.html#static-function-validateRJX",
-    "<span>validateRJX</span> <span class=\"search-result-import-path\">rjx/src/utils.js</span>",
+    "jsonx/src/utils.js~validatejsonx",
+    "function/index.html#static-function-validateJSONX",
+    "<span>validateJSONX</span> <span class=\"search-result-import-path\">jsonx/src/utils.js</span>",
     "function"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber94",
-    "rjx",
-    "test"
   ],
   [
     "",
     "test-file/test/unit/children_spec.js.html#lineNumber82",
-    "rjx",
+    "jsonx",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber94",
+    "jsonx",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber213",
-    "rjx __express",
+    "jsonx __express",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber237",
-    "rjx __express it should handle errors",
+    "jsonx __express it should handle errors",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber216",
-    "rjx __express should return an HTML string",
+    "jsonx __express should return an HTML string",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber151",
-    "rjx compile",
+    "jsonx compile",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber152",
-    "rjx compile should convert RJX to React Element",
+    "jsonx compile should convert JSONX to React Element",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber101",
-    "rjx components",
+    "jsonx components",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber102",
-    "rjx components advancedBinding",
+    "jsonx components advancedBinding",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber103",
-    "rjx components advancedBinding should use advancedBinding based on user agent",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/components_spec.js.html#lineNumber238",
-    "rjx components componentMap",
+    "jsonx components advancedBinding should use advancedBinding based on user agent",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber107",
-    "rjx components componentMap",
+    "jsonx components componentMap",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/components_spec.js.html#lineNumber238",
+    "jsonx components componentMap",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber242",
-    "rjx components componentMap should accept components from a window property",
+    "jsonx components componentMap should accept components from a window property",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber108",
-    "rjx components componentMap should export an object of components",
+    "jsonx components componentMap should export an object of components",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber122",
-    "rjx components getBoundedComponents",
+    "jsonx components getBoundedComponents",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber123",
-    "rjx components getBoundedComponents should bind this to reactComponents",
+    "jsonx components getBoundedComponents should bind this to reactComponents",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber204",
-    "rjx components getComponentFromLibrary",
+    "jsonx components getComponentFromLibrary",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber220",
-    "rjx components getComponentFromLibrary should return a function if selecting valid component library",
+    "jsonx components getComponentFromLibrary should return a function if selecting valid component library",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber217",
-    "rjx components getComponentFromLibrary should return undefined if not valid",
+    "jsonx components getComponentFromLibrary should return undefined if not valid",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber153",
-    "rjx components getComponentFromMap",
+    "jsonx components getComponentFromMap",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber193",
-    "rjx components getComponentFromMap should handle errors",
+    "jsonx components getComponentFromMap should handle errors",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber184",
-    "rjx components getComponentFromMap should return a component library react element",
+    "jsonx components getComponentFromMap should return a component library react element",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber173",
-    "rjx components getComponentFromMap should return a custom element",
+    "jsonx components getComponentFromMap should return a custom element",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber161",
-    "rjx components getComponentFromMap should return a function if rjx.component is not a string",
+    "jsonx components getComponentFromMap should return a function if jsonx.component is not a string",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber167",
-    "rjx components getComponentFromMap should return the dom element string if a valid DOM elmenet in ReactDOM",
+    "jsonx components getComponentFromMap should return the dom element string if a valid DOM elmenet in ReactDOM",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber259",
-    "rjx components getFunctionFromEval",
+    "jsonx components getFunctionFromEval",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber261",
-    "rjx components getFunctionFromEval should return a new function",
+    "jsonx components getFunctionFromEval should return a new function",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber268",
-    "rjx components getReactClassComponent",
+    "jsonx components getReactClassComponent",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber310",
-    "rjx components getReactClassComponent should allow for custom class names",
+    "jsonx components getReactClassComponent should allow for custom class names",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber303",
-    "rjx components getReactClassComponent should allow for functions as object props",
+    "jsonx components getReactClassComponent should allow for functions as object props",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber293",
-    "rjx components getReactClassComponent should create a React Component",
+    "jsonx components getReactClassComponent should create a React Component",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber320",
-    "rjx components getReactClassComponent should create suspense/lazy components",
+    "jsonx components getReactClassComponent should create suspense/lazy components",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber317",
-    "rjx components getReactClassComponent should throw an error if missing a function is missing a body",
+    "jsonx components getReactClassComponent should throw an error if missing a function is missing a body",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber314",
-    "rjx components getReactClassComponent should throw an error if missing a render function",
+    "jsonx components getReactClassComponent should throw an error if missing a render function",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber424",
-    "rjx components getReactContext",
+    "jsonx components getReactContext",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber426",
-    "rjx components getReactContext should return a React Context Object",
+    "jsonx components getReactContext should return a React Context Object",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber353",
-    "rjx components getReactFunctionComponent",
+    "jsonx components getReactFunctionComponent",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber367",
-    "rjx components getReactFunctionComponent should create a React Function Component with a name",
+    "jsonx components getReactFunctionComponent should create a React Function Component with a name",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber390",
-    "rjx components getReactFunctionComponent should create suspense/lazy components",
+    "jsonx components getReactFunctionComponent should create suspense/lazy components",
     "test"
   ],
   [
     "",
     "test-file/test/unit/components_spec.js.html#lineNumber355",
-    "rjx components getReactFunctionComponent should react a React Function Component",
+    "jsonx components getReactFunctionComponent should react a React Function Component",
     "test"
   ],
   [
     "",
     "test-file/test/unit/children_spec.js.html#lineNumber83",
-    "rjx getChildrenProperty",
+    "jsonx getChildrenProperty",
     "test"
   ],
   [
     "",
     "test-file/test/unit/children_spec.js.html#lineNumber105",
-    "rjx getChildrenProperty should get the children from rjx.props._children property",
+    "jsonx getChildrenProperty should get the children from jsonx.props._children property",
     "test"
   ],
   [
     "",
     "test-file/test/unit/children_spec.js.html#lineNumber154",
-    "rjx getChildrenProperty should get the children from rjx.props.children property",
+    "jsonx getChildrenProperty should get the children from jsonx.props.children property",
     "test"
   ],
   [
     "",
     "test-file/test/unit/children_spec.js.html#lineNumber85",
-    "rjx getChildrenProperty should return the children of an RJX Object",
+    "jsonx getChildrenProperty should return the children of an JSONX Object",
     "test"
   ],
   [
     "",
     "test-file/test/unit/children_spec.js.html#lineNumber211",
-    "rjx getChildrenProps",
+    "jsonx getChildrenProps",
     "test"
   ],
   [
     "",
     "test-file/test/unit/children_spec.js.html#lineNumber220",
-    "rjx getChildrenProps should pass props except for styles",
+    "jsonx getChildrenProps should pass props except for styles",
     "test"
   ],
   [
     "",
     "test-file/test/unit/children_spec.js.html#lineNumber214",
-    "rjx getChildrenProps should return child RJX if not passing props",
+    "jsonx getChildrenProps should return child JSONX if not passing props",
     "test"
   ],
   [
     "",
     "test-file/test/unit/children_spec.js.html#lineNumber233",
-    "rjx getRJXChildren",
+    "jsonx getJSONXChildren",
     "test"
   ],
   [
     "",
     "test-file/test/unit/children_spec.js.html#lineNumber235",
-    "rjx getRJXChildren should return RJX Child Objects",
+    "jsonx getJSONXChildren should return JSONX Child Objects",
     "test"
   ],
   [
     "",
     "test-file/test/unit/children_spec.js.html#lineNumber250",
-    "rjx getRJXChildren should return null on error",
+    "jsonx getJSONXChildren should return null on error",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber137",
-    "rjx getReactElementFromJSON",
+    "jsonx getReactElementFromJSON",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber138",
-    "rjx getReactElementFromJSON should return an instance of a react element",
+    "jsonx getReactElementFromJSON should return an instance of a react element",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber106",
-    "rjx getReactElementFromRJX",
+    "jsonx getReactElementFromJSONX",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber119",
-    "rjx getReactElementFromRJX should handle errors with empty components",
+    "jsonx getReactElementFromJSONX should handle errors with empty components",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber107",
-    "rjx getReactElementFromRJX should return an instance of a react element",
+    "jsonx getReactElementFromJSONX should return an instance of a react element",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber126",
-    "rjx getReactElementFromRJX should throw an error with invalid components",
+    "jsonx getReactElementFromJSONX should throw an error with invalid components",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber95",
-    "rjx helper functions",
+    "jsonx helper functions",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber99",
-    "rjx helper functions should return React",
+    "jsonx helper functions should return React",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber102",
-    "rjx helper functions should return ReactDOM",
+    "jsonx helper functions should return ReactDOM",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber96",
-    "rjx helper functions should return useGlobalHook",
+    "jsonx helper functions should return useGlobalHook",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber187",
-    "rjx jsonToJSX",
+    "jsonx jsonToJSX",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber190",
-    "rjx jsonToJSX should compile to JSX String",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber198",
-    "rjx outputHTML",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber199",
-    "rjx outputHTML should be an alias for rjxHTMLString",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber172",
-    "rjx outputJSON",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber173",
-    "rjx outputJSON should convert RJX to JSON",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber180",
-    "rjx outputJSX",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber181",
-    "rjx outputJSX should compile to JSX String",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber46",
-    "rjx props",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber144",
-    "rjx props boundArgsReducer",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber145",
-    "rjx props boundArgsReducer should return reducer function",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber118",
-    "rjx props getChildrenComponents",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber123",
-    "rjx props getChildrenComponents should return error in children if missing __spread prop and if in debug mode",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber120",
-    "rjx props getChildrenComponents should return undefined children if missing __spread prop",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber127",
-    "rjx props getChildrenComponents should spread data as a component on __spread prop",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber337",
-    "rjx props getComponentProps",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber339",
-    "rjx props getComponentProps should return evaluated props dangerously using eval",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber47",
-    "rjx props getComputedProps",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber48",
-    "rjx props getComputedProps should return resolved computed props",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber149",
-    "rjx props getEvalProps",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber151",
-    "rjx props getEvalProps should return evaluated props dangerously using eval",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber258",
-    "rjx props getFunctionFromProps",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber296",
-    "rjx props getFunctionFromProps should return a function on this.props like this.props.onClick",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber277",
-    "rjx props getFunctionFromProps should return a library function like this.props.reduxRouter.push",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber312",
-    "rjx props getFunctionFromProps should return a window function like window.print or window.localStorage.getItem",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber260",
-    "rjx props getFunctionFromProps should return an empty function by default",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber216",
-    "rjx props getFunctionProps",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber218",
-    "rjx props getFunctionProps should resolve functions from rjx.__functionProps from function strings",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber91",
-    "rjx props getRJXProps",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber93",
-    "rjx props getRJXProps should return resolved dynamic prop",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber107",
-    "rjx props getRJXProps should return resolved dynamic prop with undefined values if reference is invalid",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber356",
-    "rjx props getReactComponentProps",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber358",
-    "rjx props getReactComponentProps should return react component props dangerously using eval",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber170",
-    "rjx props getWindowComponents",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/unit/props_spec.js.html#lineNumber175",
-    "rjx props getWindowComponents should return react element from rjx.__windowComponents",
+    "jsonx jsonToJSX should compile to JSX String",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber203",
-    "rjx rjxHTMLString",
+    "jsonx jsonxHTMLString",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber204",
-    "rjx rjxHTMLString should return an HTML string",
+    "jsonx jsonxHTMLString should return an HTML string",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber245",
-    "rjx rjxRender",
+    "jsonx jsonxRender",
     "test"
   ],
   [
     "",
     "test-file/test/unit/rjx_spec.js.html#lineNumber249",
-    "rjx rjxRender should render component inside of querySelector",
+    "jsonx jsonxRender should render component inside of querySelector",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber198",
+    "jsonx outputHTML",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber199",
+    "jsonx outputHTML should be an alias for jsonxHTMLString",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber172",
+    "jsonx outputJSON",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber173",
+    "jsonx outputJSON should convert JSONX to JSON",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber180",
+    "jsonx outputJSX",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/rjx_spec.js.html#lineNumber181",
+    "jsonx outputJSX should compile to JSX String",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber46",
+    "jsonx props",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber144",
+    "jsonx props boundArgsReducer",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber145",
+    "jsonx props boundArgsReducer should return reducer function",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber118",
+    "jsonx props getChildrenComponents",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber123",
+    "jsonx props getChildrenComponents should return error in children if missing __spread prop and if in debug mode",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber120",
+    "jsonx props getChildrenComponents should return undefined children if missing __spread prop",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber127",
+    "jsonx props getChildrenComponents should spread data as a component on __spread prop",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber337",
+    "jsonx props getComponentProps",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber339",
+    "jsonx props getComponentProps should return evaluated props dangerously using eval",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber47",
+    "jsonx props getComputedProps",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber48",
+    "jsonx props getComputedProps should return resolved computed props",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber149",
+    "jsonx props getEvalProps",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber151",
+    "jsonx props getEvalProps should return evaluated props dangerously using eval",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber258",
+    "jsonx props getFunctionFromProps",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber296",
+    "jsonx props getFunctionFromProps should return a function on this.props like this.props.onClick",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber277",
+    "jsonx props getFunctionFromProps should return a library function like this.props.reduxRouter.push",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber312",
+    "jsonx props getFunctionFromProps should return a window function like window.print or window.localStorage.getItem",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber260",
+    "jsonx props getFunctionFromProps should return an empty function by default",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber216",
+    "jsonx props getFunctionProps",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber218",
+    "jsonx props getFunctionProps should resolve functions from jsonx.__functionProps from function strings",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber91",
+    "jsonx props getJSONXProps",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber93",
+    "jsonx props getJSONXProps should return resolved dynamic prop",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber107",
+    "jsonx props getJSONXProps should return resolved dynamic prop with undefined values if reference is invalid",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber356",
+    "jsonx props getReactComponentProps",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber358",
+    "jsonx props getReactComponentProps should return react component props dangerously using eval",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber170",
+    "jsonx props getWindowComponents",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/unit/props_spec.js.html#lineNumber175",
+    "jsonx props getWindowComponents should return react element from jsonx.__windowComponents",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber29",
-    "rjx utils",
+    "jsonx utils",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber30",
-    "rjx utils displayComponent",
+    "jsonx utils displayComponent",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber32",
-    "rjx utils displayComponent should display by default return true",
+    "jsonx utils displayComponent should display by default return true",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber131",
-    "rjx utils displayComponent should display if left != right",
+    "jsonx utils displayComponent should display if left != right",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber35",
-    "rjx utils displayComponent should display if left !== null||undefined",
+    "jsonx utils displayComponent should display if left !== null||undefined",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber157",
-    "rjx utils displayComponent should display if left !== right",
+    "jsonx utils displayComponent should display if left !== right",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber235",
-    "rjx utils displayComponent should display if left < right",
+    "jsonx utils displayComponent should display if left < right",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber261",
-    "rjx utils displayComponent should display if left <= right",
+    "jsonx utils displayComponent should display if left <= right",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber79",
-    "rjx utils displayComponent should display if left == right",
+    "jsonx utils displayComponent should display if left == right",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber56",
-    "rjx utils displayComponent should display if left === null||undefined",
+    "jsonx utils displayComponent should display if left === null||undefined",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber105",
-    "rjx utils displayComponent should display if left === right",
+    "jsonx utils displayComponent should display if left === right",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber183",
-    "rjx utils displayComponent should display if left > right",
+    "jsonx utils displayComponent should display if left > right",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber209",
-    "rjx utils displayComponent should display if left >= right",
+    "jsonx utils displayComponent should display if left >= right",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber287",
-    "rjx utils displayComponent should display if multiple comprisons are true",
+    "jsonx utils displayComponent should display if multiple comprisons are true",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber313",
-    "rjx utils displayComponent should display if one or more using comparisonorprops comprisons are true",
+    "jsonx utils displayComponent should display if one or more using comparisonorprops comprisons are true",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber355",
-    "rjx utils getAdvancedBinding",
+    "jsonx utils getAdvancedBinding",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber365",
-    "rjx utils getAdvancedBinding should return false on all versions of IE/Trident",
+    "jsonx utils getAdvancedBinding should return false on all versions of IE/Trident",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber373",
-    "rjx utils getAdvancedBinding should return false on old Android Browser",
+    "jsonx utils getAdvancedBinding should return false on old Android Browser",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber381",
-    "rjx utils getAdvancedBinding should return false on old Chrome Browser",
+    "jsonx utils getAdvancedBinding should return false on old Chrome Browser",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber389",
-    "rjx utils getAdvancedBinding should return false unknown browser",
+    "jsonx utils getAdvancedBinding should return false unknown browser",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber357",
-    "rjx utils getAdvancedBinding should return true if browser supports deep nesting",
+    "jsonx utils getAdvancedBinding should return true if browser supports deep nesting",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber859",
-    "rjx utils getSimplifiedRJX",
+    "jsonx utils getSimplifiedJSONX",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber907",
-    "rjx utils getSimplifiedRJX should produce equivalent SimpleRJX",
+    "jsonx utils getSimplifiedJSONX should produce equivalent SimpleJSONX",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber912",
-    "rjx utils getSimplifiedRJX should return SimpleRJX if already simple",
+    "jsonx utils getSimplifiedJSONX should return SimpleJSONX if already simple",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber754",
-    "rjx utils simpleRJXSyntax",
+    "jsonx utils simpleJSONXSyntax",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber805",
-    "rjx utils simpleRJXSyntax should produce equivalent RXJ",
+    "jsonx utils simpleJSONXSyntax should produce equivalent RXJ",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber756",
-    "rjx utils simpleRJXSyntax should return valid RJX from simple RJX syntax",
+    "jsonx utils simpleJSONXSyntax should return valid JSONX from simple JSONX syntax",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber393",
-    "rjx utils traverse",
+    "jsonx utils traverse",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber406",
-    "rjx utils traverse should return properties from an object from the array of paths",
+    "jsonx utils traverse should return properties from an object from the array of paths",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber410",
-    "rjx utils traverse should return the entire object if no paths provided",
+    "jsonx utils traverse should return the entire object if no paths provided",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber414",
-    "rjx utils traverse should return undefined if paths are invalid",
+    "jsonx utils traverse should return undefined if paths are invalid",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber418",
-    "rjx utils traverse should throw an error if paths are not an array of strings or numeric indexes",
+    "jsonx utils traverse should throw an error if paths are not an array of strings or numeric indexes",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber669",
-    "rjx utils validSimpleRJXSyntax",
+    "jsonx utils validSimpleJSONXSyntax",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber671",
-    "rjx utils validSimpleRJXSyntax should invalidate shorthard simple syntax",
+    "jsonx utils validSimpleJSONXSyntax should invalidate shorthard simple syntax",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber714",
-    "rjx utils validSimpleRJXSyntax should validate shorthard simple syntax",
+    "jsonx utils validSimpleJSONXSyntax should validate shorthard simple syntax",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber423",
-    "rjx utils validateRJX",
+    "jsonx utils validateJSONX",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber428",
-    "rjx utils validateRJX should return string and warn of invalid RJX props",
+    "jsonx utils validateJSONX should return string and warn of invalid JSONX props",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber425",
-    "rjx utils validateRJX should return true if RJX is valid",
+    "jsonx utils validateJSONX should return true if JSONX is valid",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber435",
-    "rjx utils validateRJX should throw a syntax error if RJX is missing a component",
+    "jsonx utils validateJSONX should throw a syntax error if JSONX is missing a component",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber454",
-    "rjx utils validateRJX should throw a type error if RJX children is not an array or RJX docs or a string",
+    "jsonx utils validateJSONX should throw a type error if JSONX children is not an array or JSONX docs or a string",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber447",
-    "rjx utils validateRJX should throw a type error if RJX props is not an object, props.children or props._children",
+    "jsonx utils validateJSONX should throw a type error if JSONX props is not an object, props.children or props._children",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber440",
-    "rjx utils validateRJX should throw multiple errors if returnAllErrors is true",
+    "jsonx utils validateJSONX should throw multiple errors if returnAllErrors is true",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber523",
-    "rjx utils validateRJX should validate __dangerouslyBindEvalProps as a function that can be bound javascript",
+    "jsonx utils validateJSONX should validate __dangerouslyBindEvalProps as a function that can be bound javascript",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber513",
-    "rjx utils validateRJX should validate __dangerouslyEvalProps javascript",
+    "jsonx utils validateJSONX should validate __dangerouslyEvalProps javascript",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber533",
-    "rjx utils validateRJX should validate __dangerouslyInsertComponents are valid RJX objects",
+    "jsonx utils validateJSONX should validate __dangerouslyInsertComponents are valid JSONX objects",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber546",
-    "rjx utils validateRJX should validate __functionProps are valid function strings",
+    "jsonx utils validateJSONX should validate __functionProps are valid function strings",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber572",
-    "rjx utils validateRJX should validate __windowComponentProps is an object",
+    "jsonx utils validateJSONX should validate __windowComponentProps is an object",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber588",
-    "rjx utils validateRJX should validate __windowComponents are valid function strings",
+    "jsonx utils validateJSONX should validate __windowComponents are valid function strings",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber457",
-    "rjx utils validateRJX should validate child objects",
+    "jsonx utils validateJSONX should validate child objects",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber614",
-    "rjx utils validateRJX should validate comparisonorprops is boolean",
+    "jsonx utils validateJSONX should validate comparisonorprops is boolean",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber628",
-    "rjx utils validateRJX should validate comparisonprops is an array of comaprisons",
+    "jsonx utils validateJSONX should validate comparisonprops is an array of comaprisons",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber475",
-    "rjx utils validateRJX should validate dynamic props[asyncprops,resourceprops,thisprops,windowprops]",
+    "jsonx utils validateJSONX should validate dynamic props[asyncprops,resourceprops,thisprops,windowprops]",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber492",
-    "rjx utils validateRJX should validate eval props[__dangerouslyEvalProps,__dangerouslyBindEvalProps]",
+    "jsonx utils validateJSONX should validate eval props[__dangerouslyEvalProps,__dangerouslyBindEvalProps]",
     "test"
   ],
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber654",
-    "rjx utils validateRJX should validate passprops is boolean",
+    "jsonx utils validateJSONX should validate passprops is boolean",
     "test"
   ],
   [

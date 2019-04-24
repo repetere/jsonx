@@ -1,4 +1,4 @@
-import * as rjx from '../../src/main';
+import * as jsonx from '../../src/main';
 import mochaJSDOM from 'jsdom-global';
 import path from 'path';
 import chai from 'chai';
@@ -15,11 +15,11 @@ import 'mocha-sinon';
 import useGlobalHook from 'use-global-hook';
 
 
-const sampleRJX = {
+const sampleJSONX = {
   component: 'div',
   props: {
-    id: 'generatedRJX',
-    className:'rjx',
+    id: 'generatedJSONX',
+    className:'jsonx',
   },
   children: [
     {
@@ -34,11 +34,11 @@ const sampleRJX = {
     },
   ],
 };
-const simpleRJX = {
+const simpleJSONX = {
   div: {
     props: {
-      id: 'generatedRJX',
-      className:'rjx',
+      id: 'generatedJSONX',
+      className:'jsonx',
     },
     children: [
       {
@@ -55,8 +55,8 @@ const simpleRJX = {
     ],
   },
 };
-const sampleRJXJSON = rjx.getReactElementFromRJX.call({ returnJSON: true }, sampleRJX);
-const simpleRJXJSON = rjx.getReactElementFromRJX.call({ returnJSON: true }, simpleRJX);
+const sampleJSONXJSON = jsonx.getReactElementFromJSONX.call({ returnJSON: true }, sampleJSONX);
+const simpleJSONXJSON = jsonx.getReactElementFromJSONX.call({ returnJSON: true }, simpleJSONX);
 
 const simpleDiv = {
   component: 'div',
@@ -88,25 +88,25 @@ const complexDiv = {
     },
   ],
 };
-const simpleDivJSON = rjx.getReactElementFromRJX.call({ returnJSON: true, }, simpleDiv);
-const complexDivJSON = rjx.getReactElementFromRJX.call({ returnJSON: true, exposeEval:true, }, complexDiv);
+const simpleDivJSON = jsonx.getReactElementFromJSONX.call({ returnJSON: true, }, simpleDiv);
+const complexDivJSON = jsonx.getReactElementFromJSONX.call({ returnJSON: true, exposeEval:true, }, complexDiv);
 
-describe('rjx', function () { 
+describe('jsonx', function () { 
   describe('helper functions', () => {
     it('should return useGlobalHook', () => {
-      expect(rjx.__getUseGlobalHook()).to.eql(useGlobalHook);
+      expect(jsonx.__getUseGlobalHook()).to.eql(useGlobalHook);
     });
     it('should return React', () => {
-      expect(rjx.__getReact()).to.eql(React);
+      expect(jsonx.__getReact()).to.eql(React);
     });
     it('should return ReactDOM', () => {
-      expect(rjx.__getReactDOM()).to.eql(ReactDOM);
+      expect(jsonx.__getReactDOM()).to.eql(ReactDOM);
     });
   });
-  describe('getReactElementFromRJX', () => {
+  describe('getReactElementFromJSONX', () => {
     it('should return an instance of a react element', () => {
-      const ReactiveJSON = rjx.getReactElementFromRJX(sampleRJX);
-      const ReactiveSimpleJSON = rjx.getReactElementFromRJX(simpleRJX);
+      const ReactiveJSON = jsonx.getReactElementFromJSONX(sampleJSONX);
+      const ReactiveSimpleJSON = jsonx.getReactElementFromJSONX(simpleJSONX);
       expect(ReactTestUtils.isElement(ReactiveJSON));
       expect(ReactTestUtils.isElement(ReactiveSimpleJSON));
       expect(ReactiveJSON).to.be.an('object');
@@ -117,17 +117,17 @@ describe('rjx', function () {
       expect(ReactiveJSON).to.haveOwnProperty('props');
     });
     it('should handle errors with empty components', () => {
-      const emptySpanComponent = rjx.getReactElementFromRJX({});
-      const emptySpanComponentDebugged = rjx.getReactElementFromRJX.call({ debug: true, }, {}, {});
+      const emptySpanComponent = jsonx.getReactElementFromJSONX({});
+      const emptySpanComponentDebugged = jsonx.getReactElementFromJSONX.call({ debug: true, }, {}, {});
       expect(emptySpanComponent).to.be.an('object');
       expect(emptySpanComponentDebugged).to.be.an('object');
       expect(emptySpanComponentDebugged.props.children).to.eql('Error: Missing Component Object');
     });
     it('should throw an error with invalid components', () => {
       const loggerSpy = sinon.spy();
-      expect(rjx.getReactElementFromRJX.bind({}, { component: 'somethingInvalid', })).to.throw('Invalid React Component (somethingInvalid)');
+      expect(jsonx.getReactElementFromJSONX.bind({}, { component: 'somethingInvalid', })).to.throw('Invalid React Component (somethingInvalid)');
       try {
-        rjx.getReactElementFromRJX.call({ debug: true, logError: loggerSpy, }, { component: 'somethingInvalid', }, {});
+        jsonx.getReactElementFromJSONX.call({ debug: true, logError: loggerSpy, }, { component: 'somethingInvalid', }, {});
       } catch (e) {
         expect(loggerSpy.called).to.be.true;
         expect(e).to.be.an('error');
@@ -136,8 +136,8 @@ describe('rjx', function () {
   });
   describe('getReactElementFromJSON', () => {
     it('should return an instance of a react element', () => {
-      const ReactiveJSON = rjx.getReactElementFromJSON(sampleRJXJSON);
-      const ReactiveSimpleJSON = rjx.getReactElementFromJSON(simpleRJXJSON);
+      const ReactiveJSON = jsonx.getReactElementFromJSON(sampleJSONXJSON);
+      const ReactiveSimpleJSON = jsonx.getReactElementFromJSON(simpleJSONXJSON);
       expect(ReactTestUtils.isElement(ReactiveJSON)).to.be.true;
       expect(ReactTestUtils.isElement(ReactiveSimpleJSON)).to.be.true;
       expect(ReactiveJSON).to.be.an('object');
@@ -149,7 +149,7 @@ describe('rjx', function () {
     });
   });
   describe('compile', () => { 
-    it('should convert RJX to React Element', () => {
+    it('should convert JSONX to React Element', () => {
       const dom = new JSDOM(`<!DOCTYPE html>
       <body>
         <div id="root"/>
@@ -161,7 +161,7 @@ describe('rjx', function () {
       global.window.React = React;
       global.document = global.window.document;
       // console.log("dom.window.document.querySelector('#root')",dom.window.document.querySelector('#root'));
-      const ReactiveJSON = rjx.compile(sampleRJXJSON);
+      const ReactiveJSON = jsonx.compile(sampleJSONXJSON);
       const testDOM = ReactTestUtils.renderIntoDocument(ReactiveJSON());
       // console.log({testDOM});
       expect(ReactTestUtils.isDOMComponent(testDOM)).to.be.true;
@@ -170,16 +170,16 @@ describe('rjx', function () {
     });
   });
   describe('outputJSON', () => { 
-    it('should convert RJX to JSON', () => {
-      const compiledJSON = rjx.outputJSON(simpleDiv);
-      const compiledRJXJSON = rjx.getReactElementFromRJX.call({ returnJSON: true, }, simpleDiv);
-      expect(compiledJSON.children).to.eql(compiledRJXJSON.children);
-      expect(compiledJSON.type).to.eql(compiledRJXJSON.type);
+    it('should convert JSONX to JSON', () => {
+      const compiledJSON = jsonx.outputJSON(simpleDiv);
+      const compiledJSONXJSON = jsonx.getReactElementFromJSONX.call({ returnJSON: true, }, simpleDiv);
+      expect(compiledJSON.children).to.eql(compiledJSONXJSON.children);
+      expect(compiledJSON.type).to.eql(compiledJSONXJSON.type);
     });
   });
   describe('outputJSX', () => {
     it('should compile to JSX String', () => {
-      const JSXString = rjx.outputJSX(simpleDiv);
+      const JSXString = jsonx.outputJSX(simpleDiv);
       expect(JSXString).to.include('title="test">hello</div>');
       // console.log({ JSXString, complexJSXString, });
     });
@@ -188,34 +188,34 @@ describe('rjx', function () {
     // const util = require('util');
     // console.log(util.inspect({ simpleDivJSON, complexDivJSON, },{depth:20}));
     it('should compile to JSX String', () => {
-      const JSXString = rjx.jsonToJSX(simpleDivJSON);
-      const complexJSXString = rjx.jsonToJSX(complexDivJSON);
+      const JSXString = jsonx.jsonToJSX(simpleDivJSON);
+      const complexJSXString = jsonx.jsonToJSX(complexDivJSON);
       expect(JSXString).to.include('title="test">hello</div>');
       expect(complexJSXString).to.be.a('string');
       // console.log({ JSXString, complexJSXString, });
     });
   });
   describe('outputHTML', () => {
-    it('should be an alias for rjxHTMLString', () => {
-      expect(rjx.outputHTML).to.eql(rjx.rjxHTMLString);
+    it('should be an alias for jsonxHTMLString', () => {
+      expect(jsonx.outputHTML).to.eql(jsonx.jsonxHTMLString);
     });
   });
-  describe('rjxHTMLString', () => {
+  describe('jsonxHTMLString', () => {
     it('should return an HTML string', () => {
-      const rjxString = rjx.rjxHTMLString({ rjx: sampleRJX, });
-      const dom = new JSDOM(`<!DOCTYPE html><body>${rjxString}</body>`);
+      const jsonxString = jsonx.jsonxHTMLString({ jsonx: sampleJSONX, });
+      const dom = new JSDOM(`<!DOCTYPE html><body>${jsonxString}</body>`);
 
-      expect(rjxString).to.be.a('string');
+      expect(jsonxString).to.be.a('string');
       expect(dom.window.document.body.querySelector('p').innerHTML).to.eql('hello world');
       expect(dom.window.document.body.querySelector('p').style.color).to.eql('red');
     });
   });
   describe('__express', () => {
-    const sampleRJXFilepath = path.resolve('./test/mock/sample.rjx');
+    const sampleJSONXFilepath = path.resolve('./test/mock/sample.jsonx');
     const spantext = 'should render in express';
     it('should return an HTML string', (done) => {
-      rjx.__express(
-        sampleRJXFilepath,
+      jsonx.__express(
+        sampleJSONXFilepath,
         {
           spantext,
           __boundConfig: {
@@ -226,7 +226,7 @@ describe('rjx', function () {
         ((err, renderedString) => {
           const dom = new JSDOM(renderedString);
           if (renderedString) {
-            expect(dom.window.document.querySelector('#generatedRJX').getAttribute('title')).to.eql(spantext);
+            expect(dom.window.document.querySelector('#generatedJSONX').getAttribute('title')).to.eql(spantext);
             expect(err).to.be.null;
             expect(renderedString).to.be.a('String');
           }
@@ -235,14 +235,14 @@ describe('rjx', function () {
       );
     });
     it('it should handle errors', (done) => {
-      expect(rjx.__express.bind()).to.throw;
-      rjx.__express(null,null, (err) => {
+      expect(jsonx.__express.bind()).to.throw;
+      jsonx.__express(null,null, (err) => {
         expect(err).to.be.a('error');
         done();
       })
     });
   });
-  describe('rjxRender', () => {
+  describe('jsonxRender', () => {
     before(function () {
       this.jsdom = mochaJSDOM();
     });
@@ -250,7 +250,7 @@ describe('rjx', function () {
       const containerDiv = document.createElement('div');
       containerDiv.setAttribute('id', 'reactContainer');
       document.body.appendChild(containerDiv);
-      rjx.rjxRender({ rjx: sampleRJX, querySelector:'#reactContainer', });
+      jsonx.jsonxRender({ jsonx: sampleJSONX, querySelector:'#reactContainer', });
       
       expect(document.body.querySelector('p').innerHTML).to.eql('hello world');
       expect(document.body.querySelector('p').style.color).to.eql('red');

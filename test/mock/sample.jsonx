@@ -1,11 +1,11 @@
-const rjx = require('../../dist/rjx.cjs.js');
-let c = rjx._rjxComponents.getFunctionFromEval({ body: 'console.log("hello")', });
-const MyCustomComponent = rjx._rjxComponents.getReactClassComponent({
+const jsonx = require('../../dist/jsonx.cjs.js');
+let c = jsonx._jsonxComponents.getFunctionFromEval({ body: 'console.log("hello")', });
+const MyCustomComponent = jsonx._jsonxComponents.getReactClassComponent({
   //
   // Initialization function
   //
   getInitialState: {
-    body: 'return { status:"not-loaded", name:"rjx test", customNumber:1, }',
+    body: 'return { status:"not-loaded", name:"jsonx test", customNumber:1, }',
     arguments: [],
   },
   getDefaultProps: {
@@ -68,7 +68,7 @@ const MyCustomComponent = rjx._rjxComponents.getReactClassComponent({
   },
 });
 
-const sampleRJX = {
+const sampleJSONX = {
   component: 'html',
   children: [
     {
@@ -76,13 +76,13 @@ const sampleRJX = {
       children: [
         {
           component: 'title',
-          children:'sample rjx page',
+          children:'sample jsonx page',
         },
         {
           component: 'meta',
           props: {
             name:'Description',
-            content:'RJX page for Express',
+            content:'JSONX page for Express',
           },
         },
       ],
@@ -93,8 +93,8 @@ const sampleRJX = {
         {
           component: 'div',
           props: {
-            id: 'generatedRJX',
-            className: 'rjx',
+            id: 'generatedJSONX',
+            className: 'jsonx',
           },
           resourceprops: {
             title: ['spantext', ],
@@ -113,7 +113,7 @@ const sampleRJX = {
               __dangerouslyEvalProps: {
                 onClick: '()=>()=>alert("click works")',
               },
-              children: 'Hello RJX World!',
+              children: 'Hello JSONX World!',
             },
             {
               component: 'p',
@@ -145,7 +145,7 @@ const sampleRJX = {
                     color: 'blue',
                   },
                 },
-                children: 'this is using shorthand rjx',
+                children: 'this is using shorthand jsonx',
               },
             },
           ],
@@ -164,4 +164,4 @@ const sampleRJX = {
   ],
 };
 
-module.exports = sampleRJX;
+module.exports = sampleJSONX;

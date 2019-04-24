@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useReducer, useCallback, useMem
 import { default as ReactDOMElements, } from 'react-dom-factories';
 import { getAdvancedBinding, } from './utils';
 import createReactClass from 'create-react-class';
-import { getReactElementFromRJX, } from './main';
+import { getReactElementFromJSONX, } from './main';
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
@@ -12,18 +12,18 @@ import { getReactElementFromRJX, } from './main';
 export let advancedBinding = getAdvancedBinding();
 // require;
 /**
- * object of all react components available for RJX
+ * object of all react components available for JSONX
  * @memberOf components
  */
-export let componentMap = Object.assign({ Fragment, Suspense, }, ReactDOMElements, (typeof window ==='object') ? window.__rjx_custom_elements : {});
+export let componentMap = Object.assign({ Fragment, Suspense, }, ReactDOMElements, (typeof window ==='object') ? window.__jsonx_custom_elements : {});
 
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
  * @memberOf components
  * @param {Object} options - options for getBoundedComponents 
- * @param {Object} options.reactComponents - all react components available for RJX
- * @param {string[]} boundedComponents - list of components to bind RJX this context (usually helpful for navigation and redux-router)
- * @returns {Object} reactComponents object of all react components available for RJX
+ * @param {Object} options.reactComponents - all react components available for JSONX
+ * @param {string[]} boundedComponents - list of components to bind JSONX this context (usually helpful for navigation and redux-router)
+ * @returns {Object} reactComponents object of all react components available for JSONX
  */
 export function getBoundedComponents(options = {}) {
   const { reactComponents, boundedComponents=[], } = options;
@@ -41,14 +41,14 @@ export function getBoundedComponents(options = {}) {
  * @memberOf components
  * @param {Object} options - options for getComponentFromLibrary
  * @param {Object} [options.componentLibraries={}] - react component library like bootstrap
- * @param {Object} [options.rjx={}] - any valid RJX JSON
+ * @param {Object} [options.jsonx={}] - any valid JSONX JSON
  * @returns {function|undefined} react component from react library like bootstrap, material design or bulma
  */
 export function getComponentFromLibrary(options = {}) {
-  const { componentLibraries = {}, rjx = {}, } = options;
+  const { componentLibraries = {}, jsonx = {}, } = options;
   const libComponent = Object.keys(componentLibraries)
     .map(libraryName => {
-      const cleanLibraryName = rjx.component.replace(`${libraryName}.`, '');
+      const cleanLibraryName = jsonx.component.replace(`${libraryName}.`, '');
       const libraryNameArray = cleanLibraryName.split('.');
       if (libraryNameArray.length === 2
         && componentLibraries[ libraryName ]
@@ -64,15 +64,15 @@ export function getComponentFromLibrary(options = {}) {
 }
 
 /**
- * returns a react element from rjx.component
+ * returns a react element from jsonx.component
  * @memberOf components
  * @example
  * // returns react elements
- * getComponentFromMap({rjx:{component:'div'}})=>div
- * getComponentFromMap({rjx:{component:'MyModal'},reactComponents:{MyModal:MyModal extends React.Component}})=>MyModal
- * getComponentFromMap({rjx:{component:'reactBootstap.nav'},componentLibraries:{reactBootstrap,}})=>reactBootstap.nav
+ * getComponentFromMap({jsonx:{component:'div'}})=>div
+ * getComponentFromMap({jsonx:{component:'MyModal'},reactComponents:{MyModal:MyModal extends React.Component}})=>MyModal
+ * getComponentFromMap({jsonx:{component:'reactBootstap.nav'},componentLibraries:{reactBootstrap,}})=>reactBootstap.nav
  * @param {Object} options - options for getComponentFromMap
- * @param {object} [options.rjx={}] - any valid RJX JSON object
+ * @param {object} [options.jsonx={}] - any valid JSONX JSON object
  * @param {Object} [options.reactComponents={}] - react components to render
  * @param {Object} [options.componentLibraries={}] - react components to render from another component library like bootstrap or bulma
  * @param {function} [options.logError=console.error] - error logging function
@@ -81,19 +81,19 @@ export function getComponentFromLibrary(options = {}) {
  */
 export function getComponentFromMap(options = {}) {
   // eslint-disable-next-line
-  const { rjx = {}, reactComponents = {}, componentLibraries = {}, logError = console.error, debug } = options;
+  const { jsonx = {}, reactComponents = {}, componentLibraries = {}, logError = console.error, debug } = options;
 
   try {
-    if (typeof rjx.component !== 'string' && typeof rjx.component === 'function') {
-      return rjx.component;
-    } else if (ReactDOMElements[rjx.component]) {
-      return rjx.component;
-    } else if (reactComponents[ rjx.component ]) {
-      return reactComponents[rjx.component];
-    } else if (typeof rjx.component ==='string' && rjx.component.indexOf('.') > 0 && getComponentFromLibrary({ rjx, componentLibraries, })) {
-      return getComponentFromLibrary({ rjx, componentLibraries, });
+    if (typeof jsonx.component !== 'string' && typeof jsonx.component === 'function') {
+      return jsonx.component;
+    } else if (ReactDOMElements[jsonx.component]) {
+      return jsonx.component;
+    } else if (reactComponents[ jsonx.component ]) {
+      return reactComponents[jsonx.component];
+    } else if (typeof jsonx.component ==='string' && jsonx.component.indexOf('.') > 0 && getComponentFromLibrary({ jsonx, componentLibraries, })) {
+      return getComponentFromLibrary({ jsonx, componentLibraries, });
     } else {
-      throw new ReferenceError(`Invalid React Component (${rjx.component})`);
+      throw new ReferenceError(`Invalid React Component (${jsonx.component})`);
     }
   } catch (e) {
     if(debug) logError(e, (e.stack) ? e.stack : 'no stack');
@@ -128,7 +128,7 @@ export function getFunctionFromEval(options = {}) {
  * @param {Boolean} [options.passprops ] - pass props to rendered component
  * @param {Boolean} [options.passstate] - pass state as props to rendered component
  * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
- * @param {Object} reactComponent.render.body - Valid RJX JSON
+ * @param {Object} reactComponent.render.body - Valid JSONX JSON
  * @param {String} reactComponent.getDefaultProps.body - return an object for the default props
  * @param {String} reactComponent.getInitialState.body - return an object for the default state
  * @returns {Function} 
@@ -173,7 +173,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
       result[ val ] = function () {
         if (options.passprops && this.props) body.props = Object.assign({}, body.props, this.props);
         if (options.passstate && this.state) body.props = Object.assign({}, body.props, this.state);
-        return getReactElementFromRJX.call(Object.assign(
+        return getReactElementFromJSONX.call(Object.assign(
           {},
           context,
           bindContext ? this : {},
@@ -216,13 +216,13 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
  * Returns new React Function Component
  * @memberOf components
  * @todo set 'functionprops' to set arguments for function
- * @param {*} reactComponent - Valid RJX to render
+ * @param {*} reactComponent - Valid JSONX to render
  * @param {String} functionBody - String of function component body
  * @param {String} options.name - Function Component name 
  * @returns {Function}
  * @see {@link https://reactjs.org/docs/hooks-intro.html}
  * @example
-  const rjxRender = {
+  const jsonxRender = {
    component:'div',
    passprops:'true',
    children:[ 
@@ -249,7 +249,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
   };
   const functionBody = 'const [count, setCount] = useState(0); const functionprops = {count,setCount};'
   const options = { name: IntroHook}
-  const MyCustomFunctionComponent = rjx._rjxComponents.getReactFunctionComponent({rjxRender, functionBody, options});
+  const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({jsonxRender, functionBody, options});
    */
 export function getReactFunctionComponent(reactComponent = {}, functionBody = '', options = {}) {
   if (options.lazy) {
@@ -262,9 +262,9 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
   const { resources = {}, args=[], } = options;
 
   const props = reactComponent.props;
-  const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getReactElementFromRJX, reactComponent, resources, props, ];
+  const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getReactElementFromJSONX, reactComponent, resources, props, ];
   if (typeof functionBody === 'function') functionBody = functionBody.toString();
-  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromRJX', 'reactComponent', 'resources', 'props', `
+  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromJSONX', 'reactComponent', 'resources', 'props', `
       return function ${options.name || 'Anonymous'}(props){
         ${functionBody}
         if(typeof exposeProps!=='undefined'){
@@ -275,7 +275,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
         }
         if(!props.children) delete props.children;
   
-        return getReactElementFromRJX.call(this, reactComponent);
+        return getReactElementFromJSONX.call(this, reactComponent);
       }
     `);
   if (options.name) {

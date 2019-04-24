@@ -1,4 +1,4 @@
-import * as _rjxProps from '../../src/props';
+import * as _jsonxProps from '../../src/props';
 import { getComputedProps, } from '../../src/props';
 import mochaJSDOM from 'jsdom-global';
 import chai from 'chai';
@@ -11,11 +11,11 @@ import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
 import 'mocha-sinon';
 
-const sampleRJX = {
+const sampleJSONX = {
   component: 'div',
   props: {
-    id: 'generatedRJX',
-    className:'rjx',
+    id: 'generatedJSONX',
+    className:'jsonx',
   },
   children: [
     {
@@ -33,7 +33,7 @@ const sampleRJX = {
 
 const traverseObject = {
   user: {
-    name: 'rjx',
+    name: 'jsonx',
     description: 'react withouth javascript',
   },
   stats: {
@@ -43,7 +43,7 @@ const traverseObject = {
   authentication: 'OAuth2',
 };
 
-describe('rjx props', function () { 
+describe('jsonx props', function () { 
   describe('getComputedProps', () => { 
     it('should return resolved computed props', () => {
       const dynamicprops = {
@@ -51,10 +51,10 @@ describe('rjx props', function () {
         username: ['user', 'name', ],
       };
       const evalProps = {
-        getUsername: '()=>\'rjx\'',
+        getUsername: '()=>\'jsonx\'',
       };
       const bindEvalProps = {
-        getUsernameFunction: '(function () { return "rjx"; })',
+        getUsernameFunction: '(function () { return "jsonx"; })',
       };
       const compProps = {
         myComponent: {
@@ -64,14 +64,14 @@ describe('rjx props', function () {
       };
       const renderIndex = 1;
       const resources = traverseObject;
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         asyncprops: dynamicprops,
         __dangerouslyEvalProps: evalProps,
         __dangerouslyBindEvalProps: bindEvalProps,
         __dangerouslyInsertComponents: compProps,
       });
       const computedProps = getComputedProps.call({}, {
-        rjx: testRJX,
+        jsonx: testJSONX,
         resources,
         renderIndex,
       });
@@ -88,40 +88,40 @@ describe('rjx props', function () {
       expect(computedProps.myComponent).to.haveOwnProperty('props');
     });
   });
-  describe('getRJXProps', () => {
-    const getRJXProps = _rjxProps.getRJXProps;
+  describe('getJSONXProps', () => {
+    const getJSONXProps = _jsonxProps.getJSONXProps;
     it('should return resolved dynamic prop', () => {
       const testVals = {
         auth: ['authentication', ],
         username: ['user', 'name', ],
       };
-      const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
-      const testRJX2 = Object.assign({}, sampleRJX, { thisprops: testVals, });
-      const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
-      const RJXP2 = getRJXProps({ rjx: testRJX2, traverseObject, propName:'thisprops', });
-      expect(RJXP.auth).to.eql(traverseObject.authentication);
-      expect(RJXP.username).to.eql(traverseObject.user.name);
-      expect(RJXP2.auth).to.eql(traverseObject.authentication);
-      expect(RJXP2.username).to.eql(traverseObject.user.name);
+      const testJSONX = Object.assign({}, sampleJSONX, { asyncprops: testVals, });
+      const testJSONX2 = Object.assign({}, sampleJSONX, { thisprops: testVals, });
+      const JSONXP = getJSONXProps({ jsonx: testJSONX, traverseObject, });
+      const JSONXP2 = getJSONXProps({ jsonx: testJSONX2, traverseObject, propName:'thisprops', });
+      expect(JSONXP.auth).to.eql(traverseObject.authentication);
+      expect(JSONXP.username).to.eql(traverseObject.user.name);
+      expect(JSONXP2.auth).to.eql(traverseObject.authentication);
+      expect(JSONXP2.username).to.eql(traverseObject.user.name);
     });
     it('should return resolved dynamic prop with undefined values if reference is invalid', () => {
       const testVals = {
         auth: ['wrong', ],
         username: ['no', 'ref', ],
       };
-      const testRJX = Object.assign({}, sampleRJX, { asyncprops: testVals, });
-      const RJXP = getRJXProps({ rjx: testRJX, traverseObject, });
-      expect(RJXP.auth).to.be.undefined;
-      expect(RJXP.username).to.be.undefined;
+      const testJSONX = Object.assign({}, sampleJSONX, { asyncprops: testVals, });
+      const JSONXP = getJSONXProps({ jsonx: testJSONX, traverseObject, });
+      expect(JSONXP.auth).to.be.undefined;
+      expect(JSONXP.username).to.be.undefined;
     });
   });
   describe('getChildrenComponents', () => {
-    const getChildrenComponents = _rjxProps.getChildrenComponents;
+    const getChildrenComponents = _jsonxProps.getChildrenComponents;
     it('should return undefined children if missing __spread prop', () => {
       expect(getChildrenComponents().children).to.be.undefined;
     });
     it('should return error in children if missing __spread prop and if in debug mode', () => {
-      expect(getChildrenComponents({ rjx:{ debug:true ,}, }).children).to.be.a('string');
+      expect(getChildrenComponents({ jsonx:{ debug:true ,}, }).children).to.be.a('string');
       expect(getChildrenComponents.call({ debug:true ,}).children).to.be.a('string');
     });
     it('should spread data as a component on __spread prop', () => {
@@ -129,7 +129,7 @@ describe('rjx props', function () {
         allProps: {
           __spread: [ 1, 2, 3, 4, 5, ],
         },
-        rjx: {
+        jsonx: {
           __spreadComponent: {
             component: 'div',
           },
@@ -138,41 +138,41 @@ describe('rjx props', function () {
       const spreadChilds = getChildrenComponents(options);
       expect(spreadChilds).to.haveOwnProperty('_children');
       expect(spreadChilds._children).to.have.lengthOf(options.allProps.__spread.length);
-      // expect(getChildrenComponents({ rjx:{ debug:true ,}, }).children).to.be.a('string');
+      // expect(getChildrenComponents({ jsonx:{ debug:true ,}, }).children).to.be.a('string');
     });
   });
   describe('boundArgsReducer', () => { 
     it('should return reducer function', () => {
-      expect(_rjxProps.boundArgsReducer.bind()).to.be.a('function');
+      expect(_jsonxProps.boundArgsReducer.bind()).to.be.a('function');
     });
   });
   describe('getEvalProps', () => {
-    const getEvalProps = _rjxProps.getEvalProps;
+    const getEvalProps = _jsonxProps.getEvalProps;
     it('should return evaluated props dangerously using eval', () => {
       const testVals = {
         auth: 'true',
         username: '()=>(user={})=>user.name',
       };
-      const testRJX = Object.assign({}, sampleRJX, {
+      const testJSONX = Object.assign({}, sampleJSONX, {
         __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {
           email: '(function getUser(user={}){ return this.testBound(); })',
         },
       });
-      // console.log({ testRJX });
-      const RJXP = getEvalProps.call({ testBound: () => 'bounded', }, { rjx: testRJX, });
-      const evalutedComputedFunc = RJXP.username({ name: 'bob', });
-      const evalutedComputedBoundFunc = RJXP.email({ email:'test@email.domain', });
-      expect(RJXP.auth).to.be.true;
+      // console.log({ testJSONX });
+      const JSONXP = getEvalProps.call({ testBound: () => 'bounded', }, { jsonx: testJSONX, });
+      const evalutedComputedFunc = JSONXP.username({ name: 'bob', });
+      const evalutedComputedBoundFunc = JSONXP.email({ email:'test@email.domain', });
+      expect(JSONXP.auth).to.be.true;
       expect(evalutedComputedFunc).to.eql('bob');
       expect(evalutedComputedBoundFunc).to.eql('bounded');
     });
   });
   describe('getWindowComponents', () => {
-    const getWindowComponents = _rjxProps.getWindowComponents;
+    const getWindowComponents = _jsonxProps.getWindowComponents;
     before(function () {
       this.jsdom = mochaJSDOM();
     });
-    it('should return react element from rjx.__windowComponents', function () {
+    it('should return react element from jsonx.__windowComponents', function () {
       class Welcome extends React.Component {
         render() {
           return React.createElement('h1', { name: 'Welcome', }, `Hello, ${this.props.name} ${this.props.title||'NA'}`);
@@ -188,23 +188,23 @@ describe('rjx props', function () {
           title: 'pull it',
         },
       };
-      const testRJX = {
+      const testJSONX = {
         component: 'div',
         children: 'hello world',
         __windowComponents: {
-          useWelcome:'func:window.__rjx_custom_elements.Welcome',
+          useWelcome:'func:window.__jsonx_custom_elements.Welcome',
         },
       };
       const thisProp = {
         window: {
-          __rjx_custom_elements: {
+          __jsonx_custom_elements: {
             Welcome,
           },
         },
       };
       const windowProps = getWindowComponents.call(thisProp, {
         allProps,
-        rjx: testRJX,
+        jsonx: testJSONX,
       });
       expect(windowProps.useWelcome.type).to.eql(Welcome);
       expect(windowProps.useWelcome.props.name).to.eql(allProps.__windowComponentProps.name);
@@ -214,8 +214,8 @@ describe('rjx props', function () {
     });
   });
   describe('getFunctionProps', () => {
-    const getFunctionProps = _rjxProps.getFunctionProps;
-    it('should resolve functions from rjx.__functionProps from function strings', () => {
+    const getFunctionProps = _jsonxProps.getFunctionProps;
+    it('should resolve functions from jsonx.__functionProps from function strings', () => {
       const logError = sinon.spy();
       const thisProp = {
         logError,
@@ -246,7 +246,7 @@ describe('rjx props', function () {
         },
       };
       const rxjObj = getFunctionProps.call(thisProp, {
-        rjx: rxjTest,
+        jsonx: rxjTest,
       });
       expect(rxjObj).is.an('object');
       expect(Object.keys(rxjObj)).to.eql(Object.keys(rxjTest.__functionProps));
@@ -256,7 +256,7 @@ describe('rjx props', function () {
     });
   });
   describe('getFunctionFromProps', () => {
-    const getFunctionFromProps = _rjxProps.getFunctionFromProps;
+    const getFunctionFromProps = _jsonxProps.getFunctionFromProps;
     it('should return an empty function by default', () => {
       const logError = sinon.spy();
       const thisProp = {
@@ -335,7 +335,7 @@ describe('rjx props', function () {
     });
   });
   describe('getComponentProps', () => {
-    const getComponentProps = _rjxProps.getComponentProps;
+    const getComponentProps = _jsonxProps.getComponentProps;
     it('should return evaluated props dangerously using eval', () => {
       const testVals = {
         myComponent: {
@@ -343,26 +343,26 @@ describe('rjx props', function () {
           children:'hello world',
         },
       };
-      const testRJX = Object.assign({}, sampleRJX, { __dangerouslyInsertComponents: testVals,  });
-      const RJXP = getComponentProps.call({ }, { rjx: testRJX, });
-      expect(RJXP.myComponent).to.be.an('object');
-      expect(RJXP.myComponent).to.haveOwnProperty('$$typeof');
-      expect(RJXP.myComponent).to.haveOwnProperty('type');
-      expect(RJXP.myComponent).to.haveOwnProperty('key');
-      expect(RJXP.myComponent).to.haveOwnProperty('ref');
-      expect(RJXP.myComponent).to.haveOwnProperty('props');
+      const testJSONX = Object.assign({}, sampleJSONX, { __dangerouslyInsertComponents: testVals,  });
+      const JSONXP = getComponentProps.call({ }, { jsonx: testJSONX, });
+      expect(JSONXP.myComponent).to.be.an('object');
+      expect(JSONXP.myComponent).to.haveOwnProperty('$$typeof');
+      expect(JSONXP.myComponent).to.haveOwnProperty('type');
+      expect(JSONXP.myComponent).to.haveOwnProperty('key');
+      expect(JSONXP.myComponent).to.haveOwnProperty('ref');
+      expect(JSONXP.myComponent).to.haveOwnProperty('props');
     });
   });
   describe('getReactComponentProps', () => {
-    const getReactComponentProps = _rjxProps.getReactComponentProps;
+    const getReactComponentProps = _jsonxProps.getReactComponentProps;
     it('should return react component props dangerously using eval', () => {
       const testVals = {
         myComponent: 'p',
       };
-      const testRJX = Object.assign({}, sampleRJX, { __dangerouslyInsertReactComponents: testVals,  });
-      const RJXP = getReactComponentProps.call({}, { rjx: testRJX, });
-      expect(RJXP.myComponent).to.be.an('string');
-      expect(RJXP.myComponent).to.eql('p');
+      const testJSONX = Object.assign({}, sampleJSONX, { __dangerouslyInsertReactComponents: testVals,  });
+      const JSONXP = getReactComponentProps.call({}, { jsonx: testJSONX, });
+      expect(JSONXP.myComponent).to.be.an('string');
+      expect(JSONXP.myComponent).to.eql('p');
     });
   });
 

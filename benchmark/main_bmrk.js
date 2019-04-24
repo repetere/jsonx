@@ -1,12 +1,12 @@
 import Benchmark from 'benchmark';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-// import * as rjx from '../dist/rjx-server.esm';
-import * as rjx from '../src/main';
+// import * as jsonx from '../dist/jsonx-server.esm';
+import * as jsonx from '../src/main';
 import util from 'util';
 
-// console.log({ rjx, });
-const sampleRJX = {
+// console.log({ jsonx, });
+const sampleJSONX = {
   component: 'section',
   children: [
     {
@@ -23,10 +23,10 @@ const sampleRJX = {
       img: {
         // debug:true,
         props: {
-          src:'https://rjx.io/favicon.png',
+          src:'https://jsonx.io/favicon.png',
         },
         __dangerouslyEvalProps: {
-          alt:'"rjx"',
+          alt:'"jsonx"',
         },
         __dangerouslyBindEvalProps:{
           onClick:`(function(e){ 
@@ -38,43 +38,43 @@ const sampleRJX = {
   ],
 };
 
-const RJXE = rjx.getRenderedJSON(sampleRJX);
-const RJXJ = rjx.getRenderedJSON.call({
+const JSONXE = jsonx.getRenderedJSON(sampleJSONX);
+const JSONXJ = jsonx.getRenderedJSON.call({
   returnJSON: true,
 },
-sampleRJX);
-const RJXC = rjx.compile(sampleRJX);
+sampleJSONX);
+const JSONXC = jsonx.compile(sampleJSONX);
 const compiledReact = React.createElement('section', {}, [
   React.createElement('div', { title: 'this is a div', 'data-attr': 5, key: 1, }, 'inside of div'),
-  React.createElement('img', { src: 'https://rjx.io/favicon.png', alt: 'rjx', key: 2, }),
+  React.createElement('img', { src: 'https://jsonx.io/favicon.png', alt: 'jsonx', key: 2, }),
 ]);
 
 // const RE = React.createElement('div', { title: 'hello', }, 'hey there');
 
-// console.log('RJXC', util.inspect(RJXC, { depth:20, }));
-// // console.log('RJXE', util.inspect(RJXE, { depth:20, }));
-// console.log('RJXJ', util.inspect(RJXJ, { depth:20, }));
+// console.log('JSONXC', util.inspect(JSONXC, { depth:20, }));
+// // console.log('JSONXE', util.inspect(JSONXE, { depth:20, }));
+// console.log('JSONXJ', util.inspect(JSONXJ, { depth:20, }));
 
 const suite = new Benchmark.Suite;
 // add tests
-suite.add('RJX', function () {
-  rjx.getRenderedJSON({
+suite.add('JSONX', function () {
+  jsonx.getRenderedJSON({
     component: 'div', children: [
-      sampleRJX,
+      sampleJSONX,
     ],
   });
 });
-suite.add('RJX JSON', function () {
-  rjx.getReactElementFromJSON(RJXJ);
+suite.add('JSONX JSON', function () {
+  jsonx.getReactElementFromJSON(JSONXJ);
 });
-suite.add('Compiled RJX', function () {
-  React.createElement(RJXC);
+suite.add('Compiled JSONX', function () {
+  React.createElement(JSONXC);
 });
 suite.add('React raw', function () {
   React.createElement('div', {}, [
     React.createElement('section', {}, [
       React.createElement('div', { title: 'this is a div', 'data-attr': eval(5), key:1, }, 'inside of div'),
-      React.createElement('img', { src:'https://rjx.io/favicon.png', alt:eval('"rjx"'), key:2, }),
+      React.createElement('img', { src:'https://jsonx.io/favicon.png', alt:eval('"jsonx"'), key:2, }),
     ]),
   ]);
 });
@@ -82,18 +82,18 @@ suite.add('React', function () {
   React.createElement('div', {}, [
     React.createElement('section', {}, [
       React.createElement('div', { title: 'this is a div', 'data-attr':5, key:1, }, 'inside of div'),
-      React.createElement('img', { src:'https://rjx.io/favicon.png', alt:'rjx', key:2, }),
+      React.createElement('img', { src:'https://jsonx.io/favicon.png', alt:'jsonx', key:2, }),
     ]),
   ]);
 });
-suite.add('React & RJX', function () {
-  React.createElement('div', { }, [RJXE,]);
+suite.add('React & JSONX', function () {
+  React.createElement('div', { }, [JSONXE,]);
 });
 suite.add('React & React', function () {
   React.createElement('div', { }, [compiledReact,]);
 });
-// suite.add('RJX', function () {
-//   rjx.getRenderedJSON({
+// suite.add('JSONX', function () {
+//   jsonx.getRenderedJSON({
 //     component: 'div',
 //     children: 'text body',
 //   });

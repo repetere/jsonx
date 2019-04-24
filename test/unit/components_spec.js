@@ -1,5 +1,5 @@
-import * as rjx from '../../src/main';
-import * as _rjxComponents from '../../src/components';
+import * as jsonx from '../../src/main';
+import * as _jsonxComponents from '../../src/components';
 import mochaJSDOM from 'jsdom-global';
 import chai from 'chai';
 import sinon from 'sinon';
@@ -12,20 +12,20 @@ import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
 import 'mocha-sinon';
 
-const sampleRJX = {
+const sampleJSONX = {
   component: 'div',
   props: {
-    id: 'generatedRJX',
-    className:'rjx',
+    id: 'generatedJSONX',
+    className:'jsonx',
   },
   children: 'some div',
 };
 
-const sampleCustomElementRJX = {
+const sampleCustomElementJSONX = {
   component: 'div',
   props: {
-    id: 'customRJX',
-    className:'rjx',
+    id: 'customJSONX',
+    className:'jsonx',
   },
   thisprops: {
     title: ['extraname', ],
@@ -98,25 +98,25 @@ class WelcomeNonBind extends React.Component {
   }
 }
 
-describe('rjx components', function () { 
+describe('jsonx components', function () { 
   describe('advancedBinding', () => {
     it('should use advancedBinding based on user agent', () => {
-      expect(_rjxComponents.advancedBinding).to.be.false;
+      expect(_jsonxComponents.advancedBinding).to.be.false;
     });
   });
   describe('componentMap', () => {
     it('should export an object of components', () => {
-      expect(_rjxComponents.componentMap).to.be.a('object');
+      expect(_jsonxComponents.componentMap).to.be.a('object');
     });
     // it('should export an object of components', () => {
     //   global.window = {
-    //     __rjx_custom_elements: {
+    //     __jsonx_custom_elements: {
     //       cusEl: {},
     //     },
     //   };
-    //   const comps = _rjxComponents.componentMap;
+    //   const comps = _jsonxComponents.componentMap;
     //   console.log({ comps });
-    //   expect(_rjxComponents.componentMap.cusEl).to.eql(global.window.__rjx_custom_elements.cusEl);
+    //   expect(_jsonxComponents.componentMap.cusEl).to.eql(global.window.__jsonx_custom_elements.cusEl);
     // });
   });
   describe('getBoundedComponents', () => {
@@ -129,7 +129,7 @@ describe('rjx components', function () {
         WelcomeBindSpy,
       };
       const boundedComponents = ['Welcome', 'WelcomeBindSpy', ];
-      const customComponents = _rjxComponents.getBoundedComponents({ reactComponents, boundedComponents, advancedBinding:true, });
+      const customComponents = _jsonxComponents.getBoundedComponents({ reactComponents, boundedComponents, advancedBinding:true, });
       const customThis = {
         props: {
           name:'customElementTest',
@@ -143,10 +143,10 @@ describe('rjx components', function () {
         // debug: false,
         // logError:()=>null,
       };
-      const RJXPropCheck = rjx.getRenderedJSON.call(customThis, sampleCustomElementRJX);
+      const JSONXPropCheck = jsonx.getRenderedJSON.call(customThis, sampleCustomElementJSONX);
 
       expect(bindSpy.called).to.be.true;
-      expect(RJXPropCheck.props.title).to.eql(customThis.props.extraname);
+      expect(JSONXPropCheck.props.title).to.eql(customThis.props.extraname);
       expect(customComponents.length).to.eql(reactComponents.length);
     });
   });
@@ -158,43 +158,43 @@ describe('rjx components', function () {
     const componentLibraries = {
       reactBootstrap,
     };
-    it('should return a function if rjx.component is not a string', () => {
-      expect(_rjxComponents.getComponentFromMap({
-        rjx: {
+    it('should return a function if jsonx.component is not a string', () => {
+      expect(_jsonxComponents.getComponentFromMap({
+        jsonx: {
           component:Welcome,
         }, })).to.be.a('function').and.to.eql(Welcome);
     });
     it('should return the dom element string if a valid DOM elmenet in ReactDOM', () => {
       ['div', 'span', 'p', 'section', ].forEach(el => {
-        const rjxObj = { rjx: { component: el, }, };
-        expect(_rjxComponents.getComponentFromMap(rjxObj)).to.eql(el);
+        const jsonxObj = { jsonx: { component: el, }, };
+        expect(_jsonxComponents.getComponentFromMap(jsonxObj)).to.eql(el);
       });
     });
     it('should return a custom element', () => {
-      const rjxObj = {
-        rjx: {
+      const jsonxObj = {
+        jsonx: {
           component: 'Welcome',
         },
         reactComponents: {
           Welcome,
         },
       };
-      expect(_rjxComponents.getComponentFromMap(rjxObj)).to.eql(Welcome);
+      expect(_jsonxComponents.getComponentFromMap(jsonxObj)).to.eql(Welcome);
     });
     it('should return a component library react element', () => {
-      const rjxObj = {
-        rjx: {
+      const jsonxObj = {
+        jsonx: {
           component: 'reactBootstrap.Welcome',
         },
         componentLibraries,
       };
-      expect(_rjxComponents.getComponentFromMap(rjxObj)).to.eql(Welcome);
+      expect(_jsonxComponents.getComponentFromMap(jsonxObj)).to.eql(Welcome);
     });
     it('should handle errors', () => { 
       const logError = sinon.spy();
-      expect(_rjxComponents.getComponentFromMap.bind(null)).to.throw();
+      expect(_jsonxComponents.getComponentFromMap.bind(null)).to.throw();
       try {
-        _rjxComponents.getComponentFromMap({ debug: true, logError, rjx:false, });
+        _jsonxComponents.getComponentFromMap({ debug: true, logError, jsonx:false, });
       } catch (e) {
         expect(e).to.be.a('error');
         expect(logError.called).to.be.true;
@@ -215,23 +215,23 @@ describe('rjx components', function () {
       },
     };
     it('should return undefined if not valid', () => {
-      expect(_rjxComponents.getComponentFromLibrary()).to.be.undefined;
+      expect(_jsonxComponents.getComponentFromLibrary()).to.be.undefined;
     });
     it('should return a function if selecting valid component library', () => {
-      const rjxObj = {
-        rjx: {
+      const jsonxObj = {
+        jsonx: {
           component: 'reactBootstrap.Welcome',
         },
         componentLibraries,
       };
-      expect(_rjxComponents.getComponentFromLibrary(rjxObj)).to.be.eql(Welcome);
-      const rjxObjDeep = {
-        rjx: {
+      expect(_jsonxComponents.getComponentFromLibrary(jsonxObj)).to.be.eql(Welcome);
+      const jsonxObjDeep = {
+        jsonx: {
           component: 'testLib.testGrouping.testComponent',
         },
         componentLibraries,
       };
-      expect(_rjxComponents.getComponentFromLibrary(rjxObjDeep)).to.be.eql(componentLibraries.testLib.testGrouping.testComponent);
+      expect(_jsonxComponents.getComponentFromLibrary(jsonxObjDeep)).to.be.eql(componentLibraries.testLib.testGrouping.testComponent);
 
     });
   });
@@ -240,24 +240,24 @@ describe('rjx components', function () {
       this.jsdom = mochaJSDOM();
     });
     it('should accept components from a window property', function () {
-      global.window.__rjx_custom_elements = {
+      global.window.__jsonx_custom_elements = {
         Welcome,
         WelcomeNonBind,
         WelcomeBindSpy,
       };
-      delete require.cache[ require.resolve('../../dist/rjx.cjs') ];
-      const window_test_rjx = require('../../dist/rjx.cjs');
+      delete require.cache[ require.resolve('../../dist/jsonx.cjs') ];
+      const window_test_jsonx = require('../../dist/jsonx.cjs');
 
-      expect(window_test_rjx._rjxComponents.componentMap).to.haveOwnProperty('Welcome');
-      expect(window_test_rjx._rjxComponents.componentMap).to.haveOwnProperty('WelcomeNonBind');
-      expect(window_test_rjx._rjxComponents.componentMap).to.haveOwnProperty('WelcomeBindSpy');
+      expect(window_test_jsonx._jsonxComponents.componentMap).to.haveOwnProperty('Welcome');
+      expect(window_test_jsonx._jsonxComponents.componentMap).to.haveOwnProperty('WelcomeNonBind');
+      expect(window_test_jsonx._jsonxComponents.componentMap).to.haveOwnProperty('WelcomeBindSpy');
     });    
     after(function () {
       this.jsdom();
     });
   });
   describe('getFunctionFromEval', () => {
-    const getFunctionFromEval = _rjxComponents.getFunctionFromEval;
+    const getFunctionFromEval = _jsonxComponents.getFunctionFromEval;
     it('should return a new function', () => {
       const myFunc = getFunctionFromEval({
         body: 'return 3;',
@@ -266,7 +266,7 @@ describe('rjx components', function () {
     });
   });
   describe('getReactClassComponent', () => {
-    const getReactClassComponent = _rjxComponents.getReactClassComponent;
+    const getReactClassComponent = _jsonxComponents.getReactClassComponent;
     const classBody = {
       componentDidMount: {
         body: 'console.log(\'mounted\',this.props)',
@@ -351,7 +351,7 @@ describe('rjx components', function () {
     });
   });
   describe('getReactFunctionComponent', () => {
-    const getReactFunctionComponent = _rjxComponents.getReactFunctionComponent;
+    const getReactFunctionComponent = _jsonxComponents.getReactFunctionComponent;
     it('should react a React Function Component', () => { 
       const MyCustomComponentNameless = getReactFunctionComponent(
         {
@@ -422,7 +422,7 @@ describe('rjx components', function () {
     });
   });
   describe('getReactContext', () => {
-    const getReactContext = _rjxComponents.getReactContext;
+    const getReactContext = _jsonxComponents.getReactContext;
     it('should return a React Context Object', () => {
       const context = getReactContext({ some: 'c', });
       expect(ReactTestUtils.isElement(context)).to.be.false;
