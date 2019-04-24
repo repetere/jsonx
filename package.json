@@ -1,7 +1,7 @@
 {
   "name": "jsonx",
-  "version": "0.9.0",
-  "description": "React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX support React Function and Class Components, React Lazy and Suspense Content, and full support for React Hooks",
+  "version": "0.9.1",
+  "description": "React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks",
   "main": "dist/jsonx.cjs.js",
   "module": "dist/jsonx.esm.js",
   "browser": "dist/jsonx.umd.js",

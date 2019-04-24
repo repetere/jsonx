@@ -14,7 +14,7 @@
     gtag('js', new Date());
   
     gtag('config', 'UA-112697260-2');
-  </script><meta name="description" content="Reactive JSON (JSONX) takes a RXJ JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="og:type" content="website"><meta property="og:url" content="https://repetere.github.io/jsonx"><meta property="og:site_name" content="JSONX"><meta property="og:title" content="JSONX"><meta property="og:image" content="https://jsonx.io/favicon.png"><meta property="og:description" content="Reactive JSON (JSONX) takes a RXJ JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="og:author" content="https://github.com/repetere"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="JSONX"><meta property="twitter:description" content="Reactive JSON (JSONX) takes a RXJ JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="twitter:image" content="https://jsonx.io/favicon.png"></head>
+  </script><meta name="description" content="Reactive JSON (JSONX) takes a JSONX JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="og:type" content="website"><meta property="og:url" content="https://repetere.github.io/jsonx"><meta property="og:site_name" content="JSONX"><meta property="og:title" content="JSONX"><meta property="og:image" content="https://jsonx.io/favicon.png"><meta property="og:description" content="Reactive JSON (JSONX) takes a JSONX JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="og:author" content="https://github.com/repetere"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="JSONX"><meta property="twitter:description" content="Reactive JSON (JSONX) takes a JSONX JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="twitter:image" content="https://jsonx.io/favicon.png"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -328,7 +328,7 @@ describe(&apos;jsonx props&apos;, function () {
           },
         },
       };
-      const rxjTest = {
+      const jsonxTest = {
         component:&apos;div&apos;,
         props: {
           name:&apos;test&apos;,
@@ -339,14 +339,14 @@ describe(&apos;jsonx props&apos;, function () {
           nav:&apos;func:this.props.reduxRouter.push&apos;,
         },
       };
-      const rxjObj = getFunctionProps.call(thisProp, {
-        jsonx: rxjTest,
+      const jsonxObj = getFunctionProps.call(thisProp, {
+        jsonx: jsonxTest,
       });
-      expect(rxjObj).is.an(&apos;object&apos;);
-      expect(Object.keys(rxjObj)).to.eql(Object.keys(rxjTest.__functionProps));
-      expect(rxjObj.onclick()).to.eq(&apos;clicked&apos;);
-      expect(rxjObj.printPage()).to.eql(&apos;printed&apos;);
-      expect(rxjObj.nav()).to.eql(&apos;pushed&apos;);
+      expect(jsonxObj).is.an(&apos;object&apos;);
+      expect(Object.keys(jsonxObj)).to.eql(Object.keys(jsonxTest.__functionProps));
+      expect(jsonxObj.onclick()).to.eq(&apos;clicked&apos;);
+      expect(jsonxObj.printPage()).to.eql(&apos;printed&apos;);
+      expect(jsonxObj.nav()).to.eql(&apos;pushed&apos;);
     });
   });
   describe(&apos;getFunctionFromProps&apos;, () =&gt; {

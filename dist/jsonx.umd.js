@@ -17002,7 +17002,7 @@
 	      children: simpleJSONX[component].children && Array.isArray(simpleJSONX[component].children) ? simpleJSONX[component].children.map(simpleJSONXSyntax) : simpleJSONX[component].children
 	    });
 	  } catch (e) {
-	    throw SyntaxError('Invalid Simple RXJ Syntax', e);
+	    throw SyntaxError('Invalid Simple JSONX Syntax', e);
 	  }
 	}
 	/**

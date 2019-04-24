@@ -4,7 +4,7 @@
 
 ## Description
 
-**React JSON Syntax (JSONX)** takes a RXJ JSON object and can create (Suspense, Lazy, Functional and Class) React Components, output HTML and JSX and render React components without transpilers. **JSONX** lets you get up and running with React without extra configuration management of more complicated tool chains.
+**React JSON Syntax (JSONX)** takes a JSON object and can create (Suspense, Lazy, Functional and Class) React Components, output HTML and JSX and render React components without transpilers. **JSONX** lets you get up and running with React without extra configuration management of more complicated tool chains.
 
 
 ## Installation
@@ -60,7 +60,7 @@ jsonx.jsonxRender({ jsonx: { component: 'div', props:{className:'jsonx-generated
 
 ### JSONX JSON Spec
 
-RXJ JSON is valid JSON that more or less mimics JSX in JSON notation with a couple of special properties. The properties for RXJ JSON are the arguments passed to [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component (which is passed as the `type` argument)
+JSONX JSON is valid JSON that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component (which is passed as the `type` argument)
 
 ```javascript
 React.createElement(
@@ -236,7 +236,7 @@ jsonx = {
   __dangerouslyBindEvalProps:Object, // An object of evaluated JavaScript functions that are bound to this, used as inline functions onto jsonx.props
   //computed properties
   __functionProps:Object, // An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto jsonx.props
-  __dangerouslyInsertComponents:Object, // An object that turns each RXJ JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+  __dangerouslyInsertComponents:Object, // An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
   __dangerouslyInsertReactComponents:Object, // An object that returns the react element from either ReactDOM, reactComponents or componentLibraries.
   __spreadComponent:Object, // A JSONX element that is mapped on any array prop called  __spread
   __windowComponents:Object, // An object of components merged onto jsonx.props from window.__jsonx_custom_elements
@@ -467,7 +467,7 @@ const thisProp = {
     },
   },
 };
-const rxjTest = {
+const jsonxTest = {
   component:'div',
   props: {
     name:'test',
@@ -478,14 +478,14 @@ const rxjTest = {
     nav:'func:this.props.reduxRouter.push',
   },
 };
-const rxjObj = getFunctionProps.call(thisProp, {
-  jsonx: rxjTest,
+const jsonxObj = getFunctionProps.call(thisProp, {
+  jsonx: jsonxTest,
 });
-expect(rxjObj).is.an('object');
-expect(Object.keys(rxjObj)).to.eql(Object.keys(rxjTest.__functionProps));
-expect(rxjObj.onclick()).to.eq('clicked');
-expect(rxjObj.printPage()).to.eql('printed');
-expect(rxjObj.nav()).to.eql('pushed');
+expect(jsonxObj).is.an('object');
+expect(Object.keys(jsonxObj)).to.eql(Object.keys(jsonxTest.__functionProps));
+expect(jsonxObj.onclick()).to.eq('clicked');
+expect(jsonxObj.printPage()).to.eql('printed');
+expect(jsonxObj.nav()).to.eql('pushed');
 ```
 
 ##### comparisionprops

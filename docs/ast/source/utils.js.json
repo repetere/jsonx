@@ -29020,10 +29020,10 @@
                                 }
                               },
                               "extra": {
-                                "rawValue": "Invalid Simple RXJ Syntax",
-                                "raw": "'Invalid Simple RXJ Syntax'"
+                                "rawValue": "Invalid Simple JSONX Syntax",
+                                "raw": "'Invalid Simple JSONX Syntax'"
                               },
-                              "value": "Invalid Simple RXJ Syntax"
+                              "value": "Invalid Simple JSONX Syntax"
                             },
                             {
                               "type": "Identifier",
@@ -88351,7 +88351,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "Invalid Simple RXJ Syntax",
+      "value": "Invalid Simple JSONX Syntax",
       "start": 16519,
       "end": 16546,
       "loc": {

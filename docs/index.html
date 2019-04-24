@@ -14,7 +14,7 @@
     gtag('js', new Date());
   
     gtag('config', 'UA-112697260-2');
-  </script><meta name="description" content="Reactive JSON (JSONX) takes a RXJ JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="og:type" content="website"><meta property="og:url" content="https://repetere.github.io/jsonx"><meta property="og:site_name" content="JSONX"><meta property="og:title" content="JSONX"><meta property="og:image" content="https://jsonx.io/favicon.png"><meta property="og:description" content="Reactive JSON (JSONX) takes a RXJ JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="og:author" content="https://github.com/repetere"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="JSONX"><meta property="twitter:description" content="Reactive JSON (JSONX) takes a RXJ JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="twitter:image" content="https://jsonx.io/favicon.png"></head>
+  </script><meta name="description" content="Reactive JSON (JSONX) takes a JSONX JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="og:type" content="website"><meta property="og:url" content="https://repetere.github.io/jsonx"><meta property="og:site_name" content="JSONX"><meta property="og:title" content="JSONX"><meta property="og:image" content="https://jsonx.io/favicon.png"><meta property="og:description" content="Reactive JSON (JSONX) takes a JSONX JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="og:author" content="https://github.com/repetere"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="JSONX"><meta property="twitter:description" content="Reactive JSON (JSONX) takes a JSONX JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="twitter:image" content="https://jsonx.io/favicon.png"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -92,7 +92,7 @@
 </nav>
 
 <div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="react-json-syntax--jsonx-">React JSON Syntax (JSONX)</h1><p><a href="https://coveralls.io/github/repetere/jsonx?branch=master"><img src="https://coveralls.io/repos/github/repetere/jsonx/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://travis-ci.org/repetere/jsonx"><img src="https://travis-ci.org/repetere/jsonx.svg?branch=master" alt="Build Status"></a></p>
-<h2 id="description">Description</h2><p><strong>React JSON Syntax (JSONX)</strong> takes a RXJ JSON object and can create (Suspense, Lazy, Functional and Class) React Components, output HTML and JSX and render React components without transpilers. <strong>JSONX</strong> lets you get up and running with React without extra configuration management of more complicated tool chains.</p>
+<h2 id="description">Description</h2><p><strong>React JSON Syntax (JSONX)</strong> takes a JSONX JSON object and can create (Suspense, Lazy, Functional and Class) React Components, output HTML and JSX and render React components without transpilers. <strong>JSONX</strong> lets you get up and running with React without extra configuration management of more complicated tool chains.</p>
 <h2 id="installation">Installation</h2><pre><code class="lang-sh"><code class="source-code prettyprint">$ npm i jsonx</code>
 </code></pre>
 <h3 id="-a-href--https---repetere-github-io-jsonx---full-documentation--a-"><a href="https://repetere.github.io/jsonx/">Full Documentation</a></h3><h3 id="examples----a-href--https---github-com-repetere-jsonx-blob-master-dist-example-html--html-browser-example--a---">Examples ( <a href="https://github.com/repetere/jsonx/blob/master/dist/example.html">HTML/Browser Example</a> )</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">import { default as jsonx } from &apos;jsonx&apos;;
@@ -134,7 +134,7 @@ jsonx.jsonxRender({ jsonx: { component: &apos;div&apos;, props:{className:&apos;
 //    &lt;/div&gt;
 // &lt;/body&gt;</code>
 </code></pre>
-<h3 id="jsonx-json-spec">JSONX JSON Spec</h3><p>RXJ JSON is valid JSON that more or less mimics JSX in JSON notation with a couple of special properties. The properties for RXJ JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+<h3 id="jsonx-json-spec">JSONX JSON Spec</h3><p>JSONX JSON is valid JSON that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">React.createElement(
   type,
   [props],
@@ -287,7 +287,7 @@ _jsonxChildren: {
   __dangerouslyBindEvalProps:Object, // An object of evaluated JavaScript functions that are bound to this, used as inline functions onto jsonx.props
   //computed properties
   __functionProps:Object, // An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto jsonx.props
-  __dangerouslyInsertComponents:Object, // An object that turns each RXJ JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+  __dangerouslyInsertComponents:Object, // An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
   __dangerouslyInsertReactComponents:Object, // An object that returns the react element from either ReactDOM, reactComponents or componentLibraries.
   __spreadComponent:Object, // A JSONX element that is mapped on any array prop called  __spread
   __windowComponents:Object, // An object of components merged onto jsonx.props from window.__jsonx_custom_elements
@@ -486,7 +486,7 @@ const testJSONX = {
     },
   },
 };
-const rxjTest = {
+const jsonxTest = {
   component:&apos;div&apos;,
   props: {
     name:&apos;test&apos;,
@@ -497,14 +497,14 @@ const rxjTest = {
     nav:&apos;func:this.props.reduxRouter.push&apos;,
   },
 };
-const rxjObj = getFunctionProps.call(thisProp, {
-  jsonx: rxjTest,
+const jsonxObj = getFunctionProps.call(thisProp, {
+  jsonx: jsonxTest,
 });
-expect(rxjObj).is.an(&apos;object&apos;);
-expect(Object.keys(rxjObj)).to.eql(Object.keys(rxjTest.__functionProps));
-expect(rxjObj.onclick()).to.eq(&apos;clicked&apos;);
-expect(rxjObj.printPage()).to.eql(&apos;printed&apos;);
-expect(rxjObj.nav()).to.eql(&apos;pushed&apos;);</code>
+expect(jsonxObj).is.an(&apos;object&apos;);
+expect(Object.keys(jsonxObj)).to.eql(Object.keys(jsonxTest.__functionProps));
+expect(jsonxObj.onclick()).to.eq(&apos;clicked&apos;);
+expect(jsonxObj.printPage()).to.eql(&apos;printed&apos;);
+expect(jsonxObj.nav()).to.eql(&apos;pushed&apos;);</code>
 </code></pre>
 <h5 id="comparisionprops">comparisionprops</h5><p>Comparison props are used to contionally show components if they&apos;re truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If <code>comparisonorprops:true</code> then only one condition needs to be true in order to render the component</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">//and conditions

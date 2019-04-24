@@ -234,7 +234,7 @@ describe('jsonx props', function () {
           },
         },
       };
-      const rxjTest = {
+      const jsonxTest = {
         component:'div',
         props: {
           name:'test',
@@ -245,14 +245,14 @@ describe('jsonx props', function () {
           nav:'func:this.props.reduxRouter.push',
         },
       };
-      const rxjObj = getFunctionProps.call(thisProp, {
-        jsonx: rxjTest,
+      const jsonxObj = getFunctionProps.call(thisProp, {
+        jsonx: jsonxTest,
       });
-      expect(rxjObj).is.an('object');
-      expect(Object.keys(rxjObj)).to.eql(Object.keys(rxjTest.__functionProps));
-      expect(rxjObj.onclick()).to.eq('clicked');
-      expect(rxjObj.printPage()).to.eql('printed');
-      expect(rxjObj.nav()).to.eql('pushed');
+      expect(jsonxObj).is.an('object');
+      expect(Object.keys(jsonxObj)).to.eql(Object.keys(jsonxTest.__functionProps));
+      expect(jsonxObj.onclick()).to.eq('clicked');
+      expect(jsonxObj.printPage()).to.eql('printed');
+      expect(jsonxObj.nav()).to.eql('pushed');
     });
   });
   describe('getFunctionFromProps', () => {

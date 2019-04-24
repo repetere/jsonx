@@ -391,7 +391,7 @@ export function simpleJSONXSyntax(simpleJSONX = {}) {
           : simpleJSONX[ component ].children,
       });
   } catch (e) {
-    throw SyntaxError('Invalid Simple RXJ Syntax', e);
+    throw SyntaxError('Invalid Simple JSONX Syntax', e);
   }   
 }
 

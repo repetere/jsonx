@@ -802,7 +802,7 @@ describe('jsonx utils', function () {
       expect((transformedSimpleSyntaxValid4[0])).to.be.true;
       expect((transformedSimpleSyntaxValid5)).to.be.true;
     });
-    it('should produce equivalent RXJ', () => {
+    it('should produce equivalent JSONX', () => {
       const sampleJSONX = {
         component: 'div',
         props: {

@@ -24,7 +24,7 @@
         },
         "brand": {
           "title": "JSONX",
-          "description": "Reactive JSON (JSONX) takes a RXJ JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript.",
+          "description": "React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks.",
           "repository": "https://github.com/repetere/jsonx",
           "site": "https://repetere.github.io/jsonx",
           "author": "https://github.com/repetere",

@@ -1058,7 +1058,7 @@ window.esdocSearchIndex = [
   [
     "",
     "test-file/test/unit/util_spec.js.html#lineNumber805",
-    "jsonx utils simpleJSONXSyntax should produce equivalent RXJ",
+    "jsonx utils simpleJSONXSyntax should produce equivalent JSONX",
     "test"
   ],
   [
