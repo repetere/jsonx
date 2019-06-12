@@ -265,19 +265,20 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
   const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getReactElementFromJSONX, reactComponent, resources, props, ];
   if (typeof functionBody === 'function') functionBody = functionBody.toString();
   const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromJSONX', 'reactComponent', 'resources', 'props', `
-      return function ${options.name || 'Anonymous'}(props){
-        ${functionBody}
-        if(typeof exposeProps!=='undefined'){
-          reactComponent.props = Object.assign({},props,exposeProps);
-          // reactComponent.__functionargs = Object.keys(exposeProps);
-        } else{
-          reactComponent.props =  props;
-        }
-        if(!props.children) delete props.children;
-  
-        return getReactElementFromJSONX.call(this, reactComponent);
+    const self = this;
+    return function ${options.name || 'Anonymous'}(props){
+      ${functionBody}
+      if(typeof exposeProps!=='undefined'){
+        reactComponent.props = Object.assign({},props,exposeProps);
+        // reactComponent.__functionargs = Object.keys(exposeProps);
+      } else{
+        reactComponent.props =  props;
       }
-    `);
+      if(!props.children) delete props.children;
+      const context = ${options.bind?'Object.assign(self,this)':'this'};
+      return getReactElementFromJSONX.call(context, reactComponent);
+    }
+  `);
   if (options.name) {
     Object.defineProperty(
       functionComponent,
@@ -287,7 +288,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
       }
     );
   }
-  return functionComponent(...functionArgs);
+  return (options.bind) ? functionComponent.call(this, ...functionArgs) : functionComponent(...functionArgs);
 }
 /**
  * @memberOf components

@@ -319,37 +319,37 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber94",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber94",
     "jsonx",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber213",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber213",
     "jsonx __express",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber237",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber237",
     "jsonx __express it should handle errors",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber216",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber216",
     "jsonx __express should return an HTML string",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber151",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber151",
     "jsonx compile",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber152",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber152",
     "jsonx compile should convert JSONX to React Element",
     "test"
   ],
@@ -613,133 +613,133 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber137",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber137",
     "jsonx getReactElementFromJSON",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber138",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber138",
     "jsonx getReactElementFromJSON should return an instance of a react element",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber106",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber106",
     "jsonx getReactElementFromJSONX",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber119",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber119",
     "jsonx getReactElementFromJSONX should handle errors with empty components",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber107",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber107",
     "jsonx getReactElementFromJSONX should return an instance of a react element",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber126",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber126",
     "jsonx getReactElementFromJSONX should throw an error with invalid components",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber95",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber95",
     "jsonx helper functions",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber99",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber99",
     "jsonx helper functions should return React",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber102",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber102",
     "jsonx helper functions should return ReactDOM",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber96",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber96",
     "jsonx helper functions should return useGlobalHook",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber187",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber187",
     "jsonx jsonToJSX",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber190",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber190",
     "jsonx jsonToJSX should compile to JSX String",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber203",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber203",
     "jsonx jsonxHTMLString",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber204",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber204",
     "jsonx jsonxHTMLString should return an HTML string",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber245",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber245",
     "jsonx jsonxRender",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber249",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber249",
     "jsonx jsonxRender should render component inside of querySelector",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber198",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber198",
     "jsonx outputHTML",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber199",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber199",
     "jsonx outputHTML should be an alias for jsonxHTMLString",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber172",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber172",
     "jsonx outputJSON",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber173",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber173",
     "jsonx outputJSON should convert JSONX to JSON",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber180",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber180",
     "jsonx outputJSX",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/rjx_spec.js.html#lineNumber181",
+    "test-file/test/unit/jsonx_spec.js.html#lineNumber181",
     "jsonx outputJSX should compile to JSX String",
     "test"
   ],
@@ -1560,15 +1560,15 @@ window.esdocSearchIndex = [
     "testFile"
   ],
   [
-    "test/unit/props_spec.js",
-    "test-file/test/unit/props_spec.js.html",
-    "test/unit/props_spec.js",
+    "test/unit/jsonx_spec.js",
+    "test-file/test/unit/jsonx_spec.js.html",
+    "test/unit/jsonx_spec.js",
     "testFile"
   ],
   [
-    "test/unit/rjx_spec.js",
-    "test-file/test/unit/rjx_spec.js.html",
-    "test/unit/rjx_spec.js",
+    "test/unit/props_spec.js",
+    "test-file/test/unit/props_spec.js.html",
+    "test/unit/props_spec.js",
     "testFile"
   ],
   [

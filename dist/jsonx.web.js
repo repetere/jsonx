@@ -18279,19 +18279,20 @@ var jsonx = (function (exports) {
 	  const functionArgs = [react, react_9, react_10, react_11, react_12, react_13, react_14, react_15, react_16, react_17, react_18, getReactElementFromJSONX, reactComponent, resources, props];
 	  if (typeof functionBody === 'function') functionBody = functionBody.toString();
 	  const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromJSONX', 'reactComponent', 'resources', 'props', `
-      return function ${options.name || 'Anonymous'}(props){
-        ${functionBody}
-        if(typeof exposeProps!=='undefined'){
-          reactComponent.props = Object.assign({},props,exposeProps);
-          // reactComponent.__functionargs = Object.keys(exposeProps);
-        } else{
-          reactComponent.props =  props;
-        }
-        if(!props.children) delete props.children;
-  
-        return getReactElementFromJSONX.call(this, reactComponent);
+    const self = this;
+    return function ${options.name || 'Anonymous'}(props){
+      ${functionBody}
+      if(typeof exposeProps!=='undefined'){
+        reactComponent.props = Object.assign({},props,exposeProps);
+        // reactComponent.__functionargs = Object.keys(exposeProps);
+      } else{
+        reactComponent.props =  props;
       }
-    `);
+      if(!props.children) delete props.children;
+      const context = ${options.bind ? 'Object.assign(self,this)' : 'this'};
+      return getReactElementFromJSONX.call(context, reactComponent);
+    }
+  `);
 
 	  if (options.name) {
 	    Object.defineProperty(functionComponent, 'name', {
@@ -18299,7 +18300,7 @@ var jsonx = (function (exports) {
 	    });
 	  }
 
-	  return functionComponent(...functionArgs);
+	  return options.bind ? functionComponent.call(this, ...functionArgs) : functionComponent(...functionArgs);
 	}
 	/**
 	 * @memberOf components

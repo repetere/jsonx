@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>JSONX TEST</title>
+    <script type="text/javascript" src="../../dist/jsonx.web.js"></script>
+    <script type="text/javascript">
+    window.React = jsonx.__getReact();
+    window.ReactDOM = jsonx.__getReactDOM();
+    // shallowEqual=()=>{};
+    // console.log({jsonx});
+    // console.log({React});
+    </script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/react-md@1.9.2/dist/react-md.js"></script> -->
+    <!-- <link rel="stylesheet" href="../node_modules/react-md/dist/react-md.amber-blue.min.css"> -->
+    <link rel="stylesheet" href="../../node_modules/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="../../node_modules/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="../../node_modules/spectre.css/dist/spectre-icons.min.css">
+    <!-- <script type="text/javascript" src="../node_modules/react-md/dist/react-md.js"></script> -->
+    <!-- <script type="text/javascript" src="../node_modules/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script> -->
+    <script type="text/javascript" src="../../design/spectre.umd.js"></script>
+    <!-- <script type="text/javascript" src="../design/semantic.web.js"></script> -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      const exampleComponent = {
+        component: 'Spectre.Grid.Grid',
+        children: [
+          {
+            component:'div',
+            children:[
+              {
+                component: 'Spectre.Typography.H4',
+                children:'Testing Deep Nested resourceprops (asyncprops)'
+              },
+              {
+                component: 'Spectre.Form.FormGroup',
+                children:[
+                  {
+                    component: 'label',
+                    props:{
+                      className:'form-label',
+                      for:'input-1'
+                    },
+                    children:'Form Input from resourceprops/asyncprops',
+                  },
+                  {
+                    component: 'Spectre.Form.Input',
+                    props:{
+                      id:'input-1'
+                    },
+                    resourceprops:{
+                      defaultValue:['deep','nested']
+                    }
+                  }
+                ]
+              },
+            ],
+          },
+          {
+            component:'p',
+            asyncprops:{
+              children:['deep','under'],
+            }
+          },
+          {
+            component:'div',
+            __dangerouslyEvalAllProps:function(){
+              console.log('__dangerouslyEvalAllProps arguments',arguments);
+              return {
+                _children:'from __dangerouslyEvalAllProps',
+                style:{
+                  color:'red',
+                },
+                title:'on div title'
+              };
+            },
+            children:'allComputedProps',
+          },
+        ],
+      };
+      const boundConfig = {
+        debug:true, 
+        componentLibraries:{
+          Spectre,
+        }
+      };
+      jsonx.jsonxRender.call(boundConfig,{ 
+        jsonx: exampleComponent, 
+        resources: { 
+          deep:{
+            nested:'some data',
+            under:'works with resourceprops or asyncprops(alias)'
+          }
+        },
+        querySelector:'#root', });
+    </script>
+  </body>
+</html>

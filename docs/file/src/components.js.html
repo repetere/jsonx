@@ -14,7 +14,7 @@
     gtag('js', new Date());
   
     gtag('config', 'UA-112697260-2');
-  </script><meta name="description" content="Reactive JSON (JSONX) takes a JSONX JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="og:type" content="website"><meta property="og:url" content="https://repetere.github.io/jsonx"><meta property="og:site_name" content="JSONX"><meta property="og:title" content="JSONX"><meta property="og:image" content="https://jsonx.io/favicon.png"><meta property="og:description" content="Reactive JSON (JSONX) takes a JSONX JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="og:author" content="https://github.com/repetere"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="JSONX"><meta property="twitter:description" content="Reactive JSON (JSONX) takes a JSONX JSON object and renders React components. JSONX lets you get up and running with React without using JavaScript."><meta property="twitter:image" content="https://jsonx.io/favicon.png"></head>
+  </script><meta name="description" content="React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks."><meta property="og:type" content="website"><meta property="og:url" content="https://repetere.github.io/jsonx"><meta property="og:site_name" content="JSONX"><meta property="og:title" content="JSONX"><meta property="og:image" content="https://jsonx.io/favicon.png"><meta property="og:description" content="React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks."><meta property="og:author" content="https://github.com/repetere"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="JSONX"><meta property="twitter:description" content="React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks."><meta property="twitter:image" content="https://jsonx.io/favicon.png"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -359,19 +359,20 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = &a
   const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getReactElementFromJSONX, reactComponent, resources, props, ];
   if (typeof functionBody === &apos;function&apos;) functionBody = functionBody.toString();
   const functionComponent = Function(&apos;React&apos;, &apos;useState&apos;, &apos;useEffect&apos;, &apos;useContext&apos;, &apos;useReducer&apos;, &apos;useCallback&apos;, &apos;useMemo&apos;, &apos;useRef&apos;, &apos;useImperativeHandle&apos;, &apos;useLayoutEffect&apos;, &apos;useDebugValue&apos;, &apos;getReactElementFromJSONX&apos;, &apos;reactComponent&apos;, &apos;resources&apos;, &apos;props&apos;, `
-      return function ${options.name || &apos;Anonymous&apos;}(props){
-        ${functionBody}
-        if(typeof exposeProps!==&apos;undefined&apos;){
-          reactComponent.props = Object.assign({},props,exposeProps);
-          // reactComponent.__functionargs = Object.keys(exposeProps);
-        } else{
-          reactComponent.props =  props;
-        }
-        if(!props.children) delete props.children;
-  
-        return getReactElementFromJSONX.call(this, reactComponent);
+    const self = this;
+    return function ${options.name || &apos;Anonymous&apos;}(props){
+      ${functionBody}
+      if(typeof exposeProps!==&apos;undefined&apos;){
+        reactComponent.props = Object.assign({},props,exposeProps);
+        // reactComponent.__functionargs = Object.keys(exposeProps);
+      } else{
+        reactComponent.props =  props;
       }
-    `);
+      if(!props.children) delete props.children;
+      const context = ${options.bind?&apos;Object.assign(self,this)&apos;:&apos;this&apos;};
+      return getReactElementFromJSONX.call(context, reactComponent);
+    }
+  `);
   if (options.name) {
     Object.defineProperty(
       functionComponent,
@@ -381,7 +382,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = &a
       }
     );
   }
-  return functionComponent(...functionArgs);
+  return (options.bind) ? functionComponent.call(this, ...functionArgs) : functionComponent(...functionArgs);
 }
 /**
  * @memberOf components

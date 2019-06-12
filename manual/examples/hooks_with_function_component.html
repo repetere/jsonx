@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>JSONX TEST</title>
-    <script type="text/javascript" src="jsonx.web.js"></script>
+    <script type="text/javascript" src="../../dist/jsonx.web.js"></script>
     <script type="text/javascript">
     window.React = jsonx.__getReact();
     window.ReactDOM = jsonx.__getReactDOM();
@@ -13,12 +13,12 @@
     </script>
     <!-- <script type="text/javascript" src="https://unpkg.com/react-md@1.9.2/dist/react-md.js"></script> -->
     <!-- <link rel="stylesheet" href="../node_modules/react-md/dist/react-md.amber-blue.min.css"> -->
-    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre.min.css">
-    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre-exp.min.css">
-    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre-icons.min.css">
+    <link rel="stylesheet" href="../../node_modules/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="../../node_modules/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="../../node_modules/spectre.css/dist/spectre-icons.min.css">
     <!-- <script type="text/javascript" src="../node_modules/react-md/dist/react-md.js"></script> -->
     <!-- <script type="text/javascript" src="../node_modules/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script> -->
-    <script type="text/javascript" src="../design/spectre.umd.js"></script>
+    <script type="text/javascript" src="../../design/spectre.umd.js"></script>
     <!-- <script type="text/javascript" src="../design/semantic.web.js"></script> -->
   </head>
   <body>
@@ -26,7 +26,13 @@
     <script type="text/javascript">
       
       
-      const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({
+      const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent.call({
+        
+        componentLibraries:{
+          // ReactMD,
+          Spectre,
+        }
+      },{
         component:'div',
         props:{
           extra:'ok'
@@ -34,10 +40,9 @@
         passprops:true,
         children:[
           {
-            component:'p',
+            component:'Spectre.Typography.H1',
             children: 'This is from Function Component'
           },
-          
           {
               component:'p',
               passprops:true,
@@ -65,7 +70,9 @@
               ]
           },
           {
-            component:'button',
+            component:'Spectre.Button.Button',
+
+            // component:'button',
             // __functionargs:{
             //   onClick:['count','setCount'],
             // },
@@ -84,18 +91,20 @@
           }
         ],
       },`
+      console.log('function component this',this,{self})
       const [count, setCount] = useState(0);
       const exposeProps = {count,setCount};
       `,{
-        name:'IntroHook'
-      })
+        name:'IntroHook',
+        bind:true,
+      });
 
       const sampleJSONX = {
-        component: 'div',
+        component: 'Spectre.Grid.Grid',
         props: {
           id: 'generatedJSONX',
           className:'jsonx',
-          otherProp: 'testing Other Prop',
+          otherprop: 'testing Other Prop',
           style:{
             padding:'1rem',
           }
@@ -109,6 +118,20 @@
             resourceprops:{
               punc:['punc']
             }
+          },
+          {
+            component:'div',
+            __dangerouslyEvalAllProps:function(){
+              console.log('__dangerouslyEvalAllProps arguments',arguments);
+              return {
+                _children:'from __dangerouslyEvalAllProps',
+                style:{
+                  color:'red',
+                },
+                title:'on div title'
+              };
+            },
+            children:'allComputedProps',
           },
         ],
       };
