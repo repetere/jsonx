@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>JSONX TEST</title>
+    <script type="text/javascript" src="../../dist/jsonx.web.js"></script>
+    <script type="text/javascript">
+    window.React = jsonx.__getReact();
+    window.ReactDOM = jsonx.__getReactDOM();
+    // shallowEqual=()=>{};
+    // console.log({jsonx});
+    // console.log({React});
+    </script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/react-md@1.9.2/dist/react-md.js"></script> -->
+    <!-- <link rel="stylesheet" href="../node_modules/react-md/dist/react-md.amber-blue.min.css"> -->
+    <link rel="stylesheet" href="../../node_modules/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="../../node_modules/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="../../node_modules/spectre.css/dist/spectre-icons.min.css">
+    <!-- <script type="text/javascript" src="../node_modules/react-md/dist/react-md.js"></script> -->
+    <!-- <script type="text/javascript" src="../node_modules/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script> -->
+    <script type="text/javascript" src="../../design/spectre.umd.js"></script>
+    <!-- <script type="text/javascript" src="../design/semantic.web.js"></script> -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      
+      const myCustomComponent = jsonx._jsonxComponents.getReactFunctionComponent({
+        component:'div',
+        props:{
+          style:{
+            color:'red'
+          },
+        },
+        __functionProps:{
+          onClick:['func:window.sayHello']
+        },
+        children:'this is a custom component'
+      });
+      // const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent.call({
+        
+      //   componentLibraries:{
+      //     // ReactMD,
+      //     Spectre,
+      //   }
+      // },{
+      //   component:'div',
+      //   props:{
+      //     extra:'ok'
+      //   },
+      //   passprops:true,
+      //   children:[
+      //     {
+      //       component:'Spectre.Typography.H1',
+      //       children: 'This is from Function Component'
+      //     },
+      //     {
+      //         component:'p',
+      //         passprops:true,
+      //         children:[
+      //           {
+      //             component:'span',
+      //             children:'You clicked ',
+      //           },
+      //           {
+      //             component:'input',
+      //             thisprops:{
+      //               value:['count'],
+      //             },
+      //             // __functionProps:{
+      //             //   ref:'func:inline.ref',
+      //             // },
+      //             // __inline:{
+      //             //   ref:`window.INPUTREF = param1; console.log('testing INPUTREF',{param1});`,
+      //             // },
+      //           },
+      //           {
+      //             component:'span',
+      //             children:' times'
+      //           }
+      //         ]
+      //     },
+      //     {
+      //       component:'Spectre.Button.Button',
+
+      //       // component:'button',
+      //       // __functionargs:{
+      //       //   onClick:['count','setCount'],
+      //       // },
+      //       debug:true,
+      //       __dangerouslyBindEvalProps:{
+      //         onClick:function(count,setCount){
+      //           console.log('this is inline',{count,setCount},'arguments',arguments);
+      //           setCount(count+1);
+      //         },
+      //         // onClick:`(function(count,setCount){
+      //         //   setCount(count+1)
+      //         //   console.log('this is inline',{count,setCount});
+      //         // })`,
+      //       },
+      //       children:'Click me'
+      //     }
+      //   ],
+      // },`
+      // console.log('function component this',this,{self})
+      // const [count, setCount] = useState(0);
+      // const exposeProps = {count,setCount};
+      // `,{
+      //   name:'IntroHook',
+      //   bind:true,
+      // });
+
+      const sampleJSONX = {
+        component: 'Spectre.Grid.Grid',
+        props: {
+          id: 'generatedJSONX',
+          className:'jsonx',
+          otherprop: 'testing Other Prop',
+          style:{
+            padding:'1rem',
+          }
+        },
+        children: [
+          {
+            component:'p',
+            children:'some text here'
+          },
+          {
+            component:'myCustomComponent',
+          }
+          // {
+          //   component:'MyCustomFunctionComponent',
+          //   props:{
+          //     status:'Amazing',
+          //   },
+          //   resourceprops:{
+          //     punc:['punc']
+          //   }
+          // },
+          // {
+          //   component:'div',
+          //   __dangerouslyEvalAllProps:function(){
+          //     console.log('__dangerouslyEvalAllProps arguments',arguments);
+          //     return {
+          //       _children:'from __dangerouslyEvalAllProps',
+          //       style:{
+          //         color:'red',
+          //       },
+          //       title:'on div title'
+          //     };
+          //   },
+          //   children:'allComputedProps',
+          // },
+        ],
+      };
+      const boundConfig = {
+        debug:true, 
+        reactComponents:{
+          myCustomComponent,
+        },
+        componentLibraries:{
+          // ReactMD,
+          Spectre,
+        }
+      };
+      // console.log({boundConfig})
+      jsonx.jsonxRender.call(boundConfig,{ 
+        jsonx: sampleJSONX, 
+        resources: { 
+        },
+        querySelector:'#root', });
+
+        window.sayHello = function(){
+          alert('hello');
+        }
+    </script>
+  </body>
+</html>

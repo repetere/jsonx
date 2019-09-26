@@ -71,6 +71,7 @@ describe('jsonx props', function () {
         __dangerouslyInsertComponents: compProps,
       });
       const computedProps = getComputedProps.call({}, {
+        disableRenderIndexKey:false,
         jsonx: testJSONX,
         resources,
         renderIndex,

@@ -71,7 +71,7 @@ export function outputHTML(config = {}) {
  */
 export function getReactElementFromJSONX(jsonx = {}, resources = {}) {
   // eslint-disable-next-line
-  const { componentLibraries = {}, debug = false, returnJSON=false, logError = console.error, boundedComponents = [], disableRenderIndexKey = false, } = this || {};
+  const { componentLibraries = {}, debug = false, returnJSON=false, logError = console.error, boundedComponents = [], disableRenderIndexKey = true, } = this || {};
   // const componentLibraries = this.componentLibraries;
   if (!jsonx) return null;
   if (jsonx.type) jsonx.component = jsonx.type;
@@ -85,13 +85,13 @@ export function getReactElementFromJSONX(jsonx = {}, resources = {}) {
       : components;
     renderIndex++;
     const element = getComponentFromMap({ jsonx, reactComponents, componentLibraries, debug, logError, });
-    const props = getComputedProps.call(this, { jsonx, resources, renderIndex, componentLibraries, debug, logError, });
+    const props = getComputedProps.call(this, { jsonx, resources, renderIndex, componentLibraries, debug, logError, disableRenderIndexKey, });
     const displayElement = (jsonx.comparisonprops)
       ? displayComponent.call(this, { jsonx, props, renderIndex, componentLibraries, debug, })
       : true;
     if (displayElement) {
       const children = getJSONXChildren.call(this, { jsonx, props, resources, renderIndex, });
-      if (this.returnJSON) return { type:element, props, children, };
+      if (returnJSON) return { type:element, props, children, };
       return createElement(element, props, children);
     } else {
       return null;

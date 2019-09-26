@@ -18869,6 +18869,7 @@
 	    logError = console.error,
 	    useReduxState = true,
 	    ignoreReduxPropsInComponentLibraries = true,
+	    disableRenderIndexKey = true,
 	    componentLibraries,
 	    debug
 	  } = options;
@@ -18922,7 +18923,7 @@
 	    const evalAllProps = jsonx.__dangerouslyEvalAllProps ? getEvalProps.call(this, {
 	      jsonx
 	    }) : {};
-	    const allProps = Object.assign({}, this.disableRenderIndexKey ? {} : {
+	    const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {} : {
 	      key: renderIndex
 	    }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
 	    const computedProps = Object.assign({}, allProps, jsonx.__functionProps ? getFunctionProps.call(this, {
@@ -19441,7 +19442,7 @@ ${jsonxRenderedString}`;
 	    returnJSON = false,
 	    logError = console.error,
 	    boundedComponents = [],
-	    disableRenderIndexKey = false
+	    disableRenderIndexKey = true
 	  } = this || {}; // const componentLibraries = this.componentLibraries;
 
 	  if (!jsonx) return null;
@@ -19469,7 +19470,8 @@ ${jsonxRenderedString}`;
 	      renderIndex: exports.renderIndex,
 	      componentLibraries,
 	      debug,
-	      logError
+	      logError,
+	      disableRenderIndexKey
 	    });
 	    const displayElement = jsonx.comparisonprops ? displayComponent$1.call(this, {
 	      jsonx,
@@ -19486,7 +19488,7 @@ ${jsonxRenderedString}`;
 	        resources,
 	        renderIndex: exports.renderIndex
 	      });
-	      if (this.returnJSON) return {
+	      if (returnJSON) return {
 	        type: element,
 	        props,
 	        children

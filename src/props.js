@@ -504,7 +504,7 @@ computedProps = { key: 1,
  */
 export function getComputedProps(options = {}) {
   // eslint-disable-next-line
-  const { jsonx = {}, resources = {}, renderIndex, logError = console.error, useReduxState=true, ignoreReduxPropsInComponentLibraries=true, componentLibraries, debug, } = options;
+  const { jsonx = {}, resources = {}, renderIndex, logError = console.error, useReduxState=true, ignoreReduxPropsInComponentLibraries=true, disableRenderIndexKey=true, componentLibraries, debug, } = options;
   try {
     const componentThisProp = (jsonx.thisprops)
       ? Object.assign({
@@ -540,7 +540,7 @@ export function getComputedProps(options = {}) {
     const evalAllProps = (jsonx.__dangerouslyEvalAllProps)
       ? getEvalProps.call(this, { jsonx, })
       : {};
-    const allProps = Object.assign({}, this.disableRenderIndexKey ? {}: { key: renderIndex, }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
+    const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {}: { key: renderIndex, }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps,
       jsonx.__functionProps ? getFunctionProps.call(this, { allProps, jsonx, }) : {},
       jsonx.__windowComponents ? getWindowComponents.call(this, { allProps, jsonx, }) : {},
