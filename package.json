@@ -1,9 +1,9 @@
 {
   "name": "jsonx",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks",
   "main": "dist/jsonx.cjs.js",
-  "module": "dist/jsonx.esm.js",
+  "module": "src/main.js",
   "browser": "dist/jsonx.umd.js",
   "web": "dist/jsonx.web.js",
   "modules.root": "lib",
@@ -101,14 +101,14 @@
     "semantic-ui-react": "^0.86.0",
     "sinon": "^7.3.2",
     "sinon-chai": "^3.2.0",
-    "spectre.css": "^0.5.8",
-    "use-global-hook": "^0.1.7"
+    "spectre.css": "^0.5.8"
   },
   "dependencies": {
     "create-react-class": "^15.6.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-dom-factories": "^1.0.2",
+    "use-global-hook": "^0.1.11",
     "ua-parser-js": "^0.7.20"
   }
 }
