@@ -94,7 +94,7 @@ const complexDivJSON = jsonx.getReactElementFromJSONX.call({ returnJSON: true, e
 describe('jsonx', function () { 
   describe('helper functions', () => {
     it('should return useGlobalHook', () => {
-      expect(jsonx.__getUseGlobalHook()).to.eql(useGlobalHook);
+      expect(jsonx.__getUseGlobalHook()).to.be.a('function');
     });
     it('should return React', () => {
       expect(jsonx.__getReact()).to.eql(React);
