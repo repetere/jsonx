@@ -46,6 +46,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactContext">getReactContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunctionComponent">getReactFunctionComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span></li>
@@ -138,8 +139,8 @@ const JSONXChildrenPTag = getChildrenProperty({ jsonx: sampleJSONX.children[ 0 ]
 export function getChildrenProperty(options = {}) {
   const { jsonx = {}, } = options;
   const props = options.props || jsonx.props || {};
-  if (props._children /* &amp;&amp; !jsonx.children */) {
-    if (Array.isArray(props._children) || typeof props._children === &apos;string&apos;){
+  if (typeof props._children!==&apos;undefined&apos; /* &amp;&amp; !jsonx.children */) {
+    if (Array.isArray(props._children) || typeof props._children === &apos;string&apos; || typeof props._children === &apos;number&apos;){
       return props._children;
     } else {
       return jsonx.children;
@@ -201,6 +202,8 @@ export function getJSONXChildren(options = {}) {
   try {
     const props = options.props || jsonx.props || {};
     jsonx.children = getChildrenProperty({ jsonx, props, });
+    props._children = undefined;
+    delete props._children;
 
     return (jsonx.children &amp;&amp; Array.isArray(jsonx.children) &amp;&amp; typeof jsonx.children !== &apos;string&apos;)
       ? jsonx.children.map(childjsonx =&gt; getReactElementFromJSONX.call(this, getChildrenProps({ jsonx, childjsonx, props, renderIndex, }), resources))

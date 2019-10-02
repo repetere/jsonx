@@ -1542,10 +1542,10 @@ function getChildrenProperty(options = {}) {
   } = options;
   const props = options.props || jsonx.props || {};
 
-  if (props._children
+  if (typeof props._children !== 'undefined'
   /* && !jsonx.children */
   ) {
-      if (Array.isArray(props._children) || typeof props._children === 'string') {
+      if (Array.isArray(props._children) || typeof props._children === 'string' || typeof props._children === 'number') {
         return props._children;
       } else {
         return jsonx.children;
@@ -1611,6 +1611,8 @@ function getJSONXChildren(options = {}) {
       jsonx,
       props
     });
+    props._children = undefined;
+    delete props._children;
     return jsonx.children && Array.isArray(jsonx.children) && typeof jsonx.children !== 'string' ? jsonx.children.map(childjsonx => getReactElementFromJSONX.call(this, getChildrenProps({
       jsonx,
       childjsonx,

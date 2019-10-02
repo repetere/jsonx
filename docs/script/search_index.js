@@ -18,6 +18,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "jsonx/src/main.js~__express",
+    "function/index.html#static-function-__express",
+    "<span>__express</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
+    "function"
+  ],
+  [
     "jsonx/src/main.js~__getreact",
     "function/index.html#static-function-__getReact",
     "<span>__getReact</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",

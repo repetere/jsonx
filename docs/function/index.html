@@ -46,6 +46,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactContext">getReactContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunctionComponent">getReactFunctionComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getUseGlobalHook">__getUseGlobalHook</a></span></span></li>
@@ -1187,6 +1188,35 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span><span class="code" data-ice="signature">(filePath: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>, callback: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Use JSONX for express view rendering</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
         </p>
       </div>
@@ -1320,11 +1350,11 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber132">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1834">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {compile} from &apos;<span><a href="file/src/main.js.html#lineNumber132">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {compile} from &apos;<span><a href="file/src/main.js.html#lineNumber1834">jsonx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>converts a jsonx json object into a react function component </p>
@@ -3371,11 +3401,11 @@ getParamNames(regularFunctionAdd) // =&gt; [&apos;c&apos;,&apos;d&apos;]</code><
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1819">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactElementFromJSON} from &apos;<span><a href="file/src/main.js.html#lineNumber119">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactElementFromJSON} from &apos;<span><a href="file/src/main.js.html#lineNumber1819">jsonx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>converts a json object {type,props,children} into a react element </p>
@@ -3466,11 +3496,11 @@ getParamNames(regularFunctionAdd) // =&gt; [&apos;c&apos;,&apos;d&apos;]</code><
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber72">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1733">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactElementFromJSONX} from &apos;<span><a href="file/src/main.js.html#lineNumber72">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import getReactElementFromJSONX from &apos;<span><a href="file/src/main.js.html#lineNumber1733">jsonx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Use React.createElement and JSONX JSON to create React elements</p>
@@ -3902,11 +3932,11 @@ const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionCompone
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber180">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1892">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {jsonToJSX} from &apos;<span><a href="file/src/main.js.html#lineNumber180">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {jsonToJSX} from &apos;<span><a href="file/src/main.js.html#lineNumber1892">jsonx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>converts JSONX JSON IR to JSX</p>
@@ -3983,11 +4013,11 @@ const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionCompone
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber29">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1687">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {jsonxRender} from &apos;<span><a href="file/src/main.js.html#lineNumber29">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {jsonxRender} from &apos;<span><a href="file/src/main.js.html#lineNumber1687">jsonx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Use JSONX without any configuration to render JSONX JSON to HTML and insert JSONX into querySelector using ReactDOM.render</p>
@@ -4073,11 +4103,11 @@ jsonx.jsonxRender({ jsonx: { component: &apos;div&apos;, props:{className:&apos;
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber48">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1709">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {outputHTML} from &apos;<span><a href="file/src/main.js.html#lineNumber48">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {outputHTML} from &apos;<span><a href="file/src/main.js.html#lineNumber1709">jsonx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Use ReactDOMServer.renderToString to render html from JSONX</p>
@@ -4186,11 +4216,11 @@ jsonx.outputHTML({ jsonx: { component: &apos;div&apos;, props:{className:&apos;j
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber167">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1877">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {outputJSON} from &apos;<span><a href="file/src/main.js.html#lineNumber167">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {outputJSON} from &apos;<span><a href="file/src/main.js.html#lineNumber1877">jsonx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Compiles JSONX into JSON IR format for react create element</p>
@@ -4293,11 +4323,11 @@ children: &apos;hello&apos; }</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber150">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1858">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {outputJSX} from &apos;<span><a href="file/src/main.js.html#lineNumber150">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {outputJSX} from &apos;<span><a href="file/src/main.js.html#lineNumber1858">jsonx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>converts JSONX JSON IR to JSX</p>
@@ -4815,6 +4845,95 @@ validateJSONX({children:&apos;hello world&apos;})=&gt;throw SyntaxError(&apos;[0
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-__express">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">__express</span><span class="code" data-ice="signature">(filePath: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>, callback: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1636">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__express} from &apos;<span><a href="file/src/main.js.html#lineNumber1636">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Use JSONX for express view rendering</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">filePath</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>path to jsonx express view</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">options</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>property used for express view {locals}</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.__boundConfig</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>property used to bind this object for JSONX, can be used to add custom components</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.__DOCTYPE</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;&quot;</li></ul></td>
+      <td data-ice="description"><p>html doctype string</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">callback</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="static-function-__getReact">
     <span class="access" data-ice="access">private</span>
     
@@ -4826,11 +4945,11 @@ validateJSONX({children:&apos;hello world&apos;})=&gt;throw SyntaxError(&apos;[0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber203">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1906">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReact} from &apos;<span><a href="file/src/main.js.html#lineNumber203">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReact} from &apos;<span><a href="file/src/main.js.html#lineNumber1906">jsonx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Exposes react module used in JSONX</p>
@@ -4883,11 +5002,11 @@ validateJSONX({children:&apos;hello world&apos;})=&gt;throw SyntaxError(&apos;[0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber211">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1914">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReactDOM} from &apos;<span><a href="file/src/main.js.html#lineNumber211">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getReactDOM} from &apos;<span><a href="file/src/main.js.html#lineNumber1914">jsonx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Exposes react dom module used in JSONX</p>
@@ -4940,11 +5059,11 @@ validateJSONX({children:&apos;hello world&apos;})=&gt;throw SyntaxError(&apos;[0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber219">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber1922">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getUseGlobalHook} from &apos;<span><a href="file/src/main.js.html#lineNumber219">jsonx/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {__getUseGlobalHook} from &apos;<span><a href="file/src/main.js.html#lineNumber1922">jsonx/src/main.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Exposes global hook used in JSONX</p>

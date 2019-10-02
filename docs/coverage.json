@@ -1,7 +1,7 @@
 {
-  "coverage": "71.92%",
-  "expectCount": 57,
-  "actualCount": 41,
+  "coverage": "72.44%",
+  "expectCount": 98,
+  "actualCount": 71,
   "files": {
     "src/children.js": {
       "expectCount": 3,
@@ -19,22 +19,33 @@
       "undocumentLines": []
     },
     "src/main.js": {
-      "expectCount": 24,
-      "actualCount": 11,
+      "expectCount": 65,
+      "actualCount": 41,
       "undocumentLines": [
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        108,
-        109,
-        171,
-        223,
-        224,
-        225,
-        226
+        9,
+        18,
+        29,
+        43,
+        501,
+        839,
+        855,
+        856,
+        995,
+        1473,
+        1621,
+        1659,
+        1660,
+        1665,
+        1668,
+        1671,
+        1925,
+        1926,
+        1927,
+        1928,
+        1809,
+        1808,
+        1883,
+        1674
       ]
     },
     "src/props.js": {

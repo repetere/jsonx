@@ -44,8 +44,8 @@ const JSONXChildrenPTag = getChildrenProperty({ jsonx: sampleJSONX.children[ 0 ]
 export function getChildrenProperty(options = {}) {
   const { jsonx = {}, } = options;
   const props = options.props || jsonx.props || {};
-  if (props._children /* && !jsonx.children */) {
-    if (Array.isArray(props._children) || typeof props._children === 'string'){
+  if (typeof props._children!=='undefined' /* && !jsonx.children */) {
+    if (Array.isArray(props._children) || typeof props._children === 'string' || typeof props._children === 'number'){
       return props._children;
     } else {
       return jsonx.children;
@@ -107,6 +107,8 @@ export function getJSONXChildren(options = {}) {
   try {
     const props = options.props || jsonx.props || {};
     jsonx.children = getChildrenProperty({ jsonx, props, });
+    props._children = undefined;
+    delete props._children;
 
     return (jsonx.children && Array.isArray(jsonx.children) && typeof jsonx.children !== 'string')
       ? jsonx.children.map(childjsonx => getReactElementFromJSONX.call(this, getChildrenProps({ jsonx, childjsonx, props, renderIndex, }), resources))
