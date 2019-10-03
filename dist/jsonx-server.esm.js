@@ -1,9 +1,9 @@
-import React, { Fragment, Suspense, lazy, createContext, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue } from 'react';
-import ReactDOMServer from 'react-dom/server';
-import ReactDOMElements from 'react-dom-factories';
 import UAParser from 'ua-parser-js';
+import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, createContext } from 'react';
+import ReactDOMElements from 'react-dom-factories';
 import createReactClass from 'create-react-class';
 import path from 'path';
+import ReactDOMServer from 'react-dom/server';
 
 function setState(newState) {
   this.state = { ...this.state,
@@ -14,9 +14,9 @@ function setState(newState) {
   });
 }
 
-function useCustom(React) {
-  const newListener = React.useState()[1];
-  React.useEffect(() => {
+function useCustom(React$$1) {
+  const newListener = React$$1.useState()[1];
+  React$$1.useEffect(() => {
     this.listeners.push(newListener);
     return () => {
       this.listeners = this.listeners.filter(listener => listener !== newListener);
@@ -39,7 +39,7 @@ function associateActions(store, actions) {
   return associatedActions;
 }
 
-const useStore = (React, initialState, actions, initializer) => {
+const useStore = (React$$1, initialState, actions, initializer) => {
   const store = {
     state: initialState,
     listeners: []
@@ -47,8 +47,9 @@ const useStore = (React, initialState, actions, initializer) => {
   store.setState = setState.bind(store);
   store.actions = associateActions(store, actions);
   if (initializer) initializer(store);
-  return useCustom.bind(store, React);
+  return useCustom.bind(store, React$$1);
 };
+
 /**
  * Used to evaluate whether or not to render a component
  * @param {Object} options 
@@ -77,7 +78,6 @@ const testJSONX = Object.assign({}, sampleJSONX, {
 });
 displayComponent({ jsonx: testJSONX, props: testJSONX2.props, }) // => false
  */
-
 
 function displayComponent(options = {}) {
   const {
@@ -191,7 +191,6 @@ function displayComponent(options = {}) {
  * @returns {Boolean} true if browser is not IE or old android / chrome
  */
 
-
 function getAdvancedBinding() {
   if (typeof window === 'undefined') {
     var window = this && this.window ? this.window : global.window || {};
@@ -249,7 +248,6 @@ const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
  * @throws {TypeError} 
  */
 
-
 function traverse(paths = {}, data = {}) {
   let keys = Object.keys(paths);
   if (!keys.length) return paths;
@@ -280,7 +278,6 @@ function traverse(paths = {}, data = {}) {
  * @returns {Boolean|Error[]} either returns true if JSONX is valid, or throws validation error or returns list of errors in array
  * @throws {SyntaxError|TypeError|ReferenceError}
  */
-
 
 function validateJSONX(jsonx = {}, returnAllErrors = false) {
   const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops', 'thisstate'];
@@ -451,7 +448,6 @@ function validateJSONX(jsonx = {}, returnAllErrors = false) {
  * @return {Boolean} returns true if simpleJSONX is valid
  */
 
-
 function validSimpleJSONXSyntax(simpleJSONX = {}) {
   if (Object.keys(simpleJSONX).length !== 1 && !simpleJSONX.component) {
     return false;
@@ -465,7 +461,6 @@ function validSimpleJSONXSyntax(simpleJSONX = {}) {
  * @param {Object} simpleJSONX JSON Object 
  * @return {Object} - returns a valid JSONX JSON Object from a simple JSONX JSON Object
  */
-
 
 function simpleJSONXSyntax(simpleJSONX = {}) {
   const component = Object.keys(simpleJSONX)[0];
@@ -486,7 +481,6 @@ function simpleJSONXSyntax(simpleJSONX = {}) {
  * @return {Object} - returns a simple JSONX JSON Object from a valid JSONX JSON Object 
  */
 
-
 function getSimplifiedJSONX(jsonx = {}) {
   try {
     if (!jsonx.component) return jsonx; //already simple
@@ -503,9 +497,7 @@ function getSimplifiedJSONX(jsonx = {}) {
   }
 }
 
-var jsonxUtils =
-/*#__PURE__*/
-Object.freeze({
+var jsonxUtils = /*#__PURE__*/Object.freeze({
   displayComponent: displayComponent,
   getAdvancedBinding: getAdvancedBinding,
   traverse: traverse,
@@ -513,7 +505,9 @@ Object.freeze({
   validSimpleJSONXSyntax: validSimpleJSONXSyntax,
   simpleJSONXSyntax: simpleJSONXSyntax,
   getSimplifiedJSONX: getSimplifiedJSONX
-}); //   var window = window || global.window || {};
+});
+
+//   var window = window || global.window || {};
 // }
 
 /**
@@ -562,7 +556,6 @@ function getBoundedComponents(options = {}) {
  * @returns {function|undefined} react component from react library like bootstrap, material design or bulma
  */
 
-
 function getComponentFromLibrary(options = {}) {
   const {
     componentLibraries = {},
@@ -596,7 +589,6 @@ function getComponentFromLibrary(options = {}) {
  * @param {boolean} [options.debug=false] - use debug messages
  * @returns {string|function|class} valid react element
  */
-
 
 function getComponentFromMap(options = {}) {
   // eslint-disable-next-line
@@ -640,7 +632,6 @@ function getComponentFromMap(options = {}) {
  * @returns {Function} 
  */
 
-
 function getFunctionFromEval(options = {}) {
   const {
     body = '',
@@ -668,7 +659,6 @@ function getFunctionFromEval(options = {}) {
  * @returns {Function} 
  * @see {@link https://reactjs.org/docs/react-without-es6.html} 
  */
-
 
 function getReactClassComponent(reactComponent = {}, options = {}) {
   // const util = require('util');
@@ -795,7 +785,6 @@ function getReactClassComponent(reactComponent = {}, options = {}) {
   const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({jsonxRender, functionBody, options});
    */
 
-
 function getReactFunctionComponent(reactComponent = {}, functionBody = '', options = {}) {
   if (options.lazy) {
     return lazy(() => options.lazy(reactComponent, functionBody, Object.assign({}, options, {
@@ -842,14 +831,11 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
  * @memberOf components
  */
 
-
 function getReactContext(options = {}) {
   return createContext(options.value);
 }
 
-var jsonxComponents =
-/*#__PURE__*/
-Object.freeze({
+var jsonxComponents = /*#__PURE__*/Object.freeze({
   advancedBinding: advancedBinding,
   componentMap: componentMap,
   getBoundedComponents: getBoundedComponents,
@@ -859,7 +845,9 @@ Object.freeze({
   getReactClassComponent: getReactClassComponent,
   getReactFunctionComponent: getReactFunctionComponent,
   getReactContext: getReactContext
-}); //   var window = window || {};
+});
+
+//   var window = window || {};
 // }
 //https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically
 
@@ -958,7 +946,6 @@ const testJSONX = {
 };
  */
 
-
 function getJSONXProps(options = {}) {
   // eslint-disable-next-line
   let {
@@ -975,7 +962,6 @@ function getJSONXProps(options = {}) {
  * returns children jsonx components defined on __spreadComponent spread over an array on props.__spread
  * @param {*} options 
  */
-
 
 function getChildrenComponents(options = {}) {
   const {
@@ -1005,7 +991,6 @@ function getChildrenComponents(options = {}) {
     };
   }
 }
-
 function boundArgsReducer(jsonx = {}) {
   return (args, arg) => {
     let val;
@@ -1036,7 +1021,6 @@ function boundArgsReducer(jsonx = {}) {
   // expect(evalutedComputedFunc).to.eql('bob');
   // expect(evalutedComputedBoundFunc).to.eql('bounded');
  */
-
 
 function getEvalProps(options = {}) {
   const {
@@ -1127,7 +1111,6 @@ function getEvalProps(options = {}) {
  * @returns {Object} resolved object of React Components
  */
 
-
 function getComponentProps(options = {}) {
   const {
     jsonx,
@@ -1154,7 +1137,6 @@ function getComponentProps(options = {}) {
 //  * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
  * @returns {Object} resolved object of React Components
  */
-
 
 function getReactComponentProps(options = {}) {
   const {
@@ -1211,7 +1193,6 @@ function getReactComponentProps(options = {}) {
  * @example
  * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
  */
-
 
 function getFunctionFromProps(options) {
   const {
@@ -1301,7 +1282,6 @@ function getFunctionFromProps(options) {
  * @returns {Object} resolved object of functions from function strings
  */
 
-
 function getFunctionProps(options = {}) {
   const {
     allProps = {},
@@ -1329,7 +1309,6 @@ function getFunctionProps(options = {}) {
  * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Object} resolved object of with React Components from a window property window.__jsonx_custom_elements
  */
-
 
 function getWindowComponents(options = {}) {
   const {
@@ -1403,13 +1382,12 @@ computedProps = { key: 1,
  *
  */
 
-
 function getComputedProps(options = {}) {
   // eslint-disable-next-line
   const {
     jsonx = {},
     resources = {},
-    renderIndex,
+    renderIndex: renderIndex$$1,
     logError = console.error,
     useReduxState = true,
     ignoreReduxPropsInComponentLibraries = true,
@@ -1468,7 +1446,7 @@ function getComputedProps(options = {}) {
       jsonx
     }) : {};
     const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {} : {
-      key: renderIndex
+      key: renderIndex$$1
     }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps, jsonx.__functionProps ? getFunctionProps.call(this, {
       allProps,
@@ -1491,9 +1469,7 @@ function getComputedProps(options = {}) {
   }
 }
 
-var jsonxProps =
-/*#__PURE__*/
-Object.freeze({
+var jsonxProps = /*#__PURE__*/Object.freeze({
   STRIP_COMMENTS: STRIP_COMMENTS,
   ARGUMENT_NAMES: ARGUMENT_NAMES,
   getParamNames: getParamNames,
@@ -1508,6 +1484,7 @@ Object.freeze({
   getWindowComponents: getWindowComponents,
   getComputedProps: getComputedProps
 });
+
 /**
  * returns a valid jsonx.children property
  * @param {Object} options
@@ -1585,12 +1562,11 @@ function getChildrenProperty(options = {}) {
  * @returns {Object|String} returns a valid  Valid JSONX Child object or a string 
  */
 
-
 function getChildrenProps(options = {}) {
   const {
     jsonx = {},
     childjsonx,
-    renderIndex
+    renderIndex: renderIndex$$1
   } = options;
   const props = options.props || jsonx.props || {};
   return jsonx.passprops && typeof childjsonx === 'object' ? Object.assign({}, childjsonx, {
@@ -1598,7 +1574,7 @@ function getChildrenProps(options = {}) {
     childjsonx.asyncprops && childjsonx.asyncprops.style || childjsonx.windowprops && childjsonx.windowprops.style ? {} : {
       style: {}
     }, childjsonx.props, {
-      key: renderIndex + Math.random()
+      key: renderIndex$$1 + Math.random()
     })
   }) : childjsonx;
 }
@@ -1612,13 +1588,12 @@ function getChildrenProps(options = {}) {
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  */
 
-
 function getJSONXChildren(options = {}) {
   // eslint-disable-next-line
   const {
     jsonx,
     resources,
-    renderIndex,
+    renderIndex: renderIndex$$1,
     logError = console.error
   } = options;
 
@@ -1634,7 +1609,7 @@ function getJSONXChildren(options = {}) {
       jsonx,
       childjsonx,
       props,
-      renderIndex
+      renderIndex: renderIndex$$1
     }), resources)) : jsonx.children;
   } catch (e) {
     logError(e);
@@ -1642,13 +1617,12 @@ function getJSONXChildren(options = {}) {
   }
 }
 
-var jsonxChildren =
-/*#__PURE__*/
-Object.freeze({
+var jsonxChildren = /*#__PURE__*/Object.freeze({
   getChildrenProperty: getChildrenProperty,
   getChildrenProps: getChildrenProps,
   getJSONXChildren: getJSONXChildren
 });
+
 /**
  * Use JSONX for express view rendering
  * @param {string} filePath - path to jsonx express view 
@@ -1658,9 +1632,9 @@ Object.freeze({
  * @param {*} callback 
  */
 
-function __express(filePath, options, callback) {
+function __express$$1(filePath, options, callback) {
   try {
-    const jsonxModule = options.__jsonx || require(filePath);
+    const jsonxModule = options.__jsonx; //|| require(filePath);
 
     const resources = Object.assign({}, options);
     delete resources.__boundConfig;
@@ -1678,9 +1652,9 @@ ${jsonxRenderedString}`;
   } catch (e) {
     if (typeof callback === 'function') callback(e);else throw e;
   }
-} // import React, { createElement, } from 'react';
+}
 
-
+// import React, { createElement, } from 'react';
 const createElement = React.createElement;
 const {
   componentMap: componentMap$1,
@@ -1731,7 +1705,6 @@ function jsonxRender(config = {}) {
  * @returns {string} React genereated html via JSONX JSON
  */
 
-
 function outputHTML(config = {}) {
   const {
     jsonx,
@@ -1755,7 +1728,6 @@ function outputHTML(config = {}) {
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
-
 
 function getReactElementFromJSONX(jsonx = {}, resources = {}) {
   // eslint-disable-next-line
@@ -1832,7 +1804,6 @@ function getReactElementFromJSONX(jsonx = {}, resources = {}) {
     throw e;
   }
 }
-
 const getRenderedJSON = getReactElementFromJSONX;
 const getReactElement = getReactElementFromJSONX;
 /** converts a json object {type,props,children} into a react element 
@@ -1859,7 +1830,6 @@ function getReactElementFromJSON({
  * @returns {function} React element via React.createElement
 */
 
-
 function compile(jsonx, resources) {
   const context = Object.assign({}, this, {
     returnJSON: true
@@ -1884,7 +1854,6 @@ function compile(jsonx, resources) {
  * @returns {String} jsx string
  */
 
-
 function outputJSX(jsonx, resources) {
   const context = Object.assign({}, this, {
     returnJSON: true
@@ -1904,14 +1873,12 @@ function outputJSX(jsonx, resources) {
  * @returns {Object} json - {type,props,children}
  */
 
-
 function outputJSON(jsonx, resources) {
   const context = Object.assign({}, this, {
     returnJSON: true
   });
   return getReactElementFromJSONX.call(context, jsonx, resources);
 }
-
 const jsonxHTMLString = outputHTML;
 /**
  * converts JSONX JSON IR to JSX
@@ -1935,7 +1902,6 @@ function jsonToJSX(json) {
  * @returns {Object} React
  */
 
-
 function __getReact() {
   return React;
 }
@@ -1943,7 +1909,6 @@ function __getReact() {
  * Exposes react dom module used in JSONX
  * @returns {Object} ReactDOM
  */
-
 
 function __getReactDOM() {
   return ReactDOMServer;
@@ -1953,15 +1918,13 @@ function __getReactDOM() {
  * @returns {Object} useGlobalHook
  */
 
-
 function __getUseGlobalHook() {
   return useStore;
 }
-
 const _jsonxChildren = jsonxChildren;
 const _jsonxComponents = jsonxComponents;
 const _jsonxProps = jsonxProps;
 const _jsonxUtils = jsonxUtils;
 
 export default getReactElementFromJSONX;
-export { __express, __getReact, __getReactDOM, __getUseGlobalHook, _jsonxChildren, _jsonxComponents, _jsonxProps, _jsonxUtils, compile, getReactElement, getReactElementFromJSON, getReactElementFromJSONX, getRenderedJSON, jsonToJSX, jsonxHTMLString, jsonxRender, outputHTML, outputJSON, outputJSX, __express as renderFile, renderIndex };
+export { renderIndex, jsonxRender, outputHTML, getReactElementFromJSONX, getRenderedJSON, getReactElement, getReactElementFromJSON, compile, outputJSX, outputJSON, jsonxHTMLString, jsonToJSX, __getReact, __getReactDOM, __getUseGlobalHook, _jsonxChildren, _jsonxComponents, _jsonxProps, _jsonxUtils, __express$$1 as __express, __express$$1 as renderFile };

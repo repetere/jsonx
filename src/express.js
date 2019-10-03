@@ -10,7 +10,7 @@ import path from 'path';
  */
 export function __express(filePath, options, callback) {
   try {
-    const jsonxModule = options.__jsonx || require(filePath);
+    const jsonxModule = options.__jsonx;//|| require(filePath);
     const resources = Object.assign({}, options);
     delete resources.__boundConfig;
     delete resources.__DOCTYPE;

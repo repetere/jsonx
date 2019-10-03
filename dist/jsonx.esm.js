@@ -1,10 +1,10 @@
-import React, { Fragment, Suspense, lazy, createContext, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue } from 'react';
-import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
-import ReactDOMElements from 'react-dom-factories';
 import UAParser from 'ua-parser-js';
+import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, createContext } from 'react';
+import ReactDOMElements from 'react-dom-factories';
 import createReactClass from 'create-react-class';
 import path from 'path';
+import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
 
 function setState(newState) {
   this.state = { ...this.state,
@@ -15,9 +15,9 @@ function setState(newState) {
   });
 }
 
-function useCustom(React) {
-  const newListener = React.useState()[1];
-  React.useEffect(() => {
+function useCustom(React$$1) {
+  const newListener = React$$1.useState()[1];
+  React$$1.useEffect(() => {
     this.listeners.push(newListener);
     return () => {
       this.listeners = this.listeners.filter(listener => listener !== newListener);
@@ -40,7 +40,7 @@ function associateActions(store, actions) {
   return associatedActions;
 }
 
-const useStore = (React, initialState, actions, initializer) => {
+const useStore = (React$$1, initialState, actions, initializer) => {
   const store = {
     state: initialState,
     listeners: []
@@ -48,7 +48,7 @@ const useStore = (React, initialState, actions, initializer) => {
   store.setState = setState.bind(store);
   store.actions = associateActions(store, actions);
   if (initializer) initializer(store);
-  return useCustom.bind(store, React);
+  return useCustom.bind(store, React$$1);
 };
 
 /**
@@ -1388,7 +1388,7 @@ function getComputedProps(options = {}) {
   const {
     jsonx = {},
     resources = {},
-    renderIndex,
+    renderIndex: renderIndex$$1,
     logError = console.error,
     useReduxState = true,
     ignoreReduxPropsInComponentLibraries = true,
@@ -1447,7 +1447,7 @@ function getComputedProps(options = {}) {
       jsonx
     }) : {};
     const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {} : {
-      key: renderIndex
+      key: renderIndex$$1
     }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
     const computedProps = Object.assign({}, allProps, jsonx.__functionProps ? getFunctionProps.call(this, {
       allProps,
@@ -1535,10 +1535,10 @@ function getChildrenProperty(options = {}) {
   } = options;
   const props = options.props || jsonx.props || {};
 
-  if (props._children
+  if (typeof props._children !== 'undefined'
   /* && !jsonx.children */
   ) {
-      if (Array.isArray(props._children) || typeof props._children === 'string') {
+      if (Array.isArray(props._children) || typeof props._children === 'string' || typeof props._children === 'number') {
         return props._children;
       } else {
         return jsonx.children;
@@ -1567,7 +1567,7 @@ function getChildrenProps(options = {}) {
   const {
     jsonx = {},
     childjsonx,
-    renderIndex
+    renderIndex: renderIndex$$1
   } = options;
   const props = options.props || jsonx.props || {};
   return jsonx.passprops && typeof childjsonx === 'object' ? Object.assign({}, childjsonx, {
@@ -1575,7 +1575,7 @@ function getChildrenProps(options = {}) {
     childjsonx.asyncprops && childjsonx.asyncprops.style || childjsonx.windowprops && childjsonx.windowprops.style ? {} : {
       style: {}
     }, childjsonx.props, {
-      key: renderIndex + Math.random()
+      key: renderIndex$$1 + Math.random()
     })
   }) : childjsonx;
 }
@@ -1594,7 +1594,7 @@ function getJSONXChildren(options = {}) {
   const {
     jsonx,
     resources,
-    renderIndex,
+    renderIndex: renderIndex$$1,
     logError = console.error
   } = options;
 
@@ -1604,11 +1604,13 @@ function getJSONXChildren(options = {}) {
       jsonx,
       props
     });
+    props._children = undefined;
+    delete props._children;
     return jsonx.children && Array.isArray(jsonx.children) && typeof jsonx.children !== 'string' ? jsonx.children.map(childjsonx => getReactElementFromJSONX.call(this, getChildrenProps({
       jsonx,
       childjsonx,
       props,
-      renderIndex
+      renderIndex: renderIndex$$1
     }), resources)) : jsonx.children;
   } catch (e) {
     logError(e);
@@ -1631,9 +1633,9 @@ var jsonxChildren = /*#__PURE__*/Object.freeze({
  * @param {*} callback 
  */
 
-function __express(filePath, options, callback) {
+function __express$$1(filePath, options, callback) {
   try {
-    const jsonxModule = options.__jsonx || require(filePath);
+    const jsonxModule = options.__jsonx; //|| require(filePath);
 
     const resources = Object.assign({}, options);
     delete resources.__boundConfig;
@@ -1926,4 +1928,4 @@ const _jsonxProps = jsonxProps;
 const _jsonxUtils = jsonxUtils;
 
 export default getReactElementFromJSONX;
-export { __express, __getReact, __getReactDOM, __getUseGlobalHook, _jsonxChildren, _jsonxComponents, _jsonxProps, _jsonxUtils, compile, getReactElement, getReactElementFromJSON, getReactElementFromJSONX, getRenderedJSON, jsonToJSX, jsonxHTMLString, jsonxRender, outputHTML, outputJSON, outputJSX, __express as renderFile, renderIndex };
+export { renderIndex, jsonxRender, outputHTML, getReactElementFromJSONX, getRenderedJSON, getReactElement, getReactElementFromJSON, compile, outputJSX, outputJSON, jsonxHTMLString, jsonToJSX, __getReact, __getReactDOM, __getUseGlobalHook, _jsonxChildren, _jsonxComponents, _jsonxProps, _jsonxUtils, __express$$1 as __express, __express$$1 as renderFile };

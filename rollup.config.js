@@ -103,7 +103,7 @@ export default [
       {
         name: 'jsonx',
         exports: 'named',
-        file: pkg.module,
+        file: pkg.esm,
         format: 'es',
       },
     ],

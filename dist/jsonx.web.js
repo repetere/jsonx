@@ -2206,7 +2206,6 @@ var jsonx = (function (exports) {
 	      value: true
 	    });
 	    var enableSchedulerDebugging = false;
-	    var requestIdleCallbackBeforeFirstFrame = false;
 	    // works by scheduling a requestAnimationFrame, storing the time for the start
 	    // of the frame, then scheduling a postMessage which gets scheduled after paint.
 	    // Within the postMessage handler do as much work as possible until time + frame
@@ -2294,8 +2293,6 @@ var jsonx = (function (exports) {
 	          console.error("This browser doesn't support cancelAnimationFrame. " + 'Make sure that you load a ' + 'polyfill in older browsers. https://fb.me/react-polyfills');
 	        }
 	      }
-
-	      var requestIdleCallbackBeforeFirstFrame$1 = requestIdleCallbackBeforeFirstFrame;
 	      exports.unstable_now = typeof performance === 'object' && typeof performance.now === 'function' ? function () {
 	        return performance.now();
 	      } : function () {
@@ -2444,29 +2441,9 @@ var jsonx = (function (exports) {
 	            // Start a rAF loop.
 	            isRAFLoopRunning = true;
 	            requestAnimationFrame(function (rAFTime) {
-	              if (requestIdleCallbackBeforeFirstFrame$1) {
-	                cancelIdleCallback(idleCallbackID);
-	              }
 
 	              onAnimationFrame(rAFTime);
 	            }); // If we just missed the last vsync, the next rAF might not happen for
-	            // another frame. To claim as much idle time as possible, post a
-	            // callback with `requestIdleCallback`, which should fire if there's
-	            // idle time left in the frame.
-	            //
-	            // This should only be an issue for the first rAF in the loop;
-	            // subsequent rAFs are scheduled at the beginning of the
-	            // preceding frame.
-
-	            var idleCallbackID = void 0;
-
-	            if (requestIdleCallbackBeforeFirstFrame$1) {
-	              idleCallbackID = requestIdleCallback(function onIdleCallbackBeforeFirstFrame() {
-
-	                frameDeadline = exports.unstable_now() + frameLength;
-	                performWorkUntilDeadline();
-	              });
-	            } // Alternate strategy to address the same problem. Scheduler a timer
 	          }
 	        }
 	      };
@@ -3439,7 +3416,7 @@ var jsonx = (function (exports) {
 	});
 
 	var reactDom_development = createCommonjsModule(function (module) {
-	{(function(){var React=react;var _assign=objectAssign;var checkPropTypes=checkPropTypes_1;var Scheduler=scheduler;var tracing$1=tracing;// Do not require this module directly! Use normal `invariant` calls with
+	{(function(){var React=react;var _assign=objectAssign;var checkPropTypes=checkPropTypes_1;var Scheduler=scheduler;var tracing$$1=tracing;// Do not require this module directly! Use normal `invariant` calls with
 	// template literal strings. The messages will be converted to ReactError during
 	// build, and in production they will be minified.
 	// Do not require this module directly! Use normal `invariant` calls with
@@ -5419,7 +5396,7 @@ var jsonx = (function (exports) {
 	var Scheduler_runWithPriority=Scheduler.unstable_runWithPriority;var Scheduler_scheduleCallback=Scheduler.unstable_scheduleCallback;var Scheduler_cancelCallback=Scheduler.unstable_cancelCallback;var Scheduler_shouldYield=Scheduler.unstable_shouldYield;var Scheduler_requestPaint=Scheduler.unstable_requestPaint;var Scheduler_now=Scheduler.unstable_now;var Scheduler_getCurrentPriorityLevel=Scheduler.unstable_getCurrentPriorityLevel;var Scheduler_ImmediatePriority=Scheduler.unstable_ImmediatePriority;var Scheduler_UserBlockingPriority=Scheduler.unstable_UserBlockingPriority;var Scheduler_NormalPriority=Scheduler.unstable_NormalPriority;var Scheduler_LowPriority=Scheduler.unstable_LowPriority;var Scheduler_IdlePriority=Scheduler.unstable_IdlePriority;{// Provide explicit error message when production+profiling bundle of e.g.
 	// react-dom is used with production (non-profiling) bundle of
 	// scheduler/tracing
-	(function(){if(!(tracing$1.__interactionsRef!=null&&tracing$1.__interactionsRef.current!=null)){{throw ReactError(Error('It is not supported to run the profiling version of a renderer (for example, `react-dom/profiling`) without also replacing the `scheduler/tracing` module with `scheduler/tracing-profiling`. Your bundler might have a setting for aliasing both modules. Learn more at http://fb.me/react-profiling'));}}})();}var fakeCallbackNode={};// Except for NoPriority, these correspond to Scheduler priorities. We use
+	(function(){if(!(tracing$$1.__interactionsRef!=null&&tracing$$1.__interactionsRef.current!=null)){{throw ReactError(Error('It is not supported to run the profiling version of a renderer (for example, `react-dom/profiling`) without also replacing the `scheduler/tracing` module with `scheduler/tracing-profiling`. Your bundler might have a setting for aliasing both modules. Learn more at http://fb.me/react-profiling'));}}})();}var fakeCallbackNode={};// Except for NoPriority, these correspond to Scheduler priorities. We use
 	// ascending numbers so we can compare them like numbers. They start at 90 to
 	// avoid clashing with Scheduler's priorities.
 	var ImmediatePriority=99;var UserBlockingPriority$2=98;var NormalPriority=97;var LowPriority=96;var IdlePriority=95;// NoPriority is the absence of priority. Also React-only.
@@ -6783,7 +6760,7 @@ var jsonx = (function (exports) {
 	var oldText=current$$1!==null?current$$1.memoizedProps:newText;commitTextUpdate(textInstance,oldText,newText);return;}case HostRoot:{return;}case Profiler:{return;}case SuspenseComponent:{commitSuspenseComponent(finishedWork);attachSuspenseRetryListeners(finishedWork);return;}case SuspenseListComponent:{attachSuspenseRetryListeners(finishedWork);return;}case IncompleteClassComponent:{return;}case FundamentalComponent:{return;}default:{(function(){{{throw ReactError(Error('This unit of work tag should not have side-effects. This error is likely caused by a bug in React. Please file an issue.'));}}})();}}}function commitSuspenseComponent(finishedWork){var newState=finishedWork.memoizedState;var newDidTimeout=void 0;var primaryChildParent=finishedWork;if(newState===null){newDidTimeout=false;}else{newDidTimeout=true;primaryChildParent=finishedWork.child;markCommitTimeOfFallback();}if(primaryChildParent!==null){hideOrUnhideAllChildren(primaryChildParent,newDidTimeout);}}function attachSuspenseRetryListeners(finishedWork){// If this boundary just timed out, then it will have a set of thenables.
 	// For each thenable, attach a listener so that when it resolves, React
 	var thenables=finishedWork.updateQueue;if(thenables!==null){finishedWork.updateQueue=null;var retryCache=finishedWork.stateNode;if(retryCache===null){retryCache=finishedWork.stateNode=new PossiblyWeakSet$1();}thenables.forEach(function(thenable){// Memoize using the boundary fiber to prevent redundant listeners.
-	var retry=resolveRetryThenable.bind(null,finishedWork,thenable);if(!retryCache.has(thenable)){{retry=tracing$1.unstable_wrap(retry);}retryCache.add(thenable);thenable.then(retry,retry);}});}}function commitResetTextContent(current$$1){resetTextContent(current$$1.stateNode);}var PossiblyWeakMap$1=typeof WeakMap==='function'?WeakMap:Map;function createRootErrorUpdate(fiber,errorInfo,expirationTime){var update=createUpdate(expirationTime,null);// Unmount the root by rendering null.
+	var retry=resolveRetryThenable.bind(null,finishedWork,thenable);if(!retryCache.has(thenable)){{retry=tracing$$1.unstable_wrap(retry);}retryCache.add(thenable);thenable.then(retry,retry);}});}}function commitResetTextContent(current$$1){resetTextContent(current$$1.stateNode);}var PossiblyWeakMap$1=typeof WeakMap==='function'?WeakMap:Map;function createRootErrorUpdate(fiber,errorInfo,expirationTime){var update=createUpdate(expirationTime,null);// Unmount the root by rendering null.
 	update.tag=CaptureUpdate;// Caution: React DevTools currently depends on this property
 	// being called "element".
 	update.payload={element:null};var error=errorInfo.value;update.callback=function(){onUncaughtError(error);logError(fiber,errorInfo);};return update;}function createClassErrorUpdate(fiber,errorInfo,expirationTime){var update=createUpdate(expirationTime,null);update.tag=CaptureUpdate;var getDerivedStateFromError=fiber.type.getDerivedStateFromError;if(typeof getDerivedStateFromError==='function'){var error=errorInfo.value;update.payload=function(){logError(fiber,errorInfo);return getDerivedStateFromError(error);};}var inst=fiber.stateNode;if(inst!==null&&typeof inst.componentDidCatch==='function'){update.callback=function callback(){{markFailedErrorBoundaryForHotReloading(fiber);}if(typeof getDerivedStateFromError!=='function'){// To preserve the preexisting retry behavior of error boundaries,
@@ -6799,7 +6776,7 @@ var jsonx = (function (exports) {
 	// only if one does not already exist for the current render expiration
 	// time (which acts like a "thread ID" here).
 	var pingCache=root.pingCache;var threadIDs=void 0;if(pingCache===null){pingCache=root.pingCache=new PossiblyWeakMap$1();threadIDs=new Set();pingCache.set(thenable,threadIDs);}else{threadIDs=pingCache.get(thenable);if(threadIDs===undefined){threadIDs=new Set();pingCache.set(thenable,threadIDs);}}if(!threadIDs.has(renderExpirationTime)){// Memoize using the thread ID to prevent redundant listeners.
-	threadIDs.add(renderExpirationTime);var ping=pingSuspendedRoot.bind(null,root,thenable,renderExpirationTime);{ping=tracing$1.unstable_wrap(ping);}thenable.then(ping,ping);}}function throwException(root,returnFiber,sourceFiber,value,renderExpirationTime){// The source fiber did not complete.
+	threadIDs.add(renderExpirationTime);var ping=pingSuspendedRoot.bind(null,root,thenable,renderExpirationTime);{ping=tracing$$1.unstable_wrap(ping);}thenable.then(ping,ping);}}function throwException(root,returnFiber,sourceFiber,value,renderExpirationTime){// The source fiber did not complete.
 	sourceFiber.effectTag|=Incomplete;// Its effect list is no longer valid.
 	sourceFiber.firstEffect=sourceFiber.lastEffect=null;if(value!==null&&typeof value==='object'&&typeof value.then==='function'){// This is a thenable.
 	var thenable=value;checkForWrongSuspensePriorityInDEV(sourceFiber);var hasInvisibleParentBoundary=hasSuspenseContext(suspenseStackCursor.current,InvisibleParentSuspenseContext);// Schedule the nearest Suspense to re-render the timed out view.
@@ -7011,12 +6988,12 @@ var jsonx = (function (exports) {
 	if(workInProgress!==null){var prevExecutionContext=executionContext;executionContext|=RenderContext;var prevDispatcher=ReactCurrentDispatcher.current;if(prevDispatcher===null){// The React isomorphic package does not include a default dispatcher.
 	// Instead the first renderer will lazily attach one, in order to give
 	// nicer error messages.
-	prevDispatcher=ContextOnlyDispatcher;}ReactCurrentDispatcher.current=ContextOnlyDispatcher;var prevInteractions=null;{prevInteractions=tracing$1.__interactionsRef.current;tracing$1.__interactionsRef.current=root.memoizedInteractions;}startWorkLoopTimer(workInProgress);// TODO: Fork renderRoot into renderRootSync and renderRootAsync
+	prevDispatcher=ContextOnlyDispatcher;}ReactCurrentDispatcher.current=ContextOnlyDispatcher;var prevInteractions=null;{prevInteractions=tracing$$1.__interactionsRef.current;tracing$$1.__interactionsRef.current=root.memoizedInteractions;}startWorkLoopTimer(workInProgress);// TODO: Fork renderRoot into renderRootSync and renderRootAsync
 	if(isSync){if(expirationTime!==Sync){// An async update expired. There may be other expired updates on
 	// this root. We should render all the expired work in a
 	// single batch.
 	var currentTime=requestCurrentTime();if(currentTime<expirationTime){// Restart at the current time.
-	executionContext=prevExecutionContext;resetContextDependencies();ReactCurrentDispatcher.current=prevDispatcher;{tracing$1.__interactionsRef.current=prevInteractions;}return renderRoot.bind(null,root,currentTime);}}}else{// Since we know we're in a React event, we can clear the current
+	executionContext=prevExecutionContext;resetContextDependencies();ReactCurrentDispatcher.current=prevDispatcher;{tracing$$1.__interactionsRef.current=prevInteractions;}return renderRoot.bind(null,root,currentTime);}}}else{// Since we know we're in a React event, we can clear the current
 	// event time. The next update will compute a new event time.
 	currentEventTime=NoWork;}do{try{if(isSync){workLoopSync();}else{workLoop();}break;}catch(thrownValue){// Reset module-level state that was set during the render phase.
 	resetContextDependencies();resetHooks();var sourceFiber=workInProgress;if(sourceFiber===null||sourceFiber.return===null){// Expected to be working on a non-root fiber. This is a fatal error
@@ -7026,7 +7003,7 @@ var jsonx = (function (exports) {
 	prepareFreshStack(root,expirationTime);executionContext=prevExecutionContext;throw thrownValue;}if(sourceFiber.mode&ProfileMode){// Record the time spent rendering before an error was thrown. This
 	// avoids inaccurate Profiler durations in the case of a
 	// suspended render.
-	stopProfilerTimerIfRunningAndRecordDelta(sourceFiber,true);}var returnFiber=sourceFiber.return;throwException(root,returnFiber,sourceFiber,thrownValue,renderExpirationTime);workInProgress=completeUnitOfWork(sourceFiber);}}while(true);executionContext=prevExecutionContext;resetContextDependencies();ReactCurrentDispatcher.current=prevDispatcher;{tracing$1.__interactionsRef.current=prevInteractions;}if(workInProgress!==null){// There's still work left over. Return a continuation.
+	stopProfilerTimerIfRunningAndRecordDelta(sourceFiber,true);}var returnFiber=sourceFiber.return;throwException(root,returnFiber,sourceFiber,thrownValue,renderExpirationTime);workInProgress=completeUnitOfWork(sourceFiber);}}while(true);executionContext=prevExecutionContext;resetContextDependencies();ReactCurrentDispatcher.current=prevDispatcher;{tracing$$1.__interactionsRef.current=prevInteractions;}if(workInProgress!==null){// There's still work left over. Return a continuation.
 	stopInterruptedWorkLoopTimer();if(expirationTime!==Sync){startRequestCallbackTimer();}return renderRoot.bind(null,root,expirationTime);}}// We now have a consistent tree. The next step is either to commit it, or, if
 	// something suspended, wait to commit it after a timeout.
 	stopFinishedWorkLoopTimer();root.finishedWork=root.current.alternate;root.finishedExpirationTime=expirationTime;var isLocked=resolveLocksOnRoot(root,expirationTime);if(isLocked){// This root has a lock that prevents it from committing. Exit. If we begin
@@ -7177,7 +7154,7 @@ var jsonx = (function (exports) {
 	// resulting list is the set that would belong to the root's parent, if it
 	// had one; that is, all the effects in the tree including the root.
 	if(finishedWork.lastEffect!==null){finishedWork.lastEffect.nextEffect=finishedWork;firstEffect=finishedWork.firstEffect;}else{firstEffect=finishedWork;}}else{// There is no effect on the root.
-	firstEffect=finishedWork.firstEffect;}if(firstEffect!==null){var prevExecutionContext=executionContext;executionContext|=CommitContext;var prevInteractions=null;{prevInteractions=tracing$1.__interactionsRef.current;tracing$1.__interactionsRef.current=root.memoizedInteractions;}// Reset this to null before calling lifecycles
+	firstEffect=finishedWork.firstEffect;}if(firstEffect!==null){var prevExecutionContext=executionContext;executionContext|=CommitContext;var prevInteractions=null;{prevInteractions=tracing$$1.__interactionsRef.current;tracing$$1.__interactionsRef.current=root.memoizedInteractions;}// Reset this to null before calling lifecycles
 	ReactCurrentOwner$2.current=null;// The commit phase is broken into several sub-phases. We do a separate pass
 	// of the effect list for each phase: all mutation effects come before all
 	// layout effects, and so on.
@@ -7196,7 +7173,7 @@ var jsonx = (function (exports) {
 	// layout, but class component lifecycles also fire here for legacy reasons.
 	startCommitLifeCyclesTimer();nextEffect=firstEffect;do{{invokeGuardedCallback(null,commitLayoutEffects,null,root,expirationTime);if(hasCaughtError()){(function(){if(!(nextEffect!==null)){{throw ReactError(Error('Should be working on an effect.'));}}})();var _error2=clearCaughtError();captureCommitPhaseError(nextEffect,_error2);nextEffect=nextEffect.nextEffect;}}}while(nextEffect!==null);stopCommitLifeCyclesTimer();nextEffect=null;// Tell Scheduler to yield at the end of the frame, so the browser has an
 	// opportunity to paint.
-	requestPaint();{tracing$1.__interactionsRef.current=prevInteractions;}executionContext=prevExecutionContext;}else{// No effects.
+	requestPaint();{tracing$$1.__interactionsRef.current=prevInteractions;}executionContext=prevExecutionContext;}else{// No effects.
 	root.current=finishedWork;// Measure these anyway so the flamegraph explicitly shows that there were
 	// no effects.
 	// TODO: Maybe there's a better way to report this.
@@ -7234,11 +7211,11 @@ var jsonx = (function (exports) {
 	nextEffect.effectTag&=~Placement;// Update
 	var _current=nextEffect.alternate;commitWork(_current,nextEffect);break;}case Update:{var _current2=nextEffect.alternate;commitWork(_current2,nextEffect);break;}case Deletion:{commitDeletion(nextEffect,renderPriorityLevel);break;}}// TODO: Only record a mutation effect if primaryEffectTag is non-zero.
 	recordEffect();resetCurrentFiber();nextEffect=nextEffect.nextEffect;}}function commitLayoutEffects(root,committedExpirationTime){// TODO: Should probably move the bulk of this function to commitWork.
-	while(nextEffect!==null){setCurrentFiber(nextEffect);var effectTag=nextEffect.effectTag;if(effectTag&(Update|Callback)){recordEffect();var current$$1=nextEffect.alternate;commitLifeCycles(root,current$$1,nextEffect,committedExpirationTime);}if(effectTag&Ref){recordEffect();commitAttachRef(nextEffect);}if(effectTag&Passive){rootDoesHavePassiveEffects=true;}resetCurrentFiber();nextEffect=nextEffect.nextEffect;}}function flushPassiveEffects(){if(rootWithPendingPassiveEffects===null){return false;}var root=rootWithPendingPassiveEffects;var expirationTime=pendingPassiveEffectsExpirationTime;var renderPriorityLevel=pendingPassiveEffectsRenderPriority;rootWithPendingPassiveEffects=null;pendingPassiveEffectsExpirationTime=NoWork;pendingPassiveEffectsRenderPriority=NoPriority;var priorityLevel=renderPriorityLevel>NormalPriority?NormalPriority:renderPriorityLevel;return runWithPriority$2(priorityLevel,flushPassiveEffectsImpl.bind(null,root,expirationTime));}function flushPassiveEffectsImpl(root,expirationTime){var prevInteractions=null;{prevInteractions=tracing$1.__interactionsRef.current;tracing$1.__interactionsRef.current=root.memoizedInteractions;}(function(){if(!((executionContext&(RenderContext|CommitContext))===NoContext)){{throw ReactError(Error('Cannot flush passive effects while already rendering.'));}}})();var prevExecutionContext=executionContext;executionContext|=CommitContext;// Note: This currently assumes there are no passive effects on the root
+	while(nextEffect!==null){setCurrentFiber(nextEffect);var effectTag=nextEffect.effectTag;if(effectTag&(Update|Callback)){recordEffect();var current$$1=nextEffect.alternate;commitLifeCycles(root,current$$1,nextEffect,committedExpirationTime);}if(effectTag&Ref){recordEffect();commitAttachRef(nextEffect);}if(effectTag&Passive){rootDoesHavePassiveEffects=true;}resetCurrentFiber();nextEffect=nextEffect.nextEffect;}}function flushPassiveEffects(){if(rootWithPendingPassiveEffects===null){return false;}var root=rootWithPendingPassiveEffects;var expirationTime=pendingPassiveEffectsExpirationTime;var renderPriorityLevel=pendingPassiveEffectsRenderPriority;rootWithPendingPassiveEffects=null;pendingPassiveEffectsExpirationTime=NoWork;pendingPassiveEffectsRenderPriority=NoPriority;var priorityLevel=renderPriorityLevel>NormalPriority?NormalPriority:renderPriorityLevel;return runWithPriority$2(priorityLevel,flushPassiveEffectsImpl.bind(null,root,expirationTime));}function flushPassiveEffectsImpl(root,expirationTime){var prevInteractions=null;{prevInteractions=tracing$$1.__interactionsRef.current;tracing$$1.__interactionsRef.current=root.memoizedInteractions;}(function(){if(!((executionContext&(RenderContext|CommitContext))===NoContext)){{throw ReactError(Error('Cannot flush passive effects while already rendering.'));}}})();var prevExecutionContext=executionContext;executionContext|=CommitContext;// Note: This currently assumes there are no passive effects on the root
 	// fiber, because the root is not part of its own effect list. This could
 	// change in the future.
 	var effect=root.current.firstEffect;while(effect!==null){{setCurrentFiber(effect);invokeGuardedCallback(null,commitPassiveHookEffects,null,effect);if(hasCaughtError()){(function(){if(!(effect!==null)){{throw ReactError(Error('Should be working on an effect.'));}}})();var error=clearCaughtError();captureCommitPhaseError(effect,error);}resetCurrentFiber();}var nextNextEffect=effect.nextEffect;// Remove nextEffect pointer to assist GC
-	effect.nextEffect=null;effect=nextNextEffect;}{tracing$1.__interactionsRef.current=prevInteractions;finishPendingInteractions(root,expirationTime);}executionContext=prevExecutionContext;flushSyncCallbackQueue();// If additional passive effects were scheduled, increment a counter. If this
+	effect.nextEffect=null;effect=nextNextEffect;}{tracing$$1.__interactionsRef.current=prevInteractions;finishPendingInteractions(root,expirationTime);}executionContext=prevExecutionContext;flushSyncCallbackQueue();// If additional passive effects were scheduled, increment a counter. If this
 	// exceeds the limit, we'll fire a warning.
 	nestedPassiveUpdateCount=rootWithPendingPassiveEffects===null?0:nestedPassiveUpdateCount+1;return true;}function isAlreadyFailedLegacyErrorBoundary(instance){return legacyErrorBoundariesThatAlreadyFailed!==null&&legacyErrorBoundariesThatAlreadyFailed.has(instance);}function markLegacyErrorBoundaryAsFailed(instance){if(legacyErrorBoundariesThatAlreadyFailed===null){legacyErrorBoundariesThatAlreadyFailed=new Set([instance]);}else{legacyErrorBoundariesThatAlreadyFailed.add(instance);}}function prepareToThrowUncaughtError(error){if(!hasUncaughtError){hasUncaughtError=true;firstUncaughtError=error;}}var onUncaughtError=prepareToThrowUncaughtError;function captureCommitPhaseErrorOnRoot(rootFiber,sourceFiber,error){var errorInfo=createCapturedValue(error,sourceFiber);var update=createRootErrorUpdate(rootFiber,errorInfo,Sync);enqueueUpdate(rootFiber,update);var root=markUpdateTimeFromFiberToRoot(rootFiber,Sync);if(root!==null){scheduleCallbackForRoot(root,ImmediatePriority,Sync);}}function captureCommitPhaseError(sourceFiber,error){if(sourceFiber.tag===HostRoot){// Error was thrown at the root. There is no parent, so the root
 	// itself should capture it.
@@ -7321,8 +7298,8 @@ var jsonx = (function (exports) {
 	componentNames.sort().join(', '));}}}}function computeThreadID(root,expirationTime){// Interaction threads are unique per root and expiration time.
 	return expirationTime*1000+root.interactionThreadID;}function markSpawnedWork(expirationTime){if(spawnedWorkDuringRender===null){spawnedWorkDuringRender=[expirationTime];}else{spawnedWorkDuringRender.push(expirationTime);}}function scheduleInteractions(root,expirationTime,interactions){if(interactions.size>0){var pendingInteractionMap=root.pendingInteractionMap;var pendingInteractions=pendingInteractionMap.get(expirationTime);if(pendingInteractions!=null){interactions.forEach(function(interaction){if(!pendingInteractions.has(interaction)){// Update the pending async work count for previously unscheduled interaction.
 	interaction.__count++;}pendingInteractions.add(interaction);});}else{pendingInteractionMap.set(expirationTime,new Set(interactions));// Update the pending async work count for the current interactions.
-	interactions.forEach(function(interaction){interaction.__count++;});}var subscriber=tracing$1.__subscriberRef.current;if(subscriber!==null){var threadID=computeThreadID(root,expirationTime);subscriber.onWorkScheduled(interactions,threadID);}}}function schedulePendingInteractions(root,expirationTime){// This is called when work is scheduled on a root.
-	scheduleInteractions(root,expirationTime,tracing$1.__interactionsRef.current);}function startWorkOnPendingInteractions(root,expirationTime){// This is called when new work is started on a root.
+	interactions.forEach(function(interaction){interaction.__count++;});}var subscriber=tracing$$1.__subscriberRef.current;if(subscriber!==null){var threadID=computeThreadID(root,expirationTime);subscriber.onWorkScheduled(interactions,threadID);}}}function schedulePendingInteractions(root,expirationTime){// This is called when work is scheduled on a root.
+	scheduleInteractions(root,expirationTime,tracing$$1.__interactionsRef.current);}function startWorkOnPendingInteractions(root,expirationTime){// This is called when new work is started on a root.
 	// we can accurately attribute time spent working on it, And so that cascading
 	// work triggered during the render phase will be associated with it.
 	var interactions=new Set();root.pendingInteractionMap.forEach(function(scheduledInteractions,scheduledExpirationTime){if(scheduledExpirationTime>=expirationTime){scheduledInteractions.forEach(function(interaction){return interactions.add(interaction);});}});// Store the current set of interactions on the FiberRoot for a few reasons:
@@ -7330,8 +7307,8 @@ var jsonx = (function (exports) {
 	// recalculate it. We will also use it in commitWork() to pass to any Profiler
 	// onRender() hooks. This also provides DevTools with a way to access it when
 	// the onCommitRoot() hook is called.
-	root.memoizedInteractions=interactions;if(interactions.size>0){var subscriber=tracing$1.__subscriberRef.current;if(subscriber!==null){var threadID=computeThreadID(root,expirationTime);try{subscriber.onWorkStarted(interactions,threadID);}catch(error){// If the subscriber throws, rethrow it in a separate task
-	scheduleCallback(ImmediatePriority,function(){throw error;});}}}}function finishPendingInteractions(root,committedExpirationTime){var earliestRemainingTimeAfterCommit=root.firstPendingTime;var subscriber=void 0;try{subscriber=tracing$1.__subscriberRef.current;if(subscriber!==null&&root.memoizedInteractions.size>0){var threadID=computeThreadID(root,committedExpirationTime);subscriber.onWorkStopped(root.memoizedInteractions,threadID);}}catch(error){// If the subscriber throws, rethrow it in a separate task
+	root.memoizedInteractions=interactions;if(interactions.size>0){var subscriber=tracing$$1.__subscriberRef.current;if(subscriber!==null){var threadID=computeThreadID(root,expirationTime);try{subscriber.onWorkStarted(interactions,threadID);}catch(error){// If the subscriber throws, rethrow it in a separate task
+	scheduleCallback(ImmediatePriority,function(){throw error;});}}}}function finishPendingInteractions(root,committedExpirationTime){var earliestRemainingTimeAfterCommit=root.firstPendingTime;var subscriber=void 0;try{subscriber=tracing$$1.__subscriberRef.current;if(subscriber!==null&&root.memoizedInteractions.size>0){var threadID=computeThreadID(root,committedExpirationTime);subscriber.onWorkStopped(root.memoizedInteractions,threadID);}}catch(error){// If the subscriber throws, rethrow it in a separate task
 	scheduleCallback(ImmediatePriority,function(){throw error;});}finally{// Clear completed interactions from the pending Map.
 	// Unless the render was suspended or cascading work was scheduled,
 	// In which case– leave pending interactions until the subsequent render.
@@ -7453,7 +7430,7 @@ var jsonx = (function (exports) {
 	// Profiling properties are only safe to access in profiling builds (when enableSchedulerTracing is true).
 	// The types are defined separately within this file to ensure they stay in sync.
 	// (We don't have to use an inline :any cast when enableSchedulerTracing is disabled.)
-	function FiberRootNode(containerInfo,tag,hydrate){this.tag=tag;this.current=null;this.containerInfo=containerInfo;this.pendingChildren=null;this.pingCache=null;this.finishedExpirationTime=NoWork;this.finishedWork=null;this.timeoutHandle=noTimeout;this.context=null;this.pendingContext=null;this.hydrate=hydrate;this.firstBatch=null;this.callbackNode=null;this.callbackExpirationTime=NoWork;this.firstPendingTime=NoWork;this.lastPendingTime=NoWork;this.pingTime=NoWork;{this.interactionThreadID=tracing$1.unstable_getThreadID();this.memoizedInteractions=new Set();this.pendingInteractionMap=new Map();}}function createFiberRoot(containerInfo,tag,hydrate){var root=new FiberRootNode(containerInfo,tag,hydrate);// Cyclic construction. This cheats the type system right now because
+	function FiberRootNode(containerInfo,tag,hydrate){this.tag=tag;this.current=null;this.containerInfo=containerInfo;this.pendingChildren=null;this.pingCache=null;this.finishedExpirationTime=NoWork;this.finishedWork=null;this.timeoutHandle=noTimeout;this.context=null;this.pendingContext=null;this.hydrate=hydrate;this.firstBatch=null;this.callbackNode=null;this.callbackExpirationTime=NoWork;this.firstPendingTime=NoWork;this.lastPendingTime=NoWork;this.pingTime=NoWork;{this.interactionThreadID=tracing$$1.unstable_getThreadID();this.memoizedInteractions=new Set();this.pendingInteractionMap=new Map();}}function createFiberRoot(containerInfo,tag,hydrate){var root=new FiberRootNode(containerInfo,tag,hydrate);// Cyclic construction. This cheats the type system right now because
 	// stateNode is any.
 	var uninitializedFiber=createHostRootFiber(tag);root.current=uninitializedFiber;uninitializedFiber.stateNode=root;return root;}// This lets us hook into Fiber to debug what it's doing.
 	// Might add PROFILE later.
@@ -8082,11 +8059,6 @@ var jsonx = (function (exports) {
 	  parts.push(output);
 	  return parts.join('');
 	}
-
-	var base64 = /*#__PURE__*/Object.freeze({
-		toByteArray: toByteArray,
-		fromByteArray: fromByteArray
-	});
 
 	function read(buffer, offset, isLE, mLen, nBytes) {
 	  var e, m;
@@ -8905,7 +8877,7 @@ var jsonx = (function (exports) {
 	    }
 	  }
 
-	  function read(buf, i) {
+	  function read$$1(buf, i) {
 	    if (indexSize === 1) {
 	      return buf[i];
 	    } else {
@@ -8919,7 +8891,7 @@ var jsonx = (function (exports) {
 	    var foundIndex = -1;
 
 	    for (i = byteOffset; i < arrLength; i++) {
-	      if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
+	      if (read$$1(arr, i) === read$$1(val, foundIndex === -1 ? 0 : i - foundIndex)) {
 	        if (foundIndex === -1) foundIndex = i;
 	        if (i - foundIndex + 1 === valLength) return foundIndex * indexSize;
 	      } else {
@@ -8934,7 +8906,7 @@ var jsonx = (function (exports) {
 	      var found = true;
 
 	      for (var j = 0; j < valLength; j++) {
-	        if (read(arr, i + j) !== read(val, j)) {
+	        if (read$$1(arr, i + j) !== read$$1(val, j)) {
 	          found = false;
 	          break;
 	        }
@@ -9010,7 +8982,7 @@ var jsonx = (function (exports) {
 	  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length);
 	}
 
-	Buffer.prototype.write = function write(string, offset, length, encoding) {
+	Buffer.prototype.write = function write$$1(string, offset, length, encoding) {
 	  // Buffer#write(string)
 	  if (offset === undefined) {
 	    encoding = 'utf8';
@@ -10144,11 +10116,95 @@ var jsonx = (function (exports) {
 	  this.fun.apply(null, this.array);
 	};
 
+	var title = 'browser';
+	var platform = 'browser';
+	var browser = true;
+	var env = {};
+	var argv = [];
+	var version = ''; // empty string to avoid regexp issues
+
+	var versions = {};
+	var release = {};
+	var config = {};
+
+	function noop() {}
+
+	var on = noop;
+	var addListener = noop;
+	var once = noop;
+	var off = noop;
+	var removeListener = noop;
+	var removeAllListeners = noop;
+	var emit = noop;
+	function binding(name) {
+	  throw new Error('process.binding is not supported');
+	}
+	function cwd() {
+	  return '/';
+	}
+	function chdir(dir) {
+	  throw new Error('process.chdir is not supported');
+	}
+	function umask() {
+	  return 0;
+	} // from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
+
 	var performance$1 = global$1.performance || {};
 
 	var performanceNow = performance$1.now || performance$1.mozNow || performance$1.msNow || performance$1.oNow || performance$1.webkitNow || function () {
 	  return new Date().getTime();
 	}; // generate timestamp or delta
+	// see http://nodejs.org/api/process.html#process_process_hrtime
+
+
+	function hrtime(previousTimestamp) {
+	  var clocktime = performanceNow.call(performance$1) * 1e-3;
+	  var seconds = Math.floor(clocktime);
+	  var nanoseconds = Math.floor(clocktime % 1 * 1e9);
+
+	  if (previousTimestamp) {
+	    seconds = seconds - previousTimestamp[0];
+	    nanoseconds = nanoseconds - previousTimestamp[1];
+
+	    if (nanoseconds < 0) {
+	      seconds--;
+	      nanoseconds += 1e9;
+	    }
+	  }
+
+	  return [seconds, nanoseconds];
+	}
+	var startTime = new Date();
+	function uptime() {
+	  var currentTime = new Date();
+	  var dif = currentTime - startTime;
+	  return dif / 1000;
+	}
+	var process = {
+	  nextTick: nextTick,
+	  title: title,
+	  browser: browser,
+	  env: env,
+	  argv: argv,
+	  version: version,
+	  versions: versions,
+	  on: on,
+	  addListener: addListener,
+	  once: once,
+	  off: off,
+	  removeListener: removeListener,
+	  removeAllListeners: removeAllListeners,
+	  emit: emit,
+	  binding: binding,
+	  cwd: cwd,
+	  chdir: chdir,
+	  umask: umask,
+	  hrtime: hrtime,
+	  platform: platform,
+	  release: release,
+	  config: config,
+	  uptime: uptime
+	};
 
 	var inherits;
 
@@ -10257,7 +10313,7 @@ var jsonx = (function (exports) {
 	var debugs = {};
 	var debugEnviron;
 	function debuglog(set) {
-	  if (isUndefined(debugEnviron)) debugEnviron = '';
+	  if (isUndefined(debugEnviron)) debugEnviron = process.env.NODE_DEBUG || '';
 	  set = set.toUpperCase();
 
 	  if (!debugs[set]) {
@@ -16771,7 +16827,7 @@ var jsonx = (function (exports) {
 	 * Copyright © 2012-2016 Faisal Salman <fyzlman@gmail.com>
 	 * Dual licensed under GPLv2 or MIT
 	 */
-	(function (window, undefined$1) {
+	(function (window, undefined) {
 	  // Constants
 	  /////////////
 
@@ -16824,7 +16880,7 @@ var jsonx = (function (exports) {
 	      return str.toLowerCase();
 	    },
 	    major: function (version) {
-	      return typeof version === STR_TYPE ? version.replace(/[^\d\.]/g, '').split(".")[0] : undefined$1;
+	      return typeof version === STR_TYPE ? version.replace(/[^\d\.]/g, '').split(".")[0] : undefined;
 	    },
 	    trim: function (str) {
 	      return str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
@@ -16879,16 +16935,16 @@ var jsonx = (function (exports) {
 	                  // check whether function or regex
 	                  if (typeof q[1] === FUNC_TYPE && !(q[1].exec && q[1].test)) {
 	                    // call function (usually string mapper)
-	                    this[q[0]] = match ? q[1].call(this, match, q[2]) : undefined$1;
+	                    this[q[0]] = match ? q[1].call(this, match, q[2]) : undefined;
 	                  } else {
 	                    // sanitize match using given regex
-	                    this[q[0]] = match ? match.replace(q[1], q[2]) : undefined$1;
+	                    this[q[0]] = match ? match.replace(q[1], q[2]) : undefined;
 	                  }
 	                } else if (q.length == 4) {
-	                  this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined$1;
+	                  this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined;
 	                }
 	              } else {
-	                this[q] = match ? match : undefined$1;
+	                this[q] = match ? match : undefined;
 	              }
 	            }
 	          }
@@ -16905,11 +16961,11 @@ var jsonx = (function (exports) {
 	        if (typeof map[i] === OBJ_TYPE && map[i].length > 0) {
 	          for (var j = 0; j < map[i].length; j++) {
 	            if (util.has(map[i][j], str)) {
-	              return i === UNKNOWN ? undefined$1 : i;
+	              return i === UNKNOWN ? undefined : i;
 	            }
 	          }
 	        } else if (util.has(map[i], str)) {
-	          return i === UNKNOWN ? undefined$1 : i;
+	          return i === UNKNOWN ? undefined : i;
 	        }
 	      }
 
@@ -17326,7 +17382,7 @@ var jsonx = (function (exports) {
 	  var UAParser = function (uastring, extensions) {
 	    if (typeof uastring === 'object') {
 	      extensions = uastring;
-	      uastring = undefined$1;
+	      uastring = undefined;
 	    }
 
 	    if (!(this instanceof UAParser)) {
@@ -17342,8 +17398,8 @@ var jsonx = (function (exports) {
 
 	    this.getBrowser = function () {
 	      var browser = {
-	        name: undefined$1,
-	        version: undefined$1
+	        name: undefined,
+	        version: undefined
 	      };
 	      mapper.rgx.call(browser, ua, rgxmap.browser);
 	      browser.major = util.major(browser.version); // deprecated
@@ -17353,7 +17409,7 @@ var jsonx = (function (exports) {
 
 	    this.getCPU = function () {
 	      var cpu = {
-	        architecture: undefined$1
+	        architecture: undefined
 	      };
 	      mapper.rgx.call(cpu, ua, rgxmap.cpu);
 	      return cpu;
@@ -17361,9 +17417,9 @@ var jsonx = (function (exports) {
 
 	    this.getDevice = function () {
 	      var device = {
-	        vendor: undefined$1,
-	        model: undefined$1,
-	        type: undefined$1
+	        vendor: undefined,
+	        model: undefined,
+	        type: undefined
 	      };
 	      mapper.rgx.call(device, ua, rgxmap.device);
 	      return device;
@@ -17371,8 +17427,8 @@ var jsonx = (function (exports) {
 
 	    this.getEngine = function () {
 	      var engine = {
-	        name: undefined$1,
-	        version: undefined$1
+	        name: undefined,
+	        version: undefined
 	      };
 	      mapper.rgx.call(engine, ua, rgxmap.engine);
 	      return engine;
@@ -17380,8 +17436,8 @@ var jsonx = (function (exports) {
 
 	    this.getOS = function () {
 	      var os = {
-	        name: undefined$1,
-	        version: undefined$1
+	        name: undefined,
+	        version: undefined
 	      };
 	      mapper.rgx.call(os, ua, rgxmap.os);
 	      return os;
@@ -20275,9 +20331,9 @@ var jsonx = (function (exports) {
 	 * @param {*} callback 
 	 */
 
-	function __express(filePath, options, callback) {
+	function __express$$1(filePath, options, callback) {
 	  try {
-	    const jsonxModule = options.__jsonx || require(filePath);
+	    const jsonxModule = options.__jsonx; //|| require(filePath);
 
 	    const resources = Object.assign({}, options);
 	    delete resources.__boundConfig;
@@ -20569,7 +20625,17 @@ ${jsonxRenderedString}`;
 	const _jsonxProps = jsonxProps;
 	const _jsonxUtils = jsonxUtils;
 
-	exports.__express = __express;
+	exports.jsonxRender = jsonxRender;
+	exports.outputHTML = outputHTML;
+	exports.getReactElementFromJSONX = getReactElementFromJSONX;
+	exports.getRenderedJSON = getRenderedJSON;
+	exports.getReactElement = getReactElement;
+	exports.getReactElementFromJSON = getReactElementFromJSON;
+	exports.compile = compile;
+	exports.outputJSX = outputJSX;
+	exports.outputJSON = outputJSON;
+	exports.jsonxHTMLString = jsonxHTMLString;
+	exports.jsonToJSX = jsonToJSX;
 	exports.__getReact = __getReact;
 	exports.__getReactDOM = __getReactDOM;
 	exports.__getUseGlobalHook = __getUseGlobalHook;
@@ -20577,19 +20643,9 @@ ${jsonxRenderedString}`;
 	exports._jsonxComponents = _jsonxComponents;
 	exports._jsonxProps = _jsonxProps;
 	exports._jsonxUtils = _jsonxUtils;
-	exports.compile = compile;
 	exports.default = getReactElementFromJSONX;
-	exports.getReactElement = getReactElement;
-	exports.getReactElementFromJSON = getReactElementFromJSON;
-	exports.getReactElementFromJSONX = getReactElementFromJSONX;
-	exports.getRenderedJSON = getRenderedJSON;
-	exports.jsonToJSX = jsonToJSX;
-	exports.jsonxHTMLString = jsonxHTMLString;
-	exports.jsonxRender = jsonxRender;
-	exports.outputHTML = outputHTML;
-	exports.outputJSON = outputJSON;
-	exports.outputJSX = outputJSX;
-	exports.renderFile = __express;
+	exports.__express = __express$$1;
+	exports.renderFile = __express$$1;
 
 	return exports;
 
