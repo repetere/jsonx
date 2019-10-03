@@ -3,52 +3,8 @@ import React, { useState, useEffect, useContext, useReducer, useCallback, useMem
 import ReactDOMElements from 'react-dom-factories';
 import createReactClass from 'create-react-class';
 import path from 'path';
-import ReactDOMServer from 'react-dom/server';
-
-function setState(newState) {
-  this.state = { ...this.state,
-    ...newState
-  };
-  this.listeners.forEach(listener => {
-    listener(this.state);
-  });
-}
-
-function useCustom(React$$1) {
-  const newListener = React$$1.useState()[1];
-  React$$1.useEffect(() => {
-    this.listeners.push(newListener);
-    return () => {
-      this.listeners = this.listeners.filter(listener => listener !== newListener);
-    };
-  }, []);
-  return [this.state, this.actions];
-}
-
-function associateActions(store, actions) {
-  const associatedActions = {};
-  Object.keys(actions).forEach(key => {
-    if (typeof actions[key] === 'function') {
-      associatedActions[key] = actions[key].bind(null, store);
-    }
-
-    if (typeof actions[key] === 'object') {
-      associatedActions[key] = associateActions(store, actions[key]);
-    }
-  });
-  return associatedActions;
-}
-
-const useStore = (React$$1, initialState, actions, initializer) => {
-  const store = {
-    state: initialState,
-    listeners: []
-  };
-  store.setState = setState.bind(store);
-  store.actions = associateActions(store, actions);
-  if (initializer) initializer(store);
-  return useCustom.bind(store, React$$1);
-};
+import ReactDOM from 'react-dom/server';
+import useGlobalHook from 'use-global-hook';
 
 /**
  * Used to evaluate whether or not to render a component
@@ -1689,9 +1645,11 @@ function jsonxRender(config = {}) {
     resources,
     querySelector,
     options,
-    DOM
+    DOM,
+    portal
   } = config;
-  ReactDOMServer.render(getReactElementFromJSONX.call(this || {}, jsonx, resources, options), DOM || document.querySelector(querySelector));
+  const Render = portal ? ReactDOM.createPortal : ReactDOM.render;
+  Render(getReactElementFromJSONX.call(this || {}, jsonx, resources, options), DOM || document.querySelector(querySelector));
 }
 /**
  * Use ReactDOMServer.renderToString to render html from JSONX
@@ -1710,7 +1668,7 @@ function outputHTML(config = {}) {
     jsonx,
     resources
   } = config;
-  return this && this.useJSON ? ReactDOMServer.renderToString(getReactElementFromJSON.call(this || {}, jsonx, resources)) : ReactDOMServer.renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
+  return this && this.useJSON ? ReactDOM.renderToString(getReactElementFromJSON.call(this || {}, jsonx, resources)) : ReactDOM.renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
 }
 /**
  * Use React.createElement and JSONX JSON to create React elements
@@ -1911,7 +1869,7 @@ function __getReact() {
  */
 
 function __getReactDOM() {
-  return ReactDOMServer;
+  return ReactDOM;
 }
 /**
  * Exposes global hook used in JSONX
@@ -1919,7 +1877,7 @@ function __getReactDOM() {
  */
 
 function __getUseGlobalHook() {
-  return useStore;
+  return useGlobalHook;
 }
 const _jsonxChildren = jsonxChildren;
 const _jsonxComponents = jsonxComponents;

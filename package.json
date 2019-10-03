@@ -8,6 +8,7 @@
   "browser": "dist/jsonx.umd.js",
   "web": "dist/jsonx.web.js",
   "modules.root": "lib",
+  "type": "module",
   "scripts": {
     "dev": "rollup -c -w",
     "test_simple": "node test/test.js",

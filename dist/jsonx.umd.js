@@ -1,8 +1,10 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.jsonx = {})));
-}(this, (function (exports) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('use-global-hook')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'use-global-hook'], factory) :
+	(factory((global.jsonx = {}),global.useGlobalHook));
+}(this, (function (exports,useGlobalHook) { 'use strict';
+
+	useGlobalHook = useGlobalHook && useGlobalHook.hasOwnProperty('default') ? useGlobalHook['default'] : useGlobalHook;
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -16602,51 +16604,6 @@
 
 	var server = server_node;
 
-	function setState(newState) {
-	  this.state = { ...this.state,
-	    ...newState
-	  };
-	  this.listeners.forEach(listener => {
-	    listener(this.state);
-	  });
-	}
-
-	function useCustom(React) {
-	  const newListener = React.useState()[1];
-	  React.useEffect(() => {
-	    this.listeners.push(newListener);
-	    return () => {
-	      this.listeners = this.listeners.filter(listener => listener !== newListener);
-	    };
-	  }, []);
-	  return [this.state, this.actions];
-	}
-
-	function associateActions(store, actions) {
-	  const associatedActions = {};
-	  Object.keys(actions).forEach(key => {
-	    if (typeof actions[key] === 'function') {
-	      associatedActions[key] = actions[key].bind(null, store);
-	    }
-
-	    if (typeof actions[key] === 'object') {
-	      associatedActions[key] = associateActions(store, actions[key]);
-	    }
-	  });
-	  return associatedActions;
-	}
-
-	const useStore = (React, initialState, actions, initializer) => {
-	  const store = {
-	    state: initialState,
-	    listeners: []
-	  };
-	  store.setState = setState.bind(store);
-	  store.actions = associateActions(store, actions);
-	  if (initializer) initializer(store);
-	  return useCustom.bind(store, React);
-	};
-
 	var reactDomFactories = createCommonjsModule(function (module, exports) {
 	/**
 	 * Copyright (c) 2015-present, Facebook, Inc.
@@ -20391,9 +20348,11 @@ ${jsonxRenderedString}`;
 	    resources,
 	    querySelector,
 	    options,
-	    DOM
+	    DOM,
+	    portal
 	  } = config;
-	  reactDom.render(getReactElementFromJSONX.call(this || {}, jsonx, resources, options), DOM || document.querySelector(querySelector));
+	  const Render = portal ? reactDom.createPortal : reactDom.render;
+	  Render(getReactElementFromJSONX.call(this || {}, jsonx, resources, options), DOM || document.querySelector(querySelector));
 	}
 	/**
 	 * Use ReactDOMServer.renderToString to render html from JSONX
@@ -20621,7 +20580,7 @@ ${jsonxRenderedString}`;
 	 */
 
 	function __getUseGlobalHook() {
-	  return useStore;
+	  return useGlobalHook;
 	}
 	const _jsonxChildren = jsonxChildren;
 	const _jsonxComponents = jsonxComponents;

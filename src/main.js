@@ -27,8 +27,9 @@ export let renderIndex = 0;
  * @property {object} this - options for getReactElementFromJSONX
  */
 export function jsonxRender(config = {}) {
-  const { jsonx, resources, querySelector, options, DOM, } = config;
-  ReactDOM.render(
+  const { jsonx, resources, querySelector, options, DOM, portal, } = config;
+  const Render = portal ? ReactDOM.createPortal : ReactDOM.render;
+  Render(
     getReactElementFromJSONX.call(this || {}, jsonx, resources, options),
     DOM || document.querySelector(querySelector)
   );
