@@ -9,7 +9,7 @@ import * as jsonxProps from './props';
 import * as jsonxChildren from './children';
 import * as jsonxUtils from './utils';
 const createElement = React.createElement;
-const { componentMap, getComponentFromMap, getBoundedComponents, } = jsonxComponents;
+const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, } = jsonxComponents;
 const { getComputedProps, } = jsonxProps;
 const { getJSONXChildren, } = jsonxChildren;
 const { displayComponent, } = jsonxUtils;
@@ -79,7 +79,7 @@ export function getReactElementFromJSONX(jsonx = {}, resources = {}) {
   if (jsonxUtils.validSimpleJSONXSyntax(jsonx)) jsonx = jsonxUtils.simpleJSONXSyntax(jsonx);
   if (!jsonx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
   try {
-    const components = Object.assign({}, componentMap, this.reactComponents);
+    const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this), }, componentMap, this.reactComponents);
 
     const reactComponents = (boundedComponents.length)
       ? getBoundedComponents.call(this, { boundedComponents, reactComponents: components, })

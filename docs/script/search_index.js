@@ -6,6 +6,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "jsonx/src/components.js~dynamiccomponent",
+    "function/index.html#static-function-DynamicComponent",
+    "<span>DynamicComponent</span> <span class=\"search-result-import-path\">jsonx/src/components.js</span>",
+    "function"
+  ],
+  [
     "jsonx/src/props.js~strip_comments",
     "variable/index.html#static-variable-STRIP_COMMENTS",
     "<span>STRIP_COMMENTS</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
@@ -15,12 +21,6 @@ window.esdocSearchIndex = [
     "jsonx/src/express.js~__express",
     "function/index.html#static-function-__express",
     "<span>__express</span> <span class=\"search-result-import-path\">jsonx/src/express.js</span>",
-    "function"
-  ],
-  [
-    "jsonx/src/main.js~__express",
-    "function/index.html#static-function-__express",
-    "<span>__express</span> <span class=\"search-result-import-path\">jsonx/src/main.js</span>",
     "function"
   ],
   [
@@ -93,6 +93,12 @@ window.esdocSearchIndex = [
     "jsonx/src/utils.js~displaycomponent",
     "function/index.html#static-function-displayComponent",
     "<span>displayComponent</span> <span class=\"search-result-import-path\">jsonx/src/utils.js</span>",
+    "function"
+  ],
+  [
+    "jsonx/src/utils.js~fetchjson",
+    "function/index.html#static-function-fetchJSON",
+    "<span>fetchJSON</span> <span class=\"search-result-import-path\">jsonx/src/utils.js</span>",
     "function"
   ],
   [

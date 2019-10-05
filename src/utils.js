@@ -417,3 +417,18 @@ export function getSimplifiedJSONX(jsonx = {}) {
     throw e;
   }
 }
+
+/**
+ * Fetches JSON from remote path
+ * @param {String} path - fetch path url
+ * @param {Object} options - fetch options
+ * @return {Object} - returns fetched JSON data
+ */
+export async function fetchJSON(path='', options={}) {
+  try {
+    const response = await fetch(path, options);
+    return await response.json();
+  } catch (e) {
+    throw e;
+  }
+}

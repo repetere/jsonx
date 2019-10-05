@@ -24,16 +24,17 @@
   <body>
     <div id="root"></div>
     <script type="text/javascript">
-      
+      window.sayHello = ()=>console.log('SAYING HELLO')
       const myCustomComponent = jsonx._jsonxComponents.getReactFunctionComponent({
-        component:'div',
+        component:'button',
         props:{
+          key:123,
           style:{
             color:'red'
           },
         },
         __functionProps:{
-          onClick:['func:window.sayHello']
+          onClick:'func:window.sayHello'
         },
         children:'this is a custom component'
       });
@@ -118,15 +119,48 @@
           otherprop: 'testing Other Prop',
           style:{
             padding:'1rem',
-          }
+          },
+          key:1,
         },
         children: [
           {
             component:'p',
+            props:{key:8,},
             children:'some text here'
           },
           {
             component:'myCustomComponent',
+            props:{key:2,},
+
+          },
+          {
+            component:'DynamicComponent',
+            props:{
+              key:3,
+              jsonx:{
+                component:'div',
+                props:{key:4,},
+                children:[
+                  {
+                    component:'div',
+                    props:{key:5,},
+                    children: 'from dynamic',
+                  },
+                  { 
+                    component:'div',
+                    props:{key:6,},
+                    resourceprops:{
+                      _children:['title']
+                    },
+                  },
+                ]
+              },
+              fetchURL:'https://jsonplaceholder.typicode.com/todos/1',
+              loadingJSONX: { component:'div', props:{key:55}, children:'...Loading', },
+              loadingErrorJSONX: { component:'div', children:[{component:'span',children:'Error: '},{ component:'span',  resourceprops:{_children:['error','message']}, }], },
+              cacheTimeout:5000,
+              cacheTimeoutFunction:(k,v)=>console.log(`cache expired for ${k} - ${v}`)
+            },
           }
           // {
           //   component:'MyCustomFunctionComponent',
@@ -161,7 +195,8 @@
         componentLibraries:{
           // ReactMD,
           Spectre,
-        }
+        },
+        // disableRenderIndexKey:false,
       };
       // console.log({boundConfig})
       jsonx.jsonxRender.call(boundConfig,{ 

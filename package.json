@@ -1,6 +1,6 @@
 {
   "name": "jsonx",
-  "version": "0.9.7",
+  "version": "0.9.80",
   "description": "React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks",
   "main": "dist/jsonx.cjs.js",
   "module": "src/main.js",
@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "rollup -c -w",
     "test_simple": "node test/test.js",
-    "test": "nyc  mocha \"test/**/*.{js,mjs}\" --include-all-sources -r esm ",
+    "test": "nyc  mocha \"test/**/*.{js,mjs}\" --include-all-sources -r esm --mode=auto ",
     "doc": "esdoc",
     "build": "rollup -c && esdoc",
     "benchmark": "node -r esm  benchmark/main_bmrk.js",
@@ -107,10 +107,11 @@
   },
   "dependencies": {
     "create-react-class": "^15.6.3",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
+    "memory-cache": "^0.2.0",
+    "react": "^16.10.0",
+    "react-dom": "^16.10.0",
     "react-dom-factories": "^1.0.2",
-    "use-global-hook": "^0.1.11",
-    "ua-parser-js": "^0.7.20"
+    "ua-parser-js": "^0.7.20",
+    "use-global-hook": "^0.1.11"
   }
 }

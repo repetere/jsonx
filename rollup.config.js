@@ -245,6 +245,10 @@ export default [
             // 'default',
             'Children', 'Component', 'PropTypes', 'createContext', 'Fragment', 'Suspense', 'lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue',
           ],
+          'node_modules/memory-cache/index.js':[
+            'cache',
+            'default',
+          ],
         },
       }), // so Rollup can convert `ms` to an ES module
       builtins({

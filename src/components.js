@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, createContext, } from 'react';
+import * as memoryCache from 'memory-cache';
+// import {cache} from 'memory-cache';
+// import cache from 'memory-cache';
 import { default as ReactDOMElements, } from 'react-dom-factories';
-import { getAdvancedBinding, } from './utils';
+import { getAdvancedBinding, fetchJSON, } from './utils';
 import createReactClass from 'create-react-class';
 import { getReactElementFromJSONX, } from './main';
+const cache = new memoryCache.Cache();
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
@@ -110,10 +114,15 @@ export function getComponentFromMap(options = {}) {
  * @returns {Function} 
  */
 export function getFunctionFromEval(options = {}) {
-  const { body = '', args = [], } = options;
+  if (typeof options === 'function') return options;
+  const { body = '', args = [], name, } = options;
   const argus = [].concat(args);
   argus.push(body);
-  return Function.prototype.constructor.apply({}, argus);
+  const evalFunction = Function.prototype.constructor.apply({ name, }, argus);
+  if (name) {
+    Object.defineProperty(evalFunction, 'name', { value: name, });
+  }
+  return evalFunction;
 }
 
 /**
@@ -210,6 +219,43 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
     ? React.createFactory(reactComponentClass)
     : reactComponentClass;
   return reactClass;
+}
+
+export function DynamicComponent(props={}) {
+  const { useCache = true, cacheTimeout = 60 * 60 * 5, loadingJSONX= { component:'div', children:'...Loading', },
+  loadingErrorJSONX= { component:'div', children:[{component:'span',children:'Error: '},{ component:'span',  resourceprops:{_children:['error','message']}, }], }, cacheTimeoutFunction = () => { }, jsonx, transformFunction = data => data, fetchURL, fetchOptions, } = props;
+  const context = this || {};
+  const [ state, setState ] = useState({ hasLoaded: false, hasError: false, resources: {}, error:undefined, });
+  const transformer = useMemo(()=>getFunctionFromEval(transformFunction), [ transformFunction ]);
+  const timeoutFunction = useMemo(()=>getFunctionFromEval(cacheTimeoutFunction), [ cacheTimeoutFunction ]);
+  const renderJSONX = useMemo(()=>getReactElementFromJSONX.bind({context}), [ context ]);
+  const loadingComponent = useMemo(()=>renderJSONX(loadingJSONX), [ loadingJSONX ]);
+  const loadingError = useMemo(()=>renderJSONX(loadingErrorJSONX,{error:state.error}), [ loadingErrorJSONX, state.error ]);
+
+  useEffect(() => { 
+    async function getData() {
+      try {
+        let transformedData;
+        if (useCache && cache.get(fetchURL)) {
+          transformedData = cache.get(fetchURL);
+        } else {
+          const fetchedData = await fetchJSON(fetchURL, fetchOptions);
+          transformedData = await transformer(fetchedData);
+          if (useCache) cache.put(fetchURL, transformedData, cacheTimeout,timeoutFunction);
+        }
+        setState(prevState=>Object.assign({},prevState,{ hasLoaded: true, hasError: false, resources: transformedData, }));
+      } catch (e) {
+        if(context.debug) console.warn(e);
+        setState({ hasError: true, error:e, });
+      }
+    }
+    getData();
+  }, [ fetchURL, fetchOptions ]);
+  if (state.hasError) {
+    return loadingError;
+  } else if (state.hasLoaded === false) {
+    return loadingComponent;
+  } else return renderJSONX(jsonx, state.resources);
 }
 
 /**

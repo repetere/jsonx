@@ -4,14 +4,271 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var UAParser = _interopDefault(require('ua-parser-js'));
 var React = require('react');
 var React__default = _interopDefault(React);
+var ReactDOM = _interopDefault(require('react-dom/server'));
 var ReactDOMElements = _interopDefault(require('react-dom-factories'));
+var UAParser = _interopDefault(require('ua-parser-js'));
 var createReactClass = _interopDefault(require('create-react-class'));
 var path = _interopDefault(require('path'));
-var ReactDOM = _interopDefault(require('react-dom/server'));
-var useGlobalHook = _interopDefault(require('use-global-hook'));
+
+function setState(store, newState, afterUpdateCallback) {
+  const listenersLength = store.listeners.length;
+  store.state = { ...store.state,
+    ...newState
+  };
+  store.listeners.forEach(listener => {
+    listener.run(store.state);
+  });
+  afterUpdateCallback && afterUpdateCallback();
+}
+
+function useCustom(store, React, mapState, mapActions) {
+  const [, originalHook] = React.useState(Object.create(null));
+  const state = mapState ? mapState(store.state) : store.state;
+  const actions = React.useMemo(() => mapActions ? mapActions(store.actions) : store.actions, [mapActions, store.actions]);
+  React.useEffect(() => {
+    const newListener = {
+      oldState: {}
+    };
+    newListener.run = mapState ? newState => {
+      const mappedState = mapState(newState);
+
+      if (mappedState !== newListener.oldState) {
+        newListener.oldState = mappedState;
+        originalHook(mappedState);
+      }
+    } : originalHook;
+    store.listeners.push(newListener);
+    newListener.run(store.state);
+    return () => {
+      store.listeners = store.listeners.filter(listener => listener !== newListener);
+    };
+  }, []); // eslint-disable-line
+
+  return [state, actions];
+}
+
+function associateActions(store, actions) {
+  const associatedActions = {};
+  Object.keys(actions).forEach(key => {
+    if (typeof actions[key] === "function") {
+      associatedActions[key] = actions[key].bind(null, store);
+    }
+
+    if (typeof actions[key] === "object") {
+      associatedActions[key] = associateActions(store, actions[key]);
+    }
+  });
+  return associatedActions;
+}
+
+const useStore = (React, initialState, actions, initializer) => {
+  const store = {
+    state: initialState,
+    listeners: []
+  };
+  store.setState = setState.bind(null, store);
+  store.actions = associateActions(store, actions);
+  if (initializer) initializer(store);
+  return useCustom.bind(null, store, React);
+};
+
+function Cache() {
+  var _cache = Object.create(null);
+
+  var _hitCount = 0;
+  var _missCount = 0;
+  var _size = 0;
+  var _debug = false;
+
+  this.put = function (key, value, time, timeoutCallback) {
+    if (_debug) {
+      console.log('caching: %s = %j (@%s)', key, value, time);
+    }
+
+    if (typeof time !== 'undefined' && (typeof time !== 'number' || isNaN(time) || time <= 0)) {
+      throw new Error('Cache timeout must be a positive number');
+    } else if (typeof timeoutCallback !== 'undefined' && typeof timeoutCallback !== 'function') {
+      throw new Error('Cache timeout callback must be a function');
+    }
+
+    var oldRecord = _cache[key];
+
+    if (oldRecord) {
+      clearTimeout(oldRecord.timeout);
+    } else {
+      _size++;
+    }
+
+    var record = {
+      value: value,
+      expire: time + Date.now()
+    };
+
+    if (!isNaN(record.expire)) {
+      record.timeout = setTimeout(function () {
+        _del(key);
+
+        if (timeoutCallback) {
+          timeoutCallback(key, value);
+        }
+      }.bind(this), time);
+    }
+
+    _cache[key] = record;
+    return value;
+  };
+
+  this.del = function (key) {
+    var canDelete = true;
+    var oldRecord = _cache[key];
+
+    if (oldRecord) {
+      clearTimeout(oldRecord.timeout);
+
+      if (!isNaN(oldRecord.expire) && oldRecord.expire < Date.now()) {
+        canDelete = false;
+      }
+    } else {
+      canDelete = false;
+    }
+
+    if (canDelete) {
+      _del(key);
+    }
+
+    return canDelete;
+  };
+
+  function _del(key) {
+    _size--;
+    delete _cache[key];
+  }
+
+  this.clear = function () {
+    for (var key in _cache) {
+      clearTimeout(_cache[key].timeout);
+    }
+
+    _size = 0;
+    _cache = Object.create(null);
+
+    if (_debug) {
+      _hitCount = 0;
+      _missCount = 0;
+    }
+  };
+
+  this.get = function (key) {
+    var data = _cache[key];
+
+    if (typeof data != "undefined") {
+      if (isNaN(data.expire) || data.expire >= Date.now()) {
+        if (_debug) _hitCount++;
+        return data.value;
+      } else {
+        // free some space
+        if (_debug) _missCount++;
+        _size--;
+        delete _cache[key];
+      }
+    } else if (_debug) {
+      _missCount++;
+    }
+
+    return null;
+  };
+
+  this.size = function () {
+    return _size;
+  };
+
+  this.memsize = function () {
+    var size = 0,
+        key;
+
+    for (key in _cache) {
+      size++;
+    }
+
+    return size;
+  };
+
+  this.debug = function (bool) {
+    _debug = bool;
+  };
+
+  this.hits = function () {
+    return _hitCount;
+  };
+
+  this.misses = function () {
+    return _missCount;
+  };
+
+  this.keys = function () {
+    return Object.keys(_cache);
+  };
+
+  this.exportJson = function () {
+    var plainJsCache = {}; // Discard the `timeout` property.
+    // Note: JSON doesn't support `NaN`, so convert it to `'NaN'`.
+
+    for (var key in _cache) {
+      var record = _cache[key];
+      plainJsCache[key] = {
+        value: record.value,
+        expire: record.expire || 'NaN'
+      };
+    }
+
+    return JSON.stringify(plainJsCache);
+  };
+
+  this.importJson = function (jsonToImport, options) {
+    var cacheToImport = JSON.parse(jsonToImport);
+    var currTime = Date.now();
+    var skipDuplicates = options && options.skipDuplicates;
+
+    for (var key in cacheToImport) {
+      if (cacheToImport.hasOwnProperty(key)) {
+        if (skipDuplicates) {
+          var existingRecord = _cache[key];
+
+          if (existingRecord) {
+            if (_debug) {
+              console.log('Skipping duplicate imported key \'%s\'', key);
+            }
+
+            continue;
+          }
+        }
+
+        var record = cacheToImport[key]; // record.expire could be `'NaN'` if no expiry was set.
+        // Try to subtract from it; a string minus a number is `NaN`, which is perfectly fine here.
+
+        var remainingTime = record.expire - currTime;
+
+        if (remainingTime <= 0) {
+          // Delete any record that might exist with the same key, since this key is expired.
+          this.del(key);
+          continue;
+        } // Remaining time must now be either positive or `NaN`,
+        // but `put` will throw an error if we try to give it `NaN`.
+
+
+        remainingTime = remainingTime > 0 ? remainingTime : undefined;
+        this.put(key, record.value, remainingTime);
+      }
+    }
+
+    return this.size();
+  };
+}
+
+module.exports = new Cache();
+module.exports.Cache = Cache;
 
 /**
  * Used to evaluate whether or not to render a component
@@ -459,6 +716,21 @@ function getSimplifiedJSONX(jsonx = {}) {
     throw e;
   }
 }
+/**
+ * Fetches JSON from remote path
+ * @param {String} path - fetch path url
+ * @param {Object} options - fetch options
+ * @return {Object} - returns fetched JSON data
+ */
+
+async function fetchJSON(path = '', options = {}) {
+  try {
+    const response = await fetch(path, options);
+    return await response.json();
+  } catch (e) {
+    throw e;
+  }
+}
 
 var jsonxUtils = /*#__PURE__*/Object.freeze({
   displayComponent: displayComponent,
@@ -467,9 +739,11 @@ var jsonxUtils = /*#__PURE__*/Object.freeze({
   validateJSONX: validateJSONX,
   validSimpleJSONXSyntax: validSimpleJSONXSyntax,
   simpleJSONXSyntax: simpleJSONXSyntax,
-  getSimplifiedJSONX: getSimplifiedJSONX
+  getSimplifiedJSONX: getSimplifiedJSONX,
+  fetchJSON: fetchJSON
 });
 
+const cache = new undefined(); // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
 
@@ -596,13 +870,25 @@ function getComponentFromMap(options = {}) {
  */
 
 function getFunctionFromEval(options = {}) {
+  if (typeof options === 'function') return options;
   const {
     body = '',
-    args = []
+    args = [],
+    name
   } = options;
   const argus = [].concat(args);
   argus.push(body);
-  return Function.prototype.constructor.apply({}, argus);
+  const evalFunction = Function.prototype.constructor.apply({
+    name
+  }, argus);
+
+  if (name) {
+    Object.defineProperty(evalFunction, 'name', {
+      value: name
+    });
+  }
+
+  return evalFunction;
 }
 /**
  * Returns a new React Component
@@ -708,6 +994,84 @@ function getReactClassComponent(reactComponent = {}, options = {}) {
   const reactClass = returnFactory ? React__default.createFactory(reactComponentClass) : reactComponentClass;
   return reactClass;
 }
+function DynamicComponent(props = {}) {
+  const {
+    useCache = true,
+    cacheTimeout = 60 * 60 * 5,
+    loadingJSONX = {
+      component: 'div',
+      children: '...Loading'
+    },
+    loadingErrorJSONX = {
+      component: 'div',
+      children: [{
+        component: 'span',
+        children: 'Error: '
+      }, {
+        component: 'span',
+        resourceprops: {
+          _children: ['error', 'message']
+        }
+      }]
+    },
+    cacheTimeoutFunction = () => {},
+    jsonx,
+    transformFunction = data => data,
+    fetchURL,
+    fetchOptions
+  } = props;
+  const context = this || {};
+  const [state, setState] = React.useState({
+    hasLoaded: false,
+    hasError: false,
+    resources: {},
+    error: undefined
+  });
+  const transformer = React.useMemo(() => getFunctionFromEval(transformFunction), [transformFunction]);
+  const timeoutFunction = React.useMemo(() => getFunctionFromEval(cacheTimeoutFunction), [cacheTimeoutFunction]);
+  const renderJSONX = React.useMemo(() => getReactElementFromJSONX.bind({
+    context
+  }), [context]);
+  const loadingComponent = React.useMemo(() => renderJSONX(loadingJSONX), [loadingJSONX]);
+  const loadingError = React.useMemo(() => renderJSONX(loadingErrorJSONX, {
+    error: state.error
+  }), [loadingErrorJSONX, state.error]);
+  React.useEffect(() => {
+    async function getData() {
+      try {
+        let transformedData;
+
+        if (useCache && cache.get(fetchURL)) {
+          transformedData = cache.get(fetchURL);
+        } else {
+          const fetchedData = await fetchJSON(fetchURL, fetchOptions);
+          transformedData = await transformer(fetchedData);
+          if (useCache) cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
+        }
+
+        setState(prevState => Object.assign({}, prevState, {
+          hasLoaded: true,
+          hasError: false,
+          resources: transformedData
+        }));
+      } catch (e) {
+        if (context.debug) console.warn(e);
+        setState({
+          hasError: true,
+          error: e
+        });
+      }
+    }
+
+    getData();
+  }, [fetchURL, fetchOptions]);
+
+  if (state.hasError) {
+    return loadingError;
+  } else if (state.hasLoaded === false) {
+    return loadingComponent;
+  } else return renderJSONX(jsonx, state.resources);
+}
 /**
  * Returns new React Function Component
  * @memberOf components
@@ -806,6 +1170,7 @@ var jsonxComponents = /*#__PURE__*/Object.freeze({
   getComponentFromMap: getComponentFromMap,
   getFunctionFromEval: getFunctionFromEval,
   getReactClassComponent: getReactClassComponent,
+  DynamicComponent: DynamicComponent,
   getReactFunctionComponent: getReactFunctionComponent,
   getReactContext: getReactContext
 });
@@ -1595,7 +1960,7 @@ var jsonxChildren = /*#__PURE__*/Object.freeze({
  * @param {*} callback 
  */
 
-function __express$$1(filePath, options, callback) {
+function __express(filePath, options, callback) {
   try {
     const jsonxModule = options.__jsonx; //|| require(filePath);
 
@@ -1622,7 +1987,8 @@ const createElement = React__default.createElement;
 const {
   componentMap: componentMap$1,
   getComponentFromMap: getComponentFromMap$1,
-  getBoundedComponents: getBoundedComponents$1
+  getBoundedComponents: getBoundedComponents$1,
+  DynamicComponent: DynamicComponent$1
 } = jsonxComponents;
 const {
   getComputedProps: getComputedProps$1
@@ -1711,7 +2077,9 @@ function getReactElementFromJSONX(jsonx = {}, resources = {}) {
   if (!jsonx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
 
   try {
-    const components = Object.assign({}, componentMap$1, this.reactComponents);
+    const components = Object.assign({
+      DynamicComponent: DynamicComponent$1.bind(this)
+    }, componentMap$1, this.reactComponents);
     const reactComponents = boundedComponents.length ? getBoundedComponents$1.call(this, {
       boundedComponents,
       reactComponents: components
@@ -1884,24 +2252,14 @@ function __getReactDOM() {
  */
 
 function __getUseGlobalHook() {
-  return useGlobalHook;
+  return useStore;
 }
 const _jsonxChildren = jsonxChildren;
 const _jsonxComponents = jsonxComponents;
 const _jsonxProps = jsonxProps;
 const _jsonxUtils = jsonxUtils;
 
-exports.jsonxRender = jsonxRender;
-exports.outputHTML = outputHTML;
-exports.getReactElementFromJSONX = getReactElementFromJSONX;
-exports.getRenderedJSON = getRenderedJSON;
-exports.getReactElement = getReactElement;
-exports.getReactElementFromJSON = getReactElementFromJSON;
-exports.compile = compile;
-exports.outputJSX = outputJSX;
-exports.outputJSON = outputJSON;
-exports.jsonxHTMLString = jsonxHTMLString;
-exports.jsonToJSX = jsonToJSX;
+exports.__express = __express;
 exports.__getReact = __getReact;
 exports.__getReactDOM = __getReactDOM;
 exports.__getUseGlobalHook = __getUseGlobalHook;
@@ -1909,6 +2267,16 @@ exports._jsonxChildren = _jsonxChildren;
 exports._jsonxComponents = _jsonxComponents;
 exports._jsonxProps = _jsonxProps;
 exports._jsonxUtils = _jsonxUtils;
+exports.compile = compile;
 exports.default = getReactElementFromJSONX;
-exports.__express = __express$$1;
-exports.renderFile = __express$$1;
+exports.getReactElement = getReactElement;
+exports.getReactElementFromJSON = getReactElementFromJSON;
+exports.getReactElementFromJSONX = getReactElementFromJSONX;
+exports.getRenderedJSON = getRenderedJSON;
+exports.jsonToJSX = jsonToJSX;
+exports.jsonxHTMLString = jsonxHTMLString;
+exports.jsonxRender = jsonxRender;
+exports.outputHTML = outputHTML;
+exports.outputJSON = outputJSON;
+exports.outputJSX = outputJSX;
+exports.renderFile = __express;

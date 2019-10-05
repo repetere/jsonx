@@ -38,6 +38,7 @@
   <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenProperty">getChildrenProperty</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getChildrenProps">getChildrenProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getJSONXChildren">getJSONXChildren</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-DynamicComponent">DynamicComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBoundedComponents">getBoundedComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromLibrary">getComponentFromLibrary</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getComponentFromMap">getComponentFromMap</a></span></span></li>
@@ -45,7 +46,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactClassComponent">getReactClassComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactContext">getReactContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactFunctionComponent">getReactFunctionComponent</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__express">__express</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReact">__getReact</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__getReactDOM">__getReactDOM</a></span></span></li>
@@ -70,6 +70,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-displayComponent">displayComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fetchJSON">fetchJSON</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getAdvancedBinding">getAdvancedBinding</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getSimplifiedJSONX">getSimplifiedJSONX</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-simpleJSONXSyntax">simpleJSONXSyntax</a></span></span></li>
@@ -94,10 +95,14 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/components.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, createContext, } from &apos;react&apos;;
+import * as memoryCache from &apos;memory-cache&apos;;
+// import {cache} from &apos;memory-cache&apos;;
+// import cache from &apos;memory-cache&apos;;
 import { default as ReactDOMElements, } from &apos;react-dom-factories&apos;;
-import { getAdvancedBinding, } from &apos;./utils&apos;;
+import { getAdvancedBinding, fetchJSON, } from &apos;./utils&apos;;
 import createReactClass from &apos;create-react-class&apos;;
 import { getReactElementFromJSONX, } from &apos;./main&apos;;
+const cache = new memoryCache.Cache();
 // if (typeof window === &apos;undefined&apos;) {
 //   var window = window || global.window || {};
 // }
@@ -205,10 +210,15 @@ export function getComponentFromMap(options = {}) {
  * @returns {Function} 
  */
 export function getFunctionFromEval(options = {}) {
-  const { body = &apos;&apos;, args = [], } = options;
+  if (typeof options === &apos;function&apos;) return options;
+  const { body = &apos;&apos;, args = [], name, } = options;
   const argus = [].concat(args);
   argus.push(body);
-  return Function.prototype.constructor.apply({}, argus);
+  const evalFunction = Function.prototype.constructor.apply({ name, }, argus);
+  if (name) {
+    Object.defineProperty(evalFunction, &apos;name&apos;, { value: name, });
+  }
+  return evalFunction;
 }
 
 /**
@@ -305,6 +315,43 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
     ? React.createFactory(reactComponentClass)
     : reactComponentClass;
   return reactClass;
+}
+
+export function DynamicComponent(props={}) {
+  const { useCache = true, cacheTimeout = 60 * 60 * 5, loadingJSONX= { component:&apos;div&apos;, children:&apos;...Loading&apos;, },
+  loadingErrorJSONX= { component:&apos;div&apos;, children:[{component:&apos;span&apos;,children:&apos;Error: &apos;},{ component:&apos;span&apos;,  resourceprops:{_children:[&apos;error&apos;,&apos;message&apos;]}, }], }, cacheTimeoutFunction = () =&gt; { }, jsonx, transformFunction = data =&gt; data, fetchURL, fetchOptions, } = props;
+  const context = this || {};
+  const [ state, setState ] = useState({ hasLoaded: false, hasError: false, resources: {}, error:undefined, });
+  const transformer = useMemo(()=&gt;getFunctionFromEval(transformFunction), [ transformFunction ]);
+  const timeoutFunction = useMemo(()=&gt;getFunctionFromEval(cacheTimeoutFunction), [ cacheTimeoutFunction ]);
+  const renderJSONX = useMemo(()=&gt;getReactElementFromJSONX.bind({context}), [ context ]);
+  const loadingComponent = useMemo(()=&gt;renderJSONX(loadingJSONX), [ loadingJSONX ]);
+  const loadingError = useMemo(()=&gt;renderJSONX(loadingErrorJSONX,{error:state.error}), [ loadingErrorJSONX, state.error ]);
+
+  useEffect(() =&gt; { 
+    async function getData() {
+      try {
+        let transformedData;
+        if (useCache &amp;&amp; cache.get(fetchURL)) {
+          transformedData = cache.get(fetchURL);
+        } else {
+          const fetchedData = await fetchJSON(fetchURL, fetchOptions);
+          transformedData = await transformer(fetchedData);
+          if (useCache) cache.put(fetchURL, transformedData, cacheTimeout,timeoutFunction);
+        }
+        setState(prevState=&gt;Object.assign({},prevState,{ hasLoaded: true, hasError: false, resources: transformedData, }));
+      } catch (e) {
+        if(context.debug) console.warn(e);
+        setState({ hasError: true, error:e, });
+      }
+    }
+    getData();
+  }, [ fetchURL, fetchOptions ]);
+  if (state.hasError) {
+    return loadingError;
+  } else if (state.hasLoaded === false) {
+    return loadingComponent;
+  } else return renderJSONX(jsonx, state.resources);
 }
 
 /**
