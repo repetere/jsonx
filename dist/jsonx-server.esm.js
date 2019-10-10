@@ -1129,7 +1129,7 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
     return function ${options.name || 'Anonymous'}(props){
       ${functionBody}
       if(typeof exposeProps==='undefined' || exposeProps){
-        reactComponent.props = Object.assign({},props,exposeProps);
+        reactComponent.props = Object.assign({},props,typeof exposeProps==='undefined'?{}:exposeProps);
         // reactComponent.__functionargs = Object.keys(exposeProps);
       } else{
         reactComponent.props =  props;
