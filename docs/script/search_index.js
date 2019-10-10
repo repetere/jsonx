@@ -210,6 +210,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "jsonx/src/props.js~getreactcomponents",
+    "function/index.html#static-function-getReactComponents",
+    "<span>getReactComponents</span> <span class=\"search-result-import-path\">jsonx/src/props.js</span>",
+    "function"
+  ],
+  [
     "jsonx/src/components.js~getreactcontext",
     "function/index.html#static-function-getReactContext",
     "<span>getReactContext</span> <span class=\"search-result-import-path\">jsonx/src/components.js</span>",
@@ -385,13 +391,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber107",
+    "test-file/test/unit/components_spec.js.html#lineNumber238",
     "jsonx components componentMap",
     "test"
   ],
   [
     "",
-    "test-file/test/unit/components_spec.js.html#lineNumber238",
+    "test-file/test/unit/components_spec.js.html#lineNumber107",
     "jsonx components componentMap",
     "test"
   ],

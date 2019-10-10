@@ -305,6 +305,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
       };
     }));
   }
+  if (typeof options === 'undefined' || typeof options.bind === 'undefined') options.bind = true;
   const { resources = {}, args=[], } = options;
 
   const props = reactComponent.props;
@@ -314,7 +315,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
     const self = this;
     return function ${options.name || 'Anonymous'}(props){
       ${functionBody}
-      if(typeof exposeProps!=='undefined'){
+      if(typeof exposeProps==='undefined' || exposeProps){
         reactComponent.props = Object.assign({},props,exposeProps);
         // reactComponent.__functionargs = Object.keys(exposeProps);
       } else{

@@ -272,6 +272,11 @@ Resolves jsonx.__dangerouslyInsertComponents into an object that turns each valu
 | options.jsonx | Object |  | Valid JSONX JSON |
 | options.resources | Object | optional: true, default: {} | object to use for resourceprops(asyncprops), usually a result of an asynchronous call |
 
+## `getReactComponents()`
+
+| Name | Type | Attribute | Description |
+| --- | --- | --- | --- |
+
 ## `getReactComponentProps(options: Object, options.jsonx: Object): Object`
 
 Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.

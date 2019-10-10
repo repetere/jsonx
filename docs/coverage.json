@@ -1,6 +1,6 @@
 {
-  "coverage": "70%",
-  "expectCount": 60,
+  "coverage": "68.85%",
+  "expectCount": 61,
   "actualCount": 42,
   "files": {
     "src/children.js": {
@@ -41,12 +41,13 @@
       ]
     },
     "src/props.js": {
-      "expectCount": 13,
+      "expectCount": 14,
       "actualCount": 10,
       "undocumentLines": [
         10,
         11,
-        141
+        141,
+        266
       ]
     },
     "src/utils.js": {

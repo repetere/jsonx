@@ -68,6 +68,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getJSONXProps">getJSONXProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getParamNames">getParamNames</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponents">getReactComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-displayComponent">displayComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fetchJSON">fetchJSON</a></span></span></li>
@@ -401,6 +402,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = &a
       };
     }));
   }
+  if (typeof options === &apos;undefined&apos; || typeof options.bind === &apos;undefined&apos;) options.bind = true;
   const { resources = {}, args=[], } = options;
 
   const props = reactComponent.props;
@@ -410,7 +412,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = &a
     const self = this;
     return function ${options.name || &apos;Anonymous&apos;}(props){
       ${functionBody}
-      if(typeof exposeProps!==&apos;undefined&apos;){
+      if(typeof exposeProps===&apos;undefined&apos; || exposeProps){
         reactComponent.props = Object.assign({},props,exposeProps);
         // reactComponent.__functionargs = Object.keys(exposeProps);
       } else{

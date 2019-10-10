@@ -68,6 +68,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getJSONXProps">getJSONXProps</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getParamNames">getParamNames</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponentProps">getReactComponentProps</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getReactComponents">getReactComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getWindowComponents">getWindowComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-displayComponent">displayComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fetchJSON">fetchJSON</a></span></span></li>
@@ -756,6 +757,34 @@
         
         <div data-ice="description"><p>Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a React components.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-getReactComponents">getReactComponents</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -2444,11 +2473,11 @@ getComponentFromMap({jsonx:{component:&apos;reactBootstap.nav&apos;},componentLi
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber505">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber540">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComputedProps} from &apos;<span><a href="file/src/props.js.html#lineNumber505">jsonx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getComputedProps} from &apos;<span><a href="file/src/props.js.html#lineNumber540">jsonx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Returns computed properties for React Components and any property that&apos;s prefixed with __ is a computedProperty</p>
@@ -2797,11 +2826,11 @@ const evalutedComputedBoundFunc = JSONXP.email({ email:&apos;test@email.domain&a
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber324">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber359">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionFromProps} from &apos;<span><a href="file/src/props.js.html#lineNumber324">jsonx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionFromProps} from &apos;<span><a href="file/src/props.js.html#lineNumber359">jsonx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep</p>
@@ -2893,11 +2922,11 @@ const evalutedComputedBoundFunc = JSONXP.email({ email:&apos;test@email.domain&a
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber406">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber441">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionProps} from &apos;<span><a href="file/src/props.js.html#lineNumber406">jsonx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getFunctionProps} from &apos;<span><a href="file/src/props.js.html#lineNumber441">jsonx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Returns a resolved object from function strings that has functions pulled from jsonx.__functionProps</p>
@@ -3430,11 +3459,11 @@ getParamNames(regularFunctionAdd) // =&gt; [&apos;c&apos;,&apos;d&apos;]</code><
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber273">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber308">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactComponentProps} from &apos;<span><a href="file/src/props.js.html#lineNumber273">jsonx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactComponentProps} from &apos;<span><a href="file/src/props.js.html#lineNumber308">jsonx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. </p>
@@ -3500,6 +3529,49 @@ getParamNames(regularFunctionAdd) // =&gt; [&apos;c&apos;,&apos;d&apos;]</code><
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-getReactComponents">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">getReactComponents</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber266">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactComponents} from &apos;<span><a href="file/src/props.js.html#lineNumber266">jsonx/src/props.js</a></span>&apos;</code></pre></div>
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="static-function-getReactContext">
     <span class="access" data-ice="access">public</span>
     
@@ -3511,11 +3583,11 @@ getParamNames(regularFunctionAdd) // =&gt; [&apos;c&apos;,&apos;d&apos;]</code><
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber342">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components.js.html#lineNumber343">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactContext} from &apos;<span><a href="file/src/components.js.html#lineNumber342">jsonx/src/components.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getReactContext} from &apos;<span><a href="file/src/components.js.html#lineNumber343">jsonx/src/components.js</a></span>&apos;</code></pre></div>
   
   
   
@@ -3997,11 +4069,11 @@ const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionCompone
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber431">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/props.js.html#lineNumber466">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getWindowComponents} from &apos;<span><a href="file/src/props.js.html#lineNumber431">jsonx/src/props.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {getWindowComponents} from &apos;<span><a href="file/src/props.js.html#lineNumber466">jsonx/src/props.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Returns a resolved object that has React Components pulled from window.__jsonx_custom_elements</p>

@@ -19594,6 +19594,7 @@ var jsonx = (function (exports) {
 	    }));
 	  }
 
+	  if (typeof options === 'undefined' || typeof options.bind === 'undefined') options.bind = true;
 	  const {
 	    resources = {},
 	    args = []
@@ -19605,7 +19606,7 @@ var jsonx = (function (exports) {
     const self = this;
     return function ${options.name || 'Anonymous'}(props){
       ${functionBody}
-      if(typeof exposeProps!=='undefined'){
+      if(typeof exposeProps==='undefined' || exposeProps){
         reactComponent.props = Object.assign({},props,exposeProps);
         // reactComponent.__functionargs = Object.keys(exposeProps);
       } else{
@@ -19929,6 +19930,47 @@ var jsonx = (function (exports) {
 	    return cprops;
 	  }, {});
 	}
+	function getReactComponents(options) {
+	  const {
+	    jsonx,
+	    resources
+	  } = options;
+	  const functionComponents = !jsonx.__dangerouslyInsertFunctionComponents ? {} : Object.keys(jsonx.__dangerouslyInsertFunctionComponents).reduce((cprops, cpropName) => {
+	    let componentVal;
+
+	    try {
+	      const args = jsonx.__dangerouslyInsertFunctionComponents[cpropName];
+	      args.options = Object.assign({}, args.options, {
+	        resources
+	      }); // eslint-disable-next-line
+
+	      componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+	    } catch (e) {
+	      if (this.debug || jsonx.debug) componentVal = e;
+	    }
+
+	    cprops[cpropName] = cpropName === '_children' ? [componentVal] : componentVal;
+	    return cprops;
+	  }, {});
+	  const classComponents = !jsonx.__dangerouslyInsertClassComponents ? {} : Object.keys(jsonx.__dangerouslyInsertClassComponents).reduce((cprops, cpropName) => {
+	    let componentVal;
+
+	    try {
+	      const args = jsonx.__dangerouslyInsertClassComponents[cpropName];
+	      args.options = Object.assign({}, args.options, {
+	        resources
+	      }); // eslint-disable-next-line
+
+	      componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.options);
+	    } catch (e) {
+	      if (this.debug || jsonx.debug) componentVal = e;
+	    }
+
+	    cprops[cpropName] = cpropName === '_children' ? [componentVal] : componentVal;
+	    return cprops;
+	  }, {});
+	  return Object.assign({}, functionComponents, classComponents);
+	}
 	/**
 	 * Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
 	 * @param {Object} options 
@@ -20241,12 +20283,16 @@ var jsonx = (function (exports) {
 	      jsonx,
 	      debug
 	    }) : {};
+	    const insertedComputedComponents = jsonx.__dangerouslyInsertFunctionComponents || jsonx.__dangerouslyInsertClassComponents ? getReactComponents.call(this, {
+	      jsonx,
+	      debug
+	    }) : {};
 	    const evalAllProps = jsonx.__dangerouslyEvalAllProps ? getEvalProps.call(this, {
 	      jsonx
 	    }) : {};
 	    const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {} : {
 	      key: renderIndex
-	    }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
+	    }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents, insertedComputedComponents);
 	    const computedProps = Object.assign({}, allProps, jsonx.__functionProps ? getFunctionProps.call(this, {
 	      allProps,
 	      jsonx
@@ -20277,6 +20323,7 @@ var jsonx = (function (exports) {
 		boundArgsReducer: boundArgsReducer,
 		getEvalProps: getEvalProps,
 		getComponentProps: getComponentProps,
+		getReactComponents: getReactComponents,
 		getReactComponentProps: getReactComponentProps,
 		getFunctionFromProps: getFunctionFromProps,
 		getFunctionProps: getFunctionProps,

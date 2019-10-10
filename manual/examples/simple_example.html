@@ -129,6 +129,12 @@
             children:'some text here'
           },
           {
+            component:'div',
+            __dangerouslyInsertFunctionComponents:{
+              _children:{reactComponent:{ component:'p',children:'from func component'}}
+            }
+          },
+          {
             component:'myCustomComponent',
             props:{key:2,},
 

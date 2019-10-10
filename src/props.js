@@ -1,7 +1,7 @@
 import React from 'react';
 import { getRenderedJSON, } from './main';
 import * as utilities from './utils';
-import { getComponentFromMap, } from './components';
+import { getComponentFromMap, getReactFunctionComponent, getReactContext, } from './components';
 // if (typeof window === 'undefined') {
 //   var window = window || {};
 // }
@@ -261,6 +261,41 @@ export function getComponentProps(options = {}) {
     cprops[ cpropName ] = componentVal;
     return cprops;
   }, {});
+}
+
+export function getReactComponents(options) {
+  const { jsonx, resources, } = options;
+  const functionComponents = (!jsonx.__dangerouslyInsertFunctionComponents)
+    ? {}
+    : Object.keys(jsonx.__dangerouslyInsertFunctionComponents).reduce((cprops, cpropName) => {
+      let componentVal;
+      try {
+        const args = jsonx.__dangerouslyInsertFunctionComponents[ cpropName ];
+        args.options = Object.assign({}, args.options, { resources });
+        // eslint-disable-next-line
+        componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+      } catch (e) {
+        if (this.debug || jsonx.debug) componentVal = e;
+      }
+      cprops[ cpropName ] = cpropName === '_children' ? [ componentVal ] : componentVal;
+      return cprops;
+    }, {});
+  const classComponents = (!jsonx.__dangerouslyInsertClassComponents)
+    ? {}
+    : Object.keys(jsonx.__dangerouslyInsertClassComponents).reduce((cprops, cpropName) => {
+      let componentVal;
+      try {
+        const args = jsonx.__dangerouslyInsertClassComponents[ cpropName ];
+        args.options = Object.assign({}, args.options, { resources });
+        // eslint-disable-next-line
+        componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.options);
+      } catch (e) {
+        if (this.debug || jsonx.debug) componentVal = e;
+      }
+      cprops[ cpropName ] = cpropName === '_children' ? [ componentVal ] : componentVal;
+      return cprops;
+    }, {});
+  return Object.assign({}, functionComponents, classComponents);
 }
 
 /**
@@ -536,11 +571,14 @@ export function getComputedProps(options = {}) {
     const insertedReactComponents = (jsonx.__dangerouslyInsertReactComponents || jsonx.__dangerouslyInsertJSONXComponents)
       ? getReactComponentProps.call(this, { jsonx, debug, })
       : {};
+    const insertedComputedComponents = (jsonx.__dangerouslyInsertFunctionComponents  || jsonx.__dangerouslyInsertClassComponents)
+      ? getReactComponents.call(this, { jsonx, debug, })
+      : {};
     
     const evalAllProps = (jsonx.__dangerouslyEvalAllProps)
       ? getEvalProps.call(this, { jsonx, })
       : {};
-    const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {}: { key: renderIndex, }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents);
+    const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {}: { key: renderIndex, }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents, insertedComputedComponents);
     const computedProps = Object.assign({}, allProps,
       jsonx.__functionProps ? getFunctionProps.call(this, { allProps, jsonx, }) : {},
       jsonx.__windowComponents ? getWindowComponents.call(this, { allProps, jsonx, }) : {},

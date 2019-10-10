@@ -236,8 +236,11 @@ jsonx = {
   __dangerouslyBindEvalProps:Object, // An object of evaluated JavaScript functions that are bound to this, used as inline functions onto jsonx.props
   //computed properties
   __functionProps:Object, // An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto jsonx.props
+  __dangerouslyInsertJSONXComponents:Object, // An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
   __dangerouslyInsertComponents:Object, // An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
   __dangerouslyInsertReactComponents:Object, // An object that returns the react element from either ReactDOM, reactComponents or componentLibraries.
+  __dangerouslyInsertFunctionComponents:Object, // An object that returns the react function component.
+  __dangerouslyInsertClassComponents:Object, // An object that returns the react class component.
   __spreadComponent:Object, // A JSONX element that is mapped on any array prop called  __spread
   __windowComponents:Object, // An object of components merged onto jsonx.props from window.__jsonx_custom_elements
   __windowComponentProps:Object,
