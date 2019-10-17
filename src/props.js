@@ -141,10 +141,10 @@ export function getChildrenComponents(options = {}) {
 export function boundArgsReducer(jsonx = {}) {
   return (args, arg) => {
     let val;
-    if (this && this.state && typeof this.state[ arg ] !== undefined) val = (this.state[ arg ]);
-    else if (this && this.props && typeof this.props[ arg ] !== undefined) val = (this.props[ arg ]);
-    else if (jsonx.props && typeof jsonx.props[ arg ] !== undefined) val = (jsonx.props[ arg ]);
-    if (typeof val !== undefined) args.push(val);
+    if (this && this.state && typeof this.state[ arg ] !== 'undefined') val = (this.state[ arg ]);
+    else if (this && this.props && typeof this.props[ arg ] !== 'undefined') val = (this.props[ arg ]);
+    else if (jsonx.props && typeof jsonx.props[ arg ] !== 'undefined') val = (jsonx.props[ arg ]);
+    if (typeof val !== 'undefined') args.push(val);
     return args.filter(a=>typeof a!=='undefined');
   };
 }
