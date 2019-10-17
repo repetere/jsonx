@@ -1024,9 +1024,7 @@ function DynamicComponent(props = {}) {
   });
   const transformer = useMemo(() => getFunctionFromEval(transformFunction), [transformFunction]);
   const timeoutFunction = useMemo(() => getFunctionFromEval(cacheTimeoutFunction), [cacheTimeoutFunction]);
-  const renderJSONX = useMemo(() => getReactElementFromJSONX.bind({
-    context
-  }), [context]);
+  const renderJSONX = useMemo(() => getReactElementFromJSONX.bind(context), [context]);
   const loadingComponent = useMemo(() => renderJSONX(loadingJSONX), [loadingJSONX]);
   const loadingError = useMemo(() => renderJSONX(loadingErrorJSONX, {
     error: state.error

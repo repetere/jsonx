@@ -19501,9 +19501,7 @@ var jsonx = (function (exports) {
 	  });
 	  const transformer = react_14(() => getFunctionFromEval(transformFunction), [transformFunction]);
 	  const timeoutFunction = react_14(() => getFunctionFromEval(cacheTimeoutFunction), [cacheTimeoutFunction]);
-	  const renderJSONX = react_14(() => getReactElementFromJSONX.bind({
-	    context
-	  }), [context]);
+	  const renderJSONX = react_14(() => getReactElementFromJSONX.bind(context), [context]);
 	  const loadingComponent = react_14(() => renderJSONX(loadingJSONX), [loadingJSONX]);
 	  const loadingError = react_14(() => renderJSONX(loadingErrorJSONX, {
 	    error: state.error

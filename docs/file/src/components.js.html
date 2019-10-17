@@ -325,7 +325,7 @@ export function DynamicComponent(props={}) {
   const [ state, setState ] = useState({ hasLoaded: false, hasError: false, resources: {}, error:undefined, });
   const transformer = useMemo(()=&gt;getFunctionFromEval(transformFunction), [ transformFunction ]);
   const timeoutFunction = useMemo(()=&gt;getFunctionFromEval(cacheTimeoutFunction), [ cacheTimeoutFunction ]);
-  const renderJSONX = useMemo(()=&gt;getReactElementFromJSONX.bind({context}), [ context ]);
+  const renderJSONX = useMemo(()=&gt;getReactElementFromJSONX.bind(context), [ context ]);
   const loadingComponent = useMemo(()=&gt;renderJSONX(loadingJSONX), [ loadingJSONX ]);
   const loadingError = useMemo(()=&gt;renderJSONX(loadingErrorJSONX,{error:state.error}), [ loadingErrorJSONX, state.error ]);
 
