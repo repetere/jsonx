@@ -223,7 +223,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
 
 export function DynamicComponent(props={}) {
   const { useCache = true, cacheTimeout = 60 * 60 * 5, loadingJSONX= { component:'div', children:'...Loading', },
-  loadingErrorJSONX= { component:'div', children:[{component:'span',children:'Error: '},{ component:'span',  resourceprops:{_children:['error','message']}, }], }, cacheTimeoutFunction = () => { }, jsonx, transformFunction = data => data, fetchURL, fetchOptions, } = props;
+  loadingErrorJSONX= { component:'div', children:[{component:'span',children:'Error: '},{ component:'span',  resourceprops:{_children:['error','message']}, }], }, cacheTimeoutFunction = () => { }, jsonx, transformFunction = data => data, fetchURL, fetchOptions, fetchFunction, } = props;
   const context = this || {};
   const [ state, setState ] = useState({ hasLoaded: false, hasError: false, resources: {}, error:undefined, });
   const transformer = useMemo(()=>getFunctionFromEval(transformFunction), [ transformFunction ]);
@@ -239,7 +239,10 @@ export function DynamicComponent(props={}) {
         if (useCache && cache.get(fetchURL)) {
           transformedData = cache.get(fetchURL);
         } else {
-          const fetchedData = await fetchJSON(fetchURL, fetchOptions);
+          let fetchedData;
+          if (fetchFunction) {
+            fetchedData = await fetchJSON(fetchURL, fetchOptions);
+          } else fetchedData = await fetchFunction(fetchURL, fetchOptions);
           transformedData = await transformer(fetchedData);
           if (useCache) cache.put(fetchURL, transformedData, cacheTimeout,timeoutFunction);
         }
@@ -249,9 +252,10 @@ export function DynamicComponent(props={}) {
         setState({ hasError: true, error:e, });
       }
     }
-    getData();
+    if(fetchURL) getData();
   }, [ fetchURL, fetchOptions ]);
-  if (state.hasError) {
+  if (!fetchURL) return null;
+  else if (state.hasError) {
     return loadingError;
   } else if (state.hasLoaded === false) {
     return loadingComponent;

@@ -1019,7 +1019,8 @@ function DynamicComponent(props = {}) {
     jsonx,
     transformFunction = data => data,
     fetchURL,
-    fetchOptions
+    fetchOptions,
+    fetchFunction
   } = props;
   const context = this || {};
   const [state, setState] = React.useState({
@@ -1045,7 +1046,12 @@ function DynamicComponent(props = {}) {
         if (useCache && cache.get(fetchURL)) {
           transformedData = cache.get(fetchURL);
         } else {
-          const fetchedData = await fetchJSON(fetchURL, fetchOptions);
+          let fetchedData;
+
+          if (fetchFunction) {
+            fetchedData = await fetchJSON(fetchURL, fetchOptions);
+          } else fetchedData = await fetchFunction(fetchURL, fetchOptions);
+
           transformedData = await transformer(fetchedData);
           if (useCache) cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
         }
@@ -1064,10 +1070,9 @@ function DynamicComponent(props = {}) {
       }
     }
 
-    getData();
+    if (fetchURL) getData();
   }, [fetchURL, fetchOptions]);
-
-  if (state.hasError) {
+  if (!fetchURL) return null;else if (state.hasError) {
     return loadingError;
   } else if (state.hasLoaded === false) {
     return loadingComponent;

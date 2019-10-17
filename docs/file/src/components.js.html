@@ -320,7 +320,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
 
 export function DynamicComponent(props={}) {
   const { useCache = true, cacheTimeout = 60 * 60 * 5, loadingJSONX= { component:&apos;div&apos;, children:&apos;...Loading&apos;, },
-  loadingErrorJSONX= { component:&apos;div&apos;, children:[{component:&apos;span&apos;,children:&apos;Error: &apos;},{ component:&apos;span&apos;,  resourceprops:{_children:[&apos;error&apos;,&apos;message&apos;]}, }], }, cacheTimeoutFunction = () =&gt; { }, jsonx, transformFunction = data =&gt; data, fetchURL, fetchOptions, } = props;
+  loadingErrorJSONX= { component:&apos;div&apos;, children:[{component:&apos;span&apos;,children:&apos;Error: &apos;},{ component:&apos;span&apos;,  resourceprops:{_children:[&apos;error&apos;,&apos;message&apos;]}, }], }, cacheTimeoutFunction = () =&gt; { }, jsonx, transformFunction = data =&gt; data, fetchURL, fetchOptions, fetchFunction, } = props;
   const context = this || {};
   const [ state, setState ] = useState({ hasLoaded: false, hasError: false, resources: {}, error:undefined, });
   const transformer = useMemo(()=&gt;getFunctionFromEval(transformFunction), [ transformFunction ]);
@@ -336,7 +336,10 @@ export function DynamicComponent(props={}) {
         if (useCache &amp;&amp; cache.get(fetchURL)) {
           transformedData = cache.get(fetchURL);
         } else {
-          const fetchedData = await fetchJSON(fetchURL, fetchOptions);
+          let fetchedData;
+          if (fetchFunction) {
+            fetchedData = await fetchJSON(fetchURL, fetchOptions);
+          } else fetchedData = await fetchFunction(fetchURL, fetchOptions);
           transformedData = await transformer(fetchedData);
           if (useCache) cache.put(fetchURL, transformedData, cacheTimeout,timeoutFunction);
         }
@@ -346,9 +349,10 @@ export function DynamicComponent(props={}) {
         setState({ hasError: true, error:e, });
       }
     }
-    getData();
+    if(fetchURL) getData();
   }, [ fetchURL, fetchOptions ]);
-  if (state.hasError) {
+  if (!fetchURL) return null;
+  else if (state.hasError) {
     return loadingError;
   } else if (state.hasLoaded === false) {
     return loadingComponent;

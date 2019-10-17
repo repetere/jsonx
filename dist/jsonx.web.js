@@ -19489,7 +19489,8 @@ var jsonx = (function (exports) {
 	    jsonx,
 	    transformFunction = data => data,
 	    fetchURL,
-	    fetchOptions
+	    fetchOptions,
+	    fetchFunction
 	  } = props;
 	  const context = this || {};
 	  const [state, setState] = react_9({
@@ -19515,7 +19516,12 @@ var jsonx = (function (exports) {
 	        if (useCache && cache.get(fetchURL)) {
 	          transformedData = cache.get(fetchURL);
 	        } else {
-	          const fetchedData = await fetchJSON(fetchURL, fetchOptions);
+	          let fetchedData;
+
+	          if (fetchFunction) {
+	            fetchedData = await fetchJSON(fetchURL, fetchOptions);
+	          } else fetchedData = await fetchFunction(fetchURL, fetchOptions);
+
 	          transformedData = await transformer(fetchedData);
 	          if (useCache) cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
 	        }
@@ -19534,10 +19540,9 @@ var jsonx = (function (exports) {
 	      }
 	    }
 
-	    getData();
+	    if (fetchURL) getData();
 	  }, [fetchURL, fetchOptions]);
-
-	  if (state.hasError) {
+	  if (!fetchURL) return null;else if (state.hasError) {
 	    return loadingError;
 	  } else if (state.hasLoaded === false) {
 	    return loadingComponent;
