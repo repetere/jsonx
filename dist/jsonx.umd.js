@@ -19532,7 +19532,9 @@
 	        setState(prevState => Object.assign({}, prevState, {
 	          hasLoaded: true,
 	          hasError: false,
-	          resources: transformedData
+	          resources: {
+	            DynamicComponentData: transformedData
+	          }
 	        }));
 	      } catch (e) {
 	        if (context.debug) console.warn(e);
