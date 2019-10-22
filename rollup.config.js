@@ -9,11 +9,12 @@ import replace from 'rollup-plugin-replace';
 import pkg from './package.json';
 import { terser, } from 'rollup-plugin-terser';
 // import terser from 'rollup-plugin-terser-js';
+import typescript from 'rollup-plugin-typescript';
 
 export default [
   // browser-friendly UMD build
   {
-    input: 'src/main.js',
+    input: 'src/main.ts',
     // external: [ 'react' ], // <-- suppresses the warning
     output:[{
       exports: 'named',
@@ -28,6 +29,7 @@ export default [
     },
     ],
     plugins: [
+      typescript(),
       replace({
         'process.env.NODE_ENV': JSON.stringify( 'development' ),
         // 'process.env.NODE_ENV': JSON.stringify( 'production' ),
@@ -82,7 +84,7 @@ export default [
   // an array for the `output` option, where we can specify 
   // `file` and `format` for each target)
   {
-    input: 'src/main.js',
+    input: 'src/main.ts',
     external: [
       'path',
       'react',
@@ -108,6 +110,7 @@ export default [
       },
     ],
     plugins: [
+      typescript(),
       resolve({
         preferBuiltins: true,
       }),
@@ -142,7 +145,7 @@ export default [
   // an array for the `output` option, where we can specify 
   // `file` and `format` for each target)
   {
-    input: 'src/main.js',
+    input: 'src/main.ts',
     external: [
       'path',
       'react',
@@ -168,6 +171,8 @@ export default [
       },
     ],
     plugins: [
+      typescript(),
+
       // aliasModuleSpecifiers({
       //   'react-dom/': 'react-dom/server/',
       // }),
@@ -209,7 +214,7 @@ export default [
   },
   // BROWSER MIN
   {
-    input: 'src/main.js',
+    input: 'src/main.ts',
     // external: [ 'react' ], // <-- suppresses the warning
     output:[{
       exports: 'named',
@@ -231,6 +236,8 @@ export default [
     },
     ],
     plugins: [
+      typescript(),
+
       replace({
         // 'process.env.NODE_ENV': JSON.stringify( 'development' ),
         'process.env.NODE_ENV': JSON.stringify( 'production' ),
