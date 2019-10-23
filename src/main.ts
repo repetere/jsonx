@@ -1,18 +1,26 @@
 // import React, { createElement, } from 'react';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
-import useGlobalHook from 'use-global-hook';
+import React from "react";
+import ReactDOM from "react-dom";
+import ReactDOMServer from "react-dom/server";
+import useGlobalHook from "use-global-hook";
+import * as jsonx from "./types/jsonx/index";
 
-import * as jsonxComponents from './components';
-import * as jsonxProps from './props';
-import * as jsonxChildren from './children';
-import * as jsonxUtils from './utils';
+import * as jsonxComponents from "./components";
+import * as jsonxProps from "./props";
+import * as jsonxChildren from "./children";
+import * as jsonxUtils from "./utils";
+import { ReactElementLike } from "prop-types";
+import { JSONReactElement, Context } from "./types/jsonx/index";
 const createElement = React.createElement;
-const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, } = jsonxComponents;
-const { getComputedProps, } = jsonxProps;
-const { getJSONXChildren, } = jsonxChildren;
-const { displayComponent, } = jsonxUtils;
+const {
+  componentMap,
+  getComponentFromMap,
+  getBoundedComponents,
+  DynamicComponent,
+} = jsonxComponents;
+const { getComputedProps } = jsonxProps;
+const { getJSONXChildren } = jsonxChildren;
+const { displayComponent } = jsonxUtils;
 export let renderIndex = 0;
 
 /**
@@ -26,13 +34,22 @@ export let renderIndex = 0;
  * @param {string} config.querySelector - selector for document.querySelector
  * @property {object} this - options for getReactElementFromJSONX
  */
-export function jsonxRender(config = {}) {
-  const { jsonx, resources, querySelector, options, DOM, portal, } = config;
+export function jsonxRender(
+  this: jsonx.Context,
+  config: jsonx.RenderConfig = { jsonx: { component: "" }, querySelector: "" }
+): void {
+  const { jsonx, resources, querySelector, DOM, portal } = config;
   const Render = portal ? ReactDOM.createPortal : ReactDOM.render;
-  Render(
-    getReactElementFromJSONX.call(this || {}, jsonx, resources, options),
-    DOM || document.querySelector(querySelector)
+  const RenderDOM: HTMLElement | null =
+    DOM || document.querySelector(querySelector);
+  const JSONXReactElement: React.ReactElement | null = getReactElementFromJSONX.call(
+    this || {},
+    jsonx,
+    resources
   );
+  if (!JSONXReactElement) throw ReferenceError("Invalid React Element");
+  else if (!RenderDOM) throw ReferenceError("Invalid Render DOM Element");
+  Render(JSONXReactElement, RenderDOM);
 }
 
 /**
@@ -46,12 +63,16 @@ export function jsonxRender(config = {}) {
  * @property {object} this - options for getReactElementFromJSONX
  * @returns {string} React genereated html via JSONX JSON
  */
-export function outputHTML(config = {}) {
-  const { jsonx, resources, } = config;
-  
-  return (this && this.useJSON)
-    ? ReactDOMServer.renderToString(getReactElementFromJSON.call(this || {}, jsonx, resources))
-    : ReactDOMServer.renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
+export function outputHTML(this:jsonx.OutputHTMLContext, config:jsonx.OutputHTMLConfig = { jsonx: { component: "" } }): string {
+  const { jsonx, resources, type="Fragment", props, children } = config;
+
+  return this && this.useJSON
+    ? ReactDOMServer.renderToString(
+        getReactElementFromJSON.call(this || {}, {type, props, children})
+      )
+    : ReactDOMServer.renderToString(
+        getReactElementFromJSONX.call(this || {}, jsonx, resources)as ReactElementLike
+      );
 }
 
 /**
@@ -70,37 +91,85 @@ export function outputHTML(config = {}) {
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
-export function getReactElementFromJSONX(jsonx = {}, resources = {}) {
+export function getReactElementFromJSONX(this:jsonx.Context,
+  jsonx:jsonx.jsonx,
+  resources = {}
+): ReactElementLike |JSONReactElement | null {
   // eslint-disable-next-line
-  const { componentLibraries = {}, debug = false, returnJSON=false, logError = console.error, boundedComponents = [], disableRenderIndexKey = true, } = this || {};
+  const {
+    componentLibraries = {},
+    debug = false,
+    returnJSON = false,
+    logError = console.error,
+    boundedComponents = [],
+    disableRenderIndexKey = true,
+  } = this || {};
   // const componentLibraries = this.componentLibraries;
   if (!jsonx) return null;
   if (jsonx.type) jsonx.component = jsonx.type;
-  if (jsonxUtils.validSimpleJSONXSyntax(jsonx)) jsonx = jsonxUtils.simpleJSONXSyntax(jsonx);
-  if (!jsonx.component) return createElement('span', {}, debug ? 'Error: Missing Component Object' : '');
+  if (jsonxUtils.validSimpleJSONXSyntax(jsonx))
+    jsonx = jsonxUtils.simpleJSONXSyntax(jsonx);
+  if (!jsonx.component)
+    return createElement(
+      "span",
+      {},
+      debug ? "Error: Missing Component Object" : ""
+    );
   try {
-    const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this), }, componentMap, this.reactComponents);
+    const components = Object.assign(
+      { DynamicComponent: DynamicComponent.bind(this) },
+      componentMap,
+      this.reactComponents
+    );
 
-    const reactComponents = (boundedComponents.length)
-      ? getBoundedComponents.call(this, { boundedComponents, reactComponents: components, })
+    const reactComponents = boundedComponents.length
+      ? getBoundedComponents.call(this, {
+          boundedComponents,
+          reactComponents: components,
+        })
       : components;
     renderIndex++;
-    const element = getComponentFromMap({ jsonx, reactComponents, componentLibraries, debug, logError, });
-    const props = getComputedProps.call(this, { jsonx, resources, renderIndex, componentLibraries, debug, logError, disableRenderIndexKey, });
-    const displayElement = (jsonx.comparisonprops)
-      ? displayComponent.call(this, { jsonx, props, renderIndex, componentLibraries, debug, })
+    const element = getComponentFromMap({
+      jsonx,
+      reactComponents,
+      componentLibraries,
+      debug,
+      logError,
+    });
+    const props = getComputedProps.call(this, {
+      jsonx,
+      resources,
+      renderIndex,
+      componentLibraries,
+      debug,
+      logError,
+      disableRenderIndexKey,
+    });
+    const displayElement = jsonx.comparisonprops
+      ? displayComponent.call(this, {
+          jsonx,
+          props,
+          renderIndex,
+          componentLibraries,
+          debug,
+        })
       : true;
     if (displayElement) {
-      const children = getJSONXChildren.call(this, { jsonx, props, resources, renderIndex, });
-      if (returnJSON) return { type:element, props, children, };
+      const children = getJSONXChildren.call(this, {
+        jsonx,
+        props,
+        resources,
+        renderIndex,
+      });
+      if (returnJSON) return { type: element, props, children };
       return createElement(element, props, children);
     } else {
       return null;
     }
   } catch (e) {
     if (debug) {
-      logError({ jsonx, resources, }, 'this', this);
-      logError(e, (e.stack) ? e.stack : 'no stack');
+      logError({ jsonx, resources }, "this", this);
+      logError(e, e.stack ? e.stack : "no stack");
     }
     throw e;
   }
@@ -109,35 +178,37 @@ export function getReactElementFromJSONX(jsonx = {}, resources = {}) {
 export const getRenderedJSON = getReactElementFromJSONX;
 export const getReactElement = getReactElementFromJSONX;
 
-/** converts a json object {type,props,children} into a react element 
+/** converts a json object {type,props,children} into a react element
  * @example
  * jsonx.getReactElementFromJSON({type:'div',props:{title:'some title attribute'},children:'inner html text'})
  * @param {Object|String} options.type - 'div' or react component
  * @param {Object} options.props - props for react element
  * @param {String|[Object]} options.children - children elements
  * @returns {function} React element via React.createElement
-*/
-export function getReactElementFromJSON({ type, props, children, }) {
-  return createElement(type, props, Array.isArray(children)
-    ? children.map(getReactElementFromJSON)
-    : children);
+ */
+export function getReactElementFromJSON({ type, props, children }:JSONReactElement):ReactElementLike {
+  return createElement(
+    type,
+    props,
+    Array.isArray(children) ? children.map(getReactElementFromJSON) : children
+  );
 }
 
-/** converts a jsonx json object into a react function component 
+/** converts a jsonx json object into a react function component
  * @example
  * jsonx.compile({jsonx:{component:'div',props:{title:'some title attribute'},children:'inner html text'}}) //=>React Function Component
  * @param {Object} jsonx - valid JSONX JSON
  * @param {Object} resources - props for react element
  * @returns {function} React element via React.createElement
-*/
-export function compile(jsonx, resources) {
-  const context = Object.assign({}, this, { returnJSON: true, });
-  const json = getReactElementFromJSONX.call(context, jsonx, resources);
-  const func = function compiledJSONX(props) {
+ */
+export function compile(this:Context,jsonx: jsonx.jsonx, resources = {}) {
+  const context = Object.assign({}, this, { returnJSON: true });
+  const json = getReactElementFromJSONX.call(context, jsonx, resources) as jsonx.JSONReactElement;
+  const func = function compiledJSONX(props:any) {
     json.props = Object.assign({}, json.props, props);
     return getReactElementFromJSON(json);
   };
-  Object.defineProperty(func, 'name', { value: this.name, });
+  Object.defineProperty(func, "name", { value: this.name });
   return func;
 }
 
@@ -148,9 +219,9 @@ export function compile(jsonx, resources) {
  * @param {Object} json - {type,props,children}
  * @returns {String} jsx string
  */
-export function outputJSX(jsonx, resources) {
-  const context = Object.assign({}, this, { returnJSON: true, });
-  const json = getReactElementFromJSONX.call(context, jsonx, resources);
+export function outputJSX(this:Context,jsonx:jsonx.jsonx, resources={}) {
+  const context = Object.assign({}, this, { returnJSON: true });
+  const json = getReactElementFromJSONX.call(context, jsonx, resources) as jsonx.JSONReactElement;
   return jsonToJSX(json);
 }
 
@@ -165,9 +236,9 @@ export function outputJSX(jsonx, resources) {
  * @param {object} resources - any additional resource used for asynchronous properties
  * @returns {Object} json - {type,props,children}
  */
-export function outputJSON(jsonx, resources) {
-  const context = Object.assign({}, this, { returnJSON: true, });
-  return getReactElementFromJSONX.call(context, jsonx, resources);
+export function outputJSON(jsonx:jsonx.jsonx, resources={}):JSONReactElement {
+  const context = Object.assign({}, this, { returnJSON: true });
+  return getReactElementFromJSONX.call(context, jsonx, resources) as JSONReactElement;
 }
 export const jsonxHTMLString = outputHTML;
 
@@ -178,19 +249,21 @@ export const jsonxHTMLString = outputHTML;
  * @param {Object} json - {type,props,children}
  * @returns {String} jsx string
  */
-export function jsonToJSX(json) {
+export function jsonToJSX(json:JSONReactElement):string {
   const propsString = json.props
     ? Object.keys(json.props)
-      .filter(prop => prop.includes('__eval_') === false)
-      .reduce((propString, prop) => {
-        propString += ` ${prop.toString()}=${
-          typeof json.props[ prop ] === 'string'
-            ? `"${json.props[ prop ].toString()}"`
-            : `{${(json.props[ `__eval_${prop}` ]||json.props[ prop ]).toString()}}`
-        }`;
-        return propString;
-      }, '')
-    : '';
+        .filter(prop => prop.includes("__eval_") === false)
+        .reduce((propString, prop) => {
+          propString += ` ${prop.toString()}=${
+            typeof json.props[prop] === "string"
+              ? `"${json.props[prop].toString()}"`
+              : `{${(
+                  json.props[`__eval_${prop}`] || json.props[prop]
+                ).toString()}}`
+          }`;
+          return propString;
+        }, "")
+    : "";
   return Array.isArray(json.children)
     ? `<${json.type} ${propsString}>
   ${json.children.map(jsonToJSX)}
@@ -225,6 +298,6 @@ export const _jsonxChildren = jsonxChildren;
 export const _jsonxComponents = jsonxComponents;
 export const _jsonxProps = jsonxProps;
 export const _jsonxUtils = jsonxUtils;
-export { __express, __express as renderFile, } from './express';
+export { __express, __express as renderFile } from "./express";
 
 export default getReactElementFromJSONX;

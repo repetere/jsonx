@@ -1,6 +1,6 @@
 {
   "extends": "eslint:recommended",
-  "plugins": [],
+  "plugins": ["prettier"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2017,
@@ -9,6 +9,7 @@
     }
   },
   "rules": {
+    "prettier/prettier": "warn",
     "jsx-quotes": ["error", "prefer-double"],
     "indent": ["error", 2],
     "quotes": ["error", "single"],

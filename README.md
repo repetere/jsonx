@@ -744,6 +744,7 @@ Fork, write tests and create a pull request!
 
 </div>
 
+<!-- jsdoc src/components.js -c jsdoc.json  -->
 
 License
 

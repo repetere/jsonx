@@ -11,19 +11,19 @@ const cache = new memoryCache.Cache();
 //   var window = window || global.window || {};
 // }
 /**
- * @memberOf components
+ 
  */
 export let advancedBinding = getAdvancedBinding();
 // require;
 /**
  * object of all react components available for JSONX
- * @memberOf components
+ 
  */
 export let componentMap = Object.assign({ Fragment, Suspense, }, ReactDOMElements, (typeof window ==='object') ? window.__jsonx_custom_elements : {});
 
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list 
- * @memberOf components
+ 
  * @param {Object} options - options for getBoundedComponents 
  * @param {Object} options.reactComponents - all react components available for JSONX
  * @param {string[]} boundedComponents - list of components to bind JSONX this context (usually helpful for navigation and redux-router)
@@ -42,7 +42,7 @@ export function getBoundedComponents(options = {}) {
 
 /**
  * returns a react component from a component library
- * @memberOf components
+ 
  * @param {Object} options - options for getComponentFromLibrary
  * @param {Object} [options.componentLibraries={}] - react component library like bootstrap
  * @param {Object} [options.jsonx={}] - any valid JSONX JSON
@@ -69,7 +69,7 @@ export function getComponentFromLibrary(options = {}) {
 
 /**
  * returns a react element from jsonx.component
- * @memberOf components
+ 
  * @example
  * // returns react elements
  * getComponentFromMap({jsonx:{component:'div'}})=>div
@@ -107,7 +107,7 @@ export function getComponentFromMap(options = {}) {
 
 /**
  * Returns a new function from an options object
- * @memberOf components
+ 
  * @param {Object} options 
  * @param {String} [options.body=''] - Function string body
  * @param {String[]} [options.args=[]] - Function arguments
@@ -127,7 +127,7 @@ export function getFunctionFromEval(options = {}) {
 
 /**
  * Returns a new React Component
- * @memberOf components
+ 
  * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class 
  * @param {Object} [options.resources={}] - asyncprops for component
  * @param {String} [options.name ] - Component name
@@ -264,7 +264,7 @@ export function DynamicComponent(props={}) {
 
 /**
  * Returns new React Function Component
- * @memberOf components
+ 
  * @todo set 'functionprops' to set arguments for function
  * @param {*} reactComponent - Valid JSONX to render
  * @param {String} functionBody - String of function component body
@@ -342,7 +342,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
   return (options.bind) ? functionComponent.call(this, ...functionArgs) : functionComponent(...functionArgs);
 }
 /**
- * @memberOf components
+ *
  */
 export function getReactContext(options = {}) {
   return createContext(options.value);

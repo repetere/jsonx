@@ -20,6 +20,6 @@
     "jsx": "react"
   },
   "include": [
-    "src"
+    "src", "types/jsonx/utils.d.ts", "types/jsonx/props.d.ts", "types/jsonx/main.d.ts", "types/jsonx/express.d.ts", "types/jsonx/components.d.ts", "types/jsonx/children.d.ts"
   ]
 }
