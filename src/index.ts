@@ -42,7 +42,7 @@ export function jsonxRender(
   const Render = portal ? ReactDOM.createPortal : ReactDOM.render;
   const RenderDOM: HTMLElement | null =
     DOM || document.querySelector(querySelector);
-  const JSONXReactElement: React.ReactElement | null = getReactElementFromJSONX.call(
+  const JSONXReactElement: any = getReactElementFromJSONX.call(
     this || {},
     jsonx,
     resources

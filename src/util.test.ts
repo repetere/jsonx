@@ -1,5 +1,5 @@
-import * as jsonx from '../../src/main';
-import * as _jsonxUtils from '../../src/utils';
+import * as jsonx from '.';
+import * as _jsonxUtils from './utils';
 
 import mochaJSDOM from 'jsdom-global';
 import chai from 'chai';

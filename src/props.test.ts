@@ -1,5 +1,5 @@
-import * as _jsonxProps from '../../src/props';
-import { getComputedProps, } from '../../src/props';
+import * as _jsonxProps from './props';
+import { getComputedProps, } from './props';
 import mochaJSDOM from 'jsdom-global';
 import chai from 'chai';
 import sinon from 'sinon';
@@ -9,7 +9,7 @@ import ReactDOMElements from 'react-dom-factories';
 import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
-import 'mocha-sinon';
+// import 'mocha-sinon';
 
 const sampleJSONX = {
   component: 'div',

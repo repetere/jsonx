@@ -1,5 +1,5 @@
 import React from 'react';
-import { getRenderedJSON, } from './main';
+import { getRenderedJSON, } from './index';
 import * as utilities from './utils';
 import { getComponentFromMap, getReactFunctionComponent, getReactContext, } from './components';
 // if (typeof window === 'undefined') {

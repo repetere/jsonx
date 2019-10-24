@@ -2,10 +2,12 @@ import React, { useState, useEffect, useContext, useReducer, useCallback, useMem
 import * as memoryCache from 'memory-cache';
 // import {cache} from 'memory-cache';
 // import cache from 'memory-cache';
+//@ts-ignore
 import { default as ReactDOMElements, } from 'react-dom-factories';
 import { getAdvancedBinding, fetchJSON, } from './utils';
+//@ts-ignore
 import createReactClass from 'create-react-class';
-import { getReactElementFromJSONX, } from './main';
+import { getReactElementFromJSONX, } from '.';
 const cache = new memoryCache.Cache();
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};

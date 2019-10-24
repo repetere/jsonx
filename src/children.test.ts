@@ -1,4 +1,4 @@
-import * as _jsonxChildren from '../../src/children';
+import * as _jsonxChildren from './children';
 import mochaJSDOM from 'jsdom-global';
 import chai from 'chai';
 import sinon from 'sinon';
@@ -9,7 +9,7 @@ import ReactDOMElements from 'react-dom-factories';
 import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
-import 'mocha-sinon';
+// import 'mocha-sinon';
 
 const sampleJSONX = {
   component: 'div',

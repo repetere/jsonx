@@ -1,4 +1,4 @@
-import * as jsonx from '../../src/main';
+import * as jsonx from './index';
 import mochaJSDOM from 'jsdom-global';
 import path from 'path';
 import chai from 'chai';
@@ -10,7 +10,7 @@ import ReactDOMElements from 'react-dom-factories';
 import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
-import 'mocha-sinon';
+// import 'mocha-sinon';
 
 import useGlobalHook from 'use-global-hook';
 

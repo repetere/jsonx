@@ -1,4 +1,4 @@
-import { outputHTML, } from './main';
+import { outputHTML, } from './';
 import path from 'path';
 /**
  * Use JSONX for express view rendering
@@ -8,7 +8,7 @@ import path from 'path';
  * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
  * @param {*} callback 
  */
-export function __express(filePath, options, callback) {
+export function __express(filePath:string, options:any, callback:any) {
   try {
     const jsonxModule = options.__jsonx;//|| require(filePath);
     const resources = Object.assign({}, options);

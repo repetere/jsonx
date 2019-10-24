@@ -1,4 +1,4 @@
-import { getReactElementFromJSONX, } from './main';
+import { getReactElementFromJSONX, } from './';
 /**
  * returns a valid jsonx.children property
  * @param {Object} options

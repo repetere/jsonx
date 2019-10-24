@@ -23,7 +23,8 @@
     "jsx": "react"
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "node_modules/use-global-hook"
   ],
   "exclude": [
     "**/*.test.ts",

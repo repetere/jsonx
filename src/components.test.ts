@@ -1,5 +1,5 @@
-import * as jsonx from '../../src/main';
-import * as _jsonxComponents from '../../src/components';
+import * as jsonx from './index';
+import * as _jsonxComponents from './components';
 import mochaJSDOM from 'jsdom-global';
 import chai from 'chai';
 import sinon from 'sinon';
@@ -10,7 +10,7 @@ import ReactDOMElements from 'react-dom-factories';
 import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
-import 'mocha-sinon';
+// import 'mocha-sinon';
 
 const sampleJSONX = {
   component: 'div',
@@ -246,7 +246,7 @@ describe('jsonx components', function () {
         WelcomeBindSpy,
       };
       delete require.cache[ require.resolve('../../dist/jsonx.cjs') ];
-      const window_test_jsonx = require('../../dist/jsonx.cjs');
+      const window_test_jsonx = require('../dist/jsonx.cjs');
 
       expect(window_test_jsonx._jsonxComponents.componentMap).to.haveOwnProperty('Welcome');
       expect(window_test_jsonx._jsonxComponents.componentMap).to.haveOwnProperty('WelcomeNonBind');
