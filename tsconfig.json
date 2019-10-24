@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "declaration": true,
+    "declarationDir": "./build",
+    "outDir": "./build",
+    "target": "esnext",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -15,11 +18,14 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
+    "isolatedModules": false,
+    "noEmit": false,
     "jsx": "react"
   },
   "include": [
-    "src", "types/jsonx/utils.d.ts", "types/jsonx/props.d.ts", "types/jsonx/main.d.ts", "types/jsonx/express.d.ts", "types/jsonx/components.d.ts", "types/jsonx/children.d.ts"
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "**/*.test.ts",
   ]
 }
