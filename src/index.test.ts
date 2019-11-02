@@ -1,5 +1,5 @@
 import * as jsonx from './index';
-import mochaJSDOM from 'jsdom-global';
+// import mochaJSDOM from 'jsdom-global';
 import path from 'path';
 import chai from 'chai';
 import sinon from 'sinon';
@@ -9,17 +9,18 @@ import ReactDOM from 'react-dom';
 import ReactDOMElements from 'react-dom-factories';
 import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
-chai.use(require('sinon-chai'));
+// chai.use(require('sinon-chai'));
 // import 'mocha-sinon';
 
-import useGlobalHook from 'use-global-hook';
+// import useGlobalHook from 'use-global-hook';
 
 
 const sampleJSONX = {
   component: 'div',
   props: {
     id: 'generatedJSONX',
-    className:'jsonx',
+    className: 'jsonx',
+    key:5
   },
   children: [
     {
@@ -29,6 +30,7 @@ const sampleJSONX = {
           color: 'red',
           fontWeight:'bold',
         },
+        key:3
       },
       children:'hello world',
     },
@@ -38,7 +40,8 @@ const simpleJSONX = {
   div: {
     props: {
       id: 'generatedJSONX',
-      className:'jsonx',
+      className: 'jsonx',
+      key:0,
     },
     children: [
       {
@@ -48,6 +51,7 @@ const simpleJSONX = {
               color: 'red',
               fontWeight:'bold',
             },
+            key:1,
           },
           children:'hello world',
         },
@@ -93,9 +97,11 @@ const complexDivJSON = jsonx.getReactElementFromJSONX.call({ returnJSON: true, e
 
 describe('jsonx', function () { 
   describe('helper functions', () => {
-    it('should return useGlobalHook', () => {
-      expect(jsonx.__getUseGlobalHook()).to.be.a('function');
-    });
+    // it('should return useGlobalHook', () => {
+    //   const ugh = jsonx.__getUseGlobalHook();
+    //   console.log({ ugh });
+    //   expect(jsonx.__getUseGlobalHook()).to.be.a('function');
+    // });
     it('should return React', () => {
       expect(jsonx.__getReact()).to.eql(React);
     });
@@ -211,7 +217,7 @@ describe('jsonx', function () {
     });
   });
   describe('__express', () => {
-    const sampleJSONXFilepath = path.resolve('./test/mock/sample.jsonx');
+    const sampleJSONXFilepath = path.resolve('./src/mock/sample.jsonx');
     const spantext = 'should render in express';
     it('should return an HTML string', (done) => {
       jsonx.__express(
@@ -219,7 +225,7 @@ describe('jsonx', function () {
         {
           spantext,
           __boundConfig: {
-            debug:true,
+            debug:false,
           },
           __DOCTYPE:'',
         },
@@ -243,9 +249,9 @@ describe('jsonx', function () {
     });
   });
   describe('jsonxRender', () => {
-    before(function () {
-      this.jsdom = mochaJSDOM();
-    });
+    // beforeAll(function () {
+    //   // this.jsdom = mochaJSDOM();
+    // });
     it('should render component inside of querySelector', function () {
       const containerDiv = document.createElement('div');
       containerDiv.setAttribute('id', 'reactContainer');
@@ -255,8 +261,8 @@ describe('jsonx', function () {
       expect(document.body.querySelector('p').innerHTML).to.eql('hello world');
       expect(document.body.querySelector('p').style.color).to.eql('red');
     });    
-    after(function () {
-      this.jsdom();
-    });
+    // afterAll(function () {
+    //   // this.jsdom();
+    // });
   });
 });

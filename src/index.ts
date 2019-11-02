@@ -2,8 +2,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactDOMServer from "react-dom/server";
-import useGlobalHook from "use-global-hook";
-import * as jsonx from "./types/jsonx/index";
+import * as defs from "./types/jsonx/index";
 
 import * as jsonxComponents from "./components";
 import * as jsonxProps from "./props";
@@ -35,8 +34,8 @@ export let renderIndex = 0;
  * @property {object} this - options for getReactElementFromJSONX
  */
 export function jsonxRender(
-  this: jsonx.Context,
-  config: jsonx.RenderConfig = { jsonx: { component: "" }, querySelector: "" }
+  this: defs.Context,
+  config: defs.RenderConfig = { jsonx: { component: "" }, querySelector: "" }
 ): void {
   const { jsonx, resources, querySelector, DOM, portal } = config;
   const Render = portal ? ReactDOM.createPortal : ReactDOM.render;
@@ -63,7 +62,7 @@ export function jsonxRender(
  * @property {object} this - options for getReactElementFromJSONX
  * @returns {string} React genereated html via JSONX JSON
  */
-export function outputHTML(this:jsonx.OutputHTMLContext, config:jsonx.OutputHTMLConfig = { jsonx: { component: "" } }): string {
+export function outputHTML(this:defs.OutputHTMLContext, config:defs.OutputHTMLConfig = { jsonx: { component: "" } }): string {
   const { jsonx, resources, type="Fragment", props, children } = config;
 
   return this && this.useJSON
@@ -91,8 +90,8 @@ export function outputHTML(this:jsonx.OutputHTMLContext, config:jsonx.OutputHTML
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
-export function getReactElementFromJSONX(this:jsonx.Context,
-  jsonx:jsonx.jsonx,
+export function getReactElementFromJSONX(this:defs.Context,
+  jsonx:defs.jsonx|defs.simpleJsonx,
   resources = {}
 ): ReactElementLike |JSONReactElement | null {
   // eslint-disable-next-line
@@ -201,9 +200,9 @@ export function getReactElementFromJSON({ type, props, children }:JSONReactEleme
  * @param {Object} resources - props for react element
  * @returns {function} React element via React.createElement
  */
-export function compile(this:Context,jsonx: jsonx.jsonx, resources = {}) {
+export function compile(this:Context,jsonx: defs.jsonx, resources = {}) {
   const context = Object.assign({}, this, { returnJSON: true });
-  const json = getReactElementFromJSONX.call(context, jsonx, resources) as jsonx.JSONReactElement;
+  const json = getReactElementFromJSONX.call(context, jsonx, resources) as defs.JSONReactElement;
   const func = function compiledJSONX(props:any) {
     json.props = Object.assign({}, json.props, props);
     return getReactElementFromJSON(json);
@@ -219,9 +218,9 @@ export function compile(this:Context,jsonx: jsonx.jsonx, resources = {}) {
  * @param {Object} json - {type,props,children}
  * @returns {String} jsx string
  */
-export function outputJSX(this:Context,jsonx:jsonx.jsonx, resources={}) {
+export function outputJSX(this:Context,jsonx:defs.jsonx, resources={}) {
   const context = Object.assign({}, this, { returnJSON: true });
-  const json = getReactElementFromJSONX.call(context, jsonx, resources) as jsonx.JSONReactElement;
+  const json = getReactElementFromJSONX.call(context, jsonx, resources) as defs.JSONReactElement;
   return jsonToJSX(json);
 }
 
@@ -236,7 +235,8 @@ export function outputJSX(this:Context,jsonx:jsonx.jsonx, resources={}) {
  * @param {object} resources - any additional resource used for asynchronous properties
  * @returns {Object} json - {type,props,children}
  */
-export function outputJSON(jsonx:jsonx.jsonx, resources={}):JSONReactElement {
+export function outputJSON(jsonx: defs.jsonx, resources = {}): JSONReactElement {
+      //@ts-ignore
   const context = Object.assign({}, this, { returnJSON: true });
   return getReactElementFromJSONX.call(context, jsonx, resources) as JSONReactElement;
 }
@@ -284,14 +284,6 @@ export function __getReact() {
  */
 export function __getReactDOM() {
   return ReactDOM;
-}
-
-/**
- * Exposes global hook used in JSONX
- * @returns {Object} useGlobalHook
- */
-export function __getUseGlobalHook() {
-  return useGlobalHook;
 }
 
 export const _jsonxChildren = jsonxChildren;

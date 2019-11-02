@@ -170,9 +170,11 @@ describe('jsonx props', function () {
   });
   describe('getWindowComponents', () => {
     const getWindowComponents = _jsonxProps.getWindowComponents;
-    before(function () {
-      this.jsdom = mochaJSDOM();
-    });
+    // beforeAll(function () {
+    //   // this.jsdom = mochaJSDOM();
+    //   // console.log('this.jsdom', this.jsdom,{mochaJSDOM});
+    //   console.log({window});
+    // });
     it('should return react element from jsonx.__windowComponents', function () {
       class Welcome extends React.Component {
         render() {
@@ -210,9 +212,9 @@ describe('jsonx props', function () {
       expect(windowProps.useWelcome.type).to.eql(Welcome);
       expect(windowProps.useWelcome.props.name).to.eql(allProps.__windowComponentProps.name);
     });    
-    after(function () {
-      this.jsdom();
-    });
+    // afterAll(function () {
+    //   // this.jsdom();
+    // });
   });
   describe('getFunctionProps', () => {
     const getFunctionProps = _jsonxProps.getFunctionProps;

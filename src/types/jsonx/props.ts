@@ -1,90 +1,12 @@
-/**
- * returns the names of parameters from a function declaration
- * @example
- * const arrowFunctionAdd = (a,b)=>a+b;
- * function regularFunctionAdd(c,d){return c+d;}
- * getParamNames(arrowFunctionAdd) // => ['a','b']
- * getParamNames(regularFunctionAdd) // => ['c','d']
- * @param {Function} func
- * @todo write tests
- */
-declare function getParamNames(func: (...params: any[]) => any): void;
+import { jsonx } from "./jsonx";
 
-/**
- * It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
- * @param {Object} [traverseObject={}] - the object that contains values of propName
- * @param {Object} options
- * @param {Object} options.jsonx - Valid JSONX JSON
- * @param {Object} [options.propName='asyncprops'] - Property on JSONX to resolve values onto, i.e (asyncprops,thisprops,windowprops)
- * @returns {Object} resolved object
- * @example
- const traverseObject = {
-  user: {
-    name: 'jsonx',
-    description: 'react withouth javascript',
-  },
-  stats: {
-    logins: 102,
-    comments: 3,
-  },
-  authentication: 'OAuth2',
-};
-const testJSONX = {
-  component: 'div',
-  props: {
-    id: 'generatedJSONX',
-    className:'jsonx',
-  },
-  asyncprops:{
-    auth: [ 'authentication', ],
-    username: [ 'user', 'name', ],
-  },
-  children: [
-    {
-      component: 'p',
-      props: {
-        style: {
-          color: 'red',
-          fontWeight:'bold',
-        },
-      },
-      children:'hello world',
-    },
-  ],
-};
-const JSONXP = getJSONXProps({ jsonx: testJSONX, traverseObject, });
-// => {
-//   auth: 'OAuth2',
-//   username: 'jsonx'
-// }
+export type functionParam = (...params: any[]) => any;
 
-//finally resolves:
-const testJSONX = {
-  component: 'div',
-  props: {
-    id: 'generatedJSONX',
-    className:'jsonx',
-    auth: 'OAuth2',
-    username: 'jsonx',
-  },
-  children: [
-    {
-      component: 'p',
-      props: {
-        style: {
-          color: 'red',
-          fontWeight:'bold',
-        },
-      },
-      children:'hello world',
-    },
-  ],
+export type dynamicFunctionParams = {
+  jsonx?: jsonx;
+  propName?: string;
+  traverseObject?: any;
 };
- */
-declare function getJSONXProps(traverseObject?: any, options: {
-    jsonx: any;
-    propName?: any;
-}): any;
 
 /**
  * returns children jsonx components defined on __spreadComponent spread over an array on props.__spread

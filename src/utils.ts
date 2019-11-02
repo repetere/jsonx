@@ -1,5 +1,7 @@
 import UAParser from 'ua-parser-js';
+import * as defs from "./types/jsonx/index";
 
+const global:any = {};
 
 /**
  * Used to evaluate whether or not to render a component
@@ -29,11 +31,11 @@ const testJSONX = Object.assign({}, sampleJSONX, {
 });
 displayComponent({ jsonx: testJSONX, props: testJSONX2.props, }) // => false
  */
-export function displayComponent(options = {}) {
+export function displayComponent(options: { jsonx?: defs.jsonx, props?: any, renderIndex?: number, componentLibraries?:defs.jsonxLibrary, debug?:boolean} = {}):boolean {
   const { jsonx = {}, props, } = options;
   const propsToCompare = jsonx.comparisonprops;
   const comparisons = Array.isArray(propsToCompare) ? propsToCompare.map(comp => {
-    const compares = {};
+    const compares:defs.jsonxCompare = {};
     if (Array.isArray(comp.left)) {
       compares.left = comp.left;
     }
@@ -124,7 +126,7 @@ export function displayComponent(options = {}) {
  * Use to test if can bind components this context for react-redux-router 
  * @returns {Boolean} true if browser is not IE or old android / chrome
  */
-export function getAdvancedBinding() {
+export function getAdvancedBinding(this:defs.globalThisWindow):boolean {
   
   if (typeof window === 'undefined') {
     var window = (this && this.window)
@@ -139,6 +141,7 @@ export function getAdvancedBinding() {
         return false;
       }
       const uastring = window.navigator.userAgent;
+      //@ts-ignore
       const parser = new UAParser();
       parser.setUA(uastring);
       const parseUserAgent = parser.getResult();
@@ -181,17 +184,18 @@ const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
  * @returns {Object} resolved object with traversed properties
  * @throws {TypeError} 
  */
-export function traverse(paths = {}, data = {}) {
+export function traverse(paths:defs.traversePaths = {}, data = {}) {
   let keys = Object.keys(paths);
   if (!keys.length) return paths;
-  return keys.reduce((result, key) => {
+  return keys.reduce((result: defs.jsonxResourceProps, key: string) => {
+    //@ts-ignore
     if (typeof paths[key] === 'string') result[key] = data[paths[key]];
     else if (Array.isArray(paths[key])) {
       let _path = Object.assign([], paths[key]);
       let value = data;
       while (_path.length && value && typeof value === 'object') {
         let prop = _path.shift();
-        value = value[prop];
+        if(prop&&value[prop])value = value[prop];
       }
       result[key] = (_path.length) ? undefined : value;
     } else throw new TypeError('dynamic property paths must be a string or an array of strings or numeric indexes');
@@ -209,11 +213,11 @@ export function traverse(paths = {}, data = {}) {
  * @returns {Boolean|Error[]} either returns true if JSONX is valid, or throws validation error or returns list of errors in array
  * @throws {SyntaxError|TypeError|ReferenceError}
  */
-export function validateJSONX(jsonx = {}, returnAllErrors = false) {
+export function validateJSONX(jsonx:defs.jsonx = {}, returnAllErrors = false):boolean|string {
   const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops', 'thisstate',];
   const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps',];
   const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline','__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertJSONXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'debug' ].concat(dynamicPropsNames, evalPropNames);
-  let errors = [];
+  let errors: any = [];
   if (!jsonx.component) {
     errors.push(SyntaxError('[0001] Missing React Component'));
   }
@@ -239,7 +243,7 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
       errors = errors.concat(...childrenErrors);
     }
   }
-  dynamicPropsNames.forEach(dynamicprop => {
+  dynamicPropsNames.forEach((dynamicprop) => {
     const jsonxDynamicProps = jsonx[ dynamicprop ];
     if (jsonxDynamicProps) {
       // if (dynamicprop === 'thisprops') {
@@ -253,6 +257,7 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
           errors.push(TypeError(`[0007] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
         }
         if (Array.isArray(jsonxDynamicProps[resolvedDynamicProp])) {
+          //@ts-ignore
           const allStringArray = jsonxDynamicProps[resolvedDynamicProp].filter(propArrayItem => typeof propArrayItem === 'string');
           
           if (allStringArray.length !== jsonxDynamicProps[ resolvedDynamicProp ].length) {
@@ -294,7 +299,7 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
   if (jsonx.__dangerouslyInsertComponents) {
     Object.keys(jsonx.__dangerouslyInsertComponents).forEach(insertedComponents => {
       try {
-        validateJSONX(jsonx.__dangerouslyInsertComponents[ insertedComponents ]);
+        if(jsonx.__dangerouslyInsertComponents)validateJSONX(jsonx.__dangerouslyInsertComponents[ insertedComponents ]);
       } catch (e) {
         errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${e.toString()}`));
       }
@@ -307,7 +312,7 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
       
       Object.keys(jsonx.__functionProps)
         .forEach(fProp => {
-          if (jsonx.__functionProps[fProp] &&( typeof jsonx.__functionProps[fProp] !=='string' || jsonx.__functionProps[fProp].indexOf('func:') === -1)) {
+          if (jsonx.__functionProps && jsonx.__functionProps[fProp] &&( typeof jsonx.__functionProps[fProp] !=='string' || jsonx.__functionProps[fProp].indexOf('func:') === -1)) {
             errors.push(ReferenceError(`[0013] jsonx.__functionProps.${fProp} must reference a function (i.e. func:this.props.logoutUser())`));
           }
         });
@@ -361,7 +366,7 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
  * @param {Object} simpleJSONX - Any valid simple JSONX Syntax
  * @return {Boolean} returns true if simpleJSONX is valid
  */
-export function validSimpleJSONXSyntax(simpleJSONX = {}) {
+export function validSimpleJSONXSyntax(simpleJSONX:any = {}) {
   if (Object.keys(simpleJSONX).length !== 1 && !simpleJSONX.component) {
     return false;
   } else {
@@ -377,21 +382,25 @@ export function validSimpleJSONXSyntax(simpleJSONX = {}) {
  * @param {Object} simpleJSONX JSON Object 
  * @return {Object} - returns a valid JSONX JSON Object from a simple JSONX JSON Object
  */
-export function simpleJSONXSyntax(simpleJSONX = {}) {
+export function simpleJSONXSyntax(simpleJSONX:defs.simpleJsonx = {}) {
   const component = Object.keys(simpleJSONX)[ 0 ];
   try {
     return Object.assign({},
       {
         component,
       },
-      simpleJSONX[ component ], {
-        children: (simpleJSONX[ component ].children && Array.isArray(simpleJSONX[ component ].children))
-          ? simpleJSONX[ component ].children
-            .map(simpleJSONXSyntax)
-          : simpleJSONX[ component ].children,
-      });
+      simpleJSONX[component], {
+      children: (simpleJSONX[component] &&
+        simpleJSONX[component].children &&
+        Array.isArray(simpleJSONX[component].children))
+        //@ts-ignore  
+        ? simpleJSONX[component].children
+          //@ts-ignore  
+          .map(simpleJSONXSyntax)
+        : simpleJSONX[component].children,
+    });
   } catch (e) {
-    throw SyntaxError('Invalid Simple JSONX Syntax', e);
+    throw SyntaxError('Invalid Simple JSONX Syntax');
   }   
 }
 
@@ -400,7 +409,8 @@ export function simpleJSONXSyntax(simpleJSONX = {}) {
  * @param {Object} jsonx Valid JSONX JSON object 
  * @return {Object} - returns a simple JSONX JSON Object from a valid JSONX JSON Object 
  */
-export function getSimplifiedJSONX(jsonx = {}) {
+export function getSimplifiedJSONX(jsonx
+  :defs.jsonx= {}) {
   try {
     if (!jsonx.component) return jsonx; //already simple
     const componentName = jsonx.component;
@@ -424,7 +434,7 @@ export function getSimplifiedJSONX(jsonx = {}) {
  * @param {Object} options - fetch options
  * @return {Object} - returns fetched JSON data
  */
-export async function fetchJSON(path='', options={}) {
+export async function fetchJSON(path:string='', options={}) {
   try {
     const response = await fetch(path, options);
     return await response.json();

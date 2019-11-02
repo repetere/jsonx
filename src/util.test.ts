@@ -11,7 +11,7 @@ import ReactDOMElements from 'react-dom-factories';
 import { expect } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
-import 'mocha-sinon';
+// import 'mocha-sinon';
 
 const sampleJSONX = {
   component: 'div',
@@ -387,7 +387,7 @@ describe('jsonx utils', function () {
       expect(getAdvancedBinding.call({ window, })).to.be.false;
     });    
     it('should return false unknown browser', function () {
-      expect(getAdvancedBinding.call({ })).to.be.false;
+      expect(getAdvancedBinding.call({window:{} })).to.be.false;
     });    
   });
   describe('traverse', () => {

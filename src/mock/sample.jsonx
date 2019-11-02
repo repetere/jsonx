@@ -1,100 +1,113 @@
-const jsonx = require('../../dist/jsonx.cjs.js');
-let c = jsonx._jsonxComponents.getFunctionFromEval({ body: 'console.log("hello")', });
-const MyCustomComponent = jsonx._jsonxComponents.getReactClassComponent({
-  //
-  // Initialization function
-  //
-  getInitialState: {
-    body: 'return { status:"not-loaded", name:"jsonx test", customNumber:1, }',
-    arguments: [],
-  },
-  getDefaultProps: {
-    body: 'return { someProp:1, someOtherProp:2, status:"original status" }',
-    arguments: [],
-  },
-  componentDidMount: {
-    body: 'console.log(\'mounted\', \'this.props\',this.props, \'this.state\',this.state)',
-    arguments: [],
-  },
-  componentWillUnmount: {
-    body: 'console.log(\'unmounted\',this.props)',
-    arguments: [],
-  },
-  //
-  // State change functions
-  //
-  shouldComponentUpdate: {
-    body: 'console.log("should update component",{nextProps,nextState}); return true;',
-    arguments: ['nextProps', 'nextState',],
-  },
-  componentWillUpdate: {
-    body: 'console.log("will update component",{nextProps,nextState}); return true;',
-    arguments: ['nextProps', 'nextState',],
-  },
-  componentDidUpdate: {
-    body: 'console.log("did update component",{prevProps,prevState}); return true;',
-    arguments: ['prevProps', 'prevState',],
-  },
-  //
-  // Prop change functions
-  //
-  componentWillReceiveProps: {
-    body: 'console.log("will recieve props",{nextProps}); return true;',
-    arguments: ['nextProps',],
-  },
-  //
-  // RENDER IS THE ONLY ***REQUIRED*** FUNCTION
-  //
-  render: {
-    body: {
-      component: 'p',
-      props: {
-        status: 'from inline prop',
-      },
-      passprops: true,
-      children: [
-        {
-          component: 'span',
-          children: 'My Custom React Component Status: ',
-        },
-        {
-          component: 'span',
-          thisprops: {
-            children: ['status',],
-          },
-        },
-      ],
-    },
-  },
-});
-
-const sampleJSONX = {
+// const jsonx = require('../../dist/jsonx.cjs.js');
+// let c = jsonx._jsonxComponents.getFunctionFromEval({ body: 'console.log("hello")', });
+// const MyCustomComponent = jsonx._jsonxComponents.getReactClassComponent({
+//   //
+//   // Initialization function
+//   //
+//   getInitialState: {
+//     body: 'return { status:"not-loaded", name:"jsonx test", customNumber:1, }',
+//     arguments: [],
+//   },
+//   getDefaultProps: {
+//     body: 'return { someProp:1, someOtherProp:2, status:"original status" }',
+//     arguments: [],
+//   },
+//   componentDidMount: {
+//     body: 'console.log(\'mounted\', \'this.props\',this.props, \'this.state\',this.state)',
+//     arguments: [],
+//   },
+//   componentWillUnmount: {
+//     body: 'console.log(\'unmounted\',this.props)',
+//     arguments: [],
+//   },
+//   //
+//   // State change functions
+//   //
+//   shouldComponentUpdate: {
+//     body: 'console.log("should update component",{nextProps,nextState}); return true;',
+//     arguments: ['nextProps', 'nextState',],
+//   },
+//   componentWillUpdate: {
+//     body: 'console.log("will update component",{nextProps,nextState}); return true;',
+//     arguments: ['nextProps', 'nextState',],
+//   },
+//   componentDidUpdate: {
+//     body: 'console.log("did update component",{prevProps,prevState}); return true;',
+//     arguments: ['prevProps', 'prevState',],
+//   },
+//   //
+//   // Prop change functions
+//   //
+//   componentWillReceiveProps: {
+//     body: 'console.log("will recieve props",{nextProps}); return true;',
+//     arguments: ['nextProps',],
+//   },
+//   //
+//   // RENDER IS THE ONLY ***REQUIRED*** FUNCTION
+//   //
+//   render: {
+//     body: {
+//       component: 'p',
+//       props: {
+//         status: 'from inline prop',
+//       },
+//       passprops: true,
+//       children: [
+//         {
+//           component: 'span',
+//           children: 'My Custom React Component Status: ',
+//         },
+//         {
+//           component: 'span',
+//           thisprops: {
+//             children: ['status',],
+//           },
+//         },
+//       ],
+//     },
+//   },
+// });
+({
   component: 'html',
+  props: {
+                    key:41
+                  },
   children: [
     {
       component: 'head',
+      props: {
+                    key:31
+                  },
       children: [
         {
           component: 'title',
-          children:'sample jsonx page',
+          children: 'sample jsonx page',
+          props: {
+                    key:30
+                  }
         },
         {
           component: 'meta',
           props: {
             name:'Description',
-            content:'JSONX page for Express',
+            content: 'JSONX page for Express',
+            key:0
           },
         },
       ],
     },
     {
       component: 'body',
+      props: {
+                    key:19
+                  },
       children: [
         {
           component: 'div',
           props: {
             id: 'generatedJSONX',
             className: 'jsonx',
+            key:0
           },
           resourceprops: {
             title: ['spantext', ],
@@ -104,10 +117,12 @@ const sampleJSONX = {
             {
               component: 'h1',
               props: {
+                key:8,
                 style: {
                   color: 'darkgrey',
                   fontWeight: 'bold',
                   cursor: 'pointer',
+
                 },
               },
               __dangerouslyEvalProps: {
@@ -117,15 +132,23 @@ const sampleJSONX = {
             },
             {
               component: 'p',
+              props: {
+                    key:10
+                  },
               passprops:true,
               children: [
                 {
                   component: 'span',
                   children: 'Browser URL: ',
+                  props: {
+                    key:1
+                  }
                 },
                 {
                   component: 'span',
-                        
+                  props: {
+                    key:2
+                  },     
                   thisprops: {
                     _children: ['spantext', ],
                   },
@@ -144,6 +167,7 @@ const sampleJSONX = {
                   style: {
                     color: 'blue',
                   },
+                  key:3
                 },
                 children: 'this is using shorthand jsonx',
               },
@@ -153,7 +177,8 @@ const sampleJSONX = {
         {
           component: 'script',
           props: {
-            type:'text/javascript',
+            type: 'text/javascript',
+            key:4,
             dangerouslySetInnerHTML: {
               __html: 'console.log("hello");',
             },
@@ -162,6 +187,4 @@ const sampleJSONX = {
       ],
     },
   ],
-};
-
-module.exports = sampleJSONX;
+});

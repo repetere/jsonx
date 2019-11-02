@@ -1,4 +1,6 @@
 import { getReactElementFromJSONX, } from './';
+import * as defs from "./types/jsonx/index";
+
 /**
  * returns a valid jsonx.children property
  * @param {Object} options
@@ -41,8 +43,10 @@ import { getReactElementFromJSONX, } from './';
 const JSONXChildren = getChildrenProperty({ jsonx: sampleJSONX, }); //=> [ [jsonx Object],[jsonx Object]]
 const JSONXChildrenPTag = getChildrenProperty({ jsonx: sampleJSONX.children[ 0 ], }); //=>hello world
  */
-export function getChildrenProperty(options = {}) {
-  const { jsonx = {}, } = options;
+export function getChildrenProperty(options:{jsonx?:defs.jsonx, props?:any} = {}) {
+
+  const { jsonx = {},  } = options;
+
   const props = options.props || jsonx.props || {};
   if (typeof props._children!=='undefined' /* && !jsonx.children */) {
     if (Array.isArray(props._children) || typeof props._children === 'string' || typeof props._children === 'number'){
@@ -70,8 +74,8 @@ export function getChildrenProperty(options = {}) {
  * @param {Object} [options.props=options.jsonx.props] - Props to pull children  Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops) 
  * @returns {Object|String} returns a valid  Valid JSONX Child object or a string 
  */
-export function getChildrenProps(options = {}) {
-  const { jsonx = {}, childjsonx, renderIndex, } = options;
+export function getChildrenProps(options:{jsonx?:defs.jsonx,renderIndex?:number, childjsonx?:defs.jsonx, props?:any } = {}) {
+const { jsonx = {}, childjsonx, renderIndex, } = options;
   const props = options.props || jsonx.props || {};
 
   return (jsonx.passprops && typeof childjsonx==='object')
@@ -87,7 +91,7 @@ export function getChildrenProps(options = {}) {
               style: {},
             },
           childjsonx.props,
-          { key: renderIndex + Math.random(), }),
+          { key: renderIndex||'' + Math.random(), }),
       })
     : childjsonx;
 }
@@ -101,7 +105,7 @@ export function getChildrenProps(options = {}) {
  * @property {function} [this.logError=console.error] - error logging function
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  */
-export function getJSONXChildren(options = {}) {
+export function getJSONXChildren(this:defs.Context, options:any = {}) {
   // eslint-disable-next-line
   const { jsonx, resources, renderIndex, logError = console.error, } = options;
   try {
@@ -111,11 +115,12 @@ export function getJSONXChildren(options = {}) {
     delete props._children;
 
     return (jsonx.children && Array.isArray(jsonx.children) && typeof jsonx.children !== 'string')
+      //@ts-ignore
       ? jsonx.children.map(childjsonx => getReactElementFromJSONX.call(this, getChildrenProps({ jsonx, childjsonx, props, renderIndex, }), resources))
       : jsonx.children;
 
   } catch (e) {
-    logError(e);
+  this && this.debug && logError(e, (e.stack) ? e.stack : 'no stack');
     return null;
   }
 }

@@ -8,6 +8,10 @@ import { getAdvancedBinding, fetchJSON, } from './utils';
 //@ts-ignore
 import createReactClass from 'create-react-class';
 import { getReactElementFromJSONX, } from '.';
+
+import * as defs from "./types/jsonx/index";
+import { ReactComponentLike } from 'prop-types';
+
 const cache = new memoryCache.Cache();
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
@@ -15,12 +19,14 @@ const cache = new memoryCache.Cache();
 /**
  
  */
+//@ts-ignore
 export let advancedBinding = getAdvancedBinding();
 // require;
 /**
  * object of all react components available for JSONX
  
  */
+//@ts-ignore
 export let componentMap = Object.assign({ Fragment, Suspense, }, ReactDOMElements, (typeof window ==='object') ? window.__jsonx_custom_elements : {});
 
 /**
@@ -31,10 +37,14 @@ export let componentMap = Object.assign({ Fragment, Suspense, }, ReactDOMElement
  * @param {string[]} boundedComponents - list of components to bind JSONX this context (usually helpful for navigation and redux-router)
  * @returns {Object} reactComponents object of all react components available for JSONX
  */
-export function getBoundedComponents(options = {}) {
+export function getBoundedComponents(this: defs.Context, options: {
+  advancedBinding?: boolean,
+  reactComponents?: defs.jsonx['jsonxComponents'],
+  boundedComponents?:string[],
+} = {}) {
   const { reactComponents, boundedComponents=[], } = options;
   if (advancedBinding || options.advancedBinding) {
-    return Object.assign({}, reactComponents, boundedComponents.reduce((result, componentName) => {
+    return Object.assign({}, reactComponents, boundedComponents.reduce((result:defs.jsonx['jsonxComponents'], componentName) => {
       result[ componentName ] = reactComponents[ componentName ].bind(this);
       return result;
     }, {}));
@@ -50,10 +60,14 @@ export function getBoundedComponents(options = {}) {
  * @param {Object} [options.jsonx={}] - any valid JSONX JSON
  * @returns {function|undefined} react component from react library like bootstrap, material design or bulma
  */
-export function getComponentFromLibrary(options = {}) {
+export function getComponentFromLibrary(options: {
+  jsonx:defs.jsonx,
+  componentLibraries?: defs.jsonx['jsonxLibrary'],
+} = { jsonx: {}}) {
   const { componentLibraries = {}, jsonx = {}, } = options;
   const libComponent = Object.keys(componentLibraries)
     .map(libraryName => {
+      //@ts-ignore
       const cleanLibraryName = jsonx.component.replace(`${libraryName}.`, '');
       const libraryNameArray = cleanLibraryName.split('.');
       if (libraryNameArray.length === 2
@@ -85,16 +99,24 @@ export function getComponentFromLibrary(options = {}) {
  * @param {boolean} [options.debug=false] - use debug messages
  * @returns {string|function|class} valid react element
  */
-export function getComponentFromMap(options = {}) {
+export function getComponentFromMap(options: {
+  jsonx?: defs.jsonx,
+  reactComponents?: defs.jsonx['jsonxComponents'],
+  componentLibraries?: defs.jsonx['jsonxLibrary'],
+  logError?: any,
+  debug?:boolean,
+} = {}) {
   // eslint-disable-next-line
   const { jsonx = {}, reactComponents = {}, componentLibraries = {}, logError = console.error, debug } = options;
 
-  try {
-    if (typeof jsonx.component !== 'string' && typeof jsonx.component === 'function') {
-      return jsonx.component;
-    } else if (ReactDOMElements[jsonx.component]) {
-      return jsonx.component;
-    } else if (reactComponents[ jsonx.component ]) {
+  try {if (typeof jsonx.component !== 'string' && typeof jsonx.component === 'function') {
+    return jsonx.component;
+    //@ts-ignore
+  } else if (ReactDOMElements[jsonx.component]) {
+    return jsonx.component;
+    //@ts-ignore
+  } else if (reactComponents[ jsonx.component ]) {
+    //@ts-ignore
       return reactComponents[jsonx.component];
     } else if (typeof jsonx.component ==='string' && jsonx.component.indexOf('.') > 0 && getComponentFromLibrary({ jsonx, componentLibraries, })) {
       return getComponentFromLibrary({ jsonx, componentLibraries, });
@@ -115,10 +137,10 @@ export function getComponentFromMap(options = {}) {
  * @param {String[]} [options.args=[]] - Function arguments
  * @returns {Function} 
  */
-export function getFunctionFromEval(options = {}) {
+export function getFunctionFromEval(options:any = {}) {
   if (typeof options === 'function') return options;
   const { body = '', args = [], name, } = options;
-  const argus = [].concat(args);
+  const argus:string[] = [].concat(args);
   argus.push(body);
   const evalFunction = Function.prototype.constructor.apply({ name, }, argus);
   if (name) {
@@ -145,19 +167,21 @@ export function getFunctionFromEval(options = {}) {
  * @returns {Function} 
  * @see {@link https://reactjs.org/docs/react-without-es6.html} 
  */
-export function getReactClassComponent(reactComponent = {}, options = {}) {
+export function getReactClassComponent(this:defs.Context, reactComponent = {}, options:any = {}):ReactComponentLike {
   // const util = require('util');
   // console.log(util.inspect({ reactComponent },{depth:20}));
   if (options.lazy) {
+    //@ts-ignore
     return lazy(() => options.lazy(reactComponent, Object.assign({}, options, { lazy: false, })).then((lazyComponent) => {
       return {
+        //@ts-ignore
         default: getReactClassComponent(...lazyComponent),
       };
     }));
   }
-  const context = this || {};
+  const context:defs.Context = this || {};
   const { returnFactory = true, resources = {}, use_getState=true, bindContext=true, disableRenderIndexKey = true, } = options;
-  const rjc = Object.assign({
+  const rjc:any = Object.assign({
     getDefaultProps: {
       body:'return {};',
     },
@@ -177,12 +201,15 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
       console.warn({ rjc, });
       throw new SyntaxError(`Function(${val}) requires a function body`);
     }
-    if (args && !Array.isArray(args) && (args.length &&(args.length && args.filter(arg=>typeof arg==='string').length)) ) {
+    if (args && !Array.isArray(args) && (args.length &&(args.length && args.filter((arg:string)=>typeof arg==='string').length)) ) {
       throw new TypeError(`Function(${val}) arguments must be an array or variable names`);
     }
     if (val === 'render') {
-      result[ val ] = function () {
+      //@ts-ignore
+      result[val] = function () {
+        //@ts-ignore
         if (options.passprops && this.props) body.props = Object.assign({}, body.props, this.props);
+        //@ts-ignore
         if (options.passstate && this.state) body.props = Object.assign({}, body.props, this.state);
         return getReactElementFromJSONX.call(Object.assign(
           {},
@@ -191,12 +218,15 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
           { disableRenderIndexKey, },
           {
             props: use_getState
+              //@ts-ignore
               ? Object.assign({}, this.props, { getState: () => this.state, })
+              //@ts-ignore
               : this.props,
           }
         ), body, resources);
       };
     } else {
+      //@ts-ignore
       result[ val ] = typeof body === 'function'
         ? body
         : getFunctionFromEval({
@@ -223,8 +253,10 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
   return reactClass;
 }
 
-export function DynamicComponent(props={}) {
-  const { useCache = true, cacheTimeout = 60 * 60 * 5, loadingJSONX= { component:'div', children:'...Loading', },
+export function DynamicComponent(this: defs.Context, props = {}) {
+  //@ts-ignore
+  const { useCache = true, cacheTimeout = 60 * 60 * 5, loadingJSONX = { component: 'div', children: '...Loading', },
+    //@ts-ignore
   loadingErrorJSONX= { component:'div', children:[{component:'span',children:'Error: '},{ component:'span',  resourceprops:{_children:['error','message']}, }], }, cacheTimeoutFunction = () => { }, jsonx, transformFunction = data => data, fetchURL, fetchOptions, fetchFunction, } = props;
   const context = this || {};
   const [ state, setState ] = useState({ hasLoaded: false, hasError: false, resources: {}, error:undefined, });
@@ -237,6 +269,7 @@ export function DynamicComponent(props={}) {
   useEffect(() => { 
     async function getData() {
       try {
+        //@ts-ignore
         let transformedData;
         if (useCache && cache.get(fetchURL)) {
           transformedData = cache.get(fetchURL);
@@ -248,9 +281,11 @@ export function DynamicComponent(props={}) {
           transformedData = await transformer(fetchedData);
           if (useCache) cache.put(fetchURL, transformedData, cacheTimeout,timeoutFunction);
         }
+        //@ts-ignore
         setState(prevState=>Object.assign({},prevState,{ hasLoaded: true, hasError: false, resources: { DynamicComponentData: transformedData, }, }));
       } catch (e) {
-        if(context.debug) console.warn(e);
+        if (context.debug) console.warn(e);
+        //@ts-ignore
         setState({ hasError: true, error:e, });
       }
     }
@@ -303,19 +338,22 @@ export function DynamicComponent(props={}) {
   const options = { name: IntroHook}
   const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({jsonxRender, functionBody, options});
    */
-export function getReactFunctionComponent(reactComponent = {}, functionBody = '', options = {}) {
+export function getReactFunctionComponent(this:defs.Context,reactComponent = {}, functionBody = '', options:any = {}) {
   if (options.lazy) {
+    //@ts-ignore
     return lazy(() => options.lazy(reactComponent, functionBody, Object.assign({}, options, { lazy: false, })).then((lazyComponent) => {
       return {
+        //@ts-ignore
         default: getReactFunctionComponent(...lazyComponent),
       };
     }));
   }
   if (typeof options === 'undefined' || typeof options.bind === 'undefined') options.bind = true;
   const { resources = {}, args=[], } = options;
-
+  //@ts-ignore
   const props = reactComponent.props;
-  const functionArgs = [ React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getReactElementFromJSONX, reactComponent, resources, props, ];
+  const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getReactElementFromJSONX, reactComponent, resources, props,];
+  //@ts-ignore
   if (typeof functionBody === 'function') functionBody = functionBody.toString();
   const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromJSONX', 'reactComponent', 'resources', 'props', `
     const self = this;
@@ -346,6 +384,6 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
 /**
  *
  */
-export function getReactContext(options = {}) {
+export function getReactContext(options:any = {}) {
   return createContext(options.value);
 }

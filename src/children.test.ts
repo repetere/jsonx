@@ -225,6 +225,7 @@ describe('jsonx', function () {
       const childProps_p = getChildrenProps({ jsonx: passableJSONX, childjsonx:childjsonx_p, renderIndex, });
       expect(childProps_span.props.title).to.eq(passableJSONX.props.title);
       expect(childProps_p.props.title).to.eq(passableJSONX.props.title);
+      //@ts-ignore
       expect(childProps_p.props.style.color).to.eq(passableJSONX.children[ 1 ].props.style.color);
       expect(childProps_p.props.key).to.not.eq(renderIndex);
       expect(childProps_span.props.key).to.not.eq(renderIndex);
@@ -238,6 +239,7 @@ describe('jsonx', function () {
         jsonx: passableJSONX,
         renderIndex,
       });
+      //@ts-ignore
       JSONXChildren.forEach(ReactiveJSON => {
         expect(ReactiveJSON).to.be.an('object');
         expect(ReactiveJSON).to.haveOwnProperty('$$typeof');
