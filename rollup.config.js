@@ -14,7 +14,7 @@ import typescript from 'rollup-plugin-typescript';
 export default [
   // browser-friendly UMD build
   {
-    input: 'src/main.ts',
+    input: 'src/index.ts',
     // external: [ 'react' ], // <-- suppresses the warning
     output:[{
       exports: 'named',
@@ -84,7 +84,7 @@ export default [
   // an array for the `output` option, where we can specify 
   // `file` and `format` for each target)
   {
-    input: 'src/main.ts',
+    input: 'src/index.ts',
     external: [
       'path',
       'react',
@@ -145,7 +145,7 @@ export default [
   // an array for the `output` option, where we can specify 
   // `file` and `format` for each target)
   {
-    input: 'src/main.ts',
+    input: 'src/index.ts',
     external: [
       'path',
       'react',
@@ -214,7 +214,7 @@ export default [
   },
   // BROWSER MIN
   {
-    input: 'src/main.ts',
+    input: 'src/index.ts',
     // external: [ 'react' ], // <-- suppresses the warning
     output:[{
       exports: 'named',

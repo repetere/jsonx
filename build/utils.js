@@ -1,4 +1,5 @@
 import UAParser from 'ua-parser-js';
+const global = {};
 /**
  * Used to evaluate whether or not to render a component
  * @param {Object} options
@@ -139,6 +140,7 @@ export function getAdvancedBinding() {
                 return false;
             }
             const uastring = window.navigator.userAgent;
+            //@ts-ignore
             const parser = new UAParser();
             parser.setUA(uastring);
             const parseUserAgent = parser.getResult();
@@ -186,6 +188,7 @@ export function traverse(paths = {}, data = {}) {
     if (!keys.length)
         return paths;
     return keys.reduce((result, key) => {
+        //@ts-ignore
         if (typeof paths[key] === 'string')
             result[key] = data[paths[key]];
         else if (Array.isArray(paths[key])) {
@@ -193,7 +196,8 @@ export function traverse(paths = {}, data = {}) {
             let value = data;
             while (_path.length && value && typeof value === 'object') {
                 let prop = _path.shift();
-                value = value[prop];
+                if (prop && value[prop])
+                    value = value[prop];
             }
             result[key] = (_path.length) ? undefined : value;
         }
@@ -242,7 +246,7 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
             errors = errors.concat(...childrenErrors);
         }
     }
-    dynamicPropsNames.forEach(dynamicprop => {
+    dynamicPropsNames.forEach((dynamicprop) => {
         const jsonxDynamicProps = jsonx[dynamicprop];
         if (jsonxDynamicProps) {
             // if (dynamicprop === 'thisprops') {
@@ -256,6 +260,7 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
                     errors.push(TypeError(`[0007] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
                 }
                 if (Array.isArray(jsonxDynamicProps[resolvedDynamicProp])) {
+                    //@ts-ignore
                     const allStringArray = jsonxDynamicProps[resolvedDynamicProp].filter(propArrayItem => typeof propArrayItem === 'string');
                     if (allStringArray.length !== jsonxDynamicProps[resolvedDynamicProp].length) {
                         errors.push(TypeError(`[0008] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
@@ -298,7 +303,8 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
     if (jsonx.__dangerouslyInsertComponents) {
         Object.keys(jsonx.__dangerouslyInsertComponents).forEach(insertedComponents => {
             try {
-                validateJSONX(jsonx.__dangerouslyInsertComponents[insertedComponents]);
+                if (jsonx.__dangerouslyInsertComponents)
+                    validateJSONX(jsonx.__dangerouslyInsertComponents[insertedComponents]);
             }
             catch (e) {
                 errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${e.toString()}`));
@@ -312,7 +318,7 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
         else {
             Object.keys(jsonx.__functionProps)
                 .forEach(fProp => {
-                if (jsonx.__functionProps[fProp] && (typeof jsonx.__functionProps[fProp] !== 'string' || jsonx.__functionProps[fProp].indexOf('func:') === -1)) {
+                if (jsonx.__functionProps && jsonx.__functionProps[fProp] && (typeof jsonx.__functionProps[fProp] !== 'string' || jsonx.__functionProps[fProp].indexOf('func:') === -1)) {
                     errors.push(ReferenceError(`[0013] jsonx.__functionProps.${fProp} must reference a function (i.e. func:this.props.logoutUser())`));
                 }
             });
@@ -390,14 +396,18 @@ export function simpleJSONXSyntax(simpleJSONX = {}) {
         return Object.assign({}, {
             component,
         }, simpleJSONX[component], {
-            children: (simpleJSONX[component].children && Array.isArray(simpleJSONX[component].children))
+            children: (simpleJSONX[component] &&
+                simpleJSONX[component].children &&
+                Array.isArray(simpleJSONX[component].children))
+                //@ts-ignore  
                 ? simpleJSONX[component].children
+                    //@ts-ignore  
                     .map(simpleJSONXSyntax)
                 : simpleJSONX[component].children,
         });
     }
     catch (e) {
-        throw SyntaxError('Invalid Simple JSONX Syntax', e);
+        throw SyntaxError('Invalid Simple JSONX Syntax');
     }
 }
 /**

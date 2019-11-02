@@ -1,4 +1,4 @@
-import { getReactElementFromJSONX, } from './main';
+import { getReactElementFromJSONX, } from './';
 /**
  * returns a valid jsonx.children property
  * @param {Object} options
@@ -84,7 +84,7 @@ export function getChildrenProps(options = {}) {
                 ? {}
                 : {
                     style: {},
-                }, childjsonx.props, { key: renderIndex + Math.random(), }),
+                }, childjsonx.props, { key: renderIndex || '' + Math.random(), }),
         })
         : childjsonx;
 }
@@ -106,11 +106,12 @@ export function getJSONXChildren(options = {}) {
         props._children = undefined;
         delete props._children;
         return (jsonx.children && Array.isArray(jsonx.children) && typeof jsonx.children !== 'string')
+            //@ts-ignore
             ? jsonx.children.map(childjsonx => getReactElementFromJSONX.call(this, getChildrenProps({ jsonx, childjsonx, props, renderIndex, }), resources))
             : jsonx.children;
     }
     catch (e) {
-        logError(e);
+        this && this.debug && logError(e, (e.stack) ? e.stack : 'no stack');
         return null;
     }
 }

@@ -104,76 +104,76 @@
             children: 'This is from Function Component'
           },
           
-          {
-              component:'p',
-              passprops:true,
-              children:[
-                {
-                  component:'span',
-                  children:'You clicked ',
-                },
-                {
-                  component:'input',
-                  thisprops:{
-                    value:['count'],
-                  },
-                  __functionProps:{
-                    ref:'func:inline.ref',
-                  },
-                  __inline:{
-                    ref:`window.INPUTREF = param1; console.log('testing INPUTREF',{param1});`,
-                  },
-                },
-                {
-                  component:'span',
-                  children:' times'
-                }
-              ]
-          },
-          {
-            // component:'button',
-            // // props:{
-            // //   onClick:()=>{console.log('CLICKED THIS')}
-            // // },
-            // __functionProps:{
-            //   onClick:'func:inline.onClick'
-            //   // onclick:'func:this.props.onClick'
-            // },
-            // __functionargs:{
-            //   onClick:['count','setCount'],
-            // },
-            // __inline:{
-            //   onClick:`return setCount(count+1)//console.log('this is inline',{count,setCount}); `,
-            // },
-            // children:'Click me'
+          // {
+          //     component:'p',
+          //     passprops:true,
+          //     children:[
+          //       {
+          //         component:'span',
+          //         children:'You clicked ',
+          //       },
+          //       {
+          //         component:'input',
+          //         thisprops:{
+          //           value:['count'],
+          //         },
+          //         __functionProps:{
+          //           ref:'func:inline.ref',
+          //         },
+          //         __inline:{
+          //           ref:`window.INPUTREF = param1; console.log('testing INPUTREF',{param1});`,
+          //         },
+          //       },
+          //       {
+          //         component:'span',
+          //         children:' times'
+          //       }
+          //     ]
+          // },
+          // {
+          //   // component:'button',
+          //   // // props:{
+          //   // //   onClick:()=>{console.log('CLICKED THIS')}
+          //   // // },
+          //   // __functionProps:{
+          //   //   onClick:'func:inline.onClick'
+          //   //   // onclick:'func:this.props.onClick'
+          //   // },
+          //   // __functionargs:{
+          //   //   onClick:['count','setCount'],
+          //   // },
+          //   // __inline:{
+          //   //   onClick:`return setCount(count+1)//console.log('this is inline',{count,setCount}); `,
+          //   // },
+          //   // children:'Click me'
 
 
-            component:'button',
-            // __functionargs:{
-            //   onClick:['count','setCount'],
-            // },
-            debug:true,
-            __dangerouslyBindEvalProps:{
-              onClick:function(count,setCount){
-                console.log('this is inline',{count,setCount},'arguments',arguments);
-                setCount(count+1);
-              },
-              // onClick:`(function(count,setCount){
-              //   setCount(count+1)
-              //   console.log('this is inline',{count,setCount});
-              // })`,
-            },
-            children:'Click me'
-          }
+          //   component:'button',
+          //   // __functionargs:{
+          //   //   onClick:['count','setCount'],
+          //   // },
+          //   debug:true,
+          //   __dangerouslyBindEvalProps:{
+          //     onClick:function(count,setCount){
+          //       console.log('this is inline',{count,setCount},'arguments',arguments);
+          //       setCount(count+1);
+          //     },
+          //     // onClick:`(function(count,setCount){
+          //     //   setCount(count+1)
+          //     //   console.log('this is inline',{count,setCount});
+          //     // })`,
+          //   },
+          //   children:'Click me'
+          // }
         ],
       },`
-      const [count, setCount] = useState(0);
-      const exposeProps = {count,setCount};
+      //const [count, setCount] = useState(0);
+      //const exposeProps = {count,setCount};
       // console.log({ reactComponent, count, setCount, })
       // console.log('HELLO',{resources, props,},arguments)
       `,{
         name:'IntroHook'
-      })
+      });
       const dynamicClassComponent = jsonx._jsonxComponents.getReactClassComponent({ 
         render:{
           body:{
@@ -240,6 +240,7 @@
             },
             children:'def'
           },
+          /*
           {
             component:'Suspense',
             debug:true,
@@ -273,6 +274,7 @@
               }
             ]
           },
+          */
           {
             component: 'h1',
             props: {
@@ -318,6 +320,7 @@
               punc:['punc']
             }
           },
+          /*
           {
             component:'form',
             debug:true,
@@ -341,6 +344,7 @@
               },
             ]
           },
+          */
           {
             p:{
               props:{
@@ -436,6 +440,7 @@
 
             }
           },
+          /*
           {
             'Spectre.Accordion.Accordion':{
               children:[
@@ -492,14 +497,16 @@
               ]
             }
           }
+        */
         ],
       };
       const boundConfig = {
+        disableRenderIndexKey:false,
         debug:true, 
         reactComponents:{
           MyCustomComponent,
           MyCustomFunctionComponent,
-          dynamicClassComponent,
+          // dynamicClassComponent,
           dynamicFunctionComponent,
           // Accordion:Spectre.Accordion.Accordion,
           // AccordionHeader:Spectre.Accordion.Header,

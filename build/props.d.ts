@@ -1,3 +1,9 @@
+import * as defs from "./types/jsonx/index";
+declare global {
+    interface window {
+        [index: string]: any;
+    }
+}
 export declare const STRIP_COMMENTS: RegExp;
 export declare const ARGUMENT_NAMES: RegExp;
 /**
@@ -10,7 +16,7 @@ export declare const ARGUMENT_NAMES: RegExp;
  * @param {Function} func
  * @todo write tests
  */
-export declare function getParamNames(func: any): any;
+export declare function getParamNames(func: defs.functionParam): RegExpMatchArray;
 /**
  * It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
  * @param {Object} [traverseObject={}] - the object that contains values of propName
@@ -82,12 +88,15 @@ const testJSONX = {
   ],
 };
  */
-export declare function getJSONXProps(options?: {}): {};
+export declare function getJSONXProps(options?: defs.dynamicFunctionParams): defs.jsonxResourceProps;
 /**
  * returns children jsonx components defined on __spreadComponent spread over an array on props.__spread
  * @param {*} options
  */
-export declare function getChildrenComponents(options?: {}): {
+export declare function getChildrenComponents(this: defs.Context, options?: {
+    allProps?: any;
+    jsonx?: defs.jsonx;
+}): {
     children: string;
     _children?: undefined;
 } | {
@@ -97,7 +106,7 @@ export declare function getChildrenComponents(options?: {}): {
     _children: any;
     children?: undefined;
 };
-export declare function boundArgsReducer(jsonx?: {}): (args: any, arg: any) => any;
+export declare function boundArgsReducer(this: defs.Context, jsonx?: defs.jsonx): (args: any, arg: string) => any;
 /**
  * Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
  * @param {Object} options
@@ -120,7 +129,9 @@ export declare function boundArgsReducer(jsonx?: {}): (args: any, arg: any) => a
   // expect(evalutedComputedFunc).to.eql('bob');
   // expect(evalutedComputedBoundFunc).to.eql('bounded');
  */
-export declare function getEvalProps(options?: {}): {};
+export declare function getEvalProps(this: defs.Context, options?: {
+    jsonx: defs.jsonx;
+}): {};
 /**
  * Resolves jsonx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
  * @param {Object} options
@@ -128,8 +139,8 @@ export declare function getEvalProps(options?: {}): {};
  * @param {Object} [options.resources={}] - object to use for resourceprops(asyncprops), usually a result of an asynchronous call
  * @returns {Object} resolved object of React Components
  */
-export declare function getComponentProps(options?: {}): {};
-export declare function getReactComponents(options: any): {};
+export declare function getComponentProps(this: defs.Context, options?: defs.Config): any;
+export declare function getReactComponents(this: defs.Context, options: defs.Config): defs.jsonxResourceProps;
 /**
  * Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
  * @param {Object} options
@@ -137,7 +148,9 @@ export declare function getReactComponents(options: any): {};
 //  * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
  * @returns {Object} resolved object of React Components
  */
-export declare function getReactComponentProps(options?: {}): {};
+export declare function getReactComponentProps(this: defs.Context, options?: {
+    jsonx: defs.jsonx;
+}): defs.jsonxResourceProps;
 /**
  * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
  * @param {Object} options
@@ -147,7 +160,12 @@ export declare function getReactComponentProps(options?: {}): {};
  * @example
  * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
  */
-export declare function getFunctionFromProps(options: any): any;
+export declare function getFunctionFromProps(this: defs.Context, options?: {
+    propFunc?: string;
+    propBody: string;
+    jsonx: defs.jsonx;
+    functionProperty?: string;
+}): any;
 /**
  * Returns a resolved object from function strings that has functions pulled from jsonx.__functionProps
  * @param {Object} options
@@ -155,7 +173,10 @@ export declare function getFunctionFromProps(options: any): any;
  * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Object} resolved object of functions from function strings
  */
-export declare function getFunctionProps(options?: {}): any;
+export declare function getFunctionProps(this: defs.Context, options?: {
+    allProps?: any;
+    jsonx: defs.jsonx;
+}): any;
 /**
  * Returns a resolved object that has React Components pulled from window.__jsonx_custom_elements
  * @param {Object} options
@@ -163,7 +184,10 @@ export declare function getFunctionProps(options?: {}): any;
  * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Object} resolved object of with React Components from a window property window.__jsonx_custom_elements
  */
-export declare function getWindowComponents(options?: {}): any;
+export declare function getWindowComponents(this: defs.Context, options?: {
+    allProps?: any;
+    jsonx: defs.jsonx;
+}): any;
 /**
  * Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty
  * @param {Object} options
@@ -215,4 +239,14 @@ computedProps = { key: 1,
         _store: {} } } }
  *
  */
-export declare function getComputedProps(options?: {}): any;
+export declare function getComputedProps(this: defs.Context, options?: {
+    jsonx?: defs.jsonx;
+    resources?: defs.jsonxResourceProps;
+    renderIndex?: number;
+    logError?: any;
+    useReduxState?: boolean;
+    ignoreReduxPropsInComponentLibraries?: boolean;
+    disableRenderIndexKey?: boolean;
+    debug?: boolean;
+    componentLibraries?: defs.jsonxLibrary;
+}): any;

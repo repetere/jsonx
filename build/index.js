@@ -2,7 +2,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactDOMServer from "react-dom/server";
-import useGlobalHook from "use-global-hook";
 import * as jsonxComponents from "./components";
 import * as jsonxProps from "./props";
 import * as jsonxChildren from "./children";
@@ -191,6 +190,7 @@ export function outputJSX(jsonx, resources = {}) {
  * @returns {Object} json - {type,props,children}
  */
 export function outputJSON(jsonx, resources = {}) {
+    //@ts-ignore
     const context = Object.assign({}, this, { returnJSON: true });
     return getReactElementFromJSONX.call(context, jsonx, resources);
 }
@@ -232,13 +232,6 @@ export function __getReact() {
  */
 export function __getReactDOM() {
     return ReactDOM;
-}
-/**
- * Exposes global hook used in JSONX
- * @returns {Object} useGlobalHook
- */
-export function __getUseGlobalHook() {
-    return useGlobalHook;
 }
 export const _jsonxChildren = jsonxChildren;
 export const _jsonxComponents = jsonxComponents;

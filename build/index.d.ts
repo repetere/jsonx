@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import useGlobalHook from "use-global-hook";
-import * as jsonx from "./types/jsonx/index";
+import * as defs from "./types/jsonx/index";
 import * as jsonxComponents from "./components";
 import * as jsonxProps from "./props";
 import * as jsonxChildren from "./children";
@@ -20,7 +19,7 @@ export declare let renderIndex: number;
  * @param {string} config.querySelector - selector for document.querySelector
  * @property {object} this - options for getReactElementFromJSONX
  */
-export declare function jsonxRender(this: jsonx.Context, config?: jsonx.RenderConfig): void;
+export declare function jsonxRender(this: defs.Context, config?: defs.RenderConfig): void;
 /**
  * Use ReactDOMServer.renderToString to render html from JSONX
  * @example
@@ -32,7 +31,7 @@ export declare function jsonxRender(this: jsonx.Context, config?: jsonx.RenderCo
  * @property {object} this - options for getReactElementFromJSONX
  * @returns {string} React genereated html via JSONX JSON
  */
-export declare function outputHTML(this: jsonx.OutputHTMLContext, config?: jsonx.OutputHTMLConfig): string;
+export declare function outputHTML(this: defs.OutputHTMLContext, config?: defs.OutputHTMLConfig): string;
 /**
  * Use React.createElement and JSONX JSON to create React elements
  * @example
@@ -49,7 +48,7 @@ export declare function outputHTML(this: jsonx.OutputHTMLContext, config?: jsonx
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
-export declare function getReactElementFromJSONX(this: jsonx.Context, jsonx: jsonx.jsonx, resources?: {}): ReactElementLike | JSONReactElement | null;
+export declare function getReactElementFromJSONX(this: defs.Context, jsonx: defs.jsonx | defs.simpleJsonx, resources?: {}): ReactElementLike | JSONReactElement | null;
 export declare const getRenderedJSON: typeof getReactElementFromJSONX;
 export declare const getReactElement: typeof getReactElementFromJSONX;
 /** converts a json object {type,props,children} into a react element
@@ -68,7 +67,7 @@ export declare function getReactElementFromJSON({ type, props, children }: JSONR
  * @param {Object} resources - props for react element
  * @returns {function} React element via React.createElement
  */
-export declare function compile(this: Context, jsonx: jsonx.jsonx, resources?: {}): (props: any) => ReactElementLike;
+export declare function compile(this: Context, jsonx: defs.jsonx, resources?: {}): (props: any) => ReactElementLike;
 /**
  * converts JSONX JSON IR to JSX
  * @example
@@ -76,7 +75,7 @@ export declare function compile(this: Context, jsonx: jsonx.jsonx, resources?: {
  * @param {Object} json - {type,props,children}
  * @returns {String} jsx string
  */
-export declare function outputJSX(this: Context, jsonx: jsonx.jsonx, resources?: {}): string;
+export declare function outputJSX(this: Context, jsonx: defs.jsonx, resources?: {}): string;
 /**
  * Compiles JSONX into JSON IR format for react create element
  * @example
@@ -88,7 +87,7 @@ export declare function outputJSX(this: Context, jsonx: jsonx.jsonx, resources?:
  * @param {object} resources - any additional resource used for asynchronous properties
  * @returns {Object} json - {type,props,children}
  */
-export declare function outputJSON(jsonx: jsonx.jsonx, resources?: {}): JSONReactElement;
+export declare function outputJSON(jsonx: defs.jsonx, resources?: {}): JSONReactElement;
 export declare const jsonxHTMLString: typeof outputHTML;
 /**
  * converts JSONX JSON IR to JSX
@@ -108,11 +107,6 @@ export declare function __getReact(): typeof React;
  * @returns {Object} ReactDOM
  */
 export declare function __getReactDOM(): typeof ReactDOM;
-/**
- * Exposes global hook used in JSONX
- * @returns {Object} useGlobalHook
- */
-export declare function __getUseGlobalHook(): typeof useGlobalHook;
 export declare const _jsonxChildren: typeof jsonxChildren;
 export declare const _jsonxComponents: typeof jsonxComponents;
 export declare const _jsonxProps: typeof jsonxProps;

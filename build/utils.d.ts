@@ -1,3 +1,4 @@
+import * as defs from "./types/jsonx/index";
 /**
  * Used to evaluate whether or not to render a component
  * @param {Object} options
@@ -26,12 +27,18 @@ const testJSONX = Object.assign({}, sampleJSONX, {
 });
 displayComponent({ jsonx: testJSONX, props: testJSONX2.props, }) // => false
  */
-export declare function displayComponent(options?: {}): boolean;
+export declare function displayComponent(options?: {
+    jsonx?: defs.jsonx;
+    props?: any;
+    renderIndex?: number;
+    componentLibraries?: defs.jsonxLibrary;
+    debug?: boolean;
+}): boolean;
 /**
  * Use to test if can bind components this context for react-redux-router
  * @returns {Boolean} true if browser is not IE or old android / chrome
  */
-export declare function getAdvancedBinding(): boolean;
+export declare function getAdvancedBinding(this: defs.globalThisWindow): boolean;
 /**
  * take an object of array paths to traverse and resolve
  * @example
@@ -54,7 +61,7 @@ const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
  * @returns {Object} resolved object with traversed properties
  * @throws {TypeError}
  */
-export declare function traverse(paths?: {}, data?: {}): {};
+export declare function traverse(paths?: defs.traversePaths, data?: {}): defs.jsonxResourceProps;
 /**
  * Validates JSONX JSON Syntax
  * @example
@@ -65,25 +72,29 @@ export declare function traverse(paths?: {}, data?: {}): {};
  * @returns {Boolean|Error[]} either returns true if JSONX is valid, or throws validation error or returns list of errors in array
  * @throws {SyntaxError|TypeError|ReferenceError}
  */
-export declare function validateJSONX(jsonx?: {}, returnAllErrors?: boolean): string | true | SyntaxError[];
+export declare function validateJSONX(jsonx?: defs.jsonx, returnAllErrors?: boolean): boolean | string;
 /**
  * validates simple JSONX Syntax {[component]:{props,children}}
  * @param {Object} simpleJSONX - Any valid simple JSONX Syntax
  * @return {Boolean} returns true if simpleJSONX is valid
  */
-export declare function validSimpleJSONXSyntax(simpleJSONX?: {}): boolean;
+export declare function validSimpleJSONXSyntax(simpleJSONX?: any): boolean;
 /**
  * Transforms SimpleJSONX to Valid JSONX JSON {[component]:{props,children}} => {component,props,children}
  * @param {Object} simpleJSONX JSON Object
  * @return {Object} - returns a valid JSONX JSON Object from a simple JSONX JSON Object
  */
-export declare function simpleJSONXSyntax(simpleJSONX?: {}): any;
+export declare function simpleJSONXSyntax(simpleJSONX?: defs.simpleJsonx): {
+    component: string;
+} & defs.simpleJsonxElementProperties & {
+    children: any;
+};
 /**
  * Transforms Valid JSONX JSON to SimpleJSONX  {component,props,children} => {[component]:{props,children}}
  * @param {Object} jsonx Valid JSONX JSON object
  * @return {Object} - returns a simple JSONX JSON Object from a valid JSONX JSON Object
  */
-export declare function getSimplifiedJSONX(jsonx?: {}): {};
+export declare function getSimplifiedJSONX(jsonx?: defs.jsonx): defs.jsonx;
 /**
  * Fetches JSON from remote path
  * @param {String} path - fetch path url

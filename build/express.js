@@ -1,5 +1,7 @@
-import { outputHTML, } from '.';
+import { outputHTML, } from './';
 import path from 'path';
+import fs from 'fs';
+const scopedEval = eval;
 /**
  * Use JSONX for express view rendering
  * @param {string} filePath - path to jsonx express view
@@ -10,7 +12,11 @@ import path from 'path';
  */
 export function __express(filePath, options, callback) {
     try {
-        const jsonxModule = options.__jsonx; //|| require(filePath);
+        let jsonxModule = options.__jsonx;
+        if (filePath) {
+            const jsFile = fs.readFileSync(filePath).toString();
+            jsonxModule = scopedEval(jsFile.toString());
+        }
         const resources = Object.assign({}, options);
         delete resources.__boundConfig;
         delete resources.__DOCTYPE;

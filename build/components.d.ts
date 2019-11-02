@@ -1,4 +1,6 @@
 import React from 'react';
+import * as defs from "./types/jsonx/index";
+import { ReactComponentLike } from 'prop-types';
 /**
  
  */
@@ -16,7 +18,11 @@ export declare let componentMap: any;
  * @param {string[]} boundedComponents - list of components to bind JSONX this context (usually helpful for navigation and redux-router)
  * @returns {Object} reactComponents object of all react components available for JSONX
  */
-export declare function getBoundedComponents(options?: {}): any;
+export declare function getBoundedComponents(this: defs.Context, options?: {
+    advancedBinding?: boolean;
+    reactComponents?: defs.jsonx['jsonxComponents'];
+    boundedComponents?: string[];
+}): any;
 /**
  * returns a react component from a component library
  
@@ -25,7 +31,10 @@ export declare function getBoundedComponents(options?: {}): any;
  * @param {Object} [options.jsonx={}] - any valid JSONX JSON
  * @returns {function|undefined} react component from react library like bootstrap, material design or bulma
  */
-export declare function getComponentFromLibrary(options?: {}): any;
+export declare function getComponentFromLibrary(options?: {
+    jsonx: defs.jsonx;
+    componentLibraries?: defs.jsonx['jsonxLibrary'];
+}): any;
 /**
  * returns a react element from jsonx.component
  
@@ -42,7 +51,13 @@ export declare function getComponentFromLibrary(options?: {}): any;
  * @param {boolean} [options.debug=false] - use debug messages
  * @returns {string|function|class} valid react element
  */
-export declare function getComponentFromMap(options?: {}): any;
+export declare function getComponentFromMap(options?: {
+    jsonx?: defs.jsonx;
+    reactComponents?: defs.jsonx['jsonxComponents'];
+    componentLibraries?: defs.jsonx['jsonxLibrary'];
+    logError?: any;
+    debug?: boolean;
+}): any;
 /**
  * Returns a new function from an options object
  
@@ -51,7 +66,7 @@ export declare function getComponentFromMap(options?: {}): any;
  * @param {String[]} [options.args=[]] - Function arguments
  * @returns {Function}
  */
-export declare function getFunctionFromEval(options?: {}): any;
+export declare function getFunctionFromEval(options?: any): any;
 /**
  * Returns a new React Component
  
@@ -70,8 +85,8 @@ export declare function getFunctionFromEval(options?: {}): any;
  * @returns {Function}
  * @see {@link https://reactjs.org/docs/react-without-es6.html}
  */
-export declare function getReactClassComponent(reactComponent?: {}, options?: {}): any;
-export declare function DynamicComponent(props?: {}): any;
+export declare function getReactClassComponent(this: defs.Context, reactComponent?: {}, options?: any): ReactComponentLike;
+export declare function DynamicComponent(this: defs.Context, props?: {}): defs.JSONReactElement | import("prop-types").ReactElementLike | null;
 /**
  * Returns new React Function Component
  
@@ -111,8 +126,8 @@ export declare function DynamicComponent(props?: {}): any;
   const options = { name: IntroHook}
   const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({jsonxRender, functionBody, options});
    */
-export declare function getReactFunctionComponent(reactComponent?: {}, functionBody?: string, options?: {}): any;
+export declare function getReactFunctionComponent(this: defs.Context, reactComponent?: {}, functionBody?: string, options?: any): any;
 /**
  *
  */
-export declare function getReactContext(options?: {}): React.Context<any>;
+export declare function getReactContext(options?: any): React.Context<any>;

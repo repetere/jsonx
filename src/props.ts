@@ -380,8 +380,10 @@ export function getFunctionFromProps(this: defs.Context, options: {
   const { propFunc='func:', propBody, jsonx, functionProperty='', } = options;
   // eslint-disable-next-line
   const { logError = console.error, debug, } = this;
+  let windowObject:any = {};
+  if (this.window) windowObject = this.window;
   //@ts-ignore
-  const windowObject = this.window || global.window || {};
+  else if (typeof global!=='undefined' && global.window) windowObject = global.window;
   try {
     const functionNameString = propFunc.split(':')[ 1 ] || '';
     const functionNameArray = functionNameString.split('.');
@@ -407,7 +409,7 @@ export function getFunctionFromProps(this: defs.Context, options: {
         }
       );
       if (jsonx.__functionargs) {
-        const boundArgs = [this,].concat(jsonx.__functionargs[functionProperty].map(arg => jsonx.props[ arg ]));
+        const boundArgs = [this,].concat(jsonx.__functionargs[functionProperty].map((arg:string) => jsonx.props[ arg ]));
         return InlineFunction.bind(...boundArgs);
       } else {
         return InlineFunction.bind(this);
@@ -573,7 +575,7 @@ export function getComputedProps(this: defs.Context, options: {
   componentLibraries?:defs.jsonxLibrary
 } = {}) {
   // eslint-disable-next-line
-  const { jsonx = {}, resources = {}, renderIndex, logError = console.error, useReduxState = true, ignoreReduxPropsInComponentLibraries = true, disableRenderIndexKey = true, debug, } = options;
+  const { jsonx = {}, resources = {}, renderIndex, logError = console.error, useReduxState = true, ignoreReduxPropsInComponentLibraries = true, disableRenderIndexKey = true, debug, componentLibraries = {}} = options;
   try {
     const componentThisProp = (jsonx.thisprops)
       ? Object.assign({
