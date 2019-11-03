@@ -29,7 +29,7 @@ before_script:
   - npm install 
 
 install: 
-  - npm install nyc typescript jest -g
+  - npm install nyc typescript coveralls jest -g
   - npm install 
 
 branches:
