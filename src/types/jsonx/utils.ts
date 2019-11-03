@@ -7,3 +7,4 @@ export interface globalThisWindow{
 export type traversePaths = {
   [index: string]: string[];
 }
+

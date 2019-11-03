@@ -323,14 +323,16 @@ export function getReactComponents(this:defs.Context, options:defs.Config) {
  */
 export function getReactComponentProps(this: defs.Context, options: { jsonx: defs.jsonx } = { jsonx: {}}) {
   const { jsonx, } = options;
+  const customComponents = this && this.reactComponents ? this.reactComponents : {};
+  const customLibraries = this && this.componentLibraries ? this.componentLibraries : {};
   if (jsonx.__dangerouslyInsertJSONXComponents && Object.keys(jsonx.__dangerouslyInsertJSONXComponents).length) { 
     return Object.keys(jsonx.__dangerouslyInsertJSONXComponents).reduce((cprops:defs.jsonxResourceProps, cpropName) => {
       let componentVal;
       try {
         componentVal = getComponentFromMap({
           jsonx: jsonx.__dangerouslyInsertJSONXComponents[ cpropName ],
-          reactComponents: this.reactComponents,
-          componentLibraries: this.componentLibraries,
+          reactComponents: customComponents,
+          componentLibraries: customLibraries,
         });
       } catch (e) {
         if (this.debug || jsonx.debug) componentVal = e;
@@ -350,8 +352,8 @@ export function getReactComponentProps(this: defs.Context, options: { jsonx: def
               ? jsonx.__dangerouslyInsertComponentProps[ cpropName ]
               : {},
           },
-          reactComponents: this.reactComponents,
-          componentLibraries: this.componentLibraries,
+          reactComponents: customComponents,
+          componentLibraries: customLibraries,
         });
       } catch (e) {
         if (this.debug || jsonx.debug) componentVal = e;

@@ -1,208 +1,13 @@
 import UAParser from 'ua-parser-js';
 import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, createContext } from 'react';
+import { Cache } from 'memory-cache';
 import ReactDOMElements from 'react-dom-factories';
 import createReactClass from 'create-react-class';
 import path from 'path';
-import fs from 'fs';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 
-function Cache() {
-  var _cache = Object.create(null);
-
-  var _hitCount = 0;
-  var _missCount = 0;
-  var _size = 0;
-  var _debug = false;
-
-  this.put = function (key, value, time, timeoutCallback) {
-    if (_debug) {
-      console.log('caching: %s = %j (@%s)', key, value, time);
-    }
-
-    if (typeof time !== 'undefined' && (typeof time !== 'number' || isNaN(time) || time <= 0)) {
-      throw new Error('Cache timeout must be a positive number');
-    } else if (typeof timeoutCallback !== 'undefined' && typeof timeoutCallback !== 'function') {
-      throw new Error('Cache timeout callback must be a function');
-    }
-
-    var oldRecord = _cache[key];
-
-    if (oldRecord) {
-      clearTimeout(oldRecord.timeout);
-    } else {
-      _size++;
-    }
-
-    var record = {
-      value: value,
-      expire: time + Date.now()
-    };
-
-    if (!isNaN(record.expire)) {
-      record.timeout = setTimeout(function () {
-        _del(key);
-
-        if (timeoutCallback) {
-          timeoutCallback(key, value);
-        }
-      }.bind(this), time);
-    }
-
-    _cache[key] = record;
-    return value;
-  };
-
-  this.del = function (key) {
-    var canDelete = true;
-    var oldRecord = _cache[key];
-
-    if (oldRecord) {
-      clearTimeout(oldRecord.timeout);
-
-      if (!isNaN(oldRecord.expire) && oldRecord.expire < Date.now()) {
-        canDelete = false;
-      }
-    } else {
-      canDelete = false;
-    }
-
-    if (canDelete) {
-      _del(key);
-    }
-
-    return canDelete;
-  };
-
-  function _del(key) {
-    _size--;
-    delete _cache[key];
-  }
-
-  this.clear = function () {
-    for (var key in _cache) {
-      clearTimeout(_cache[key].timeout);
-    }
-
-    _size = 0;
-    _cache = Object.create(null);
-
-    if (_debug) {
-      _hitCount = 0;
-      _missCount = 0;
-    }
-  };
-
-  this.get = function (key) {
-    var data = _cache[key];
-
-    if (typeof data != "undefined") {
-      if (isNaN(data.expire) || data.expire >= Date.now()) {
-        if (_debug) _hitCount++;
-        return data.value;
-      } else {
-        // free some space
-        if (_debug) _missCount++;
-        _size--;
-        delete _cache[key];
-      }
-    } else if (_debug) {
-      _missCount++;
-    }
-
-    return null;
-  };
-
-  this.size = function () {
-    return _size;
-  };
-
-  this.memsize = function () {
-    var size = 0,
-        key;
-
-    for (key in _cache) {
-      size++;
-    }
-
-    return size;
-  };
-
-  this.debug = function (bool) {
-    _debug = bool;
-  };
-
-  this.hits = function () {
-    return _hitCount;
-  };
-
-  this.misses = function () {
-    return _missCount;
-  };
-
-  this.keys = function () {
-    return Object.keys(_cache);
-  };
-
-  this.exportJson = function () {
-    var plainJsCache = {}; // Discard the `timeout` property.
-    // Note: JSON doesn't support `NaN`, so convert it to `'NaN'`.
-
-    for (var key in _cache) {
-      var record = _cache[key];
-      plainJsCache[key] = {
-        value: record.value,
-        expire: record.expire || 'NaN'
-      };
-    }
-
-    return JSON.stringify(plainJsCache);
-  };
-
-  this.importJson = function (jsonToImport, options) {
-    var cacheToImport = JSON.parse(jsonToImport);
-    var currTime = Date.now();
-    var skipDuplicates = options && options.skipDuplicates;
-
-    for (var key in cacheToImport) {
-      if (cacheToImport.hasOwnProperty(key)) {
-        if (skipDuplicates) {
-          var existingRecord = _cache[key];
-
-          if (existingRecord) {
-            if (_debug) {
-              console.log('Skipping duplicate imported key \'%s\'', key);
-            }
-
-            continue;
-          }
-        }
-
-        var record = cacheToImport[key]; // record.expire could be `'NaN'` if no expiry was set.
-        // Try to subtract from it; a string minus a number is `NaN`, which is perfectly fine here.
-
-        var remainingTime = record.expire - currTime;
-
-        if (remainingTime <= 0) {
-          // Delete any record that might exist with the same key, since this key is expired.
-          this.del(key);
-          continue;
-        } // Remaining time must now be either positive or `NaN`,
-        // but `put` will throw an error if we try to give it `NaN`.
-
-
-        remainingTime = remainingTime > 0 ? remainingTime : undefined;
-        this.put(key, record.value, remainingTime);
-      }
-    }
-
-    return this.size();
-  };
-}
-
-module.exports = new Cache();
-module.exports.Cache = Cache;
-
+var global$1 = typeof global$1 !== 'undefined' ? global$1 : globalThis;
 /**
  * Used to evaluate whether or not to render a component
  * @param {Object} options
@@ -329,10 +134,17 @@ function displayComponent(options = {}) {
  * @returns {Boolean} true if browser is not IE or old android / chrome
  */
 function getAdvancedBinding() {
+    var window = window;
     if (typeof window === 'undefined') {
-        var window = (this && this.window)
-            ? this.window
-            : {};
+        if (this && this.window) {
+            window = this.window;
+        }
+        else if (typeof global$1 !== 'undefined' && global$1.window) {
+            window = global$1.window;
+        }
+        else if (typeof globalThis !== 'undefined' && globalThis.window) {
+            window = globalThis.window;
+        }
         if (!window.navigator)
             return false;
     }
@@ -398,8 +210,8 @@ function traverse(paths = {}, data = {}) {
             let value = data;
             while (_path.length && value && typeof value === 'object') {
                 let prop = _path.shift();
-                if (prop && value[prop])
-                    value = value[prop];
+                //@ts-ignore
+                value = value[prop];
             }
             result[key] = (_path.length) ? undefined : value;
         }
@@ -663,7 +475,7 @@ var jsonxUtils = /*#__PURE__*/Object.freeze({
   fetchJSON: fetchJSON
 });
 
-const cache = new undefined();
+const cache = new Cache();
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
@@ -994,10 +806,9 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
     }
     if (typeof options === 'undefined' || typeof options.bind === 'undefined')
         options.bind = true;
-    console.log('func', { options }, 'this', this);
     const { resources = {}, args = [], } = options;
     //@ts-ignore
-    const props = reactComponent.props;
+    const props = Object.assign({}, reactComponent.props);
     const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getReactElementFromJSONX, reactComponent, resources, props,];
     //@ts-ignore
     if (typeof functionBody === 'function')
@@ -1010,15 +821,14 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
       ${functionBody}
       if(typeof exposeProps==='undefined' || exposeProps){
         reactComponent.props = Object.assign({},props,typeof exposeProps==='undefined'?{}:exposeProps);
-        // reactComponent.__functionargs = Object.keys(exposeProps);
+        reactComponent.__functionargs = Object.keys(exposeProps);
       } else{
         reactComponent.props =  props;
       }
-      // if(!props.children && props) delete props.children;
-      console.log('func self',self)
-      console.log('func this',this)
+      if(!props.children) {
+      //  delete props.children;
+      }
       const context = ${options.bind ? 'Object.assign(self,this)' : 'this'};
-      console.log({context}) 
       return getReactElementFromJSONX.call(context, reactComponent);
     }
   `);
@@ -1373,14 +1183,16 @@ function getReactComponents(options) {
  */
 function getReactComponentProps(options = { jsonx: {} }) {
     const { jsonx, } = options;
+    const customComponents = this && this.reactComponents ? this.reactComponents : {};
+    const customLibraries = this && this.componentLibraries ? this.componentLibraries : {};
     if (jsonx.__dangerouslyInsertJSONXComponents && Object.keys(jsonx.__dangerouslyInsertJSONXComponents).length) {
         return Object.keys(jsonx.__dangerouslyInsertJSONXComponents).reduce((cprops, cpropName) => {
             let componentVal;
             try {
                 componentVal = getComponentFromMap({
                     jsonx: jsonx.__dangerouslyInsertJSONXComponents[cpropName],
-                    reactComponents: this.reactComponents,
-                    componentLibraries: this.componentLibraries,
+                    reactComponents: customComponents,
+                    componentLibraries: customLibraries,
                 });
             }
             catch (e) {
@@ -1403,8 +1215,8 @@ function getReactComponentProps(options = { jsonx: {} }) {
                             ? jsonx.__dangerouslyInsertComponentProps[cpropName]
                             : {},
                     },
-                    reactComponents: this.reactComponents,
-                    componentLibraries: this.componentLibraries,
+                    reactComponents: customComponents,
+                    componentLibraries: customLibraries,
                 });
             }
             catch (e) {
@@ -1766,7 +1578,11 @@ function getChildrenProps(options = {}) {
                 ? {}
                 : {
                     style: {},
-                }, childjsonx.props, { key: renderIndex$$1 || '' + Math.random(), }),
+                }, childjsonx.props, {
+                key: (typeof renderIndex$$1 !== 'undefined')
+                    ? renderIndex$$1 + Math.random()
+                    : Math.random(),
+            }),
         })
         : childjsonx;
 }
@@ -1803,6 +1619,8 @@ var jsonxChildren = /*#__PURE__*/Object.freeze({
   getChildrenProps: getChildrenProps,
   getJSONXChildren: getJSONXChildren
 });
+
+var fs = {};
 
 const scopedEval = eval;
 /**

@@ -367,14 +367,10 @@ export function getReactFunctionComponent(this:defs.Context,reactComponent = {},
       } else{
         reactComponent.props =  props;
       }
-      // console.log({props})
       if(!props.children) {
       //  delete props.children;
       }
-      // console.log('func self',self)
-      // console.log('func this',this)
       const context = ${options.bind ? 'Object.assign(self,this)' : 'this'};
-      console.log({context, reactComponent}) 
       return getReactElementFromJSONX.call(context, reactComponent);
     }
   `);

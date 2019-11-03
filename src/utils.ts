@@ -1,7 +1,12 @@
 import UAParser from 'ua-parser-js';
 import * as defs from "./types/jsonx/index";
 
-const global:any = {};
+declare global {
+  interface window {
+  }
+}
+
+var global: any = typeof global!=='undefined'?global: globalThis;
 
 /**
  * Used to evaluate whether or not to render a component
@@ -127,11 +132,15 @@ export function displayComponent(options: { jsonx?: defs.jsonx, props?: any, ren
  * @returns {Boolean} true if browser is not IE or old android / chrome
  */
 export function getAdvancedBinding(this:defs.globalThisWindow):boolean {
-  
+  var window:any = window;
   if (typeof window === 'undefined') {
-    var window = (this && this.window)
-      ? this.window
-      : global.window || {};
+    if(this && this.window){
+      window = this.window;
+    } else if (typeof global !== 'undefined' && global.window) {
+      window = global.window;
+    } else if (typeof globalThis !== 'undefined' && globalThis.window) {
+      window = globalThis.window;
+    }
     if (!window.navigator) return false;
   }
   try {
@@ -187,7 +196,7 @@ const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
 export function traverse(paths:defs.traversePaths = {}, data = {}) {
   let keys = Object.keys(paths);
   if (!keys.length) return paths;
-  return keys.reduce((result: defs.jsonxResourceProps, key: string) => {
+  return keys.reduce((result:defs.jsonxResourceProps, key:string) => {
     //@ts-ignore
     if (typeof paths[key] === 'string') result[key] = data[paths[key]];
     else if (Array.isArray(paths[key])) {
@@ -195,7 +204,8 @@ export function traverse(paths:defs.traversePaths = {}, data = {}) {
       let value = data;
       while (_path.length && value && typeof value === 'object') {
         let prop = _path.shift();
-        if(prop&&value[prop])value = value[prop];
+        //@ts-ignore
+        value = value[prop];
       }
       result[key] = (_path.length) ? undefined : value;
     } else throw new TypeError('dynamic property paths must be a string or an array of strings or numeric indexes');

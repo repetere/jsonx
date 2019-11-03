@@ -49,7 +49,6 @@ export default [
 
           'node_modules/memory-cache/index.js':[
             'cache',
-            'Cache',
             'default',
           ],
         },
@@ -65,123 +64,6 @@ export default [
     },
   },
 
-  // CommonJS (for Node) and ES module (for bundlers) build.
-  // (We could have three entries in the configuration array
-  // instead of two, but it's quicker to generate multiple
-  // builds from a single configuration where possible, using
-  // an array for the `output` option, where we can specify 
-  // `file` and `format` for each target)
-  {
-    input: 'src/index.ts',
-    external: [
-      'path',
-      'react',
-      'react-dom',
-      'react-dom/server',
-      'react-dom-factories',
-      'create-react-class',
-      'memory-cache',
-      // 'use-global-hook',
-      'ua-parser-js',
-    ], // <-- suppresses the warning
-    output: [
-      {
-        name: 'jsonx',
-        exports: 'named',
-        file: pkg.main,
-        format: 'cjs',
-      },
-      {
-        name: 'jsonx',
-        exports: 'named',
-        file: pkg.esm,
-        format: 'es',
-      },
-    ],
-    plugins: [
-      resolve({
-        preferBuiltins: true,
-      }),
-      resolve({
-        preferBuiltins: true,
-      }), // so Rollup can find `ms`
-      builtins({
-      }),
-      commonjs({}),
-      typescript(),
-      globals({
-      }),
-    ],
-    watch: {
-      include: 'src/**',
-    },
-  },
-  // CommonJS (for Node) and ES module (for bundlers) build.
-  // (We could have three entries in the configuration array
-  // instead of two, but it's quicker to generate multiple
-  // builds from a single configuration where possible, using
-  // an array for the `output` option, where we can specify 
-  // `file` and `format` for each target)
-  {
-    input: 'src/index.ts',
-    external: [
-      'path',
-      'react',
-      'react-dom',
-      'react-dom/server',
-      'react-dom-factories',
-      'create-react-class',
-      'memory-cache',
-      // 'use-global-hook',
-      'ua-parser-js',
-    ], // <-- suppresses the warning
-    output: [
-      {
-        name: 'jsonx',
-        exports: 'named',
-        file: 'dist/jsonx-server.cjs.js',
-        format: 'cjs',
-      },
-      {
-        name: 'jsonx',
-        exports: 'named',
-        file: 'dist/jsonx-server.esm.js',
-        format: 'es',
-      },
-    ],
-    plugins: [
-      resolve({
-        preferBuiltins: true,
-      }),
-      typescript(),
-      babel({
-        // exclude: 'node_modules/**', // only transpile our source code
-        runtimeHelpers: true,
-        // 'presets': [
-        //   // ['@babel/env', { },],
-        //   '@babel/env'
-        // ],
-        plugins: [
-          [
-            '@babel/transform-runtime',
-            // { useESModules: output.format !== 'cjs' }
-          ],
-
-          [
-            '@babel/plugin-proposal-export-namespace-from',
-          ],
-          ['babel-plugin-replace-imports', {
-            'test': /react-dom$/,
-            'replacer': 'react-dom/server',
-          },],
-        ],
-        // exclude: 'node_modules/**', // only transpile our source code
-      }),
-    ],
-    watch: {
-      include: 'src/**',
-    },
-  },
   // BROWSER MIN
   {
     input: 'src/index.ts',
@@ -225,7 +107,6 @@ export default [
           ],
           'node_modules/memory-cache/index.js':[
             'cache',
-            'Cache',
             'default',
           ],
         },
@@ -233,7 +114,6 @@ export default [
       
       globals({
       }),
-
       terser({
         // sourceMap: {
         //   filename: 'dist/jsonx.web.min.js',
@@ -249,5 +129,123 @@ export default [
       //   sourcemap: true
       // }),
     ],
+  },
+  // CommonJS (for Node) and ES module (for bundlers) build.
+  // (We could have three entries in the configuration array
+  // instead of two, but it's quicker to generate multiple
+  // builds from a single configuration where possible, using
+  // an array for the `output` option, where we can specify 
+  // `file` and `format` for each target)
+  {
+    input: 'src/index.ts',
+    external: [
+      'path',
+      'react',
+      'react-dom',
+      'react-dom/server',
+      'react-dom-factories',
+      'create-react-class',
+      'memory-cache',
+      // 'use-global-hook',
+      'ua-parser-js',
+    ], // <-- suppresses the warning
+    output: [
+      {
+        name: 'jsonx',
+        exports: 'named',
+        file: pkg.main,
+        format: 'cjs',
+      },
+      {
+        name: 'jsonx',
+        exports: 'named',
+        file: pkg.esm,
+        format: 'es',
+      },
+    ],
+    plugins: [
+      resolve({
+        preferBuiltins: true,
+      }), // so Rollup can find `ms`
+      builtins({
+      }),
+      commonjs({}),
+      globals({
+      }),
+      typescript(),
+     
+    ],
+    watch: {
+      include: 'src/**',
+    },
+  },
+  // CommonJS (for Node) and ES module (for bundlers) build.
+  // (We could have three entries in the configuration array
+  // instead of two, but it's quicker to generate multiple
+  // builds from a single configuration where possible, using
+  // an array for the `output` option, where we can specify 
+  // `file` and `format` for each target)
+  {
+    input: 'src/index.ts',
+    external: [
+      'path',
+      'react',
+      'react-dom',
+      'react-dom/server',
+      'react-dom-factories',
+      'create-react-class',
+      'memory-cache',
+      // 'use-global-hook',
+      'ua-parser-js',
+    ], // <-- suppresses the warning
+    output: [
+      {
+        name: 'jsonx',
+        exports: 'named',
+        file: 'dist/jsonx-server.cjs.js',
+        format: 'cjs',
+      },
+      {
+        name: 'jsonx',
+        exports: 'named',
+        file: 'dist/jsonx-server.esm.js',
+        format: 'es',
+      },
+    ],
+    plugins: [
+      resolve({
+        preferBuiltins: true,
+      }),
+      builtins({
+      }),
+      commonjs({}),
+      typescript(),
+      babel({
+        // exclude: 'node_modules/**', // only transpile our source code
+        runtimeHelpers: true,
+        // 'presets': [
+        //   // ['@babel/env', { },],
+        //   '@babel/env'
+        // ],
+        plugins: [
+          [
+            '@babel/transform-runtime',
+            // { useESModules: output.format !== 'cjs' }
+          ],
+
+          [
+            '@babel/plugin-proposal-export-namespace-from',
+          ],
+          ['babel-plugin-replace-imports', {
+            'test': /react-dom$/,
+            'replacer': 'react-dom/server',
+          },],
+        ],
+        // exclude: 'node_modules/**', // only transpile our source code
+      }),
+    ],
+    watch: {
+      include: 'src/**',
+    },
   },
 ];

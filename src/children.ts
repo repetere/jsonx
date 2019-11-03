@@ -91,7 +91,11 @@ const { jsonx = {}, childjsonx, renderIndex, } = options;
               style: {},
             },
           childjsonx.props,
-          { key: renderIndex||'' + Math.random(), }),
+          {
+            key: (typeof renderIndex !== 'undefined')
+              ? renderIndex + Math.random()
+              : Math.random(),
+          }),
       })
     : childjsonx;
 }
