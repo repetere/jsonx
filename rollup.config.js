@@ -9,11 +9,12 @@ import replace from 'rollup-plugin-replace';
 import pkg from './package.json';
 import { terser, } from 'rollup-plugin-terser';
 // import terser from 'rollup-plugin-terser-js';
+import typescript from 'rollup-plugin-typescript';
 
 export default [
   // browser-friendly UMD build
   {
-    input: 'src/main.js',
+    input: 'src/index.ts',
     // external: [ 'react' ], // <-- suppresses the warning
     output:[{
       exports: 'named',
@@ -37,23 +38,7 @@ export default [
       }), // so Rollup can find `ms`
       builtins({
       }),
-      babel({
-        runtimeHelpers: true,
-        // 'presets': [
-        //   ['@babel/env', { },],
-        // ],
-        plugins: [
-          [
-            '@babel/transform-runtime',
-            // { useESModules: output.format !== 'cjs' }
-          ],
-
-          [
-            '@babel/plugin-proposal-export-namespace-from',
-          ],
-        ],
-        // exclude: 'node_modules/**', // only transpile our source code
-      }),
+      typescript(),
       commonjs({
         namedExports: {
           // left-hand side can be an absolute path, a path
@@ -62,6 +47,10 @@ export default [
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
           'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createContext', 'Fragment', 'Suspense', 'lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', ],
 
+          'node_modules/memory-cache/index.js':[
+            'cache',
+            'default',
+          ],
         },
       }), // so Rollup can convert `ms` to an ES module
       globals({
@@ -75,141 +64,9 @@ export default [
     },
   },
 
-  // CommonJS (for Node) and ES module (for bundlers) build.
-  // (We could have three entries in the configuration array
-  // instead of two, but it's quicker to generate multiple
-  // builds from a single configuration where possible, using
-  // an array for the `output` option, where we can specify 
-  // `file` and `format` for each target)
-  {
-    input: 'src/main.js',
-    external: [
-      'path',
-      'react',
-      'react-dom',
-      'react-dom/server',
-      'react-dom-factories',
-      'create-react-class',
-      // 'use-global-hook',
-      'ua-parser-js',
-    ], // <-- suppresses the warning
-    output: [
-      {
-        name: 'jsonx',
-        exports: 'named',
-        file: pkg.main,
-        format: 'cjs',
-      },
-      {
-        name: 'jsonx',
-        exports: 'named',
-        file: pkg.esm,
-        format: 'es',
-      },
-    ],
-    plugins: [
-      resolve({
-        preferBuiltins: true,
-      }),
-      babel({
-        // exclude: 'node_modules/**', // only transpile our source code
-        runtimeHelpers: true,
-        // 'presets': [
-        //   // ['@babel/env', { },],
-        //   '@babel/env'
-        // ],
-        plugins: [
-          [
-            '@babel/transform-runtime',
-            // { useESModules: output.format !== 'cjs' }
-          ],
-
-          [
-            '@babel/plugin-proposal-export-namespace-from',
-          ],
-        ],
-        // exclude: 'node_modules/**', // only transpile our source code
-      }),
-    ],
-    watch: {
-      include: 'src/**',
-    },
-  },
-  // CommonJS (for Node) and ES module (for bundlers) build.
-  // (We could have three entries in the configuration array
-  // instead of two, but it's quicker to generate multiple
-  // builds from a single configuration where possible, using
-  // an array for the `output` option, where we can specify 
-  // `file` and `format` for each target)
-  {
-    input: 'src/main.js',
-    external: [
-      'path',
-      'react',
-      'react-dom',
-      'react-dom/server',
-      'react-dom-factories',
-      'create-react-class',
-      // 'use-global-hook',
-      'ua-parser-js',
-    ], // <-- suppresses the warning
-    output: [
-      {
-        name: 'jsonx',
-        exports: 'named',
-        file: 'dist/jsonx-server.cjs.js',
-        format: 'cjs',
-      },
-      {
-        name: 'jsonx',
-        exports: 'named',
-        file: 'dist/jsonx-server.esm.js',
-        format: 'es',
-      },
-    ],
-    plugins: [
-      // aliasModuleSpecifiers({
-      //   'react-dom/': 'react-dom/server/',
-      // }),
-      // alias({
-      //   'react-dom': path.resolve('./node_modules/react-dom/server.node.js'),
-      //   ReactDOM: path.resolve('./node_modules/react-dom/server.node.js'),
-      // }),
-
-      resolve({
-        preferBuiltins: true,
-      }),
-      babel({
-        // exclude: 'node_modules/**', // only transpile our source code
-        runtimeHelpers: true,
-        // 'presets': [
-        //   // ['@babel/env', { },],
-        //   '@babel/env'
-        // ],
-        plugins: [
-          [
-            '@babel/transform-runtime',
-            // { useESModules: output.format !== 'cjs' }
-          ],
-
-          [
-            '@babel/plugin-proposal-export-namespace-from',
-          ],
-          ['babel-plugin-replace-imports', {
-            'test': /react-dom$/,
-            'replacer': 'react-dom/server',
-          },],
-        ],
-        // exclude: 'node_modules/**', // only transpile our source code
-      }),
-    ],
-    watch: {
-      include: 'src/**',
-    },
-  },
   // BROWSER MIN
   {
-    input: 'src/main.js',
+    input: 'src/index.ts',
     // external: [ 'react' ], // <-- suppresses the warning
     output:[{
       exports: 'named',
@@ -238,6 +95,9 @@ export default [
       resolve({
         preferBuiltins: true,
       }), // so Rollup can find `ms`
+      builtins({
+      }),
+      typescript(),
       commonjs({
         namedExports: {
           'node_modules/react/index.js':[
@@ -251,38 +111,8 @@ export default [
           ],
         },
       }), // so Rollup can convert `ms` to an ES module
-      builtins({
-      }),
+      
       globals({
-      }),
-      babel({
-        runtimeHelpers: true,
-        externalHelpers: true,
-        // exclude: 'node_modules/@babel/runtime/**',
-        exclude: 'node_modules/@babel/runtime/helpers/typeof.js',
-        'presets': [
-          ['@babel/env', {}, ],
-        ],
-        plugins: [
-          [
-            '@babel/transform-runtime',
-          ],
-          [
-            '@babel/plugin-proposal-export-namespace-from',
-          ],
-          ['babel-plugin-replace-imports', {
-            'test': /react-dom\/server/,
-            'replacer': '../design/_mock_react-dom-server',
-          },],
-          ['babel-plugin-replace-imports', {
-            'test': /express/,
-            'replacer': '../design/_mock_express',
-          },'u-rename-express' ],
-          // ['babel-plugin-replace-imports', {
-          //   'test': /ua-parser-js$/,
-          //   'replacer': '../design/_mock_react-dom-server',
-          // },'u-rename' ],
-        ],
       }),
       terser({
         // sourceMap: {
@@ -299,5 +129,123 @@ export default [
       //   sourcemap: true
       // }),
     ],
+  },
+  // CommonJS (for Node) and ES module (for bundlers) build.
+  // (We could have three entries in the configuration array
+  // instead of two, but it's quicker to generate multiple
+  // builds from a single configuration where possible, using
+  // an array for the `output` option, where we can specify 
+  // `file` and `format` for each target)
+  {
+    input: 'src/index.ts',
+    external: [
+      'path',
+      'react',
+      'react-dom',
+      'react-dom/server',
+      'react-dom-factories',
+      'create-react-class',
+      'memory-cache',
+      // 'use-global-hook',
+      'ua-parser-js',
+    ], // <-- suppresses the warning
+    output: [
+      {
+        name: 'jsonx',
+        exports: 'named',
+        file: pkg.main,
+        format: 'cjs',
+      },
+      {
+        name: 'jsonx',
+        exports: 'named',
+        file: pkg.esm,
+        format: 'es',
+      },
+    ],
+    plugins: [
+      resolve({
+        preferBuiltins: true,
+      }), // so Rollup can find `ms`
+      builtins({
+      }),
+      commonjs({}),
+      globals({
+      }),
+      typescript(),
+     
+    ],
+    watch: {
+      include: 'src/**',
+    },
+  },
+  // CommonJS (for Node) and ES module (for bundlers) build.
+  // (We could have three entries in the configuration array
+  // instead of two, but it's quicker to generate multiple
+  // builds from a single configuration where possible, using
+  // an array for the `output` option, where we can specify 
+  // `file` and `format` for each target)
+  {
+    input: 'src/index.ts',
+    external: [
+      'path',
+      'react',
+      'react-dom',
+      'react-dom/server',
+      'react-dom-factories',
+      'create-react-class',
+      'memory-cache',
+      // 'use-global-hook',
+      'ua-parser-js',
+    ], // <-- suppresses the warning
+    output: [
+      {
+        name: 'jsonx',
+        exports: 'named',
+        file: 'dist/jsonx-server.cjs.js',
+        format: 'cjs',
+      },
+      {
+        name: 'jsonx',
+        exports: 'named',
+        file: 'dist/jsonx-server.esm.js',
+        format: 'es',
+      },
+    ],
+    plugins: [
+      resolve({
+        preferBuiltins: true,
+      }),
+      builtins({
+      }),
+      commonjs({}),
+      typescript(),
+      babel({
+        // exclude: 'node_modules/**', // only transpile our source code
+        runtimeHelpers: true,
+        // 'presets': [
+        //   // ['@babel/env', { },],
+        //   '@babel/env'
+        // ],
+        plugins: [
+          [
+            '@babel/transform-runtime',
+            // { useESModules: output.format !== 'cjs' }
+          ],
+
+          [
+            '@babel/plugin-proposal-export-namespace-from',
+          ],
+          ['babel-plugin-replace-imports', {
+            'test': /react-dom$/,
+            'replacer': 'react-dom/server',
+          },],
+        ],
+        // exclude: 'node_modules/**', // only transpile our source code
+      }),
+    ],
+    watch: {
+      include: 'src/**',
+    },
   },
 ];

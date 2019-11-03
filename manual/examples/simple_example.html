@@ -28,7 +28,6 @@
       const myCustomComponent = jsonx._jsonxComponents.getReactFunctionComponent({
         component:'button',
         props:{
-          key:123,
           style:{
             color:'red'
           },
@@ -38,78 +37,78 @@
         },
         children:'this is a custom component'
       });
-      // const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent.call({
+      const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent.call({
         
-      //   componentLibraries:{
-      //     // ReactMD,
-      //     Spectre,
-      //   }
-      // },{
-      //   component:'div',
-      //   props:{
-      //     extra:'ok'
-      //   },
-      //   passprops:true,
-      //   children:[
-      //     {
-      //       component:'Spectre.Typography.H1',
-      //       children: 'This is from Function Component'
-      //     },
-      //     {
-      //         component:'p',
-      //         passprops:true,
-      //         children:[
-      //           {
-      //             component:'span',
-      //             children:'You clicked ',
-      //           },
-      //           {
-      //             component:'input',
-      //             thisprops:{
-      //               value:['count'],
-      //             },
-      //             // __functionProps:{
-      //             //   ref:'func:inline.ref',
-      //             // },
-      //             // __inline:{
-      //             //   ref:`window.INPUTREF = param1; console.log('testing INPUTREF',{param1});`,
-      //             // },
-      //           },
-      //           {
-      //             component:'span',
-      //             children:' times'
-      //           }
-      //         ]
-      //     },
-      //     {
-      //       component:'Spectre.Button.Button',
+        componentLibraries:{
+          // ReactMD,
+          Spectre,
+        }
+      },{
+        component:'div',
+        props:{
+          extra:'ok'
+        },
+        passprops:true,
+        children:[
+          {
+            component:'Spectre.Typography.H1',
+            children: 'This is from Function Component'
+          },
+          {
+              component:'p',
+              passprops:true,
+              children:[
+                {
+                  component:'span',
+                  children:'You clicked ',
+                },
+                {
+                  component:'input',
+                  thisprops:{
+                    value:['count'],
+                  },
+                  // __functionProps:{
+                  //   ref:'func:inline.ref',
+                  // },
+                  // __inline:{
+                  //   ref:`window.INPUTREF = param1; console.log('testing INPUTREF',{param1});`,
+                  // },
+                },
+                {
+                  component:'span',
+                  children:' times'
+                }
+              ]
+          },
+          {
+            component:'Spectre.Button.Button',
 
-      //       // component:'button',
-      //       // __functionargs:{
-      //       //   onClick:['count','setCount'],
-      //       // },
-      //       debug:true,
-      //       __dangerouslyBindEvalProps:{
-      //         onClick:function(count,setCount){
-      //           console.log('this is inline',{count,setCount},'arguments',arguments);
-      //           setCount(count+1);
-      //         },
-      //         // onClick:`(function(count,setCount){
-      //         //   setCount(count+1)
-      //         //   console.log('this is inline',{count,setCount});
-      //         // })`,
-      //       },
-      //       children:'Click me'
-      //     }
-      //   ],
-      // },`
-      // console.log('function component this',this,{self})
-      // const [count, setCount] = useState(0);
-      // const exposeProps = {count,setCount};
-      // `,{
-      //   name:'IntroHook',
-      //   bind:true,
-      // });
+            // component:'button',
+            // __functionargs:{
+            //   onClick:['count','setCount'],
+            // },
+            debug:true,
+            __dangerouslyBindEvalProps:{
+              onClick:function(count,setCount){
+                console.log('this is inline',{count,setCount},'arguments',arguments);
+                setCount(count+1);
+              },
+              // onClick:`(function(count,setCount){
+              //   setCount(count+1)
+              //   console.log('this is inline',{count,setCount});
+              // })`,
+            },
+            children:'Click me'
+          }
+        ],
+      },`
+      console.log('function component this',this,{self})
+      const [count, setCount] = useState(0);
+      const exposeProps = {count,setCount};
+      `,{
+        name:'IntroHook',
+        bind:true,
+      });
 
       const sampleJSONX = {
         component: 'Spectre.Grid.Grid',
@@ -130,8 +129,9 @@
           },
           {
             component:'div',
-            __dangerouslyInsertFunctionComponents:{
-              _children:{reactComponent:{ component:'p',children:'from func component'}}
+            props:{key:453248,},
+           __dangerouslyInsertFunctionComponents:{
+              _children:{reactComponent:{ component:'p',props:{key:1213},children:'from func component'}}
             }
           },
           {
@@ -156,7 +156,7 @@
                     component:'div',
                     props:{key:6,},
                     resourceprops:{
-                      _children:['title']
+                      _children:['DynamicComponentData','title']
                     },
                   },
                 ]
@@ -167,36 +167,38 @@
               cacheTimeout:5000,
               cacheTimeoutFunction:(k,v)=>console.log(`cache expired for ${k} - ${v}`)
             },
-          }
-          // {
-          //   component:'MyCustomFunctionComponent',
-          //   props:{
-          //     status:'Amazing',
-          //   },
-          //   resourceprops:{
-          //     punc:['punc']
-          //   }
-          // },
-          // {
-          //   component:'div',
-          //   __dangerouslyEvalAllProps:function(){
-          //     console.log('__dangerouslyEvalAllProps arguments',arguments);
-          //     return {
-          //       _children:'from __dangerouslyEvalAllProps',
-          //       style:{
-          //         color:'red',
-          //       },
-          //       title:'on div title'
-          //     };
-          //   },
-          //   children:'allComputedProps',
-          // },
+          },
+          {
+            component:'MyCustomFunctionComponent',
+            props:{
+              status:'Amazing',
+              key:239403,
+            },
+            resourceprops:{
+              punc:['punc']
+            }
+          },
+          {
+            component:'div',
+            __dangerouslyEvalAllProps:function(){
+              console.log('__dangerouslyEvalAllProps arguments',arguments);
+              return {
+                _children:'from __dangerouslyEvalAllProps',
+                style:{
+                  color:'red',
+                },
+                title:'on div title'
+              };
+            },
+            children:'allComputedProps',
+          },
         ],
       };
       const boundConfig = {
         debug:true, 
         reactComponents:{
           myCustomComponent,
+          MyCustomFunctionComponent,
         },
         componentLibraries:{
           // ReactMD,

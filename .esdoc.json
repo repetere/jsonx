@@ -41,9 +41,9 @@
           ]
         },
         "test": {
-          "source": "./test/",
+          "source": "./src/",
           "interfaces": ["describe", "it", "context", "suite", "test"],
-          "includes": ["(spec|Spec|test|Test)\\.mjs$","(spec|Spec|test|Test)\\.js$"],
+          "includes": ["(spec|Spec|test|Test)\\.js$","(spec|Spec|test|Test)\\.ts$"],
           "excludes": ["\\.config\\.js$"]
         }
       }
@@ -55,5 +55,5 @@
       }
     }
   ],
-  "includes": ["\\.mjs$","\\.js$"]
+  "includes": ["\\.mjs$","\\.js$","\\.ts$"]
 }

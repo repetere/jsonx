@@ -1,59 +1,58 @@
 {
-  "coverage": "68.85%",
-  "expectCount": 61,
-  "actualCount": 42,
+  "coverage": "0%",
+  "expectCount": 21,
+  "actualCount": 0,
   "files": {
-    "src/children.js": {
-      "expectCount": 3,
-      "actualCount": 3,
-      "undocumentLines": []
-    },
-    "src/components.js": {
-      "expectCount": 11,
-      "actualCount": 9,
+    "src/children.test.ts": {
+      "expectCount": 2,
+      "actualCount": 0,
       "undocumentLines": [
-        9,
-        224
-      ]
-    },
-    "src/express.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/main.js": {
-      "expectCount": 24,
-      "actualCount": 11,
-      "undocumentLines": [
-        11,
-        12,
-        13,
         14,
-        15,
-        16,
-        109,
-        110,
-        172,
-        224,
-        225,
-        226,
-        227
+        56
       ]
     },
-    "src/props.js": {
-      "expectCount": 14,
-      "actualCount": 10,
-      "undocumentLines": [
-        10,
-        11,
-        141,
-        266
-      ]
-    },
-    "src/utils.js": {
+    "src/components.test.ts": {
       "expectCount": 8,
-      "actualCount": 8,
-      "undocumentLines": []
+      "actualCount": 0,
+      "undocumentLines": [
+        15,
+        24,
+        83,
+        84,
+        89,
+        90,
+        95,
+        96
+      ]
+    },
+    "src/index.test.ts": {
+      "expectCount": 8,
+      "actualCount": 0,
+      "undocumentLines": [
+        18,
+        39,
+        62,
+        63,
+        65,
+        70,
+        95,
+        96
+      ]
+    },
+    "src/props.test.ts": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        14,
+        34
+      ]
+    },
+    "src/util.test.ts": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        16
+      ]
     }
   }
 }
