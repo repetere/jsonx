@@ -17,7 +17,7 @@
     "doc": "esdoc",
     "compile": "tsc",
     "build": "tsc && rollup -c && esdoc",
-    "coverage": "nyc report  --temp-directory=coverage --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --temp-directory=coverage --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -79,7 +79,7 @@
     "bulma": "^0.7.4",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "coveralls": "^3.0.3",
+    "coveralls": "^3.0.7",
     "esdoc": "^1.1.0",
     "esdoc-ecmascript-proposal-plugin": "^1.0.0",
     "esdoc-inject-script-plugin": "^1.0.0",

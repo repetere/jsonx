@@ -40,4 +40,5 @@ git:
   submodules: false  
 
 script: 
-  - npm set progress=false && npm run test && npm run coverage
+  - npm set progress=false && npm run test
+  - nyc report --temp-directory=coverage --reporter=text-lcov | coveralls
