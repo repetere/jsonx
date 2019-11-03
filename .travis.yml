@@ -41,4 +41,3 @@ git:
 
 script: 
   - npm set progress=false && npm run test
-  - nyc report --temp-directory=coverage --reporter=text-lcov | coveralls
