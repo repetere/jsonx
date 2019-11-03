@@ -24,39 +24,33 @@
   <body>
     <div id="root"></div>
     <script type="text/javascript">
-      window.sayHello = ()=>console.log('SAYING HELLO')
-      const myCustomComponent = jsonx._jsonxComponents.getReactFunctionComponent({
-        component:'button',
-        props:{
-          style:{
-            color:'red'
-          },
-        },
-        __functionProps:{
-          onClick:'func:window.sayHello'
-        },
-        children:'this is a custom component'
-      });
       const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent.call({
-        
+        debug:true, 
+
         componentLibraries:{
-          // ReactMD,
           Spectre,
         }
       },{
         component:'div',
         props:{
-          extra:'ok'
+          extra:'ok',
+          key:10,
         },
         passprops:true,
         children:[
           {
             component:'Spectre.Typography.H1',
+            props:{
+              key:11,
+            },
             children: 'This is from Function Component'
           },
           {
               component:'p',
               passprops:true,
+              props:{
+                key:12,
+              },
               children:[
                 {
                   component:'span',
@@ -67,12 +61,6 @@
                   thisprops:{
                     value:['count'],
                   },
-                  // __functionProps:{
-                  //   ref:'func:inline.ref',
-                  // },
-                  // __inline:{
-                  //   ref:`window.INPUTREF = param1; console.log('testing INPUTREF',{param1});`,
-                  // },
                 },
                 {
                   component:'span',
@@ -82,27 +70,22 @@
           },
           {
             component:'Spectre.Button.Button',
-
-            // component:'button',
-            // __functionargs:{
-            //   onClick:['count','setCount'],
-            // },
             debug:true,
+            props:{
+                key:13,
+              },
             __dangerouslyBindEvalProps:{
               onClick:function(count,setCount){
+                console.log('specte button this',this);
                 console.log('this is inline',{count,setCount},'arguments',arguments);
                 setCount(count+1);
               },
-              // onClick:`(function(count,setCount){
-              //   setCount(count+1)
-              //   console.log('this is inline',{count,setCount});
-              // })`,
             },
             children:'Click me'
           }
         ],
       },`
-      console.log('function component this',this,{self})
+      // console.log('function component this',this,{self})
       const [count, setCount] = useState(0);
       const exposeProps = {count,setCount};
       `,{
@@ -123,81 +106,21 @@
         },
         children: [
           {
-            component:'p',
-            props:{key:8,},
-            children:'some text here'
-          },
-          {
-            component:'div',
-            props:{key:453248,},
-           __dangerouslyInsertFunctionComponents:{
-              _children:{reactComponent:{ component:'p',props:{key:1213},children:'from func component'}}
-            }
-          },
-          {
-            component:'myCustomComponent',
-            props:{key:2,},
-
-          },
-          {
-            component:'DynamicComponent',
-            props:{
-              key:3,
-              jsonx:{
-                component:'div',
-                props:{key:4,},
-                children:[
-                  {
-                    component:'div',
-                    props:{key:5,},
-                    children: 'from dynamic',
-                  },
-                  { 
-                    component:'div',
-                    props:{key:6,},
-                    resourceprops:{
-                      _children:['DynamicComponentData','title']
-                    },
-                  },
-                ]
-              },
-              fetchURL:'https://jsonplaceholder.typicode.com/todos/1',
-              loadingJSONX: { component:'div', props:{key:55}, children:'...Loading', },
-              loadingErrorJSONX: { component:'div', children:[{component:'span',children:'Error: '},{ component:'span',  resourceprops:{_children:['error','message']}, }], },
-              cacheTimeout:5000,
-              cacheTimeoutFunction:(k,v)=>console.log(`cache expired for ${k} - ${v}`)
-            },
-          },
-          {
             component:'MyCustomFunctionComponent',
             props:{
+              key:2,
               status:'Amazing',
-              key:239403,
             },
             resourceprops:{
               punc:['punc']
             }
           },
-          {
-            component:'div',
-            __dangerouslyEvalAllProps:function(){
-              console.log('__dangerouslyEvalAllProps arguments',arguments);
-              return {
-                _children:'from __dangerouslyEvalAllProps',
-                style:{
-                  color:'red',
-                },
-                title:'on div title'
-              };
-            },
-            children:'allComputedProps',
-          },
+          
         ],
       };
       const boundConfig = {
         debug:true, 
         reactComponents:{
-          myCustomComponent,
           MyCustomFunctionComponent,
         },
         componentLibraries:{
@@ -210,12 +133,9 @@
       jsonx.jsonxRender.call(boundConfig,{ 
         jsonx: sampleJSONX, 
         resources: { 
+          punc:{some:'random'}
         },
         querySelector:'#root', });
-
-        window.sayHello = function(){
-          alert('hello');
-        }
     </script>
   </body>
 </html>

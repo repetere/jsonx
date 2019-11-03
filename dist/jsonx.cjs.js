@@ -4,15 +4,15 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var UAParser = _interopDefault(require('ua-parser-js'));
 var React = require('react');
 var React__default = _interopDefault(React);
-var ReactDOM = _interopDefault(require('react-dom'));
-var ReactDOMServer = _interopDefault(require('react-dom/server'));
 var ReactDOMElements = _interopDefault(require('react-dom-factories'));
-var UAParser = _interopDefault(require('ua-parser-js'));
 var createReactClass = _interopDefault(require('create-react-class'));
 var path = _interopDefault(require('path'));
 var fs = _interopDefault(require('fs'));
+var ReactDOM = _interopDefault(require('react-dom'));
+var ReactDOMServer = _interopDefault(require('react-dom/server'));
 
 function Cache() {
   var _cache = Object.create(null);
@@ -649,9 +649,9 @@ function getSimplifiedJSONX(jsonx = {}) {
  * @param {Object} options - fetch options
  * @return {Object} - returns fetched JSON data
  */
-async function fetchJSON(path = '', options = {}) {
+async function fetchJSON(path$$1 = '', options = {}) {
     try {
-        const response = await fetch(path, options);
+        const response = await fetch(path$$1, options);
         return await response.json();
     }
     catch (e) {
@@ -1001,6 +1001,7 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
     }
     if (typeof options === 'undefined' || typeof options.bind === 'undefined')
         options.bind = true;
+    console.log('func', { options }, 'this', this);
     const { resources = {}, args = [], } = options;
     //@ts-ignore
     const props = reactComponent.props;
@@ -1009,7 +1010,9 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
     if (typeof functionBody === 'function')
         functionBody = functionBody.toString();
     const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromJSONX', 'reactComponent', 'resources', 'props', `
+    'use strict';
     const self = this;
+
     return function ${options.name || 'Anonymous'}(props){
       ${functionBody}
       if(typeof exposeProps==='undefined' || exposeProps){
@@ -1018,8 +1021,11 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
       } else{
         reactComponent.props =  props;
       }
-      if(!props.children) delete props.children;
+      // if(!props.children && props) delete props.children;
+      console.log('func self',self)
+      console.log('func this',this)
       const context = ${options.bind ? 'Object.assign(self,this)' : 'this'};
+      console.log({context}) 
       return getReactElementFromJSONX.call(context, reactComponent);
     }
   `);
@@ -1342,7 +1348,8 @@ function getReactComponents(options) {
                 if (this.debug || jsonx.debug)
                     componentVal = e;
             }
-            cprops[cpropName] = cpropName === '_children' ? [componentVal] : componentVal;
+            cprops[cpropName] = cpropName === '_children' ? [componentVal]
+                : componentVal;
             return cprops;
         }, {});
     const classComponents = (!jsonx.__dangerouslyInsertClassComponents)
@@ -1813,7 +1820,7 @@ const scopedEval = eval;
  * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
  * @param {*} callback
  */
-function __express(filePath, options, callback) {
+function __express$$1(filePath, options, callback) {
     try {
         let jsonxModule = options.__jsonx;
         if (filePath) {
@@ -2079,23 +2086,23 @@ const _jsonxComponents = jsonxComponents;
 const _jsonxProps = jsonxProps;
 const _jsonxUtils = jsonxUtils;
 
-exports.__express = __express;
+exports.jsonxRender = jsonxRender;
+exports.outputHTML = outputHTML;
+exports.getReactElementFromJSONX = getReactElementFromJSONX;
+exports.getRenderedJSON = getRenderedJSON;
+exports.getReactElement = getReactElement;
+exports.getReactElementFromJSON = getReactElementFromJSON;
+exports.compile = compile;
+exports.outputJSX = outputJSX;
+exports.outputJSON = outputJSON;
+exports.jsonxHTMLString = jsonxHTMLString;
+exports.jsonToJSX = jsonToJSX;
 exports.__getReact = __getReact;
 exports.__getReactDOM = __getReactDOM;
 exports._jsonxChildren = _jsonxChildren;
 exports._jsonxComponents = _jsonxComponents;
 exports._jsonxProps = _jsonxProps;
 exports._jsonxUtils = _jsonxUtils;
-exports.compile = compile;
 exports.default = getReactElementFromJSONX;
-exports.getReactElement = getReactElement;
-exports.getReactElementFromJSON = getReactElementFromJSON;
-exports.getReactElementFromJSONX = getReactElementFromJSONX;
-exports.getRenderedJSON = getRenderedJSON;
-exports.jsonToJSX = jsonToJSX;
-exports.jsonxHTMLString = jsonxHTMLString;
-exports.jsonxRender = jsonxRender;
-exports.outputHTML = outputHTML;
-exports.outputJSON = outputJSON;
-exports.outputJSX = outputJSX;
-exports.renderFile = __express;
+exports.__express = __express$$1;
+exports.renderFile = __express$$1;

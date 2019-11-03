@@ -29,7 +29,6 @@ export default [
     },
     ],
     plugins: [
-      typescript(),
       replace({
         'process.env.NODE_ENV': JSON.stringify( 'development' ),
         // 'process.env.NODE_ENV': JSON.stringify( 'production' ),
@@ -39,23 +38,7 @@ export default [
       }), // so Rollup can find `ms`
       builtins({
       }),
-      babel({
-        runtimeHelpers: true,
-        // 'presets': [
-        //   ['@babel/env', { },],
-        // ],
-        plugins: [
-          [
-            '@babel/transform-runtime',
-            // { useESModules: output.format !== 'cjs' }
-          ],
-
-          [
-            '@babel/plugin-proposal-export-namespace-from',
-          ],
-        ],
-        // exclude: 'node_modules/**', // only transpile our source code
-      }),
+      typescript(),
       commonjs({
         namedExports: {
           // left-hand side can be an absolute path, a path
@@ -64,6 +47,11 @@ export default [
           // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
           'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createContext', 'Fragment', 'Suspense', 'lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', ],
 
+          'node_modules/memory-cache/index.js':[
+            'cache',
+            'Cache',
+            'default',
+          ],
         },
       }), // so Rollup can convert `ms` to an ES module
       globals({
@@ -92,6 +80,7 @@ export default [
       'react-dom/server',
       'react-dom-factories',
       'create-react-class',
+      'memory-cache',
       // 'use-global-hook',
       'ua-parser-js',
     ], // <-- suppresses the warning
@@ -110,28 +99,17 @@ export default [
       },
     ],
     plugins: [
-      typescript(),
       resolve({
         preferBuiltins: true,
       }),
-      babel({
-        // exclude: 'node_modules/**', // only transpile our source code
-        runtimeHelpers: true,
-        // 'presets': [
-        //   // ['@babel/env', { },],
-        //   '@babel/env'
-        // ],
-        plugins: [
-          [
-            '@babel/transform-runtime',
-            // { useESModules: output.format !== 'cjs' }
-          ],
-
-          [
-            '@babel/plugin-proposal-export-namespace-from',
-          ],
-        ],
-        // exclude: 'node_modules/**', // only transpile our source code
+      resolve({
+        preferBuiltins: true,
+      }), // so Rollup can find `ms`
+      builtins({
+      }),
+      commonjs({}),
+      typescript(),
+      globals({
       }),
     ],
     watch: {
@@ -153,6 +131,7 @@ export default [
       'react-dom/server',
       'react-dom-factories',
       'create-react-class',
+      'memory-cache',
       // 'use-global-hook',
       'ua-parser-js',
     ], // <-- suppresses the warning
@@ -171,19 +150,10 @@ export default [
       },
     ],
     plugins: [
-      typescript(),
-
-      // aliasModuleSpecifiers({
-      //   'react-dom/': 'react-dom/server/',
-      // }),
-      // alias({
-      //   'react-dom': path.resolve('./node_modules/react-dom/server.node.js'),
-      //   ReactDOM: path.resolve('./node_modules/react-dom/server.node.js'),
-      // }),
-
       resolve({
         preferBuiltins: true,
       }),
+      typescript(),
       babel({
         // exclude: 'node_modules/**', // only transpile our source code
         runtimeHelpers: true,
@@ -236,8 +206,6 @@ export default [
     },
     ],
     plugins: [
-      typescript(),
-
       replace({
         // 'process.env.NODE_ENV': JSON.stringify( 'development' ),
         'process.env.NODE_ENV': JSON.stringify( 'production' ),
@@ -245,6 +213,9 @@ export default [
       resolve({
         preferBuiltins: true,
       }), // so Rollup can find `ms`
+      builtins({
+      }),
+      typescript(),
       commonjs({
         namedExports: {
           'node_modules/react/index.js':[
@@ -254,43 +225,15 @@ export default [
           ],
           'node_modules/memory-cache/index.js':[
             'cache',
+            'Cache',
             'default',
           ],
         },
       }), // so Rollup can convert `ms` to an ES module
-      builtins({
-      }),
+      
       globals({
       }),
-      babel({
-        runtimeHelpers: true,
-        externalHelpers: true,
-        // exclude: 'node_modules/@babel/runtime/**',
-        exclude: 'node_modules/@babel/runtime/helpers/typeof.js',
-        'presets': [
-          ['@babel/env', {}, ],
-        ],
-        plugins: [
-          [
-            '@babel/transform-runtime',
-          ],
-          [
-            '@babel/plugin-proposal-export-namespace-from',
-          ],
-          ['babel-plugin-replace-imports', {
-            'test': /react-dom\/server/,
-            'replacer': '../design/_mock_react-dom-server',
-          },],
-          ['babel-plugin-replace-imports', {
-            'test': /express/,
-            'replacer': '../design/_mock_express',
-          },'u-rename-express' ],
-          // ['babel-plugin-replace-imports', {
-          //   'test': /ua-parser-js$/,
-          //   'replacer': '../design/_mock_react-dom-server',
-          // },'u-rename' ],
-        ],
-      }),
+
       terser({
         // sourceMap: {
         //   filename: 'dist/jsonx.web.min.js',

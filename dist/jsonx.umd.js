@@ -1,8 +1,8 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(global = global || self, factory(global.jsonx = {}));
-}(this, function (exports) { 'use strict';
+	(factory((global.jsonx = {})));
+}(this, (function (exports) { 'use strict';
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -3474,7 +3474,7 @@
 	});
 
 	var reactDom_development = createCommonjsModule(function (module) {
-	{(function(){var React=react;var _assign=objectAssign;var Scheduler=scheduler;var checkPropTypes=checkPropTypes_1;var tracing$1=tracing;// Do not require this module directly! Use normal `invariant` calls with
+	{(function(){var React=react;var _assign=objectAssign;var Scheduler=scheduler;var checkPropTypes=checkPropTypes_1;var tracing$$1=tracing;// Do not require this module directly! Use normal `invariant` calls with
 	// template literal strings. The messages will be converted to ReactError during
 	// build, and in production they will be minified.
 	// Do not require this module directly! Use normal `invariant` calls with
@@ -5562,7 +5562,7 @@
 	var Scheduler_runWithPriority=Scheduler.unstable_runWithPriority;var Scheduler_scheduleCallback=Scheduler.unstable_scheduleCallback;var Scheduler_cancelCallback=Scheduler.unstable_cancelCallback;var Scheduler_shouldYield=Scheduler.unstable_shouldYield;var Scheduler_requestPaint=Scheduler.unstable_requestPaint;var Scheduler_now=Scheduler.unstable_now;var Scheduler_getCurrentPriorityLevel=Scheduler.unstable_getCurrentPriorityLevel;var Scheduler_ImmediatePriority=Scheduler.unstable_ImmediatePriority;var Scheduler_UserBlockingPriority=Scheduler.unstable_UserBlockingPriority;var Scheduler_NormalPriority=Scheduler.unstable_NormalPriority;var Scheduler_LowPriority=Scheduler.unstable_LowPriority;var Scheduler_IdlePriority=Scheduler.unstable_IdlePriority;{// Provide explicit error message when production+profiling bundle of e.g.
 	// react-dom is used with production (non-profiling) bundle of
 	// scheduler/tracing
-	(function(){if(!(tracing$1.__interactionsRef!=null&&tracing$1.__interactionsRef.current!=null)){{throw ReactError(Error("It is not supported to run the profiling version of a renderer (for example, `react-dom/profiling`) without also replacing the `scheduler/tracing` module with `scheduler/tracing-profiling`. Your bundler might have a setting for aliasing both modules. Learn more at http://fb.me/react-profiling"));}}})();}var fakeCallbackNode={};// Except for NoPriority, these correspond to Scheduler priorities. We use
+	(function(){if(!(tracing$$1.__interactionsRef!=null&&tracing$$1.__interactionsRef.current!=null)){{throw ReactError(Error("It is not supported to run the profiling version of a renderer (for example, `react-dom/profiling`) without also replacing the `scheduler/tracing` module with `scheduler/tracing-profiling`. Your bundler might have a setting for aliasing both modules. Learn more at http://fb.me/react-profiling"));}}})();}var fakeCallbackNode={};// Except for NoPriority, these correspond to Scheduler priorities. We use
 	// ascending numbers so we can compare them like numbers. They start at 90 to
 	// avoid clashing with Scheduler's priorities.
 	var ImmediatePriority=99;var UserBlockingPriority$2=98;var NormalPriority=97;var LowPriority=96;var IdlePriority=95;// NoPriority is the absence of priority. Also React-only.
@@ -6943,7 +6943,7 @@
 	// For each thenable, attach a listener so that when it resolves, React
 	// attempts to re-render the boundary in the primary (pre-timeout) state.
 	var thenables=finishedWork.updateQueue;if(thenables!==null){finishedWork.updateQueue=null;var retryCache=finishedWork.stateNode;if(retryCache===null){retryCache=finishedWork.stateNode=new PossiblyWeakSet();}thenables.forEach(function(thenable){// Memoize using the boundary fiber to prevent redundant listeners.
-	var retry=resolveRetryThenable.bind(null,finishedWork,thenable);if(!retryCache.has(thenable)){{if(thenable.__reactDoNotTraceInteractions!==true){retry=tracing$1.unstable_wrap(retry);}}retryCache.add(thenable);thenable.then(retry,retry);}});}}function commitResetTextContent(current$$1){resetTextContent(current$$1.stateNode);}var PossiblyWeakMap$1=typeof WeakMap==='function'?WeakMap:Map;function createRootErrorUpdate(fiber,errorInfo,expirationTime){var update=createUpdate(expirationTime,null);// Unmount the root by rendering null.
+	var retry=resolveRetryThenable.bind(null,finishedWork,thenable);if(!retryCache.has(thenable)){{if(thenable.__reactDoNotTraceInteractions!==true){retry=tracing$$1.unstable_wrap(retry);}}retryCache.add(thenable);thenable.then(retry,retry);}});}}function commitResetTextContent(current$$1){resetTextContent(current$$1.stateNode);}var PossiblyWeakMap$1=typeof WeakMap==='function'?WeakMap:Map;function createRootErrorUpdate(fiber,errorInfo,expirationTime){var update=createUpdate(expirationTime,null);// Unmount the root by rendering null.
 	update.tag=CaptureUpdate;// Caution: React DevTools currently depends on this property
 	// being called "element".
 	update.payload={element:null};var error=errorInfo.value;update.callback=function(){onUncaughtError(error);logError(fiber,errorInfo);};return update;}function createClassErrorUpdate(fiber,errorInfo,expirationTime){var update=createUpdate(expirationTime,null);update.tag=CaptureUpdate;var getDerivedStateFromError=fiber.type.getDerivedStateFromError;if(typeof getDerivedStateFromError==='function'){var error=errorInfo.value;update.payload=function(){logError(fiber,errorInfo);return getDerivedStateFromError(error);};}var inst=fiber.stateNode;if(inst!==null&&typeof inst.componentDidCatch==='function'){update.callback=function callback(){{markFailedErrorBoundaryForHotReloading(fiber);}if(typeof getDerivedStateFromError!=='function'){// To preserve the preexisting retry behavior of error boundaries,
@@ -7294,7 +7294,7 @@
 	return;}while(true);}function pushDispatcher(root){var prevDispatcher=ReactCurrentDispatcher.current;ReactCurrentDispatcher.current=ContextOnlyDispatcher;if(prevDispatcher===null){// The React isomorphic package does not include a default dispatcher.
 	// Instead the first renderer will lazily attach one, in order to give
 	// nicer error messages.
-	return ContextOnlyDispatcher;}else{return prevDispatcher;}}function popDispatcher(prevDispatcher){ReactCurrentDispatcher.current=prevDispatcher;}function pushInteractions(root){{var prevInteractions=tracing$1.__interactionsRef.current;tracing$1.__interactionsRef.current=root.memoizedInteractions;return prevInteractions;}return null;}function popInteractions(prevInteractions){{tracing$1.__interactionsRef.current=prevInteractions;}}function markCommitTimeOfFallback(){globalMostRecentFallbackTime=now();}function markRenderEventTimeAndConfig(expirationTime,suspenseConfig){if(expirationTime<workInProgressRootLatestProcessedExpirationTime&&expirationTime>Idle){workInProgressRootLatestProcessedExpirationTime=expirationTime;}if(suspenseConfig!==null){if(expirationTime<workInProgressRootLatestSuspenseTimeout&&expirationTime>Idle){workInProgressRootLatestSuspenseTimeout=expirationTime;// Most of the time we only have one config and getting wrong is not bad.
+	return ContextOnlyDispatcher;}else{return prevDispatcher;}}function popDispatcher(prevDispatcher){ReactCurrentDispatcher.current=prevDispatcher;}function pushInteractions(root){{var prevInteractions=tracing$$1.__interactionsRef.current;tracing$$1.__interactionsRef.current=root.memoizedInteractions;return prevInteractions;}return null;}function popInteractions(prevInteractions){{tracing$$1.__interactionsRef.current=prevInteractions;}}function markCommitTimeOfFallback(){globalMostRecentFallbackTime=now();}function markRenderEventTimeAndConfig(expirationTime,suspenseConfig){if(expirationTime<workInProgressRootLatestProcessedExpirationTime&&expirationTime>Idle){workInProgressRootLatestProcessedExpirationTime=expirationTime;}if(suspenseConfig!==null){if(expirationTime<workInProgressRootLatestSuspenseTimeout&&expirationTime>Idle){workInProgressRootLatestSuspenseTimeout=expirationTime;// Most of the time we only have one config and getting wrong is not bad.
 	workInProgressRootCanSuspendUsingConfig=suspenseConfig;}}}function markUnprocessedUpdateTime(expirationTime){if(expirationTime>workInProgressRootNextUnprocessedUpdateTime){workInProgressRootNextUnprocessedUpdateTime=expirationTime;}}function renderDidSuspend(){if(workInProgressRootExitStatus===RootIncomplete){workInProgressRootExitStatus=RootSuspended;}}function renderDidSuspendDelayIfPossible(){if(workInProgressRootExitStatus===RootIncomplete||workInProgressRootExitStatus===RootSuspended){workInProgressRootExitStatus=RootSuspendedWithDelay;}// Check if there's a lower priority update somewhere else in the tree.
 	if(workInProgressRootNextUnprocessedUpdateTime!==NoWork&&workInProgressRoot!==null){// Mark the current render as suspended, and then mark that there's a
 	// pending update.
@@ -7529,8 +7529,8 @@
 	componentNames.sort().join(', '));}}}}function computeThreadID(root,expirationTime){// Interaction threads are unique per root and expiration time.
 	return expirationTime*1000+root.interactionThreadID;}function markSpawnedWork(expirationTime){if(spawnedWorkDuringRender===null){spawnedWorkDuringRender=[expirationTime];}else{spawnedWorkDuringRender.push(expirationTime);}}function scheduleInteractions(root,expirationTime,interactions){if(interactions.size>0){var pendingInteractionMap=root.pendingInteractionMap;var pendingInteractions=pendingInteractionMap.get(expirationTime);if(pendingInteractions!=null){interactions.forEach(function(interaction){if(!pendingInteractions.has(interaction)){// Update the pending async work count for previously unscheduled interaction.
 	interaction.__count++;}pendingInteractions.add(interaction);});}else{pendingInteractionMap.set(expirationTime,new Set(interactions));// Update the pending async work count for the current interactions.
-	interactions.forEach(function(interaction){interaction.__count++;});}var subscriber=tracing$1.__subscriberRef.current;if(subscriber!==null){var threadID=computeThreadID(root,expirationTime);subscriber.onWorkScheduled(interactions,threadID);}}}function schedulePendingInteractions(root,expirationTime){// This is called when work is scheduled on a root.
-	scheduleInteractions(root,expirationTime,tracing$1.__interactionsRef.current);}function startWorkOnPendingInteractions(root,expirationTime){// This is called when new work is started on a root.
+	interactions.forEach(function(interaction){interaction.__count++;});}var subscriber=tracing$$1.__subscriberRef.current;if(subscriber!==null){var threadID=computeThreadID(root,expirationTime);subscriber.onWorkScheduled(interactions,threadID);}}}function schedulePendingInteractions(root,expirationTime){// This is called when work is scheduled on a root.
+	scheduleInteractions(root,expirationTime,tracing$$1.__interactionsRef.current);}function startWorkOnPendingInteractions(root,expirationTime){// This is called when new work is started on a root.
 	// we can accurately attribute time spent working on it, And so that cascading
 	// work triggered during the render phase will be associated with it.
 	var interactions=new Set();root.pendingInteractionMap.forEach(function(scheduledInteractions,scheduledExpirationTime){if(scheduledExpirationTime>=expirationTime){scheduledInteractions.forEach(function(interaction){return interactions.add(interaction);});}});// Store the current set of interactions on the FiberRoot for a few reasons:
@@ -7538,8 +7538,8 @@
 	// recalculate it. We will also use it in commitWork() to pass to any Profiler
 	// onRender() hooks. This also provides DevTools with a way to access it when
 	// the onCommitRoot() hook is called.
-	root.memoizedInteractions=interactions;if(interactions.size>0){var subscriber=tracing$1.__subscriberRef.current;if(subscriber!==null){var threadID=computeThreadID(root,expirationTime);try{subscriber.onWorkStarted(interactions,threadID);}catch(error){// If the subscriber throws, rethrow it in a separate task
-	scheduleCallback(ImmediatePriority,function(){throw error;});}}}}function finishPendingInteractions(root,committedExpirationTime){var earliestRemainingTimeAfterCommit=root.firstPendingTime;var subscriber;try{subscriber=tracing$1.__subscriberRef.current;if(subscriber!==null&&root.memoizedInteractions.size>0){var threadID=computeThreadID(root,committedExpirationTime);subscriber.onWorkStopped(root.memoizedInteractions,threadID);}}catch(error){// If the subscriber throws, rethrow it in a separate task
+	root.memoizedInteractions=interactions;if(interactions.size>0){var subscriber=tracing$$1.__subscriberRef.current;if(subscriber!==null){var threadID=computeThreadID(root,expirationTime);try{subscriber.onWorkStarted(interactions,threadID);}catch(error){// If the subscriber throws, rethrow it in a separate task
+	scheduleCallback(ImmediatePriority,function(){throw error;});}}}}function finishPendingInteractions(root,committedExpirationTime){var earliestRemainingTimeAfterCommit=root.firstPendingTime;var subscriber;try{subscriber=tracing$$1.__subscriberRef.current;if(subscriber!==null&&root.memoizedInteractions.size>0){var threadID=computeThreadID(root,committedExpirationTime);subscriber.onWorkStopped(root.memoizedInteractions,threadID);}}catch(error){// If the subscriber throws, rethrow it in a separate task
 	scheduleCallback(ImmediatePriority,function(){throw error;});}finally{// Clear completed interactions from the pending Map.
 	// Unless the render was suspended or cascading work was scheduled,
 	// In which case– leave pending interactions until the subsequent render.
@@ -7651,7 +7651,7 @@
 	// the hottest path, and Object.assign() was too slow:
 	// https://github.com/facebook/react/issues/12502
 	// This code is DEV-only so size is not a concern.
-	target.tag=source.tag;target.key=source.key;target.elementType=source.elementType;target.type=source.type;target.stateNode=source.stateNode;target.return=source.return;target.child=source.child;target.sibling=source.sibling;target.index=source.index;target.ref=source.ref;target.pendingProps=source.pendingProps;target.memoizedProps=source.memoizedProps;target.updateQueue=source.updateQueue;target.memoizedState=source.memoizedState;target.dependencies=source.dependencies;target.mode=source.mode;target.effectTag=source.effectTag;target.nextEffect=source.nextEffect;target.firstEffect=source.firstEffect;target.lastEffect=source.lastEffect;target.expirationTime=source.expirationTime;target.childExpirationTime=source.childExpirationTime;target.alternate=source.alternate;{target.actualDuration=source.actualDuration;target.actualStartTime=source.actualStartTime;target.selfBaseDuration=source.selfBaseDuration;target.treeBaseDuration=source.treeBaseDuration;}target._debugID=source._debugID;target._debugSource=source._debugSource;target._debugOwner=source._debugOwner;target._debugIsCurrentlyTiming=source._debugIsCurrentlyTiming;target._debugNeedsRemount=source._debugNeedsRemount;target._debugHookTypes=source._debugHookTypes;return target;}function FiberRootNode(containerInfo,tag,hydrate){this.tag=tag;this.current=null;this.containerInfo=containerInfo;this.pendingChildren=null;this.pingCache=null;this.finishedExpirationTime=NoWork;this.finishedWork=null;this.timeoutHandle=noTimeout;this.context=null;this.pendingContext=null;this.hydrate=hydrate;this.firstBatch=null;this.callbackNode=null;this.callbackPriority=NoPriority;this.firstPendingTime=NoWork;this.firstSuspendedTime=NoWork;this.lastSuspendedTime=NoWork;this.nextKnownPendingLevel=NoWork;this.lastPingedTime=NoWork;this.lastExpiredTime=NoWork;{this.interactionThreadID=tracing$1.unstable_getThreadID();this.memoizedInteractions=new Set();this.pendingInteractionMap=new Map();}}function createFiberRoot(containerInfo,tag,hydrate,hydrationCallbacks){var root=new FiberRootNode(containerInfo,tag,hydrate);// stateNode is any.
+	target.tag=source.tag;target.key=source.key;target.elementType=source.elementType;target.type=source.type;target.stateNode=source.stateNode;target.return=source.return;target.child=source.child;target.sibling=source.sibling;target.index=source.index;target.ref=source.ref;target.pendingProps=source.pendingProps;target.memoizedProps=source.memoizedProps;target.updateQueue=source.updateQueue;target.memoizedState=source.memoizedState;target.dependencies=source.dependencies;target.mode=source.mode;target.effectTag=source.effectTag;target.nextEffect=source.nextEffect;target.firstEffect=source.firstEffect;target.lastEffect=source.lastEffect;target.expirationTime=source.expirationTime;target.childExpirationTime=source.childExpirationTime;target.alternate=source.alternate;{target.actualDuration=source.actualDuration;target.actualStartTime=source.actualStartTime;target.selfBaseDuration=source.selfBaseDuration;target.treeBaseDuration=source.treeBaseDuration;}target._debugID=source._debugID;target._debugSource=source._debugSource;target._debugOwner=source._debugOwner;target._debugIsCurrentlyTiming=source._debugIsCurrentlyTiming;target._debugNeedsRemount=source._debugNeedsRemount;target._debugHookTypes=source._debugHookTypes;return target;}function FiberRootNode(containerInfo,tag,hydrate){this.tag=tag;this.current=null;this.containerInfo=containerInfo;this.pendingChildren=null;this.pingCache=null;this.finishedExpirationTime=NoWork;this.finishedWork=null;this.timeoutHandle=noTimeout;this.context=null;this.pendingContext=null;this.hydrate=hydrate;this.firstBatch=null;this.callbackNode=null;this.callbackPriority=NoPriority;this.firstPendingTime=NoWork;this.firstSuspendedTime=NoWork;this.lastSuspendedTime=NoWork;this.nextKnownPendingLevel=NoWork;this.lastPingedTime=NoWork;this.lastExpiredTime=NoWork;{this.interactionThreadID=tracing$$1.unstable_getThreadID();this.memoizedInteractions=new Set();this.pendingInteractionMap=new Map();}}function createFiberRoot(containerInfo,tag,hydrate,hydrationCallbacks){var root=new FiberRootNode(containerInfo,tag,hydrate);// stateNode is any.
 	var uninitializedFiber=createHostRootFiber(tag);root.current=uninitializedFiber;uninitializedFiber.stateNode=root;return root;}function isRootSuspendedAtTime(root,expirationTime){var firstSuspendedTime=root.firstSuspendedTime;var lastSuspendedTime=root.lastSuspendedTime;return firstSuspendedTime!==NoWork&&firstSuspendedTime>=expirationTime&&lastSuspendedTime<=expirationTime;}function markRootSuspendedAtTime(root,expirationTime){var firstSuspendedTime=root.firstSuspendedTime;var lastSuspendedTime=root.lastSuspendedTime;if(firstSuspendedTime<expirationTime){root.firstSuspendedTime=expirationTime;}if(lastSuspendedTime>expirationTime||firstSuspendedTime===NoWork){root.lastSuspendedTime=expirationTime;}if(expirationTime<=root.lastPingedTime){root.lastPingedTime=NoWork;}if(expirationTime<=root.lastExpiredTime){root.lastExpiredTime=NoWork;}}function markRootUpdatedAtTime(root,expirationTime){// Update the range of pending times
 	var firstPendingTime=root.firstPendingTime;if(expirationTime>firstPendingTime){root.firstPendingTime=expirationTime;}// Update the range of suspended times. Treat everything lower priority or
 	// equal to this update as unsuspended.
@@ -8292,11 +8292,6 @@
 	  parts.push(output);
 	  return parts.join('');
 	}
-
-	var base64 = /*#__PURE__*/Object.freeze({
-		toByteArray: toByteArray,
-		fromByteArray: fromByteArray
-	});
 
 	function read(buffer, offset, isLE, mLen, nBytes) {
 	  var e, m;
@@ -9129,7 +9124,7 @@
 	    }
 	  }
 
-	  function read(buf, i) {
+	  function read$$1(buf, i) {
 	    if (indexSize === 1) {
 	      return buf[i];
 	    } else {
@@ -9143,7 +9138,7 @@
 	    var foundIndex = -1;
 
 	    for (i = byteOffset; i < arrLength; i++) {
-	      if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
+	      if (read$$1(arr, i) === read$$1(val, foundIndex === -1 ? 0 : i - foundIndex)) {
 	        if (foundIndex === -1) foundIndex = i;
 	        if (i - foundIndex + 1 === valLength) return foundIndex * indexSize;
 	      } else {
@@ -9158,7 +9153,7 @@
 	      var found = true;
 
 	      for (var j = 0; j < valLength; j++) {
-	        if (read(arr, i + j) !== read(val, j)) {
+	        if (read$$1(arr, i + j) !== read$$1(val, j)) {
 	          found = false;
 	          break;
 	        }
@@ -9234,7 +9229,7 @@
 	  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length);
 	}
 
-	Buffer.prototype.write = function write(string, offset, length, encoding) {
+	Buffer.prototype.write = function write$$1(string, offset, length, encoding) {
 	  // Buffer#write(string)
 	  if (offset === undefined) {
 	    encoding = 'utf8';
@@ -10376,11 +10371,95 @@
 	  this.fun.apply(null, this.array);
 	};
 
+	var title = 'browser';
+	var platform = 'browser';
+	var browser = true;
+	var env = {};
+	var argv = [];
+	var version = ''; // empty string to avoid regexp issues
+
+	var versions = {};
+	var release = {};
+	var config = {};
+
+	function noop() {}
+
+	var on = noop;
+	var addListener = noop;
+	var once = noop;
+	var off = noop;
+	var removeListener = noop;
+	var removeAllListeners = noop;
+	var emit = noop;
+	function binding(name) {
+	  throw new Error('process.binding is not supported');
+	}
+	function cwd() {
+	  return '/';
+	}
+	function chdir(dir) {
+	  throw new Error('process.chdir is not supported');
+	}
+	function umask() {
+	  return 0;
+	} // from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
+
 	var performance$1 = global$1.performance || {};
 
 	var performanceNow = performance$1.now || performance$1.mozNow || performance$1.msNow || performance$1.oNow || performance$1.webkitNow || function () {
 	  return new Date().getTime();
 	}; // generate timestamp or delta
+	// see http://nodejs.org/api/process.html#process_process_hrtime
+
+
+	function hrtime(previousTimestamp) {
+	  var clocktime = performanceNow.call(performance$1) * 1e-3;
+	  var seconds = Math.floor(clocktime);
+	  var nanoseconds = Math.floor(clocktime % 1 * 1e9);
+
+	  if (previousTimestamp) {
+	    seconds = seconds - previousTimestamp[0];
+	    nanoseconds = nanoseconds - previousTimestamp[1];
+
+	    if (nanoseconds < 0) {
+	      seconds--;
+	      nanoseconds += 1e9;
+	    }
+	  }
+
+	  return [seconds, nanoseconds];
+	}
+	var startTime = new Date();
+	function uptime() {
+	  var currentTime = new Date();
+	  var dif = currentTime - startTime;
+	  return dif / 1000;
+	}
+	var process = {
+	  nextTick: nextTick,
+	  title: title,
+	  browser: browser,
+	  env: env,
+	  argv: argv,
+	  version: version,
+	  versions: versions,
+	  on: on,
+	  addListener: addListener,
+	  once: once,
+	  off: off,
+	  removeListener: removeListener,
+	  removeAllListeners: removeAllListeners,
+	  emit: emit,
+	  binding: binding,
+	  cwd: cwd,
+	  chdir: chdir,
+	  umask: umask,
+	  hrtime: hrtime,
+	  platform: platform,
+	  release: release,
+	  config: config,
+	  uptime: uptime
+	};
 
 	var inherits;
 
@@ -10489,7 +10568,7 @@
 	var debugs = {};
 	var debugEnviron;
 	function debuglog(set) {
-	  if (isUndefined(debugEnviron)) debugEnviron = '';
+	  if (isUndefined(debugEnviron)) debugEnviron = process.env.NODE_DEBUG || '';
 	  set = set.toUpperCase();
 
 	  if (!debugs[set]) {
@@ -17227,7 +17306,7 @@
 	 * Copyright © 2012-2019 Faisal Salman <f@faisalman.com>
 	 * Licensed under MIT License
 	 */
-	(function (window, undefined$1) {
+	(function (window, undefined) {
 	  // Constants
 	  /////////////
 
@@ -17280,7 +17359,7 @@
 	      return str.toLowerCase();
 	    },
 	    major: function (version) {
-	      return typeof version === STR_TYPE ? version.replace(/[^\d\.]/g, '').split(".")[0] : undefined$1;
+	      return typeof version === STR_TYPE ? version.replace(/[^\d\.]/g, '').split(".")[0] : undefined;
 	    },
 	    trim: function (str) {
 	      return str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
@@ -17327,16 +17406,16 @@
 	                  // check whether function or regex
 	                  if (typeof q[1] === FUNC_TYPE && !(q[1].exec && q[1].test)) {
 	                    // call function (usually string mapper)
-	                    this[q[0]] = match ? q[1].call(this, match, q[2]) : undefined$1;
+	                    this[q[0]] = match ? q[1].call(this, match, q[2]) : undefined;
 	                  } else {
 	                    // sanitize match using given regex
-	                    this[q[0]] = match ? match.replace(q[1], q[2]) : undefined$1;
+	                    this[q[0]] = match ? match.replace(q[1], q[2]) : undefined;
 	                  }
 	                } else if (q.length == 4) {
-	                  this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined$1;
+	                  this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined;
 	                }
 	              } else {
-	                this[q] = match ? match : undefined$1;
+	                this[q] = match ? match : undefined;
 	              }
 	            }
 	          }
@@ -17351,11 +17430,11 @@
 	        if (typeof map[i] === OBJ_TYPE && map[i].length > 0) {
 	          for (var j = 0; j < map[i].length; j++) {
 	            if (util.has(map[i][j], str)) {
-	              return i === UNKNOWN ? undefined$1 : i;
+	              return i === UNKNOWN ? undefined : i;
 	            }
 	          }
 	        } else if (util.has(map[i], str)) {
-	          return i === UNKNOWN ? undefined$1 : i;
+	          return i === UNKNOWN ? undefined : i;
 	        }
 	      }
 
@@ -17630,7 +17709,7 @@
 	  var UAParser = function (uastring, extensions) {
 	    if (typeof uastring === 'object') {
 	      extensions = uastring;
-	      uastring = undefined$1;
+	      uastring = undefined;
 	    }
 
 	    if (!(this instanceof UAParser)) {
@@ -17642,8 +17721,8 @@
 
 	    this.getBrowser = function () {
 	      var browser = {
-	        name: undefined$1,
-	        version: undefined$1
+	        name: undefined,
+	        version: undefined
 	      };
 	      mapper.rgx.call(browser, ua, rgxmap.browser);
 	      browser.major = util.major(browser.version); // deprecated
@@ -17653,7 +17732,7 @@
 
 	    this.getCPU = function () {
 	      var cpu = {
-	        architecture: undefined$1
+	        architecture: undefined
 	      };
 	      mapper.rgx.call(cpu, ua, rgxmap.cpu);
 	      return cpu;
@@ -17661,9 +17740,9 @@
 
 	    this.getDevice = function () {
 	      var device = {
-	        vendor: undefined$1,
-	        model: undefined$1,
-	        type: undefined$1
+	        vendor: undefined,
+	        model: undefined,
+	        type: undefined
 	      };
 	      mapper.rgx.call(device, ua, rgxmap.device);
 	      return device;
@@ -17671,8 +17750,8 @@
 
 	    this.getEngine = function () {
 	      var engine = {
-	        name: undefined$1,
-	        version: undefined$1
+	        name: undefined,
+	        version: undefined
 	      };
 	      mapper.rgx.call(engine, ua, rgxmap.engine);
 	      return engine;
@@ -17680,8 +17759,8 @@
 
 	    this.getOS = function () {
 	      var os = {
-	        name: undefined$1,
-	        version: undefined$1
+	        name: undefined,
+	        version: undefined
 	      };
 	      mapper.rgx.call(os, ua, rgxmap.os);
 	      return os;
@@ -18228,6 +18307,7 @@
 	        throw e;
 	    }
 	}
+	//# sourceMappingURL=utils.js.map
 
 	var jsonxUtils = /*#__PURE__*/Object.freeze({
 		displayComponent: displayComponent,
@@ -19521,23 +19601,31 @@
 	        options.bind = true;
 	    const { resources = {}, args = [], } = options;
 	    //@ts-ignore
-	    const props = reactComponent.props;
+	    const props = Object.assign({}, reactComponent.props);
 	    const functionArgs = [react, react_9, react_10, react_11, react_12, react_13, react_14, react_15, react_16, react_17, react_18, getReactElementFromJSONX, reactComponent, resources, props,];
 	    //@ts-ignore
 	    if (typeof functionBody === 'function')
 	        functionBody = functionBody.toString();
 	    const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromJSONX', 'reactComponent', 'resources', 'props', `
+    'use strict';
     const self = this;
+
     return function ${options.name || 'Anonymous'}(props){
       ${functionBody}
       if(typeof exposeProps==='undefined' || exposeProps){
         reactComponent.props = Object.assign({},props,typeof exposeProps==='undefined'?{}:exposeProps);
-        // reactComponent.__functionargs = Object.keys(exposeProps);
+        reactComponent.__functionargs = Object.keys(exposeProps);
       } else{
         reactComponent.props =  props;
       }
-      if(!props.children) delete props.children;
+      // console.log({props})
+      if(!props.children) {
+      //  delete props.children;
+      }
+      // console.log('func self',self)
+      // console.log('func this',this)
       const context = ${options.bind ? 'Object.assign(self,this)' : 'this'};
+      console.log({context, reactComponent}) 
       return getReactElementFromJSONX.call(context, reactComponent);
     }
   `);
@@ -19860,7 +19948,8 @@
 	                if (this.debug || jsonx.debug)
 	                    componentVal = e;
 	            }
-	            cprops[cpropName] = cpropName === '_children' ? [componentVal] : componentVal;
+	            cprops[cpropName] = cpropName === '_children' ? [componentVal]
+	                : componentVal;
 	            return cprops;
 	        }, {});
 	    const classComponents = (!jsonx.__dangerouslyInsertClassComponents)
@@ -20181,6 +20270,7 @@
 	        return null;
 	    }
 	}
+	//# sourceMappingURL=props.js.map
 
 	var jsonxProps = /*#__PURE__*/Object.freeze({
 		STRIP_COMMENTS: STRIP_COMMENTS,
@@ -20315,6 +20405,7 @@
 	        return null;
 	    }
 	}
+	//# sourceMappingURL=children.js.map
 
 	var jsonxChildren = /*#__PURE__*/Object.freeze({
 		getChildrenProperty: getChildrenProperty,
@@ -20562,7 +20653,7 @@
 	 * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
 	 * @param {*} callback
 	 */
-	function __express(filePath, options, callback) {
+	function __express$$1(filePath, options, callback) {
 	    try {
 	        let jsonxModule = options.__jsonx;
 	        if (filePath) {
@@ -20594,6 +20685,7 @@ ${jsonxRenderedString}`;
 	            throw e;
 	    }
 	}
+	//# sourceMappingURL=express.js.map
 
 	// import React, { createElement, } from 'react';
 	const createElement = react.createElement;
@@ -20827,28 +20919,29 @@ ${jsonxRenderedString}`;
 	const _jsonxComponents = jsonxComponents;
 	const _jsonxProps = jsonxProps;
 	const _jsonxUtils = jsonxUtils;
+	//# sourceMappingURL=index.js.map
 
-	exports.__express = __express;
+	exports.jsonxRender = jsonxRender;
+	exports.outputHTML = outputHTML;
+	exports.getReactElementFromJSONX = getReactElementFromJSONX;
+	exports.getRenderedJSON = getRenderedJSON;
+	exports.getReactElement = getReactElement;
+	exports.getReactElementFromJSON = getReactElementFromJSON;
+	exports.compile = compile;
+	exports.outputJSX = outputJSX;
+	exports.outputJSON = outputJSON;
+	exports.jsonxHTMLString = jsonxHTMLString;
+	exports.jsonToJSX = jsonToJSX;
 	exports.__getReact = __getReact;
 	exports.__getReactDOM = __getReactDOM;
 	exports._jsonxChildren = _jsonxChildren;
 	exports._jsonxComponents = _jsonxComponents;
 	exports._jsonxProps = _jsonxProps;
 	exports._jsonxUtils = _jsonxUtils;
-	exports.compile = compile;
 	exports.default = getReactElementFromJSONX;
-	exports.getReactElement = getReactElement;
-	exports.getReactElementFromJSON = getReactElementFromJSON;
-	exports.getReactElementFromJSONX = getReactElementFromJSONX;
-	exports.getRenderedJSON = getRenderedJSON;
-	exports.jsonToJSX = jsonToJSX;
-	exports.jsonxHTMLString = jsonxHTMLString;
-	exports.jsonxRender = jsonxRender;
-	exports.outputHTML = outputHTML;
-	exports.outputJSON = outputJSON;
-	exports.outputJSX = outputJSX;
-	exports.renderFile = __express;
+	exports.__express = __express$$1;
+	exports.renderFile = __express$$1;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));

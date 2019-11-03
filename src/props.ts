@@ -292,7 +292,8 @@ export function getReactComponents(this:defs.Context, options:defs.Config) {
       } catch (e) {
         if (this.debug || jsonx.debug) componentVal = e;
       }
-      cprops[cpropName] = cpropName === '_children' ? [componentVal] : componentVal;
+      cprops[cpropName] = cpropName === '_children' ? [componentVal]
+       : componentVal;
       return cprops;
     }, {});
   const classComponents = (!jsonx.__dangerouslyInsertClassComponents)
