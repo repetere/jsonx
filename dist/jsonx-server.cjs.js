@@ -4,18 +4,21 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var UAParser = _interopDefault(require('ua-parser-js'));
 var React = require('react');
 var React__default = _interopDefault(React);
-var memoryCache = require('memory-cache');
-var ReactDOMElements = _interopDefault(require('react-dom-factories'));
-var createReactClass = _interopDefault(require('create-react-class'));
-var path = _interopDefault(require('path'));
-var fs = _interopDefault(require('fs'));
 var ReactDOM = _interopDefault(require('react-dom'));
 var ReactDOMServer = _interopDefault(require('react-dom/server'));
+var memoryCache = require('memory-cache');
+var ReactDOMElements = _interopDefault(require('react-dom-factories'));
+var UAParser = _interopDefault(require('ua-parser-js'));
+var createReactClass = _interopDefault(require('create-react-class'));
+var path = _interopDefault(require('path'));
 
-var global$1 = typeof global$1 !== 'undefined' ? global$1 : globalThis;
+var global$1 = typeof global$1 !== 'undefined'
+    ? global$1
+    : typeof globalThis !== 'undefined'
+        ? globalThis
+        : {};
 /**
  * Used to evaluate whether or not to render a component
  * @param {Object} options
@@ -462,9 +465,9 @@ function getSimplifiedJSONX(jsonx = {}) {
  * @param {Object} options - fetch options
  * @return {Object} - returns fetched JSON data
  */
-async function fetchJSON(path$$1 = '', options = {}) {
+async function fetchJSON(path = '', options = {}) {
     try {
-        const response = await fetch(path$$1, options);
+        const response = await fetch(path, options);
         return await response.json();
     }
     catch (e) {
@@ -1628,6 +1631,8 @@ var jsonxChildren = /*#__PURE__*/Object.freeze({
   getJSONXChildren: getJSONXChildren
 });
 
+var fs = {};
+
 const scopedEval = eval;
 /**
  * Use JSONX for express view rendering
@@ -1637,7 +1642,7 @@ const scopedEval = eval;
  * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
  * @param {*} callback
  */
-function __express$$1(filePath, options, callback) {
+function __express(filePath, options, callback) {
     try {
         let jsonxModule = options.__jsonx;
         if (filePath) {
@@ -1903,23 +1908,23 @@ const _jsonxComponents = jsonxComponents;
 const _jsonxProps = jsonxProps;
 const _jsonxUtils = jsonxUtils;
 
-exports.jsonxRender = jsonxRender;
-exports.outputHTML = outputHTML;
-exports.getReactElementFromJSONX = getReactElementFromJSONX;
-exports.getRenderedJSON = getRenderedJSON;
-exports.getReactElement = getReactElement;
-exports.getReactElementFromJSON = getReactElementFromJSON;
-exports.compile = compile;
-exports.outputJSX = outputJSX;
-exports.outputJSON = outputJSON;
-exports.jsonxHTMLString = jsonxHTMLString;
-exports.jsonToJSX = jsonToJSX;
+exports.__express = __express;
 exports.__getReact = __getReact;
 exports.__getReactDOM = __getReactDOM;
 exports._jsonxChildren = _jsonxChildren;
 exports._jsonxComponents = _jsonxComponents;
 exports._jsonxProps = _jsonxProps;
 exports._jsonxUtils = _jsonxUtils;
+exports.compile = compile;
 exports.default = getReactElementFromJSONX;
-exports.__express = __express$$1;
-exports.renderFile = __express$$1;
+exports.getReactElement = getReactElement;
+exports.getReactElementFromJSON = getReactElementFromJSON;
+exports.getReactElementFromJSONX = getReactElementFromJSONX;
+exports.getRenderedJSON = getRenderedJSON;
+exports.jsonToJSX = jsonToJSX;
+exports.jsonxHTMLString = jsonxHTMLString;
+exports.jsonxRender = jsonxRender;
+exports.outputHTML = outputHTML;
+exports.outputJSON = outputJSON;
+exports.outputJSX = outputJSX;
+exports.renderFile = __express;

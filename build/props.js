@@ -294,7 +294,8 @@ export function getReactComponents(options) {
                 if (this.debug || jsonx.debug)
                     componentVal = e;
             }
-            cprops[cpropName] = cpropName === '_children' ? [componentVal] : componentVal;
+            cprops[cpropName] = cpropName === '_children' ? [componentVal]
+                : componentVal;
             return cprops;
         }, {});
     const classComponents = (!jsonx.__dangerouslyInsertClassComponents)
@@ -325,14 +326,16 @@ export function getReactComponents(options) {
  */
 export function getReactComponentProps(options = { jsonx: {} }) {
     const { jsonx, } = options;
+    const customComponents = this && this.reactComponents ? this.reactComponents : {};
+    const customLibraries = this && this.componentLibraries ? this.componentLibraries : {};
     if (jsonx.__dangerouslyInsertJSONXComponents && Object.keys(jsonx.__dangerouslyInsertJSONXComponents).length) {
         return Object.keys(jsonx.__dangerouslyInsertJSONXComponents).reduce((cprops, cpropName) => {
             let componentVal;
             try {
                 componentVal = getComponentFromMap({
                     jsonx: jsonx.__dangerouslyInsertJSONXComponents[cpropName],
-                    reactComponents: this.reactComponents,
-                    componentLibraries: this.componentLibraries,
+                    reactComponents: customComponents,
+                    componentLibraries: customLibraries,
                 });
             }
             catch (e) {
@@ -355,8 +358,8 @@ export function getReactComponentProps(options = { jsonx: {} }) {
                             ? jsonx.__dangerouslyInsertComponentProps[cpropName]
                             : {},
                     },
-                    reactComponents: this.reactComponents,
-                    componentLibraries: this.componentLibraries,
+                    reactComponents: customComponents,
+                    componentLibraries: customLibraries,
                 });
             }
             catch (e) {

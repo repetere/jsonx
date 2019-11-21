@@ -3527,7 +3527,7 @@ var jsonx = (function (exports) {
 	var _assign = objectAssign;
 	var Scheduler = scheduler;
 	var checkPropTypes = checkPropTypes_1;
-	var tracing$$1 = tracing;
+	var tracing$1 = tracing;
 
 	// Do not require this module directly! Use normal `invariant` calls with
 	// template literal strings. The messages will be converted to ReactError during
@@ -14461,7 +14461,7 @@ var jsonx = (function (exports) {
 	  // react-dom is used with production (non-profiling) bundle of
 	  // scheduler/tracing
 	  (function () {
-	    if (!(tracing$$1.__interactionsRef != null && tracing$$1.__interactionsRef.current != null)) {
+	    if (!(tracing$1.__interactionsRef != null && tracing$1.__interactionsRef.current != null)) {
 	      {
 	        throw ReactError(Error("It is not supported to run the profiling version of a renderer (for example, `react-dom/profiling`) without also replacing the `scheduler/tracing` module with `scheduler/tracing-profiling`. Your bundler might have a setting for aliasing both modules. Learn more at http://fb.me/react-profiling"));
 	      }
@@ -23968,7 +23968,7 @@ var jsonx = (function (exports) {
 	      if (!retryCache.has(thenable)) {
 	        {
 	          if (thenable.__reactDoNotTraceInteractions !== true) {
-	            retry = tracing$$1.unstable_wrap(retry);
+	            retry = tracing$1.unstable_wrap(retry);
 	          }
 	        }
 
@@ -25413,8 +25413,8 @@ var jsonx = (function (exports) {
 
 	function pushInteractions(root) {
 	  {
-	    var prevInteractions = tracing$$1.__interactionsRef.current;
-	    tracing$$1.__interactionsRef.current = root.memoizedInteractions;
+	    var prevInteractions = tracing$1.__interactionsRef.current;
+	    tracing$1.__interactionsRef.current = root.memoizedInteractions;
 	    return prevInteractions;
 	  }
 
@@ -25423,7 +25423,7 @@ var jsonx = (function (exports) {
 
 	function popInteractions(prevInteractions) {
 	  {
-	    tracing$$1.__interactionsRef.current = prevInteractions;
+	    tracing$1.__interactionsRef.current = prevInteractions;
 	  }
 	}
 
@@ -26807,7 +26807,7 @@ var jsonx = (function (exports) {
 	      });
 	    }
 
-	    var subscriber = tracing$$1.__subscriberRef.current;
+	    var subscriber = tracing$1.__subscriberRef.current;
 
 	    if (subscriber !== null) {
 	      var threadID = computeThreadID(root, expirationTime);
@@ -26818,7 +26818,7 @@ var jsonx = (function (exports) {
 
 	function schedulePendingInteractions(root, expirationTime) {
 
-	  scheduleInteractions(root, expirationTime, tracing$$1.__interactionsRef.current);
+	  scheduleInteractions(root, expirationTime, tracing$1.__interactionsRef.current);
 	}
 
 	function startWorkOnPendingInteractions(root, expirationTime) {
@@ -26842,7 +26842,7 @@ var jsonx = (function (exports) {
 	  root.memoizedInteractions = interactions;
 
 	  if (interactions.size > 0) {
-	    var subscriber = tracing$$1.__subscriberRef.current;
+	    var subscriber = tracing$1.__subscriberRef.current;
 
 	    if (subscriber !== null) {
 	      var threadID = computeThreadID(root, expirationTime);
@@ -26865,7 +26865,7 @@ var jsonx = (function (exports) {
 	  var subscriber;
 
 	  try {
-	    subscriber = tracing$$1.__subscriberRef.current;
+	    subscriber = tracing$1.__subscriberRef.current;
 
 	    if (subscriber !== null && root.memoizedInteractions.size > 0) {
 	      var threadID = computeThreadID(root, committedExpirationTime);
@@ -27578,7 +27578,7 @@ var jsonx = (function (exports) {
 	  this.lastExpiredTime = NoWork;
 
 	  {
-	    this.interactionThreadID = tracing$$1.unstable_getThreadID();
+	    this.interactionThreadID = tracing$1.unstable_getThreadID();
 	    this.memoizedInteractions = new Set();
 	    this.pendingInteractionMap = new Map();
 	  }
@@ -29259,6 +29259,11 @@ var jsonx = (function (exports) {
 	  return parts.join('')
 	}
 
+	var base64 = /*#__PURE__*/Object.freeze({
+		toByteArray: toByteArray,
+		fromByteArray: fromByteArray
+	});
+
 	function read (buffer, offset, isLE, mLen, nBytes) {
 	  var e, m;
 	  var eLen = nBytes * 8 - mLen - 1;
@@ -30037,7 +30042,7 @@ var jsonx = (function (exports) {
 	    }
 	  }
 
-	  function read$$1 (buf, i) {
+	  function read (buf, i) {
 	    if (indexSize === 1) {
 	      return buf[i]
 	    } else {
@@ -30049,7 +30054,7 @@ var jsonx = (function (exports) {
 	  if (dir) {
 	    var foundIndex = -1;
 	    for (i = byteOffset; i < arrLength; i++) {
-	      if (read$$1(arr, i) === read$$1(val, foundIndex === -1 ? 0 : i - foundIndex)) {
+	      if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
 	        if (foundIndex === -1) foundIndex = i;
 	        if (i - foundIndex + 1 === valLength) return foundIndex * indexSize
 	      } else {
@@ -30062,7 +30067,7 @@ var jsonx = (function (exports) {
 	    for (i = byteOffset; i >= 0; i--) {
 	      var found = true;
 	      for (var j = 0; j < valLength; j++) {
-	        if (read$$1(arr, i + j) !== read$$1(val, j)) {
+	        if (read(arr, i + j) !== read(val, j)) {
 	          found = false;
 	          break
 	        }
@@ -30133,7 +30138,7 @@ var jsonx = (function (exports) {
 	  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
 	}
 
-	Buffer.prototype.write = function write$$1 (string, offset, length, encoding) {
+	Buffer.prototype.write = function write (string, offset, length, encoding) {
 	  // Buffer#write(string)
 	  if (offset === undefined) {
 	    encoding = 'utf8';
@@ -31243,34 +31248,6 @@ var jsonx = (function (exports) {
 	Item.prototype.run = function () {
 	    this.fun.apply(null, this.array);
 	};
-	var title = 'browser';
-	var platform = 'browser';
-	var browser = true;
-	var env = {};
-	var argv = [];
-	var version = ''; // empty string to avoid regexp issues
-	var versions = {};
-	var release = {};
-	var config = {};
-
-	function noop() {}
-
-	var on = noop;
-	var addListener = noop;
-	var once = noop;
-	var off = noop;
-	var removeListener = noop;
-	var removeAllListeners = noop;
-	var emit = noop;
-
-	function binding(name) {
-	    throw new Error('process.binding is not supported');
-	}
-
-	function cwd () { return '/' }
-	function chdir (dir) {
-	    throw new Error('process.chdir is not supported');
-	}function umask() { return 0; }
 
 	// from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
 	var performance$1 = global$1.performance || {};
@@ -31281,56 +31258,6 @@ var jsonx = (function (exports) {
 	  performance$1.oNow       ||
 	  performance$1.webkitNow  ||
 	  function(){ return (new Date()).getTime() };
-
-	// generate timestamp or delta
-	// see http://nodejs.org/api/process.html#process_process_hrtime
-	function hrtime(previousTimestamp){
-	  var clocktime = performanceNow.call(performance$1)*1e-3;
-	  var seconds = Math.floor(clocktime);
-	  var nanoseconds = Math.floor((clocktime%1)*1e9);
-	  if (previousTimestamp) {
-	    seconds = seconds - previousTimestamp[0];
-	    nanoseconds = nanoseconds - previousTimestamp[1];
-	    if (nanoseconds<0) {
-	      seconds--;
-	      nanoseconds += 1e9;
-	    }
-	  }
-	  return [seconds,nanoseconds]
-	}
-
-	var startTime = new Date();
-	function uptime() {
-	  var currentTime = new Date();
-	  var dif = currentTime - startTime;
-	  return dif / 1000;
-	}
-
-	var process = {
-	  nextTick: nextTick,
-	  title: title,
-	  browser: browser,
-	  env: env,
-	  argv: argv,
-	  version: version,
-	  versions: versions,
-	  on: on,
-	  addListener: addListener,
-	  once: once,
-	  off: off,
-	  removeListener: removeListener,
-	  removeAllListeners: removeAllListeners,
-	  emit: emit,
-	  binding: binding,
-	  cwd: cwd,
-	  chdir: chdir,
-	  umask: umask,
-	  hrtime: hrtime,
-	  platform: platform,
-	  release: release,
-	  config: config,
-	  uptime: uptime
-	};
 
 	var inherits;
 	if (typeof Object.create === 'function'){
@@ -31425,7 +31352,7 @@ var jsonx = (function (exports) {
 	var debugEnviron;
 	function debuglog(set) {
 	  if (isUndefined(debugEnviron))
-	    debugEnviron = process.env.NODE_DEBUG || '';
+	    debugEnviron = '';
 	  set = set.toUpperCase();
 	  if (!debugs[set]) {
 	    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
@@ -38299,7 +38226,7 @@ var jsonx = (function (exports) {
 	 * Licensed under MIT License
 	 */
 
-	(function (window, undefined) {
+	(function (window, undefined$1) {
 
 	    //////////////
 	    // Constants
@@ -38356,7 +38283,7 @@ var jsonx = (function (exports) {
 	            return str.toLowerCase();
 	        },
 	        major : function (version) {
-	            return typeof(version) === STR_TYPE ? version.replace(/[^\d\.]/g,'').split(".")[0] : undefined;
+	            return typeof(version) === STR_TYPE ? version.replace(/[^\d\.]/g,'').split(".")[0] : undefined$1;
 	        },
 	        trim : function (str) {
 	          return str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
@@ -38405,16 +38332,16 @@ var jsonx = (function (exports) {
 	                                    // check whether function or regex
 	                                    if (typeof q[1] === FUNC_TYPE && !(q[1].exec && q[1].test)) {
 	                                        // call function (usually string mapper)
-	                                        this[q[0]] = match ? q[1].call(this, match, q[2]) : undefined;
+	                                        this[q[0]] = match ? q[1].call(this, match, q[2]) : undefined$1;
 	                                    } else {
 	                                        // sanitize match using given regex
-	                                        this[q[0]] = match ? match.replace(q[1], q[2]) : undefined;
+	                                        this[q[0]] = match ? match.replace(q[1], q[2]) : undefined$1;
 	                                    }
 	                                } else if (q.length == 4) {
-	                                        this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined;
+	                                        this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined$1;
 	                                }
 	                            } else {
-	                                this[q] = match ? match : undefined;
+	                                this[q] = match ? match : undefined$1;
 	                            }
 	                        }
 	                    }
@@ -38430,11 +38357,11 @@ var jsonx = (function (exports) {
 	                if (typeof map[i] === OBJ_TYPE && map[i].length > 0) {
 	                    for (var j = 0; j < map[i].length; j++) {
 	                        if (util.has(map[i][j], str)) {
-	                            return (i === UNKNOWN) ? undefined : i;
+	                            return (i === UNKNOWN) ? undefined$1 : i;
 	                        }
 	                    }
 	                } else if (util.has(map[i], str)) {
-	                    return (i === UNKNOWN) ? undefined : i;
+	                    return (i === UNKNOWN) ? undefined$1 : i;
 	                }
 	            }
 	            return str;
@@ -39053,7 +38980,7 @@ var jsonx = (function (exports) {
 
 	        if (typeof uastring === 'object') {
 	            extensions = uastring;
-	            uastring = undefined;
+	            uastring = undefined$1;
 	        }
 
 	        if (!(this instanceof UAParser)) {
@@ -39064,28 +38991,28 @@ var jsonx = (function (exports) {
 	        var rgxmap = extensions ? util.extend(regexes, extensions) : regexes;
 
 	        this.getBrowser = function () {
-	            var browser = { name: undefined, version: undefined };
+	            var browser = { name: undefined$1, version: undefined$1 };
 	            mapper.rgx.call(browser, ua, rgxmap.browser);
 	            browser.major = util.major(browser.version); // deprecated
 	            return browser;
 	        };
 	        this.getCPU = function () {
-	            var cpu = { architecture: undefined };
+	            var cpu = { architecture: undefined$1 };
 	            mapper.rgx.call(cpu, ua, rgxmap.cpu);
 	            return cpu;
 	        };
 	        this.getDevice = function () {
-	            var device = { vendor: undefined, model: undefined, type: undefined };
+	            var device = { vendor: undefined$1, model: undefined$1, type: undefined$1 };
 	            mapper.rgx.call(device, ua, rgxmap.device);
 	            return device;
 	        };
 	        this.getEngine = function () {
-	            var engine = { name: undefined, version: undefined };
+	            var engine = { name: undefined$1, version: undefined$1 };
 	            mapper.rgx.call(engine, ua, rgxmap.engine);
 	            return engine;
 	        };
 	        this.getOS = function () {
-	            var os = { name: undefined, version: undefined };
+	            var os = { name: undefined$1, version: undefined$1 };
 	            mapper.rgx.call(os, ua, rgxmap.os);
 	            return os;
 	        };
@@ -39177,7 +39104,11 @@ var jsonx = (function (exports) {
 	});
 	var uaParser_1 = uaParser.UAParser;
 
-	var global$2 = typeof global$2 !== 'undefined' ? global$2 : globalThis;
+	var global$2 = typeof global$2 !== 'undefined'
+	    ? global$2
+	    : typeof globalThis !== 'undefined'
+	        ? globalThis
+	        : {};
 	/**
 	 * Used to evaluate whether or not to render a component
 	 * @param {Object} options
@@ -42114,7 +42045,7 @@ var jsonx = (function (exports) {
 	 * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
 	 * @param {*} callback
 	 */
-	function __express$$1(filePath, options, callback) {
+	function __express(filePath, options, callback) {
 	    try {
 	        let jsonxModule = options.__jsonx;
 	        if (filePath) {
@@ -42380,26 +42311,26 @@ ${jsonxRenderedString}`;
 	const _jsonxProps = jsonxProps;
 	const _jsonxUtils = jsonxUtils;
 
-	exports.jsonxRender = jsonxRender;
-	exports.outputHTML = outputHTML;
-	exports.getReactElementFromJSONX = getReactElementFromJSONX;
-	exports.getRenderedJSON = getRenderedJSON;
-	exports.getReactElement = getReactElement;
-	exports.getReactElementFromJSON = getReactElementFromJSON;
-	exports.compile = compile;
-	exports.outputJSX = outputJSX;
-	exports.outputJSON = outputJSON;
-	exports.jsonxHTMLString = jsonxHTMLString;
-	exports.jsonToJSX = jsonToJSX;
+	exports.__express = __express;
 	exports.__getReact = __getReact;
 	exports.__getReactDOM = __getReactDOM;
 	exports._jsonxChildren = _jsonxChildren;
 	exports._jsonxComponents = _jsonxComponents;
 	exports._jsonxProps = _jsonxProps;
 	exports._jsonxUtils = _jsonxUtils;
+	exports.compile = compile;
 	exports.default = getReactElementFromJSONX;
-	exports.__express = __express$$1;
-	exports.renderFile = __express$$1;
+	exports.getReactElement = getReactElement;
+	exports.getReactElementFromJSON = getReactElementFromJSON;
+	exports.getReactElementFromJSONX = getReactElementFromJSONX;
+	exports.getRenderedJSON = getRenderedJSON;
+	exports.jsonToJSX = jsonToJSX;
+	exports.jsonxHTMLString = jsonxHTMLString;
+	exports.jsonxRender = jsonxRender;
+	exports.outputHTML = outputHTML;
+	exports.outputJSON = outputJSON;
+	exports.outputJSX = outputJSX;
+	exports.renderFile = __express;
 
 	return exports;
 

@@ -341,22 +341,26 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
         options.bind = true;
     const { resources = {}, args = [], } = options;
     //@ts-ignore
-    const props = reactComponent.props;
+    const props = Object.assign({}, reactComponent.props);
     const functionArgs = [React, useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, getReactElementFromJSONX, reactComponent, resources, props,];
     //@ts-ignore
     if (typeof functionBody === 'function')
         functionBody = functionBody.toString();
     const functionComponent = Function('React', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', 'getReactElementFromJSONX', 'reactComponent', 'resources', 'props', `
+    'use strict';
     const self = this;
+
     return function ${options.name || 'Anonymous'}(props){
       ${functionBody}
       if(typeof exposeProps==='undefined' || exposeProps){
         reactComponent.props = Object.assign({},props,typeof exposeProps==='undefined'?{}:exposeProps);
-        // reactComponent.__functionargs = Object.keys(exposeProps);
+        reactComponent.__functionargs = Object.keys(exposeProps);
       } else{
         reactComponent.props =  props;
       }
-      if(!props.children) delete props.children;
+      if(!props.children) {
+      //  delete props.children;
+      }
       const context = ${options.bind ? 'Object.assign(self,this)' : 'this'};
       return getReactElementFromJSONX.call(context, reactComponent);
     }

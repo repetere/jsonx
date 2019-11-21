@@ -6,7 +6,11 @@ declare global {
   }
 }
 
-var global: any = typeof global!=='undefined'?global: globalThis;
+var global: any = typeof global !== 'undefined'
+  ? global
+  : typeof globalThis !== 'undefined'
+    ? globalThis
+    :{};
 
 /**
  * Used to evaluate whether or not to render a component

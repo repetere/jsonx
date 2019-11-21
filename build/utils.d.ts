@@ -1,4 +1,8 @@
 import * as defs from "./types/jsonx/index";
+declare global {
+    interface window {
+    }
+}
 /**
  * Used to evaluate whether or not to render a component
  * @param {Object} options

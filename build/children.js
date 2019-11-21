@@ -84,7 +84,11 @@ export function getChildrenProps(options = {}) {
                 ? {}
                 : {
                     style: {},
-                }, childjsonx.props, { key: renderIndex || '' + Math.random(), }),
+                }, childjsonx.props, {
+                key: (typeof renderIndex !== 'undefined')
+                    ? renderIndex + Math.random()
+                    : Math.random(),
+            }),
         })
         : childjsonx;
 }

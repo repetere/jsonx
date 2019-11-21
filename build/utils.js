@@ -1,5 +1,9 @@
 import UAParser from 'ua-parser-js';
-const global = {};
+var global = typeof global !== 'undefined'
+    ? global
+    : typeof globalThis !== 'undefined'
+        ? globalThis
+        : {};
 /**
  * Used to evaluate whether or not to render a component
  * @param {Object} options
@@ -126,10 +130,17 @@ export function displayComponent(options = {}) {
  * @returns {Boolean} true if browser is not IE or old android / chrome
  */
 export function getAdvancedBinding() {
+    var window = window;
     if (typeof window === 'undefined') {
-        var window = (this && this.window)
-            ? this.window
-            : global.window || {};
+        if (this && this.window) {
+            window = this.window;
+        }
+        else if (typeof global !== 'undefined' && global.window) {
+            window = global.window;
+        }
+        else if (typeof globalThis !== 'undefined' && globalThis.window) {
+            window = globalThis.window;
+        }
         if (!window.navigator)
             return false;
     }
@@ -196,8 +207,8 @@ export function traverse(paths = {}, data = {}) {
             let value = data;
             while (_path.length && value && typeof value === 'object') {
                 let prop = _path.shift();
-                if (prop && value[prop])
-                    value = value[prop];
+                //@ts-ignore
+                value = value[prop];
             }
             result[key] = (_path.length) ? undefined : value;
         }
