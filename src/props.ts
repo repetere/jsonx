@@ -600,6 +600,7 @@ export function getComputedProps(this: defs.Context, options: {
     const windowprops = jsonx.windowprops ? getJSONXProps({ jsonx, propName: 'windowprops', traverseObject: windowTraverse, }) : {};
     const thisprops = jsonx.thisprops ? getJSONXProps({ jsonx, propName: 'thisprops', traverseObject: componentThisProp, }) : {};
     const thisstate = jsonx.thisstate ? getJSONXProps({ jsonx, propName: 'thisstate', traverseObject: this.state, }) : {};
+    const thiscontext = jsonx.thiscontext ? getJSONXProps({ jsonx, propName: 'thiscontext', traverseObject: this || {}, }) : {};
 
     //allowing javascript injections
     const evalProps = (jsonx.__dangerouslyEvalProps || jsonx.__dangerouslyBindEvalProps)
@@ -618,7 +619,7 @@ export function getComputedProps(this: defs.Context, options: {
     const evalAllProps = (jsonx.__dangerouslyEvalAllProps)
       ? getEvalProps.call(this, { jsonx, })
       : {};
-    const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {}: { key: renderIndex, }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents, insertedComputedComponents);
+    const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {}: { key: renderIndex, }, jsonx.props, thisprops, thisstate, thiscontext, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents, insertedComputedComponents);
     const computedProps = Object.assign({}, allProps,
       jsonx.__functionProps ? getFunctionProps.call(this, { allProps, jsonx, }) : {},
       jsonx.__windowComponents ? getWindowComponents.call(this, { allProps, jsonx, }) : {},

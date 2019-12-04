@@ -24933,8 +24933,8 @@
                                 }
                               },
                               "value": {
-                                "raw": "\n      if(typeof exposeProps==='undefined' || exposeProps){\n        reactComponent.props = Object.assign({},props,typeof exposeProps==='undefined'?{}:exposeProps);\n        // reactComponent.__functionargs = Object.keys(exposeProps);\n      } else{\n        reactComponent.props =  props;\n      }\n      if(!props.children) delete props.children;\n      const context = ",
-                                "cooked": "\n      if(typeof exposeProps==='undefined' || exposeProps){\n        reactComponent.props = Object.assign({},props,typeof exposeProps==='undefined'?{}:exposeProps);\n        // reactComponent.__functionargs = Object.keys(exposeProps);\n      } else{\n        reactComponent.props =  props;\n      }\n      if(!props.children) delete props.children;\n      const context = "
+                                "raw": "\n      if(typeof exposeprops==='undefined' || exposeprops){\n        reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);\n        // reactComponent.__functionargs = Object.keys(exposeprops);\n      } else{\n        reactComponent.props =  props;\n      }\n      if(!props.children) delete props.children;\n      const context = ",
+                                "cooked": "\n      if(typeof exposeprops==='undefined' || exposeprops){\n        reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);\n        // reactComponent.__functionargs = Object.keys(exposeprops);\n      } else{\n        reactComponent.props =  props;\n      }\n      if(!props.children) delete props.children;\n      const context = "
                               },
                               "tail": false
                             },
@@ -76645,7 +76645,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "\n      if(typeof exposeProps==='undefined' || exposeProps){\n        reactComponent.props = Object.assign({},props,typeof exposeProps==='undefined'?{}:exposeProps);\n        // reactComponent.__functionargs = Object.keys(exposeProps);\n      } else{\n        reactComponent.props =  props;\n      }\n      if(!props.children) delete props.children;\n      const context = ",
+      "value": "\n      if(typeof exposeprops==='undefined' || exposeprops){\n        reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);\n        // reactComponent.__functionargs = Object.keys(exposeprops);\n      } else{\n        reactComponent.props =  props;\n      }\n      if(!props.children) delete props.children;\n      const context = ",
       "start": 14768,
       "end": 15141,
       "loc": {

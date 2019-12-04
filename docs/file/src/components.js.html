@@ -416,9 +416,9 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = &a
     const self = this;
     return function ${options.name || &apos;Anonymous&apos;}(props){
       ${functionBody}
-      if(typeof exposeProps===&apos;undefined&apos; || exposeProps){
-        reactComponent.props = Object.assign({},props,typeof exposeProps===&apos;undefined&apos;?{}:exposeProps);
-        // reactComponent.__functionargs = Object.keys(exposeProps);
+      if(typeof exposeprops===&apos;undefined&apos; || exposeprops){
+        reactComponent.props = Object.assign({},props,typeof exposeprops===&apos;undefined&apos;?{}:exposeprops);
+        // reactComponent.__functionargs = Object.keys(exposeprops);
       } else{
         reactComponent.props =  props;
       }

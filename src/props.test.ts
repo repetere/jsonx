@@ -1,3 +1,4 @@
+import * as jsonx from './index';
 import * as _jsonxProps from './props';
 import { getComputedProps, } from './props';
 import mochaJSDOM from 'jsdom-global';
@@ -91,6 +92,33 @@ describe('jsonx props', function () {
   });
   describe('getJSONXProps', () => {
     const getJSONXProps = _jsonxProps.getJSONXProps;
+    it('should return context props', () => { 
+      const functionContext = {
+        name: 'custom context',
+        content:'this should be the children content',
+        returnJSON: true,
+      };
+      const testVals = {
+        contextName: ['name'],
+        _children: ['content']
+      };
+      const contextJSONX = {
+        component: 'div',
+        props: {
+          title: 'context jsonx',
+        },
+        thiscontext:testVals,
+      };
+      const JSONXCP = getJSONXProps({ jsonx: contextJSONX, traverseObject: functionContext, propName: 'thiscontext', });
+      const JSONXJSONX = jsonx.getReactElementFromJSONX.call(functionContext, contextJSONX);
+      expect(JSONXCP).to.haveOwnProperty('contextName');
+      expect(JSONXCP).to.haveOwnProperty('_children');
+      expect(JSONXCP.contextName).to.eql(functionContext.name);
+      expect(JSONXCP._children).to.eql(functionContext.content);
+      expect(JSONXJSONX.children).to.eql(functionContext.content);
+      // const JSONXCP = getJSONXProps.call(functionContext, contextJSONX, { thiscontext: testVals, });
+      // console.log({ JSONXCP,JSONXJSONX });
+    });
     it('should return resolved dynamic prop', () => {
       const testVals = {
         auth: ['authentication', ],

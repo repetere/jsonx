@@ -217,7 +217,7 @@ var jsonx = (function (exports) {
 
 	// TODO: this is special because it gets imported during build.
 
-	var ReactVersion = '16.12.0';
+	var ReactVersion = '16.10.2';
 
 	// The Symbol used to tag the ReactElement-like types. If there is no native Symbol
 	// nor polyfill, then a plain number is used for performance.
@@ -258,8 +258,16 @@ var jsonx = (function (exports) {
 	}
 
 	// Do not require this module directly! Use normal `invariant` calls with
-	// template literal strings. The messages will be replaced with error codes
-	// during build.
+	// template literal strings. The messages will be converted to ReactError during
+	// build, and in production they will be minified.
+
+	// Do not require this module directly! Use normal `invariant` calls with
+	// template literal strings. The messages will be converted to ReactError during
+	// build, and in production they will be minified.
+	function ReactError(error) {
+	  error.name = 'Invariant Violation';
+	  return error;
+	}
 
 	/**
 	 * Use invariant() to assert state which your program assumes to be true.
@@ -513,11 +521,13 @@ var jsonx = (function (exports) {
 	 */
 
 	Component.prototype.setState = function (partialState, callback) {
-	  if (!(typeof partialState === 'object' || typeof partialState === 'function' || partialState == null)) {
-	    {
-	      throw Error("setState(...): takes an object of state variables to update or a function which returns an object of state variables.");
+	  (function () {
+	    if (!(typeof partialState === 'object' || typeof partialState === 'function' || partialState == null)) {
+	      {
+	        throw ReactError(Error("setState(...): takes an object of state variables to update or a function which returns an object of state variables."));
+	      }
 	    }
-	  }
+	  })();
 
 	  this.updater.enqueueSetState(this, partialState, callback, 'setState');
 	};
@@ -907,8 +917,8 @@ var jsonx = (function (exports) {
 	}
 	/**
 	 * Factory method to create a new React element. This no longer adheres to
-	 * the class pattern, so do not use new to call it. Also, instanceof check
-	 * will not work. Instead test $$typeof field against Symbol.for('react.element') to check
+	 * the class pattern, so do not use new to call it. Also, no instanceof check
+	 * will work. Instead test $$typeof field against Symbol.for('react.element') to check
 	 * if something is a React Element.
 	 *
 	 * @param {*} type
@@ -1078,11 +1088,13 @@ var jsonx = (function (exports) {
 	 */
 
 	function cloneElement(element, config, children) {
-	  if (!!(element === null || element === undefined)) {
-	    {
-	      throw Error("React.cloneElement(...): The argument must be a React element, but you passed " + element + ".");
+	  (function () {
+	    if (!!(element === null || element === undefined)) {
+	      {
+	        throw ReactError(Error("React.cloneElement(...): The argument must be a React element, but you passed " + element + "."));
+	      }
 	    }
-	  }
+	  })();
 
 	  var propName; // Original props are copied
 
@@ -1315,11 +1327,13 @@ var jsonx = (function (exports) {
 
 	      var childrenString = '' + children;
 
-	      {
+	      (function () {
 	        {
-	          throw Error("Objects are not valid as a React child (found: " + (childrenString === '[object Object]' ? 'object with keys {' + Object.keys(children).join(', ') + '}' : childrenString) + ")." + addendum);
+	          {
+	            throw ReactError(Error("Objects are not valid as a React child (found: " + (childrenString === '[object Object]' ? 'object with keys {' + Object.keys(children).join(', ') + '}' : childrenString) + ")." + addendum));
+	          }
 	        }
-	      }
+	      })();
 	    }
 	  }
 
@@ -1505,11 +1519,13 @@ var jsonx = (function (exports) {
 
 
 	function onlyChild(children) {
-	  if (!isValidElement(children)) {
-	    {
-	      throw Error("React.Children.only expected to receive a single React element child.");
+	  (function () {
+	    if (!isValidElement(children)) {
+	      {
+	        throw ReactError(Error("React.Children.only expected to receive a single React element child."));
+	      }
 	    }
-	  }
+	  })();
 
 	  return children;
 	}
@@ -1710,11 +1726,13 @@ var jsonx = (function (exports) {
 	function resolveDispatcher() {
 	  var dispatcher = ReactCurrentDispatcher.current;
 
-	  if (!(dispatcher !== null)) {
-	    {
-	      throw Error("Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://fb.me/react-invalid-hook-call for tips about how to debug and fix this problem.");
+	  (function () {
+	    if (!(dispatcher !== null)) {
+	      {
+	        throw ReactError(Error("Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://fb.me/react-invalid-hook-call for tips about how to debug and fix this problem."));
+	      }
 	    }
-	  }
+	  })();
 
 	  return dispatcher;
 	}
@@ -1775,6 +1793,17 @@ var jsonx = (function (exports) {
 	  {
 	    var dispatcher = resolveDispatcher();
 	    return dispatcher.useDebugValue(value, formatterFn);
+	  }
+	}
+
+	function withSuspenseConfig(scope, config) {
+	  var previousConfig = ReactCurrentBatchConfig.suspense;
+	  ReactCurrentBatchConfig.suspense = config === undefined ? null : config;
+
+	  try {
+	    scope();
+	  } finally {
+	    ReactCurrentBatchConfig.suspense = previousConfig;
 	  }
 	}
 
@@ -2104,10 +2133,14 @@ var jsonx = (function (exports) {
 	  } catch (e) {
 	  }
 	}
-	// Till then, we warn about the missing mock, but still fallback to a legacy mode compatible version
+	// Till then, we warn about the missing mock, but still fallback to a sync mode compatible version
 
 	 // For tests, we flush suspense fallbacks in an act scope;
 	// *except* in some of our own tests, where we test incremental loading states.
+
+	 // Changes priority of some events like mousemove to user-blocking priority,
+	// but without making them discrete. The flag exists in case it causes
+	// starvation problems.
 
 	 // Add a callback property to suspense to notify which promises are currently
 	// in the update queue. This allows reporting and tracing of what is causing
@@ -2118,12 +2151,6 @@ var jsonx = (function (exports) {
 	 // Part of the simplification of React.createElement so we can eventually move
 	// from React.createElement to React.jsx
 	// https://github.com/reactjs/rfcs/blob/createlement-rfc/text/0000-create-element-changes.md
-
-
-
-
-
-	 // Flag to turn event.target and event.currentTarget in ReactNative from a reactTag to a component instance
 
 	var React = {
 	  Children: {
@@ -2154,11 +2181,13 @@ var jsonx = (function (exports) {
 	  Profiler: REACT_PROFILER_TYPE,
 	  StrictMode: REACT_STRICT_MODE_TYPE,
 	  Suspense: REACT_SUSPENSE_TYPE,
+	  unstable_SuspenseList: REACT_SUSPENSE_LIST_TYPE,
 	  createElement: createElementWithValidation,
 	  cloneElement: cloneElementWithValidation,
 	  createFactory: createFactoryWithValidation,
 	  isValidElement: isValidElement,
 	  version: ReactVersion,
+	  unstable_withSuspenseConfig: withSuspenseConfig,
 	  __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: ReactSharedInternals
 	};
 
@@ -2216,7 +2245,13 @@ var jsonx = (function (exports) {
 	Object.defineProperty(exports, '__esModule', { value: true });
 
 	var enableSchedulerDebugging = false;
-	var enableProfiling = true;
+
+	// works by scheduling a requestAnimationFrame, storing the time for the start
+	// of the frame, then scheduling a postMessage which gets scheduled after paint.
+	// Within the postMessage handler do as much work as possible until time + frame
+	// rate. By separating the idle call into a separate event tick we ensure that
+	// layout, paint and other browser work is counted against the available time.
+	// The frame rate is dynamically adjusted.
 
 	var requestHostCallback;
 
@@ -2287,14 +2322,11 @@ var jsonx = (function (exports) {
 	  var _Date = window.Date;
 	  var _setTimeout = window.setTimeout;
 	  var _clearTimeout = window.clearTimeout;
+	  var requestAnimationFrame = window.requestAnimationFrame;
+	  var cancelAnimationFrame = window.cancelAnimationFrame;
 
 	  if (typeof console !== 'undefined') {
-	    // TODO: Scheduler no longer requires these methods to be polyfilled. But
-	    // maybe we want to continue warning if they don't exist, to preserve the
-	    // option to rely on it in the future?
-	    var requestAnimationFrame = window.requestAnimationFrame;
-	    var cancelAnimationFrame = window.cancelAnimationFrame; // TODO: Remove fb.me link
-
+	    // TODO: Remove fb.me link
 	    if (typeof requestAnimationFrame !== 'function') {
 	      console.error("This browser doesn't support requestAnimationFrame. " + 'Make sure that you load a ' + 'polyfill in older browsers. https://fb.me/react-polyfills');
 	    }
@@ -2315,22 +2347,17 @@ var jsonx = (function (exports) {
 	      return _Date.now() - _initialTime;
 	    };
 	  }
-
 	  var isMessageLoopRunning = false;
 	  var scheduledHostCallback = null;
-	  var taskTimeoutID = -1; // Scheduler periodically yields in case there is other work on the main
-	  // thread, like user events. By default, it yields multiple times per frame.
-	  // It does not attempt to align with frame boundaries, since most tasks don't
-	  // need to be frame aligned; for those that do, use requestAnimationFrame.
-
-	  var yieldInterval = 5;
-	  var deadline = 0; // TODO: Make this configurable
+	  var taskTimeoutID = -1;
+	  var frameLength = 5;
+	  var frameDeadline = 0;
 
 	  {
 	    // `isInputPending` is not available. Since we have no way of knowing if
 	    // there's pending input, always yield at the end of the frame.
 	    shouldYieldToHost = function () {
-	      return exports.unstable_now() >= deadline;
+	      return exports.unstable_now() >= frameDeadline;
 	    }; // Since we yield every frame regardless, `requestPaint` has no effect.
 
 
@@ -2344,42 +2371,44 @@ var jsonx = (function (exports) {
 	    }
 
 	    if (fps > 0) {
-	      yieldInterval = Math.floor(1000 / fps);
+	      frameLength = Math.floor(1000 / fps);
 	    } else {
 	      // reset the framerate
-	      yieldInterval = 5;
+	      frameLength = 33.33;
 	    }
 	  };
 
 	  var performWorkUntilDeadline = function () {
-	    if (scheduledHostCallback !== null) {
-	      var currentTime = exports.unstable_now(); // Yield after `yieldInterval` ms, regardless of where we are in the vsync
-	      // cycle. This means there's always time remaining at the beginning of
-	      // the message event.
+	    {
+	      if (scheduledHostCallback !== null) {
+	        var currentTime = exports.unstable_now(); // Yield after `frameLength` ms, regardless of where we are in the vsync
+	        // cycle. This means there's always time remaining at the beginning of
+	        // the message event.
 
-	      deadline = currentTime + yieldInterval;
-	      var hasTimeRemaining = true;
+	        frameDeadline = currentTime + frameLength;
+	        var hasTimeRemaining = true;
 
-	      try {
-	        var hasMoreWork = scheduledHostCallback(hasTimeRemaining, currentTime);
+	        try {
+	          var hasMoreWork = scheduledHostCallback(hasTimeRemaining, currentTime);
 
-	        if (!hasMoreWork) {
-	          isMessageLoopRunning = false;
-	          scheduledHostCallback = null;
-	        } else {
-	          // If there's more work, schedule the next message event at the end
-	          // of the preceding one.
+	          if (!hasMoreWork) {
+	            isMessageLoopRunning = false;
+	            scheduledHostCallback = null;
+	          } else {
+	            // If there's more work, schedule the next message event at the end
+	            // of the preceding one.
+	            port.postMessage(null);
+	          }
+	        } catch (error) {
+	          // If a scheduler task throws, exit the current browser task so the
+	          // error can be observed.
 	          port.postMessage(null);
+	          throw error;
 	        }
-	      } catch (error) {
-	        // If a scheduler task throws, exit the current browser task so the
-	        // error can be observed.
-	        port.postMessage(null);
-	        throw error;
-	      }
-	    } else {
-	      isMessageLoopRunning = false;
-	    } // Yielding to the browser will give it a chance to paint, so we can
+	      } else {
+	        isMessageLoopRunning = false;
+	      } // Yielding to the browser will give it a chance to paint, so we can
+	    }
 	  };
 
 	  var channel = new MessageChannel();
@@ -2389,9 +2418,11 @@ var jsonx = (function (exports) {
 	  requestHostCallback = function (callback) {
 	    scheduledHostCallback = callback;
 
-	    if (!isMessageLoopRunning) {
-	      isMessageLoopRunning = true;
-	      port.postMessage(null);
+	    {
+	      if (!isMessageLoopRunning) {
+	        isMessageLoopRunning = true;
+	        port.postMessage(null);
+	      }
 	    }
 	  };
 
@@ -2501,11 +2532,9 @@ var jsonx = (function (exports) {
 	var runIdCounter = 0;
 	var mainThreadIdCounter = 0;
 	var profilingStateSize = 4;
-	var sharedProfilingBuffer =  // $FlowFixMe Flow doesn't know about SharedArrayBuffer
-	typeof SharedArrayBuffer === 'function' ? new SharedArrayBuffer(profilingStateSize * Int32Array.BYTES_PER_ELEMENT) : // $FlowFixMe Flow doesn't know about ArrayBuffer
-	typeof ArrayBuffer === 'function' ? new ArrayBuffer(profilingStateSize * Int32Array.BYTES_PER_ELEMENT) : null // Don't crash the init path on IE9
-	;
-	var profilingState =  sharedProfilingBuffer !== null ? new Int32Array(sharedProfilingBuffer) : []; // We can't read this but it helps save bytes for null checks
+	var sharedProfilingBuffer = typeof SharedArrayBuffer === 'function' ? new SharedArrayBuffer(profilingStateSize * Int32Array.BYTES_PER_ELEMENT) : // $FlowFixMe Flow doesn't know about ArrayBuffer
+	typeof ArrayBuffer === 'function' ? new ArrayBuffer(profilingStateSize * Int32Array.BYTES_PER_ELEMENT) : null;
+	var profilingState = sharedProfilingBuffer !== null ? new Int32Array(sharedProfilingBuffer) : []; // We can't read this but it helps save bytes for null checks
 
 	var PRIORITY = 0;
 	var CURRENT_TASK_ID = 1;
@@ -2575,50 +2604,47 @@ var jsonx = (function (exports) {
 	  eventLogIndex = 0;
 	  return buffer;
 	}
-	function markTaskStart(task, ms) {
+	function markTaskStart(task, time) {
 	  {
 	    profilingState[QUEUE_SIZE]++;
 
 	    if (eventLog !== null) {
-	      // performance.now returns a float, representing milliseconds. When the
-	      // event is logged, it's coerced to an int. Convert to microseconds to
-	      // maintain extra degrees of precision.
-	      logEvent([TaskStartEvent, ms * 1000, task.id, task.priorityLevel]);
+	      logEvent([TaskStartEvent, time, task.id, task.priorityLevel]);
 	    }
 	  }
 	}
-	function markTaskCompleted(task, ms) {
+	function markTaskCompleted(task, time) {
 	  {
 	    profilingState[PRIORITY] = NoPriority;
 	    profilingState[CURRENT_TASK_ID] = 0;
 	    profilingState[QUEUE_SIZE]--;
 
 	    if (eventLog !== null) {
-	      logEvent([TaskCompleteEvent, ms * 1000, task.id]);
+	      logEvent([TaskCompleteEvent, time, task.id]);
 	    }
 	  }
 	}
-	function markTaskCanceled(task, ms) {
+	function markTaskCanceled(task, time) {
 	  {
 	    profilingState[QUEUE_SIZE]--;
 
 	    if (eventLog !== null) {
-	      logEvent([TaskCancelEvent, ms * 1000, task.id]);
+	      logEvent([TaskCancelEvent, time, task.id]);
 	    }
 	  }
 	}
-	function markTaskErrored(task, ms) {
+	function markTaskErrored(task, time) {
 	  {
 	    profilingState[PRIORITY] = NoPriority;
 	    profilingState[CURRENT_TASK_ID] = 0;
 	    profilingState[QUEUE_SIZE]--;
 
 	    if (eventLog !== null) {
-	      logEvent([TaskErrorEvent, ms * 1000, task.id]);
+	      logEvent([TaskErrorEvent, time, task.id]);
 	    }
 	  }
 	}
-	function markTaskRun(task, ms) {
+	function markTaskRun(task, time) {
 	  {
 	    runIdCounter++;
 	    profilingState[PRIORITY] = task.priorityLevel;
@@ -2626,34 +2652,34 @@ var jsonx = (function (exports) {
 	    profilingState[CURRENT_RUN_ID] = runIdCounter;
 
 	    if (eventLog !== null) {
-	      logEvent([TaskRunEvent, ms * 1000, task.id, runIdCounter]);
+	      logEvent([TaskRunEvent, time, task.id, runIdCounter]);
 	    }
 	  }
 	}
-	function markTaskYield(task, ms) {
+	function markTaskYield(task, time) {
 	  {
 	    profilingState[PRIORITY] = NoPriority;
 	    profilingState[CURRENT_TASK_ID] = 0;
 	    profilingState[CURRENT_RUN_ID] = 0;
 
 	    if (eventLog !== null) {
-	      logEvent([TaskYieldEvent, ms * 1000, task.id, runIdCounter]);
+	      logEvent([TaskYieldEvent, time, task.id, runIdCounter]);
 	    }
 	  }
 	}
-	function markSchedulerSuspended(ms) {
+	function markSchedulerSuspended(time) {
 	  {
 	    mainThreadIdCounter++;
 
 	    if (eventLog !== null) {
-	      logEvent([SchedulerSuspendEvent, ms * 1000, mainThreadIdCounter]);
+	      logEvent([SchedulerSuspendEvent, time, mainThreadIdCounter]);
 	    }
 	  }
 	}
-	function markSchedulerUnsuspended(ms) {
+	function markSchedulerUnsuspended(time) {
 	  {
 	    if (eventLog !== null) {
-	      logEvent([SchedulerResumeEvent, ms * 1000, mainThreadIdCounter]);
+	      logEvent([SchedulerResumeEvent, time, mainThreadIdCounter]);
 	    }
 	  }
 	}
@@ -2746,7 +2772,7 @@ var jsonx = (function (exports) {
 	  var previousPriorityLevel = currentPriorityLevel;
 
 	  try {
-	    if (enableProfiling) {
+	    {
 	      try {
 	        return workLoop(hasTimeRemaining, initialTime);
 	      } catch (error) {
@@ -2758,9 +2784,6 @@ var jsonx = (function (exports) {
 
 	        throw error;
 	      }
-	    } else {
-	      // No catch in prod codepath.
-	      return workLoop(hasTimeRemaining, initialTime);
 	    }
 	  } finally {
 	    currentTask = null;
@@ -2780,7 +2803,7 @@ var jsonx = (function (exports) {
 	  advanceTimers(currentTime);
 	  currentTask = peek(taskQueue);
 
-	  while (currentTask !== null && !(enableSchedulerDebugging )) {
+	  while (currentTask !== null && !(enableSchedulerDebugging)) {
 	    if (currentTask.expirationTime > currentTime && (!hasTimeRemaining || shouldYieldToHost())) {
 	      // This currentTask hasn't expired, and we've reached the deadline.
 	      break;
@@ -3030,11 +3053,11 @@ var jsonx = (function (exports) {
 	}
 
 	var unstable_requestPaint = requestPaint;
-	var unstable_Profiling =  {
+	var unstable_Profiling = {
 	  startLoggingProfilingEvents: startLoggingProfilingEvents,
 	  stopLoggingProfilingEvents: stopLoggingProfilingEvents,
 	  sharedProfilingBuffer: sharedProfilingBuffer
-	} ;
+	};
 
 	exports.unstable_ImmediatePriority = ImmediatePriority;
 	exports.unstable_UserBlockingPriority = UserBlockingPriority;
@@ -3094,6 +3117,7 @@ var jsonx = (function (exports) {
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 
+	 // TODO: true? Here it might just be false.
 
 	 // Only used in www builds.
 
@@ -3108,6 +3132,9 @@ var jsonx = (function (exports) {
 	// Control this behavior with a flag to support 16.6 minor releases in the meanwhile.
 
 
+	 // See https://github.com/react-native-community/discussions-and-proposals/issues/72 for more information
+	// This is a flag so we can fix warnings in RN core before turning it on
+
 	 // Experimental React Flare event system and event components support.
 
 	 // Experimental Host Component support.
@@ -3117,10 +3144,14 @@ var jsonx = (function (exports) {
 	 // New API for JSX transforms to target - https://github.com/reactjs/rfcs/pull/107
 
 	 // We will enforce mocking scheduler with scheduler/unstable_mock at some point. (v17?)
-	// Till then, we warn about the missing mock, but still fallback to a legacy mode compatible version
+	// Till then, we warn about the missing mock, but still fallback to a sync mode compatible version
 
 	 // For tests, we flush suspense fallbacks in an act scope;
 	// *except* in some of our own tests, where we test incremental loading states.
+
+	 // Changes priority of some events like mousemove to user-blocking priority,
+	// but without making them discrete. The flag exists in case it causes
+	// starvation problems.
 
 	 // Add a callback property to suspense to notify which promises are currently
 	// in the update queue. This allows reporting and tracing of what is causing
@@ -3131,12 +3162,6 @@ var jsonx = (function (exports) {
 	 // Part of the simplification of React.createElement so we can eventually move
 	// from React.createElement to React.jsx
 	// https://github.com/reactjs/rfcs/blob/createlement-rfc/text/0000-create-element-changes.md
-
-
-
-
-
-	 // Flag to turn event.target and event.currentTarget in ReactNative from a reactTag to a component instance
 
 	var DEFAULT_THREAD_ID = 0; // Counters used to generate unique IDs.
 
@@ -3505,8 +3530,16 @@ var jsonx = (function (exports) {
 	var tracing$1 = tracing;
 
 	// Do not require this module directly! Use normal `invariant` calls with
-	// template literal strings. The messages will be replaced with error codes
-	// during build.
+	// template literal strings. The messages will be converted to ReactError during
+	// build, and in production they will be minified.
+
+	// Do not require this module directly! Use normal `invariant` calls with
+	// template literal strings. The messages will be converted to ReactError during
+	// build, and in production they will be minified.
+	function ReactError(error) {
+	  error.name = 'Invariant Violation';
+	  return error;
+	}
 
 	/**
 	 * Use invariant() to assert state which your program assumes to be true.
@@ -3519,11 +3552,13 @@ var jsonx = (function (exports) {
 	 * will remain to ensure logic does not differ in production.
 	 */
 
-	if (!React) {
-	  {
-	    throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
+	(function () {
+	  if (!React) {
+	    {
+	      throw ReactError(Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM."));
+	    }
 	  }
-	}
+	})();
 
 	/**
 	 * Injectable ordering of event plugins.
@@ -3550,31 +3585,37 @@ var jsonx = (function (exports) {
 	    var pluginModule = namesToPlugins[pluginName];
 	    var pluginIndex = eventPluginOrder.indexOf(pluginName);
 
-	    if (!(pluginIndex > -1)) {
-	      {
-	        throw Error("EventPluginRegistry: Cannot inject event plugins that do not exist in the plugin ordering, `" + pluginName + "`.");
+	    (function () {
+	      if (!(pluginIndex > -1)) {
+	        {
+	          throw ReactError(Error("EventPluginRegistry: Cannot inject event plugins that do not exist in the plugin ordering, `" + pluginName + "`."));
+	        }
 	      }
-	    }
+	    })();
 
 	    if (plugins[pluginIndex]) {
 	      continue;
 	    }
 
-	    if (!pluginModule.extractEvents) {
-	      {
-	        throw Error("EventPluginRegistry: Event plugins must implement an `extractEvents` method, but `" + pluginName + "` does not.");
+	    (function () {
+	      if (!pluginModule.extractEvents) {
+	        {
+	          throw ReactError(Error("EventPluginRegistry: Event plugins must implement an `extractEvents` method, but `" + pluginName + "` does not."));
+	        }
 	      }
-	    }
+	    })();
 
 	    plugins[pluginIndex] = pluginModule;
 	    var publishedEvents = pluginModule.eventTypes;
 
 	    for (var eventName in publishedEvents) {
-	      if (!publishEventForPlugin(publishedEvents[eventName], pluginModule, eventName)) {
-	        {
-	          throw Error("EventPluginRegistry: Failed to publish event `" + eventName + "` for plugin `" + pluginName + "`.");
+	      (function () {
+	        if (!publishEventForPlugin(publishedEvents[eventName], pluginModule, eventName)) {
+	          {
+	            throw ReactError(Error("EventPluginRegistry: Failed to publish event `" + eventName + "` for plugin `" + pluginName + "`."));
+	          }
 	        }
-	      }
+	      })();
 	    }
 	  }
 	}
@@ -3589,11 +3630,13 @@ var jsonx = (function (exports) {
 
 
 	function publishEventForPlugin(dispatchConfig, pluginModule, eventName) {
-	  if (!!eventNameDispatchConfigs.hasOwnProperty(eventName)) {
-	    {
-	      throw Error("EventPluginHub: More than one plugin attempted to publish the same event name, `" + eventName + "`.");
+	  (function () {
+	    if (!!eventNameDispatchConfigs.hasOwnProperty(eventName)) {
+	      {
+	        throw ReactError(Error("EventPluginHub: More than one plugin attempted to publish the same event name, `" + eventName + "`."));
+	      }
 	    }
-	  }
+	  })();
 
 	  eventNameDispatchConfigs[eventName] = dispatchConfig;
 	  var phasedRegistrationNames = dispatchConfig.phasedRegistrationNames;
@@ -3624,11 +3667,13 @@ var jsonx = (function (exports) {
 
 
 	function publishRegistrationName(registrationName, pluginModule, eventName) {
-	  if (!!registrationNameModules[registrationName]) {
-	    {
-	      throw Error("EventPluginHub: More than one plugin attempted to publish the same registration name, `" + registrationName + "`.");
+	  (function () {
+	    if (!!registrationNameModules[registrationName]) {
+	      {
+	        throw ReactError(Error("EventPluginHub: More than one plugin attempted to publish the same registration name, `" + registrationName + "`."));
+	      }
 	    }
-	  }
+	  })();
 
 	  registrationNameModules[registrationName] = pluginModule;
 	  registrationNameDependencies[registrationName] = pluginModule.eventTypes[eventName].dependencies;
@@ -3689,11 +3734,13 @@ var jsonx = (function (exports) {
 	 */
 
 	function injectEventPluginOrder(injectedEventPluginOrder) {
-	  if (!!eventPluginOrder) {
-	    {
-	      throw Error("EventPluginRegistry: Cannot inject event plugin ordering more than once. You are likely trying to load more than one copy of React.");
+	  (function () {
+	    if (!!eventPluginOrder) {
+	      {
+	        throw ReactError(Error("EventPluginRegistry: Cannot inject event plugin ordering more than once. You are likely trying to load more than one copy of React."));
+	      }
 	    }
-	  } // Clone the ordering so it cannot be dynamically mutated.
+	  })(); // Clone the ordering so it cannot be dynamically mutated.
 
 
 	  eventPluginOrder = Array.prototype.slice.call(injectedEventPluginOrder);
@@ -3721,11 +3768,13 @@ var jsonx = (function (exports) {
 	    var pluginModule = injectedNamesToPlugins[pluginName];
 
 	    if (!namesToPlugins.hasOwnProperty(pluginName) || namesToPlugins[pluginName] !== pluginModule) {
-	      if (!!namesToPlugins[pluginName]) {
-	        {
-	          throw Error("EventPluginRegistry: Cannot inject two different event plugins using the same name, `" + pluginName + "`.");
+	      (function () {
+	        if (!!namesToPlugins[pluginName]) {
+	          {
+	            throw ReactError(Error("EventPluginRegistry: Cannot inject two different event plugins using the same name, `" + pluginName + "`."));
+	          }
 	        }
-	      }
+	      })();
 
 	      namesToPlugins[pluginName] = pluginModule;
 	      isOrderingDirty = true;
@@ -3776,11 +3825,13 @@ var jsonx = (function (exports) {
 	      // when we call document.createEvent(). However this can cause confusing
 	      // errors: https://github.com/facebookincubator/create-react-app/issues/3482
 	      // So we preemptively throw with a better message instead.
-	      if (!(typeof document !== 'undefined')) {
-	        {
-	          throw Error("The `document` global was defined when React was initialized, but is not defined anymore. This can happen in a test environment if a component schedules an update from an asynchronous callback, but the test has already finished running. To solve this, you can either unmount the component at the end of your test (and ensure that any asynchronous operations get canceled in `componentWillUnmount`), or you can change the test itself to be asynchronous.");
+	      (function () {
+	        if (!(typeof document !== 'undefined')) {
+	          {
+	            throw ReactError(Error("The `document` global was defined when React was initialized, but is not defined anymore. This can happen in a test environment if a component schedules an update from an asynchronous callback, but the test has already finished running. To solve this, you can either unmount the component at the end of your test (and ensure that any asynchronous operations get canceled in `componentWillUnmount`), or you can change the test itself to be asynchronous."));
+	          }
 	        }
-	      }
+	      })();
 
 	      var evt = document.createEvent('Event'); // Keeps track of whether the user-provided callback threw an error. We
 	      // set this to true at the beginning, then set it to false right after
@@ -3968,11 +4019,13 @@ var jsonx = (function (exports) {
 	    caughtError = null;
 	    return error;
 	  } else {
-	    {
+	    (function () {
 	      {
-	        throw Error("clearCaughtError was called but no error was captured. This error is likely caused by a bug in React. Please file an issue.");
+	        {
+	          throw ReactError(Error("clearCaughtError was called but no error was captured. This error is likely caused by a bug in React. Please file an issue."));
+	        }
 	      }
-	    }
+	    })();
 	  }
 	}
 
@@ -4131,11 +4184,13 @@ var jsonx = (function (exports) {
 	 */
 
 	function accumulateInto(current, next) {
-	  if (!(next != null)) {
-	    {
-	      throw Error("accumulateInto(...): Accumulated items must not be null or undefined.");
+	  (function () {
+	    if (!(next != null)) {
+	      {
+	        throw ReactError(Error("accumulateInto(...): Accumulated items must not be null or undefined."));
+	      }
 	    }
-	  }
+	  })();
 
 	  if (current == null) {
 	    return next;
@@ -4221,11 +4276,13 @@ var jsonx = (function (exports) {
 
 	  forEachAccumulated(processingEventQueue, executeDispatchesAndReleaseTopLevel);
 
-	  if (!!eventQueue) {
-	    {
-	      throw Error("processEventQueue(): Additional events were enqueued while processing an event queue. Support for this has not yet been implemented.");
+	  (function () {
+	    if (!!eventQueue) {
+	      {
+	        throw ReactError(Error("processEventQueue(): Additional events were enqueued while processing an event queue. Support for this has not yet been implemented."));
+	      }
 	    }
-	  } // This would be a good time to rethrow if any of the event handlers threw.
+	  })(); // This would be a good time to rethrow if any of the event handlers threw.
 
 
 	  rethrowCaughtError();
@@ -4323,11 +4380,13 @@ var jsonx = (function (exports) {
 	    return null;
 	  }
 
-	  if (!(!listener || typeof listener === 'function')) {
-	    {
-	      throw Error("Expected `" + registrationName + "` listener to be a function, instead got a value of `" + typeof listener + "` type.");
+	  (function () {
+	    if (!(!listener || typeof listener === 'function')) {
+	      {
+	        throw ReactError(Error("Expected `" + registrationName + "` listener to be a function, instead got a value of `" + typeof listener + "` type."));
+	      }
 	    }
-	  }
+	  })();
 
 	  return listener;
 	}
@@ -4457,6 +4516,8 @@ var jsonx = (function (exports) {
 	var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
 	var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
 	var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+	var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
+	var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
 	var MAYBE_ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
 	var FAUX_ITERATOR_SYMBOL = '@@iterator';
 	function getIteratorFn(maybeIterable) {
@@ -4676,6 +4737,8 @@ var jsonx = (function (exports) {
 
 	    return getStackByFiberInDevAndProd(current);
 	  }
+
+	  return '';
 	}
 	function resetCurrentFiber() {
 	  {
@@ -4716,11 +4779,13 @@ var jsonx = (function (exports) {
 	    return;
 	  }
 
-	  if (!(typeof restoreImpl === 'function')) {
-	    {
-	      throw Error("setRestoreImplementation() needs to be called to handle a target for controlled events. This error is likely caused by a bug in React. Please file an issue.");
+	  (function () {
+	    if (!(typeof restoreImpl === 'function')) {
+	      {
+	        throw ReactError(Error("setRestoreImplementation() needs to be called to handle a target for controlled events. This error is likely caused by a bug in React. Please file an issue."));
+	      }
 	    }
-	  }
+	  })();
 
 	  var props = getFiberCurrentPropsFromNode(internalInstance.stateNode);
 	  restoreImpl(internalInstance.stateNode, internalInstance.type, props);
@@ -4760,8 +4825,9 @@ var jsonx = (function (exports) {
 	    }
 	  }
 	}
+	// This is a flag so we can fix warnings in RN core before turning it on
 
-	var enableProfilerTimer = true; // Trace which interactions trigger each commit.
+	 // Experimental React Flare event system and event components support.
 
 	var enableFlareAPI = false; // Experimental Host Component support.
 
@@ -4863,7 +4929,7 @@ var jsonx = (function (exports) {
 	  // such as if an earlier flush removes or adds event listeners that
 	  // are fired in the subsequent flush. However, this is the same
 	  // behaviour as we had before this change, so the risks are low.
-	  if (!isInsideEventHandler && (!enableFlareAPI  )) {
+	  if (!isInsideEventHandler && (!enableFlareAPI)) {
 	    flushDiscreteUpdatesImpl();
 	  }
 	}
@@ -5188,7 +5254,7 @@ var jsonx = (function (exports) {
 	var didWarn = false;
 
 	function sanitizeURL(url) {
-	  if ( !didWarn && isJavaScriptProtocol.test(url)) {
+	  if (!didWarn && isJavaScriptProtocol.test(url)) {
 	    didWarn = true;
 	    warning$1(false, 'A future version of React will block javascript: URLs as a security precaution. ' + 'Use event handlers instead if you can. If you need to generate unsafe HTML try ' + 'using dangerouslySetInnerHTML instead. React was passed %s.', JSON.stringify(url));
 	  }
@@ -5252,7 +5318,7 @@ var jsonx = (function (exports) {
 	      var propertyName = propertyInfo.propertyName;
 	      return node[propertyName];
 	    } else {
-	      if ( propertyInfo.sanitizeURL) {
+	      if (propertyInfo.sanitizeURL) {
 	        // If we haven't fully disabled javascript: URLs, and if
 	        // the hydration is successful of a javascript: URL, we
 	        // still want to warn on the client.
@@ -5800,11 +5866,13 @@ var jsonx = (function (exports) {
 
 	      var otherProps = getFiberCurrentPropsFromNode$1(otherNode);
 
-	      if (!otherProps) {
-	        {
-	          throw Error("ReactDOMInput: Mixing React and non-React radio inputs with the same `name` is not supported.");
+	      (function () {
+	        if (!otherProps) {
+	          {
+	            throw ReactError(Error("ReactDOMInput: Mixing React and non-React radio inputs with the same `name` is not supported."));
+	          }
 	        }
-	      } // We need update the tracked value on the named cousin since the value
+	      })(); // We need update the tracked value on the named cousin since the value
 	      // was changed but the input saw no event or value set
 
 
@@ -6107,11 +6175,13 @@ var jsonx = (function (exports) {
 	function getHostProps$3(element, props) {
 	  var node = element;
 
-	  if (!(props.dangerouslySetInnerHTML == null)) {
-	    {
-	      throw Error("`dangerouslySetInnerHTML` does not make sense on <textarea>.");
+	  (function () {
+	    if (!(props.dangerouslySetInnerHTML == null)) {
+	      {
+	        throw ReactError(Error("`dangerouslySetInnerHTML` does not make sense on <textarea>."));
+	      }
 	    }
-	  } // Always set children to the same thing. In IE9, the selection range will
+	  })(); // Always set children to the same thing. In IE9, the selection range will
 	  // get reset if `textContent` is mutated.  We could add a check in setTextContent
 	  // to only set the value if/when the value differs from the node value (which would
 	  // completely solve this IE9 bug), but Sebastian+Sophie seemed to like this
@@ -6151,18 +6221,22 @@ var jsonx = (function (exports) {
 	        warning$1(false, 'Use the `defaultValue` or `value` props instead of setting ' + 'children on <textarea>.');
 	      }
 
-	      if (!(defaultValue == null)) {
-	        {
-	          throw Error("If you supply `defaultValue` on a <textarea>, do not pass children.");
-	        }
-	      }
-
-	      if (Array.isArray(children)) {
-	        if (!(children.length <= 1)) {
+	      (function () {
+	        if (!(defaultValue == null)) {
 	          {
-	            throw Error("<textarea> can only have at most one child.");
+	            throw ReactError(Error("If you supply `defaultValue` on a <textarea>, do not pass children."));
 	          }
 	        }
+	      })();
+
+	      if (Array.isArray(children)) {
+	        (function () {
+	          if (!(children.length <= 1)) {
+	            {
+	              throw ReactError(Error("<textarea> can only have at most one child."));
+	            }
+	          }
+	        })();
 
 	        children = children[0];
 	      }
@@ -6534,6 +6608,266 @@ var jsonx = (function (exports) {
 	function getRawEventName(topLevelType) {
 	  return unsafeCastDOMTopLevelTypeToString(topLevelType);
 	}
+	// has this definition built-in.
+
+	var hasScheduledReplayAttempt = false; // The queue of discrete events to be replayed.
+
+	var queuedDiscreteEvents = []; // Indicates if any continuous event targets are non-null for early bailout.
+
+	// if the last target was dehydrated.
+
+	var queuedFocus = null;
+	var queuedDrag = null;
+	var queuedMouse = null; // For pointer events there can be one latest event per pointerId.
+
+	var queuedPointers = new Map();
+	var queuedPointerCaptures = new Map(); // We could consider replaying selectionchange and touchmoves too.
+
+	function hasQueuedDiscreteEvents() {
+	  return queuedDiscreteEvents.length > 0;
+	}
+
+	var discreteReplayableEvents = [TOP_MOUSE_DOWN, TOP_MOUSE_UP, TOP_TOUCH_CANCEL, TOP_TOUCH_END, TOP_TOUCH_START, TOP_AUX_CLICK, TOP_DOUBLE_CLICK, TOP_POINTER_CANCEL, TOP_POINTER_DOWN, TOP_POINTER_UP, TOP_DRAG_END, TOP_DRAG_START, TOP_DROP, TOP_COMPOSITION_END, TOP_COMPOSITION_START, TOP_KEY_DOWN, TOP_KEY_PRESS, TOP_KEY_UP, TOP_INPUT, TOP_TEXT_INPUT, TOP_CLOSE, TOP_CANCEL, TOP_COPY, TOP_CUT, TOP_PASTE, TOP_CLICK, TOP_CHANGE, TOP_CONTEXT_MENU, TOP_RESET, TOP_SUBMIT];
+	var continuousReplayableEvents = [TOP_FOCUS, TOP_BLUR, TOP_DRAG_ENTER, TOP_DRAG_LEAVE, TOP_MOUSE_OVER, TOP_MOUSE_OUT, TOP_POINTER_OVER, TOP_POINTER_OUT, TOP_GOT_POINTER_CAPTURE, TOP_LOST_POINTER_CAPTURE];
+	function isReplayableDiscreteEvent(eventType) {
+	  return discreteReplayableEvents.indexOf(eventType) > -1;
+	}
+
+	function trapReplayableEvent(topLevelType, document, listeningSet) {
+	  listenToTopLevel(topLevelType, document, listeningSet);
+	}
+
+	function eagerlyTrapReplayableEvents(document) {
+	  var listeningSet = getListeningSetForElement(document); // Discrete
+
+	  discreteReplayableEvents.forEach(function (topLevelType) {
+	    trapReplayableEvent(topLevelType, document, listeningSet);
+	  }); // Continuous
+
+	  continuousReplayableEvents.forEach(function (topLevelType) {
+	    trapReplayableEvent(topLevelType, document, listeningSet);
+	  });
+	}
+
+	function createQueuedReplayableEvent(blockedOn, topLevelType, eventSystemFlags, nativeEvent) {
+	  return {
+	    blockedOn: blockedOn,
+	    topLevelType: topLevelType,
+	    eventSystemFlags: eventSystemFlags | IS_REPLAYED,
+	    nativeEvent: nativeEvent
+	  };
+	}
+
+	function queueDiscreteEvent(blockedOn, topLevelType, eventSystemFlags, nativeEvent) {
+	  var queuedEvent = createQueuedReplayableEvent(blockedOn, topLevelType, eventSystemFlags, nativeEvent);
+	  queuedDiscreteEvents.push(queuedEvent);
+	} // Resets the replaying for this type of continuous event to no event.
+
+	function clearIfContinuousEvent(topLevelType, nativeEvent) {
+	  switch (topLevelType) {
+	    case TOP_FOCUS:
+	    case TOP_BLUR:
+	      queuedFocus = null;
+	      break;
+
+	    case TOP_DRAG_ENTER:
+	    case TOP_DRAG_LEAVE:
+	      queuedDrag = null;
+	      break;
+
+	    case TOP_MOUSE_OVER:
+	    case TOP_MOUSE_OUT:
+	      queuedMouse = null;
+	      break;
+
+	    case TOP_POINTER_OVER:
+	    case TOP_POINTER_OUT:
+	      {
+	        var pointerId = nativeEvent.pointerId;
+	        queuedPointers.delete(pointerId);
+	        break;
+	      }
+
+	    case TOP_GOT_POINTER_CAPTURE:
+	    case TOP_LOST_POINTER_CAPTURE:
+	      {
+	        var _pointerId = nativeEvent.pointerId;
+	        queuedPointerCaptures.delete(_pointerId);
+	        break;
+	      }
+	  }
+	}
+
+	function accumulateOrCreateQueuedReplayableEvent(existingQueuedEvent, blockedOn, topLevelType, eventSystemFlags, nativeEvent) {
+	  if (existingQueuedEvent === null || existingQueuedEvent.nativeEvent !== nativeEvent) {
+	    return createQueuedReplayableEvent(blockedOn, topLevelType, eventSystemFlags, nativeEvent);
+	  } // If we have already queued this exact event, then it's because
+	  // the different event systems have different DOM event listeners.
+	  // We can accumulate the flags and store a single event to be
+	  // replayed.
+
+
+	  existingQueuedEvent.eventSystemFlags |= eventSystemFlags;
+	  return existingQueuedEvent;
+	}
+
+	function queueIfContinuousEvent(blockedOn, topLevelType, eventSystemFlags, nativeEvent) {
+	  // These set relatedTarget to null because the replayed event will be treated as if we
+	  // moved from outside the window (no target) onto the target once it hydrates.
+	  // Instead of mutating we could clone the event.
+	  switch (topLevelType) {
+	    case TOP_FOCUS:
+	      {
+	        var focusEvent = nativeEvent;
+	        queuedFocus = accumulateOrCreateQueuedReplayableEvent(queuedFocus, blockedOn, topLevelType, eventSystemFlags, focusEvent);
+	        return true;
+	      }
+
+	    case TOP_DRAG_ENTER:
+	      {
+	        var dragEvent = nativeEvent;
+	        queuedDrag = accumulateOrCreateQueuedReplayableEvent(queuedDrag, blockedOn, topLevelType, eventSystemFlags, dragEvent);
+	        return true;
+	      }
+
+	    case TOP_MOUSE_OVER:
+	      {
+	        var mouseEvent = nativeEvent;
+	        queuedMouse = accumulateOrCreateQueuedReplayableEvent(queuedMouse, blockedOn, topLevelType, eventSystemFlags, mouseEvent);
+	        return true;
+	      }
+
+	    case TOP_POINTER_OVER:
+	      {
+	        var pointerEvent = nativeEvent;
+	        var pointerId = pointerEvent.pointerId;
+	        queuedPointers.set(pointerId, accumulateOrCreateQueuedReplayableEvent(queuedPointers.get(pointerId) || null, blockedOn, topLevelType, eventSystemFlags, pointerEvent));
+	        return true;
+	      }
+
+	    case TOP_GOT_POINTER_CAPTURE:
+	      {
+	        var _pointerEvent = nativeEvent;
+	        var _pointerId2 = _pointerEvent.pointerId;
+	        queuedPointerCaptures.set(_pointerId2, accumulateOrCreateQueuedReplayableEvent(queuedPointerCaptures.get(_pointerId2) || null, blockedOn, topLevelType, eventSystemFlags, _pointerEvent));
+	        return true;
+	      }
+	  }
+
+	  return false;
+	}
+
+	function attemptReplayQueuedEvent(queuedEvent) {
+	  if (queuedEvent.blockedOn !== null) {
+	    return false;
+	  }
+
+	  var nextBlockedOn = attemptToDispatchEvent(queuedEvent.topLevelType, queuedEvent.eventSystemFlags, queuedEvent.nativeEvent);
+
+	  if (nextBlockedOn !== null) {
+	    // We're still blocked. Try again later.
+	    queuedEvent.blockedOn = nextBlockedOn;
+	    return false;
+	  }
+
+	  return true;
+	}
+
+	function attemptReplayQueuedEventInMap(queuedEvent, key, map) {
+	  if (attemptReplayQueuedEvent(queuedEvent)) {
+	    map.delete(key);
+	  }
+	}
+
+	function replayUnblockedEvents() {
+	  hasScheduledReplayAttempt = false; // First replay discrete events.
+
+	  while (queuedDiscreteEvents.length > 0) {
+	    var nextDiscreteEvent = queuedDiscreteEvents[0];
+
+	    if (nextDiscreteEvent.blockedOn !== null) {
+	      // We're still blocked.
+	      break;
+	    }
+
+	    var nextBlockedOn = attemptToDispatchEvent(nextDiscreteEvent.topLevelType, nextDiscreteEvent.eventSystemFlags, nextDiscreteEvent.nativeEvent);
+
+	    if (nextBlockedOn !== null) {
+	      // We're still blocked. Try again later.
+	      nextDiscreteEvent.blockedOn = nextBlockedOn;
+	    } else {
+	      // We've successfully replayed the first event. Let's try the next one.
+	      queuedDiscreteEvents.shift();
+	    }
+	  } // Next replay any continuous events.
+
+
+	  if (queuedFocus !== null && attemptReplayQueuedEvent(queuedFocus)) {
+	    queuedFocus = null;
+	  }
+
+	  if (queuedDrag !== null && attemptReplayQueuedEvent(queuedDrag)) {
+	    queuedDrag = null;
+	  }
+
+	  if (queuedMouse !== null && attemptReplayQueuedEvent(queuedMouse)) {
+	    queuedMouse = null;
+	  }
+
+	  queuedPointers.forEach(attemptReplayQueuedEventInMap);
+	  queuedPointerCaptures.forEach(attemptReplayQueuedEventInMap);
+	}
+
+	function scheduleCallbackIfUnblocked(queuedEvent, unblocked) {
+	  if (queuedEvent.blockedOn === unblocked) {
+	    queuedEvent.blockedOn = null;
+
+	    if (!hasScheduledReplayAttempt) {
+	      hasScheduledReplayAttempt = true; // Schedule a callback to attempt replaying as many events as are
+	      // now unblocked. This first might not actually be unblocked yet.
+	      // We could check it early to avoid scheduling an unnecessary callback.
+
+	      Scheduler.unstable_scheduleCallback(Scheduler.unstable_NormalPriority, replayUnblockedEvents);
+	    }
+	  }
+	}
+
+	function retryIfBlockedOn(unblocked) {
+	  // Mark anything that was blocked on this as no longer blocked
+	  // and eligible for a replay.
+	  if (queuedDiscreteEvents.length > 0) {
+	    scheduleCallbackIfUnblocked(queuedDiscreteEvents[0], unblocked); // This is a exponential search for each boundary that commits. I think it's
+	    // worth it because we expect very few discrete events to queue up and once
+	    // we are actually fully unblocked it will be fast to replay them.
+
+	    for (var i = 1; i < queuedDiscreteEvents.length; i++) {
+	      var queuedEvent = queuedDiscreteEvents[i];
+
+	      if (queuedEvent.blockedOn === unblocked) {
+	        queuedEvent.blockedOn = null;
+	      }
+	    }
+	  }
+
+	  if (queuedFocus !== null) {
+	    scheduleCallbackIfUnblocked(queuedFocus, unblocked);
+	  }
+
+	  if (queuedDrag !== null) {
+	    scheduleCallbackIfUnblocked(queuedDrag, unblocked);
+	  }
+
+	  if (queuedMouse !== null) {
+	    scheduleCallbackIfUnblocked(queuedMouse, unblocked);
+	  }
+
+	  var unblock = function (queuedEvent) {
+	    return scheduleCallbackIfUnblocked(queuedEvent, unblocked);
+	  };
+
+	  queuedPointers.forEach(unblock);
+	  queuedPointerCaptures.forEach(unblock);
+	}
 
 	/**
 	 * `ReactInstanceMap` maintains a mapping from a public facing stateful
@@ -6620,7 +6954,7 @@ var jsonx = (function (exports) {
 	/*         */
 	4096;
 
-	var ReactCurrentOwner = ReactSharedInternals.ReactCurrentOwner;
+	var ReactCurrentOwner$1 = ReactSharedInternals.ReactCurrentOwner;
 	function getNearestMountedFiber(fiber) {
 	  var node = fiber;
 	  var nearestMounted = fiber;
@@ -6685,7 +7019,7 @@ var jsonx = (function (exports) {
 	}
 	function isMounted(component) {
 	  {
-	    var owner = ReactCurrentOwner.current;
+	    var owner = ReactCurrentOwner$1.current;
 
 	    if (owner !== null && owner.tag === ClassComponent) {
 	      var ownerFiber = owner;
@@ -6705,11 +7039,13 @@ var jsonx = (function (exports) {
 	}
 
 	function assertIsMounted(fiber) {
-	  if (!(getNearestMountedFiber(fiber) === fiber)) {
-	    {
-	      throw Error("Unable to find node on an unmounted component.");
+	  (function () {
+	    if (!(getNearestMountedFiber(fiber) === fiber)) {
+	      {
+	        throw ReactError(Error("Unable to find node on an unmounted component."));
+	      }
 	    }
-	  }
+	  })();
 	}
 
 	function findCurrentFiberUsingSlowPath(fiber) {
@@ -6719,11 +7055,13 @@ var jsonx = (function (exports) {
 	    // If there is no alternate, then we only need to check if it is mounted.
 	    var nearestMounted = getNearestMountedFiber(fiber);
 
-	    if (!(nearestMounted !== null)) {
-	      {
-	        throw Error("Unable to find node on an unmounted component.");
+	    (function () {
+	      if (!(nearestMounted !== null)) {
+	        {
+	          throw ReactError(Error("Unable to find node on an unmounted component."));
+	        }
 	      }
-	    }
+	    })();
 
 	    if (nearestMounted !== fiber) {
 	      return null;
@@ -6788,11 +7126,13 @@ var jsonx = (function (exports) {
 	      // way this could possibly happen is if this was unmounted, if at all.
 
 
-	      {
+	      (function () {
 	        {
-	          throw Error("Unable to find node on an unmounted component.");
+	          {
+	            throw ReactError(Error("Unable to find node on an unmounted component."));
+	          }
 	        }
-	      }
+	      })();
 	    }
 
 	    if (a.return !== b.return) {
@@ -6851,28 +7191,34 @@ var jsonx = (function (exports) {
 	          _child = _child.sibling;
 	        }
 
-	        if (!didFindChild) {
-	          {
-	            throw Error("Child was not found in either parent set. This indicates a bug in React related to the return pointer. Please file an issue.");
+	        (function () {
+	          if (!didFindChild) {
+	            {
+	              throw ReactError(Error("Child was not found in either parent set. This indicates a bug in React related to the return pointer. Please file an issue."));
+	            }
 	          }
-	        }
+	        })();
 	      }
 	    }
 
-	    if (!(a.alternate === b)) {
-	      {
-	        throw Error("Return fibers should always be each others' alternates. This error is likely caused by a bug in React. Please file an issue.");
+	    (function () {
+	      if (!(a.alternate === b)) {
+	        {
+	          throw ReactError(Error("Return fibers should always be each others' alternates. This error is likely caused by a bug in React. Please file an issue."));
+	        }
 	      }
-	    }
+	    })();
 	  } // If the root is not a host container, we're in a disconnected tree. I.e.
 	  // unmounted.
 
 
-	  if (!(a.tag === HostRoot)) {
-	    {
-	      throw Error("Unable to find node on an unmounted component.");
+	  (function () {
+	    if (!(a.tag === HostRoot)) {
+	      {
+	        throw ReactError(Error("Unable to find node on an unmounted component."));
+	      }
 	    }
-	  }
+	  })();
 
 	  if (a.stateNode.current === a) {
 	    // We've determined that A is the current branch.
@@ -6959,368 +7305,6 @@ var jsonx = (function (exports) {
 
 
 	  return null;
-	}
-	var attemptUserBlockingHydration;
-	function setAttemptUserBlockingHydration(fn) {
-	  attemptUserBlockingHydration = fn;
-	}
-	var attemptContinuousHydration;
-	function setAttemptContinuousHydration(fn) {
-	  attemptContinuousHydration = fn;
-	}
-	var attemptHydrationAtCurrentPriority;
-	function setAttemptHydrationAtCurrentPriority(fn) {
-	  attemptHydrationAtCurrentPriority = fn;
-	} // TODO: Upgrade this definition once we're on a newer version of Flow that
-	// has this definition built-in.
-
-	var hasScheduledReplayAttempt = false; // The queue of discrete events to be replayed.
-
-	var queuedDiscreteEvents = []; // Indicates if any continuous event targets are non-null for early bailout.
-
-	// if the last target was dehydrated.
-
-	var queuedFocus = null;
-	var queuedDrag = null;
-	var queuedMouse = null; // For pointer events there can be one latest event per pointerId.
-
-	var queuedPointers = new Map();
-	var queuedPointerCaptures = new Map(); // We could consider replaying selectionchange and touchmoves too.
-
-	var queuedExplicitHydrationTargets = [];
-	function hasQueuedDiscreteEvents() {
-	  return queuedDiscreteEvents.length > 0;
-	}
-
-	var discreteReplayableEvents = [TOP_MOUSE_DOWN, TOP_MOUSE_UP, TOP_TOUCH_CANCEL, TOP_TOUCH_END, TOP_TOUCH_START, TOP_AUX_CLICK, TOP_DOUBLE_CLICK, TOP_POINTER_CANCEL, TOP_POINTER_DOWN, TOP_POINTER_UP, TOP_DRAG_END, TOP_DRAG_START, TOP_DROP, TOP_COMPOSITION_END, TOP_COMPOSITION_START, TOP_KEY_DOWN, TOP_KEY_PRESS, TOP_KEY_UP, TOP_INPUT, TOP_TEXT_INPUT, TOP_CLOSE, TOP_CANCEL, TOP_COPY, TOP_CUT, TOP_PASTE, TOP_CLICK, TOP_CHANGE, TOP_CONTEXT_MENU, TOP_RESET, TOP_SUBMIT];
-	var continuousReplayableEvents = [TOP_FOCUS, TOP_BLUR, TOP_DRAG_ENTER, TOP_DRAG_LEAVE, TOP_MOUSE_OVER, TOP_MOUSE_OUT, TOP_POINTER_OVER, TOP_POINTER_OUT, TOP_GOT_POINTER_CAPTURE, TOP_LOST_POINTER_CAPTURE];
-	function isReplayableDiscreteEvent(eventType) {
-	  return discreteReplayableEvents.indexOf(eventType) > -1;
-	}
-
-	function trapReplayableEvent(topLevelType, document, listeningSet) {
-	  listenToTopLevel(topLevelType, document, listeningSet);
-	}
-
-	function eagerlyTrapReplayableEvents(document) {
-	  var listeningSet = getListeningSetForElement(document); // Discrete
-
-	  discreteReplayableEvents.forEach(function (topLevelType) {
-	    trapReplayableEvent(topLevelType, document, listeningSet);
-	  }); // Continuous
-
-	  continuousReplayableEvents.forEach(function (topLevelType) {
-	    trapReplayableEvent(topLevelType, document, listeningSet);
-	  });
-	}
-
-	function createQueuedReplayableEvent(blockedOn, topLevelType, eventSystemFlags, nativeEvent) {
-	  return {
-	    blockedOn: blockedOn,
-	    topLevelType: topLevelType,
-	    eventSystemFlags: eventSystemFlags | IS_REPLAYED,
-	    nativeEvent: nativeEvent
-	  };
-	}
-
-	function queueDiscreteEvent(blockedOn, topLevelType, eventSystemFlags, nativeEvent) {
-	  var queuedEvent = createQueuedReplayableEvent(blockedOn, topLevelType, eventSystemFlags, nativeEvent);
-	  queuedDiscreteEvents.push(queuedEvent);
-	} // Resets the replaying for this type of continuous event to no event.
-
-	function clearIfContinuousEvent(topLevelType, nativeEvent) {
-	  switch (topLevelType) {
-	    case TOP_FOCUS:
-	    case TOP_BLUR:
-	      queuedFocus = null;
-	      break;
-
-	    case TOP_DRAG_ENTER:
-	    case TOP_DRAG_LEAVE:
-	      queuedDrag = null;
-	      break;
-
-	    case TOP_MOUSE_OVER:
-	    case TOP_MOUSE_OUT:
-	      queuedMouse = null;
-	      break;
-
-	    case TOP_POINTER_OVER:
-	    case TOP_POINTER_OUT:
-	      {
-	        var pointerId = nativeEvent.pointerId;
-	        queuedPointers.delete(pointerId);
-	        break;
-	      }
-
-	    case TOP_GOT_POINTER_CAPTURE:
-	    case TOP_LOST_POINTER_CAPTURE:
-	      {
-	        var _pointerId = nativeEvent.pointerId;
-	        queuedPointerCaptures.delete(_pointerId);
-	        break;
-	      }
-	  }
-	}
-
-	function accumulateOrCreateContinuousQueuedReplayableEvent(existingQueuedEvent, blockedOn, topLevelType, eventSystemFlags, nativeEvent) {
-	  if (existingQueuedEvent === null || existingQueuedEvent.nativeEvent !== nativeEvent) {
-	    var queuedEvent = createQueuedReplayableEvent(blockedOn, topLevelType, eventSystemFlags, nativeEvent);
-
-	    if (blockedOn !== null) {
-	      var _fiber2 = getInstanceFromNode$1(blockedOn);
-
-	      if (_fiber2 !== null) {
-	        // Attempt to increase the priority of this target.
-	        attemptContinuousHydration(_fiber2);
-	      }
-	    }
-
-	    return queuedEvent;
-	  } // If we have already queued this exact event, then it's because
-	  // the different event systems have different DOM event listeners.
-	  // We can accumulate the flags and store a single event to be
-	  // replayed.
-
-
-	  existingQueuedEvent.eventSystemFlags |= eventSystemFlags;
-	  return existingQueuedEvent;
-	}
-
-	function queueIfContinuousEvent(blockedOn, topLevelType, eventSystemFlags, nativeEvent) {
-	  // These set relatedTarget to null because the replayed event will be treated as if we
-	  // moved from outside the window (no target) onto the target once it hydrates.
-	  // Instead of mutating we could clone the event.
-	  switch (topLevelType) {
-	    case TOP_FOCUS:
-	      {
-	        var focusEvent = nativeEvent;
-	        queuedFocus = accumulateOrCreateContinuousQueuedReplayableEvent(queuedFocus, blockedOn, topLevelType, eventSystemFlags, focusEvent);
-	        return true;
-	      }
-
-	    case TOP_DRAG_ENTER:
-	      {
-	        var dragEvent = nativeEvent;
-	        queuedDrag = accumulateOrCreateContinuousQueuedReplayableEvent(queuedDrag, blockedOn, topLevelType, eventSystemFlags, dragEvent);
-	        return true;
-	      }
-
-	    case TOP_MOUSE_OVER:
-	      {
-	        var mouseEvent = nativeEvent;
-	        queuedMouse = accumulateOrCreateContinuousQueuedReplayableEvent(queuedMouse, blockedOn, topLevelType, eventSystemFlags, mouseEvent);
-	        return true;
-	      }
-
-	    case TOP_POINTER_OVER:
-	      {
-	        var pointerEvent = nativeEvent;
-	        var pointerId = pointerEvent.pointerId;
-	        queuedPointers.set(pointerId, accumulateOrCreateContinuousQueuedReplayableEvent(queuedPointers.get(pointerId) || null, blockedOn, topLevelType, eventSystemFlags, pointerEvent));
-	        return true;
-	      }
-
-	    case TOP_GOT_POINTER_CAPTURE:
-	      {
-	        var _pointerEvent = nativeEvent;
-	        var _pointerId2 = _pointerEvent.pointerId;
-	        queuedPointerCaptures.set(_pointerId2, accumulateOrCreateContinuousQueuedReplayableEvent(queuedPointerCaptures.get(_pointerId2) || null, blockedOn, topLevelType, eventSystemFlags, _pointerEvent));
-	        return true;
-	      }
-	  }
-
-	  return false;
-	} // Check if this target is unblocked. Returns true if it's unblocked.
-
-	function attemptExplicitHydrationTarget(queuedTarget) {
-	  // TODO: This function shares a lot of logic with attemptToDispatchEvent.
-	  // Try to unify them. It's a bit tricky since it would require two return
-	  // values.
-	  var targetInst = getClosestInstanceFromNode(queuedTarget.target);
-
-	  if (targetInst !== null) {
-	    var nearestMounted = getNearestMountedFiber(targetInst);
-
-	    if (nearestMounted !== null) {
-	      var tag = nearestMounted.tag;
-
-	      if (tag === SuspenseComponent) {
-	        var instance = getSuspenseInstanceFromFiber(nearestMounted);
-
-	        if (instance !== null) {
-	          // We're blocked on hydrating this boundary.
-	          // Increase its priority.
-	          queuedTarget.blockedOn = instance;
-	          Scheduler.unstable_runWithPriority(queuedTarget.priority, function () {
-	            attemptHydrationAtCurrentPriority(nearestMounted);
-	          });
-	          return;
-	        }
-	      } else if (tag === HostRoot) {
-	        var root = nearestMounted.stateNode;
-
-	        if (root.hydrate) {
-	          queuedTarget.blockedOn = getContainerFromFiber(nearestMounted); // We don't currently have a way to increase the priority of
-	          // a root other than sync.
-
-	          return;
-	        }
-	      }
-	    }
-	  }
-
-	  queuedTarget.blockedOn = null;
-	}
-
-	function attemptReplayContinuousQueuedEvent(queuedEvent) {
-	  if (queuedEvent.blockedOn !== null) {
-	    return false;
-	  }
-
-	  var nextBlockedOn = attemptToDispatchEvent(queuedEvent.topLevelType, queuedEvent.eventSystemFlags, queuedEvent.nativeEvent);
-
-	  if (nextBlockedOn !== null) {
-	    // We're still blocked. Try again later.
-	    var _fiber3 = getInstanceFromNode$1(nextBlockedOn);
-
-	    if (_fiber3 !== null) {
-	      attemptContinuousHydration(_fiber3);
-	    }
-
-	    queuedEvent.blockedOn = nextBlockedOn;
-	    return false;
-	  }
-
-	  return true;
-	}
-
-	function attemptReplayContinuousQueuedEventInMap(queuedEvent, key, map) {
-	  if (attemptReplayContinuousQueuedEvent(queuedEvent)) {
-	    map.delete(key);
-	  }
-	}
-
-	function replayUnblockedEvents() {
-	  hasScheduledReplayAttempt = false; // First replay discrete events.
-
-	  while (queuedDiscreteEvents.length > 0) {
-	    var nextDiscreteEvent = queuedDiscreteEvents[0];
-
-	    if (nextDiscreteEvent.blockedOn !== null) {
-	      // We're still blocked.
-	      // Increase the priority of this boundary to unblock
-	      // the next discrete event.
-	      var _fiber4 = getInstanceFromNode$1(nextDiscreteEvent.blockedOn);
-
-	      if (_fiber4 !== null) {
-	        attemptUserBlockingHydration(_fiber4);
-	      }
-
-	      break;
-	    }
-
-	    var nextBlockedOn = attemptToDispatchEvent(nextDiscreteEvent.topLevelType, nextDiscreteEvent.eventSystemFlags, nextDiscreteEvent.nativeEvent);
-
-	    if (nextBlockedOn !== null) {
-	      // We're still blocked. Try again later.
-	      nextDiscreteEvent.blockedOn = nextBlockedOn;
-	    } else {
-	      // We've successfully replayed the first event. Let's try the next one.
-	      queuedDiscreteEvents.shift();
-	    }
-	  } // Next replay any continuous events.
-
-
-	  if (queuedFocus !== null && attemptReplayContinuousQueuedEvent(queuedFocus)) {
-	    queuedFocus = null;
-	  }
-
-	  if (queuedDrag !== null && attemptReplayContinuousQueuedEvent(queuedDrag)) {
-	    queuedDrag = null;
-	  }
-
-	  if (queuedMouse !== null && attemptReplayContinuousQueuedEvent(queuedMouse)) {
-	    queuedMouse = null;
-	  }
-
-	  queuedPointers.forEach(attemptReplayContinuousQueuedEventInMap);
-	  queuedPointerCaptures.forEach(attemptReplayContinuousQueuedEventInMap);
-	}
-
-	function scheduleCallbackIfUnblocked(queuedEvent, unblocked) {
-	  if (queuedEvent.blockedOn === unblocked) {
-	    queuedEvent.blockedOn = null;
-
-	    if (!hasScheduledReplayAttempt) {
-	      hasScheduledReplayAttempt = true; // Schedule a callback to attempt replaying as many events as are
-	      // now unblocked. This first might not actually be unblocked yet.
-	      // We could check it early to avoid scheduling an unnecessary callback.
-
-	      Scheduler.unstable_scheduleCallback(Scheduler.unstable_NormalPriority, replayUnblockedEvents);
-	    }
-	  }
-	}
-
-	function retryIfBlockedOn(unblocked) {
-	  // Mark anything that was blocked on this as no longer blocked
-	  // and eligible for a replay.
-	  if (queuedDiscreteEvents.length > 0) {
-	    scheduleCallbackIfUnblocked(queuedDiscreteEvents[0], unblocked); // This is a exponential search for each boundary that commits. I think it's
-	    // worth it because we expect very few discrete events to queue up and once
-	    // we are actually fully unblocked it will be fast to replay them.
-
-	    for (var i = 1; i < queuedDiscreteEvents.length; i++) {
-	      var queuedEvent = queuedDiscreteEvents[i];
-
-	      if (queuedEvent.blockedOn === unblocked) {
-	        queuedEvent.blockedOn = null;
-	      }
-	    }
-	  }
-
-	  if (queuedFocus !== null) {
-	    scheduleCallbackIfUnblocked(queuedFocus, unblocked);
-	  }
-
-	  if (queuedDrag !== null) {
-	    scheduleCallbackIfUnblocked(queuedDrag, unblocked);
-	  }
-
-	  if (queuedMouse !== null) {
-	    scheduleCallbackIfUnblocked(queuedMouse, unblocked);
-	  }
-
-	  var unblock = function (queuedEvent) {
-	    return scheduleCallbackIfUnblocked(queuedEvent, unblocked);
-	  };
-
-	  queuedPointers.forEach(unblock);
-	  queuedPointerCaptures.forEach(unblock);
-
-	  for (var _i = 0; _i < queuedExplicitHydrationTargets.length; _i++) {
-	    var queuedTarget = queuedExplicitHydrationTargets[_i];
-
-	    if (queuedTarget.blockedOn === unblocked) {
-	      queuedTarget.blockedOn = null;
-	    }
-	  }
-
-	  while (queuedExplicitHydrationTargets.length > 0) {
-	    var nextExplicitTarget = queuedExplicitHydrationTargets[0];
-
-	    if (nextExplicitTarget.blockedOn !== null) {
-	      // We're still blocked.
-	      break;
-	    } else {
-	      attemptExplicitHydrationTarget(nextExplicitTarget);
-
-	      if (nextExplicitTarget.blockedOn === null) {
-	        // We're unblocked.
-	        queuedExplicitHydrationTargets.shift();
-	      }
-	    }
-	  }
 	}
 
 	function addEventBubbleListener(element, eventType, listener) {
@@ -7841,7 +7825,7 @@ var jsonx = (function (exports) {
 	  }
 
 	  function warn(action, result) {
-	     warningWithoutStack$1(false, "This synthetic event is reused for performance reasons. If you're seeing this, " + "you're %s `%s` on a released/nullified synthetic event. %s. " + 'If you must keep the original synthetic event around, use event.persist(). ' + 'See https://fb.me/react-event-pooling for more information.', action, propName, result) ;
+	    warningWithoutStack$1(false, "This synthetic event is reused for performance reasons. If you're seeing this, " + "you're %s `%s` on a released/nullified synthetic event. %s. " + 'If you must keep the original synthetic event around, use event.persist(). ' + 'See https://fb.me/react-event-pooling for more information.', action, propName, result);
 	  }
 	}
 
@@ -7860,11 +7844,13 @@ var jsonx = (function (exports) {
 	function releasePooledEvent(event) {
 	  var EventConstructor = this;
 
-	  if (!(event instanceof EventConstructor)) {
-	    {
-	      throw Error("Trying to release an event instance into a pool of a different type.");
+	  (function () {
+	    if (!(event instanceof EventConstructor)) {
+	      {
+	        throw ReactError(Error("Trying to release an event instance into a pool of a different type."));
+	      }
 	    }
-	  }
+	  })();
 
 	  event.destructor();
 
@@ -8604,7 +8590,9 @@ var jsonx = (function (exports) {
 	}
 
 	function dispatchUserBlockingUpdate(topLevelType, eventSystemFlags, nativeEvent) {
-	  runWithPriority$1(UserBlockingPriority$1, dispatchEvent.bind(null, topLevelType, eventSystemFlags, nativeEvent));
+	  {
+	    dispatchEvent(topLevelType, eventSystemFlags, nativeEvent);
+	  }
 	}
 
 	function dispatchEventForPluginEventSystem(topLevelType, eventSystemFlags, nativeEvent, targetInst) {
@@ -8910,6 +8898,58 @@ var jsonx = (function (exports) {
 	  return true;
 	}
 
+	// List derived from Gecko source code:
+	// https://github.com/mozilla/gecko-dev/blob/4e638efc71/layout/style/test/property_database.js
+	var shorthandToLonghand = {
+	  animation: ['animationDelay', 'animationDirection', 'animationDuration', 'animationFillMode', 'animationIterationCount', 'animationName', 'animationPlayState', 'animationTimingFunction'],
+	  background: ['backgroundAttachment', 'backgroundClip', 'backgroundColor', 'backgroundImage', 'backgroundOrigin', 'backgroundPositionX', 'backgroundPositionY', 'backgroundRepeat', 'backgroundSize'],
+	  backgroundPosition: ['backgroundPositionX', 'backgroundPositionY'],
+	  border: ['borderBottomColor', 'borderBottomStyle', 'borderBottomWidth', 'borderImageOutset', 'borderImageRepeat', 'borderImageSlice', 'borderImageSource', 'borderImageWidth', 'borderLeftColor', 'borderLeftStyle', 'borderLeftWidth', 'borderRightColor', 'borderRightStyle', 'borderRightWidth', 'borderTopColor', 'borderTopStyle', 'borderTopWidth'],
+	  borderBlockEnd: ['borderBlockEndColor', 'borderBlockEndStyle', 'borderBlockEndWidth'],
+	  borderBlockStart: ['borderBlockStartColor', 'borderBlockStartStyle', 'borderBlockStartWidth'],
+	  borderBottom: ['borderBottomColor', 'borderBottomStyle', 'borderBottomWidth'],
+	  borderColor: ['borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor'],
+	  borderImage: ['borderImageOutset', 'borderImageRepeat', 'borderImageSlice', 'borderImageSource', 'borderImageWidth'],
+	  borderInlineEnd: ['borderInlineEndColor', 'borderInlineEndStyle', 'borderInlineEndWidth'],
+	  borderInlineStart: ['borderInlineStartColor', 'borderInlineStartStyle', 'borderInlineStartWidth'],
+	  borderLeft: ['borderLeftColor', 'borderLeftStyle', 'borderLeftWidth'],
+	  borderRadius: ['borderBottomLeftRadius', 'borderBottomRightRadius', 'borderTopLeftRadius', 'borderTopRightRadius'],
+	  borderRight: ['borderRightColor', 'borderRightStyle', 'borderRightWidth'],
+	  borderStyle: ['borderBottomStyle', 'borderLeftStyle', 'borderRightStyle', 'borderTopStyle'],
+	  borderTop: ['borderTopColor', 'borderTopStyle', 'borderTopWidth'],
+	  borderWidth: ['borderBottomWidth', 'borderLeftWidth', 'borderRightWidth', 'borderTopWidth'],
+	  columnRule: ['columnRuleColor', 'columnRuleStyle', 'columnRuleWidth'],
+	  columns: ['columnCount', 'columnWidth'],
+	  flex: ['flexBasis', 'flexGrow', 'flexShrink'],
+	  flexFlow: ['flexDirection', 'flexWrap'],
+	  font: ['fontFamily', 'fontFeatureSettings', 'fontKerning', 'fontLanguageOverride', 'fontSize', 'fontSizeAdjust', 'fontStretch', 'fontStyle', 'fontVariant', 'fontVariantAlternates', 'fontVariantCaps', 'fontVariantEastAsian', 'fontVariantLigatures', 'fontVariantNumeric', 'fontVariantPosition', 'fontWeight', 'lineHeight'],
+	  fontVariant: ['fontVariantAlternates', 'fontVariantCaps', 'fontVariantEastAsian', 'fontVariantLigatures', 'fontVariantNumeric', 'fontVariantPosition'],
+	  gap: ['columnGap', 'rowGap'],
+	  grid: ['gridAutoColumns', 'gridAutoFlow', 'gridAutoRows', 'gridTemplateAreas', 'gridTemplateColumns', 'gridTemplateRows'],
+	  gridArea: ['gridColumnEnd', 'gridColumnStart', 'gridRowEnd', 'gridRowStart'],
+	  gridColumn: ['gridColumnEnd', 'gridColumnStart'],
+	  gridColumnGap: ['columnGap'],
+	  gridGap: ['columnGap', 'rowGap'],
+	  gridRow: ['gridRowEnd', 'gridRowStart'],
+	  gridRowGap: ['rowGap'],
+	  gridTemplate: ['gridTemplateAreas', 'gridTemplateColumns', 'gridTemplateRows'],
+	  listStyle: ['listStyleImage', 'listStylePosition', 'listStyleType'],
+	  margin: ['marginBottom', 'marginLeft', 'marginRight', 'marginTop'],
+	  marker: ['markerEnd', 'markerMid', 'markerStart'],
+	  mask: ['maskClip', 'maskComposite', 'maskImage', 'maskMode', 'maskOrigin', 'maskPositionX', 'maskPositionY', 'maskRepeat', 'maskSize'],
+	  maskPosition: ['maskPositionX', 'maskPositionY'],
+	  outline: ['outlineColor', 'outlineStyle', 'outlineWidth'],
+	  overflow: ['overflowX', 'overflowY'],
+	  padding: ['paddingBottom', 'paddingLeft', 'paddingRight', 'paddingTop'],
+	  placeContent: ['alignContent', 'justifyContent'],
+	  placeItems: ['alignItems', 'justifyItems'],
+	  placeSelf: ['alignSelf', 'justifySelf'],
+	  textDecoration: ['textDecorationColor', 'textDecorationLine', 'textDecorationStyle'],
+	  textEmphasis: ['textEmphasisColor', 'textEmphasisStyle'],
+	  transition: ['transitionDelay', 'transitionDuration', 'transitionProperty', 'transitionTimingFunction'],
+	  wordWrap: ['overflowWrap']
+	};
+
 	/**
 	 * CSS properties which accept numbers but are not in units of "px".
 	 */
@@ -9196,6 +9236,33 @@ var jsonx = (function (exports) {
 	    }
 	  }
 	}
+
+	function isValueEmpty(value) {
+	  return value == null || typeof value === 'boolean' || value === '';
+	}
+	/**
+	 * Given {color: 'red', overflow: 'hidden'} returns {
+	 *   color: 'color',
+	 *   overflowX: 'overflow',
+	 *   overflowY: 'overflow',
+	 * }. This can be read as "the overflowY property was set by the overflow
+	 * shorthand". That is, the values are the property that each was derived from.
+	 */
+
+
+	function expandShorthandMap(styles) {
+	  var expanded = {};
+
+	  for (var key in styles) {
+	    var longhands = shorthandToLonghand[key] || [key];
+
+	    for (var i = 0; i < longhands.length; i++) {
+	      expanded[longhands[i]] = key;
+	    }
+	  }
+
+	  return expanded;
+	}
 	/**
 	 * When mixing shorthand and longhand property names, we warn during updates if
 	 * we expect an incorrect result to occur. In particular, we warn for:
@@ -9215,6 +9282,30 @@ var jsonx = (function (exports) {
 	function validateShorthandPropertyCollisionInDev(styleUpdates, nextStyles) {
 	  {
 	    return;
+	  }
+
+	  if (!nextStyles) {
+	    return;
+	  }
+
+	  var expandedUpdates = expandShorthandMap(styleUpdates);
+	  var expandedStyles = expandShorthandMap(nextStyles);
+	  var warnedAbout = {};
+
+	  for (var key in expandedUpdates) {
+	    var originalKey = expandedUpdates[key];
+	    var correctOriginalKey = expandedStyles[key];
+
+	    if (correctOriginalKey && originalKey !== correctOriginalKey) {
+	      var warningKey = originalKey + ',' + correctOriginalKey;
+
+	      if (warnedAbout[warningKey]) {
+	        continue;
+	      }
+
+	      warnedAbout[warningKey] = true;
+	      warning$1(false, '%s a style property during rerender (%s) when a ' + 'conflicting property is set (%s) can lead to styling bugs. To ' + "avoid this, don't mix shorthand and non-shorthand properties " + 'for the same value; instead, replace the shorthand with ' + 'separate values.', isValueEmpty(styleUpdates[originalKey]) ? 'Removing' : 'Updating', originalKey, correctOriginalKey);
+	    }
 	  }
 	}
 
@@ -9261,36 +9352,44 @@ var jsonx = (function (exports) {
 
 
 	  if (voidElementTags[tag]) {
-	    if (!(props.children == null && props.dangerouslySetInnerHTML == null)) {
-	      {
-	        throw Error(tag + " is a void element tag and must neither have `children` nor use `dangerouslySetInnerHTML`." + (ReactDebugCurrentFrame$3.getStackAddendum()));
+	    (function () {
+	      if (!(props.children == null && props.dangerouslySetInnerHTML == null)) {
+	        {
+	          throw ReactError(Error(tag + " is a void element tag and must neither have `children` nor use `dangerouslySetInnerHTML`." + (ReactDebugCurrentFrame$3.getStackAddendum())));
+	        }
 	      }
-	    }
+	    })();
 	  }
 
 	  if (props.dangerouslySetInnerHTML != null) {
-	    if (!(props.children == null)) {
-	      {
-	        throw Error("Can only set one of `children` or `props.dangerouslySetInnerHTML`.");
+	    (function () {
+	      if (!(props.children == null)) {
+	        {
+	          throw ReactError(Error("Can only set one of `children` or `props.dangerouslySetInnerHTML`."));
+	        }
 	      }
-	    }
+	    })();
 
-	    if (!(typeof props.dangerouslySetInnerHTML === 'object' && HTML$1 in props.dangerouslySetInnerHTML)) {
-	      {
-	        throw Error("`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. Please visit https://fb.me/react-invariant-dangerously-set-inner-html for more information.");
+	    (function () {
+	      if (!(typeof props.dangerouslySetInnerHTML === 'object' && HTML$1 in props.dangerouslySetInnerHTML)) {
+	        {
+	          throw ReactError(Error("`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. Please visit https://fb.me/react-invariant-dangerously-set-inner-html for more information."));
+	        }
 	      }
-	    }
+	    })();
 	  }
 
 	  {
 	    !(props.suppressContentEditableWarning || !props.contentEditable || props.children == null) ? warning$1(false, 'A component is `contentEditable` and contains `children` managed by ' + 'React. It is now your responsibility to guarantee that none of ' + 'those nodes are unexpectedly modified or duplicated. This is ' + 'probably not intentional.') : void 0;
 	  }
 
-	  if (!(props.style == null || typeof props.style === 'object')) {
-	    {
-	      throw Error("The `style` prop expects a mapping from style properties to values, not a string. For example, style={{marginRight: spacing + 'em'}} when using JSX." + (ReactDebugCurrentFrame$3.getStackAddendum()));
+	  (function () {
+	    if (!(props.style == null || typeof props.style === 'object')) {
+	      {
+	        throw ReactError(Error("The `style` prop expects a mapping from style properties to values, not a string. For example, style={{marginRight: spacing + 'em'}} when using JSX." + (ReactDebugCurrentFrame$3.getStackAddendum())));
+	      }
 	    }
-	  }
+	  })();
 	}
 
 	function isCustomComponent(tagName, props) {
@@ -10328,9 +10427,9 @@ var jsonx = (function (exports) {
 	      } else if (typeof nextProp === 'number') {
 	        setTextContent(domElement, '' + nextProp);
 	      }
-	    } else if ( propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (propKey === AUTOFOCUS) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
+	    } else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (propKey === AUTOFOCUS) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
 	      if (nextProp != null) {
-	        if ( typeof nextProp !== 'function') {
+	        if (typeof nextProp !== 'function') {
 	          warnForInvalidEventListener(propKey, nextProp);
 	        }
 
@@ -10548,7 +10647,7 @@ var jsonx = (function (exports) {
 	      // TODO: Make sure we check if this is still unmounted or do any clean
 	      // up necessary since we never stop tracking anymore.
 	      track(domElement);
-	      postMountWrapper$3(domElement);
+	      postMountWrapper$3(domElement, rawProps);
 	      break;
 
 	    case 'option':
@@ -10637,7 +10736,7 @@ var jsonx = (function (exports) {
 	          styleUpdates[styleName] = '';
 	        }
 	      }
-	    } else if (propKey === DANGEROUSLY_SET_INNER_HTML || propKey === CHILDREN) ; else if ( propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (propKey === AUTOFOCUS) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
+	    } else if (propKey === DANGEROUSLY_SET_INNER_HTML || propKey === CHILDREN) ; else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (propKey === AUTOFOCUS) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
 	      // This is a special case. If any listener updates we need to ensure
 	      // that the "current" fiber pointer gets updated so we need a commit
 	      // to update this element.
@@ -10715,10 +10814,10 @@ var jsonx = (function (exports) {
 	      if (lastProp !== nextProp && (typeof nextProp === 'string' || typeof nextProp === 'number')) {
 	        (updatePayload = updatePayload || []).push(propKey, '' + nextProp);
 	      }
-	    } else if ( propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
+	    } else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
 	      if (nextProp != null) {
 	        // We eagerly listen to this even though we haven't committed yet.
-	        if ( typeof nextProp !== 'function') {
+	        if (typeof nextProp !== 'function') {
 	          warnForInvalidEventListener(propKey, nextProp);
 	        }
 
@@ -10793,6 +10892,8 @@ var jsonx = (function (exports) {
 
 	    return possibleStandardNames[lowerCasedName] || null;
 	  }
+
+	  return null;
 	}
 
 	function diffHydratedProperties(domElement, tag, rawProps, parentNamespace, rootContainerElement) {
@@ -10930,7 +11031,7 @@ var jsonx = (function (exports) {
 	      // TODO: Should we use domElement.firstChild.nodeValue to compare?
 	      if (typeof nextProp === 'string') {
 	        if (domElement.textContent !== nextProp) {
-	          if ( !suppressHydrationWarning) {
+	          if (!suppressHydrationWarning) {
 	            warnForTextDifference(domElement.textContent, nextProp);
 	          }
 
@@ -10938,7 +11039,7 @@ var jsonx = (function (exports) {
 	        }
 	      } else if (typeof nextProp === 'number') {
 	        if (domElement.textContent !== '' + nextProp) {
-	          if ( !suppressHydrationWarning) {
+	          if (!suppressHydrationWarning) {
 	            warnForTextDifference(domElement.textContent, nextProp);
 	          }
 
@@ -10947,19 +11048,18 @@ var jsonx = (function (exports) {
 	      }
 	    } else if (registrationNameModules.hasOwnProperty(propKey)) {
 	      if (nextProp != null) {
-	        if ( typeof nextProp !== 'function') {
+	        if (typeof nextProp !== 'function') {
 	          warnForInvalidEventListener(propKey, nextProp);
 	        }
 
 	        ensureListeningTo(rootContainerElement, propKey);
 	      }
-	    } else if ( // Convince Flow we've calculated it (it's DEV-only in this method.)
-	    typeof isCustomComponentTag === 'boolean') {
+	    } else if (typeof isCustomComponentTag === 'boolean') {
 	      // Validate that the properties correspond to their expected values.
 	      var serverValue = void 0;
 	      var propertyInfo = getPropertyInfo(propKey);
 
-	      if (suppressHydrationWarning) ; else if ( propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1 || // Controlled attributes are not validated
+	      if (suppressHydrationWarning) ; else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1 || // Controlled attributes are not validated
 	      // TODO: Only ignore them on controlled tags.
 	      propKey === 'value' || propKey === 'checked' || propKey === 'selected') ; else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
 	        var serverHTML = domElement.innerHTML;
@@ -11054,7 +11154,7 @@ var jsonx = (function (exports) {
 	      // TODO: Make sure we check if this is still unmounted or do any clean
 	      // up necessary since we never stop tracking anymore.
 	      track(domElement);
-	      postMountWrapper$3(domElement);
+	      postMountWrapper$3(domElement, rawProps);
 	      break;
 
 	    case 'select':
@@ -11951,6 +12051,8 @@ var jsonx = (function (exports) {
 	      ancestorInfo: ancestorInfo
 	    };
 	  }
+
+	  return namespace;
 	}
 	function getChildHostContext(parentHostContext, type, rootContainerInstance) {
 	  {
@@ -11962,6 +12064,9 @@ var jsonx = (function (exports) {
 	      ancestorInfo: ancestorInfo
 	    };
 	  }
+
+	  var parentNamespace = parentHostContext;
+	  return getChildNamespace(parentNamespace, type);
 	}
 	function getPublicInstance(instance) {
 	  return instance;
@@ -12103,8 +12208,7 @@ var jsonx = (function (exports) {
 	  } else {
 	    container.insertBefore(child, beforeChild);
 	  }
-	} // This is a specific event for the React Flare
-
+	}
 	function removeChild(parentInstance, child) {
 	  parentInstance.removeChild(child);
 	}
@@ -12272,7 +12376,7 @@ var jsonx = (function (exports) {
 	  }
 	}
 	function didNotMatchHydratedTextInstance(parentType, parentProps, parentInstance, textInstance, text) {
-	  if ( parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
+	  if (parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
 	    warnForUnmatchedText(textInstance, text);
 	  }
 	}
@@ -12286,7 +12390,7 @@ var jsonx = (function (exports) {
 	  }
 	}
 	function didNotHydrateInstance(parentType, parentProps, parentInstance, instance) {
-	  if ( parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
+	  if (parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
 	    if (instance.nodeType === ELEMENT_NODE) {
 	      warnForDeletedHydratableElement(parentInstance, instance);
 	    } else if (instance.nodeType === COMMENT_NODE) ; else {
@@ -12296,7 +12400,7 @@ var jsonx = (function (exports) {
 	}
 	function didNotFindHydratableContainerInstance(parentContainer, type, props) {
 	  {
-	    warnForInsertedHydratedElement(parentContainer, type);
+	    warnForInsertedHydratedElement(parentContainer, type, props);
 	  }
 	}
 	function didNotFindHydratableContainerTextInstance(parentContainer, text) {
@@ -12306,17 +12410,17 @@ var jsonx = (function (exports) {
 	}
 
 	function didNotFindHydratableInstance(parentType, parentProps, parentInstance, type, props) {
-	  if ( parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
-	    warnForInsertedHydratedElement(parentInstance, type);
+	  if (parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
+	    warnForInsertedHydratedElement(parentInstance, type, props);
 	  }
 	}
 	function didNotFindHydratableTextInstance(parentType, parentProps, parentInstance, text) {
-	  if ( parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
+	  if (parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
 	    warnForInsertedHydratedText(parentInstance, text);
 	  }
 	}
 	function didNotFindHydratableSuspenseInstance(parentType, parentProps, parentInstance) {
-	  if ( parentProps[SUPPRESS_HYDRATION_WARNING] !== true) ;
+	  if (parentProps[SUPPRESS_HYDRATION_WARNING] !== true) ;
 	}
 
 	var randomKey = Math.random().toString(36).slice(2);
@@ -12328,17 +12432,11 @@ var jsonx = (function (exports) {
 	}
 	function markContainerAsRoot(hostRoot, node) {
 	  node[internalContainerInstanceKey] = hostRoot;
-	}
-	function unmarkContainerAsRoot(node) {
-	  node[internalContainerInstanceKey] = null;
-	}
-	function isContainerMarkedAsRoot(node) {
-	  return !!node[internalContainerInstanceKey];
 	} // Given a DOM node, return the closest HostComponent or HostText fiber ancestor.
 	// If the target node is part of a hydrated or not yet rendered subtree, then
 	// this may also return a SuspenseComponent or HostRoot to indicate that.
 	// Conceptually the HostRoot fiber is a child of the Container node. So if you
-	// pass the Container node as the targetNode, you will not actually get the
+	// pass the Container node as the targetNode, you wiill not actually get the
 	// HostRoot back. To get to the HostRoot, you need to pass a child of it.
 	// The same thing applies to Suspense boundaries.
 
@@ -12452,11 +12550,13 @@ var jsonx = (function (exports) {
 	  // invariant for a missing parent, which is super confusing.
 
 
-	  {
+	  (function () {
 	    {
-	      throw Error("getNodeFromInstance: Invalid argument.");
+	      {
+	        throw ReactError(Error("getNodeFromInstance: Invalid argument."));
+	      }
 	    }
-	  }
+	  })();
 	}
 	function getFiberCurrentPropsFromNode$1(node) {
 	  return node[internalEventHandlersKey] || null;
@@ -13261,12 +13361,7 @@ var jsonx = (function (exports) {
 	    registrationName: 'onPointerLeave',
 	    dependencies: [TOP_POINTER_OUT, TOP_POINTER_OVER]
 	  }
-	}; // We track the lastNativeEvent to ensure that when we encounter
-	// cases where we process the same nativeEvent multiple times,
-	// which can happen when have multiple ancestors, that we don't
-	// duplicate enter
-
-	var lastNativeEvent;
+	};
 	var EnterLeaveEventPlugin = {
 	  eventTypes: eventTypes$3,
 
@@ -13361,13 +13456,6 @@ var jsonx = (function (exports) {
 	    enter.target = toNode;
 	    enter.relatedTarget = fromNode;
 	    accumulateEnterLeaveDispatches(leave, enter, from, to);
-
-	    if (nativeEvent === lastNativeEvent) {
-	      lastNativeEvent = null;
-	      return [leave];
-	    }
-
-	    lastNativeEvent = nativeEvent;
 	    return [leave, enter];
 	  }
 	};
@@ -14187,11 +14275,13 @@ var jsonx = (function (exports) {
 
 	function pushTopLevelContextObject(fiber, context, didChange) {
 	  {
-	    if (!(contextStackCursor.current === emptyContextObject)) {
-	      {
-	        throw Error("Unexpected context found on stack. This error is likely caused by a bug in React. Please file an issue.");
+	    (function () {
+	      if (!(contextStackCursor.current === emptyContextObject)) {
+	        {
+	          throw ReactError(Error("Unexpected context found on stack. This error is likely caused by a bug in React. Please file an issue."));
+	        }
 	      }
-	    }
+	    })();
 
 	    push(contextStackCursor, context, fiber);
 	    push(didPerformWorkStackCursor, didChange, fiber);
@@ -14232,11 +14322,13 @@ var jsonx = (function (exports) {
 	    }
 
 	    for (var contextKey in childContext) {
-	      if (!(contextKey in childContextTypes)) {
-	        {
-	          throw Error((getComponentName(type) || 'Unknown') + ".getChildContext(): key \"" + contextKey + "\" is not defined in childContextTypes.");
+	      (function () {
+	        if (!(contextKey in childContextTypes)) {
+	          {
+	            throw ReactError(Error((getComponentName(type) || 'Unknown') + ".getChildContext(): key \"" + contextKey + "\" is not defined in childContextTypes."));
+	          }
 	        }
-	      }
+	      })();
 	    }
 
 	    {
@@ -14273,11 +14365,13 @@ var jsonx = (function (exports) {
 	  {
 	    var instance = workInProgress.stateNode;
 
-	    if (!instance) {
-	      {
-	        throw Error("Expected to have an instance by this point. This error is likely caused by a bug in React. Please file an issue.");
+	    (function () {
+	      if (!instance) {
+	        {
+	          throw ReactError(Error("Expected to have an instance by this point. This error is likely caused by a bug in React. Please file an issue."));
+	        }
 	      }
-	    }
+	    })();
 
 	    if (didChange) {
 	      // Merge parent and own context.
@@ -14303,11 +14397,13 @@ var jsonx = (function (exports) {
 	  {
 	    // Currently this is only used with renderSubtreeIntoContainer; not sure if it
 	    // makes sense elsewhere
-	    if (!(isFiberMounted(fiber) && fiber.tag === ClassComponent)) {
-	      {
-	        throw Error("Expected subtree parent to be a mounted class component. This error is likely caused by a bug in React. Please file an issue.");
+	    (function () {
+	      if (!(isFiberMounted(fiber) && fiber.tag === ClassComponent)) {
+	        {
+	          throw ReactError(Error("Expected subtree parent to be a mounted class component. This error is likely caused by a bug in React. Please file an issue."));
+	        }
 	      }
-	    }
+	    })();
 
 	    var node = fiber;
 
@@ -14331,16 +14427,18 @@ var jsonx = (function (exports) {
 	      node = node.return;
 	    } while (node !== null);
 
-	    {
+	    (function () {
 	      {
-	        throw Error("Found unexpected detached subtree parent. This error is likely caused by a bug in React. Please file an issue.");
+	        {
+	          throw ReactError(Error("Found unexpected detached subtree parent. This error is likely caused by a bug in React. Please file an issue."));
+	        }
 	      }
-	    }
+	    })();
 	  }
 	}
 
 	var LegacyRoot = 0;
-	var BlockingRoot = 1;
+	var BatchedRoot = 1;
 	var ConcurrentRoot = 2;
 
 	// Intentionally not named imports because Rollup would use dynamic dispatch for
@@ -14362,11 +14460,13 @@ var jsonx = (function (exports) {
 	  // Provide explicit error message when production+profiling bundle of e.g.
 	  // react-dom is used with production (non-profiling) bundle of
 	  // scheduler/tracing
-	  if (!(tracing$1.__interactionsRef != null && tracing$1.__interactionsRef.current != null)) {
-	    {
-	      throw Error("It is not supported to run the profiling version of a renderer (for example, `react-dom/profiling`) without also replacing the `scheduler/tracing` module with `scheduler/tracing-profiling`. Your bundler might have a setting for aliasing both modules. Learn more at http://fb.me/react-profiling");
+	  (function () {
+	    if (!(tracing$1.__interactionsRef != null && tracing$1.__interactionsRef.current != null)) {
+	      {
+	        throw ReactError(Error("It is not supported to run the profiling version of a renderer (for example, `react-dom/profiling`) without also replacing the `scheduler/tracing` module with `scheduler/tracing-profiling`. Your bundler might have a setting for aliasing both modules. Learn more at http://fb.me/react-profiling"));
+	      }
 	    }
-	  }
+	  })();
 	}
 
 	var fakeCallbackNode = {}; // Except for NoPriority, these correspond to Scheduler priorities. We use
@@ -14415,11 +14515,13 @@ var jsonx = (function (exports) {
 	      return IdlePriority;
 
 	    default:
-	      {
+	      (function () {
 	        {
-	          throw Error("Unknown priority level.");
+	          {
+	            throw ReactError(Error("Unknown priority level."));
+	          }
 	        }
-	      }
+	      })();
 
 	  }
 	}
@@ -14442,11 +14544,13 @@ var jsonx = (function (exports) {
 	      return Scheduler_IdlePriority;
 
 	    default:
-	      {
+	      (function () {
 	        {
-	          throw Error("Unknown priority level.");
+	          {
+	            throw ReactError(Error("Unknown priority level."));
+	          }
 	        }
-	      }
+	      })();
 
 	  }
 	}
@@ -14524,10 +14628,10 @@ var jsonx = (function (exports) {
 	}
 
 	var NoMode = 0;
-	var StrictMode = 1; // TODO: Remove BlockingMode and ConcurrentMode by reading from the root
+	var StrictMode = 1; // TODO: Remove BatchedMode and ConcurrentMode by reading from the root
 	// tag instead
 
-	var BlockingMode = 2;
+	var BatchedMode = 2;
 	var ConcurrentMode = 4;
 	var ProfileMode = 8;
 
@@ -14547,11 +14651,7 @@ var jsonx = (function (exports) {
 	var Never = 1; // Idle is slightly higher priority than Never. It must completely finish in
 	// order to be consistent.
 
-	var Idle = 2; // Continuous Hydration is a moving priority. It is slightly higher than Idle
-	// and is used to increase priority of hover targets. It is increasing with
-	// each usage so that last always wins.
-
-	var ContinuousHydration = 3;
+	var Idle = 2;
 	var Sync = MAX_SIGNED_31_BIT_INT;
 	var Batched = Sync - 1;
 	var UNIT_SIZE = 10;
@@ -14599,12 +14699,6 @@ var jsonx = (function (exports) {
 	var HIGH_PRIORITY_BATCH_SIZE = 100;
 	function computeInteractiveExpiration(currentTime) {
 	  return computeExpirationBucket(currentTime, HIGH_PRIORITY_EXPIRATION, HIGH_PRIORITY_BATCH_SIZE);
-	}
-	function computeContinuousHydrationExpiration(currentTime) {
-	  // Each time we ask for a new one of these we increase the priority.
-	  // This ensures that the last one always wins since we can't deprioritize
-	  // once we've scheduled work already.
-	  return ContinuousHydration++;
 	}
 	function inferPriorityFromExpirationTime(currentTime, expirationTime) {
 	  if (expirationTime === Sync) {
@@ -15109,9 +15203,7 @@ var jsonx = (function (exports) {
 	    }
 
 	    flushPassiveEffects();
-	    syncUpdates(function () {
-	      updateContainer(element, root, null, null);
-	    });
+	    updateContainerAtExpirationTime(element, root, null, Sync, null);
 	  }
 	};
 
@@ -15133,6 +15225,9 @@ var jsonx = (function (exports) {
 
 	      case ForwardRef:
 	        candidateType = type.render;
+	        break;
+
+	      default:
 	        break;
 	    }
 
@@ -15211,6 +15306,9 @@ var jsonx = (function (exports) {
 
 	      case ForwardRef:
 	        candidateType = type.render;
+	        break;
+
+	      default:
 	        break;
 	    }
 
@@ -15572,11 +15670,13 @@ var jsonx = (function (exports) {
 	    };
 
 	    if (lastContextDependency === null) {
-	      if (!(currentlyRenderingFiber !== null)) {
-	        {
-	          throw Error("Context can only be read while React is rendering. In classes, you can read it in the render method or getDerivedStateFromProps. In function components, you can read it directly in the function body, but not inside Hooks like useReducer() or useMemo().");
+	      (function () {
+	        if (!(currentlyRenderingFiber !== null)) {
+	          {
+	            throw ReactError(Error("Context can only be read while React is rendering. In classes, you can read it in the render method or getDerivedStateFromProps. In function components, you can read it directly in the function body, but not inside Hooks like useReducer() or useMemo()."));
+	          }
 	        }
-	      } // This is the first dependency for this component. Create a new list.
+	      })(); // This is the first dependency for this component. Create a new list.
 
 
 	      lastContextDependency = contextItem;
@@ -15591,7 +15691,7 @@ var jsonx = (function (exports) {
 	    }
 	  }
 
-	  return  context._currentValue ;
+	  return context._currentValue;
 	}
 
 	// UpdateQueue is a linked list of prioritized updates.
@@ -15862,7 +15962,7 @@ var jsonx = (function (exports) {
 	          {
 	            enterDisallowedContextReadInDEV();
 
-	            if ( workInProgress.mode & StrictMode) {
+	            if (workInProgress.mode & StrictMode) {
 	              payload.call(instance, prevState, nextProps);
 	            }
 	          }
@@ -15896,7 +15996,7 @@ var jsonx = (function (exports) {
 	          {
 	            enterDisallowedContextReadInDEV();
 
-	            if ( workInProgress.mode & StrictMode) {
+	            if (workInProgress.mode & StrictMode) {
 	              _payload.call(instance, prevState, nextProps);
 	            }
 	          }
@@ -16080,11 +16180,13 @@ var jsonx = (function (exports) {
 	}
 
 	function callCallback(callback, context) {
-	  if (!(typeof callback === 'function')) {
-	    {
-	      throw Error("Invalid argument passed as callback. Expected a function. Instead received: " + callback);
+	  (function () {
+	    if (!(typeof callback === 'function')) {
+	      {
+	        throw ReactError(Error("Invalid argument passed as callback. Expected a function. Instead received: " + callback));
+	      }
 	    }
-	  }
+	  })();
 
 	  callback.call(context);
 	}
@@ -16195,11 +16297,13 @@ var jsonx = (function (exports) {
 	  Object.defineProperty(fakeInternalInstance, '_processChildContext', {
 	    enumerable: false,
 	    value: function () {
-	      {
+	      (function () {
 	        {
-	          throw Error("_processChildContext is not available in React 16+. This likely means you have multiple copies of React and are attempting to nest a React 15 tree inside a React 16 tree using unstable_renderSubtreeIntoContainer, which isn't supported. Try to make sure you have only one copy of React (and ideally, switch to ReactDOM.createPortal).");
+	          {
+	            throw ReactError(Error("_processChildContext is not available in React 16+. This likely means you have multiple copies of React and are attempting to nest a React 15 tree inside a React 16 tree using unstable_renderSubtreeIntoContainer, which isn't supported. Try to make sure you have only one copy of React (and ideally, switch to ReactDOM.createPortal)."));
+	          }
 	        }
-	      }
+	      })();
 	    }
 	  });
 	  Object.freeze(fakeInternalInstance);
@@ -16209,7 +16313,7 @@ var jsonx = (function (exports) {
 	  var prevState = workInProgress.memoizedState;
 
 	  {
-	    if ( workInProgress.mode & StrictMode) {
+	    if (workInProgress.mode & StrictMode) {
 	      // Invoke the function an extra time to help detect side-effects.
 	      getDerivedStateFromProps(nextProps, prevState);
 	    }
@@ -16236,7 +16340,7 @@ var jsonx = (function (exports) {
 	  isMounted: isMounted,
 	  enqueueSetState: function (inst, payload, callback) {
 	    var fiber = get(inst);
-	    var currentTime = requestCurrentTimeForUpdate();
+	    var currentTime = requestCurrentTime();
 	    var suspenseConfig = requestCurrentSuspenseConfig();
 	    var expirationTime = computeExpirationForFiber(currentTime, fiber, suspenseConfig);
 	    var update = createUpdate(expirationTime, suspenseConfig);
@@ -16255,7 +16359,7 @@ var jsonx = (function (exports) {
 	  },
 	  enqueueReplaceState: function (inst, payload, callback) {
 	    var fiber = get(inst);
-	    var currentTime = requestCurrentTimeForUpdate();
+	    var currentTime = requestCurrentTime();
 	    var suspenseConfig = requestCurrentSuspenseConfig();
 	    var expirationTime = computeExpirationForFiber(currentTime, fiber, suspenseConfig);
 	    var update = createUpdate(expirationTime, suspenseConfig);
@@ -16275,7 +16379,7 @@ var jsonx = (function (exports) {
 	  },
 	  enqueueForceUpdate: function (inst, callback) {
 	    var fiber = get(inst);
-	    var currentTime = requestCurrentTimeForUpdate();
+	    var currentTime = requestCurrentTime();
 	    var suspenseConfig = requestCurrentSuspenseConfig();
 	    var expirationTime = computeExpirationForFiber(currentTime, fiber, suspenseConfig);
 	    var update = createUpdate(expirationTime, suspenseConfig);
@@ -16448,7 +16552,7 @@ var jsonx = (function (exports) {
 
 
 	  {
-	    if ( workInProgress.mode & StrictMode) {
+	    if (workInProgress.mode & StrictMode) {
 	      new ctor(props, context); // eslint-disable-line no-new
 	    }
 	  }
@@ -16880,11 +16984,13 @@ var jsonx = (function (exports) {
 	      return;
 	    }
 
-	    if (!(typeof child._store === 'object')) {
-	      {
-	        throw Error("React Component in warnForMissingKey should have a _store. This error is likely caused by a bug in React. Please file an issue.");
+	    (function () {
+	      if (!(typeof child._store === 'object')) {
+	        {
+	          throw ReactError(Error("React Component in warnForMissingKey should have a _store. This error is likely caused by a bug in React. Please file an issue."));
+	        }
 	      }
-	    }
+	    })();
 
 	    child._store.validated = true;
 	    var currentComponentErrorInfo = 'Each child in a list should have a unique ' + '"key" prop. See https://fb.me/react-warning-keys for ' + 'more information.' + getCurrentFiberStackInDev();
@@ -16927,20 +17033,24 @@ var jsonx = (function (exports) {
 	      if (owner) {
 	        var ownerFiber = owner;
 
-	        if (!(ownerFiber.tag === ClassComponent)) {
-	          {
-	            throw Error("Function components cannot have refs. Did you mean to use React.forwardRef()?");
+	        (function () {
+	          if (!(ownerFiber.tag === ClassComponent)) {
+	            {
+	              throw ReactError(Error("Function components cannot have refs. Did you mean to use React.forwardRef()?"));
+	            }
 	          }
-	        }
+	        })();
 
 	        inst = ownerFiber.stateNode;
 	      }
 
-	      if (!inst) {
-	        {
-	          throw Error("Missing owner for string ref " + mixedRef + ". This error is likely caused by a bug in React. Please file an issue.");
+	      (function () {
+	        if (!inst) {
+	          {
+	            throw ReactError(Error("Missing owner for string ref " + mixedRef + ". This error is likely caused by a bug in React. Please file an issue."));
+	          }
 	        }
-	      }
+	      })();
 
 	      var stringRef = '' + mixedRef; // Check if previous string ref matches new string ref
 
@@ -16966,17 +17076,21 @@ var jsonx = (function (exports) {
 	      ref._stringRef = stringRef;
 	      return ref;
 	    } else {
-	      if (!(typeof mixedRef === 'string')) {
-	        {
-	          throw Error("Expected ref to be a function, a string, an object returned by React.createRef(), or null.");
+	      (function () {
+	        if (!(typeof mixedRef === 'string')) {
+	          {
+	            throw ReactError(Error("Expected ref to be a function, a string, an object returned by React.createRef(), or null."));
+	          }
 	        }
-	      }
+	      })();
 
-	      if (!element._owner) {
-	        {
-	          throw Error("Element ref was specified as a string (" + mixedRef + ") but no owner was set. This could happen for one of the following reasons:\n1. You may be adding a ref to a function component\n2. You may be adding a ref to a component that was not created inside a component's render method\n3. You have multiple copies of React loaded\nSee https://fb.me/react-refs-must-have-owner for more information.");
+	      (function () {
+	        if (!element._owner) {
+	          {
+	            throw ReactError(Error("Element ref was specified as a string (" + mixedRef + ") but no owner was set. This could happen for one of the following reasons:\n1. You may be adding a ref to a function component\n2. You may be adding a ref to a component that was not created inside a component's render method\n3. You have multiple copies of React loaded\nSee https://fb.me/react-refs-must-have-owner for more information."));
+	          }
 	        }
-	      }
+	      })();
 	    }
 	  }
 
@@ -16991,11 +17105,13 @@ var jsonx = (function (exports) {
 	      addendum = ' If you meant to render a collection of children, use an array ' + 'instead.' + getCurrentFiberStackInDev();
 	    }
 
-	    {
+	    (function () {
 	      {
-	        throw Error("Objects are not valid as a React child (found: " + (Object.prototype.toString.call(newChild) === '[object Object]' ? 'object with keys {' + Object.keys(newChild).join(', ') + '}' : newChild) + ")." + addendum);
+	        {
+	          throw ReactError(Error("Objects are not valid as a React child (found: " + (Object.prototype.toString.call(newChild) === '[object Object]' ? 'object with keys {' + Object.keys(newChild).join(', ') + '}' : newChild) + ")." + addendum));
+	        }
 	      }
-	    }
+	    })();
 	  }
 	}
 
@@ -17080,7 +17196,7 @@ var jsonx = (function (exports) {
 	  function useFiber(fiber, pendingProps, expirationTime) {
 	    // We currently set sibling to null and index to 0 here because it is easy
 	    // to forget to do before returning it. E.g. for the single child case.
-	    var clone = createWorkInProgress(fiber, pendingProps);
+	    var clone = createWorkInProgress(fiber, pendingProps, expirationTime);
 	    clone.index = 0;
 	    clone.sibling = null;
 	    return clone;
@@ -17132,7 +17248,7 @@ var jsonx = (function (exports) {
 	      return created;
 	    } else {
 	      // Update
-	      var existing = useFiber(current$$1, textContent);
+	      var existing = useFiber(current$$1, textContent, expirationTime);
 	      existing.return = returnFiber;
 	      return existing;
 	    }
@@ -17142,7 +17258,7 @@ var jsonx = (function (exports) {
 	    if (current$$1 !== null && (current$$1.elementType === element.type || ( // Keep this check inline so it only runs on the false path:
 	    isCompatibleFamilyForHotReloading(current$$1, element)))) {
 	      // Move based on index
-	      var existing = useFiber(current$$1, element.props);
+	      var existing = useFiber(current$$1, element.props, expirationTime);
 	      existing.ref = coerceRef(returnFiber, current$$1, element);
 	      existing.return = returnFiber;
 
@@ -17169,7 +17285,7 @@ var jsonx = (function (exports) {
 	      return created;
 	    } else {
 	      // Update
-	      var existing = useFiber(current$$1, portal.children || []);
+	      var existing = useFiber(current$$1, portal.children || [], expirationTime);
 	      existing.return = returnFiber;
 	      return existing;
 	    }
@@ -17183,7 +17299,7 @@ var jsonx = (function (exports) {
 	      return created;
 	    } else {
 	      // Update
-	      var existing = useFiber(current$$1, fragment);
+	      var existing = useFiber(current$$1, fragment, expirationTime);
 	      existing.return = returnFiber;
 	      return existing;
 	    }
@@ -17378,6 +17494,9 @@ var jsonx = (function (exports) {
 
 	          warning$1(false, 'Encountered two children with the same key, `%s`. ' + 'Keys should be unique so that components maintain their identity ' + 'across updates. Non-unique keys may cause children to be ' + 'duplicated and/or omitted — the behavior is unsupported and ' + 'could change in a future version.', key);
 	          break;
+
+	        default:
+	          break;
 	      }
 	    }
 
@@ -17540,11 +17659,13 @@ var jsonx = (function (exports) {
 	    // but using the iterator instead.
 	    var iteratorFn = getIteratorFn(newChildrenIterable);
 
-	    if (!(typeof iteratorFn === 'function')) {
-	      {
-	        throw Error("An object is not an iterable. This error is likely caused by a bug in React. Please file an issue.");
+	    (function () {
+	      if (!(typeof iteratorFn === 'function')) {
+	        {
+	          throw ReactError(Error("An object is not an iterable. This error is likely caused by a bug in React. Please file an issue."));
+	        }
 	      }
-	    }
+	    })();
 
 	    {
 	      // We don't support rendering Generators because it's a mutation.
@@ -17579,11 +17700,13 @@ var jsonx = (function (exports) {
 
 	    var newChildren = iteratorFn.call(newChildrenIterable);
 
-	    if (!(newChildren != null)) {
-	      {
-	        throw Error("An iterable object provided no iterator.");
+	    (function () {
+	      if (!(newChildren != null)) {
+	        {
+	          throw ReactError(Error("An iterable object provided no iterator."));
+	        }
 	      }
-	    }
+	    })();
 
 	    var resultingFirstChild = null;
 	    var previousNewFiber = null;
@@ -17718,7 +17841,7 @@ var jsonx = (function (exports) {
 	      // We already have an existing node so let's just update it and delete
 	      // the rest.
 	      deleteRemainingChildren(returnFiber, currentFirstChild.sibling);
-	      var existing = useFiber(currentFirstChild, textContent);
+	      var existing = useFiber(currentFirstChild, textContent, expirationTime);
 	      existing.return = returnFiber;
 	      return existing;
 	    } // The existing first child is not a text node so we need to create one
@@ -17742,7 +17865,7 @@ var jsonx = (function (exports) {
 	        if (child.tag === Fragment ? element.type === REACT_FRAGMENT_TYPE : child.elementType === element.type || ( // Keep this check inline so it only runs on the false path:
 	        isCompatibleFamilyForHotReloading(child, element))) {
 	          deleteRemainingChildren(returnFiber, child.sibling);
-	          var existing = useFiber(child, element.type === REACT_FRAGMENT_TYPE ? element.props.children : element.props);
+	          var existing = useFiber(child, element.type === REACT_FRAGMENT_TYPE ? element.props.children : element.props, expirationTime);
 	          existing.ref = coerceRef(returnFiber, child, element);
 	          existing.return = returnFiber;
 
@@ -17786,7 +17909,7 @@ var jsonx = (function (exports) {
 	      if (child.key === key) {
 	        if (child.tag === HostPortal && child.stateNode.containerInfo === portal.containerInfo && child.stateNode.implementation === portal.implementation) {
 	          deleteRemainingChildren(returnFiber, child.sibling);
-	          var existing = useFiber(child, portal.children || []);
+	          var existing = useFiber(child, portal.children || [], expirationTime);
 	          existing.return = returnFiber;
 	          return existing;
 	        } else {
@@ -17881,11 +18004,13 @@ var jsonx = (function (exports) {
 	          {
 	            var Component = returnFiber.type;
 
-	            {
+	            (function () {
 	              {
-	                throw Error((Component.displayName || Component.name || 'Component') + "(...): Nothing was returned from render. This usually means a return statement is missing. Or, to render nothing, return null.");
+	                {
+	                  throw ReactError(Error((Component.displayName || Component.name || 'Component') + "(...): Nothing was returned from render. This usually means a return statement is missing. Or, to render nothing, return null."));
+	                }
 	              }
-	            }
+	            })();
 	          }
 	      }
 	    } // Remaining cases are all treated as empty.
@@ -17900,11 +18025,13 @@ var jsonx = (function (exports) {
 	var reconcileChildFibers = ChildReconciler(true);
 	var mountChildFibers = ChildReconciler(false);
 	function cloneChildFibers(current$$1, workInProgress) {
-	  if (!(current$$1 === null || workInProgress.child === current$$1.child)) {
-	    {
-	      throw Error("Resuming work not yet implemented.");
+	  (function () {
+	    if (!(current$$1 === null || workInProgress.child === current$$1.child)) {
+	      {
+	        throw ReactError(Error("Resuming work not yet implemented."));
+	      }
 	    }
-	  }
+	  })();
 
 	  if (workInProgress.child === null) {
 	    return;
@@ -17939,11 +18066,13 @@ var jsonx = (function (exports) {
 	var rootInstanceStackCursor = createCursor(NO_CONTEXT);
 
 	function requiredContext(c) {
-	  if (!(c !== NO_CONTEXT)) {
-	    {
-	      throw Error("Expected host context to exist. This error is likely caused by a bug in React. Please file an issue.");
+	  (function () {
+	    if (!(c !== NO_CONTEXT)) {
+	      {
+	        throw ReactError(Error("Expected host context to exist. This error is likely caused by a bug in React. Please file an issue."));
+	      }
 	    }
-	  }
+	  })();
 
 	  return c;
 	}
@@ -17986,7 +18115,7 @@ var jsonx = (function (exports) {
 	function pushHostContext(fiber) {
 	  var rootInstance = requiredContext(rootInstanceStackCursor.current);
 	  var context = requiredContext(contextStackCursor$1.current);
-	  var nextContext = getChildHostContext(context, fiber.type); // Don't push this Fiber's context unless it's unique.
+	  var nextContext = getChildHostContext(context, fiber.type, rootInstance); // Don't push this Fiber's context unless it's unique.
 
 	  if (context === nextContext) {
 	    return;
@@ -18166,7 +18295,6 @@ var jsonx = (function (exports) {
 	128;
 
 	var ReactCurrentDispatcher$1 = ReactSharedInternals.ReactCurrentDispatcher;
-	var ReactCurrentBatchConfig$1 = ReactSharedInternals.ReactCurrentBatchConfig;
 	var didWarnAboutMismatchedHooksForComponent;
 
 	{
@@ -18284,11 +18412,13 @@ var jsonx = (function (exports) {
 	}
 
 	function throwInvalidHookError() {
-	  {
+	  (function () {
 	    {
-	      throw Error("Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://fb.me/react-invalid-hook-call for tips about how to debug and fix this problem.");
+	      {
+	        throw ReactError(Error("Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://fb.me/react-invalid-hook-call for tips about how to debug and fix this problem."));
+	      }
 	    }
-	  }
+	  })();
 	}
 
 	function areHookInputsEqual(nextDeps, prevDeps) {
@@ -18438,11 +18568,13 @@ var jsonx = (function (exports) {
 	  // renderPhaseUpdates = null;
 	  // numberOfReRenders = 0;
 
-	  if (!!didRenderTooFewHooks) {
-	    {
-	      throw Error("Rendered fewer hooks than expected. This may be caused by an accidental early return statement.");
+	  (function () {
+	    if (!!didRenderTooFewHooks) {
+	      {
+	        throw ReactError(Error("Rendered fewer hooks than expected. This may be caused by an accidental early return statement."));
+	      }
 	    }
-	  }
+	  })();
 
 	  return children;
 	}
@@ -18517,11 +18649,13 @@ var jsonx = (function (exports) {
 	    nextCurrentHook = currentHook !== null ? currentHook.next : null;
 	  } else {
 	    // Clone from the current hook.
-	    if (!(nextCurrentHook !== null)) {
-	      {
-	        throw Error("Rendered more hooks than during the previous render.");
+	    (function () {
+	      if (!(nextCurrentHook !== null)) {
+	        {
+	          throw ReactError(Error("Rendered more hooks than during the previous render."));
+	        }
 	      }
-	    }
+	    })();
 
 	    currentHook = nextCurrentHook;
 	    var newHook = {
@@ -18582,11 +18716,13 @@ var jsonx = (function (exports) {
 	  var hook = updateWorkInProgressHook();
 	  var queue = hook.queue;
 
-	  if (!(queue !== null)) {
-	    {
-	      throw Error("Should have a queue. This is likely a bug in React. Please file an issue.");
+	  (function () {
+	    if (!(queue !== null)) {
+	      {
+	        throw ReactError(Error("Should have a queue. This is likely a bug in React. Please file an issue."));
+	      }
 	    }
-	  }
+	  })();
 
 	  queue.lastRenderedReducer = reducer;
 
@@ -18748,7 +18884,7 @@ var jsonx = (function (exports) {
 	}
 
 	function updateState(initialState) {
-	  return updateReducer(basicStateReducer);
+	  return updateReducer(basicStateReducer, initialState);
 	}
 
 	function pushEffect(tag, create, destroy, deps) {
@@ -18967,96 +19103,14 @@ var jsonx = (function (exports) {
 	  return nextValue;
 	}
 
-	function mountDeferredValue(value, config) {
-	  var _mountState = mountState(value),
-	      prevValue = _mountState[0],
-	      setValue = _mountState[1];
-
-	  mountEffect(function () {
-	    Scheduler.unstable_next(function () {
-	      var previousConfig = ReactCurrentBatchConfig$1.suspense;
-	      ReactCurrentBatchConfig$1.suspense = config === undefined ? null : config;
-
-	      try {
-	        setValue(value);
-	      } finally {
-	        ReactCurrentBatchConfig$1.suspense = previousConfig;
-	      }
-	    });
-	  }, [value, config]);
-	  return prevValue;
-	}
-
-	function updateDeferredValue(value, config) {
-	  var _updateState = updateState(),
-	      prevValue = _updateState[0],
-	      setValue = _updateState[1];
-
-	  updateEffect(function () {
-	    Scheduler.unstable_next(function () {
-	      var previousConfig = ReactCurrentBatchConfig$1.suspense;
-	      ReactCurrentBatchConfig$1.suspense = config === undefined ? null : config;
-
-	      try {
-	        setValue(value);
-	      } finally {
-	        ReactCurrentBatchConfig$1.suspense = previousConfig;
-	      }
-	    });
-	  }, [value, config]);
-	  return prevValue;
-	}
-
-	function mountTransition(config) {
-	  var _mountState2 = mountState(false),
-	      isPending = _mountState2[0],
-	      setPending = _mountState2[1];
-
-	  var startTransition = mountCallback(function (callback) {
-	    setPending(true);
-	    Scheduler.unstable_next(function () {
-	      var previousConfig = ReactCurrentBatchConfig$1.suspense;
-	      ReactCurrentBatchConfig$1.suspense = config === undefined ? null : config;
-
-	      try {
-	        setPending(false);
-	        callback();
-	      } finally {
-	        ReactCurrentBatchConfig$1.suspense = previousConfig;
-	      }
-	    });
-	  }, [config, isPending]);
-	  return [startTransition, isPending];
-	}
-
-	function updateTransition(config) {
-	  var _updateState2 = updateState(),
-	      isPending = _updateState2[0],
-	      setPending = _updateState2[1];
-
-	  var startTransition = updateCallback(function (callback) {
-	    setPending(true);
-	    Scheduler.unstable_next(function () {
-	      var previousConfig = ReactCurrentBatchConfig$1.suspense;
-	      ReactCurrentBatchConfig$1.suspense = config === undefined ? null : config;
-
-	      try {
-	        setPending(false);
-	        callback();
-	      } finally {
-	        ReactCurrentBatchConfig$1.suspense = previousConfig;
-	      }
-	    });
-	  }, [config, isPending]);
-	  return [startTransition, isPending];
-	}
-
 	function dispatchAction(fiber, queue, action) {
-	  if (!(numberOfReRenders < RE_RENDER_LIMIT)) {
-	    {
-	      throw Error("Too many re-renders. React limits the number of renders to prevent an infinite loop.");
+	  (function () {
+	    if (!(numberOfReRenders < RE_RENDER_LIMIT)) {
+	      {
+	        throw ReactError(Error("Too many re-renders. React limits the number of renders to prevent an infinite loop."));
+	      }
 	    }
-	  }
+	  })();
 
 	  {
 	    !(typeof arguments[3] !== 'function') ? warning$1(false, "State updates from the useState() and useReducer() Hooks don't support the " + 'second callback argument. To execute a side effect after ' + 'rendering, declare it in the component body with useEffect().') : void 0;
@@ -19101,7 +19155,7 @@ var jsonx = (function (exports) {
 	      lastRenderPhaseUpdate.next = update;
 	    }
 	  } else {
-	    var currentTime = requestCurrentTimeForUpdate();
+	    var currentTime = requestCurrentTime();
 	    var suspenseConfig = requestCurrentSuspenseConfig();
 	    var expirationTime = computeExpirationForFiber(currentTime, fiber, suspenseConfig);
 	    var _update2 = {
@@ -19200,9 +19254,7 @@ var jsonx = (function (exports) {
 	  useRef: throwInvalidHookError,
 	  useState: throwInvalidHookError,
 	  useDebugValue: throwInvalidHookError,
-	  useResponder: throwInvalidHookError,
-	  useDeferredValue: throwInvalidHookError,
-	  useTransition: throwInvalidHookError
+	  useResponder: throwInvalidHookError
 	};
 	var HooksDispatcherOnMountInDEV = null;
 	var HooksDispatcherOnMountWithHookTypesInDEV = null;
@@ -19297,22 +19349,12 @@ var jsonx = (function (exports) {
 	    useDebugValue: function (value, formatterFn) {
 	      currentHookNameInDev = 'useDebugValue';
 	      mountHookTypesDev();
-	      return mountDebugValue();
+	      return mountDebugValue(value, formatterFn);
 	    },
 	    useResponder: function (responder, props) {
 	      currentHookNameInDev = 'useResponder';
 	      mountHookTypesDev();
 	      return createResponderListener(responder, props);
-	    },
-	    useDeferredValue: function (value, config) {
-	      currentHookNameInDev = 'useDeferredValue';
-	      mountHookTypesDev();
-	      return mountDeferredValue(value, config);
-	    },
-	    useTransition: function (config) {
-	      currentHookNameInDev = 'useTransition';
-	      mountHookTypesDev();
-	      return mountTransition(config);
 	    }
 	  };
 	  HooksDispatcherOnMountWithHookTypesInDEV = {
@@ -19388,22 +19430,12 @@ var jsonx = (function (exports) {
 	    useDebugValue: function (value, formatterFn) {
 	      currentHookNameInDev = 'useDebugValue';
 	      updateHookTypesDev();
-	      return mountDebugValue();
+	      return mountDebugValue(value, formatterFn);
 	    },
 	    useResponder: function (responder, props) {
 	      currentHookNameInDev = 'useResponder';
 	      updateHookTypesDev();
 	      return createResponderListener(responder, props);
-	    },
-	    useDeferredValue: function (value, config) {
-	      currentHookNameInDev = 'useDeferredValue';
-	      updateHookTypesDev();
-	      return mountDeferredValue(value, config);
-	    },
-	    useTransition: function (config) {
-	      currentHookNameInDev = 'useTransition';
-	      updateHookTypesDev();
-	      return mountTransition(config);
 	    }
 	  };
 	  HooksDispatcherOnUpdateInDEV = {
@@ -19462,7 +19494,7 @@ var jsonx = (function (exports) {
 	    useRef: function (initialValue) {
 	      currentHookNameInDev = 'useRef';
 	      updateHookTypesDev();
-	      return updateRef();
+	      return updateRef(initialValue);
 	    },
 	    useState: function (initialState) {
 	      currentHookNameInDev = 'useState';
@@ -19479,22 +19511,12 @@ var jsonx = (function (exports) {
 	    useDebugValue: function (value, formatterFn) {
 	      currentHookNameInDev = 'useDebugValue';
 	      updateHookTypesDev();
-	      return updateDebugValue();
+	      return updateDebugValue(value, formatterFn);
 	    },
 	    useResponder: function (responder, props) {
 	      currentHookNameInDev = 'useResponder';
 	      updateHookTypesDev();
 	      return createResponderListener(responder, props);
-	    },
-	    useDeferredValue: function (value, config) {
-	      currentHookNameInDev = 'useDeferredValue';
-	      updateHookTypesDev();
-	      return updateDeferredValue(value, config);
-	    },
-	    useTransition: function (config) {
-	      currentHookNameInDev = 'useTransition';
-	      updateHookTypesDev();
-	      return updateTransition(config);
 	    }
 	  };
 	  InvalidNestedHooksDispatcherOnMountInDEV = {
@@ -19581,25 +19603,13 @@ var jsonx = (function (exports) {
 	      currentHookNameInDev = 'useDebugValue';
 	      warnInvalidHookAccess();
 	      mountHookTypesDev();
-	      return mountDebugValue();
+	      return mountDebugValue(value, formatterFn);
 	    },
 	    useResponder: function (responder, props) {
 	      currentHookNameInDev = 'useResponder';
 	      warnInvalidHookAccess();
 	      mountHookTypesDev();
 	      return createResponderListener(responder, props);
-	    },
-	    useDeferredValue: function (value, config) {
-	      currentHookNameInDev = 'useDeferredValue';
-	      warnInvalidHookAccess();
-	      mountHookTypesDev();
-	      return mountDeferredValue(value, config);
-	    },
-	    useTransition: function (config) {
-	      currentHookNameInDev = 'useTransition';
-	      warnInvalidHookAccess();
-	      mountHookTypesDev();
-	      return mountTransition(config);
 	    }
 	  };
 	  InvalidNestedHooksDispatcherOnUpdateInDEV = {
@@ -19667,7 +19677,7 @@ var jsonx = (function (exports) {
 	      currentHookNameInDev = 'useRef';
 	      warnInvalidHookAccess();
 	      updateHookTypesDev();
-	      return updateRef();
+	      return updateRef(initialValue);
 	    },
 	    useState: function (initialState) {
 	      currentHookNameInDev = 'useState';
@@ -19686,25 +19696,13 @@ var jsonx = (function (exports) {
 	      currentHookNameInDev = 'useDebugValue';
 	      warnInvalidHookAccess();
 	      updateHookTypesDev();
-	      return updateDebugValue();
+	      return updateDebugValue(value, formatterFn);
 	    },
 	    useResponder: function (responder, props) {
 	      currentHookNameInDev = 'useResponder';
 	      warnInvalidHookAccess();
 	      updateHookTypesDev();
 	      return createResponderListener(responder, props);
-	    },
-	    useDeferredValue: function (value, config) {
-	      currentHookNameInDev = 'useDeferredValue';
-	      warnInvalidHookAccess();
-	      updateHookTypesDev();
-	      return updateDeferredValue(value, config);
-	    },
-	    useTransition: function (config) {
-	      currentHookNameInDev = 'useTransition';
-	      warnInvalidHookAccess();
-	      updateHookTypesDev();
-	      return updateTransition(config);
 	    }
 	  };
 	}
@@ -19810,12 +19808,16 @@ var jsonx = (function (exports) {
 	            case HostComponent:
 	              var type = fiber.type;
 	              var props = fiber.pendingProps;
-	              didNotFindHydratableContainerInstance(parentContainer, type);
+	              didNotFindHydratableContainerInstance(parentContainer, type, props);
 	              break;
 
 	            case HostText:
 	              var text = fiber.pendingProps;
 	              didNotFindHydratableContainerTextInstance(parentContainer, text);
+	              break;
+
+	            case SuspenseComponent:
+	              
 	              break;
 	          }
 
@@ -19832,7 +19834,7 @@ var jsonx = (function (exports) {
 	            case HostComponent:
 	              var _type = fiber.type;
 	              var _props = fiber.pendingProps;
-	              didNotFindHydratableInstance(parentType, parentProps, parentInstance, _type);
+	              didNotFindHydratableInstance(parentType, parentProps, parentInstance, _type, _props);
 	              break;
 
 	            case HostText:
@@ -19841,7 +19843,7 @@ var jsonx = (function (exports) {
 	              break;
 
 	            case SuspenseComponent:
-	              didNotFindHydratableSuspenseInstance(parentType, parentProps);
+	              didNotFindHydratableSuspenseInstance(parentType, parentProps, parentInstance);
 	              break;
 	          }
 
@@ -19860,7 +19862,7 @@ var jsonx = (function (exports) {
 	      {
 	        var type = fiber.type;
 	        var props = fiber.pendingProps;
-	        var instance = canHydrateInstance(nextInstance, type);
+	        var instance = canHydrateInstance(nextInstance, type, props);
 
 	        if (instance !== null) {
 	          fiber.stateNode = instance;
@@ -19993,10 +19995,9 @@ var jsonx = (function (exports) {
 	  var suspenseState = fiber.memoizedState;
 	  var suspenseInstance = suspenseState !== null ? suspenseState.dehydrated : null;
 
-	  if (!suspenseInstance) {
-	    {
-	      throw Error("Expected to have a hydrated suspense instance. This error is likely caused by a bug in React. Please file an issue.");
-	    }
+	  if (suspenseInstance === null) {
+	    // This Suspense boundary was hydrated without a match.
+	    return nextHydratableInstance;
 	  }
 
 	  return getNextHydratableInstanceAfterSuspenseInstance(suspenseInstance);
@@ -20148,7 +20149,7 @@ var jsonx = (function (exports) {
 	    setCurrentPhase('render');
 	    nextChildren = renderWithHooks(current$$1, workInProgress, render, nextProps, ref, renderExpirationTime);
 
-	    if ( workInProgress.mode & StrictMode) {
+	    if (workInProgress.mode & StrictMode) {
 	      // Only double-render components with Hooks
 	      if (workInProgress.memoizedState !== null) {
 	        nextChildren = renderWithHooks(current$$1, workInProgress, render, nextProps, ref, renderExpirationTime);
@@ -20241,7 +20242,7 @@ var jsonx = (function (exports) {
 
 
 	  workInProgress.effectTag |= PerformedWork;
-	  var newChild = createWorkInProgress(currentChild, nextProps);
+	  var newChild = createWorkInProgress(currentChild, nextProps, renderExpirationTime);
 	  newChild.ref = workInProgress.ref;
 	  newChild.return = workInProgress;
 	  workInProgress.child = newChild;
@@ -20352,7 +20353,7 @@ var jsonx = (function (exports) {
 	    setCurrentPhase('render');
 	    nextChildren = renderWithHooks(current$$1, workInProgress, Component, nextProps, context, renderExpirationTime);
 
-	    if ( workInProgress.mode & StrictMode) {
+	    if (workInProgress.mode & StrictMode) {
 	      // Only double-render components with Hooks
 	      if (workInProgress.memoizedState !== null) {
 	        nextChildren = renderWithHooks(current$$1, workInProgress, Component, nextProps, context, renderExpirationTime);
@@ -20416,7 +20417,7 @@ var jsonx = (function (exports) {
 	    } // In the initial pass we might need to construct the instance.
 
 
-	    constructClassInstance(workInProgress, Component, nextProps);
+	    constructClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
 	    mountClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
 	    shouldUpdate = true;
 	  } else if (current$$1 === null) {
@@ -20468,14 +20469,14 @@ var jsonx = (function (exports) {
 	    nextChildren = null;
 
 	    {
-	      stopProfilerTimerIfRunning();
+	      stopProfilerTimerIfRunning(workInProgress);
 	    }
 	  } else {
 	    {
 	      setCurrentPhase('render');
 	      nextChildren = instance.render();
 
-	      if ( workInProgress.mode & StrictMode) {
+	      if (workInProgress.mode & StrictMode) {
 	        instance.render();
 	      }
 
@@ -20524,11 +20525,13 @@ var jsonx = (function (exports) {
 	  pushHostRootContext(workInProgress);
 	  var updateQueue = workInProgress.updateQueue;
 
-	  if (!(updateQueue !== null)) {
-	    {
-	      throw Error("If the root does not have an updateQueue, we should have already bailed out. This error is likely caused by a bug in React. Please file an issue.");
+	  (function () {
+	    if (!(updateQueue !== null)) {
+	      {
+	        throw ReactError(Error("If the root does not have an updateQueue, we should have already bailed out. This error is likely caused by a bug in React. Please file an issue."));
+	      }
 	    }
-	  }
+	  })();
 
 	  var nextProps = workInProgress.pendingProps;
 	  var prevState = workInProgress.memoizedState;
@@ -20715,11 +20718,13 @@ var jsonx = (function (exports) {
 	        // implementation detail.
 
 
-	        {
+	        (function () {
 	          {
-	            throw Error("Element type is invalid. Received a promise that resolves to: " + Component + ". Lazy element type must resolve to a class or function." + hint);
+	            {
+	              throw ReactError(Error("Element type is invalid. Received a promise that resolves to: " + Component + ". Lazy element type must resolve to a class or function." + hint));
+	            }
 	          }
-	        }
+	        })();
 	      }
 	  }
 
@@ -20754,7 +20759,7 @@ var jsonx = (function (exports) {
 	  }
 
 	  prepareToReadContext(workInProgress, renderExpirationTime);
-	  constructClassInstance(workInProgress, Component, nextProps);
+	  constructClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
 	  mountClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
 	  return finishClassComponent(null, workInProgress, Component, true, hasContext, renderExpirationTime);
 	}
@@ -20845,7 +20850,7 @@ var jsonx = (function (exports) {
 
 	    {
 
-	      if ( workInProgress.mode & StrictMode) {
+	      if (workInProgress.mode & StrictMode) {
 	        // Only double-render components with Hooks
 	        if (workInProgress.memoizedState !== null) {
 	          value = renderWithHooks(null, workInProgress, Component, props, context, renderExpirationTime);
@@ -20910,7 +20915,7 @@ var jsonx = (function (exports) {
 
 	var SUSPENDED_MARKER = {
 	  dehydrated: null,
-	  retryTime: NoWork
+	  retryTime: Never
 	};
 
 	function shouldRemainOnFallback(suspenseContext, current$$1, workInProgress) {
@@ -20933,7 +20938,7 @@ var jsonx = (function (exports) {
 	  var nextDidTimeout = false;
 	  var didSuspend = (workInProgress.effectTag & DidCapture) !== NoEffect;
 
-	  if (didSuspend || shouldRemainOnFallback(suspenseContext, current$$1)) {
+	  if (didSuspend || shouldRemainOnFallback(suspenseContext, current$$1, workInProgress)) {
 	    // Something in this boundary's subtree already suspended. Switch to
 	    // rendering the fallback children.
 	    nextDidTimeout = true;
@@ -20986,11 +20991,6 @@ var jsonx = (function (exports) {
 
 
 	  if (current$$1 === null) {
-	    // If we're currently hydrating, try to hydrate this boundary.
-	    // But only if this has a fallback.
-	    if (nextProps.fallback !== undefined) {
-	      tryToClaimNextHydratableInstance(workInProgress); // This could've been a dehydrated suspense component.
-	    } // This is the initial mount. This branch is pretty simple because there's
 	    // no previous state that needs to be preserved.
 
 
@@ -21000,8 +21000,8 @@ var jsonx = (function (exports) {
 	      var primaryChildFragment = createFiberFromFragment(null, mode, NoWork, null);
 	      primaryChildFragment.return = workInProgress;
 
-	      if ((workInProgress.mode & BlockingMode) === NoMode) {
-	        // Outside of blocking mode, we commit the effects from the
+	      if ((workInProgress.mode & BatchedMode) === NoMode) {
+	        // Outside of batched mode, we commit the effects from the
 	        // partially completed, timed-out tree, too.
 	        var progressedState = workInProgress.memoizedState;
 	        var progressedPrimaryChild = progressedState !== null ? workInProgress.child.child : workInProgress.child;
@@ -21045,12 +21045,12 @@ var jsonx = (function (exports) {
 	        // its fragment. We're going to skip over these entirely.
 	        var _nextFallbackChildren2 = nextProps.fallback;
 
-	        var _primaryChildFragment2 = createWorkInProgress(currentPrimaryChildFragment, currentPrimaryChildFragment.pendingProps);
+	        var _primaryChildFragment2 = createWorkInProgress(currentPrimaryChildFragment, currentPrimaryChildFragment.pendingProps, NoWork);
 
 	        _primaryChildFragment2.return = workInProgress;
 
-	        if ((workInProgress.mode & BlockingMode) === NoMode) {
-	          // Outside of blocking mode, we commit the effects from the
+	        if ((workInProgress.mode & BatchedMode) === NoMode) {
+	          // Outside of batched mode, we commit the effects from the
 	          // partially completed, timed-out tree, too.
 	          var _progressedState = workInProgress.memoizedState;
 
@@ -21069,7 +21069,7 @@ var jsonx = (function (exports) {
 	        // parent of a new tree, we need to set its treeBaseDuration.
 
 
-	        if ( workInProgress.mode & ProfileMode) {
+	        if (workInProgress.mode & ProfileMode) {
 	          // treeBaseDuration is the sum of all the child tree base durations.
 	          var _treeBaseDuration = 0;
 	          var _hiddenChild = _primaryChildFragment2.child;
@@ -21134,8 +21134,8 @@ var jsonx = (function (exports) {
 	        // primaryChildFragment.effectTag |= Placement;
 
 
-	        if ((workInProgress.mode & BlockingMode) === NoMode) {
-	          // Outside of blocking mode, we commit the effects from the
+	        if ((workInProgress.mode & BatchedMode) === NoMode) {
+	          // Outside of batched mode, we commit the effects from the
 	          // partially completed, timed-out tree, too.
 	          var _progressedState2 = workInProgress.memoizedState;
 
@@ -21152,7 +21152,7 @@ var jsonx = (function (exports) {
 	        // parent of a new tree, we need to set its treeBaseDuration.
 
 
-	        if ( workInProgress.mode & ProfileMode) {
+	        if (workInProgress.mode & ProfileMode) {
 	          // treeBaseDuration is the sum of all the child tree base durations.
 	          var _treeBaseDuration2 = 0;
 	          var _hiddenChild2 = _primaryChildFragment3.child;
@@ -21188,20 +21188,6 @@ var jsonx = (function (exports) {
 	  }
 	}
 
-	function scheduleWorkOnFiber(fiber, renderExpirationTime) {
-	  if (fiber.expirationTime < renderExpirationTime) {
-	    fiber.expirationTime = renderExpirationTime;
-	  }
-
-	  var alternate = fiber.alternate;
-
-	  if (alternate !== null && alternate.expirationTime < renderExpirationTime) {
-	    alternate.expirationTime = renderExpirationTime;
-	  }
-
-	  scheduleWorkOnParentPath(fiber.return, renderExpirationTime);
-	}
-
 	function propagateSuspenseContextChange(workInProgress, firstChild, renderExpirationTime) {
 	  // Mark any Suspense boundaries with fallbacks as having work to do.
 	  // If they were previously forced into fallbacks, they may now be able
@@ -21213,15 +21199,18 @@ var jsonx = (function (exports) {
 	      var state = node.memoizedState;
 
 	      if (state !== null) {
-	        scheduleWorkOnFiber(node, renderExpirationTime);
+	        if (node.expirationTime < renderExpirationTime) {
+	          node.expirationTime = renderExpirationTime;
+	        }
+
+	        var alternate = node.alternate;
+
+	        if (alternate !== null && alternate.expirationTime < renderExpirationTime) {
+	          alternate.expirationTime = renderExpirationTime;
+	        }
+
+	        scheduleWorkOnParentPath(node.return, renderExpirationTime);
 	      }
-	    } else if (node.tag === SuspenseListComponent) {
-	      // If the tail is hidden there might not be an Suspense boundaries
-	      // to schedule work on. In this case we have to schedule it on the
-	      // list itself.
-	      // We don't have to traverse to the children of the list since
-	      // the list will propagate the change when it rerenders.
-	      scheduleWorkOnFiber(node, renderExpirationTime);
 	    } else if (node.child !== null) {
 	      node.child.return = node;
 	      node = node.child;
@@ -21366,7 +21355,7 @@ var jsonx = (function (exports) {
 	  }
 	}
 
-	function initSuspenseListRenderState(workInProgress, isBackwards, tail, lastContentRow, tailMode, lastEffectBeforeRendering) {
+	function initSuspenseListRenderState(workInProgress, isBackwards, tail, lastContentRow, tailMode) {
 	  var renderState = workInProgress.memoizedState;
 
 	  if (renderState === null) {
@@ -21376,8 +21365,7 @@ var jsonx = (function (exports) {
 	      last: lastContentRow,
 	      tail: tail,
 	      tailExpiration: 0,
-	      tailMode: tailMode,
-	      lastEffect: lastEffectBeforeRendering
+	      tailMode: tailMode
 	    };
 	  } else {
 	    // We can reuse the existing object from previous renders.
@@ -21387,7 +21375,6 @@ var jsonx = (function (exports) {
 	    renderState.tail = tail;
 	    renderState.tailExpiration = 0;
 	    renderState.tailMode = tailMode;
-	    renderState.lastEffect = lastEffectBeforeRendering;
 	  }
 	} // This can end up rendering this component multiple passes.
 	// The first pass splits the children fibers into two sets. A head and tail.
@@ -21428,8 +21415,8 @@ var jsonx = (function (exports) {
 
 	  pushSuspenseContext(workInProgress, suspenseContext);
 
-	  if ((workInProgress.mode & BlockingMode) === NoMode) {
-	    // Outside of blocking mode, SuspenseList doesn't work so we just
+	  if ((workInProgress.mode & BatchedMode) === NoMode) {
+	    // Outside of batched mode, SuspenseList doesn't work so we just
 	    // use make it a noop by treating it as the default revealOrder.
 	    workInProgress.memoizedState = null;
 	  } else {
@@ -21452,7 +21439,7 @@ var jsonx = (function (exports) {
 	          }
 
 	          initSuspenseListRenderState(workInProgress, false, // isBackwards
-	          tail, lastContentRow, tailMode, workInProgress.lastEffect);
+	          tail, lastContentRow, tailMode);
 	          break;
 	        }
 
@@ -21484,7 +21471,7 @@ var jsonx = (function (exports) {
 
 	          initSuspenseListRenderState(workInProgress, true, // isBackwards
 	          _tail, null, // last
-	          tailMode, workInProgress.lastEffect);
+	          tailMode);
 	          break;
 	        }
 
@@ -21493,7 +21480,7 @@ var jsonx = (function (exports) {
 	          initSuspenseListRenderState(workInProgress, false, // isBackwards
 	          null, // tail
 	          null, // last
-	          undefined, workInProgress.lastEffect);
+	          undefined);
 	          break;
 	        }
 
@@ -21630,7 +21617,7 @@ var jsonx = (function (exports) {
 
 	  {
 	    // Don't update "base" render times for bailouts.
-	    stopProfilerTimerIfRunning();
+	    stopProfilerTimerIfRunning(workInProgress);
 	  }
 
 	  var updateExpirationTime = workInProgress.expirationTime;
@@ -21781,12 +21768,7 @@ var jsonx = (function (exports) {
 
 	        case Profiler:
 	          {
-	            // Profiler should only call onRender when one of its descendants actually rendered.
-	            var hasChildWork = workInProgress.childExpirationTime >= renderExpirationTime;
-
-	            if (hasChildWork) {
-	              workInProgress.effectTag |= Update;
-	            }
+	            workInProgress.effectTag |= Update;
 	          }
 
 	          break;
@@ -21832,11 +21814,10 @@ var jsonx = (function (exports) {
 	        case SuspenseListComponent:
 	          {
 	            var didSuspendBefore = (current$$1.effectTag & DidCapture) !== NoEffect;
-
-	            var _hasChildWork = workInProgress.childExpirationTime >= renderExpirationTime;
+	            var hasChildWork = workInProgress.childExpirationTime >= renderExpirationTime;
 
 	            if (didSuspendBefore) {
-	              if (_hasChildWork) {
+	              if (hasChildWork) {
 	                // If something was in fallback state last time, and we have all the
 	                // same children then we're still in progressive loading state.
 	                // Something might get unblocked by state updates or retries in the
@@ -21865,7 +21846,7 @@ var jsonx = (function (exports) {
 
 	            pushSuspenseContext(workInProgress, suspenseStackCursor.current);
 
-	            if (_hasChildWork) {
+	            if (hasChildWork) {
 	              break;
 	            } else {
 	              // If none of the children had any work, that means that none of
@@ -22002,13 +21983,27 @@ var jsonx = (function (exports) {
 	      {
 	        return updateSuspenseListComponent(current$$1, workInProgress, renderExpirationTime);
 	      }
+
+	    case FundamentalComponent:
+	      {
+
+	        break;
+	      }
+
+	    case ScopeComponent:
+	      {
+
+	        break;
+	      }
 	  }
 
-	  {
+	  (function () {
 	    {
-	      throw Error("Unknown unit of work tag (" + workInProgress.tag + "). This error is likely caused by a bug in React. Please file an issue.");
+	      {
+	        throw ReactError(Error("Unknown unit of work tag (" + workInProgress.tag + "). This error is likely caused by a bug in React. Please file an issue."));
+	      }
 	    }
-	  }
+	  })();
 	}
 
 	function markUpdate(workInProgress) {
@@ -22240,11 +22235,13 @@ var jsonx = (function (exports) {
 	          }
 	        } else {
 	          if (!newProps) {
-	            if (!(workInProgress.stateNode !== null)) {
-	              {
-	                throw Error("We must have new props for new mounts. This error is likely caused by a bug in React. Please file an issue.");
+	            (function () {
+	              if (!(workInProgress.stateNode !== null)) {
+	                {
+	                  throw ReactError(Error("We must have new props for new mounts. This error is likely caused by a bug in React. Please file an issue."));
+	                }
 	              }
-	            } // This can happen when we abort work.
+	            })(); // This can happen when we abort work.
 
 
 	            break;
@@ -22274,7 +22271,7 @@ var jsonx = (function (exports) {
 	            // Make sure such renderers get scheduled for later work.
 
 
-	            if (finalizeInitialChildren(instance, type, newProps, rootContainerInstance)) {
+	            if (finalizeInitialChildren(instance, type, newProps, rootContainerInstance, currentHostContext)) {
 	              markUpdate(workInProgress);
 	            }
 	          }
@@ -22299,11 +22296,13 @@ var jsonx = (function (exports) {
 	          updateHostText$1(current, workInProgress, oldText, newText);
 	        } else {
 	          if (typeof newText !== 'string') {
-	            if (!(workInProgress.stateNode !== null)) {
-	              {
-	                throw Error("We must have new props for new mounts. This error is likely caused by a bug in React. Please file an issue.");
+	            (function () {
+	              if (!(workInProgress.stateNode !== null)) {
+	                {
+	                  throw ReactError(Error("We must have new props for new mounts. This error is likely caused by a bug in React. Please file an issue."));
+	                }
 	              }
-	            } // This can happen when we abort work.
+	            })(); // This can happen when we abort work.
 
 	          }
 
@@ -22344,9 +22343,10 @@ var jsonx = (function (exports) {
 	        var prevDidTimeout = false;
 
 	        if (current === null) {
-	          if (workInProgress.memoizedProps.fallback !== undefined) {
-	            popHydrationState(workInProgress);
-	          }
+	          // In cases where we didn't find a suitable hydration boundary we never
+	          // put this in dehydrated mode, but we still need to pop the hydration
+	          // state since we might be inside the insertion tree.
+	          popHydrationState(workInProgress);
 	        } else {
 	          var prevState = current.memoizedState;
 	          prevDidTimeout = prevState !== null;
@@ -22376,12 +22376,12 @@ var jsonx = (function (exports) {
 	        }
 
 	        if (nextDidTimeout && !prevDidTimeout) {
-	          // If this subtreee is running in blocking mode we can suspend,
+	          // If this subtreee is running in batched mode we can suspend,
 	          // otherwise we won't suspend.
 	          // TODO: This will still suspend a synchronous tree if anything
 	          // in the concurrent tree already suspended during this render.
 	          // This is a known bug.
-	          if ((workInProgress.mode & BlockingMode) !== NoMode) {
+	          if ((workInProgress.mode & BatchedMode) !== NoMode) {
 	            // TODO: Move this back to throwException because this is too late
 	            // if this is a large tree which is common for initial loads. We
 	            // don't know if we should restart a render or not until we get
@@ -22516,11 +22516,7 @@ var jsonx = (function (exports) {
 	                  // Reset the effect list before doing the second pass since that's now invalid.
 
 
-	                  if (renderState.lastEffect === null) {
-	                    workInProgress.firstEffect = null;
-	                  }
-
-	                  workInProgress.lastEffect = renderState.lastEffect; // Reset the child fibers to their original state.
+	                  workInProgress.firstEffect = workInProgress.lastEffect = null; // Reset the child fibers to their original state.
 
 	                  resetChildFibers(workInProgress, renderExpirationTime); // Set up the Suspense Context to force suspense and immediately
 	                  // rerender the children.
@@ -22543,22 +22539,21 @@ var jsonx = (function (exports) {
 
 	            if (_suspended !== null) {
 	              workInProgress.effectTag |= DidCapture;
-	              didSuspendAlready = true; // Ensure we transfer the update queue to the parent so that it doesn't
-	              // get lost if this row ends up dropped during a second pass.
-
-	              var _newThennables = _suspended.updateQueue;
-
-	              if (_newThennables !== null) {
-	                workInProgress.updateQueue = _newThennables;
-	                workInProgress.effectTag |= Update;
-	              }
-
+	              didSuspendAlready = true;
 	              cutOffTailIfNeeded(renderState, true); // This might have been modified.
 
-	              if (renderState.tail === null && renderState.tailMode === 'hidden' && !renderedTail.alternate) {
+	              if (renderState.tail === null && renderState.tailMode === 'hidden') {
 	                // We need to delete the row we just rendered.
-	                // Reset the effect list to what it was before we rendered this
+	                // Ensure we transfer the update queue to the parent.
+	                var _newThennables = _suspended.updateQueue;
+
+	                if (_newThennables !== null) {
+	                  workInProgress.updateQueue = _newThennables;
+	                  workInProgress.effectTag |= Update;
+	                } // Reset the effect list to what it w as before we rendered this
 	                // child. The nested children have already appended themselves.
+
+
 	                var lastEffect = workInProgress.lastEffect = renderState.lastEffect; // Remove any effects that were appended after this point.
 
 	                if (lastEffect !== null) {
@@ -22657,11 +22652,13 @@ var jsonx = (function (exports) {
 	      }
 
 	    default:
-	      {
+	      (function () {
 	        {
-	          throw Error("Unknown unit of work tag (" + workInProgress.tag + "). This error is likely caused by a bug in React. Please file an issue.");
+	          {
+	            throw ReactError(Error("Unknown unit of work tag (" + workInProgress.tag + "). This error is likely caused by a bug in React. Please file an issue."));
+	          }
 	        }
-	      }
+	      })();
 
 	  }
 
@@ -22694,11 +22691,13 @@ var jsonx = (function (exports) {
 	        popTopLevelContextObject(workInProgress);
 	        var _effectTag = workInProgress.effectTag;
 
-	        if (!((_effectTag & DidCapture) === NoEffect)) {
-	          {
-	            throw Error("The root failed to unmount after an error. This is likely a bug in React. Please file an issue.");
+	        (function () {
+	          if (!((_effectTag & DidCapture) === NoEffect)) {
+	            {
+	              throw ReactError(Error("The root failed to unmount after an error. This is likely a bug in React. Please file an issue."));
+	            }
 	          }
-	        }
+	        })();
 
 	        workInProgress.effectTag = _effectTag & ~ShouldCapture | DidCapture;
 	        return workInProgress;
@@ -22787,6 +22786,9 @@ var jsonx = (function (exports) {
 
 	    case ContextProvider:
 	      popProvider(interruptedWork);
+	      break;
+
+	    default:
 	      break;
 	  }
 	}
@@ -23004,11 +23006,13 @@ var jsonx = (function (exports) {
 
 	    default:
 	      {
-	        {
+	        (function () {
 	          {
-	            throw Error("This unit of work tag should not have side-effects. This error is likely caused by a bug in React. Please file an issue.");
+	            {
+	              throw ReactError(Error("This unit of work tag should not have side-effects. This error is likely caused by a bug in React. Please file an issue."));
+	            }
 	          }
-	        }
+	        })();
 	      }
 	  }
 	}
@@ -23072,6 +23076,9 @@ var jsonx = (function (exports) {
 	          commitHookEffectList(NoEffect$1, MountPassive, finishedWork);
 	          break;
 	        }
+
+	      default:
+	        break;
 	    }
 	  }
 	}
@@ -23137,7 +23144,7 @@ var jsonx = (function (exports) {
 	          // TODO: revisit this when we implement resuming.
 
 
-	          commitUpdateQueue(finishedWork, updateQueue, instance);
+	          commitUpdateQueue(finishedWork, updateQueue, instance, committedExpirationTime);
 	        }
 
 	        return;
@@ -23162,7 +23169,7 @@ var jsonx = (function (exports) {
 	            }
 	          }
 
-	          commitUpdateQueue(finishedWork, _updateQueue, _instance);
+	          commitUpdateQueue(finishedWork, _updateQueue, _instance, committedExpirationTime);
 	        }
 
 	        return;
@@ -23178,7 +23185,7 @@ var jsonx = (function (exports) {
 	        if (current$$1 === null && finishedWork.effectTag & Update) {
 	          var type = finishedWork.type;
 	          var props = finishedWork.memoizedProps;
-	          commitMount(_instance2, type, props);
+	          commitMount(_instance2, type, props, finishedWork);
 	        }
 
 	        return;
@@ -23225,11 +23232,13 @@ var jsonx = (function (exports) {
 
 	    default:
 	      {
-	        {
+	        (function () {
 	          {
-	            throw Error("This unit of work tag should not have side-effects. This error is likely caused by a bug in React. Please file an issue.");
+	            {
+	              throw ReactError(Error("This unit of work tag should not have side-effects. This error is likely caused by a bug in React. Please file an issue."));
+	            }
 	          }
-	        }
+	        })();
 	      }
 	  }
 	}
@@ -23423,6 +23432,9 @@ var jsonx = (function (exports) {
 
 	        return;
 	      }
+
+	    case ScopeComponent:
+
 	  }
 	}
 
@@ -23440,7 +23452,7 @@ var jsonx = (function (exports) {
 
 	    if (node.child !== null && ( // If we use mutation we drill down into portals using commitUnmount above.
 	    // If we don't use mutation we drill down into portals here instead.
-	     node.tag !== HostPortal)) {
+	    node.tag !== HostPortal)) {
 	      node.child.return = node;
 	      node = node.child;
 	      continue;
@@ -23497,11 +23509,13 @@ var jsonx = (function (exports) {
 	    parent = parent.return;
 	  }
 
-	  {
+	  (function () {
 	    {
-	      throw Error("Expected to find a host parent. This error is likely caused by a bug in React. Please file an issue.");
+	      {
+	        throw ReactError(Error("Expected to find a host parent. This error is likely caused by a bug in React. Please file an issue."));
+	      }
 	    }
-	  }
+	  })();
 	}
 
 	function isHostParent(fiber) {
@@ -23583,14 +23597,17 @@ var jsonx = (function (exports) {
 
 	    case FundamentalComponent:
 
+
 	    // eslint-disable-next-line-no-fallthrough
 
 	    default:
-	      {
+	      (function () {
 	        {
-	          throw Error("Invalid host parent fiber. This error is likely caused by a bug in React. Please file an issue.");
+	          {
+	            throw ReactError(Error("Invalid host parent fiber. This error is likely caused by a bug in React. Please file an issue."));
+	          }
 	        }
-	      }
+	      })();
 
 	  }
 
@@ -23664,11 +23681,13 @@ var jsonx = (function (exports) {
 	      var parent = node.return;
 
 	      findParent: while (true) {
-	        if (!(parent !== null)) {
-	          {
-	            throw Error("Expected to find a host parent. This error is likely caused by a bug in React. Please file an issue.");
+	        (function () {
+	          if (!(parent !== null)) {
+	            {
+	              throw ReactError(Error("Expected to find a host parent. This error is likely caused by a bug in React. Please file an issue."));
+	            }
 	          }
-	        }
+	        })();
 
 	        var parentStateNode = parent.stateNode;
 
@@ -23687,6 +23706,9 @@ var jsonx = (function (exports) {
 	            currentParent = parentStateNode.containerInfo;
 	            currentParentIsContainer = true;
 	            break findParent;
+
+	          case FundamentalComponent:
+
 
 	        }
 
@@ -23796,7 +23818,7 @@ var jsonx = (function (exports) {
 	          finishedWork.updateQueue = null;
 
 	          if (updatePayload !== null) {
-	            commitUpdate(instance, updatePayload, type, oldProps, newProps);
+	            commitUpdate(instance, updatePayload, type, oldProps, newProps, finishedWork);
 	          }
 	        }
 
@@ -23805,11 +23827,13 @@ var jsonx = (function (exports) {
 
 	    case HostText:
 	      {
-	        if (!(finishedWork.stateNode !== null)) {
-	          {
-	            throw Error("This should have a text node initialized. This error is likely caused by a bug in React. Please file an issue.");
+	        (function () {
+	          if (!(finishedWork.stateNode !== null)) {
+	            {
+	              throw ReactError(Error("This should have a text node initialized. This error is likely caused by a bug in React. Please file an issue."));
+	            }
 	          }
-	        }
+	        })();
 
 	        var textInstance = finishedWork.stateNode;
 	        var newText = finishedWork.memoizedProps; // For hydration we reuse the update path but we treat the oldProps
@@ -23873,11 +23897,13 @@ var jsonx = (function (exports) {
 
 	    default:
 	      {
-	        {
+	        (function () {
 	          {
-	            throw Error("This unit of work tag should not have side-effects. This error is likely caused by a bug in React. Please file an issue.");
+	            {
+	              throw ReactError(Error("This unit of work tag should not have side-effects. This error is likely caused by a bug in React. Please file an issue."));
+	            }
 	          }
-	        }
+	        })();
 	      }
 	  }
 	}
@@ -23895,7 +23921,7 @@ var jsonx = (function (exports) {
 	    markCommitTimeOfFallback();
 	  }
 
-	  if ( primaryChildParent !== null) {
+	  if (primaryChildParent !== null) {
 	    hideOrUnhideAllChildren(primaryChildParent, newDidTimeout);
 	  }
 	}
@@ -24091,17 +24117,17 @@ var jsonx = (function (exports) {
 	          _workInProgress.updateQueue = updateQueue;
 	        } else {
 	          thenables.add(thenable);
-	        } // If the boundary is outside of blocking mode, we should *not*
+	        } // If the boundary is outside of batched mode, we should *not*
 	        // suspend the commit. Pretend as if the suspended component rendered
 	        // null and keep rendering. In the commit phase, we'll schedule a
 	        // subsequent synchronous update to re-render the Suspense.
 	        //
 	        // Note: It doesn't matter whether the component that suspended was
-	        // inside a blocking mode tree. If the Suspense is outside of it, we
+	        // inside a batched mode tree. If the Suspense is outside of it, we
 	        // should *not* suspend the commit.
 
 
-	        if ((_workInProgress.mode & BlockingMode) === NoMode) {
+	        if ((_workInProgress.mode & BatchedMode) === NoMode) {
 	          _workInProgress.effectTag |= DidCapture; // We're going to commit this fiber even though it didn't complete.
 	          // But we shouldn't call any lifecycle methods or callbacks. Remove
 	          // all lifecycle effect tags.
@@ -24227,6 +24253,9 @@ var jsonx = (function (exports) {
 	        }
 
 	        break;
+
+	      default:
+	        break;
 	    }
 
 	    workInProgress = workInProgress.return;
@@ -24264,6 +24293,7 @@ var jsonx = (function (exports) {
 	var RootSuspended = 3;
 	var RootSuspendedWithDelay = 4;
 	var RootCompleted = 5;
+	var RootLocked = 6;
 	// Describes where we are in the React execution stack
 	var executionContext = NoContext; // The root we're working on
 
@@ -24323,7 +24353,7 @@ var jsonx = (function (exports) {
 	// receive the same expiration time. Otherwise we get tearing.
 
 	var currentEventTime = NoWork;
-	function requestCurrentTimeForUpdate() {
+	function requestCurrentTime() {
 	  if ((executionContext & (RenderContext | CommitContext)) !== NoContext) {
 	    // We're inside React, so it's fine to read the actual time.
 	    return msToExpirationTime(now());
@@ -24339,13 +24369,10 @@ var jsonx = (function (exports) {
 	  currentEventTime = msToExpirationTime(now());
 	  return currentEventTime;
 	}
-	function getCurrentTime() {
-	  return msToExpirationTime(now());
-	}
 	function computeExpirationForFiber(currentTime, fiber, suspenseConfig) {
 	  var mode = fiber.mode;
 
-	  if ((mode & BlockingMode) === NoMode) {
+	  if ((mode & BatchedMode) === NoMode) {
 	    return Sync;
 	  }
 
@@ -24390,11 +24417,13 @@ var jsonx = (function (exports) {
 	        break;
 
 	      default:
-	        {
+	        (function () {
 	          {
-	            throw Error("Expected a valid priority level");
+	            {
+	              throw ReactError(Error("Expected a valid priority level"));
+	            }
 	          }
-	        }
+	        })();
 
 	    }
 	  } // If we're in the middle of rendering a tree, do not update at the same
@@ -24410,6 +24439,21 @@ var jsonx = (function (exports) {
 	  }
 
 	  return expirationTime;
+	}
+	var lastUniqueAsyncExpiration = NoWork;
+	function computeUniqueAsyncExpiration() {
+	  var currentTime = requestCurrentTime();
+	  var result = computeAsyncExpiration(currentTime);
+
+	  if (result <= lastUniqueAsyncExpiration) {
+	    // Since we assume the current time monotonically increases, we only hit
+	    // this branch when computeUniqueAsyncExpiration is fired multiple times
+	    // within a 200ms window (or whatever the async bucket size is).
+	    result -= 1;
+	  }
+
+	  lastUniqueAsyncExpiration = result;
+	  return result;
 	}
 	function scheduleUpdateOnFiber(fiber, expirationTime) {
 	  checkForNestedUpdates();
@@ -24446,7 +24490,7 @@ var jsonx = (function (exports) {
 	        // a batch. This is intentionally inside scheduleUpdateOnFiber instead of
 	        // scheduleCallbackForFiber to preserve the ability to schedule a callback
 	        // without immediately flushing it. We only do this for user-initiated
-	        // updates, to preserve historical behavior of legacy mode.
+	        // updates, to preserve historical behavior of sync mode.
 	        flushSyncCallbackQueue();
 	      }
 	    }
@@ -24607,7 +24651,7 @@ var jsonx = (function (exports) {
 	  // time as an argument.
 
 
-	  var currentTime = requestCurrentTimeForUpdate();
+	  var currentTime = requestCurrentTime();
 	  var priorityLevel = inferPriorityFromExpirationTime(currentTime, expirationTime); // If there's an existing render task, confirm it has the correct priority and
 	  // expiration time. Otherwise, we'll cancel it and schedule a new one.
 
@@ -24656,7 +24700,7 @@ var jsonx = (function (exports) {
 	  if (didTimeout) {
 	    // The render task took too long to complete. Mark the current time as
 	    // expired to synchronously render all expired work in a single batch.
-	    var currentTime = requestCurrentTimeForUpdate();
+	    var currentTime = requestCurrentTime();
 	    markRootExpiredAtTime(root, currentTime); // This will schedule a synchronous callback.
 
 	    ensureRootIsScheduled(root);
@@ -24670,11 +24714,13 @@ var jsonx = (function (exports) {
 	  if (expirationTime !== NoWork) {
 	    var originalCallbackNode = root.callbackNode;
 
-	    if (!((executionContext & (RenderContext | CommitContext)) === NoContext)) {
-	      {
-	        throw Error("Should not already be working.");
+	    (function () {
+	      if (!((executionContext & (RenderContext | CommitContext)) === NoContext)) {
+	        {
+	          throw ReactError(Error("Should not already be working."));
+	        }
 	      }
-	    }
+	    })();
 
 	    flushPassiveEffects(); // If the root or expiration time have changed, throw out the existing stack
 	    // and prepare a fresh one. Otherwise we'll continue where we left off.
@@ -24689,7 +24735,7 @@ var jsonx = (function (exports) {
 	    if (workInProgress !== null) {
 	      var prevExecutionContext = executionContext;
 	      executionContext |= RenderContext;
-	      var prevDispatcher = pushDispatcher();
+	      var prevDispatcher = pushDispatcher(root);
 	      var prevInteractions = pushInteractions(root);
 	      startWorkLoopTimer(workInProgress);
 
@@ -24728,6 +24774,7 @@ var jsonx = (function (exports) {
 	        stopFinishedWorkLoopTimer();
 	        var finishedWork = root.finishedWork = root.current.alternate;
 	        root.finishedExpirationTime = expirationTime;
+	        resolveLocksOnRoot(root, expirationTime);
 	        finishConcurrentRender(root, finishedWork, workInProgressRootExitStatus, expirationTime);
 	      }
 
@@ -24752,11 +24799,13 @@ var jsonx = (function (exports) {
 	    case RootIncomplete:
 	    case RootFatalErrored:
 	      {
-	        {
+	        (function () {
 	          {
-	            throw Error("Root did not complete. This is a bug in React.");
+	            {
+	              throw ReactError(Error("Root did not complete. This is a bug in React."));
+	            }
 	          }
-	        }
+	        })();
 	      }
 	    // Flow knows about invariant, so it complains if I add a break
 	    // statement, but eslint doesn't know about invariant, so it complains
@@ -24764,16 +24813,18 @@ var jsonx = (function (exports) {
 
 	    case RootErrored:
 	      {
-	        // If this was an async render, the error may have happened due to
-	        // a mutation in a concurrent event. Try rendering one more time,
-	        // synchronously, to see if the error goes away. If there are
-	        // lower priority updates, let's include those, too, in case they
-	        // fix the inconsistency. Render at Idle to include all updates.
-	        // If it was Idle or Never or some not-yet-invented time, render
-	        // at that time.
-	        markRootExpiredAtTime(root, expirationTime > Idle ? Idle : expirationTime); // We assume that this second render pass will be synchronous
-	        // and therefore not hit this path again.
+	        if (expirationTime !== Idle) {
+	          // If this was an async render, the error may have happened due to
+	          // a mutation in a concurrent event. Try rendering one more time,
+	          // synchronously, to see if the error goes away. If there are
+	          // lower priority updates, let's include those, too, in case they
+	          // fix the inconsistency. Render at Idle to include all updates.
+	          markRootExpiredAtTime(root, Idle);
+	          break;
+	        } // Commit the root in its errored state.
 
+
+	        commitRoot(root);
 	        break;
 	      }
 
@@ -24795,7 +24846,7 @@ var jsonx = (function (exports) {
 	        var hasNotProcessedNewUpdates = workInProgressRootLatestProcessedExpirationTime === Sync;
 
 	        if (hasNotProcessedNewUpdates && // do not delay if we're inside an act() scope
-	        !( IsThisRendererActing.current)) {
+	        !(IsThisRendererActing.current)) {
 	          // If we have not processed any new updates during this pass, then
 	          // this is either a retry of an existing fallback state or a
 	          // hidden tree. Hidden trees shouldn't be batched with other work
@@ -24857,7 +24908,7 @@ var jsonx = (function (exports) {
 	        flushSuspensePriorityWarningInDEV();
 
 	        if ( // do not delay if we're inside an act() scope
-	        !( IsThisRendererActing.current)) {
+	        !(IsThisRendererActing.current)) {
 	          // We're suspended in a state that should be avoided. We'll try to
 	          // avoid committing it for as long as the timeouts let us.
 	          if (workInProgressRootHasPendingPing) {
@@ -24939,7 +24990,7 @@ var jsonx = (function (exports) {
 	      {
 	        // The work completed. Ready to commit.
 	        if ( // do not delay if we're inside an act() scope
-	        !( IsThisRendererActing.current) && workInProgressRootLatestProcessedExpirationTime !== Sync && workInProgressRootCanSuspendUsingConfig !== null) {
+	        !(IsThisRendererActing.current) && workInProgressRootLatestProcessedExpirationTime !== Sync && workInProgressRootCanSuspendUsingConfig !== null) {
 	          // If we have exceeded the minimum loading delay, which probably
 	          // means we have shown a spinner already, we might have to suspend
 	          // a bit longer to ensure that the spinner is shown for
@@ -24957,13 +25008,24 @@ var jsonx = (function (exports) {
 	        break;
 	      }
 
+	    case RootLocked:
+	      {
+	        // This root has a lock that prevents it from committing. Exit. If
+	        // we begin work on the root again, without any intervening updates,
+	        // it will finish without doing additional work.
+	        markRootSuspendedAtTime(root, expirationTime);
+	        break;
+	      }
+
 	    default:
 	      {
-	        {
+	        (function () {
 	          {
-	            throw Error("Unknown root exit status.");
+	            {
+	              throw ReactError(Error("Unknown root exit status."));
+	            }
 	          }
-	        }
+	        })();
 	      }
 	  }
 	} // This is the entry point for synchronous tasks that don't go
@@ -24981,11 +25043,13 @@ var jsonx = (function (exports) {
 	    // batch.commit() API.
 	    commitRoot(root);
 	  } else {
-	    if (!((executionContext & (RenderContext | CommitContext)) === NoContext)) {
-	      {
-	        throw Error("Should not already be working.");
+	    (function () {
+	      if (!((executionContext & (RenderContext | CommitContext)) === NoContext)) {
+	        {
+	          throw ReactError(Error("Should not already be working."));
+	        }
 	      }
-	    }
+	    })();
 
 	    flushPassiveEffects(); // If the root or expiration time have changed, throw out the existing stack
 	    // and prepare a fresh one. Otherwise we'll continue where we left off.
@@ -25000,7 +25064,7 @@ var jsonx = (function (exports) {
 	    if (workInProgress !== null) {
 	      var prevExecutionContext = executionContext;
 	      executionContext |= RenderContext;
-	      var prevDispatcher = pushDispatcher();
+	      var prevDispatcher = pushDispatcher(root);
 	      var prevInteractions = pushInteractions(root);
 	      startWorkLoopTimer(workInProgress);
 
@@ -25032,18 +25096,22 @@ var jsonx = (function (exports) {
 
 	      if (workInProgress !== null) {
 	        // This is a sync render, so we should have finished the whole tree.
-	        {
+	        (function () {
 	          {
-	            throw Error("Cannot commit an incomplete root. This error is likely caused by a bug in React. Please file an issue.");
+	            {
+	              throw ReactError(Error("Cannot commit an incomplete root. This error is likely caused by a bug in React. Please file an issue."));
+	            }
 	          }
-	        }
+	        })();
 	      } else {
 	        // We now have a consistent tree. Because this is a sync render, we
-	        // will commit it even if something suspended.
+	        // will commit it even if something suspended. The only exception is
+	        // if the root is locked (using the unstable_createBatch API).
 	        stopFinishedWorkLoopTimer();
 	        root.finishedWork = root.current.alternate;
 	        root.finishedExpirationTime = expirationTime;
-	        finishSyncRender(root, workInProgressRootExitStatus);
+	        resolveLocksOnRoot(root, expirationTime);
+	        finishSyncRender(root, workInProgressRootExitStatus, expirationTime);
 	      } // Before exiting, make sure there's a callback scheduled for the next
 	      // pending level.
 
@@ -25056,16 +25124,39 @@ var jsonx = (function (exports) {
 	}
 
 	function finishSyncRender(root, exitStatus, expirationTime) {
-	  // Set this to null to indicate there's no in-progress render.
-	  workInProgressRoot = null;
+	  if (exitStatus === RootLocked) {
+	    // This root has a lock that prevents it from committing. Exit. If we
+	    // begin work on the root again, without any intervening updates, it
+	    // will finish without doing additional work.
+	    markRootSuspendedAtTime(root, expirationTime);
+	  } else {
+	    // Set this to null to indicate there's no in-progress render.
+	    workInProgressRoot = null;
 
-	  {
-	    if (exitStatus === RootSuspended || exitStatus === RootSuspendedWithDelay) {
-	      flushSuspensePriorityWarningInDEV();
+	    {
+	      if (exitStatus === RootSuspended || exitStatus === RootSuspendedWithDelay) {
+	        flushSuspensePriorityWarningInDEV();
+	      }
 	    }
+
+	    commitRoot(root);
+	  }
+	}
+
+	function flushRoot(root, expirationTime) {
+	  if ((executionContext & (RenderContext | CommitContext)) !== NoContext) {
+	    (function () {
+	      {
+	        {
+	          throw ReactError(Error("work.commit(): Cannot commit while already rendering. This likely means you attempted to commit from inside a lifecycle method."));
+	        }
+	      }
+	    })();
 	  }
 
-	  commitRoot(root);
+	  markRootExpiredAtTime(root, expirationTime);
+	  ensureRootIsScheduled(root);
+	  flushSyncCallbackQueue();
 	}
 	function flushDiscreteUpdates() {
 	  // TODO: Should be able to flush inside batchedUpdates, but not inside `act`.
@@ -25073,7 +25164,7 @@ var jsonx = (function (exports) {
 	  // those two cases. Need to fix this before exposing flushDiscreteUpdates
 	  // as a public API.
 	  if ((executionContext & (BatchedContext | RenderContext | CommitContext)) !== NoContext) {
-	    if ( (executionContext & RenderContext) !== NoContext) {
+	    if ((executionContext & RenderContext) !== NoContext) {
 	      warning$1(false, 'unstable_flushDiscreteUpdates: Cannot flush updates when React is ' + 'already rendering.');
 	    } // We're already rendering, so we can't synchronously flush pending work.
 	    // This is probably a nested event dispatch triggered by a lifecycle/effect,
@@ -25089,9 +25180,21 @@ var jsonx = (function (exports) {
 	  flushPassiveEffects();
 	}
 
-	function syncUpdates(fn, a, b, c) {
-	  return runWithPriority$2(ImmediatePriority, fn.bind(null, a, b, c));
+	function resolveLocksOnRoot(root, expirationTime) {
+	  var firstBatch = root.firstBatch;
+
+	  if (firstBatch !== null && firstBatch._defer && firstBatch._expirationTime >= expirationTime) {
+	    scheduleCallback(NormalPriority, function () {
+	      firstBatch._onComplete();
+
+	      return null;
+	    });
+	    workInProgressRootExitStatus = RootLocked;
+	  }
 	}
+
+
+
 
 	function flushPendingDiscreteUpdates() {
 	  if (rootsWithPendingDiscreteUpdates !== null) {
@@ -25172,11 +25275,13 @@ var jsonx = (function (exports) {
 	}
 	function flushSync(fn, a) {
 	  if ((executionContext & (RenderContext | CommitContext)) !== NoContext) {
-	    {
+	    (function () {
 	      {
-	        throw Error("flushSync was called from inside a lifecycle method. It cannot be called when React is already rendering.");
+	        {
+	          throw ReactError(Error("flushSync was called from inside a lifecycle method. It cannot be called when React is already rendering."));
+	        }
 	      }
-	    }
+	    })();
 	  }
 
 	  var prevExecutionContext = executionContext;
@@ -25190,6 +25295,21 @@ var jsonx = (function (exports) {
 	    // the stack.
 
 	    flushSyncCallbackQueue();
+	  }
+	}
+	function flushControlled(fn) {
+	  var prevExecutionContext = executionContext;
+	  executionContext |= BatchedContext;
+
+	  try {
+	    runWithPriority$2(ImmediatePriority, fn);
+	  } finally {
+	    executionContext = prevExecutionContext;
+
+	    if (executionContext === NoContext) {
+	      // Flush the immediate callbacks that were scheduled during this batch
+	      flushSyncCallbackQueue();
+	    }
 	  }
 	}
 
@@ -25216,7 +25336,7 @@ var jsonx = (function (exports) {
 	  }
 
 	  workInProgressRoot = root;
-	  workInProgress = createWorkInProgress(root.current, null);
+	  workInProgress = createWorkInProgress(root.current, null, expirationTime);
 	  renderExpirationTime = expirationTime;
 	  workInProgressRootExitStatus = RootIncomplete;
 	  workInProgressRootFatalError = null;
@@ -25242,7 +25362,6 @@ var jsonx = (function (exports) {
 	      // Reset module-level state that was set during the render phase.
 	      resetContextDependencies();
 	      resetHooks();
-	      resetCurrentFiber();
 
 	      if (workInProgress === null || workInProgress.return === null) {
 	        // Expected to be working on a non-root fiber. This is a fatal error
@@ -25254,7 +25373,7 @@ var jsonx = (function (exports) {
 	        return null;
 	      }
 
-	      if (enableProfilerTimer && workInProgress.mode & ProfileMode) {
+	      if (workInProgress.mode & ProfileMode) {
 	        // Record the time spent rendering before an error was thrown. This
 	        // avoids inaccurate Profiler durations in the case of a
 	        // suspended render.
@@ -25298,6 +25417,8 @@ var jsonx = (function (exports) {
 	    tracing$1.__interactionsRef.current = root.memoizedInteractions;
 	    return prevInteractions;
 	  }
+
+	  return null;
 	}
 
 	function popInteractions(prevInteractions) {
@@ -25403,7 +25524,7 @@ var jsonx = (function (exports) {
 	  setCurrentFiber(unitOfWork);
 	  var next;
 
-	  if ( (unitOfWork.mode & ProfileMode) !== NoMode) {
+	  if ((unitOfWork.mode & ProfileMode) !== NoMode) {
 	    startProfilerTimer(unitOfWork);
 	    next = beginWork$$1(current$$1, unitOfWork, renderExpirationTime);
 	    stopProfilerTimerIfRunningAndRecordDelta(unitOfWork, true);
@@ -25439,7 +25560,7 @@ var jsonx = (function (exports) {
 	      setCurrentFiber(workInProgress);
 	      var next = void 0;
 
-	      if ( (workInProgress.mode & ProfileMode) === NoMode) {
+	      if ((workInProgress.mode & ProfileMode) === NoMode) {
 	        next = completeWork(current$$1, workInProgress, renderExpirationTime);
 	      } else {
 	        startProfilerTimer(workInProgress);
@@ -25498,10 +25619,10 @@ var jsonx = (function (exports) {
 	      // This fiber did not complete because something threw. Pop values off
 	      // the stack without entering the complete phase. If this is a boundary,
 	      // capture values if possible.
-	      var _next = unwindWork(workInProgress); // Because this fiber did not complete, don't reset its expiration time.
+	      var _next = unwindWork(workInProgress, renderExpirationTime); // Because this fiber did not complete, don't reset its expiration time.
 
 
-	      if ( (workInProgress.mode & ProfileMode) !== NoMode) {
+	      if ((workInProgress.mode & ProfileMode) !== NoMode) {
 	        // Record the render duration for the fiber that errored.
 	        stopProfilerTimerIfRunningAndRecordDelta(workInProgress, false); // Include the time spent working on failed children before continuing.
 
@@ -25571,7 +25692,7 @@ var jsonx = (function (exports) {
 
 	  var newChildExpirationTime = NoWork; // Bubble up the earliest expiration time.
 
-	  if ( (completedWork.mode & ProfileMode) !== NoMode) {
+	  if ((completedWork.mode & ProfileMode) !== NoMode) {
 	    // In profiling mode, resetChildExpirationTime is also used to reset
 	    // profiler durations.
 	    var actualDuration = completedWork.actualDuration;
@@ -25637,23 +25758,16 @@ var jsonx = (function (exports) {
 	}
 
 	function commitRootImpl(root, renderPriorityLevel) {
-	  do {
-	    // `flushPassiveEffects` will call `flushSyncUpdateQueue` at the end, which
-	    // means `flushPassiveEffects` will sometimes result in additional
-	    // passive effects. So we need to keep flushing in a loop until there are
-	    // no more pending effects.
-	    // TODO: Might be better if `flushPassiveEffects` did not automatically
-	    // flush synchronous work at the end, to avoid factoring hazards like this.
-	    flushPassiveEffects();
-	  } while (rootWithPendingPassiveEffects !== null);
-
+	  flushPassiveEffects();
 	  flushRenderPhaseStrictModeWarningsInDEV();
 
-	  if (!((executionContext & (RenderContext | CommitContext)) === NoContext)) {
-	    {
-	      throw Error("Should not already be working.");
+	  (function () {
+	    if (!((executionContext & (RenderContext | CommitContext)) === NoContext)) {
+	      {
+	        throw ReactError(Error("Should not already be working."));
+	      }
 	    }
-	  }
+	  })();
 
 	  var finishedWork = root.finishedWork;
 	  var expirationTime = root.finishedExpirationTime;
@@ -25665,11 +25779,13 @@ var jsonx = (function (exports) {
 	  root.finishedWork = null;
 	  root.finishedExpirationTime = NoWork;
 
-	  if (!(finishedWork !== root.current)) {
-	    {
-	      throw Error("Cannot commit the same tree as before. This error is likely caused by a bug in React. Please file an issue.");
+	  (function () {
+	    if (!(finishedWork !== root.current)) {
+	      {
+	        throw ReactError(Error("Cannot commit the same tree as before. This error is likely caused by a bug in React. Please file an issue."));
+	      }
 	    }
-	  } // commitRoot never returns a continuation; it always finishes synchronously.
+	  })(); // commitRoot never returns a continuation; it always finishes synchronously.
 	  // So we can clear these now to allow a new callback to be scheduled.
 
 
@@ -25733,11 +25849,13 @@ var jsonx = (function (exports) {
 	        invokeGuardedCallback(null, commitBeforeMutationEffects, null);
 
 	        if (hasCaughtError()) {
-	          if (!(nextEffect !== null)) {
-	            {
-	              throw Error("Should be working on an effect.");
+	          (function () {
+	            if (!(nextEffect !== null)) {
+	              {
+	                throw ReactError(Error("Should be working on an effect."));
+	              }
 	            }
-	          }
+	          })();
 
 	          var error = clearCaughtError();
 	          captureCommitPhaseError(nextEffect, error);
@@ -25763,11 +25881,13 @@ var jsonx = (function (exports) {
 	        invokeGuardedCallback(null, commitMutationEffects, null, root, renderPriorityLevel);
 
 	        if (hasCaughtError()) {
-	          if (!(nextEffect !== null)) {
-	            {
-	              throw Error("Should be working on an effect.");
+	          (function () {
+	            if (!(nextEffect !== null)) {
+	              {
+	                throw ReactError(Error("Should be working on an effect."));
+	              }
 	            }
-	          }
+	          })();
 
 	          var _error = clearCaughtError();
 
@@ -25795,11 +25915,13 @@ var jsonx = (function (exports) {
 	        invokeGuardedCallback(null, commitLayoutEffects, null, root, expirationTime);
 
 	        if (hasCaughtError()) {
-	          if (!(nextEffect !== null)) {
-	            {
-	              throw Error("Should be working on an effect.");
+	          (function () {
+	            if (!(nextEffect !== null)) {
+	              {
+	                throw ReactError(Error("Should be working on an effect."));
+	              }
 	            }
-	          }
+	          })();
 
 	          var _error2 = clearCaughtError();
 
@@ -26054,7 +26176,7 @@ var jsonx = (function (exports) {
 	    if (effectTag & (Update | Callback)) {
 	      recordEffect();
 	      var current$$1 = nextEffect.alternate;
-	      commitLifeCycles(root, current$$1, nextEffect);
+	      commitLifeCycles(root, current$$1, nextEffect, committedExpirationTime);
 	    }
 
 	    if (effectTag & Ref) {
@@ -26085,11 +26207,13 @@ var jsonx = (function (exports) {
 	  rootWithPendingPassiveEffects = null;
 	  pendingPassiveEffectsExpirationTime = NoWork;
 
-	  if (!((executionContext & (RenderContext | CommitContext)) === NoContext)) {
-	    {
-	      throw Error("Cannot flush passive effects while already rendering.");
+	  (function () {
+	    if (!((executionContext & (RenderContext | CommitContext)) === NoContext)) {
+	      {
+	        throw ReactError(Error("Cannot flush passive effects while already rendering."));
+	      }
 	    }
-	  }
+	  })();
 
 	  var prevExecutionContext = executionContext;
 	  executionContext |= CommitContext;
@@ -26105,11 +26229,13 @@ var jsonx = (function (exports) {
 	      invokeGuardedCallback(null, commitPassiveHookEffects, null, effect);
 
 	      if (hasCaughtError()) {
-	        if (!(effect !== null)) {
-	          {
-	            throw Error("Should be working on an effect.");
+	        (function () {
+	          if (!(effect !== null)) {
+	            {
+	              throw ReactError(Error("Should be working on an effect."));
+	            }
 	          }
-	        }
+	        })();
 
 	        var error = clearCaughtError();
 	        captureCommitPhaseError(effect, error);
@@ -26270,10 +26396,10 @@ var jsonx = (function (exports) {
 	  // previously was rendered in its fallback state. One of the promises that
 	  // suspended it has resolved, which means at least part of the tree was
 	  // likely unblocked. Try rendering again, at a new expiration time.
-	  if (retryTime === NoWork) {
+	  if (retryTime === Never) {
 	    var suspenseConfig = null; // Retries don't carry over the already committed update.
 
-	    var currentTime = requestCurrentTimeForUpdate();
+	    var currentTime = requestCurrentTime();
 	    retryTime = computeExpirationForFiber(currentTime, boundaryFiber, suspenseConfig);
 	  } // TODO: Special case idle priority?
 
@@ -26286,7 +26412,7 @@ var jsonx = (function (exports) {
 	  }
 	}
 	function resolveRetryThenable(boundaryFiber, thenable) {
-	  var retryTime = NoWork; // Default
+	  var retryTime = Never; // Default
 
 	  var retryCache;
 
@@ -26344,11 +26470,13 @@ var jsonx = (function (exports) {
 	    nestedUpdateCount = 0;
 	    rootWithNestedUpdates = null;
 
-	    {
+	    (function () {
 	      {
-	        throw Error("Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.");
+	        {
+	          throw ReactError(Error("Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops."));
+	        }
 	      }
-	    }
+	    })();
 	  }
 
 	  {
@@ -26383,7 +26511,7 @@ var jsonx = (function (exports) {
 	}
 
 	function checkForInterruption(fiberThatReceivedUpdate, updateExpirationTime) {
-	  if ( workInProgressRoot !== null && updateExpirationTime > renderExpirationTime) {
+	  if (workInProgressRoot !== null && updateExpirationTime > renderExpirationTime) {
 	    interruptedBy = fiberThatReceivedUpdate;
 	  }
 	}
@@ -26436,20 +26564,18 @@ var jsonx = (function (exports) {
 	      if (originalError !== null && typeof originalError === 'object' && typeof originalError.then === 'function') {
 	        // Don't replay promises. Treat everything else like an error.
 	        throw originalError;
-	      } // Keep this code in sync with handleError; any changes here must have
+	      } // Keep this code in sync with renderRoot; any changes here must have
 	      // corresponding changes there.
 
 
 	      resetContextDependencies();
-	      resetHooks(); // Don't reset current debug fiber, since we're about to work on the
-	      // same fiber again.
-	      // Unwind the failed stack frame
+	      resetHooks(); // Unwind the failed stack frame
 
 	      unwindInterruptedWork(unitOfWork); // Restore the original properties of the fiber.
 
 	      assignFiberPropertiesInDEV(unitOfWork, originalWorkInProgressCopy);
 
-	      if ( unitOfWork.mode & ProfileMode) {
+	      if (unitOfWork.mode & ProfileMode) {
 	        // Reset the profiler timer.
 	        startProfilerTimer(unitOfWork);
 	      } // Run beginWork again.
@@ -26505,14 +26631,14 @@ var jsonx = (function (exports) {
 	};
 	function warnIfNotScopedWithMatchingAct(fiber) {
 	  {
-	    if ( IsSomeRendererActing.current === true && IsThisRendererActing.current !== true) {
+	    if (IsSomeRendererActing.current === true && IsThisRendererActing.current !== true) {
 	      warningWithoutStack$1(false, "It looks like you're using the wrong act() around your test interactions.\n" + 'Be sure to use the matching version of act() corresponding to your renderer:\n\n' + '// for react-dom:\n' + "import {act} from 'react-dom/test-utils';\n" + '// ...\n' + 'act(() => ...);\n\n' + '// for react-test-renderer:\n' + "import TestRenderer from 'react-test-renderer';\n" + 'const {act} = TestRenderer;\n' + '// ...\n' + 'act(() => ...);' + '%s', getStackByFiberInDevAndProd(fiber));
 	    }
 	  }
 	}
 	function warnIfNotCurrentlyActingEffectsInDEV(fiber) {
 	  {
-	    if ( (fiber.mode & StrictMode) !== NoMode && IsSomeRendererActing.current === false && IsThisRendererActing.current === false) {
+	    if ((fiber.mode & StrictMode) !== NoMode && IsSomeRendererActing.current === false && IsThisRendererActing.current === false) {
 	      warningWithoutStack$1(false, 'An update to %s ran an effect, but was not wrapped in act(...).\n\n' + 'When testing, code that causes React state updates should be ' + 'wrapped into act(...):\n\n' + 'act(() => {\n' + '  /* fire events that update state */\n' + '});\n' + '/* assert on the output */\n\n' + "This ensures that you're testing the behavior the user would see " + 'in the browser.' + ' Learn more at https://fb.me/react-wrap-tests-with-act' + '%s', getComponentName(fiber.type), getStackByFiberInDevAndProd(fiber));
 	    }
 	  }
@@ -26520,7 +26646,7 @@ var jsonx = (function (exports) {
 
 	function warnIfNotCurrentlyActingUpdatesInDEV(fiber) {
 	  {
-	    if ( executionContext === NoContext && IsSomeRendererActing.current === false && IsThisRendererActing.current === false) {
+	    if (executionContext === NoContext && IsSomeRendererActing.current === false && IsThisRendererActing.current === false) {
 	      warningWithoutStack$1(false, 'An update to %s inside a test was not wrapped in act(...).\n\n' + 'When testing, code that causes React state updates should be ' + 'wrapped into act(...):\n\n' + 'act(() => {\n' + '  /* fire events that update state */\n' + '});\n' + '/* assert on the output */\n\n' + "This ensures that you're testing the behavior the user would see " + 'in the browser.' + ' Learn more at https://fb.me/react-wrap-tests-with-act' + '%s', getComponentName(fiber.type), getStackByFiberInDevAndProd(fiber));
 	    }
 	  }
@@ -26536,7 +26662,7 @@ var jsonx = (function (exports) {
 	function warnIfUnmockedScheduler(fiber) {
 	  {
 	    if (didWarnAboutUnmockedScheduler === false && Scheduler.unstable_flushAllWithoutAsserting === undefined) {
-	      if (fiber.mode & BlockingMode || fiber.mode & ConcurrentMode) {
+	      if (fiber.mode & BatchedMode || fiber.mode & ConcurrentMode) {
 	        didWarnAboutUnmockedScheduler = true;
 	        warningWithoutStack$1(false, 'In Concurrent or Sync modes, the "scheduler" module needs to be mocked ' + 'to guarantee consistent behaviour across tests and browsers. ' + 'For example, with jest: \n' + "jest.mock('scheduler', () => require('scheduler/unstable_mock'));\n\n" + 'For more info, visit https://fb.me/react-mock-scheduler');
 	      }
@@ -26615,6 +26741,9 @@ var jsonx = (function (exports) {
 	              }
 
 	              break;
+
+	            default:
+	              break;
 	          }
 	        }
 
@@ -26634,7 +26763,7 @@ var jsonx = (function (exports) {
 	      componentsThatTriggeredHighPriSuspend = null;
 
 	      if (componentNames.length > 0) {
-	        warningWithoutStack$1(false, '%s triggered a user-blocking update that suspended.' + '\n\n' + 'The fix is to split the update into multiple parts: a user-blocking ' + 'update to provide immediate feedback, and another update that ' + 'triggers the bulk of the changes.' + '\n\n' + 'Refer to the documentation for useTransition to learn how ' + 'to implement this pattern.', // TODO: Add link to React docs with more information, once it exists
+	        warningWithoutStack$1(false, '%s triggered a user-blocking update that suspended.' + '\n\n' + 'The fix is to split the update into multiple parts: a user-blocking ' + 'update to provide immediate feedback, and another update that ' + 'triggers the bulk of the changes.' + '\n\n' + 'Refer to the documentation for useSuspenseTransition to learn how ' + 'to implement this pattern.', // TODO: Add link to React docs with more information, once it exists
 	        componentNames.sort().join(', '));
 	      }
 	    }
@@ -26705,10 +26834,10 @@ var jsonx = (function (exports) {
 	      });
 	    }
 	  }); // Store the current set of interactions on the FiberRoot for a few reasons:
-	  // We can re-use it in hot functions like performConcurrentWorkOnRoot()
-	  // without having to recalculate it. We will also use it in commitWork() to
-	  // pass to any Profiler onRender() hooks. This also provides DevTools with a
-	  // way to access it when the onCommitRoot() hook is called.
+	  // We can re-use it in hot functions like renderRoot() without having to
+	  // recalculate it. We will also use it in commitWork() to pass to any Profiler
+	  // onRender() hooks. This also provides DevTools with a way to access it when
+	  // the onCommitRoot() hook is called.
 
 	  root.memoizedInteractions = interactions;
 
@@ -26812,15 +26941,13 @@ var jsonx = (function (exports) {
 	      try {
 	        var didError = (root.current.effectTag & DidCapture) === DidCapture;
 
-	        if (enableProfilerTimer) {
-	          var currentTime = getCurrentTime();
+	        {
+	          var currentTime = requestCurrentTime();
 	          var priorityLevel = inferPriorityFromExpirationTime(currentTime, expirationTime);
 	          hook.onCommitFiberRoot(rendererID, root, priorityLevel, didError);
-	        } else {
-	          hook.onCommitFiberRoot(rendererID, root, undefined, didError);
 	        }
 	      } catch (err) {
-	        if (true && !hasLoggedError) {
+	        if (!hasLoggedError) {
 	          hasLoggedError = true;
 	          warningWithoutStack$1(false, 'React DevTools encountered an error: %s', err);
 	        }
@@ -26831,7 +26958,7 @@ var jsonx = (function (exports) {
 	      try {
 	        hook.onCommitFiberUnmount(rendererID, fiber);
 	      } catch (err) {
-	        if (true && !hasLoggedError) {
+	        if (!hasLoggedError) {
 	          hasLoggedError = true;
 	          warningWithoutStack$1(false, 'React DevTools encountered an error: %s', err);
 	        }
@@ -27082,6 +27209,9 @@ var jsonx = (function (exports) {
 	      case ForwardRef:
 	        workInProgress.type = resolveForwardRefForHotReloading(current.type);
 	        break;
+
+	      default:
+	        break;
 	    }
 	  }
 
@@ -27151,14 +27281,14 @@ var jsonx = (function (exports) {
 	  var mode;
 
 	  if (tag === ConcurrentRoot) {
-	    mode = ConcurrentMode | BlockingMode | StrictMode;
-	  } else if (tag === BlockingRoot) {
-	    mode = BlockingMode | StrictMode;
+	    mode = ConcurrentMode | BatchedMode | StrictMode;
+	  } else if (tag === BatchedRoot) {
+	    mode = BatchedMode | StrictMode;
 	  } else {
 	    mode = NoMode;
 	  }
 
-	  if ( isDevToolsPresent) {
+	  if (isDevToolsPresent) {
 	    // Always collect profile timings when DevTools are present.
 	    // This enables DevTools to start capturing timing at any point–
 	    // Without some nodes in the tree having empty base times.
@@ -27195,7 +27325,7 @@ var jsonx = (function (exports) {
 
 	      case REACT_CONCURRENT_MODE_TYPE:
 	        fiberTag = Mode;
-	        mode |= ConcurrentMode | BlockingMode | StrictMode;
+	        mode |= ConcurrentMode | BatchedMode | StrictMode;
 	        break;
 
 	      case REACT_STRICT_MODE_TYPE:
@@ -27243,6 +27373,13 @@ var jsonx = (function (exports) {
 	                resolvedType = null;
 	                break getTag;
 
+	              case REACT_FUNDAMENTAL_TYPE:
+
+	                break;
+
+	              case REACT_SCOPE_TYPE:
+
+
 	            }
 	          }
 
@@ -27260,11 +27397,13 @@ var jsonx = (function (exports) {
 	            }
 	          }
 
-	          {
+	          (function () {
 	            {
-	              throw Error("Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: " + (type == null ? type : typeof type) + "." + info);
+	              {
+	                throw ReactError(Error("Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: " + (type == null ? type : typeof type) + "." + info));
+	              }
 	            }
-	          }
+	          })();
 	        }
 	    }
 	  }
@@ -27428,6 +27567,7 @@ var jsonx = (function (exports) {
 	  this.context = null;
 	  this.pendingContext = null;
 	  this.hydrate = hydrate;
+	  this.firstBatch = null;
 	  this.callbackNode = null;
 	  this.callbackPriority = NoPriority;
 	  this.firstPendingTime = NoWork;
@@ -27566,23 +27706,100 @@ var jsonx = (function (exports) {
 	  return parentContext;
 	}
 
+	function scheduleRootUpdate(current$$1, element, expirationTime, suspenseConfig, callback) {
+	  {
+	    if (phase === 'render' && current !== null && !didWarnAboutNestedUpdates) {
+	      didWarnAboutNestedUpdates = true;
+	      warningWithoutStack$1(false, 'Render methods should be a pure function of props and state; ' + 'triggering nested component updates from render is not allowed. ' + 'If necessary, trigger nested updates in componentDidUpdate.\n\n' + 'Check the render method of %s.', getComponentName(current.type) || 'Unknown');
+	    }
+	  }
+
+	  var update = createUpdate(expirationTime, suspenseConfig); // Caution: React DevTools currently depends on this property
+	  // being called "element".
+
+	  update.payload = {
+	    element: element
+	  };
+	  callback = callback === undefined ? null : callback;
+
+	  if (callback !== null) {
+	    !(typeof callback === 'function') ? warningWithoutStack$1(false, 'render(...): Expected the last optional `callback` argument to be a ' + 'function. Instead received: %s.', callback) : void 0;
+	    update.callback = callback;
+	  }
+
+	  enqueueUpdate(current$$1, update);
+	  scheduleWork(current$$1, expirationTime);
+	  return expirationTime;
+	}
+
+	function updateContainerAtExpirationTime(element, container, parentComponent, expirationTime, suspenseConfig, callback) {
+	  // TODO: If this is a nested container, this won't be the root.
+	  var current$$1 = container.current;
+
+	  var context = getContextForSubtree(parentComponent);
+
+	  if (container.context === null) {
+	    container.context = context;
+	  } else {
+	    container.pendingContext = context;
+	  }
+
+	  return scheduleRootUpdate(current$$1, element, expirationTime, suspenseConfig, callback);
+	}
+
+	function findHostInstance(component) {
+	  var fiber = get(component);
+
+	  if (fiber === undefined) {
+	    if (typeof component.render === 'function') {
+	      (function () {
+	        {
+	          {
+	            throw ReactError(Error("Unable to find node on an unmounted component."));
+	          }
+	        }
+	      })();
+	    } else {
+	      (function () {
+	        {
+	          {
+	            throw ReactError(Error("Argument appears to not be a ReactComponent. Keys: " + Object.keys(component)));
+	          }
+	        }
+	      })();
+	    }
+	  }
+
+	  var hostFiber = findCurrentHostFiber(fiber);
+
+	  if (hostFiber === null) {
+	    return null;
+	  }
+
+	  return hostFiber.stateNode;
+	}
+
 	function findHostInstanceWithWarning(component, methodName) {
 	  {
 	    var fiber = get(component);
 
 	    if (fiber === undefined) {
 	      if (typeof component.render === 'function') {
-	        {
+	        (function () {
 	          {
-	            throw Error("Unable to find node on an unmounted component.");
+	            {
+	              throw ReactError(Error("Unable to find node on an unmounted component."));
+	            }
 	          }
-	        }
+	        })();
 	      } else {
-	        {
+	        (function () {
 	          {
-	            throw Error("Argument appears to not be a ReactComponent. Keys: " + Object.keys(component));
+	            {
+	              throw ReactError(Error("Argument appears to not be a ReactComponent. Keys: " + Object.keys(component)));
+	            }
 	          }
-	        }
+	        })();
 	      }
 	    }
 
@@ -27608,14 +27825,16 @@ var jsonx = (function (exports) {
 
 	    return hostFiber.stateNode;
 	  }
+
+	  return findHostInstance(component);
 	}
 
 	function createContainer(containerInfo, tag, hydrate, hydrationCallbacks) {
-	  return createFiberRoot(containerInfo, tag, hydrate);
+	  return createFiberRoot(containerInfo, tag, hydrate, hydrationCallbacks);
 	}
 	function updateContainer(element, container, parentComponent, callback) {
 	  var current$$1 = container.current;
-	  var currentTime = requestCurrentTimeForUpdate();
+	  var currentTime = requestCurrentTime();
 
 	  {
 	    // $FlowExpectedError - jest isn't a global, and isn't recognized outside of tests
@@ -27627,38 +27846,7 @@ var jsonx = (function (exports) {
 
 	  var suspenseConfig = requestCurrentSuspenseConfig();
 	  var expirationTime = computeExpirationForFiber(currentTime, current$$1, suspenseConfig);
-
-	  var context = getContextForSubtree(parentComponent);
-
-	  if (container.context === null) {
-	    container.context = context;
-	  } else {
-	    container.pendingContext = context;
-	  }
-
-	  {
-	    if (phase === 'render' && current !== null && !didWarnAboutNestedUpdates) {
-	      didWarnAboutNestedUpdates = true;
-	      warningWithoutStack$1(false, 'Render methods should be a pure function of props and state; ' + 'triggering nested component updates from render is not allowed. ' + 'If necessary, trigger nested updates in componentDidUpdate.\n\n' + 'Check the render method of %s.', getComponentName(current.type) || 'Unknown');
-	    }
-	  }
-
-	  var update = createUpdate(expirationTime, suspenseConfig); // Caution: React DevTools currently depends on this property
-	  // being called "element".
-
-	  update.payload = {
-	    element: element
-	  };
-	  callback = callback === undefined ? null : callback;
-
-	  if (callback !== null) {
-	    !(typeof callback === 'function') ? warningWithoutStack$1(false, 'render(...): Expected the last optional `callback` argument to be a ' + 'function. Instead received: %s.', callback) : void 0;
-	    update.callback = callback;
-	  }
-
-	  enqueueUpdate(current$$1, update);
-	  scheduleWork(current$$1, expirationTime);
-	  return expirationTime;
+	  return updateContainerAtExpirationTime(element, container, parentComponent, expirationTime, suspenseConfig, callback);
 	}
 	function getPublicRootInstance(container) {
 	  var containerFiber = container.current;
@@ -27674,65 +27862,6 @@ var jsonx = (function (exports) {
 	    default:
 	      return containerFiber.child.stateNode;
 	  }
-	}
-
-	function markRetryTimeImpl(fiber, retryTime) {
-	  var suspenseState = fiber.memoizedState;
-
-	  if (suspenseState !== null && suspenseState.dehydrated !== null) {
-	    if (suspenseState.retryTime < retryTime) {
-	      suspenseState.retryTime = retryTime;
-	    }
-	  }
-	} // Increases the priority of thennables when they resolve within this boundary.
-
-
-	function markRetryTimeIfNotHydrated(fiber, retryTime) {
-	  markRetryTimeImpl(fiber, retryTime);
-	  var alternate = fiber.alternate;
-
-	  if (alternate) {
-	    markRetryTimeImpl(alternate, retryTime);
-	  }
-	}
-
-	function attemptUserBlockingHydration$1(fiber) {
-	  if (fiber.tag !== SuspenseComponent) {
-	    // We ignore HostRoots here because we can't increase
-	    // their priority and they should not suspend on I/O,
-	    // since you have to wrap anything that might suspend in
-	    // Suspense.
-	    return;
-	  }
-
-	  var expTime = computeInteractiveExpiration(requestCurrentTimeForUpdate());
-	  scheduleWork(fiber, expTime);
-	  markRetryTimeIfNotHydrated(fiber, expTime);
-	}
-	function attemptContinuousHydration$1(fiber) {
-	  if (fiber.tag !== SuspenseComponent) {
-	    // We ignore HostRoots here because we can't increase
-	    // their priority and they should not suspend on I/O,
-	    // since you have to wrap anything that might suspend in
-	    // Suspense.
-	    return;
-	  }
-
-	  var expTime = computeContinuousHydrationExpiration(requestCurrentTimeForUpdate());
-	  scheduleWork(fiber, expTime);
-	  markRetryTimeIfNotHydrated(fiber, expTime);
-	}
-	function attemptHydrationAtCurrentPriority$1(fiber) {
-	  if (fiber.tag !== SuspenseComponent) {
-	    // We ignore HostRoots here because we can't increase
-	    // their priority other than synchronously flush it.
-	    return;
-	  }
-
-	  var currentTime = requestCurrentTimeForUpdate();
-	  var expTime = computeExpirationForFiber(currentTime, fiber, null);
-	  scheduleWork(fiber, expTime);
-	  markRetryTimeIfNotHydrated(fiber, expTime);
 	}
 	function findHostInstanceWithNoPortals(fiber) {
 	  var hostFiber = findCurrentHostFiberWithNoPortals(fiber);
@@ -27863,76 +27992,34 @@ var jsonx = (function (exports) {
 	// This file intentionally does *not* have the Flow annotation.
 	// Don't add it. See `./inline-typed.js` for an explanation.
 
-	// TODO: This type is shared between the reconciler and ReactDOM, but will
-	// eventually be lifted out to the renderer.
-	function ReactDOMRoot(container, options) {
-	  this._internalRoot = createRootImpl(container, ConcurrentRoot, options);
+	function createPortal$1(children, containerInfo, // TODO: figure out the API for cross-renderer implementation.
+	implementation) {
+	  var key = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+	  return {
+	    // This tag allow us to uniquely identify this as a React Portal
+	    $$typeof: REACT_PORTAL_TYPE,
+	    key: key == null ? null : '' + key,
+	    children: children,
+	    containerInfo: containerInfo,
+	    implementation: implementation
+	  };
 	}
 
-	function ReactDOMBlockingRoot(container, tag, options) {
-	  this._internalRoot = createRootImpl(container, tag, options);
-	}
+	// TODO: this is special because it gets imported during build.
 
-	ReactDOMRoot.prototype.render = ReactDOMBlockingRoot.prototype.render = function (children, callback) {
-	  var root = this._internalRoot;
-	  var cb = callback === undefined ? null : callback;
-
-	  {
-	    warnOnInvalidCallback(cb, 'render');
-	  }
-
-	  updateContainer(children, root, null, cb);
-	};
-
-	ReactDOMRoot.prototype.unmount = ReactDOMBlockingRoot.prototype.unmount = function (callback) {
-	  var root = this._internalRoot;
-	  var cb = callback === undefined ? null : callback;
-
-	  {
-	    warnOnInvalidCallback(cb, 'render');
-	  }
-
-	  var container = root.containerInfo;
-	  updateContainer(null, root, null, function () {
-	    unmarkContainerAsRoot(container);
-
-	    if (cb !== null) {
-	      cb();
-	    }
-	  });
-	};
-
-	function createRootImpl(container, tag, options) {
-	  // Tag is either LegacyRoot or Concurrent Root
-	  var hydrate = options != null && options.hydrate === true;
-	  var hydrationCallbacks = options != null && options.hydrationOptions || null;
-	  var root = createContainer(container, tag, hydrate);
-	  markContainerAsRoot(root.current, container);
-
-	  if (hydrate && tag !== LegacyRoot) {
-	    var doc = container.nodeType === DOCUMENT_NODE ? container : container.ownerDocument;
-	    eagerlyTrapReplayableEvents(doc);
-	  }
-
-	  return root;
-	}
-	function createLegacyRoot(container, options) {
-	  return new ReactDOMBlockingRoot(container, LegacyRoot, options);
-	}
-	function isValidContainer(node) {
-	  return !!(node && (node.nodeType === ELEMENT_NODE || node.nodeType === DOCUMENT_NODE || node.nodeType === DOCUMENT_FRAGMENT_NODE || node.nodeType === COMMENT_NODE && node.nodeValue === ' react-mount-point-unstable '));
-	}
-	function warnOnInvalidCallback(callback, callerName) {
-	  {
-	    !(callback === null || typeof callback === 'function') ? warningWithoutStack$1(false, '%s(...): Expected the last optional `callback` argument to be a ' + 'function. Instead received: %s.', callerName, callback) : void 0;
-	  }
-	}
-
-	var ReactCurrentOwner$1 = ReactSharedInternals.ReactCurrentOwner;
+	var ReactVersion = '16.10.2';
+	var ReactCurrentOwner = ReactSharedInternals.ReactCurrentOwner;
 	var topLevelUpdateWarnings;
-	var warnedAboutHydrateAPI = false;
+	var warnOnInvalidCallback;
+	var didWarnAboutUnstableCreatePortal = false;
 
 	{
+	  if (typeof Map !== 'function' || // $FlowIssue Flow incorrectly thinks Map has no prototype
+	  Map.prototype == null || typeof Map.prototype.forEach !== 'function' || typeof Set !== 'function' || // $FlowIssue Flow incorrectly thinks Set has no prototype
+	  Set.prototype == null || typeof Set.prototype.clear !== 'function' || typeof Set.prototype.forEach !== 'function') {
+	    warningWithoutStack$1(false, 'React depends on Map and Set built-in types. Make sure that you load a ' + 'polyfill in older browsers. https://fb.me/react-polyfills');
+	  }
+
 	  topLevelUpdateWarnings = function (container) {
 	    if (container._reactRootContainer && container.nodeType !== COMMENT_NODE) {
 	      var hostInstance = findHostInstanceWithNoPortals(container._reactRootContainer._internalRoot.current);
@@ -27948,6 +28035,301 @@ var jsonx = (function (exports) {
 	    !(!hasNonRootReactChild || isRootRenderedBySomeReact) ? warningWithoutStack$1(false, 'render(...): Replacing React-rendered children with a new root ' + 'component. If you intended to update the children of this node, ' + 'you should instead have the existing children update their state ' + 'and render the new components instead of calling ReactDOM.render.') : void 0;
 	    !(container.nodeType !== ELEMENT_NODE || !container.tagName || container.tagName.toUpperCase() !== 'BODY') ? warningWithoutStack$1(false, 'render(): Rendering components directly into document.body is ' + 'discouraged, since its children are often manipulated by third-party ' + 'scripts and browser extensions. This may lead to subtle ' + 'reconciliation issues. Try rendering into a container element created ' + 'for your app.') : void 0;
 	  };
+
+	  warnOnInvalidCallback = function (callback, callerName) {
+	    !(callback === null || typeof callback === 'function') ? warningWithoutStack$1(false, '%s(...): Expected the last optional `callback` argument to be a ' + 'function. Instead received: %s.', callerName, callback) : void 0;
+	  };
+	}
+
+	setRestoreImplementation(restoreControlledState$$1);
+
+	function ReactBatch(root) {
+	  var expirationTime = computeUniqueAsyncExpiration();
+	  this._expirationTime = expirationTime;
+	  this._root = root;
+	  this._next = null;
+	  this._callbacks = null;
+	  this._didComplete = false;
+	  this._hasChildren = false;
+	  this._children = null;
+	  this._defer = true;
+	}
+
+	ReactBatch.prototype.render = function (children) {
+	  var _this = this;
+
+	  (function () {
+	    if (!_this._defer) {
+	      {
+	        throw ReactError(Error("batch.render: Cannot render a batch that already committed."));
+	      }
+	    }
+	  })();
+
+	  this._hasChildren = true;
+	  this._children = children;
+	  var internalRoot = this._root._internalRoot;
+	  var expirationTime = this._expirationTime;
+	  var work = new ReactWork();
+	  updateContainerAtExpirationTime(children, internalRoot, null, expirationTime, null, work._onCommit);
+	  return work;
+	};
+
+	ReactBatch.prototype.then = function (onComplete) {
+	  if (this._didComplete) {
+	    onComplete();
+	    return;
+	  }
+
+	  var callbacks = this._callbacks;
+
+	  if (callbacks === null) {
+	    callbacks = this._callbacks = [];
+	  }
+
+	  callbacks.push(onComplete);
+	};
+
+	ReactBatch.prototype.commit = function () {
+	  var _this2 = this;
+
+	  var internalRoot = this._root._internalRoot;
+	  var firstBatch = internalRoot.firstBatch;
+
+	  (function () {
+	    if (!(_this2._defer && firstBatch !== null)) {
+	      {
+	        throw ReactError(Error("batch.commit: Cannot commit a batch multiple times."));
+	      }
+	    }
+	  })();
+
+	  if (!this._hasChildren) {
+	    // This batch is empty. Return.
+	    this._next = null;
+	    this._defer = false;
+	    return;
+	  }
+
+	  var expirationTime = this._expirationTime; // Ensure this is the first batch in the list.
+
+	  if (firstBatch !== this) {
+	    // This batch is not the earliest batch. We need to move it to the front.
+	    // Update its expiration time to be the expiration time of the earliest
+	    // batch, so that we can flush it without flushing the other batches.
+	    if (this._hasChildren) {
+	      expirationTime = this._expirationTime = firstBatch._expirationTime; // Rendering this batch again ensures its children will be the final state
+	      // when we flush (updates are processed in insertion order: last
+	      // update wins).
+	      // TODO: This forces a restart. Should we print a warning?
+
+	      this.render(this._children);
+	    } // Remove the batch from the list.
+
+
+	    var previous = null;
+	    var batch = firstBatch;
+
+	    while (batch !== this) {
+	      previous = batch;
+	      batch = batch._next;
+	    }
+
+	    (function () {
+	      if (!(previous !== null)) {
+	        {
+	          throw ReactError(Error("batch.commit: Cannot commit a batch multiple times."));
+	        }
+	      }
+	    })();
+
+	    previous._next = batch._next; // Add it to the front.
+
+	    this._next = firstBatch;
+	    firstBatch = internalRoot.firstBatch = this;
+	  } // Synchronously flush all the work up to this batch's expiration time.
+
+
+	  this._defer = false;
+	  flushRoot(internalRoot, expirationTime); // Pop the batch from the list.
+
+	  var next = this._next;
+	  this._next = null;
+	  firstBatch = internalRoot.firstBatch = next; // Append the next earliest batch's children to the update queue.
+
+	  if (firstBatch !== null && firstBatch._hasChildren) {
+	    firstBatch.render(firstBatch._children);
+	  }
+	};
+
+	ReactBatch.prototype._onComplete = function () {
+	  if (this._didComplete) {
+	    return;
+	  }
+
+	  this._didComplete = true;
+	  var callbacks = this._callbacks;
+
+	  if (callbacks === null) {
+	    return;
+	  } // TODO: Error handling.
+
+
+	  for (var i = 0; i < callbacks.length; i++) {
+	    var _callback = callbacks[i];
+
+	    _callback();
+	  }
+	};
+
+	function ReactWork() {
+	  this._callbacks = null;
+	  this._didCommit = false; // TODO: Avoid need to bind by replacing callbacks in the update queue with
+	  // list of Work objects.
+
+	  this._onCommit = this._onCommit.bind(this);
+	}
+
+	ReactWork.prototype.then = function (onCommit) {
+	  if (this._didCommit) {
+	    onCommit();
+	    return;
+	  }
+
+	  var callbacks = this._callbacks;
+
+	  if (callbacks === null) {
+	    callbacks = this._callbacks = [];
+	  }
+
+	  callbacks.push(onCommit);
+	};
+
+	ReactWork.prototype._onCommit = function () {
+	  if (this._didCommit) {
+	    return;
+	  }
+
+	  this._didCommit = true;
+	  var callbacks = this._callbacks;
+
+	  if (callbacks === null) {
+	    return;
+	  } // TODO: Error handling.
+
+
+	  for (var i = 0; i < callbacks.length; i++) {
+	    var _callback2 = callbacks[i];
+
+	    (function () {
+	      if (!(typeof _callback2 === 'function')) {
+	        {
+	          throw ReactError(Error("Invalid argument passed as callback. Expected a function. Instead received: " + _callback2));
+	        }
+	      }
+	    })();
+
+	    _callback2();
+	  }
+	};
+
+	function createRootImpl(container, tag, options) {
+	  // Tag is either LegacyRoot or Concurrent Root
+	  var hydrate = options != null && options.hydrate === true;
+	  var hydrationCallbacks = options != null && options.hydrationOptions || null;
+	  var root = createContainer(container, tag, hydrate, hydrationCallbacks);
+	  markContainerAsRoot(root.current, container);
+
+	  if (hydrate && tag !== LegacyRoot) {
+	    var doc = container.nodeType === DOCUMENT_NODE ? container : container.ownerDocument;
+	    eagerlyTrapReplayableEvents(doc);
+	  }
+
+	  return root;
+	}
+
+	function ReactSyncRoot(container, tag, options) {
+	  this._internalRoot = createRootImpl(container, tag, options);
+	}
+
+	function ReactRoot(container, options) {
+	  this._internalRoot = createRootImpl(container, ConcurrentRoot, options);
+	}
+
+	ReactRoot.prototype.render = ReactSyncRoot.prototype.render = function (children, callback) {
+	  var root = this._internalRoot;
+	  var work = new ReactWork();
+	  callback = callback === undefined ? null : callback;
+
+	  {
+	    warnOnInvalidCallback(callback, 'render');
+	  }
+
+	  if (callback !== null) {
+	    work.then(callback);
+	  }
+
+	  updateContainer(children, root, null, work._onCommit);
+	  return work;
+	};
+
+	ReactRoot.prototype.unmount = ReactSyncRoot.prototype.unmount = function (callback) {
+	  var root = this._internalRoot;
+	  var work = new ReactWork();
+	  callback = callback === undefined ? null : callback;
+
+	  {
+	    warnOnInvalidCallback(callback, 'render');
+	  }
+
+	  if (callback !== null) {
+	    work.then(callback);
+	  }
+
+	  updateContainer(null, root, null, work._onCommit);
+	  return work;
+	}; // Sync roots cannot create batches. Only concurrent ones.
+
+
+	ReactRoot.prototype.createBatch = function () {
+	  var batch = new ReactBatch(this);
+	  var expirationTime = batch._expirationTime;
+	  var internalRoot = this._internalRoot;
+	  var firstBatch = internalRoot.firstBatch;
+
+	  if (firstBatch === null) {
+	    internalRoot.firstBatch = batch;
+	    batch._next = null;
+	  } else {
+	    // Insert sorted by expiration time then insertion order
+	    var insertAfter = null;
+	    var insertBefore = firstBatch;
+
+	    while (insertBefore !== null && insertBefore._expirationTime >= expirationTime) {
+	      insertAfter = insertBefore;
+	      insertBefore = insertBefore._next;
+	    }
+
+	    batch._next = insertBefore;
+
+	    if (insertAfter !== null) {
+	      insertAfter._next = batch;
+	    }
+	  }
+
+	  return batch;
+	};
+	/**
+	 * True if the supplied DOM node is a valid node element.
+	 *
+	 * @param {?DOMElement} node The candidate DOM node.
+	 * @return {boolean} True if the DOM is a valid DOM node.
+	 * @internal
+	 */
+
+
+	function isValidContainer(node) {
+	  return !!(node && (node.nodeType === ELEMENT_NODE || node.nodeType === DOCUMENT_NODE || node.nodeType === DOCUMENT_FRAGMENT_NODE || node.nodeType === COMMENT_NODE && node.nodeValue === ' react-mount-point-unstable '));
 	}
 
 	function getReactRootElementInContainer(container) {
@@ -27966,6 +28348,9 @@ var jsonx = (function (exports) {
 	  var rootElement = getReactRootElementInContainer(container);
 	  return !!(rootElement && rootElement.nodeType === ELEMENT_NODE && rootElement.hasAttribute(ROOT_ATTRIBUTE_NAME));
 	}
+
+	setBatchingImplementation(batchedUpdates$1, discreteUpdates$1, flushDiscreteUpdates, batchedEventUpdates$1);
+	var warnedAboutHydrateAPI = false;
 
 	function legacyCreateRootFromDOMContainer(container, forceHydrate) {
 	  var shouldHydrate = forceHydrate || shouldHydrateDueToLegacyHeuristic(container); // First clear any existing content.
@@ -27991,9 +28376,10 @@ var jsonx = (function (exports) {
 	      warnedAboutHydrateAPI = true;
 	      lowPriorityWarningWithoutStack$1(false, 'render(): Calling ReactDOM.render() to hydrate server-rendered markup ' + 'will stop working in React v17. Replace the ReactDOM.render() call ' + 'with ReactDOM.hydrate() if you want React to attach to the server HTML.');
 	    }
-	  }
+	  } // Legacy roots are not batched.
 
-	  return createLegacyRoot(container, shouldHydrate ? {
+
+	  return new ReactSyncRoot(container, LegacyRoot, shouldHydrate ? {
 	    hydrate: true
 	  } : undefined);
 	}
@@ -28047,165 +28433,16 @@ var jsonx = (function (exports) {
 	  return getPublicRootInstance(fiberRoot);
 	}
 
-	function findDOMNode(componentOrElement) {
-	  {
-	    var owner = ReactCurrentOwner$1.current;
-
-	    if (owner !== null && owner.stateNode !== null) {
-	      var warnedAboutRefsInRender = owner.stateNode._warnedAboutRefsInRender;
-	      !warnedAboutRefsInRender ? warningWithoutStack$1(false, '%s is accessing findDOMNode inside its render(). ' + 'render() should be a pure function of props and state. It should ' + 'never access something that requires stale data from the previous ' + 'render, such as refs. Move this logic to componentDidMount and ' + 'componentDidUpdate instead.', getComponentName(owner.type) || 'A component') : void 0;
-	      owner.stateNode._warnedAboutRefsInRender = true;
-	    }
-	  }
-
-	  if (componentOrElement == null) {
-	    return null;
-	  }
-
-	  if (componentOrElement.nodeType === ELEMENT_NODE) {
-	    return componentOrElement;
-	  }
-
-	  {
-	    return findHostInstanceWithWarning(componentOrElement, 'findDOMNode');
-	  }
-	}
-	function hydrate(element, container, callback) {
-	  if (!isValidContainer(container)) {
-	    {
-	      throw Error("Target container is not a DOM element.");
-	    }
-	  }
-
-	  {
-	    var isModernRoot = isContainerMarkedAsRoot(container) && container._reactRootContainer === undefined;
-
-	    if (isModernRoot) {
-	      warningWithoutStack$1(false, 'You are calling ReactDOM.hydrate() on a container that was previously ' + 'passed to ReactDOM.createRoot(). This is not supported. ' + 'Did you mean to call createRoot(container, {hydrate: true}).render(element)?');
-	    }
-	  } // TODO: throw or warn if we couldn't hydrate?
-
-
-	  return legacyRenderSubtreeIntoContainer(null, element, container, true, callback);
-	}
-	function render(element, container, callback) {
-	  if (!isValidContainer(container)) {
-	    {
-	      throw Error("Target container is not a DOM element.");
-	    }
-	  }
-
-	  {
-	    var isModernRoot = isContainerMarkedAsRoot(container) && container._reactRootContainer === undefined;
-
-	    if (isModernRoot) {
-	      warningWithoutStack$1(false, 'You are calling ReactDOM.render() on a container that was previously ' + 'passed to ReactDOM.createRoot(). This is not supported. ' + 'Did you mean to call root.render(element)?');
-	    }
-	  }
-
-	  return legacyRenderSubtreeIntoContainer(null, element, container, false, callback);
-	}
-	function unstable_renderSubtreeIntoContainer(parentComponent, element, containerNode, callback) {
-	  if (!isValidContainer(containerNode)) {
-	    {
-	      throw Error("Target container is not a DOM element.");
-	    }
-	  }
-
-	  if (!(parentComponent != null && has(parentComponent))) {
-	    {
-	      throw Error("parentComponent must be a valid React Component");
-	    }
-	  }
-
-	  return legacyRenderSubtreeIntoContainer(parentComponent, element, containerNode, false, callback);
-	}
-	function unmountComponentAtNode(container) {
-	  if (!isValidContainer(container)) {
-	    {
-	      throw Error("unmountComponentAtNode(...): Target container is not a DOM element.");
-	    }
-	  }
-
-	  {
-	    var isModernRoot = isContainerMarkedAsRoot(container) && container._reactRootContainer === undefined;
-
-	    if (isModernRoot) {
-	      warningWithoutStack$1(false, 'You are calling ReactDOM.unmountComponentAtNode() on a container that was previously ' + 'passed to ReactDOM.createRoot(). This is not supported. Did you mean to call root.unmount()?');
-	    }
-	  }
-
-	  if (container._reactRootContainer) {
-	    {
-	      var rootEl = getReactRootElementInContainer(container);
-	      var renderedByDifferentReact = rootEl && !getInstanceFromNode$1(rootEl);
-	      !!renderedByDifferentReact ? warningWithoutStack$1(false, "unmountComponentAtNode(): The node you're attempting to unmount " + 'was rendered by another copy of React.') : void 0;
-	    } // Unmount should not be batched.
-
-
-	    unbatchedUpdates(function () {
-	      legacyRenderSubtreeIntoContainer(null, null, container, false, function () {
-	        container._reactRootContainer = null;
-	        unmarkContainerAsRoot(container);
-	      });
-	    }); // If you call unmountComponentAtNode twice in quick succession, you'll
-	    // get `true` twice. That's probably fine?
-
-	    return true;
-	  } else {
-	    {
-	      var _rootEl = getReactRootElementInContainer(container);
-
-	      var hasNonRootReactChild = !!(_rootEl && getInstanceFromNode$1(_rootEl)); // Check if the container itself is a React root node.
-
-	      var isContainerReactRoot = container.nodeType === ELEMENT_NODE && isValidContainer(container.parentNode) && !!container.parentNode._reactRootContainer;
-	      !!hasNonRootReactChild ? warningWithoutStack$1(false, "unmountComponentAtNode(): The node you're attempting to unmount " + 'was rendered by React and is not a top-level container. %s', isContainerReactRoot ? 'You may have accidentally passed in a React root node instead ' + 'of its container.' : 'Instead, have the parent component update its state and ' + 'rerender in order to remove this component.') : void 0;
-	    }
-
-	    return false;
-	  }
-	}
-
-	function createPortal$1(children, containerInfo, // TODO: figure out the API for cross-renderer implementation.
-	implementation) {
-	  var key = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-	  return {
-	    // This tag allow us to uniquely identify this as a React Portal
-	    $$typeof: REACT_PORTAL_TYPE,
-	    key: key == null ? null : '' + key,
-	    children: children,
-	    containerInfo: containerInfo,
-	    implementation: implementation
-	  };
-	}
-
-	// TODO: this is special because it gets imported during build.
-
-	var ReactVersion = '16.12.0';
-	setAttemptUserBlockingHydration(attemptUserBlockingHydration$1);
-	setAttemptContinuousHydration(attemptContinuousHydration$1);
-	setAttemptHydrationAtCurrentPriority(attemptHydrationAtCurrentPriority$1);
-	var didWarnAboutUnstableCreatePortal = false;
-
-	{
-	  if (typeof Map !== 'function' || // $FlowIssue Flow incorrectly thinks Map has no prototype
-	  Map.prototype == null || typeof Map.prototype.forEach !== 'function' || typeof Set !== 'function' || // $FlowIssue Flow incorrectly thinks Set has no prototype
-	  Set.prototype == null || typeof Set.prototype.clear !== 'function' || typeof Set.prototype.forEach !== 'function') {
-	    warningWithoutStack$1(false, 'React depends on Map and Set built-in types. Make sure that you load a ' + 'polyfill in older browsers. https://fb.me/react-polyfills');
-	  }
-	}
-
-	setRestoreImplementation(restoreControlledState$$1);
-	setBatchingImplementation(batchedUpdates$1, discreteUpdates$1, flushDiscreteUpdates, batchedEventUpdates$1);
-
 	function createPortal$$1(children, container) {
 	  var key = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
-	  if (!isValidContainer(container)) {
-	    {
-	      throw Error("Target container is not a DOM element.");
+	  (function () {
+	    if (!isValidContainer(container)) {
+	      {
+	        throw ReactError(Error("Target container is not a DOM element."));
+	      }
 	    }
-	  } // TODO: pass ReactDOM portal implementation as third argument
+	  })(); // TODO: pass ReactDOM portal implementation as third argument
 
 
 	  return createPortal$1(children, container, null, key);
@@ -28213,12 +28450,123 @@ var jsonx = (function (exports) {
 
 	var ReactDOM = {
 	  createPortal: createPortal$$1,
-	  // Legacy
-	  findDOMNode: findDOMNode,
-	  hydrate: hydrate,
-	  render: render,
-	  unstable_renderSubtreeIntoContainer: unstable_renderSubtreeIntoContainer,
-	  unmountComponentAtNode: unmountComponentAtNode,
+	  findDOMNode: function (componentOrElement) {
+	    {
+	      var owner = ReactCurrentOwner.current;
+
+	      if (owner !== null && owner.stateNode !== null) {
+	        var warnedAboutRefsInRender = owner.stateNode._warnedAboutRefsInRender;
+	        !warnedAboutRefsInRender ? warningWithoutStack$1(false, '%s is accessing findDOMNode inside its render(). ' + 'render() should be a pure function of props and state. It should ' + 'never access something that requires stale data from the previous ' + 'render, such as refs. Move this logic to componentDidMount and ' + 'componentDidUpdate instead.', getComponentName(owner.type) || 'A component') : void 0;
+	        owner.stateNode._warnedAboutRefsInRender = true;
+	      }
+	    }
+
+	    if (componentOrElement == null) {
+	      return null;
+	    }
+
+	    if (componentOrElement.nodeType === ELEMENT_NODE) {
+	      return componentOrElement;
+	    }
+
+	    {
+	      return findHostInstanceWithWarning(componentOrElement, 'findDOMNode');
+	    }
+
+	    return findHostInstance(componentOrElement);
+	  },
+	  hydrate: function (element, container, callback) {
+	    (function () {
+	      if (!isValidContainer(container)) {
+	        {
+	          throw ReactError(Error("Target container is not a DOM element."));
+	        }
+	      }
+	    })();
+
+	    {
+	      !!container._reactHasBeenPassedToCreateRootDEV ? warningWithoutStack$1(false, 'You are calling ReactDOM.hydrate() on a container that was previously ' + 'passed to ReactDOM.%s(). This is not supported. ' + 'Did you mean to call createRoot(container, {hydrate: true}).render(element)?', 'unstable_createRoot') : void 0;
+	    } // TODO: throw or warn if we couldn't hydrate?
+
+
+	    return legacyRenderSubtreeIntoContainer(null, element, container, true, callback);
+	  },
+	  render: function (element, container, callback) {
+	    (function () {
+	      if (!isValidContainer(container)) {
+	        {
+	          throw ReactError(Error("Target container is not a DOM element."));
+	        }
+	      }
+	    })();
+
+	    {
+	      !!container._reactHasBeenPassedToCreateRootDEV ? warningWithoutStack$1(false, 'You are calling ReactDOM.render() on a container that was previously ' + 'passed to ReactDOM.%s(). This is not supported. ' + 'Did you mean to call root.render(element)?', 'unstable_createRoot') : void 0;
+	    }
+
+	    return legacyRenderSubtreeIntoContainer(null, element, container, false, callback);
+	  },
+	  unstable_renderSubtreeIntoContainer: function (parentComponent, element, containerNode, callback) {
+	    (function () {
+	      if (!isValidContainer(containerNode)) {
+	        {
+	          throw ReactError(Error("Target container is not a DOM element."));
+	        }
+	      }
+	    })();
+
+	    (function () {
+	      if (!(parentComponent != null && has(parentComponent))) {
+	        {
+	          throw ReactError(Error("parentComponent must be a valid React Component"));
+	        }
+	      }
+	    })();
+
+	    return legacyRenderSubtreeIntoContainer(parentComponent, element, containerNode, false, callback);
+	  },
+	  unmountComponentAtNode: function (container) {
+	    (function () {
+	      if (!isValidContainer(container)) {
+	        {
+	          throw ReactError(Error("unmountComponentAtNode(...): Target container is not a DOM element."));
+	        }
+	      }
+	    })();
+
+	    {
+	      !!container._reactHasBeenPassedToCreateRootDEV ? warningWithoutStack$1(false, 'You are calling ReactDOM.unmountComponentAtNode() on a container that was previously ' + 'passed to ReactDOM.%s(). This is not supported. Did you mean to call root.unmount()?', 'unstable_createRoot') : void 0;
+	    }
+
+	    if (container._reactRootContainer) {
+	      {
+	        var rootEl = getReactRootElementInContainer(container);
+	        var renderedByDifferentReact = rootEl && !getInstanceFromNode$1(rootEl);
+	        !!renderedByDifferentReact ? warningWithoutStack$1(false, "unmountComponentAtNode(): The node you're attempting to unmount " + 'was rendered by another copy of React.') : void 0;
+	      } // Unmount should not be batched.
+
+
+	      unbatchedUpdates(function () {
+	        legacyRenderSubtreeIntoContainer(null, null, container, false, function () {
+	          container._reactRootContainer = null;
+	        });
+	      }); // If you call unmountComponentAtNode twice in quick succession, you'll
+	      // get `true` twice. That's probably fine?
+
+	      return true;
+	    } else {
+	      {
+	        var _rootEl = getReactRootElementInContainer(container);
+
+	        var hasNonRootReactChild = !!(_rootEl && getInstanceFromNode$1(_rootEl)); // Check if the container itself is a React root node.
+
+	        var isContainerReactRoot = container.nodeType === ELEMENT_NODE && isValidContainer(container.parentNode) && !!container.parentNode._reactRootContainer;
+	        !!hasNonRootReactChild ? warningWithoutStack$1(false, "unmountComponentAtNode(): The node you're attempting to unmount " + 'was rendered by React and is not a top-level container. %s', isContainerReactRoot ? 'You may have accidentally passed in a React root node instead ' + 'of its container.' : 'Instead, have the parent component update its state and ' + 'rerender in order to remove this component.') : void 0;
+	      }
+
+	      return false;
+	    }
+	  },
 	  // Temporary alias since we already shipped React 16 RC with it.
 	  // TODO: remove in React 17.
 	  unstable_createPortal: function () {
@@ -28230,13 +28578,60 @@ var jsonx = (function (exports) {
 	    return createPortal$$1.apply(void 0, arguments);
 	  },
 	  unstable_batchedUpdates: batchedUpdates$1,
+	  // TODO remove this legacy method, unstable_discreteUpdates replaces it
+	  unstable_interactiveUpdates: function (fn, a, b, c) {
+	    flushDiscreteUpdates();
+	    return discreteUpdates$1(fn, a, b, c);
+	  },
+	  unstable_discreteUpdates: discreteUpdates$1,
+	  unstable_flushDiscreteUpdates: flushDiscreteUpdates,
 	  flushSync: flushSync,
+	  unstable_createRoot: createRoot,
+	  unstable_createSyncRoot: createSyncRoot,
+	  unstable_flushControlled: flushControlled,
 	  __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: {
 	    // Keep in sync with ReactDOMUnstableNativeDependencies.js
 	    // ReactTestUtils.js, and ReactTestUtilsAct.js. This is an array for better minification.
 	    Events: [getInstanceFromNode$1, getNodeFromInstance$1, getFiberCurrentPropsFromNode$1, injection.injectEventPluginsByName, eventNameDispatchConfigs, accumulateTwoPhaseDispatches, accumulateDirectDispatches, enqueueStateRestore, restoreStateIfNeeded, dispatchEvent, runEventsInBatch, flushPassiveEffects, IsThisRendererActing]
 	  }
 	};
+
+	function createRoot(container, options) {
+	  var functionName = 'unstable_createRoot';
+
+	  (function () {
+	    if (!isValidContainer(container)) {
+	      {
+	        throw ReactError(Error(functionName + "(...): Target container is not a DOM element."));
+	      }
+	    }
+	  })();
+
+	  warnIfReactDOMContainerInDEV(container);
+	  return new ReactRoot(container, options);
+	}
+
+	function createSyncRoot(container, options) {
+	  var functionName = 'unstable_createRoot';
+
+	  (function () {
+	    if (!isValidContainer(container)) {
+	      {
+	        throw ReactError(Error(functionName + "(...): Target container is not a DOM element."));
+	      }
+	    }
+	  })();
+
+	  warnIfReactDOMContainerInDEV(container);
+	  return new ReactSyncRoot(container, BatchedRoot, options);
+	}
+
+	function warnIfReactDOMContainerInDEV(container) {
+	  {
+	    !!container._reactRootContainer ? warningWithoutStack$1(false, 'You are calling ReactDOM.%s() on a container that was previously ' + 'passed to ReactDOM.render(). This is not supported.', 'unstable_createRoot') : void 0;
+	    container._reactHasBeenPassedToCreateRootDEV = true;
+	  }
+	}
 
 	var foundDevTools = injectIntoDevTools({
 	  findFiberByHostInstance: getClosestInstanceFromNode,
@@ -28863,6 +29258,11 @@ var jsonx = (function (exports) {
 
 	  return parts.join('')
 	}
+
+	var base64 = /*#__PURE__*/Object.freeze({
+		toByteArray: toByteArray,
+		fromByteArray: fromByteArray
+	});
 
 	function read (buffer, offset, isLE, mLen, nBytes) {
 	  var e, m;
@@ -30407,7 +30807,7 @@ var jsonx = (function (exports) {
 
 	function writeFloat (buf, value, offset, littleEndian, noAssert) {
 	  if (!noAssert) {
-	    checkIEEE754(buf, value, offset, 4);
+	    checkIEEE754(buf, value, offset, 4, 3.4028234663852886e+38, -3.4028234663852886e+38);
 	  }
 	  write(buf, value, offset, littleEndian, 23, 4);
 	  return offset + 4
@@ -30423,7 +30823,7 @@ var jsonx = (function (exports) {
 
 	function writeDouble (buf, value, offset, littleEndian, noAssert) {
 	  if (!noAssert) {
-	    checkIEEE754(buf, value, offset, 8);
+	    checkIEEE754(buf, value, offset, 8, 1.7976931348623157E+308, -1.7976931348623157E+308);
 	  }
 	  write(buf, value, offset, littleEndian, 52, 8);
 	  return offset + 8
@@ -30952,7 +31352,7 @@ var jsonx = (function (exports) {
 	var debugEnviron;
 	function debuglog(set) {
 	  if (isUndefined(debugEnviron))
-	    debugEnviron =  '';
+	    debugEnviron = '';
 	  set = set.toUpperCase();
 	  if (!debugs[set]) {
 	    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
@@ -32240,7 +32640,7 @@ var jsonx = (function (exports) {
 	      if (!state.reading) {
 	        nextTick(nReadingNextTick, this);
 	      } else if (state.length) {
-	        emitReadable(this);
+	        emitReadable(this, state);
 	      }
 	    }
 	  }
@@ -33267,11 +33667,19 @@ var jsonx = (function (exports) {
 
 	// TODO: this is special because it gets imported during build.
 
-	var ReactVersion = '16.12.0';
+	var ReactVersion = '16.10.2';
 
 	// Do not require this module directly! Use normal `invariant` calls with
-	// template literal strings. The messages will be replaced with error codes
-	// during build.
+	// template literal strings. The messages will be converted to ReactError during
+	// build, and in production they will be minified.
+
+	// Do not require this module directly! Use normal `invariant` calls with
+	// template literal strings. The messages will be converted to ReactError during
+	// build, and in production they will be minified.
+	function ReactError(error) {
+	  error.name = 'Invariant Violation';
+	  return error;
+	}
 
 	/**
 	 * Use invariant() to assert state which your program assumes to be true.
@@ -33601,23 +34009,18 @@ var jsonx = (function (exports) {
 
 	  return '\n    in ' + (name || 'Unknown') + sourceInfo;
 	};
-
-	 // Trace which interactions trigger each commit.
-
-	 // SSR experiments
-
-	var enableSuspenseServerRenderer = false;
 	// with their related DOM properties
 
 	 // These APIs will no longer be "unstable" in the upcoming 16.7 release,
 	// Control this behavior with a flag to support 16.6 minor releases in the meanwhile.
 
 
+	 // See https://github.com/react-native-community/discussions-and-proposals/issues/72 for more information
+	// This is a flag so we can fix warnings in RN core before turning it on
+
 	 // Experimental React Flare event system and event components support.
 
 	var enableFlareAPI = false; // Experimental Host Component support.
-
-	 // Flag to turn event.target and event.currentTarget in ReactNative from a reactTag to a component instance
 
 	var ReactDebugCurrentFrame$1;
 	var didWarnAboutInvalidateContextType;
@@ -33746,11 +34149,13 @@ var jsonx = (function (exports) {
 	  var oldSize = oldArray.length;
 	  var newSize = oldSize * 2;
 
-	  if (!(newSize <= 0x10000)) {
-	    {
-	      throw Error("Maximum number of concurrent React renderers exceeded. This can happen if you are not properly destroying the Readable provided by React. Ensure that you call .destroy() on it if you no longer want to read from it, and did not read to the end. If you use .pipe() this should be automatic.");
+	  (function () {
+	    if (!(newSize <= 0x10000)) {
+	      {
+	        throw ReactError(Error("Maximum number of concurrent React renderers exceeded. This can happen if you are not properly destroying the Readable provided by React. Ensure that you call .destroy() on it if you no longer want to read from it, and did not read to the end. If you use .pipe() this should be automatic."));
+	      }
 	    }
-	  }
+	  })();
 
 	  var newArray = new Uint16Array(newSize);
 	  newArray.set(oldArray);
@@ -34085,7 +34490,7 @@ var jsonx = (function (exports) {
 	var didWarn = false;
 
 	function sanitizeURL(url) {
-	  if ( !didWarn && isJavaScriptProtocol.test(url)) {
+	  if (!didWarn && isJavaScriptProtocol.test(url)) {
 	    didWarn = true;
 	    warning$1(false, 'A future version of React will block javascript: URLs as a security precaution. ' + 'Use event handlers instead if you can. If you need to generate unsafe HTML try ' + 'using dangerouslySetInnerHTML instead. React was passed %s.', JSON.stringify(url));
 	  }
@@ -34290,11 +34695,13 @@ var jsonx = (function (exports) {
 	var currentHookNameInDev;
 
 	function resolveCurrentlyRenderingComponent() {
-	  if (!(currentlyRenderingComponent !== null)) {
-	    {
-	      throw Error("Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://fb.me/react-invalid-hook-call for tips about how to debug and fix this problem.");
+	  (function () {
+	    if (!(currentlyRenderingComponent !== null)) {
+	      {
+	        throw ReactError(Error("Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://fb.me/react-invalid-hook-call for tips about how to debug and fix this problem."));
+	      }
 	    }
-	  }
+	  })();
 
 	  {
 	    !!isInHookUserCodeInDev ? warning$1(false, 'Do not call Hooks inside useEffect(...), useMemo(...), or other built-in Hooks. ' + 'You can only call Hooks at the top level of your React function. ' + 'For more information, see ' + 'https://fb.me/rules-of-hooks') : void 0;
@@ -34333,11 +34740,13 @@ var jsonx = (function (exports) {
 
 	function createHook() {
 	  if (numberOfReRenders > 0) {
-	    {
+	    (function () {
 	      {
-	        throw Error("Rendered more hooks than during the previous render");
+	        {
+	          throw ReactError(Error("Rendered more hooks than during the previous render"));
+	        }
 	      }
-	    }
+	    })();
 	  }
 
 	  return {
@@ -34599,11 +35008,13 @@ var jsonx = (function (exports) {
 	}
 
 	function dispatchAction(componentIdentity, queue, action) {
-	  if (!(numberOfReRenders < RE_RENDER_LIMIT)) {
-	    {
-	      throw Error("Too many re-renders. React limits the number of renders to prevent an infinite loop.");
+	  (function () {
+	    if (!(numberOfReRenders < RE_RENDER_LIMIT)) {
+	      {
+	        throw ReactError(Error("Too many re-renders. React limits the number of renders to prevent an infinite loop."));
+	      }
 	    }
-	  }
+	  })();
 
 	  if (componentIdentity === currentlyRenderingComponent) {
 	    // This is a render phase update. Stash it in a lazily-created map of
@@ -34648,21 +35059,6 @@ var jsonx = (function (exports) {
 	  };
 	}
 
-	function useDeferredValue(value, config) {
-	  resolveCurrentlyRenderingComponent();
-	  return value;
-	}
-
-	function useTransition(config) {
-	  resolveCurrentlyRenderingComponent();
-
-	  var startTransition = function (callback) {
-	    callback();
-	  };
-
-	  return [startTransition, false];
-	}
-
 	function noop() {}
 
 	var currentThreadID = 0;
@@ -34684,9 +35080,7 @@ var jsonx = (function (exports) {
 	  useEffect: noop,
 	  // Debugging effect
 	  useDebugValue: noop,
-	  useResponder: useResponder,
-	  useDeferredValue: useDeferredValue,
-	  useTransition: useTransition
+	  useResponder: useResponder
 	};
 
 	var HTML_NAMESPACE = 'http://www.w3.org/1999/xhtml';
@@ -34810,36 +35204,44 @@ var jsonx = (function (exports) {
 
 
 	  if (voidElementTags[tag]) {
-	    if (!(props.children == null && props.dangerouslySetInnerHTML == null)) {
-	      {
-	        throw Error(tag + " is a void element tag and must neither have `children` nor use `dangerouslySetInnerHTML`." + (ReactDebugCurrentFrame$4.getStackAddendum()));
+	    (function () {
+	      if (!(props.children == null && props.dangerouslySetInnerHTML == null)) {
+	        {
+	          throw ReactError(Error(tag + " is a void element tag and must neither have `children` nor use `dangerouslySetInnerHTML`." + (ReactDebugCurrentFrame$4.getStackAddendum())));
+	        }
 	      }
-	    }
+	    })();
 	  }
 
 	  if (props.dangerouslySetInnerHTML != null) {
-	    if (!(props.children == null)) {
-	      {
-	        throw Error("Can only set one of `children` or `props.dangerouslySetInnerHTML`.");
+	    (function () {
+	      if (!(props.children == null)) {
+	        {
+	          throw ReactError(Error("Can only set one of `children` or `props.dangerouslySetInnerHTML`."));
+	        }
 	      }
-	    }
+	    })();
 
-	    if (!(typeof props.dangerouslySetInnerHTML === 'object' && HTML in props.dangerouslySetInnerHTML)) {
-	      {
-	        throw Error("`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. Please visit https://fb.me/react-invariant-dangerously-set-inner-html for more information.");
+	    (function () {
+	      if (!(typeof props.dangerouslySetInnerHTML === 'object' && HTML in props.dangerouslySetInnerHTML)) {
+	        {
+	          throw ReactError(Error("`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. Please visit https://fb.me/react-invariant-dangerously-set-inner-html for more information."));
+	        }
 	      }
-	    }
+	    })();
 	  }
 
 	  {
 	    !(props.suppressContentEditableWarning || !props.contentEditable || props.children == null) ? warning$1(false, 'A component is `contentEditable` and contains `children` managed by ' + 'React. It is now your responsibility to guarantee that none of ' + 'those nodes are unexpectedly modified or duplicated. This is ' + 'probably not intentional.') : void 0;
 	  }
 
-	  if (!(props.style == null || typeof props.style === 'object')) {
-	    {
-	      throw Error("The `style` prop expects a mapping from style properties to values, not a string. For example, style={{marginRight: spacing + 'em'}} when using JSX." + (ReactDebugCurrentFrame$4.getStackAddendum()));
+	  (function () {
+	    if (!(props.style == null || typeof props.style === 'object')) {
+	      {
+	        throw ReactError(Error("The `style` prop expects a mapping from style properties to values, not a string. For example, style={{marginRight: spacing + 'em'}} when using JSX." + (ReactDebugCurrentFrame$4.getStackAddendum())));
+	      }
 	    }
-	  }
+	  })();
 	}
 
 	/**
@@ -36084,11 +36486,13 @@ var jsonx = (function (exports) {
 
 	function validateDangerousTag(tag) {
 	  if (!validatedTagCache.hasOwnProperty(tag)) {
-	    if (!VALID_TAG_REGEX.test(tag)) {
-	      {
-	        throw Error("Invalid tag: " + tag);
+	    (function () {
+	      if (!VALID_TAG_REGEX.test(tag)) {
+	        {
+	          throw ReactError(Error("Invalid tag: " + tag));
+	        }
 	      }
-	    }
+	    })();
 
 	    validatedTagCache[tag] = true;
 	  }
@@ -36274,11 +36678,13 @@ var jsonx = (function (exports) {
 
 	function validateRenderResult(child, type) {
 	  if (child === undefined) {
-	    {
+	    (function () {
 	      {
-	        throw Error((getComponentName(type) || 'Component') + "(...): Nothing was returned from render. This usually means a return statement is missing. Or, to render nothing, return null.");
+	        {
+	          throw ReactError(Error((getComponentName(type) || 'Component') + "(...): Nothing was returned from render. This usually means a return statement is missing. Or, to render nothing, return null."));
+	        }
 	      }
-	    }
+	    })();
 	  }
 	}
 
@@ -36407,7 +36813,7 @@ var jsonx = (function (exports) {
 	    if (typeof inst.UNSAFE_componentWillMount === 'function' || typeof inst.componentWillMount === 'function') {
 	      if (typeof inst.componentWillMount === 'function') {
 	        {
-	          if ( inst.componentWillMount.__suppressDeprecationWarning !== true) {
+	          if (inst.componentWillMount.__suppressDeprecationWarning !== true) {
 	            var _componentName4 = getComponentName(Component) || 'Unknown';
 
 	            if (!didWarnAboutDeprecatedWillMount[_componentName4]) {
@@ -36486,11 +36892,13 @@ var jsonx = (function (exports) {
 	          childContext = inst.getChildContext();
 
 	          for (var contextKey in childContext) {
-	            if (!(contextKey in _childContextTypes)) {
-	              {
-	                throw Error((getComponentName(Component) || 'Unknown') + ".getChildContext(): key \"" + contextKey + "\" is not defined in childContextTypes.");
+	            (function () {
+	              if (!(contextKey in _childContextTypes)) {
+	                {
+	                  throw ReactError(Error((getComponentName(Component) || 'Unknown') + ".getChildContext(): key \"" + contextKey + "\" is not defined in childContextTypes."));
+	                }
 	              }
-	            }
+	            })();
 	          }
 	        } else {
 	          warningWithoutStack$1(false, '%s.getChildContext(): childContextTypes must be defined in order to ' + 'use getChildContext().', getComponentName(Component) || 'Unknown');
@@ -36623,6 +37031,7 @@ var jsonx = (function (exports) {
 	  };
 
 	  _proto.read = function read(bytes) {
+
 	    if (this.exhausted) {
 	      return null;
 	    }
@@ -36670,11 +37079,13 @@ var jsonx = (function (exports) {
 
 	              var fallbackFrame = frame.fallbackFrame;
 
-	              if (!fallbackFrame) {
-	                {
-	                  throw Error("ReactDOMServer did not find an internal fallback frame for Suspense. This is a bug in React. Please file an issue.");
+	              (function () {
+	                if (!fallbackFrame) {
+	                  {
+	                    throw ReactError(Error("ReactDOMServer did not find an internal fallback frame for Suspense. This is a bug in React. Please file an issue."));
+	                  }
 	                }
-	              }
+	              })();
 
 	              this.stack.push(fallbackFrame);
 	              out[this.suspenseDepth] += '<!--$!-->'; // Skip flushing output since we're switching to the fallback
@@ -36703,20 +37114,14 @@ var jsonx = (function (exports) {
 	          outBuffer += this.render(child, frame.context, frame.domNamespace);
 	        } catch (err) {
 	          if (err != null && typeof err.then === 'function') {
-	            if (enableSuspenseServerRenderer) {
-	              if (!(this.suspenseDepth > 0)) {
+	            {
+	              (function () {
 	                {
-	                  throw Error("A React component suspended while rendering, but no fallback UI was specified.\n\nAdd a <Suspense fallback=...> component higher in the tree to provide a loading indicator or placeholder to display.");
+	                  {
+	                    throw ReactError(Error("ReactDOMServer does not yet support Suspense."));
+	                  }
 	                }
-	              }
-
-	              suspended = true;
-	            } else {
-	              {
-	                {
-	                  throw Error("ReactDOMServer does not yet support Suspense.");
-	                }
-	              }
+	              })();
 	            }
 	          } else {
 	            throw err;
@@ -36774,18 +37179,22 @@ var jsonx = (function (exports) {
 	          // Catch unexpected special types early.
 	          var $$typeof = nextChild.$$typeof;
 
-	          if (!($$typeof !== REACT_PORTAL_TYPE)) {
-	            {
-	              throw Error("Portals are not currently supported by the server renderer. Render them conditionally so that they only appear on the client render.");
+	          (function () {
+	            if (!($$typeof !== REACT_PORTAL_TYPE)) {
+	              {
+	                throw ReactError(Error("Portals are not currently supported by the server renderer. Render them conditionally so that they only appear on the client render."));
+	              }
 	            }
-	          } // Catch-all to prevent an infinite loop if React.Children.toArray() supports some new type.
+	          })(); // Catch-all to prevent an infinite loop if React.Children.toArray() supports some new type.
 
 
-	          {
+	          (function () {
 	            {
-	              throw Error("Unknown element-like object type: " + $$typeof.toString() + ". This is likely a bug in React. Please file an issue.");
+	              {
+	                throw ReactError(Error("Unknown element-like object type: " + $$typeof.toString() + ". This is likely a bug in React. Please file an issue."));
+	              }
 	            }
-	          }
+	          })();
 	        }
 
 	        var nextChildren = toArray(nextChild);
@@ -36843,13 +37252,19 @@ var jsonx = (function (exports) {
 	        case REACT_SUSPENSE_TYPE:
 	          {
 	            {
-	              {
+	              (function () {
 	                {
-	                  throw Error("ReactDOMServer does not yet support Suspense.");
+	                  {
+	                    throw ReactError(Error("ReactDOMServer does not yet support Suspense."));
+	                  }
 	                }
-	              }
+	              })();
 	            }
 	          }
+	        // eslint-disable-next-line-no-fallthrough
+
+	        default:
+	          break;
 	      }
 
 	      if (typeof elementType === 'object' && elementType !== null) {
@@ -36984,11 +37399,13 @@ var jsonx = (function (exports) {
 	          case REACT_FUNDAMENTAL_TYPE:
 	            {
 
-	              {
+	              (function () {
 	                {
-	                  throw Error("ReactDOMServer does not yet support the fundamental API.");
+	                  {
+	                    throw ReactError(Error("ReactDOMServer does not yet support the fundamental API."));
+	                  }
 	                }
-	              }
+	              })();
 	            }
 	          // eslint-disable-next-line-no-fallthrough
 
@@ -37029,11 +37446,13 @@ var jsonx = (function (exports) {
 
 	                case Pending:
 	                default:
-	                  {
+	                  (function () {
 	                    {
-	                      throw Error("ReactDOMServer does not yet support lazy-loaded components.");
+	                      {
+	                        throw ReactError(Error("ReactDOMServer does not yet support lazy-loaded components."));
+	                      }
 	                    }
-	                  }
+	                  })();
 
 	              }
 	            }
@@ -37042,11 +37461,13 @@ var jsonx = (function (exports) {
 	          case REACT_SCOPE_TYPE:
 	            {
 
-	              {
+	              (function () {
 	                {
-	                  throw Error("ReactDOMServer does not yet support scope components.");
+	                  {
+	                    throw ReactError(Error("ReactDOMServer does not yet support scope components."));
+	                  }
 	                }
-	              }
+	              })();
 	            }
 	        }
 	      }
@@ -37067,11 +37488,13 @@ var jsonx = (function (exports) {
 	        }
 	      }
 
-	      {
+	      (function () {
 	        {
-	          throw Error("Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: " + (elementType == null ? elementType : typeof elementType) + "." + info);
+	          {
+	            throw ReactError(Error("Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: " + (elementType == null ? elementType : typeof elementType) + "." + info));
+	          }
 	        }
-	      }
+	      })();
 	    }
 	  };
 
@@ -37139,18 +37562,22 @@ var jsonx = (function (exports) {
 	            warning$1(false, 'Use the `defaultValue` or `value` props instead of setting ' + 'children on <textarea>.');
 	          }
 
-	          if (!(defaultValue == null)) {
-	            {
-	              throw Error("If you supply `defaultValue` on a <textarea>, do not pass children.");
-	            }
-	          }
-
-	          if (Array.isArray(textareaChildren)) {
-	            if (!(textareaChildren.length <= 1)) {
+	          (function () {
+	            if (!(defaultValue == null)) {
 	              {
-	                throw Error("<textarea> can only have at most one child.");
+	                throw ReactError(Error("If you supply `defaultValue` on a <textarea>, do not pass children."));
 	              }
 	            }
+	          })();
+
+	          if (Array.isArray(textareaChildren)) {
+	            (function () {
+	              if (!(textareaChildren.length <= 1)) {
+	                {
+	                  throw ReactError(Error("<textarea> can only have at most one child."));
+	                }
+	              }
+	            })();
 
 	            textareaChildren = textareaChildren[0];
 	          }
@@ -38646,7 +39073,7 @@ var jsonx = (function (exports) {
 	    // check js environment
 	    {
 	        // nodejs env
-	        if ( module.exports) {
+	        if (module.exports) {
 	            exports = module.exports = UAParser;
 	        }
 	        exports.UAParser = UAParser;
@@ -39139,7 +39566,6 @@ var jsonx = (function (exports) {
 	}
 
 	var jsonxUtils = /*#__PURE__*/Object.freeze({
-		__proto__: null,
 		displayComponent: displayComponent,
 		getAdvancedBinding: getAdvancedBinding,
 		traverse: traverse,
@@ -40574,9 +41000,9 @@ var jsonx = (function (exports) {
 
     return function ${options.name || 'Anonymous'}(props){
       ${functionBody}
-      if(typeof exposeProps==='undefined' || exposeProps){
-        reactComponent.props = Object.assign({},props,typeof exposeProps==='undefined'?{}:exposeProps);
-        if(typeof exposeProps!=='undefined') reactComponent.__functionargs = Object.keys(exposeProps);
+      if(typeof exposeprops==='undefined' || exposeprops){
+        reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);
+        if(typeof exposeprops!=='undefined') reactComponent.__functionargs = Object.keys(exposeprops);
       } else{
         reactComponent.props =  props;
       }
@@ -40602,7 +41028,6 @@ var jsonx = (function (exports) {
 	}
 
 	var jsonxComponents = /*#__PURE__*/Object.freeze({
-		__proto__: null,
 		advancedBinding: advancedBinding,
 		componentMap: componentMap,
 		getBoundedComponents: getBoundedComponents,
@@ -41233,7 +41658,6 @@ var jsonx = (function (exports) {
 	}
 
 	var jsonxProps = /*#__PURE__*/Object.freeze({
-		__proto__: null,
 		STRIP_COMMENTS: STRIP_COMMENTS,
 		ARGUMENT_NAMES: ARGUMENT_NAMES,
 		getParamNames: getParamNames,
@@ -41372,7 +41796,6 @@ var jsonx = (function (exports) {
 	}
 
 	var jsonxChildren = /*#__PURE__*/Object.freeze({
-		__proto__: null,
 		getChildrenProperty: getChildrenProperty,
 		getChildrenProps: getChildrenProps,
 		getJSONXChildren: getJSONXChildren

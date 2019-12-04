@@ -352,9 +352,9 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
 
     return function ${options.name || 'Anonymous'}(props){
       ${functionBody}
-      if(typeof exposeProps==='undefined' || exposeProps){
-        reactComponent.props = Object.assign({},props,typeof exposeProps==='undefined'?{}:exposeProps);
-        if(typeof exposeProps!=='undefined') reactComponent.__functionargs = Object.keys(exposeProps);
+      if(typeof exposeprops==='undefined' || exposeprops){
+        reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);
+        if(typeof exposeprops!=='undefined') reactComponent.__functionargs = Object.keys(exposeprops);
       } else{
         reactComponent.props =  props;
       }
