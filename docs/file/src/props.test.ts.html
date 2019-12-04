@@ -40,7 +40,8 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/props.test.ts</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import * as _jsonxProps from &apos;./props&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import * as jsonx from &apos;./index&apos;;
+import * as _jsonxProps from &apos;./props&apos;;
 import { getComputedProps, } from &apos;./props&apos;;
 import mochaJSDOM from &apos;jsdom-global&apos;;
 import chai from &apos;chai&apos;;
@@ -133,6 +134,33 @@ describe(&apos;jsonx props&apos;, function () {
   });
   describe(&apos;getJSONXProps&apos;, () =&gt; {
     const getJSONXProps = _jsonxProps.getJSONXProps;
+    it(&apos;should return context props&apos;, () =&gt; { 
+      const functionContext = {
+        name: &apos;custom context&apos;,
+        content:&apos;this should be the children content&apos;,
+        returnJSON: true,
+      };
+      const testVals = {
+        contextName: [&apos;name&apos;],
+        _children: [&apos;content&apos;]
+      };
+      const contextJSONX = {
+        component: &apos;div&apos;,
+        props: {
+          title: &apos;context jsonx&apos;,
+        },
+        thiscontext:testVals,
+      };
+      const JSONXCP = getJSONXProps({ jsonx: contextJSONX, traverseObject: functionContext, propName: &apos;thiscontext&apos;, });
+      const JSONXJSONX = jsonx.getReactElementFromJSONX.call(functionContext, contextJSONX);
+      expect(JSONXCP).to.haveOwnProperty(&apos;contextName&apos;);
+      expect(JSONXCP).to.haveOwnProperty(&apos;_children&apos;);
+      expect(JSONXCP.contextName).to.eql(functionContext.name);
+      expect(JSONXCP._children).to.eql(functionContext.content);
+      expect(JSONXJSONX.children).to.eql(functionContext.content);
+      // const JSONXCP = getJSONXProps.call(functionContext, contextJSONX, { thiscontext: testVals, });
+      // console.log({ JSONXCP,JSONXJSONX });
+    });
     it(&apos;should return resolved dynamic prop&apos;, () =&gt; {
       const testVals = {
         auth: [&apos;authentication&apos;, ],

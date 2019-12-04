@@ -227,6 +227,8 @@ _jsonxChildren: {
   resourceprops:Object, // An object from async resources to merge onto jsonx.props once fully resolved
   asyncprops:Object, // An object from async resources to merge onto jsonx.props once fully resolved (alias for resourceprops)
   thisprops:Object, // An object to merge onto jsonx.props from properties already bound to this.props
+  thisstate:Object, // An object to merge onto jsonx.props from properties already bound to this.state
+  thiscontext:Object, // An object to merge onto jsonx.props from properties already bound to this
   windowprops:Object, // An object to merge onto jsonx.props from the window object
 
 
@@ -331,9 +333,11 @@ const myJSONX = {
 
 const myReactElements = getReactElement(myJSONX);</code>
 </code></pre>
-<h4 id="advanced---special-properties">Advanced - Special properties</h4><h5 id="resourceprops--asyncprops----thisprops---windowprops">resourceprops (asyncprops) / thisprops / windowprops</h5><p>The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.</p>
+<h4 id="advanced---special-properties">Advanced - Special properties</h4><h5 id="resourceprops--asyncprops----thisprops---thisstate---thiscontext---windowprops">resourceprops (asyncprops) / thisprops / thisstate / thiscontext / windowprops</h5><p>The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.</p>
 <p>Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).</p>
-<p>Thisprops transverse anything bound to <code>this.props</code>, a good example would be if you&apos;re storing and passing a user object on <code>this.props.user</code>, pulling the username would be where you would use thisprops.</p>
+<p>Thisprops transverses anything bound to <code>this.props</code>, a good example would be if you&apos;re storing and passing a user object on <code>this.props.user</code>, pulling the username would be where you would use thisprops.</p>
+<p>Thisstate transverses anything bound to <code>this.state</code>, for example if you&apos;re updating the state of a component based on user input from a text field <code>this.state.value</code>, pulling the value would be where you would use thisstate.</p>
+<p>Thiscontext transverses anything bound to <code>this</code>, a good example is if you&apos;re using JSONX programatically and you want to bind functionality to the render methods.</p>
 <p>Windowprops transverse anything on the global window object, like the current page location <code>window.location.href</code>.</p>
 <p>Dynamic props are transversed by passing an array to the property value you want, so for a window&apos;s location (<code>window.location.href</code>) the property value is accessed by an array to the href <code>[&apos;location&apos;,&apos;href&apos;]</code> where you omit the transverse object from the array path.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const traverseObject = {

@@ -61,13 +61,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/components.test.ts.html#lineNumber240",
+    "test-file/src/components.test.ts.html#lineNumber107",
     "jsonx components componentMap",
     "test"
   ],
   [
     "",
-    "test-file/src/components.test.ts.html#lineNumber107",
+    "test-file/src/components.test.ts.html#lineNumber240",
     "jsonx components componentMap",
     "test"
   ],
@@ -421,163 +421,169 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber46",
+    "test-file/src/props.test.ts.html#lineNumber47",
     "jsonx props",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber145",
+    "test-file/src/props.test.ts.html#lineNumber173",
     "jsonx props boundArgsReducer",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber146",
+    "test-file/src/props.test.ts.html#lineNumber174",
     "jsonx props boundArgsReducer should return reducer function",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber119",
+    "test-file/src/props.test.ts.html#lineNumber147",
     "jsonx props getChildrenComponents",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber124",
+    "test-file/src/props.test.ts.html#lineNumber152",
     "jsonx props getChildrenComponents should return error in children if missing __spread prop and if in debug mode",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber121",
+    "test-file/src/props.test.ts.html#lineNumber149",
     "jsonx props getChildrenComponents should return undefined children if missing __spread prop",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber128",
+    "test-file/src/props.test.ts.html#lineNumber156",
     "jsonx props getChildrenComponents should spread data as a component on __spread prop",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber340",
+    "test-file/src/props.test.ts.html#lineNumber368",
     "jsonx props getComponentProps",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber342",
+    "test-file/src/props.test.ts.html#lineNumber370",
     "jsonx props getComponentProps should return evaluated props dangerously using eval",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber47",
+    "test-file/src/props.test.ts.html#lineNumber48",
     "jsonx props getComputedProps",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber48",
+    "test-file/src/props.test.ts.html#lineNumber49",
     "jsonx props getComputedProps should return resolved computed props",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber150",
+    "test-file/src/props.test.ts.html#lineNumber178",
     "jsonx props getEvalProps",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber152",
+    "test-file/src/props.test.ts.html#lineNumber180",
     "jsonx props getEvalProps should return evaluated props dangerously using eval",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber261",
+    "test-file/src/props.test.ts.html#lineNumber289",
     "jsonx props getFunctionFromProps",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber299",
+    "test-file/src/props.test.ts.html#lineNumber327",
     "jsonx props getFunctionFromProps should return a function on this.props like this.props.onClick",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber280",
+    "test-file/src/props.test.ts.html#lineNumber308",
     "jsonx props getFunctionFromProps should return a library function like this.props.reduxRouter.push",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber315",
+    "test-file/src/props.test.ts.html#lineNumber343",
     "jsonx props getFunctionFromProps should return a window function like window.print or window.localStorage.getItem",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber263",
+    "test-file/src/props.test.ts.html#lineNumber291",
     "jsonx props getFunctionFromProps should return an empty function by default",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber219",
+    "test-file/src/props.test.ts.html#lineNumber247",
     "jsonx props getFunctionProps",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber221",
+    "test-file/src/props.test.ts.html#lineNumber249",
     "jsonx props getFunctionProps should resolve functions from jsonx.__functionProps from function strings",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber92",
+    "test-file/src/props.test.ts.html#lineNumber93",
     "jsonx props getJSONXProps",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber94",
+    "test-file/src/props.test.ts.html#lineNumber95",
+    "jsonx props getJSONXProps should return context props",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/props.test.ts.html#lineNumber122",
     "jsonx props getJSONXProps should return resolved dynamic prop",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber108",
+    "test-file/src/props.test.ts.html#lineNumber136",
     "jsonx props getJSONXProps should return resolved dynamic prop with undefined values if reference is invalid",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber359",
+    "test-file/src/props.test.ts.html#lineNumber387",
     "jsonx props getReactComponentProps",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber361",
+    "test-file/src/props.test.ts.html#lineNumber389",
     "jsonx props getReactComponentProps should return react component props dangerously using eval",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber171",
+    "test-file/src/props.test.ts.html#lineNumber199",
     "jsonx props getWindowComponents",
     "test"
   ],
   [
     "",
-    "test-file/src/props.test.ts.html#lineNumber178",
+    "test-file/src/props.test.ts.html#lineNumber206",
     "jsonx props getWindowComponents should return react element from jsonx.__windowComponents",
     "test"
   ],
@@ -1189,27 +1195,27 @@ window.esdocSearchIndex = [
   ],
   [
     "src/children.test.ts",
-    "test-file/src/children.test.ts.html",
-    "src/children.test.ts",
-    "testFile"
-  ],
-  [
-    "src/children.test.ts",
     "file/src/children.test.ts.html",
     "src/children.test.ts",
     "file"
   ],
   [
-    "src/components.test.ts",
-    "file/src/components.test.ts.html",
-    "src/components.test.ts",
-    "file"
+    "src/children.test.ts",
+    "test-file/src/children.test.ts.html",
+    "src/children.test.ts",
+    "testFile"
   ],
   [
     "src/components.test.ts",
     "test-file/src/components.test.ts.html",
     "src/components.test.ts",
     "testFile"
+  ],
+  [
+    "src/components.test.ts",
+    "file/src/components.test.ts.html",
+    "src/components.test.ts",
+    "file"
   ],
   [
     "src/index.test.ts",

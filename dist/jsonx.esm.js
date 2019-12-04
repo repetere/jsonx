@@ -235,9 +235,9 @@ function traverse(paths = {}, data = {}) {
  * @throws {SyntaxError|TypeError|ReferenceError}
  */
 function validateJSONX(jsonx = {}, returnAllErrors = false) {
-    const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops', 'thisstate',];
+    const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops', 'thisstate', 'thiscontext',];
     const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps',];
-    const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertJSONXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'debug'].concat(dynamicPropsNames, evalPropNames);
+    const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertJSONXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'exposeprops', 'debug'].concat(dynamicPropsNames, evalPropNames);
     let errors = [];
     if (!jsonx.component) {
         errors.push(SyntaxError('[0001] Missing React Component'));
@@ -1452,6 +1452,7 @@ function getComputedProps(options = {}) {
         const windowprops = jsonx.windowprops ? getJSONXProps({ jsonx, propName: 'windowprops', traverseObject: windowTraverse, }) : {};
         const thisprops = jsonx.thisprops ? getJSONXProps({ jsonx, propName: 'thisprops', traverseObject: componentThisProp, }) : {};
         const thisstate = jsonx.thisstate ? getJSONXProps({ jsonx, propName: 'thisstate', traverseObject: this.state, }) : {};
+        const thiscontext = jsonx.thiscontext ? getJSONXProps({ jsonx, propName: 'thiscontext', traverseObject: this || {}, }) : {};
         //allowing javascript injections
         const evalProps = (jsonx.__dangerouslyEvalProps || jsonx.__dangerouslyBindEvalProps)
             ? getEvalProps.call(this, { jsonx, })
@@ -1468,7 +1469,7 @@ function getComputedProps(options = {}) {
         const evalAllProps = (jsonx.__dangerouslyEvalAllProps)
             ? getEvalProps.call(this, { jsonx, })
             : {};
-        const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {} : { key: renderIndex, }, jsonx.props, thisprops, thisstate, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents, insertedComputedComponents);
+        const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {} : { key: renderIndex, }, jsonx.props, thisprops, thisstate, thiscontext, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents, insertedComputedComponents);
         const computedProps = Object.assign({}, allProps, jsonx.__functionProps ? getFunctionProps.call(this, { allProps, jsonx, }) : {}, jsonx.__windowComponents ? getWindowComponents.call(this, { allProps, jsonx, }) : {}, jsonx.__spreadComponent ? getChildrenComponents.call(this, { allProps, jsonx, }) : {}, evalAllProps);
         if (jsonx.debug)
             console.debug({ jsonx, computedProps, });

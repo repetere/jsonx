@@ -228,6 +228,8 @@ jsonx = {
   resourceprops:Object, // An object from async resources to merge onto jsonx.props once fully resolved
   asyncprops:Object, // An object from async resources to merge onto jsonx.props once fully resolved (alias for resourceprops)
   thisprops:Object, // An object to merge onto jsonx.props from properties already bound to this.props
+  thisstate:Object, // An object to merge onto jsonx.props from properties already bound to this.state
+  thiscontext:Object, // An object to merge onto jsonx.props from properties already bound to this
   windowprops:Object, // An object to merge onto jsonx.props from the window object
 
 
@@ -346,13 +348,17 @@ const myReactElements = getReactElement(myJSONX);
 
 #### Advanced - Special properties
 
-##### resourceprops (asyncprops) / thisprops / windowprops
+##### resourceprops (asyncprops) / thisprops / thisstate / thiscontext / windowprops
 
 The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.
 
 Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).
 
-Thisprops transverse anything bound to `this.props`, a good example would be if you're storing and passing a user object on `this.props.user`, pulling the username would be where you would use thisprops.
+Thisprops transverses anything bound to `this.props`, a good example would be if you're storing and passing a user object on `this.props.user`, pulling the username would be where you would use thisprops.
+
+Thisstate transverses anything bound to `this.state`, for example if you're updating the state of a component based on user input from a text field `this.state.value`, pulling the value would be where you would use thisstate.
+
+Thiscontext transverses anything bound to `this`, a good example is if you're using JSONX programatically and you want to bind functionality to the render methods.
 
 Windowprops transverse anything on the global window object, like the current page location `window.location.href`.
 
