@@ -476,6 +476,7 @@ async function fetchJSON(path = '', options = {}) {
 }
 
 var jsonxUtils = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   displayComponent: displayComponent,
   getAdvancedBinding: getAdvancedBinding,
   traverse: traverse,
@@ -832,7 +833,7 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = '', optio
       ${functionBody}
       if(typeof exposeProps==='undefined' || exposeProps){
         reactComponent.props = Object.assign({},props,typeof exposeProps==='undefined'?{}:exposeProps);
-        reactComponent.__functionargs = Object.keys(exposeProps);
+        if(typeof exposeProps!=='undefined') reactComponent.__functionargs = Object.keys(exposeProps);
       } else{
         reactComponent.props =  props;
       }
@@ -858,6 +859,7 @@ function getReactContext(options = {}) {
 }
 
 var jsonxComponents = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   advancedBinding: advancedBinding,
   componentMap: componentMap,
   getBoundedComponents: getBoundedComponents,
@@ -1488,6 +1490,7 @@ function getComputedProps(options = {}) {
 }
 
 var jsonxProps = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   STRIP_COMMENTS: STRIP_COMMENTS,
   ARGUMENT_NAMES: ARGUMENT_NAMES,
   getParamNames: getParamNames,
@@ -1626,6 +1629,7 @@ function getJSONXChildren(options = {}) {
 }
 
 var jsonxChildren = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   getChildrenProperty: getChildrenProperty,
   getChildrenProps: getChildrenProps,
   getJSONXChildren: getJSONXChildren

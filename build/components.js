@@ -354,7 +354,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ''
       ${functionBody}
       if(typeof exposeProps==='undefined' || exposeProps){
         reactComponent.props = Object.assign({},props,typeof exposeProps==='undefined'?{}:exposeProps);
-        reactComponent.__functionargs = Object.keys(exposeProps);
+        if(typeof exposeProps!=='undefined') reactComponent.__functionargs = Object.keys(exposeProps);
       } else{
         reactComponent.props =  props;
       }
