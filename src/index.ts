@@ -9,7 +9,7 @@ import * as jsonxProps from "./props";
 import * as jsonxChildren from "./children";
 import * as jsonxUtils from "./utils";
 import numeral from 'numeral';
-import luxon from 'luxon';
+import * as luxon from 'luxon';
 
 import { ReactElementLike } from "prop-types";
 import { JSONReactElement, Context } from "./types/jsonx/index";

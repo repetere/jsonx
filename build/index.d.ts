@@ -1,3 +1,4 @@
+/// <reference types="numeral" />
 import React from "react";
 import ReactDOM from "react-dom";
 import * as defs from "./types/jsonx/index";
@@ -5,6 +6,7 @@ import * as jsonxComponents from "./components";
 import * as jsonxProps from "./props";
 import * as jsonxChildren from "./children";
 import * as jsonxUtils from "./utils";
+import * as luxon from 'luxon';
 import { ReactElementLike } from "prop-types";
 import { JSONReactElement, Context } from "./types/jsonx/index";
 export declare let renderIndex: number;
@@ -111,5 +113,9 @@ export declare const _jsonxChildren: typeof jsonxChildren;
 export declare const _jsonxComponents: typeof jsonxComponents;
 export declare const _jsonxProps: typeof jsonxProps;
 export declare const _jsonxUtils: typeof jsonxUtils;
+export declare const _jsonxHelpers: {
+    numeral: Numeral;
+    luxon: typeof luxon;
+};
 export { __express, __express as renderFile } from "./express";
 export default getReactElementFromJSONX;

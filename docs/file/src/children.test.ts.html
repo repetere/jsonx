@@ -50,6 +50,8 @@ import ReactDOM from &apos;react-dom&apos;;
 import ReactDOMElements from &apos;react-dom-factories&apos;;
 import { expect, } from &apos;chai&apos;;
 import { JSDOM, } from &apos;jsdom&apos;;
+import numeral from &apos;numeral&apos;;
+import * as luxon from &apos;luxon&apos;;
 chai.use(require(&apos;sinon-chai&apos;));
 // import &apos;mocha-sinon&apos;;
 
@@ -275,6 +277,9 @@ describe(&apos;jsonx&apos;, function () {
   });
   describe(&apos;getJSONXChildren&apos;, () =&gt; {
     const getJSONXChildren = _jsonxChildren.getJSONXChildren;
+    const testDate = new Date();
+    const testDateISO = testDate.toISOString();
+    const luxonFormat = &apos;LL/dd/yyyy&apos;;
     it(&apos;should return JSONX Child Objects&apos;, () =&gt; {
       const renderIndex = 1;
       const JSONXChildren = getJSONXChildren.call({}, {
@@ -292,8 +297,62 @@ describe(&apos;jsonx&apos;, function () {
       });
     });
     it(&apos;should return null on error&apos;, () =&gt; {
-      expect(getJSONXChildren({ logError: () =&gt; { }, })).to.eql(null);
-
+      expect(getJSONXChildren.call({},{ logError: () =&gt; { }, })).to.eql(null);
+    });
+    it(&apos;should stringify children&apos;, () =&gt; {
+      const obj = { some: &apos;data&apos;, to: &apos;stringify&apos; };
+      expect(getJSONXChildren.call({},{
+        jsonx: {
+          children: obj,
+          ___stringifyChildren:[null,2],
+        }
+      })).to.eql(JSON.stringify(obj, null, 2));
+    });
+    it(&apos;should toString children&apos;, () =&gt; {
+      const obj = { some: &apos;data&apos;, to: &apos;stringify&apos; };
+      const testDate = new Date();
+      expect(getJSONXChildren.call({},{
+        jsonx: {
+          children: obj,
+          ___toStringChildren:true,
+        }
+      })).to.eql(obj.toString());
+      expect(getJSONXChildren.call({},{
+        jsonx: {
+          children: testDate,
+          ___toStringChildren:true,
+        }
+      })).to.eql(testDate.toString());
+    });
+    it(&apos;should convert children to numeral formatted string&apos;, () =&gt; {
+      const numeralValue = 1500.23;
+      const numeralFormat = &apos;0,0&apos;;
+      const numeralFormattedString = numeral(numeralValue).format(numeralFormat);
+      expect(getJSONXChildren.call({},{
+        jsonx: {
+          children: numeralValue,
+          ___toNumeral:numeralFormat,
+        }
+      })).to.eql(numeralFormattedString);
+    });
+    it(&apos;should convert children date object to luxon formatted string&apos;, () =&gt; {
+      const testLuxonFormat = luxon.DateTime.fromJSDate(testDate).toFormat(luxonFormat);
+      // console.log({ testDate, testDateISO, luxonFormat, testLuxonFormat });
+      expect(getJSONXChildren.call({}, {
+        jsonx: {
+          children: testDate,
+          ___JSDatetoLuxonString: luxonFormat,
+        }
+      })).to.eql(testLuxonFormat);
+    });
+    it(&apos;should convert children iso string to luxon formatted string&apos;, () =&gt; {
+      const testLuxonFormat = luxon.DateTime.fromISO(testDateISO).toFormat(luxonFormat);
+      expect(getJSONXChildren.call({}, {
+        jsonx: {
+          children: testDateISO,
+          ___ISOtoLuxonString: luxonFormat,
+        }
+      })).to.eql(testLuxonFormat);
     });
   });
 });</code></pre>

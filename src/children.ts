@@ -111,7 +111,7 @@ const { jsonx = {}, childjsonx, renderIndex, } = options;
  * @property {function} [this.logError=console.error] - error logging function
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  */
-export function getJSONXChildren(this:defs.Context, options:defs.Config = {}) {
+export function getJSONXChildren(this: defs.Context, options: defs.Config = { jsonx: {}, }) {
   // eslint-disable-next-line
   const { jsonx, resources, renderIndex, logError = console.error, } = options;
   try {

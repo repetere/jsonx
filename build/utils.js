@@ -230,7 +230,7 @@ export function traverse(paths = {}, data = {}) {
 export function validateJSONX(jsonx = {}, returnAllErrors = false) {
     const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops', 'thisstate', 'thiscontext',];
     const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps',];
-    const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertJSONXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'exposeprops', 'debug'].concat(dynamicPropsNames, evalPropNames);
+    const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertJSONXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'exposeprops', 'debug', '___stringifyChildren', '___toStringChildren', '___toNumeral', '___FromLuxonTimeZone', '___ISOtoLuxonString', '___JSDatetoLuxonString'].concat(dynamicPropsNames, evalPropNames);
     let errors = [];
     if (!jsonx.component) {
         errors.push(SyntaxError('[0001] Missing React Component'));

@@ -2,7 +2,7 @@ import { jsonx } from "./jsonx";
 export declare type JSONReactElement = {
     type: string;
     props?: any;
-    children?: null | string | JSONReactElement[];
+    children?: null | string | Date | JSONReactElement[];
 };
 export declare type Context = {
     componentLibraries?: jsonx['jsonxLibrary'];
@@ -22,6 +22,9 @@ export declare type Config = {
     jsonx: jsonx;
     resources?: any;
     debug?: boolean;
+    renderIndex?: number;
+    props?: any;
+    logError?: (...params: any[]) => any;
 };
 export declare type RenderConfig = Config & {
     querySelector: string;
