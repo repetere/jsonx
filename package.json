@@ -87,7 +87,7 @@
     "esdoc-standard-plugin": "^1.0.0",
     "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-prettier": "^3.1.1",
-    "esm": "3.2.22",
+    "esm": "3.2.25",
     "install": "^0.12.2",
     "jest": "^24.9.0",
     "jsdom": "^14.0.0",
