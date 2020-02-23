@@ -354,6 +354,18 @@ describe(&apos;jsonx&apos;, function () {
         }
       })).to.eql(testLuxonFormat);
     });
+    it(&apos;should import templates into children&apos;, () =&gt; {
+      const importedTemplate = getJSONXChildren.call({ returnJSON: true, }, {
+        jsonx: {
+          component: &apos;Fragment&apos;,
+          ___template: &apos;./src/mock/simple_template.jxm.json&apos;
+        }
+      });
+      expect(_jsonxChildren.templateCache).to.be.lengthOf(1);
+      expect(importedTemplate).to.be.an(&apos;array&apos;);
+      expect(importedTemplate[0].type).to.eql(&apos;div&apos;);
+      expect(importedTemplate[0].children).to.eql(&apos;from external template&apos;);
+    });
   });
 });</code></pre>
 

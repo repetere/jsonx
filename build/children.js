@@ -1,6 +1,10 @@
 import numeral from 'numeral';
 import * as luxon from 'luxon';
+import fs from 'fs';
+import path from 'path';
 import { getReactElementFromJSONX, } from './';
+const scopedEval = eval;
+export const templateCache = new Map();
 /**
  * returns a valid jsonx.children property
  * @param {Object} options
@@ -94,6 +98,47 @@ export function getChildrenProps(options = {}) {
         })
         : childjsonx;
 }
+export function fetchJSONSync(path, options) {
+    try {
+        const request = new XMLHttpRequest();
+        request.open(options.method || 'GET', path, false); // `false` makes the request synchronous
+        if (options.headers) {
+            Object.keys(options.headers).forEach(header => {
+                request.setRequestHeader(header, options.headers[header]);
+            });
+        }
+        request.send(options.body ? JSON.stringify(options.body) : undefined);
+        if (request.status !== 200) {
+            throw new Error(request.responseText);
+        }
+        else
+            return request.responseText;
+    }
+    catch (e) {
+        throw e;
+    }
+}
+export function getChildrenTemplate(template) {
+    const cachedTemplate = templateCache.get(template);
+    if (cachedTemplate)
+        return cachedTemplate;
+    else if (typeof window !== 'undefined' && typeof window.XMLHttpRequest === 'function' && !fs.readFileSync) {
+        const jsFile = fetchJSONSync(template);
+        const jsonxModule = scopedEval(`(${jsFile})`);
+        templateCache.set(template, jsonxModule);
+        return jsonxModule;
+    }
+    else if (typeof template === 'string') {
+        const jsFile = fs.readFileSync(path.resolve(template)).toString();
+        const jsonxModule = scopedEval(`(${jsFile})`);
+        templateCache.set(template, jsonxModule);
+        return jsonxModule;
+    }
+    return null;
+}
+export function clearTemplateCache() {
+    templateCache.clear();
+}
 /**
  * returns React Child Elements via JSONX
  * @param {*} options
@@ -111,7 +156,9 @@ export function getJSONXChildren(options = { jsonx: {}, }) {
         jsonx.children = getChildrenProperty({ jsonx, props, });
         props._children = undefined;
         delete props._children;
-        if (jsonx.children && jsonx.___stringifyChildren)
+        if (jsonx.___template)
+            jsonx.children = [getChildrenTemplate(jsonx.___template)];
+        else if (jsonx.children && jsonx.___stringifyChildren)
             jsonx.children = JSON.stringify.apply(null, [jsonx.children, null, 2]); //TODO: fix passing applied params
         else if (jsonx.children && jsonx.___toStringChildren)
             jsonx.children = jsonx.children.toString();

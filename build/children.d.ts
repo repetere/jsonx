@@ -1,4 +1,5 @@
 import * as defs from "./types/jsonx/index";
+export declare const templateCache: Map<any, any>;
 /**
  * returns a valid jsonx.children property
  * @param {Object} options
@@ -60,6 +61,9 @@ export declare function getChildrenProps(options?: {
     childjsonx?: defs.jsonx;
     props?: any;
 }): defs.jsonx | undefined;
+export declare function fetchJSONSync(path: string, options?: any): string;
+export declare function getChildrenTemplate(template: string | any): any;
+export declare function clearTemplateCache(): void;
 /**
  * returns React Child Elements via JSONX
  * @param {*} options

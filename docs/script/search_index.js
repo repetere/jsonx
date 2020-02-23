@@ -301,6 +301,12 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/src/children.test.ts.html#lineNumber315",
+    "jsonx getJSONXChildren should import templates into children",
+    "test"
+  ],
+  [
+    "",
     "test-file/src/children.test.ts.html#lineNumber241",
     "jsonx getJSONXChildren should return JSONX Child Objects",
     "test"

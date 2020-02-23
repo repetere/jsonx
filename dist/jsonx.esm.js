@@ -237,7 +237,7 @@ function traverse(paths = {}, data = {}) {
 function validateJSONX(jsonx = {}, returnAllErrors = false) {
     const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops', 'thisstate', 'thiscontext',];
     const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps',];
-    const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertJSONXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'exposeprops', 'debug', '___stringifyChildren', '___toStringChildren', '___toNumeral', '___FromLuxonTimeZone', '___ISOtoLuxonString', '___JSDatetoLuxonString'].concat(dynamicPropsNames, evalPropNames);
+    const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline', '__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertJSONXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops', 'exposeprops', 'debug', '___stringifyChildren', '___toStringChildren', '___toNumeral', '___FromLuxonTimeZone', '___ISOtoLuxonString', '___JSDatetoLuxonString', '___template'].concat(dynamicPropsNames, evalPropNames);
     let errors = [];
     if (!jsonx.component) {
         errors.push(SyntaxError('[0001] Missing React Component'));
@@ -9401,6 +9401,10 @@ var luxon = /*#__PURE__*/Object.freeze({
   Settings: Settings
 });
 
+var fs = {};
+
+const scopedEval = eval;
+const templateCache = new Map();
 /**
  * returns a valid jsonx.children property
  * @param {Object} options
@@ -9494,6 +9498,47 @@ function getChildrenProps(options = {}) {
         })
         : childjsonx;
 }
+function fetchJSONSync(path, options) {
+    try {
+        const request = new XMLHttpRequest();
+        request.open(options.method || 'GET', path, false); // `false` makes the request synchronous
+        if (options.headers) {
+            Object.keys(options.headers).forEach(header => {
+                request.setRequestHeader(header, options.headers[header]);
+            });
+        }
+        request.send(options.body ? JSON.stringify(options.body) : undefined);
+        if (request.status !== 200) {
+            throw new Error(request.responseText);
+        }
+        else
+            return request.responseText;
+    }
+    catch (e) {
+        throw e;
+    }
+}
+function getChildrenTemplate(template) {
+    const cachedTemplate = templateCache.get(template);
+    if (cachedTemplate)
+        return cachedTemplate;
+    else if (typeof window !== 'undefined' && typeof window.XMLHttpRequest === 'function' && !fs.readFileSync) {
+        const jsFile = fetchJSONSync(template);
+        const jsonxModule = scopedEval(`(${jsFile})`);
+        templateCache.set(template, jsonxModule);
+        return jsonxModule;
+    }
+    else if (typeof template === 'string') {
+        const jsFile = fs.readFileSync(path.resolve(template)).toString();
+        const jsonxModule = scopedEval(`(${jsFile})`);
+        templateCache.set(template, jsonxModule);
+        return jsonxModule;
+    }
+    return null;
+}
+function clearTemplateCache() {
+    templateCache.clear();
+}
 /**
  * returns React Child Elements via JSONX
  * @param {*} options
@@ -9511,7 +9556,9 @@ function getJSONXChildren(options = { jsonx: {}, }) {
         jsonx.children = getChildrenProperty({ jsonx, props, });
         props._children = undefined;
         delete props._children;
-        if (jsonx.children && jsonx.___stringifyChildren)
+        if (jsonx.___template)
+            jsonx.children = [getChildrenTemplate(jsonx.___template)];
+        else if (jsonx.children && jsonx.___stringifyChildren)
             jsonx.children = JSON.stringify.apply(null, [jsonx.children, null, 2]); //TODO: fix passing applied params
         else if (jsonx.children && jsonx.___toStringChildren)
             jsonx.children = jsonx.children.toString();
@@ -9534,14 +9581,16 @@ function getJSONXChildren(options = { jsonx: {}, }) {
 
 var jsonxChildren = /*#__PURE__*/Object.freeze({
   __proto__: null,
+  templateCache: templateCache,
   getChildrenProperty: getChildrenProperty,
   getChildrenProps: getChildrenProps,
+  fetchJSONSync: fetchJSONSync,
+  getChildrenTemplate: getChildrenTemplate,
+  clearTemplateCache: clearTemplateCache,
   getJSONXChildren: getJSONXChildren
 });
 
-var fs = {};
-
-const scopedEval = eval;
+const scopedEval$1 = eval;
 /**
  * Use JSONX for express view rendering
  * @param {string} filePath - path to jsonx express view
@@ -9555,7 +9604,7 @@ function __express(filePath, options, callback) {
         let jsonxModule = options.__jsonx;
         if (filePath) {
             const jsFile = fs.readFileSync(filePath).toString();
-            jsonxModule = scopedEval(jsFile.toString());
+            jsonxModule = scopedEval$1(jsFile.toString());
         }
         const resources = Object.assign({}, options);
         delete resources.__boundConfig;
