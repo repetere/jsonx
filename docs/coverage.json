@@ -7,8 +7,8 @@
       "expectCount": 2,
       "actualCount": 0,
       "undocumentLines": [
-        14,
-        56
+        16,
+        58
       ]
     },
     "src/components.test.ts": {

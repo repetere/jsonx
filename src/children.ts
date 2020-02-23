@@ -1,3 +1,5 @@
+import numeral from 'numeral';
+import * as luxon from 'luxon';
 import { getReactElementFromJSONX, } from './';
 import * as defs from "./types/jsonx/index";
 
@@ -109,7 +111,7 @@ const { jsonx = {}, childjsonx, renderIndex, } = options;
  * @property {function} [this.logError=console.error] - error logging function
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  */
-export function getJSONXChildren(this:defs.Context, options:any = {}) {
+export function getJSONXChildren(this: defs.Context, options: defs.Config = { jsonx: {}, }) {
   // eslint-disable-next-line
   const { jsonx, resources, renderIndex, logError = console.error, } = options;
   try {
@@ -117,6 +119,11 @@ export function getJSONXChildren(this:defs.Context, options:any = {}) {
     jsonx.children = getChildrenProperty({ jsonx, props, });
     props._children = undefined;
     delete props._children;
+    if (jsonx.children && jsonx.___stringifyChildren) jsonx.children = JSON.stringify.apply(null, [jsonx.children, null, 2]);//TODO: fix passing applied params
+    else if (jsonx.children && jsonx.___toStringChildren) jsonx.children = jsonx.children.toString();
+    else if (jsonx.children && jsonx.___toNumeral) jsonx.children = numeral(jsonx.children).format(jsonx.___toNumeral);
+    else if (jsonx.children && jsonx.___JSDatetoLuxonString) jsonx.children = luxon.DateTime.fromJSDate(jsonx.children as Date).toFormat(jsonx.___JSDatetoLuxonString);
+    else if (jsonx.children && jsonx.___ISOtoLuxonString) jsonx.children = luxon.DateTime.fromISO(jsonx.children as string, { zone: jsonx.___FromLuxonTimeZone }).toFormat(jsonx.___ISOtoLuxonString);
 
     return (jsonx.children && Array.isArray(jsonx.children) && typeof jsonx.children !== 'string')
       //@ts-ignore

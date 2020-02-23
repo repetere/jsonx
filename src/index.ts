@@ -8,6 +8,9 @@ import * as jsonxComponents from "./components";
 import * as jsonxProps from "./props";
 import * as jsonxChildren from "./children";
 import * as jsonxUtils from "./utils";
+import numeral from 'numeral';
+import * as luxon from 'luxon';
+
 import { ReactElementLike } from "prop-types";
 import { JSONReactElement, Context } from "./types/jsonx/index";
 const createElement = React.createElement;
@@ -290,6 +293,7 @@ export const _jsonxChildren = jsonxChildren;
 export const _jsonxComponents = jsonxComponents;
 export const _jsonxProps = jsonxProps;
 export const _jsonxUtils = jsonxUtils;
+export const _jsonxHelpers = { numeral, luxon, };
 export { __express, __express as renderFile } from "./express";
 
 export default getReactElementFromJSONX;

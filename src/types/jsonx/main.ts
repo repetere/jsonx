@@ -4,7 +4,7 @@ import { jsonx } from "./jsonx";
 export type JSONReactElement = {
   type: string;
   props?: any;
-  children?: null | string | JSONReactElement[];
+  children?: null | string | Date | JSONReactElement[];
 };
 
 export type Context = {
@@ -26,6 +26,9 @@ export type Config = {
   jsonx: jsonx;
   resources?: any;
   debug?: boolean;
+  renderIndex?: number;
+  props?: any;
+  logError?: (...params: any[]) => any;
 };
 
 export type RenderConfig = Config & {
