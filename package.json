@@ -105,7 +105,7 @@
     "react-bootstrap": "^1.0.0-beta.16",
     "react-materialize": "^3.5.9",
     "react-md": "^1.15.1",
-    "react-spectre": "0.0.1-alpha.0",
+    "react-spectre": "0.0.1-alpha.7",
     "rollup": "^1.31.1",
     "rollup-plugin-alias": "^2.2.0",
     "rollup-plugin-async": "^1.2.0",
