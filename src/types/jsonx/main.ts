@@ -26,6 +26,9 @@ export type Config = {
   jsonx: jsonx;
   resources?: any;
   debug?: boolean;
+  renderIndex?: number;
+  props?: any;
+  logError?: (...params: any[]) => any;
 };
 
 export type RenderConfig = Config & {

@@ -1,5 +1,5 @@
 export interface jsonxChildren {
-  children?: jsonx[] | string | null;
+  children?: jsonx[] | string | Date | null;
 }
 
 export interface jsonxElementProperties {
@@ -20,6 +20,9 @@ export interface jsonxElementProperties {
   thisstate?: {
     [index: string]: string[];
   };
+  thiscontext?: {
+    [index: string]: string[];
+  };
   comparisonprops?: jsonxComparison[];
   comparisonorprops?: jsonxComparison[];
   __dangerouslyBindEvalProps?: {
@@ -37,6 +40,12 @@ export interface jsonxElementProperties {
   __windowComponentProps?: any;
   __windowComponents?: any;
   passprops?: boolean;
+  ___stringifyChildren?: [string, number]|boolean; //TODO: fix passing applied params
+  ___toStringChildren?: boolean;
+  ___toNumeral?: string;
+  ___FromLuxonTimeZone?: string;
+  ___ISOtoLuxonString?: string;
+  ___JSDatetoLuxonString?: string;
   // __dangerouslyInsertComponents?: {
   //   [index: string]: string | callbackFunc;
   // };
