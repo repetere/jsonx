@@ -46,6 +46,7 @@ export interface jsonxElementProperties {
   ___FromLuxonTimeZone?: string;
   ___ISOtoLuxonString?: string;
   ___JSDatetoLuxonString?: string;
+  ___template?: string | any;
   // __dangerouslyInsertComponents?: {
   //   [index: string]: string | callbackFunc;
   // };

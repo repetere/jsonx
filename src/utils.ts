@@ -230,7 +230,7 @@ export function traverse(paths:defs.traversePaths = {}, data = {}) {
 export function validateJSONX(jsonx:defs.jsonx = {}, returnAllErrors = false):boolean|string {
   const dynamicPropsNames = ['asyncprops', 'resourceprops', 'windowprops', 'thisprops', 'thisstate','thiscontext',];
   const evalPropNames = ['__dangerouslyEvalProps', '__dangerouslyBindEvalProps',];
-  const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline','__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertJSONXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops','exposeprops', 'debug', '___stringifyChildren','___toStringChildren','___toNumeral','___FromLuxonTimeZone','___ISOtoLuxonString','___JSDatetoLuxonString' ].concat(dynamicPropsNames, evalPropNames);
+  const validKeys = ['component', 'props', 'children', '__spreadComponent', '__inline','__functionargs', '__dangerouslyInsertComponents', '__dangerouslyInsertComponentProps', '__dangerouslyInsertJSONXComponents', '__functionProps', '__functionparams', '__windowComponents', '__windowComponentProps', 'comparisonprops', 'comparisonorprops', 'passprops','exposeprops', 'debug', '___stringifyChildren','___toStringChildren','___toNumeral','___FromLuxonTimeZone','___ISOtoLuxonString','___JSDatetoLuxonString','___template' ].concat(dynamicPropsNames, evalPropNames);
   let errors: any = [];
   if (!jsonx.component) {
     errors.push(SyntaxError('[0001] Missing React Component'));

@@ -312,5 +312,17 @@ describe('jsonx', function () {
         }
       })).to.eql(testLuxonFormat);
     });
+    it('should import templates into children', () => {
+      const importedTemplate = getJSONXChildren.call({ returnJSON: true, }, {
+        jsonx: {
+          component: 'Fragment',
+          ___template: './src/mock/simple_template.jxm.json'
+        }
+      });
+      expect(_jsonxChildren.templateCache).to.be.lengthOf(1);
+      expect(importedTemplate).to.be.an('array');
+      expect(importedTemplate[0].type).to.eql('div');
+      expect(importedTemplate[0].children).to.eql('from external template');
+    });
   });
 });
