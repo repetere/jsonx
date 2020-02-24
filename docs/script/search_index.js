@@ -1,13 +1,13 @@
 window.esdocSearchIndex = [
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber84",
+    "test-file/src/index.test.ts.html#lineNumber98",
     "jsonx",
     "test"
   ],
   [
     "",
-    "test-file/src/index.test.ts.html#lineNumber98",
+    "test-file/src/children.test.ts.html#lineNumber84",
     "jsonx",
     "test"
   ],
@@ -1285,14 +1285,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/util.test.ts",
-    "file/src/util.test.ts.html",
-    "src/util.test.ts",
-    "file"
-  ],
-  [
-    "src/util.test.ts",
     "test-file/src/util.test.ts.html",
     "src/util.test.ts",
     "testFile"
+  ],
+  [
+    "src/util.test.ts",
+    "file/src/util.test.ts.html",
+    "src/util.test.ts",
+    "file"
   ]
 ]

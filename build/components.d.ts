@@ -1,6 +1,22 @@
-import React from 'react';
+import React from "react";
+import { ReactElementLike } from "prop-types";
 import * as defs from "./types/jsonx/index";
-import { ReactComponentLike } from 'prop-types';
+import { ReactComponentLike } from "prop-types";
+declare global {
+    interface window {
+        [index: string]: any;
+    }
+    interface Window {
+        [index: string]: any;
+    }
+    namespace NodeJS {
+        interface Global {
+            document: Document;
+            window: Window;
+            navigator: Navigator;
+        }
+    }
+}
 /**
  
  */
@@ -20,7 +36,7 @@ export declare let componentMap: any;
  */
 export declare function getBoundedComponents(this: defs.Context, options?: {
     advancedBinding?: boolean;
-    reactComponents?: defs.jsonx['jsonxComponents'];
+    reactComponents?: defs.jsonx["jsonxComponents"];
     boundedComponents?: string[];
 }): any;
 /**
@@ -33,7 +49,7 @@ export declare function getBoundedComponents(this: defs.Context, options?: {
  */
 export declare function getComponentFromLibrary(options?: {
     jsonx: defs.jsonx;
-    componentLibraries?: defs.jsonx['jsonxLibrary'];
+    componentLibraries?: defs.jsonx["jsonxLibrary"];
 }): any;
 /**
  * returns a react element from jsonx.component
@@ -53,8 +69,8 @@ export declare function getComponentFromLibrary(options?: {
  */
 export declare function getComponentFromMap(options?: {
     jsonx?: defs.jsonx;
-    reactComponents?: defs.jsonx['jsonxComponents'];
-    componentLibraries?: defs.jsonx['jsonxLibrary'];
+    reactComponents?: defs.jsonx["jsonxComponents"];
+    componentLibraries?: defs.jsonx["jsonxLibrary"];
     logError?: any;
     debug?: boolean;
 }): any;
@@ -86,7 +102,7 @@ export declare function getFunctionFromEval(options?: any): any;
  * @see {@link https://reactjs.org/docs/react-without-es6.html}
  */
 export declare function getReactClassComponent(this: defs.Context, reactComponent?: {}, options?: any): ReactComponentLike;
-export declare function DynamicComponent(this: defs.Context, props?: {}): defs.JSONReactElement | import("prop-types").ReactElementLike | null;
+export declare function DynamicComponent(this: defs.Context, props?: defs.dynamicComponentProps): defs.JSONReactElement | ReactElementLike | null;
 /**
  * Returns new React Function Component
  
@@ -126,7 +142,7 @@ export declare function DynamicComponent(this: defs.Context, props?: {}): defs.J
   const options = { name: IntroHook}
   const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({jsonxRender, functionBody, options});
    */
-export declare function getReactFunctionComponent(this: defs.Context, reactComponent?: {}, functionBody?: string, options?: any): any;
+export declare function getReactFunctionComponent(this: defs.Context, reactComponent?: {}, functionBody?: string | defs.functionParam, options?: any): any;
 /**
  *
  */

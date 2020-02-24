@@ -5,8 +5,8 @@ export declare type JSONReactElement = {
     children?: null | string | Date | JSONReactElement[];
 };
 export declare type Context = {
-    componentLibraries?: jsonx['jsonxLibrary'];
-    reactComponents?: jsonx['jsonxComponents'];
+    componentLibraries?: jsonx["jsonxLibrary"];
+    reactComponents?: jsonx["jsonxComponents"];
     debug?: boolean;
     returnJSON?: boolean;
     logError?: any;

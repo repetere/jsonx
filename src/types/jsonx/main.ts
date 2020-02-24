@@ -8,8 +8,8 @@ export type JSONReactElement = {
 };
 
 export type Context = {
-  componentLibraries?: jsonx['jsonxLibrary'];
-  reactComponents?: jsonx['jsonxComponents'];
+  componentLibraries?: jsonx["jsonxLibrary"];
+  reactComponents?: jsonx["jsonxComponents"];
   debug?: boolean;
   returnJSON?: boolean;
   logError?: any;
@@ -47,4 +47,3 @@ export type OutputHTMLConfig = {
   props?: any;
   children?: null | string | JSONReactElement[];
 } & Config;
-

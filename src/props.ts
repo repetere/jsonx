@@ -1,19 +1,30 @@
-import React from 'react';
-import { getRenderedJSON, } from './index';
-import * as utilities from './utils';
-import { getComponentFromMap, getReactFunctionComponent, getReactContext, } from './components';
+import React from "react";
+import { getRenderedJSON } from "./index";
+import * as utilities from "./utils";
+import {
+  getComponentFromMap,
+  getReactFunctionComponent,
+  getReactContext
+} from "./components";
 // if (typeof window === 'undefined') {
 //   var window = window || {};
 // }
 import * as defs from "./types/jsonx/index";
 declare global {
   interface window {
-    [index:string]: any;
+    [index: string]: any;
+  }
+  namespace NodeJS {
+    interface Global {
+      document: Document;
+      window: Window;
+      navigator: Navigator;
+    }
   }
 }
 
 //https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically
-export const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+export const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
 export const ARGUMENT_NAMES = /([^\s,]+)/g;
 /**
  * returns the names of parameters from a function declaration
@@ -22,13 +33,15 @@ export const ARGUMENT_NAMES = /([^\s,]+)/g;
  * function regularFunctionAdd(c,d){return c+d;}
  * getParamNames(arrowFunctionAdd) // => ['a','b']
  * getParamNames(regularFunctionAdd) // => ['c','d']
- * @param {Function} func 
+ * @param {Function} func
  * @todo write tests
  */
-export function getParamNames(func:defs.functionParam) {
-  var fnStr = func.toString().replace(STRIP_COMMENTS, '');
-  var result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
-  if(result === null){
+export function getParamNames(func: defs.functionParam) {
+  var fnStr = func.toString().replace(STRIP_COMMENTS, "");
+  var result = fnStr
+    .slice(fnStr.indexOf("(") + 1, fnStr.indexOf(")"))
+    .match(ARGUMENT_NAMES);
+  if (result === null) {
     result = [];
   }
   return result;
@@ -105,53 +118,61 @@ const testJSONX = {
   ],
 };
  */
-export function getJSONXProps(options:defs.dynamicFunctionParams = {}) {
+export function getJSONXProps(options: defs.dynamicFunctionParams = {}) {
   // eslint-disable-next-line
-  let { jsonx = {}, propName = 'asyncprops', traverseObject = {}, } = options;
+  let { jsonx = {}, propName = "asyncprops", traverseObject = {} } = options;
   // return (jsonx.asyncprops && typeof jsonx.asyncprops === 'object')
   // ? utilities.traverse(jsonx.asyncprops, resources)
   // : {};
-  return (jsonx[ propName ] && typeof jsonx[ propName ] === 'object')
-    ? utilities.traverse(jsonx[ propName ], traverseObject)
+  return jsonx[propName] && typeof jsonx[propName] === "object"
+    ? utilities.traverse(jsonx[propName], traverseObject)
     : {};
 }
 
 /**
  * returns children jsonx components defined on __spreadComponent spread over an array on props.__spread
- * @param {*} options 
+ * @param {*} options
  */
-export function getChildrenComponents(this:defs.Context, options: {allProps?:any, jsonx?:defs.jsonx} = {}) {
-  const { allProps = {}, jsonx = {}, } = options;
+export function getChildrenComponents(
+  this: defs.Context,
+  options: { allProps?: any; jsonx?: defs.jsonx } = {}
+) {
+  const { allProps = {}, jsonx = {} } = options;
   // const asyncprops = getJSONXProps({ jsonx, propName: 'spreadprops', traverseObject: allProps, });
   if (Array.isArray(allProps.__spread) === false) {
     if ((this && this.debug) || jsonx.debug) {
       return {
-        children: new Error('Using __spreadComponent requires an array prop \'__spread\'').toString(),
+        children: new Error(
+          "Using __spreadComponent requires an array prop '__spread'"
+        ).toString()
       };
     } else {
-      return { children:undefined, };
+      return { children: undefined };
     }
   } else {
     return {
-      _children: allProps.__spread.map((__item:any) => {
+      _children: allProps.__spread.map((__item: any) => {
         const clonedChild = Object.assign({}, jsonx.__spreadComponent);
         const clonedChildProps = Object.assign({}, clonedChild.props);
         clonedChildProps.__item = __item;
         clonedChild.props = clonedChildProps;
         return clonedChild;
-      }),
+      })
     };
   }
 }
 
-export function boundArgsReducer(this:defs.Context, jsonx:defs.jsonx = {}) {
-  return (args:any, arg:string) => {
+export function boundArgsReducer(this: defs.Context, jsonx: defs.jsonx = {}) {
+  return (args: any, arg: string) => {
     let val;
-    if (this && this.state && typeof this.state[ arg ] !== 'undefined') val = (this.state[ arg ]);
-    else if (this && this.props && typeof this.props[ arg ] !== 'undefined') val = (this.props[ arg ]);
-    else if (jsonx.props && typeof jsonx.props[ arg ] !== 'undefined') val = (jsonx.props[ arg ]);
-    if (typeof val !== 'undefined') args.push(val);
-    return args.filter((a:any)=>typeof a!=='undefined');
+    if (this && this.state && typeof this.state[arg] !== "undefined")
+      val = this.state[arg];
+    else if (this && this.props && typeof this.props[arg] !== "undefined")
+      val = this.props[arg];
+    else if (jsonx.props && typeof jsonx.props[arg] !== "undefined")
+      val = jsonx.props[arg];
+    if (typeof val !== "undefined") args.push(val);
+    return args.filter((a: any) => typeof a !== "undefined");
   };
 }
 
@@ -177,77 +198,92 @@ export function boundArgsReducer(this:defs.Context, jsonx:defs.jsonx = {}) {
   // expect(evalutedComputedFunc).to.eql('bob');
   // expect(evalutedComputedBoundFunc).to.eql('bounded');
  */
-export function getEvalProps(this: defs.Context, options: {jsonx:defs.jsonx } = {jsonx:{}}) {
-  const { jsonx, } = options;
+export function getEvalProps(
+  this: defs.Context,
+  options: { jsonx: defs.jsonx } = { jsonx: {} }
+) {
+  const { jsonx } = options;
   const scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
   let evAllProps = {};
   if (jsonx.__dangerouslyEvalAllProps) {
     let evVal;
     try {
       // eslint-disable-next-line
-      evVal = (typeof evVal === 'function')
-        ? jsonx.__dangerouslyEvalAllProps
-        : scopedEval(jsonx.__dangerouslyEvalAllProps);
-    } catch (e) { 
+      evVal =
+        typeof evVal === "function"
+          ? jsonx.__dangerouslyEvalAllProps
+          : scopedEval(jsonx.__dangerouslyEvalAllProps);
+    } catch (e) {
       if (this.debug || jsonx.debug) evVal = e;
     }
-    evAllProps = evVal.call(this, { jsonx, });
+    evAllProps = evVal.call(this, { jsonx });
   }
-  const evProps = Object.keys(jsonx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
-    let evVal;
-    let evValString;
-    try {
-      // eslint-disable-next-line
+  const evProps = Object.keys(jsonx.__dangerouslyEvalProps || {}).reduce(
+    (eprops, epropName) => {
+      let evVal;
+      let evValString;
+      try {
+        // eslint-disable-next-line
+        //@ts-ignore
+        evVal = scopedEval(jsonx.__dangerouslyEvalProps[epropName]);
+        evValString = evVal.toString();
+      } catch (e) {
+        if (this.debug || jsonx.debug) evVal = e;
+      }
       //@ts-ignore
-      evVal = scopedEval(jsonx.__dangerouslyEvalProps[ epropName ]);
-      evValString = evVal.toString();
-    } catch (e) { 
-      if (this.debug || jsonx.debug) evVal = e;
-    }
-    //@ts-ignore
-    eprops[ epropName ] = (typeof evVal === 'function')
-      ? evVal.call(this, { jsonx, })
-      : evVal;
-    //@ts-ignore
-    if (this.exposeEval) eprops[ `__eval_${epropName}` ] = evValString;
-    return eprops;
-  }, {});
-  const evBindProps = Object.keys(jsonx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
+      eprops[epropName] =
+        typeof evVal === "function" ? evVal.call(this, { jsonx }) : evVal;
+      //@ts-ignore
+      if (this.exposeEval) eprops[`__eval_${epropName}`] = evValString;
+      return eprops;
+    },
+    {}
+  );
+  const evBindProps = Object.keys(
+    jsonx.__dangerouslyBindEvalProps || {}
+  ).reduce((eprops, epropName) => {
     let evVal;
     let evValString;
 
     try {
       let args;
       //@ts-ignore
-      const functionBody = jsonx.__dangerouslyBindEvalProps[ epropName ];
+      const functionBody = jsonx.__dangerouslyBindEvalProps[epropName];
       // InlineFunction = Function.prototype.constructor.apply({}, args);
       let functionDefinition;
-      if (typeof functionBody === 'function') {
+      if (typeof functionBody === "function") {
         functionDefinition = functionBody;
-      } else {
-        //@ts-ignore
-        functionDefinition = scopedEval(jsonx.__dangerouslyBindEvalProps[ epropName ]);
+      } else if (jsonx.__dangerouslyBindEvalProps) {
+        functionDefinition = scopedEval(
+          jsonx.__dangerouslyBindEvalProps[epropName] as string
+        );
         evValString = functionDefinition.toString();
-
       } // eslint-disable-next-line
       if (jsonx.__functionargs && jsonx.__functionargs[epropName]) {
-        args = [this, ].concat(jsonx.__functionargs[epropName].reduce(boundArgsReducer.call(this, jsonx), []));
-      } else if (jsonx.__functionparams===false) {
-        args = [this, ];
+        args = [this].concat(
+          jsonx.__functionargs[epropName].reduce(
+            boundArgsReducer.call(this, jsonx),
+            []
+          )
+        );
+      } else if (jsonx.__functionparams === false) {
+        args = [this];
       } else {
         const functionDefArgs = getParamNames(functionDefinition);
-        args = [this, ].concat(functionDefArgs.reduce(boundArgsReducer.call(this, jsonx), []));
+        args = [this].concat(
+          functionDefArgs.reduce(boundArgsReducer.call(this, jsonx), [])
+        );
       }
       // eslint-disable-next-line
       evVal = functionDefinition.bind(...args);
-    } catch (e) { 
+    } catch (e) {
       if (this.debug || jsonx.debug) evVal = e;
     }
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
     //@ts-ignore
-    eprops[ epropName ] = evVal;
+    eprops[epropName] = evVal;
     //@ts-ignore
-    if (this.exposeEval) eprops[ `__eval_${epropName}` ] = evValString;
+    if (this.exposeEval) eprops[`__eval_${epropName}`] = evValString;
     return eprops;
   }, {});
 
@@ -255,62 +291,89 @@ export function getEvalProps(this: defs.Context, options: {jsonx:defs.jsonx } = 
 }
 
 /**
- * Resolves jsonx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points. 
- * @param {Object} options 
- * @param {Object} options.jsonx - Valid JSONX JSON 
+ * Resolves jsonx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+ * @param {Object} options
+ * @param {Object} options.jsonx - Valid JSONX JSON
  * @param {Object} [options.resources={}] - object to use for resourceprops(asyncprops), usually a result of an asynchronous call
  * @returns {Object} resolved object of React Components
  */
-export function getComponentProps(this:defs.Context, options:defs.Config = {jsonx:{}}) {
-  const { jsonx, resources, } = options;
-    //@ts-ignore
-    return Object.keys(jsonx.__dangerouslyInsertComponents).reduce((cprops:defs.jsonxResourceProps, cpropName:string) => {
-    let componentVal;
-    try {
-      // eslint-disable-next-line
-      //@ts-ignore
-      componentVal = getRenderedJSON.call(this, jsonx.__dangerouslyInsertComponents[ cpropName ], resources);
-    } catch (e) {
-      if (this.debug || jsonx.debug) componentVal = e;
-    }
-    cprops[ cpropName ] = componentVal;
-    return cprops;
-  }, {});
+export function getComponentProps(
+  this: defs.Context,
+  options: defs.Config = { jsonx: {} }
+) {
+  const { jsonx, resources } = options;
+  //@ts-ignore
+  return Object.keys(jsonx.__dangerouslyInsertComponents).reduce(
+    (cprops: defs.jsonxResourceProps, cpropName: string) => {
+      let componentVal;
+      try {
+        // eslint-disable-next-line
+        if (jsonx.__dangerouslyInsertComponents) {
+          componentVal = getRenderedJSON.call(
+            this,
+            jsonx.__dangerouslyInsertComponents[cpropName],
+            resources
+          );
+        }
+      } catch (e) {
+        if (this.debug || jsonx.debug) componentVal = e;
+      }
+      cprops[cpropName] = componentVal;
+      return cprops;
+    },
+    {}
+  );
 }
 
-export function getReactComponents(this:defs.Context, options:defs.Config) {
-  const { jsonx, resources, } = options;
-  const functionComponents = (!jsonx.__dangerouslyInsertFunctionComponents)
+export function getReactComponents(this: defs.Context, options: defs.Config) {
+  const { jsonx, resources } = options;
+  const functionComponents = !jsonx.__dangerouslyInsertFunctionComponents
     ? {}
-    : Object.keys(jsonx.__dangerouslyInsertFunctionComponents).reduce((cprops:defs.jsonxResourceProps, cpropName) => {
-      let componentVal;
-      try {
-        const args = jsonx.__dangerouslyInsertFunctionComponents[ cpropName ];
-        args.options = Object.assign({}, args.options, { resources });
-        // eslint-disable-next-line
-        componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
-      } catch (e) {
-        if (this.debug || jsonx.debug) componentVal = e;
-      }
-      cprops[cpropName] = cpropName === '_children' ? [componentVal]
-       : componentVal;
-      return cprops;
-    }, {});
-  const classComponents = (!jsonx.__dangerouslyInsertClassComponents)
+    : Object.keys(jsonx.__dangerouslyInsertFunctionComponents).reduce(
+        (cprops: defs.jsonxResourceProps, cpropName) => {
+          let componentVal;
+          try {
+            const args = jsonx.__dangerouslyInsertFunctionComponents[cpropName];
+            args.options = Object.assign({}, args.options, { resources });
+            // eslint-disable-next-line
+            componentVal = getReactFunctionComponent.call(
+              this,
+              args.reactComponent,
+              args.functionBody,
+              args.options
+            );
+          } catch (e) {
+            if (this.debug || jsonx.debug) componentVal = e;
+          }
+          cprops[cpropName] =
+            cpropName === "_children" ? [componentVal] : componentVal;
+          return cprops;
+        },
+        {}
+      );
+  const classComponents = !jsonx.__dangerouslyInsertClassComponents
     ? {}
-    : Object.keys(jsonx.__dangerouslyInsertClassComponents).reduce((cprops:defs.jsonxResourceProps, cpropName) => {
-      let componentVal;
-      try {
-        const args = jsonx.__dangerouslyInsertClassComponents[ cpropName ];
-        args.options = Object.assign({}, args.options, { resources });
-        // eslint-disable-next-line
-        componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.options);
-      } catch (e) {
-        if (this.debug || jsonx.debug) componentVal = e;
-      }
-      cprops[cpropName] = cpropName === '_children' ? [componentVal] : componentVal;
-      return cprops;
-    }, {});
+    : Object.keys(jsonx.__dangerouslyInsertClassComponents).reduce(
+        (cprops: defs.jsonxResourceProps, cpropName) => {
+          let componentVal;
+          try {
+            const args = jsonx.__dangerouslyInsertClassComponents[cpropName];
+            args.options = Object.assign({}, args.options, { resources });
+            // eslint-disable-next-line
+            componentVal = getReactFunctionComponent.call(
+              this,
+              args.reactComponent,
+              args.options
+            );
+          } catch (e) {
+            if (this.debug || jsonx.debug) componentVal = e;
+          }
+          cprops[cpropName] =
+            cpropName === "_children" ? [componentVal] : componentVal;
+          return cprops;
+        },
+        {}
+      );
   return Object.assign({}, functionComponents, classComponents);
 }
 
@@ -321,164 +384,201 @@ export function getReactComponents(this:defs.Context, options:defs.Config) {
 //  * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
  * @returns {Object} resolved object of React Components
  */
-export function getReactComponentProps(this: defs.Context, options: { jsonx: defs.jsonx } = { jsonx: {}}) {
-  const { jsonx, } = options;
-  const customComponents = this && this.reactComponents ? this.reactComponents : {};
-  const customLibraries = this && this.componentLibraries ? this.componentLibraries : {};
-  if (jsonx.__dangerouslyInsertJSONXComponents && Object.keys(jsonx.__dangerouslyInsertJSONXComponents).length) { 
-    return Object.keys(jsonx.__dangerouslyInsertJSONXComponents).reduce((cprops:defs.jsonxResourceProps, cpropName) => {
-      let componentVal;
-      try {
-        componentVal = getComponentFromMap({
-          jsonx: jsonx.__dangerouslyInsertJSONXComponents[ cpropName ],
-          reactComponents: customComponents,
-          componentLibraries: customLibraries,
-        });
-      } catch (e) {
-        if (this.debug || jsonx.debug) componentVal = e;
-      }
-      // eslint-disable-next-line
-      cprops[ cpropName ] = componentVal;
-      return cprops;
-    }, {});
+export function getReactComponentProps(
+  this: defs.Context,
+  options: { jsonx: defs.jsonx } = { jsonx: {} }
+) {
+  const { jsonx } = options;
+  const customComponents =
+    this && this.reactComponents ? this.reactComponents : {};
+  const customLibraries =
+    this && this.componentLibraries ? this.componentLibraries : {};
+  if (
+    jsonx.__dangerouslyInsertJSONXComponents &&
+    Object.keys(jsonx.__dangerouslyInsertJSONXComponents).length
+  ) {
+    return Object.keys(jsonx.__dangerouslyInsertJSONXComponents).reduce(
+      (cprops: defs.jsonxResourceProps, cpropName) => {
+        let componentVal;
+        try {
+          componentVal = getComponentFromMap({
+            jsonx: jsonx.__dangerouslyInsertJSONXComponents[cpropName],
+            reactComponents: customComponents,
+            componentLibraries: customLibraries
+          });
+        } catch (e) {
+          if (this.debug || jsonx.debug) componentVal = e;
+        }
+        // eslint-disable-next-line
+        cprops[cpropName] = componentVal;
+        return cprops;
+      },
+      {}
+    );
   } else {
-    return Object.keys(jsonx.__dangerouslyInsertReactComponents).reduce((cprops:defs.jsonxResourceProps, cpropName) => {
-      let componentVal;
-      try {
-        componentVal = getComponentFromMap({
-          jsonx: {
-            component: jsonx.__dangerouslyInsertReactComponents[ cpropName ],
-            props: jsonx.__dangerouslyInsertComponentProps
-              ? jsonx.__dangerouslyInsertComponentProps[ cpropName ]
-              : {},
-          },
-          reactComponents: customComponents,
-          componentLibraries: customLibraries,
-        });
-      } catch (e) {
-        if (this.debug || jsonx.debug) componentVal = e;
-      }
-      // eslint-disable-next-line
-      cprops[ cpropName ] = componentVal;
-      return cprops;
-    }, {});
+    return Object.keys(jsonx.__dangerouslyInsertReactComponents).reduce(
+      (cprops: defs.jsonxResourceProps, cpropName) => {
+        let componentVal;
+        try {
+          componentVal = getComponentFromMap({
+            jsonx: {
+              component: jsonx.__dangerouslyInsertReactComponents[cpropName],
+              props: jsonx.__dangerouslyInsertComponentProps
+                ? jsonx.__dangerouslyInsertComponentProps[cpropName]
+                : {}
+            },
+            reactComponents: customComponents,
+            componentLibraries: customLibraries
+          });
+        } catch (e) {
+          if (this.debug || jsonx.debug) componentVal = e;
+        }
+        // eslint-disable-next-line
+        cprops[cpropName] = componentVal;
+        return cprops;
+      },
+      {}
+    );
   }
 }
 
 /**
  * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
- * @param {Object} options 
+ * @param {Object} options
  * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or func:this.props.onClick  or func:inline.myInlineFunction
  * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Function} returns a function from this.props or window functions
  * @example
  * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
  */
-export function getFunctionFromProps(this: defs.Context, options: {
-  propFunc?: string,
-  propBody: string,
-  jsonx: defs.jsonx,
-  functionProperty?:string,
-} = { jsonx: {},propBody:''}) {
-  const { propFunc='func:', propBody, jsonx, functionProperty='', } = options;
+export function getFunctionFromProps(
+  this: defs.Context,
+  options: {
+    propFunc?: string;
+    propBody: string;
+    jsonx: defs.jsonx;
+    functionProperty?: string;
+  } = { jsonx: {}, propBody: "" }
+) {
+  const {
+    propFunc = "func:",
+    propBody,
+    jsonx,
+    functionProperty = ""
+  } = options;
   // eslint-disable-next-line
-  const { logError = console.error, debug, } = this;
-  let windowObject:any = {};
+  const { logError = console.error, debug } = this;
+  let windowObject: any = {};
   if (this.window) windowObject = this.window;
   //@ts-ignore
-  else if (typeof global!=='undefined' && global.window) windowObject = global.window;
+  else if (typeof global !== "undefined" && global.window)
+    windowObject = global.window;
   try {
-    const functionNameString = propFunc.split(':')[ 1 ] || '';
-    const functionNameArray = functionNameString.split('.');
-    const functionName = (functionNameArray.length) ? functionNameArray[ functionNameArray.length - 1 ] : '';
+    const functionNameString = propFunc.split(":")[1] || "";
+    const functionNameArray = functionNameString.split(".");
+    const functionName = functionNameArray.length
+      ? functionNameArray[functionNameArray.length - 1]
+      : "";
 
-    if (propFunc.includes('func:inline')) {
+    if (propFunc.includes("func:inline")) {
       // eslint-disable-next-line
       let InlineFunction;
       if (jsonx.__functionargs) {
-        const args:string[] = [].concat(jsonx.__functionargs[functionProperty]);
+        const args: string[] = [].concat(
+          jsonx.__functionargs[functionProperty]
+        );
         args.push(propBody);
         InlineFunction = Function.prototype.constructor.apply({}, args);
       } else {
-        InlineFunction = Function('param1', 'param2', '"use strict";' + propBody);
+        InlineFunction = Function(
+          "param1",
+          "param2",
+          '"use strict";' + propBody
+        );
       }
-      const [propFuncName, funcName, ] = propFunc.split('.');
-      
-      Object.defineProperty(
-        InlineFunction,
-        'name',
-        {
-          value: funcName,
-        }
-      );
+      const [propFuncName, funcName] = propFunc.split(".");
+
+      Object.defineProperty(InlineFunction, "name", {
+        value: funcName
+      });
       if (jsonx.__functionargs) {
-        const boundArgs = [this,].concat(jsonx.__functionargs[functionProperty].map((arg:string) => jsonx.props[ arg ]));
+        const boundArgs = [this].concat(
+          jsonx.__functionargs[functionProperty].map(
+            (arg: string) => jsonx.props[arg]
+          )
+        );
         return InlineFunction.bind(...boundArgs);
       } else {
         return InlineFunction.bind(this);
       }
-    } else if (propFunc.indexOf('func:window') !== -1) {
+    } else if (propFunc.indexOf("func:window") !== -1) {
       if (functionNameArray.length === 3) {
         try {
-          return windowObject[ functionNameArray[ 1 ] ][ functionName ].bind(this);
+          return windowObject[functionNameArray[1]][functionName].bind(this);
         } catch (e) {
           if (debug) {
             logError(e);
           }
-          return windowObject[ functionNameArray[ 1 ] ][ functionName ];
+          return windowObject[functionNameArray[1]][functionName];
         }
       } else {
         try {
-          return windowObject[ functionName ].bind(this);
+          return windowObject[functionName].bind(this);
         } catch (e) {
           if (debug) {
             logError(e);
           }
-          return windowObject[ functionName ];
+          return windowObject[functionName];
         }
       }
     } else if (functionNameArray.length === 4) {
-      return (this.props)
-        ? this.props[ functionNameArray[ 2 ] ][ functionName ]
-        : jsonx.props[ functionNameArray[ 2 ] ][ functionName ];
+      return this.props
+        ? this.props[functionNameArray[2]][functionName]
+        : jsonx.props[functionNameArray[2]][functionName];
     } else if (functionNameArray.length === 3) {
-      return (this.props)
-        ? this.props[ functionName ].bind(this)
-        : jsonx.props[ functionName ].bind(this);
+      return this.props
+        ? this.props[functionName].bind(this)
+        : jsonx.props[functionName].bind(this);
     } else {
-      return function () {};
+      return function() {};
     }
   } catch (e) {
-    if (this.debug){
+    if (this.debug) {
       logError(e);
       if (jsonx && jsonx.debug) return e;
     }
-    return function () {};
+    return function() {};
   }
 }
 
 /**
  * Returns a resolved object from function strings that has functions pulled from jsonx.__functionProps
- * @param {Object} options 
- * @param {Object} options.jsonx - Valid JSONX JSON 
+ * @param {Object} options
+ * @param {Object} options.jsonx - Valid JSONX JSON
  * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Object} resolved object of functions from function strings
  */
-export function getFunctionProps(this: defs.Context, options: {allProps?:any, jsonx:defs.jsonx, } = {jsonx:{}}) {
-  const { allProps = {}, jsonx = {}, } = options;
+export function getFunctionProps(
+  this: defs.Context,
+  options: { allProps?: any; jsonx: defs.jsonx } = { jsonx: {} }
+) {
+  const { allProps = {}, jsonx = {} } = options;
   const getFunction = getFunctionFromProps.bind(this);
   const funcProps = jsonx.__functionProps;
   //Allowing for window functions
   if (funcProps) {
     Object.keys(funcProps).forEach(key => {
-      if (typeof funcProps[ key ] === 'string' && funcProps[ key ].indexOf('func:') !== -1) {
-        allProps[ key ] = getFunction({
-          propFunc: funcProps[ key ],
-          propBody: (jsonx.__inline)?jsonx.__inline[ key ]:'',
+      if (
+        typeof funcProps[key] === "string" &&
+        funcProps[key].indexOf("func:") !== -1
+      ) {
+        allProps[key] = getFunction({
+          propFunc: funcProps[key],
+          propBody: jsonx.__inline ? jsonx.__inline[key] : "",
           jsonx,
-          functionProperty:key,
+          functionProperty: key
         });
-      } 
+      }
     });
   }
   return allProps;
@@ -486,30 +586,40 @@ export function getFunctionProps(this: defs.Context, options: {allProps?:any, js
 
 /**
  * Returns a resolved object that has React Components pulled from window.__jsonx_custom_elements
- * @param {Object} options 
- * @param {Object} options.jsonx - Valid JSONX JSON 
+ * @param {Object} options
+ * @param {Object} options.jsonx - Valid JSONX JSON
  * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Object} resolved object of with React Components from a window property window.__jsonx_custom_elements
  */
-export function getWindowComponents(this: defs.Context, options: {allProps?:any, jsonx:defs.jsonx, } = {jsonx:{}}) {
-  const { allProps, jsonx, } = options;
+export function getWindowComponents(
+  this: defs.Context,
+  options: { allProps?: any; jsonx: defs.jsonx } = { jsonx: {} }
+) {
+  const { allProps, jsonx } = options;
   const windowComponents = jsonx.__windowComponents;
   //@ts-ignore
   const window = this.window || global.window || {};
-  const windowFuncPrefix = 'func:window.__jsonx_custom_elements';
+  const windowFuncPrefix = "func:window.__jsonx_custom_elements";
   // if (jsonx.hasWindowComponent && window.__jsonx_custom_elements) {
   Object.keys(windowComponents).forEach(key => {
-    const windowKEY = (typeof windowComponents[ key ] === 'string')
-      ? windowComponents[ key ].replace(`${windowFuncPrefix}.`, '')
-      : '';
-    if (typeof windowComponents[ key ] === 'string' && windowComponents[ key ].indexOf(windowFuncPrefix) !== -1 && typeof window.__jsonx_custom_elements[ windowKEY ] === 'function') {
-      const windowComponentElement = window.__jsonx_custom_elements[ windowKEY ];
-      const windowComponentProps = (allProps[ '__windowComponentProps' ]) ? allProps[ '__windowComponentProps' ]
+    const windowKEY =
+      typeof windowComponents[key] === "string"
+        ? windowComponents[key].replace(`${windowFuncPrefix}.`, "")
+        : "";
+    if (
+      typeof windowComponents[key] === "string" &&
+      windowComponents[key].indexOf(windowFuncPrefix) !== -1 &&
+      typeof window.__jsonx_custom_elements[windowKEY] === "function"
+    ) {
+      const windowComponentElement = window.__jsonx_custom_elements[windowKEY];
+      const windowComponentProps = allProps["__windowComponentProps"]
+        ? allProps["__windowComponentProps"]
         : this.props;
-      allProps[ key ] = React.createElement(
+      allProps[key] = React.createElement(
         windowComponentElement,
         windowComponentProps,
-        null);
+        null
+      );
     }
   });
   return allProps;
@@ -566,69 +676,157 @@ computedProps = { key: 1,
         _store: {} } } }
  *
  */
-export function getComputedProps(this: defs.Context, options: {
-  jsonx?: defs.jsonx,
-  resources?: defs.jsonxResourceProps,
-  renderIndex?: number,
-  logError?: any,
-  useReduxState?:boolean,
-  ignoreReduxPropsInComponentLibraries?:boolean,
-  disableRenderIndexKey?:boolean,
-  debug?: boolean,
-  componentLibraries?:defs.jsonxLibrary
-} = {}) {
+export function getComputedProps(
+  this: defs.Context,
+  options: {
+    jsonx?: defs.jsonx;
+    resources?: defs.jsonxResourceProps;
+    renderIndex?: number;
+    logError?: any;
+    useReduxState?: boolean;
+    ignoreReduxPropsInComponentLibraries?: boolean;
+    disableRenderIndexKey?: boolean;
+    debug?: boolean;
+    componentLibraries?: defs.jsonxLibrary;
+  } = {}
+) {
   // eslint-disable-next-line
-  const { jsonx = {}, resources = {}, renderIndex, logError = console.error, useReduxState = true, ignoreReduxPropsInComponentLibraries = true, disableRenderIndexKey = true, debug, componentLibraries = {}} = options;
+  const {
+    jsonx = {},
+    resources = {},
+    renderIndex,
+    logError = console.error,
+    useReduxState = true,
+    ignoreReduxPropsInComponentLibraries = true,
+    disableRenderIndexKey = true,
+    debug,
+    componentLibraries = {}
+  } = options;
   try {
-    const componentThisProp = (jsonx.thisprops)
-      ? Object.assign({
-        __jsonx: {
-          _component: jsonx,
-          _resources: resources,
-        },
-      }, this.props,
-        jsonx.props,
-      //@ts-ignore
-      (useReduxState && !jsonx.ignoreReduxProps && (ignoreReduxPropsInComponentLibraries && !componentLibraries[ jsonx.component ]))
-        ? (this.props && this.props.getState) ? this.props.getState() : {}
-        : {}
-      )
+    const componentThisProp = jsonx.thisprops
+      ? Object.assign(
+          {
+            __jsonx: {
+              _component: jsonx,
+              _resources: resources
+            }
+          },
+          this.props,
+          jsonx.props,
+          //@ts-ignore
+          useReduxState &&
+            !jsonx.ignoreReduxProps &&
+            ignoreReduxPropsInComponentLibraries &&
+            jsonx.component &&
+            !componentLibraries[jsonx.component]
+            ? this.props && this.props.getState
+              ? this.props.getState()
+              : {}
+            : {}
+        )
       : undefined;
-    const windowTraverse = typeof window !== 'undefined' ? window : {};
-    const asyncprops = jsonx.asyncprops ? getJSONXProps({ jsonx, propName: 'asyncprops', traverseObject: resources, }) : {};
-    const resourceprops = jsonx.resourceprops ? getJSONXProps({ jsonx, propName: 'resourceprops', traverseObject: resources, }) : {};
-    const windowprops = jsonx.windowprops ? getJSONXProps({ jsonx, propName: 'windowprops', traverseObject: windowTraverse, }) : {};
-    const thisprops = jsonx.thisprops ? getJSONXProps({ jsonx, propName: 'thisprops', traverseObject: componentThisProp, }) : {};
-    const thisstate = jsonx.thisstate ? getJSONXProps({ jsonx, propName: 'thisstate', traverseObject: this.state, }) : {};
-    const thiscontext = jsonx.thiscontext ? getJSONXProps({ jsonx, propName: 'thiscontext', traverseObject: this || {}, }) : {};
+
+    const windowTraverse = typeof window !== "undefined" ? window : {};
+    const asyncprops = jsonx.asyncprops
+      ? getJSONXProps({
+          jsonx,
+          propName: "asyncprops",
+          traverseObject: resources
+        })
+      : {};
+    const resourceprops = jsonx.resourceprops
+      ? getJSONXProps({
+          jsonx,
+          propName: "resourceprops",
+          traverseObject: resources
+        })
+      : {};
+    const windowprops = jsonx.windowprops
+      ? getJSONXProps({
+          jsonx,
+          propName: "windowprops",
+          traverseObject: windowTraverse
+        })
+      : {};
+    const thisprops = jsonx.thisprops
+      ? getJSONXProps({
+          jsonx,
+          propName: "thisprops",
+          traverseObject: componentThisProp
+        })
+      : {};
+    const thisstate = jsonx.thisstate
+      ? getJSONXProps({
+          jsonx,
+          propName: "thisstate",
+          traverseObject: this.state
+        })
+      : {};
+    const thiscontext = jsonx.thiscontext
+      ? getJSONXProps({
+          jsonx,
+          propName: "thiscontext",
+          traverseObject: this || {}
+        })
+      : {};
 
     //allowing javascript injections
-    const evalProps = (jsonx.__dangerouslyEvalProps || jsonx.__dangerouslyBindEvalProps)
-      ? getEvalProps.call(this, { jsonx, })
+    const evalProps =
+      jsonx.__dangerouslyEvalProps || jsonx.__dangerouslyBindEvalProps
+        ? getEvalProps.call(this, { jsonx })
+        : {};
+    const insertedComponents = jsonx.__dangerouslyInsertComponents
+      ? getComponentProps.call(this, { jsonx, resources, debug })
       : {};
-    const insertedComponents = (jsonx.__dangerouslyInsertComponents)
-      ? getComponentProps.call(this, { jsonx, resources, debug, })
+    const insertedReactComponents =
+      jsonx.__dangerouslyInsertReactComponents ||
+      jsonx.__dangerouslyInsertJSONXComponents
+        ? getReactComponentProps.call(this, { jsonx, debug })
+        : {};
+    const insertedComputedComponents =
+      jsonx.__dangerouslyInsertFunctionComponents ||
+      jsonx.__dangerouslyInsertClassComponents
+        ? getReactComponents.call(this, { jsonx, debug })
+        : {};
+
+    const evalAllProps = jsonx.__dangerouslyEvalAllProps
+      ? getEvalProps.call(this, { jsonx })
       : {};
-    const insertedReactComponents = (jsonx.__dangerouslyInsertReactComponents || jsonx.__dangerouslyInsertJSONXComponents)
-      ? getReactComponentProps.call(this, { jsonx, debug, })
-      : {};
-    const insertedComputedComponents = (jsonx.__dangerouslyInsertFunctionComponents  || jsonx.__dangerouslyInsertClassComponents)
-      ? getReactComponents.call(this, { jsonx, debug, })
-      : {};
-    
-    const evalAllProps = (jsonx.__dangerouslyEvalAllProps)
-      ? getEvalProps.call(this, { jsonx, })
-      : {};
-    const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {}: { key: renderIndex, }, jsonx.props, thisprops, thisstate, thiscontext, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents, insertedComputedComponents);
-    const computedProps = Object.assign({}, allProps,
-      jsonx.__functionProps ? getFunctionProps.call(this, { allProps, jsonx, }) : {},
-      jsonx.__windowComponents ? getWindowComponents.call(this, { allProps, jsonx, }) : {},
-      jsonx.__spreadComponent ? getChildrenComponents.call(this, { allProps, jsonx, }) : {},
-      evalAllProps);
-    if (jsonx.debug) console.debug({ jsonx, computedProps, });
+    const allProps = Object.assign(
+      {},
+      this.disableRenderIndexKey || disableRenderIndexKey
+        ? {}
+        : { key: renderIndex },
+      jsonx.props,
+      thisprops,
+      thisstate,
+      thiscontext,
+      resourceprops,
+      asyncprops,
+      windowprops,
+      evalProps,
+      insertedComponents,
+      insertedReactComponents,
+      insertedComputedComponents
+    );
+    const computedProps = Object.assign(
+      {},
+      allProps,
+      jsonx.__functionProps
+        ? getFunctionProps.call(this, { allProps, jsonx })
+        : {},
+      jsonx.__windowComponents
+        ? getWindowComponents.call(this, { allProps, jsonx })
+        : {},
+      jsonx.__spreadComponent
+        ? getChildrenComponents.call(this, { allProps, jsonx })
+        : {},
+      evalAllProps
+    );
+    if (jsonx.debug) console.debug({ jsonx, computedProps });
     return computedProps;
   } catch (e) {
-    debug && logError(e, (e.stack) ? e.stack : 'no stack');
+    debug && logError(e, e.stack ? e.stack : "no stack");
     return null;
   }
 }

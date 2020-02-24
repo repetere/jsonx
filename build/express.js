@@ -1,6 +1,6 @@
-import { outputHTML, } from './';
-import path from 'path';
-import fs from 'fs';
+import { outputHTML } from "./";
+import path from "path";
+import fs from "fs";
 const scopedEval = eval;
 /**
  * Use JSONX for express view rendering
@@ -22,21 +22,21 @@ export function __express(filePath, options, callback) {
         delete resources.__DOCTYPE;
         delete resources.__jsonx;
         const context = Object.assign({}, options.__boundConfig);
-        if (path.extname('.json'))
+        if (path.extname(".json"))
             context.useJSON = true;
         const jsonxRenderedString = outputHTML.call(context, {
             jsonx: jsonxModule,
-            resources,
+            resources
         });
-        const template = `${options.__DOCTYPE || '<!DOCTYPE html>'}
+        const template = `${options.__DOCTYPE || "<!DOCTYPE html>"}
 ${jsonxRenderedString}`;
-        if (typeof callback === 'function')
+        if (typeof callback === "function")
             callback(null, template);
         else
             return template;
     }
     catch (e) {
-        if (typeof callback === 'function')
+        if (typeof callback === "function")
             callback(e);
         else
             throw e;
