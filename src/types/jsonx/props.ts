@@ -8,6 +8,21 @@ export type dynamicFunctionParams = {
   traverseObject?: any;
 };
 
+export type dynamicComponentProps = {
+  propName?: string;
+  traverseObject?: any;
+  useCache?: boolean;
+  cacheTimeout?: number;
+  loadingJSONX?: jsonx;
+  loadingErrorJSONX?: jsonx;
+  cacheTimeoutFunction?: functionParam;
+  jsonx?: jsonx;
+  transformFunction?: functionParam;
+  fetchURL?: string;
+  fetchOptions?: any;
+  fetchFunction?: functionParam;
+};
+
 /**
  * returns children jsonx components defined on __spreadComponent spread over an array on props.__spread
  * @param {*} options
@@ -36,9 +51,7 @@ declare function getChildrenComponents(options: any): void;
   // expect(evalutedComputedFunc).to.eql('bob');
   // expect(evalutedComputedBoundFunc).to.eql('bounded');
  */
-declare function getEvalProps(options: {
-    jsonx: any;
-}): any;
+declare function getEvalProps(options: { jsonx: any }): any;
 
 /**
  * Resolves jsonx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
@@ -48,8 +61,8 @@ declare function getEvalProps(options: {
  * @returns {Object} resolved object of React Components
  */
 declare function getComponentProps(options: {
-    jsonx: any;
-    resources?: any;
+  jsonx: any;
+  resources?: any;
 }): any;
 
 /**
@@ -59,9 +72,7 @@ declare function getComponentProps(options: {
 // * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
  * @returns {Object} resolved object of React Components
  */
-declare function getReactComponentProps(options: {
-    jsonx: any;
-}): any;
+declare function getReactComponentProps(options: { jsonx: any }): any;
 
 /**
  * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
@@ -73,8 +84,8 @@ declare function getReactComponentProps(options: {
  * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
  */
 declare function getFunctionFromProps(options: {
-    propFunc?: string;
-    allProps?: any;
+  propFunc?: string;
+  allProps?: any;
 }): (...params: any[]) => any;
 
 /**
@@ -84,10 +95,7 @@ declare function getFunctionFromProps(options: {
  * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents);
  * @returns {Object} resolved object of functions from function strings
  */
-declare function getFunctionProps(options: {
-    jsonx: any;
-    allProps?: any;
-}): any;
+declare function getFunctionProps(options: { jsonx: any; allProps?: any }): any;
 
 /**
  * Returns a resolved object that has React Components pulled from window.__jsonx_custom_elements
@@ -97,8 +105,8 @@ declare function getFunctionProps(options: {
  * @returns {Object} resolved object of with React Components from a window property window.__jsonx_custom_elements
  */
 declare function getWindowComponents(options: {
-    jsonx: any;
-    allProps?: any;
+  jsonx: any;
+  allProps?: any;
 }): any;
 
 /**
@@ -153,13 +161,12 @@ computedProps = { key: 1,
  *
  */
 declare function getComputedProps(options: {
-    jsonx: any;
-    resources?: any;
-    renderIndex: number;
-    logError?: (...params: any[]) => any;
-    componentLibraries?: any;
-    useReduxState?: boolean;
-    ignoreReduxPropsInComponentLibraries?: boolean;
-    debug?: boolean;
+  jsonx: any;
+  resources?: any;
+  renderIndex: number;
+  logError?: (...params: any[]) => any;
+  componentLibraries?: any;
+  useReduxState?: boolean;
+  ignoreReduxPropsInComponentLibraries?: boolean;
+  debug?: boolean;
 }): void;
-

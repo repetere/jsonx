@@ -1,4 +1,5 @@
 /// <reference types="react" />
+export declare type callbackFunc = (...args: any[]) => any;
 export interface jsonxChildren {
     children?: jsonx[] | string | Date | null;
 }
@@ -60,14 +61,13 @@ export interface simpleJsonxElementProperties extends simpleJsonxChildren, jsonx
 export interface simpleJsonx {
     [index: string]: simpleJsonxElementProperties;
 }
-export declare type callbackFunc = (...args: any[]) => any;
 export declare type jsonxCompare = {
     left?: any;
     right?: any;
 };
 export declare type jsonxComparison = {
     left: any;
-    operation: 'eq' | '==' | 'dneq' | '!=' | '!' | 'dnseq' | '!==' | 'seq' | '===' | 'lt' | '<' | 'lte' | '<=' | 'gt' | '>' | 'gte' | '>=' | 'dne' | 'undefined' | 'null' | '!null' | '!undefined' | 'exists';
+    operation: "eq" | "==" | "dneq" | "!=" | "!" | "dnseq" | "!==" | "seq" | "===" | "lt" | "<" | "lte" | "<=" | "gt" | ">" | "gte" | ">=" | "dne" | "undefined" | "null" | "!null" | "!undefined" | "exists";
     right?: any;
 };
 export interface jsonxResourceProps {

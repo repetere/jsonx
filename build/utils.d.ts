@@ -88,11 +88,7 @@ export declare function validSimpleJSONXSyntax(simpleJSONX?: any): boolean;
  * @param {Object} simpleJSONX JSON Object
  * @return {Object} - returns a valid JSONX JSON Object from a simple JSONX JSON Object
  */
-export declare function simpleJSONXSyntax(simpleJSONX?: defs.simpleJsonx): {
-    component: string;
-} & defs.simpleJsonxElementProperties & {
-    children: any;
-};
+export declare function simpleJSONXSyntax(simpleJSONX?: defs.simpleJsonx): defs.jsonx;
 /**
  * Transforms Valid JSONX JSON to SimpleJSONX  {component,props,children} => {[component]:{props,children}}
  * @param {Object} jsonx Valid JSONX JSON object

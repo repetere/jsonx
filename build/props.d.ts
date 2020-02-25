@@ -3,6 +3,13 @@ declare global {
     interface window {
         [index: string]: any;
     }
+    namespace NodeJS {
+        interface Global {
+            document: Document;
+            window: Window;
+            navigator: Navigator;
+        }
+    }
 }
 export declare const STRIP_COMMENTS: RegExp;
 export declare const ARGUMENT_NAMES: RegExp;

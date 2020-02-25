@@ -6,10 +6,10 @@ import * as jsonxComponents from "./components";
 import * as jsonxProps from "./props";
 import * as jsonxChildren from "./children";
 import * as jsonxUtils from "./utils";
-import numeral from 'numeral';
-import * as luxon from 'luxon';
+import numeral from "numeral";
+import * as luxon from "luxon";
 const createElement = React.createElement;
-const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, } = jsonxComponents;
+const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent } = jsonxComponents;
 const { getComputedProps } = jsonxProps;
 const { getJSONXChildren } = jsonxChildren;
 const { displayComponent } = jsonxUtils;
@@ -71,7 +71,7 @@ export function outputHTML(config = { jsonx: { component: "" } }) {
  */
 export function getReactElementFromJSONX(jsonx, resources = {}) {
     // eslint-disable-next-line
-    const { componentLibraries = {}, debug = false, returnJSON = false, logError = console.error, boundedComponents = [], disableRenderIndexKey = true, } = this || {};
+    const { componentLibraries = {}, debug = false, returnJSON = false, logError = console.error, boundedComponents = [], disableRenderIndexKey = true } = this || {};
     // const componentLibraries = this.componentLibraries;
     if (!jsonx)
         return null;
@@ -79,14 +79,14 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
         jsonx.component = jsonx.type;
     if (jsonxUtils.validSimpleJSONXSyntax(jsonx))
         jsonx = jsonxUtils.simpleJSONXSyntax(jsonx);
-    if (!jsonx.component)
+    if (!jsonx || !jsonx.component)
         return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
     try {
         const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, componentMap, this.reactComponents);
         const reactComponents = boundedComponents.length
             ? getBoundedComponents.call(this, {
                 boundedComponents,
-                reactComponents: components,
+                reactComponents: components
             })
             : components;
         renderIndex++;
@@ -95,7 +95,7 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
             reactComponents,
             componentLibraries,
             debug,
-            logError,
+            logError
         });
         const props = getComputedProps.call(this, {
             jsonx,
@@ -104,7 +104,7 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
             componentLibraries,
             debug,
             logError,
-            disableRenderIndexKey,
+            disableRenderIndexKey
         });
         const displayElement = jsonx.comparisonprops
             ? displayComponent.call(this, {
@@ -112,7 +112,7 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
                 props,
                 renderIndex,
                 componentLibraries,
-                debug,
+                debug
             })
             : true;
         if (displayElement) {
@@ -120,11 +120,14 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
                 jsonx,
                 props,
                 resources,
-                renderIndex,
+                renderIndex
             });
+            //@ts -ignore
             if (returnJSON)
                 return { type: element, props, children };
-            return createElement(element, props, children);
+            //TODO: Fix
+            else
+                return createElement(element, props, children);
         }
         else {
             return null;
@@ -149,7 +152,9 @@ export const getReactElement = getReactElementFromJSONX;
  * @returns {function} React element via React.createElement
  */
 export function getReactElementFromJSON({ type, props, children }) {
-    return createElement(type, props, Array.isArray(children) ? children.map(getReactElementFromJSON) : children);
+    return createElement(type, props, children && Array.isArray(children)
+        ? children.map(getReactElementFromJSON)
+        : children);
 }
 /** converts a jsonx json object into a react function component
  * @example
@@ -217,7 +222,7 @@ export function jsonToJSX(json) {
         : "";
     return Array.isArray(json.children)
         ? `<${json.type} ${propsString}>
-  ${json.children.map(jsonToJSX)}
+  ${json.children.map(jsonToJSX).join('\r\n')}
 </${json.type}>`
         : `<${json.type}${propsString}>${json.children}</${json.type}>`;
 }
@@ -239,6 +244,6 @@ export const _jsonxChildren = jsonxChildren;
 export const _jsonxComponents = jsonxComponents;
 export const _jsonxProps = jsonxProps;
 export const _jsonxUtils = jsonxUtils;
-export const _jsonxHelpers = { numeral, luxon, };
+export const _jsonxHelpers = { numeral, luxon };
 export { __express, __express as renderFile } from "./express";
 export default getReactElementFromJSONX;

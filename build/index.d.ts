@@ -6,7 +6,7 @@ import * as jsonxComponents from "./components";
 import * as jsonxProps from "./props";
 import * as jsonxChildren from "./children";
 import * as jsonxUtils from "./utils";
-import * as luxon from 'luxon';
+import * as luxon from "luxon";
 import { ReactElementLike } from "prop-types";
 import { JSONReactElement, Context } from "./types/jsonx/index";
 export declare let renderIndex: number;
@@ -50,7 +50,7 @@ export declare function outputHTML(this: defs.OutputHTMLContext, config?: defs.O
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  * @returns {function} React element via React.createElement
  */
-export declare function getReactElementFromJSONX(this: defs.Context, jsonx: defs.jsonx | defs.simpleJsonx, resources?: {}): ReactElementLike | JSONReactElement | null;
+export declare function getReactElementFromJSONX(this: defs.Context, jsonx?: defs.jsonx | defs.simpleJsonx, resources?: {}): ReactElementLike | JSONReactElement | null | undefined;
 export declare const getRenderedJSON: typeof getReactElementFromJSONX;
 export declare const getReactElement: typeof getReactElementFromJSONX;
 /** converts a json object {type,props,children} into a react element
