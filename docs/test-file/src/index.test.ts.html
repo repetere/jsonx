@@ -229,7 +229,7 @@ describe(&apos;jsonx&apos;, function () {
     it(&apos;should compile to JSX String&apos;, () =&gt; {
       const JSXString = jsonx.outputJSX(simpleDiv);
       expect(JSXString).to.include(&apos;title=&quot;test&quot;&gt;hello&lt;/div&gt;&apos;);
-      // console.log({ JSXString, complexJSXString, });
+      // console.log({ JSXString,  });
     });
   });
   describe(&apos;jsonToJSX&apos;, () =&gt; {
@@ -241,6 +241,7 @@ describe(&apos;jsonx&apos;, function () {
       expect(JSXString).to.include(&apos;title=&quot;test&quot;&gt;hello&lt;/div&gt;&apos;);
       expect(complexJSXString).to.be.a(&apos;string&apos;);
       // console.log({ JSXString, complexJSXString, });
+      // console.log(complexJSXString);
     });
   });
   describe(&apos;outputHTML&apos;, () =&gt; {

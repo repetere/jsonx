@@ -9746,6 +9746,8 @@ function getJSONXChildren(options = { jsonx: {} }) {
         delete props._children;
         if (jsonx.___template)
             jsonx.children = [getChildrenTemplate(jsonx.___template)];
+        else if (typeof jsonx.children === 'undefined' || jsonx.children === null)
+            return undefined;
         else if (jsonx.children && jsonx.___stringifyChildren)
             jsonx.children = JSON.stringify.apply(null, [jsonx.children, null, 2]);
         //TODO: fix passing applied params
@@ -9759,13 +9761,14 @@ function getJSONXChildren(options = { jsonx: {} }) {
             jsonx.children = DateTime.fromISO(jsonx.children, {
                 zone: jsonx.___FromLuxonTimeZone
             }).toFormat(jsonx.___ISOtoLuxonString);
-        return jsonx.children &&
-            Array.isArray(jsonx.children) &&
-            typeof jsonx.children !== "string"
+        if (typeof jsonx.children === 'string')
+            return jsonx.children;
+        const children = jsonx.children && Array.isArray(jsonx.children)
             ? jsonx.children
                 .map(childjsonx => getReactElementFromJSONX.call(this, getChildrenProps({ jsonx, childjsonx, props, renderIndex }), resources))
-                .filter(child => child)
+                .filter(child => child !== null)
             : jsonx.children;
+        return children;
     }
     catch (e) {
         this && this.debug && logError(e, e.stack ? e.stack : "no stack");
@@ -9941,7 +9944,7 @@ function getReactElementFromJSONX(jsonx, resources = {}) {
                 resources,
                 renderIndex
             });
-            //@ts-ignore
+            //@ts -ignore
             if (returnJSON)
                 return { type: element, props, children };
             //TODO: Fix
@@ -10041,7 +10044,7 @@ function jsonToJSX(json) {
         : "";
     return Array.isArray(json.children)
         ? `<${json.type} ${propsString}>
-  ${json.children.map(jsonToJSX)}
+  ${json.children.map(jsonToJSX).join('\r\n')}
 </${json.type}>`
         : `<${json.type}${propsString}>${json.children}</${json.type}>`;
 }

@@ -1,31 +1,31 @@
 window.esdocSearchIndex = [
   [
     "",
-    "test-file/src/index.test.ts.html#lineNumber98",
-    "jsonx",
-    "test"
-  ],
-  [
-    "",
     "test-file/src/children.test.ts.html#lineNumber84",
     "jsonx",
     "test"
   ],
   [
     "",
-    "test-file/src/index.test.ts.html#lineNumber219",
+    "test-file/src/index.test.ts.html#lineNumber98",
+    "jsonx",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/index.test.ts.html#lineNumber220",
     "jsonx __express",
     "test"
   ],
   [
     "",
-    "test-file/src/index.test.ts.html#lineNumber243",
+    "test-file/src/index.test.ts.html#lineNumber244",
     "jsonx __express it should handle errors",
     "test"
   ],
   [
     "",
-    "test-file/src/index.test.ts.html#lineNumber222",
+    "test-file/src/index.test.ts.html#lineNumber223",
     "jsonx __express should return an HTML string",
     "test"
   ],
@@ -241,13 +241,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber107",
+    "test-file/src/children.test.ts.html#lineNumber116",
     "jsonx getChildrenProperty should get the children from jsonx.props._children property",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber156",
+    "test-file/src/children.test.ts.html#lineNumber165",
     "jsonx getChildrenProperty should get the children from jsonx.props.children property",
     "test"
   ],
@@ -259,74 +259,80 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber213",
+    "test-file/src/children.test.ts.html#lineNumber222",
     "jsonx getChildrenProps",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber222",
+    "test-file/src/children.test.ts.html#lineNumber235",
     "jsonx getChildrenProps should pass props except for styles",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber216",
+    "test-file/src/children.test.ts.html#lineNumber225",
     "jsonx getChildrenProps should return child JSONX if not passing props",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber236",
+    "test-file/src/children.test.ts.html#lineNumber259",
     "jsonx getJSONXChildren",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber296",
+    "test-file/src/children.test.ts.html#lineNumber362",
     "jsonx getJSONXChildren should convert children date object to luxon formatted string",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber306",
+    "test-file/src/children.test.ts.html#lineNumber379",
     "jsonx getJSONXChildren should convert children iso string to luxon formatted string",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber285",
+    "test-file/src/children.test.ts.html#lineNumber344",
     "jsonx getJSONXChildren should convert children to numeral formatted string",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber315",
+    "test-file/src/children.test.ts.html#lineNumber395",
     "jsonx getJSONXChildren should import templates into children",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber241",
+    "test-file/src/children.test.ts.html#lineNumber282",
     "jsonx getJSONXChildren should return JSONX Child Objects",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber257",
+    "test-file/src/children.test.ts.html#lineNumber301",
     "jsonx getJSONXChildren should return null on error",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber260",
+    "test-file/src/children.test.ts.html#lineNumber304",
     "jsonx getJSONXChildren should stringify children",
     "test"
   ],
   [
     "",
-    "test-file/src/children.test.ts.html#lineNumber269",
+    "test-file/src/children.test.ts.html#lineNumber318",
     "jsonx getJSONXChildren should toString children",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/children.test.ts.html#lineNumber264",
+    "jsonx getJSONXChildren should work with JSON",
     "test"
   ],
   [
@@ -397,37 +403,37 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/index.test.ts.html#lineNumber209",
+    "test-file/src/index.test.ts.html#lineNumber210",
     "jsonx jsonxHTMLString",
     "test"
   ],
   [
     "",
-    "test-file/src/index.test.ts.html#lineNumber210",
+    "test-file/src/index.test.ts.html#lineNumber211",
     "jsonx jsonxHTMLString should return an HTML string",
     "test"
   ],
   [
     "",
-    "test-file/src/index.test.ts.html#lineNumber251",
+    "test-file/src/index.test.ts.html#lineNumber252",
     "jsonx jsonxRender",
     "test"
   ],
   [
     "",
-    "test-file/src/index.test.ts.html#lineNumber255",
+    "test-file/src/index.test.ts.html#lineNumber256",
     "jsonx jsonxRender should render component inside of querySelector",
     "test"
   ],
   [
     "",
-    "test-file/src/index.test.ts.html#lineNumber204",
+    "test-file/src/index.test.ts.html#lineNumber205",
     "jsonx outputHTML",
     "test"
   ],
   [
     "",
-    "test-file/src/index.test.ts.html#lineNumber205",
+    "test-file/src/index.test.ts.html#lineNumber206",
     "jsonx outputHTML should be an alias for jsonxHTMLString",
     "test"
   ],
@@ -1285,14 +1291,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/util.test.ts",
-    "test-file/src/util.test.ts.html",
-    "src/util.test.ts",
-    "testFile"
-  ],
-  [
-    "src/util.test.ts",
     "file/src/util.test.ts.html",
     "src/util.test.ts",
     "file"
+  ],
+  [
+    "src/util.test.ts",
+    "test-file/src/util.test.ts.html",
+    "src/util.test.ts",
+    "testFile"
   ]
 ]
