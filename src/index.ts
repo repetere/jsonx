@@ -104,7 +104,7 @@ export function getReactElementFromJSONX(
   this: defs.Context,
   jsonx?: defs.jsonx | defs.simpleJsonx,
   resources = {}
-): ReactElementLike | JSONReactElement | null {
+): ReactElementLike | JSONReactElement | null |undefined{
   // eslint-disable-next-line
   const {
     componentLibraries = {},
@@ -171,8 +171,8 @@ export function getReactElementFromJSONX(
         resources,
         renderIndex
       });
-      //@ts-ignore
-      if (returnJSON) return { type: element, props, children };
+      //@ts -ignore
+      if (returnJSON) return { type: element as string, props, children };
       //TODO: Fix
       else return createElement(element, props, children);
     } else {

@@ -4,10 +4,10 @@ import { jsonx } from "./jsonx";
 export type JSONReactElement = {
   type: string;
   props?: any;
-  children?: null | string | Date | JSONReactElement[];
+  children?: null | string  | JSONReactElement[] |any;
 };
 
-export type Context = {
+export interface Context {
   componentLibraries?: jsonx["jsonxLibrary"];
   reactComponents?: jsonx["jsonxComponents"];
   debug?: boolean;
@@ -21,6 +21,10 @@ export type Context = {
   exposeEval?: boolean;
   name?: string;
 };
+
+export interface JSONContext extends Context {
+  returnJSON: true;
+}
 
 export type Config = {
   jsonx: jsonx;

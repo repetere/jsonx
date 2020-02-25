@@ -122,7 +122,7 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
                 resources,
                 renderIndex
             });
-            //@ts-ignore
+            //@ts -ignore
             if (returnJSON)
                 return { type: element, props, children };
             //TODO: Fix

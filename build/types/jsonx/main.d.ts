@@ -2,9 +2,9 @@ import { jsonx } from "./jsonx";
 export declare type JSONReactElement = {
     type: string;
     props?: any;
-    children?: null | string | Date | JSONReactElement[];
+    children?: null | string | JSONReactElement[] | any;
 };
-export declare type Context = {
+export interface Context {
     componentLibraries?: jsonx["jsonxLibrary"];
     reactComponents?: jsonx["jsonxComponents"];
     debug?: boolean;
@@ -17,7 +17,10 @@ export declare type Context = {
     disableRenderIndexKey?: boolean;
     exposeEval?: boolean;
     name?: string;
-};
+}
+export interface JSONContext extends Context {
+    returnJSON: true;
+}
 export declare type Config = {
     jsonx: jsonx;
     resources?: any;

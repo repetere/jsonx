@@ -102,7 +102,7 @@ export declare function getFunctionFromEval(options?: any): any;
  * @see {@link https://reactjs.org/docs/react-without-es6.html}
  */
 export declare function getReactClassComponent(this: defs.Context, reactComponent?: {}, options?: any): ReactComponentLike;
-export declare function DynamicComponent(this: defs.Context, props?: defs.dynamicComponentProps): defs.JSONReactElement | ReactElementLike | null;
+export declare function DynamicComponent(this: defs.Context, props?: defs.dynamicComponentProps): defs.JSONReactElement | ReactElementLike | null | undefined;
 /**
  * Returns new React Function Component
  

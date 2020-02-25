@@ -178,10 +178,11 @@ export function clearTemplateCache(): void {
  * @property {function} [this.logError=console.error] - error logging function
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  */
+
 export function getJSONXChildren(
   this: defs.Context,
   options: defs.Config = { jsonx: {} }
-) {
+): string | null | undefined | Array<ReactElementLike>| Array<defs.JSONReactElement> {
   // eslint-disable-next-line
   const { jsonx, resources, renderIndex, logError = console.error } = options;
   try {
@@ -191,6 +192,7 @@ export function getJSONXChildren(
     delete props._children;
     if (jsonx.___template)
       jsonx.children = [getChildrenTemplate(jsonx.___template)];
+    else if (typeof jsonx.children === 'undefined' || jsonx.children === null) return undefined;
     else if (jsonx.children && jsonx.___stringifyChildren)
       jsonx.children = JSON.stringify.apply(null, [jsonx.children, null, 2]);
     //TODO: fix passing applied params
@@ -207,9 +209,8 @@ export function getJSONXChildren(
         zone: jsonx.___FromLuxonTimeZone
       }).toFormat(jsonx.___ISOtoLuxonString);
 
-    return jsonx.children &&
-      Array.isArray(jsonx.children) &&
-      typeof jsonx.children !== "string"
+    if (typeof jsonx.children === 'string') return jsonx.children;
+    const children = jsonx.children && Array.isArray(jsonx.children)
       ? jsonx.children
           .map(childjsonx =>
             getReactElementFromJSONX.call(
@@ -218,8 +219,9 @@ export function getJSONXChildren(
               resources
             )
           )
-          .filter(child => child)
+          .filter(child => child !== null)
       : jsonx.children;
+    return children as ReactElementLike[]|defs.JSONReactElement[]|null|string|undefined;
   } catch (e) {
     this && this.debug && logError(e, e.stack ? e.stack : "no stack");
     return null;

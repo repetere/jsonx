@@ -277,8 +277,7 @@ describe("jsonx", function() {
         // ]
       };
 
-      const JXMChildrenJSON = getJSONXChildren({ jsonx: JXM });
-      console.log({ JXMChildrenJSON });
+      // const JXMChildrenJSON = getJSONXChildren({ jsonx: JXM });
     });
     it("should return JSONX Child Objects", () => {
       const renderIndex = 1;

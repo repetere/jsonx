@@ -1,6 +1,6 @@
 export type callbackFunc = (...args: any[]) => any;
 export interface jsonxChildren {
-  children?: jsonx[] | string | Date | null;
+  children?: jsonx[] | string | Date | null ;
 }
 
 export interface jsonxElementProperties {
