@@ -74,4 +74,4 @@ export declare function clearTemplateCache(): void;
  * @property {function} [this.logError=console.error] - error logging function
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  */
-export declare function getJSONXChildren(this: defs.Context, options?: defs.Config): string | Date | (ReactElementLike | defs.JSONReactElement | null)[] | null | undefined;
+export declare function getJSONXChildren(this: defs.Context, options?: defs.Config): string | Date | (defs.JSONReactElement | ReactElementLike | null)[] | null | undefined;

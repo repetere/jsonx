@@ -187,7 +187,7 @@ describe('jsonx', function () {
     it('should compile to JSX String', () => {
       const JSXString = jsonx.outputJSX(simpleDiv);
       expect(JSXString).to.include('title="test">hello</div>');
-      // console.log({ JSXString, complexJSXString, });
+      // console.log({ JSXString,  });
     });
   });
   describe('jsonToJSX', () => {
@@ -199,6 +199,7 @@ describe('jsonx', function () {
       expect(JSXString).to.include('title="test">hello</div>');
       expect(complexJSXString).to.be.a('string');
       // console.log({ JSXString, complexJSXString, });
+      // console.log(complexJSXString);
     });
   });
   describe('outputHTML', () => {

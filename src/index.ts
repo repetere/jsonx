@@ -300,7 +300,7 @@ export function jsonToJSX(json: JSONReactElement): string {
     : "";
   return Array.isArray(json.children)
     ? `<${json.type} ${propsString}>
-  ${json.children.map(jsonToJSX)}
+  ${json.children.map(jsonToJSX).join('\r\n')}
 </${json.type}>`
     : `<${json.type}${propsString}>${json.children}</${json.type}>`;
 }
