@@ -1,0 +1,32 @@
+  name: Build, Test & Coverage
+  on: ["push","pull_request"]
+  jobs:
+
+    build:
+      name: Build
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@master
+      - name: Use Node.js 13.x
+        uses: actions/setup-node@master
+        with:
+          version: 13.x
+
+      - name: npm install, jestcoverage
+        run: |
+          npm i jest typescript -g
+          npm install
+          jest --coverage
+
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel: true
+          path-to-lcov: ./coverage/lcov.info # optional (default value)
+
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true

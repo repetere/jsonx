@@ -1,5 +1,0 @@
-{
-  "opts": {
-      "template": "./node_modules/tsd-jsdoc/dist"
-  }
-}

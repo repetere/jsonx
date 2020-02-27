@@ -416,7 +416,8 @@ describe('jsonx utils', function () {
       expect( traverse(testVals, testObj)).to.eql({ emptyObj:undefined, });
     });
     it('should throw an error if paths are not an array of strings or numeric indexes', () => {
-      const testVals = { emptyObj: ()=>undefined, };
+      const testVals = { emptyObj: () => undefined, };
+      //@ts-ignore
       expect(traverse.bind(null, testVals, testObj)).to.throw(Error);
     });
   });
@@ -441,7 +442,9 @@ describe('jsonx utils', function () {
       const validationTest = validateJSONX( {
         props: [],
       }, true);
+      //@ts-ignore
       expect(validationTest).to.be.an('array');
+      //@ts-ignore
       expect(validationTest[ 0 ]).to.be.an('error');
     });
     it('should throw a type error if JSONX props is not an object, props.children or props._children', () => {
@@ -452,6 +455,7 @@ describe('jsonx utils', function () {
       expect(validateJSONX.bind(null, { component: 'div', props: { _children: {}, }, })).to.throw(TypeError);
     });
     it('should throw a type error if JSONX children is not an array or JSONX docs or a string', () => {
+      //@ts-ignore
       expect(validateJSONX.bind(null, { component:'div', children:{}, })).to.throw(TypeError);
     });
     it('should validate child objects', () => {
@@ -468,10 +472,14 @@ describe('jsonx utils', function () {
           },
         ],
       };
+      //@ts-ignore
       const childrenErrors = validateJSONX(jsonxObj, true);
+      //@ts-ignore
       expect(childrenErrors).to.be.an('array');
+      //@ts-ignore
       expect(childrenErrors[ 0 ]).to.be.an('error');
     });
+    //@ts-ignore
     it('should validate dynamic props[asyncprops,resourceprops,thisprops,windowprops]', () => {
       const jsonxObj = {
         component: 'myComponent',
@@ -484,9 +492,12 @@ describe('jsonx utils', function () {
           title:['navigator', 'userAgent', ],
         },
       };
+      //@ts-ignore
       const dynamicerrors = validateJSONX(jsonxObj, true);
       expect(dynamicerrors).to.be.an('array');
+      //@ts-ignore
       expect(dynamicerrors.length).to.eql(7);
+      //@ts-ignore
       expect(dynamicerrors[ 0 ]).to.be.an('error');
     });
     it('should validate eval props[__dangerouslyEvalProps,__dangerouslyBindEvalProps]', () => {
@@ -501,8 +512,10 @@ describe('jsonx utils', function () {
           testJS1:'3',
         },
       };
+      //@ts-ignore
       const evalError = validateJSONX(jsonxObj, true);
       const evalError2 = validateJSONX(jsonxObj2);
+      //@ts-ignore
       expect(evalError[ 0 ]).to.be.an('error');
       expect(evalError2).to.be.true;
       // console.log({ evalError3 });
@@ -517,7 +530,9 @@ describe('jsonx utils', function () {
           testJS: '(=>true',
         },
       };
+      //@ts-ignore
       const evalError3 = validateJSONX(jsonxObj3, true);
+      //@ts-ignore
       expect(evalError3[ 0 ]).to.be.an('error');
     });
     it('should validate __dangerouslyBindEvalProps as a function that can be bound javascript', () => {
@@ -527,7 +542,9 @@ describe('jsonx utils', function () {
           testJS1: '{}',
         },
       };
+      //@ts-ignore
       const evalError4 = validateJSONX(jsonxObj4, true);
+      //@ts-ignore
       expect(evalError4[ 0 ]).to.be.an('error');
     });
     it('should validate __dangerouslyInsertComponents are valid JSONX objects', () => {
@@ -541,6 +558,7 @@ describe('jsonx utils', function () {
         },
       };
       const evalError = validateJSONX(jsonxObj, true);
+      //@ts-ignore
       expect(evalError[ 0 ]).to.be.an('error');
     });
     it('should validate __functionProps are valid function strings', () => {
@@ -562,10 +580,14 @@ describe('jsonx utils', function () {
           goodFunc:'func:this.someFunc',
         },
       };
+      //@ts-ignore
       const evalError = validateJSONX(jsonxObj, true);
+      //@ts-ignore
       const evalError2 = validateJSONX(jsonxObj2, true);
       const validTest = validateJSONX(jsonxObjValid);
-      expect(evalError[ 0 ]).to.be.an('error');
+      //@ts-ignore
+      expect(evalError[0]).to.be.an('error');
+      //@ts-ignore
       expect(evalError2[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
@@ -582,6 +604,7 @@ describe('jsonx utils', function () {
       };
       const evalError = validateJSONX(jsonxObj, true);
       const validTest = validateJSONX(jsonxObjValid);
+      //@ts-ignore
       expect(evalError[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
@@ -607,7 +630,9 @@ describe('jsonx utils', function () {
       const evalError = validateJSONX(jsonxObj, true);
       const evalError2 = validateJSONX(jsonxObj2, true);
       const validTest = validateJSONX(jsonxObjValid);
-      expect(evalError[ 0 ]).to.be.an('error');
+      //@ts-ignore
+      expect(evalError[0]).to.be.an('error');
+      //@ts-ignore
       expect(evalError2[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
@@ -620,8 +645,11 @@ describe('jsonx utils', function () {
         component: 'myComponent',
         comparisonorprops: true,
       };
+      //@ts-ignore
       const evalError = validateJSONX(jsonxObj, true);
+      //@ts-ignore
       const validTest = validateJSONX(jsonxObjValid);
+      //@ts-ignore
       expect(evalError[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
@@ -642,12 +670,19 @@ describe('jsonx utils', function () {
         component: 'myComponent',
         comparisonprops: [() => { },],
       };
+      //@ts-ignore
       const evalError = validateJSONX(jsonxObj, true);
+      //@ts-ignore
       const evalError1 = validateJSONX(jsonxObjin1, true);
+      //@ts-ignore
       const evalError2 = validateJSONX(jsonxObjin2, true);
+      //@ts-ignore
       const validTest = validateJSONX(jsonxObjValid);
-      expect(evalError[ 0 ]).to.be.an('error');
-      expect(evalError1[ 0 ]).to.be.an('error');
+      //@ts-ignore
+      expect(evalError[0]).to.be.an('error');
+      //@ts-ignore
+      expect(evalError1[0]).to.be.an('error');
+      //@ts-ignore
       expect(evalError2[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
@@ -660,8 +695,10 @@ describe('jsonx utils', function () {
         component: 'myComponent',
         passprops: true,
       };
+      //@ts-ignore
       const evalError = validateJSONX(jsonxObj, true);
       const validTest = validateJSONX(jsonxObjValid);
+      //@ts-ignore
       expect(evalError[ 0 ]).to.be.an('error');
       expect(validTest).to.be.true;
     });
@@ -798,7 +835,9 @@ describe('jsonx utils', function () {
      
       expect((transformedSimpleSyntaxValid)).to.be.true;
       expect((transformedSimpleSyntaxValid2)).to.be.true;
+      //@ts-ignore
       expect((transformedSimpleSyntaxValid3[0])).to.be.an('error');
+      //@ts-ignore
       expect((transformedSimpleSyntaxValid4[0])).to.be.true;
       expect((transformedSimpleSyntaxValid5)).to.be.true;
     });

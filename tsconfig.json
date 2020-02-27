@@ -24,9 +24,17 @@
   },
   "include": [
     "src/**/*.ts",
-    "node_modules/use-global-hook"
+    "src/**/*.tsx",
+    "node_modules/use-global-hook",
   ],
   "exclude": [
     "**/*.test.ts",
-  ]
+    "**/*.test.tsx",
+  ],
+  "typedocOptions":{
+    "out":"./docs",
+    "include":"./manual",
+    "mdPagesSourcePath": "./manual",
+    "hideGenerator":true
+  }
 }

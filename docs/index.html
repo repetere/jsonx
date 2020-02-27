@@ -1,703 +1,869 @@
-<!DOCTYPE html><html><head>
-  <meta charset="utf-8">
-  <base data-ice="baseUrl">
-  <title data-ice="title">Home | JSONX</title>
-  <link type="text/css" rel="stylesheet" href="css/style.css">
-  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
-  <script src="script/prettify/prettify.js"></script>
-  <script src="script/manual.js"></script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="//www.googletagmanager.com/gtag/js?id=UA-112697260-2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-  
-    gtag('config', 'UA-112697260-2');
-  </script><meta name="description" content="React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks."><meta property="og:type" content="website"><meta property="og:url" content="https://repetere.github.io/jsonx"><meta property="og:site_name" content="JSONX"><meta property="og:title" content="JSONX"><meta property="og:image" content="https://jsonx.io/favicon.png"><meta property="og:description" content="React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks."><meta property="og:author" content="https://github.com/repetere"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="JSONX"><meta property="twitter:description" content="React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks."><meta property="twitter:image" content="https://jsonx.io/favicon.png"></head>
-<body class="layout-container" data-ice="rootContainer">
-
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>jsonx</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
 <header>
-  <a href="./">Home</a>
-  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
-  <a href="identifiers.html">Reference</a>
-  <a href="source.html">Source</a>
-  <a href="test.html" data-ice="testLink">Test</a>
-  <div class="search-box">
-  <span>
-    <img src="./image/search.png">
-    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
-  </span>
-    <ul class="search-result"></ul>
-  </div>
-<a style="position:relative; top:3px;" href="https://github.com/repetere/jsonx"><img width="20px" src="./image/github.png"></a></header>
-
-<nav class="navigation" data-ice="nav"><div>
-  <ul>
-    
-  </ul>
-</div>
-</nav>
-
-<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="react-json-syntax--jsonx-">React JSON Syntax (JSONX)</h1><p><a href="https://coveralls.io/github/repetere/jsonx?branch=master"><img src="https://coveralls.io/repos/github/repetere/jsonx/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://travis-ci.org/repetere/jsonx"><img src="https://travis-ci.org/repetere/jsonx.svg?branch=master" alt="Build Status"></a></p>
-<h2 id="description">Description</h2><p><strong>React JSON Syntax (JSONX)</strong> takes a JSON object and can create (Suspense, Lazy, Functional and Class) React Components, output HTML and JSX and render React components without transpilers. <strong>JSONX</strong> lets you get up and running with React without extra configuration management of more complicated tool chains.</p>
-<h2 id="installation">Installation</h2><pre><code class="lang-sh"><code class="source-code prettyprint">$ npm i jsonx</code>
-</code></pre>
-<h3 id="-a-href--https---repetere-github-io-jsonx---full-documentation--a-"><a href="https://repetere.github.io/jsonx/">Full Documentation</a></h3><h3 id="examples----a-href--https---github-com-repetere-jsonx-blob-master-dist-example-html--html-browser-example--a---">Examples ( <a href="https://github.com/repetere/jsonx/blob/master/dist/example.html">HTML/Browser Example</a> )</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">import { default as jsonx } from &apos;jsonx&apos;;
-const exampleJSONX = {
-  component:&apos;p&apos;,
-  props:{style:{color:&apos;blue&apos;}},
-  children:&apos;hello world&apos;
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">jsonx</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>jsonx</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#react-json-syntax-jsonx" id="react-json-syntax-jsonx" style="color: inherit; text-decoration: none;">
+					<h1>React JSON Syntax (JSONX)</h1>
+				</a>
+				<p><a href="https://coveralls.io/github/repetere/jsonx?branch=master"><img src="https://coveralls.io/repos/github/repetere/jsonx/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://travis-ci.org/repetere/jsonx"><img src="https://travis-ci.org/repetere/jsonx.svg?branch=master" alt="Build Status"></a></p>
+				<a href="#description" id="description" style="color: inherit; text-decoration: none;">
+					<h2>Description</h2>
+				</a>
+				<p><strong>React JSON Syntax (JSONX)</strong> takes a JSON object and can create (Suspense, Lazy, Functional and Class) React Components, output HTML and JSX and render React components without transpilers. <strong>JSONX</strong> lets you get up and running with React without extra configuration management of more complicated tool chains.</p>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<pre><code class="language-sh">$ npm i jsonx</code></pre>
+				<a href="#a-hrefhttpsrepeteregithubiojsonxfull-documentationa" id="a-hrefhttpsrepeteregithubiojsonxfull-documentationa" style="color: inherit; text-decoration: none;">
+					<h3><a href="https://repetere.github.io/jsonx/">Full Documentation</a></h3>
+				</a>
+				<a href="#examples--a-hrefhttpsgithubcomrepeterejsonxblobmasterdistexamplehtmlhtmlbrowser-examplea-" id="examples--a-hrefhttpsgithubcomrepeterejsonxblobmasterdistexamplehtmlhtmlbrowser-examplea-" style="color: inherit; text-decoration: none;">
+					<h3>Examples ( <a href="https://github.com/repetere/jsonx/blob/master/dist/example.html">HTML/Browser Example</a> )</h3>
+				</a>
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> { <span class="hljs-keyword">default</span> <span class="hljs-keyword">as</span> jsonx } <span class="hljs-keyword">from</span> <span class="hljs-string">'jsonx'</span>;
+<span class="hljs-keyword">const</span> exampleJSONX = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'p'</span>,
+  <span class="hljs-attr">props</span>:{<span class="hljs-attr">style</span>:{<span class="hljs-attr">color</span>:<span class="hljs-string">'blue'</span>}},
+  <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span>
 };
-//Rendering React Components
+<span class="hljs-comment">//Rendering React Components</span>
 jsonx.getReactElement(exampleJSONX);
-// =&gt; JSX Equivalent: &lt;p style={{color:&apos;blue&apos;}}&gt;hello world&lt;/p&gt;
+<span class="hljs-comment">// =&gt; JSX Equivalent: &lt;p style={{color:'blue'}}&gt;hello world&lt;/p&gt;</span>
 
-const exampleToHTMLandJSX = {
-  component: &apos;div&apos;,
-  props:{  className:&apos;jsonx-generated&apos;, },
-  children:[
+<span class="hljs-keyword">const</span> exampleToHTMLandJSX = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">'div'</span>,
+  <span class="hljs-attr">props</span>:{  <span class="hljs-attr">className</span>:<span class="hljs-string">'jsonx-generated'</span>, },
+  <span class="hljs-attr">children</span>:[
     {  
-      component:&apos;p&apos;,
-      props:{ style:{ color:&apos;red&apos;, }, },
-      children:&apos;hello world&apos;,
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'p'</span>,
+      <span class="hljs-attr">props</span>:{ <span class="hljs-attr">style</span>:{ <span class="hljs-attr">color</span>:<span class="hljs-string">'red'</span>, }, },
+      <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span>,
     }
   ]
 };
-//Generating HTML strings
-jsonx.outputHTML({ jsonx: exampleToHTMLandJSX, });
-// =&gt; &apos;&lt;div class=&quot;jsonx-generated&quot;&gt;&lt;p style=&quot;color:red;&quot;&gt;hello world&lt;/p&gt;&lt;/div&gt;&apos;
-//Generating JSX strings
-jsonx.outputJSX({ jsonx: exampleToHTMLandJSX, });
-// =&gt; &apos;&lt;div class=&quot;jsonx-generated&quot;&gt;&lt;p style={{color:red,}}&gt;hello world&lt;/p&gt;&lt;/div&gt;&apos;
+<span class="hljs-comment">//Generating HTML strings</span>
+jsonx.outputHTML({ <span class="hljs-attr">jsonx</span>: exampleToHTMLandJSX, });
+<span class="hljs-comment">// =&gt; '&lt;div class="jsonx-generated"&gt;&lt;p style="color:red;"&gt;hello world&lt;/p&gt;&lt;/div&gt;'</span>
+<span class="hljs-comment">//Generating JSX strings</span>
+jsonx.outputJSX({ <span class="hljs-attr">jsonx</span>: exampleToHTMLandJSX, });
+<span class="hljs-comment">// =&gt; '&lt;div class="jsonx-generated"&gt;&lt;p style={{color:red,}}&gt;hello world&lt;/p&gt;&lt;/div&gt;'</span>
 
-//Rendering HTML Dom with React
-jsonx.jsonxRender({ jsonx: { component: &apos;div&apos;, props:{className:&apos;jsonx-generated&apos;,children:[{ component:&apos;p&apos;,props:{style:{color:&apos;red&apos;}}, children:&apos;hello world&apos; }]}}, querySelector:&apos;#myApp&apos;, });
-// &lt;!DOCTYPE html&gt;
-//  &lt;body&gt;
-//    &lt;div id=&quot;myApp&quot;&gt;
-//      &lt;div class=&quot;jsonx-generated&quot;&gt;
-//        &lt;p style=&quot;color:red;&quot;&gt;hello world&lt;/p&gt;
-//      &lt;/div&gt;
-//    &lt;/div&gt;
-// &lt;/body&gt;</code>
-</code></pre>
-<h3 id="jsonx-json-spec">JSONX JSON Spec</h3><p>JSONX JSON is valid JSON that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">React.createElement(
+<span class="hljs-comment">//Rendering HTML Dom with React</span>
+jsonx.jsonxRender({ <span class="hljs-attr">jsonx</span>: { <span class="hljs-attr">component</span>: <span class="hljs-string">'div'</span>, <span class="hljs-attr">props</span>:{<span class="hljs-attr">className</span>:<span class="hljs-string">'jsonx-generated'</span>,<span class="hljs-attr">children</span>:[{ <span class="hljs-attr">component</span>:<span class="hljs-string">'p'</span>,<span class="hljs-attr">props</span>:{<span class="hljs-attr">style</span>:{<span class="hljs-attr">color</span>:<span class="hljs-string">'red'</span>}}, <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span> }]}}, <span class="hljs-attr">querySelector</span>:<span class="hljs-string">'#myApp'</span>, });
+<span class="hljs-comment">// &lt;!DOCTYPE html&gt;</span>
+<span class="hljs-comment">//  &lt;body&gt;</span>
+<span class="hljs-comment">//    &lt;div id="myApp"&gt;</span>
+<span class="hljs-comment">//      &lt;div class="jsonx-generated"&gt;</span>
+<span class="hljs-comment">//        &lt;p style="color:red;"&gt;hello world&lt;/p&gt;</span>
+<span class="hljs-comment">//      &lt;/div&gt;</span>
+<span class="hljs-comment">//    &lt;/div&gt;</span>
+<span class="hljs-comment">// &lt;/body&gt;</span></code></pre>
+				<a href="#jsonx-json-spec" id="jsonx-json-spec" style="color: inherit; text-decoration: none;">
+					<h3>JSONX JSON Spec</h3>
+				</a>
+				<p>JSONX JSON is valid JSON that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+				<pre><code class="language-javascript">React.createElement(
   type,
   [props],
   [...children]
-)</code>
-</code></pre>
-<p>You can pass React component libraries for additional components, or you own custom components (see Advanced, also see Full Spec).</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">//sample JSONX
+)</code></pre>
+				<p>You can pass React component libraries for additional components, or you own custom components (see Advanced, also see Full Spec).</p>
+				<pre><code class="language-javascript"><span class="hljs-comment">//sample JSONX</span>
 {
-  component:&apos;ul&apos;,
-  props:{
-    className:&apos;list-class&apos;,
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'ul'</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">className</span>:<span class="hljs-string">'list-class'</span>,
   },
-  children:[
+  <span class="hljs-attr">children</span>:[
     {
-      component:&apos;li&apos;,
-      children:&apos;first bullet&apos;
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'li'</span>,
+      <span class="hljs-attr">children</span>:<span class="hljs-string">'first bullet'</span>
     },
     {
-      component:&apos;li&apos;,
-      children:&apos;second bullet&apos;,
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'li'</span>,
+      <span class="hljs-attr">children</span>:<span class="hljs-string">'second bullet'</span>,
     }
   ]
 }
-</code>
 </code></pre>
-<pre><code class="lang-JSX"><code class="source-code prettyprint">// Equivalent JSX
-&lt;ul className=&quot;list-class&quot;&gt;
-  &lt;li&gt;first bullet&lt;/li&gt;
-  &lt;li&gt;second bullet&lt;/li&gt;
-&lt;/ul&gt;</code>
-</code></pre>
-<h4 id="validating-jsonx-json">Validating JSONX JSON</h4><pre><code class="lang-javascript"><code class="source-code prettyprint">import * as jsonx from &apos;jsonx&apos;;
+				<pre><code class="language-JSX"><span class="hljs-comment">// Equivalent JSX</span>
+&lt;ul className=<span class="hljs-string">"list-class"</span>&gt;
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>first bullet<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>second bullet<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+&lt;<span class="hljs-regexp">/ul&gt;</span></code></pre>
+				<a href="#validating-jsonx-json" id="validating-jsonx-json" style="color: inherit; text-decoration: none;">
+					<h4>Validating JSONX JSON</h4>
+				</a>
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">'jsonx'</span>;
 
-//use the built in JSONX Validator
-const valid_jsonx_json = {
-  component:&apos;p&apos;,
-  props:{
-    className:&apos;title&apos;,
+<span class="hljs-comment">//use the built in JSONX Validator</span>
+<span class="hljs-keyword">const</span> valid_jsonx_json = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'p'</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">className</span>:<span class="hljs-string">'title'</span>,
   },
-  children:&apos;hello world&apos;
+  <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span>
 };
-const invalid_jsonx_json = {
-  props:{
-    className:&apos;title&apos;,
+<span class="hljs-keyword">const</span> invalid_jsonx_json = {
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">className</span>:<span class="hljs-string">'title'</span>,
   },
-  children:&apos;hello world&apos;
+  <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span>
 };
-const multiple_invalid_jsonx_json = {
-  props:&apos;must be obj&apos;,
-  children:&apos;hello world&apos;
+<span class="hljs-keyword">const</span> multiple_invalid_jsonx_json = {
+  <span class="hljs-attr">props</span>:<span class="hljs-string">'must be obj'</span>,
+  <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span>
 };
 
-jsonx._jsonxUtils.validateJSONX(testJSONXJSON) // =&gt; true
-jsonx._jsonxUtils.validateJSONX(invalid_jsonx_json) // =&gt; throws SyntaxError(&apos;[0001] Missing React Component&apos;)
-jsonx._jsonxUtils.validateJSONX(multiple_invalid_jsonx_json, true) // =&gt;
-// [ [Error: [0001] Missing React Component],[ Error: [0002]  props must be an Object / valid React props] ]
+jsonx._jsonxUtils.validateJSONX(testJSONXJSON) <span class="hljs-comment">// =&gt; true</span>
+jsonx._jsonxUtils.validateJSONX(invalid_jsonx_json) <span class="hljs-comment">// =&gt; throws SyntaxError('[0001] Missing React Component')</span>
+jsonx._jsonxUtils.validateJSONX(multiple_invalid_jsonx_json, <span class="hljs-literal">true</span>) <span class="hljs-comment">// =&gt;</span>
+<span class="hljs-comment">// [ [Error: [0001] Missing React Component],[ Error: [0002]  props must be an Object / valid React props] ]</span>
 
-/**
- * @param {Object} jsonx - JSONX JSON to validate 
- * @param {Boolean} [returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@param <span class="hljs-type">{Object}</span> <span class="hljs-variable">jsonx</span></span> - JSONX JSON to validate 
+ * <span class="hljs-doctag">@param <span class="hljs-type">{Boolean}</span> </span>[returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
  * /
-function validateJSONX(jsonx = {}, returnAllErrors= false);</code>
-</code></pre>
-<h3 id="simple-jsonx-syntax">Simple JSONX Syntax</h3><p>If you want to save time, you can use the property name as the component and define properties for a cleaner simple syntax</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">//shorthand simple jsonx
+function validateJSONX(jsonx = {}, returnAllErrors= false);</span></code></pre>
+				<a href="#simple-jsonx-syntax" id="simple-jsonx-syntax" style="color: inherit; text-decoration: none;">
+					<h3>Simple JSONX Syntax</h3>
+				</a>
+				<p>If you want to save time, you can use the property name as the component and define properties for a cleaner simple syntax</p>
+				<pre><code class="language-javascript"><span class="hljs-comment">//shorthand simple jsonx</span>
 {
-  ul: {
-    props:{
-      className:&apos;list-class&apos;,
+  <span class="hljs-attr">ul</span>: {
+    <span class="hljs-attr">props</span>:{
+      <span class="hljs-attr">className</span>:<span class="hljs-string">'list-class'</span>,
     },
-    children:[
+    <span class="hljs-attr">children</span>:[
       {
-        li: {
-          children:&apos;first bullet&apos;,
+        <span class="hljs-attr">li</span>: {
+          <span class="hljs-attr">children</span>:<span class="hljs-string">'first bullet'</span>,
         },
       },
       {
-        li: {
-          children:&apos;second bullet&apos;,
+        <span class="hljs-attr">li</span>: {
+          <span class="hljs-attr">children</span>:<span class="hljs-string">'second bullet'</span>,
         },
       }
     ]
   }
-}</code>
-</code></pre>
-<h3 id="jsonx-module">JSONX Module</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">&quot;jsonx&quot; : {
-  getReactElement: [Function: getReactElement], {aliases:[getRenderedJSON,getReactElementFromJSONX]} //Use React.createElement and JSONX JSON to create React elements
-  getReactElementFromJSON: [Function: getReactElementFromJSON], // Use compiledJSON object {type,props,children} to create React elements
-  jsonxRender: [Function: getRenderedJSON], //Use JSONX without any configuration to render JSONX JSON to HTML and insert JSONX into querySelector using ReactDOM.render
-  outputHTML: [Function: outputHTML], //Use ReactDOMServer.renderToString to render html from JSONX
-  outputJSX: [Function: outputJSX], //Generate valid JSX from JSONX
-  outputJSON: [Function: outputJSON], //Generate computed static values from JSONX into JSON
-  compile: [Function: compile], //Generate React Function Component from JSONX
+}</code></pre>
+				<a href="#jsonx-module" id="jsonx-module" style="color: inherit; text-decoration: none;">
+					<h3>JSONX Module</h3>
+				</a>
+				<pre><code class="language-javascript"><span class="hljs-string">"jsonx"</span> : {
+  <span class="hljs-attr">getReactElement</span>: [<span class="hljs-built_in">Function</span>: getReactElement], {<span class="hljs-attr">aliases</span>:[getRenderedJSON,getReactElementFromJSONX]} <span class="hljs-comment">//Use React.createElement and JSONX JSON to create React elements</span>
+  <span class="hljs-attr">getReactElementFromJSON</span>: [<span class="hljs-built_in">Function</span>: getReactElementFromJSON], <span class="hljs-comment">// Use compiledJSON object {type,props,children} to create React elements</span>
+  <span class="hljs-attr">jsonxRender</span>: [<span class="hljs-built_in">Function</span>: getRenderedJSON], <span class="hljs-comment">//Use JSONX without any configuration to render JSONX JSON to HTML and insert JSONX into querySelector using ReactDOM.render</span>
+  <span class="hljs-attr">outputHTML</span>: [<span class="hljs-built_in">Function</span>: outputHTML], <span class="hljs-comment">//Use ReactDOMServer.renderToString to render html from JSONX</span>
+  <span class="hljs-attr">outputJSX</span>: [<span class="hljs-built_in">Function</span>: outputJSX], <span class="hljs-comment">//Generate valid JSX from JSONX</span>
+  <span class="hljs-attr">outputJSON</span>: [<span class="hljs-built_in">Function</span>: outputJSON], <span class="hljs-comment">//Generate computed static values from JSONX into JSON</span>
+  <span class="hljs-attr">compile</span>: [<span class="hljs-built_in">Function</span>: compile], <span class="hljs-comment">//Generate React Function Component from JSONX</span>
 
-  jsonToJSX: [Function: jsonToJSX], //Converts JSON to JSX
-  __express: [Function: __express], //render express views with JSONX
-  __getReact: [Function: __getReact], //Expose reference to React
-  __getReactDOM: [Function: __getReactDOM], //Expose reference to ReactDOM
-  __getUseGlobalHook: [Function: __getUseGlobalHook], //Expose reference to useGlobalHook
+  <span class="hljs-attr">jsonToJSX</span>: [<span class="hljs-built_in">Function</span>: jsonToJSX], <span class="hljs-comment">//Converts JSON to JSX</span>
+  <span class="hljs-attr">__express</span>: [<span class="hljs-built_in">Function</span>: __express], <span class="hljs-comment">//render express views with JSONX</span>
+  <span class="hljs-attr">__getReact</span>: [<span class="hljs-built_in">Function</span>: __getReact], <span class="hljs-comment">//Expose reference to React</span>
+  <span class="hljs-attr">__getReactDOM</span>: [<span class="hljs-built_in">Function</span>: __getReactDOM], <span class="hljs-comment">//Expose reference to ReactDOM</span>
+  <span class="hljs-attr">__getUseGlobalHook</span>: [<span class="hljs-built_in">Function</span>: __getUseGlobalHook], <span class="hljs-comment">//Expose reference to useGlobalHook</span>
 
 
-_jsonxChildren: {
-    getChildrenProperty: [Function: getChildrenProperty], // returns a valid jsonx.children property
-    getChildrenProps: [Function: getChildrenProps], // Used to pass properties down to child components if passprops is set to true
-    getJSONXChildren: [Function: getJSONXChildren], // returns React Child Elements via JSONX
+<span class="hljs-attr">_jsonxChildren</span>: {
+    <span class="hljs-attr">getChildrenProperty</span>: [<span class="hljs-built_in">Function</span>: getChildrenProperty], <span class="hljs-comment">// returns a valid jsonx.children property</span>
+    <span class="hljs-attr">getChildrenProps</span>: [<span class="hljs-built_in">Function</span>: getChildrenProps], <span class="hljs-comment">// Used to pass properties down to child components if passprops is set to true</span>
+    <span class="hljs-attr">getJSONXChildren</span>: [<span class="hljs-built_in">Function</span>: getJSONXChildren], <span class="hljs-comment">// returns React Child Elements via JSONX</span>
   },
-  _jsonxComponents: {
-    componentMap: {}, // object of all react components available for JSONX
-    getBoundedComponents: [Function: getBoundedComponents], // getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
-    getComponentFromLibrary: [Function: getComponentFromLibrary], // returns a react component from a component library (like material-ui, or semantic-ui)
-    getComponentFromMap: [Function: getComponentFromMap], // returns a react element from jsonx.component
-    getReactClassComponent: [Function: getReactClassComponent], // returns a react class component and support lifecycle functions, lazy and suspense components
-    getReactFunctionComponent: [Function: getReactFunctionComponent], // returns a react function component and support lifecycle functions, hooks, lazy and suspense components
+  <span class="hljs-attr">_jsonxComponents</span>: {
+    <span class="hljs-attr">componentMap</span>: {}, <span class="hljs-comment">// object of all react components available for JSONX</span>
+    <span class="hljs-attr">getBoundedComponents</span>: [<span class="hljs-built_in">Function</span>: getBoundedComponents], <span class="hljs-comment">// getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list</span>
+    <span class="hljs-attr">getComponentFromLibrary</span>: [<span class="hljs-built_in">Function</span>: getComponentFromLibrary], <span class="hljs-comment">// returns a react component from a component library (like material-ui, or semantic-ui)</span>
+    <span class="hljs-attr">getComponentFromMap</span>: [<span class="hljs-built_in">Function</span>: getComponentFromMap], <span class="hljs-comment">// returns a react element from jsonx.component</span>
+    <span class="hljs-attr">getReactClassComponent</span>: [<span class="hljs-built_in">Function</span>: getReactClassComponent], <span class="hljs-comment">// returns a react class component and support lifecycle functions, lazy and suspense components</span>
+    <span class="hljs-attr">getReactFunctionComponent</span>: [<span class="hljs-built_in">Function</span>: getReactFunctionComponent], <span class="hljs-comment">// returns a react function component and support lifecycle functions, hooks, lazy and suspense components</span>
   },
-  _jsonxProps: {
-    getJSONXProps: [Function: getJSONXProps], // It uses traverse on a traverseObject to returns a resolved object on propName. So if you&apos;re making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
-    getEvalProps: [Function: getEvalProps], //Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
-    getComponentProps: [Function: getComponentProps], // Resolves jsonx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
-    getReactComponentProps: [Function: getReactComponentProps], // Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a the React component from reactComponents, componentLibraries or ReactDOM.
-    getFunctionFromProps: [Function: getFunctionFromProps], // Takes a function string and returns a function on either this.props or window.
-    getFunctionProps: [Function: getFunctionProps], // Returns a resolved object from function strings that has functions pulled from jsonx.__functionProps
-    getWindowComponents: [Function: getWindowComponents], // Returns a resolved object that has React Components pulled from window.__jsonx_custom_elements
-    getComputedProps: [Function: getComputedProps], // Returns computed properties for React Components and any property that&apos;s prefixed with __ is a computedProperty
+  <span class="hljs-attr">_jsonxProps</span>: {
+    <span class="hljs-attr">getJSONXProps</span>: [<span class="hljs-built_in">Function</span>: getJSONXProps], <span class="hljs-comment">// It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths</span>
+    <span class="hljs-attr">getEvalProps</span>: [<span class="hljs-built_in">Function</span>: getEvalProps], <span class="hljs-comment">//Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})</span>
+    <span class="hljs-attr">getComponentProps</span>: [<span class="hljs-built_in">Function</span>: getComponentProps], <span class="hljs-comment">// Resolves jsonx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</span>
+    <span class="hljs-attr">getReactComponentProps</span>: [<span class="hljs-built_in">Function</span>: getReactComponentProps], <span class="hljs-comment">// Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a the React component from reactComponents, componentLibraries or ReactDOM.</span>
+    <span class="hljs-attr">getFunctionFromProps</span>: [<span class="hljs-built_in">Function</span>: getFunctionFromProps], <span class="hljs-comment">// Takes a function string and returns a function on either this.props or window.</span>
+    <span class="hljs-attr">getFunctionProps</span>: [<span class="hljs-built_in">Function</span>: getFunctionProps], <span class="hljs-comment">// Returns a resolved object from function strings that has functions pulled from jsonx.__functionProps</span>
+    <span class="hljs-attr">getWindowComponents</span>: [<span class="hljs-built_in">Function</span>: getWindowComponents], <span class="hljs-comment">// Returns a resolved object that has React Components pulled from window.__jsonx_custom_elements</span>
+    <span class="hljs-attr">getComputedProps</span>: [<span class="hljs-built_in">Function</span>: getComputedProps], <span class="hljs-comment">// Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty</span>
   },
-  _jsonxUtils: {
-    validateJSONX: [Function: validateJSONX], //Validates JSONX JSON Syntax
-    displayComponent: [Function displayComponent], // Used to evaluate whether or not to render a component
-    traverse: [Function traverse], //take an object of array paths to traverse and resolve
-    getAdvancedBinding: [Function: getAdvancedBinding], // Use to test if can bind components this context for react-redux-router
+  <span class="hljs-attr">_jsonxUtils</span>: {
+    <span class="hljs-attr">validateJSONX</span>: [<span class="hljs-built_in">Function</span>: validateJSONX], <span class="hljs-comment">//Validates JSONX JSON Syntax</span>
+    <span class="hljs-attr">displayComponent</span>: [<span class="hljs-built_in">Function</span> displayComponent], <span class="hljs-comment">// Used to evaluate whether or not to render a component</span>
+    <span class="hljs-attr">traverse</span>: [<span class="hljs-built_in">Function</span> traverse], <span class="hljs-comment">//take an object of array paths to traverse and resolve</span>
+    <span class="hljs-attr">getAdvancedBinding</span>: [<span class="hljs-built_in">Function</span>: getAdvancedBinding], <span class="hljs-comment">// Use to test if can bind components this context for react-redux-router</span>
   },
-}</code>
-</code></pre>
-<h3 id="full-jsonx-spec">Full JSONX Spec</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">jsonx = {
-  //standard properties
-  component:String, // Any React DOM element, or custom component div,p, Boomer.Hero, MaterialUI.Button, myCustomComponent (can also use the property &apos;type&apos; instead of &apos;component&apos;)
-  props:Object, // Standard React component properties
-  children:Array|String, // Any String or Array of valid JSONX JSON objects
+}</code></pre>
+				<a href="#full-jsonx-spec" id="full-jsonx-spec" style="color: inherit; text-decoration: none;">
+					<h3>Full JSONX Spec</h3>
+				</a>
+				<pre><code class="language-javascript">jsonx = {
+  <span class="hljs-comment">//standard properties</span>
+  <span class="hljs-attr">component</span>:<span class="hljs-built_in">String</span>, <span class="hljs-comment">// Any React DOM element, or custom component div,p, Boomer.Hero, MaterialUI.Button, myCustomComponent (can also use the property 'type' instead of 'component')</span>
+  <span class="hljs-attr">props</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// Standard React component properties</span>
+  <span class="hljs-attr">children</span>:<span class="hljs-built_in">Array</span>|<span class="hljs-built_in">String</span>, <span class="hljs-comment">// Any String or Array of valid JSONX JSON objects</span>
 
 
-  //dynamic properties
-  resourceprops:Object, // An object from async resources to merge onto jsonx.props once fully resolved
-  asyncprops:Object, // An object from async resources to merge onto jsonx.props once fully resolved (alias for resourceprops)
-  thisprops:Object, // An object to merge onto jsonx.props from properties already bound to this.props
-  thisstate:Object, // An object to merge onto jsonx.props from properties already bound to this.state
-  thiscontext:Object, // An object to merge onto jsonx.props from properties already bound to this
-  windowprops:Object, // An object to merge onto jsonx.props from the window object
+  <span class="hljs-comment">//dynamic properties</span>
+  <span class="hljs-attr">resourceprops</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object from async resources to merge onto jsonx.props once fully resolved</span>
+  <span class="hljs-attr">asyncprops</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object from async resources to merge onto jsonx.props once fully resolved (alias for resourceprops)</span>
+  <span class="hljs-attr">thisprops</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from properties already bound to this.props</span>
+  <span class="hljs-attr">thisstate</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from properties already bound to this.state</span>
+  <span class="hljs-attr">thiscontext</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from properties already bound to this</span>
+  <span class="hljs-attr">windowprops</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from the window object</span>
 
 
-  //evaluated properties
-  __dangerouslyEvalProps:Object, // An object of evaluated JavaScript strings, used as inline functions onto jsonx.props, if the prop is a function it will be called bound to &apos;this&apos; and the returned value will be assigned
-  __dangerouslyBindEvalProps:Object, // An object of evaluated JavaScript functions that are bound to this, used as inline functions onto jsonx.props
-  //computed properties
-  __functionProps:Object, // An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto jsonx.props
-  __dangerouslyInsertJSONXComponents:Object, // An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
-  __dangerouslyInsertComponents:Object, // An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
-  __dangerouslyInsertReactComponents:Object, // An object that returns the react element from either ReactDOM, reactComponents or componentLibraries.
-  __dangerouslyInsertFunctionComponents:Object, // An object that returns the react function component.
-  __dangerouslyInsertClassComponents:Object, // An object that returns the react class component.
-  __spreadComponent:Object, // A JSONX element that is mapped on any array prop called  __spread
-  __windowComponents:Object, // An object of components merged onto jsonx.props from window.__jsonx_custom_elements
-  __windowComponentProps:Object,
+  <span class="hljs-comment">//evaluated properties</span>
+  <span class="hljs-attr">__dangerouslyEvalProps</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of evaluated JavaScript strings, used as inline functions onto jsonx.props, if the prop is a function it will be called bound to 'this' and the returned value will be assigned</span>
+  <span class="hljs-attr">__dangerouslyBindEvalProps</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of evaluated JavaScript functions that are bound to this, used as inline functions onto jsonx.props</span>
+  <span class="hljs-comment">//computed properties</span>
+  <span class="hljs-attr">__functionProps</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto jsonx.props</span>
+  <span class="hljs-attr">__dangerouslyInsertJSONXComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</span>
+  <span class="hljs-attr">__dangerouslyInsertComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</span>
+  <span class="hljs-attr">__dangerouslyInsertReactComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that returns the react element from either ReactDOM, reactComponents or componentLibraries.</span>
+  <span class="hljs-attr">__dangerouslyInsertFunctionComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that returns the react function component.</span>
+  <span class="hljs-attr">__dangerouslyInsertClassComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that returns the react class component.</span>
+  <span class="hljs-attr">__spreadComponent</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// A JSONX element that is mapped on any array prop called  __spread</span>
+  <span class="hljs-attr">__windowComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of components merged onto jsonx.props from window.__jsonx_custom_elements</span>
+  <span class="hljs-attr">__windowComponentProps</span>:<span class="hljs-built_in">Object</span>,
 
 
-  //display properties
-  comparisonprops:[Object], // An array of Objects used to conditionally display the current jsonx.component
-  //flag properties
-  passprops:Boolean, // A flag to pass parent properties to children JSONX objects (except for the style property)
-  comparisonorprops:Boolean, // A flag to use an or condition instead of and conditions between comparisions
-}</code>
-</code></pre>
-<h4 id="advanced---using-custom-components--amp--ui-libraries">Advanced - Using Custom Components &amp; UI Libraries</h4><p>If you plan on using an entire UI library, then bind the library to this before using JSONX.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import * as jsonx from &apos;jsonx&apos;;
-import { * as Semantic } from &apos;semantic-ui-react&apos;;
+  <span class="hljs-comment">//display properties</span>
+  <span class="hljs-attr">comparisonprops</span>:[<span class="hljs-built_in">Object</span>], <span class="hljs-comment">// An array of Objects used to conditionally display the current jsonx.component</span>
+  <span class="hljs-comment">//flag properties</span>
+  <span class="hljs-attr">passprops</span>:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to pass parent properties to children JSONX objects (except for the style property)</span>
+  <span class="hljs-attr">comparisonorprops</span>:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to use an or condition instead of and conditions between comparisions</span>
+}</code></pre>
+				<a href="#advanced---using-custom-components-amp-ui-libraries" id="advanced---using-custom-components-amp-ui-libraries" style="color: inherit; text-decoration: none;">
+					<h4>Advanced - Using Custom Components &amp; UI Libraries</h4>
+				</a>
+				<p>If you plan on using an entire UI library, then bind the library to this before using JSONX.</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">'jsonx'</span>;
+<span class="hljs-keyword">import</span> { * <span class="hljs-keyword">as</span> Semantic } <span class="hljs-keyword">from</span> <span class="hljs-string">'semantic-ui-react'</span>;
 
-const getReactElement = jsonx.getReactElement.bind({
-  componentLibraries:{
+<span class="hljs-keyword">const</span> getReactElement = jsonx.getReactElement.bind({
+  <span class="hljs-attr">componentLibraries</span>:{
     Semantic,
   }
 });
 
-const myJSONX = {
-  component:&apos;Semantic.Container&apos;,
-  children:[
+<span class="hljs-keyword">const</span> myJSONX = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'Semantic.Container'</span>,
+  <span class="hljs-attr">children</span>:[
     {
-      component:&apos;Semantic.Header&apos;,
-      props:{
-        as:&apos;h1&apos;,
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'Semantic.Header'</span>,
+      <span class="hljs-attr">props</span>:{
+        <span class="hljs-attr">as</span>:<span class="hljs-string">'h1'</span>,
       },
-      children:&apos;Hello World!&apos;,
+      <span class="hljs-attr">children</span>:<span class="hljs-string">'Hello World!'</span>,
     },
     {
-      component:&apos;Semantic.Button&apos;,
-      props:{
-        content:&apos;Discover docs&apos;,
-        href:&apos;http://react.semantic-ui.com&apos;,
-        icon:&apos;github&apos;,
-        labelPosition:&apos;left&apos;,
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'Semantic.Button'</span>,
+      <span class="hljs-attr">props</span>:{
+        <span class="hljs-attr">content</span>:<span class="hljs-string">'Discover docs'</span>,
+        <span class="hljs-attr">href</span>:<span class="hljs-string">'http://react.semantic-ui.com'</span>,
+        <span class="hljs-attr">icon</span>:<span class="hljs-string">'github'</span>,
+        <span class="hljs-attr">labelPosition</span>:<span class="hljs-string">'left'</span>,
       }
     }
   ]
 }
 
-const myReactElements = getReactElement(myJSONX);</code>
-</code></pre>
-<h4 id="advanced---using-new--amp--custom-components">Advanced - Using New &amp; Custom Components</h4><p>If you&apos;re only adding single components or using your own components you can add them to JSONX&apos;s component my individually.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import React from &apos;react&apos;;
-import * as jsonx from &apos;jsonx&apos;;
-import { Header } from &apos;semantic-ui-react&apos;;
+<span class="hljs-keyword">const</span> myReactElements = getReactElement(myJSONX);</code></pre>
+				<a href="#advanced---using-new-amp-custom-components" id="advanced---using-new-amp-custom-components" style="color: inherit; text-decoration: none;">
+					<h4>Advanced - Using New &amp; Custom Components</h4>
+				</a>
+				<p>If you&#39;re only adding single components or using your own components you can add them to JSONX&#39;s component my individually.</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">'jsonx'</span>;
+<span class="hljs-keyword">import</span> { Header } <span class="hljs-keyword">from</span> <span class="hljs-string">'semantic-ui-react'</span>;
 
-class MyButton extends React.Component {
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
   render() {
-    return &lt;a {...this.props}&gt;{this.props.children}&lt;/a&gt;
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> {<span class="hljs-attr">...this.props</span>}&gt;</span>{this.props.children}<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></span>
   }
 }
 
 
-const getReactElement = jsonx.getReactElement.bind({
-  reactComponents:{
+<span class="hljs-keyword">const</span> getReactElement = jsonx.getReactElement.bind({
+  <span class="hljs-attr">reactComponents</span>:{
     Header,
     MyButton,
   }
 });
 
-const myJSONX = {
-  component:&apos;div&apos;,
-  children:[
+<span class="hljs-keyword">const</span> myJSONX = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>,
+  <span class="hljs-attr">children</span>:[
     {
-      component:&apos;Header&apos;,
-      props:{
-        as:&apos;h1&apos;,
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'Header'</span>,
+      <span class="hljs-attr">props</span>:{
+        <span class="hljs-attr">as</span>:<span class="hljs-string">'h1'</span>,
       },
-      children:&apos;Hello World!&apos;,
+      <span class="hljs-attr">children</span>:<span class="hljs-string">'Hello World!'</span>,
     },
     {
-      component:&apos;MyButton&apos;,
-      props:{
-        title:&apos;Discover docs&apos;,
-        href:&apos;http://react.semantic-ui.com&apos;,
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'MyButton'</span>,
+      <span class="hljs-attr">props</span>:{
+        <span class="hljs-attr">title</span>:<span class="hljs-string">'Discover docs'</span>,
+        <span class="hljs-attr">href</span>:<span class="hljs-string">'http://react.semantic-ui.com'</span>,
       },
-      __dangerouslyEvalProps:{
-        onClick:&apos;()=&gt;alert(&quot;click works&quot;)&apos;
+      <span class="hljs-attr">__dangerouslyEvalProps</span>:{
+        <span class="hljs-attr">onClick</span>:<span class="hljs-string">'()=&gt;alert("click works")'</span>
       },
-      children:&apos;click me&apos;,
+      <span class="hljs-attr">children</span>:<span class="hljs-string">'click me'</span>,
     }
   ]
 }
 
-const myReactElements = getReactElement(myJSONX);</code>
-</code></pre>
-<h4 id="advanced---special-properties">Advanced - Special properties</h4><h5 id="resourceprops--asyncprops----thisprops---thisstate---thiscontext---windowprops">resourceprops (asyncprops) / thisprops / thisstate / thiscontext / windowprops</h5><p>The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.</p>
-<p>Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).</p>
-<p>Thisprops transverses anything bound to <code>this.props</code>, a good example would be if you&apos;re storing and passing a user object on <code>this.props.user</code>, pulling the username would be where you would use thisprops.</p>
-<p>Thisstate transverses anything bound to <code>this.state</code>, for example if you&apos;re updating the state of a component based on user input from a text field <code>this.state.value</code>, pulling the value would be where you would use thisstate.</p>
-<p>Thiscontext transverses anything bound to <code>this</code>, a good example is if you&apos;re using JSONX programatically and you want to bind functionality to the render methods.</p>
-<p>Windowprops transverse anything on the global window object, like the current page location <code>window.location.href</code>.</p>
-<p>Dynamic props are transversed by passing an array to the property value you want, so for a window&apos;s location (<code>window.location.href</code>) the property value is accessed by an array to the href <code>[&apos;location&apos;,&apos;href&apos;]</code> where you omit the transverse object from the array path.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">const traverseObject = {
-  user: {
-    name: &apos;jsonx&apos;,
-    description: &apos;react without javascript&apos;,
+<span class="hljs-keyword">const</span> myReactElements = getReactElement(myJSONX);</code></pre>
+				<a href="#advanced---special-properties" id="advanced---special-properties" style="color: inherit; text-decoration: none;">
+					<h4>Advanced - Special properties</h4>
+				</a>
+				<a href="#resourceprops-asyncprops--thisprops--thisstate--thiscontext--windowprops" id="resourceprops-asyncprops--thisprops--thisstate--thiscontext--windowprops" style="color: inherit; text-decoration: none;">
+					<h5>resourceprops (asyncprops) / thisprops / thisstate / thiscontext / windowprops</h5>
+				</a>
+				<p>The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.</p>
+				<p>Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).</p>
+				<p>Thisprops transverses anything bound to <code>this.props</code>, a good example would be if you&#39;re storing and passing a user object on <code>this.props.user</code>, pulling the username would be where you would use thisprops.</p>
+				<p>Thisstate transverses anything bound to <code>this.state</code>, for example if you&#39;re updating the state of a component based on user input from a text field <code>this.state.value</code>, pulling the value would be where you would use thisstate.</p>
+				<p>Thiscontext transverses anything bound to <code>this</code>, a good example is if you&#39;re using JSONX programatically and you want to bind functionality to the render methods.</p>
+				<p>Windowprops transverse anything on the global window object, like the current page location <code>window.location.href</code>.</p>
+				<p>Dynamic props are transversed by passing an array to the property value you want, so for a window&#39;s location (<code>window.location.href</code>) the property value is accessed by an array to the href <code>[&#39;location&#39;,&#39;href&#39;]</code> where you omit the transverse object from the array path.</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> traverseObject = {
+  <span class="hljs-attr">user</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'jsonx'</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">'react without javascript'</span>,
   },
-  stats: {
-    logins: 102,
-    comments: 3,
+  <span class="hljs-attr">stats</span>: {
+    <span class="hljs-attr">logins</span>: <span class="hljs-number">102</span>,
+    <span class="hljs-attr">comments</span>: <span class="hljs-number">3</span>,
   },
-  authentication: &apos;OAuth2&apos;,
+  <span class="hljs-attr">authentication</span>: <span class="hljs-string">'OAuth2'</span>,
 };
-const testJSONX = {
-  component: &apos;div&apos;,
-  props: {
-    id: &apos;generatedJSONX&apos;,
-    className:&apos;jsonx&apos;,
+<span class="hljs-keyword">const</span> testJSONX = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">'div'</span>,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">id</span>: <span class="hljs-string">'generatedJSONX'</span>,
+    <span class="hljs-attr">className</span>:<span class="hljs-string">'jsonx'</span>,
   },
-  resourceprops:{
-    auth: [ &apos;authentication&apos;, ],
-    username: [ &apos;user&apos;, &apos;name&apos;, ],
+  <span class="hljs-attr">resourceprops</span>:{
+    <span class="hljs-attr">auth</span>: [ <span class="hljs-string">'authentication'</span>, ],
+    <span class="hljs-attr">username</span>: [ <span class="hljs-string">'user'</span>, <span class="hljs-string">'name'</span>, ],
   },
-  children: [
+  <span class="hljs-attr">children</span>: [
     {
-      component: &apos;p&apos;,
-      props: {
-        style: {
-          color: &apos;red&apos;,
-          fontWeight:&apos;bold&apos;,
+      <span class="hljs-attr">component</span>: <span class="hljs-string">'p'</span>,
+      <span class="hljs-attr">props</span>: {
+        <span class="hljs-attr">style</span>: {
+          <span class="hljs-attr">color</span>: <span class="hljs-string">'red'</span>,
+          <span class="hljs-attr">fontWeight</span>:<span class="hljs-string">'bold'</span>,
         },
       },
-      asyncprops:{
-        title: [&apos;user&apos;,&apos;description&apos;]
+      <span class="hljs-attr">asyncprops</span>:{
+        <span class="hljs-attr">title</span>: [<span class="hljs-string">'user'</span>,<span class="hljs-string">'description'</span>]
       },
-      children:&apos;hello world&apos;,
+      <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span>,
     },
   ],
 };
-const JSONXP = getJSONXProps({ jsonx: testJSONX, traverseObject, });
-// =&gt; {
-//   auth: &apos;OAuth2&apos;,
-//   username: &apos;jsonx&apos;
-// }
+<span class="hljs-keyword">const</span> JSONXP = getJSONXProps({ <span class="hljs-attr">jsonx</span>: testJSONX, traverseObject, });
+<span class="hljs-comment">// =&gt; {</span>
+<span class="hljs-comment">//   auth: 'OAuth2',</span>
+<span class="hljs-comment">//   username: 'jsonx'</span>
+<span class="hljs-comment">// }</span>
 
-//finally resolves:
-const testJSONX = {
-  component: &apos;div&apos;,
-  props: {
-    id: &apos;generatedJSONX&apos;,
-    className:&apos;jsonx&apos;,
-    auth: &apos;OAuth2&apos;,
-    username: &apos;jsonx&apos;,
+<span class="hljs-comment">//finally resolves:</span>
+<span class="hljs-keyword">const</span> testJSONX = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">'div'</span>,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">id</span>: <span class="hljs-string">'generatedJSONX'</span>,
+    <span class="hljs-attr">className</span>:<span class="hljs-string">'jsonx'</span>,
+    <span class="hljs-attr">auth</span>: <span class="hljs-string">'OAuth2'</span>,
+    <span class="hljs-attr">username</span>: <span class="hljs-string">'jsonx'</span>,
   },
-  children: [
+  <span class="hljs-attr">children</span>: [
     {
-      component: &apos;p&apos;,
-      props: {
-        style: {
-          color: &apos;red&apos;,
-          fontWeight:&apos;bold&apos;,
+      <span class="hljs-attr">component</span>: <span class="hljs-string">'p'</span>,
+      <span class="hljs-attr">props</span>: {
+        <span class="hljs-attr">style</span>: {
+          <span class="hljs-attr">color</span>: <span class="hljs-string">'red'</span>,
+          <span class="hljs-attr">fontWeight</span>:<span class="hljs-string">'bold'</span>,
         },
-        title:&apos;react without javascript&apos;,
+        <span class="hljs-attr">title</span>:<span class="hljs-string">'react without javascript'</span>,
       },
-      children:&apos;hello world&apos;,
+      <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span>,
     },
   ],
-};</code>
-</code></pre>
-<h5 id="-strong-dangerouslyevalprops-----strong-dangerouslybindevalprops"><strong>dangerouslyEvalProps / </strong>dangerouslyBindEvalProps</h5><p>The only difference between <code>__dangerouslyEvalProps</code> and <code>__dangerouslyBindEvalProps</code> is each  <code>__dangerouslyBindEvalProps</code> has to be a function, because it&apos;s returned as the bound instance of the function with <code>this</code>.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint"> const testVals = {
-    auth: &apos;true&apos;,
-    username: &apos;()=&gt;(user={})=&gt;user.name&apos;,
+};</code></pre>
+				<a href="#__dangerouslyevalprops--__dangerouslybindevalprops" id="__dangerouslyevalprops--__dangerouslybindevalprops" style="color: inherit; text-decoration: none;">
+					<h5>__dangerouslyEvalProps / __dangerouslyBindEvalProps</h5>
+				</a>
+				<p>The only difference between <code>__dangerouslyEvalProps</code> and <code>__dangerouslyBindEvalProps</code> is each  <code>__dangerouslyBindEvalProps</code> has to be a function, because it&#39;s returned as the bound instance of the function with <code>this</code>.</p>
+				<pre><code class="language-javascript"> <span class="hljs-keyword">const</span> testVals = {
+    <span class="hljs-attr">auth</span>: <span class="hljs-string">'true'</span>,
+    <span class="hljs-attr">username</span>: <span class="hljs-string">'()=&gt;(user={})=&gt;user.name'</span>,
   };
-  const testJSONX = Object.assign({}, sampleJSONX, {
-    __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {
-      email: &apos;(function getUser(user={}){ return this.testBound(); })&apos;,
+  <span class="hljs-keyword">const</span> testJSONX = <span class="hljs-built_in">Object</span>.assign({}, sampleJSONX, {
+    <span class="hljs-attr">__dangerouslyEvalProps</span>: testVals, <span class="hljs-attr">__dangerouslyBindEvalProps</span>: {
+      <span class="hljs-attr">email</span>: <span class="hljs-string">'(function getUser(user={}){ return this.testBound(); })'</span>,
     },
   });
-  const JSONXP = getEvalProps.call({ testBound: () =&gt; &apos;bounded&apos;, }, { jsonx: testJSONX, });
-  const evalutedComputedFunc = JSONXP.username({ name: &apos;bob&apos;, });
-  const evalutedComputedBoundFunc = JSONXP.email({ email:&apos;test@email.domain&apos;, });
-  // expect(JSONXP.auth).to.be.true;
-  // expect(evalutedComputedFunc).to.eql(&apos;bob&apos;);
-  // expect(evalutedComputedBoundFunc).to.eql(&apos;bounded&apos;);</code>
-</code></pre>
-<h5 id="--functionprops">__functionProps</h5><p>Function props merge onto jsonx.props after evaluating each functon string.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">const thisProp = {
-  debug: true,
-  window: {
-    print: () =&gt; &apos;printed&apos;,
-    localStorage: {
-      getItem:()=&gt;&apos;gotItem&apos;,
+  <span class="hljs-keyword">const</span> JSONXP = getEvalProps.call({ <span class="hljs-attr">testBound</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'bounded'</span>, }, { <span class="hljs-attr">jsonx</span>: testJSONX, });
+  <span class="hljs-keyword">const</span> evalutedComputedFunc = JSONXP.username({ <span class="hljs-attr">name</span>: <span class="hljs-string">'bob'</span>, });
+  <span class="hljs-keyword">const</span> evalutedComputedBoundFunc = JSONXP.email({ <span class="hljs-attr">email</span>:<span class="hljs-string">'test@email.domain'</span>, });
+  <span class="hljs-comment">// expect(JSONXP.auth).to.be.true;</span>
+  <span class="hljs-comment">// expect(evalutedComputedFunc).to.eql('bob');</span>
+  <span class="hljs-comment">// expect(evalutedComputedBoundFunc).to.eql('bounded');</span></code></pre>
+				<a href="#__functionprops" id="__functionprops" style="color: inherit; text-decoration: none;">
+					<h5>__functionProps</h5>
+				</a>
+				<p>Function props merge onto jsonx.props after evaluating each functon string.</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> thisProp = {
+  <span class="hljs-attr">debug</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">window</span>: {
+    <span class="hljs-attr">print</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'printed'</span>,
+    <span class="hljs-attr">localStorage</span>: {
+      <span class="hljs-attr">getItem</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">'gotItem'</span>,
     },
   },
-  props: {
-    onClick:()=&gt;&apos;clicked&apos;,
-    reduxRouter: {
-      push:()=&gt;&apos;pushed&apos;,
-      pop:()=&gt;&apos;poped&apos;,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">onClick</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">'clicked'</span>,
+    <span class="hljs-attr">reduxRouter</span>: {
+      <span class="hljs-attr">push</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">'pushed'</span>,
+      <span class="hljs-attr">pop</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">'poped'</span>,
     },
   },
 };
-const jsonxTest = {
-  component:&apos;div&apos;,
-  props: {
-    name:&apos;test&apos;,
+<span class="hljs-keyword">const</span> jsonxTest = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">name</span>:<span class="hljs-string">'test'</span>,
   },
-  __functionProps: {
-    onclick:&apos;func:this.props.onClick&apos;,
-    printPage: &apos;func:window.print&apos;,
-    nav:&apos;func:this.props.reduxRouter.push&apos;,
+  <span class="hljs-attr">__functionProps</span>: {
+    <span class="hljs-attr">onclick</span>:<span class="hljs-string">'func:this.props.onClick'</span>,
+    <span class="hljs-attr">printPage</span>: <span class="hljs-string">'func:window.print'</span>,
+    <span class="hljs-attr">nav</span>:<span class="hljs-string">'func:this.props.reduxRouter.push'</span>,
   },
 };
-const jsonxObj = getFunctionProps.call(thisProp, {
-  jsonx: jsonxTest,
+<span class="hljs-keyword">const</span> jsonxObj = getFunctionProps.call(thisProp, {
+  <span class="hljs-attr">jsonx</span>: jsonxTest,
 });
-expect(jsonxObj).is.an(&apos;object&apos;);
-expect(Object.keys(jsonxObj)).to.eql(Object.keys(jsonxTest.__functionProps));
-expect(jsonxObj.onclick()).to.eq(&apos;clicked&apos;);
-expect(jsonxObj.printPage()).to.eql(&apos;printed&apos;);
-expect(jsonxObj.nav()).to.eql(&apos;pushed&apos;);</code>
-</code></pre>
-<h5 id="comparisionprops">comparisionprops</h5><p>Comparison props are used to contionally show components if they&apos;re truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If <code>comparisonorprops:true</code> then only one condition needs to be true in order to render the component</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">//and conditions
+expect(jsonxObj).is.an(<span class="hljs-string">'object'</span>);
+expect(<span class="hljs-built_in">Object</span>.keys(jsonxObj)).to.eql(<span class="hljs-built_in">Object</span>.keys(jsonxTest.__functionProps));
+expect(jsonxObj.onclick()).to.eq(<span class="hljs-string">'clicked'</span>);
+expect(jsonxObj.printPage()).to.eql(<span class="hljs-string">'printed'</span>);
+expect(jsonxObj.nav()).to.eql(<span class="hljs-string">'pushed'</span>);</code></pre>
+				<a href="#comparisionprops" id="comparisionprops" style="color: inherit; text-decoration: none;">
+					<h5>comparisionprops</h5>
+				</a>
+				<p>Comparison props are used to contionally show components if they&#39;re truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If <code>comparisonorprops:true</code> then only one condition needs to be true in order to render the component</p>
+				<pre><code class="language-javascript"><span class="hljs-comment">//and conditions</span>
 jsonx={
-  comparisonprops: [{
-    left: [&apos;bigNum&apos;,],
-    operation:&apos;lte&apos;,
-    right:[&apos;smallNum&apos;,],
+  <span class="hljs-attr">comparisonprops</span>: [{
+    <span class="hljs-attr">left</span>: [<span class="hljs-string">'bigNum'</span>,],
+    <span class="hljs-attr">operation</span>:<span class="hljs-string">'lte'</span>,
+    <span class="hljs-attr">right</span>:[<span class="hljs-string">'smallNum'</span>,],
   },{
-    left: [&apos;smallNum&apos;,],
-    operation:&apos;&lt;=&apos;,
-    right:[&apos;bigNum&apos;,],
+    <span class="hljs-attr">left</span>: [<span class="hljs-string">'smallNum'</span>,],
+    <span class="hljs-attr">operation</span>:<span class="hljs-string">'&lt;='</span>,
+    <span class="hljs-attr">right</span>:[<span class="hljs-string">'bigNum'</span>,],
   }],
 }
-//or conditions
+<span class="hljs-comment">//or conditions</span>
 jsonx={
-  comparisonorprops:true,
-  comparisonprops: [{
-    left: [&apos;truthy&apos;,],
-    operation:&apos;eq&apos;,
-    right:[&apos;falsey&apos;,],
+  <span class="hljs-attr">comparisonorprops</span>:<span class="hljs-literal">true</span>,
+  <span class="hljs-attr">comparisonprops</span>: [{
+    <span class="hljs-attr">left</span>: [<span class="hljs-string">'truthy'</span>,],
+    <span class="hljs-attr">operation</span>:<span class="hljs-string">'eq'</span>,
+    <span class="hljs-attr">right</span>:[<span class="hljs-string">'falsey'</span>,],
   },{
-    left: [&apos;smallNum&apos;,],
-    operation:&apos;eq&apos;,
-    right:[&apos;smallNum&apos;,],
+    <span class="hljs-attr">left</span>: [<span class="hljs-string">'smallNum'</span>,],
+    <span class="hljs-attr">operation</span>:<span class="hljs-string">'eq'</span>,
+    <span class="hljs-attr">right</span>:[<span class="hljs-string">'smallNum'</span>,],
   }],
 }
 
-// All comparison operations
-switch (opscompares.operation) {
-  case &apos;eq&apos;:
-  case &apos;==&apos;:
-    return opscompares.left == opscompares.right;
-  case &apos;dneq&apos;:
-  case &apos;!=&apos;:
-  case &apos;!&apos;:
-    return opscompares.left !== opscompares.right;
-  case &apos;dnseq&apos;:
-  case &apos;!==&apos;:
-    return opscompares.left !== opscompares.right;
-  case &apos;seq&apos;:
-  case &apos;===&apos;:
-    return opscompares.left === opscompares.right;
-  case &apos;lt&apos;:
-  case &apos;&lt;&apos;:
-    return opscompares.left &lt; opscompares.right;
-  case &apos;lte&apos;:
-  case &apos;&lt;=&apos;:
-    return opscompares.left &lt;= opscompares.right;
-  case &apos;gt&apos;:
-  case &apos;&gt;&apos;:
-    return opscompares.left &gt; opscompares.right;
-  case &apos;gte&apos;:
-  case &apos;&gt;=&apos;:
-    return opscompares.left &gt;= opscompares.right;
-  case &apos;dne&apos;:
-  case &apos;undefined&apos;:
-  case &apos;null&apos;:
-    return opscompares.left === undefined || opscompares.left === null; 
-  case &apos;!null&apos;:
-  case &apos;!undefined&apos;:
-  case &apos;exists&apos;:
-  default://&apos;exists&apos;
-    return opscompares.left !== undefined &amp;&amp; opscompares.left !== null;
-}</code>
-</code></pre>
-<h3 id="advanced---custom-react-components--amp--lifecycle-functions">Advanced - Custom React Components &amp; Lifecycle Functions</h3><p>You can also create react components with lifecycle functions using <code>getReactClassComponent</code>.</p>
-<p>The only required function is a render function, the body of the function has to be valid jsonx.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">const MyCustomComponent = jsonx._jsonxComponents.getReactClassComponent({
-    //
-    // Initialization function
-    //
-    getInitialState:{
-      body:&apos;return { status:&quot;not-loaded&quot;, name:&quot;jsonx test&quot;, customNumber:1, }&apos;,
-      arguments:[],
+<span class="hljs-comment">// All comparison operations</span>
+<span class="hljs-keyword">switch</span> (opscompares.operation) {
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'eq'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'=='</span>:
+    <span class="hljs-keyword">return</span> opscompares.left == opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'dneq'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'!='</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'!'</span>:
+    <span class="hljs-keyword">return</span> opscompares.left !== opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'dnseq'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'!=='</span>:
+    <span class="hljs-keyword">return</span> opscompares.left !== opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'seq'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'==='</span>:
+    <span class="hljs-keyword">return</span> opscompares.left === opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'lt'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'&lt;'</span>:
+    <span class="hljs-keyword">return</span> opscompares.left &lt; opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'lte'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'&lt;='</span>:
+    <span class="hljs-keyword">return</span> opscompares.left &lt;= opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'gt'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'&gt;'</span>:
+    <span class="hljs-keyword">return</span> opscompares.left &gt; opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'gte'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'&gt;='</span>:
+    <span class="hljs-keyword">return</span> opscompares.left &gt;= opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'dne'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'undefined'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'null'</span>:
+    <span class="hljs-keyword">return</span> opscompares.left === <span class="hljs-literal">undefined</span> || opscompares.left === <span class="hljs-literal">null</span>; 
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'!null'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'!undefined'</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'exists'</span>:
+  <span class="hljs-keyword">default</span>:<span class="hljs-comment">//'exists'</span>
+    <span class="hljs-keyword">return</span> opscompares.left !== <span class="hljs-literal">undefined</span> &amp;&amp; opscompares.left !== <span class="hljs-literal">null</span>;
+}</code></pre>
+				<a href="#advanced---custom-react-components-amp-lifecycle-functions" id="advanced---custom-react-components-amp-lifecycle-functions" style="color: inherit; text-decoration: none;">
+					<h3>Advanced - Custom React Components &amp; Lifecycle Functions</h3>
+				</a>
+				<p>You can also create react components with lifecycle functions using <code>getReactClassComponent</code>.</p>
+				<p>The only required function is a render function, the body of the function has to be valid jsonx.</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> MyCustomComponent = jsonx._jsonxComponents.getReactClassComponent({
+    <span class="hljs-comment">//</span>
+    <span class="hljs-comment">// Initialization function</span>
+    <span class="hljs-comment">//</span>
+    <span class="hljs-attr">getInitialState</span>:{
+      <span class="hljs-attr">body</span>:<span class="hljs-string">'return { status:"not-loaded", name:"jsonx test", customNumber:1, }'</span>,
+      <span class="hljs-attr">arguments</span>:[],
     },
-    getDefaultProps:{
-      body:&apos;return { someProp:1, someOtherProp:2, status:&quot;original status&quot; }&apos;,
-      arguments:[],
+    <span class="hljs-attr">getDefaultProps</span>:{
+      <span class="hljs-attr">body</span>:<span class="hljs-string">'return { someProp:1, someOtherProp:2, status:"original status" }'</span>,
+      <span class="hljs-attr">arguments</span>:[],
     },
-    componentDidMount:{
-      body:`console.log(&apos;mounted&apos;, &apos;this.props&apos;,this.props, &apos;this.state&apos;,this.state)`,
-      arguments:[],
+    <span class="hljs-attr">componentDidMount</span>:{
+      <span class="hljs-attr">body</span>:<span class="hljs-string">`console.log('mounted', 'this.props',this.props, 'this.state',this.state)`</span>,
+      <span class="hljs-attr">arguments</span>:[],
     },
-    componentWillUnmount:{
-      body:`console.log(&apos;unmounted&apos;,this.props)`,
-      arguments:[],
+    <span class="hljs-attr">componentWillUnmount</span>:{
+      <span class="hljs-attr">body</span>:<span class="hljs-string">`console.log('unmounted',this.props)`</span>,
+      <span class="hljs-attr">arguments</span>:[],
     },
-    //
-    // State change functions
-    //
-    shouldComponentUpdate:{
-      body:&apos;console.log(&quot;should update component&quot;,{nextProps,nextState}); return true;&apos;,
-      arguments:[&apos;nextProps&apos;, &apos;nextState&apos;]
+    <span class="hljs-comment">//</span>
+    <span class="hljs-comment">// State change functions</span>
+    <span class="hljs-comment">//</span>
+    <span class="hljs-attr">shouldComponentUpdate</span>:{
+      <span class="hljs-attr">body</span>:<span class="hljs-string">'console.log("should update component",{nextProps,nextState}); return true;'</span>,
+      <span class="hljs-attr">arguments</span>:[<span class="hljs-string">'nextProps'</span>, <span class="hljs-string">'nextState'</span>]
     },
-    componentWillUpdate:{
-      body:&apos;console.log(&quot;will update component&quot;,{nextProps,nextState}); return true;&apos;,
-      arguments:[&apos;nextProps&apos;, &apos;nextState&apos;]
+    <span class="hljs-attr">componentWillUpdate</span>:{
+      <span class="hljs-attr">body</span>:<span class="hljs-string">'console.log("will update component",{nextProps,nextState}); return true;'</span>,
+      <span class="hljs-attr">arguments</span>:[<span class="hljs-string">'nextProps'</span>, <span class="hljs-string">'nextState'</span>]
     },
-    componentDidUpdate:{
-      body:&apos;console.log(&quot;did update component&quot;,{prevProps,prevState}); return true;&apos;,
-      arguments:[&apos;prevProps&apos;, &apos;prevState&apos;]
+    <span class="hljs-attr">componentDidUpdate</span>:{
+      <span class="hljs-attr">body</span>:<span class="hljs-string">'console.log("did update component",{prevProps,prevState}); return true;'</span>,
+      <span class="hljs-attr">arguments</span>:[<span class="hljs-string">'prevProps'</span>, <span class="hljs-string">'prevState'</span>]
     },
-    //
-    // Prop change functions
-    //
-    componentWillReceiveProps: {
-      body:&apos;console.log(&quot;will recieve props&quot;,{nextProps}); return true;&apos;,
-      arguments:[&apos;nextProps&apos;]
+    <span class="hljs-comment">//</span>
+    <span class="hljs-comment">// Prop change functions</span>
+    <span class="hljs-comment">//</span>
+    <span class="hljs-attr">componentWillReceiveProps</span>: {
+      <span class="hljs-attr">body</span>:<span class="hljs-string">'console.log("will recieve props",{nextProps}); return true;'</span>,
+      <span class="hljs-attr">arguments</span>:[<span class="hljs-string">'nextProps'</span>]
     },
-    //
-    // RENDER IS THE ONLY ***REQUIRED*** FUNCTION
-    //
-    render:{
-      body:{
-        component:&apos;p&apos;,
-        props:{
-          status:&apos;from inline prop&apos;
+    <span class="hljs-comment">//</span>
+    <span class="hljs-comment">// RENDER IS THE ONLY ***REQUIRED*** FUNCTION</span>
+    <span class="hljs-comment">//</span>
+    <span class="hljs-attr">render</span>:{
+      <span class="hljs-attr">body</span>:{
+        <span class="hljs-attr">component</span>:<span class="hljs-string">'p'</span>,
+        <span class="hljs-attr">props</span>:{
+          <span class="hljs-attr">status</span>:<span class="hljs-string">'from inline prop'</span>
         },
-        passprops:true,
-        children:[
+        <span class="hljs-attr">passprops</span>:<span class="hljs-literal">true</span>,
+        <span class="hljs-attr">children</span>:[
           {
-            component:&apos;span&apos;,
-            children: &apos;My Custom React Component Status: &apos;,
+            <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>,
+            <span class="hljs-attr">children</span>: <span class="hljs-string">'My Custom React Component Status: '</span>,
           },
           {
-            component:&apos;span&apos;,
-            thisprops:{
-              children:[&apos;status&apos;]
+            <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>,
+            <span class="hljs-attr">thisprops</span>:{
+              <span class="hljs-attr">children</span>:[<span class="hljs-string">'status'</span>]
             }
           }
         ]
       },
     }
   });
-const sampleJSONX = {
-  component:&apos;MyCustomComponent&apos;,
-  props:{
-    status:&apos;Amazing&apos;,
+<span class="hljs-keyword">const</span> sampleJSONX = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'MyCustomComponent'</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">status</span>:<span class="hljs-string">'Amazing'</span>,
   }
 };
-const boundConfig = {
-  debug:true, 
-  reactComponents:{
+<span class="hljs-keyword">const</span> boundConfig = {
+  <span class="hljs-attr">debug</span>:<span class="hljs-literal">true</span>, 
+  <span class="hljs-attr">reactComponents</span>:{
     MyCustomComponent,
   }
 };
 jsonx.jsonxRender.call(boundConfig, {
-  jsonx: sampleJSONX, 
-  querySelector:&apos;#root&apos;, });</code>
-</code></pre>
-<p>Console output after mounting</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">[Log] mounted (4)
-&quot;this.props&quot;
-{status: &quot;Amazing&quot;, children: {}, someProp: 1, someOtherProp: 2}
-&quot;this.state&quot;
-{status: &quot;not-loaded&quot;, name: &quot;jsonx test&quot;, customNumber: 1}</code>
-</code></pre>
-<p>Checkout the <code>dist/example.html</code> for example usage.
-<img src="https://raw.githubusercontent.com/repetere/jsonx/master/docs/dist-example-html.png" alt="https://raw.githubusercontent.com/repetere/jsonx/master/docs/dist-example-html.png"></p>
-<h3 id="development">Development</h3><p>Note <em>Make sure you have grunt installed</em></p>
-<pre><code class="lang-sh"><code class="source-code prettyprint">$ npm i -g grunt-cli jsdoc-to-markdown</code>
-</code></pre>
-<p>For generating documentation</p>
-<pre><code class="lang-sh"><code class="source-code prettyprint">$ grunt doc
-$ jsdoc2md src/**/*.js  &gt; docs/api.md</code>
-</code></pre>
-<h3 id="notes">Notes</h3><p>Check out <a href="https://repetere.github.io/jsonx/">https://repetere.github.io/jsonx/</a> for the full jsonx Documentation</p>
-<h3 id="testing">Testing</h3><pre><code class="lang-sh"><code class="source-code prettyprint">$ npm i
-$ grunt test</code>
-</code></pre>
-<h3 id="contributing">Contributing</h3><p>Fork, write tests and create a pull request!</p>
-<h3 id="example-browser-usage">Example Browser Usage</h3><pre><code class="lang-html"><code class="source-code prettyprint">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-  &lt;head&gt;
-    &lt;meta charset=&quot;utf-8&quot;&gt;
-    &lt;title&gt;JSONX TEST&lt;/title&gt;
-    &lt;script type=&quot;text/javascript&quot; src=&quot;jsonx.umd.js&quot;&gt;&lt;/script&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;div id=&quot;root&quot;&gt;&lt;/div&gt;
-    &lt;script type=&quot;text/javascript&quot;&gt;
-      const sampleJSONX = {
-        component: &apos;div&apos;,
+  <span class="hljs-attr">jsonx</span>: sampleJSONX, 
+  <span class="hljs-attr">querySelector</span>:<span class="hljs-string">'#root'</span>, });</code></pre>
+				<p>Console output after mounting</p>
+				<pre><code class="language-javascript">[Log] mounted (<span class="hljs-number">4</span>)
+<span class="hljs-string">"this.props"</span>
+{<span class="hljs-attr">status</span>: <span class="hljs-string">"Amazing"</span>, <span class="hljs-attr">children</span>: {}, <span class="hljs-attr">someProp</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">someOtherProp</span>: <span class="hljs-number">2</span>}
+<span class="hljs-string">"this.state"</span>
+{<span class="hljs-attr">status</span>: <span class="hljs-string">"not-loaded"</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">"jsonx test"</span>, <span class="hljs-attr">customNumber</span>: <span class="hljs-number">1</span>}</code></pre>
+				<p>Checkout the <code>dist/example.html</code> for example usage.
+				<img src="https://raw.githubusercontent.com/repetere/jsonx/master/docs/dist-example-html.png" alt="https://raw.githubusercontent.com/repetere/jsonx/master/docs/dist-example-html.png"></p>
+				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
+					<h3>Development</h3>
+				</a>
+				<p>Note <em>Make sure you have grunt installed</em></p>
+				<pre><code class="language-sh">$ npm i -g grunt-cli jsdoc-to-markdown</code></pre>
+				<p>For generating documentation</p>
+				<pre><code class="language-sh">$ grunt doc
+$ jsdoc2md src/**/*.js  &gt; docs/api.md</code></pre>
+				<a href="#notes" id="notes" style="color: inherit; text-decoration: none;">
+					<h3>Notes</h3>
+				</a>
+				<p>Check out <a href="https://repetere.github.io/jsonx/">https://repetere.github.io/jsonx/</a> for the full jsonx Documentation</p>
+				<a href="#testing" id="testing" style="color: inherit; text-decoration: none;">
+					<h3>Testing</h3>
+				</a>
+				<pre><code class="language-sh">$ npm i
+$ grunt <span class="hljs-built_in">test</span></code></pre>
+				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+					<h3>Contributing</h3>
+				</a>
+				<p>Fork, write tests and create a pull request!</p>
+				<a href="#example-browser-usage" id="example-browser-usage" style="color: inherit; text-decoration: none;">
+					<h3>Example Browser Usage</h3>
+				</a>
+				<pre><code class="language-html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"en"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"utf-8"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>JSONX TEST<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"jsonx.umd.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"root"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span>&gt;</span><span class="actionscript">
+      <span class="hljs-keyword">const</span> sampleJSONX = {
+        component: <span class="hljs-string">'div'</span>,
         props: {
-          id: &apos;generatedJSONX&apos;,
-          className:&apos;jsonx&apos;,
+          id: <span class="hljs-string">'generatedJSONX'</span>,
+          className:<span class="hljs-string">'jsonx'</span>,
         },
         children: [
           {
-            component: &apos;p&apos;,
+            component: <span class="hljs-string">'p'</span>,
             props: {
               style: {
-                color: &apos;red&apos;,
-                fontWeight:&apos;bold&apos;,
+                color: <span class="hljs-string">'red'</span>,
+                fontWeight:<span class="hljs-string">'bold'</span>,
               },
             },
             __dangerouslyEvalProps:{
-              onClick:&apos;()=&gt;alert(&quot;click works&quot;)&apos;
+              onClick:<span class="hljs-string">'()=&gt;alert("click works")'</span>
             },
-            children:&apos;hello world&apos;,
+            children:<span class="hljs-string">'hello world'</span>,
           },
         ],
       };
-      const boundConfig = {
-        debug:true, 
+      <span class="hljs-keyword">const</span> boundConfig = {
+        debug:<span class="hljs-literal">true</span>, 
       };
-      jsonx.jsonxRender.call(boundConfig,{ jsonx: sampleJSONX, querySelector:&apos;#root&apos;, });
-    &lt;/script&gt;
-  &lt;/body&gt;
-&lt;/html&gt;</code>
-</code></pre>
-<p></p><div>
-
-<img src="https://raw.githubusercontent.com/repetere/jsonx/master/docs/jsonx-logo.png">
-
+      jsonx.jsonxRender.call(boundConfig,{ jsonx: sampleJSONX, querySelector:<span class="hljs-string">'#root'</span>, });
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+				<div style="text-align:center;">
+					<img src="https://raw.githubusercontent.com/repetere/jsonx/master/docs/jsonx-logo.png" style="max-width:160px;">
+				</div>
+				<!-- jsdoc src/components.js -c jsdoc.json  -->
+				<p>License</p>
+				<hr>
+				<p>MIT</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_children_.html">&quot;children&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_components_.html">&quot;components&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_express_.html">&quot;express&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">&quot;index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_props_.html">&quot;props&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_types_jsonx_index_.html">&quot;types/jsonx/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_types_jsonx_jsonx_.html">&quot;types/jsonx/jsonx&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_types_jsonx_main_.html">&quot;types/jsonx/main&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_types_jsonx_props_.html">&quot;types/jsonx/props&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_types_jsonx_utils_.html">&quot;types/jsonx/utils&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_utils_.html">&quot;utils&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
 </div>
-
-<p></p>
-<p><!-- jsdoc src/components.js -c jsdoc.json  -->
-</p>
-<p>License</p>
-<hr>
-<p>MIT</p>
-</div>
-</div>
-
-<footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+<footer>
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
 </footer>
-
-<script src="script/search_index.js"></script>
-<script src="script/search.js"></script>
-<script src="script/pretty-print.js"></script>
-<script src="script/inherited-summary.js"></script>
-<script src="script/test-summary.js"></script>
-<script src="script/inner-link.js"></script>
-<script src="script/patch-for-local.js"></script>
-
-
-</body></html>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
