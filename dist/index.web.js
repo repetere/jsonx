@@ -49694,8 +49694,9 @@ var jsonx = (function (exports) {
 	}
 	function getChildrenTemplate(template) {
 	    const cachedTemplate = templateCache.get(template);
-	    if (cachedTemplate)
+	    if (cachedTemplate) {
 	        return cachedTemplate;
+	    }
 	    else if (typeof window !== "undefined" &&
 	        typeof window.XMLHttpRequest === "function" &&
 	        !fs.readFileSync) {
@@ -49707,7 +49708,9 @@ var jsonx = (function (exports) {
 	    else if (typeof template === "string") {
 	        const jsFile = fs.readFileSync(path.resolve(template)).toString();
 	        const jsonxModule = scopedEval(`(${jsFile})`);
+	        // console.log({jsonxModule})
 	        templateCache.set(template, jsonxModule);
+	        // console.log({ templateCache });
 	        return jsonxModule;
 	    }
 	    return null;
@@ -49728,7 +49731,14 @@ var jsonx = (function (exports) {
 	    // eslint-disable-next-line
 	    const { jsonx, resources, renderIndex, logError = console.error } = options;
 	    try {
-	        const props = options.props || jsonx.props || {};
+	        const context = this || {};
+	        const props = options && options.props
+	            ? options.props
+	            : jsonx && jsonx.props
+	                ? jsonx.props
+	                : {};
+	        if (!jsonx)
+	            return null;
 	        jsonx.children = getChildrenProperty({ jsonx, props });
 	        props._children = undefined;
 	        delete props._children;
@@ -49753,7 +49763,7 @@ var jsonx = (function (exports) {
 	            return jsonx.children;
 	        const children = jsonx.children && Array.isArray(jsonx.children)
 	            ? jsonx.children
-	                .map(childjsonx => getReactElementFromJSONX.call(this, getChildrenProps({ jsonx, childjsonx, props, renderIndex }), resources))
+	                .map(childjsonx => getReactElementFromJSONX.call(context, getChildrenProps({ jsonx, childjsonx, props, renderIndex }), resources))
 	                .filter(child => child !== null)
 	            : jsonx.children;
 	        return children;
@@ -49945,7 +49955,7 @@ ${jsonxRenderedString}`;
 	    }
 	    catch (e) {
 	        if (debug) {
-	            logError({ jsonx, resources }, "this", this);
+	            logError({ jsonx, resources }, "getReactElementFromJSONX this", this);
 	            logError(e, e.stack ? e.stack : "no stack");
 	        }
 	        throw e;

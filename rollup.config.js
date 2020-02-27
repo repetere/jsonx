@@ -13,6 +13,10 @@ const external = [
   // "react",
   // "react-dom",
 ];
+const coreWebExternal = [
+  "react",
+  "react-dom",
+];
 const serverExternal = [
   'path',
   'react',
@@ -27,10 +31,19 @@ const serverExternal = [
 const windowGlobals = {
   // react: "React"
 };
+const coreWebWindowGlobals = {
+  react: "React",
+  'react-dom': "ReactDOM"
+};
 
-function getOutput({ minify = false, server = false, serverDom = false, }) {
-  const output = server ?
-    [ {
+
+function getOutput({
+  minify = false,
+  server = false,
+  serverDom = false,
+  core = false,
+}) {
+  const output = server ? [{
       file: pkg.main,
       format: "cjs",
       exports: "named",
@@ -44,13 +57,12 @@ function getOutput({ minify = false, server = false, serverDom = false, }) {
       name,
       sourcemap: true
     }
-    ] :
-    [ {
+  ] : [{
       file: pkg.browser,
       format: "umd",
       exports: "named",
       name,
-      globals:windowGlobals,
+      globals: core ? coreWebWindowGlobals : windowGlobals,
       sourcemap: true
     },
     {
@@ -58,35 +70,46 @@ function getOutput({ minify = false, server = false, serverDom = false, }) {
       format: "iife",
       exports: "named",
       name,
-      globals:windowGlobals,
+      globals: core ? coreWebWindowGlobals : windowGlobals,
       sourcemap: true
     }
   ];
-    if (minify) {
-        return output.map(item => {
-            const itemFileArray = item.file.split('.');
-            itemFileArray.splice(itemFileArray.length - 1, 0, 'min');
-            item.file = itemFileArray.join('.');
-            item.sourcemap = false;
-            return item;
-        })
-    }
-    if (serverDom) {
-        return output.map(item => {
-            const itemFileArray = item.file.split('.');
-            itemFileArray.splice(itemFileArray.length - 1, 0, 'server');
-            item.file = itemFileArray.join('.');
-            item.sourcemap = false;
-            return item;
-        })
-    }
-    return output;
+  if (minify) {
+    return output.map(item => {
+      const itemFileArray = item.file.split('.');
+      if (core) itemFileArray.splice(itemFileArray.length - 1, 0, 'core-min');
+      else itemFileArray.splice(itemFileArray.length - 1, 0, 'min');
+      item.file = itemFileArray.join('.');
+      item.sourcemap = false;
+      return item;
+    })
+  }
+  if (serverDom) {
+    return output.map(item => {
+      const itemFileArray = item.file.split('.');
+      itemFileArray.splice(itemFileArray.length - 1, 0, 'server');
+      item.file = itemFileArray.join('.');
+      item.sourcemap = false;
+      return item;
+    })
+  }
+  if (core) {
+    return output.map(item => {
+      const itemFileArray = item.file.split('.');
+      itemFileArray.splice(itemFileArray.length - 1, 0, 'core');
+      item.file = itemFileArray.join('.');
+      item.sourcemap = false;
+      return item;
+    })
+  }
+  return output;
 }
 
 function getPlugins({
   minify = false,
   server = false,
   serverDom = false,
+  core = false,
 }) {
   const plugins = [
     // // external(),
@@ -105,7 +128,7 @@ function getPlugins({
       declarationDir: null,
     }),
     commonjs({
-      extensions: [ '.js', '.ts' ],
+      extensions: ['.js', '.ts'],
       namedExports: {
         // left-hand side can be an absolute path, a path
         // relative to the current directory, or the name
@@ -113,7 +136,7 @@ function getPlugins({
         // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
         'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createContext', 'Fragment', 'Suspense', 'lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', ],
 
-        'node_modules/memory-cache/index.js':[
+        'node_modules/memory-cache/index.js': [
           'cache',
           'default',
         ],
@@ -126,7 +149,10 @@ function getPlugins({
   ];
   if (serverDom) {
     plugins.push(alias({
-      entries:{ find:/react-dom$/, replacement: 'react-dom/server' }
+      entries: {
+        find: /react-dom$/,
+        replacement: 'react-dom/server'
+      }
     }));
   }
 
@@ -149,52 +175,85 @@ function getPlugins({
 
 
 export default [
-  // {
-  //   input: "src/index.ts",
-  //   output: getOutput({
-  //     minify: false,
-  //     server: false,
-  //   }),
-  //   external,
-  //   plugins: getPlugins({
-  //     minify: false,
-  //   }),
-  // },
-  // {
-  //   input: "src/index.ts",
-  //   output: getOutput({
-  //     minify: false,
-  //     server: true,
-  //   }),
-  //   external:serverExternal,
-  //   plugins: getPlugins({
-  //     minify: false,
-  //     server: true,
-  //   }),
-  // },
-  // {
-  //   input: "src/index.ts",
-  //   output: getOutput({
-  //     minify: true,
-  //     server: false,
-  //   }),
-  //   external,
-  //   plugins: getPlugins({
-  //     minify: true,
-  //   }),
-  // },
+  //web
+  {
+    input: "src/index.ts",
+    output: getOutput({
+      minify: false,
+      server: false,
+    }),
+    external,
+    plugins: getPlugins({
+      minify: false,
+    }),
+  },
+  //web core
+  {
+    input: "src/index.ts",
+    output: getOutput({
+      minify: false,
+      server: false,
+      core: true,
+    }),
+    external: coreWebExternal,
+    plugins: getPlugins({
+      minify: false,
+      core: true,
+    }),
+  },
+  //web minified
+  {
+    input: "src/index.ts",
+    output: getOutput({
+      minify: true,
+      server: false,
+    }),
+    external,
+    plugins: getPlugins({
+      minify: true,
+    }),
+  },
+  //web minified core
+  {
+    input: "src/index.ts",
+    output: getOutput({
+      minify: true,
+      server: false,
+      core: true,
+    }),
+    external: coreWebExternal,
+    plugins: getPlugins({
+      minify: true,
+      core: true,
+    }),
+  },
+
+  //server
   {
     input: "src/index.ts",
     output: getOutput({
       minify: false,
       server: true,
-      serverDom:true,
     }),
-    external:serverExternal,
+    external: serverExternal,
     plugins: getPlugins({
       minify: false,
       server: true,
-      serverDom:true,
+    }),
+  },
+  //server react-dom-server
+  {
+    input: "src/index.ts",
+    output: getOutput({
+      minify: false,
+      server: true,
+      serverDom: true,
+    }),
+    external: serverExternal,
+    plugins: getPlugins({
+      minify: false,
+      server: true,
+      serverDom: true,
     }),
   },
 ];
