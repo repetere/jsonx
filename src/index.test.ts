@@ -74,6 +74,7 @@ const complexDiv = {
     {
       button: {
         props: {
+          //@ts-ignore
           onClick: function (e) {
             console.log({ e, });
           },
@@ -111,7 +112,9 @@ describe('jsonx', function () {
   });
   describe('getReactElementFromJSONX', () => {
     it('should return an instance of a react element', () => {
+      //@ts-ignore
       const ReactiveJSON = jsonx.getReactElementFromJSONX(sampleJSONX);
+      //@ts-ignore
       const ReactiveSimpleJSON = jsonx.getReactElementFromJSONX(simpleJSONX);
       expect(ReactTestUtils.isElement(ReactiveJSON));
       expect(ReactTestUtils.isElement(ReactiveSimpleJSON));
@@ -123,10 +126,12 @@ describe('jsonx', function () {
       expect(ReactiveJSON).to.haveOwnProperty('props');
     });
     it('should handle errors with empty components', () => {
+      //@ts-ignore
       const emptySpanComponent = jsonx.getReactElementFromJSONX({});
       const emptySpanComponentDebugged = jsonx.getReactElementFromJSONX.call({ debug: true, }, {}, {});
       expect(emptySpanComponent).to.be.an('object');
       expect(emptySpanComponentDebugged).to.be.an('object');
+      //@ts-ignore
       expect(emptySpanComponentDebugged.props.children).to.eql('Error: Missing Component Object');
     });
     it('should throw an error with invalid components', () => {
@@ -142,7 +147,9 @@ describe('jsonx', function () {
   });
   describe('getReactElementFromJSON', () => {
     it('should return an instance of a react element', () => {
+      //@ts-ignore
       const ReactiveJSON = jsonx.getReactElementFromJSON(sampleJSONXJSON);
+      //@ts-ignore
       const ReactiveSimpleJSON = jsonx.getReactElementFromJSON(simpleJSONXJSON);
       expect(ReactTestUtils.isElement(ReactiveJSON)).to.be.true;
       expect(ReactTestUtils.isElement(ReactiveSimpleJSON)).to.be.true;
@@ -163,11 +170,14 @@ describe('jsonx', function () {
       // global.document = dom.window.document;
       // global.document.createElement = React.createElement;
       // console.log('dom.window',dom.window)
+      //@ts-ignore
       global.window = dom.window;
       global.window.React = React;
       global.document = global.window.document;
       // console.log("dom.window.document.querySelector('#root')",dom.window.document.querySelector('#root'));
+      //@ts-ignore
       const ReactiveJSON = jsonx.compile(sampleJSONXJSON);
+      //@ts-ignore
       const testDOM = ReactTestUtils.renderIntoDocument(ReactiveJSON());
       // console.log({testDOM});
       expect(ReactTestUtils.isDOMComponent(testDOM)).to.be.true;
@@ -179,26 +189,32 @@ describe('jsonx', function () {
     it('should convert JSONX to JSON', () => {
       const compiledJSON = jsonx.outputJSON(simpleDiv);
       const compiledJSONXJSON = jsonx.getReactElementFromJSONX.call({ returnJSON: true, }, simpleDiv);
+      //@ts-ignore
       expect(compiledJSON.children).to.eql(compiledJSONXJSON.children);
+      //@ts-ignore
       expect(compiledJSON.type).to.eql(compiledJSONXJSON.type);
     });
   });
   describe('outputJSX', () => {
     it('should compile to JSX String', () => {
+      //@ts-ignore
       const JSXString = jsonx.outputJSX(simpleDiv);
       expect(JSXString).to.include('title="test">hello</div>');
-      // console.log({ JSXString, complexJSXString, });
+      // console.log({ JSXString,  });
     });
   });
   describe('jsonToJSX', () => {
     // const util = require('util');
     // console.log(util.inspect({ simpleDivJSON, complexDivJSON, },{depth:20}));
     it('should compile to JSX String', () => {
+      //@ts-ignore
       const JSXString = jsonx.jsonToJSX(simpleDivJSON);
+      //@ts-ignore
       const complexJSXString = jsonx.jsonToJSX(complexDivJSON);
       expect(JSXString).to.include('title="test">hello</div>');
       expect(complexJSXString).to.be.a('string');
       // console.log({ JSXString, complexJSXString, });
+      // console.log(complexJSXString);
     });
   });
   describe('outputHTML', () => {
@@ -208,6 +224,7 @@ describe('jsonx', function () {
   });
   describe('jsonxHTMLString', () => {
     it('should return an HTML string', () => {
+      //@ts-ignore
       const jsonxString = jsonx.jsonxHTMLString({ jsonx: sampleJSONX, });
       const dom = new JSDOM(`<!DOCTYPE html><body>${jsonxString}</body>`);
 
@@ -229,6 +246,7 @@ describe('jsonx', function () {
           },
           __DOCTYPE:'',
         },
+        //@ts-ignore
         ((err, renderedString) => {
           const dom = new JSDOM(renderedString);
           if (renderedString) {
@@ -241,7 +259,9 @@ describe('jsonx', function () {
       );
     });
     it('it should handle errors', (done) => {
+      //@ts-ignore
       expect(jsonx.__express.bind()).to.throw;
+      //@ts-ignore
       jsonx.__express(null,null, (err) => {
         expect(err).to.be.a('error');
         done();
@@ -256,9 +276,11 @@ describe('jsonx', function () {
       const containerDiv = document.createElement('div');
       containerDiv.setAttribute('id', 'reactContainer');
       document.body.appendChild(containerDiv);
+      //@ts-ignore
       jsonx.jsonxRender({ jsonx: sampleJSONX, querySelector:'#reactContainer', });
-      
+      //@ts-ignore
       expect(document.body.querySelector('p').innerHTML).to.eql('hello world');
+      //@ts-ignore
       expect(document.body.querySelector('p').style.color).to.eql('red');
     });    
     // afterAll(function () {

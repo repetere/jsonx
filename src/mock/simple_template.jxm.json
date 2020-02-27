@@ -1,0 +1,5 @@
+{
+  "component":"div",
+  // support comments
+  "children":"from external template"
+}
