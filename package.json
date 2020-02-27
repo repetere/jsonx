@@ -72,7 +72,7 @@
     "react-bootstrap": "^1.0.0-beta.16",
     "react-materialize": "^3.5.9",
     "react-md": "^1.15.1",
-    "react-spectre": "0.0.1-alpha.0",
+    "react-spectre": "0.0.1-alpha.7",
     "routes": "^2.1.0",
     "semantic-ui-react": "^0.88.2",
     "sinon-chai": "^3.5.0",
