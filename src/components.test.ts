@@ -82,18 +82,21 @@ const sampleCustomElementJSONX = {
 
 class Welcome extends React.Component {
   render() {
+    //@ts-ignore
     return React.createElement('h1', { name: 'Welcome', }, `Hello, ${this.props.name} ${this.props.title||'NA'}`);
   }
 }
 
 class WelcomeBindSpy extends React.Component {
   render() {
+    //@ts-ignore
     return React.createElement('h1', { name: 'Welcome', }, `Hello, ${this.props.name} ${this.props.title||'NA'}`);
   }
 }
 
 class WelcomeNonBind extends React.Component {
   render() {
+    //@ts-ignore
     return React.createElement('h1', { name: 'Welcome', }, `Hello, ${this.props.name} ${this.props.title||'NA'}`);
   }
 }
@@ -148,7 +151,9 @@ describe('jsonx components', function () {
       const JSONXPropCheck = jsonx.getRenderedJSON.call(customThis, sampleCustomElementJSONX);
 
       expect(bindSpy.called).to.be.true;
+      //@ts-ignore
       expect(JSONXPropCheck.props.title).to.eql(customThis.props.extraname);
+      //@ts-ignore
       expect(customComponents.length).to.eql(reactComponents.length);
     });
   });
@@ -163,6 +168,7 @@ describe('jsonx components', function () {
     it('should return a function if jsonx.component is not a string', () => {
       expect(_jsonxComponents.getComponentFromMap({
         jsonx: {
+          //@ts-ignore
           component:Welcome,
         }, })).to.be.a('function').and.to.eql(Welcome);
     });
@@ -196,6 +202,7 @@ describe('jsonx components', function () {
       const logError = sinon.spy();
       expect(_jsonxComponents.getComponentFromMap.bind(null)).to.throw();
       try {
+        //@ts-ignore
         _jsonxComponents.getComponentFromMap({ debug: true, logError, jsonx:false, });
       } catch (e) {
         expect(e).to.be.a('error');
@@ -307,7 +314,9 @@ describe('jsonx components', function () {
       },
     };
     it('should create a React Component', () => {
+      //@ts-ignore
       const MyCustomComponent = getReactClassComponent(classBody);
+      //@ts-ignore
       const MyCustomComponentClass = getReactClassComponent(classBody, { returnFactory:false, });
       // const MyCustomComponentFactory = getReactClassComponent(classBody);
       // console.log({MyCustomComponentClass});
@@ -318,22 +327,28 @@ describe('jsonx components', function () {
     });
     it('should allow for functions as object props', () => {
       const classBodyOpts = Object.assign({}, classBody);
+      //@ts-ignore
       classBodyOpts.componentDidMount = function () {
         console.log('mounted!');
       };
+      //@ts-ignore
       expect(getReactClassComponent.bind(null, classBodyOpts)).to.not.throw;
     });
     it('should allow for custom class names', () => { 
+      //@ts-ignore
       const MyCustomComponentNameClass = getReactClassComponent(classBody, '', { name: 'myClass', });
       expect(MyCustomComponentNameClass).to.be.a('function');
     });
     it('should throw an error if missing a render function', () => { 
+      //@ts-ignore
       expect(getReactClassComponent.bind()).to.throw;
     });
-    it('should throw an error if missing a function is missing a body', () => { 
+    it('should throw an error if missing a function is missing a body', () => {
+      //@ts-ignore
       expect(getReactClassComponent.bind({ render: {}, })).to.throw;
     });
     it('should create suspense/lazy components', () => {
+      //@ts-ignore
       const MyCustomLazyComponent = getReactClassComponent(
         {
           component: 'p',
@@ -352,6 +367,7 @@ describe('jsonx components', function () {
         },
         {
           name: 'myComp',
+          //@ts-ignore
           lazy: (comp, options) => {
             return new Promise((resolve) => {
               setTimeout(() => {
@@ -369,6 +385,7 @@ describe('jsonx components', function () {
   describe('getReactFunctionComponent', () => {
     const getReactFunctionComponent = _jsonxComponents.getReactFunctionComponent;
     it('should react a React Function Component', () => { 
+      //@ts-ignore
       const MyCustomComponentNameless = getReactFunctionComponent(
         {
           component:'p',
@@ -381,6 +398,7 @@ describe('jsonx components', function () {
       expect(MyCustomComponentNameless).to.be.a('function');
     });
     it('should create a React Function Component with a name', () => {
+      //@ts-ignore
       const MyCustomComponent = getReactFunctionComponent(
         {
           component:'p',
@@ -404,6 +422,7 @@ describe('jsonx components', function () {
       expect(MyCustomComponent).to.be.a('function');
     });
     it('should create suspense/lazy components', () => {
+      //@ts-ignore
       const MyCustomLazyComponent = getReactFunctionComponent(
         {
           component: 'p',
@@ -423,6 +442,7 @@ describe('jsonx components', function () {
         'console.log("lazy function body");',
         {
           name: 'myComp',
+          //@ts-ignore
           lazy: (comp, options) => {
             return new Promise((resolve) => {
               setTimeout(() => {

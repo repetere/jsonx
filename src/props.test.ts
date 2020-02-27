@@ -115,6 +115,7 @@ describe('jsonx props', function () {
       expect(JSONXCP).to.haveOwnProperty('_children');
       expect(JSONXCP.contextName).to.eql(functionContext.name);
       expect(JSONXCP._children).to.eql(functionContext.content);
+      //@ts-ignore
       expect(JSONXJSONX.children).to.eql(functionContext.content);
       // const JSONXCP = getJSONXProps.call(functionContext, contextJSONX, { thiscontext: testVals, });
       // console.log({ JSONXCP,JSONXJSONX });
@@ -147,9 +148,11 @@ describe('jsonx props', function () {
   describe('getChildrenComponents', () => {
     const getChildrenComponents = _jsonxProps.getChildrenComponents;
     it('should return undefined children if missing __spread prop', () => {
+      //@ts-ignore
       expect(getChildrenComponents().children).to.be.undefined;
     });
     it('should return error in children if missing __spread prop and if in debug mode', () => {
+      //@ts-ignore
       expect(getChildrenComponents({ jsonx:{ debug:true ,}, }).children).to.be.a('string');
       expect(getChildrenComponents.call({ debug:true ,}).children).to.be.a('string');
     });
@@ -164,6 +167,7 @@ describe('jsonx props', function () {
           },
         },
       };
+      //@ts-ignore
       const spreadChilds = getChildrenComponents(options);
       expect(spreadChilds).to.haveOwnProperty('_children');
       expect(spreadChilds._children).to.have.lengthOf(options.allProps.__spread.length);
@@ -172,6 +176,7 @@ describe('jsonx props', function () {
   });
   describe('boundArgsReducer', () => { 
     it('should return reducer function', () => {
+      //@ts-ignore
       expect(_jsonxProps.boundArgsReducer.bind()).to.be.a('function');
     });
   });
@@ -188,6 +193,7 @@ describe('jsonx props', function () {
         },
       });
       // console.log({ testJSONX });
+      //@ts-ignore
       const JSONXP = getEvalProps.call({ testBound: () => 'bounded', }, { jsonx: testJSONX, });
       const evalutedComputedFunc = JSONXP.username({ name: 'bob', });
       const evalutedComputedBoundFunc = JSONXP.email({ email:'test@email.domain', });
@@ -206,6 +212,7 @@ describe('jsonx props', function () {
     it('should return react element from jsonx.__windowComponents', function () {
       class Welcome extends React.Component {
         render() {
+          //@ts-ignore
           return React.createElement('h1', { name: 'Welcome', }, `Hello, ${this.props.name} ${this.props.title||'NA'}`);
         }
       }
@@ -294,9 +301,12 @@ describe('jsonx props', function () {
         logError,
         debug:true,
       };
+      //@ts-ignore
       const func = getFunctionFromProps.call(thisProp, {
+        //@ts-ignore
         propFunc: () => { },
       });
+      //@ts-ignore
       const defaultFunc = getFunctionFromProps.call(thisProp, {});
       // const emptyFunction = function () {};
       expect(func).to.be.a('function');
@@ -317,6 +327,7 @@ describe('jsonx props', function () {
           },
         },
       };
+      //@ts-ignore
       const func = getFunctionFromProps.call(thisProp, {
         propFunc: 'func:this.props.reduxRouter.push',
       });
@@ -333,6 +344,7 @@ describe('jsonx props', function () {
           onClick:()=>'clicked',
         },
       };
+      //@ts-ignore
       const func = getFunctionFromProps.call(thisProp, {
         propFunc: 'func:this.props.onClick',
       });
@@ -352,9 +364,12 @@ describe('jsonx props', function () {
           },
         },
       };
+      //@ts-ignore
       const func = getFunctionFromProps.call(thisProp, {
+        //@ts-ignore
         propFunc: 'func:window.print',
       });
+      //@ts-ignore
       const funcDeep = getFunctionFromProps.call(thisProp, {
         propFunc: 'func:window.localStorage.getItem',
       });

@@ -1,4 +1,4 @@
-import * as _jsonxChildren from "./children";
+import * as JSONX from "./index";
 import mochaJSDOM from "jsdom-global";
 import chai from "chai";
 import sinon from "sinon";
@@ -12,6 +12,8 @@ import numeral from "numeral";
 import * as luxon from "luxon";
 chai.use(require("sinon-chai"));
 // import 'mocha-sinon';
+
+const _jsonxChildren = JSONX._jsonxChildren;
 
 const sampleJSONX = {
   component: "div",
@@ -67,6 +69,7 @@ const passableJSONX = {
   children: [
     {
       component: "span",
+      props:{},
       children: "should have props"
     },
     {
@@ -246,13 +249,18 @@ describe("jsonx", function() {
         childjsonx: childjsonx_p,
         renderIndex
       });
+      //@ts-ignore
       expect(childProps_span.props.title).to.eq(passableJSONX.props.title);
+      //@ts-ignore
       expect(childProps_p.props.title).to.eq(passableJSONX.props.title);
       //@ts-ignore
       expect(childProps_p.props.style.color).to.eq(
+        //@ts-ignore
         passableJSONX.children[1].props.style.color
       );
+      //@ts-ignore
       expect(childProps_p.props.key).to.not.eq(renderIndex);
+      //@ts-ignore
       expect(childProps_span.props.key).to.not.eq(renderIndex);
     });
   });
@@ -299,6 +307,7 @@ describe("jsonx", function() {
       });
     });
     it("should return null on error", () => {
+      //@ts-ignore
       expect(getJSONXChildren.call({}, { logError: () => {} })).to.eql(null);
     });
     it("should stringify children", () => {
@@ -308,7 +317,9 @@ describe("jsonx", function() {
           {},
           {
             jsonx: {
+              //@ts-ignore
               children: obj,
+              //@ts-ignore
               ___stringifyChildren: [null, 2]
             }
           }
@@ -323,7 +334,9 @@ describe("jsonx", function() {
           {},
           {
             jsonx: {
+              //@ts-ignore
               children: obj,
+              //@ts-ignore
               ___toStringChildren: true
             }
           }
@@ -334,6 +347,8 @@ describe("jsonx", function() {
           {},
           {
             jsonx: {
+              
+              component: 'div',
               children: testDate,
               ___toStringChildren: true
             }
@@ -348,10 +363,12 @@ describe("jsonx", function() {
         numeralFormat
       );
       expect(
+        //@ts-ignore
         getJSONXChildren.call(
           {},
           {
             jsonx: {
+              //@ts-ignore
               children: numeralValue,
               ___toNumeral: numeralFormat
             }
@@ -393,8 +410,9 @@ describe("jsonx", function() {
       ).to.eql(testLuxonFormat);
     });
     it("should import templates into children", () => {
-      const importedTemplate = getJSONXChildren.call(
-        { returnJSON: true },
+      const importedTemplate = JSONX._jsonxChildren.getJSONXChildren.call(
+        //@ts-ignore
+        { returnJSON: true, debug:true },
         {
           jsonx: {
             component: "Fragment",
@@ -404,7 +422,9 @@ describe("jsonx", function() {
       );
       expect(_jsonxChildren.templateCache).to.be.lengthOf(1);
       expect(importedTemplate).to.be.an("array");
+      //@ts-ignore
       expect(importedTemplate[0].type).to.eql("div");
+      //@ts-ignore
       expect(importedTemplate[0].children).to.eql("from external template");
     });
   });
