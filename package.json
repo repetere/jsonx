@@ -108,7 +108,7 @@
     "ts-jest": "25.2.1",
     "tslib": "1.11.1",
     "typedoc": "0.16.11",
-    "typescript": "3.8.2"
+    "typescript": "3.8.3"
   },
   "dependencies": {
     "create-react-class": "^15.6.3",
