@@ -1,6 +1,6 @@
 # JSONX
 
-[![Coverage Status](https://coveralls.io/repos/github/repetere/jsonx/badge.svg?branch=master)](https://coveralls.io/github/repetere/jsonx?branch=master) [![Build Status](https://travis-ci.org/repetere/jsonx.svg?branch=master)](https://travis-ci.org/repetere/jsonx)
+[![Coverage Status](https://coveralls.io/repos/github/repetere/jsonx/badge.svg?branch=master)](https://coveralls.io/github/repetere/jsonx?branch=master) ![Build, Test & Coverage](https://github.com/repetere/jsonx/workflows/Build,%20Test%20&%20Coverage/badge.svg)
 
 ## Description
 
@@ -32,13 +32,13 @@ $ npm i jsonx
 
 ---
 ### JSONX Manual
- - [Getting Started](../getting-started/index.html)
- - [External and Custom Components](../using-external-and-custom-components/index.html)
- - [Using Advanced Props](../using-advanced-props/index.html)
- - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
- - [Roadmap](../roadmap/index.html)
- - [JSONX & JXM Spec](../spec/index.html)
- - [Samples](../samples/index.html)
+ - [Getting Started](https://repetere.github.io/jsonx/manual/getting-started/index.html)
+ - [External and Custom Components](https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html)
+ - [Using Advanced Props](https://repetere.github.io/jsonx/manual/using-advanced-props/index.html)
+ - [Creating React Components and Component Libraries](https://repetere.github.io/jsonx/manual/creating-react-components-and-component-libraries/index.html)
+ - [Roadmap](https://repetere.github.io/jsonx/manual/roadmap/index.html)
+ - [JSONX & JXM Spec](https://repetere.github.io/jsonx/manual/spec/index.html)
+ - [Samples](https://repetere.github.io/jsonx/manual/samples/index.html)
 ---
 
 ### Basic Usage
