@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tutorial Getting Started</title>
+  <title>Getting Started</title>
   <link rel="stylesheet" href="https://unpkg.com/style.css">
   <style type="text/css">
     .markdown-body {
@@ -16,8 +16,161 @@
   </style>
 </head>
 <body>
-  <main class="markdown-body"><h1>Tutorial Getting Started</h1>
+  <main class="markdown-body"><link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+<hr>
+<h3>JSONX Manual</h3>
+<ul>
+<li><a href="../getting-started/index.html">Getting Started</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="../samples/index.html">Samples</a></li>
+</ul>
+<hr>
+<h1>Getting Started</h1>
 <p>Some other sample page</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> { <span class="hljs-keyword">default</span> <span class="hljs-keyword">as</span> jsonx } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;jsonx&apos;</span>;
+<span class="hljs-keyword">const</span> exampleJSONX = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;p&apos;</span>,
+  <span class="hljs-attr">props</span>:{<span class="hljs-attr">style</span>:{<span class="hljs-attr">color</span>:<span class="hljs-string">&apos;blue&apos;</span>}},
+  <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;hello world&apos;</span>
+};
+<span class="hljs-comment">//Rendering React Components</span>
+jsonx.getReactElement(exampleJSONX);
+<span class="hljs-comment">// =&gt; JSX Equivalent: &lt;p style={{color:&apos;blue&apos;}}&gt;hello world&lt;/p&gt;</span>
+
+<span class="hljs-keyword">const</span> exampleToHTMLandJSX = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">&apos;div&apos;</span>,
+  <span class="hljs-attr">props</span>:{  <span class="hljs-attr">className</span>:<span class="hljs-string">&apos;jsonx-generated&apos;</span>, },
+  <span class="hljs-attr">children</span>:[
+    {  
+      <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;p&apos;</span>,
+      <span class="hljs-attr">props</span>:{ <span class="hljs-attr">style</span>:{ <span class="hljs-attr">color</span>:<span class="hljs-string">&apos;red&apos;</span>, }, },
+      <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;hello world&apos;</span>,
+    }
+  ]
+};
+<span class="hljs-comment">//Generating HTML strings</span>
+jsonx.outputHTML({ <span class="hljs-attr">jsonx</span>: exampleToHTMLandJSX, });
+<span class="hljs-comment">// =&gt; &apos;&lt;div class=&quot;jsonx-generated&quot;&gt;&lt;p style=&quot;color:red;&quot;&gt;hello world&lt;/p&gt;&lt;/div&gt;&apos;</span>
+<span class="hljs-comment">//Generating JSX strings</span>
+jsonx.outputJSX({ <span class="hljs-attr">jsonx</span>: exampleToHTMLandJSX, });
+<span class="hljs-comment">// =&gt; &apos;&lt;div class=&quot;jsonx-generated&quot;&gt;&lt;p style={{color:red,}}&gt;hello world&lt;/p&gt;&lt;/div&gt;&apos;</span>
+
+<span class="hljs-comment">//Rendering HTML Dom with React</span>
+jsonx.jsonxRender({ <span class="hljs-attr">jsonx</span>: { <span class="hljs-attr">component</span>: <span class="hljs-string">&apos;div&apos;</span>, <span class="hljs-attr">props</span>:{<span class="hljs-attr">className</span>:<span class="hljs-string">&apos;jsonx-generated&apos;</span>,<span class="hljs-attr">children</span>:[{ <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;p&apos;</span>,<span class="hljs-attr">props</span>:{<span class="hljs-attr">style</span>:{<span class="hljs-attr">color</span>:<span class="hljs-string">&apos;red&apos;</span>}}, <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;hello world&apos;</span> }]}}, <span class="hljs-attr">querySelector</span>:<span class="hljs-string">&apos;#myApp&apos;</span>, });
+<span class="hljs-comment">// &lt;!DOCTYPE html&gt;</span>
+<span class="hljs-comment">//  &lt;body&gt;</span>
+<span class="hljs-comment">//    &lt;div id=&quot;myApp&quot;&gt;</span>
+<span class="hljs-comment">//      &lt;div class=&quot;jsonx-generated&quot;&gt;</span>
+<span class="hljs-comment">//        &lt;p style=&quot;color:red;&quot;&gt;hello world&lt;/p&gt;</span>
+<span class="hljs-comment">//      &lt;/div&gt;</span>
+<span class="hljs-comment">//    &lt;/div&gt;</span>
+<span class="hljs-comment">// &lt;/body&gt;</span>
+</code></pre>
+<h3>JSONX JSON Spec</h3>
+<p>JSONX JSON is valid JSON that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+<pre><code class="hljs language-javascript">React.createElement(
+  type,
+  [props],
+  [...children]
+)
+</code></pre>
+<p>You can pass React component libraries for additional components, or you own custom components (see Advanced, also see Full Spec).</p>
+<pre><code class="hljs language-javascript"><span class="hljs-comment">//sample JSONX</span>
+{
+  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;ul&apos;</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">className</span>:<span class="hljs-string">&apos;list-class&apos;</span>,
+  },
+  <span class="hljs-attr">children</span>:[
+    {
+      <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;li&apos;</span>,
+      <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;first bullet&apos;</span>
+    },
+    {
+      <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;li&apos;</span>,
+      <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;second bullet&apos;</span>,
+    }
+  ]
+}
+
+</code></pre>
+<pre><code class="hljs language-JSX"><span class="hljs-comment">// Equivalent JSX</span>
+&lt;ul className=<span class="hljs-string">&quot;list-class&quot;</span>&gt;
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>first bullet<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>second bullet<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+&lt;<span class="hljs-regexp">/ul&gt;
+</span></code></pre>
+<h4>Validating JSONX JSON</h4>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;jsonx&apos;</span>;
+
+<span class="hljs-comment">//use the built in JSONX Validator</span>
+<span class="hljs-keyword">const</span> valid_jsonx_json = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;p&apos;</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">className</span>:<span class="hljs-string">&apos;title&apos;</span>,
+  },
+  <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;hello world&apos;</span>
+};
+<span class="hljs-keyword">const</span> invalid_jsonx_json = {
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">className</span>:<span class="hljs-string">&apos;title&apos;</span>,
+  },
+  <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;hello world&apos;</span>
+};
+<span class="hljs-keyword">const</span> multiple_invalid_jsonx_json = {
+  <span class="hljs-attr">props</span>:<span class="hljs-string">&apos;must be obj&apos;</span>,
+  <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;hello world&apos;</span>
+};
+
+jsonx._jsonxUtils.validateJSONX(testJSONXJSON) <span class="hljs-comment">// =&gt; true</span>
+jsonx._jsonxUtils.validateJSONX(invalid_jsonx_json) <span class="hljs-comment">// =&gt; throws SyntaxError(&apos;[0001] Missing React Component&apos;)</span>
+jsonx._jsonxUtils.validateJSONX(multiple_invalid_jsonx_json, <span class="hljs-literal">true</span>) <span class="hljs-comment">// =&gt;</span>
+<span class="hljs-comment">// [ [Error: [0001] Missing React Component],[ Error: [0002]  props must be an Object / valid React props] ]</span>
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@param <span class="hljs-type">{Object}</span> <span class="hljs-variable">jsonx</span></span> - JSONX JSON to validate 
+ * <span class="hljs-doctag">@param <span class="hljs-type">{Boolean}</span> </span>[returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
+ * /
+function validateJSONX(jsonx = {}, returnAllErrors= false);
+</span></code></pre>
+<h3>Simple JSONX Syntax</h3>
+<p>If you want to save time, you can use the property name as the component and define properties for a cleaner simple syntax</p>
+<pre><code class="hljs language-javascript"><span class="hljs-comment">//shorthand simple jsonx</span>
+{
+  <span class="hljs-attr">ul</span>: {
+    <span class="hljs-attr">props</span>:{
+      <span class="hljs-attr">className</span>:<span class="hljs-string">&apos;list-class&apos;</span>,
+    },
+    <span class="hljs-attr">children</span>:[
+      {
+        <span class="hljs-attr">li</span>: {
+          <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;first bullet&apos;</span>,
+        },
+      },
+      {
+        <span class="hljs-attr">li</span>: {
+          <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;second bullet&apos;</span>,
+        },
+      }
+    ]
+  }
+}
+</code></pre>
+<hr>
+<h3>JSONX Manual</h3>
+<ul>
+<li><a href="../getting-started/index.html">Getting Started</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="../samples/index.html">Samples</a></li>
+</ul>
 </main>
 </body>
 </html>

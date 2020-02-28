@@ -16,8 +16,113 @@
   </style>
 </head>
 <body>
-  <main class="markdown-body"><h1>Tutorial Getting Started</h1>
+  <main class="markdown-body"><link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+<hr>
+<h3>JSONX Manual</h3>
+<ul>
+<li><a href="../getting-started/index.html">Getting Started</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="../samples/index.html">Samples</a></li>
+</ul>
+<hr>
+<h1>Tutorial Getting Started</h1>
 <p>Some other sample page</p>
+<h4>Advanced - Using Custom Components &amp; UI Libraries</h4>
+<p>If you plan on using an entire UI library, then bind the library to this before using JSONX.</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;jsonx&apos;</span>;
+<span class="hljs-keyword">import</span> { * <span class="hljs-keyword">as</span> Semantic } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;semantic-ui-react&apos;</span>;
+
+<span class="hljs-keyword">const</span> getReactElement = jsonx.getReactElement.bind({
+  <span class="hljs-attr">componentLibraries</span>:{
+    Semantic,
+  }
+});
+
+<span class="hljs-keyword">const</span> myJSONX = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;Semantic.Container&apos;</span>,
+  <span class="hljs-attr">children</span>:[
+    {
+      <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;Semantic.Header&apos;</span>,
+      <span class="hljs-attr">props</span>:{
+        <span class="hljs-attr">as</span>:<span class="hljs-string">&apos;h1&apos;</span>,
+      },
+      <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;Hello World!&apos;</span>,
+    },
+    {
+      <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;Semantic.Button&apos;</span>,
+      <span class="hljs-attr">props</span>:{
+        <span class="hljs-attr">content</span>:<span class="hljs-string">&apos;Discover docs&apos;</span>,
+        <span class="hljs-attr">href</span>:<span class="hljs-string">&apos;http://react.semantic-ui.com&apos;</span>,
+        <span class="hljs-attr">icon</span>:<span class="hljs-string">&apos;github&apos;</span>,
+        <span class="hljs-attr">labelPosition</span>:<span class="hljs-string">&apos;left&apos;</span>,
+      }
+    }
+  ]
+}
+
+<span class="hljs-keyword">const</span> myReactElements = getReactElement(myJSONX);
+</code></pre>
+<h4>Advanced - Using New &amp; Custom Components</h4>
+<p>If you&#x2019;re only adding single components or using your own components you can add them to JSONX&#x2019;s component my individually.</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;jsonx&apos;</span>;
+<span class="hljs-keyword">import</span> { Header } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;semantic-ui-react&apos;</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  render() {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> {<span class="hljs-attr">...this.props</span>}&gt;</span>{this.props.children}<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></span>
+  }
+}
+
+
+<span class="hljs-keyword">const</span> getReactElement = jsonx.getReactElement.bind({
+  <span class="hljs-attr">reactComponents</span>:{
+    Header,
+    MyButton,
+  }
+});
+
+<span class="hljs-keyword">const</span> myJSONX = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;div&apos;</span>,
+  <span class="hljs-attr">children</span>:[
+    {
+      <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;Header&apos;</span>,
+      <span class="hljs-attr">props</span>:{
+        <span class="hljs-attr">as</span>:<span class="hljs-string">&apos;h1&apos;</span>,
+      },
+      <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;Hello World!&apos;</span>,
+    },
+    {
+      <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;MyButton&apos;</span>,
+      <span class="hljs-attr">props</span>:{
+        <span class="hljs-attr">title</span>:<span class="hljs-string">&apos;Discover docs&apos;</span>,
+        <span class="hljs-attr">href</span>:<span class="hljs-string">&apos;http://react.semantic-ui.com&apos;</span>,
+      },
+      <span class="hljs-attr">__dangerouslyEvalProps</span>:{
+        <span class="hljs-attr">onClick</span>:<span class="hljs-string">&apos;()=&gt;alert(&quot;click works&quot;)&apos;</span>
+      },
+      <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;click me&apos;</span>,
+    }
+  ]
+}
+
+<span class="hljs-keyword">const</span> myReactElements = getReactElement(myJSONX);
+</code></pre>
+<hr>
+<h3>JSONX Manual</h3>
+<ul>
+<li><a href="../getting-started/index.html">Getting Started</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="../samples/index.html">Samples</a></li>
+</ul>
 </main>
 </body>
 </html>

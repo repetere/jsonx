@@ -16,8 +16,230 @@
   </style>
 </head>
 <body>
-  <main class="markdown-body"><h1>Tutorial Getting Started</h1>
+  <main class="markdown-body"><link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+<hr>
+<h3>JSONX Manual</h3>
+<ul>
+<li><a href="../getting-started/index.html">Getting Started</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="../samples/index.html">Samples</a></li>
+</ul>
+<hr>
+<h1>Tutorial Getting Started</h1>
 <p>Some other sample page</p>
+<h4>Advanced - Special properties</h4>
+<h5>resourceprops (asyncprops) / thisprops / thisstate / thiscontext / windowprops</h5>
+<p>The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.</p>
+<p>Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).</p>
+<p>Thisprops transverses anything bound to <code>this.props</code>, a good example would be if you&#x2019;re storing and passing a user object on <code>this.props.user</code>, pulling the username would be where you would use thisprops.</p>
+<p>Thisstate transverses anything bound to <code>this.state</code>, for example if you&#x2019;re updating the state of a component based on user input from a text field <code>this.state.value</code>, pulling the value would be where you would use thisstate.</p>
+<p>Thiscontext transverses anything bound to <code>this</code>, a good example is if you&#x2019;re using JSONX programatically and you want to bind functionality to the render methods.</p>
+<p>Windowprops transverse anything on the global window object, like the current page location <code>window.location.href</code>.</p>
+<p>Dynamic props are transversed by passing an array to the property value you want, so for a window&#x2019;s location (<code>window.location.href</code>) the property value is accessed by an array to the href <code>[&apos;location&apos;,&apos;href&apos;]</code> where you omit the transverse object from the array path.</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> traverseObject = {
+  <span class="hljs-attr">user</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;jsonx&apos;</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">&apos;react without javascript&apos;</span>,
+  },
+  <span class="hljs-attr">stats</span>: {
+    <span class="hljs-attr">logins</span>: <span class="hljs-number">102</span>,
+    <span class="hljs-attr">comments</span>: <span class="hljs-number">3</span>,
+  },
+  <span class="hljs-attr">authentication</span>: <span class="hljs-string">&apos;OAuth2&apos;</span>,
+};
+<span class="hljs-keyword">const</span> testJSONX = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">&apos;div&apos;</span>,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">id</span>: <span class="hljs-string">&apos;generatedJSONX&apos;</span>,
+    <span class="hljs-attr">className</span>:<span class="hljs-string">&apos;jsonx&apos;</span>,
+  },
+  <span class="hljs-attr">resourceprops</span>:{
+    <span class="hljs-attr">auth</span>: [ <span class="hljs-string">&apos;authentication&apos;</span>, ],
+    <span class="hljs-attr">username</span>: [ <span class="hljs-string">&apos;user&apos;</span>, <span class="hljs-string">&apos;name&apos;</span>, ],
+  },
+  <span class="hljs-attr">children</span>: [
+    {
+      <span class="hljs-attr">component</span>: <span class="hljs-string">&apos;p&apos;</span>,
+      <span class="hljs-attr">props</span>: {
+        <span class="hljs-attr">style</span>: {
+          <span class="hljs-attr">color</span>: <span class="hljs-string">&apos;red&apos;</span>,
+          <span class="hljs-attr">fontWeight</span>:<span class="hljs-string">&apos;bold&apos;</span>,
+        },
+      },
+      <span class="hljs-attr">asyncprops</span>:{
+        <span class="hljs-attr">title</span>: [<span class="hljs-string">&apos;user&apos;</span>,<span class="hljs-string">&apos;description&apos;</span>]
+      },
+      <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;hello world&apos;</span>,
+    },
+  ],
+};
+<span class="hljs-keyword">const</span> JSONXP = getJSONXProps({ <span class="hljs-attr">jsonx</span>: testJSONX, traverseObject, });
+<span class="hljs-comment">// =&gt; {</span>
+<span class="hljs-comment">//   auth: &apos;OAuth2&apos;,</span>
+<span class="hljs-comment">//   username: &apos;jsonx&apos;</span>
+<span class="hljs-comment">// }</span>
+
+<span class="hljs-comment">//finally resolves:</span>
+<span class="hljs-keyword">const</span> testJSONX = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">&apos;div&apos;</span>,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">id</span>: <span class="hljs-string">&apos;generatedJSONX&apos;</span>,
+    <span class="hljs-attr">className</span>:<span class="hljs-string">&apos;jsonx&apos;</span>,
+    <span class="hljs-attr">auth</span>: <span class="hljs-string">&apos;OAuth2&apos;</span>,
+    <span class="hljs-attr">username</span>: <span class="hljs-string">&apos;jsonx&apos;</span>,
+  },
+  <span class="hljs-attr">children</span>: [
+    {
+      <span class="hljs-attr">component</span>: <span class="hljs-string">&apos;p&apos;</span>,
+      <span class="hljs-attr">props</span>: {
+        <span class="hljs-attr">style</span>: {
+          <span class="hljs-attr">color</span>: <span class="hljs-string">&apos;red&apos;</span>,
+          <span class="hljs-attr">fontWeight</span>:<span class="hljs-string">&apos;bold&apos;</span>,
+        },
+        <span class="hljs-attr">title</span>:<span class="hljs-string">&apos;react without javascript&apos;</span>,
+      },
+      <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;hello world&apos;</span>,
+    },
+  ],
+};
+</code></pre>
+<h5>__dangerouslyEvalProps / __dangerouslyBindEvalProps</h5>
+<p>The only difference between <code>__dangerouslyEvalProps</code> and <code>__dangerouslyBindEvalProps</code> is each  <code>__dangerouslyBindEvalProps</code> has to be a function, because it&#x2019;s returned as the bound instance of the function with <code>this</code>.</p>
+<pre><code class="hljs language-javascript"> <span class="hljs-keyword">const</span> testVals = {
+    <span class="hljs-attr">auth</span>: <span class="hljs-string">&apos;true&apos;</span>,
+    <span class="hljs-attr">username</span>: <span class="hljs-string">&apos;()=&gt;(user={})=&gt;user.name&apos;</span>,
+  };
+  <span class="hljs-keyword">const</span> testJSONX = <span class="hljs-built_in">Object</span>.assign({}, sampleJSONX, {
+    <span class="hljs-attr">__dangerouslyEvalProps</span>: testVals, <span class="hljs-attr">__dangerouslyBindEvalProps</span>: {
+      <span class="hljs-attr">email</span>: <span class="hljs-string">&apos;(function getUser(user={}){ return this.testBound(); })&apos;</span>,
+    },
+  });
+  <span class="hljs-keyword">const</span> JSONXP = getEvalProps.call({ <span class="hljs-attr">testBound</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">&apos;bounded&apos;</span>, }, { <span class="hljs-attr">jsonx</span>: testJSONX, });
+  <span class="hljs-keyword">const</span> evalutedComputedFunc = JSONXP.username({ <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;bob&apos;</span>, });
+  <span class="hljs-keyword">const</span> evalutedComputedBoundFunc = JSONXP.email({ <span class="hljs-attr">email</span>:<span class="hljs-string">&apos;test@email.domain&apos;</span>, });
+  <span class="hljs-comment">// expect(JSONXP.auth).to.be.true;</span>
+  <span class="hljs-comment">// expect(evalutedComputedFunc).to.eql(&apos;bob&apos;);</span>
+  <span class="hljs-comment">// expect(evalutedComputedBoundFunc).to.eql(&apos;bounded&apos;);</span>
+</code></pre>
+<h5>__functionProps</h5>
+<p>Function props merge onto jsonx.props after evaluating each functon string.</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> thisProp = {
+  <span class="hljs-attr">debug</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">window</span>: {
+    <span class="hljs-attr">print</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">&apos;printed&apos;</span>,
+    <span class="hljs-attr">localStorage</span>: {
+      <span class="hljs-attr">getItem</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">&apos;gotItem&apos;</span>,
+    },
+  },
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">onClick</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">&apos;clicked&apos;</span>,
+    <span class="hljs-attr">reduxRouter</span>: {
+      <span class="hljs-attr">push</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">&apos;pushed&apos;</span>,
+      <span class="hljs-attr">pop</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">&apos;poped&apos;</span>,
+    },
+  },
+};
+<span class="hljs-keyword">const</span> jsonxTest = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;div&apos;</span>,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">name</span>:<span class="hljs-string">&apos;test&apos;</span>,
+  },
+  <span class="hljs-attr">__functionProps</span>: {
+    <span class="hljs-attr">onclick</span>:<span class="hljs-string">&apos;func:this.props.onClick&apos;</span>,
+    <span class="hljs-attr">printPage</span>: <span class="hljs-string">&apos;func:window.print&apos;</span>,
+    <span class="hljs-attr">nav</span>:<span class="hljs-string">&apos;func:this.props.reduxRouter.push&apos;</span>,
+  },
+};
+<span class="hljs-keyword">const</span> jsonxObj = getFunctionProps.call(thisProp, {
+  <span class="hljs-attr">jsonx</span>: jsonxTest,
+});
+expect(jsonxObj).is.an(<span class="hljs-string">&apos;object&apos;</span>);
+expect(<span class="hljs-built_in">Object</span>.keys(jsonxObj)).to.eql(<span class="hljs-built_in">Object</span>.keys(jsonxTest.__functionProps));
+expect(jsonxObj.onclick()).to.eq(<span class="hljs-string">&apos;clicked&apos;</span>);
+expect(jsonxObj.printPage()).to.eql(<span class="hljs-string">&apos;printed&apos;</span>);
+expect(jsonxObj.nav()).to.eql(<span class="hljs-string">&apos;pushed&apos;</span>);
+</code></pre>
+<h5>comparisionprops</h5>
+<p>Comparison props are used to contionally show components if they&#x2019;re truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If <code>comparisonorprops:true</code> then only one condition needs to be true in order to render the component</p>
+<pre><code class="hljs language-javascript"><span class="hljs-comment">//and conditions</span>
+jsonx={
+  <span class="hljs-attr">comparisonprops</span>: [{
+    <span class="hljs-attr">left</span>: [<span class="hljs-string">&apos;bigNum&apos;</span>,],
+    <span class="hljs-attr">operation</span>:<span class="hljs-string">&apos;lte&apos;</span>,
+    <span class="hljs-attr">right</span>:[<span class="hljs-string">&apos;smallNum&apos;</span>,],
+  },{
+    <span class="hljs-attr">left</span>: [<span class="hljs-string">&apos;smallNum&apos;</span>,],
+    <span class="hljs-attr">operation</span>:<span class="hljs-string">&apos;&lt;=&apos;</span>,
+    <span class="hljs-attr">right</span>:[<span class="hljs-string">&apos;bigNum&apos;</span>,],
+  }],
+}
+<span class="hljs-comment">//or conditions</span>
+jsonx={
+  <span class="hljs-attr">comparisonorprops</span>:<span class="hljs-literal">true</span>,
+  <span class="hljs-attr">comparisonprops</span>: [{
+    <span class="hljs-attr">left</span>: [<span class="hljs-string">&apos;truthy&apos;</span>,],
+    <span class="hljs-attr">operation</span>:<span class="hljs-string">&apos;eq&apos;</span>,
+    <span class="hljs-attr">right</span>:[<span class="hljs-string">&apos;falsey&apos;</span>,],
+  },{
+    <span class="hljs-attr">left</span>: [<span class="hljs-string">&apos;smallNum&apos;</span>,],
+    <span class="hljs-attr">operation</span>:<span class="hljs-string">&apos;eq&apos;</span>,
+    <span class="hljs-attr">right</span>:[<span class="hljs-string">&apos;smallNum&apos;</span>,],
+  }],
+}
+
+<span class="hljs-comment">// All comparison operations</span>
+<span class="hljs-keyword">switch</span> (opscompares.operation) {
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;eq&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;==&apos;</span>:
+    <span class="hljs-keyword">return</span> opscompares.left == opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;dneq&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;!=&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;!&apos;</span>:
+    <span class="hljs-keyword">return</span> opscompares.left !== opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;dnseq&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;!==&apos;</span>:
+    <span class="hljs-keyword">return</span> opscompares.left !== opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;seq&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;===&apos;</span>:
+    <span class="hljs-keyword">return</span> opscompares.left === opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;lt&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;&lt;&apos;</span>:
+    <span class="hljs-keyword">return</span> opscompares.left &lt; opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;lte&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;&lt;=&apos;</span>:
+    <span class="hljs-keyword">return</span> opscompares.left &lt;= opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;gt&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;&gt;&apos;</span>:
+    <span class="hljs-keyword">return</span> opscompares.left &gt; opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;gte&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;&gt;=&apos;</span>:
+    <span class="hljs-keyword">return</span> opscompares.left &gt;= opscompares.right;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;dne&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;undefined&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;null&apos;</span>:
+    <span class="hljs-keyword">return</span> opscompares.left === <span class="hljs-literal">undefined</span> || opscompares.left === <span class="hljs-literal">null</span>; 
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;!null&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;!undefined&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;exists&apos;</span>:
+  <span class="hljs-keyword">default</span>:<span class="hljs-comment">//&apos;exists&apos;</span>
+    <span class="hljs-keyword">return</span> opscompares.left !== <span class="hljs-literal">undefined</span> &amp;&amp; opscompares.left !== <span class="hljs-literal">null</span>;
+}
+</code></pre>
+<hr>
+<h3>JSONX Manual</h3>
+<ul>
+<li><a href="../getting-started/index.html">Getting Started</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="../samples/index.html">Samples</a></li>
+</ul>
 </main>
 </body>
 </html>
