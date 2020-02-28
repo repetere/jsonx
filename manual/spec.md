@@ -8,6 +8,7 @@
  - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
  - [Roadmap](../roadmap/index.html)
  - [JSONX & JXM Spec](../spec/index.html)
+ - [Samples](../samples/index.html)
 
 ---
 
@@ -142,4 +143,5 @@ _jsonxChildren: {
  - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
  - [Roadmap](../roadmap/index.html)
  - [JSONX & JXM Spec](../spec/index.html)
+ - [Samples](../samples/index.html)
 
