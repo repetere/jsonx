@@ -2,13 +2,15 @@
 
 ---
 ### JSONX Manual
+ - [Home](https://jsonx.anydata.app)
  - [Getting Started](../getting-started/index.html)
  - [External and Custom Components](../using-external-and-custom-components/index.html)
  - [Using Advanced Props](../using-advanced-props/index.html)
  - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
- - [Roadmap](../roadmap/index.html)
  - [JSONX & JXM Spec](../spec/index.html)
  - [Samples](../samples/index.html)
+ - [Roadmap](../roadmap/index.html)
+ - [Full API Docs](../../index.html)
 ---
 
 
@@ -173,10 +175,12 @@ If you want to save time, you can use the property name as the component and def
 
 ---
 ### JSONX Manual
+ - [Home](https://jsonx.anydata.app)
  - [Getting Started](../getting-started/index.html)
  - [External and Custom Components](../using-external-and-custom-components/index.html)
  - [Using Advanced Props](../using-advanced-props/index.html)
  - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
- - [Roadmap](../roadmap/index.html)
  - [JSONX & JXM Spec](../spec/index.html)
  - [Samples](../samples/index.html)
+ - [Roadmap](../roadmap/index.html)
+ - [Full API Docs](../../index.html)
