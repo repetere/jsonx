@@ -17,6 +17,7 @@
 </head>
 <body>
   <main class="markdown-body"><link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+<!-- <script src="https://unpkg.com/highlight.js@9.18.1/lib/highlight.js"> </script> -->
 <hr>
 <h3>JSONX Manual</h3>
 <ul>
@@ -33,20 +34,44 @@
 <hr>
 <h1>Getting Started</h1>
 <p>JSONX is a library that creates React Elements, JSX and HTML from JSON. JSONX works by converting JSON Objects that follow the JXM spec into the arguments passed into <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
-<pre><code class="hljs language-ts"><span class="hljs-comment">/*
- * const JXM = { component:&apos;div&apos;, props: { title:&apos;jsonx&apos;, }, children:&apos;hello&apos;, };
- * JSONX.getReactElement(JXM) 
- * // JXM converted into { type:&apos;div&apos;, props:{ title:&apos;jsonx&apos;, }, children:&apos;hello&apos;, }
- * // JSONX then calls React.createElement(&apos;div&apos;, { title: &apos;jsonx&apos;, }, &apos;hello&apos;) 
- * // This is functionally equivalent to the JSX &lt;div title=&quot;jsonx&quot;&gt;hello&lt;/div&gt; 
- */</span>
-
+<pre><code class="hljs language-ts"><span class="hljs-comment">// React Create Element Example</span>
 React.createElement(
   <span class="hljs-keyword">type</span>,
   [props],
   [...children]
 )
-</code></pre>
+
+<span class="hljs-comment">// Basic JXM</span>
+<span class="hljs-keyword">const</span> JXM = { component:<span class="hljs-string">&apos;div&apos;</span>, props: { title:<span class="hljs-string">&apos;jsonx&apos;</span>, }, children:<span class="hljs-string">&apos;hello&apos;</span>, };
+
+<span class="hljs-comment">// JSONX.getReactElement returns a react element </span>
+JSONX.getReactElement(JXM) =&gt; React.createElement(<span class="hljs-string">&apos;div&apos;</span>, { title: <span class="hljs-string">&apos;jsonx&apos;</span>, }, <span class="hljs-string">&apos;hello&apos;</span>);
+
+<span class="hljs-comment">// eqivalent to JSX </span>
+&lt;div title=<span class="hljs-string">&quot;jsonx&quot;</span>&gt;hello&lt;<span class="hljs-regexp">/div&gt; 
+</span></code></pre>
+<h2>Usages</h2>
+<p>JSONX is great for:</p>
+<ul>
+<li>Composing UIs programmatically</li>
+<li>Using existing React Component Libraries to compose UIs</li>
+<li>Using React components with transpilers</li>
+<li>Creating simple components with JSON</li>
+<li>Rendering components in existing React Applications</li>
+</ul>
+<p>JSONX is not great for:</p>
+<ul>
+<li>building extremely complicated components (although it can be done)</li>
+</ul>
+<h2>Example</h2>
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+</td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+</td>
+  </tr>
+</table>
 <hr>
 <h3>JSONX Manual</h3>
 <ul>

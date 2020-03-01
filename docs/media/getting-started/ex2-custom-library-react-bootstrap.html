@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    <script  src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/jsonx/dist/index.umd.core-min.js" type="text/javascript" ></script>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script src="https://unpkg.com/react-bootstrap@1.0.0-beta.16/dist/react-bootstrap.min.js" type="text/javascript" ></script>
+    <script>
+      const jsonxRender = jsonx.jsonxRender.bind({ 
+        componentLibraries:{
+          ReactBootstrap,
+        }
+      });
+      // console.log({ReactBootstrap}); => [...ReactBootstrap.Container,ReactBootstrap.Accordion...]
+
+      const JXM = {
+        component:'ReactBootstrap.Container', 
+        children:[
+          {
+            component:'ReactBootstrap.Row', 
+            children:[
+              {
+                component:'ReactBootstrap.Col',
+                children:[
+                  {
+                    component:'ReactBootstrap.Alert',
+                    props:{ variant:'primary' },
+                    children: 'This is a Bootstrap Alert'
+                  }
+                ]
+              },
+              {
+                component:'ReactBootstrap.Col',
+                children:[
+                  {
+                    component:'ReactBootstrap.Spinner',
+                    props:{ animation:'border', role:'status' },
+                  }
+                ]
+              }
+            ], 
+          }
+        ], 
+      };
+
+      jsonxRender({
+        jsonx:JXM, 
+        querySelector:'#main',
+      });
+    </script>
+  </body>
+</html>

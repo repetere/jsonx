@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Examples</title>
+  <link rel="stylesheet" href="https://unpkg.com/style.css">
+  <style type="text/css">
+    .markdown-body {
+      max-width: 46em;
+      margin: 2em auto;
+      padding: 0 1em;
+      overflow: hidden;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <main class="markdown-body"><link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+<hr>
+<h3>JSONX Manual</h3>
+<ul>
+<li><a href="https://jsonx.anydata.app">Home</a></li>
+<li><a href="../getting-started/index.html">Getting Started</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="../samples/index.html">Samples</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../../index.html">Full API Docs</a></li>
+</ul>
+<hr>
+<h1>Examples</h1>
+<ol>
+<li><a href="https://jsfiddle.net/yawetse/ka7ghypd/6/">Getting Started Basic Example</a></li>
+<li><a href="https://jsfiddle.net/yawetse/gctmsojp/16/">Custom Library: React Bootstrap Example</a></li>
+</ol>
+<p>Some other sample page</p>
+<div style="color:red;">
+this is raw <strong>html</strong>
+  <section id="putHere">replace</section>
+</div>
+<script src="../../media/basic/basic.js"></script>
+<h3>Example Browser Usage</h3>
+<pre><code class="hljs language-html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>JSONX TEST<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;jsonx.umd.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;root&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span>&gt;</span><span class="actionscript">
+      <span class="hljs-keyword">const</span> sampleJSONX = {
+        component: <span class="hljs-string">&apos;div&apos;</span>,
+        props: {
+          id: <span class="hljs-string">&apos;generatedJSONX&apos;</span>,
+          className:<span class="hljs-string">&apos;jsonx&apos;</span>,
+        },
+        children: [
+          {
+            component: <span class="hljs-string">&apos;p&apos;</span>,
+            props: {
+              style: {
+                color: <span class="hljs-string">&apos;red&apos;</span>,
+                fontWeight:<span class="hljs-string">&apos;bold&apos;</span>,
+              },
+            },
+            __dangerouslyEvalProps:{
+              onClick:<span class="hljs-string">&apos;()=&gt;alert(&quot;click works&quot;)&apos;</span>
+            },
+            children:<span class="hljs-string">&apos;hello world&apos;</span>,
+          },
+        ],
+      };
+      <span class="hljs-keyword">const</span> boundConfig = {
+        debug:<span class="hljs-literal">true</span>, 
+      };
+      jsonx.jsonxRender.call(boundConfig,{ jsonx: sampleJSONX, querySelector:<span class="hljs-string">&apos;#root&apos;</span>, });
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<div style="text-align:center;">
+<img src="https://raw.githubusercontent.com/repetere/jsonx/master/docs/jsonx-logo.png" style="max-width:160px;">
+</div>
+<!-- jsdoc src/components.js -c jsdoc.json  -->
+<hr>
+<h3>JSONX Manual</h3>
+<ul>
+<li><a href="../getting-started/index.html">Getting Started</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="../examples/index.html">Samples</a></li>
+</ul>
+</main>
+</body>
+</html>

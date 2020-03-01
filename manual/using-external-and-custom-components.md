@@ -14,60 +14,112 @@
 ---
 
 
-# Tutorial Getting Started
+# External Libraries and Components
 
-Some other sample page
+JSONX will natively support any components from React-DOM, but for most real applications you are using either a large open source component library (e.g. react bootstrap, ant.design, material ui, etc) or many 3rd party react components (like react-autocomplete). In order to use custom 3rd party components or libraries they need to be assigned to JSONX's the `this` parameter.
 
+## Using custom Component Libraries
 
-
-#### Advanced - Using Custom Components & UI Libraries
-
-If you plan on using an entire UI library, then bind the library to this before using JSONX.
+Using a component library is as simple as assigning the Library to the `this.componentLibraries` property, and referencing the flattened component name as the component in your JXM JSON Object.
 
 ```javascript
 import * as jsonx from 'jsonx';
-import { * as Semantic } from 'semantic-ui-react';
+import { * as ReactBootstrap } from 'react-bootstrap'; //or in the browser reference the UMD: <script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin />
 
 const getReactElement = jsonx.getReactElement.bind({
   componentLibraries:{
-    Semantic,
+    ReactBootstrap,
   }
 });
 
-const myJSONX = {
-  component:'Semantic.Container',
+const JXM = {
+  component:'ReactBootstrap.Container', 
   children:[
     {
-      component:'Semantic.Header',
-      props:{
-        as:'h1',
-      },
-      children:'Hello World!',
-    },
-    {
-      component:'Semantic.Button',
-      props:{
-        content:'Discover docs',
-        href:'http://react.semantic-ui.com',
-        icon:'github',
-        labelPosition:'left',
-      }
+      component:'ReactBootstrap.Row', 
+      children:[
+        {
+          component:'ReactBootstrap.Col',
+          children:[
+            {
+              component:'ReactBootstrap.Alert',
+              props:{ variant:'primary' },
+              children: 'This is a Bootstrap Alert'
+            }
+          ]
+        },
+        {
+          component:'ReactBootstrap.Col',
+          children:[
+            {
+              component:'ReactBootstrap.Spinner',
+              props:{ animation:'border', role:'status' },
+            }
+          ]
+        }
+      ], 
     }
-  ]
+  ], 
 }
 
-const myReactElements = getReactElement(myJSONX);
+const myReactElements = getReactElement(JXM);
 ```
 
+### Example React Bootstrap
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gctmsojp/22/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+</td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gctmsojp/22/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+</td>
+  </tr>
+</table>
 
-#### Advanced - Using New & Custom Components
+## Using Custom Components
 
-If you're only adding single components or using your own components you can add them to JSONX's component my individually.
+If you're only adding single components or using your own components you can add them to JSONX's component my individually. The difference between a Custom Component and a Custom Library is `this.reactComponents` expects each property value to be a react component and `this.componentLibraries` expects each property value to reference and object that has values that are React Components.
 
 ```javascript
 import React from 'react';
 import * as jsonx from 'jsonx';
-import { Header } from 'semantic-ui-react';
+import { Calendar } from 'rc-calendar';
+const jsonxRender = jsonx.jsonxRender.bind({ 
+  reactComponents:{
+    ReactCalendar: Calendar,
+  }
+});
+
+const JXM = {
+  component:'div', 
+  children:[
+    {
+      component:'h1', 
+      children:'React Calendar demo',
+    },
+    {
+      component:'ReactCalendar',
+      props:{
+      },
+    }
+  ], 
+};
+
+jsonxRender({
+  jsonx:JXM, 
+  querySelector:'#main',
+});
+```
+### Example React Calendar
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/Lqwe3f59/5/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+</td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/Lqwe3f59/5/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+</td>
+  </tr>
+</table>
+
+```
 
 class MyButton extends React.Component {
   render() {
@@ -109,9 +161,6 @@ const myJSONX = {
 
 const myReactElements = getReactElement(myJSONX);
 ```
-
-
-
 
 ---
 ### JSONX Manual

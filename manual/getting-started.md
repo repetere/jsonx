@@ -1,4 +1,5 @@
 <link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+<!-- <script src="https://unpkg.com/highlight.js@9.18.1/lib/highlight.js"> </script> -->
 
 ---
 ### JSONX Manual
@@ -18,22 +19,44 @@
 JSONX is a library that creates React Elements, JSX and HTML from JSON. JSONX works by converting JSON Objects that follow the JXM spec into the arguments passed into [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component (which is passed as the `type` argument)
 
 ```ts
-/*
- * const JXM = { component:'div', props: { title:'jsonx', }, children:'hello', };
- * JSONX.getReactElement(JXM) 
- * // JXM converted into { type:'div', props:{ title:'jsonx', }, children:'hello', }
- * // JSONX then calls React.createElement('div', { title: 'jsonx', }, 'hello') 
- * // This is functionally equivalent to the JSX <div title="jsonx">hello</div> 
- */
-
+// React Create Element Example
 React.createElement(
   type,
   [props],
   [...children]
 )
+
+// Basic JXM
+const JXM = { component:'div', props: { title:'jsonx', }, children:'hello', };
+
+// JSONX.getReactElement returns a react element 
+JSONX.getReactElement(JXM) => React.createElement('div', { title: 'jsonx', }, 'hello');
+
+// eqivalent to JSX 
+<div title="jsonx">hello</div> 
 ```
 
+## Usages
 
+JSONX is great for:
+- Composing UIs programmatically
+- Using existing React Component Libraries to compose UIs
+- Using React components with transpilers
+- Creating simple components with JSON
+- Rendering components in existing React Applications
+
+JSONX is not great for:
+- building extremely complicated components (although it can be done)
+
+## Example
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+</td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+</td>
+  </tr>
+</table>
 
 
 ---

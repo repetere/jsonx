@@ -122,7 +122,7 @@ If you want to save time, you can use the property name as the component/type an
   __getUseGlobalHook: [Function: __getUseGlobalHook], //Expose reference to useGlobalHook
 
 
-_jsonxChildren: {
+  _jsonxChildren: {
     getChildrenProperty: [Function: getChildrenProperty], // returns a valid jsonx.children property
     getChildrenProps: [Function: getChildrenProps], // Used to pass properties down to child components if passprops is set to true
     getJSONXChildren: [Function: getJSONXChildren], // returns React Child Elements via JSONX
