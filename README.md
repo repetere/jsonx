@@ -8,15 +8,15 @@
 
 ### Zero Setup
 
-The JSONX UMD comes with batteries included so you can use JSONX in browser without transpilers or any additional setup/configure. Ideal for JAMstack Applications.
+The JSONX UMD comes with batteries included so you can use JSONX in browser without transpilers or any additional setup/configuration. The JSONX UMD is ideal for JAMstack Applications.
 
 ### Embeddable
 
-JSONX can also be used in existing react applications if you want to dynamically create elements with JSON. This works great for many scenarios when you want to manage your application views and components in a view management system.
+JSONX can also be used in existing react applications if you want to dynamically create elements with JSON. This works great for many scenarios when you want to manage your application views and components in a view management system or if you want to dynamically create React elements without using JSX.
 
 ### Fully Featured
 
-JSONX supports all of Reacts features including, Hooks, Functional, Class-based, Suspense and Lazy components. JSONX supports JSON objects that implement the JXM (JSONX Markup) Spec.
+JSONX supports all of Reacts features including Functional (with Hooks), Class-based, Suspense and Lazy components. JSONX supports JSON objects that implement the JXM (JSONX Markup) Spec.
 
 
 ## Installation
@@ -32,13 +32,15 @@ $ npm i jsonx
 
 ---
 ### JSONX Manual
+ - [Home](https://jsonx.anydata.app)
  - [Getting Started](https://repetere.github.io/jsonx/manual/getting-started/index.html)
  - [External and Custom Components](https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html)
  - [Using Advanced Props](https://repetere.github.io/jsonx/manual/using-advanced-props/index.html)
  - [Creating React Components and Component Libraries](https://repetere.github.io/jsonx/manual/creating-react-components-and-component-libraries/index.html)
- - [Roadmap](https://repetere.github.io/jsonx/manual/roadmap/index.html)
  - [JSONX & JXM Spec](https://repetere.github.io/jsonx/manual/spec/index.html)
  - [Samples](https://repetere.github.io/jsonx/manual/samples/index.html)
+ - [Roadmap](https://repetere.github.io/jsonx/manual/roadmap/index.html)
+ - [Full API Docs](https://repetere.github.io/jsonx/)
 ---
 
 ### Basic Usage
@@ -82,6 +84,23 @@ jsonx.jsonxRender({ jsonx: { component: 'div', props:{className:'jsonx-generated
 //    </div>
 // </body>
 ```
+
+
+### JXM JSON Spec
+
+JSONX works by using JXM JSON to create react elements. JXM JSON Objects are valid JSON Objects that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component (which is passed as the `type` argument)
+
+```javascript
+React.createElement(
+  type,
+  [props],
+  [...children]
+)
+```
+
+You can pass React component libraries for additional components, or you own custom components (see [External and Custom Components](../using-external-and-custom-components/index.html)
+ and [Using Advanced Props](../using-advanced-props/index.html) for more details).
+
 
 ### Development
 

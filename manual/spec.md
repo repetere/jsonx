@@ -16,7 +16,17 @@
 
 # Full JXM (JSONX Markup) JSON Spec 
 
-The full [type definition](../..//interfaces/_types_jsonx_jsonx_.jsonx.html) is also available .
+A JXM JSON Object is valid JSON Object that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component (which is passed as the `type` argument)
+
+```javascript
+React.createElement(
+  type,
+  [props],
+  [...children]
+)
+```
+
+The full [type definition](../../interfaces/_types_jsonx_jsonx_.jsonx.html) is also available.
 ```typescript
 jxm = {
   //standard properties
@@ -46,8 +56,15 @@ jxm = {
   __dangerouslyInsertClassComponents:Object, // An object that returns the react class component.
   __spreadComponent:Object, // A JSONX element that is mapped on any array prop called  __spread
   __windowComponents:Object, // An object of components merged onto jsonx.props from window.__jsonx_custom_elements
-  __windowComponentProps:Object,
+  __windowComponentProps:Object, // Returns a resolved object that has React Components pulled from window.
 
+  //children formatting properties
+  ___ISOtoLuxonString:String, //converts the children prop to from an ISO String to a Luxon formatted DateTime String 
+  ___JSDatetoLuxonString:String, //converts the children prop to from JavaScript Date to a Luxon formatted DateTime String 
+  ___stringifyChildren:String, //converts the children prop to a string using JSON.stringify 
+  ___template:String, //imports JXM from a file path into the children property 
+  ___toNumeral:String, //converts numbers to numeral formatted numbers
+  ___toStringChildren:String, //converts the children prop to a string using toString()
 
   //display properties
   comparisonprops:[Object], // An array of Objects used to conditionally display the current jsonx.component
@@ -60,7 +77,7 @@ jxm = {
 
 ## Simple JSONX Syntax
 
-If you want to save time, you can use the property name as the component and define properties for a cleaner simple syntax
+If you want to save time, you can use the property name as the component/type and use the object value to define the rest of the JXM properties for a cleaner simple syntax
 
 ```javascript
 //shorthand simple jsonx

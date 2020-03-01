@@ -20,17 +20,26 @@
 <hr>
 <h3>JSONX Manual</h3>
 <ul>
+<li><a href="https://jsonx.anydata.app">Home</a></li>
 <li><a href="../getting-started/index.html">Getting Started</a></li>
 <li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
 <li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
 <li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
 <li><a href="../samples/index.html">Samples</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../../index.html">Full API Docs</a></li>
 </ul>
 <hr>
 <h1>Full JXM (JSONX Markup) JSON Spec</h1>
-<p>The full <a href="../..//interfaces/_types_jsonx_jsonx_.jsonx.html">type definition</a> is also available .</p>
+<p>A JXM JSON Object is valid JSON Object that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+<pre><code class="hljs language-javascript">React.createElement(
+  type,
+  [props],
+  [...children]
+)
+</code></pre>
+<p>The full <a href="../../interfaces/_types_jsonx_jsonx_.jsonx.html">type definition</a> is also available.</p>
 <pre><code class="hljs language-typescript">jxm = {
   <span class="hljs-comment">//standard properties</span>
   component:<span class="hljs-built_in">String</span>, <span class="hljs-comment">// Any React DOM element, or custom component div,p, Boomer.Hero, MaterialUI.Button, myCustomComponent (can also use the property &apos;type&apos; instead of &apos;component&apos;)</span>
@@ -59,8 +68,15 @@
   __dangerouslyInsertClassComponents:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that returns the react class component.</span>
   __spreadComponent:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// A JSONX element that is mapped on any array prop called  __spread</span>
   __windowComponents:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of components merged onto jsonx.props from window.__jsonx_custom_elements</span>
-  __windowComponentProps:<span class="hljs-built_in">Object</span>,
+  __windowComponentProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// Returns a resolved object that has React Components pulled from window.</span>
 
+  <span class="hljs-comment">//children formatting properties</span>
+  ___ISOtoLuxonString:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to from an ISO String to a Luxon formatted DateTime String </span>
+  ___JSDatetoLuxonString:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to from JavaScript Date to a Luxon formatted DateTime String </span>
+  ___stringifyChildren:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to a string using JSON.stringify </span>
+  ___template:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//imports JXM from a file path into the children property </span>
+  ___toNumeral:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts numbers to numeral formatted numbers</span>
+  ___toStringChildren:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to a string using toString()</span>
 
   <span class="hljs-comment">//display properties</span>
   comparisonprops:[<span class="hljs-built_in">Object</span>], <span class="hljs-comment">// An array of Objects used to conditionally display the current jsonx.component</span>
@@ -70,7 +86,7 @@
 }
 </code></pre>
 <h2>Simple JSONX Syntax</h2>
-<p>If you want to save time, you can use the property name as the component and define properties for a cleaner simple syntax</p>
+<p>If you want to save time, you can use the property name as the component/type and use the object value to define the rest of the JXM properties for a cleaner simple syntax</p>
 <pre><code class="hljs language-javascript"><span class="hljs-comment">//shorthand simple jsonx</span>
 {
   <span class="hljs-attr">ul</span>: {
@@ -143,13 +159,15 @@
 <hr>
 <h3>JSONX Manual</h3>
 <ul>
+<li><a href="https://jsonx.anydata.app">Home</a></li>
 <li><a href="../getting-started/index.html">Getting Started</a></li>
 <li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
 <li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
 <li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
 <li><a href="../samples/index.html">Samples</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../../index.html">Full API Docs</a></li>
 </ul>
 </main>
 </body>

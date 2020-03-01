@@ -75,15 +75,15 @@
 				<a href="#zero-setup" id="zero-setup" style="color: inherit; text-decoration: none;">
 					<h3>Zero Setup</h3>
 				</a>
-				<p>The JSONX UMD comes with batteries included so you can use JSONX in browser without transpilers or any additional setup/configure. Ideal for JAMstack Applications.</p>
+				<p>The JSONX UMD comes with batteries included so you can use JSONX in browser without transpilers or any additional setup/configuration. The JSONX UMD is ideal for JAMstack Applications.</p>
 				<a href="#embeddable" id="embeddable" style="color: inherit; text-decoration: none;">
 					<h3>Embeddable</h3>
 				</a>
-				<p>JSONX can also be used in existing react applications if you want to dynamically create elements with JSON. This works great for many scenarios when you want to manage your application views and components in a view management system.</p>
+				<p>JSONX can also be used in existing react applications if you want to dynamically create elements with JSON. This works great for many scenarios when you want to manage your application views and components in a view management system or if you want to dynamically create React elements without using JSX.</p>
 				<a href="#fully-featured" id="fully-featured" style="color: inherit; text-decoration: none;">
 					<h3>Fully Featured</h3>
 				</a>
-				<p>JSONX supports all of Reacts features including, Hooks, Functional, Class-based, Suspense and Lazy components. JSONX supports JSON objects that implement the JXM (JSONX Markup) Spec.</p>
+				<p>JSONX supports all of Reacts features including Functional (with Hooks), Class-based, Suspense and Lazy components. JSONX supports JSON objects that implement the JXM (JSONX Markup) Spec.</p>
 				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
 					<h2>Installation</h2>
 				</a>
@@ -97,13 +97,15 @@
 					<h3>JSONX Manual</h3>
 				</a>
 				<ul>
+					<li><a href="https://jsonx.anydata.app">Home</a></li>
 					<li><a href="https://repetere.github.io/jsonx/manual/getting-started/index.html">Getting Started</a></li>
 					<li><a href="https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html">External and Custom Components</a></li>
 					<li><a href="https://repetere.github.io/jsonx/manual/using-advanced-props/index.html">Using Advanced Props</a></li>
 					<li><a href="https://repetere.github.io/jsonx/manual/creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-					<li><a href="https://repetere.github.io/jsonx/manual/roadmap/index.html">Roadmap</a></li>
 					<li><a href="https://repetere.github.io/jsonx/manual/spec/index.html">JSONX &amp; JXM Spec</a></li>
 					<li><a href="https://repetere.github.io/jsonx/manual/samples/index.html">Samples</a></li>
+					<li><a href="https://repetere.github.io/jsonx/manual/roadmap/index.html">Roadmap</a></li>
+					<li><a href="https://repetere.github.io/jsonx/">Full API Docs</a></li>
 				</ul>
 				<hr>
 				<a href="#basic-usage" id="basic-usage" style="color: inherit; text-decoration: none;">
@@ -147,6 +149,17 @@ jsonx.jsonxRender({ <span class="hljs-attr">jsonx</span>: { <span class="hljs-at
 <span class="hljs-comment">//      &lt;/div&gt;</span>
 <span class="hljs-comment">//    &lt;/div&gt;</span>
 <span class="hljs-comment">// &lt;/body&gt;</span></code></pre>
+				<a href="#jxm-json-spec" id="jxm-json-spec" style="color: inherit; text-decoration: none;">
+					<h3>JXM JSON Spec</h3>
+				</a>
+				<p>JSONX works by using JXM JSON to create react elements. JXM JSON Objects are valid JSON Objects that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+				<pre><code class="language-javascript">React.createElement(
+  type,
+  [props],
+  [...children]
+)</code></pre>
+				<p>You can pass React component libraries for additional components, or you own custom components (see <a href="../using-external-and-custom-components/index.html">External and Custom Components</a>
+				and <a href="../using-advanced-props/index.html">Using Advanced Props</a> for more details).</p>
 				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
 					<h3>Development</h3>
 				</a>
