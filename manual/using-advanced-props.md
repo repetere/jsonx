@@ -27,7 +27,8 @@ There are six kinds of Advanced Props:
  4. Utility Props - used to preform functional tasks like inserting external JXM references (template support), or sharing props across components 
  5. Display Props - used to decide whether or not to render elements
 
-## Traverse Props (thisprops, thisstate, thiscontext, windowprops, resourceprops/asyncprops)
+## Traverse Props 
+*(thisprops, thisstate, thiscontext, windowprops, resourceprops/asyncprops)*
 
 Traversed Props are used to assign props values from different objects. For example if you wanted to set the alt text of an image tag from the url of the window, because JXM objects are JSON it's impossible to get the dynamic value `window.location.href` and assign it to the alt prop.
 
@@ -167,33 +168,78 @@ main();
   </tr>
 </table>
 
-## Evaluation Props (_children, __dangerouslyEvalProps, __dangerouslyBindEvalProps, __dangerouslyInsertComponents, __dangerouslyInsertReactComponents, __dangerouslyInsertJSONXComponents, __dangerouslyInsertFunctionComponents, __dangerouslyInsertClassComponents, __dangerouslyEvalAllProps, __functionProps, __windowComponents , __windowComponentProps, __spreadComponent)
+---
 
-##### __dangerouslyEvalProps / __dangerouslyBindEvalProps
+## Evaluation Props
+*(_children, __dangerouslyEvalProps, __dangerouslyBindEvalProps, __dangerouslyEvalAllProps, __dangerouslyInsertComponents, __dangerouslyInsertReactComponents, __dangerouslyInsertJSONXComponents, __dangerouslyInsertFunctionComponents, __dangerouslyInsertClassComponents, __functionProps, __windowComponents , __windowComponentProps, __spreadComponent)*
 
-The only difference between `__dangerouslyEvalProps` and `__dangerouslyBindEvalProps` is each  `__dangerouslyBindEvalProps` has to be a function, because it's returned as the bound instance of the function with `this`.
+Evaluation Props are properties that are computed and resolve values onto the `JXM.props` property. They are helpful because in order to interact with dyanamic data and stateful information, they provide a way to describe declaratively how to assign properties onto the `JXM.props` property.
+
+### _children
+The `_children` evaluation property is used to override the value of `JXM.children` and is usually only used when you want to dynamically set the value of the `children` property from an advanced property.
 
 ```javascript
- const testVals = {
-    auth: 'true',
-    username: '()=>(user={})=>user.name',
-  };
-  const testJSONX = Object.assign({}, sampleJSONX, {
-    __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {
-      email: '(function getUser(user={}){ return this.testBound(); })',
-    },
-  });
-  const JSONXP = getEvalProps.call({ testBound: () => 'bounded', }, { jsonx: testJSONX, });
-  const evalutedComputedFunc = JSONXP.username({ name: 'bob', });
-  const evalutedComputedBoundFunc = JSONXP.email({ email:'test@email.domain', });
-  // expect(JSONXP.auth).to.be.true;
-  // expect(evalutedComputedFunc).to.eql('bob');
-  // expect(evalutedComputedBoundFunc).to.eql('bounded');
+//current URL: http://example.com
+const JXMWindowLocation = {
+  component:'p',
+  windowprops:{
+    _children:['location','href']
+  }
+};
+// computes: { component:'p', children:'http://example.com', }
 ```
 
-##### __functionProps
+### __dangerouslyEvalProps, __dangerouslyBindEvalProps and __dangerouslyEvalAllProps
 
-Function props merge onto jsonx.props after evaluating each functon string.
+The evaluation properties `__dangerouslyEvalProps`, `__dangerouslyBindEvalProps` and `__dangerouslyEvalAllProps` are properties used to evaluate strings and set the value the property value on a JXM Object. 
+
+`__dangerouslyEvalAllProps` will evaluate a string as a function and assign the returned value of the function to the `props` property of a JXM object. 
+*Note: If passing the value as a string, remember this value has to be an expression, so either a `(({jsonx})=>{})` or `(function({jsonx}){})`. There is one parameter passed into the function, it's the current value of the JXM Object on the jsonx property*
+
+`__dangerouslyEvalProps` is used to evaluate the string value and assign it to the JXM.props value, the string must be a valid javascript expression *(Tip, if evaluting an object remember to wrap it ({some:'obj', }) )*. If `__dangerouslyEvalProps` is a function, it will assign the value of the function called with one parameter `{jsonx}`.
+
+`__dangerouslyBindEvalProps` is used to assign functions to JXM object props values. This is usually for *onClick* and *onChange* functions. Each property of `__dangerouslyBindEvalProps` has to be a function, because it's attempts to assign the value as a function with `this` bound to it.
+
+The reason why these functions exist are because there are instances where JSONX is delivered via JSON and JavaScript functions are not valid JSON values. This is typically used sparingly when JXM is sent server side. In practice there are many ways to pass functions as values (especially if they are bound to JSONX, then you can always reference functions by access properties off of `this` by using `thiscontext`).
+
+### Example Evaluation Props
+
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/n704z65x/7/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/n704z65x/7/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+
+### __functionProps (legacy)
+
+The evaluation prop `__functionProps` is another way to assign a function value to a property in `JXM.props`. There are two ways of using `__functionProps`, one way for predefined functions and another way for dynamic functions.
+
+#### predefined functions
+`__functionProps` can assign values from functions that exist on `this.props` (e.g. using something like react-router and accessing this.props.reduxRouter.push) or functions that exist on the `window` object.
+
+Properties are assigned by using the value of the function by access the propery as a string, prefixed with "func:". Function props merge onto jsonx.props after evaluating each functon string.
+
+
+```javascript
+const JXM = {
+  component:'div',
+  props: {
+    name:'test',
+  },
+  __functionProps: {
+    onclick:'func:this.props.onClick', // if there's already a defined onClick Function
+    printPage: 'func:window.print',
+    nav:'func:this.props.reduxRouter.push',
+  },
+};
+```
+
+#### inline functions
+`__functionProps` can also generate functions from a string in a much less elegant way than using `__dangerouslyEvalProps`. 
+
 
 ```javascript
 const thisProp = {

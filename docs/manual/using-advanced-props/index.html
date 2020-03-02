@@ -46,7 +46,8 @@
 <li>Utility Props - used to preform functional tasks like inserting external JXM references (template support), or sharing props across components</li>
 <li>Display Props - used to decide whether or not to render elements</li>
 </ol>
-<h2>Traverse Props (thisprops, thisstate, thiscontext, windowprops, resourceprops/asyncprops)</h2>
+<h2>Traverse Props</h2>
+<p><em>(thisprops, thisstate, thiscontext, windowprops, resourceprops/asyncprops)</em></p>
 <p>Traversed Props are used to assign props values from different objects. For example if you wanted to set the alt text of an image tag from the url of the window, because JXM objects are JSON it&#x2019;s impossible to get the dynamic value <code>window.location.href</code> and assign it to the alt prop.</p>
 <pre><code class="hljs language-JavaScript"><span class="hljs-comment">//assume window.location.href = http://example.com</span>
 
@@ -175,27 +176,56 @@ main();
     </td>
   </tr>
 </table>
-<h2>Evaluation Props (_children, __dangerouslyEvalProps, __dangerouslyBindEvalProps, __dangerouslyInsertComponents, __dangerouslyInsertReactComponents, __dangerouslyInsertJSONXComponents, __dangerouslyInsertFunctionComponents, __dangerouslyInsertClassComponents, __dangerouslyEvalAllProps, __functionProps, __windowComponents , __windowComponentProps, __spreadComponent)</h2>
-<h5>__dangerouslyEvalProps / __dangerouslyBindEvalProps</h5>
-<p>The only difference between <code>__dangerouslyEvalProps</code> and <code>__dangerouslyBindEvalProps</code> is each  <code>__dangerouslyBindEvalProps</code> has to be a function, because it&#x2019;s returned as the bound instance of the function with <code>this</code>.</p>
-<pre><code class="hljs language-javascript"> <span class="hljs-keyword">const</span> testVals = {
-    <span class="hljs-attr">auth</span>: <span class="hljs-string">&apos;true&apos;</span>,
-    <span class="hljs-attr">username</span>: <span class="hljs-string">&apos;()=&gt;(user={})=&gt;user.name&apos;</span>,
-  };
-  <span class="hljs-keyword">const</span> testJSONX = <span class="hljs-built_in">Object</span>.assign({}, sampleJSONX, {
-    <span class="hljs-attr">__dangerouslyEvalProps</span>: testVals, <span class="hljs-attr">__dangerouslyBindEvalProps</span>: {
-      <span class="hljs-attr">email</span>: <span class="hljs-string">&apos;(function getUser(user={}){ return this.testBound(); })&apos;</span>,
-    },
-  });
-  <span class="hljs-keyword">const</span> JSONXP = getEvalProps.call({ <span class="hljs-attr">testBound</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">&apos;bounded&apos;</span>, }, { <span class="hljs-attr">jsonx</span>: testJSONX, });
-  <span class="hljs-keyword">const</span> evalutedComputedFunc = JSONXP.username({ <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;bob&apos;</span>, });
-  <span class="hljs-keyword">const</span> evalutedComputedBoundFunc = JSONXP.email({ <span class="hljs-attr">email</span>:<span class="hljs-string">&apos;test@email.domain&apos;</span>, });
-  <span class="hljs-comment">// expect(JSONXP.auth).to.be.true;</span>
-  <span class="hljs-comment">// expect(evalutedComputedFunc).to.eql(&apos;bob&apos;);</span>
-  <span class="hljs-comment">// expect(evalutedComputedBoundFunc).to.eql(&apos;bounded&apos;);</span>
+<hr>
+<h2>Evaluation Props</h2>
+<p><em>(_children, __dangerouslyEvalProps, __dangerouslyBindEvalProps, __dangerouslyEvalAllProps, __dangerouslyInsertComponents, __dangerouslyInsertReactComponents, __dangerouslyInsertJSONXComponents, __dangerouslyInsertFunctionComponents, __dangerouslyInsertClassComponents, __functionProps, __windowComponents , __windowComponentProps, __spreadComponent)</em></p>
+<p>Evaluation Props are properties that are computed and resolve values onto the <code>JXM.props</code> property. They are helpful because in order to interact with dyanamic data and stateful information, they provide a way to describe declaratively how to assign properties onto the <code>JXM.props</code> property.</p>
+<h3>_children</h3>
+<p>The <code>_children</code> evaluation property is used to override the value of <code>JXM.children</code> and is usually only used when you want to dynamically set the value of the <code>children</code> property from an advanced property.</p>
+<pre><code class="hljs language-javascript"><span class="hljs-comment">//current URL: http://example.com</span>
+<span class="hljs-keyword">const</span> JXMWindowLocation = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;p&apos;</span>,
+  <span class="hljs-attr">windowprops</span>:{
+    <span class="hljs-attr">_children</span>:[<span class="hljs-string">&apos;location&apos;</span>,<span class="hljs-string">&apos;href&apos;</span>]
+  }
+};
+<span class="hljs-comment">// computes: { component:&apos;p&apos;, children:&apos;http://example.com&apos;, }</span>
 </code></pre>
-<h5>__functionProps</h5>
-<p>Function props merge onto jsonx.props after evaluating each functon string.</p>
+<h3>__dangerouslyEvalProps, __dangerouslyBindEvalProps and __dangerouslyEvalAllProps</h3>
+<p>The evaluation properties <code>__dangerouslyEvalProps</code>, <code>__dangerouslyBindEvalProps</code> and <code>__dangerouslyEvalAllProps</code> are properties used to evaluate strings and set the value the property value on a JXM Object.</p>
+<p><code>__dangerouslyEvalAllProps</code> will evaluate a string as a function and assign the returned value of the function to the <code>props</code> property of a JXM object.
+<em>Note: If passing the value as a string, remember this value has to be an expression, so either a <code>(({jsonx})=&gt;{})</code> or <code>(function({jsonx}){})</code>. There is one parameter passed into the function, it&#x2019;s the current value of the JXM Object on the jsonx property</em></p>
+<p><code>__dangerouslyEvalProps</code> is used to evaluate the string value and assign it to the JXM.props value, the string must be a valid javascript expression <em>(Tip, if evaluting an object remember to wrap it ({some:&#x2018;obj&#x2019;, }) )</em>. If <code>__dangerouslyEvalProps</code> is a function, it will assign the value of the function called with one parameter <code>{jsonx}</code>.</p>
+<p><code>__dangerouslyBindEvalProps</code> is used to assign functions to JXM object props values. This is usually for <em>onClick</em> and <em>onChange</em> functions. Each property of <code>__dangerouslyBindEvalProps</code> has to be a function, because it&#x2019;s attempts to assign the value as a function with <code>this</code> bound to it.</p>
+<p>The reason why these functions exist are because there are instances where JSONX is delivered via JSON and JavaScript functions are not valid JSON values. This is typically used sparingly when JXM is sent server side. In practice there are many ways to pass functions as values (especially if they are bound to JSONX, then you can always reference functions by access properties off of <code>this</code> by using <code>thiscontext</code>).</p>
+<h3>Example Evaluation Props</h3>
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/n704z65x/7/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/n704z65x/7/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+<h3>__functionProps (legacy)</h3>
+<p>The evaluation prop <code>__functionProps</code> is another way to assign a function value to a property in <code>JXM.props</code>. There are two ways of using <code>__functionProps</code>, one way for predefined functions and another way for dynamic functions.</p>
+<h4>predefined functions</h4>
+<p><code>__functionProps</code> can assign values from functions that exist on <code>this.props</code> (e.g. using something like react-router and accessing this.props.reduxRouter.push) or functions that exist on the <code>window</code> object.</p>
+<p>Properties are assigned by using the value of the function by access the propery as a string, prefixed with &#x201C;func:&#x201D;. Function props merge onto jsonx.props after evaluating each functon string.</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> JXM = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;div&apos;</span>,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">name</span>:<span class="hljs-string">&apos;test&apos;</span>,
+  },
+  <span class="hljs-attr">__functionProps</span>: {
+    <span class="hljs-attr">onclick</span>:<span class="hljs-string">&apos;func:this.props.onClick&apos;</span>, <span class="hljs-comment">// if there&apos;s already a defined onClick Function</span>
+    <span class="hljs-attr">printPage</span>: <span class="hljs-string">&apos;func:window.print&apos;</span>,
+    <span class="hljs-attr">nav</span>:<span class="hljs-string">&apos;func:this.props.reduxRouter.push&apos;</span>,
+  },
+};
+</code></pre>
+<h4>inline functions</h4>
+<p><code>__functionProps</code> can also generate functions from a string in a much less elegant way than using <code>__dangerouslyEvalProps</code>.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> thisProp = {
   <span class="hljs-attr">debug</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">window</span>: {
