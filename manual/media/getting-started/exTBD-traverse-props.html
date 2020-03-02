@@ -1,0 +1,96 @@
+<html>
+  <head>
+    <script  src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/jsonx/dist/index.umd.js" type="text/javascript" ></script>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script>
+      // class MyButton extends React.Component {
+      //   render() {
+      //     return <a {...this.props}>{this.props.children}</a>
+      //   }
+      // }
+
+      const RHeader = jsonx._jsonxComponents.getReactClassComponent({ 
+        render:{ 
+          body:{
+            component:'h1',
+            thisprops:{
+              style:['style']
+            },
+            children:'this is a header'
+          }
+        } 
+      });
+
+      const jsonxRender = jsonx.jsonxRender.bind({ 
+        reactComponents:{
+          RHeader,
+        }
+      });
+
+      const JXM = {
+        component:'div', 
+        children:[
+          {
+            component:'RHeader', 
+            props:{
+              style:{
+                color:'red'
+              }
+            }
+          },
+        ], 
+      };
+
+      jsonxRender({
+        jsonx:JXM, 
+        querySelector:'#main',
+      });
+    </script>
+    ```
+
+    class MyButton extends React.Component {
+      render() {
+        return <a {...this.props}>{this.props.children}</a>
+      }
+    }
+    
+    
+    const getReactElement = jsonx.getReactElement.bind({
+      reactComponents:{
+        Header,
+        MyButton,
+      }
+    });
+    
+    const myJSONX = {
+      component:'div',
+      children:[
+        {
+          component:'Header',
+          props:{
+            as:'h1',
+          },
+          children:'Hello World!',
+        },
+        {
+          component:'MyButton',
+          props:{
+            title:'Discover docs',
+            href:'http://react.semantic-ui.com',
+          },
+          __dangerouslyEvalProps:{
+            onClick:'()=>alert("click works")'
+          },
+          children:'click me',
+        }
+      ]
+    }
+    
+    const myReactElements = getReactElement(myJSONX);
+    ```
+  </body>
+</html>
