@@ -119,49 +119,6 @@ jsonxRender({
   </tr>
 </table>
 
-```
-
-class MyButton extends React.Component {
-  render() {
-    return <a {...this.props}>{this.props.children}</a>
-  }
-}
-
-
-const getReactElement = jsonx.getReactElement.bind({
-  reactComponents:{
-    Header,
-    MyButton,
-  }
-});
-
-const myJSONX = {
-  component:'div',
-  children:[
-    {
-      component:'Header',
-      props:{
-        as:'h1',
-      },
-      children:'Hello World!',
-    },
-    {
-      component:'MyButton',
-      props:{
-        title:'Discover docs',
-        href:'http://react.semantic-ui.com',
-      },
-      __dangerouslyEvalProps:{
-        onClick:'()=>alert("click works")'
-      },
-      children:'click me',
-    }
-  ]
-}
-
-const myReactElements = getReactElement(myJSONX);
-```
-
 ---
 ### JSONX Manual
  - [Home](https://jsonx.anydata.app)

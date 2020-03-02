@@ -35,7 +35,7 @@ jxm = {
   children:Array|String, // Any String or Array of valid JSONX JSON objects
 
 
-  //dynamic properties
+  //traverse properties
   resourceprops:Object, // An object from async resources to merge onto jsonx.props once fully resolved
   asyncprops:Object, // An object from async resources to merge onto jsonx.props once fully resolved (alias for resourceprops)
   thisprops:Object, // An object to merge onto jsonx.props from properties already bound to this.props
@@ -44,7 +44,7 @@ jxm = {
   windowprops:Object, // An object to merge onto jsonx.props from the window object
 
 
-  //evaluated properties
+  //evaluation properties
   __dangerouslyEvalProps:Object, // An object of evaluated JavaScript strings, used as inline functions onto jsonx.props, if the prop is a function it will be called bound to 'this' and the returned value will be assigned
   __dangerouslyBindEvalProps:Object, // An object of evaluated JavaScript functions that are bound to this, used as inline functions onto jsonx.props
   //computed properties
@@ -57,20 +57,22 @@ jxm = {
   __spreadComponent:Object, // A JSONX element that is mapped on any array prop called  __spread
   __windowComponents:Object, // An object of components merged onto jsonx.props from window.__jsonx_custom_elements
   __windowComponentProps:Object, // Returns a resolved object that has React Components pulled from window.
+  _children: Object, // any value assigned to _children will be set as the react element children property. This is typically used when you want to override what's passed as the children JXM property with a dynamic value later.
 
-  //children formatting properties
+  //format properties
   ___ISOtoLuxonString:String, //converts the children prop to from an ISO String to a Luxon formatted DateTime String 
   ___JSDatetoLuxonString:String, //converts the children prop to from JavaScript Date to a Luxon formatted DateTime String 
   ___stringifyChildren:String, //converts the children prop to a string using JSON.stringify 
-  ___template:String, //imports JXM from a file path into the children property 
   ___toNumeral:String, //converts numbers to numeral formatted numbers
   ___toStringChildren:String, //converts the children prop to a string using toString()
 
   //display properties
   comparisonprops:[Object], // An array of Objects used to conditionally display the current jsonx.component
-  //flag properties
+  
+  //utility properties
   passprops:Boolean, // A flag to pass parent properties to children JSONX objects (except for the style property)
   comparisonorprops:Boolean, // A flag to use an or condition instead of and conditions between comparisions
+  ___template:String, //imports JXM from a file path into the children property 
 }
 ```
 

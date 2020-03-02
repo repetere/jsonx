@@ -13,42 +13,92 @@
  - [Full API Docs](../../index.html)
 ---
 
+# Using advanced props
 
-# Tutorial Getting Started
+JSONX is created so you can create react elements and components with only JSON. Advanced props allow for your components to interact with dynamic data for example:
+ - referencing stateful properties dynamically
+ - formatting the output of props
+ - inserting templates into your JXM Objects
 
-Some other sample page
+There are six kinds of Advanced Props:
+ 1. Traverse Props - used to traverse data passed into elements or other dynamic/stateful data and assign values as props
+ 2. Evaluation Props - used to create function properties or component properties and assign values as props
+ 3. Format Props - used to format children props for example converting number formats or formatting dates
+ 4. Utility Props - used to preform functional tasks like inserting external JXM references (template support), or sharing props across components 
+ 5. Display Props - used to decide whether or not to render elements
 
-#### Advanced - Special properties
+## Traverse Props (thisprops, thisstate, thiscontext, windowprops, resourceprops/asyncprops)
 
-##### resourceprops (asyncprops) / thisprops / thisstate / thiscontext / windowprops
+Traversed Props are used to assign props values from different objects. For example if you wanted to set the alt text of an image tag from the url of the window, because JXM objects are JSON it's impossible to get the dynamic value `window.location.href` and assign it to the alt prop.
 
-The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.
+```JavaScript
+//assume window.location.href = http://example.com
 
-Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).
+const JXM = {
+  component:'img',
+  props:{
+    src:'path/to/some/image',
+    alt: // ??? http://example.com
+  }
+};
+```
 
-Thisprops transverses anything bound to `this.props`, a good example would be if you're storing and passing a user object on `this.props.user`, pulling the username would be where you would use thisprops.
+This is where traverse props are useful, for accessing `window.location.href` you want to traverse the `window` property and assign the `href` property from `window.location` to the `JXM.props.alt` property.
 
-Thisstate transverses anything bound to `this.state`, for example if you're updating the state of a component based on user input from a text field `this.state.value`, pulling the value would be where you would use thisstate.
+Traversing the `window` object is possibly by using the `windowprops` traverse prop. The other traverse props are:
+ - thisprops - traverse properties on `this.props`
+ - thisstate - traverse properties on `this.state`
+ - thiscontext - traverse properties on `this`
+ - windowprops - traverse properties on `window`
+ - resourceprops - traverse asynchronous properties passed to components when using JSONX programmatically
+ - asyncprops - an alias for `resourceprops`
 
-Thiscontext transverses anything bound to `this`, a good example is if you're using JSONX programatically and you want to bind functionality to the render methods.
+To properly reference `window.location.href` the following JXM Object would work
 
-Windowprops transverse anything on the global window object, like the current page location `window.location.href`.
+ ```JavaScript
+const JXM = {
+  component:'img',
+  props:{
+    src:'path/to/some/image',
+  },
+  windowprops:{
+    alt:['location','href]
+  }
+}
+ ```
 
-Dynamic props are transversed by passing an array to the property value you want, so for a window's location (`window.location.href`) the property value is accessed by an array to the href `['location','href']` where you omit the transverse object from the array path.
+Traverse props assign properties to `JXM.props` object by defining what property you want to set on `JXM.props` as the traverse prop name and passing an array to the property value you want. So for a window's location (`window.location.href`) the property value is accessed by an array to the href `['location','href']` where you omit the transverse object from the array path.
+
+Some sample use cases are:
+ - Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncprops).
+ - Thisprops transverses anything bound to `this.props`, a good example would be if you're storing and passing a user object on `this.props.username`, pulling the username would be where you would use thisprops.
+ - Thisstate transverses anything bound to `this.state`, for example if you're updating the state of a component based on user input from a text field `this.state.value`, pulling the value would be where you would use thisstate.
+ - Thiscontext transverses anything bound to `this`, a good example is if you're using JSONX programatically and you want to bind functionality to the render methods.
+ - And like the previous example windowprops transverse anything on the global window object, like the current page location `window.location.href`.
+
 
 ```javascript
-const traverseObject = {
-  user: {
-    name: 'jsonx',
-    description: 'react without javascript',
-  },
-  stats: {
-    logins: 102,
-    comments: 3,
-  },
-  authentication: 'OAuth2',
-};
-const testJSONX = {
+// programmatic example
+import * as jsonx from 'jsonx';
+
+async function main(){
+
+  const response = await fetch('/path/to/userdata');
+  const asyncUserData = await response.json();
+  /*
+  asyncUserData = {
+    user: {
+      name: 'jsonx',
+      description: 'react without javascript',
+    },
+    stats: {
+      logins: 102,
+      comments: 3,
+    },
+    authentication: 'OAuth2',
+  };
+  */
+  const JXM = {
   component: 'div',
   props: {
     id: 'generatedJSONX',
@@ -74,36 +124,50 @@ const testJSONX = {
     },
   ],
 };
-const JSONXP = getJSONXProps({ jsonx: testJSONX, traverseObject, });
-// => {
-//   auth: 'OAuth2',
-//   username: 'jsonx'
-// }
 
-//finally resolves:
-const testJSONX = {
-  component: 'div',
-  props: {
-    id: 'generatedJSONX',
-    className:'jsonx',
-    auth: 'OAuth2',
-    username: 'jsonx',
-  },
-  children: [
-    {
-      component: 'p',
-      props: {
-        style: {
-          color: 'red',
-          fontWeight:'bold',
-        },
-        title:'react without javascript',
-      },
-      children:'hello world',
+  //render something silly
+  jsonx.jsonxRender(JXM,asyncUserData);
+  /*
+  Renders this JXM Object:
+  JXM = {
+    component: 'div',
+    props: {
+      id: 'generatedJSONX',
+      className:'jsonx',
+      auth: 'OAuth2',
+      username: 'jsonx',
     },
-  ],
-};
+    children: [
+      {
+        component: 'p',
+        props: {
+          style: {
+            color: 'red',
+            fontWeight:'bold',
+          },
+          title:'react without javascript',
+        },
+        children:'hello world',
+      },
+    ],
+  };
+  */
+}
+
+main();
 ```
+
+### Example Traverse Props
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+
+## Evaluation Props (_children, __dangerouslyEvalProps, __dangerouslyBindEvalProps, __dangerouslyInsertComponents, __dangerouslyInsertReactComponents, __dangerouslyInsertJSONXComponents, __dangerouslyInsertFunctionComponents, __dangerouslyInsertClassComponents, __dangerouslyEvalAllProps, __functionProps, __windowComponents , __windowComponentProps, __spreadComponent)
 
 ##### __dangerouslyEvalProps / __dangerouslyBindEvalProps
 

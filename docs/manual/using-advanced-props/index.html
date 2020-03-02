@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tutorial Getting Started</title>
+  <title>Using advanced props</title>
   <link rel="stylesheet" href="https://unpkg.com/style.css">
   <style type="text/css">
     .markdown-body {
@@ -31,29 +31,84 @@
 <li><a href="../../index.html">Full API Docs</a></li>
 </ul>
 <hr>
-<h1>Tutorial Getting Started</h1>
-<p>Some other sample page</p>
-<h4>Advanced - Special properties</h4>
-<h5>resourceprops (asyncprops) / thisprops / thisstate / thiscontext / windowprops</h5>
-<p>The only different between resourceprops (asyncprops), thisprops and windowprops are the source of the transverse Object.</p>
-<p>Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncpropc).</p>
-<p>Thisprops transverses anything bound to <code>this.props</code>, a good example would be if you&#x2019;re storing and passing a user object on <code>this.props.user</code>, pulling the username would be where you would use thisprops.</p>
-<p>Thisstate transverses anything bound to <code>this.state</code>, for example if you&#x2019;re updating the state of a component based on user input from a text field <code>this.state.value</code>, pulling the value would be where you would use thisstate.</p>
-<p>Thiscontext transverses anything bound to <code>this</code>, a good example is if you&#x2019;re using JSONX programatically and you want to bind functionality to the render methods.</p>
-<p>Windowprops transverse anything on the global window object, like the current page location <code>window.location.href</code>.</p>
-<p>Dynamic props are transversed by passing an array to the property value you want, so for a window&#x2019;s location (<code>window.location.href</code>) the property value is accessed by an array to the href <code>[&apos;location&apos;,&apos;href&apos;]</code> where you omit the transverse object from the array path.</p>
-<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> traverseObject = {
-  <span class="hljs-attr">user</span>: {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;jsonx&apos;</span>,
-    <span class="hljs-attr">description</span>: <span class="hljs-string">&apos;react without javascript&apos;</span>,
-  },
-  <span class="hljs-attr">stats</span>: {
-    <span class="hljs-attr">logins</span>: <span class="hljs-number">102</span>,
-    <span class="hljs-attr">comments</span>: <span class="hljs-number">3</span>,
-  },
-  <span class="hljs-attr">authentication</span>: <span class="hljs-string">&apos;OAuth2&apos;</span>,
+<h1>Using advanced props</h1>
+<p>JSONX is created so you can create react elements and components with only JSON. Advanced props allow for your components to interact with dynamic data for example:</p>
+<ul>
+<li>referencing stateful properties dynamically</li>
+<li>formatting the output of props</li>
+<li>inserting templates into your JXM Objects</li>
+</ul>
+<p>There are six kinds of Advanced Props:</p>
+<ol>
+<li>Traverse Props - used to traverse data passed into elements or other dynamic/stateful data and assign values as props</li>
+<li>Evaluation Props - used to create function properties or component properties and assign values as props</li>
+<li>Format Props - used to format children props for example converting number formats or formatting dates</li>
+<li>Utility Props - used to preform functional tasks like inserting external JXM references (template support), or sharing props across components</li>
+<li>Display Props - used to decide whether or not to render elements</li>
+</ol>
+<h2>Traverse Props (thisprops, thisstate, thiscontext, windowprops, resourceprops/asyncprops)</h2>
+<p>Traversed Props are used to assign props values from different objects. For example if you wanted to set the alt text of an image tag from the url of the window, because JXM objects are JSON it&#x2019;s impossible to get the dynamic value <code>window.location.href</code> and assign it to the alt prop.</p>
+<pre><code class="hljs language-JavaScript"><span class="hljs-comment">//assume window.location.href = http://example.com</span>
+
+<span class="hljs-keyword">const</span> JXM = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;img&apos;</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">src</span>:<span class="hljs-string">&apos;path/to/some/image&apos;</span>,
+    <span class="hljs-attr">alt</span>: <span class="hljs-comment">// ??? http://example.com</span>
+  }
 };
-<span class="hljs-keyword">const</span> testJSONX = {
+</code></pre>
+<p>This is where traverse props are useful, for accessing <code>window.location.href</code> you want to traverse the <code>window</code> property and assign the <code>href</code> property from <code>window.location</code> to the <code>JXM.props.alt</code> property.</p>
+<p>Traversing the <code>window</code> object is possibly by using the <code>windowprops</code> traverse prop. The other traverse props are:</p>
+<ul>
+<li>thisprops - traverse properties on <code>this.props</code></li>
+<li>thisstate - traverse properties on <code>this.state</code></li>
+<li>thiscontext - traverse properties on <code>this</code></li>
+<li>windowprops - traverse properties on <code>window</code></li>
+<li>resourceprops - traverse asynchronous properties passed to components when using JSONX programmatically</li>
+<li>asyncprops - an alias for <code>resourceprops</code></li>
+</ul>
+<p>To properly reference <code>window.location.href</code> the following JXM Object would work</p>
+<pre><code class="hljs language-JavaScript"><span class="hljs-keyword">const</span> JXM = {
+ <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;img&apos;</span>,
+ <span class="hljs-attr">props</span>:{
+   <span class="hljs-attr">src</span>:<span class="hljs-string">&apos;path/to/some/image&apos;</span>,
+ },
+ <span class="hljs-attr">windowprops</span>:{
+   <span class="hljs-attr">alt</span>:[<span class="hljs-string">&apos;location&apos;</span>,<span class="hljs-string">&apos;href]
+ }
+}
+</span></code></pre>
+<p>Traverse props assign properties to <code>JXM.props</code> object by defining what property you want to set on <code>JXM.props</code> as the traverse prop name and passing an array to the property value you want. So for a window&#x2019;s location (<code>window.location.href</code>) the property value is accessed by an array to the href <code>[&apos;location&apos;,&apos;href&apos;]</code> where you omit the transverse object from the array path.</p>
+<p>Some sample use cases are:</p>
+<ul>
+<li>Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncprops).</li>
+<li>Thisprops transverses anything bound to <code>this.props</code>, a good example would be if you&#x2019;re storing and passing a user object on <code>this.props.username</code>, pulling the username would be where you would use thisprops.</li>
+<li>Thisstate transverses anything bound to <code>this.state</code>, for example if you&#x2019;re updating the state of a component based on user input from a text field <code>this.state.value</code>, pulling the value would be where you would use thisstate.</li>
+<li>Thiscontext transverses anything bound to <code>this</code>, a good example is if you&#x2019;re using JSONX programatically and you want to bind functionality to the render methods.</li>
+<li>And like the previous example windowprops transverse anything on the global window object, like the current page location <code>window.location.href</code>.</li>
+</ul>
+<pre><code class="hljs language-javascript"><span class="hljs-comment">// programmatic example</span>
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;jsonx&apos;</span>;
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>)</span>{
+
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&apos;/path/to/userdata&apos;</span>);
+  <span class="hljs-keyword">const</span> asyncUserData = <span class="hljs-keyword">await</span> response.json();
+  <span class="hljs-comment">/*
+  asyncUserData = {
+    user: {
+      name: &apos;jsonx&apos;,
+      description: &apos;react without javascript&apos;,
+    },
+    stats: {
+      logins: 102,
+      comments: 3,
+    },
+    authentication: &apos;OAuth2&apos;,
+  };
+  */</span>
+  <span class="hljs-keyword">const</span> JXM = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">&apos;div&apos;</span>,
   <span class="hljs-attr">props</span>: {
     <span class="hljs-attr">id</span>: <span class="hljs-string">&apos;generatedJSONX&apos;</span>,
@@ -79,36 +134,48 @@
     },
   ],
 };
-<span class="hljs-keyword">const</span> JSONXP = getJSONXProps({ <span class="hljs-attr">jsonx</span>: testJSONX, traverseObject, });
-<span class="hljs-comment">// =&gt; {</span>
-<span class="hljs-comment">//   auth: &apos;OAuth2&apos;,</span>
-<span class="hljs-comment">//   username: &apos;jsonx&apos;</span>
-<span class="hljs-comment">// }</span>
 
-<span class="hljs-comment">//finally resolves:</span>
-<span class="hljs-keyword">const</span> testJSONX = {
-  <span class="hljs-attr">component</span>: <span class="hljs-string">&apos;div&apos;</span>,
-  <span class="hljs-attr">props</span>: {
-    <span class="hljs-attr">id</span>: <span class="hljs-string">&apos;generatedJSONX&apos;</span>,
-    <span class="hljs-attr">className</span>:<span class="hljs-string">&apos;jsonx&apos;</span>,
-    <span class="hljs-attr">auth</span>: <span class="hljs-string">&apos;OAuth2&apos;</span>,
-    <span class="hljs-attr">username</span>: <span class="hljs-string">&apos;jsonx&apos;</span>,
-  },
-  <span class="hljs-attr">children</span>: [
-    {
-      <span class="hljs-attr">component</span>: <span class="hljs-string">&apos;p&apos;</span>,
-      <span class="hljs-attr">props</span>: {
-        <span class="hljs-attr">style</span>: {
-          <span class="hljs-attr">color</span>: <span class="hljs-string">&apos;red&apos;</span>,
-          <span class="hljs-attr">fontWeight</span>:<span class="hljs-string">&apos;bold&apos;</span>,
-        },
-        <span class="hljs-attr">title</span>:<span class="hljs-string">&apos;react without javascript&apos;</span>,
-      },
-      <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;hello world&apos;</span>,
+  <span class="hljs-comment">//render something silly</span>
+  jsonx.jsonxRender(JXM,asyncUserData);
+  <span class="hljs-comment">/*
+  Renders this JXM Object:
+  JXM = {
+    component: &apos;div&apos;,
+    props: {
+      id: &apos;generatedJSONX&apos;,
+      className:&apos;jsonx&apos;,
+      auth: &apos;OAuth2&apos;,
+      username: &apos;jsonx&apos;,
     },
-  ],
-};
+    children: [
+      {
+        component: &apos;p&apos;,
+        props: {
+          style: {
+            color: &apos;red&apos;,
+            fontWeight:&apos;bold&apos;,
+          },
+          title:&apos;react without javascript&apos;,
+        },
+        children:&apos;hello world&apos;,
+      },
+    ],
+  };
+  */</span>
+}
+
+main();
 </code></pre>
+<h3>Example Traverse Props</h3>
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+<h2>Evaluation Props (_children, __dangerouslyEvalProps, __dangerouslyBindEvalProps, __dangerouslyInsertComponents, __dangerouslyInsertReactComponents, __dangerouslyInsertJSONXComponents, __dangerouslyInsertFunctionComponents, __dangerouslyInsertClassComponents, __dangerouslyEvalAllProps, __functionProps, __windowComponents , __windowComponentProps, __spreadComponent)</h2>
 <h5>__dangerouslyEvalProps / __dangerouslyBindEvalProps</h5>
 <p>The only difference between <code>__dangerouslyEvalProps</code> and <code>__dangerouslyBindEvalProps</code> is each  <code>__dangerouslyBindEvalProps</code> has to be a function, because it&#x2019;s returned as the bound instance of the function with <code>this</code>.</p>
 <pre><code class="hljs language-javascript"> <span class="hljs-keyword">const</span> testVals = {

@@ -125,47 +125,6 @@ jsonxRender({
 </td>
   </tr>
 </table>
-<pre><code class="hljs">
-class MyButton extends React.Component {
-  render() {
-    return &lt;a {...this.props}&gt;{this.props.children}&lt;/a&gt;
-  }
-}
-
-
-const getReactElement = jsonx.getReactElement.bind({
-  reactComponents:{
-    Header,
-    MyButton,
-  }
-});
-
-const myJSONX = {
-  component:&apos;div&apos;,
-  children:[
-    {
-      component:&apos;Header&apos;,
-      props:{
-        as:&apos;h1&apos;,
-      },
-      children:&apos;Hello World!&apos;,
-    },
-    {
-      component:&apos;MyButton&apos;,
-      props:{
-        title:&apos;Discover docs&apos;,
-        href:&apos;http://react.semantic-ui.com&apos;,
-      },
-      __dangerouslyEvalProps:{
-        onClick:&apos;()=&gt;alert(&quot;click works&quot;)&apos;
-      },
-      children:&apos;click me&apos;,
-    }
-  ]
-}
-
-const myReactElements = getReactElement(myJSONX);
-</code></pre>
 <hr>
 <h3>JSONX Manual</h3>
 <ul>

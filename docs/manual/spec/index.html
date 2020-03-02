@@ -47,7 +47,7 @@
   children:<span class="hljs-built_in">Array</span>|<span class="hljs-built_in">String</span>, <span class="hljs-comment">// Any String or Array of valid JSONX JSON objects</span>
 
 
-  <span class="hljs-comment">//dynamic properties</span>
+  <span class="hljs-comment">//traverse properties</span>
   resourceprops:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object from async resources to merge onto jsonx.props once fully resolved</span>
   asyncprops:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object from async resources to merge onto jsonx.props once fully resolved (alias for resourceprops)</span>
   thisprops:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from properties already bound to this.props</span>
@@ -56,7 +56,7 @@
   windowprops:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from the window object</span>
 
 
-  <span class="hljs-comment">//evaluated properties</span>
+  <span class="hljs-comment">//evaluation properties</span>
   __dangerouslyEvalProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of evaluated JavaScript strings, used as inline functions onto jsonx.props, if the prop is a function it will be called bound to &apos;this&apos; and the returned value will be assigned</span>
   __dangerouslyBindEvalProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of evaluated JavaScript functions that are bound to this, used as inline functions onto jsonx.props</span>
   <span class="hljs-comment">//computed properties</span>
@@ -69,20 +69,22 @@
   __spreadComponent:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// A JSONX element that is mapped on any array prop called  __spread</span>
   __windowComponents:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of components merged onto jsonx.props from window.__jsonx_custom_elements</span>
   __windowComponentProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// Returns a resolved object that has React Components pulled from window.</span>
+  _children: <span class="hljs-built_in">Object</span>, <span class="hljs-comment">// any value assigned to _children will be set as the react element children property. This is typically used when you want to override what&apos;s passed as the children JXM property with a dynamic value later.</span>
 
-  <span class="hljs-comment">//children formatting properties</span>
+  <span class="hljs-comment">//format properties</span>
   ___ISOtoLuxonString:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to from an ISO String to a Luxon formatted DateTime String </span>
   ___JSDatetoLuxonString:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to from JavaScript Date to a Luxon formatted DateTime String </span>
   ___stringifyChildren:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to a string using JSON.stringify </span>
-  ___template:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//imports JXM from a file path into the children property </span>
   ___toNumeral:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts numbers to numeral formatted numbers</span>
   ___toStringChildren:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to a string using toString()</span>
 
   <span class="hljs-comment">//display properties</span>
   comparisonprops:[<span class="hljs-built_in">Object</span>], <span class="hljs-comment">// An array of Objects used to conditionally display the current jsonx.component</span>
-  <span class="hljs-comment">//flag properties</span>
+  
+  <span class="hljs-comment">//utility properties</span>
   passprops:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to pass parent properties to children JSONX objects (except for the style property)</span>
   comparisonorprops:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to use an or condition instead of and conditions between comparisions</span>
+  ___template:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//imports JXM from a file path into the children property </span>
 }
 </code></pre>
 <h2>Simple JSONX Syntax</h2>
