@@ -178,7 +178,7 @@ main();
 </table>
 <hr>
 <h2>Evaluation Props</h2>
-<p><em>(_children, __dangerouslyEvalProps, __dangerouslyBindEvalProps, __dangerouslyEvalAllProps, __dangerouslyInsertComponents, __dangerouslyInsertReactComponents, __dangerouslyInsertJSONXComponents, __dangerouslyInsertFunctionComponents, __dangerouslyInsertClassComponents, __functionProps, __windowComponents , __windowComponentProps, __spreadComponent)</em></p>
+<p><em>(_children, __dangerouslyEvalProps, __dangerouslyBindEvalProps, __dangerouslyEvalAllProps, __dangerouslyInsertComponents, __dangerouslyInsertReactComponents, __dangerouslyInsertJSONXComponents, __dangerouslyInsertFunctionComponents, __dangerouslyInsertClassComponents, __functionProps, __windowComponents , __windowComponentProps, __spreadComponent, __spread)</em></p>
 <p>Evaluation Props are properties that are computed and resolve values onto the <code>JXM.props</code> property. They are helpful because in order to interact with dyanamic data and stateful information, they provide a way to describe declaratively how to assign properties onto the <code>JXM.props</code> property.</p>
 <h3>_children</h3>
 <p>The <code>_children</code> evaluation property is used to override the value of <code>JXM.children</code> and is usually only used when you want to dynamically set the value of the <code>children</code> property from an advanced property.</p>
@@ -208,12 +208,12 @@ main();
   </tr>
 </table>
 <h3>__functionProps (legacy)</h3>
-<p>The evaluation prop <code>__functionProps</code> is another way to assign a function value to a property in <code>JXM.props</code>. There are two ways of using <code>__functionProps</code>, one way for predefined functions and another way for dynamic functions.</p>
-<h4>predefined functions</h4>
-<p><code>__functionProps</code> can assign values from functions that exist on <code>this.props</code> (e.g. using something like react-router and accessing this.props.reduxRouter.push) or functions that exist on the <code>window</code> object.</p>
+<p>The evaluation prop <code>__functionProps</code> is another way to assign a function value to a property in <code>JXM.props</code>. There are two ways of using <code>__functionProps</code>, one way for predefined functions and another way for dynamic functions. Using <code>__functionProps</code> may be deprecated in the future.</p>
+<h4>predefined functions (legacy)</h4>
+<p><code>__functionProps</code> can assign values from functions that exist on <code>this.props</code> (e.g. using something like react-router and accessing this.props.reduxRouter.push) or functions that exist on the <code>window</code> object (like window.console.log).</p>
 <p>Properties are assigned by using the value of the function by access the propery as a string, prefixed with &#x201C;func:&#x201D;. Function props merge onto jsonx.props after evaluating each functon string.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> JXM = {
-  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;div&apos;</span>,
+  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;button&apos;</span>,
   <span class="hljs-attr">props</span>: {
     <span class="hljs-attr">name</span>:<span class="hljs-string">&apos;test&apos;</span>,
   },
@@ -224,44 +224,33 @@ main();
   },
 };
 </code></pre>
-<h4>inline functions</h4>
-<p><code>__functionProps</code> can also generate functions from a string in a much less elegant way than using <code>__dangerouslyEvalProps</code>.</p>
-<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> thisProp = {
-  <span class="hljs-attr">debug</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">window</span>: {
-    <span class="hljs-attr">print</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">&apos;printed&apos;</span>,
-    <span class="hljs-attr">localStorage</span>: {
-      <span class="hljs-attr">getItem</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">&apos;gotItem&apos;</span>,
-    },
-  },
-  <span class="hljs-attr">props</span>: {
-    <span class="hljs-attr">onClick</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">&apos;clicked&apos;</span>,
-    <span class="hljs-attr">reduxRouter</span>: {
-      <span class="hljs-attr">push</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">&apos;pushed&apos;</span>,
-      <span class="hljs-attr">pop</span>:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span><span class="hljs-string">&apos;poped&apos;</span>,
-    },
-  },
-};
-<span class="hljs-keyword">const</span> jsonxTest = {
-  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;div&apos;</span>,
+<h4>inline functions (legacy)</h4>
+<p><code>__functionProps</code> can also generate functions from a string in a much less elegant way than using <code>__dangerouslyEvalProps</code> or <code>__dangerouslyBindEvalProps</code>. It&#x2019;s very cumbersome but you define the string of the function body <code>JXM.__inline[name-of-func]</code> and reference the function on <code>__functionProps</code> by prefixing the function with <code>func:inline</code> (e.g. <code>JXM.__functionProps[func:inline[name-of-function]]</code>). You can also use the <code>__functionargs</code> advanced props to bind <code>JXM.prop</code> properties to parameters of the inline function.</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> JXM = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;button&apos;</span>,
   <span class="hljs-attr">props</span>: {
     <span class="hljs-attr">name</span>:<span class="hljs-string">&apos;test&apos;</span>,
   },
+  <span class="hljs-attr">__functionargs</span>:{
+    <span class="hljs-attr">onClick</span>:[<span class="hljs-string">&apos;name&apos;</span>],
+  },
+  <span class="hljs-attr">__inline</span>:{
+    <span class="hljs-attr">onClick</span>:<span class="hljs-string">` window.alert(&quot;the name of this component from the prop is:&quot; +arguments[0])`</span>
+  },
   <span class="hljs-attr">__functionProps</span>: {
-    <span class="hljs-attr">onclick</span>:<span class="hljs-string">&apos;func:this.props.onClick&apos;</span>,
-    <span class="hljs-attr">printPage</span>: <span class="hljs-string">&apos;func:window.print&apos;</span>,
-    <span class="hljs-attr">nav</span>:<span class="hljs-string">&apos;func:this.props.reduxRouter.push&apos;</span>,
+    <span class="hljs-attr">onClick</span>:<span class="hljs-string">&apos;func:inline.onClick&apos;</span>,
   },
 };
-<span class="hljs-keyword">const</span> jsonxObj = getFunctionProps.call(thisProp, {
-  <span class="hljs-attr">jsonx</span>: jsonxTest,
-});
-expect(jsonxObj).is.an(<span class="hljs-string">&apos;object&apos;</span>);
-expect(<span class="hljs-built_in">Object</span>.keys(jsonxObj)).to.eql(<span class="hljs-built_in">Object</span>.keys(jsonxTest.__functionProps));
-expect(jsonxObj.onclick()).to.eq(<span class="hljs-string">&apos;clicked&apos;</span>);
-expect(jsonxObj.printPage()).to.eql(<span class="hljs-string">&apos;printed&apos;</span>);
-expect(jsonxObj.nav()).to.eql(<span class="hljs-string">&apos;pushed&apos;</span>);
 </code></pre>
+<h3>Example Evaluation Props __functionProps</h3>
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/34ngdzyh/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/34ngdzyh/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
 <h5>comparisionprops</h5>
 <p>Comparison props are used to contionally show components if they&#x2019;re truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If <code>comparisonorprops:true</code> then only one condition needs to be true in order to render the component</p>
 <pre><code class="hljs language-javascript"><span class="hljs-comment">//and conditions</span>

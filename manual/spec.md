@@ -70,6 +70,7 @@ jxm = {
   comparisonprops:[Object], // An array of Objects used to conditionally display the current jsonx.component
   
   //utility properties
+  debug:Boolean, // A flag to output the calculated JXM props in the console
   passprops:Boolean, // A flag to pass parent properties to children JSONX objects (except for the style property)
   comparisonorprops:Boolean, // A flag to use an or condition instead of and conditions between comparisions
   ___template:String, //imports JXM from a file path into the children property 

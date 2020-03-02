@@ -147,6 +147,11 @@ export declare function getEvalProps(this: defs.Context, options?: {
  * @returns {Object} resolved object of React Components
  */
 export declare function getComponentProps(this: defs.Context, options?: defs.Config): any;
+/**
+ * Used to create components from jsonx as props
+ * @param this
+ * @param options
+ */
 export declare function getReactComponents(this: defs.Context, options: defs.Config): defs.jsonxResourceProps;
 /**
  * Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
@@ -157,7 +162,7 @@ export declare function getReactComponents(this: defs.Context, options: defs.Con
  */
 export declare function getReactComponentProps(this: defs.Context, options?: {
     jsonx: defs.jsonx;
-}): defs.jsonxResourceProps;
+}): defs.jsonxResourceProps | undefined;
 /**
  * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
  * @param {Object} options

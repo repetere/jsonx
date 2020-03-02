@@ -21,6 +21,7 @@
 3. [Custom Component: React Calendar Example](https://jsfiddle.net/yawetse/Lqwe3f59/5/) 
 4. [Advanced Props: Traverse Props Example](https://jsfiddle.net/yawetse/pz845dk9/4/) 
 5. [Advanced Props: Evaluation Props Example (__dangerouslyEvalProps)](https://jsfiddle.net/yawetse/n704z65x/7/) 
+6. [Advanced Props: Evaluation Props Example (__functionProps - legacy)](https://jsfiddle.net/yawetse/34ngdzyh/3/) 
 
 
 ---

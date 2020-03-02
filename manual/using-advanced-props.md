@@ -171,7 +171,7 @@ main();
 ---
 
 ## Evaluation Props
-*(_children, __dangerouslyEvalProps, __dangerouslyBindEvalProps, __dangerouslyEvalAllProps, __dangerouslyInsertComponents, __dangerouslyInsertReactComponents, __dangerouslyInsertJSONXComponents, __dangerouslyInsertFunctionComponents, __dangerouslyInsertClassComponents, __functionProps, __windowComponents , __windowComponentProps, __spreadComponent)*
+*(_children, __dangerouslyEvalProps, __dangerouslyBindEvalProps, __dangerouslyEvalAllProps, __dangerouslyInsertComponents, __dangerouslyInsertReactComponents, __dangerouslyInsertJSONXComponents, __dangerouslyInsertFunctionComponents, __dangerouslyInsertClassComponents, __functionProps, __windowComponents , __windowComponentProps, __spreadComponent, __spread)*
 
 Evaluation Props are properties that are computed and resolve values onto the `JXM.props` property. They are helpful because in order to interact with dyanamic data and stateful information, they provide a way to describe declaratively how to assign properties onto the `JXM.props` property.
 
@@ -215,17 +215,17 @@ The reason why these functions exist are because there are instances where JSONX
 
 ### __functionProps (legacy)
 
-The evaluation prop `__functionProps` is another way to assign a function value to a property in `JXM.props`. There are two ways of using `__functionProps`, one way for predefined functions and another way for dynamic functions.
+The evaluation prop `__functionProps` is another way to assign a function value to a property in `JXM.props`. There are two ways of using `__functionProps`, one way for predefined functions and another way for dynamic functions. Using `__functionProps` may be deprecated in the future.
 
-#### predefined functions
-`__functionProps` can assign values from functions that exist on `this.props` (e.g. using something like react-router and accessing this.props.reduxRouter.push) or functions that exist on the `window` object.
+#### predefined functions (legacy)
+`__functionProps` can assign values from functions that exist on `this.props` (e.g. using something like react-router and accessing this.props.reduxRouter.push) or functions that exist on the `window` object (like window.console.log).
 
 Properties are assigned by using the value of the function by access the propery as a string, prefixed with "func:". Function props merge onto jsonx.props after evaluating each functon string.
 
 
 ```javascript
 const JXM = {
-  component:'div',
+  component:'button',
   props: {
     name:'test',
   },
@@ -237,47 +237,38 @@ const JXM = {
 };
 ```
 
-#### inline functions
-`__functionProps` can also generate functions from a string in a much less elegant way than using `__dangerouslyEvalProps`. 
+#### inline functions (legacy)
+`__functionProps` can also generate functions from a string in a much less elegant way than using `__dangerouslyEvalProps` or `__dangerouslyBindEvalProps`. It's very cumbersome but you define the string of the function body `JXM.__inline[name-of-func]` and reference the function on `__functionProps` by prefixing the function with `func:inline` (e.g. `JXM.__functionProps[func:inline[name-of-function]]`). You can also use the `__functionargs` advanced props to bind `JXM.prop` properties to parameters of the inline function.
 
 
 ```javascript
-const thisProp = {
-  debug: true,
-  window: {
-    print: () => 'printed',
-    localStorage: {
-      getItem:()=>'gotItem',
-    },
-  },
-  props: {
-    onClick:()=>'clicked',
-    reduxRouter: {
-      push:()=>'pushed',
-      pop:()=>'poped',
-    },
-  },
-};
-const jsonxTest = {
-  component:'div',
+const JXM = {
+  component:'button',
   props: {
     name:'test',
   },
+  __functionargs:{
+    onClick:['name'],
+  },
+  __inline:{
+    onClick:` window.alert("the name of this component from the prop is:" +arguments[0])`
+  },
   __functionProps: {
-    onclick:'func:this.props.onClick',
-    printPage: 'func:window.print',
-    nav:'func:this.props.reduxRouter.push',
+    onClick:'func:inline.onClick',
   },
 };
-const jsonxObj = getFunctionProps.call(thisProp, {
-  jsonx: jsonxTest,
-});
-expect(jsonxObj).is.an('object');
-expect(Object.keys(jsonxObj)).to.eql(Object.keys(jsonxTest.__functionProps));
-expect(jsonxObj.onclick()).to.eq('clicked');
-expect(jsonxObj.printPage()).to.eql('printed');
-expect(jsonxObj.nav()).to.eql('pushed');
 ```
+
+### Example Evaluation Props __functionProps
+
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/34ngdzyh/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/34ngdzyh/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
 
 ##### comparisionprops
 

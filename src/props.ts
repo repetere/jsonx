@@ -325,6 +325,11 @@ export function getComponentProps(
   );
 }
 
+/**
+ * Used to create components from jsonx as props
+ * @param this 
+ * @param options 
+ */
 export function getReactComponents(this: defs.Context, options: defs.Config) {
   const { jsonx, resources } = options;
   const functionComponents = !jsonx.__dangerouslyInsertFunctionComponents
@@ -333,7 +338,8 @@ export function getReactComponents(this: defs.Context, options: defs.Config) {
         (cprops: defs.jsonxResourceProps, cpropName) => {
           let componentVal;
           try {
-            const args = jsonx.__dangerouslyInsertFunctionComponents[cpropName];
+            const args = jsonx.__dangerouslyInsertFunctionComponents && jsonx.__dangerouslyInsertFunctionComponents[cpropName] as defs.createFunctionComponentArgs;
+            if (args) {
             args.options = Object.assign({}, args.options, { resources });
             // eslint-disable-next-line
             componentVal = getReactFunctionComponent.call(
@@ -341,7 +347,8 @@ export function getReactComponents(this: defs.Context, options: defs.Config) {
               args.reactComponent,
               args.functionBody,
               args.options
-            );
+              );
+            }
           } catch (e) {
             if (this.debug || jsonx.debug) componentVal = e;
           }
@@ -357,14 +364,16 @@ export function getReactComponents(this: defs.Context, options: defs.Config) {
         (cprops: defs.jsonxResourceProps, cpropName) => {
           let componentVal;
           try {
-            const args = jsonx.__dangerouslyInsertClassComponents[cpropName];
-            args.options = Object.assign({}, args.options, { resources });
-            // eslint-disable-next-line
-            componentVal = getReactFunctionComponent.call(
-              this,
-              args.reactComponent,
-              args.options
-            );
+            const args = jsonx.__dangerouslyInsertClassComponents && jsonx.__dangerouslyInsertClassComponents[cpropName];
+            if (args) {
+              args.options = Object.assign({}, args.options, { resources });
+              // eslint-disable-next-line
+              componentVal = getReactFunctionComponent.call(
+                this,
+                args.reactComponent,
+                args.options
+              );
+            }
           } catch (e) {
             if (this.debug || jsonx.debug) componentVal = e;
           }
@@ -402,7 +411,7 @@ export function getReactComponentProps(
         let componentVal;
         try {
           componentVal = getComponentFromMap({
-            jsonx: jsonx.__dangerouslyInsertJSONXComponents[cpropName],
+            jsonx: jsonx.__dangerouslyInsertJSONXComponents && jsonx.__dangerouslyInsertJSONXComponents[cpropName],
             reactComponents: customComponents,
             componentLibraries: customLibraries
           });
@@ -415,14 +424,14 @@ export function getReactComponentProps(
       },
       {}
     );
-  } else {
+  } else if(jsonx.__dangerouslyInsertReactComponents && jsonx.__dangerouslyInsertReactComponents.length){
     return Object.keys(jsonx.__dangerouslyInsertReactComponents).reduce(
-      (cprops: defs.jsonxResourceProps, cpropName) => {
+      (cprops: defs.jsonxResourceProps, cpropName: string) => {
         let componentVal;
         try {
           componentVal = getComponentFromMap({
             jsonx: {
-              component: jsonx.__dangerouslyInsertReactComponents[cpropName],
+              component: jsonx.__dangerouslyInsertReactComponents && jsonx.__dangerouslyInsertReactComponents[cpropName],
               props: jsonx.__dangerouslyInsertComponentProps
                 ? jsonx.__dangerouslyInsertComponentProps[cpropName]
                 : {}

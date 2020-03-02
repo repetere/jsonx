@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <script  src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/jsonx/dist/index.umd.js" type="text/javascript" ></script>
+  </head>
+  <body>
+    <div id="main"></div>
+    <div id="someDiv"></div>
+    <script>
+      const JXM = {
+        component: 'div',
+        props:{
+          key:0,
+        },
+        children: [
+          {
+            component: 'h1',
+            children:'__dangerouslyEvalAllProps examples',
+          },
+          {
+            component:'div',
+            __dangerouslyEvalAllProps:()=>{
+              return {
+                style:{
+                  color:'blue'
+                },
+                children:'hello as function',
+              };
+            },
+          },
+          {
+            component:'div',
+            __dangerouslyEvalAllProps:`(function(){
+              //arguments = { jsonx:{ component:'div',...} }
+              //this = jsonx context
+              return {
+                style:{
+                  color:'red'
+                },
+                children:'hello as string',
+              };
+            })`,
+          },
+          {
+            component: 'h1',
+            children:'__dangerouslyEvalProps example',
+          },
+          {
+            component:'a',
+            children:'__dangerouslyEvalProps style',
+            __dangerouslyEvalProps:{
+              style:`({color:'green'})`,
+              onClick:`(()=>(function(e){
+                document.querySelector('#someDiv').innerHTML=Math.random(); 
+              }))`
+            },
+          },
+          {
+            component: 'h1',
+            children:'__dangerouslyBindEvalProps example',
+          },
+          {
+            component:'button',
+            children:'__dangerouslyBindEvalProps onClick',
+            __dangerouslyBindEvalProps:{
+              style:`({color:'orange'})`,
+              onClick:`(function(e){ 
+                document.querySelector('#someDiv').innerHTML=Math.random(); 
+              })`
+            },
+          },
+        ],
+      };
+
+      
+      jsonx.jsonxRender({
+        jsonx:JXM, 
+        querySelector:'#main',
+      });
+    </script>
+  </body>
+</html>
