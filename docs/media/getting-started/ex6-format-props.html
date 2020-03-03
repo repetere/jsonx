@@ -1,0 +1,276 @@
+<html>
+
+<head>
+    <script src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/jsonx/dist/index.umd.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="main"></div>
+    <div id="someDiv"></div>
+    <script>
+        const JXM = {
+            component: 'div',
+            debug: true,
+            children: [{
+                    component: 'div',
+                    children: 'original - formatted'
+                },
+                {
+                    component: 'h1',
+                    children: '___toStringChildren',
+                },
+                {
+                    component: 'table',
+                    props: {
+                        style: {
+                            width: '100%'
+                        }
+                    },
+                    children: [{
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: 'Original',
+                                },
+                                {
+                                    component: "td",
+                                    children: 'Formatted',
+                                },
+                            ]
+                        },
+                        {
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: JSON.stringify([1, 2, 3, 4]),
+                                },
+                                {
+                                    component: "td",
+                                    children: [1, 2, 3, 4],
+                                    ___toStringChildren: true,
+                                },
+                            ]
+                        }
+                    ],
+                },
+                {
+                    component: 'h1',
+                    children: '___stringifyChildren',
+                },
+                {
+                    component: 'table',
+                    props: {
+                        style: {
+                            width: '100%'
+                        }
+                    },
+                    children: [{
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: 'Original',
+                                },
+                                {
+                                    component: "td",
+                                    children: 'Formatted',
+                                },
+                            ]
+                        },
+                        {
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: JSON.stringify({
+                                        "some-non-string": "data"
+                                    }),
+                                },
+                                {
+                                    component: "td",
+                                    children: {
+                                        "some-non-string": "data"
+                                    },
+                                    ___stringifyChildren: true,
+                                },
+                            ]
+                        }
+                    ],
+                },
+                {
+                    component: 'h1',
+                    children: '___toNumeral',
+                },
+                {
+                    component: 'table',
+                    props: {
+                        style: {
+                            width: '100%'
+                        }
+                    },
+                    children: [{
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: 'Original',
+                                },
+                                {
+                                    component: "td",
+                                    children: 'Formatted',
+                                },
+                            ]
+                        },
+                        {
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: 15204.39084,
+                                },
+                                {
+                                    component: "td",
+                                    children: 15204.39084,
+                                    ___toNumeral: "0,0.00"
+                                },
+                            ]
+                        }
+                    ],
+                },
+                {
+                    component: 'h1',
+                    children: '___JSDatetoLuxonString',
+                },
+                {
+                    component: 'table',
+                    props: {
+                        style: {
+                            width: '100%'
+                        }
+                    },
+                    children: [{
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: 'Original',
+                                },
+                                {
+                                    component: "td",
+                                    children: 'Formatted',
+                                },
+                            ]
+                        },
+                        {
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: JSON.stringify(new Date("2020-03-03")),
+                                },
+                                {
+                                    component: "td",
+                                    children: new Date("2020-03-03"),
+                                    ___JSDatetoLuxonString: "LLL d, yyyy"
+                                },
+                            ]
+                        }
+                    ],
+                },
+                {
+                    component: 'h1',
+                    children: '___ISOtoLuxonString',
+                },
+                {
+                    component: 'table',
+                    props: {
+                        style: {
+                            width: '100%'
+                        }
+                    },
+                    children: [{
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: 'Original',
+                                },
+                                {
+                                    component: "td",
+                                    children: 'Formatted',
+                                },
+                            ]
+                        },
+                        {
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: JSON.stringify("2020-03-03T14:30:00.000Z"),
+                                },
+                                {
+                                    component: "td",
+                                    children: "2020-03-03T14:30:00.000Z",
+                                    ___ISOtoLuxonString: "ff"
+                                },
+                            ]
+                        },
+                        {
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: 'Original New York',
+                                },
+                                {
+                                    component: "td",
+                                    children: 'Formatted  New York',
+                                },
+                            ]
+                        },
+                        {
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: JSON.stringify("2020-03-03T14:30:00.000Z"),
+                                },
+                                {
+                                    component: "td",
+                                    children: "2020-03-03T14:30:00.000Z",
+                                    ___ISOtoLuxonString: "ff",
+                                    ___FromLuxonTimeZone: "America/New_York"
+                                },
+                            ]
+                        },
+                        {
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: 'Original Los Angeles',
+                                },
+                                {
+                                    component: "td",
+                                    children: 'Formatted Los Angeles',
+                                },
+                            ]
+                        },
+                        {
+                            component: 'tr',
+                            children: [{
+                                    component: "td",
+                                    children: JSON.stringify("2020-03-03T14:30:00.00Z"),
+                                },
+                                {
+                                    component: "td",
+                                    children: "2020-03-03T14:30:00.000Z",
+                                    ___ISOtoLuxonString: "ff",
+                                    ___FromLuxonTimeZone: "America/Los_Angeles"
+                                },
+                            ]
+                        },
+                    ],
+                },
+            ],
+        };
+
+        jsonx.jsonxRender({
+            jsonx: JXM,
+            querySelector: '#main',
+        });
+    </script>
+</body>
+
+</html>

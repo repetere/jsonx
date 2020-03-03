@@ -76,10 +76,10 @@
    <span class="hljs-attr">src</span>:<span class="hljs-string">&apos;path/to/some/image&apos;</span>,
  },
  <span class="hljs-attr">windowprops</span>:{
-   <span class="hljs-attr">alt</span>:[<span class="hljs-string">&apos;location&apos;</span>,<span class="hljs-string">&apos;href]
+   <span class="hljs-attr">alt</span>:[<span class="hljs-string">&apos;location&apos;</span>,<span class="hljs-string">&apos;href&apos;</span>]
  }
 }
-</span></code></pre>
+</code></pre>
 <p>Traverse props assign properties to <code>JXM.props</code> object by defining what property you want to set on <code>JXM.props</code> as the traverse prop name and passing an array to the property value you want. So for a window&#x2019;s location (<code>window.location.href</code>) the property value is accessed by an array to the href <code>[&apos;location&apos;,&apos;href&apos;]</code> where you omit the transverse object from the array path.</p>
 <p>Some sample use cases are:</p>
 <ul>
@@ -90,11 +90,10 @@
 <li>And like the previous example windowprops transverse anything on the global window object, like the current page location <code>window.location.href</code>.</li>
 </ul>
 <pre><code class="hljs language-javascript"><span class="hljs-comment">// programmatic example</span>
-<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;jsonx&apos;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;jsonx&quot;</span>;
 
-<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>)</span>{
-
-  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&apos;/path/to/userdata&apos;</span>);
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&quot;/path/to/userdata&quot;</span>);
   <span class="hljs-keyword">const</span> asyncUserData = <span class="hljs-keyword">await</span> response.json();
   <span class="hljs-comment">/*
   asyncUserData = {
@@ -110,34 +109,34 @@
   };
   */</span>
   <span class="hljs-keyword">const</span> JXM = {
-  <span class="hljs-attr">component</span>: <span class="hljs-string">&apos;div&apos;</span>,
-  <span class="hljs-attr">props</span>: {
-    <span class="hljs-attr">id</span>: <span class="hljs-string">&apos;generatedJSONX&apos;</span>,
-    <span class="hljs-attr">className</span>:<span class="hljs-string">&apos;jsonx&apos;</span>,
-  },
-  <span class="hljs-attr">resourceprops</span>:{
-    <span class="hljs-attr">auth</span>: [ <span class="hljs-string">&apos;authentication&apos;</span>, ],
-    <span class="hljs-attr">username</span>: [ <span class="hljs-string">&apos;user&apos;</span>, <span class="hljs-string">&apos;name&apos;</span>, ],
-  },
-  <span class="hljs-attr">children</span>: [
-    {
-      <span class="hljs-attr">component</span>: <span class="hljs-string">&apos;p&apos;</span>,
-      <span class="hljs-attr">props</span>: {
-        <span class="hljs-attr">style</span>: {
-          <span class="hljs-attr">color</span>: <span class="hljs-string">&apos;red&apos;</span>,
-          <span class="hljs-attr">fontWeight</span>:<span class="hljs-string">&apos;bold&apos;</span>,
-        },
-      },
-      <span class="hljs-attr">asyncprops</span>:{
-        <span class="hljs-attr">title</span>: [<span class="hljs-string">&apos;user&apos;</span>,<span class="hljs-string">&apos;description&apos;</span>]
-      },
-      <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;hello world&apos;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-string">&quot;div&quot;</span>,
+    <span class="hljs-attr">props</span>: {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">&quot;generatedJSONX&quot;</span>,
+      <span class="hljs-attr">className</span>: <span class="hljs-string">&quot;jsonx&quot;</span>
     },
-  ],
-};
+    <span class="hljs-attr">resourceprops</span>: {
+      <span class="hljs-attr">auth</span>: [<span class="hljs-string">&quot;authentication&quot;</span>],
+      <span class="hljs-attr">username</span>: [<span class="hljs-string">&quot;user&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>]
+    },
+    <span class="hljs-attr">children</span>: [
+      {
+        <span class="hljs-attr">component</span>: <span class="hljs-string">&quot;p&quot;</span>,
+        <span class="hljs-attr">props</span>: {
+          <span class="hljs-attr">style</span>: {
+            <span class="hljs-attr">color</span>: <span class="hljs-string">&quot;red&quot;</span>,
+            <span class="hljs-attr">fontWeight</span>: <span class="hljs-string">&quot;bold&quot;</span>
+          }
+        },
+        <span class="hljs-attr">asyncprops</span>: {
+          <span class="hljs-attr">title</span>: [<span class="hljs-string">&quot;user&quot;</span>, <span class="hljs-string">&quot;description&quot;</span>]
+        },
+        <span class="hljs-attr">children</span>: <span class="hljs-string">&quot;hello world&quot;</span>
+      }
+    ]
+  };
 
   <span class="hljs-comment">//render something silly</span>
-  jsonx.jsonxRender(JXM,asyncUserData);
+  jsonx.jsonxRender(JXM, asyncUserData);
   <span class="hljs-comment">/*
   Renders this JXM Object:
   JXM = {
@@ -178,20 +177,20 @@ main();
 </table>
 <hr>
 <h2>Evaluation Props</h2>
-<p><em>(_children, __dangerouslyEvalProps, __dangerouslyBindEvalProps, __dangerouslyEvalAllProps, __dangerouslyInsertComponents, __dangerouslyInsertReactComponents, __dangerouslyInsertJSONXComponents, __dangerouslyInsertFunctionComponents, __dangerouslyInsertClassComponents, __functionProps, __windowComponents , __windowComponentProps, __spreadComponent, __spread)</em></p>
+<p><em>(_children, **dangerouslyEvalProps, **dangerouslyBindEvalProps, **dangerouslyEvalAllProps, **dangerouslyInsertComponents, **dangerouslyInsertReactComponents, **dangerouslyInsertJSONXComponents, **dangerouslyInsertFunctionComponents, **dangerouslyInsertClassComponents, **functionProps, **windowComponents , **windowComponentProps, **spreadComponent, __spread)</em></p>
 <p>Evaluation Props are properties that are computed and resolve values onto the <code>JXM.props</code> property. They are helpful because in order to interact with dyanamic data and stateful information, they provide a way to describe declaratively how to assign properties onto the <code>JXM.props</code> property.</p>
 <h3>_children</h3>
 <p>The <code>_children</code> evaluation property is used to override the value of <code>JXM.children</code> and is usually only used when you want to dynamically set the value of the <code>children</code> property from an advanced property.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-comment">//current URL: http://example.com</span>
 <span class="hljs-keyword">const</span> JXMWindowLocation = {
-  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;p&apos;</span>,
-  <span class="hljs-attr">windowprops</span>:{
-    <span class="hljs-attr">_children</span>:[<span class="hljs-string">&apos;location&apos;</span>,<span class="hljs-string">&apos;href&apos;</span>]
+  <span class="hljs-attr">component</span>: <span class="hljs-string">&quot;p&quot;</span>,
+  <span class="hljs-attr">windowprops</span>: {
+    <span class="hljs-attr">_children</span>: [<span class="hljs-string">&quot;location&quot;</span>, <span class="hljs-string">&quot;href&quot;</span>]
   }
 };
 <span class="hljs-comment">// computes: { component:&apos;p&apos;, children:&apos;http://example.com&apos;, }</span>
 </code></pre>
-<h3>__dangerouslyEvalProps, __dangerouslyBindEvalProps and __dangerouslyEvalAllProps</h3>
+<h3>**dangerouslyEvalProps, **dangerouslyBindEvalProps and __dangerouslyEvalAllProps</h3>
 <p>The evaluation properties <code>__dangerouslyEvalProps</code>, <code>__dangerouslyBindEvalProps</code> and <code>__dangerouslyEvalAllProps</code> are properties used to evaluate strings and set the value the property value on a JXM Object.</p>
 <p><code>__dangerouslyEvalAllProps</code> will evaluate a string as a function and assign the returned value of the function to the <code>props</code> property of a JXM object.
 <em>Note: If passing the value as a string, remember this value has to be an expression, so either a <code>(({jsonx})=&gt;{})</code> or <code>(function({jsonx}){})</code>. There is one parameter passed into the function, it&#x2019;s the current value of the JXM Object on the jsonx property</em></p>
@@ -213,33 +212,33 @@ main();
 <p><code>__functionProps</code> can assign values from functions that exist on <code>this.props</code> (e.g. using something like react-router and accessing this.props.reduxRouter.push) or functions that exist on the <code>window</code> object (like window.console.log).</p>
 <p>Properties are assigned by using the value of the function by access the propery as a string, prefixed with &#x201C;func:&#x201D;. Function props merge onto jsonx.props after evaluating each functon string.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> JXM = {
-  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;button&apos;</span>,
+  <span class="hljs-attr">component</span>: <span class="hljs-string">&quot;button&quot;</span>,
   <span class="hljs-attr">props</span>: {
-    <span class="hljs-attr">name</span>:<span class="hljs-string">&apos;test&apos;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;test&quot;</span>
   },
   <span class="hljs-attr">__functionProps</span>: {
-    <span class="hljs-attr">onclick</span>:<span class="hljs-string">&apos;func:this.props.onClick&apos;</span>, <span class="hljs-comment">// if there&apos;s already a defined onClick Function</span>
-    <span class="hljs-attr">printPage</span>: <span class="hljs-string">&apos;func:window.print&apos;</span>,
-    <span class="hljs-attr">nav</span>:<span class="hljs-string">&apos;func:this.props.reduxRouter.push&apos;</span>,
-  },
+    <span class="hljs-attr">onclick</span>: <span class="hljs-string">&quot;func:this.props.onClick&quot;</span>, <span class="hljs-comment">// if there&apos;s already a defined onClick Function</span>
+    <span class="hljs-attr">printPage</span>: <span class="hljs-string">&quot;func:window.print&quot;</span>,
+    <span class="hljs-attr">nav</span>: <span class="hljs-string">&quot;func:this.props.reduxRouter.push&quot;</span>
+  }
 };
 </code></pre>
 <h4>inline functions (legacy)</h4>
 <p><code>__functionProps</code> can also generate functions from a string in a much less elegant way than using <code>__dangerouslyEvalProps</code> or <code>__dangerouslyBindEvalProps</code>. It&#x2019;s very cumbersome but you define the string of the function body <code>JXM.__inline[name-of-func]</code> and reference the function on <code>__functionProps</code> by prefixing the function with <code>func:inline</code> (e.g. <code>JXM.__functionProps[func:inline[name-of-function]]</code>). You can also use the <code>__functionargs</code> advanced props to bind <code>JXM.prop</code> properties to parameters of the inline function.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> JXM = {
-  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;button&apos;</span>,
+  <span class="hljs-attr">component</span>: <span class="hljs-string">&quot;button&quot;</span>,
   <span class="hljs-attr">props</span>: {
-    <span class="hljs-attr">name</span>:<span class="hljs-string">&apos;test&apos;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;test&quot;</span>
   },
-  <span class="hljs-attr">__functionargs</span>:{
-    <span class="hljs-attr">onClick</span>:[<span class="hljs-string">&apos;name&apos;</span>],
+  <span class="hljs-attr">__functionargs</span>: {
+    <span class="hljs-attr">onClick</span>: [<span class="hljs-string">&quot;name&quot;</span>]
   },
-  <span class="hljs-attr">__inline</span>:{
-    <span class="hljs-attr">onClick</span>:<span class="hljs-string">` window.alert(&quot;the name of this component from the prop is:&quot; +arguments[0])`</span>
+  <span class="hljs-attr">__inline</span>: {
+    <span class="hljs-attr">onClick</span>: <span class="hljs-string">` window.alert(&quot;the name of this component from the prop is:&quot; +arguments[0])`</span>
   },
   <span class="hljs-attr">__functionProps</span>: {
-    <span class="hljs-attr">onClick</span>:<span class="hljs-string">&apos;func:inline.onClick&apos;</span>,
-  },
+    <span class="hljs-attr">onClick</span>: <span class="hljs-string">&quot;func:inline.onClick&quot;</span>
+  }
 };
 </code></pre>
 <h3>Example Evaluation Props __functionProps</h3>
@@ -251,69 +250,140 @@ main();
     </td>
   </tr>
 </table>
+<h2>Format Props</h2>
+<p>_( ___stringifyChildren, ___toStringChildren, ___toNumeral, ___FromLuxonTimeZone, ___ISOtoLuxonString )_</p>
+<p>Format Props are properties that are used to convert JXM.children values to strings. Format Props are used because the <code>children</code> parameter of <code>React.createElement</code> can only be a string or an array of React Elements.</p>
+<h3>___stringifyChildren</h3>
+<p>The <code>___stringifyChildren</code> format property converts the <code>JXM.children</code> property to a string by using <code>JSON.stringify</code>.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> JXM = {
+  component: <span class="hljs-string">&quot;div&quot;</span>,
+  children: { <span class="hljs-string">&quot;some-non-string&quot;</span>: <span class="hljs-string">&quot;data&quot;</span> },
+  ___stringifyChildren: <span class="hljs-literal">true</span>
+}; <span class="hljs-comment">// =&gt; { component:&apos;div&apos;, children: &apos;{&quot;some-non-string&quot;:&quot;data&quot;}&apos; };</span>
+</code></pre>
+<h3>___toStringChildren</h3>
+<p>The <code>___toStringChildren</code> format property converts the <code>JXM.children</code> property to a string by calling <code>toString()</code>.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> JXM = {
+  component: <span class="hljs-string">&quot;div&quot;</span>,
+  children: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>],
+  ___toStringChildren: <span class="hljs-literal">true</span>
+}; <span class="hljs-comment">// =&gt; { component:&apos;div&apos;, children: &apos;1,2,3,4&apos; };</span>
+</code></pre>
+<h3>___toNumeral</h3>
+<p>The <code>___toNumeral</code> format property converts the <code>JXM.children</code> property to a string by calling <code>numeral(JXM.children).format(JXM.___toNumeral)</code>. See numeral formatting options on <a href="http://numeraljs.com/">numeraljs.com</a>.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> JXM = {
+  component: <span class="hljs-string">&quot;div&quot;</span>,
+  children: <span class="hljs-number">15204.39084</span>,
+  ___toNumeral: <span class="hljs-string">&quot;0,0.00&quot;</span>
+}; <span class="hljs-comment">// =&gt; { component:&apos;div&apos;, children: &apos;15,204.39&apos; };</span>
+</code></pre>
+<h3>___JSDatetoLuxonString</h3>
+<p>The <code>___JSDatetoLuxonString</code> format property converts the <code>JXM.children</code> property to a string by calling <code>Luxon.DateTime.fromJSDate(JXM.children).toFormat(JXM.___JSDatetoLuxonString)</code>. See luxon formatting options from the <a href="https://moment.github.io/luxon/docs/manual/formatting.html">luxon formatting docs</a>.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> JXM = {
+  component: <span class="hljs-string">&quot;div&quot;</span>,
+  children: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&quot;2020-03-03&quot;</span>),
+  ___JSDatetoLuxonString: <span class="hljs-string">&quot;LLL d, yyyy&quot;</span>
+}; <span class="hljs-comment">// =&gt; { component:&apos;div&apos;, children: &apos;Mar 3, 2020&apos; };</span>
+</code></pre>
+<h3>___ISOtoLuxonString &amp; ___FromLuxonTimeZone</h3>
+<p>The <code>___ISOtoLuxonString</code> format property converts the <code>JXM.children</code> property to a string by calling <code>Luxon.DateTime.fromISO(JXM.children).toFormat(JXM.___ISOtoLuxonString)</code>. You can set the timezone of the ISO string by using the <code>___FromLuxonTimeZone</code> format Prop. See luxon formatting options from the <a href="https://moment.github.io/luxon/docs/manual/formatting.html">luxon formatting docs</a>.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> JXM_NY = {
+  component: <span class="hljs-string">&quot;div&quot;</span>,
+  children: <span class="hljs-string">&quot;2020-03-03T14:30:00.000Z&quot;</span>,
+  ___ISOtoLuxonString: <span class="hljs-string">&quot;ff&quot;</span>,
+  ___FromLuxonTimeZone: <span class="hljs-string">&quot;America/New_York&quot;</span>
+}; <span class="hljs-comment">// =&gt; { component:&apos;div&apos;, children: &apos;Mar 3, 2020, 9:30 AM&apos; };</span>
+
+<span class="hljs-keyword">const</span> JXM_LA = {
+  component: <span class="hljs-string">&quot;div&quot;</span>,
+  children: <span class="hljs-string">&quot;2020-03-03T14:30:00.000Z&quot;</span>,
+  ___ISOtoLuxonString: <span class="hljs-string">&quot;ff&quot;</span>,
+  ___FromLuxonTimeZone: <span class="hljs-string">&quot;America/Los_Angeles&quot;</span>
+}; <span class="hljs-comment">// =&gt; { component:&apos;div&apos;, children: &apos;Mar 3, 2020, 6:30 AM&apos; };</span>
+</code></pre>
+<h3>Example Format Props</h3>
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/5ypaotu6/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/5ypaotu6/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+<h2>Utility Props</h2>
+<p>_(<em>__template, passprops, debug)</em></p>
+<h2>Display Props</h2>
+<p><em>(comparisonprops, comparisonorprops)</em></p>
 <h5>comparisionprops</h5>
 <p>Comparison props are used to contionally show components if they&#x2019;re truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If <code>comparisonorprops:true</code> then only one condition needs to be true in order to render the component</p>
 <pre><code class="hljs language-javascript"><span class="hljs-comment">//and conditions</span>
-jsonx={
-  <span class="hljs-attr">comparisonprops</span>: [{
-    <span class="hljs-attr">left</span>: [<span class="hljs-string">&apos;bigNum&apos;</span>,],
-    <span class="hljs-attr">operation</span>:<span class="hljs-string">&apos;lte&apos;</span>,
-    <span class="hljs-attr">right</span>:[<span class="hljs-string">&apos;smallNum&apos;</span>,],
-  },{
-    <span class="hljs-attr">left</span>: [<span class="hljs-string">&apos;smallNum&apos;</span>,],
-    <span class="hljs-attr">operation</span>:<span class="hljs-string">&apos;&lt;=&apos;</span>,
-    <span class="hljs-attr">right</span>:[<span class="hljs-string">&apos;bigNum&apos;</span>,],
-  }],
-}
+jsonx = {
+  <span class="hljs-attr">comparisonprops</span>: [
+    {
+      <span class="hljs-attr">left</span>: [<span class="hljs-string">&quot;bigNum&quot;</span>],
+      <span class="hljs-attr">operation</span>: <span class="hljs-string">&quot;lte&quot;</span>,
+      <span class="hljs-attr">right</span>: [<span class="hljs-string">&quot;smallNum&quot;</span>]
+    },
+    {
+      <span class="hljs-attr">left</span>: [<span class="hljs-string">&quot;smallNum&quot;</span>],
+      <span class="hljs-attr">operation</span>: <span class="hljs-string">&quot;&lt;=&quot;</span>,
+      <span class="hljs-attr">right</span>: [<span class="hljs-string">&quot;bigNum&quot;</span>]
+    }
+  ]
+};
 <span class="hljs-comment">//or conditions</span>
-jsonx={
-  <span class="hljs-attr">comparisonorprops</span>:<span class="hljs-literal">true</span>,
-  <span class="hljs-attr">comparisonprops</span>: [{
-    <span class="hljs-attr">left</span>: [<span class="hljs-string">&apos;truthy&apos;</span>,],
-    <span class="hljs-attr">operation</span>:<span class="hljs-string">&apos;eq&apos;</span>,
-    <span class="hljs-attr">right</span>:[<span class="hljs-string">&apos;falsey&apos;</span>,],
-  },{
-    <span class="hljs-attr">left</span>: [<span class="hljs-string">&apos;smallNum&apos;</span>,],
-    <span class="hljs-attr">operation</span>:<span class="hljs-string">&apos;eq&apos;</span>,
-    <span class="hljs-attr">right</span>:[<span class="hljs-string">&apos;smallNum&apos;</span>,],
-  }],
-}
+jsonx = {
+  <span class="hljs-attr">comparisonorprops</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">comparisonprops</span>: [
+    {
+      <span class="hljs-attr">left</span>: [<span class="hljs-string">&quot;truthy&quot;</span>],
+      <span class="hljs-attr">operation</span>: <span class="hljs-string">&quot;eq&quot;</span>,
+      <span class="hljs-attr">right</span>: [<span class="hljs-string">&quot;falsey&quot;</span>]
+    },
+    {
+      <span class="hljs-attr">left</span>: [<span class="hljs-string">&quot;smallNum&quot;</span>],
+      <span class="hljs-attr">operation</span>: <span class="hljs-string">&quot;eq&quot;</span>,
+      <span class="hljs-attr">right</span>: [<span class="hljs-string">&quot;smallNum&quot;</span>]
+    }
+  ]
+};
 
 <span class="hljs-comment">// All comparison operations</span>
 <span class="hljs-keyword">switch</span> (opscompares.operation) {
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;eq&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;==&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;eq&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;==&quot;</span>:
     <span class="hljs-keyword">return</span> opscompares.left == opscompares.right;
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;dneq&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;!=&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;!&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;dneq&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;!=&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;!&quot;</span>:
     <span class="hljs-keyword">return</span> opscompares.left !== opscompares.right;
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;dnseq&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;!==&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;dnseq&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;!==&quot;</span>:
     <span class="hljs-keyword">return</span> opscompares.left !== opscompares.right;
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;seq&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;===&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;seq&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;===&quot;</span>:
     <span class="hljs-keyword">return</span> opscompares.left === opscompares.right;
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;lt&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;&lt;&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;lt&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;&lt;&quot;</span>:
     <span class="hljs-keyword">return</span> opscompares.left &lt; opscompares.right;
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;lte&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;&lt;=&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;lte&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;&lt;=&quot;</span>:
     <span class="hljs-keyword">return</span> opscompares.left &lt;= opscompares.right;
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;gt&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;&gt;&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;gt&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;&gt;&quot;</span>:
     <span class="hljs-keyword">return</span> opscompares.left &gt; opscompares.right;
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;gte&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;&gt;=&apos;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;gte&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;&gt;=&quot;</span>:
     <span class="hljs-keyword">return</span> opscompares.left &gt;= opscompares.right;
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;dne&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;undefined&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;null&apos;</span>:
-    <span class="hljs-keyword">return</span> opscompares.left === <span class="hljs-literal">undefined</span> || opscompares.left === <span class="hljs-literal">null</span>; 
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;!null&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;!undefined&apos;</span>:
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;exists&apos;</span>:
-  <span class="hljs-keyword">default</span>:<span class="hljs-comment">//&apos;exists&apos;</span>
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;dne&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;undefined&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;null&quot;</span>:
+    <span class="hljs-keyword">return</span> opscompares.left === <span class="hljs-literal">undefined</span> || opscompares.left === <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;!null&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;!undefined&quot;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;exists&quot;</span>:
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-comment">//&apos;exists&apos;</span>
     <span class="hljs-keyword">return</span> opscompares.left !== <span class="hljs-literal">undefined</span> &amp;&amp; opscompares.left !== <span class="hljs-literal">null</span>;
 }
 </code></pre>
