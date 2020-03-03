@@ -58,6 +58,36 @@ JSONX is not great for:
   </tr>
 </table>
 
+## Customizing JSONX
+
+The JSONX library has a couple of customization options. The library can be customized by setting the configuration on the `this` property of JSONX methods. The configuration options are:
+```typescript
+type JSONXConfiguration = {
+  debug: boolean = false; // used to debug component rendering errors, and will send exceptions to the logError function
+  logError: (...args: any[]) => any = console.error; // default(console.error) by default will log errors to console.error but you can define any custom error logging function
+  returnJSON: boolean = false; // used to return a JSON object instead of React Components
+  disableRenderIndexKey: boolean = true; // used to disable auto assign props.key
+  boundedComponents: jsonx[]; // array of components to bind "this" to
+  componentLibraries: { 
+    [index: libraryName as string]: {
+      [index: componentName as string]: ReactComponentLike;
+    } 
+  }; // object of custom react components in component library
+  reactComponents: { [index: componentName as string]: ReactComponentLike } // custom react components
+}
+
+
+//e.g
+
+jsonx.getReactElementFromJSONX.call({
+  debug:true, reactComponents:{ReactModal}, componentLibraries:{ ReactBootstrap, Antd} //custom options bound to 'this'
+  }, 
+  {
+    component:'ReactBootstrap.Container',children:'hello world'
+  });
+```
+ 
+
 
 ---
 ### JSONX Manual
