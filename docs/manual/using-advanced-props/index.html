@@ -314,38 +314,44 @@ main();
 <p>_(<em>__template, passprops, debug)</em></p>
 <h2>Display Props</h2>
 <p><em>(comparisonprops, comparisonorprops)</em></p>
-<h5>comparisionprops</h5>
-<p>Comparison props are used to contionally show components if they&#x2019;re truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If <code>comparisonorprops:true</code> then only one condition needs to be true in order to render the component</p>
+<p>Display Props are properties that are used to determine if a JXM should be rendered. Display props enable conditional logic based of the value of props to determine if an element should be shown.</p>
+<h3>comparisionprops and comparisonorprops</h3>
+<p>The display prop <code>comparisionprops</code> is used to contionally show elements if all of the comparisions are truthy. <code>comparisonprops</code> works by comparing an array of left and right side values, if they are all true, the component is rendered. If <code>JXM.comparisonorprops</code> is set to true then only one condition needs to be true in order to render the component.</p>
+<p>The comparison values can either be literal values or the value can be a reference to any <code>JXM.props</code> value. References to values in <code>JXM.props</code> are accessed in the same way you would use traverse props, where the prop being traversed is <code>JXM.props</code>.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-comment">//and conditions</span>
 jsonx = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">&quot;div&quot;</span>,
+  <span class="hljs-attr">children</span>: <span class="hljs-string">&quot;evals to false, so it will not render&quot;</span>,
   <span class="hljs-attr">comparisonprops</span>: [
     {
       <span class="hljs-attr">left</span>: [<span class="hljs-string">&quot;bigNum&quot;</span>],
       <span class="hljs-attr">operation</span>: <span class="hljs-string">&quot;lte&quot;</span>,
       <span class="hljs-attr">right</span>: [<span class="hljs-string">&quot;smallNum&quot;</span>]
-    },
+    }, <span class="hljs-comment">// false (10000 &lt;= 100)</span>
     {
       <span class="hljs-attr">left</span>: [<span class="hljs-string">&quot;smallNum&quot;</span>],
       <span class="hljs-attr">operation</span>: <span class="hljs-string">&quot;&lt;=&quot;</span>,
       <span class="hljs-attr">right</span>: [<span class="hljs-string">&quot;bigNum&quot;</span>]
-    }
-  ]
+    } <span class="hljs-comment">// true (100 &lt;= 10000)</span>
+  ] <span class="hljs-comment">// false and true === false, so it won&apos;t render</span>
 };
 <span class="hljs-comment">//or conditions</span>
 jsonx = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">&quot;div&quot;</span>,
+  <span class="hljs-attr">children</span>: <span class="hljs-string">&quot;evals to true, so this will render&quot;</span>,
   <span class="hljs-attr">comparisonorprops</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">comparisonprops</span>: [
     {
       <span class="hljs-attr">left</span>: [<span class="hljs-string">&quot;truthy&quot;</span>],
       <span class="hljs-attr">operation</span>: <span class="hljs-string">&quot;eq&quot;</span>,
       <span class="hljs-attr">right</span>: [<span class="hljs-string">&quot;falsey&quot;</span>]
-    },
+    }, <span class="hljs-comment">// = false</span>
     {
       <span class="hljs-attr">left</span>: [<span class="hljs-string">&quot;smallNum&quot;</span>],
       <span class="hljs-attr">operation</span>: <span class="hljs-string">&quot;eq&quot;</span>,
       <span class="hljs-attr">right</span>: [<span class="hljs-string">&quot;smallNum&quot;</span>]
-    }
-  ]
+    } <span class="hljs-comment">// true</span>
+  ] <span class="hljs-comment">// false or true === true, so render element</span>
 };
 
 <span class="hljs-comment">// All comparison operations</span>
@@ -387,6 +393,15 @@ jsonx = {
     <span class="hljs-keyword">return</span> opscompares.left !== <span class="hljs-literal">undefined</span> &amp;&amp; opscompares.left !== <span class="hljs-literal">null</span>;
 }
 </code></pre>
+<h3>Example Display Props</h3>
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/jn7L54x1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/jn7L54x1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
 <hr>
 <h3>JSONX Manual</h3>
 <ul>
