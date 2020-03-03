@@ -25,6 +25,7 @@
 5. [Advanced Props: Evaluation Props Example (\_\_dangerouslyEvalProps)](https://jsfiddle.net/yawetse/n704z65x/7/)
 6. [Advanced Props: Evaluation Props Example (\_\_functionProps - legacy)](https://jsfiddle.net/yawetse/34ngdzyh/3/)
 7. [Advanced Props: Format Props Example](https://jsfiddle.net/yawetse/5ypaotu6/3/)
+8. [Advanced Props: Display Props Example](https://jsfiddle.net/yawetse/jn7L54x1/4/)
 
 ---
 

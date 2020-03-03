@@ -372,41 +372,49 @@ const JXM_LA = {
 
 _(comparisonprops, comparisonorprops)_
 
-##### comparisionprops
+Display Props are properties that are used to determine if a JXM should be rendered. Display props enable conditional logic based of the value of props to determine if an element should be shown.
 
-Comparison props are used to contionally show components if they're truthy. They compare an array of left and right side values, if they are all true, the component is rendered. If `comparisonorprops:true` then only one condition needs to be true in order to render the component
+### comparisionprops and comparisonorprops
+
+The display prop `comparisionprops` is used to contionally show elements if all of the comparisions are truthy. `comparisonprops` works by comparing an array of left and right side values, if they are all true, the component is rendered. If `JXM.comparisonorprops` is set to true then only one condition needs to be true in order to render the component.
+
+The comparison values can either be literal values or the value can be a reference to any `JXM.props` value. References to values in `JXM.props` are accessed in the same way you would use traverse props, where the prop being traversed is `JXM.props`.
 
 ```javascript
 //and conditions
 jsonx = {
+  component: "div",
+  children: "evals to false, so it will not render",
   comparisonprops: [
     {
       left: ["bigNum"],
       operation: "lte",
       right: ["smallNum"]
-    },
+    }, // false (10000 <= 100)
     {
       left: ["smallNum"],
       operation: "<=",
       right: ["bigNum"]
-    }
-  ]
+    } // true (100 <= 10000)
+  ] // false and true === false, so it won't render
 };
 //or conditions
 jsonx = {
+  component: "div",
+  children: "evals to true, so this will render",
   comparisonorprops: true,
   comparisonprops: [
     {
       left: ["truthy"],
       operation: "eq",
       right: ["falsey"]
-    },
+    }, // = false
     {
       left: ["smallNum"],
       operation: "eq",
       right: ["smallNum"]
-    }
-  ]
+    } // true
+  ] // false or true === true, so render element
 };
 
 // All comparison operations
@@ -448,6 +456,17 @@ switch (opscompares.operation) {
     return opscompares.left !== undefined && opscompares.left !== null;
 }
 ```
+
+### Example Display Props
+
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/jn7L54x1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/jn7L54x1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
 
 ---
 
