@@ -1,0 +1,150 @@
+<html>
+
+<head>
+    <script src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/jsonx/dist/index.umd.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="main"></div>
+    <script>
+        const JXM = {
+            component: 'div',
+            debug: true,
+            props: {
+                key: 0,
+            },
+            children: [{
+                    component: 'h3',
+                    children: 'comparisonprops (10 <= 100) and (20 <= 200) = will render',
+                },
+                {
+                    component: 'div',
+                    children: 'comparisonprops (10 <= 100) and (20 <= 200)',
+                    comparisonprops: [{
+                            left: 10,
+                            operation: "lte",
+                            right: 100
+                        }, // true (10 <= 100)
+                        {
+                            left: 20,
+                            operation: "<=",
+                            right: 200
+                        } // true (20 <= 200)
+                    ],
+                },
+                {
+                    component: 'h3',
+                    children: 'comparisonprops (10 <= 100) and (20 >= 200) = will NOT render',
+                },
+                {
+                    component: 'div',
+                    children: 'comparisonprops (10 <= 100) and (20 >= 200)',
+                    comparisonprops: [{
+                            left: 10,
+                            operation: "lte",
+                            right: 100
+                        }, // true (10 <= 100)
+                        {
+                            left: 20,
+                            operation: ">=",
+                            right: 200
+                        } // true (20 <= 200)
+                    ],
+                },
+                {
+                    component: 'div',
+                    props: {
+                        style: {
+                            color: 'red'
+                        }
+                    },
+                    children: 'comparison failed'
+                },
+                {
+                    component: 'h3',
+                    children: 'comparisonprops (user.loggedIn) = will render',
+                },
+                {
+                    component: 'div',
+                    props: {
+                        user: {
+                            loggedIn: true,
+                        }
+                    },
+                    children: 'comparisonprops (user.loggedIn) = will render - this is left side only',
+                    comparisonprops: [{
+                            left: ['user', 'loggedIn'],
+                            // operation: "lte",
+                            // right: 100
+                        }, // true 
+                    ],
+                },
+                {
+                    component: 'div',
+                    props: {
+                        user: {
+                            loggedIn: true,
+                        }
+                    },
+                    children: 'comparisonprops (user.loggedIn != false) = will render',
+                    comparisonprops: [{
+                            left: ['user', 'loggedIn'],
+                            operation: "!=",
+                            right: false
+                        }, // true 
+                    ],
+                },
+                {
+                    component: 'h3',
+                    children: 'comparisonprops (user.first_name(john) != user.last_name(smith)) = will render',
+                },
+                {
+                    component: 'div',
+                    props: {
+                        user: {
+                            first_name: 'john',
+                            last_name: 'smith',
+                            loggedIn: true,
+                        }
+                    },
+                    children: 'comparisonprops (user.first_name(john) != user.last_name(smith)) = will render',
+                    comparisonprops: [{
+                            left: ['user', 'first_name'],
+                            operation: "!=",
+                            right: ['user', 'last_name'],
+                        }, // true 
+                    ],
+                },
+                {
+                    component: 'h3',
+                    children: '*comparisonorprops* comparisonprops (10 <= 100) or (20 >= 200) = will render',
+                },
+                {
+                    component: 'div',
+                    children: '*comparisonorprops* comparisonprops (10 <= 100) or (20 >= 200) = will render',
+                    comparisonorprops: true,
+                    comparisonprops: [{
+                            left: 10,
+                            operation: "lte",
+                            right: 100
+                        }, // true (10 <= 100)
+                        {
+                            left: 20,
+                            operation: ">=",
+                            right: 200
+                        } // false (20 >= 200)
+                    ],
+                },
+            ],
+        };
+
+        jsonx.jsonxRender({
+            jsonx: JXM,
+            querySelector: '#main',
+        });
+    </script>
+</body>
+
+</html>

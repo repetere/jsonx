@@ -1,0 +1,79 @@
+<html>
+
+<head>
+  <script src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" type="text/javascript"></script>
+  <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" type="text/javascript"></script>
+  <script src="../../../dist/index.umd.js" type="text/javascript"></script>
+  <script src="https://unpkg.com/jsonx/dist/index.umd.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <div id="main"></div>
+  <div id="someDiv"></div>
+  <script>
+    const JXM = {
+      component: 'div',
+      props: {
+          key: 0,
+      },
+      children: [{
+            component: 'h3',
+            children: 'debug',
+        },
+        {
+            component: 'div',
+            children: 'Debug JXM Data',
+            __dangerouslyEvalAllProps:`(
+              ()=>({ style:{ color:"blue" } })
+            )`,
+            debug:true,
+        },
+        {
+            component: 'h3',
+            children: 'passprops',
+        },
+        {
+          component: 'div',
+          props:{
+            type:'radio',
+            style:{
+              background:'red'
+            }
+          },
+          passprops:true,
+          children:[
+            {
+              component:'input',
+              debug:true,
+            }
+          ]
+        },
+        {
+            component: 'h3',
+            children: '___template',
+        },
+        {
+          component: 'div',
+          children:[
+            {
+              component:'div',
+              children:'template test',
+            },
+            {
+              component:'div',
+              ___template:'https://my-json-server.typicode.com/repetere/mock-jsonx-jxm-template/jsonx'
+            }
+          ]
+        },
+       
+      ]
+    };
+
+    jsonx.jsonxRender({
+      jsonx: JXM,
+      querySelector: '#main',
+    });
+  </script>
+</body>
+
+</html>

@@ -104,14 +104,19 @@ export function getChildrenProps(options = {}) {
 }
 export function fetchJSONSync(path, options) {
     try {
+        const config = {
+            method: "GET",
+            headers: [],
+            ...options
+        };
         const request = new XMLHttpRequest();
-        request.open(options.method || "GET", path, false); // `false` makes the request synchronous
-        if (options.headers) {
-            Object.keys(options.headers).forEach(header => {
-                request.setRequestHeader(header, options.headers[header]);
+        request.open(config && config.method || "GET", path, false); // `false` makes the request synchronous
+        if (config.headers) {
+            Object.keys(config.headers).forEach(header => {
+                request.setRequestHeader(header, config.headers[header]);
             });
         }
-        request.send(options.body ? JSON.stringify(options.body) : undefined);
+        request.send(config.body ? JSON.stringify(config.body) : undefined);
         if (request.status !== 200) {
             throw new Error(request.responseText);
         }

@@ -12964,6 +12964,11 @@
 	        return cprops;
 	    }, {});
 	}
+	/**
+	 * Used to create components from jsonx as props
+	 * @param this
+	 * @param options
+	 */
 	function getReactComponents(options) {
 	    const { jsonx, resources } = options;
 	    const functionComponents = !jsonx.__dangerouslyInsertFunctionComponents
@@ -12971,10 +12976,12 @@
 	        : Object.keys(jsonx.__dangerouslyInsertFunctionComponents).reduce((cprops, cpropName) => {
 	            let componentVal;
 	            try {
-	                const args = jsonx.__dangerouslyInsertFunctionComponents[cpropName];
-	                args.options = Object.assign({}, args.options, { resources });
-	                // eslint-disable-next-line
-	                componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+	                const args = jsonx.__dangerouslyInsertFunctionComponents && jsonx.__dangerouslyInsertFunctionComponents[cpropName];
+	                if (args) {
+	                    args.options = Object.assign({}, args.options, { resources });
+	                    // eslint-disable-next-line
+	                    componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+	                }
 	            }
 	            catch (e) {
 	                if (this.debug || jsonx.debug)
@@ -12989,10 +12996,12 @@
 	        : Object.keys(jsonx.__dangerouslyInsertClassComponents).reduce((cprops, cpropName) => {
 	            let componentVal;
 	            try {
-	                const args = jsonx.__dangerouslyInsertClassComponents[cpropName];
-	                args.options = Object.assign({}, args.options, { resources });
-	                // eslint-disable-next-line
-	                componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.options);
+	                const args = jsonx.__dangerouslyInsertClassComponents && jsonx.__dangerouslyInsertClassComponents[cpropName];
+	                if (args) {
+	                    args.options = Object.assign({}, args.options, { resources });
+	                    // eslint-disable-next-line
+	                    componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.options);
+	                }
 	            }
 	            catch (e) {
 	                if (this.debug || jsonx.debug)
@@ -13021,7 +13030,7 @@
 	            let componentVal;
 	            try {
 	                componentVal = getComponentFromMap({
-	                    jsonx: jsonx.__dangerouslyInsertJSONXComponents[cpropName],
+	                    jsonx: jsonx.__dangerouslyInsertJSONXComponents && jsonx.__dangerouslyInsertJSONXComponents[cpropName],
 	                    reactComponents: customComponents,
 	                    componentLibraries: customLibraries
 	                });
@@ -13035,13 +13044,13 @@
 	            return cprops;
 	        }, {});
 	    }
-	    else {
+	    else if (jsonx.__dangerouslyInsertReactComponents && jsonx.__dangerouslyInsertReactComponents.length) {
 	        return Object.keys(jsonx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) => {
 	            let componentVal;
 	            try {
 	                componentVal = getComponentFromMap({
 	                    jsonx: {
-	                        component: jsonx.__dangerouslyInsertReactComponents[cpropName],
+	                        component: jsonx.__dangerouslyInsertReactComponents && jsonx.__dangerouslyInsertReactComponents[cpropName],
 	                        props: jsonx.__dangerouslyInsertComponentProps
 	                            ? jsonx.__dangerouslyInsertComponentProps[cpropName]
 	                            : {}
@@ -21614,14 +21623,19 @@
 	}
 	function fetchJSONSync(path, options) {
 	    try {
+	        const config = {
+	            method: "GET",
+	            headers: [],
+	            ...options
+	        };
 	        const request = new XMLHttpRequest();
-	        request.open(options.method || "GET", path, false); // `false` makes the request synchronous
-	        if (options.headers) {
-	            Object.keys(options.headers).forEach(header => {
-	                request.setRequestHeader(header, options.headers[header]);
+	        request.open(config && config.method || "GET", path, false); // `false` makes the request synchronous
+	        if (config.headers) {
+	            Object.keys(config.headers).forEach(header => {
+	                request.setRequestHeader(header, config.headers[header]);
 	            });
 	        }
-	        request.send(options.body ? JSON.stringify(options.body) : undefined);
+	        request.send(config.body ? JSON.stringify(config.body) : undefined);
 	        if (request.status !== 200) {
 	            throw new Error(request.responseText);
 	        }

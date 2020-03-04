@@ -24,17 +24,48 @@ JSONX is created so you can create react elements and components with only JSON.
 - formatting the output of props
 - inserting templates into your JXM Objects
 
-There are six kinds of Advanced Props:
+There are five kinds of Advanced Props (Traverse, Evaluation, Format, Display and Utility props):
 
-1.  Traverse Props - used to traverse data passed into elements or other dynamic/stateful data and assign values as props
-2.  Evaluation Props - used to create function properties or component properties and assign values as props
-3.  Format Props - used to format children props for example converting number formats or formatting dates
-4.  Utility Props - used to preform functional tasks like inserting external JXM references (template support), or sharing props across components
-5.  Display Props - used to decide whether or not to render elements
+-  [1. Traverse Props](#traverse-props) - used to traverse data passed into elements or other dynamic/stateful data and assign values as props
+    - [1.1 resourceprops/asyncprops](#traverse-asyncprops) - assign dynamic data to props
+    - [1.2 windowprops](#traverse-windowprops) - assign window variables to props
+    - [1.3 thisstate](#traverse-thisstate) - assign stateful data to props
+    - [1.4 thiscontext](#traverse-thiscontext) - assign data bound to `this` to props
+    - [1.5 thisprops](#traverse-thisprops) - re-assign prop values
+-  [2. Evaluation Props](#evaluation-props) - used to create function properties or component properties and assign values as props
+    - [2.1 \_\_dangerouslyEvalProps](#evaluation-dangerouslyevalprops) - evaluate strings as props
+    - [2.2 \_\_dangerouslyBindEvalProps](#evaluation-dangerouslybindevalprops) - evaluate strings to generate props that are functions bound to `this`
+    - [2.3 \_\_dangerouslyEvalAllProps](#evaluation-dangerouslyevalallprops) - evaluate all props from a string
+    - [2.4 \_\_dangerouslyInsertFunctionComponents](#evaluation-dangerouslyinsertfunctioncomponents) - use JSONX to generate a function component as a prop
+    - [2.5 \_\_dangerouslyInsertClassComponents](#evaluation-dangerouslyinsertclasscomponents) - use JSONX to generate a class component as a prop
+    - [2.6 \_\_dangerouslyInsertComponents](#evaluation-dangerouslyinsertcomponents) - assign React Elements to props using JSONX
+    - [2.7 \_\_dangerouslyInsertReactComponents](#evaluation-dangerouslyinsertreactcomponents) - assign React Elements to props
+    - [2.8 \_\_dangerouslyInsertJSONXComponents](#evaluation-dangerouslyinsertjsonxcomponents) - assign React Elements to props
+    - [2.9 \_children](#evaluation-children) - dynamically override the `children` prop
+    - [2.10 \_\_functionProps (legacy)](#evaluation-functionprops) - the old way to assign functions to props
+    - [2.11 \_\_windowComponents ](#evaluation-windowcomponents ) - assign window components to props
+    - [2.12 \_\_windowComponentProps](#evaluation-windowcomponentprops) - assign props of window components assign to props
+    - [2.13 \_\_spreadComponent](#evaluation-spreadcomponent) - component mapped over `__spread` data
+    - [2.14 \_\_spread](#evaluation-spread) - data used to generate props from an array (e.g. if you have a list)
+-  [3. Format Props](#format-props) - used to format children props for example converting number formats or formatting dates
+    - [3.1 \_\_\_stringifyChildren](#format-stringifychildren) - convert `children` prop to string using JSON.stringify
+    - [3.2 \_\_\_toStringChildren](#format-tostringchildren) - convert `children` prop to string using .toString()
+    - [3.3 \_\_\_toNumeral](#format-tonumeral) - format number values as strings assigned to `children` prop using Numeral JS
+    - [3.4 \_\_\_JSDatetoLuxonString](#format-jsdatetoluxonstring) - format date values as strings assigned to `children` prop using Luxon
+    - [3.5 \_\_\_ISOtoLuxonString](#format-isotoluxonstring) - format iso date values as strings assigned to `children` prop using Luxon
+    - [3.6 \_\_\_FromLuxonTimeZone](#format-fromluxontimezone) - format date values as strings assigned to `children` prop using Luxon
+-  [4. Utility Props](#utility-props) - used to preform functional tasks like inserting external JXM references (template support), or sharing props across components
+    - [4.1 \_\_template](#utility-template) - insert jxm objects from external files
+    - [4.2 passprops](#utility-passprops) - pass props from parent to children elements
+    - [4.3 debug](#utility-debug) - output computed advanced props and debugging information to the console
+-  [5. Display Props](#display-props) - used to decide whether or not to render elements
+    - [5.1 comparisonprops](#display-comparisonprops) - conditionally render elements based on prop values
+    - [5.2 comparisonorprops](#display-comparisonorprops) - conditionally render elements flag to use 'or' logic instead of 'and' logic
 
-## Traverse Props
 
-_(thisprops, thisstate, thiscontext, windowprops, resourceprops/asyncprops)_
+## <a name="traverse-props">1. Traverse Props </a>
+
+_([resourceprops/asyncprops](#traverse-asyncprops), [windowprops](#traverse-windowprops), [thisprops](#traverse-thisprops), [thisstate](#traverse-thisstate), [thiscontext](#traverse-thiscontext))_
 
 Traversed Props are used to assign props values from different objects. For example if you wanted to set the alt text of an image tag from the url of the window, because JXM objects are JSON it's impossible to get the dynamic value `window.location.href` and assign it to the alt prop.
 
@@ -54,12 +85,12 @@ This is where traverse props are useful, for accessing `window.location.href` yo
 
 Traversing the `window` object is possibly by using the `windowprops` traverse prop. The other traverse props are:
 
-- thisprops - traverse properties on `this.props`
-- thisstate - traverse properties on `this.state`
-- thiscontext - traverse properties on `this`
-- windowprops - traverse properties on `window`
-- resourceprops - traverse asynchronous properties passed to components when using JSONX programmatically
-- asyncprops - an alias for `resourceprops`
+- <a name="traverse-resourceprops">resourceprops</a> - traverse asynchronous properties passed to components when using JSONX programmatically
+- <a name="traverse-asyncprops">asyncprops</a> - an alias for `resourceprops`
+- <a name="traverse-windowprops">windowprops</a> - traverse properties on `window`
+- <a name="traverse-thisprops">thisprops</a> - traverse properties on `this.props`
+- <a name="traverse-thisstate">thisstate</a> - traverse properties on `this.state`
+- <a name="traverse-thiscontext">thiscontext</a> - traverse properties on `this`
 
 To properly reference `window.location.href` the following JXM Object would work
 
@@ -177,13 +208,13 @@ main();
 
 ---
 
-## Evaluation Props
+## <a name="evaluation-props">2. Evaluation Props </a>
 
-_(\_children, **dangerouslyEvalProps, **dangerouslyBindEvalProps, **dangerouslyEvalAllProps, **dangerouslyInsertComponents, **dangerouslyInsertReactComponents, **dangerouslyInsertJSONXComponents, **dangerouslyInsertFunctionComponents, **dangerouslyInsertClassComponents, **functionProps, **windowComponents , **windowComponentProps, **spreadComponent, \_\_spread)_
+_([\_\_dangerouslyEvalProps](#evaluation-dangerouslyevalprops), [\_\_dangerouslyBindEvalProps](#evaluation-dangerouslybindevalprops), [\_\_dangerouslyEvalAllProps](#evaluation-dangerouslyevalallprops), [\_\_dangerouslyInsertFunctionComponents](#evaluation-dangerouslyinsertfunctioncomponents), [\_\_dangerouslyInsertClassComponents](#evaluation-dangerouslyinsertclasscomponents), [\_\_dangerouslyInsertComponents](#evaluation-dangerouslyinsertcomponents), [\_\_dangerouslyInsertReactComponents](#evaluation-dangerouslyinsertreactcomponents), [\_\_dangerouslyInsertJSONXComponents](#evaluation-dangerouslyinsertjsonxcomponents), [\_children](#evaluation-children), [\_\_functionProps (legacy)](#evaluation-functionprops), [\_\_windowComponents ](#evaluation-windowcomponents), [\_\_windowComponentProps](#evaluation-windowcomponentprops), [\_\_spreadComponent](#evaluation-spreadcomponent), [\_\_spread](#evaluation-spread))_
 
 Evaluation Props are properties that are computed and resolve values onto the `JXM.props` property. They are helpful because in order to interact with dyanamic data and stateful information, they provide a way to describe declaratively how to assign properties onto the `JXM.props` property.
 
-### \_children
+### <a name="evaluation-children">\_children</a>
 
 The `_children` evaluation property is used to override the value of `JXM.children` and is usually only used when you want to dynamically set the value of the `children` property from an advanced property.
 
@@ -198,12 +229,12 @@ const JXMWindowLocation = {
 // computes: { component:'p', children:'http://example.com', }
 ```
 
-### **dangerouslyEvalProps, **dangerouslyBindEvalProps and \_\_dangerouslyEvalAllProps
+### <a name="evaluation-dangerouslyevalprops">\_\_dangerouslyEvalProps</a>, <a name="evaluation-dangerouslybindevalprops">\_\_dangerouslyBindEvalProps</a> ,and <a name="evaluation-dangerouslyevalallprops">\_\_dangerouslyEvalAllProps</a>
 
 The evaluation properties `__dangerouslyEvalProps`, `__dangerouslyBindEvalProps` and `__dangerouslyEvalAllProps` are properties used to evaluate strings and set the value the property value on a JXM Object.
 
 `__dangerouslyEvalAllProps` will evaluate a string as a function and assign the returned value of the function to the `props` property of a JXM object.
-_Note: If passing the value as a string, remember this value has to be an expression, so either a `(({jsonx})=>{})` or `(function({jsonx}){})`. There is one parameter passed into the function, it's the current value of the JXM Object on the jsonx property_
+_Note: If passing the value as a string, remember this value has to be an expression, so either a `(({jsonx})=>({}))` or `(function({jsonx}){})`. There is one parameter passed into the function, it's the current value of the JXM Object on the jsonx property_
 
 `__dangerouslyEvalProps` is used to evaluate the string value and assign it to the JXM.props value, the string must be a valid javascript expression _(Tip, if evaluting an object remember to wrap it ({some:'obj', }) )_. If `__dangerouslyEvalProps` is a function, it will assign the value of the function called with one parameter `{jsonx}`.
 
@@ -222,7 +253,15 @@ The reason why these functions exist are because there are instances where JSONX
   </tr>
 </table>
 
-### \_\_functionProps (legacy)
+### <a name="evaluation-spreadcomponent">\_\_spreadComponent</a> and <a name="evaluation-spread">\_\_spread</a>
+
+### <a name="evaluation-dangerouslyinsertfunctioncomponents">\_\_dangerouslyInsertFunctionComponents</a> and <a name="evaluation-dangerouslyinsertclasscomponents">\_\_dangerouslyInsertClassComponents</a>
+
+### <a name="evaluation-dangerouslyinsertcomponents">\_\_dangerouslyInsertComponents</a>, <a name="evaluation-dangerouslyinsertreactcomponents">\_\_dangerouslyInsertReactComponents</a>, <a name="evaluation-dangerouslyinsertjsonxcomponents">\_\_dangerouslyInsertJSONXComponents</a> 
+
+### <a name="evaluation-windowcomponents">\_\_windowComponents</a>, <a name="evaluation-windowcomponentprops">\_\_windowComponentProps</a>, 
+
+### <a name="evaluation-functionprops">\_\_functionProps</a> (legacy)
 
 The evaluation prop `__functionProps` is another way to assign a function value to a property in `JXM.props`. There are two ways of using `__functionProps`, one way for predefined functions and another way for dynamic functions. Using `__functionProps` may be deprecated in the future.
 
@@ -279,13 +318,15 @@ const JXM = {
   </tr>
 </table>
 
-## Format Props
+---
 
-_( \_\_\_stringifyChildren, _\_\_toStringChildren, _\_\_toNumeral, \_\_\_FromLuxonTimeZone, _\_\_ISOtoLuxonString )\_
+## <a name="format-props">3. Format Props </a>
+
+_([___stringifyChildren](#format-stringifychildren), [___toStringChildren](#format-tostringchildren), [___toNumeral](#format-tonumeral), [____JSDatetoLuxonString](#format-jsdatetoluxonstring), [___ISOtoLuxonString](#format-isotoluxonstring), [___FromLuxonTimeZone](#format-fromluxontimezone))_
 
 Format Props are properties that are used to convert JXM.children values to strings. Format Props are used because the `children` parameter of `React.createElement` can only be a string or an array of React Elements.
 
-### \_\_\_stringifyChildren
+### <a name="format-stringifychildren">\_\_\_stringifyChildren</a>
 
 The `___stringifyChildren` format property converts the `JXM.children` property to a string by using `JSON.stringify`.
 
@@ -297,7 +338,7 @@ const JXM = {
 }; // => { component:'div', children: '{"some-non-string":"data"}' };
 ```
 
-### \_\_\_toStringChildren
+### <a name="format-tostringchildren">\_\_\_toStringChildren</a>
 
 The `___toStringChildren` format property converts the `JXM.children` property to a string by calling `toString()`.
 
@@ -309,7 +350,7 @@ const JXM = {
 }; // => { component:'div', children: '1,2,3,4' };
 ```
 
-### \_\_\_toNumeral
+### <a name="format-tonumeral">\_\_\_toNumeral</a>
 
 The `___toNumeral` format property converts the `JXM.children` property to a string by calling `numeral(JXM.children).format(JXM.___toNumeral)`. See numeral formatting options on [numeraljs.com](http://numeraljs.com/).
 
@@ -321,7 +362,7 @@ const JXM = {
 }; // => { component:'div', children: '15,204.39' };
 ```
 
-### \_\_\_JSDatetoLuxonString
+### <a name="format-jsdatetoluxonstring">\_\_\_JSDatetoLuxonString</a>
 
 The `___JSDatetoLuxonString` format property converts the `JXM.children` property to a string by calling `Luxon.DateTime.fromJSDate(JXM.children).toFormat(JXM.___JSDatetoLuxonString)`. See luxon formatting options from the [luxon formatting docs](https://moment.github.io/luxon/docs/manual/formatting.html).
 
@@ -333,7 +374,7 @@ const JXM = {
 }; // => { component:'div', children: 'Mar 3, 2020' };
 ```
 
-### \_\_\_ISOtoLuxonString & \_\_\_FromLuxonTimeZone
+### <a name="format-isotoluxonstring">\_\_\_ISOtoLuxonString</a> & <a name="format-fromluxontimezone">\_\_\_FromLuxonTimeZone</a>
 
 The `___ISOtoLuxonString` format property converts the `JXM.children` property to a string by calling `Luxon.DateTime.fromISO(JXM.children).toFormat(JXM.___ISOtoLuxonString)`. You can set the timezone of the ISO string by using the `___FromLuxonTimeZone` format Prop. See luxon formatting options from the [luxon formatting docs](https://moment.github.io/luxon/docs/manual/formatting.html).
 
@@ -364,17 +405,124 @@ const JXM_LA = {
   </tr>
 </table>
 
-## Utility Props
+---
 
-\_(_\_\_template, passprops, debug)_
+## <a name="utility-props">4. Utility Props</a>
 
-## Display Props
+_([__template](#utility-template), [passprops](#utility-passprops), [debug](#utility-debug))_
 
-_(comparisonprops, comparisonorprops)_
+Utility props generally do not mutate `JXM.props` but are used augment the expected behaviour of JSONX.
 
-Display Props are properties that are used to determine if a JXM should be rendered. Display props enable conditional logic based of the value of props to determine if an element should be shown.
+### <a name="utility-debug">debug</a>
+The debug flag outputs the value of the `JXM` object where `JXM.debug === true` and the value of all of the computed advanced props as well.
 
-### comparisionprops and comparisonorprops
+```typescript
+const JXM = {
+    component: 'div',
+    children: 'Debug JXM Data',
+    __dangerouslyEvalAllProps:`(
+      ()=>({ style:{ color:"blue" } })
+    )`,
+    debug:true,
+};
+
+//outputs to console:
+/* { 
+  jsonx: {
+    component: "div",
+    children: "Debug JXM Data",
+    __dangerouslyEvalAllProps: "(()=>({ style:{ color:"blue" } }))"
+    debug: true
+  },
+  {
+    computedProps: {
+      style: {color: "blue"}
+    }
+  }
+}*/
+```
+
+### <a name="utility-passprops">passprops</a>
+The passprops flag passess the props from the parent `JXM` object to each `JXM.children` JXM Object except for the `JXM.props.style` property.
+
+```typescript
+const JXM = {
+  component: 'div',
+  props:{
+    type:'radio',
+    style:{
+      background:'red'
+    }
+  },
+  passprops:true,
+  children:[
+    {
+      component:'input',
+    }
+  ]
+};
+
+/* computes:
+const JXM = {
+  component: 'div',
+  props:{
+    type:'radio',
+    style:{
+      background:'red'
+    }
+  },
+  passprops:true,
+  children:[
+    {
+      component:'input',
+      props:{
+        type:'radio',
+      },
+    }
+  ]
+};
+*/
+```
+
+### <a name="utility-template">___template</a>
+The `___template` advanced prop (should really only be used server side but works in the browser too) will load JXM objects from an external file (or URL client side - note in the browser this is a synchronous request).
+
+```typescript
+
+const JXM = {
+  component:'div',
+  ___template:'path/to/some/jxm/json/file'
+}
+// path/to/some/jxm/json/file = { component: "section", children: "from external template"}
+/* computes: 
+{
+  component:'div',
+  children:[{ component: "section", children: "from external template"}]
+}
+*/
+
+```
+
+### Example Utility Props
+
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gbeatwp2/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gbeatwp2/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+
+---
+
+## <a name="display-props">5. Display Props</a>
+
+_([comparisonprops](#display-comparisonprops), [comparisonorprops](#display-comparisonorprops))_
+
+Display Props are properties that are used to determine if a React Element rendered from a JXM Object should be rendered. Display props enable conditional logic based of the value of props to determine if an element should be shown.
+
+### [comparisonprops](#display-comparisonprops) and [comparisonorprops](#display-comparisonorprops)
 
 The display prop `comparisionprops` is used to contionally show elements if all of the comparisions are truthy. `comparisonprops` works by comparing an array of left and right side values, if they are all true, the component is rendered. If `JXM.comparisonorprops` is set to true then only one condition needs to be true in order to render the component.
 
