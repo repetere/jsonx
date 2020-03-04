@@ -6,8 +6,8 @@
 
 - [Home](https://jsonx.anydata.app)
 - [Getting Started](../getting-started/index.html)
-- [External and Custom Components](../using-external-and-custom-components/index.html)
 - [Using Advanced Props](../using-advanced-props/index.html)
+- [External and Custom Components](../using-external-and-custom-components/index.html)
 - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
 - [JSONX & JXM Spec](../spec/index.html)
 - [Samples](../samples/index.html)
@@ -255,11 +255,77 @@ The reason why these functions exist are because there are instances where JSONX
 
 ### <a name="evaluation-spreadcomponent">\_\_spreadComponent</a> and <a name="evaluation-spread">\_\_spread</a>
 
-### <a name="evaluation-dangerouslyinsertfunctioncomponents">\_\_dangerouslyInsertFunctionComponents</a> and <a name="evaluation-dangerouslyinsertclasscomponents">\_\_dangerouslyInsertClassComponents</a>
+The `__spreadComponent` advanced prop is a component that maps over the `JXM.__spread` prop. Typically `__spreadComponent` props are used to list data from an array. Each element of the `JXM.__spread` array is passed into the child `__spreadComponent` as `JXM.__item` . `JXM.__spread` is usually set using a traverse prop to assign the property property.
 
-### <a name="evaluation-dangerouslyinsertcomponents">\_\_dangerouslyInsertComponents</a>, <a name="evaluation-dangerouslyinsertreactcomponents">\_\_dangerouslyInsertReactComponents</a>, <a name="evaluation-dangerouslyinsertjsonxcomponents">\_\_dangerouslyInsertJSONXComponents</a> 
+```typescript
+const JXM = {
+  component: 'ul',
+  props:{
+    __spread: [
+      {
+        name:'bob smith',
+        email:'bob.smith@email.com'
+      },
+      {
+        name:'jane doe',
+        email:'jane.doe@email.com'
+      },
+      {
+        name:'billy bob',
+        email:'billy.bob@email.com'
+      },
+    ],
+  },
+  __spreadComponent:{
+    component:'li',
+    thisprops:{
+      _children:['__item','name']
+    }
+  },
+}; 
+/* => { 
+  component:'ul', children: [
+    {
+      component:'li', children:'bob smith',
+    },
+    {
+      component:'li', children:'jane doe',
+    },
+    {
+      component:'li', children:'billy bob',
+    }
+  ] 
+};*/
+```
 
-### <a name="evaluation-windowcomponents">\_\_windowComponents</a>, <a name="evaluation-windowcomponentprops">\_\_windowComponentProps</a>, 
+### Example Evaluation Props
+
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/e5au6td1/2/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/e5au6td1/2/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+
+### <a name="evaluation-dangerouslyinsertfunctioncomponents">\_\_dangerouslyInsertFunctionComponents</a>, <a name="evaluation-dangerouslyinsertclasscomponents">\_\_dangerouslyInsertClassComponents</a>, <a name="evaluation-dangerouslyinsertcomponents">\_\_dangerouslyInsertComponents</a>, <a name="evaluation-dangerouslyinsertreactcomponents">\_\_dangerouslyInsertReactComponents</a>, <a name="evaluation-dangerouslyinsertjsonxcomponents">\_\_dangerouslyInsertJSONXComponents</a>, <a name="evaluation-windowcomponents">\_\_windowComponents</a>, <a name="evaluation-windowcomponentprops">\_\_windowComponentProps</a>,
+
+The component evaluation props all assign React Elements to props. This pattern is very common in charting libraries when you need to customize labels. Typically you would assign a custom component to a prop and the component you are using would insert the customized component appropriately.
+
+The most common pattern is a function component as a prop. Using function components or class components as props requires understanding how to create components with JSONX. Read [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html) for more information.
+
+### Example Evaluation Props
+
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/yawetse/soec2z5w/13/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/yawetse/soec2z5w/13/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+
 
 ### <a name="evaluation-functionprops">\_\_functionProps</a> (legacy)
 
@@ -622,8 +688,8 @@ switch (opscompares.operation) {
 
 - [Home](https://jsonx.anydata.app)
 - [Getting Started](../getting-started/index.html)
-- [External and Custom Components](../using-external-and-custom-components/index.html)
 - [Using Advanced Props](../using-advanced-props/index.html)
+- [External and Custom Components](../using-external-and-custom-components/index.html)
 - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
 - [JSONX & JXM Spec](../spec/index.html)
 - [Samples](../samples/index.html)

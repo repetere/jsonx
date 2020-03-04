@@ -175,19 +175,39 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
     }
     const context = this || {};
     const { returnFactory = true, resources = {}, use_getState = true, bindContext = true, disableRenderIndexKey = true } = options;
-    const rjc = Object.assign({
+    const rjc = {
+        //mounting
         getDefaultProps: {
             body: "return {};"
         },
+        // (unsupported) getDerivedStateFromProps: undefined, // {body:'return null;', args:['props','state',]}
         getInitialState: {
             body: "return {};"
-        }
-    }, reactComponent);
+        },
+        componentDidMount: undefined,
+        UNSAFE_componentWillMount: undefined,
+        //updating
+        // (unsupported) getDerivedStateFromProps 
+        shouldComponentUpdate: undefined,
+        getSnapshotBeforeUpdate: undefined,
+        componentDidUpdate: undefined,
+        UNSAFE_componentWillUpdate: undefined,
+        UNSAFE_componentWillReceiveProps: undefined,
+        //unmounting
+        componentWillUnmount: undefined,
+        //error handling
+        // (unsupported) componentDidCatch:undefined, // { body:'return ;', args:['error','info'] }
+        // (unsupported) getDerivedStateFromError: undefined, // {body:' return { hasError:true}', args:['error')',]}
+        //body
+        ...reactComponent
+    };
     const rjcKeys = Object.keys(rjc);
     if (rjcKeys.includes("render") === false) {
         throw new ReferenceError("React components require a render method");
     }
     const classOptions = rjcKeys.reduce((result, val) => {
+        if (!rjc[val])
+            return result;
         if (typeof rjc[val] === "function")
             rjc[val] = { body: rjc[val] };
         const args = rjc[val].arguments;

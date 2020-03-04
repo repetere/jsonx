@@ -22,8 +22,8 @@
 <ul>
 <li><a href="https://jsonx.anydata.app">Home</a></li>
 <li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
 <li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
 <li><a href="../samples/index.html">Samples</a></li>
@@ -252,9 +252,67 @@ main();
   </tr>
 </table>
 <h3><a name="evaluation-spreadcomponent">__spreadComponent</a> and <a name="evaluation-spread">__spread</a></h3>
-<h3><a name="evaluation-dangerouslyinsertfunctioncomponents">__dangerouslyInsertFunctionComponents</a> and <a name="evaluation-dangerouslyinsertclasscomponents">__dangerouslyInsertClassComponents</a></h3>
-<h3><a name="evaluation-dangerouslyinsertcomponents">__dangerouslyInsertComponents</a>, <a name="evaluation-dangerouslyinsertreactcomponents">__dangerouslyInsertReactComponents</a>, <a name="evaluation-dangerouslyinsertjsonxcomponents">__dangerouslyInsertJSONXComponents</a></h3>
-<h3><a name="evaluation-windowcomponents">__windowComponents</a>, <a name="evaluation-windowcomponentprops">__windowComponentProps</a>,</h3>
+<p>The <code>__spreadComponent</code> advanced prop is a component that maps over the <code>JXM.__spread</code> prop. Typically <code>__spreadComponent</code> props are used to list data from an array. Each element of the <code>JXM.__spread</code> array is passed into the child <code>__spreadComponent</code> as <code>JXM.__item</code> . <code>JXM.__spread</code> is usually set using a traverse prop to assign the property property.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> JXM = {
+  component: <span class="hljs-string">&apos;ul&apos;</span>,
+  props:{
+    __spread: [
+      {
+        name:<span class="hljs-string">&apos;bob smith&apos;</span>,
+        email:<span class="hljs-string">&apos;bob.smith@email.com&apos;</span>
+      },
+      {
+        name:<span class="hljs-string">&apos;jane doe&apos;</span>,
+        email:<span class="hljs-string">&apos;jane.doe@email.com&apos;</span>
+      },
+      {
+        name:<span class="hljs-string">&apos;billy bob&apos;</span>,
+        email:<span class="hljs-string">&apos;billy.bob@email.com&apos;</span>
+      },
+    ],
+  },
+  __spreadComponent:{
+    component:<span class="hljs-string">&apos;li&apos;</span>,
+    thisprops:{
+      _children:[<span class="hljs-string">&apos;__item&apos;</span>,<span class="hljs-string">&apos;name&apos;</span>]
+    }
+  },
+}; 
+<span class="hljs-comment">/* =&gt; { 
+  component:&apos;ul&apos;, children: [
+    {
+      component:&apos;li&apos;, children:&apos;bob smith&apos;,
+    },
+    {
+      component:&apos;li&apos;, children:&apos;jane doe&apos;,
+    },
+    {
+      component:&apos;li&apos;, children:&apos;billy bob&apos;,
+    }
+  ] 
+};*/</span>
+</code></pre>
+<h3>Example Evaluation Props</h3>
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/e5au6td1/2/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/e5au6td1/2/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+<h3><a name="evaluation-dangerouslyinsertfunctioncomponents">__dangerouslyInsertFunctionComponents</a>, <a name="evaluation-dangerouslyinsertclasscomponents">__dangerouslyInsertClassComponents</a>, <a name="evaluation-dangerouslyinsertcomponents">__dangerouslyInsertComponents</a>, <a name="evaluation-dangerouslyinsertreactcomponents">__dangerouslyInsertReactComponents</a>, <a name="evaluation-dangerouslyinsertjsonxcomponents">__dangerouslyInsertJSONXComponents</a>, <a name="evaluation-windowcomponents">__windowComponents</a>, <a name="evaluation-windowcomponentprops">__windowComponentProps</a>,</h3>
+<p>The component evaluation props all assign React Elements to props. This pattern is very common in charting libraries when you need to customize labels. Typically you would assign a custom component to a prop and the component you are using would insert the customized component appropriately.</p>
+<p>The most common pattern is a function component as a prop. Using function components or class components as props requires understanding how to create components with JSONX. Read <a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a> for more information.</p>
+<h3>Example Evaluation Props</h3>
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/yawetse/soec2z5w/13/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/yawetse/soec2z5w/13/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
 <h3><a name="evaluation-functionprops">__functionProps</a> (legacy)</h3>
 <p>The evaluation prop <code>__functionProps</code> is another way to assign a function value to a property in <code>JXM.props</code>. There are two ways of using <code>__functionProps</code>, one way for predefined functions and another way for dynamic functions. Using <code>__functionProps</code> may be deprecated in the future.</p>
 <h4>predefined functions (legacy)</h4>
@@ -550,8 +608,8 @@ jsonx = {
 <ul>
 <li><a href="https://jsonx.anydata.app">Home</a></li>
 <li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
 <li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
 <li><a href="../samples/index.html">Samples</a></li>

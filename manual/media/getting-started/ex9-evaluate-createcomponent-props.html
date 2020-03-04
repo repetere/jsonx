@@ -1,0 +1,159 @@
+<html>
+
+<head>
+  <script src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" type="text/javascript"></script>
+  <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" type="text/javascript"></script>
+  <script src="https://unpkg.com/prop-types/prop-types.min.js"></script>
+  <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+  <!-- <script src="https://unpkg.com/jsonx/dist/index.umd.js" type="text/javascript"></script> -->
+  <script src="../../../dist/index.umd.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <div id="main"></div>
+  <script>
+    // const testC = jsonx._jsonxComponents.getReactClassComponent(
+    //   { 
+        
+    //     getInitialState:{
+    //       body:`
+    //        console.log('getInitialState arguments',arguments);
+    //        console.log('getInitialState this',this);
+    //        return {}
+    //       ;`,
+    //       arguments:['props','state'],
+    //     },
+    //     render:{
+    //       body:{
+    //         component:'div',
+    //         children:'some test class comp'
+    //       }
+    //     } 
+    //   },
+    //   {name:'testComp'}
+    //   );
+    const customJSONXRender = jsonx.jsonxRender.bind({
+      componentLibraries:{
+        Recharts,
+      },
+      // reactComponents:{
+      //   testC,
+      // }
+    });
+    const data = [
+      {name: 'A', uv: 400, pv: 240, amt: 2400}, 
+      {name: 'B', uv: 300, pv: 200, amt: 2000}, 
+      {name: 'C', uv: 300, pv: 190, amt: 1900}, 
+      {name: 'D', uv: 200, pv: 150, amt: 1500}, 
+      {name: 'E', uv: 278, pv: 165, amt: 1650}, 
+      {name: 'F', uv: 189, pv: 119, amt: 1190}, 
+    ];
+    const JXM = {
+      component: 'div',
+      children: [
+        {
+            component: 'h3',
+            children: '__dangerouslyInsertFunctionComponents',
+        },
+        {
+          component: 'Recharts.BarChart',
+          props:{
+            width:600,
+            height:300,
+            data,
+          },
+          children:[
+            {
+              component:'Recharts.Legend',
+              props:{
+                verticalAlign:"top",
+                height:36,
+              }
+            },
+          {
+              component: 'Recharts.Tooltip',
+              props:{
+                wrapperStyle:{
+                  border:'1px solid grey',
+                  padding:'1rem',
+                  background:'white',
+                },
+              },
+              __dangerouslyInsertFunctionComponents:{
+                content: {
+                  reactComponent:{
+                    component:'div',
+                    passprops:true,
+                    children:[
+                      {
+                        component:'div',
+                        props:{
+                          style:{ color:'blue'}
+                        },
+                        thisprops:{
+                          _children:['label']
+                        }
+                      },
+                      {
+                        component:'div',
+                        props:{
+                        },
+                        thisprops:{
+                          _children:['payload','0','name']
+                        }
+                      },
+                      {
+                        component:'div',
+                        props:{
+                        },
+                        thisprops:{
+                          _children:['payload','0','value']
+                        }
+                      },
+                      
+                    ]
+                  },
+                  functionBody:`//console.log({props});`,
+                  options:{
+                    name:'CustomTooltip'
+                  }
+                }
+              }
+            },
+            {
+              component: 'Recharts.XAxis',
+              debug:true,
+              props:{
+                dataKey:'name',
+              },
+            },
+            {
+              component: 'Recharts.YAxis',
+            },
+            
+            {
+              component: 'Recharts.Bar',
+              props:{
+                dataKey:'uv'
+              }
+            },
+          ],
+        },
+        
+      ]
+    };
+
+    customJSONXRender({
+      jsonx: JXM,
+      querySelector: '#main',
+    });
+  </script>
+</body>
+
+</html>
+
+<div class="recharts-tooltip-wrapper recharts-tooltip-wrapper-left recharts-tooltip-wrapper-bottom" style="pointer-events: none; visibility: hidden; position: absolute; top: 0px; transform: translate(488.849px, 15px);"><h3 allowescapeviewbox="[object Object]" offset="10" viewbox="[object Object]" coordinate="[object Object]" cursorstyle="[object Object]" separator=" : " wrapperstyle="[object Object]" contentstyle="[object Object]" itemstyle="[object Object]" labelstyle="[object Object]" animationeasing="ease" animationduration="400" payload="" label="F">tooltip</h3></div>
+
+
+
+<div class="recharts-tooltip-wrapper recharts-tooltip-wrapper-right recharts-tooltip-wrapper-bottom" style="pointer-events: none; visibility: hidden; position: absolute; top: 0px; transform: translate(560.833px, 170px);"><div class="recharts-default-tooltip" style="margin: 0px; padding: 10px; background-color: rgb(255, 255, 255); border: 1px solid rgb(204, 204, 204); white-space: nowrap;"><p class="recharts-tooltip-label" style="margin: 0px;">F</p></div></div>

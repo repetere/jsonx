@@ -34,8 +34,8 @@ $ npm i jsonx
 ### JSONX Manual
  - [Home](https://jsonx.anydata.app)
  - [Getting Started](https://repetere.github.io/jsonx/manual/getting-started/index.html)
- - [External and Custom Components](https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html)
  - [Using Advanced Props](https://repetere.github.io/jsonx/manual/using-advanced-props/index.html)
+ - [External and Custom Components](https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html)
  - [Creating React Components and Component Libraries](https://repetere.github.io/jsonx/manual/creating-react-components-and-component-libraries/index.html)
  - [JSONX & JXM Spec](https://repetere.github.io/jsonx/manual/spec/index.html)
  - [Samples](https://repetere.github.io/jsonx/manual/samples/index.html)

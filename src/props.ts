@@ -4,6 +4,7 @@ import * as utilities from "./utils";
 import {
   getComponentFromMap,
   getReactFunctionComponent,
+  getReactClassComponent,
   getReactContext
 } from "./components";
 // if (typeof window === 'undefined') {
@@ -368,7 +369,7 @@ export function getReactComponents(this: defs.Context, options: defs.Config) {
             if (args) {
               args.options = Object.assign({}, args.options, { resources });
               // eslint-disable-next-line
-              componentVal = getReactFunctionComponent.call(
+              componentVal = getReactClassComponent.call(
                 this,
                 args.reactComponent,
                 args.options

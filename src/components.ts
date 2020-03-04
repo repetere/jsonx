@@ -269,22 +269,42 @@ export function getReactClassComponent(
     bindContext = true,
     disableRenderIndexKey = true
   } = options;
-  const rjc: any = Object.assign(
-    {
-      getDefaultProps: {
-        body: "return {};"
-      },
-      getInitialState: {
-        body: "return {};"
-      }
+  const rjc: any = {
+    //mounting
+    getDefaultProps: {
+      body: "return {};"
     },
-    reactComponent
-  );
+    // (unsupported) getDerivedStateFromProps: undefined, // {body:'return null;', args:['props','state',]}
+    getInitialState: {
+      body: "return {};"
+    },
+    componentDidMount: undefined,
+    UNSAFE_componentWillMount: undefined,
+    
+    //updating
+    // (unsupported) getDerivedStateFromProps 
+    shouldComponentUpdate: undefined, // {body:'return true;', args:['nextProps','nextState',]}
+    getSnapshotBeforeUpdate: undefined, // {body:'return snapshot;', args:['prevProps', 'prevState)',]}
+    componentDidUpdate: undefined, // {body:'', args:['prevProps', 'prevState','snapshot')',]}
+    UNSAFE_componentWillUpdate: undefined, // {body:';', args:['nextProps','nextState',]}
+    UNSAFE_componentWillReceiveProps: undefined, // {body:';', args:['nextProps',]}
+
+    //unmounting
+    componentWillUnmount: undefined,
+
+    //error handling
+    // (unsupported) componentDidCatch:undefined, // { body:'return ;', args:['error','info'] }
+    // (unsupported) getDerivedStateFromError: undefined, // {body:' return { hasError:true}', args:['error')',]}
+    
+    //body
+    ...reactComponent
+  };
   const rjcKeys = Object.keys(rjc);
   if (rjcKeys.includes("render") === false) {
     throw new ReferenceError("React components require a render method");
   }
   const classOptions = rjcKeys.reduce((result: any, val: string) => {
+    if (!rjc[val]) return result;
     if (typeof rjc[val] === "function") rjc[val] = { body: rjc[val] };
     const args = rjc[val].arguments;
     const body = rjc[val].body;
