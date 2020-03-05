@@ -21,6 +21,10 @@ Some other sample page
 
 
 ---
+
+## [Full API Docs](../../index.html)
+
+
 ### JSONX Manual
  - [Home](https://jsonx.anydata.app)
  - [Getting Started](../getting-started/index.html)

@@ -23,8 +23,8 @@
 <ul>
 <li><a href="https://jsonx.anydata.app">Home</a></li>
 <li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
 <li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
 <li><a href="../samples/index.html">Samples</a></li>
@@ -33,7 +33,7 @@
 </ul>
 <hr>
 <h1>Getting Started</h1>
-<p>JSONX is a library that creates React Elements, JSX and HTML from JSON. JSONX works by converting JSON Objects that follow the JXM spec into the arguments passed into <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+<p>JSONX is a library that creates React Elements, JSX, and HTML from JSON. JSONX works by converting JSON Objects that follow the JXM spec into the arguments passed into <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
 <pre><code class="hljs language-ts"><span class="hljs-comment">// React Create Element Example</span>
 React.createElement(
   <span class="hljs-keyword">type</span>,
@@ -91,20 +91,20 @@ JSONX.getReactElement(JXM) =&gt; React.createElement(<span class="hljs-string">&
 
 <span class="hljs-comment">//e.g</span>
 
-jsonx.getReactElementFromJSONX.call({
-  debug:<span class="hljs-literal">true</span>, reactComponents:{ReactModal}, componentLibraries:{ ReactBootstrap, Antd} <span class="hljs-comment">//custom options bound to &apos;this&apos;</span>
-  }, 
+jsonx.getReactElementFromJSONX.call(
+  { debug:<span class="hljs-literal">true</span>, reactComponents:{ReactModal}, componentLibraries:{ ReactBootstrap, Antd, } }, <span class="hljs-comment">//custom options bound to &apos;this&apos; </span>
   {
-    component:<span class="hljs-string">&apos;ReactBootstrap.Container&apos;</span>,children:<span class="hljs-string">&apos;hello world&apos;</span>
+    component:<span class="hljs-string">&apos;ReactBootstrap.Container&apos;</span>, children:<span class="hljs-string">&apos;hello world&apos;</span>
   });
 </code></pre>
+<h2>Next: <a href="../using-advanced-props/index.html">Using Advanced Props</a></h2>
 <hr>
 <h3>JSONX Manual</h3>
 <ul>
 <li><a href="https://jsonx.anydata.app">Home</a></li>
 <li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
 <li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
 <li><a href="../samples/index.html">Samples</a></li>

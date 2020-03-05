@@ -8,7 +8,7 @@
 
 ### Zero Setup
 
-The JSONX UMD comes with batteries included so you can use JSONX in browser without transpilers or any additional setup/configuration. The JSONX UMD is ideal for JAMstack Applications.
+The JSONX UMD comes with batteries included so you can use JSONX in the browser without transpilers or any additional setup/configuration. The JSONX UMD is ideal for JAMstack Applications.
 
 ### Embeddable
 
@@ -32,7 +32,6 @@ $ npm i jsonx
 
 ---
 ### JSONX Manual
- - [Home](https://jsonx.anydata.app)
  - [Getting Started](https://repetere.github.io/jsonx/manual/getting-started/index.html)
  - [Using Advanced Props](https://repetere.github.io/jsonx/manual/using-advanced-props/index.html)
  - [External and Custom Components](https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html)
@@ -45,42 +44,27 @@ $ npm i jsonx
 
 ### Basic Usage
 ```javascript
-import { default as jsonx } from 'jsonx';
-const exampleJSONX = {
+import { * as jsonx } from 'jsonx';
+const example_JXM_JSON = {
   component:'p',
-  props:{style:{color:'blue'}},
+  props:{ style:{ color:'blue' } },
   children:'hello world'
 };
 //Rendering React Components
-jsonx.getReactElement(exampleJSONX);
-// => JSX Equivalent: <p style={{color:'blue'}}>hello world</p>
+jsonx.getReactElement(example_JXM_JSON); // => JSX Equivalent: <p style={{color:'blue'}}>hello world</p>
 
-const exampleToHTMLandJSX = {
-  component: 'div',
-  props:{  className:'jsonx-generated', },
-  children:[
-    {  
-      component:'p',
-      props:{ style:{ color:'red', }, },
-      children:'hello world',
-    }
-  ]
-};
 //Generating HTML strings
-jsonx.outputHTML({ jsonx: exampleToHTMLandJSX, });
-// => '<div class="jsonx-generated"><p style="color:red;">hello world</p></div>'
+jsonx.outputHTML({ jsonx: example_JXM_JSON, }); // => '<p style="color:blue;">hello world</p>'
+
 //Generating JSX strings
-jsonx.outputJSX({ jsonx: exampleToHTMLandJSX, });
-// => '<div class="jsonx-generated"><p style={{color:red,}}>hello world</p></div>'
+jsonx.outputJSX({ jsonx: example_JXM_JSON, }); // => '<p style={{color:blue,}}>hello world</p>'
 
 //Rendering HTML Dom with React
-jsonx.jsonxRender({ jsonx: { component: 'div', props:{className:'jsonx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, querySelector:'#myApp', });
+jsonx.jsonxRender({ jsonx: example_JXM_JSON, querySelector:'#myApp', });
 // <!DOCTYPE html>
 //  <body>
 //    <div id="myApp">
-//      <div class="jsonx-generated">
-//        <p style="color:red;">hello world</p>
-//      </div>
+//      <p style="color:blue;">hello world</p>
 //    </div>
 // </body>
 ```

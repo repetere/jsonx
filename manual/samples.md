@@ -19,17 +19,20 @@
 # Examples
 
 1. [Getting Started Basic Example](https://jsfiddle.net/yawetse/ka7ghypd/6/)
-2. [Custom Library: React Bootstrap Example](https://jsfiddle.net/yawetse/gctmsojp/22/)
-3. [Custom Component: React Calendar Example](https://jsfiddle.net/yawetse/Lqwe3f59/5/)
-4. [Advanced Props: Traverse Props Examples](https://jsfiddle.net/yawetse/pz845dk9/4/)
-5. [Advanced Props: Evaluation Props Examples (\_\_dangerouslyEvalProps)](https://jsfiddle.net/yawetse/n704z65x/7/)
-6. [Advanced Props: Evaluation Props Example s(\_\_spreadComponent)](https://jsfiddle.net/yawetse/e5au6td1/2/)
-6. [Advanced Props: Evaluation Props Example s(\_\_functionProps - legacy)](https://jsfiddle.net/yawetse/34ngdzyh/3/)
-7. [Advanced Props: Format Props Examples](https://jsfiddle.net/yawetse/5ypaotu6/3/)
-8. [Advanced Props: Display Props Examples](https://jsfiddle.net/yawetse/jn7L54x1/4/)
-9. [Advanced Props: Utility Props Examples](https://jsfiddle.net/yawetse/gbeatwp2/3/)
+2. [Advanced Props: Traverse Props Examples](https://jsfiddle.net/yawetse/pz845dk9/4/)
+3. [Advanced Props: Evaluation Props Examples (\_\_dangerouslyEvalProps)](https://jsfiddle.net/yawetse/n704z65x/7/)
+4. [Advanced Props: Evaluation Props Example s(\_\_spreadComponent)](https://jsfiddle.net/yawetse/e5au6td1/2/)
+5. [Advanced Props: Evaluation Props Example s(\_\_functionProps - legacy)](https://jsfiddle.net/yawetse/34ngdzyh/3/)
+6. [Advanced Props: Format Props Examples](https://jsfiddle.net/yawetse/5ypaotu6/3/)
+7. [Advanced Props: Display Props Examples](https://jsfiddle.net/yawetse/jn7L54x1/4/)
+8. [Advanced Props: Utility Props Examples](https://jsfiddle.net/yawetse/gbeatwp2/3/)
+9. [Custom Library: React Bootstrap Example](https://jsfiddle.net/yawetse/gctmsojp/22/)
+10. [Custom Component: React Calendar Example](https://jsfiddle.net/yawetse/Lqwe3f59/5/)
+11. [Create Components: Function (with hooks), Class, Lazy, Suspense](https://jsfiddle.net/yawetse/ck3oye01/7/)
 
 ---
+
+## [Roadmap](../roadmap/index.html)
 
 ### JSONX Manual
 

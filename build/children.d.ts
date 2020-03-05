@@ -56,7 +56,7 @@ export declare function getChildrenProperty(options?: {
  * @param {Object} [options.props=options.jsonx.props] - Props to pull children  Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops)
  * @returns {Object|String} returns a valid  Valid JSONX Child object or a string
  */
-export declare function getChildrenProps(options?: {
+export declare function getChildrenProps(this: defs.Context, options?: {
     jsonx?: defs.jsonx;
     renderIndex?: number;
     childjsonx?: defs.jsonx;

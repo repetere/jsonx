@@ -425,7 +425,7 @@ export function getReactComponentProps(
       },
       {}
     );
-  } else if(jsonx.__dangerouslyInsertReactComponents && jsonx.__dangerouslyInsertReactComponents.length){
+  } else if(jsonx.__dangerouslyInsertReactComponents && Object.keys(jsonx.__dangerouslyInsertReactComponents).length){
     return Object.keys(jsonx.__dangerouslyInsertReactComponents).reduce(
       (cprops: defs.jsonxResourceProps, cpropName: string) => {
         let componentVal;

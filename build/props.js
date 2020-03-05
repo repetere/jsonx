@@ -360,7 +360,7 @@ export function getReactComponentProps(options = { jsonx: {} }) {
             return cprops;
         }, {});
     }
-    else if (jsonx.__dangerouslyInsertReactComponents && jsonx.__dangerouslyInsertReactComponents.length) {
+    else if (jsonx.__dangerouslyInsertReactComponents && Object.keys(jsonx.__dangerouslyInsertReactComponents).length) {
         return Object.keys(jsonx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) => {
             let componentVal;
             try {

@@ -684,6 +684,9 @@ switch (opscompares.operation) {
 
 ---
 
+## Next: [External and Custom Components](../using-external-and-custom-components/index.html)
+
+
 ### JSONX Manual
 
 - [Home](https://jsonx.anydata.app)

@@ -1,0 +1,170 @@
+<html>
+
+<head>
+  <script src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" type="text/javascript"></script>
+  <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" type="text/javascript"></script>
+  <script src="https://unpkg.com/prop-types/prop-types.min.js"></script>
+  <!-- <script src="https://unpkg.com/jsonx/dist/index.umd.js" type="text/javascript"></script> -->
+  <script src="../../../dist/index.umd.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <div id="main"></div>
+  <script>
+  
+    const lazyFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({ 
+        component:'div',children:'LOADED FROM LAZY Function',
+      },
+      `
+      // console.log("lazy function body");
+      `,
+      {
+      lazy:(resolvedComponent,body,options)=>{
+        // console.log('lazyFunctionComponent',{resolvedComponent,body,options});
+        return new Promise((resolve)=>{
+          setTimeout(()=>{
+            resolve([resolvedComponent,body,{lazy:false}]);
+          },3000);
+        });
+      }
+    });
+
+    const hookCountdownFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
+      {
+        component:'div',
+        passprops:true,
+        children:[
+          {
+            component:'span',
+            children:'Loading in ... '
+          },
+          {
+            component:'button',
+            thisprops:{
+              _children:['count'],
+            }
+          }
+        ]
+      },
+      `
+      const [count, setCount] = useState(3);
+      const exposeprops = {count,setCount};
+      let interval;
+
+      useEffect(()=>{
+        interval = setInterval(()=>{
+          setCount(count-1);
+        }, 1000);
+
+        return function cleanup(){
+          clearInterval(interval);
+        }
+      });
+
+      `,
+      {
+        name:'hookCountdownFunctionComponent',
+      });
+
+    const hookClickFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent.call({
+      disableRenderIndexKey: true
+    },
+      {
+        component:'div',
+        passprops:true,
+        children:[
+          {
+            component:'button',
+            __dangerouslyBindEvalProps:{
+              onClick:function(clicks,set_click){
+                // console.log('this is inline',{clicks,set_click},'arguments',arguments);
+                // console.log('this',this);
+                set_click(clicks+1);
+                // return function(e){
+                //   console.log({e})
+                // }
+              },
+            },
+            thisprops:{
+              clicks:['clicks'],
+              set_click:['set_click']
+            },
+            children:'Click Me',
+          },
+          {
+            component:'span',
+            children:' Clicks: '
+          },
+          {
+            component:'span',
+            thisprops:{
+              _children:['clicks'],
+            }
+          }
+        ]
+      },
+      `
+      const [clicks, set_click] = useState(0);
+      const exposeprops = {clicks,set_click};
+
+      
+      `,
+      {
+        name:'hookClickFunctionComponent',
+      });
+
+
+    const JXM = {
+      component:'div',
+      children:[
+        {
+          component:'h1',
+          children:'jsonx._jsonxComponents.getReactFunctionComponent hook',
+        },
+        {
+          component:'hookClickFunctionComponent',
+          props:{
+            status:'Amazing',
+          }
+        },
+        {
+          component:'h1',
+          children:'jsonx._jsonxComponents.getReactFunctionComponent lazy',
+        },
+        {
+          component:'Suspense',
+          // debug:true,
+          __dangerouslyInsertComponents:{
+            fallback:{
+              component:'hookCountdownFunctionComponent',
+            }
+          },
+          children:[
+            {
+              component:'div',
+              children:[
+                {component:'h3',children:'React Suspense Function Test'},
+                {component:'lazyFunctionComponent'},
+              ],
+            }
+          ]
+        },
+      ]
+    };
+    const boundConfig = {
+      debug:true, 
+      reactComponents:{
+        lazyFunctionComponent,
+        hookCountdownFunctionComponent,
+        hookClickFunctionComponent,
+      }
+    };
+    
+    jsonx.jsonxRender.call(boundConfig, {
+      jsonx: JXM, 
+      querySelector:'#main', 
+    });
+  </script>
+</body>
+
+</html>

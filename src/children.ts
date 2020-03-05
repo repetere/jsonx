@@ -92,6 +92,7 @@ export function getChildrenProperty(
  * @returns {Object|String} returns a valid  Valid JSONX Child object or a string
  */
 export function getChildrenProps(
+  this: defs.Context,
   options: {
     jsonx?: defs.jsonx;
     renderIndex?: number;
@@ -115,12 +116,12 @@ export function getChildrenProps(
                 style: {}
               },
           childjsonx.props,
-          {
-            key:
-              typeof renderIndex !== "undefined"
+          typeof this !== "undefined" &&this && this.disableRenderIndexKey
+            ? {}
+            : {  key: typeof renderIndex !== "undefined"
                 ? renderIndex + Math.random()
                 : Math.random()
-          }
+            }
         )
       })
     : childjsonx;
@@ -230,7 +231,7 @@ export function getJSONXChildren(
         .map(childjsonx =>
           getReactElementFromJSONX.call(
             context,
-              getChildrenProps({ jsonx, childjsonx, props, renderIndex }),
+            getChildrenProps.call(this,{ jsonx, childjsonx, props, renderIndex }),
               resources
             )
           )

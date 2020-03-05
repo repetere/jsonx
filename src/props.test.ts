@@ -407,7 +407,9 @@ describe('jsonx props', function () {
       };
       const testJSONX = Object.assign({}, sampleJSONX, { __dangerouslyInsertReactComponents: testVals,  });
       const JSONXP = getReactComponentProps.call({}, { jsonx: testJSONX, });
+      //@ts-ignore
       expect(JSONXP.myComponent).to.be.an('string');
+      //@ts-ignore
       expect(JSONXP.myComponent).to.eql('p');
     });
   });

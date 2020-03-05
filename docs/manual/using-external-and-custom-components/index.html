@@ -22,8 +22,8 @@
 <ul>
 <li><a href="https://jsonx.anydata.app">Home</a></li>
 <li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
 <li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
 <li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
 <li><a href="../samples/index.html">Samples</a></li>
@@ -32,9 +32,9 @@
 </ul>
 <hr>
 <h1>External Libraries and Components</h1>
-<p>JSONX will natively support any components from React-DOM, but for most real applications you are using either a large open source component library (e.g. react bootstrap, ant.design, material ui, etc) or many 3rd party react components (like react-autocomplete). In order to use custom 3rd party components or libraries they need to be assigned to JSONX&#x2019;s the <code>this</code> parameter.</p>
+<p>JSONX natively supports any components from React-DOM, but for most real applications you are using either a large open-source component library (e.g. react-bootstrap, ant.design, material UI, etc) or any 3rd-party react components (like react-autocomplete). To use custom 3rd-party components or libraries they need to be assigned to JSONX&#x2019;s <code>this</code> parameter.</p>
 <h2>Using custom Component Libraries</h2>
-<p>Using a component library is as simple as assigning the Library to the <code>this.componentLibraries</code> property, and referencing the flattened component name as the component in your JXM JSON Object.</p>
+<p>Using a component library is as simple as assigning the Library to the <code>this.componentLibraries</code> property, and referencing the flattened component name as the component value in your JXM JSON Object.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;jsonx&apos;</span>;
 <span class="hljs-keyword">import</span> { * <span class="hljs-keyword">as</span> ReactBootstrap } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-bootstrap&apos;</span>; <span class="hljs-comment">//or in the browser reference the UMD: &lt;script src=&quot;https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js&quot; crossorigin /&gt;</span>
 
@@ -86,7 +86,7 @@
   </tr>
 </table>
 <h2>Using Custom Components</h2>
-<p>If you&#x2019;re only adding single components or using your own components you can add them to JSONX&#x2019;s component my individually. The difference between a Custom Component and a Custom Library is <code>this.reactComponents</code> expects each property value to be a react component and <code>this.componentLibraries</code> expects each property value to reference and object that has values that are React Components.</p>
+<p>If you&#x2019;re only adding single components or using your components you can add them to JSONX&#x2019;s component my individually. The difference between a Custom Component and a Custom Library is <code>this.reactComponents</code> expects each property value to be a react component and <code>this.componentLibraries</code> expects each property value to reference an object that has values that are React Components.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
 <span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;jsonx&apos;</span>;
 <span class="hljs-keyword">import</span> { Calendar } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;rc-calendar&apos;</span>;
@@ -126,6 +126,7 @@ jsonxRender({
   </tr>
 </table>
 <hr>
+<h2>Next: <a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></h2>
 <h3>JSONX Manual</h3>
 <ul>
 <li><a href="https://jsonx.anydata.app">Home</a></li>

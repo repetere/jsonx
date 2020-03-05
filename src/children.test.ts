@@ -223,7 +223,7 @@ describe("jsonx", function() {
     });
   });
   describe("getChildrenProps", () => {
-    const getChildrenProps = _jsonxChildren.getChildrenProps;
+    const getChildrenProps = _jsonxChildren.getChildrenProps.bind({});
     const getChildrenProperty = _jsonxChildren.getChildrenProperty;
     it("should return child JSONX if not passing props", () => {
       const renderIndex = 1;

@@ -40719,7 +40719,7 @@ var jsonx = (function (exports) {
 	        functionBody = functionBody.toString();
 	    const functionComponent = Function("React", "useState", "useEffect", "useContext", "useReducer", "useCallback", "useMemo", "useRef", "useImperativeHandle", "useLayoutEffect", "useDebugValue", "getReactElementFromJSONX", "reactComponent", "resources", "props", `
     'use strict';
-    const self = this;
+    const self = this || {};
 
     return function ${options.name || "Anonymous"}(props){
       ${functionBody}
@@ -40732,7 +40732,7 @@ var jsonx = (function (exports) {
       if(!props.children) {
       //  delete props.children;
       }
-      const context = ${options.bind ? "Object.assign(self,this)" : "this"};
+      const context = ${options.bind ? "Object.assign(self,this||{})" : "this"};
       return getReactElementFromJSONX.call(context, reactComponent);
     }
   `);
@@ -41124,7 +41124,7 @@ var jsonx = (function (exports) {
 	            return cprops;
 	        }, {});
 	    }
-	    else if (jsonx.__dangerouslyInsertReactComponents && jsonx.__dangerouslyInsertReactComponents.length) {
+	    else if (jsonx.__dangerouslyInsertReactComponents && Object.keys(jsonx.__dangerouslyInsertReactComponents).length) {
 	        return Object.keys(jsonx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) => {
 	            let componentVal;
 	            try {
@@ -49693,11 +49693,12 @@ var jsonx = (function (exports) {
 	                ? {}
 	                : {
 	                    style: {}
-	                }, childjsonx.props, {
-	                key: typeof renderIndex !== "undefined"
-	                    ? renderIndex + Math.random()
-	                    : Math.random()
-	            })
+	                }, childjsonx.props, typeof this !== "undefined" && this && this.disableRenderIndexKey
+	                ? {}
+	                : { key: typeof renderIndex !== "undefined"
+	                        ? renderIndex + Math.random()
+	                        : Math.random()
+	                })
 	        })
 	        : childjsonx;
 	}
@@ -49797,7 +49798,7 @@ var jsonx = (function (exports) {
 	            return jsonx.children;
 	        const children = jsonx.children && Array.isArray(jsonx.children)
 	            ? jsonx.children
-	                .map(childjsonx => getReactElementFromJSONX.call(context, getChildrenProps({ jsonx, childjsonx, props, renderIndex }), resources))
+	                .map(childjsonx => getReactElementFromJSONX.call(context, getChildrenProps.call(this, { jsonx, childjsonx, props, renderIndex }), resources))
 	                .filter(child => child !== null)
 	            : jsonx.children;
 	        return children;

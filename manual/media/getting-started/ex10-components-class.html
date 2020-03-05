@@ -1,0 +1,209 @@
+<html>
+
+<head>
+  <script src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" type="text/javascript"></script>
+  <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" type="text/javascript"></script>
+  <script src="https://unpkg.com/prop-types/prop-types.min.js"></script>
+  <script src="https://unpkg.com/jsonx/dist/index.umd.js" type="text/javascript"></script>
+  <!-- <script src="../../../dist/index.umd.js" type="text/javascript"></script> -->
+</head>
+
+<body>
+  <div id="main"></div>
+  <script>
+    const reactComponent = {
+      //
+      // Initialization function
+      //
+      getInitialState:{
+        body:`
+        // console.log('getInitialState arguments',arguments)
+        // console.log('getInitialState this',this)
+        return { status:"not-loaded", name:"jsonx test", custom_number:1, };
+        `,
+        arguments:[],
+      },
+      getDefaultProps:{
+        body:`
+          // console.log('getDefaultProps arguments',arguments)
+          // console.log('getDefaultProps this',this)
+          return { some_prop:1, some_other_prop:2, status:"original status" };
+        `,
+        arguments:[],
+      },
+      componentDidMount:{
+        body:`console.log('mounted', 'this.props',this.props, 'this.state',this.state)`,
+        arguments:[],
+      },
+      componentWillUnmount:{
+        body:`console.log('unmounted',this.props)`,
+        arguments:[],
+      },
+      //
+      // State change functions
+      //
+      shouldComponentUpdate:{
+        body:'console.log("should update component",{nextProps,nextState}); return true;',
+        arguments:['nextProps', 'nextState']
+      },
+      UNSAFE_componentWillUpdate:{
+        body:'console.log("will update component",{nextProps,nextState}); return true;',
+        arguments:['nextProps', 'nextState']
+      },
+      componentDidUpdate:{
+        body:'console.log("did update component",{prevProps,prevState}); return true;',
+        arguments:['prevProps', 'prevState']
+      },
+      //
+      // Prop change functions
+      //
+      UNSAFE_componentWillReceiveProps: {
+        body:'console.log("will recieve props",{nextProps}); return true;',
+        arguments:['nextProps']
+      },
+      //
+      // RENDER IS THE ONLY ***REQUIRED*** FUNCTION
+      //
+      render:{
+        body:{
+          component:'p',
+          props:{
+            inline_status:'from inline prop'
+          },
+          thisprops:{
+            incoming_status:['status']
+          },
+          passprops:true,
+          children:[
+            {
+              component:'span',
+              children: 'My Custom React Component Status: ',
+            },
+            {
+              component:'span',
+              thisprops:{
+                children:['status']
+              }
+            }
+          ]
+        },
+      }
+    };
+    const options = {
+      name:'MyCustomComponent',
+      use_getState:false, 
+      passprops:true,
+    };
+
+
+    const MyCustomComponent = jsonx._jsonxComponents.getReactClassComponent.call({useReduxState:false,},reactComponent,options);
+
+    const lazyClassComponent = jsonx._jsonxComponents.getReactClassComponent({ 
+      render:{
+        body:{
+          component:'div',children:'LOADED FROM LAZY Class',
+        }
+      }
+      },{
+      lazy:(resolvedComponent,options)=>{
+        return new Promise((resolve)=>{
+          setTimeout(()=>{
+            resolve([resolvedComponent,{lazy:false}]);
+          },3000);
+        })
+      }
+    });
+
+    const hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
+      {
+        component:'div',
+        passprops:true,
+        children:[
+          {
+            component:'span',
+            children:'Loading in ... '
+          },
+          {
+            component:'button',
+            thisprops:{
+              _children:['count'],
+            }
+          }
+        ]
+      },
+      `
+      const [count, setCount] = useState(3);
+      const exposeprops = {count,setCount};
+      let interval;
+
+      useEffect(()=>{
+        interval = setInterval(()=>{
+          setCount(count-1);
+        }, 1000);
+
+        return function cleanup(){
+          clearInterval(interval);
+        }
+      });
+
+      `,
+      {
+        name:'hookFunctionComponent',
+      });
+
+
+    const JXM = {
+      component:'div',
+      children:[
+        {
+          component:'h1',
+          children:'jsonx._jsonxComponents.getReactClassComponent',
+        },
+        {
+          component:'MyCustomComponent',
+          props:{
+            status:'Amazing',
+          }
+        },
+        {
+          component:'h1',
+          children:'jsonx._jsonxComponents.getReactClassComponent Suspense with getReactFunctionComponent (with hooks) ',
+        },
+        {
+          component:'Suspense',
+          debug:true,
+          __dangerouslyInsertComponents:{
+            fallback:{
+              component:'hookFunctionComponent',
+            }
+          },
+          children:[
+            {
+              component:'div',
+              children:[
+                {component:'h3',children:'React Suspense Test'},
+                {component:'lazyClassComponent'},
+                // {component:'dynamicFunctionComponent'},
+              ],
+            }
+          ]
+        },
+      ]
+    };
+    const boundConfig = {
+      debug:true, 
+      reactComponents:{
+        MyCustomComponent,
+        lazyClassComponent,
+        hookFunctionComponent,
+      }
+    };
+    
+    jsonx.jsonxRender.call(boundConfig, {
+      jsonx: JXM, 
+      querySelector:'#main', 
+    });
+  </script>
+</body>
+
+</html>

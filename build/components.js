@@ -422,7 +422,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ""
         functionBody = functionBody.toString();
     const functionComponent = Function("React", "useState", "useEffect", "useContext", "useReducer", "useCallback", "useMemo", "useRef", "useImperativeHandle", "useLayoutEffect", "useDebugValue", "getReactElementFromJSONX", "reactComponent", "resources", "props", `
     'use strict';
-    const self = this;
+    const self = this || {};
 
     return function ${options.name || "Anonymous"}(props){
       ${functionBody}
@@ -435,7 +435,7 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ""
       if(!props.children) {
       //  delete props.children;
       }
-      const context = ${options.bind ? "Object.assign(self,this)" : "this"};
+      const context = ${options.bind ? "Object.assign(self,this||{})" : "this"};
       return getReactElementFromJSONX.call(context, reactComponent);
     }
   `);

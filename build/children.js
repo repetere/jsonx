@@ -94,11 +94,12 @@ export function getChildrenProps(options = {}) {
                 ? {}
                 : {
                     style: {}
-                }, childjsonx.props, {
-                key: typeof renderIndex !== "undefined"
-                    ? renderIndex + Math.random()
-                    : Math.random()
-            })
+                }, childjsonx.props, typeof this !== "undefined" && this && this.disableRenderIndexKey
+                ? {}
+                : { key: typeof renderIndex !== "undefined"
+                        ? renderIndex + Math.random()
+                        : Math.random()
+                })
         })
         : childjsonx;
 }
@@ -198,7 +199,7 @@ export function getJSONXChildren(options = { jsonx: {} }) {
             return jsonx.children;
         const children = jsonx.children && Array.isArray(jsonx.children)
             ? jsonx.children
-                .map(childjsonx => getReactElementFromJSONX.call(context, getChildrenProps({ jsonx, childjsonx, props, renderIndex }), resources))
+                .map(childjsonx => getReactElementFromJSONX.call(context, getChildrenProps.call(this, { jsonx, childjsonx, props, renderIndex }), resources))
                 .filter(child => child !== null)
             : jsonx.children;
         return children;
