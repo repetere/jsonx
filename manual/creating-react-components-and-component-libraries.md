@@ -153,42 +153,61 @@ Console output after mounting
 
 ## <a name="function-component">2. Function Components </a>
 
-You can also create react components with lifecycle functions using `getReactClassComponent`.
+
+JSONX exposes the `jsonx._jsonxComponents.getReactFunctionComponent` function that can you can use to create React Function Components. 
+
+```typescript
+export function getReactFunctionComponent(
+  reactComponent: JXM_JSON,
+  functionBody: string,
+  options = {},
+): ReactComponentLike
+```
+
+`getReactFunctionComponent` takes three arguments:
+  1. `reactComponent` which contains the JXM JSON for rendering the Function Component.
+  2. `functionBody` which is a string for the Function component (if you are using hooks or want to expose props from inside of your components, assign the props you want to make available to an `exposeprops` variable)
+  3. `options` used to customize `getReactFunctionComponent`.
+
 
 ```typescript
 const hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
+  //reactComponent
   {
     component:'div',
     passprops:true,
     children:[
       {
-        component:'span',
-        children:'Loading in ... '
+        component:'button',
+        __dangerouslyBindEvalProps:{
+          onClick:function(clicks,set_click){
+            set_click(clicks+1);
+          },
+        },
+        thisprops:{
+          clicks:['clicks'],
+          set_click:['set_click']
+        },
+        children:'Click Me',
       },
       {
-        component:'button',
+        component:'span',
+        children:' Clicks: '
+      },
+      {
+        component:'span',
         thisprops:{
-          _children:['count'],
+          _children:['clicks'],
         }
       }
     ]
   },
+  //functionBody
   `
-  const [count, setCount] = useState(3);
-  const exposeprops = {count,setCount};
-  let interval;
-
-  useEffect(()=>{
-    interval = setInterval(()=>{
-      setCount(count-1);
-    }, 1000);
-
-    return function cleanup(){
-      clearInterval(interval);
-    }
-  });
-
+  const [clicks, set_click] = useState(0);
+  const exposeprops = {clicks,set_click};
   `,
+  //options
   {
     name:'hookFunctionComponent',
   });
@@ -198,9 +217,9 @@ const hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
 
 <table style="border:0; width:100%">
   <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
   </tr>
 </table>
@@ -209,10 +228,33 @@ const hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
 
 ## <a name="dynamic-component">3. Dynamic Components </a>
 
-You can also create react components with lifecycle functions using `getReactClassComponent`. Dynamic components are useful if you want to have stateful components without implementing Lazy and Suspense Components. Dynamic Components use Hooks underneath the hood.
+
+JSONX exposes the `jsonx._jsonxComponents.DynamicComponent` function that can you can use to create components that load data and render asynchronously. The typical use case is if you have some kind of dashboard or components that are independently loading data, Dynamic Components are a convenient way to handle dynamic components without Suspense and Lazy Components (they use hooks under the hood). 
+
+Once the data is fetched, the `jsonx` object passed is rendered and the resolved data is available as  `resourceprops.DynamicComponentData`.
 
 ```typescript
-//some code
+export function DynamicComponent({
+  useCache: boolean;
+  cacheTimeout: number;//milliseconds
+  loadingJSONX: jsonx;
+  loadingErrorJSONX: jsonx;
+  cacheTimeoutFunction: () => void,
+  jsonx: jsonx;
+  transformFunction: (data: any) => any,
+  fetchURL: string;
+  fetchOptions: any;
+  fetchFunction: (fetchURL: string, fetchOptions: any)=>Promise,
+}): ReactComponentLike
+```
+
+```typescript
+const dynamicComponent = jsonx._jsonxComponents.DynamicComponent({
+  jsonx:{component:'div',children:'loaded data',},
+  fetchURL:'/path/to/some/data'
+});
+
+
 ```
 
 ### Example Dynamic Components

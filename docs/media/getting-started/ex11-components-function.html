@@ -66,9 +66,7 @@
         name:'hookCountdownFunctionComponent',
       });
 
-    const hookClickFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent.call({
-      disableRenderIndexKey: true
-    },
+    const hookClickFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
       {
         component:'div',
         passprops:true,
@@ -77,12 +75,7 @@
             component:'button',
             __dangerouslyBindEvalProps:{
               onClick:function(clicks,set_click){
-                // console.log('this is inline',{clicks,set_click},'arguments',arguments);
-                // console.log('this',this);
                 set_click(clicks+1);
-                // return function(e){
-                //   console.log({e})
-                // }
               },
             },
             thisprops:{
@@ -106,8 +99,6 @@
       `
       const [clicks, set_click] = useState(0);
       const exposeprops = {clicks,set_click};
-
-      
       `,
       {
         name:'hookClickFunctionComponent',

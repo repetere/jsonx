@@ -154,40 +154,56 @@ jsonx.jsonxRender.call(boundConfig, {
 </table>
 <hr>
 <h2><a name="function-component">2. Function Components </a></h2>
-<p>You can also create react components with lifecycle functions using <code>getReactClassComponent</code>.</p>
+<p>JSONX exposes the <code>jsonx._jsonxComponents.getReactFunctionComponent</code> function that can you can use to create React Function Components.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getReactFunctionComponent</span>(<span class="hljs-params">
+  reactComponent: JXM_JSON,
+  functionBody: <span class="hljs-built_in">string</span>,
+  options = {},
+</span>): <span class="hljs-title">ReactComponentLike</span>
+</span></code></pre>
+<p><code>getReactFunctionComponent</code> takes three arguments:</p>
+<ol>
+<li><code>reactComponent</code> which contains the JXM JSON for rendering the Function Component.</li>
+<li><code>functionBody</code> which is a string for the Function component (if you are using hooks or want to expose props from inside of your components, assign the props you want to make available to an <code>exposeprops</code> variable)</li>
+<li><code>options</code> used to customize <code>getReactFunctionComponent</code>.</li>
+</ol>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
+  <span class="hljs-comment">//reactComponent</span>
   {
     component:<span class="hljs-string">&apos;div&apos;</span>,
     passprops:<span class="hljs-literal">true</span>,
     children:[
       {
-        component:<span class="hljs-string">&apos;span&apos;</span>,
-        children:<span class="hljs-string">&apos;Loading in ... &apos;</span>
+        component:<span class="hljs-string">&apos;button&apos;</span>,
+        __dangerouslyBindEvalProps:{
+          onClick:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">clicks,set_click</span>)</span>{
+            set_click(clicks+<span class="hljs-number">1</span>);
+          },
+        },
+        thisprops:{
+          clicks:[<span class="hljs-string">&apos;clicks&apos;</span>],
+          set_click:[<span class="hljs-string">&apos;set_click&apos;</span>]
+        },
+        children:<span class="hljs-string">&apos;Click Me&apos;</span>,
       },
       {
-        component:<span class="hljs-string">&apos;button&apos;</span>,
+        component:<span class="hljs-string">&apos;span&apos;</span>,
+        children:<span class="hljs-string">&apos; Clicks: &apos;</span>
+      },
+      {
+        component:<span class="hljs-string">&apos;span&apos;</span>,
         thisprops:{
-          _children:[<span class="hljs-string">&apos;count&apos;</span>],
+          _children:[<span class="hljs-string">&apos;clicks&apos;</span>],
         }
       }
     ]
   },
+  <span class="hljs-comment">//functionBody</span>
   <span class="hljs-string">`
-  const [count, setCount] = useState(3);
-  const exposeprops = {count,setCount};
-  let interval;
-
-  useEffect(()=&gt;{
-    interval = setInterval(()=&gt;{
-      setCount(count-1);
-    }, 1000);
-
-    return function cleanup(){
-      clearInterval(interval);
-    }
-  });
-
+  const [clicks, set_click] = useState(0);
+  const exposeprops = {clicks,set_click};
   `</span>,
+  <span class="hljs-comment">//options</span>
   {
     name:<span class="hljs-string">&apos;hookFunctionComponent&apos;</span>,
   });
@@ -195,9 +211,9 @@ jsonx.jsonxRender.call(boundConfig, {
 <h3>Example Function Components</h3>
 <table style="border:0; width:100%">
   <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
   </tr>
 </table>

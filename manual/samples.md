@@ -29,6 +29,7 @@
 9. [Custom Library: React Bootstrap Example](https://jsfiddle.net/yawetse/gctmsojp/22/)
 10. [Custom Component: React Calendar Example](https://jsfiddle.net/yawetse/Lqwe3f59/5/)
 11. [Create Components: Function (with hooks), Class, Lazy, Suspense](https://jsfiddle.net/yawetse/ck3oye01/7/)
+11. [Create Components: Function (with hooks)](https://jsfiddle.net/yawetse/a4pmLyd1/4/)
 
 ---
 
