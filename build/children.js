@@ -94,7 +94,9 @@ export function getChildrenProps(options = {}) {
                 ? {}
                 : {
                     style: {}
-                }, childjsonx.props, typeof this !== "undefined" && this && this.disableRenderIndexKey
+                }, childjsonx.props, 
+            //@ts-ignore
+            typeof this !== "undefined" || (this && this.disableRenderIndexKey)
                 ? {}
                 : { key: typeof renderIndex !== "undefined"
                         ? renderIndex + Math.random()

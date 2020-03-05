@@ -681,8 +681,6 @@ export function getComputedProps(options = {}) {
             : {}, jsonx.__spreadComponent
             ? getChildrenComponents.call(this, { allProps, jsonx })
             : {}, evalAllProps);
-        if (jsonx.debug)
-            console.debug({ jsonx, computedProps });
         return computedProps;
     }
     catch (e) {

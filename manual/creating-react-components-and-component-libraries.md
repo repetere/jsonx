@@ -229,41 +229,52 @@ const hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
 ## <a name="dynamic-component">3. Dynamic Components </a>
 
 
-JSONX exposes the `jsonx._jsonxComponents.DynamicComponent` function that can you can use to create components that load data and render asynchronously. The typical use case is if you have some kind of dashboard or components that are independently loading data, Dynamic Components are a convenient way to handle dynamic components without Suspense and Lazy Components (they use hooks under the hood). 
+JSONX has a helper component called `DynamicComponent`. Using `DynamicComponent` allows you to create components that load data and render asynchronously. 
+
+The typical use case is if you have some kind of dashboard or components that are independently loading data, Dynamic Components are a convenient way to handle dynamic components without Suspense and Lazy Components (they use hooks under the hood). 
 
 Once the data is fetched, the `jsonx` object passed is rendered and the resolved data is available as  `resourceprops.DynamicComponentData`.
 
 ```typescript
-export function DynamicComponent({
-  useCache: boolean;
-  cacheTimeout: number;//milliseconds
-  loadingJSONX: jsonx;
-  loadingErrorJSONX: jsonx;
-  cacheTimeoutFunction: () => void,
-  jsonx: jsonx;
-  transformFunction: (data: any) => any,
-  fetchURL: string;
-  fetchOptions: any;
-  fetchFunction: (fetchURL: string, fetchOptions: any)=>Promise,
-}): ReactComponentLike
+const JXM = {
+  component: 'DynamicComponent',
+  props: {
+    useCache: boolean;
+    cacheTimeout: number;//milliseconds
+    loadingJSONX: jsonx;
+    loadingErrorJSONX: jsonx;
+    cacheTimeoutFunction: () => void,
+    jsonx: jsonx;
+    transformFunction: (data: any) => any,
+    fetchURL: string;
+    fetchOptions: any;
+    fetchFunction: (fetchURL: string, fetchOptions: any)=>Promise,
+  }
+};
 ```
 
 ```typescript
-const dynamicComponent = jsonx._jsonxComponents.DynamicComponent({
-  jsonx:{component:'div',children:'loaded data',},
-  fetchURL:'/path/to/some/data'
+const dynamicComponent = jsonx.getReactElementFromJSONX({
+  {
+    component:'DynamicComponent',
+    props:{
+      fetchURL:'/path/to/some/data'
+      jsonx:{
+        component:'p',
+        children:'loaded data',
+      }
+    }
+  },
 });
-
-
 ```
 
 ### Example Dynamic Components
 
 <table style="border:0; width:100%">
   <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/cjm1yshz/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/cjm1yshz/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
   </tr>
 </table>

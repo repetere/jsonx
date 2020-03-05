@@ -41448,8 +41448,6 @@
 	            : {}, jsonx.__spreadComponent
 	            ? getChildrenComponents.call(this, { allProps, jsonx })
 	            : {}, evalAllProps);
-	        if (jsonx.debug)
-	            console.debug({ jsonx, computedProps });
 	        return computedProps;
 	    }
 	    catch (e) {
@@ -49696,7 +49694,9 @@
 	                ? {}
 	                : {
 	                    style: {}
-	                }, childjsonx.props, typeof this !== "undefined" && this && this.disableRenderIndexKey
+	                }, childjsonx.props, 
+	            //@ts-ignore
+	            typeof this !== "undefined" || (this && this.disableRenderIndexKey)
 	                ? {}
 	                : { key: typeof renderIndex !== "undefined"
 	                        ? renderIndex + Math.random()

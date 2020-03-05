@@ -59,7 +59,7 @@
   <span class="hljs-comment">//evaluation properties</span>
   __dangerouslyEvalProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of evaluated JavaScript strings, used as inline functions onto jsonx.props, if the prop is a function it will be called bound to &apos;this&apos; and the returned value will be assigned</span>
   __dangerouslyBindEvalProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of evaluated JavaScript functions that are bound to this, used as inline functions onto jsonx.props</span>
-  <span class="hljs-comment">//computed properties</span>
+  __dangerouslyEvalAllProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// evaluate strings to generate props that are functions bound to `this`</span>
   __functionProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto jsonx.props</span>
   __dangerouslyInsertJSONXComponents:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</span>
   __dangerouslyInsertComponents:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</span>
@@ -72,20 +72,22 @@
   _children: <span class="hljs-built_in">Object</span>, <span class="hljs-comment">// any value assigned to _children will be set as the react element children property. This is typically used when you want to override what&apos;s passed as the children JXM property with a dynamic value later.</span>
 
   <span class="hljs-comment">//format properties</span>
+  ___FromLuxonTimeZone:<span class="hljs-built_in">String</span>, <span class="hljs-comment">// format date values as strings assigned to `children` prop using Luxon</span>
   ___ISOtoLuxonString:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to from an ISO String to a Luxon formatted DateTime String </span>
   ___JSDatetoLuxonString:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to from JavaScript Date to a Luxon formatted DateTime String </span>
   ___stringifyChildren:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to a string using JSON.stringify </span>
   ___toNumeral:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts numbers to numeral formatted numbers</span>
   ___toStringChildren:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to a string using toString()</span>
 
-  <span class="hljs-comment">//display properties</span>
-  comparisonprops:[<span class="hljs-built_in">Object</span>], <span class="hljs-comment">// An array of Objects used to conditionally display the current jsonx.component</span>
   
   <span class="hljs-comment">//utility properties</span>
   debug:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to output the calculated JXM props in the console</span>
   passprops:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to pass parent properties to children JSONX objects (except for the style property)</span>
-  comparisonorprops:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to use an or condition instead of and conditions between comparisions</span>
   ___template:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//imports JXM from a file path into the children property </span>
+  
+  <span class="hljs-comment">//display properties</span>
+  comparisonprops:[<span class="hljs-built_in">Object</span>], <span class="hljs-comment">// An array of Objects used to conditionally display the current jsonx.component</span>
+  comparisonorprops:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to use an or condition instead of and conditions between comparisions</span>
 }
 </code></pre>
 <h2>Simple JSONX Syntax</h2>
@@ -111,7 +113,7 @@
   }
 }
 </code></pre>
-<h3>JSONX Module</h3>
+<h3>JSONX Imperative API / Module</h3>
 <pre><code class="hljs language-javascript"><span class="hljs-string">&quot;jsonx&quot;</span> : {
   <span class="hljs-attr">getReactElement</span>: [<span class="hljs-built_in">Function</span>: getReactElement], {<span class="hljs-attr">aliases</span>:[getRenderedJSON,getReactElementFromJSONX]} <span class="hljs-comment">//Use React.createElement and JSONX JSON to create React elements</span>
   <span class="hljs-attr">getReactElementFromJSON</span>: [<span class="hljs-built_in">Function</span>: getReactElementFromJSON], <span class="hljs-comment">// Use compiledJSON object {type,props,children} to create React elements</span>

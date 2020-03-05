@@ -833,7 +833,6 @@ export function getComputedProps(
         : {},
       evalAllProps
     );
-    if (jsonx.debug) console.debug({ jsonx, computedProps });
     return computedProps;
   } catch (e) {
     debug && logError(e, e.stack ? e.stack : "no stack");
