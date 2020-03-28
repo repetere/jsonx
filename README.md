@@ -6,7 +6,7 @@
 
 **JSONX** is a module that creates React Elements, JSX and HTML from JSON.
 
-### Zero Setup
+### Declarative
 
 The JSONX UMD comes with batteries included so you can use JSONX in the browser without transpilers or any additional setup/configuration. The JSONX UMD is ideal for JAMstack Applications.
 
@@ -82,8 +82,8 @@ React.createElement(
 )
 ```
 
-You can pass React component libraries for additional components, or you own custom components (see [External and Custom Components](../using-external-and-custom-components/index.html)
- and [Using Advanced Props](../using-advanced-props/index.html) for more details).
+You can pass React component libraries for additional components, or you own custom components (see [External and Custom Components](https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html)
+ and [Using Advanced Props](https://repetere.github.io/jsonx/manual/using-advanced-props/index.html) for more details).
 
 
 ### Development
