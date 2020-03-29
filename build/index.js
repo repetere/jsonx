@@ -9,7 +9,7 @@ import * as jsonxUtils from "./utils";
 import numeral from "numeral";
 import * as luxon from "luxon";
 const createElement = React.createElement;
-const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent } = jsonxComponents;
+const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, } = jsonxComponents;
 const { getComputedProps } = jsonxProps;
 const { getJSONXChildren } = jsonxChildren;
 const { displayComponent } = jsonxUtils;
@@ -82,7 +82,7 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
     if (!jsonx || !jsonx.component)
         return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
     try {
-        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, componentMap, this.reactComponents);
+        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this.reactComponents);
         const reactComponents = boundedComponents.length
             ? getBoundedComponents.call(this, {
                 boundedComponents,
@@ -125,6 +125,8 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
             //@ts -ignore
             if (returnJSON)
                 return { type: element, props, children };
+            else if (jsonx.test)
+                return JSON.stringify({ element, props, children }, null, 2);
             //TODO: Fix
             else
                 return createElement(element, props, children);

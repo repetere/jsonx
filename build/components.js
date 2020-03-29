@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, createContext } from "react";
 import * as memoryCache from "memory-cache";
+import { useForm, Controller, ErrorMessage, } from 'react-hook-form';
 // import {cache} from 'memory-cache';
 // import cache from 'memory-cache';
 //@ts-ignore
@@ -265,6 +266,47 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
         : reactComponentClass;
     return reactClass;
 }
+/**
+ * A helper component that allows you to create forms with [react-hook-form](https://react-hook-form.com/) without needed to add external form libraries
+ * @param this
+ * @param props
+ */
+export function FormComponent(props = {}) {
+    const { hookFormOptions = {}, formComponent = { component: "div", children: "empty form" }, onSubmit, formWrapperComponent, formKey, } = props;
+    // const { register, unregister, errors, watch, handleSubmit, reset, setError, clearError, setValue, getValues, triggerValidation, control, formState, } = useForm(hookFormOptions);
+    const reactHookForm = useForm(hookFormOptions);
+    const context = {
+        ...this || {},
+        ...{ reactHookForm, },
+    };
+    if (!context.componentLibraries || !context.componentLibraries.ReactHookForm) {
+        context.componentLibraries = {
+            ...context.componentLibraries,
+            ...{
+                ReactHookForm: {
+                    Controller, ErrorMessage,
+                }
+            }
+        };
+    }
+    const formWrapperJXM = formWrapperComponent || {
+        component: 'form',
+        props: {
+            onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined,
+            key: formKey ? `formWrapperJXM-${formKey}` : undefined,
+        }
+    };
+    formWrapperJXM.children = Array.isArray(formComponent) ? formComponent : [formComponent];
+    const renderJSONX = useMemo(() => getReactElementFromJSONX.bind(context), [
+        context
+    ]);
+    return renderJSONX(formWrapperJXM);
+}
+/**
+ * A helper component that allows you to create components that load data and render asynchronously.
+ * @param this
+ * @param props
+ */
 export function DynamicComponent(props = {}) {
     //@ts-ignore
     const { useCache = true, cacheTimeout = 60 * 60 * 5, loadingJSONX = { component: "div", children: "...Loading" }, 

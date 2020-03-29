@@ -82,6 +82,7 @@
   
   <span class="hljs-comment">//utility properties</span>
   debug:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to output the calculated JXM props in the console</span>
+  test:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to output the calculated JXM as a string component</span>
   passprops:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to pass parent properties to children JSONX objects (except for the style property)</span>
   ___template:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//imports JXM from a file path into the children property </span>
   
@@ -142,6 +143,8 @@
     <span class="hljs-attr">getComponentFromMap</span>: [<span class="hljs-built_in">Function</span>: getComponentFromMap], <span class="hljs-comment">// returns a react element from jsonx.component</span>
     <span class="hljs-attr">getReactClassComponent</span>: [<span class="hljs-built_in">Function</span>: getReactClassComponent], <span class="hljs-comment">// returns a react class component and support lifecycle functions, lazy and suspense components</span>
     <span class="hljs-attr">getReactFunctionComponent</span>: [<span class="hljs-built_in">Function</span>: getReactFunctionComponent], <span class="hljs-comment">// returns a react function component and support lifecycle functions, hooks, lazy and suspense components</span>
+    <span class="hljs-attr">FormComponent</span>: [<span class="hljs-built_in">Function</span>: FormComponent], <span class="hljs-comment">// returns a helper react function component that allows you to create forms with [react-hook-form](https://react-hook-form.com/) without needed to add external form libraries</span>
+    <span class="hljs-attr">DynamicComponent</span>: [<span class="hljs-built_in">Function</span>: DynamicComponent], <span class="hljs-comment">// returns a helper react function component that allows you to create components that load data and render asynchronously. </span>
   },
   <span class="hljs-attr">_jsonxProps</span>: {
     <span class="hljs-attr">getJSONXProps</span>: [<span class="hljs-built_in">Function</span>: getJSONXProps], <span class="hljs-comment">// It uses traverse on a traverseObject to returns a resolved object on propName. So if you&apos;re making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths</span>

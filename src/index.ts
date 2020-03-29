@@ -18,7 +18,8 @@ const {
   componentMap,
   getComponentFromMap,
   getBoundedComponents,
-  DynamicComponent
+  DynamicComponent,
+  FormComponent,
 } = jsonxComponents;
 const { getComputedProps } = jsonxProps;
 const { getJSONXChildren } = jsonxChildren;
@@ -104,7 +105,7 @@ export function getReactElementFromJSONX(
   this: defs.Context,
   jsonx?: defs.jsonx | defs.simpleJsonx,
   resources = {}
-): ReactElementLike | JSONReactElement | null |undefined{
+): ReactElementLike | JSONReactElement | null |string|undefined{
   // eslint-disable-next-line
   const {
     componentLibraries = {},
@@ -128,6 +129,7 @@ export function getReactElementFromJSONX(
   try {
     const components = Object.assign(
       { DynamicComponent: DynamicComponent.bind(this) },
+      { FormComponent: FormComponent.bind(this) },
       componentMap,
       this.reactComponents
     );
@@ -173,6 +175,7 @@ export function getReactElementFromJSONX(
       });
       //@ts -ignore
       if (returnJSON) return { type: element as string, props, children };
+      else if (jsonx.test) return JSON.stringify({ element, props, children }, null, 2);
       //TODO: Fix
       else return createElement(element, props, children);
     } else {

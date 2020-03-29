@@ -144,6 +144,13 @@ describe('jsonx', function () {
         expect(e).to.be.an('error');
       }
     });
+    it('should return testing output', () => {
+      const ReactiveJSON = jsonx.getReactElementFromJSONX.call({}, { ...sampleJSONX, test: true });
+      expect(ReactiveJSON).to.be.a('string');
+      expect(ReactiveJSON).to.include('element');
+      expect(ReactiveJSON).to.include('props');
+      expect(ReactiveJSON).to.include('children');
+    });
   });
   describe('getReactElementFromJSON', () => {
     it('should return an instance of a react element', () => {

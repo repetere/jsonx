@@ -37,6 +37,7 @@
 <li><a href="#class-component">1. Class Components</a> - Use <code>jsonx._jsonxComponents.getReactClassComponent</code> and JXM to create React Class Components with JSON</li>
 <li><a href="#function-component">2. Function Components</a> - Use <code>jsonx._jsonxComponents.getReactFunctionComponent</code> and JXM to create React Function Components with JSON. Because JSONX can uses React under the hood, all React features are available (e.g. Hooks, Lazy and Suspense).</li>
 <li><a href="#dynamic-component">3. Dynamic Components</a> - Use <code>jsonx._jsonxComponents.DynamicComponent</code> is a special component that renders components after fetching data.</li>
+<li><a href="#form-component">4. Form Components</a> - Use <code>jsonx._jsonxComponents.FormComponent</code> is a special component that create forms with react-hook-form.</li>
 </ul>
 <h2><a name="class-component">1. Class Components </a></h2>
 <p>JSONX exposes the <code>jsonx._jsonxComponents.getReactClassComponent</code> function that can you can use to create React Class Components. <code>getReactClassComponent</code> uses <code>createReactClass</code> underneath the hood. You can read more about using <code>createReactClass</code> in the React docs section about <a href="https://reactjs.org/docs/react-without-es6.html">&#x201C;React Without ES6&#x201D;</a>.</p>
@@ -257,6 +258,45 @@ jsonx.jsonxRender.call(boundConfig, {
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/cjm1yshz/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/cjm1yshz/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+---
+<h2><a name="form-component">4. Form Components </a></h2>
+<p>JSONX has a helper component called <code>FormComponent</code>. Using <code>FormComponent</code> allows you to create forms with <a href="https://react-hook-form.com/">react-hook-form</a> without needed to add external form libraries.</p>
+<p>Form components work by creating a Function Component that uses the <code>useForm</code> hook. You can customize <code>useForm</code> by adding schema validations via <code>Yup</code> or any of the other optional arguments on <a href="https://react-hook-form.com/api#useForm">useForm</a>.</p>
+<p>The actual form elements are passed through the formComponent JXM property. By Default FormComponents are wrapped with <code>form onSubmit={handleSubmit(props.onSubmit)}</code> but the default wrapper can be overwritten with the <code>formWrapperComponent</code>.</p>
+<p>FormComponents will add an additional reactComponentLibrary called <code>ReactHookForm</code> with the <code>Controller</code> and <code>ErrorMessage</code> components included. All of the methods returned from the <code>useForm</code> hook are bound to the function context on the <code>this.reactHookForm</code> property. This is useful when you need to customize and pass registers, errors and other react-hook-form functionality into your JXM JSON Object.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> JXM = {
+  component: <span class="hljs-string">&apos;FormComponent&apos;</span>,
+  props: {
+    hookFormOptions: {},<span class="hljs-comment">// settings for react-hook-form&apos;s useForm hook</span>
+    formComponent: jsonx,
+    onSubmit:<span class="hljs-function">(<span class="hljs-params">formdata: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>,
+    formWrapperComponent: jsonx,
+  }
+};
+</code></pre>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> dynamicComponent = jsonx.getReactElementFromJSONX({
+  {
+    component:<span class="hljs-string">&apos;FormComponent&apos;</span>,
+    props:{
+      fetchURL:<span class="hljs-string">&apos;/path/to/some/data&apos;</span>
+      formComponent:{
+        component: <span class="hljs-string">&quot;input&quot;</span>,
+        props: { <span class="hljs-keyword">type</span>: <span class="hljs-string">&quot;text&quot;</span>, name: <span class="hljs-string">&quot;username&quot;</span>, placeholder: <span class="hljs-string">&quot;username&quot;</span> },
+        thiscontext:{ ref:[<span class="hljs-string">&apos;reactHookForm&apos;</span>,<span class="hljs-string">&apos;register&apos;</span>] },
+      },
+    }
+  },
+});
+</code></pre>
+<h3>Example Form Components</h3>
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/8/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/8/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
   </tr>
 </table>

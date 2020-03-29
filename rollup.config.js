@@ -7,6 +7,7 @@ import replace from '@rollup/plugin-replace';
 import terser from 'rollup-plugin-terser-js';
 import alias from '@rollup/plugin-alias';
 import pkg from "./package.json";
+import { cloneElement } from 'react';
 
 const name = 'jsonx';
 const external = [
@@ -134,7 +135,7 @@ function getPlugins({
         // relative to the current directory, or the name
         // of a module in node_modules
         // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
-        'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createContext', 'Fragment', 'Suspense', 'lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue', ],
+        'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createContext', 'Fragment', 'Suspense', 'lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue','isValidElement', 'cloneElement', ],
 
         'node_modules/memory-cache/index.js': [
           'cache',

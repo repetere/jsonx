@@ -58,6 +58,7 @@ There are five kinds of Advanced Props (Traverse, Evaluation, Format, Display an
     - [4.1 \_\_template](#utility-template) - insert jxm objects from external files
     - [4.2 passprops](#utility-passprops) - pass props from parent to children elements
     - [4.3 debug](#utility-debug) - output computed advanced props and debugging information to the console
+    - [4.4 test](#utility-test) - output computed advanced props and debugging information as a string
 -  [5. Display Props](#display-props) - used to decide whether or not to render elements
     - [5.1 comparisonprops](#display-comparisonprops) - conditionally render elements based on prop values
     - [5.2 comparisonorprops](#display-comparisonorprops) - conditionally render elements flag to use 'or' logic instead of 'and' logic
@@ -475,7 +476,7 @@ const JXM_LA = {
 
 ## <a name="utility-props">4. Utility Props</a>
 
-_([__template](#utility-template), [passprops](#utility-passprops), [debug](#utility-debug))_
+_([__template](#utility-template), [passprops](#utility-passprops), [debug](#utility-debug), [test](#utility-test))_
 
 Utility props generally do not mutate `JXM.props` but are used to augment the expected behavior of JSONX.
 
@@ -505,6 +506,23 @@ const JXM = {
       style: {color: "blue"}
     }
   }
+}*/
+```
+### <a name="utility-test">test</a>
+The test flag outputs the value of the `JXM` object where `JXM.test === true` as a string.
+
+```typescript
+const JXM = {
+    component: 'div',
+    children: 'Test JXM Data',
+    test:true,
+};
+
+//outputs as a string component:
+/* { 
+  element: "div",
+  children: "Debug JXM Data",
+  test: true
 }*/
 ```
 

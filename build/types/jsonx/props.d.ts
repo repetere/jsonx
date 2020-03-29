@@ -19,3 +19,10 @@ export declare type dynamicComponentProps = {
     fetchOptions?: any;
     fetchFunction?: functionParam;
 };
+export declare type formComponentProps = {
+    hookFormOptions?: any;
+    onSubmit?: functionParam;
+    formComponent?: jsonx;
+    formWrapperComponent?: jsonx;
+    formKey?: any;
+};

@@ -88,6 +88,7 @@
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_components_.html#dynamiccomponent" class="tsd-kind-icon">Dynamic<wbr>Component</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_components_.html#formcomponent" class="tsd-kind-icon">Form<wbr>Component</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_components_.html#getboundedcomponents" class="tsd-kind-icon">get<wbr>Bounded<wbr>Components</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_components_.html#getcomponentfromlibrary" class="tsd-kind-icon">get<wbr>Component<wbr>From<wbr>Library</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_components_.html#getcomponentfrommap" class="tsd-kind-icon">get<wbr>Component<wbr>From<wbr>Map</a></li>
@@ -108,7 +109,7 @@
 					<div class="tsd-signature tsd-kind-icon">advanced<wbr>Binding<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = getAdvancedBinding()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/repetere/jsonx/blob/92b6e4a/src/components.ts#L56">components.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L57">components.ts:57</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -118,7 +119,7 @@
 					<div class="tsd-signature tsd-kind-icon">cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CacheClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new memoryCache.Cache()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/repetere/jsonx/blob/92b6e4a/src/components.ts#L48">components.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L49">components.ts:49</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -128,7 +129,7 @@
 					<div class="tsd-signature tsd-kind-icon">component<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = Object.assign({ Fragment, Suspense },ReactDOMElements,window &amp;&amp; typeof window &#x3D;&#x3D;&#x3D; &quot;object&quot; ? window.__jsonx_custom_elements : {})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/repetere/jsonx/blob/92b6e4a/src/components.ts#L63">components.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L64">components.ts:64</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -144,15 +145,20 @@
 					<a name="dynamiccomponent" class="tsd-anchor"></a>
 					<h3>Dynamic<wbr>Component</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">Dynamic<wbr>Component<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../interfaces/_types_jsonx_main_.context.html" class="tsd-signature-type">Context</a>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">defs.dynamicComponentProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>children<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="_types_jsonx_main_.html#jsonreactelement" class="tsd-signature-type">JSONReactElement</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ReactElementLike</span></li>
+						<li class="tsd-signature tsd-kind-icon">Dynamic<wbr>Component<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../interfaces/_types_jsonx_main_.context.html" class="tsd-signature-type">Context</a>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">defs.dynamicComponentProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>children<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="_types_jsonx_main_.html#jsonreactelement" class="tsd-signature-type">JSONReactElement</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ReactElementLike</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/repetere/jsonx/blob/92b6e4a/src/components.ts#L380">components.ts:380</a></li>
+									<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L433">components.ts:433</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A helper component that allows you to create components that load data and render asynchronously.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -160,9 +166,44 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> props: <span class="tsd-signature-type">defs.dynamicComponentProps</span><span class="tsd-signature-symbol"> = {}</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>children<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="_types_jsonx_main_.html#jsonreactelement" class="tsd-signature-type">JSONReactElement</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ReactElementLike</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>children<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="_types_jsonx_main_.html#jsonreactelement" class="tsd-signature-type">JSONReactElement</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ReactElementLike</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="formcomponent" class="tsd-anchor"></a>
+					<h3>Form<wbr>Component</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">Form<wbr>Component<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../interfaces/_types_jsonx_main_.context.html" class="tsd-signature-type">Context</a>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">defs.formComponentProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>children<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="_types_jsonx_main_.html#jsonreactelement" class="tsd-signature-type">JSONReactElement</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ReactElementLike</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L386">components.ts:386</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A helper component that allows you to create forms with <a href="https://react-hook-form.com/">react-hook-form</a> without needed to add external form libraries</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>this: <a href="../interfaces/_types_jsonx_main_.context.html" class="tsd-signature-type">Context</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> props: <span class="tsd-signature-type">defs.formComponentProps</span><span class="tsd-signature-symbol"> = {}</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>children<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="_types_jsonx_main_.html#jsonreactelement" class="tsd-signature-type">JSONReactElement</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ReactElementLike</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -176,7 +217,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/repetere/jsonx/blob/92b6e4a/src/components.ts#L77">components.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L78">components.ts:78</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -225,7 +266,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/repetere/jsonx/blob/92b6e4a/src/components.ts#L110">components.ts:110</a></li>
+									<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L111">components.ts:111</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -265,7 +306,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/repetere/jsonx/blob/92b6e4a/src/components.ts#L159">components.ts:159</a></li>
+									<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L160">components.ts:160</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -322,7 +363,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/repetere/jsonx/blob/92b6e4a/src/components.ts#L214">components.ts:214</a></li>
+									<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L215">components.ts:215</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -350,7 +391,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/repetere/jsonx/blob/92b6e4a/src/components.ts#L244">components.ts:244</a></li>
+									<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L245">components.ts:245</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -391,7 +432,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/repetere/jsonx/blob/92b6e4a/src/components.ts#L608">components.ts:608</a></li>
+									<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L661">components.ts:661</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -414,7 +455,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/repetere/jsonx/blob/92b6e4a/src/components.ts#L511">components.ts:511</a></li>
+									<li>Defined in <a href="https://github.com/repetere/rjx/blob/e03837a/src/components.ts#L564">components.ts:564</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -548,6 +589,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_components_.html#dynamiccomponent" class="tsd-kind-icon">Dynamic<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_components_.html#formcomponent" class="tsd-kind-icon">Form<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_components_.html#getboundedcomponents" class="tsd-kind-icon">get<wbr>Bounded<wbr>Components</a>

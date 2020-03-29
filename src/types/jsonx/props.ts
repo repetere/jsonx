@@ -23,6 +23,14 @@ export type dynamicComponentProps = {
   fetchFunction?: functionParam;
 };
 
+export type formComponentProps = {
+  hookFormOptions?: any;
+  onSubmit?: functionParam;
+  formComponent?: jsonx;
+  formWrapperComponent?: jsonx;
+  formKey?:any;
+};
+
 /**
  * returns children jsonx components defined on __spreadComponent spread over an array on props.__spread
  * @param {*} options

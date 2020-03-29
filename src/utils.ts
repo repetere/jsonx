@@ -273,6 +273,7 @@ export function validateJSONX(
   const validKeys = [
     "component",
     "props",
+    "test",
     "children",
     "__spreadComponent",
     "__inline",

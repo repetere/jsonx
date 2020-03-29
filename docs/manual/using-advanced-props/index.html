@@ -82,6 +82,7 @@
 <li><a href="#utility-template">4.1 __template</a> - insert jxm objects from external files</li>
 <li><a href="#utility-passprops">4.2 passprops</a> - pass props from parent to children elements</li>
 <li><a href="#utility-debug">4.3 debug</a> - output computed advanced props and debugging information to the console</li>
+<li><a href="#utility-test">4.4 test</a> - output computed advanced props and debugging information as a string</li>
 </ul>
 </li>
 <li><a href="#display-props">5. Display Props</a> - used to decide whether or not to render elements
@@ -420,7 +421,7 @@ main();
 </table>
 <hr>
 <h2><a name="utility-props">4. Utility Props</a></h2>
-<p><em>(<a href="#utility-template">__template</a>, <a href="#utility-passprops">passprops</a>, <a href="#utility-debug">debug</a>)</em></p>
+<p><em>(<a href="#utility-template">__template</a>, <a href="#utility-passprops">passprops</a>, <a href="#utility-debug">debug</a>, <a href="#utility-test">test</a>)</em></p>
 <p>Utility props generally do not mutate <code>JXM.props</code> but are used to augment the expected behavior of JSONX.</p>
 <h3><a name="utility-debug">debug</a></h3>
 <p>The debug flag outputs the value of the <code>JXM</code> object where <code>JXM.debug === true</code> and the value of all of the computed advanced props as well.</p>
@@ -446,6 +447,21 @@ main();
       style: {color: &quot;blue&quot;}
     }
   }
+}*/</span>
+</code></pre>
+<h3><a name="utility-test">test</a></h3>
+<p>The test flag outputs the value of the <code>JXM</code> object where <code>JXM.test === true</code> as a string.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> JXM = {
+    component: <span class="hljs-string">&apos;div&apos;</span>,
+    children: <span class="hljs-string">&apos;Test JXM Data&apos;</span>,
+    test:<span class="hljs-literal">true</span>,
+};
+
+<span class="hljs-comment">//outputs as a string component:</span>
+<span class="hljs-comment">/* { 
+  element: &quot;div&quot;,
+  children: &quot;Debug JXM Data&quot;,
+  test: true
 }*/</span>
 </code></pre>
 <h3><a name="utility-passprops">passprops</a></h3>

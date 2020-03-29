@@ -70,6 +70,7 @@ jxm = {
   
   //utility properties
   debug:Boolean, // A flag to output the calculated JXM props in the console
+  test:Boolean, // A flag to output the calculated JXM as a string component
   passprops:Boolean, // A flag to pass parent properties to children JSONX objects (except for the style property)
   ___template:String, //imports JXM from a file path into the children property 
   
@@ -139,6 +140,8 @@ If you want to save time, you can use the property name as the component/type an
     getComponentFromMap: [Function: getComponentFromMap], // returns a react element from jsonx.component
     getReactClassComponent: [Function: getReactClassComponent], // returns a react class component and support lifecycle functions, lazy and suspense components
     getReactFunctionComponent: [Function: getReactFunctionComponent], // returns a react function component and support lifecycle functions, hooks, lazy and suspense components
+    FormComponent: [Function: FormComponent], // returns a helper react function component that allows you to create forms with [react-hook-form](https://react-hook-form.com/) without needed to add external form libraries
+    DynamicComponent: [Function: DynamicComponent], // returns a helper react function component that allows you to create components that load data and render asynchronously. 
   },
   _jsonxProps: {
     getJSONXProps: [Function: getJSONXProps], // It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths

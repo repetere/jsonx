@@ -21,6 +21,7 @@
 -  [1. Class Components](#class-component) - Use `jsonx._jsonxComponents.getReactClassComponent` and JXM to create React Class Components with JSON
 -  [2. Function Components](#function-component) - Use `jsonx._jsonxComponents.getReactFunctionComponent` and JXM to create React Function Components with JSON. Because JSONX can uses React under the hood, all React features are available (e.g. Hooks, Lazy and Suspense). 
 -  [3. Dynamic Components](#dynamic-component) - Use `jsonx._jsonxComponents.DynamicComponent` is a special component that renders components after fetching data.
+-  [4. Form Components](#form-component) - Use `jsonx._jsonxComponents.FormComponent` is a special component that create forms with react-hook-form.
 
 ## <a name="class-component">1. Class Components </a>
 
@@ -275,6 +276,57 @@ const dynamicComponent = jsonx.getReactElementFromJSONX({
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/cjm1yshz/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/cjm1yshz/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+---
+
+## <a name="form-component">4. Form Components </a>
+
+
+JSONX has a helper component called `FormComponent`. Using `FormComponent` allows you to create forms with [react-hook-form](https://react-hook-form.com/) without needed to add external form libraries.
+
+Form components work by creating a Function Component that uses the `useForm` hook. You can customize `useForm` by adding schema validations via `Yup` or any of the other optional arguments on [useForm](https://react-hook-form.com/api#useForm).
+
+The actual form elements are passed through the formComponent JXM property. By Default FormComponents are wrapped with `form onSubmit={handleSubmit(props.onSubmit)}` but the default wrapper can be overwritten with the `formWrapperComponent`.
+
+FormComponents will add an additional reactComponentLibrary called `ReactHookForm` with the `Controller` and `ErrorMessage` components included. All of the methods returned from the `useForm` hook are bound to the function context on the `this.reactHookForm` property. This is useful when you need to customize and pass registers, errors and other react-hook-form functionality into your JXM JSON Object.
+
+```typescript
+const JXM = {
+  component: 'FormComponent',
+  props: {
+    hookFormOptions: {},// settings for react-hook-form's useForm hook
+    formComponent: jsonx,
+    onSubmit:(formdata: any) => any,
+    formWrapperComponent: jsonx,
+  }
+};
+```
+
+```typescript
+const dynamicComponent = jsonx.getReactElementFromJSONX({
+  {
+    component:'FormComponent',
+    props:{
+      fetchURL:'/path/to/some/data'
+      formComponent:{
+        component: "input",
+        props: { type: "text", name: "username", placeholder: "username" },
+        thiscontext:{ ref:['reactHookForm','register'] },
+      },
+    }
+  },
+});
+```
+
+### Example Form Components
+
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/8/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/8/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
   </tr>
 </table>
