@@ -1,0 +1,196 @@
+<html>
+
+<head>
+  <!-- <script src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" type="text/javascript"></script> -->
+  <!-- <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" type="text/javascript"></script> -->
+  <!-- <script src="https://unpkg.com/jsonx/dist/index.umd.js" type="text/javascript"></script> -->
+  <!-- <script src="../../../node_modules/react/index.js" type="text/javascript"></script> -->
+  <!-- <script src="../../../node_modules/react-dom/index.js" type="text/javascript"></script> -->
+  
+  <script src="../../../dist/index.web.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    window.React = jsonx.__getReact();
+    window.ReactDOM = jsonx.__getReactDOM();
+  </script>
+  <script crossorigin src="https://unpkg.com/react-hook-form@5.2.0/dist/react-hook-form.umd.js" type="text/javascript"></script>
+
+  <script></script>
+</head>
+
+<body>
+  <div id="root"></div>
+    <script type="application/javascript">
+      const JXM = {
+        component: "div",
+        props: { className: "App", key:0 },
+        children: [
+          {
+            component: "h1",
+            props: { key:1 },
+            children: "Hello JSONX CodeSandbox"
+          },
+          {
+            component: "h2",
+            props: { key:2 },
+            children: "Start editing to see the magic happen!"
+          },
+          {
+
+            component:'FormComponent',
+            props:{
+              key:4,
+              onSubmit:(data)=>{
+                console.log({submitData:data})
+                document.querySelector('#formOutput').innerHTML=JSON.stringify(data,null,2);
+              },
+              formComponent:{
+
+                component:'div',
+                props:{key:3423},
+                children:[
+                  {
+                    component:'ReactHookForm.Controller',
+                    props:{
+                      name:'notes',
+                      key:120192,
+                      defaultValue:'hey there',
+                      // as:'input'
+                    },
+                    __dangerouslyInsertJSONXComponents: {
+                      as:{component:'input',props:{key:092309}}
+                    },
+                    
+                    // __dangerouslyInsertReactComponents: {
+                    //   as:'input'
+                    // },
+                    thiscontext:{
+                      control:['reactHookForm','control']
+                    },
+                    __dangerouslyEvalProps:{
+                      onChange:`(function(){
+                        return ([e])=>{
+                          return e.target.value;
+                        }
+                      })`,
+                    }
+                  },
+                  {
+                    component: "input",
+                      props: {
+                        key:31,
+                        type: "text",
+                        name: "username",
+                        placeholder: "username"
+                      },
+                      // thiscontext:{
+                      //   ref:['reactHookForm','register']
+                      // },
+                      __dangerouslyEvalProps:{
+                        ref:`(function(){
+                          return this.reactHookForm.register({required:'required username'});
+                        })`,
+                      }
+                    },
+                    {
+                      component: "ReactHookForm.ErrorMessage",
+                      props: {
+                        key:32,
+                        name: "username"
+                      },
+                      thiscontext:{
+                        errors:['reactHookForm','errors']
+                      },
+                      __dangerouslyInsertFunctionComponents: {
+                        children:{
+                          functionBody: `let exposeProps={}`,
+                          reactComponent:{
+                            component:'p',
+                            thisprops:{
+                              _children:['message']
+                            }
+                            // children:'test functional component',
+                          },
+                          options: {
+                            name:'testHookFormError'
+                          }
+                        }
+                      }
+                    },
+                    {
+                      component: "input",
+                      props: {
+                        key:33,
+                        type: "password",
+                        name: "password"
+                      },
+                      __dangerouslyEvalProps:{
+                        ref:`(function(){
+                          return this.reactHookForm.register({required:'this is required',});
+                        })`,
+                      }
+                    },
+                    {
+                      component: "ReactHookForm.ErrorMessage",
+                      props: {
+                        key:367,
+                        name: "password"
+                      },
+                      thiscontext:{
+                        errors:['reactHookForm','errors']
+                      }
+                    },
+                    {
+                      component:'div',
+                      props:{key:789239},
+                      children:[
+                        
+                        {
+                          component: "button",
+                          props: {
+                            key:34,
+                            type: "button"
+                          },
+                          __dangerouslyBindEvalProps:{
+                            onClick:`(function(){
+                              const values = this.reactHookForm.getValues();
+                              console.log({values})
+                            })`
+                          },
+                          children: "get values"
+                        },
+                        {
+                          component: "button",
+                          props: {
+                            key:345234,
+                            type: "reset"
+                          },
+                          children: "reset"
+                        },
+                        {
+                          component: "button",
+                          props: {
+                            key:2432,
+                            type: "submit"
+                          },
+                          children: "Submit"
+                        }
+                      ]
+                    },
+                ]
+              }
+            }
+          },
+        ]
+      };
+      jsonx.jsonxRender.call({ 
+        debug:true,
+        componentLibraries: {
+          ReactHookForm: window.ReactHookForm,
+        },
+       },{ jsonx: JXM, querySelector: "#root" });
+    </script>
+    <h2>form submit data</h2>
+    <div id="formOutput" style="border:1px solid black; padding: 1rem; margin:1rem;"></div>
+</body>
+
+</html>

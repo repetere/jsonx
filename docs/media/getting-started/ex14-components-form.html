@@ -1,0 +1,114 @@
+<html>
+
+<head>
+  <!-- <script src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" type="text/javascript"></script> -->
+  <!-- <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" type="text/javascript"></script> -->
+  <!-- <script src="https://unpkg.com/jsonx/dist/index.umd.js" type="text/javascript"></script> -->
+  <!-- <script src="../../../node_modules/react/index.js" type="text/javascript"></script> -->
+  <!-- <script src="../../../node_modules/react-dom/index.js" type="text/javascript"></script> -->
+  <script src="../../../dist/index.web.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    window.React = jsonx.__getReact();
+    window.ReactDOM = jsonx.__getReactDOM();
+    </script>
+  <script></script>
+</head>
+
+<body>
+  <div id="main"></div>
+  <script>
+  
+
+    const hookCountdownFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
+      {
+        component:'div',
+        passprops:true,
+        children:[
+          {
+            component:'span',
+            children:'Loading in ... '
+          },
+          {
+            component:'button',
+            thisprops:{
+              _children:['count'],
+            }
+          }
+        ]
+      },
+      `
+      const [count, setCount] = useState(3);
+      const exposeprops = {count,setCount};
+      let interval;
+
+      useEffect(()=>{
+        interval = setInterval(()=>{
+          setCount(count-1);
+        }, 1000);
+
+        return function cleanup(){
+          clearInterval(interval);
+        }
+      });
+
+      `,
+      {
+        name:'hookCountdownFunctionComponent',
+      });
+
+  
+    const JXM = {
+      component:'div',
+      children:[
+        {
+          component:'h1',
+          children:'jsonx._jsonxComponents.DynamicComponent',
+        },
+        {
+          component:'DynamicComponent',
+          props:{
+            fetchURL:'https://my-json-server.typicode.com/repetere/mock-jsonx-jxm-template/jsonx',
+            jsonx:{
+              component:'div',
+              passprops:true,
+              resourceprops: {
+                datum:['DynamicComponentData'],
+              },
+              children:[
+
+              {
+                  component:'p',
+                  debug:true,
+                  ___stringifyChildren:true,
+                  thisprops: {
+                    _children:['datum','children'],
+                  },
+                  // children:'pl'
+                },
+                {
+                  component:'p',
+                  children:'loaded data',
+                },
+              ]
+            }
+          }
+        },
+        
+      ]
+    };
+    const boundConfig = {
+      debug:true, 
+      reactComponents:{
+        // dynamicComponent,
+        hookCountdownFunctionComponent,
+      }
+    };
+    
+    jsonx.jsonxRender.call(boundConfig, {
+      jsonx: JXM, 
+      querySelector:'#main', 
+    });
+  </script>
+</body>
+
+</html>

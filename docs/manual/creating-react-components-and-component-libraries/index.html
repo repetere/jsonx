@@ -281,7 +281,7 @@ jsonx.jsonxRender.call(boundConfig, {
   {
     component:<span class="hljs-string">&apos;FormComponent&apos;</span>,
     props:{
-      fetchURL:<span class="hljs-string">&apos;/path/to/some/data&apos;</span>
+      onSubmit: <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> { <span class="hljs-built_in">console</span>.log({ submitData: data }) },
       formComponent:{
         component: <span class="hljs-string">&quot;input&quot;</span>,
         props: { <span class="hljs-keyword">type</span>: <span class="hljs-string">&quot;text&quot;</span>, name: <span class="hljs-string">&quot;username&quot;</span>, placeholder: <span class="hljs-string">&quot;username&quot;</span> },
@@ -294,9 +294,9 @@ jsonx.jsonxRender.call(boundConfig, {
 <h3>Example Form Components</h3>
 <table style="border:0; width:100%">
   <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/8/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/18/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/8/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/18/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
   </tr>
 </table>

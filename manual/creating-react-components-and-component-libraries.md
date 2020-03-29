@@ -309,7 +309,7 @@ const dynamicComponent = jsonx.getReactElementFromJSONX({
   {
     component:'FormComponent',
     props:{
-      fetchURL:'/path/to/some/data'
+      onSubmit: (data) => { console.log({ submitData: data }) },
       formComponent:{
         component: "input",
         props: { type: "text", name: "username", placeholder: "username" },
@@ -324,9 +324,9 @@ const dynamicComponent = jsonx.getReactElementFromJSONX({
 
 <table style="border:0; width:100%">
   <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/8/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/18/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/8/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/18/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
     </td>
   </tr>
 </table>
