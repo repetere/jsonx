@@ -1,6 +1,6 @@
 {
   "name": "jsonx",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks",
   "main": "dist/index.cjs.js",
   "module": "build/index.js",
@@ -91,7 +91,6 @@
     "react": "16.13.0",
     "react-bootstrap": "1.0.0-beta.16",
     "react-dom": "16.13.0",
-    "react-hook-form": "^5.2.0",
     "react-materialize": "3.5.9",
     "react-md": "1.15.1",
     "react-spectre": "0.0.1-alpha.7",
@@ -120,6 +119,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-dom-factories": "^1.0.2",
+    "react-hook-form": "^5.2.0",
     "ua-parser-js": "^0.7.21",
     "use-global-hook": "^0.1.12"
   },
