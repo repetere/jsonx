@@ -74,7 +74,7 @@
     "bulma": "0.8.0",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
-    "coveralls": "3.0.9",
+    "coveralls": "3.0.11",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.2",
     "enzyme-adapter-react-16.3": "^1.7.2",
