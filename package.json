@@ -80,7 +80,7 @@
     "enzyme-adapter-react-16.3": "^1.7.2",
     "install": "0.13.0",
     "jest": "25.1.0",
-    "jsdom": "16.2.0",
+    "jsdom": "16.2.2",
     "jsdom-global": "3.0.2",
     "lodash-es": "4.17.15",
     "materialize-css": "1.0.0",
