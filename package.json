@@ -82,7 +82,7 @@
     "@types/react": "^16.9.27",
     "@types/react-dom": "16.9.5",
     "@types/react-dom-factories": "1.0.2",
-    "@types/sinon": "7.5.2",
+    "@types/sinon": "9.0.0",
     "@types/ua-parser-js": "0.7.33",
     "@types/use-global-hook": "0.1.2",
     "benchmark": "2.1.4",
