@@ -127,6 +127,7 @@ function getPlugins({
       noEmitOnError: false,
       declaration: false,
       declarationDir: null,
+      allowJs:true,
     }),
     commonjs({
       extensions: ['.js', '.ts'],
