@@ -1,1 +1,1808 @@
-var Spectre=function(e,r){"use strict";function a(e,r){return e(r={exports:{}},r.exports),r.exports}r=r&&r.hasOwnProperty("default")?r.default:r;var n=a(function(e){function r(){return e.exports=r=Object.assign||function(e){for(var r=1;r<arguments.length;r++){var a=arguments[r];for(var n in a)Object.prototype.hasOwnProperty.call(a,n)&&(e[n]=a[n])}return e},r.apply(this,arguments)}e.exports=r});var s=function(e,r){if(null==e)return{};var a,n,s={},c=Object.keys(e);for(n=0;n<c.length;n++)a=c[n],r.indexOf(a)>=0||(s[a]=e[a]);return s};var c=function(e,r){if(null==e)return{};var a,n,c=s(e,r);if(Object.getOwnPropertySymbols){var l=Object.getOwnPropertySymbols(e);for(n=0;n<l.length;n++)a=l[n],r.indexOf(a)>=0||Object.prototype.propertyIsEnumerable.call(e,a)&&(c[a]=e[a])}return c},l="SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";function t(){}function o(){}o.resetWarningCache=t;var i=a(function(e){e.exports=function(){function e(e,r,a,n,s,c){if(c!==l){var t=new Error("Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types");throw t.name="Invariant Violation",t}}function r(){return e}e.isRequired=e;var a={array:e,bool:e,func:e,number:e,object:e,string:e,symbol:e,any:e,arrayOf:r,element:e,elementType:e,instanceOf:r,node:e,objectOf:r,oneOf:r,oneOfType:r,shape:r,exact:r,checkPropTypes:o,resetWarningCache:t};return a.PropTypes=a,a}()}),m=a(function(e){!function(){var r={}.hasOwnProperty;function a(){for(var e=[],n=0;n<arguments.length;n++){var s=arguments[n];if(s){var c=typeof s;if("string"===c||"number"===c)e.push(s);else if(Array.isArray(s)&&s.length){var l=a.apply(null,s);l&&e.push(l)}else if("object"===c)for(var t in s)r.call(s,t)&&s[t]&&e.push(t)}}return e.join(" ")}e.exports?(a.default=a,e.exports=a):window.classNames=a}()}),p=function(e){var a=e.children,n=c(e,["children"]),s=n.tag,l=n.contents,t=n.label,o=c(n,["tag","contents","label"]);return r.createElement(s,o,a||l," ",t&&r.createElement(d,{contents:t}))};p.propTypes={tag:i.string,children:i.any,contents:i.any,label:i.any};var d=function(e){var a=e.children,s=c(e,["children"]),l=s.contents,t=s.className,o=c(s,["contents","className"]);return r.createElement("small",n({className:m("label",t)},o),a||l)};d.propTypes={children:i.any,contents:i.any,className:i.any};var u=function(e){return r.createElement(p,n({},e,{tag:"h1"}))},h=function(e){return r.createElement(p,n({},e,{tag:"h2"}))},v=function(e){return r.createElement(p,n({},e,{tag:"h3"}))},b=function(e){return r.createElement(p,n({},e,{tag:"h4"}))},N=function(e){return r.createElement(p,n({},e,{tag:"h5"}))},y=function(e){return r.createElement(p,n({},e,{tag:"h6"}))};u.propTypes=h.propTypes=v.propTypes=b.propTypes=N.propTypes=y.propTypes={children:i.any,contents:i.any,label:i.any},u.Label=h.Label=v.Label=b.Label=N.Label=y.Label=d;var f=Object.freeze({H1:u,H2:h,H3:v,H4:b,H5:N,H6:y,Label:d}),g=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=s.striped,o=s.hover,i=s.scroll,p=c(s,["className","striped","hover","scroll"]),d=m("table",l,{"table-striped":t,"table-hover":o,"table-scroll":i});return r.createElement("table",n({},p,{className:d}),a)};g.propTypes={children:i.any,className:i.any,striped:i.bool,hover:i.bool,scroll:i.bool};var T=function(e){var a=e.children,n=c(e,["children"]);return r.createElement("thead",n,a)};T.propTypes={children:i.any};var E=function(e){var a=e.children,n=c(e,["children"]);return r.createElement("tbody",n,a)};E.propTypes={children:i.any};var O=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=s.active,o=c(s,["className","active"]),i=m(l,{active:t});return r.createElement("tr",n({},o,{className:i}),a)};O.propTypes={children:i.any,className:i.any,active:i.bool};var j=function(e){var a=e.children,n=c(e,["children"]);return r.createElement("th",n,a)};j.propTypes={children:i.any};var x=function(e){var a=e.children,n=c(e,["children"]);return r.createElement("td",n,a)};x.propTypes={children:i.any},g.Header=T,g.Body=E,g.Row=O,g.Heading=j,g.Cell=x;var w=Object.freeze({Table:g,Header:T,Body:E,Row:O,Heading:j,Cell:x}),P=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=s.primary,o=s.link,i=s.success,p=s.error,d=s.block,u=s.small,h=s.large,v=s.action,b=s.circle,N=s.active,y=s.loading,f=c(s,["className","primary","link","success","error","block","small","large","action","circle","active","loading"]),g=m("btn",{"btn-primary":t,"btn-link":o,"btn-success":i,"btn-error":p,"btn-block":d,"btn-sm":u,"btn-lg":h,"btn-action":v||b,circle:b,active:N,loading:y},l);return r.createElement("button",n({},f,{className:g}),a)};P.propTypes={children:i.any,className:i.string,primary:i.bool,link:i.bool,success:i.bool,error:i.bool,block:i.bool,small:i.bool,large:i.bool,action:i.bool,circle:i.bool,active:i.bool,loading:i.bool};var z=function(e){var a=e.children,s=c(e,["children"]),l=s.block,t=c(s,["block"]),o=m("btn-group",{"btn-group-block":l});return r.createElement("div",n({},t,{className:o}),a)};z.propTypes={children:i.any,block:i.bool},P.Group=z;var k=Object.freeze({Button:P,Group:z}),S=function(e){var a=e.className,s=e.label,l=c(e,["className","label"]),t=m("form-radio",a);return r.createElement("label",{className:t},r.createElement("input",n({},l,{type:"radio"})),r.createElement("i",{className:"form-icon"})," ",s)};S.propTypes={className:i.string,label:i.string};var B=function(e,r,a){return r in e?Object.defineProperty(e,r,{value:a,enumerable:!0,configurable:!0,writable:!0}):e[r]=a,e};var I=function(e){for(var r=1;r<arguments.length;r++){var a=null!=arguments[r]?arguments[r]:{},n=Object.keys(a);"function"==typeof Object.getOwnPropertySymbols&&(n=n.concat(Object.getOwnPropertySymbols(a).filter(function(e){return Object.getOwnPropertyDescriptor(a,e).enumerable}))),n.forEach(function(r){B(e,r,a[r])})}return e},C=function(e){var a=e.children,s=e.className,l=e.label,t=e.id,o=c(e,["children","className","label","id"]),i=m("form-group",s);return r.createElement("div",n({},o,{className:i}),l&&r.createElement("label",{className:"form-label",htmlFor:t},l),a)};C.propTypes={children:i.node.isRequired,className:i.string,label:i.string,id:i.string};var H=function(e){var a=e.className,s=e.label,l=e.id,t=c(e,["className","label","id"]),o={label:s,id:l},i=I({id:l},t),p=m("form-input",a);return r.createElement(C,o,r.createElement("input",n({},i,{className:p})))};H.propTypes={className:i.string,label:i.string,id:i.string};var A=function(e){var a=e.children,s=e.className,l=e.label,t=e.id,o=c(e,["children","className","label","id"]),i={label:l,id:t},p=I({id:t},o),d=m("form-select",s);return r.createElement(C,i,r.createElement("select",n({},p,{className:d}),a))};A.propTypes={children:i.oneOf([i.node,i.arrayOf(i.node)]),className:i.string,label:i.string,id:i.string};var F=function(e){var a=e.className,s=e.label,l=c(e,["className","label"]),t=m("form-switch",a);return r.createElement("label",{className:t},r.createElement("input",n({},l,{type:"checkbox"})),r.createElement("i",{className:"form-icon"})," ",s)};F.propTypes={className:i.string,label:i.string};var L=function(e){var a=e.className,s=e.label,l=c(e,["className","label"]),t=m("form-checkbox",a);return r.createElement("label",{className:t},r.createElement("input",n({},l,{type:"checkbox"})),r.createElement("i",{className:"form-icon"})," ",s)};L.propTypes={className:i.string,label:i.string};var R=function(e){var a=e.children,s=e.className,l=e.label,t=e.id,o=c(e,["children","className","label","id"]),i={label:l,id:t},p=I({id:t},o),d=m("form-input",s);return r.createElement(C,i,r.createElement("textarea",n({},p,{className:d}),a))};R.propTypes={children:i.string,className:i.string,label:i.string,id:i.string};var _=Object.freeze({Radio:S,Input:H,Select:A,Switch:F,CheckBox:L,TextArea:R,FormGroup:C}),G=function(e){var a=e.className,s=e.name,l=e.size,t=c(e,["className","name","size"]),o=m(a,"icon","icon-".concat(s),{"icon-2x":"2x"===l,"icon-3x":"3x"===l,"icon-4x":"4x"===l});return r.createElement("i",n({},t,{className:o}))};G.propTypes={className:i.string,name:i.string,size:i.string};var D=Object.freeze({Icon:G}),M=function(e){var a=e.children,s=c(e,["children"]),l=s.primary,t=s.secondary,o=s.success,i=s.warning,p=s.error,d=s.rounded,u=s.small,h=c(s,["primary","secondary","success","warning","error","rounded","small"]),v=m("label",{"label-primary":l,"label-secondary":t,"label-success":o,"label-warning":i,"label-error":p,"label-rounded":d}),b=u?"small":"span";return r.createElement(b,n({},h,{className:v}),a)};M.propTypes={children:i.node,primary:i.bool,secondary:i.bool,success:i.bool,warning:i.bool,error:i.bool,rounded:i.bool,small:i.bool};var W=Object.freeze({Label:M}),q=function(e){var a=e.responsive,s=e.contain,l=e.cover,t=c(e,["responsive","contain","cover"]),o=m({"img-responsive":a,"img-fit-contain":s,"img-fit-cover":l});return r.createElement("img",n({},t,{className:o}))};q.propTypes={responsive:i.bool,contain:i.bool,cover:i.bool};var U=function(e){var a=e.children,s=c(e,["children"]),l=s.tag,t=s.responsive,o=c(s,["tag","responsive"]),i=m({"video-responsive":t,"video-responsive-1-1":"1:1"===t,"video-responsive-4-3":"4:3"===t});return r.createElement(l,n({},o,{className:i}),a)},V=function(e){return r.createElement(U,n({},e,{tag:"video"}))},Y=function(e){return r.createElement(U,n({},e,{tag:"div"}))};U.propTypes=V.propTypes=Y.propTypes={children:i.node,responsive:i.oneOfType([i.bool,i.oneOf(["1:1","4:3","16:9"])])},V.Container=Y;var J=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=s.caption,o=s.captionAlignment,i=c(s,["className","caption","captionAlignment"]),p=m("figure",l),d=m("figure-caption",{"text-left":"left"===o,"text-center":"center"===o,"text-right":"right"===o});return r.createElement("figure",n({},i,{className:p}),a,t&&r.createElement("figcaption",{className:d},t))};J.propTypes={children:i.node,className:i.string,caption:i.string,captionAlignment:i.oneOf(["left","center","right"])};var K=Object.freeze({Image:q,Video:V,Container:Y,Figure:J}),Q=Object.assign||function(e){for(var r=1;r<arguments.length;r++){var a=arguments[r];for(var n in a)Object.prototype.hasOwnProperty.call(a,n)&&(e[n]=a[n])}return e},X=function(e,r){var a={};for(var n in e)r.indexOf(n)>=0||Object.prototype.hasOwnProperty.call(e,n)&&(a[n]=e[n]);return a},Z=function(e){var a,n,s,c,l,t,o=e.children,i=X(e,["children"]),p=i.className,d=X(i,["className"]),u=(n=(a=d).all,s=a.offset,c=a.hide,l=a.show,t=[],n?t.push("col-"+n):t.push(["xs","sm","md","lg","xl"].reduce(function(e,r){return a[r]?m(e,"col-"+r+"-"+a[r]):e},"")),s&&t.push("col-"+s+"-auto"),c&&t.push(m(c.map(function(e){return"hide-"+e}))),l&&t.push(m(l.map(function(e){return"show-"+e}))),t),h=m("column",u,p);return r.createElement("div",{className:h},o)};Z.propTypes={children:i.any,className:i.string,xs:i.number,sm:i.number,md:i.number,lg:i.number,xl:i.number,all:i.number,offset:i.string,hide:i.array,show:i.array};var $=function(e){var a=e.children,n=X(e,["children"]),s=n.className,c=n.gapless,l=n.oneline,t=X(n,["className","gapless","oneline"]),o=m("columns",{"col-gapless":c,"col-oneline":l},s);return r.createElement("div",Q({className:o},t),a)};$.propTypes={children:i.any,className:i.string,gapless:i.bool,oneline:i.bool};var ee=function(e){var a=e.children,n=X(e,["children"]),s=n.className,c=X(n,["className"]),l=m("container",s);return r.createElement("div",Q({className:l},c),a)};ee.propTypes={children:i.any,className:i.string};var re=Object.assign||function(e){for(var r=1;r<arguments.length;r++){var a=arguments[r];for(var n in a)Object.prototype.hasOwnProperty.call(a,n)&&(e[n]=a[n])}return e},ae=function(e,r){var a={};for(var n in e)r.indexOf(n)>=0||Object.prototype.hasOwnProperty.call(e,n)&&(a[n]=e[n]);return a},ne=function(e){var a=e.children,n=ae(e,["children"]),s=n.className,c=n.center,l=ae(n,["className","center"]),t=m({"navbar-section":!c,"navbar-center":c},s);return r.createElement("section",re({className:t},l),a)};ne.propTypes={children:i.any,className:i.string,center:i.bool};var se=function(e){var a=e.children,n=ae(e,["children"]),s=n.className,c=n.href,l=ae(n,["className","href"]),t=m("navbar-brand",s);return r.createElement("a",re({href:c||"#",className:t},l),a)};se.propTypes={children:i.any,className:i.string,href:i.string};var ce=function(e){var a=e.children,n=ae(e,["children"]),s=n.className,c=ae(n,["className"]),l=m("navbar",s);return r.createElement("header",re({className:l},c),a)};ce.propTypes={children:i.any,className:i.string},ce.Section=ne,ce.Brand=se;var le=Object.freeze({Grid:ee,Row:$,Col:Z,Navbar:ce,Section:ne,Brand:se}),te=function(e){var a=e.children,n=c(e,["children"]),s=n.className,l=function(e){var r=e.all,a=e.offset,n=e.hide,s=e.show,c=[];return r?c.push("".concat("col","-").concat(r)):c.push(["xs","sm","md","lg","xl"].reduce(function(r,a){return e[a]?m(r,"".concat("col","-").concat(a,"-").concat(e[a])):r},"")),a&&c.push("".concat("col","-").concat(a,"-auto")),n&&c.push(m(n.map(function(e){return"hide-".concat(e)}))),s&&c.push(m(s.map(function(e){return"show-".concat(e)}))),c}(c(n,["className"])),t=m("column",l,s);return r.createElement("div",{className:t},a)};te.propTypes={children:i.any,className:i.string,xs:i.number,sm:i.number,md:i.number,lg:i.number,xl:i.number,all:i.number,offset:i.string,hide:i.array,show:i.array};var oe=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=s.gapless,o=s.oneline,i=c(s,["className","gapless","oneline"]),p=m("columns",{"col-gapless":t,"col-oneline":o},l);return r.createElement("div",n({className:p},i),a)};oe.propTypes={children:i.any,className:i.string,gapless:i.bool,oneline:i.bool};var ie=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=c(s,["className"]),o=m("container",l);return r.createElement("div",n({className:o},t),a)};ie.propTypes={children:i.any,className:i.string};var me=Object.freeze({Col:te,Row:oe,Grid:ie}),pe=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=s.center,o=c(s,["className","center"]),i=m({"navbar-section":!t,"navbar-center":t},l);return r.createElement("section",n({className:i},o),a)};pe.propTypes={children:i.any,className:i.string,center:i.bool};var de=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=s.href,o=c(s,["className","href"]),i=m("navbar-brand",l);return r.createElement("a",n({href:t||"#",className:i},o),a)};de.propTypes={children:i.any,className:i.string,href:i.string};var ue=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=c(s,["className"]),o=m("navbar",l);return r.createElement("header",n({className:o},t),a)};ue.propTypes={children:i.any,className:i.string},ue.Section=pe,ue.Brand=de;var he=Object.freeze({Navbar:ue,Section:pe,Brand:de}),ve=function(e){var a=e.children,n=c(e,["children"]),s=n.className,l=n.id,t=m("accordion-header c-hand",s);return r.createElement(r.Fragment,null,r.createElement("input",{type:"checkbox",id:l,hidden:!0}),r.createElement("label",{className:t,htmlFor:l},a))};ve.propTypes={children:i.any,className:i.string,id:i.string};var be=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=c(s,["className"]),o=m("accordion-body",l);return r.createElement("div",n({className:o},t),a)};be.propTypes={children:i.any,className:i.string};var Ne=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=c(s,["className"]),o=m("accordion",l);return r.createElement("div",n({className:o},t),a)};Ne.propTypes={children:i.any,className:i.string},Ne.Body=be,Ne.Header=ve;var ye=Object.freeze({Accordion:Ne,Header:ve,Body:be}),fe=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=s.focus,o=c(s,["className","focus"]),i=m("form-autocomplete-input",{"is-focused":t},l);return r.createElement("div",n({className:i},o),a)};fe.propTypes={children:i.any,className:i.string,focus:i.bool};var ge=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=c(s,["className"]),o=m("menu",l);return r.createElement("ul",n({className:o},t),a)};ge.propTypes={children:i.any,className:i.string};var Te=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=c(s,["className"]),o=m("form-autocomplete",l);return r.createElement("div",n({className:o},t),a)};Te.Input=fe,Te.Menu=ge,Te.propTypes={children:i.any,className:i.string};var Ee=Object.freeze({Autocomplete:Te,Input:fe,Menu:ge}),Oe=function(e){var a=e.className,s=c(e,["className"]),l=m("avatar-icon",a);return r.createElement("img",n({className:l},s))};Oe.propTypes={className:i.string};var je=function(e){var a=e.className,s=e.online,l=e.busy,t=e.away,o=c(e,["className","online","busy","away"]),i=m("avatar-presence",{online:s,busy:l,away:t},a);return r.createElement("i",n({className:i},o))};je.propTypes={className:i.string,online:i.bool,busy:i.bool,away:i.bool};var xe=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=s.src,o=s.initial,i=s.icon,p=s.xs,d=s.sm,u=s.lg,h=s.xl,v=c(s,["className","src","initial","icon","xs","sm","lg","xl"]),b=t&&r.createElement("img",{src:t}),N=i&&r.createElement(Oe,{src:t}),y=m("avatar",{"avatar-xl":h,"avatar-lg":u,"avatar-sm":d,"avatar-xs":p},l);return r.createElement("figure",n({className:y,"data-initial":o},v),a,b,N)};xe.propTypes={children:i.any,className:i.string,src:i.string,initial:i.string,icon:i.string,xs:i.bool,sm:i.bool,lg:i.bool,xl:i.bool},xe.Icon=Oe,xe.Presence=je;var we=Object.freeze({Avatar:xe,Icon:Oe,Presence:je}),Pe=function(e){var a=e.children,n=e.label;return r.createElement(r.Fragment,null,r.Children.map(a,function(e){var a={className:m("badge",e.props.className),"data-badge":n&&n>=0?n:""};return r.cloneElement(e,a)}))};Pe.propTypes={children:i.any,label:i.number};var ze=Object.freeze({Badge:Pe}),ke=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=s.progress,o=s.style,i=c(s,["className","progress","style"]),p=m("bar-item",l),d=I({},o,{width:"".concat(t,"%")});return r.createElement("div",n({},i,{className:p,role:"progressbar",style:d}),a)};ke.propTypes={children:i.node,className:i.string,progress:i.number,style:i.object};var Se=function(e){var a=e.children,n=c(e,["children"]),s=n.className,l=n.small,t=n.progress,o=m("bar",s,{"bar-sm":l});return r.createElement("div",{className:o},void 0===t||void 0!==a?a:r.createElement(ke,{progress:t}))};Se.propTypes={children:i.node,className:i.string,small:i.bool,progress:i.number},Se.Item=ke;var Be=function(e){var a=e.className,s=e.progress,l=e.style,t=c(e,["className","progress","style"]),o=m("bar-item",a),i=I({},l,{width:"".concat(s,"%")});return r.createElement("div",n({},t,{className:o,role:"progressbar",style:i}),r.createElement("button",{className:"bar-slider-btn btn",role:"slider"}))};Be.propTypes={className:i.string,progress:i.number,style:i.object};var Ie=function(e){var a=e.children,s=c(e,["children"]),l=s.className,t=s.progress,o=c(s,["className","progress"]),i=m("bar-slider",l);return r.createElement(Se,n({},o,{className:i}),void 0===t||void 0!==a?a:r.createElement(Be,{progress:t}))};Ie.propTypes={children:i.node,className:i.string,progress:i.oneOfType(i.string,i.number)},Ie.Item=Be;var Ce=Object.freeze({Bar:Se,Slider:Ie}),He=function(e){var a,s=e.className,l=e.primary,t=e.success,o=e.warning,i=e.error,p=e.children,d=c(e,["className","primary","success","warning","error","children"]),u=function(e){return"toast-".concat(e)},h=m("toast",s,(B(a={},u("primary"),l),B(a,u("success"),t),B(a,u("warning"),o),B(a,u("error"),i),a));return r.createElement("div",n({className:h},d),p)};He.propTypes={className:i.string,primary:i.bool,success:i.bool,warning:i.bool,error:i.bool,children:i.any};var Ae=Object.freeze({Toast:He}),Fe=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("card-header",s);return r.createElement("div",n({className:t},l),a)};Fe.propTypes={children:i.node,className:i.string};var Le=function(e){var a=e.children,s=e.h1,l=e.h2,t=e.h3,o=e.h4,i=e.h5,p=e.h6,d=e.className,u=c(e,["children","h1","h2","h3","h4","h5","h6","className"]),h=m("card-title",{h1:s,h2:l,h3:t,h4:o,h5:i,h6:p},d);return r.createElement("div",n({className:h},u),a)};Le.propTypes={children:i.any,className:i.string,h1:i.bool,h2:i.bool,h3:i.bool,h4:i.bool,h5:i.bool,h6:i.bool};var Re=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("card-subtitle text-gray",s);return r.createElement("div",n({className:t},l),a)};Re.propTypes={children:i.any,className:i.string};var _e=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("card-body",s);return r.createElement("div",n({className:t},l),a)};_e.propTypes={children:i.any,className:i.string};var Ge=function(e){var a=e.src,s=c(e,["src"]),l=m("card-image");return r.createElement("div",{className:l},r.createElement("img",n({src:a,className:"img-responsive"},s)))};Ge.propTypes={src:i.string};var De=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("card-footer",s);return r.createElement("div",n({className:t},l),a)};De.propTypes={children:i.any,className:i.string};var Me=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("card",s);return r.createElement("div",n({className:t},l),a)};Me.propTypes={children:i.any,className:i.string},Me.Header=Fe,Me.Title=Le,Me.SubTitle=Re,Me.Body=_e,Me.Image=Ge,Me.Footer=De;var We=Object.freeze({Card:Me,Body:_e,Footer:De,Header:Fe}),qe=function(e){var a=e.children,s=e.className,l=e.center,t=e.right,o=c(e,["children","className","center","right"]),i=m("panel-header",{"text-center":l},{"text-right":t},s);return r.createElement("div",n({className:i},o),a)};qe.propTypes={children:i.node,center:i.string,right:i.string,className:i.string};var Ue=function(e){var a=e.children,s=e.h1,l=e.h2,t=e.h3,o=e.h4,i=e.h5,p=e.h6,d=e.className,u=c(e,["children","h1","h2","h3","h4","h5","h6","className"]),h=m("panel-title",{h1:s,h2:l,h3:t,h4:o,h5:i,h6:p},d);return r.createElement("div",n({className:h},u),a)};Ue.propTypes={children:i.any,className:i.string,h1:i.bool,h2:i.bool,h3:i.bool,h4:i.bool,h5:i.bool,h6:i.bool};var Ve=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("panel-body",s);return r.createElement("div",n({className:t},l),a)};Ve.propTypes={children:i.any,className:i.string};var Ye=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("panel-footer",s);return r.createElement("div",n({className:t},l),a)};Ye.propTypes={children:i.any,className:i.string};var Je=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("panel-nav",s);return r.createElement("div",n({className:t},l),a)};Je.propTypes={children:i.any,className:i.string};var Ke=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("panel",s);return r.createElement("div",n({className:t},l),a)};Ke.propTypes={children:i.any,className:i.string},Ke.Header=qe,Ke.Title=Ue,Ke.Body=Ve,Ke.Footer=Ye,Ke.Nav=Je;var Qe=Object.freeze({Panel:Ke,Nav:Je,Body:Ve,Footer:Ye,Header:qe}),Xe=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("step",s);return r.createElement("ul",n({className:t},l),a)};Xe.propTypes={children:i.any,className:i.string};var Ze=function(e){var a=e.children,s=e.className,l=e.active,t=c(e,["children","className","active"]),o=m("step-item",s,{active:l});return r.createElement("li",n({className:o},t),a)};Ze.propTypes={children:i.any,active:i.bool,className:i.string},Xe.Item=Ze;var $e=Object.freeze({Step:Xe,Item:Ze}),er=function(e){var a=e.right,s=e.bottom,l=e.left,t=e.className,o=e.children,i=c(e,["right","bottom","left","className","children"]),p=m("popover",t,{"popover-right":a,"popover-left":l,"popover-bottom":s});return r.createElement("div",n({className:p},i),o)};er.propTypes={right:i.bool,left:i.bool,bottom:i.bool,className:i.string,children:i.any};var rr=function(e){var a=e.children,s=c(e,["children"]);return r.createElement("div",n({className:"popover-container"},s),a)};rr.propTypes={children:i.any},er.Container=rr;var ar=Object.freeze({Container:rr,Popover:er}),nr=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("tile-icon",s);return r.createElement("div",n({className:t},l),a)};nr.propTypes={children:i.node,className:i.string};var sr=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("tile-action",s);return r.createElement("div",n({className:t},l),a)};sr.propTypes={children:i.node,className:i.string};var cr=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("tile-title",s);return r.createElement("p",n({className:t},l),a)};cr.propTypes={children:i.node,className:i.string};var lr=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("tile-subtitle",s);return r.createElement("p",n({className:t},l),a)};lr.propTypes={children:i.node,className:i.string};var tr=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("tile-content",s);return r.createElement("div",n({className:t},l),a)};tr.propTypes={children:i.node,className:i.string},tr.Title=cr,tr.SubTitle=lr;var or=function(e){var a=e.children,s=e.className,l=c(e,["children","className"]),t=m("tile",s);return r.createElement("div",n({className:t},l),a)};or.propTypes={children:i.node,className:i.string},or.Title=cr,or.SubTitle=lr,or.Content=tr,or.Action=sr,or.Icon=nr;var ir=Object.freeze({Tile:or,Content:tr,SubTitle:lr,Title:cr,Icon:nr,Action:sr}),mr=Object.assign({Card:Me},Me,We),pr=Object.assign({Panel:Ke},Ke,Qe),dr=Object.assign({Step:Xe},Xe,$e),ur=Object.assign({Popover:er},er,ar),hr=Object.assign({Tile:or},or,ir);return e.Typography=f,e.Table=w,e.Button=k,e.Form=_,e.Icon=D,e.Label=W,e.Media=K,e.Layout=le,e.Grid=me,e.Navbar=he,e.Accordion=ye,e.Autocomplete=Ee,e.Avatar=we,e.Badge=ze,e.Bar=Ce,e.Toast=Ae,e.Card=mr,e.Panel=pr,e.Step=dr,e.Popover=ur,e.Tile=hr,e}({},React);
+var Spectre = (function (exports, React) {
+	'use strict';
+
+	React = React && Object.prototype.hasOwnProperty.call(React, 'default') ? React['default'] : React;
+
+	function unwrapExports (x) {
+		return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+	}
+
+	function createCommonjsModule(fn, module) {
+		return module = { exports: {} }, fn(module, module.exports), module.exports;
+	}
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 */
+
+	var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+	var ReactPropTypesSecret_1 = ReactPropTypesSecret;
+
+	function emptyFunction() {}
+	function emptyFunctionWithReset() {}
+	emptyFunctionWithReset.resetWarningCache = emptyFunction;
+
+	var factoryWithThrowingShims = function() {
+	  function shim(props, propName, componentName, location, propFullName, secret) {
+	    if (secret === ReactPropTypesSecret_1) {
+	      // It is still safe when called from React.
+	      return;
+	    }
+	    var err = new Error(
+	      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+	      'Use PropTypes.checkPropTypes() to call them. ' +
+	      'Read more at http://fb.me/use-check-prop-types'
+	    );
+	    err.name = 'Invariant Violation';
+	    throw err;
+	  }  shim.isRequired = shim;
+	  function getShim() {
+	    return shim;
+	  }  // Important!
+	  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+	  var ReactPropTypes = {
+	    array: shim,
+	    bool: shim,
+	    func: shim,
+	    number: shim,
+	    object: shim,
+	    string: shim,
+	    symbol: shim,
+
+	    any: shim,
+	    arrayOf: getShim,
+	    element: shim,
+	    elementType: shim,
+	    instanceOf: getShim,
+	    node: shim,
+	    objectOf: getShim,
+	    oneOf: getShim,
+	    oneOfType: getShim,
+	    shape: getShim,
+	    exact: getShim,
+
+	    checkPropTypes: emptyFunctionWithReset,
+	    resetWarningCache: emptyFunction
+	  };
+
+	  ReactPropTypes.PropTypes = ReactPropTypes;
+
+	  return ReactPropTypes;
+	};
+
+	var propTypes = createCommonjsModule(function (module) {
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 */
+
+	{
+	  // By explicitly using `prop-types` you are opting into new production behavior.
+	  // http://fb.me/prop-types-in-prod
+	  module.exports = factoryWithThrowingShims();
+	}
+	});
+
+	var classnames = createCommonjsModule(function (module) {
+	/*!
+	  Copyright (c) 2017 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg) && arg.length) {
+					var inner = classNames.apply(null, arg);
+					if (inner) {
+						classes.push(inner);
+					}
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if ( module.exports) {
+			classNames.default = classNames;
+			module.exports = classNames;
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+	});
+
+	const _jsxFileName = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/typography/src/Heading.js";
+	/**
+	 * The Heading component.
+	 */
+	const Heading = ({ children, ...props }) => {
+	  const { tag: Component, contents, label, ...otherProps } = props;
+	  return (
+	    React.createElement(Component, { ...otherProps, __self: undefined, __source: {fileName: _jsxFileName, lineNumber: 11}}
+	      , children || contents, " " , label && React.createElement(Label, { contents: label, __self: undefined, __source: {fileName: _jsxFileName, lineNumber: 12}} )
+	    )
+	  )
+	};
+
+	Heading.propTypes = {
+	  tag: propTypes.string,
+	  children: propTypes.any,
+	  contents: propTypes.any,
+	  label: propTypes.any
+	};
+
+	/**
+	 * The Label component.
+	 */
+	const Label = ({ children, ...props }) => {
+	  const { contents, className, ...otherProps } = props;
+	  return (
+	    React.createElement('small', { className: classnames('label', className), ...otherProps, __self: undefined, __source: {fileName: _jsxFileName, lineNumber: 30}}
+	      , children || contents
+	    )
+	  )
+	};
+
+	Label.propTypes = {
+	  children: propTypes.any,
+	  contents: propTypes.any,
+	  className: propTypes.any
+	};
+
+	/**
+	 * The Headings components.
+	 */
+
+	const H1 = props => React.createElement(Heading, { ...props, tag: "h1", __self: undefined, __source: {fileName: _jsxFileName, lineNumber: 46}} );
+	const H2 = props => React.createElement(Heading, { ...props, tag: "h2", __self: undefined, __source: {fileName: _jsxFileName, lineNumber: 47}} );
+	const H3 = props => React.createElement(Heading, { ...props, tag: "h3", __self: undefined, __source: {fileName: _jsxFileName, lineNumber: 48}} );
+	const H4 = props => React.createElement(Heading, { ...props, tag: "h4", __self: undefined, __source: {fileName: _jsxFileName, lineNumber: 49}} );
+	const H5 = props => React.createElement(Heading, { ...props, tag: "h5", __self: undefined, __source: {fileName: _jsxFileName, lineNumber: 50}} );
+	const H6 = props => React.createElement(Heading, { ...props, tag: "h6", __self: undefined, __source: {fileName: _jsxFileName, lineNumber: 51}} );
+
+	H1.propTypes = H2.propTypes = H3.propTypes = H4.propTypes = H5.propTypes = H6.propTypes = {
+	  children: propTypes.any,
+	  contents: propTypes.any,
+	  label: propTypes.any
+	};
+
+	H1.Label = H2.Label = H3.Label = H4.Label = H5.Label = H6.Label = Label;
+
+	var index = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		H1: H1,
+		H2: H2,
+		H3: H3,
+		H4: H4,
+		H5: H5,
+		H6: H6,
+		Label: Label
+	});
+
+	const _jsxFileName$1 = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/table/src/Table.js";
+	const Table = ({ children, ...props }) => {
+	  const { className, striped, hover, scroll, ...otherProps } = props;
+
+	  const classNames = classnames('table', className, {
+	    'table-striped': striped,
+	    'table-hover': hover,
+	    'table-scroll': scroll
+	  });
+
+	  return (
+	    React.createElement('table', { ...otherProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$1, lineNumber: 15}}
+	      , children
+	    )
+	  )
+	};
+
+	Table.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.any,
+	  striped: propTypes.bool,
+	  hover: propTypes.bool,
+	  scroll: propTypes.bool
+	};
+
+	const Header = ({ children, ...props }) => React.createElement('thead', { ...props, __self: undefined, __source: {fileName: _jsxFileName$1, lineNumber: 29}}, children);
+
+	Header.propTypes = {
+	  children: propTypes.any
+	};
+
+	const Body = ({ children, ...props }) => React.createElement('tbody', { ...props, __self: undefined, __source: {fileName: _jsxFileName$1, lineNumber: 35}}, children);
+
+	Body.propTypes = {
+	  children: propTypes.any
+	};
+
+	const Row = ({ children, ...props }) => {
+	  const { className, active, ...otherProps } = props;
+
+	  const classNames = classnames(className, { active: active });
+
+	  return (
+	    React.createElement('tr', { ...otherProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$1, lineNumber: 47}}
+	      , children
+	    )
+	  )
+	};
+
+	Row.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.any,
+	  active: propTypes.bool
+	};
+
+	const Heading$1 = ({ children, ...props }) => React.createElement('th', { ...props, __self: undefined, __source: {fileName: _jsxFileName$1, lineNumber: 59}}, children);
+
+	Heading$1.propTypes = {
+	  children: propTypes.any
+	};
+
+	const Cell = ({ children, ...props }) => React.createElement('td', { ...props, __self: undefined, __source: {fileName: _jsxFileName$1, lineNumber: 65}}, children);
+
+	Cell.propTypes = {
+	  children: propTypes.any
+	};
+
+	Table.Header = Header;
+	Table.Body = Body;
+	Table.Row = Row;
+	Table.Heading = Heading$1;
+	Table.Cell = Cell;
+
+	var index$1 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Table: Table,
+		Header: Header,
+		Body: Body,
+		Row: Row,
+		Heading: Heading$1,
+		Cell: Cell
+	});
+
+	const _jsxFileName$2 = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/button/src/Button.js";
+	const Button = ({ children, ...props }) => {
+	  const {
+	    className,
+
+	    // Styles.
+	    primary,
+	    link,
+
+	    // Colors
+	    success,
+	    error,
+
+	    // Sizes
+	    block,
+	    small,
+	    large,
+	    action,
+	    circle,
+
+	    // States
+	    active,
+	    loading,
+	    ...otherProps
+	  } = props;
+
+	  const classNames = classnames(
+	    'btn',
+	    {
+	      'btn-primary': primary,
+	      'btn-link': link,
+	      'btn-success': success,
+	      'btn-error': error,
+	      'btn-block': block,
+	      'btn-sm': small,
+	      'btn-lg': large,
+	      'btn-action': action || circle,
+	      circle: circle,
+	      active: active,
+	      loading: loading
+	    },
+	    className
+	  );
+
+	  return (
+	    React.createElement('button', { ...otherProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$2, lineNumber: 49}}
+	      , children
+	    )
+	  )
+	};
+
+	Button.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string,
+	  primary: propTypes.bool,
+	  link: propTypes.bool,
+	  success: propTypes.bool,
+	  error: propTypes.bool,
+	  block: propTypes.bool,
+	  small: propTypes.bool,
+	  large: propTypes.bool,
+	  action: propTypes.bool,
+	  circle: propTypes.bool,
+	  active: propTypes.bool,
+	  loading: propTypes.bool
+	};
+
+	const Group = ({ children, ...props }) => {
+	  const { block, ...otherProps } = props;
+	  const classNames = classnames('btn-group', { 'btn-group-block': block });
+
+	  return (
+	    React.createElement('div', { ...otherProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$2, lineNumber: 76}}
+	      , children
+	    )
+	  )
+	};
+
+	Group.propTypes = {
+	  children: propTypes.any,
+	  block: propTypes.bool
+	};
+
+	Button.Group = Group;
+
+	var index$2 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Button: Button,
+		Group: Group
+	});
+
+	const _jsxFileName$3 = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/form/src/Radio.js";
+	const Radio = props => {
+	  const { className, label, ...otherProps } = props;
+	  const classNames = classnames('form-radio', className);
+
+	  return (
+	    React.createElement('label', { className: classNames, __self: undefined, __source: {fileName: _jsxFileName$3, lineNumber: 10}}
+	      , React.createElement('input', { ...otherProps, type: "radio", __self: undefined, __source: {fileName: _jsxFileName$3, lineNumber: 11}} )
+	      , React.createElement('i', { className: "form-icon", __self: undefined, __source: {fileName: _jsxFileName$3, lineNumber: 12}} ), " " , label
+	    )
+	  )
+	};
+
+	Radio.propTypes = {
+	  className: propTypes.string,
+	  label: propTypes.string
+	};
+
+	const _jsxFileName$4 = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/form/src/FormGroup.js";
+	const FormGroup = props => {
+	  const { children, className, label, id, ...otherProps } = props;
+	  const classNames = classnames('form-group', className);
+
+	  return (
+	    React.createElement('div', { ...otherProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$4, lineNumber: 10}}
+	      , label && (
+	        React.createElement('label', { className: "form-label", htmlFor: id, __self: undefined, __source: {fileName: _jsxFileName$4, lineNumber: 12}}
+	          , label
+	        )
+	      )
+	      , children
+	    )
+	  )
+	};
+
+	FormGroup.propTypes = {
+	  children: propTypes.node.isRequired,
+	  className: propTypes.string,
+	  label: propTypes.string,
+	  id: propTypes.string
+	};
+
+	const _jsxFileName$5 = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/form/src/Input.js";
+	const Input = props => {
+	  const { className, label, id, ...otherProps } = props;
+	  const formGroupProps = { label, id };
+	  const inputProps = { id, ...otherProps };
+	  const classNames = classnames('form-input', className);
+
+	  return (
+	    React.createElement(FormGroup, { ...formGroupProps, __self: undefined, __source: {fileName: _jsxFileName$5, lineNumber: 13}}
+	      , React.createElement('input', { ...inputProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$5, lineNumber: 14}} )
+	    )
+	  )
+	};
+
+	Input.propTypes = {
+	  className: propTypes.string,
+	  label: propTypes.string,
+	  id: propTypes.string
+	};
+
+	const _jsxFileName$6 = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/form/src/Select.js";
+	const Select = props => {
+	  const { children, className, label, id, ...otherProps } = props;
+	  const formGroupProps = { label, id };
+	  const inputProps = { id, ...otherProps };
+	  const classNames = classnames('form-select', className);
+
+	  return (
+	    React.createElement(FormGroup, { ...formGroupProps, __self: undefined, __source: {fileName: _jsxFileName$6, lineNumber: 13}}
+	      , React.createElement('select', { ...inputProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$6, lineNumber: 14}}
+	        , children
+	      )
+	    )
+	  )
+	};
+
+	Select.propTypes = {
+	  children: propTypes.oneOf([
+	    propTypes.node,
+	    propTypes.arrayOf(propTypes.node)
+	  ]),
+	  className: propTypes.string,
+	  label: propTypes.string,
+	  id: propTypes.string
+	};
+
+	const _jsxFileName$7 = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/form/src/Switch.js";
+	const Switch = props => {
+	  const { className, label, ...otherProps } = props;
+	  const classNames = classnames('form-switch', className);
+
+	  return (
+	    React.createElement('label', { className: classNames, __self: undefined, __source: {fileName: _jsxFileName$7, lineNumber: 10}}
+	      , React.createElement('input', { ...otherProps, type: "checkbox", __self: undefined, __source: {fileName: _jsxFileName$7, lineNumber: 11}} )
+	      , React.createElement('i', { className: "form-icon", __self: undefined, __source: {fileName: _jsxFileName$7, lineNumber: 12}} ), " " , label
+	    )
+	  )
+	};
+
+	Switch.propTypes = {
+	  className: propTypes.string,
+	  label: propTypes.string
+	};
+
+	const _jsxFileName$8 = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/form/src/CheckBox.js";
+	const CheckBox = props => {
+	  const { className, label, ...otherProps } = props;
+	  const classNames = classnames('form-checkbox', className);
+
+	  return (
+	    React.createElement('label', { className: classNames, __self: undefined, __source: {fileName: _jsxFileName$8, lineNumber: 10}}
+	      , React.createElement('input', { ...otherProps, type: "checkbox", __self: undefined, __source: {fileName: _jsxFileName$8, lineNumber: 11}} )
+	      , React.createElement('i', { className: "form-icon", __self: undefined, __source: {fileName: _jsxFileName$8, lineNumber: 12}} ), " " , label
+	    )
+	  )
+	};
+
+	CheckBox.propTypes = {
+	  className: propTypes.string,
+	  label: propTypes.string
+	};
+
+	const _jsxFileName$9 = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/form/src/TextArea.js";
+	const TextArea = props => {
+	  const { children, className, label, id, ...otherProps } = props;
+	  const formGroupProps = { label, id };
+	  const inputProps = { id, ...otherProps };
+	  const classNames = classnames('form-input', className);
+
+	  return (
+	    React.createElement(FormGroup, { ...formGroupProps, __self: undefined, __source: {fileName: _jsxFileName$9, lineNumber: 13}}
+	      , React.createElement('textarea', { ...inputProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$9, lineNumber: 14}}
+	        , children
+	      )
+	    )
+	  )
+	};
+
+	TextArea.propTypes = {
+	  children: propTypes.string,
+	  className: propTypes.string,
+	  label: propTypes.string,
+	  id: propTypes.string
+	};
+
+	var index$3 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Radio: Radio,
+		Input: Input,
+		Select: Select,
+		Switch: Switch,
+		CheckBox: CheckBox,
+		TextArea: TextArea,
+		FormGroup: FormGroup
+	});
+
+	const _jsxFileName$a = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/icon/src/Icon.js";
+	/**
+	 * The Icon component.
+	 */
+	const Icon = props => {
+	  const { className, name, size, ...otherProps } = props;
+
+	  const classNames = classnames(className, 'icon', `icon-${name}`, {
+	    'icon-2x': size === '2x',
+	    'icon-3x': size === '3x',
+	    'icon-4x': size === '4x'
+	  });
+
+	  return React.createElement('i', { ...otherProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$a, lineNumber: 17}} )
+	};
+
+	Icon.propTypes = {
+	  className: propTypes.string,
+	  name: propTypes.string,
+	  size: propTypes.string
+	};
+
+	var index$4 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Icon: Icon
+	});
+
+	const _jsxFileName$b = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/label/src/Label.js";
+	const Label$1 = ({ children, ...props }) => {
+	  const {
+	    // Colors.
+	    primary,
+	    secondary,
+	    success,
+	    warning,
+	    error,
+	    // Styles.
+	    rounded,
+	    // Modifiers.
+	    small,
+	    // Remaining props to transfer.
+	    ...otherProps
+	  } = props;
+
+	  const classNames = classnames('label', {
+	    'label-primary': primary,
+	    'label-secondary': secondary,
+	    'label-success': success,
+	    'label-warning': warning,
+	    'label-error': error,
+	    'label-rounded': rounded
+	  });
+
+	  const Element = small ? 'small' : 'span';
+
+	  return (
+	    React.createElement(Element, { ...otherProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$b, lineNumber: 33}}
+	      , children
+	    )
+	  )
+	};
+
+	Label$1.propTypes = {
+	  children: propTypes.node,
+	  primary: propTypes.bool,
+	  secondary: propTypes.bool,
+	  success: propTypes.bool,
+	  warning: propTypes.bool,
+	  error: propTypes.bool,
+	  rounded: propTypes.bool,
+	  small: propTypes.bool
+	};
+
+	var index$5 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Label: Label$1
+	});
+
+	const _jsxFileName$c = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/media/src/Image.js";
+	/**
+	 * The Image component.
+	 */
+	const Image = props => {
+	  const { responsive, contain, cover, ...otherProps } = props;
+
+	  // Prepare class names.
+	  const classNames = classnames({
+	    'img-responsive': responsive,
+	    'img-fit-contain': contain,
+	    'img-fit-cover': cover
+	  });
+
+	  return React.createElement('img', { ...otherProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$c, lineNumber: 18}} )
+	};
+
+	Image.propTypes = {
+	  responsive: propTypes.bool,
+	  contain: propTypes.bool,
+	  cover: propTypes.bool
+	};
+
+	const _jsxFileName$d = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/media/src/Video.js";
+	/**
+	 * The Video Container component.
+	 */
+	const VideoContainer = ({ children, ...props }) => {
+	  const { tag: Element, responsive, ...otherProps } = props;
+
+	  // Prepare class names.
+	  const classNames = classnames({
+	    'video-responsive': responsive, // 16:9
+	    'video-responsive-1-1': responsive === '1:1',
+	    'video-responsive-4-3': responsive === '4:3'
+	  });
+
+	  return (
+	    React.createElement(Element, { ...otherProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$d, lineNumber: 19}}
+	      , children
+	    )
+	  )
+	};
+
+	const Video = props => React.createElement(VideoContainer, { ...props, tag: "video", __self: undefined, __source: {fileName: _jsxFileName$d, lineNumber: 25}} );
+	const Container = props => React.createElement(VideoContainer, { ...props, tag: "div", __self: undefined, __source: {fileName: _jsxFileName$d, lineNumber: 26}} );
+
+	VideoContainer.propTypes = Video.propTypes = Container.propTypes = {
+	  children: propTypes.node,
+	  responsive: propTypes.oneOfType([
+	    propTypes.bool,
+	    propTypes.oneOf(['1:1', '4:3', '16:9'])
+	  ])
+	};
+
+	Video.Container = Container;
+
+	const _jsxFileName$e = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/media/src/Figure.js";
+	/**
+	 * The Figure component.
+	 */
+	const Figure = ({ children, ...props }) => {
+	  const { className, caption, captionAlignment, ...otherProps } = props;
+
+	  // Prepare class names.
+	  const figureClassNames = classnames('figure', className);
+	  const captionClassNames = classnames('figure-caption', {
+	    'text-left': captionAlignment === 'left',
+	    'text-center': captionAlignment === 'center',
+	    'text-right': captionAlignment === 'right'
+	  });
+
+	  return (
+	    React.createElement('figure', { ...otherProps, className: figureClassNames, __self: undefined, __source: {fileName: _jsxFileName$e, lineNumber: 20}}
+	      , children
+	      , caption && (
+	        React.createElement('figcaption', { className: captionClassNames, __self: undefined, __source: {fileName: _jsxFileName$e, lineNumber: 23}}, caption)
+	      )
+	    )
+	  )
+	};
+
+	Figure.propTypes = {
+	  children: propTypes.node,
+	  className: propTypes.string,
+	  caption: propTypes.string,
+	  captionAlignment: propTypes.oneOf(['left', 'center', 'right'])
+	};
+
+	var index$6 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Image: Image,
+		Video: Video,
+		Container: Container,
+		Figure: Figure
+	});
+
+	var grid = createCommonjsModule(function (module, exports) {
+	function _interopDefault(e){return e&&"object"==typeof e&&"default"in e?e.default:e}Object.defineProperty(exports,"__esModule",{value:!0});var React$1=_interopDefault(React),PropTypes=_interopDefault(propTypes),classnames$1=_interopDefault(classnames),_extends=Object.assign||function(e){for(var r=1;r<arguments.length;r++){var s=arguments[r];for(var o in s)Object.prototype.hasOwnProperty.call(s,o)&&(e[o]=s[o]);}return e},objectWithoutProperties=function(e,r){var s={};for(var o in e)r.indexOf(o)>=0||Object.prototype.hasOwnProperty.call(e,o)&&(s[o]=e[o]);return s},Col=function(e){var r,s,o,t,a,n,p=e.children,l=objectWithoutProperties(e,["children"]),c=l.className,i=objectWithoutProperties(l,["className"]),u=(s=(r=i).all,o=r.offset,t=r.hide,a=r.show,n=[],s?n.push("col-"+s):n.push(["xs","sm","md","lg","xl"].reduce(function(e,s){return r[s]?classnames$1(e,"col-"+s+"-"+r[s]):e},"")),o&&n.push("col-"+o+"-auto"),t&&n.push(classnames$1(t.map(function(e){return "hide-"+e}))),a&&n.push(classnames$1(a.map(function(e){return "show-"+e}))),n),m=classnames$1("column",u,c);return React$1.createElement("div",{className:m},p)};Col.propTypes={children:PropTypes.any,className:PropTypes.string,xs:PropTypes.number,sm:PropTypes.number,md:PropTypes.number,lg:PropTypes.number,xl:PropTypes.number,all:PropTypes.number,offset:PropTypes.string,hide:PropTypes.array,show:PropTypes.array};var Row=function(e){var r=e.children,s=objectWithoutProperties(e,["children"]),o=s.className,t=s.gapless,a=s.oneline,n=objectWithoutProperties(s,["className","gapless","oneline"]),p=classnames$1("columns",{"col-gapless":t,"col-oneline":a},o);return React$1.createElement("div",_extends({className:p},n),r)};Row.propTypes={children:PropTypes.any,className:PropTypes.string,gapless:PropTypes.bool,oneline:PropTypes.bool};var Grid=function(e){var r=e.children,s=objectWithoutProperties(e,["children"]),o=s.className,t=objectWithoutProperties(s,["className"]),a=classnames$1("container",o);return React$1.createElement("div",_extends({className:a},t),r)};Grid.propTypes={children:PropTypes.any,className:PropTypes.string},exports.Col=Col,exports.Row=Row,exports.Grid=Grid;
+
+	});
+
+	unwrapExports(grid);
+	var grid_1 = grid.Col;
+	var grid_2 = grid.Row;
+	var grid_3 = grid.Grid;
+
+	var navbar = createCommonjsModule(function (module, exports) {
+	function _interopDefault(e){return e&&"object"==typeof e&&"default"in e?e.default:e}Object.defineProperty(exports,"__esModule",{value:!0});var React$1=_interopDefault(React),PropTypes=_interopDefault(propTypes),classnames$1=_interopDefault(classnames),_extends=Object.assign||function(e){for(var r=1;r<arguments.length;r++){var t=arguments[r];for(var a in t)Object.prototype.hasOwnProperty.call(t,a)&&(e[a]=t[a]);}return e},objectWithoutProperties=function(e,r){var t={};for(var a in e)r.indexOf(a)>=0||Object.prototype.hasOwnProperty.call(e,a)&&(t[a]=e[a]);return t},Section=function(e){var r=e.children,t=objectWithoutProperties(e,["children"]),a=t.className,n=t.center,s=objectWithoutProperties(t,["className","center"]),o=classnames$1({"navbar-section":!n,"navbar-center":n},a);return React$1.createElement("section",_extends({className:o},s),r)};Section.propTypes={children:PropTypes.any,className:PropTypes.string,center:PropTypes.bool};var Brand=function(e){var r=e.children,t=objectWithoutProperties(e,["children"]),a=t.className,n=t.href,s=objectWithoutProperties(t,["className","href"]),o=classnames$1("navbar-brand",a);return React$1.createElement("a",_extends({href:n||"#",className:o},s),r)};Brand.propTypes={children:PropTypes.any,className:PropTypes.string,href:PropTypes.string};var Navbar=function(e){var r=e.children,t=objectWithoutProperties(e,["children"]),a=t.className,n=objectWithoutProperties(t,["className"]),s=classnames$1("navbar",a);return React$1.createElement("header",_extends({className:s},n),r)};Navbar.propTypes={children:PropTypes.any,className:PropTypes.string},Navbar.Section=Section,Navbar.Brand=Brand,exports.Navbar=Navbar,exports.Section=Section,exports.Brand=Brand;
+
+	});
+
+	unwrapExports(navbar);
+	var navbar_1 = navbar.Navbar;
+	var navbar_2 = navbar.Section;
+	var navbar_3 = navbar.Brand;
+
+	var index$7 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Grid: grid_3,
+		Row: grid_2,
+		Col: grid_1,
+		Navbar: navbar_1,
+		Section: navbar_2,
+		Brand: navbar_3
+	});
+
+	const _jsxFileName$f = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/grid/src/Col.js";
+	const Col = ({ children, ...props }) => {
+	  const getColumnClasses = componentProps => {
+	    const { all, offset, hide, show } = componentProps;
+	    const colSizes = ['xs', 'sm', 'md', 'lg', 'xl'];
+	    const classes = [];
+	    const colPrefix = 'col';
+
+	    if (all) {
+	      classes.push(`${colPrefix}-${all}`);
+	    } else {
+	      classes.push(
+	        colSizes.reduce((sizes, size) => {
+	          if (!componentProps[size]) return sizes
+	          return classnames(
+	            sizes,
+	            `${colPrefix}-${size}-${componentProps[size]}`
+	          )
+	        }, '')
+	      );
+	    }
+
+	    if (offset) classes.push(`${colPrefix}-${offset}-auto`);
+	    if (hide) classes.push(classnames(hide.map(size => `hide-${size}`)));
+	    if (show) classes.push(classnames(show.map(size => `show-${size}`)));
+
+	    return classes
+	  };
+
+	  const { className, ...otherProps } = props;
+	  const classes = getColumnClasses(otherProps);
+	  const classNames = classnames('column', classes, className);
+
+	  return React.createElement('div', { className: classNames, __self: undefined, __source: {fileName: _jsxFileName$f, lineNumber: 37}}, children)
+	};
+
+	Col.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string,
+	  xs: propTypes.number,
+	  sm: propTypes.number,
+	  md: propTypes.number,
+	  lg: propTypes.number,
+	  xl: propTypes.number,
+	  all: propTypes.number,
+	  offset: propTypes.string,
+	  hide: propTypes.array,
+	  show: propTypes.array
+	};
+
+	const _jsxFileName$g = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/grid/src/Row.js";
+	const Row$1 = ({ children, ...props }) => {
+	  const { className, gapless, oneline, ...otherProps } = props;
+	  const classNames = classnames(
+	    'columns',
+	    {
+	      'col-gapless': gapless,
+	      'col-oneline': oneline
+	    },
+	    className
+	  );
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$g, lineNumber: 17}}
+	      , children
+	    )
+	  )
+	};
+
+	Row$1.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string,
+	  gapless: propTypes.bool,
+	  oneline: propTypes.bool
+	};
+
+	const _jsxFileName$h = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/grid/src/Grid.js";
+	const Grid = ({ children, ...props }) => {
+	  const { className, ...otherProps } = props;
+	  const classNames = classnames('container', className);
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$h, lineNumber: 9}}
+	      , children
+	    )
+	  )
+	};
+
+	Grid.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	var index$8 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Col: Col,
+		Row: Row$1,
+		Grid: Grid
+	});
+
+	const _jsxFileName$i = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/navbar/src/Section.js";
+	const Section = ({ children, ...props }) => {
+	  const { className, center, ...otherProps } = props;
+	  const classNames = classnames(
+	    {
+	      'navbar-section': !center,
+	      'navbar-center': center
+	    },
+	    className
+	  );
+
+	  return (
+	    React.createElement('section', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$i, lineNumber: 16}}
+	      , children
+	    )
+	  )
+	};
+
+	Section.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string,
+	  center: propTypes.bool
+	};
+
+	const _jsxFileName$j = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/navbar/src/Brand.js";
+	const Brand = ({ children, ...props }) => {
+	  const { className, href, ...otherProps } = props;
+	  const classNames = classnames('navbar-brand', className);
+
+	  return (
+	    React.createElement('a', { href: href || '#', className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$j, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Brand.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string,
+	  href: propTypes.string
+	};
+
+	const _jsxFileName$k = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/navbar/src/Navbar.js";
+	const Navbar = ({ children, ...props }) => {
+	  const { className, ...otherProps } = props;
+	  const classNames = classnames('navbar', className);
+
+	  return (
+	    React.createElement('header', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$k, lineNumber: 12}}
+	      , children
+	    )
+	  )
+	};
+
+	Navbar.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	Navbar.Section = Section;
+	Navbar.Brand = Brand;
+
+	var index$9 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Navbar: Navbar,
+		Section: Section,
+		Brand: Brand
+	});
+
+	const _jsxFileName$l = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/accordion/src/Header.js";
+	const Header$1 = ({ children, ...props }) => {
+	  const { className, id } = props;
+	  const classNames = classnames('accordion-header c-hand', className);
+
+	  return (
+	    React.createElement(React.Fragment, {__self: undefined, __source: {fileName: _jsxFileName$l, lineNumber: 10}}
+	      , React.createElement('input', { type: "checkbox", id: id, hidden: true, __self: undefined, __source: {fileName: _jsxFileName$l, lineNumber: 11}} )
+	      , React.createElement('label', { className: classNames, htmlFor: id, __self: undefined, __source: {fileName: _jsxFileName$l, lineNumber: 12}}
+	        , children
+	      )
+	    )
+	  )
+	};
+
+	Header$1.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string,
+	  id: propTypes.string
+	};
+
+	const _jsxFileName$m = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/accordion/src/Body.js";
+	const Body$1 = ({ children, ...props }) => {
+	  const { className, ...otherProps } = props;
+	  const classNames = classnames('accordion-body', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$m, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Body$1.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$n = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/accordion/src/Accordion.js";
+	const Accordion = ({ children, ...props }) => {
+	  const { className, ...otherProps } = props;
+	  const classNames = classnames('accordion', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$n, lineNumber: 12}}
+	      , children
+	    )
+	  )
+	};
+
+	Accordion.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	Accordion.Body = Body$1;
+	Accordion.Header = Header$1;
+
+	var index$a = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Accordion: Accordion,
+		Header: Header$1,
+		Body: Body$1
+	});
+
+	const _jsxFileName$o = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/autocomplete/src/Input.js";
+	const Input$1 = ({ children, ...props }) => {
+	  const { className, focus, ...otherProps } = props;
+	  const classNames = classnames(
+	    'form-autocomplete-input',
+	    {
+	      'is-focused': focus
+	    },
+	    className
+	  );
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$o, lineNumber: 16}}
+	      , children
+	    )
+	  )
+	};
+
+	Input$1.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string,
+	  focus: propTypes.bool
+	};
+
+	const _jsxFileName$p = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/autocomplete/src/Menu.js";
+	const Menu = ({ children, ...props }) => {
+	  const { className, ...otherProps } = props;
+	  const classNames = classnames('menu', className);
+
+	  return (
+	    React.createElement('ul', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$p, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Menu.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$q = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/autocomplete/src/Autocomplete.js";
+	const Autocomplete = ({ children, ...props }) => {
+	  const { className, ...otherProps } = props;
+	  const classNames = classnames('form-autocomplete', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$q, lineNumber: 12}}
+	      , children
+	    )
+	  )
+	};
+
+	Autocomplete.Input = Input$1;
+	Autocomplete.Menu = Menu;
+
+	Autocomplete.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	var index$b = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Autocomplete: Autocomplete,
+		Input: Input$1,
+		Menu: Menu
+	});
+
+	const _jsxFileName$r = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/avatar/src/Icon.js";
+	const Icon$1 = props => {
+	  const { className, ...otherProps } = props;
+	  const classNames = classnames('avatar-icon', className);
+
+	  return React.createElement('img', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$r, lineNumber: 9}} )
+	};
+
+	Icon$1.propTypes = {
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$s = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/avatar/src/Presence.js";
+	const Presence = props => {
+	  const { className, online, busy, away, ...otherProps } = props;
+	  const classNames = classnames(
+	    'avatar-presence',
+	    {
+	      online: online,
+	      busy: busy,
+	      away: away
+	    },
+	    className
+	  );
+
+	  return React.createElement('i', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$s, lineNumber: 17}} )
+	};
+
+	Presence.propTypes = {
+	  className: propTypes.string,
+	  online: propTypes.bool,
+	  busy: propTypes.bool,
+	  away: propTypes.bool
+	};
+
+	const _jsxFileName$t = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/avatar/src/Avatar.js";
+	const Avatar = ({ children, ...props }) => {
+	  const { className, src, initial, icon, xs, sm, lg, xl, ...otherProps } = props;
+	  const imageNode = src && React.createElement('img', { src: src, __self: undefined, __source: {fileName: _jsxFileName$t, lineNumber: 9}} );
+	  const iconNode = icon && React.createElement(Icon$1, { src: src, __self: undefined, __source: {fileName: _jsxFileName$t, lineNumber: 10}} );
+	  const classNames = classnames(
+	    'avatar',
+	    {
+	      'avatar-xl': xl,
+	      'avatar-lg': lg,
+	      'avatar-sm': sm,
+	      'avatar-xs': xs
+	    },
+	    className
+	  );
+
+	  return (
+	    React.createElement('figure', { className: classNames, 'data-initial': initial, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$t, lineNumber: 23}}
+	      , children
+	      , imageNode
+	      , iconNode
+	    )
+	  )
+	};
+
+	Avatar.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string,
+	  src: propTypes.string,
+	  initial: propTypes.string,
+	  icon: propTypes.string,
+	  xs: propTypes.bool,
+	  sm: propTypes.bool,
+	  lg: propTypes.bool,
+	  xl: propTypes.bool
+	};
+
+	Avatar.Icon = Icon$1;
+	Avatar.Presence = Presence;
+
+	var index$c = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Avatar: Avatar,
+		Icon: Icon$1,
+		Presence: Presence
+	});
+
+	const _jsxFileName$u = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/badge/src/Badge.js";
+	const Badge = ({ children, label }) => {
+	  function addPropsToChildren(child) {
+	    const className = classnames('badge', child.props.className);
+	    const props = {
+	      className,
+	      'data-badge': label && label >= 0 ? label : ''
+	    };
+
+	    return React.cloneElement(child, props)
+	  }
+
+	  return (
+	    React.createElement(React.Fragment, {__self: undefined, __source: {fileName: _jsxFileName$u, lineNumber: 17}}
+	      , React.Children.map(children, addPropsToChildren)
+	    )
+	  )
+	};
+
+	Badge.propTypes = {
+	  children: propTypes.any,
+	  label: propTypes.number
+	};
+
+	var index$d = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Badge: Badge
+	});
+
+	const _jsxFileName$v = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/bar/src/Bar/Item.js";
+	/**
+	 * The Item component.
+	 */
+	const Item = ({ children, ...props }) => {
+	  const { className, progress, style, ...otherProps } = props;
+
+	  // Prepare class names.
+	  const classNames = classnames('bar-item', className);
+
+	  // Prepare style.
+	  const styles = { ...style, width: `${progress}%` };
+
+	  return (
+	    React.createElement('div', {
+	      ...otherProps,
+	      className: classNames,
+	      role: "progressbar",
+	      style: styles, __self: undefined, __source: {fileName: _jsxFileName$v, lineNumber: 18}}
+	    
+	      , children
+	    )
+	  )
+	};
+
+	Item.propTypes = {
+	  children: propTypes.node,
+	  className: propTypes.string,
+	  progress: propTypes.number,
+	  style: propTypes.object
+	};
+
+	const _jsxFileName$w = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/bar/src/Bar/Bar.js";
+	/**
+	 * The Bar component.
+	 */
+	const Bar = ({ children, ...props }) => {
+	  const { className, small, progress } = props;
+
+	  // Prepare class names.
+	  const classNames = classnames('bar', className, {
+	    'bar-sm': small
+	  });
+
+	  return (
+	    React.createElement('div', { className: classNames, __self: undefined, __source: {fileName: _jsxFileName$w, lineNumber: 18}}
+	      , progress === undefined || children !== undefined ? (
+	        children
+	      ) : (
+	        React.createElement(Item, { progress: progress, __self: undefined, __source: {fileName: _jsxFileName$w, lineNumber: 22}} )
+	      )
+	    )
+	  )
+	};
+
+	Bar.propTypes = {
+	  children: propTypes.node,
+	  className: propTypes.string,
+	  small: propTypes.bool,
+	  progress: propTypes.number
+	};
+
+	// Create alias of Item component inside Bar component.
+	Bar.Item = Item;
+
+	const _jsxFileName$x = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/bar/src/Slider/Item.js";
+	/**
+	 * The Item component.
+	 */
+	const Item$1 = props => {
+	  const { className, progress, style, ...otherProps } = props;
+
+	  // Prepare class names.
+	  const classNames = classnames('bar-item', className);
+
+	  // Prepare style.
+	  const styles = { ...style, width: `${progress}%` };
+
+	  return (
+	    React.createElement('div', {
+	      ...otherProps,
+	      className: classNames,
+	      role: "progressbar",
+	      style: styles, __self: undefined, __source: {fileName: _jsxFileName$x, lineNumber: 18}}
+	    
+	      , React.createElement('button', { className: "bar-slider-btn btn" , role: "slider", __self: undefined, __source: {fileName: _jsxFileName$x, lineNumber: 24}} )
+	    )
+	  )
+	};
+
+	Item$1.propTypes = {
+	  className: propTypes.string,
+	  progress: propTypes.number,
+	  style: propTypes.object
+	};
+
+	const _jsxFileName$y = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/bar/src/Slider/Slider.js";
+	/**
+	 * The Slider component.
+	 */
+	const Slider = ({ children, ...props }) => {
+	  const { className, progress, ...otherProps } = props;
+
+	  // Prepare class names.
+	  const classNames = classnames('bar-slider', className);
+
+	  return (
+	    React.createElement(Bar, { ...otherProps, className: classNames, __self: undefined, __source: {fileName: _jsxFileName$y, lineNumber: 17}}
+	      , progress === undefined || children !== undefined ? (
+	        children
+	      ) : (
+	        React.createElement(Item$1, { progress: progress, __self: undefined, __source: {fileName: _jsxFileName$y, lineNumber: 21}} )
+	      )
+	    )
+	  )
+	};
+
+	Slider.propTypes = {
+	  children: propTypes.node,
+	  className: propTypes.string,
+	  progress: propTypes.oneOfType(propTypes.string, propTypes.number)
+	};
+
+	// Create alias of Item component inside Slider component.
+	Slider.Item = Item$1;
+
+	var index$e = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Bar: Bar,
+		Slider: Slider
+	});
+
+	const _jsxFileName$z = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/@react-spectre/toast/src/Toast.js";
+	const Toast = ({
+	  className,
+	  primary,
+	  success,
+	  warning,
+	  error,
+	  children,
+	  ...props
+	}) => {
+	  const base = 'toast';
+	  const composeVariantClass = variant => `toast-${variant}`;
+	  const classNames = classnames(base, className, {
+	    [composeVariantClass('primary')]: primary,
+	    [composeVariantClass('success')]: success,
+	    [composeVariantClass('warning')]: warning,
+	    [composeVariantClass('error')]: error
+	  });
+	  return (
+	    React.createElement('div', { className: classNames, ...props, __self: undefined, __source: {fileName: _jsxFileName$z, lineNumber: 23}}
+	      , children
+	    )
+	  )
+	};
+	Toast.propTypes = {
+	  className: propTypes.string,
+	  primary: propTypes.bool,
+	  success: propTypes.bool,
+	  warning: propTypes.bool,
+	  error: propTypes.bool,
+	  children: propTypes.any
+	};
+
+	var index$f = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Toast: Toast
+	});
+
+	const _jsxFileName$A = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/card/src/Header/Header.js";
+	const Header$2 = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('card-header', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$A, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Header$2.propTypes = {
+	  children: propTypes.node,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$B = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/card/src/Header/Title.js";
+	const Title = props => {
+	  const { children, h1, h2, h3, h4, h5, h6, className, ...otherProps } = props;
+	  const classNames = classnames(
+	    'card-title',
+	    {
+	      h1: h1,
+	      h2: h2,
+	      h3: h3,
+	      h4: h4,
+	      h5: h5,
+	      h6: h6
+	    },
+	    className
+	  );
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$B, lineNumber: 21}}
+	      , children
+	    )
+	  )
+	};
+
+	Title.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string,
+	  h1: propTypes.bool,
+	  h2: propTypes.bool,
+	  h3: propTypes.bool,
+	  h4: propTypes.bool,
+	  h5: propTypes.bool,
+	  h6: propTypes.bool
+	};
+
+	const _jsxFileName$C = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/card/src/Header/SubTitle.js";
+	const SubTitle = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('card-subtitle text-gray', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$C, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	SubTitle.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$D = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/card/src/Body.js";
+	const Body$2 = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('card-body', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$D, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Body$2.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$E = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/card/src/Image.js";
+	const Image$1 = props => {
+	  const { src, ...otherProps } = props;
+	  const wrapperClassName = classnames('card-image');
+
+	  return (
+	    React.createElement('div', { className: wrapperClassName, __self: undefined, __source: {fileName: _jsxFileName$E, lineNumber: 10}}
+	      , React.createElement('img', { src: src, className: "img-responsive", ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$E, lineNumber: 11}} )
+	    )
+	  )
+	};
+
+	Image$1.propTypes = {
+	  src: propTypes.string
+	};
+
+	const _jsxFileName$F = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/card/src/Footer.js";
+	const Footer = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('card-footer', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$F, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Footer.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$G = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/card/src/Card.js";
+	const Card = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('card', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$G, lineNumber: 14}}
+	      , children
+	    )
+	  )
+	};
+
+	Card.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	Card.Header = Header$2;
+	Card.Title = Title;
+	Card.SubTitle = SubTitle;
+	Card.Body = Body$2;
+	Card.Image = Image$1;
+	Card.Footer = Footer;
+
+	const _jsxFileName$H = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/panel/src/Header/Header.js";
+	const Header$3 = props => {
+	  const { children, className, center, right, ...otherProps } = props;
+	  const classNames = classnames(
+	    'panel-header',
+	    { 'text-center': center },
+	    { 'text-right': right },
+	    className
+	  );
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$H, lineNumber: 15}}
+	      , children
+	    )
+	  )
+	};
+
+	Header$3.propTypes = {
+	  children: propTypes.node,
+	  center: propTypes.string,
+	  right: propTypes.string,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$I = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/panel/src/Header/Title.js";
+	const Title$1 = props => {
+	  const { children, h1, h2, h3, h4, h5, h6, className, ...otherProps } = props;
+	  const classNames = classnames(
+	    'panel-title',
+	    {
+	      h1: h1,
+	      h2: h2,
+	      h3: h3,
+	      h4: h4,
+	      h5: h5,
+	      h6: h6
+	    },
+	    className
+	  );
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$I, lineNumber: 21}}
+	      , children
+	    )
+	  )
+	};
+
+	Title$1.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string,
+	  h1: propTypes.bool,
+	  h2: propTypes.bool,
+	  h3: propTypes.bool,
+	  h4: propTypes.bool,
+	  h5: propTypes.bool,
+	  h6: propTypes.bool
+	};
+
+	const _jsxFileName$J = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/panel/src/Body.js";
+	const Body$3 = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('panel-body', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$J, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Body$3.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$K = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/panel/src/Footer.js";
+	const Footer$1 = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('panel-footer', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$K, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Footer$1.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$L = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/panel/src/Nav.js";
+	const Nav = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('panel-nav', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$L, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Nav.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$M = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/panel/src/Panel.js";
+	const Panel = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('panel', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$M, lineNumber: 14}}
+	      , children
+	    )
+	  )
+	};
+
+	Panel.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	Panel.Header = Header$3;
+	Panel.Title = Title$1;
+	Panel.Body = Body$3;
+	Panel.Footer = Footer$1;
+	Panel.Nav = Nav;
+
+	const _jsxFileName$N = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/step/src/Step.js";
+	const Step = ({ children, className, ...props }) => {
+	  const classNames = classnames('step', className);
+	  return (
+	    React.createElement('ul', { className: classNames, ...props, __self: undefined, __source: {fileName: _jsxFileName$N, lineNumber: 8}}
+	      , children
+	    )
+	  )
+	};
+	Step.propTypes = {
+	  children: propTypes.any,
+	  className: propTypes.string
+	};
+
+	const Item$2 = ({ children, className, active, ...props }) => {
+	  const classNames = classnames('step-item', className, {
+	    active
+	  });
+	  return (
+	    React.createElement('li', { className: classNames, ...props, __self: undefined, __source: {fileName: _jsxFileName$N, lineNumber: 23}}
+	      , children
+	    )
+	  )
+	};
+	Item$2.propTypes = {
+	  children: propTypes.any,
+	  active: propTypes.bool,
+	  className: propTypes.string
+	};
+
+	Step.Item = Item$2;
+
+	const _jsxFileName$O = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/popover/src/Popover.js";
+	const Popover = ({ right, bottom, left, className, children, ...props }) => {
+	  const classNames = classnames('popover', className, {
+	    'popover-right': right,
+	    'popover-left': left,
+	    'popover-bottom': bottom
+	  });
+	  return (
+	    React.createElement('div', { className: classNames, ...props, __self: undefined, __source: {fileName: _jsxFileName$O, lineNumber: 12}}
+	      , children
+	    )
+	  )
+	};
+	Popover.propTypes = {
+	  right: propTypes.bool,
+	  left: propTypes.bool,
+	  bottom: propTypes.bool,
+	  className: propTypes.string,
+	  children: propTypes.any
+	};
+
+	const Container$1 = ({ children, ...props }) => (
+	  React.createElement('div', { className: "popover-container", ...props, __self: undefined, __source: {fileName: _jsxFileName$O, lineNumber: 26}}
+	    , children
+	  )
+	);
+	Container$1.propTypes = {
+	  children: propTypes.any
+	};
+
+	Popover.Container = Container$1;
+
+	const _jsxFileName$P = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/tile/src/Icon.js";
+	const Icon$2 = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('tile-icon', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$P, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Icon$2.propTypes = {
+	  children: propTypes.node,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$Q = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/tile/src/Action.js";
+	const Action = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('tile-action', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$Q, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Action.propTypes = {
+	  children: propTypes.node,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$R = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/tile/src/content/Title.js";
+	const Title$2 = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('tile-title', className);
+
+	  return (
+	    React.createElement('p', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$R, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	Title$2.propTypes = {
+	  children: propTypes.node,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$S = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/tile/src/content/SubTitle.js";
+	const SubTitle$1 = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('tile-subtitle', className);
+
+	  return (
+	    React.createElement('p', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$S, lineNumber: 10}}
+	      , children
+	    )
+	  )
+	};
+
+	SubTitle$1.propTypes = {
+	  children: propTypes.node,
+	  className: propTypes.string
+	};
+
+	const _jsxFileName$T = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/tile/src/content/Content.js";
+	const Content = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('tile-content', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$T, lineNumber: 12}}
+	      , children
+	    )
+	  )
+	};
+
+	Content.propTypes = {
+	  children: propTypes.node,
+	  className: propTypes.string
+	};
+
+	Content.Title = Title$2;
+	Content.SubTitle = SubTitle$1;
+
+	const _jsxFileName$U = "/Users/yawjosephetse/Developer/github/repetere/jsonx/node_modules/react-spectre/packages/tile/src/Tile.js";
+	const Tile = props => {
+	  const { children, className, ...otherProps } = props;
+	  const classNames = classnames('tile', className);
+
+	  return (
+	    React.createElement('div', { className: classNames, ...otherProps, __self: undefined, __source: {fileName: _jsxFileName$U, lineNumber: 13}}
+	      , children
+	    )
+	  )
+	};
+
+	Tile.propTypes = {
+	  children: propTypes.node,
+	  className: propTypes.string
+	};
+
+	Tile.Title = Title$2;
+	Tile.SubTitle = SubTitle$1;
+	Tile.Content = Content;
+	Tile.Action = Action;
+	Tile.Icon = Icon$2;
+
+	//elements
+	const Card$1 = Card;
+	const Panel$1 = Panel;
+	const Step$1 = Step;
+	const Popover$1 = Popover;
+	const Tile$1 = Tile;
+
+	exports.Accordion = index$a;
+	exports.Autocomplete = index$b;
+	exports.Avatar = index$c;
+	exports.Badge = index$d;
+	exports.Bar = index$e;
+	exports.Button = index$2;
+	exports.Card = Card$1;
+	exports.Form = index$3;
+	exports.Grid = index$8;
+	exports.Icon = index$4;
+	exports.Label = index$5;
+	exports.Layout = index$7;
+	exports.Media = index$6;
+	exports.Navbar = index$9;
+	exports.Panel = Panel$1;
+	exports.Popover = Popover$1;
+	exports.Step = Step$1;
+	exports.Table = index$1;
+	exports.Tile = Tile$1;
+	exports.Toast = index$f;
+	exports.Typography = index;
+
+	return exports;
+
+}({}, React));
