@@ -392,7 +392,7 @@ export function FormComponent(
       onSubmit,
       formWrapperComponent,
       formKey,
-      //@ts-ignore
+      formWrapperProps,
   } = props;
   // const { register, unregister, errors, watch, handleSubmit, reset, setError, clearError, setValue, getValues, triggerValidation, control, formState, } = useForm(hookFormOptions);
   const reactHookForm = useForm(hookFormOptions);
@@ -415,6 +415,7 @@ export function FormComponent(
     props: {
       onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined,
       key: formKey ? `formWrapperJXM-${formKey}` : undefined,
+      ...formWrapperProps,
     }
   };
   formWrapperJXM.children = Array.isArray(formComponent) ? formComponent : [formComponent];

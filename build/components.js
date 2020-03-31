@@ -272,7 +272,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
  * @param props
  */
 export function FormComponent(props = {}) {
-    const { hookFormOptions = {}, formComponent = { component: "div", children: "empty form" }, onSubmit, formWrapperComponent, formKey, } = props;
+    const { hookFormOptions = {}, formComponent = { component: "div", children: "empty form" }, onSubmit, formWrapperComponent, formKey, formWrapperProps, } = props;
     // const { register, unregister, errors, watch, handleSubmit, reset, setError, clearError, setValue, getValues, triggerValidation, control, formState, } = useForm(hookFormOptions);
     const reactHookForm = useForm(hookFormOptions);
     const context = {
@@ -294,6 +294,7 @@ export function FormComponent(props = {}) {
         props: {
             onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined,
             key: formKey ? `formWrapperJXM-${formKey}` : undefined,
+            ...formWrapperProps,
         }
     };
     formWrapperJXM.children = Array.isArray(formComponent) ? formComponent : [formComponent];

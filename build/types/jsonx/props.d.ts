@@ -24,5 +24,6 @@ export declare type formComponentProps = {
     onSubmit?: functionParam;
     formComponent?: jsonx;
     formWrapperComponent?: jsonx;
+    formWrapperProps?: any;
     formKey?: any;
 };

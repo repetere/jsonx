@@ -1,1 +1,19139 @@
-var jsonx=function(e,t,n){"use strict";var r="default"in t?t.default:t;n=n&&n.hasOwnProperty("default")?n.default:n;var i="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{};function o(e,t){return e(t={exports:{}},t.exports),t.exports}var s=Object.getOwnPropertySymbols,a=Object.prototype.hasOwnProperty,u=Object.prototype.propertyIsEnumerable;var c=function(){try{if(!Object.assign)return!1;var e=new String("abc");if(e[5]="de","5"===Object.getOwnPropertyNames(e)[0])return!1;for(var t={},n=0;n<10;n++)t["_"+String.fromCharCode(n)]=n;if("0123456789"!==Object.getOwnPropertyNames(t).map(function(e){return t[e]}).join(""))return!1;var r={};return"abcdefghijklmnopqrst".split("").forEach(function(e){r[e]=e}),"abcdefghijklmnopqrst"===Object.keys(Object.assign({},r)).join("")}catch(e){return!1}}()?Object.assign:function(e,t){for(var n,r,i=function(e){if(null==e)throw new TypeError("Object.assign cannot be called with null or undefined");return Object(e)}(e),o=1;o<arguments.length;o++){for(var c in n=Object(arguments[o]))a.call(n,c)&&(i[c]=n[c]);if(s){r=s(n);for(var l=0;l<r.length;l++)u.call(n,r[l])&&(i[r[l]]=n[r[l]])}}return i};function l(){}function h(){h.init.call(this)}function f(e){return void 0===e._maxListeners?h.defaultMaxListeners:e._maxListeners}function d(e,t,n,r){var i,o,s,a;if("function"!=typeof n)throw new TypeError('"listener" argument must be a function');if((o=e._events)?(o.newListener&&(e.emit("newListener",t,n.listener?n.listener:n),o=e._events),s=o[t]):(o=e._events=new l,e._eventsCount=0),s){if("function"==typeof s?s=o[t]=r?[n,s]:[s,n]:r?s.unshift(n):s.push(n),!s.warned&&(i=f(e))&&i>0&&s.length>i){s.warned=!0;var u=new Error("Possible EventEmitter memory leak detected. "+s.length+" "+t+" listeners added. Use emitter.setMaxListeners() to increase limit");u.name="MaxListenersExceededWarning",u.emitter=e,u.type=t,u.count=s.length,a=u,"function"==typeof console.warn?console.warn(a):console.log(a)}}else s=o[t]=n,++e._eventsCount;return e}function p(e,t,n){var r=!1;function i(){e.removeListener(t,i),r||(r=!0,n.apply(e,arguments))}return i.listener=n,i}function m(e){var t=this._events;if(t){var n=t[e];if("function"==typeof n)return 1;if(n)return n.length}return 0}function g(e,t){for(var n=new Array(t);t--;)n[t]=e[t];return n}l.prototype=Object.create(null),h.EventEmitter=h,h.usingDomains=!1,h.prototype.domain=void 0,h.prototype._events=void 0,h.prototype._maxListeners=void 0,h.defaultMaxListeners=10,h.init=function(){this.domain=null,h.usingDomains&&(void 0).active,this._events&&this._events!==Object.getPrototypeOf(this)._events||(this._events=new l,this._eventsCount=0),this._maxListeners=this._maxListeners||void 0},h.prototype.setMaxListeners=function(e){if("number"!=typeof e||e<0||isNaN(e))throw new TypeError('"n" argument must be a positive number');return this._maxListeners=e,this},h.prototype.getMaxListeners=function(){return f(this)},h.prototype.emit=function(e){var t,n,r,i,o,s,a,u="error"===e;if(s=this._events)u=u&&null==s.error;else if(!u)return!1;if(a=this.domain,u){if(t=arguments[1],!a){if(t instanceof Error)throw t;var c=new Error('Uncaught, unspecified "error" event. ('+t+")");throw c.context=t,c}return t||(t=new Error('Uncaught, unspecified "error" event')),t.domainEmitter=this,t.domain=a,t.domainThrown=!1,a.emit("error",t),!1}if(!(n=s[e]))return!1;var l="function"==typeof n;switch(r=arguments.length){case 1:!function(e,t,n){if(t)e.call(n);else for(var r=e.length,i=g(e,r),o=0;o<r;++o)i[o].call(n)}(n,l,this);break;case 2:!function(e,t,n,r){if(t)e.call(n,r);else for(var i=e.length,o=g(e,i),s=0;s<i;++s)o[s].call(n,r)}(n,l,this,arguments[1]);break;case 3:!function(e,t,n,r,i){if(t)e.call(n,r,i);else for(var o=e.length,s=g(e,o),a=0;a<o;++a)s[a].call(n,r,i)}(n,l,this,arguments[1],arguments[2]);break;case 4:!function(e,t,n,r,i,o){if(t)e.call(n,r,i,o);else for(var s=e.length,a=g(e,s),u=0;u<s;++u)a[u].call(n,r,i,o)}(n,l,this,arguments[1],arguments[2],arguments[3]);break;default:for(i=new Array(r-1),o=1;o<r;o++)i[o-1]=arguments[o];!function(e,t,n,r){if(t)e.apply(n,r);else for(var i=e.length,o=g(e,i),s=0;s<i;++s)o[s].apply(n,r)}(n,l,this,i)}return!0},h.prototype.addListener=function(e,t){return d(this,e,t,!1)},h.prototype.on=h.prototype.addListener,h.prototype.prependListener=function(e,t){return d(this,e,t,!0)},h.prototype.once=function(e,t){if("function"!=typeof t)throw new TypeError('"listener" argument must be a function');return this.on(e,p(this,e,t)),this},h.prototype.prependOnceListener=function(e,t){if("function"!=typeof t)throw new TypeError('"listener" argument must be a function');return this.prependListener(e,p(this,e,t)),this},h.prototype.removeListener=function(e,t){var n,r,i,o,s;if("function"!=typeof t)throw new TypeError('"listener" argument must be a function');if(!(r=this._events))return this;if(!(n=r[e]))return this;if(n===t||n.listener&&n.listener===t)0==--this._eventsCount?this._events=new l:(delete r[e],r.removeListener&&this.emit("removeListener",e,n.listener||t));else if("function"!=typeof n){for(i=-1,o=n.length;o-- >0;)if(n[o]===t||n[o].listener&&n[o].listener===t){s=n[o].listener,i=o;break}if(i<0)return this;if(1===n.length){if(n[0]=void 0,0==--this._eventsCount)return this._events=new l,this;delete r[e]}else!function(e,t){for(var n=t,r=n+1,i=e.length;r<i;n+=1,r+=1)e[n]=e[r];e.pop()}(n,i);r.removeListener&&this.emit("removeListener",e,s||t)}return this},h.prototype.removeAllListeners=function(e){var t,n;if(!(n=this._events))return this;if(!n.removeListener)return 0===arguments.length?(this._events=new l,this._eventsCount=0):n[e]&&(0==--this._eventsCount?this._events=new l:delete n[e]),this;if(0===arguments.length){for(var r,i=Object.keys(n),o=0;o<i.length;++o)"removeListener"!==(r=i[o])&&this.removeAllListeners(r);return this.removeAllListeners("removeListener"),this._events=new l,this._eventsCount=0,this}if("function"==typeof(t=n[e]))this.removeListener(e,t);else if(t)do{this.removeListener(e,t[t.length-1])}while(t[0]);return this},h.prototype.listeners=function(e){var t,n=this._events;return n&&(t=n[e])?"function"==typeof t?[t.listener||t]:function(e){for(var t=new Array(e.length),n=0;n<t.length;++n)t[n]=e[n].listener||e[n];return t}(t):[]},h.listenerCount=function(e,t){return"function"==typeof e.listenerCount?e.listenerCount(t):m.call(e,t)},h.prototype.listenerCount=m,h.prototype.eventNames=function(){return this._eventsCount>0?Reflect.ownKeys(this._events):[]};var y="undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{},w=[],b=[],v="undefined"!=typeof Uint8Array?Uint8Array:Array,_=!1;function E(){_=!0;for(var e="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",t=0,n=e.length;t<n;++t)w[t]=e[t],b[e.charCodeAt(t)]=t;b["-".charCodeAt(0)]=62,b["_".charCodeAt(0)]=63}function S(e,t,n){for(var r,i,o=[],s=t;s<n;s+=3)r=(e[s]<<16)+(e[s+1]<<8)+e[s+2],o.push(w[(i=r)>>18&63]+w[i>>12&63]+w[i>>6&63]+w[63&i]);return o.join("")}function O(e){var t;_||E();for(var n=e.length,r=n%3,i="",o=[],s=0,a=n-r;s<a;s+=16383)o.push(S(e,s,s+16383>a?a:s+16383));return 1===r?(t=e[n-1],i+=w[t>>2],i+=w[t<<4&63],i+="=="):2===r&&(t=(e[n-2]<<8)+e[n-1],i+=w[t>>10],i+=w[t>>4&63],i+=w[t<<2&63],i+="="),o.push(i),o.join("")}function x(e,t,n,r,i){var o,s,a=8*i-r-1,u=(1<<a)-1,c=u>>1,l=-7,h=n?i-1:0,f=n?-1:1,d=e[t+h];for(h+=f,o=d&(1<<-l)-1,d>>=-l,l+=a;l>0;o=256*o+e[t+h],h+=f,l-=8);for(s=o&(1<<-l)-1,o>>=-l,l+=r;l>0;s=256*s+e[t+h],h+=f,l-=8);if(0===o)o=1-c;else{if(o===u)return s?NaN:1/0*(d?-1:1);s+=Math.pow(2,r),o-=c}return(d?-1:1)*s*Math.pow(2,o-r)}function k(e,t,n,r,i,o){var s,a,u,c=8*o-i-1,l=(1<<c)-1,h=l>>1,f=23===i?Math.pow(2,-24)-Math.pow(2,-77):0,d=r?0:o-1,p=r?1:-1,m=t<0||0===t&&1/t<0?1:0;for(t=Math.abs(t),isNaN(t)||t===1/0?(a=isNaN(t)?1:0,s=l):(s=Math.floor(Math.log(t)/Math.LN2),t*(u=Math.pow(2,-s))<1&&(s--,u*=2),(t+=s+h>=1?f/u:f*Math.pow(2,1-h))*u>=2&&(s++,u/=2),s+h>=l?(a=0,s=l):s+h>=1?(a=(t*u-1)*Math.pow(2,i),s+=h):(a=t*Math.pow(2,h-1)*Math.pow(2,i),s=0));i>=8;e[n+d]=255&a,d+=p,a/=256,i-=8);for(s=s<<i|a,c+=i;c>0;e[n+d]=255&s,d+=p,s/=256,c-=8);e[n+d-p]|=128*m}var T={}.toString,j=Array.isArray||function(e){return"[object Array]"==T.call(e)};function N(){return M.TYPED_ARRAY_SUPPORT?2147483647:1073741823}function C(e,t){if(N()<t)throw new RangeError("Invalid typed array length");return M.TYPED_ARRAY_SUPPORT?(e=new Uint8Array(t)).__proto__=M.prototype:(null===e&&(e=new M(t)),e.length=t),e}function M(e,t,n){if(!(M.TYPED_ARRAY_SUPPORT||this instanceof M))return new M(e,t,n);if("number"==typeof e){if("string"==typeof t)throw new Error("If encoding is specified then the first argument must be a string");return A(this,e)}return R(this,e,t,n)}function R(e,t,n,r){if("number"==typeof t)throw new TypeError('"value" argument must not be a number');return"undefined"!=typeof ArrayBuffer&&t instanceof ArrayBuffer?function(e,t,n,r){if(t.byteLength,n<0||t.byteLength<n)throw new RangeError("'offset' is out of bounds");if(t.byteLength<n+(r||0))throw new RangeError("'length' is out of bounds");t=void 0===n&&void 0===r?new Uint8Array(t):void 0===r?new Uint8Array(t,n):new Uint8Array(t,n,r);M.TYPED_ARRAY_SUPPORT?(e=t).__proto__=M.prototype:e=D(e,t);return e}(e,t,n,r):"string"==typeof t?function(e,t,n){"string"==typeof n&&""!==n||(n="utf8");if(!M.isEncoding(n))throw new TypeError('"encoding" must be a valid string encoding');var r=0|P(t,n),i=(e=C(e,r)).write(t,n);i!==r&&(e=e.slice(0,i));return e}(e,t,n):function(e,t){if(F(t)){var n=0|L(t.length);return 0===(e=C(e,n)).length?e:(t.copy(e,0,0,n),e)}if(t){if("undefined"!=typeof ArrayBuffer&&t.buffer instanceof ArrayBuffer||"length"in t)return"number"!=typeof t.length||(r=t.length)!=r?C(e,0):D(e,t);if("Buffer"===t.type&&j(t.data))return D(e,t.data)}var r;throw new TypeError("First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.")}(e,t)}function I(e){if("number"!=typeof e)throw new TypeError('"size" argument must be a number');if(e<0)throw new RangeError('"size" argument must not be negative')}function A(e,t){if(I(t),e=C(e,t<0?0:0|L(t)),!M.TYPED_ARRAY_SUPPORT)for(var n=0;n<t;++n)e[n]=0;return e}function D(e,t){var n=t.length<0?0:0|L(t.length);e=C(e,n);for(var r=0;r<n;r+=1)e[r]=255&t[r];return e}function L(e){if(e>=N())throw new RangeError("Attempt to allocate Buffer larger than maximum size: 0x"+N().toString(16)+" bytes");return 0|e}function F(e){return!(null==e||!e._isBuffer)}function P(e,t){if(F(e))return e.length;if("undefined"!=typeof ArrayBuffer&&"function"==typeof ArrayBuffer.isView&&(ArrayBuffer.isView(e)||e instanceof ArrayBuffer))return e.byteLength;"string"!=typeof e&&(e=""+e);var n=e.length;if(0===n)return 0;for(var r=!1;;)switch(t){case"ascii":case"latin1":case"binary":return n;case"utf8":case"utf-8":case void 0:return le(e).length;case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return 2*n;case"hex":return n>>>1;case"base64":return he(e).length;default:if(r)return le(e).length;t=(""+t).toLowerCase(),r=!0}}function V(e,t,n){var r=e[t];e[t]=e[n],e[n]=r}function z(e,t,n,r,i){if(0===e.length)return-1;if("string"==typeof n?(r=n,n=0):n>2147483647?n=2147483647:n<-2147483648&&(n=-2147483648),n=+n,isNaN(n)&&(n=i?0:e.length-1),n<0&&(n=e.length+n),n>=e.length){if(i)return-1;n=e.length-1}else if(n<0){if(!i)return-1;n=0}if("string"==typeof t&&(t=M.from(t,r)),F(t))return 0===t.length?-1:B(e,t,n,r,i);if("number"==typeof t)return t&=255,M.TYPED_ARRAY_SUPPORT&&"function"==typeof Uint8Array.prototype.indexOf?i?Uint8Array.prototype.indexOf.call(e,t,n):Uint8Array.prototype.lastIndexOf.call(e,t,n):B(e,[t],n,r,i);throw new TypeError("val must be string, number or Buffer")}function B(e,t,n,r,i){var o,s=1,a=e.length,u=t.length;if(void 0!==r&&("ucs2"===(r=String(r).toLowerCase())||"ucs-2"===r||"utf16le"===r||"utf-16le"===r)){if(e.length<2||t.length<2)return-1;s=2,a/=2,u/=2,n/=2}function c(e,t){return 1===s?e[t]:e.readUInt16BE(t*s)}if(i){var l=-1;for(o=n;o<a;o++)if(c(e,o)===c(t,-1===l?0:o-l)){if(-1===l&&(l=o),o-l+1===u)return l*s}else-1!==l&&(o-=o-l),l=-1}else for(n+u>a&&(n=a-u),o=n;o>=0;o--){for(var h=!0,f=0;f<u;f++)if(c(e,o+f)!==c(t,f)){h=!1;break}if(h)return o}return-1}function $(e,t,n,r){n=Number(n)||0;var i=e.length-n;r?(r=Number(r))>i&&(r=i):r=i;var o=t.length;if(o%2!=0)throw new TypeError("Invalid hex string");r>o/2&&(r=o/2);for(var s=0;s<r;++s){var a=parseInt(t.substr(2*s,2),16);if(isNaN(a))return s;e[n+s]=a}return s}function U(e,t,n,r){return fe(le(t,e.length-n),e,n,r)}function q(e,t,n,r){return fe(function(e){for(var t=[],n=0;n<e.length;++n)t.push(255&e.charCodeAt(n));return t}(t),e,n,r)}function W(e,t,n,r){return q(e,t,n,r)}function Y(e,t,n,r){return fe(he(t),e,n,r)}function Z(e,t,n,r){return fe(function(e,t){for(var n,r,i,o=[],s=0;s<e.length&&!((t-=2)<0);++s)n=e.charCodeAt(s),r=n>>8,i=n%256,o.push(i),o.push(r);return o}(t,e.length-n),e,n,r)}function J(e,t,n){return 0===t&&n===e.length?O(e):O(e.slice(t,n))}function H(e,t,n){n=Math.min(e.length,n);for(var r=[],i=t;i<n;){var o,s,a,u,c=e[i],l=null,h=c>239?4:c>223?3:c>191?2:1;if(i+h<=n)switch(h){case 1:c<128&&(l=c);break;case 2:128==(192&(o=e[i+1]))&&(u=(31&c)<<6|63&o)>127&&(l=u);break;case 3:o=e[i+1],s=e[i+2],128==(192&o)&&128==(192&s)&&(u=(15&c)<<12|(63&o)<<6|63&s)>2047&&(u<55296||u>57343)&&(l=u);break;case 4:o=e[i+1],s=e[i+2],a=e[i+3],128==(192&o)&&128==(192&s)&&128==(192&a)&&(u=(15&c)<<18|(63&o)<<12|(63&s)<<6|63&a)>65535&&u<1114112&&(l=u)}null===l?(l=65533,h=1):l>65535&&(l-=65536,r.push(l>>>10&1023|55296),l=56320|1023&l),r.push(l),i+=h}return function(e){var t=e.length;if(t<=G)return String.fromCharCode.apply(String,e);var n="",r=0;for(;r<t;)n+=String.fromCharCode.apply(String,e.slice(r,r+=G));return n}(r)}M.TYPED_ARRAY_SUPPORT=void 0===(void 0!==y?y:window).TYPED_ARRAY_SUPPORT||(void 0!==y?y:window).TYPED_ARRAY_SUPPORT,M.poolSize=8192,M._augment=function(e){return e.__proto__=M.prototype,e},M.from=function(e,t,n){return R(null,e,t,n)},M.TYPED_ARRAY_SUPPORT&&(M.prototype.__proto__=Uint8Array.prototype,M.__proto__=Uint8Array),M.alloc=function(e,t,n){return function(e,t,n,r){return I(t),t<=0?C(e,t):void 0!==n?"string"==typeof r?C(e,t).fill(n,r):C(e,t).fill(n):C(e,t)}(null,e,t,n)},M.allocUnsafe=function(e){return A(null,e)},M.allocUnsafeSlow=function(e){return A(null,e)},M.isBuffer=de,M.compare=function(e,t){if(!F(e)||!F(t))throw new TypeError("Arguments must be Buffers");if(e===t)return 0;for(var n=e.length,r=t.length,i=0,o=Math.min(n,r);i<o;++i)if(e[i]!==t[i]){n=e[i],r=t[i];break}return n<r?-1:r<n?1:0},M.isEncoding=function(e){switch(String(e).toLowerCase()){case"hex":case"utf8":case"utf-8":case"ascii":case"latin1":case"binary":case"base64":case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return!0;default:return!1}},M.concat=function(e,t){if(!j(e))throw new TypeError('"list" argument must be an Array of Buffers');if(0===e.length)return M.alloc(0);var n;if(void 0===t)for(t=0,n=0;n<e.length;++n)t+=e[n].length;var r=M.allocUnsafe(t),i=0;for(n=0;n<e.length;++n){var o=e[n];if(!F(o))throw new TypeError('"list" argument must be an Array of Buffers');o.copy(r,i),i+=o.length}return r},M.byteLength=P,M.prototype._isBuffer=!0,M.prototype.swap16=function(){var e=this.length;if(e%2!=0)throw new RangeError("Buffer size must be a multiple of 16-bits");for(var t=0;t<e;t+=2)V(this,t,t+1);return this},M.prototype.swap32=function(){var e=this.length;if(e%4!=0)throw new RangeError("Buffer size must be a multiple of 32-bits");for(var t=0;t<e;t+=4)V(this,t,t+3),V(this,t+1,t+2);return this},M.prototype.swap64=function(){var e=this.length;if(e%8!=0)throw new RangeError("Buffer size must be a multiple of 64-bits");for(var t=0;t<e;t+=8)V(this,t,t+7),V(this,t+1,t+6),V(this,t+2,t+5),V(this,t+3,t+4);return this},M.prototype.toString=function(){var e=0|this.length;return 0===e?"":0===arguments.length?H(this,0,e):function(e,t,n){var r=!1;if((void 0===t||t<0)&&(t=0),t>this.length)return"";if((void 0===n||n>this.length)&&(n=this.length),n<=0)return"";if((n>>>=0)<=(t>>>=0))return"";for(e||(e="utf8");;)switch(e){case"hex":return Q(this,t,n);case"utf8":case"utf-8":return H(this,t,n);case"ascii":return X(this,t,n);case"latin1":case"binary":return K(this,t,n);case"base64":return J(this,t,n);case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return ee(this,t,n);default:if(r)throw new TypeError("Unknown encoding: "+e);e=(e+"").toLowerCase(),r=!0}}.apply(this,arguments)},M.prototype.equals=function(e){if(!F(e))throw new TypeError("Argument must be a Buffer");return this===e||0===M.compare(this,e)},M.prototype.inspect=function(){var e="";return this.length>0&&(e=this.toString("hex",0,50).match(/.{2}/g).join(" "),this.length>50&&(e+=" ... ")),"<Buffer "+e+">"},M.prototype.compare=function(e,t,n,r,i){if(!F(e))throw new TypeError("Argument must be a Buffer");if(void 0===t&&(t=0),void 0===n&&(n=e?e.length:0),void 0===r&&(r=0),void 0===i&&(i=this.length),t<0||n>e.length||r<0||i>this.length)throw new RangeError("out of range index");if(r>=i&&t>=n)return 0;if(r>=i)return-1;if(t>=n)return 1;if(this===e)return 0;for(var o=(i>>>=0)-(r>>>=0),s=(n>>>=0)-(t>>>=0),a=Math.min(o,s),u=this.slice(r,i),c=e.slice(t,n),l=0;l<a;++l)if(u[l]!==c[l]){o=u[l],s=c[l];break}return o<s?-1:s<o?1:0},M.prototype.includes=function(e,t,n){return-1!==this.indexOf(e,t,n)},M.prototype.indexOf=function(e,t,n){return z(this,e,t,n,!0)},M.prototype.lastIndexOf=function(e,t,n){return z(this,e,t,n,!1)},M.prototype.write=function(e,t,n,r){if(void 0===t)r="utf8",n=this.length,t=0;else if(void 0===n&&"string"==typeof t)r=t,n=this.length,t=0;else{if(!isFinite(t))throw new Error("Buffer.write(string, encoding, offset[, length]) is no longer supported");t|=0,isFinite(n)?(n|=0,void 0===r&&(r="utf8")):(r=n,n=void 0)}var i=this.length-t;if((void 0===n||n>i)&&(n=i),e.length>0&&(n<0||t<0)||t>this.length)throw new RangeError("Attempt to write outside buffer bounds");r||(r="utf8");for(var o=!1;;)switch(r){case"hex":return $(this,e,t,n);case"utf8":case"utf-8":return U(this,e,t,n);case"ascii":return q(this,e,t,n);case"latin1":case"binary":return W(this,e,t,n);case"base64":return Y(this,e,t,n);case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return Z(this,e,t,n);default:if(o)throw new TypeError("Unknown encoding: "+r);r=(""+r).toLowerCase(),o=!0}},M.prototype.toJSON=function(){return{type:"Buffer",data:Array.prototype.slice.call(this._arr||this,0)}};var G=4096;function X(e,t,n){var r="";n=Math.min(e.length,n);for(var i=t;i<n;++i)r+=String.fromCharCode(127&e[i]);return r}function K(e,t,n){var r="";n=Math.min(e.length,n);for(var i=t;i<n;++i)r+=String.fromCharCode(e[i]);return r}function Q(e,t,n){var r=e.length;(!t||t<0)&&(t=0),(!n||n<0||n>r)&&(n=r);for(var i="",o=t;o<n;++o)i+=ce(e[o]);return i}function ee(e,t,n){for(var r=e.slice(t,n),i="",o=0;o<r.length;o+=2)i+=String.fromCharCode(r[o]+256*r[o+1]);return i}function te(e,t,n){if(e%1!=0||e<0)throw new RangeError("offset is not uint");if(e+t>n)throw new RangeError("Trying to access beyond buffer length")}function ne(e,t,n,r,i,o){if(!F(e))throw new TypeError('"buffer" argument must be a Buffer instance');if(t>i||t<o)throw new RangeError('"value" argument is out of bounds');if(n+r>e.length)throw new RangeError("Index out of range")}function re(e,t,n,r){t<0&&(t=65535+t+1);for(var i=0,o=Math.min(e.length-n,2);i<o;++i)e[n+i]=(t&255<<8*(r?i:1-i))>>>8*(r?i:1-i)}function ie(e,t,n,r){t<0&&(t=4294967295+t+1);for(var i=0,o=Math.min(e.length-n,4);i<o;++i)e[n+i]=t>>>8*(r?i:3-i)&255}function oe(e,t,n,r,i,o){if(n+r>e.length)throw new RangeError("Index out of range");if(n<0)throw new RangeError("Index out of range")}function se(e,t,n,r,i){return i||oe(e,0,n,4),k(e,t,n,r,23,4),n+4}function ae(e,t,n,r,i){return i||oe(e,0,n,8),k(e,t,n,r,52,8),n+8}M.prototype.slice=function(e,t){var n,r=this.length;if((e=~~e)<0?(e+=r)<0&&(e=0):e>r&&(e=r),(t=void 0===t?r:~~t)<0?(t+=r)<0&&(t=0):t>r&&(t=r),t<e&&(t=e),M.TYPED_ARRAY_SUPPORT)(n=this.subarray(e,t)).__proto__=M.prototype;else{var i=t-e;n=new M(i,void 0);for(var o=0;o<i;++o)n[o]=this[o+e]}return n},M.prototype.readUIntLE=function(e,t,n){e|=0,t|=0,n||te(e,t,this.length);for(var r=this[e],i=1,o=0;++o<t&&(i*=256);)r+=this[e+o]*i;return r},M.prototype.readUIntBE=function(e,t,n){e|=0,t|=0,n||te(e,t,this.length);for(var r=this[e+--t],i=1;t>0&&(i*=256);)r+=this[e+--t]*i;return r},M.prototype.readUInt8=function(e,t){return t||te(e,1,this.length),this[e]},M.prototype.readUInt16LE=function(e,t){return t||te(e,2,this.length),this[e]|this[e+1]<<8},M.prototype.readUInt16BE=function(e,t){return t||te(e,2,this.length),this[e]<<8|this[e+1]},M.prototype.readUInt32LE=function(e,t){return t||te(e,4,this.length),(this[e]|this[e+1]<<8|this[e+2]<<16)+16777216*this[e+3]},M.prototype.readUInt32BE=function(e,t){return t||te(e,4,this.length),16777216*this[e]+(this[e+1]<<16|this[e+2]<<8|this[e+3])},M.prototype.readIntLE=function(e,t,n){e|=0,t|=0,n||te(e,t,this.length);for(var r=this[e],i=1,o=0;++o<t&&(i*=256);)r+=this[e+o]*i;return r>=(i*=128)&&(r-=Math.pow(2,8*t)),r},M.prototype.readIntBE=function(e,t,n){e|=0,t|=0,n||te(e,t,this.length);for(var r=t,i=1,o=this[e+--r];r>0&&(i*=256);)o+=this[e+--r]*i;return o>=(i*=128)&&(o-=Math.pow(2,8*t)),o},M.prototype.readInt8=function(e,t){return t||te(e,1,this.length),128&this[e]?-1*(255-this[e]+1):this[e]},M.prototype.readInt16LE=function(e,t){t||te(e,2,this.length);var n=this[e]|this[e+1]<<8;return 32768&n?4294901760|n:n},M.prototype.readInt16BE=function(e,t){t||te(e,2,this.length);var n=this[e+1]|this[e]<<8;return 32768&n?4294901760|n:n},M.prototype.readInt32LE=function(e,t){return t||te(e,4,this.length),this[e]|this[e+1]<<8|this[e+2]<<16|this[e+3]<<24},M.prototype.readInt32BE=function(e,t){return t||te(e,4,this.length),this[e]<<24|this[e+1]<<16|this[e+2]<<8|this[e+3]},M.prototype.readFloatLE=function(e,t){return t||te(e,4,this.length),x(this,e,!0,23,4)},M.prototype.readFloatBE=function(e,t){return t||te(e,4,this.length),x(this,e,!1,23,4)},M.prototype.readDoubleLE=function(e,t){return t||te(e,8,this.length),x(this,e,!0,52,8)},M.prototype.readDoubleBE=function(e,t){return t||te(e,8,this.length),x(this,e,!1,52,8)},M.prototype.writeUIntLE=function(e,t,n,r){(e=+e,t|=0,n|=0,r)||ne(this,e,t,n,Math.pow(2,8*n)-1,0);var i=1,o=0;for(this[t]=255&e;++o<n&&(i*=256);)this[t+o]=e/i&255;return t+n},M.prototype.writeUIntBE=function(e,t,n,r){(e=+e,t|=0,n|=0,r)||ne(this,e,t,n,Math.pow(2,8*n)-1,0);var i=n-1,o=1;for(this[t+i]=255&e;--i>=0&&(o*=256);)this[t+i]=e/o&255;return t+n},M.prototype.writeUInt8=function(e,t,n){return e=+e,t|=0,n||ne(this,e,t,1,255,0),M.TYPED_ARRAY_SUPPORT||(e=Math.floor(e)),this[t]=255&e,t+1},M.prototype.writeUInt16LE=function(e,t,n){return e=+e,t|=0,n||ne(this,e,t,2,65535,0),M.TYPED_ARRAY_SUPPORT?(this[t]=255&e,this[t+1]=e>>>8):re(this,e,t,!0),t+2},M.prototype.writeUInt16BE=function(e,t,n){return e=+e,t|=0,n||ne(this,e,t,2,65535,0),M.TYPED_ARRAY_SUPPORT?(this[t]=e>>>8,this[t+1]=255&e):re(this,e,t,!1),t+2},M.prototype.writeUInt32LE=function(e,t,n){return e=+e,t|=0,n||ne(this,e,t,4,4294967295,0),M.TYPED_ARRAY_SUPPORT?(this[t+3]=e>>>24,this[t+2]=e>>>16,this[t+1]=e>>>8,this[t]=255&e):ie(this,e,t,!0),t+4},M.prototype.writeUInt32BE=function(e,t,n){return e=+e,t|=0,n||ne(this,e,t,4,4294967295,0),M.TYPED_ARRAY_SUPPORT?(this[t]=e>>>24,this[t+1]=e>>>16,this[t+2]=e>>>8,this[t+3]=255&e):ie(this,e,t,!1),t+4},M.prototype.writeIntLE=function(e,t,n,r){if(e=+e,t|=0,!r){var i=Math.pow(2,8*n-1);ne(this,e,t,n,i-1,-i)}var o=0,s=1,a=0;for(this[t]=255&e;++o<n&&(s*=256);)e<0&&0===a&&0!==this[t+o-1]&&(a=1),this[t+o]=(e/s>>0)-a&255;return t+n},M.prototype.writeIntBE=function(e,t,n,r){if(e=+e,t|=0,!r){var i=Math.pow(2,8*n-1);ne(this,e,t,n,i-1,-i)}var o=n-1,s=1,a=0;for(this[t+o]=255&e;--o>=0&&(s*=256);)e<0&&0===a&&0!==this[t+o+1]&&(a=1),this[t+o]=(e/s>>0)-a&255;return t+n},M.prototype.writeInt8=function(e,t,n){return e=+e,t|=0,n||ne(this,e,t,1,127,-128),M.TYPED_ARRAY_SUPPORT||(e=Math.floor(e)),e<0&&(e=255+e+1),this[t]=255&e,t+1},M.prototype.writeInt16LE=function(e,t,n){return e=+e,t|=0,n||ne(this,e,t,2,32767,-32768),M.TYPED_ARRAY_SUPPORT?(this[t]=255&e,this[t+1]=e>>>8):re(this,e,t,!0),t+2},M.prototype.writeInt16BE=function(e,t,n){return e=+e,t|=0,n||ne(this,e,t,2,32767,-32768),M.TYPED_ARRAY_SUPPORT?(this[t]=e>>>8,this[t+1]=255&e):re(this,e,t,!1),t+2},M.prototype.writeInt32LE=function(e,t,n){return e=+e,t|=0,n||ne(this,e,t,4,2147483647,-2147483648),M.TYPED_ARRAY_SUPPORT?(this[t]=255&e,this[t+1]=e>>>8,this[t+2]=e>>>16,this[t+3]=e>>>24):ie(this,e,t,!0),t+4},M.prototype.writeInt32BE=function(e,t,n){return e=+e,t|=0,n||ne(this,e,t,4,2147483647,-2147483648),e<0&&(e=4294967295+e+1),M.TYPED_ARRAY_SUPPORT?(this[t]=e>>>24,this[t+1]=e>>>16,this[t+2]=e>>>8,this[t+3]=255&e):ie(this,e,t,!1),t+4},M.prototype.writeFloatLE=function(e,t,n){return se(this,e,t,!0,n)},M.prototype.writeFloatBE=function(e,t,n){return se(this,e,t,!1,n)},M.prototype.writeDoubleLE=function(e,t,n){return ae(this,e,t,!0,n)},M.prototype.writeDoubleBE=function(e,t,n){return ae(this,e,t,!1,n)},M.prototype.copy=function(e,t,n,r){if(n||(n=0),r||0===r||(r=this.length),t>=e.length&&(t=e.length),t||(t=0),r>0&&r<n&&(r=n),r===n)return 0;if(0===e.length||0===this.length)return 0;if(t<0)throw new RangeError("targetStart out of bounds");if(n<0||n>=this.length)throw new RangeError("sourceStart out of bounds");if(r<0)throw new RangeError("sourceEnd out of bounds");r>this.length&&(r=this.length),e.length-t<r-n&&(r=e.length-t+n);var i,o=r-n;if(this===e&&n<t&&t<r)for(i=o-1;i>=0;--i)e[i+t]=this[i+n];else if(o<1e3||!M.TYPED_ARRAY_SUPPORT)for(i=0;i<o;++i)e[i+t]=this[i+n];else Uint8Array.prototype.set.call(e,this.subarray(n,n+o),t);return o},M.prototype.fill=function(e,t,n,r){if("string"==typeof e){if("string"==typeof t?(r=t,t=0,n=this.length):"string"==typeof n&&(r=n,n=this.length),1===e.length){var i=e.charCodeAt(0);i<256&&(e=i)}if(void 0!==r&&"string"!=typeof r)throw new TypeError("encoding must be a string");if("string"==typeof r&&!M.isEncoding(r))throw new TypeError("Unknown encoding: "+r)}else"number"==typeof e&&(e&=255);if(t<0||this.length<t||this.length<n)throw new RangeError("Out of range index");if(n<=t)return this;var o;if(t>>>=0,n=void 0===n?this.length:n>>>0,e||(e=0),"number"==typeof e)for(o=t;o<n;++o)this[o]=e;else{var s=F(e)?e:le(new M(e,r).toString()),a=s.length;for(o=0;o<n-t;++o)this[o+t]=s[o%a]}return this};var ue=/[^+\/0-9A-Za-z-_]/g;function ce(e){return e<16?"0"+e.toString(16):e.toString(16)}function le(e,t){var n;t=t||1/0;for(var r=e.length,i=null,o=[],s=0;s<r;++s){if((n=e.charCodeAt(s))>55295&&n<57344){if(!i){if(n>56319){(t-=3)>-1&&o.push(239,191,189);continue}if(s+1===r){(t-=3)>-1&&o.push(239,191,189);continue}i=n;continue}if(n<56320){(t-=3)>-1&&o.push(239,191,189),i=n;continue}n=65536+(i-55296<<10|n-56320)}else i&&(t-=3)>-1&&o.push(239,191,189);if(i=null,n<128){if((t-=1)<0)break;o.push(n)}else if(n<2048){if((t-=2)<0)break;o.push(n>>6|192,63&n|128)}else if(n<65536){if((t-=3)<0)break;o.push(n>>12|224,n>>6&63|128,63&n|128)}else{if(!(n<1114112))throw new Error("Invalid code point");if((t-=4)<0)break;o.push(n>>18|240,n>>12&63|128,n>>6&63|128,63&n|128)}}return o}function he(e){return function(e){var t,n,r,i,o,s;_||E();var a=e.length;if(a%4>0)throw new Error("Invalid string. Length must be a multiple of 4");o="="===e[a-2]?2:"="===e[a-1]?1:0,s=new v(3*a/4-o),r=o>0?a-4:a;var u=0;for(t=0,n=0;t<r;t+=4,n+=3)i=b[e.charCodeAt(t)]<<18|b[e.charCodeAt(t+1)]<<12|b[e.charCodeAt(t+2)]<<6|b[e.charCodeAt(t+3)],s[u++]=i>>16&255,s[u++]=i>>8&255,s[u++]=255&i;return 2===o?(i=b[e.charCodeAt(t)]<<2|b[e.charCodeAt(t+1)]>>4,s[u++]=255&i):1===o&&(i=b[e.charCodeAt(t)]<<10|b[e.charCodeAt(t+1)]<<4|b[e.charCodeAt(t+2)]>>2,s[u++]=i>>8&255,s[u++]=255&i),s}(function(e){if((e=function(e){return e.trim?e.trim():e.replace(/^\s+|\s+$/g,"")}(e).replace(ue,"")).length<2)return"";for(;e.length%4!=0;)e+="=";return e}(e))}function fe(e,t,n,r){for(var i=0;i<r&&!(i+n>=t.length||i>=e.length);++i)t[i+n]=e[i];return i}function de(e){return null!=e&&(!!e._isBuffer||pe(e)||function(e){return"function"==typeof e.readFloatLE&&"function"==typeof e.slice&&pe(e.slice(0,0))}(e))}function pe(e){return!!e.constructor&&"function"==typeof e.constructor.isBuffer&&e.constructor.isBuffer(e)}function me(){throw new Error("setTimeout has not been defined")}function ge(){throw new Error("clearTimeout has not been defined")}var ye=me,we=ge;function be(e){if(ye===setTimeout)return setTimeout(e,0);if((ye===me||!ye)&&setTimeout)return ye=setTimeout,setTimeout(e,0);try{return ye(e,0)}catch(t){try{return ye.call(null,e,0)}catch(t){return ye.call(this,e,0)}}}"function"==typeof(void 0!==y?y:window).setTimeout&&(ye=setTimeout),"function"==typeof(void 0!==y?y:window).clearTimeout&&(we=clearTimeout);var ve,_e=[],Ee=!1,Se=-1;function Oe(){Ee&&ve&&(Ee=!1,ve.length?_e=ve.concat(_e):Se=-1,_e.length&&xe())}function xe(){if(!Ee){var e=be(Oe);Ee=!0;for(var t=_e.length;t;){for(ve=_e,_e=[];++Se<t;)ve&&ve[Se].run();Se=-1,t=_e.length}ve=null,Ee=!1,function(e){if(we===clearTimeout)return clearTimeout(e);if((we===ge||!we)&&clearTimeout)return we=clearTimeout,clearTimeout(e);try{we(e)}catch(t){try{return we.call(null,e)}catch(t){return we.call(this,e)}}}(e)}}function ke(e){var t=new Array(arguments.length-1);if(arguments.length>1)for(var n=1;n<arguments.length;n++)t[n-1]=arguments[n];_e.push(new Te(e,t)),1!==_e.length||Ee||be(xe)}function Te(e,t){this.fun=e,this.array=t}Te.prototype.run=function(){this.fun.apply(null,this.array)};var je=(void 0!==y?y:window).performance||{},Ne=(je.now||je.mozNow||je.msNow||je.oNow||je.webkitNow,"function"==typeof Object.create?function(e,t){e.super_=t,e.prototype=Object.create(t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}})}:function(e,t){e.super_=t;var n=function(){};n.prototype=t.prototype,e.prototype=new n,e.prototype.constructor=e}),Ce=/%[sdj%]/g;function Me(e,t){if(Ue((void 0!==y?y:window).process))return function(){return Me(e,t).apply(this,arguments)};var n=!1;return function(){return n||(console.error(t),n=!0),e.apply(this,arguments)}}var Re,Ie={};function Ae(e,t){var n={seen:[],stylize:Le};return arguments.length>=3&&(n.depth=arguments[2]),arguments.length>=4&&(n.colors=arguments[3]),ze(t)?n.showHidden=t:t&&function(e,t){if(!t||!We(t))return e;var n=Object.keys(t),r=n.length;for(;r--;)e[n[r]]=t[n[r]]}(n,t),Ue(n.showHidden)&&(n.showHidden=!1),Ue(n.depth)&&(n.depth=2),Ue(n.colors)&&(n.colors=!1),Ue(n.customInspect)&&(n.customInspect=!0),n.colors&&(n.stylize=De),Fe(n,e,n.depth)}function De(e,t){var n=Ae.styles[t];return n?"["+Ae.colors[n][0]+"m"+e+"["+Ae.colors[n][1]+"m":e}function Le(e,t){return e}function Fe(e,t,n){if(e.customInspect&&t&&Je(t.inspect)&&t.inspect!==Ae&&(!t.constructor||t.constructor.prototype!==t)){var r=t.inspect(n,e);return $e(r)||(r=Fe(e,r,n)),r}var i=function(e,t){if(Ue(t))return e.stylize("undefined","undefined");if($e(t)){var n="'"+JSON.stringify(t).replace(/^"|"$/g,"").replace(/'/g,"\\'").replace(/\\"/g,'"')+"'";return e.stylize(n,"string")}if(r=t,"number"==typeof r)return e.stylize(""+t,"number");var r;if(ze(t))return e.stylize(""+t,"boolean");if(Be(t))return e.stylize("null","null")}(e,t);if(i)return i;var o=Object.keys(t),s=function(e){var t={};return e.forEach(function(e,n){t[e]=!0}),t}(o);if(e.showHidden&&(o=Object.getOwnPropertyNames(t)),Ze(t)&&(o.indexOf("message")>=0||o.indexOf("description")>=0))return Pe(t);if(0===o.length){if(Je(t)){var a=t.name?": "+t.name:"";return e.stylize("[Function"+a+"]","special")}if(qe(t))return e.stylize(RegExp.prototype.toString.call(t),"regexp");if(Ye(t))return e.stylize(Date.prototype.toString.call(t),"date");if(Ze(t))return Pe(t)}var u,c,l="",h=!1,f=["{","}"];(u=t,Array.isArray(u)&&(h=!0,f=["[","]"]),Je(t))&&(l=" [Function"+(t.name?": "+t.name:"")+"]");return qe(t)&&(l=" "+RegExp.prototype.toString.call(t)),Ye(t)&&(l=" "+Date.prototype.toUTCString.call(t)),Ze(t)&&(l=" "+Pe(t)),0!==o.length||h&&0!=t.length?n<0?qe(t)?e.stylize(RegExp.prototype.toString.call(t),"regexp"):e.stylize("[Object]","special"):(e.seen.push(t),c=h?function(e,t,n,r,i){for(var o=[],s=0,a=t.length;s<a;++s)Ge(t,String(s))?o.push(Ve(e,t,n,r,String(s),!0)):o.push("");return i.forEach(function(i){i.match(/^\d+$/)||o.push(Ve(e,t,n,r,i,!0))}),o}(e,t,n,s,o):o.map(function(r){return Ve(e,t,n,s,r,h)}),e.seen.pop(),function(e,t,n){if(e.reduce(function(e,t){return t.indexOf("\n"),e+t.replace(/\u001b\[\d\d?m/g,"").length+1},0)>60)return n[0]+(""===t?"":t+"\n ")+" "+e.join(",\n  ")+" "+n[1];return n[0]+t+" "+e.join(", ")+" "+n[1]}(c,l,f)):f[0]+l+f[1]}function Pe(e){return"["+Error.prototype.toString.call(e)+"]"}function Ve(e,t,n,r,i,o){var s,a,u;if((u=Object.getOwnPropertyDescriptor(t,i)||{value:t[i]}).get?a=u.set?e.stylize("[Getter/Setter]","special"):e.stylize("[Getter]","special"):u.set&&(a=e.stylize("[Setter]","special")),Ge(r,i)||(s="["+i+"]"),a||(e.seen.indexOf(u.value)<0?(a=Be(n)?Fe(e,u.value,null):Fe(e,u.value,n-1)).indexOf("\n")>-1&&(a=o?a.split("\n").map(function(e){return"  "+e}).join("\n").substr(2):"\n"+a.split("\n").map(function(e){return"   "+e}).join("\n")):a=e.stylize("[Circular]","special")),Ue(s)){if(o&&i.match(/^\d+$/))return a;(s=JSON.stringify(""+i)).match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)?(s=s.substr(1,s.length-2),s=e.stylize(s,"name")):(s=s.replace(/'/g,"\\'").replace(/\\"/g,'"').replace(/(^"|"$)/g,"'"),s=e.stylize(s,"string"))}return s+": "+a}function ze(e){return"boolean"==typeof e}function Be(e){return null===e}function $e(e){return"string"==typeof e}function Ue(e){return void 0===e}function qe(e){return We(e)&&"[object RegExp]"===He(e)}function We(e){return"object"==typeof e&&null!==e}function Ye(e){return We(e)&&"[object Date]"===He(e)}function Ze(e){return We(e)&&("[object Error]"===He(e)||e instanceof Error)}function Je(e){return"function"==typeof e}function He(e){return Object.prototype.toString.call(e)}function Ge(e,t){return Object.prototype.hasOwnProperty.call(e,t)}function Xe(){this.head=null,this.tail=null,this.length=0}Ae.colors={bold:[1,22],italic:[3,23],underline:[4,24],inverse:[7,27],white:[37,39],grey:[90,39],black:[30,39],blue:[34,39],cyan:[36,39],green:[32,39],magenta:[35,39],red:[31,39],yellow:[33,39]},Ae.styles={special:"cyan",number:"yellow",boolean:"yellow",undefined:"grey",null:"bold",string:"green",date:"magenta",regexp:"red"},Xe.prototype.push=function(e){var t={data:e,next:null};this.length>0?this.tail.next=t:this.head=t,this.tail=t,++this.length},Xe.prototype.unshift=function(e){var t={data:e,next:this.head};0===this.length&&(this.tail=t),this.head=t,++this.length},Xe.prototype.shift=function(){if(0!==this.length){var e=this.head.data;return 1===this.length?this.head=this.tail=null:this.head=this.head.next,--this.length,e}},Xe.prototype.clear=function(){this.head=this.tail=null,this.length=0},Xe.prototype.join=function(e){if(0===this.length)return"";for(var t=this.head,n=""+t.data;t=t.next;)n+=e+t.data;return n},Xe.prototype.concat=function(e){if(0===this.length)return M.alloc(0);if(1===this.length)return this.head.data;for(var t=M.allocUnsafe(e>>>0),n=this.head,r=0;n;)n.data.copy(t,r),r+=n.data.length,n=n.next;return t};var Ke=M.isEncoding||function(e){switch(e&&e.toLowerCase()){case"hex":case"utf8":case"utf-8":case"ascii":case"binary":case"base64":case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":case"raw":return!0;default:return!1}};function Qe(e){switch(this.encoding=(e||"utf8").toLowerCase().replace(/[-_]/,""),function(e){if(e&&!Ke(e))throw new Error("Unknown encoding: "+e)}(e),this.encoding){case"utf8":this.surrogateSize=3;break;case"ucs2":case"utf16le":this.surrogateSize=2,this.detectIncompleteChar=tt;break;case"base64":this.surrogateSize=3,this.detectIncompleteChar=nt;break;default:return void(this.write=et)}this.charBuffer=new M(6),this.charReceived=0,this.charLength=0}function et(e){return e.toString(this.encoding)}function tt(e){this.charReceived=e.length%2,this.charLength=this.charReceived?2:0}function nt(e){this.charReceived=e.length%3,this.charLength=this.charReceived?3:0}Qe.prototype.write=function(e){for(var t="";this.charLength;){var n=e.length>=this.charLength-this.charReceived?this.charLength-this.charReceived:e.length;if(e.copy(this.charBuffer,this.charReceived,0,n),this.charReceived+=n,this.charReceived<this.charLength)return"";if(e=e.slice(n,e.length),!((i=(t=this.charBuffer.slice(0,this.charLength).toString(this.encoding)).charCodeAt(t.length-1))>=55296&&i<=56319)){if(this.charReceived=this.charLength=0,0===e.length)return t;break}this.charLength+=this.surrogateSize,t=""}this.detectIncompleteChar(e);var r=e.length;this.charLength&&(e.copy(this.charBuffer,0,e.length-this.charReceived,r),r-=this.charReceived);var i;r=(t+=e.toString(this.encoding,0,r)).length-1;if((i=t.charCodeAt(r))>=55296&&i<=56319){var o=this.surrogateSize;return this.charLength+=o,this.charReceived+=o,this.charBuffer.copy(this.charBuffer,o,0,o),e.copy(this.charBuffer,0,0,o),t.substring(0,r)}return t},Qe.prototype.detectIncompleteChar=function(e){for(var t=e.length>=3?3:e.length;t>0;t--){var n=e[e.length-t];if(1==t&&n>>5==6){this.charLength=2;break}if(t<=2&&n>>4==14){this.charLength=3;break}if(t<=3&&n>>3==30){this.charLength=4;break}}this.charReceived=t},Qe.prototype.end=function(e){var t="";if(e&&e.length&&(t=this.write(e)),this.charReceived){var n=this.charReceived,r=this.charBuffer,i=this.encoding;t+=r.slice(0,n).toString(i)}return t},ot.ReadableState=it;var rt=function(e){Ue(Re)&&(Re=""),e=e.toUpperCase(),Ie[e]||(new RegExp("\\b"+e+"\\b","i").test(Re)?Ie[e]=function(){var t=function(e){if(!$e(e)){for(var t=[],n=0;n<arguments.length;n++)t.push(Ae(arguments[n]));return t.join(" ")}n=1;for(var r=arguments,i=r.length,o=String(e).replace(Ce,function(e){if("%%"===e)return"%";if(n>=i)return e;switch(e){case"%s":return String(r[n++]);case"%d":return Number(r[n++]);case"%j":try{return JSON.stringify(r[n++])}catch(e){return"[Circular]"}default:return e}}),s=r[n];n<i;s=r[++n])Be(s)||!We(s)?o+=" "+s:o+=" "+Ae(s);return o}.apply(null,arguments);console.error("%s %d: %s",e,0,t)}:Ie[e]=function(){});return Ie[e]}("stream");function it(e,t){e=e||{},this.objectMode=!!e.objectMode,t instanceof It&&(this.objectMode=this.objectMode||!!e.readableObjectMode);var n=e.highWaterMark,r=this.objectMode?16:16384;this.highWaterMark=n||0===n?n:r,this.highWaterMark=~~this.highWaterMark,this.buffer=new Xe,this.length=0,this.pipes=null,this.pipesCount=0,this.flowing=null,this.ended=!1,this.endEmitted=!1,this.reading=!1,this.sync=!0,this.needReadable=!1,this.emittedReadable=!1,this.readableListening=!1,this.resumeScheduled=!1,this.defaultEncoding=e.defaultEncoding||"utf8",this.ranOut=!1,this.awaitDrain=0,this.readingMore=!1,this.decoder=null,this.encoding=null,e.encoding&&(this.decoder=new Qe(e.encoding),this.encoding=e.encoding)}function ot(e){if(!(this instanceof ot))return new ot(e);this._readableState=new it(e,this),this.readable=!0,e&&"function"==typeof e.read&&(this._read=e.read),h.call(this)}function st(e,t,n,r,i){var o=function(e,t){var n=null;de(t)||"string"==typeof t||null==t||e.objectMode||(n=new TypeError("Invalid non-string/buffer chunk"));return n}(t,n);if(o)e.emit("error",o);else if(null===n)t.reading=!1,function(e,t){if(t.ended)return;if(t.decoder){var n=t.decoder.end();n&&n.length&&(t.buffer.push(n),t.length+=t.objectMode?1:n.length)}t.ended=!0,ct(e)}(e,t);else if(t.objectMode||n&&n.length>0)if(t.ended&&!i){var s=new Error("stream.push() after EOF");e.emit("error",s)}else if(t.endEmitted&&i){var a=new Error("stream.unshift() after end event");e.emit("error",a)}else{var u;!t.decoder||i||r||(n=t.decoder.write(n),u=!t.objectMode&&0===n.length),i||(t.reading=!1),u||(t.flowing&&0===t.length&&!t.sync?(e.emit("data",n),e.read(0)):(t.length+=t.objectMode?1:n.length,i?t.buffer.unshift(n):t.buffer.push(n),t.needReadable&&ct(e))),function(e,t){t.readingMore||(t.readingMore=!0,ke(ht,e,t))}(e,t)}else i||(t.reading=!1);return function(e){return!e.ended&&(e.needReadable||e.length<e.highWaterMark||0===e.length)}(t)}Ne(ot,h),ot.prototype.push=function(e,t){var n=this._readableState;return n.objectMode||"string"!=typeof e||(t=t||n.defaultEncoding)!==n.encoding&&(e=M.from(e,t),t=""),st(this,n,e,t,!1)},ot.prototype.unshift=function(e){return st(this,this._readableState,e,"",!0)},ot.prototype.isPaused=function(){return!1===this._readableState.flowing},ot.prototype.setEncoding=function(e){return this._readableState.decoder=new Qe(e),this._readableState.encoding=e,this};var at=8388608;function ut(e,t){return e<=0||0===t.length&&t.ended?0:t.objectMode?1:e!=e?t.flowing&&t.length?t.buffer.head.data.length:t.length:(e>t.highWaterMark&&(t.highWaterMark=function(e){return e>=at?e=at:(e--,e|=e>>>1,e|=e>>>2,e|=e>>>4,e|=e>>>8,e|=e>>>16,e++),e}(e)),e<=t.length?e:t.ended?t.length:(t.needReadable=!0,0))}function ct(e){var t=e._readableState;t.needReadable=!1,t.emittedReadable||(rt("emitReadable",t.flowing),t.emittedReadable=!0,t.sync?ke(lt,e):lt(e))}function lt(e){rt("emit readable"),e.emit("readable"),pt(e)}function ht(e,t){for(var n=t.length;!t.reading&&!t.flowing&&!t.ended&&t.length<t.highWaterMark&&(rt("maybeReadMore read 0"),e.read(0),n!==t.length);)n=t.length;t.readingMore=!1}function ft(e){rt("readable nexttick read 0"),e.read(0)}function dt(e,t){t.reading||(rt("resume read 0"),e.read(0)),t.resumeScheduled=!1,t.awaitDrain=0,e.emit("resume"),pt(e),t.flowing&&!t.reading&&e.read(0)}function pt(e){var t=e._readableState;for(rt("flow",t.flowing);t.flowing&&null!==e.read(););}function mt(e,t){return 0===t.length?null:(t.objectMode?n=t.buffer.shift():!e||e>=t.length?(n=t.decoder?t.buffer.join(""):1===t.buffer.length?t.buffer.head.data:t.buffer.concat(t.length),t.buffer.clear()):n=function(e,t,n){var r;e<t.head.data.length?(r=t.head.data.slice(0,e),t.head.data=t.head.data.slice(e)):r=e===t.head.data.length?t.shift():n?function(e,t){var n=t.head,r=1,i=n.data;e-=i.length;for(;n=n.next;){var o=n.data,s=e>o.length?o.length:e;if(s===o.length?i+=o:i+=o.slice(0,e),0===(e-=s)){s===o.length?(++r,n.next?t.head=n.next:t.head=t.tail=null):(t.head=n,n.data=o.slice(s));break}++r}return t.length-=r,i}(e,t):function(e,t){var n=M.allocUnsafe(e),r=t.head,i=1;r.data.copy(n),e-=r.data.length;for(;r=r.next;){var o=r.data,s=e>o.length?o.length:e;if(o.copy(n,n.length-e,0,s),0===(e-=s)){s===o.length?(++i,r.next?t.head=r.next:t.head=t.tail=null):(t.head=r,r.data=o.slice(s));break}++i}return t.length-=i,n}(e,t);return r}(e,t.buffer,t.decoder),n);var n}function gt(e){var t=e._readableState;if(t.length>0)throw new Error('"endReadable()" called on non-empty stream');t.endEmitted||(t.ended=!0,ke(yt,t,e))}function yt(e,t){e.endEmitted||0!==e.length||(e.endEmitted=!0,t.readable=!1,t.emit("end"))}function wt(e,t){for(var n=0,r=e.length;n<r;n++)if(e[n]===t)return n;return-1}function bt(){}function vt(e,t,n){this.chunk=e,this.encoding=t,this.callback=n,this.next=null}function _t(e,t){Object.defineProperty(this,"buffer",{get:Me(function(){return this.getBuffer()},"_writableState.buffer is deprecated. Use _writableState.getBuffer instead.")}),e=e||{},this.objectMode=!!e.objectMode,t instanceof It&&(this.objectMode=this.objectMode||!!e.writableObjectMode);var n=e.highWaterMark,r=this.objectMode?16:16384;this.highWaterMark=n||0===n?n:r,this.highWaterMark=~~this.highWaterMark,this.needDrain=!1,this.ending=!1,this.ended=!1,this.finished=!1;var i=!1===e.decodeStrings;this.decodeStrings=!i,this.defaultEncoding=e.defaultEncoding||"utf8",this.length=0,this.writing=!1,this.corked=0,this.sync=!0,this.bufferProcessing=!1,this.onwrite=function(e){!function(e,t){var n=e._writableState,r=n.sync,i=n.writecb;if(function(e){e.writing=!1,e.writecb=null,e.length-=e.writelen,e.writelen=0}(n),t)!function(e,t,n,r,i){--t.pendingcb,n?ke(i,r):i(r);e._writableState.errorEmitted=!0,e.emit("error",r)}(e,n,r,t,i);else{var o=kt(n);o||n.corked||n.bufferProcessing||!n.bufferedRequest||xt(e,n),r?ke(Ot,e,n,o,i):Ot(e,n,o,i)}}(t,e)},this.writecb=null,this.writelen=0,this.bufferedRequest=null,this.lastBufferedRequest=null,this.pendingcb=0,this.prefinished=!1,this.errorEmitted=!1,this.bufferedRequestCount=0,this.corkedRequestsFree=new Nt(this)}function Et(e){if(!(this instanceof Et||this instanceof It))return new Et(e);this._writableState=new _t(e,this),this.writable=!0,e&&("function"==typeof e.write&&(this._write=e.write),"function"==typeof e.writev&&(this._writev=e.writev)),h.call(this)}function St(e,t,n,r,i,o,s){t.writelen=r,t.writecb=s,t.writing=!0,t.sync=!0,n?e._writev(i,t.onwrite):e._write(i,o,t.onwrite),t.sync=!1}function Ot(e,t,n,r){n||function(e,t){0===t.length&&t.needDrain&&(t.needDrain=!1,e.emit("drain"))}(e,t),t.pendingcb--,r(),jt(e,t)}function xt(e,t){t.bufferProcessing=!0;var n=t.bufferedRequest;if(e._writev&&n&&n.next){var r=t.bufferedRequestCount,i=new Array(r),o=t.corkedRequestsFree;o.entry=n;for(var s=0;n;)i[s]=n,n=n.next,s+=1;St(e,t,!0,t.length,i,"",o.finish),t.pendingcb++,t.lastBufferedRequest=null,o.next?(t.corkedRequestsFree=o.next,o.next=null):t.corkedRequestsFree=new Nt(t)}else{for(;n;){var a=n.chunk,u=n.encoding,c=n.callback;if(St(e,t,!1,t.objectMode?1:a.length,a,u,c),n=n.next,t.writing)break}null===n&&(t.lastBufferedRequest=null)}t.bufferedRequestCount=0,t.bufferedRequest=n,t.bufferProcessing=!1}function kt(e){return e.ending&&0===e.length&&null===e.bufferedRequest&&!e.finished&&!e.writing}function Tt(e,t){t.prefinished||(t.prefinished=!0,e.emit("prefinish"))}function jt(e,t){var n=kt(t);return n&&(0===t.pendingcb?(Tt(e,t),t.finished=!0,e.emit("finish")):Tt(e,t)),n}function Nt(e){var t=this;this.next=null,this.entry=null,this.finish=function(n){var r=t.entry;for(t.entry=null;r;){var i=r.callback;e.pendingcb--,i(n),r=r.next}e.corkedRequestsFree?e.corkedRequestsFree.next=t:e.corkedRequestsFree=t}}ot.prototype.read=function(e){rt("read",e),e=parseInt(e,10);var t=this._readableState,n=e;if(0!==e&&(t.emittedReadable=!1),0===e&&t.needReadable&&(t.length>=t.highWaterMark||t.ended))return rt("read: emitReadable",t.length,t.ended),0===t.length&&t.ended?gt(this):ct(this),null;if(0===(e=ut(e,t))&&t.ended)return 0===t.length&&gt(this),null;var r,i=t.needReadable;return rt("need readable",i),(0===t.length||t.length-e<t.highWaterMark)&&rt("length less than watermark",i=!0),t.ended||t.reading?rt("reading or ended",i=!1):i&&(rt("do read"),t.reading=!0,t.sync=!0,0===t.length&&(t.needReadable=!0),this._read(t.highWaterMark),t.sync=!1,t.reading||(e=ut(n,t))),null===(r=e>0?mt(e,t):null)?(t.needReadable=!0,e=0):t.length-=e,0===t.length&&(t.ended||(t.needReadable=!0),n!==e&&t.ended&&gt(this)),null!==r&&this.emit("data",r),r},ot.prototype._read=function(e){this.emit("error",new Error("not implemented"))},ot.prototype.pipe=function(e,t){var n=this,r=this._readableState;switch(r.pipesCount){case 0:r.pipes=e;break;case 1:r.pipes=[r.pipes,e];break;default:r.pipes.push(e)}r.pipesCount+=1,rt("pipe count=%d opts=%j",r.pipesCount,t);var i=!t||!1!==t.end?s:c;function o(e){rt("onunpipe"),e===n&&c()}function s(){rt("onend"),e.end()}r.endEmitted?ke(i):n.once("end",i),e.on("unpipe",o);var a=function(e){return function(){var t=e._readableState;rt("pipeOnDrain",t.awaitDrain),t.awaitDrain&&t.awaitDrain--,0===t.awaitDrain&&e.listeners("data").length&&(t.flowing=!0,pt(e))}}(n);e.on("drain",a);var u=!1;function c(){rt("cleanup"),e.removeListener("close",d),e.removeListener("finish",p),e.removeListener("drain",a),e.removeListener("error",f),e.removeListener("unpipe",o),n.removeListener("end",s),n.removeListener("end",c),n.removeListener("data",h),u=!0,!r.awaitDrain||e._writableState&&!e._writableState.needDrain||a()}var l=!1;function h(t){rt("ondata"),l=!1,!1!==e.write(t)||l||((1===r.pipesCount&&r.pipes===e||r.pipesCount>1&&-1!==wt(r.pipes,e))&&!u&&(rt("false write response, pause",n._readableState.awaitDrain),n._readableState.awaitDrain++,l=!0),n.pause())}function f(t){var n;rt("onerror",t),m(),e.removeListener("error",f),0===(n="error",e.listeners(n).length)&&e.emit("error",t)}function d(){e.removeListener("finish",p),m()}function p(){rt("onfinish"),e.removeListener("close",d),m()}function m(){rt("unpipe"),n.unpipe(e)}return n.on("data",h),function(e,t,n){if("function"==typeof e.prependListener)return e.prependListener(t,n);e._events&&e._events[t]?Array.isArray(e._events[t])?e._events[t].unshift(n):e._events[t]=[n,e._events[t]]:e.on(t,n)}(e,"error",f),e.once("close",d),e.once("finish",p),e.emit("pipe",n),r.flowing||(rt("pipe resume"),n.resume()),e},ot.prototype.unpipe=function(e){var t=this._readableState;if(0===t.pipesCount)return this;if(1===t.pipesCount)return e&&e!==t.pipes?this:(e||(e=t.pipes),t.pipes=null,t.pipesCount=0,t.flowing=!1,e&&e.emit("unpipe",this),this);if(!e){var n=t.pipes,r=t.pipesCount;t.pipes=null,t.pipesCount=0,t.flowing=!1;for(var i=0;i<r;i++)n[i].emit("unpipe",this);return this}var o=wt(t.pipes,e);return-1===o?this:(t.pipes.splice(o,1),t.pipesCount-=1,1===t.pipesCount&&(t.pipes=t.pipes[0]),e.emit("unpipe",this),this)},ot.prototype.on=function(e,t){var n=h.prototype.on.call(this,e,t);if("data"===e)!1!==this._readableState.flowing&&this.resume();else if("readable"===e){var r=this._readableState;r.endEmitted||r.readableListening||(r.readableListening=r.needReadable=!0,r.emittedReadable=!1,r.reading?r.length&&ct(this):ke(ft,this))}return n},ot.prototype.addListener=ot.prototype.on,ot.prototype.resume=function(){var e=this._readableState;return e.flowing||(rt("resume"),e.flowing=!0,function(e,t){t.resumeScheduled||(t.resumeScheduled=!0,ke(dt,e,t))}(this,e)),this},ot.prototype.pause=function(){return rt("call pause flowing=%j",this._readableState.flowing),!1!==this._readableState.flowing&&(rt("pause"),this._readableState.flowing=!1,this.emit("pause")),this},ot.prototype.wrap=function(e){var t=this._readableState,n=!1,r=this;for(var i in e.on("end",function(){if(rt("wrapped end"),t.decoder&&!t.ended){var e=t.decoder.end();e&&e.length&&r.push(e)}r.push(null)}),e.on("data",function(i){(rt("wrapped data"),t.decoder&&(i=t.decoder.write(i)),t.objectMode&&null==i)||(t.objectMode||i&&i.length)&&(r.push(i)||(n=!0,e.pause()))}),e)void 0===this[i]&&"function"==typeof e[i]&&(this[i]=function(t){return function(){return e[t].apply(e,arguments)}}(i));return function(e,t){for(var n=0,r=e.length;n<r;n++)t(e[n],n)}(["error","close","destroy","pause","resume"],function(t){e.on(t,r.emit.bind(r,t))}),r._read=function(t){rt("wrapped _read",t),n&&(n=!1,e.resume())},r},ot._fromList=mt,Et.WritableState=_t,Ne(Et,h),_t.prototype.getBuffer=function(){for(var e=this.bufferedRequest,t=[];e;)t.push(e),e=e.next;return t},Et.prototype.pipe=function(){this.emit("error",new Error("Cannot pipe, not readable"))},Et.prototype.write=function(e,t,n){var r=this._writableState,i=!1;return"function"==typeof t&&(n=t,t=null),M.isBuffer(e)?t="buffer":t||(t=r.defaultEncoding),"function"!=typeof n&&(n=bt),r.ended?function(e,t){var n=new Error("write after end");e.emit("error",n),ke(t,n)}(this,n):function(e,t,n,r){var i=!0,o=!1;return null===n?o=new TypeError("May not write null values to stream"):M.isBuffer(n)||"string"==typeof n||void 0===n||t.objectMode||(o=new TypeError("Invalid non-string/buffer chunk")),o&&(e.emit("error",o),ke(r,o),i=!1),i}(this,r,e,n)&&(r.pendingcb++,i=function(e,t,n,r,i){n=function(e,t,n){return e.objectMode||!1===e.decodeStrings||"string"!=typeof t||(t=M.from(t,n)),t}(t,n,r),M.isBuffer(n)&&(r="buffer");var o=t.objectMode?1:n.length;t.length+=o;var s=t.length<t.highWaterMark;s||(t.needDrain=!0);if(t.writing||t.corked){var a=t.lastBufferedRequest;t.lastBufferedRequest=new vt(n,r,i),a?a.next=t.lastBufferedRequest:t.bufferedRequest=t.lastBufferedRequest,t.bufferedRequestCount+=1}else St(e,t,!1,o,n,r,i);return s}(this,r,e,t,n)),i},Et.prototype.cork=function(){this._writableState.corked++},Et.prototype.uncork=function(){var e=this._writableState;e.corked&&(e.corked--,e.writing||e.corked||e.finished||e.bufferProcessing||!e.bufferedRequest||xt(this,e))},Et.prototype.setDefaultEncoding=function(e){if("string"==typeof e&&(e=e.toLowerCase()),!(["hex","utf8","utf-8","ascii","binary","base64","ucs2","ucs-2","utf16le","utf-16le","raw"].indexOf((e+"").toLowerCase())>-1))throw new TypeError("Unknown encoding: "+e);return this._writableState.defaultEncoding=e,this},Et.prototype._write=function(e,t,n){n(new Error("not implemented"))},Et.prototype._writev=null,Et.prototype.end=function(e,t,n){var r=this._writableState;"function"==typeof e?(n=e,e=null,t=null):"function"==typeof t&&(n=t,t=null),null!=e&&this.write(e,t),r.corked&&(r.corked=1,this.uncork()),r.ending||r.finished||function(e,t,n){t.ending=!0,jt(e,t),n&&(t.finished?ke(n):e.once("finish",n));t.ended=!0,e.writable=!1}(this,r,n)},Ne(It,ot);for(var Ct=Object.keys(Et.prototype),Mt=0;Mt<Ct.length;Mt++){var Rt=Ct[Mt];It.prototype[Rt]||(It.prototype[Rt]=Et.prototype[Rt])}function It(e){if(!(this instanceof It))return new It(e);ot.call(this,e),Et.call(this,e),e&&!1===e.readable&&(this.readable=!1),e&&!1===e.writable&&(this.writable=!1),this.allowHalfOpen=!0,e&&!1===e.allowHalfOpen&&(this.allowHalfOpen=!1),this.once("end",At)}function At(){this.allowHalfOpen||this._writableState.ended||ke(Dt,this)}function Dt(e){e.end()}function Lt(e){this.afterTransform=function(t,n){return function(e,t,n){var r=e._transformState;r.transforming=!1;var i=r.writecb;if(!i)return e.emit("error",new Error("no writecb in Transform class"));r.writechunk=null,r.writecb=null,null!=n&&e.push(n);i(t);var o=e._readableState;o.reading=!1,(o.needReadable||o.length<o.highWaterMark)&&e._read(o.highWaterMark)}(e,t,n)},this.needTransform=!1,this.transforming=!1,this.writecb=null,this.writechunk=null,this.writeencoding=null}function Ft(e){if(!(this instanceof Ft))return new Ft(e);It.call(this,e),this._transformState=new Lt(this);var t=this;this._readableState.needReadable=!0,this._readableState.sync=!1,e&&("function"==typeof e.transform&&(this._transform=e.transform),"function"==typeof e.flush&&(this._flush=e.flush)),this.once("prefinish",function(){"function"==typeof this._flush?this._flush(function(e){Pt(t,e)}):Pt(t)})}function Pt(e,t){if(t)return e.emit("error",t);var n=e._writableState,r=e._transformState;if(n.length)throw new Error("Calling transform done when ws.length != 0");if(r.transforming)throw new Error("Calling transform done when still transforming");return e.push(null)}function Vt(e){if(!(this instanceof Vt))return new Vt(e);Ft.call(this,e)}function zt(){h.call(this)}Ne(Ft,It),Ft.prototype.push=function(e,t){return this._transformState.needTransform=!1,It.prototype.push.call(this,e,t)},Ft.prototype._transform=function(e,t,n){throw new Error("Not implemented")},Ft.prototype._write=function(e,t,n){var r=this._transformState;if(r.writecb=n,r.writechunk=e,r.writeencoding=t,!r.transforming){var i=this._readableState;(r.needTransform||i.needReadable||i.length<i.highWaterMark)&&this._read(i.highWaterMark)}},Ft.prototype._read=function(e){var t=this._transformState;null!==t.writechunk&&t.writecb&&!t.transforming?(t.transforming=!0,this._transform(t.writechunk,t.writeencoding,t.afterTransform)):t.needTransform=!0},Ne(Vt,Ft),Vt.prototype._transform=function(e,t,n){n(null,e)},Ne(zt,h),zt.Readable=ot,zt.Writable=Et,zt.Duplex=It,zt.Transform=Ft,zt.PassThrough=Vt,zt.Stream=zt,zt.prototype.pipe=function(e,t){var n=this;function r(t){e.writable&&!1===e.write(t)&&n.pause&&n.pause()}function i(){n.readable&&n.resume&&n.resume()}n.on("data",r),e.on("drain",i),e._isStdio||t&&!1===t.end||(n.on("end",s),n.on("close",a));var o=!1;function s(){o||(o=!0,e.end())}function a(){o||(o=!0,"function"==typeof e.destroy&&e.destroy())}function u(e){if(c(),0===h.listenerCount(this,"error"))throw e}function c(){n.removeListener("data",r),e.removeListener("drain",i),n.removeListener("end",s),n.removeListener("close",a),n.removeListener("error",u),e.removeListener("error",u),n.removeListener("end",c),n.removeListener("close",c),e.removeListener("close",c)}return n.on("error",u),e.on("error",u),n.on("end",c),n.on("close",c),e.on("close",c),e.emit("pipe",n),e};var Bt=function(e){return e&&e.default||e}(Object.freeze({__proto__:null,default:zt,Readable:ot,Writable:Et,Duplex:It,Transform:Ft,PassThrough:Vt,Stream:zt}));function $t(e){for(var t="https://reactjs.org/docs/error-decoder.html?invariant="+e,n=1;n<arguments.length;n++)t+="&args[]="+encodeURIComponent(arguments[n]);return"Minified React error #"+e+"; visit "+t+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}var Ut="function"==typeof Symbol&&Symbol.for,qt=Ut?Symbol.for("react.portal"):60106,Wt=Ut?Symbol.for("react.fragment"):60107,Yt=Ut?Symbol.for("react.strict_mode"):60108,Zt=Ut?Symbol.for("react.profiler"):60114,Jt=Ut?Symbol.for("react.provider"):60109,Ht=Ut?Symbol.for("react.context"):60110,Gt=Ut?Symbol.for("react.concurrent_mode"):60111,Xt=Ut?Symbol.for("react.forward_ref"):60112,Kt=Ut?Symbol.for("react.suspense"):60113,Qt=Ut?Symbol.for("react.suspense_list"):60120,en=Ut?Symbol.for("react.memo"):60115,tn=Ut?Symbol.for("react.lazy"):60116,nn=Ut?Symbol.for("react.fundamental"):60117,rn=Ut?Symbol.for("react.scope"):60119,on=r.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;function sn(e){if(null==e)return null;if("function"==typeof e)return e.displayName||e.name||null;if("string"==typeof e)return e;switch(e){case Wt:return"Fragment";case qt:return"Portal";case Zt:return"Profiler";case Yt:return"StrictMode";case Kt:return"Suspense";case Qt:return"SuspenseList"}if("object"==typeof e)switch(e.$$typeof){case Ht:return"Context.Consumer";case Jt:return"Context.Provider";case Xt:var t=e.render;return t=t.displayName||t.name||"",e.displayName||(""!==t?"ForwardRef("+t+")":"ForwardRef");case en:return sn(e.type);case tn:if(e=1===e._status?e._result:null)return sn(e)}return null}on.hasOwnProperty("ReactCurrentDispatcher")||(on.ReactCurrentDispatcher={current:null}),on.hasOwnProperty("ReactCurrentBatchConfig")||(on.ReactCurrentBatchConfig={suspense:null});var an={};function un(e,t){for(var n=0|e._threadCount;n<=t;n++)e[n]=e._currentValue2,e._threadCount=n+1}for(var cn=new Uint16Array(16),ln=0;15>ln;ln++)cn[ln]=ln+1;cn[15]=0;var hn=/^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,fn=Object.prototype.hasOwnProperty,dn={},pn={};function mn(e){return!!fn.call(pn,e)||!fn.call(dn,e)&&(hn.test(e)?pn[e]=!0:(dn[e]=!0,!1))}function gn(e,t,n,r,i,o){this.acceptsBooleans=2===t||3===t||4===t,this.attributeName=r,this.attributeNamespace=i,this.mustUseProperty=n,this.propertyName=e,this.type=t,this.sanitizeURL=o}var yn={};"children dangerouslySetInnerHTML defaultValue defaultChecked innerHTML suppressContentEditableWarning suppressHydrationWarning style".split(" ").forEach(function(e){yn[e]=new gn(e,0,!1,e,null,!1)}),[["acceptCharset","accept-charset"],["className","class"],["htmlFor","for"],["httpEquiv","http-equiv"]].forEach(function(e){var t=e[0];yn[t]=new gn(t,1,!1,e[1],null,!1)}),["contentEditable","draggable","spellCheck","value"].forEach(function(e){yn[e]=new gn(e,2,!1,e.toLowerCase(),null,!1)}),["autoReverse","externalResourcesRequired","focusable","preserveAlpha"].forEach(function(e){yn[e]=new gn(e,2,!1,e,null,!1)}),"allowFullScreen async autoFocus autoPlay controls default defer disabled disablePictureInPicture formNoValidate hidden loop noModule noValidate open playsInline readOnly required reversed scoped seamless itemScope".split(" ").forEach(function(e){yn[e]=new gn(e,3,!1,e.toLowerCase(),null,!1)}),["checked","multiple","muted","selected"].forEach(function(e){yn[e]=new gn(e,3,!0,e,null,!1)}),["capture","download"].forEach(function(e){yn[e]=new gn(e,4,!1,e,null,!1)}),["cols","rows","size","span"].forEach(function(e){yn[e]=new gn(e,6,!1,e,null,!1)}),["rowSpan","start"].forEach(function(e){yn[e]=new gn(e,5,!1,e.toLowerCase(),null,!1)});var wn=/[\-:]([a-z])/g;function bn(e){return e[1].toUpperCase()}"accent-height alignment-baseline arabic-form baseline-shift cap-height clip-path clip-rule color-interpolation color-interpolation-filters color-profile color-rendering dominant-baseline enable-background fill-opacity fill-rule flood-color flood-opacity font-family font-size font-size-adjust font-stretch font-style font-variant font-weight glyph-name glyph-orientation-horizontal glyph-orientation-vertical horiz-adv-x horiz-origin-x image-rendering letter-spacing lighting-color marker-end marker-mid marker-start overline-position overline-thickness paint-order panose-1 pointer-events rendering-intent shape-rendering stop-color stop-opacity strikethrough-position strikethrough-thickness stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin stroke-miterlimit stroke-opacity stroke-width text-anchor text-decoration text-rendering underline-position underline-thickness unicode-bidi unicode-range units-per-em v-alphabetic v-hanging v-ideographic v-mathematical vector-effect vert-adv-y vert-origin-x vert-origin-y word-spacing writing-mode xmlns:xlink x-height".split(" ").forEach(function(e){var t=e.replace(wn,bn);yn[t]=new gn(t,1,!1,e,null,!1)}),"xlink:actuate xlink:arcrole xlink:role xlink:show xlink:title xlink:type".split(" ").forEach(function(e){var t=e.replace(wn,bn);yn[t]=new gn(t,1,!1,e,"http://www.w3.org/1999/xlink",!1)}),["xml:base","xml:lang","xml:space"].forEach(function(e){var t=e.replace(wn,bn);yn[t]=new gn(t,1,!1,e,"http://www.w3.org/XML/1998/namespace",!1)}),["tabIndex","crossOrigin"].forEach(function(e){yn[e]=new gn(e,1,!1,e.toLowerCase(),null,!1)}),yn.xlinkHref=new gn("xlinkHref",1,!1,"xlink:href","http://www.w3.org/1999/xlink",!0),["src","href","action","formAction"].forEach(function(e){yn[e]=new gn(e,1,!1,e.toLowerCase(),null,!0)});var vn=/["'&<>]/;function _n(e){if("boolean"==typeof e||"number"==typeof e)return""+e;e=""+e;var t=vn.exec(e);if(t){var n,r="",i=0;for(n=t.index;n<e.length;n++){switch(e.charCodeAt(n)){case 34:t="&quot;";break;case 38:t="&amp;";break;case 39:t="&#x27;";break;case 60:t="&lt;";break;case 62:t="&gt;";break;default:continue}i!==n&&(r+=e.substring(i,n)),i=n+1,r+=t}e=i!==n?r+e.substring(i,n):r}return e}function En(e,t){var n,r=yn.hasOwnProperty(e)?yn[e]:null;return(n="style"!==e)&&(n=null!==r?0===r.type:2<e.length&&("o"===e[0]||"O"===e[0])&&("n"===e[1]||"N"===e[1])),n||function(e,t,n,r){if(null==t||function(e,t,n,r){if(null!==n&&0===n.type)return!1;switch(typeof t){case"function":case"symbol":return!0;case"boolean":return!r&&(null!==n?!n.acceptsBooleans:"data-"!==(e=e.toLowerCase().slice(0,5))&&"aria-"!==e);default:return!1}}(e,t,n,r))return!0;if(r)return!1;if(null!==n)switch(n.type){case 3:return!t;case 4:return!1===t;case 5:return isNaN(t);case 6:return isNaN(t)||1>t}return!1}(e,t,r,!1)?"":null!==r?(e=r.attributeName,3===(n=r.type)||4===n&&!0===t?e+'=""':(r.sanitizeURL&&(t=""+t),e+'="'+_n(t)+'"')):mn(e)?e+'="'+_n(t)+'"':""}var Sn="function"==typeof Object.is?Object.is:function(e,t){return e===t&&(0!==e||1/e==1/t)||e!=e&&t!=t},On=null,xn=null,kn=null,Tn=!1,jn=!1,Nn=null,Cn=0;function Mn(){if(null===On)throw Error($t(321));return On}function Rn(){if(0<Cn)throw Error($t(312));return{memoizedState:null,queue:null,next:null}}function In(){return null===kn?null===xn?(Tn=!1,xn=kn=Rn()):(Tn=!0,kn=xn):null===kn.next?(Tn=!1,kn=kn.next=Rn()):(Tn=!0,kn=kn.next),kn}function An(e,t,n,r){for(;jn;)jn=!1,Cn+=1,kn=null,n=e(t,r);return xn=On=null,Cn=0,kn=Nn=null,n}function Dn(e,t){return"function"==typeof t?t(e):t}function Ln(e,t,n){if(On=Mn(),kn=In(),Tn){var r=kn.queue;if(t=r.dispatch,null!==Nn&&void 0!==(n=Nn.get(r))){Nn.delete(r),r=kn.memoizedState;do{r=e(r,n.action),n=n.next}while(null!==n);return kn.memoizedState=r,[r,t]}return[kn.memoizedState,t]}return e=e===Dn?"function"==typeof t?t():t:void 0!==n?n(t):t,kn.memoizedState=e,e=(e=kn.queue={last:null,dispatch:null}).dispatch=function(e,t,n){if(!(25>Cn))throw Error($t(301));if(e===On)if(jn=!0,e={action:n,next:null},null===Nn&&(Nn=new Map),void 0===(n=Nn.get(t)))Nn.set(t,e);else{for(t=n;null!==t.next;)t=t.next;t.next=e}}.bind(null,On,e),[kn.memoizedState,e]}function Fn(){}var Pn=0,Vn={readContext:function(e){var t=Pn;return un(e,t),e[t]},useContext:function(e){Mn();var t=Pn;return un(e,t),e[t]},useMemo:function(e,t){if(On=Mn(),t=void 0===t?null:t,null!==(kn=In())){var n=kn.memoizedState;if(null!==n&&null!==t){e:{var r=n[1];if(null===r)r=!1;else{for(var i=0;i<r.length&&i<t.length;i++)if(!Sn(t[i],r[i])){r=!1;break e}r=!0}}if(r)return n[0]}}return e=e(),kn.memoizedState=[e,t],e},useReducer:Ln,useRef:function(e){On=Mn();var t=(kn=In()).memoizedState;return null===t?(e={current:e},kn.memoizedState=e):t},useState:function(e){return Ln(Dn,e)},useLayoutEffect:function(){},useCallback:function(e){return e},useImperativeHandle:Fn,useEffect:Fn,useDebugValue:Fn,useResponder:function(e,t){return{props:t,responder:e}},useDeferredValue:function(e){return Mn(),e},useTransition:function(){return Mn(),[function(e){e()},!1]}},zn={html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"};var Bn={area:!0,base:!0,br:!0,col:!0,embed:!0,hr:!0,img:!0,input:!0,keygen:!0,link:!0,meta:!0,param:!0,source:!0,track:!0,wbr:!0},$n=c({menuitem:!0},Bn),Un={animationIterationCount:!0,borderImageOutset:!0,borderImageSlice:!0,borderImageWidth:!0,boxFlex:!0,boxFlexGroup:!0,boxOrdinalGroup:!0,columnCount:!0,columns:!0,flex:!0,flexGrow:!0,flexPositive:!0,flexShrink:!0,flexNegative:!0,flexOrder:!0,gridArea:!0,gridRow:!0,gridRowEnd:!0,gridRowSpan:!0,gridRowStart:!0,gridColumn:!0,gridColumnEnd:!0,gridColumnSpan:!0,gridColumnStart:!0,fontWeight:!0,lineClamp:!0,lineHeight:!0,opacity:!0,order:!0,orphans:!0,tabSize:!0,widows:!0,zIndex:!0,zoom:!0,fillOpacity:!0,floodOpacity:!0,stopOpacity:!0,strokeDasharray:!0,strokeDashoffset:!0,strokeMiterlimit:!0,strokeOpacity:!0,strokeWidth:!0},qn=["Webkit","ms","Moz","O"];Object.keys(Un).forEach(function(e){qn.forEach(function(t){t=t+e.charAt(0).toUpperCase()+e.substring(1),Un[t]=Un[e]})});var Wn=/([A-Z])/g,Yn=/^ms-/,Zn=r.Children.toArray,Jn=on.ReactCurrentDispatcher,Hn={listing:!0,pre:!0,textarea:!0},Gn=/^[a-zA-Z][a-zA-Z:_\.\-\d]*$/,Xn={},Kn={};var Qn=Object.prototype.hasOwnProperty,er={children:null,dangerouslySetInnerHTML:null,suppressContentEditableWarning:null,suppressHydrationWarning:null};function tr(e,t){if(void 0===e)throw Error($t(152,sn(t)||"Component"))}function nr(e,t,n){function i(r,i){var o=i.prototype&&i.prototype.isReactComponent,s=function(e,t,n,r){if(r&&"object"==typeof(r=e.contextType)&&null!==r)return un(r,n),r[n];if(e=e.contextTypes){for(var i in n={},e)n[i]=t[i];t=n}else t=an;return t}(i,t,n,o),a=[],u=!1,l={isMounted:function(){return!1},enqueueForceUpdate:function(){if(null===a)return null},enqueueReplaceState:function(e,t){u=!0,a=[t]},enqueueSetState:function(e,t){if(null===a)return null;a.push(t)}};if(o){if(o=new i(r.props,s,l),"function"==typeof i.getDerivedStateFromProps){var h=i.getDerivedStateFromProps.call(null,r.props,o.state);null!=h&&(o.state=c({},o.state,h))}}else if(On={},o=i(r.props,s,l),null==(o=An(i,r.props,o,s))||null==o.render)return void tr(e=o,i);if(o.props=r.props,o.context=s,o.updater=l,void 0===(l=o.state)&&(o.state=l=null),"function"==typeof o.UNSAFE_componentWillMount||"function"==typeof o.componentWillMount)if("function"==typeof o.componentWillMount&&"function"!=typeof i.getDerivedStateFromProps&&o.componentWillMount(),"function"==typeof o.UNSAFE_componentWillMount&&"function"!=typeof i.getDerivedStateFromProps&&o.UNSAFE_componentWillMount(),a.length){l=a;var f=u;if(a=null,u=!1,f&&1===l.length)o.state=l[0];else{h=f?l[0]:o.state;var d=!0;for(f=f?1:0;f<l.length;f++){var p=l[f];null!=(p="function"==typeof p?p.call(o,h,r.props,s):p)&&(d?(d=!1,h=c({},h,p)):c(h,p))}o.state=h}}else a=null;if(tr(e=o.render(),i),"function"==typeof o.getChildContext&&"object"==typeof(r=i.childContextTypes)){var m=o.getChildContext();for(var g in m)if(!(g in r))throw Error($t(108,sn(i)||"Unknown",g))}m&&(t=c({},t,m))}for(;r.isValidElement(e);){var o=e,s=o.type;if("function"!=typeof s)break;i(o,s)}return{child:e,context:t}}var rr=function(){function e(e,t){r.isValidElement(e)?e.type!==Wt?e=[e]:(e=e.props.children,e=r.isValidElement(e)?[e]:Zn(e)):e=Zn(e),e={type:null,domNamespace:zn.html,children:e,childIndex:0,context:an,footer:""};var n=cn[0];if(0===n){var i=cn,o=2*(n=i.length);if(!(65536>=o))throw Error($t(304));var s=new Uint16Array(o);for(s.set(i),(cn=s)[0]=n+1,i=n;i<o-1;i++)cn[i]=i+1;cn[o-1]=0}else cn[0]=cn[n];this.threadID=n,this.stack=[e],this.exhausted=!1,this.currentSelectValue=null,this.previousWasTextNode=!1,this.makeStaticMarkup=t,this.suspenseDepth=0,this.contextIndex=-1,this.contextStack=[],this.contextValueStack=[]}var t=e.prototype;return t.destroy=function(){if(!this.exhausted){this.exhausted=!0,this.clearProviders();var e=this.threadID;cn[e]=cn[0],cn[0]=e}},t.pushProvider=function(e){var t=++this.contextIndex,n=e.type._context,r=this.threadID;un(n,r);var i=n[r];this.contextStack[t]=n,this.contextValueStack[t]=i,n[r]=e.props.value},t.popProvider=function(){var e=this.contextIndex,t=this.contextStack[e],n=this.contextValueStack[e];this.contextStack[e]=null,this.contextValueStack[e]=null,this.contextIndex--,t[this.threadID]=n},t.clearProviders=function(){for(var e=this.contextIndex;0<=e;e--)this.contextStack[e][this.threadID]=this.contextValueStack[e]},t.read=function(e){if(this.exhausted)return null;var t=Pn;Pn=this.threadID;var n=Jn.current;Jn.current=Vn;try{for(var r=[""],i=!1;r[0].length<e;){if(0===this.stack.length){this.exhausted=!0;var o=this.threadID;cn[o]=cn[0],cn[0]=o;break}var s=this.stack[this.stack.length-1];if(i||s.childIndex>=s.children.length){var a=s.footer;if(""!==a&&(this.previousWasTextNode=!1),this.stack.pop(),"select"===s.type)this.currentSelectValue=null;else if(null!=s.type&&null!=s.type.type&&s.type.type.$$typeof===Jt)this.popProvider(s.type);else if(s.type===Kt){this.suspenseDepth--;var u=r.pop();if(i){i=!1;var c=s.fallbackFrame;if(!c)throw Error($t(303));this.stack.push(c),r[this.suspenseDepth]+="\x3c!--$!--\x3e";continue}r[this.suspenseDepth]+=u}r[this.suspenseDepth]+=a}else{var l=s.children[s.childIndex++],h="";try{h+=this.render(l,s.context,s.domNamespace)}catch(e){if(null!=e&&"function"==typeof e.then)throw Error($t(294));throw e}r.length<=this.suspenseDepth&&r.push(""),r[this.suspenseDepth]+=h}}return r[0]}finally{Jn.current=n,Pn=t}},t.render=function(e,t,n){if("string"==typeof e||"number"==typeof e)return""===(n=""+e)?"":this.makeStaticMarkup?_n(n):this.previousWasTextNode?"\x3c!-- --\x3e"+_n(n):(this.previousWasTextNode=!0,_n(n));if(e=(t=nr(e,t,this.threadID)).child,t=t.context,null===e||!1===e)return"";if(!r.isValidElement(e)){if(null!=e&&null!=e.$$typeof){if((n=e.$$typeof)===qt)throw Error($t(257));throw Error($t(258,n.toString()))}return e=Zn(e),this.stack.push({type:null,domNamespace:n,children:e,childIndex:0,context:t,footer:""}),""}var i=e.type;if("string"==typeof i)return this.renderDOM(e,t,n);switch(i){case Yt:case Gt:case Zt:case Qt:case Wt:return e=Zn(e.props.children),this.stack.push({type:null,domNamespace:n,children:e,childIndex:0,context:t,footer:""}),"";case Kt:throw Error($t(294))}if("object"==typeof i&&null!==i)switch(i.$$typeof){case Xt:On={};var o=i.render(e.props,e.ref);return o=An(i.render,e.props,o,e.ref),o=Zn(o),this.stack.push({type:null,domNamespace:n,children:o,childIndex:0,context:t,footer:""}),"";case en:return e=[r.createElement(i.type,c({ref:e.ref},e.props))],this.stack.push({type:null,domNamespace:n,children:e,childIndex:0,context:t,footer:""}),"";case Jt:return n={type:e,domNamespace:n,children:i=Zn(e.props.children),childIndex:0,context:t,footer:""},this.pushProvider(e),this.stack.push(n),"";case Ht:i=e.type,o=e.props;var s=this.threadID;return un(i,s),i=Zn(o.children(i[s])),this.stack.push({type:e,domNamespace:n,children:i,childIndex:0,context:t,footer:""}),"";case nn:throw Error($t(338));case tn:switch(function(e){if(-1===e._status){e._status=0;var t=e._ctor;t=t(),e._result=t,t.then(function(t){0===e._status&&(t=t.default,e._status=1,e._result=t)},function(t){0===e._status&&(e._status=2,e._result=t)})}}(i=e.type),i._status){case 1:return e=[r.createElement(i._result,c({ref:e.ref},e.props))],this.stack.push({type:null,domNamespace:n,children:e,childIndex:0,context:t,footer:""}),"";case 2:throw i._result;default:throw Error($t(295))}case rn:throw Error($t(343))}throw Error($t(130,null==i?i:typeof i,""))},t.renderDOM=function(e,t,n){var i=e.type.toLowerCase();if(!Xn.hasOwnProperty(i)){if(!Gn.test(i))throw Error($t(65,i));Xn[i]=!0}var o=e.props;if("input"===i)o=c({type:void 0},o,{defaultChecked:void 0,defaultValue:void 0,value:null!=o.value?o.value:o.defaultValue,checked:null!=o.checked?o.checked:o.defaultChecked});else if("textarea"===i){var s=o.value;if(null==s){s=o.defaultValue;var a=o.children;if(null!=a){if(null!=s)throw Error($t(92));if(Array.isArray(a)){if(!(1>=a.length))throw Error($t(93));a=a[0]}s=""+a}null==s&&(s="")}o=c({},o,{value:void 0,children:""+s})}else if("select"===i)this.currentSelectValue=null!=o.value?o.value:o.defaultValue,o=c({},o,{value:void 0});else if("option"===i){a=this.currentSelectValue;var u=function(e){if(null==e)return e;var t="";return r.Children.forEach(e,function(e){null!=e&&(t+=e)}),t}(o.children);if(null!=a){var l=null!=o.value?o.value+"":u;if(s=!1,Array.isArray(a)){for(var h=0;h<a.length;h++)if(""+a[h]===l){s=!0;break}}else s=""+a===l;o=c({selected:void 0,children:void 0},o,{selected:s,children:u})}}if(s=o){if($n[i]&&(null!=s.children||null!=s.dangerouslySetInnerHTML))throw Error($t(137,i,""));if(null!=s.dangerouslySetInnerHTML){if(null!=s.children)throw Error($t(60));if(!("object"==typeof s.dangerouslySetInnerHTML&&"__html"in s.dangerouslySetInnerHTML))throw Error($t(61))}if(null!=s.style&&"object"!=typeof s.style)throw Error($t(62,""))}for(b in s=o,a=this.makeStaticMarkup,u=1===this.stack.length,l="<"+e.type,s)if(Qn.call(s,b)){var f=s[b];if(null!=f){if("style"===b){h=void 0;var d="",p="";for(h in f)if(f.hasOwnProperty(h)){var m=0===h.indexOf("--"),g=f[h];if(null!=g){if(m)var y=h;else if(y=h,Kn.hasOwnProperty(y))y=Kn[y];else{var w=y.replace(Wn,"-$1").toLowerCase().replace(Yn,"-ms-");y=Kn[y]=w}d+=p+y+":",p=h,d+=m=null==g||"boolean"==typeof g||""===g?"":m||"number"!=typeof g||0===g||Un.hasOwnProperty(p)&&Un[p]?(""+g).trim():g+"px",p=";"}}f=d||null}h=null;e:if(m=i,g=s,-1===m.indexOf("-"))m="string"==typeof g.is;else switch(m){case"annotation-xml":case"color-profile":case"font-face":case"font-face-src":case"font-face-uri":case"font-face-format":case"font-face-name":case"missing-glyph":m=!1;break e;default:m=!0}m?er.hasOwnProperty(b)||(h=mn(h=b)&&null!=f?h+'="'+_n(f)+'"':""):h=En(b,f),h&&(l+=" "+h)}}a||u&&(l+=' data-reactroot=""');var b=l;s="",Bn.hasOwnProperty(i)?b+="/>":(b+=">",s="</"+e.type+">");e:{if(null!=(a=o.dangerouslySetInnerHTML)){if(null!=a.__html){a=a.__html;break e}}else if("string"==typeof(a=o.children)||"number"==typeof a){a=_n(a);break e}a=null}return null!=a?(o=[],Hn[i]&&"\n"===a.charAt(0)&&(b+="\n"),b+=a):o=Zn(o.children),e=e.type,n=null==n||"http://www.w3.org/1999/xhtml"===n?function(e){switch(e){case"svg":return"http://www.w3.org/2000/svg";case"math":return"http://www.w3.org/1998/Math/MathML";default:return"http://www.w3.org/1999/xhtml"}}(e):"http://www.w3.org/2000/svg"===n&&"foreignObject"===e?"http://www.w3.org/1999/xhtml":n,this.stack.push({domNamespace:n,type:i,children:o,childIndex:0,context:t,footer:s}),this.previousWasTextNode=!1,b},e}();var ir=function(e){function t(t,n){var r=e.call(this,{})||this;return r.partialRenderer=new rr(t,n),r}!function(e,t){e.prototype=Object.create(t.prototype),e.prototype.constructor=e,e.__proto__=t}(t,e);var n=t.prototype;return n._destroy=function(e,t){this.partialRenderer.destroy(),t(e)},n._read=function(e){try{this.push(this.partialRenderer.read(e))}catch(e){this.destroy(e)}},t}(Bt.Readable),or={renderToString:function(e){e=new rr(e,!1);try{return e.read(1/0)}finally{e.destroy()}},renderToStaticMarkup:function(e){e=new rr(e,!0);try{return e.read(1/0)}finally{e.destroy()}},renderToNodeStream:function(e){return new ir(e,!1)},renderToStaticNodeStream:function(e){return new ir(e,!0)},version:"16.12.0"},sr={default:or},ar=sr&&or||sr,ur=ar.default||ar,cr=o(function(e){e.exports=ur});function lr(){var e=Object.create(null),t=0,n=0,r=0,i=!1;function o(t){r--,delete e[t]}this.put=function(t,n,s,a){if(i&&console.log("caching: %s = %j (@%s)",t,n,s),void 0!==s&&("number"!=typeof s||isNaN(s)||s<=0))throw new Error("Cache timeout must be a positive number");if(void 0!==a&&"function"!=typeof a)throw new Error("Cache timeout callback must be a function");var u=e[t];u?clearTimeout(u.timeout):r++;var c={value:n,expire:s+Date.now()};return isNaN(c.expire)||(c.timeout=setTimeout(function(){o(t),a&&a(t,n)}.bind(this),s)),e[t]=c,n},this.del=function(t){var n=!0,r=e[t];return r?(clearTimeout(r.timeout),!isNaN(r.expire)&&r.expire<Date.now()&&(n=!1)):n=!1,n&&o(t),n},this.clear=function(){for(var o in e)clearTimeout(e[o].timeout);r=0,e=Object.create(null),i&&(t=0,n=0)},this.get=function(o){var s=e[o];if(void 0!==s){if(isNaN(s.expire)||s.expire>=Date.now())return i&&t++,s.value;i&&n++,r--,delete e[o]}else i&&n++;return null},this.size=function(){return r},this.memsize=function(){var t,n=0;for(t in e)n++;return n},this.debug=function(e){i=e},this.hits=function(){return t},this.misses=function(){return n},this.keys=function(){return Object.keys(e)},this.exportJson=function(){var t={};for(var n in e){var r=e[n];t[n]={value:r.value,expire:r.expire||"NaN"}}return JSON.stringify(t)},this.importJson=function(t,n){var r=JSON.parse(t),o=Date.now(),s=n&&n.skipDuplicates;for(var a in r)if(r.hasOwnProperty(a)){if(s)if(e[a]){i&&console.log("Skipping duplicate imported key '%s'",a);continue}var u=r[a],c=u.expire-o;if(c<=0){this.del(a);continue}c=c>0?c:void 0,this.put(a,u.value,c)}return this.size()}}var hr=new lr,fr=lr;hr.Cache=fr;var dr=e=>void 0===e,pr=e=>null===e||dr(e),mr=e=>Array.isArray(e);const gr=e=>"object"==typeof e;var yr=e=>!pr(e)&&!mr(e)&&gr(e),wr=e=>yr(e)&&e.nodeType===Node.ELEMENT_NODE;const br={onBlur:"onBlur",onChange:"onChange",onSubmit:"onSubmit"},vr="undefined",_r={BLUR:"blur",CHANGE:"change",INPUT:"input"},Er="max",Sr="min",Or="maxLength",xr="minLength",kr="pattern",Tr="required",jr="validate",Nr=/\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,Cr=/^\w*$/,Mr=/[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g,Rr=/\\(\\)?/g;var Ir=e=>!mr(e)&&(Cr.test(e)||!Nr.test(e)),Ar=e=>{const t=[];return e.replace(Mr,(e,n,r,i)=>{t.push(r?i.replace(Rr,"$1"):n||e)}),t};function Dr(e,t,n){let r=-1;const i=Ir(t)?[t]:Ar(t),o=i.length,s=o-1;for(;++r<o;){const t=i[r];let o=n;if(r!==s){const n=e[t];o=yr(n)||mr(n)?n:isNaN(i[r+1])?{}:[]}e[t]=o,e=e[t]}return e}var Lr=e=>Object.entries(e).reduce((e,[t,n])=>Ir(t)?Object.assign(Object.assign({},e),{[t]:n}):(Dr(e,t,n),e),{}),Fr=(e,t,n)=>{const r=t.split(/[,[\].]+?/).filter(Boolean).reduce((e,t)=>pr(e)?e:e[t],e);return dr(r)||r===e?e[t]||n:r},Pr=(e,t)=>{for(const n in e)if(Fr(t,n)){const t=e[n];if(t){if(wr(t.ref)&&t.ref.focus){t.ref.focus();break}if(t.options){t.options[0].ref.focus();break}}}},Vr=(e,t)=>{wr(e)&&e.removeEventListener&&(e.removeEventListener(_r.INPUT,t),e.removeEventListener(_r.CHANGE,t),e.removeEventListener(_r.BLUR,t))},zr=e=>!!e&&"radio"===e.type,Br=e=>!!e&&"checkbox"===e.type;function $r(e){return!e||e instanceof HTMLElement&&e.nodeType!==Node.DOCUMENT_NODE&&$r(e.parentNode)}var Ur=e=>yr(e)&&!Object.keys(e).length;function qr(e){return mr(e)?e:Ar(e)}function Wr(e,t){return 1==t.length?e:function(e,t){const n=Ir(t)?[t]:qr(t),r=t.length;let i=0;for(;i<r;)e=dr(e)?i++:e[n[i++]];return i==r?e:void 0}(e,function(e,t,n){let r=-1,i=e.length;t<0&&(t=-t>i?0:i+t),(n=n>i?i:n)<0&&(n+=i),i=t>n?0:n-t;const o=Array(i);for(;++r<i;)o[r]=e[r+t];return o}(t,0,-1))}function Yr(e,t){return t.forEach(t=>{!function(e,t){const n=Ir(t)?[t]:qr(t),r=Wr(e,n),i=n[n.length-1],o=!(null!=r)||delete r[i];let s=void 0;for(let t=0;t<n.slice(0,-1).length;t++){let r=-1,i=void 0;const o=n.slice(0,-(t+1)),a=o.length-1;for(t>0&&(s=e);++r<o.length;){const t=o[r];i=i?i[t]:e[t],a===r&&(yr(i)&&Ur(i)?s?delete s[t]:delete e[t]:mr(i)&&!i.filter(e=>yr(e)&&!Ur(e)).length&&s&&delete s[t]),s=i}}}(e,t)}),e}const Zr={isValid:!1,value:""};var Jr=e=>mr(e)?e.filter(Boolean).reduce((e,{ref:{checked:t,value:n}})=>t?{isValid:!0,value:n}:e,Zr):Zr,Hr=e=>[...e].filter(({selected:e})=>e).map(({value:e})=>e),Gr=e=>!!e&&"file"===e.type,Xr=e=>!!e&&"select-multiple"===e.type,Kr=e=>""===e;const Qr={value:!1,isValid:!1},ei={value:!0,isValid:!0};var ti=e=>{if(mr(e)){if(e.length>1){const t=e.filter(({ref:{checked:e}})=>e).map(({ref:{value:e}})=>e);return{value:t,isValid:!!t.length}}const{checked:t,value:n,attributes:r}=e[0].ref;return t?r&&!dr(r.value)?dr(n)||Kr(n)?ei:{value:n,isValid:!0}:ei:Qr}return Qr};function ni(e,t){const{name:n,value:r}=t,i=e[n];return Gr(t)?t.files:zr(t)?i?Jr(i.options).value:"":Xr(t)?Hr(t.options):Br(t)?!!i&&ti(i.options).value:r}var ri=e=>"string"==typeof e,ii=(e,t)=>{const n={},r=ri(t),i=mr(t),o=t&&t.nest;for(const s in e)(dr(t)||o||r&&s.startsWith(t)||i&&t.find(e=>s.startsWith(e)))&&(n[s]=ni(e,e[s].ref));return n},oi=(e,{type:t,types:n,message:r})=>yr(e)&&e.type===t&&e.message===r&&((e={},t={})=>Object.entries(e).reduce((e,[n,r])=>!!e&&t[n]&&t[n]===r,!0))(e.types,n);var si=e=>e instanceof RegExp,ai=e=>{return(e=>yr(e)&&!si(e))(e)?e:{value:e,message:""}},ui=e=>"function"==typeof e,ci=e=>"boolean"==typeof e,li=e=>ri(e)||yr(e)&&t.isValidElement(e);function hi(e,t,n="validate"){if(li(e)||ci(e)&&!e){return{type:n,message:li(e)?e:"",ref:t}}}var fi=(e,t,n,r,i)=>{if(!t)return{};const o=n[e];return Object.assign(Object.assign({},o),{types:Object.assign(Object.assign({},o&&o.types?o.types:{}),{[r]:i||!0})})},di=async(e,t,{ref:n,ref:{type:r,value:i,name:o},options:s,required:a,maxLength:u,minLength:c,min:l,max:h,pattern:f,validate:d})=>{const p=e.current,m={},g=zr(n),y=Br(n),w=g||y,b=Kr(i),v=fi.bind(null,o,t,m),_=(e,r,i,s=Or,a=xr)=>{const u=e?r:i;if(m[o]=Object.assign({type:e?s:a,message:u,ref:n},v(e?s:a,u)),!t)return m};if(a&&(!g&&!y&&(b||pr(i))||ci(i)&&!i||y&&!ti(s).isValid||g&&!Jr(s).isValid)){const{value:e,message:r}=li(a)?{value:!!a,message:a}:ai(a);if(e&&(m[o]=Object.assign({type:Tr,message:r,ref:w?p[o].options[0].ref:n},v(Tr,r)),!t))return m}if(!pr(l)||!pr(h)){let e,o;const{value:s,message:a}=ai(h),{value:u,message:c}=ai(l);if("number"===r||!r&&!isNaN(i)){const t=n.valueAsNumber||parseFloat(i);pr(s)||(e=t>s),pr(u)||(o=t<u)}else{const t=n.valueAsDate||new Date(i);ri(s)&&(e=t>new Date(s)),ri(u)&&(o=t<new Date(u))}if((e||o)&&(_(!!e,a,c,Er,Sr),!t))return m}if(ri(i)&&!b&&(u||c)){const{value:e,message:n}=ai(u),{value:r,message:o}=ai(c),s=i.toString().length,a=!pr(e)&&s>e,l=!pr(r)&&s<r;if((a||l)&&(_(!!a,n,o),!t))return m}if(f&&!b){const{value:e,message:r}=ai(f);if(si(e)&&!e.test(i)&&(m[o]=Object.assign({type:kr,message:r,ref:n},v(kr,r)),!t))return m}if(d){const e=ni(p,n),r=w&&s?s[0].ref:n;if(ui(d)){const n=hi(await d(e),r);if(n&&(m[o]=Object.assign(Object.assign({},n),v(jr,n.message)),!t))return m}else if(yr(d)){let n={};for(const[i,s]of Object.entries(d)){if(!Ur(n)&&!t)break;const a=hi(await s(e),r,i);a&&(n=Object.assign(Object.assign({},a),v(i,a.message)),t&&(m[o]=n))}if(!Ur(n)&&(m[o]=Object.assign({ref:r},n),!t))return m}}return m};const pi=(e,t)=>mr(e.inner)?e.inner.reduce((e,{path:n,message:r,type:i})=>Object.assign(Object.assign({},e),e[n]&&t?{[n]:fi(n,t,e,i,r)}:{[n]:e[n]||Object.assign({message:r,type:i},t?{types:{[i]:r||!0}}:{})}),{}):{[e.path]:{message:e.message,type:e.type}};async function mi(e,t,n,r,i){if(r)return r(n,i);try{return{values:await e.validate(n,{abortEarly:!1,context:i}),errors:{}}}catch(e){return{values:{},errors:Lr(pi(e,t))}}}var gi=(e,t,n)=>dr(e[t])?Fr(e,t,n):e[t];var yi=e=>pr(e)||!gr(e);const wi=(e,t)=>{const n=(t,n,r)=>{const i=r?`${e}.${n}`:`${e}[${n}]`;return yi(t)?i:wi(i,t)};return mr(t)?t.map((e,t)=>n(e,t)):Object.entries(t).map(([e,t])=>n(t,e,!0))};var bi=(e,t)=>(function e(t){return t.reduce((t,n)=>t.concat(mr(n)?e(n):n),[])})(wi(e,t)),vi=(e,t,n,r)=>{let i;return n.add(t),Ur(e)?i=void 0:dr(e[t])?(i=Fr(Lr(e),t),dr(i)||bi(t,i).forEach(e=>n.add(e))):(i=e[t],n.add(t)),dr(i)?yr(r)?gi(r,t):r:i},_i=({isOnChange:e,hasError:t,isBlurEvent:n,isOnSubmit:r,isReValidateOnSubmit:i,isOnBlur:o,isReValidateOnBlur:s,isSubmitted:a})=>e&&n||r&&i||r&&!a||o&&!n&&!t||s&&!n&&t||i&&a,Ei=(e,t)=>{const n=Lr(ii(e));return t?Fr(n,t,n):n};var Si=(e,t)=>[...e].reduce((e,n)=>!!((e,t)=>e.startsWith(`${t}[`))(t,n)||e,!1),Oi=e=>typeof FileList!==vr&&e instanceof FileList;var xi=e=>({isOnSubmit:!e||e===br.onSubmit,isOnBlur:e===br.onBlur,isOnChange:e===br.onChange});const{useRef:ki,useState:Ti,useCallback:ji,useEffect:Ni}=t;function Ci({mode:e=br.onSubmit,reValidateMode:t=br.onChange,validationSchema:n,validationResolver:r,validationContext:i,defaultValues:o={},submitFocusError:s=!0,validateCriteriaMode:a}={}){const u=ki({}),c="all"===a,l=ki({}),h=ki({}),f=ki(new Set),d=ki(new Set),p=ki(new Set),m=ki(new Set),g=ki(!0),y=ki({}),w=ki(o),b=ki(!1),v=ki(!1),_=ki(!1),E=ki(!1),S=ki(0),O=ki(!1),x=ki(),k=ki({}),T=ki(i),j=ki(new Set),[,N]=Ti(),{isOnBlur:C,isOnSubmit:M,isOnChange:R}=ki(xi(e)).current,I=typeof window===vr,A=!(!n&&!r),D=typeof document!==vr&&!I&&!dr(window.HTMLElement),L=D&&"Proxy"in window,F=ki({dirty:!L,dirtyFields:!L,isSubmitted:M,submitCount:!L,touched:!L,isSubmitting:!L,isValid:!L}),{isOnBlur:P,isOnSubmit:V}=ki(xi(t)).current,z=ji(()=>{b.current||N({})},[]),B=ji((e,t,n,r)=>{let i=n||function({errors:e,name:t,error:n,validFields:r,fieldsWithValidation:i}){const o=Ur(n),s=Ur(e),a=Fr(n,t),u=Fr(e,t);return!(o&&r.has(t)||u&&u.isManual)&&(!!(s!==o||!s&&!u||o&&i.has(t)&&!r.has(t))||a&&!oi(u,a))}({errors:l.current,error:t,name:e,validFields:m.current,fieldsWithValidation:p.current});if(Ur(t)?((p.current.has(e)||A)&&(m.current.add(e),i=i||Fr(l.current,e)),l.current=Yr(l.current,[e])):(m.current.delete(e),i=i||!Fr(l.current,e),Dr(l.current,e,t[e])),i&&!r)return z(),!0},[z,A]),$=ji((e,t)=>{const n=e.ref,r=e.options,{type:i}=n,o=D&&wr(n)&&pr(t)?"":t;return zr(n)&&r?r.forEach(({ref:e})=>e.checked=e.value===o):Gr(n)?Kr(o)||Oi(o)?n.files=o:n.value=o:Xr(n)?[...n.options].forEach(e=>e.selected=o.includes(e.value)):Br(n)&&r?r.length>1?r.forEach(({ref:e})=>e.checked=o.includes(e.value)):r[0].ref.checked=!!o:n.value=o,!!i},[D]),U=e=>{if(!u.current[e]||!F.current.dirty&&!F.current.dirtyFields)return!1;const t=Si(j.current,e),n=d.current.size;let r=y.current[e]!==ni(u.current,u.current[e].ref);if(t){const t=e.substring(0,e.indexOf("["));r=function(e,t){let n=!1;if(!mr(e)||!mr(t)||e.length!==t.length)return!0;for(let r=0;r<e.length&&!n;r++){const i=e[r],o=t[r];if(dr(o)||Object.keys(i).length!==Object.keys(o).length){n=!0;break}for(const e in i)if(i[e]!==o[e]){n=!0;break}}return n}(Ei(u.current,t),Fr(w.current,t))}const i=(t?E.current:d.current.has(e))!==r;return r?d.current.add(e):d.current.delete(e),E.current=t?r:!!d.current.size,F.current.dirty?i:n!==d.current.size},q=ji(e=>{if(U(e)||!Fr(h.current,e)&&F.current.touched)return!!Dr(h.current,e,!0)},[]),W=ji((e,t,n)=>{const r=mr(t);for(const i in t){const o=`${n||e}${r?`[${i}]`:`.${i}`}`;yr(t[i])&&W(e,t[i],o);const s=u.current[o];s&&($(s,t[i]),q(o))}},[$,q]),Y=ji((e,t)=>{const n=u.current[e];if(n){$(n,t);const r=q(e);if(ci(r))return r}else yi(t)||W(e,t)},[q,$,W]),Z=ji(async(e,t)=>{const n=u.current[e];if(!n)return!1;const r=await di(u,c,n);return B(e,r,!1,t),Ur(r)},[B,c]),J=ji(async e=>{const{errors:t}=await mi(n,c,Ei(u.current),r,T.current),i=g.current;return g.current=Ur(t),mr(e)?(e.forEach(e=>{const n=Fr(t,e);n?Dr(l.current,e,n):Yr(l.current,[e])}),z()):B(e,Fr(t,e)?{[e]:Fr(t,e)}:{},i!==g.current),Ur(l.current)},[z,B,c,r,n]),H=ji(async e=>{const t=e||Object.keys(u.current);if(A)return J(t);if(mr(t)){const e=await Promise.all(t.map(async e=>await Z(e,!0)));return z(),e.every(Boolean)}return await Z(t)},[J,Z,z,A]),G=e=>v.current||f.current.has(e)||f.current.has((e.match(/\w+/)||[])[0]);function X(e,t,n){let r=!1;const i=mr(e);(i?e:[e]).forEach(e=>{const n=ri(e);r=!(!Y(n?e:Object.keys(e)[0],n?t:Object.values(e)[0])&&!i)||G(e)}),(r||i)&&z(),(n||i&&t)&&H(i?void 0:e)}x.current=x.current?x.current:async({type:e,target:t})=>{const i=t?t.name:"",o=u.current,s=l.current,a=o[i],f=Fr(s,i);let d;if(!a)return;const p=e===_r.BLUR,m=_i({hasError:!!f,isOnChange:R,isBlurEvent:p,isOnSubmit:M,isReValidateOnSubmit:V,isOnBlur:C,isReValidateOnBlur:P,isSubmitted:_.current}),y=U(i);let w=G(i)||y;if(p&&!Fr(h.current,i)&&F.current.touched&&(Dr(h.current,i,!0),w=!0),m)return w&&z();if(A){const{errors:e}=await mi(n,c,Ei(o),r,T.current),t=g.current;g.current=Ur(e),d=Fr(e,i)?{[i]:Fr(e,i)}:{},t!==g.current&&(w=!0)}else d=await di(u,c,a);!B(i,d)&&w&&z()};const K=ji((e={})=>{const t=Ur(w.current)?ii(u.current):w.current;mi(n,c,Lr(Object.assign(Object.assign({},t),e)),r,T.current).then(({errors:e})=>{const t=g.current;g.current=Ur(e),t!==g.current&&z()})},[z,c,r]),Q=(e,t)=>{!dr(x.current)&&e&&function(e,t,n,r){if(!n)return;const{ref:i,ref:{name:o,type:s},mutationWatcher:a}=n;if(!s)return void delete e[o];const u=e[o];if((zr(i)||Br(i))&&u){const{options:n}=u;mr(n)&&n.length?(n.filter(Boolean).forEach(({ref:e,mutationWatcher:i},o)=>{(e&&$r(e)||r)&&(Vr(e,t),i&&i.disconnect(),Yr(n,[`[${o}]`]))}),n&&!n.filter(Boolean).length&&delete e[o]):delete e[o]}else($r(i)||r)&&(Vr(i,t),a&&a.disconnect(),delete e[o])}(u.current,x.current,e,t)},ee=ji((e,t)=>{if(!e||e&&Si(j.current,e.ref.name)&&!t)return;Q(e,t);const{name:n}=e.ref;l.current=Yr(l.current,[n]),h.current=Yr(h.current,[n]),y.current=Yr(y.current,[n]),[d,p,m,f].forEach(e=>e.current.delete(n)),(F.current.isValid||F.current.touched)&&(z(),A&&K())},[z,A,K]);const te=({name:e,type:t,types:n,message:r,preventRender:i})=>{const o=u.current[e];oi(l.current[e],{type:t,message:r,types:n})||(Dr(l.current,e,{type:t,types:n,message:r,ref:o?o.ref:{},isManual:!0}),i||z())};function ne(e){Ur(u.current)||(mr(e)?e:[e]).forEach(e=>ee(u.current[e],!0))}function re(e,t={}){if(!e.name)return console.warn("Missing name @",e);const{name:n,type:r,value:i}=e,o=Object.assign({ref:e},t),s=u.current,a=zr(e)||Br(e);let l,h=s[n],f=!0,d=!1;if(a?h&&mr(h.options)&&h.options.filter(Boolean).find(({ref:e})=>i===e.value):h)return void(s[n]=Object.assign(Object.assign({},h),t));if(r){const i=function(e,t){const n=new MutationObserver(()=>{$r(e)&&(n.disconnect(),t())});return n.observe(window.document,{childList:!0,subtree:!0}),n}(e,()=>ee(o));h=a?Object.assign({options:[...h&&h.options||[],{ref:e,mutationWatcher:i}],ref:{type:r,name:n}},t):Object.assign(Object.assign({},o),{mutationWatcher:i})}else h=o;if(s[n]=h,Ur(w.current)||(l=gi(w.current,n),f=dr(l),d=Si(j.current,n),f||d||$(h,l)),A&&!d&&F.current.isValid?K():Ur(t)||(p.current.add(n),!M&&F.current.isValid&&di(u,c,h).then(e=>{const t=g.current;Ur(e)?m.current.add(n):g.current=!1,t!==g.current&&z()})),y.current[n]||d&&f||(y.current[n]=f?ni(s,h.ref):l),!r)return;!function({field:e,handleChange:t,isRadioOrCheckbox:n}){const{ref:r}=e;wr(r)&&r.addEventListener&&t&&(r.addEventListener(n?_r.CHANGE:_r.INPUT,t),r.addEventListener(_r.BLUR,t))}({field:a&&h.options?h.options[h.options.length-1]:h,isRadioOrCheckbox:a,handleChange:x.current})}function ie(e,t){if(!I)if(ri(e))re({name:e},t);else{if(!(yr(e)&&"name"in e))return t=>t&&re(t,e);re(e,t)}}const oe=ji(e=>async t=>{t&&(t.preventDefault(),t.persist());let i={},o={};const a=u.current;F.current.isSubmitting&&(O.current=!0,z());try{if(A){o=ii(a);const{errors:e,values:t}=await mi(n,c,Lr(o),r,T.current);l.current=e,i=e,o=t}else for(const e of Object.values(a))if(e){const{ref:t,ref:{name:n}}=e,r=await di(u,c,e);r[n]?(Dr(i,n,r[n]),m.current.delete(n)):(p.current.has(n)&&m.current.add(n),o[n]=ni(a,t))}Ur(i)?(l.current={},await e(Lr(o),t)):(s&&D&&Pr(a,i),l.current=i)}finally{_.current=!0,O.current=!1,S.current=S.current+1,z()}},[D,z,A,s,c,r,n]),se=e=>{const t=ii(u.current),n=Ur(t)?w.current:t;return e&&e.nest?Lr(n):n};Ni(()=>()=>{b.current=!0,u.current&&Object.values(u.current).forEach(e=>ee(e,!0))},[ee]),A||(g.current=m.current.size>=p.current.size&&Ur(l.current));const ae={dirty:E.current,dirtyFields:d.current,isSubmitted:_.current,submitCount:S.current,touched:h.current,isSubmitting:O.current,isValid:M?_.current&&Ur(l.current):g.current};return{watch:function(e,t){const n=dr(t)?dr(w.current)?{}:w.current:t,r=ii(u.current,e),i=f.current;if(ri(e))return vi(r,e,i,n);if(mr(e))return e.reduce((e,t)=>Object.assign(Object.assign({},e),{[t]:vi(r,t,i,n)}),{});v.current=!0;const o=!Ur(r)&&r||t||w.current;return e&&e.nest?Lr(o):o},control:Object.assign(Object.assign({register:ie,unregister:ne,removeFieldEventListener:Q,getValues:se,setValue:X,reRender:z,triggerValidation:H},A?{validateSchemaIsValid:K}:{}),{formState:ae,mode:{isOnBlur:C,isOnSubmit:M,isOnChange:R},reValidateMode:{isReValidateOnBlur:P,isReValidateOnSubmit:V},errorsRef:l,touchedFieldsRef:h,fieldsRef:u,resetFieldArrayFunctionRef:k,validFieldsRef:m,dirtyFieldsRef:d,fieldsWithValidationRef:p,watchFieldsRef:f,fieldArrayNamesRef:j,isDirtyRef:E,readFormStateRef:F,defaultValuesRef:w}),handleSubmit:oe,setValue:ji(X,[z,Y,H]),triggerValidation:H,getValues:ji(se,[]),reset:ji((e,t={})=>{if(D)for(const e of Object.values(u.current))if(e&&wr(e.ref)&&e.ref.closest)try{e.ref.closest("form").reset();break}catch(e){}e&&(w.current=e),Object.values(k.current).forEach(e=>ui(e)&&e()),(({errors:e,dirty:t,isSubmitted:n,touched:r,isValid:i,submitCount:o})=>{u.current={},e||(l.current={}),r||(h.current={}),i||(m.current=new Set,p.current=new Set,g.current=!0),t||(d.current=new Set,E.current=!1),n||(_.current=!1),o||(S.current=0),y.current={},f.current=new Set,v.current=!1})(t),z()},[]),register:ji(ie,[w.current,y.current]),unregister:ji(ne,[]),clearError:ji(function(e){dr(e)?l.current={}:Yr(l.current,mr(e)?e:[e]),z()},[]),setError:ji(function(e,t="",n){ri(e)?te(Object.assign({name:e},yr(t)?{types:t,type:""}:{type:t,message:n})):mr(e)&&(e.forEach(e=>te(Object.assign(Object.assign({},e),{preventRender:!0}))),z())},[]),errors:l.current,formState:L?new Proxy(ae,{get:(e,t)=>t in e?(F.current[t]=!0,e[t]):{}}):ae}}function Mi(e,t){var n={};for(var r in e)Object.prototype.hasOwnProperty.call(e,r)&&t.indexOf(r)<0&&(n[r]=e[r]);if(null!=e&&"function"==typeof Object.getOwnPropertySymbols){var i=0;for(r=Object.getOwnPropertySymbols(e);i<r.length;i++)t.indexOf(r[i])<0&&Object.prototype.propertyIsEnumerable.call(e,r[i])&&(n[r[i]]=e[r[i]])}return n}const Ri=t.createContext(null);function Ii(){return t.useContext(Ri)}const Ai=e=>{var{name:n,rules:r,as:i,onBlur:o,onChange:s,onChangeName:a=br.onChange,onBlurName:u=br.onBlur,valueName:c,defaultValue:l,control:h}=e,f=Mi(e,["name","rules","as","onBlur","onChange","onChangeName","onBlurName","valueName","defaultValue","control"]);const d=Ii(),{defaultValuesRef:p,setValue:m,register:g,unregister:y,errorsRef:w,removeFieldEventListener:b,triggerValidation:v,mode:{isOnSubmit:_,isOnBlur:E,isOnChange:S},reValidateMode:{isReValidateOnBlur:O,isReValidateOnSubmit:x},formState:{isSubmitted:k},fieldsRef:T,fieldArrayNamesRef:j}=h||d.control,[N,C]=t.useState(dr(l)?Fr(p.current,n):l),M=t.useRef(N),R=ci(N),I=()=>!_i({hasError:!!Fr(w.current,n),isOnBlur:E,isOnSubmit:_,isOnChange:S,isReValidateOnBlur:O,isReValidateOnSubmit:x,isSubmitted:k}),A=e=>{const t=((e,t)=>yi(e)||!yr(e.target)||yr(e.target)&&!e.type?e:t||dr(e.target.value)?e.target.checked:e.target.value)(e,R);return C(t),M.current=t,t},D=()=>{Si(j.current,n)&&T.current[n]&&b(T.current[n],!0),g(Object.defineProperty({name:n},"value",{set(e){C(e),M.current=e},get:()=>M.current}),Object.assign({},r))};t.useEffect(()=>{T.current[n]||(D(),C(dr(l)?Fr(p.current,n):l))}),t.useEffect(()=>(D(),()=>{Si(j.current,n)||y(n)}),[n]),t.useEffect(()=>{D()},[r]);const L=E||O,F=Object.assign(Object.assign(Object.assign(Object.assign({name:n},f),s?{[a]:(e=>(...t)=>m(n,A(e(t)),I()))(s)}:{[a]:e=>{const t=A(e);m(n,t,I())}}),o||L?{[u]:(...e)=>{o&&o(e),L&&v(n)}}:{}),{[c||(R?"checked":"value")]:N});return t.isValidElement(i)?t.cloneElement(i,F):t.createElement(i,F)},Di=e=>{var{as:n,errors:r,name:i,message:o,children:s}=e,a=Mi(e,["as","errors","name","message","children"]);const u=Ii(),c=Fr(r||u.errors,i);if(!c)return null;const{message:l,types:h}=c,f=Object.assign(Object.assign({},n?a:{}),{children:s?s({message:l||o,messages:h}):l||o});return n?t.isValidElement(n)?t.cloneElement(n,f):t.createElement(n,f):t.createElement(t.Fragment,Object.assign({},f))};var Li=o(function(e,t){e.exports=function(e){function t(t){var n=e.createElement.bind(null,t);return n.type=t,n}return{a:t("a"),abbr:t("abbr"),address:t("address"),area:t("area"),article:t("article"),aside:t("aside"),audio:t("audio"),b:t("b"),base:t("base"),bdi:t("bdi"),bdo:t("bdo"),big:t("big"),blockquote:t("blockquote"),body:t("body"),br:t("br"),button:t("button"),canvas:t("canvas"),caption:t("caption"),cite:t("cite"),code:t("code"),col:t("col"),colgroup:t("colgroup"),data:t("data"),datalist:t("datalist"),dd:t("dd"),del:t("del"),details:t("details"),dfn:t("dfn"),dialog:t("dialog"),div:t("div"),dl:t("dl"),dt:t("dt"),em:t("em"),embed:t("embed"),fieldset:t("fieldset"),figcaption:t("figcaption"),figure:t("figure"),footer:t("footer"),form:t("form"),h1:t("h1"),h2:t("h2"),h3:t("h3"),h4:t("h4"),h5:t("h5"),h6:t("h6"),head:t("head"),header:t("header"),hgroup:t("hgroup"),hr:t("hr"),html:t("html"),i:t("i"),iframe:t("iframe"),img:t("img"),input:t("input"),ins:t("ins"),kbd:t("kbd"),keygen:t("keygen"),label:t("label"),legend:t("legend"),li:t("li"),link:t("link"),main:t("main"),map:t("map"),mark:t("mark"),menu:t("menu"),menuitem:t("menuitem"),meta:t("meta"),meter:t("meter"),nav:t("nav"),noscript:t("noscript"),object:t("object"),ol:t("ol"),optgroup:t("optgroup"),option:t("option"),output:t("output"),p:t("p"),param:t("param"),picture:t("picture"),pre:t("pre"),progress:t("progress"),q:t("q"),rp:t("rp"),rt:t("rt"),ruby:t("ruby"),s:t("s"),samp:t("samp"),script:t("script"),section:t("section"),select:t("select"),small:t("small"),source:t("source"),span:t("span"),strong:t("strong"),style:t("style"),sub:t("sub"),summary:t("summary"),sup:t("sup"),table:t("table"),tbody:t("tbody"),td:t("td"),textarea:t("textarea"),tfoot:t("tfoot"),th:t("th"),thead:t("thead"),time:t("time"),title:t("title"),tr:t("tr"),track:t("track"),u:t("u"),ul:t("ul"),var:t("var"),video:t("video"),wbr:t("wbr"),circle:t("circle"),clipPath:t("clipPath"),defs:t("defs"),ellipse:t("ellipse"),g:t("g"),image:t("image"),line:t("line"),linearGradient:t("linearGradient"),mask:t("mask"),path:t("path"),pattern:t("pattern"),polygon:t("polygon"),polyline:t("polyline"),radialGradient:t("radialGradient"),rect:t("rect"),stop:t("stop"),svg:t("svg"),text:t("text"),tspan:t("tspan")}}(r)}),Fi=o(function(e,t){!function(n,r){var i="model",o="name",s="type",a="vendor",u="version",c="mobile",l="tablet",h="smarttv",f={extend:function(e,t){var n={};for(var r in e)t[r]&&t[r].length%2==0?n[r]=t[r].concat(e[r]):n[r]=e[r];return n},has:function(e,t){return"string"==typeof e&&-1!==t.toLowerCase().indexOf(e.toLowerCase())},lowerize:function(e){return e.toLowerCase()},major:function(e){return"string"==typeof e?e.replace(/[^\d\.]/g,"").split(".")[0]:void 0},trim:function(e){return e.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")}},d={rgx:function(e,t){for(var n,r,i,o,s,a,u=0;u<t.length&&!s;){var c=t[u],l=t[u+1];for(n=r=0;n<c.length&&!s;)if(s=c[n++].exec(e))for(i=0;i<l.length;i++)a=s[++r],"object"==typeof(o=l[i])&&o.length>0?2==o.length?"function"==typeof o[1]?this[o[0]]=o[1].call(this,a):this[o[0]]=o[1]:3==o.length?"function"!=typeof o[1]||o[1].exec&&o[1].test?this[o[0]]=a?a.replace(o[1],o[2]):void 0:this[o[0]]=a?o[1].call(this,a,o[2]):void 0:4==o.length&&(this[o[0]]=a?o[3].call(this,a.replace(o[1],o[2])):void 0):this[o]=a||void 0;u+=2}},str:function(e,t){for(var n in t)if("object"==typeof t[n]&&t[n].length>0){for(var r=0;r<t[n].length;r++)if(f.has(t[n][r],e))return"?"===n?void 0:n}else if(f.has(t[n],e))return"?"===n?void 0:n;return e}},p={browser:{oldsafari:{version:{"1.0":"/8",1.2:"/1",1.3:"/3","2.0":"/412","2.0.2":"/416","2.0.3":"/417","2.0.4":"/419","?":"/"}}},device:{amazon:{model:{"Fire Phone":["SD","KF"]}},sprint:{model:{"Evo Shift 4G":"7373KT"},vendor:{HTC:"APA",Sprint:"Sprint"}}},os:{windows:{version:{ME:"4.90","NT 3.11":"NT3.51","NT 4.0":"NT4.0",2000:"NT 5.0",XP:["NT 5.1","NT 5.2"],Vista:"NT 6.0",7:"NT 6.1",8:"NT 6.2",8.1:"NT 6.3",10:["NT 6.4","NT 10.0"],RT:"ARM"}}}},m={browser:[[/(opera\smini)\/([\w\.-]+)/i,/(opera\s[mobiletab]+).+version\/([\w\.-]+)/i,/(opera).+version\/([\w\.]+)/i,/(opera)[\/\s]+([\w\.]+)/i],[o,u],[/(opios)[\/\s]+([\w\.]+)/i],[[o,"Opera Mini"],u],[/\s(opr)\/([\w\.]+)/i],[[o,"Opera"],u],[/(kindle)\/([\w\.]+)/i,/(lunascape|maxthon|netfront|jasmine|blazer)[\/\s]?([\w\.]*)/i,/(avant\s|iemobile|slim)(?:browser)?[\/\s]?([\w\.]*)/i,/(bidubrowser|baidubrowser)[\/\s]?([\w\.]+)/i,/(?:ms|\()(ie)\s([\w\.]+)/i,/(rekonq)\/([\w\.]*)/i,/(chromium|flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon)\/([\w\.-]+)/i],[o,u],[/(konqueror)\/([\w\.]+)/i],[[o,"Konqueror"],u],[/(trident).+rv[:\s]([\w\.]+).+like\sgecko/i],[[o,"IE"],u],[/(edge|edgios|edga|edg)\/((\d+)?[\w\.]+)/i],[[o,"Edge"],u],[/(yabrowser)\/([\w\.]+)/i],[[o,"Yandex"],u],[/(Avast)\/([\w\.]+)/i],[[o,"Avast Secure Browser"],u],[/(AVG)\/([\w\.]+)/i],[[o,"AVG Secure Browser"],u],[/(puffin)\/([\w\.]+)/i],[[o,"Puffin"],u],[/(focus)\/([\w\.]+)/i],[[o,"Firefox Focus"],u],[/(opt)\/([\w\.]+)/i],[[o,"Opera Touch"],u],[/((?:[\s\/])uc?\s?browser|(?:juc.+)ucweb)[\/\s]?([\w\.]+)/i],[[o,"UCBrowser"],u],[/(comodo_dragon)\/([\w\.]+)/i],[[o,/_/g," "],u],[/(windowswechat qbcore)\/([\w\.]+)/i],[[o,"WeChat(Win) Desktop"],u],[/(micromessenger)\/([\w\.]+)/i],[[o,"WeChat"],u],[/(brave)\/([\w\.]+)/i],[[o,"Brave"],u],[/(qqbrowserlite)\/([\w\.]+)/i],[o,u],[/(QQ)\/([\d\.]+)/i],[o,u],[/m?(qqbrowser)[\/\s]?([\w\.]+)/i],[o,u],[/(baiduboxapp)[\/\s]?([\w\.]+)/i],[o,u],[/(2345Explorer)[\/\s]?([\w\.]+)/i],[o,u],[/(MetaSr)[\/\s]?([\w\.]+)/i],[o],[/(LBBROWSER)/i],[o],[/xiaomi\/miuibrowser\/([\w\.]+)/i],[u,[o,"MIUI Browser"]],[/;fbav\/([\w\.]+);/i],[u,[o,"Facebook"]],[/safari\s(line)\/([\w\.]+)/i,/android.+(line)\/([\w\.]+)\/iab/i],[o,u],[/headlesschrome(?:\/([\w\.]+)|\s)/i],[u,[o,"Chrome Headless"]],[/\swv\).+(chrome)\/([\w\.]+)/i],[[o,/(.+)/,"$1 WebView"],u],[/((?:oculus|samsung)browser)\/([\w\.]+)/i],[[o,/(.+(?:g|us))(.+)/,"$1 $2"],u],[/android.+version\/([\w\.]+)\s+(?:mobile\s?safari|safari)*/i],[u,[o,"Android Browser"]],[/(sailfishbrowser)\/([\w\.]+)/i],[[o,"Sailfish Browser"],u],[/(chrome|omniweb|arora|[tizenoka]{5}\s?browser)\/v?([\w\.]+)/i],[o,u],[/(dolfin)\/([\w\.]+)/i],[[o,"Dolphin"],u],[/(qihu|qhbrowser|qihoobrowser|360browser)/i],[[o,"360 Browser"]],[/((?:android.+)crmo|crios)\/([\w\.]+)/i],[[o,"Chrome"],u],[/(coast)\/([\w\.]+)/i],[[o,"Opera Coast"],u],[/fxios\/([\w\.-]+)/i],[u,[o,"Firefox"]],[/version\/([\w\.]+).+?mobile\/\w+\s(safari)/i],[u,[o,"Mobile Safari"]],[/version\/([\w\.]+).+?(mobile\s?safari|safari)/i],[u,o],[/webkit.+?(gsa)\/([\w\.]+).+?(mobile\s?safari|safari)(\/[\w\.]+)/i],[[o,"GSA"],u],[/webkit.+?(mobile\s?safari|safari)(\/[\w\.]+)/i],[o,[u,d.str,p.browser.oldsafari.version]],[/(webkit|khtml)\/([\w\.]+)/i],[o,u],[/(navigator|netscape)\/([\w\.-]+)/i],[[o,"Netscape"],u],[/(swiftfox)/i,/(icedragon|iceweasel|camino|chimera|fennec|maemo\sbrowser|minimo|conkeror)[\/\s]?([\w\.\+]+)/i,/(firefox|seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([\w\.-]+)$/i,/(mozilla)\/([\w\.]+).+rv\:.+gecko\/\d+/i,/(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir)[\/\s]?([\w\.]+)/i,/(links)\s\(([\w\.]+)/i,/(gobrowser)\/?([\w\.]*)/i,/(ice\s?browser)\/v?([\w\._]+)/i,/(mosaic)[\/\s]([\w\.]+)/i],[o,u]],cpu:[[/(?:(amd|x(?:(?:86|64)[_-])?|wow|win)64)[;\)]/i],[["architecture","amd64"]],[/(ia32(?=;))/i],[["architecture",f.lowerize]],[/((?:i[346]|x)86)[;\)]/i],[["architecture","ia32"]],[/windows\s(ce|mobile);\sppc;/i],[["architecture","arm"]],[/((?:ppc|powerpc)(?:64)?)(?:\smac|;|\))/i],[["architecture",/ower/,"",f.lowerize]],[/(sun4\w)[;\)]/i],[["architecture","sparc"]],[/((?:avr32|ia64(?=;))|68k(?=\))|arm(?:64|(?=v\d+[;l]))|(?=atmel\s)avr|(?:irix|mips|sparc)(?:64)?(?=;)|pa-risc)/i],[["architecture",f.lowerize]]],device:[[/\((ipad|playbook);[\w\s\),;-]+(rim|apple)/i],[i,a,[s,l]],[/applecoremedia\/[\w\.]+ \((ipad)/],[i,[a,"Apple"],[s,l]],[/(apple\s{0,1}tv)/i],[[i,"Apple TV"],[a,"Apple"],[s,h]],[/(archos)\s(gamepad2?)/i,/(hp).+(touchpad)/i,/(hp).+(tablet)/i,/(kindle)\/([\w\.]+)/i,/\s(nook)[\w\s]+build\/(\w+)/i,/(dell)\s(strea[kpr\s\d]*[\dko])/i],[a,i,[s,l]],[/(kf[A-z]+)\sbuild\/.+silk\//i],[i,[a,"Amazon"],[s,l]],[/(sd|kf)[0349hijorstuw]+\sbuild\/.+silk\//i],[[i,d.str,p.device.amazon.model],[a,"Amazon"],[s,c]],[/android.+aft([bms])\sbuild/i],[i,[a,"Amazon"],[s,h]],[/\((ip[honed|\s\w*]+);.+(apple)/i],[i,a,[s,c]],[/\((ip[honed|\s\w*]+);/i],[i,[a,"Apple"],[s,c]],[/(blackberry)[\s-]?(\w+)/i,/(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[\s_-]?([\w-]*)/i,/(hp)\s([\w\s]+\w)/i,/(asus)-?(\w+)/i],[a,i,[s,c]],[/\(bb10;\s(\w+)/i],[i,[a,"BlackBerry"],[s,c]],[/android.+(transfo[prime\s]{4,10}\s\w+|eeepc|slider\s\w+|nexus 7|padfone|p00c)/i],[i,[a,"Asus"],[s,l]],[/(sony)\s(tablet\s[ps])\sbuild\//i,/(sony)?(?:sgp.+)\sbuild\//i],[[a,"Sony"],[i,"Xperia Tablet"],[s,l]],[/android.+\s([c-g]\d{4}|so[-l]\w+)(?=\sbuild\/|\).+chrome\/(?![1-6]{0,1}\d\.))/i],[i,[a,"Sony"],[s,c]],[/\s(ouya)\s/i,/(nintendo)\s([wids3u]+)/i],[a,i,[s,"console"]],[/android.+;\s(shield)\sbuild/i],[i,[a,"Nvidia"],[s,"console"]],[/(playstation\s[34portablevi]+)/i],[i,[a,"Sony"],[s,"console"]],[/(sprint\s(\w+))/i],[[a,d.str,p.device.sprint.vendor],[i,d.str,p.device.sprint.model],[s,c]],[/(htc)[;_\s-]+([\w\s]+(?=\)|\sbuild)|\w+)/i,/(zte)-(\w*)/i,/(alcatel|geeksphone|nexian|panasonic|(?=;\s)sony)[_\s-]?([\w-]*)/i],[a,[i,/_/g," "],[s,c]],[/(nexus\s9)/i],[i,[a,"HTC"],[s,l]],[/d\/huawei([\w\s-]+)[;\)]/i,/(nexus\s6p|vog-l29|ane-lx1|eml-l29)/i],[i,[a,"Huawei"],[s,c]],[/android.+(bah2?-a?[lw]\d{2})/i],[i,[a,"Huawei"],[s,l]],[/(microsoft);\s(lumia[\s\w]+)/i],[a,i,[s,c]],[/[\s\(;](xbox(?:\sone)?)[\s\);]/i],[i,[a,"Microsoft"],[s,"console"]],[/(kin\.[onetw]{3})/i],[[i,/\./g," "],[a,"Microsoft"],[s,c]],[/\s(milestone|droid(?:[2-4x]|\s(?:bionic|x2|pro|razr))?:?(\s4g)?)[\w\s]+build\//i,/mot[\s-]?(\w*)/i,/(XT\d{3,4}) build\//i,/(nexus\s6)/i],[i,[a,"Motorola"],[s,c]],[/android.+\s(mz60\d|xoom[\s2]{0,2})\sbuild\//i],[i,[a,"Motorola"],[s,l]],[/hbbtv\/\d+\.\d+\.\d+\s+\([\w\s]*;\s*(\w[^;]*);([^;]*)/i],[[a,f.trim],[i,f.trim],[s,h]],[/hbbtv.+maple;(\d+)/i],[[i,/^/,"SmartTV"],[a,"Samsung"],[s,h]],[/\(dtv[\);].+(aquos)/i],[i,[a,"Sharp"],[s,h]],[/android.+((sch-i[89]0\d|shw-m380s|gt-p\d{4}|gt-n\d+|sgh-t8[56]9|nexus 10))/i,/((SM-T\w+))/i],[[a,"Samsung"],i,[s,l]],[/smart-tv.+(samsung)/i],[a,[s,h],i],[/((s[cgp]h-\w+|gt-\w+|galaxy\snexus|sm-\w[\w\d]+))/i,/(sam[sung]*)[\s-]*(\w+-?[\w-]*)/i,/sec-((sgh\w+))/i],[[a,"Samsung"],i,[s,c]],[/sie-(\w*)/i],[i,[a,"Siemens"],[s,c]],[/(maemo|nokia).*(n900|lumia\s\d+)/i,/(nokia)[\s_-]?([\w-]*)/i],[[a,"Nokia"],i,[s,c]],[/android[x\d\.\s;]+\s([ab][1-7]\-?[0178a]\d\d?)/i],[i,[a,"Acer"],[s,l]],[/android.+([vl]k\-?\d{3})\s+build/i],[i,[a,"LG"],[s,l]],[/android\s3\.[\s\w;-]{10}(lg?)-([06cv9]{3,4})/i],[[a,"LG"],i,[s,l]],[/(lg) netcast\.tv/i],[a,i,[s,h]],[/(nexus\s[45])/i,/lg[e;\s\/-]+(\w*)/i,/android.+lg(\-?[\d\w]+)\s+build/i],[i,[a,"LG"],[s,c]],[/(lenovo)\s?(s(?:5000|6000)(?:[\w-]+)|tab(?:[\s\w]+))/i],[a,i,[s,l]],[/android.+(ideatab[a-z0-9\-\s]+)/i],[i,[a,"Lenovo"],[s,l]],[/(lenovo)[_\s-]?([\w-]+)/i],[a,i,[s,c]],[/linux;.+((jolla));/i],[a,i,[s,c]],[/((pebble))app\/[\d\.]+\s/i],[a,i,[s,"wearable"]],[/android.+;\s(oppo)\s?([\w\s]+)\sbuild/i],[a,i,[s,c]],[/crkey/i],[[i,"Chromecast"],[a,"Google"],[s,h]],[/android.+;\s(glass)\s\d/i],[i,[a,"Google"],[s,"wearable"]],[/android.+;\s(pixel c)[\s)]/i],[i,[a,"Google"],[s,l]],[/android.+;\s(pixel( [23])?( xl)?)[\s)]/i],[i,[a,"Google"],[s,c]],[/android.+;\s(\w+)\s+build\/hm\1/i,/android.+(hm[\s\-_]*note?[\s_]*(?:\d\w)?)\s+build/i,/android.+(mi[\s\-_]*(?:a\d|one|one[\s_]plus|note lte)?[\s_]*(?:\d?\w?)[\s_]*(?:plus)?)\s+build/i,/android.+(redmi[\s\-_]*(?:note)?(?:[\s_]*[\w\s]+))\s+build/i],[[i,/_/g," "],[a,"Xiaomi"],[s,c]],[/android.+(mi[\s\-_]*(?:pad)(?:[\s_]*[\w\s]+))\s+build/i],[[i,/_/g," "],[a,"Xiaomi"],[s,l]],[/android.+;\s(m[1-5]\snote)\sbuild/i],[i,[a,"Meizu"],[s,c]],[/(mz)-([\w-]{2,})/i],[[a,"Meizu"],i,[s,c]],[/android.+a000(1)\s+build/i,/android.+oneplus\s(a\d{4})[\s)]/i],[i,[a,"OnePlus"],[s,c]],[/android.+[;\/]\s*(RCT[\d\w]+)\s+build/i],[i,[a,"RCA"],[s,l]],[/android.+[;\/\s]+(Venue[\d\s]{2,7})\s+build/i],[i,[a,"Dell"],[s,l]],[/android.+[;\/]\s*(Q[T|M][\d\w]+)\s+build/i],[i,[a,"Verizon"],[s,l]],[/android.+[;\/]\s+(Barnes[&\s]+Noble\s+|BN[RT])(V?.*)\s+build/i],[[a,"Barnes & Noble"],i,[s,l]],[/android.+[;\/]\s+(TM\d{3}.*\b)\s+build/i],[i,[a,"NuVision"],[s,l]],[/android.+;\s(k88)\sbuild/i],[i,[a,"ZTE"],[s,l]],[/android.+[;\/]\s*(gen\d{3})\s+build.*49h/i],[i,[a,"Swiss"],[s,c]],[/android.+[;\/]\s*(zur\d{3})\s+build/i],[i,[a,"Swiss"],[s,l]],[/android.+[;\/]\s*((Zeki)?TB.*\b)\s+build/i],[i,[a,"Zeki"],[s,l]],[/(android).+[;\/]\s+([YR]\d{2})\s+build/i,/android.+[;\/]\s+(Dragon[\-\s]+Touch\s+|DT)(\w{5})\sbuild/i],[[a,"Dragon Touch"],i,[s,l]],[/android.+[;\/]\s*(NS-?\w{0,9})\sbuild/i],[i,[a,"Insignia"],[s,l]],[/android.+[;\/]\s*((NX|Next)-?\w{0,9})\s+build/i],[i,[a,"NextBook"],[s,l]],[/android.+[;\/]\s*(Xtreme\_)?(V(1[045]|2[015]|30|40|60|7[05]|90))\s+build/i],[[a,"Voice"],i,[s,c]],[/android.+[;\/]\s*(LVTEL\-)?(V1[12])\s+build/i],[[a,"LvTel"],i,[s,c]],[/android.+;\s(PH-1)\s/i],[i,[a,"Essential"],[s,c]],[/android.+[;\/]\s*(V(100MD|700NA|7011|917G).*\b)\s+build/i],[i,[a,"Envizen"],[s,l]],[/android.+[;\/]\s*(Le[\s\-]+Pan)[\s\-]+(\w{1,9})\s+build/i],[a,i,[s,l]],[/android.+[;\/]\s*(Trio[\s\-]*.*)\s+build/i],[i,[a,"MachSpeed"],[s,l]],[/android.+[;\/]\s*(Trinity)[\-\s]*(T\d{3})\s+build/i],[a,i,[s,l]],[/android.+[;\/]\s*TU_(1491)\s+build/i],[i,[a,"Rotor"],[s,l]],[/android.+(KS(.+))\s+build/i],[i,[a,"Amazon"],[s,l]],[/android.+(Gigaset)[\s\-]+(Q\w{1,9})\s+build/i],[a,i,[s,l]],[/\s(tablet|tab)[;\/]/i,/\s(mobile)(?:[;\/]|\ssafari)/i],[[s,f.lowerize],a,i],[/[\s\/\(](smart-?tv)[;\)]/i],[[s,h]],[/(android[\w\.\s\-]{0,9});.+build/i],[i,[a,"Generic"]]],engine:[[/windows.+\sedge\/([\w\.]+)/i],[u,[o,"EdgeHTML"]],[/webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i],[u,[o,"Blink"]],[/(presto)\/([\w\.]+)/i,/(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i,/(khtml|tasman|links)[\/\s]\(?([\w\.]+)/i,/(icab)[\/\s]([23]\.[\d\.]+)/i],[o,u],[/rv\:([\w\.]{1,9}).+(gecko)/i],[u,o]],os:[[/microsoft\s(windows)\s(vista|xp)/i],[o,u],[/(windows)\snt\s6\.2;\s(arm)/i,/(windows\sphone(?:\sos)*)[\s\/]?([\d\.\s\w]*)/i,/(windows\smobile|windows)[\s\/]?([ntce\d\.\s]+\w)/i],[o,[u,d.str,p.os.windows.version]],[/(win(?=3|9|n)|win\s9x\s)([nt\d\.]+)/i],[[o,"Windows"],[u,d.str,p.os.windows.version]],[/\((bb)(10);/i],[[o,"BlackBerry"],u],[/(blackberry)\w*\/?([\w\.]*)/i,/(tizen|kaios)[\/\s]([\w\.]+)/i,/(android|webos|palm\sos|qnx|bada|rim\stablet\sos|meego|sailfish|contiki)[\/\s-]?([\w\.]*)/i],[o,u],[/(symbian\s?os|symbos|s60(?=;))[\/\s-]?([\w\.]*)/i],[[o,"Symbian"],u],[/\((series40);/i],[o],[/mozilla.+\(mobile;.+gecko.+firefox/i],[[o,"Firefox OS"],u],[/(nintendo|playstation)\s([wids34portablevu]+)/i,/(mint)[\/\s\(]?(\w*)/i,/(mageia|vectorlinux)[;\s]/i,/(joli|[kxln]?ubuntu|debian|suse|opensuse|gentoo|(?=\s)arch|slackware|fedora|mandriva|centos|pclinuxos|redhat|zenwalk|linpus)[\/\s-]?(?!chrom)([\w\.-]*)/i,/(hurd|linux)\s?([\w\.]*)/i,/(gnu)\s?([\w\.]*)/i],[o,u],[/(cros)\s[\w]+\s([\w\.]+\w)/i],[[o,"Chromium OS"],u],[/(sunos)\s?([\w\.\d]*)/i],[[o,"Solaris"],u],[/\s([frentopc-]{0,4}bsd|dragonfly)\s?([\w\.]*)/i],[o,u],[/(haiku)\s(\w+)/i],[o,u],[/cfnetwork\/.+darwin/i,/ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i],[[u,/_/g,"."],[o,"iOS"]],[/(mac\sos\sx)\s?([\w\s\.]*)/i,/(macintosh|mac(?=_powerpc)\s)/i],[[o,"Mac OS"],[u,/_/g,"."]],[/((?:open)?solaris)[\/\s-]?([\w\.]*)/i,/(aix)\s((\d)(?=\.|\)|\s)[\w\.])*/i,/(plan\s9|minix|beos|os\/2|amigaos|morphos|risc\sos|openvms|fuchsia)/i,/(unix)\s?([\w\.]*)/i],[o,u]]},g=function(e,t){if("object"==typeof e&&(t=e,e=void 0),!(this instanceof g))return new g(e,t).getResult();var r=e||(n&&n.navigator&&n.navigator.userAgent?n.navigator.userAgent:""),i=t?f.extend(m,t):m;return this.getBrowser=function(){var e={name:void 0,version:void 0};return d.rgx.call(e,r,i.browser),e.major=f.major(e.version),e},this.getCPU=function(){var e={architecture:void 0};return d.rgx.call(e,r,i.cpu),e},this.getDevice=function(){var e={vendor:void 0,model:void 0,type:void 0};return d.rgx.call(e,r,i.device),e},this.getEngine=function(){var e={name:void 0,version:void 0};return d.rgx.call(e,r,i.engine),e},this.getOS=function(){var e={name:void 0,version:void 0};return d.rgx.call(e,r,i.os),e},this.getResult=function(){return{ua:this.getUA(),browser:this.getBrowser(),engine:this.getEngine(),os:this.getOS(),device:this.getDevice(),cpu:this.getCPU()}},this.getUA=function(){return r},this.setUA=function(e){return r=e,this},this};g.VERSION="0.7.21",g.BROWSER={NAME:o,MAJOR:"major",VERSION:u},g.CPU={ARCHITECTURE:"architecture"},g.DEVICE={MODEL:i,VENDOR:a,TYPE:s,CONSOLE:"console",MOBILE:c,SMARTTV:h,TABLET:l,WEARABLE:"wearable",EMBEDDED:"embedded"},g.ENGINE={NAME:o,VERSION:u},g.OS={NAME:o,VERSION:u},e.exports&&(t=e.exports=g),t.UAParser=g;var y=n&&(n.jQuery||n.Zepto);if(y&&!y.ua){var w=new g;y.ua=w.getResult(),y.ua.get=function(){return w.getUA()},y.ua.set=function(e){w.setUA(e);var t=w.getResult();for(var n in t)y.ua[n]=t[n]}}}("object"==typeof window?window:i)}),Pi=(Fi.UAParser,void 0!==Pi?Pi:"undefined"!=typeof globalThis?globalThis:{});function Vi(){var e=e;if(void 0===e&&(this&&this.window?e=this.window:void 0!==Pi&&(void 0!==Pi?Pi:e).window?e=(void 0!==Pi?Pi:e).window:"undefined"!=typeof globalThis&&globalThis.window&&(e=globalThis.window),!e.navigator))return!1;try{if(e&&e.navigator&&e.navigator.userAgent&&"string"==typeof e.navigator.userAgent){if(-1!==e.navigator.userAgent.indexOf("Trident"))return!1;const t=e.navigator.userAgent,n=new Fi;n.setUA(t);const r=n.getResult();if(("Chrome"===r.browser.name||"Chrome WebView"===r.browser.name)&&"Android"===r.os.name&&parseInt(r.browser.version,10)<50)return!1;if("Android Browser"===r.browser.name)return!1}}catch(e){return console.error(e),!1}return!0}function zi(e={},t={}){let n=Object.keys(e);return n.length?n.reduce((n,r)=>{if("string"==typeof e[r])n[r]=t[e[r]];else{if(!Array.isArray(e[r]))throw new TypeError("dynamic property paths must be a string or an array of strings or numeric indexes");{let i=Object.assign([],e[r]),o=t;for(;i.length&&o&&"object"==typeof o;){o=o[i.shift()]}n[r]=i.length?void 0:o}}return n},{}):e}function Bi(e={}){if(1===Object.keys(e).length||e.component){const t=Object.keys(e)[0];return 1===Object.keys(e).length&&!e[t].component&&"object"==typeof e[t]}return!1}function $i(e={}){const t=Object.keys(e)[0];try{return Object.assign({},{component:t},e[t],{children:e[t]&&e[t].children&&Array.isArray(e[t].children)?e[t].children.map($i):e[t].children})}catch(e){throw SyntaxError("Invalid Simple JSONX Syntax")}}async function Ui(e="",t={}){try{const n=await fetch(e,t);return await n.json()}catch(e){throw e}}var qi=Object.freeze({__proto__:null,displayComponent:function(e={}){const{jsonx:t={},props:n}=e,r=t.comparisonprops,i=Array.isArray(r)?r.map(e=>{const r={};Array.isArray(e.left)&&(r.left=e.left),Array.isArray(e.right)&&(r.right=e.right);const i=zi(r,n||t.props),o=Object.assign({},e,i);switch(o.operation){case"eq":case"==":return o.left==o.right;case"dneq":case"!=":case"!":return o.left!==o.right;case"dnseq":case"!==":return o.left!==o.right;case"seq":case"===":return o.left===o.right;case"lt":case"<":return o.left<o.right;case"lte":case"<=":return o.left<=o.right;case"gt":case">":return o.left>o.right;case"gte":case">=":return o.left>=o.right;case"dne":case"undefined":case"null":return void 0===o.left||null===o.left;case"!null":case"!undefined":case"exists":default:return void 0!==o.left&&null!==o.left}}):[],o=i.filter(e=>!0===e);return!(t.comparisonprops&&(t.comparisonorprops&&o.length<1||o.length!==i.length&&!t.comparisonorprops))},getAdvancedBinding:Vi,traverse:zi,validateJSONX:function e(t={},n=!1){const r=["asyncprops","resourceprops","windowprops","thisprops","thisstate","thiscontext"],i=["__dangerouslyEvalProps","__dangerouslyBindEvalProps"],o=["component","props","test","children","__spreadComponent","__inline","__functionargs","__dangerouslyInsertComponents","__dangerouslyInsertComponentProps","__dangerouslyInsertJSONXComponents","__functionProps","__functionparams","__windowComponents","__windowComponentProps","comparisonprops","comparisonorprops","passprops","exposeprops","debug","___stringifyChildren","___toStringChildren","___toNumeral","___FromLuxonTimeZone","___ISOtoLuxonString","___JSDatetoLuxonString","___template"].concat(r,i);let s=[];if(t.component||s.push(SyntaxError("[0001] Missing React Component")),t.props&&(("object"!=typeof t.props||Array.isArray(t.props))&&s.push(TypeError("[0002] "+t.component+": props must be an Object / valid React props")),!t.props.children||"string"==typeof t.props.children&&Array.isArray(t.props.children)||s.push(TypeError("[0003] "+t.component+": props.children must be an array of JSONX JSON objects or a string")),!t.props._children||"string"==typeof t.props._children&&Array.isArray(t.props._children)||s.push(TypeError("[0004] "+t.component+": props._children must be an array of JSONX JSON objects or a string"))),t.children&&("string"==typeof t.children||Array.isArray(t.children)||s.push(TypeError("[0005] "+t.component+": children must be an array of JSONX JSON objects or a string")),Array.isArray(t.children))){const r=t.children.filter(e=>"object"==typeof e).map(t=>e(t,n));s=s.concat(...r)}r.forEach(e=>{const n=t[e];n&&("object"!=typeof n&&s.push(TypeError(`[0006] ${e} must be an object`)),Object.keys(n).forEach(t=>{Array.isArray(n[t])||s.push(TypeError(`[0007] jsonx.${e}.${t} must be an array of strings`)),Array.isArray(n[t])&&n[t].filter(e=>"string"==typeof e).length!==n[t].length&&s.push(TypeError(`[0008] jsonx.${e}.${t} must be an array of strings`))}))});const a=t.__dangerouslyEvalProps,u=t.__dangerouslyBindEvalProps;(a||u)&&((a&&"object"!=typeof a||u&&"object"!=typeof u)&&s.push(TypeError("[0009] __dangerouslyEvalProps must be an object of strings to convert to valid javascript")),i.filter(e=>t[e]).forEach(e=>{const n=t[e],r=eval;Object.keys(n).forEach(t=>{"string"!=typeof n[t]&&s.push(TypeError(`[0010] jsonx.${e}.${n} must be a string`));try{"__dangerouslyBindEvalProps"===e?r(`(${n[t]})`).call({bounded:!0}):r(n[t])}catch(e){s.push(e)}})})),t.__dangerouslyInsertComponents&&Object.keys(t.__dangerouslyInsertComponents).forEach(n=>{try{t.__dangerouslyInsertComponents&&e(t.__dangerouslyInsertComponents[n])}catch(e){s.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${n} must be a valid JSONX JSON Object: ${e.toString()}`))}}),t.__functionProps&&("object"!=typeof t.__functionProps?s.push(TypeError("[0012] jsonx.__functionProps  must be an object")):Object.keys(t.__functionProps).forEach(e=>{t.__functionProps&&t.__functionProps[e]&&("string"!=typeof t.__functionProps[e]||-1===t.__functionProps[e].indexOf("func:"))&&s.push(ReferenceError(`[0013] jsonx.__functionProps.${e} must reference a function (i.e. func:this.props.logoutUser())`))})),t.__windowComponentProps&&("object"!=typeof t.__windowComponentProps||Array.isArray(t.__windowComponentProps))&&s.push(TypeError("[0013] jsonx.__windowComponentProps  must be an object")),t.__windowComponents&&("object"!=typeof t.__windowComponents&&s.push(TypeError("[0014] jsonx.__windowComponents must be an object")),Object.keys(t.__windowComponents).forEach(e=>{"string"==typeof t.__windowComponents[e]&&-1!==t.__windowComponents[e].indexOf("func:")||s.push(ReferenceError(`[0015] jsonx.__windowComponents.${e} must reference a window element on window.__jsonx_custom_elements (i.e. func:window.__jsonx_custom_elements.bootstrapModal)`))})),void 0!==t.comparisonorprops&&"boolean"!=typeof t.comparisonorprops&&s.push(TypeError("[0016] jsonx.comparisonorprops  must be boolean")),t.comparisonprops&&(Array.isArray(t.comparisonprops)?t.comparisonprops.forEach(e=>{"object"!=typeof e?s.push(TypeError("[0018] jsonx.comparisonprops  must be an array or comparisons objects")):void 0===e.left&&s.push(TypeError("[0019] jsonx.comparisonprops  must be have a left comparison value"))}):s.push(TypeError("[0017] jsonx.comparisonprops  must be an array or comparisons"))),void 0!==t.passprops&&"boolean"!=typeof t.passprops&&s.push(TypeError("[0020] jsonx.passprops  must be boolean"));const c=Object.keys(t).filter(e=>-1===o.indexOf(e));if(s.length){if(n)return s;throw s[0]}return!c.length||`Warning: Invalid Keys [${c.join()}]`},validSimpleJSONXSyntax:Bi,simpleJSONXSyntax:$i,getSimplifiedJSONX:function e(t={}){try{if(!t.component)return t;const n=t.component;return t.children=Array.isArray(t.children)?t.children.filter(e=>e).map(e):t.children,delete t.component,{[n]:t}}catch(e){throw e}},fetchJSON:Ui}),Wi={};var Yi=function(e,t,n,r,i,o,s,a){if(!e){var u;if(void 0===t)u=new Error("Minified exception occurred; use the non-minified dev environment for the full error message and additional helpful warnings.");else{var c=[n,r,i,o,s,a],l=0;(u=new Error(t.replace(/%s/g,function(){return c[l++]}))).name="Invariant Violation"}throw u.framesToPop=1,u}},Zi="mixins";var Ji=function(e,t,n){var r=[],i={mixins:"DEFINE_MANY",statics:"DEFINE_MANY",propTypes:"DEFINE_MANY",contextTypes:"DEFINE_MANY",childContextTypes:"DEFINE_MANY",getDefaultProps:"DEFINE_MANY_MERGED",getInitialState:"DEFINE_MANY_MERGED",getChildContext:"DEFINE_MANY_MERGED",render:"DEFINE_ONCE",componentWillMount:"DEFINE_MANY",componentDidMount:"DEFINE_MANY",componentWillReceiveProps:"DEFINE_MANY",shouldComponentUpdate:"DEFINE_ONCE",componentWillUpdate:"DEFINE_MANY",componentDidUpdate:"DEFINE_MANY",componentWillUnmount:"DEFINE_MANY",UNSAFE_componentWillMount:"DEFINE_MANY",UNSAFE_componentWillReceiveProps:"DEFINE_MANY",UNSAFE_componentWillUpdate:"DEFINE_MANY",updateComponent:"OVERRIDE_BASE"},o={getDerivedStateFromProps:"DEFINE_MANY_MERGED"},s={displayName:function(e,t){e.displayName=t},mixins:function(e,t){if(t)for(var n=0;n<t.length;n++)u(e,t[n])},childContextTypes:function(e,t){e.childContextTypes=c({},e.childContextTypes,t)},contextTypes:function(e,t){e.contextTypes=c({},e.contextTypes,t)},getDefaultProps:function(e,t){e.getDefaultProps?e.getDefaultProps=h(e.getDefaultProps,t):e.getDefaultProps=t},propTypes:function(e,t){e.propTypes=c({},e.propTypes,t)},statics:function(e,t){!function(e,t){if(t)for(var n in t){var r=t[n];if(t.hasOwnProperty(n)){var i=n in s;Yi(!i,'ReactClass: You are attempting to define a reserved property, `%s`, that shouldn\'t be on the "statics" key. Define it as an instance property instead; it will still be accessible on the constructor.',n);var a=n in e;if(a){var u=o.hasOwnProperty(n)?o[n]:null;return Yi("DEFINE_MANY_MERGED"===u,"ReactClass: You are attempting to define `%s` on your component more than once. This conflict may be due to a mixin.",n),void(e[n]=h(e[n],r))}e[n]=r}}}(e,t)},autobind:function(){}};function a(e,t){var n=i.hasOwnProperty(t)?i[t]:null;g.hasOwnProperty(t)&&Yi("OVERRIDE_BASE"===n,"ReactClassInterface: You are attempting to override `%s` from your class specification. Ensure that your method names do not overlap with React methods.",t),e&&Yi("DEFINE_MANY"===n||"DEFINE_MANY_MERGED"===n,"ReactClassInterface: You are attempting to define `%s` on your component more than once. This conflict may be due to a mixin.",t)}function u(e,n){if(n){Yi("function"!=typeof n,"ReactClass: You're attempting to use a component class or function as a mixin. Instead, just use a regular object."),Yi(!t(n),"ReactClass: You're attempting to use a component as a mixin. Instead, just use a regular object.");var r=e.prototype,o=r.__reactAutoBindPairs;for(var u in n.hasOwnProperty(Zi)&&s.mixins(e,n.mixins),n)if(n.hasOwnProperty(u)&&u!==Zi){var c=n[u],l=r.hasOwnProperty(u);if(a(l,u),s.hasOwnProperty(u))s[u](e,c);else{var d=i.hasOwnProperty(u);if("function"!=typeof c||d||l||!1===n.autobind)if(l){var p=i[u];Yi(d&&("DEFINE_MANY_MERGED"===p||"DEFINE_MANY"===p),"ReactClass: Unexpected spec policy %s for key %s when mixing in component specs.",p,u),"DEFINE_MANY_MERGED"===p?r[u]=h(r[u],c):"DEFINE_MANY"===p&&(r[u]=f(r[u],c))}else r[u]=c;else o.push(u,c),r[u]=c}}}}function l(e,t){for(var n in Yi(e&&t&&"object"==typeof e&&"object"==typeof t,"mergeIntoWithNoDuplicateKeys(): Cannot merge non-objects."),t)t.hasOwnProperty(n)&&(Yi(void 0===e[n],"mergeIntoWithNoDuplicateKeys(): Tried to merge two objects with the same key: `%s`. This conflict may be due to a mixin; in particular, this may be caused by two getInitialState() or getDefaultProps() methods returning objects with clashing keys.",n),e[n]=t[n]);return e}function h(e,t){return function(){var n=e.apply(this,arguments),r=t.apply(this,arguments);if(null==n)return r;if(null==r)return n;var i={};return l(i,n),l(i,r),i}}function f(e,t){return function(){e.apply(this,arguments),t.apply(this,arguments)}}function d(e,t){return t.bind(e)}var p={componentDidMount:function(){this.__isMounted=!0}},m={componentWillUnmount:function(){this.__isMounted=!1}},g={replaceState:function(e,t){this.updater.enqueueReplaceState(this,e,t)},isMounted:function(){return!!this.__isMounted}},y=function(){};return c(y.prototype,e.prototype,g),function(e){var t=function(e,r,i){this.__reactAutoBindPairs.length&&function(e){for(var t=e.__reactAutoBindPairs,n=0;n<t.length;n+=2){var r=t[n],i=t[n+1];e[r]=d(e,i)}}(this),this.props=e,this.context=r,this.refs=Wi,this.updater=i||n,this.state=null;var o=this.getInitialState?this.getInitialState():null;Yi("object"==typeof o&&!Array.isArray(o),"%s.getInitialState(): must return an object or null",t.displayName||"ReactCompositeComponent"),this.state=o};for(var o in t.prototype=new y,t.prototype.constructor=t,t.prototype.__reactAutoBindPairs=[],r.forEach(u.bind(null,t)),u(t,p),u(t,e),u(t,m),t.getDefaultProps&&(t.defaultProps=t.getDefaultProps()),Yi(t.prototype.render,"createClass(...): Class specification must implement a `render` method."),i)t.prototype[o]||(t.prototype[o]=null);return t}};if(void 0===r)throw Error("create-react-class could not find the React object. If you are using script tags, make sure that React is being loaded before create-react-class.");var Hi=(new r.Component).updater,Gi=Ji(r.Component,r.isValidElement,Hi);const Xi=new fr;let Ki=Vi(),Qi=Object.assign({Fragment:t.Fragment,Suspense:t.Suspense},Li,window&&"object"==typeof window?window.__jsonx_custom_elements:{});function eo(e={jsonx:{}}){const{componentLibraries:t={},jsonx:n={}}=e;return Object.keys(t).map(e=>{const r=n.component.replace(`${e}.`,""),i=r.split(".");return 2===i.length&&t[e]&&t[e][i[0]]&&void 0!==t[e][i[0]][i[1]]?t[e][i[0]][i[1]]:void 0!==t[e][r]?t[e][r]:void 0}).filter(e=>e)[0]}function to(e={}){const{jsonx:t={},reactComponents:n={},componentLibraries:r={},logError:i=console.error,debug:o}=e;try{if("string"!=typeof t.component&&"function"==typeof t.component)return t.component;if(t.component&&Li[t.component])return t.component;if(n[t.component])return n[t.component];if("string"==typeof t.component&&t.component.indexOf(".")>0&&eo({jsonx:t,componentLibraries:r}))return eo({jsonx:t,componentLibraries:r});throw new ReferenceError(`Invalid React Component (${t.component})`)}catch(e){throw o&&i(e,e.stack?e.stack:"no stack"),e}}function no(e={}){if("function"==typeof e)return e;const{body:t="",args:n=[],name:r}=e,i=[].concat(n);i.push(t);const o=Function.prototype.constructor.apply({name:r},i);return r&&Object.defineProperty(o,"name",{value:r}),o}function ro(e={},n={}){if(n.lazy)return t.lazy(()=>n.lazy(e,Object.assign({},n,{lazy:!1})).then(e=>({default:ro(...e)})));const i=this||{},{returnFactory:o=!0,resources:s={},use_getState:a=!0,bindContext:u=!0,disableRenderIndexKey:c=!0}=n,l={getDefaultProps:{body:"return {};"},getInitialState:{body:"return {};"},componentDidMount:void 0,UNSAFE_componentWillMount:void 0,shouldComponentUpdate:void 0,getSnapshotBeforeUpdate:void 0,componentDidUpdate:void 0,UNSAFE_componentWillUpdate:void 0,UNSAFE_componentWillReceiveProps:void 0,componentWillUnmount:void 0,...e},h=Object.keys(l);if(!1===h.includes("render"))throw new ReferenceError("React components require a render method");const f=h.reduce((e,t)=>{if(!l[t])return e;"function"==typeof l[t]&&(l[t]={body:l[t]});const r=l[t].arguments,o=l[t].body;if(!o)throw console.warn({rjc:l}),new SyntaxError(`Function(${t}) requires a function body`);if(r&&!Array.isArray(r)&&r.length&&r.length&&r.filter(e=>"string"==typeof e).length)throw new TypeError(`Function(${t}) arguments must be an array or variable names`);return e[t]="render"===t?function(){return n.passprops&&this&&this.props&&(o.props=Object.assign({},o.props,this.props)),n.passstate&&this.state&&(o.props=Object.assign({},o.props,this.state)),Hc.call(Object.assign({},i,u?this:{props:{}},{disableRenderIndexKey:c},{props:a&&this&&this.props?Object.assign({},this.props,{getState:()=>this.state}):this.props}),o,s)}:"function"==typeof o?o:no({body:o,args:r}),e},{}),d=Gi(f);return n.name&&Object.defineProperty(d,"name",{value:n.name}),o?r.createFactory(d):d}function io(e={},n="",i={}){if(i.lazy)return t.lazy(()=>i.lazy(e,n,Object.assign({},i,{lazy:!1})).then(e=>({default:io(...e)})));void 0!==i&&void 0!==i.bind||(i.bind=!0);const{resources:o={},args:s=[]}=i,a=Object.assign({},e.props),u=[r,t.useState,t.useEffect,t.useContext,t.useReducer,t.useCallback,t.useMemo,t.useRef,t.useImperativeHandle,t.useLayoutEffect,t.useDebugValue,Hc,e,o,a];"function"==typeof n&&(n=n.toString());const c=Function("React","useState","useEffect","useContext","useReducer","useCallback","useMemo","useRef","useImperativeHandle","useLayoutEffect","useDebugValue","getReactElementFromJSONX","reactComponent","resources","props",`\n    'use strict';\n    const self = this || {};\n\n    return function ${i.name||"Anonymous"}(props){\n      ${n}\n      if(typeof exposeprops==='undefined' || exposeprops){\n        reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);\n        if(typeof exposeprops!=='undefined') reactComponent.__functionargs = Object.keys(exposeprops);\n      } else{\n        reactComponent.props =  props;\n      }\n      if(!props.children) {\n      //  delete props.children;\n      }\n      const context = ${i.bind?"Object.assign(self,this||{})":"this"};\n      return getReactElementFromJSONX.call(context, reactComponent);\n    }\n  `);return i.name&&Object.defineProperty(c,"name",{value:i.name}),i.bind?c.call(this,...u):c(...u)}var oo=Object.freeze({__proto__:null,advancedBinding:Ki,componentMap:Qi,getBoundedComponents:function(e={}){const{reactComponents:t,boundedComponents:n=[]}=e;return Ki||e.advancedBinding?Object.assign({},t,n.reduce((e,n)=>(e[n]=t[n].bind(this),e),{})):t},getComponentFromLibrary:eo,getComponentFromMap:to,getFunctionFromEval:no,getReactClassComponent:ro,FormComponent:function(e={}){const{hookFormOptions:n={},formComponent:r={component:"div",children:"empty form"},onSubmit:i,formWrapperComponent:o,formKey:s}=e,a=Ci(n),u={...this||{},reactHookForm:a};u.componentLibraries&&u.componentLibraries.ReactHookForm||(u.componentLibraries={...u.componentLibraries,ReactHookForm:{Controller:Ai,ErrorMessage:Di}});const c=o||{component:"form",props:{onSubmit:i?a.handleSubmit(i):void 0,key:s?`formWrapperJXM-${s}`:void 0}};return c.children=Array.isArray(r)?r:[r],t.useMemo(()=>Hc.bind(u),[u])(c)},DynamicComponent:function(e={}){const{useCache:n=!0,cacheTimeout:r=18e3,loadingJSONX:i={component:"div",children:"...Loading"},loadingErrorJSONX:o={component:"div",children:[{component:"span",children:"Error: "},{component:"span",resourceprops:{_children:["error","message"]}}]},cacheTimeoutFunction:s=(()=>{}),jsonx:a,transformFunction:u=(e=>e),fetchURL:c,fetchOptions:l,fetchFunction:h}=e,f=this||{},[d,p]=t.useState({hasLoaded:!1,hasError:!1,resources:{},error:void 0}),m=t.useMemo(()=>no(u),[u]),g=t.useMemo(()=>no(s),[s]),y=t.useMemo(()=>Hc.bind(f),[f]),w=t.useMemo(()=>y(i),[i]),b=t.useMemo(()=>y(o,{error:d.error}),[o,d.error]);return t.useEffect(()=>{c&&async function(){try{let e;if(n&&Xi.get(c))e=Xi.get(c);else{let t;t=h?await h(c,l):await Ui(c,l),e=await m(t),n&&Xi.put(c,e,r,g)}p(t=>Object.assign({},t,{hasLoaded:!0,hasError:!1,resources:{DynamicComponentData:e}}))}catch(e){f.debug&&console.warn(e),p({hasError:!0,error:e})}}()},[c,l]),c?d.hasError?b:!1===d.hasLoaded?w:y(a,d.resources):null},getReactFunctionComponent:io,getReactContext:function(e={}){return t.createContext(e.value)}});const so=/((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm,ao=/([^\s,]+)/g;function uo(e){var t=e.toString().replace(so,""),n=t.slice(t.indexOf("(")+1,t.indexOf(")")).match(ao);return null===n&&(n=[]),n}function co(e={}){let{jsonx:t={},propName:n="asyncprops",traverseObject:r={}}=e;return t[n]&&"object"==typeof t[n]?zi(t[n],r):{}}function lo(e={}){const{allProps:t={},jsonx:n={}}=e;return!1===Array.isArray(t.__spread)?this&&this.debug||n.debug?{children:new Error("Using __spreadComponent requires an array prop '__spread'").toString()}:{children:void 0}:{_children:t.__spread.map(e=>{const t=Object.assign({},n.__spreadComponent),r=Object.assign({},t.props);return r.__item=e,t.props=r,t})}}function ho(e={}){return(t,n)=>{let r;return this&&this.state&&void 0!==this.state[n]?r=this.state[n]:this&&this.props&&void 0!==this.props[n]?r=this.props[n]:e.props&&void 0!==e.props[n]&&(r=e.props[n]),void 0!==r&&t.push(r),t.filter(e=>void 0!==e)}}function fo(e={jsonx:{}}){const{jsonx:t}=e,n=eval;let r={};if(t.__dangerouslyEvalAllProps){let e;try{e="function"==typeof e?t.__dangerouslyEvalAllProps:n(t.__dangerouslyEvalAllProps)}catch(n){(this.debug||t.debug)&&(e=n)}r=e.call(this,{jsonx:t})}const i=Object.keys(t.__dangerouslyEvalProps||{}).reduce((e,r)=>{let i,o;try{o=(i=n(t.__dangerouslyEvalProps[r])).toString()}catch(e){(this.debug||t.debug)&&(i=e)}return e[r]="function"==typeof i?i.call(this,{jsonx:t}):i,this.exposeEval&&(e[`__eval_${r}`]=o),e},{}),o=Object.keys(t.__dangerouslyBindEvalProps||{}).reduce((e,r)=>{let i,o;try{let e;const s=t.__dangerouslyBindEvalProps[r];let a;if("function"==typeof s?a=s:t.__dangerouslyBindEvalProps&&(o=(a=n(t.__dangerouslyBindEvalProps[r])).toString()),t.__functionargs&&t.__functionargs[r])e=[this].concat(t.__functionargs[r].reduce(ho.call(this,t),[]));else if(!1===t.__functionparams)e=[this];else{const n=uo(a);e=[this].concat(n.reduce(ho.call(this,t),[]))}i=a.bind(...e)}catch(e){(this.debug||t.debug)&&(i=e)}return e[r]=i,this.exposeEval&&(e[`__eval_${r}`]=o),e},{});return Object.assign({},i,o,r)}function po(e={jsonx:{}}){const{jsonx:t,resources:n}=e;return Object.keys(t.__dangerouslyInsertComponents).reduce((e,r)=>{let i;try{t.__dangerouslyInsertComponents&&(i=Gc.call(this,t.__dangerouslyInsertComponents[r],n))}catch(e){(this.debug||t.debug)&&(i=e)}return e[r]=i,e},{})}function mo(e){const{jsonx:t,resources:n}=e,r=t.__dangerouslyInsertFunctionComponents?Object.keys(t.__dangerouslyInsertFunctionComponents).reduce((e,r)=>{let i;try{const e=t.__dangerouslyInsertFunctionComponents&&t.__dangerouslyInsertFunctionComponents[r];e&&(e.options=Object.assign({},e.options,{resources:n}),i=io.call(this,e.reactComponent,e.functionBody,e.options))}catch(e){(this.debug||t.debug)&&(i=e)}return e[r]="_children"===r?[i]:i,e},{}):{},i=t.__dangerouslyInsertClassComponents?Object.keys(t.__dangerouslyInsertClassComponents).reduce((e,r)=>{let i;try{const e=t.__dangerouslyInsertClassComponents&&t.__dangerouslyInsertClassComponents[r];e&&(e.options=Object.assign({},e.options,{resources:n}),i=ro.call(this,e.reactComponent,e.options))}catch(e){(this.debug||t.debug)&&(i=e)}return e[r]="_children"===r?[i]:i,e},{}):{};return Object.assign({},r,i)}function go(e={jsonx:{}}){const{jsonx:t}=e,n=this&&this.reactComponents?this.reactComponents:{},r=this&&this.componentLibraries?this.componentLibraries:{};return t.__dangerouslyInsertJSONXComponents&&Object.keys(t.__dangerouslyInsertJSONXComponents).length?Object.keys(t.__dangerouslyInsertJSONXComponents).reduce((e,i)=>{let o;try{o=to({jsonx:t.__dangerouslyInsertJSONXComponents&&t.__dangerouslyInsertJSONXComponents[i],reactComponents:n,componentLibraries:r})}catch(e){(this.debug||t.debug)&&(o=e)}return e[i]=o,e},{}):t.__dangerouslyInsertReactComponents&&Object.keys(t.__dangerouslyInsertReactComponents).length?Object.keys(t.__dangerouslyInsertReactComponents).reduce((e,i)=>{let o;try{o=to({jsonx:{component:t.__dangerouslyInsertReactComponents&&t.__dangerouslyInsertReactComponents[i],props:t.__dangerouslyInsertComponentProps?t.__dangerouslyInsertComponentProps[i]:{}},reactComponents:n,componentLibraries:r})}catch(e){(this.debug||t.debug)&&(o=e)}return e[i]=o,e},{}):void 0}function yo(e={jsonx:{},propBody:""}){const{propFunc:t="func:",propBody:n,jsonx:r,functionProperty:i=""}=e,{logError:o=console.error,debug:s}=this;let a={};this.window?a=this.window:"undefined"!=typeof global&&("undefined"!=typeof global?global:window).window&&(a=("undefined"!=typeof global?global:window).window);try{const e=(t.split(":")[1]||"").split("."),u=e.length?e[e.length-1]:"";if(t.includes("func:inline")){let e;if(r.__functionargs){const t=[].concat(r.__functionargs[i]);t.push(n),e=Function.prototype.constructor.apply({},t)}else e=Function("param1","param2",'"use strict";'+n);const[o,s]=t.split(".");if(Object.defineProperty(e,"name",{value:s}),r.__functionargs){const t=[this].concat(r.__functionargs[i].map(e=>r.props[e]));return e.bind(...t)}return e.bind(this)}if(-1===t.indexOf("func:window"))return 4===e.length?this.props?this.props[e[2]][u]:r.props[e[2]][u]:3===e.length?this.props?this.props[u].bind(this):r.props[u].bind(this):function(){};if(3===e.length)try{return a[e[1]][u].bind(this)}catch(t){return s&&o(t),a[e[1]][u]}else try{return a[u].bind(this)}catch(e){return s&&o(e),a[u]}}catch(e){return this.debug&&(o(e),r&&r.debug)?e:function(){}}}function wo(e={jsonx:{}}){const{allProps:t={},jsonx:n={}}=e,r=yo.bind(this),i=n.__functionProps;return i&&Object.keys(i).forEach(e=>{"string"==typeof i[e]&&-1!==i[e].indexOf("func:")&&(t[e]=r({propFunc:i[e],propBody:n.__inline?n.__inline[e]:"",jsonx:n,functionProperty:e}))}),t}function bo(e={jsonx:{}}){const{allProps:t,jsonx:n}=e,i=n.__windowComponents,o=this.window||("undefined"!=typeof global?global:o).window||{};return Object.keys(i).forEach(e=>{const n="string"==typeof i[e]?i[e].replace("func:window.__jsonx_custom_elements.",""):"";if("string"==typeof i[e]&&-1!==i[e].indexOf("func:window.__jsonx_custom_elements")&&"function"==typeof o.__jsonx_custom_elements[n]){const i=o.__jsonx_custom_elements[n],s=t.__windowComponentProps?t.__windowComponentProps:this.props;t[e]=r.createElement(i,s,null)}}),t}var vo=Object.freeze({__proto__:null,STRIP_COMMENTS:so,ARGUMENT_NAMES:ao,getParamNames:uo,getJSONXProps:co,getChildrenComponents:lo,boundArgsReducer:ho,getEvalProps:fo,getComponentProps:po,getReactComponents:mo,getReactComponentProps:go,getFunctionFromProps:yo,getFunctionProps:wo,getWindowComponents:bo,getComputedProps:function(e={}){const{jsonx:t={},resources:n={},renderIndex:r,logError:i=console.error,useReduxState:o=!0,ignoreReduxPropsInComponentLibraries:s=!0,disableRenderIndexKey:a=!0,debug:u,componentLibraries:c={}}=e;try{const e=t.thisprops?Object.assign({__jsonx:{_component:t,_resources:n}},this.props,t.props,o&&!t.ignoreReduxProps&&s&&t.component&&!c[t.component]&&this.props&&this.props.getState?this.props.getState():{}):void 0,l="undefined"!=typeof window?window:{},h=t.asyncprops?co({jsonx:t,propName:"asyncprops",traverseObject:n}):{},f=t.resourceprops?co({jsonx:t,propName:"resourceprops",traverseObject:n}):{},d=t.windowprops?co({jsonx:t,propName:"windowprops",traverseObject:l}):{},p=t.thisprops?co({jsonx:t,propName:"thisprops",traverseObject:e}):{},m=t.thisstate?co({jsonx:t,propName:"thisstate",traverseObject:this.state}):{},g=t.thiscontext?co({jsonx:t,propName:"thiscontext",traverseObject:this||{}}):{},y=t.__dangerouslyEvalProps||t.__dangerouslyBindEvalProps?fo.call(this,{jsonx:t}):{},w=t.__dangerouslyInsertComponents?po.call(this,{jsonx:t,resources:n,debug:u}):{},b=t.__dangerouslyInsertReactComponents||t.__dangerouslyInsertJSONXComponents?go.call(this,{jsonx:t,debug:u}):{},v=t.__dangerouslyInsertFunctionComponents||t.__dangerouslyInsertClassComponents?mo.call(this,{jsonx:t,debug:u}):{},_=t.__dangerouslyEvalAllProps?fo.call(this,{jsonx:t}):{},E=Object.assign({},this.disableRenderIndexKey||a?{}:{key:r},t.props,p,m,g,f,h,d,y,w,b,v),S=Object.assign({},E,t.__functionProps?wo.call(this,{allProps:E,jsonx:t}):{},t.__windowComponents?bo.call(this,{allProps:E,jsonx:t}):{},t.__spreadComponent?lo.call(this,{allProps:E,jsonx:t}):{},_);return t.debug&&console.debug({jsonx:t,computedProps:S}),S}catch(e){return u&&i(e,e.stack?e.stack:"no stack"),null}}}),_o=o(function(e){var t,n;t=i,n=function(){var e,t,n,r,i,o={},s={},a={currentLocale:"en",zeroFormat:null,nullFormat:null,defaultFormat:"0,0",scalePercentBy100:!0},u={currentLocale:a.currentLocale,zeroFormat:a.zeroFormat,nullFormat:a.nullFormat,defaultFormat:a.defaultFormat,scalePercentBy100:a.scalePercentBy100};function c(e,t){this._input=e,this._value=t}return(e=function(n){var r,i,s,a;if(e.isNumeral(n))r=n.value();else if(0===n||void 0===n)r=0;else if(null===n||t.isNaN(n))r=null;else if("string"==typeof n)if(u.zeroFormat&&n===u.zeroFormat)r=0;else if(u.nullFormat&&n===u.nullFormat||!n.replace(/[^0-9]+/g,"").length)r=null;else{for(i in o)if((a="function"==typeof o[i].regexps.unformat?o[i].regexps.unformat():o[i].regexps.unformat)&&n.match(a)){s=o[i].unformat;break}r=(s=s||e._.stringToNumber)(n)}else r=Number(n)||null;return new c(n,r)}).version="2.0.6",e.isNumeral=function(e){return e instanceof c},e._=t={numberToFormat:function(t,n,r){var i,o,a,u,c,l,h,f,d=s[e.options.currentLocale],p=!1,m=!1,g="",y="",w=!1;if(t=t||0,a=Math.abs(t),e._.includes(n,"(")?(p=!0,n=n.replace(/[\(|\)]/g,"")):(e._.includes(n,"+")||e._.includes(n,"-"))&&(l=e._.includes(n,"+")?n.indexOf("+"):t<0?n.indexOf("-"):-1,n=n.replace(/[\+|\-]/g,"")),e._.includes(n,"a")&&(o=!!(o=n.match(/a(k|m|b|t)?/))&&o[1],e._.includes(n," a")&&(g=" "),n=n.replace(new RegExp(g+"a[kmbt]?"),""),a>=1e12&&!o||"t"===o?(g+=d.abbreviations.trillion,t/=1e12):a<1e12&&a>=1e9&&!o||"b"===o?(g+=d.abbreviations.billion,t/=1e9):a<1e9&&a>=1e6&&!o||"m"===o?(g+=d.abbreviations.million,t/=1e6):(a<1e6&&a>=1e3&&!o||"k"===o)&&(g+=d.abbreviations.thousand,t/=1e3)),e._.includes(n,"[.]")&&(m=!0,n=n.replace("[.]",".")),u=t.toString().split(".")[0],c=n.split(".")[1],h=n.indexOf(","),i=(n.split(".")[0].split(",")[0].match(/0/g)||[]).length,c?(e._.includes(c,"[")?(c=(c=c.replace("]","")).split("["),y=e._.toFixed(t,c[0].length+c[1].length,r,c[1].length)):y=e._.toFixed(t,c.length,r),u=y.split(".")[0],y=e._.includes(y,".")?d.delimiters.decimal+y.split(".")[1]:"",m&&0===Number(y.slice(1))&&(y="")):u=e._.toFixed(t,0,r),g&&!o&&Number(u)>=1e3&&g!==d.abbreviations.trillion)switch(u=String(Number(u)/1e3),g){case d.abbreviations.thousand:g=d.abbreviations.million;break;case d.abbreviations.million:g=d.abbreviations.billion;break;case d.abbreviations.billion:g=d.abbreviations.trillion}if(e._.includes(u,"-")&&(u=u.slice(1),w=!0),u.length<i)for(var b=i-u.length;b>0;b--)u="0"+u;return h>-1&&(u=u.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g,"$1"+d.delimiters.thousands)),0===n.indexOf(".")&&(u=""),f=u+y+(g||""),p?f=(p&&w?"(":"")+f+(p&&w?")":""):l>=0?f=0===l?(w?"-":"+")+f:f+(w?"-":"+"):w&&(f="-"+f),f},stringToNumber:function(e){var t,n,r,i=s[u.currentLocale],o=e,a={thousand:3,million:6,billion:9,trillion:12};if(u.zeroFormat&&e===u.zeroFormat)n=0;else if(u.nullFormat&&e===u.nullFormat||!e.replace(/[^0-9]+/g,"").length)n=null;else{for(t in n=1,"."!==i.delimiters.decimal&&(e=e.replace(/\./g,"").replace(i.delimiters.decimal,".")),a)if(r=new RegExp("[^a-zA-Z]"+i.abbreviations[t]+"(?:\\)|(\\"+i.currency.symbol+")?(?:\\))?)?$"),o.match(r)){n*=Math.pow(10,a[t]);break}n*=(e.split("-").length+Math.min(e.split("(").length-1,e.split(")").length-1))%2?1:-1,e=e.replace(/[^0-9\.]+/g,""),n*=Number(e)}return n},isNaN:function(e){return"number"==typeof e&&isNaN(e)},includes:function(e,t){return-1!==e.indexOf(t)},insert:function(e,t,n){return e.slice(0,n)+t+e.slice(n)},reduce:function(e,t){if(null===this)throw new TypeError("Array.prototype.reduce called on null or undefined");if("function"!=typeof t)throw new TypeError(t+" is not a function");var n,r=Object(e),i=r.length>>>0,o=0;if(3===arguments.length)n=arguments[2];else{for(;o<i&&!(o in r);)o++;if(o>=i)throw new TypeError("Reduce of empty array with no initial value");n=r[o++]}for(;o<i;o++)o in r&&(n=t(n,r[o],o,r));return n},multiplier:function(e){var t=e.toString().split(".");return t.length<2?1:Math.pow(10,t[1].length)},correctionFactor:function(){return Array.prototype.slice.call(arguments).reduce(function(e,n){var r=t.multiplier(n);return e>r?e:r},1)},toFixed:function(e,t,n,r){var i,o,s,a,u=e.toString().split("."),c=t-(r||0);return i=2===u.length?Math.min(Math.max(u[1].length,c),t):c,s=Math.pow(10,i),a=(n(e+"e+"+i)/s).toFixed(i),r>t-i&&(o=new RegExp("\\.?0{1,"+(r-(t-i))+"}$"),a=a.replace(o,"")),a}},e.options=u,e.formats=o,e.locales=s,e.locale=function(e){return e&&(u.currentLocale=e.toLowerCase()),u.currentLocale},e.localeData=function(e){if(!e)return s[u.currentLocale];if(e=e.toLowerCase(),!s[e])throw new Error("Unknown locale : "+e);return s[e]},e.reset=function(){for(var e in a)u[e]=a[e]},e.zeroFormat=function(e){u.zeroFormat="string"==typeof e?e:null},e.nullFormat=function(e){u.nullFormat="string"==typeof e?e:null},e.defaultFormat=function(e){u.defaultFormat="string"==typeof e?e:"0.0"},e.register=function(e,t,n){if(t=t.toLowerCase(),this[e+"s"][t])throw new TypeError(t+" "+e+" already registered.");return this[e+"s"][t]=n,n},e.validate=function(t,n){var r,i,o,s,a,u,c,l;if("string"!=typeof t&&(t+="",console.warn&&console.warn("Numeral.js: Value is not string. It has been co-erced to: ",t)),(t=t.trim()).match(/^\d+$/))return!0;if(""===t)return!1;try{c=e.localeData(n)}catch(t){c=e.localeData(e.locale())}return o=c.currency.symbol,a=c.abbreviations,r=c.delimiters.decimal,i="."===c.delimiters.thousands?"\\.":c.delimiters.thousands,(null===(l=t.match(/^[^\d]+/))||(t=t.substr(1),l[0]===o))&&((null===(l=t.match(/[^\d]+$/))||(t=t.slice(0,-1),l[0]===a.thousand||l[0]===a.million||l[0]===a.billion||l[0]===a.trillion))&&(u=new RegExp(i+"{2}"),!t.match(/[^\d.,]/g)&&(!((s=t.split(r)).length>2)&&(s.length<2?!!s[0].match(/^\d+.*\d$/)&&!s[0].match(u):1===s[0].length?!!s[0].match(/^\d+$/)&&!s[0].match(u)&&!!s[1].match(/^\d+$/):!!s[0].match(/^\d+.*\d$/)&&!s[0].match(u)&&!!s[1].match(/^\d+$/)))))},e.fn=c.prototype={clone:function(){return e(this)},format:function(t,n){var r,i,s,a=this._value,c=t||u.defaultFormat;if(n=n||Math.round,0===a&&null!==u.zeroFormat)i=u.zeroFormat;else if(null===a&&null!==u.nullFormat)i=u.nullFormat;else{for(r in o)if(c.match(o[r].regexps.format)){s=o[r].format;break}i=(s=s||e._.numberToFormat)(a,c,n)}return i},value:function(){return this._value},input:function(){return this._input},set:function(e){return this._value=Number(e),this},add:function(e){var n=t.correctionFactor.call(null,this._value,e);return this._value=t.reduce([this._value,e],function(e,t,r,i){return e+Math.round(n*t)},0)/n,this},subtract:function(e){var n=t.correctionFactor.call(null,this._value,e);return this._value=t.reduce([e],function(e,t,r,i){return e-Math.round(n*t)},Math.round(this._value*n))/n,this},multiply:function(e){return this._value=t.reduce([this._value,e],function(e,n,r,i){var o=t.correctionFactor(e,n);return Math.round(e*o)*Math.round(n*o)/Math.round(o*o)},1),this},divide:function(e){return this._value=t.reduce([this._value,e],function(e,n,r,i){var o=t.correctionFactor(e,n);return Math.round(e*o)/Math.round(n*o)}),this},difference:function(t){return Math.abs(e(this._value).subtract(t).value())}},e.register("locale","en",{delimiters:{thousands:",",decimal:"."},abbreviations:{thousand:"k",million:"m",billion:"b",trillion:"t"},ordinal:function(e){var t=e%10;return 1==~~(e%100/10)?"th":1===t?"st":2===t?"nd":3===t?"rd":"th"},currency:{symbol:"$"}}),e.register("format","bps",{regexps:{format:/(BPS)/,unformat:/(BPS)/},format:function(t,n,r){var i,o=e._.includes(n," BPS")?" ":"";return t*=1e4,n=n.replace(/\s?BPS/,""),i=e._.numberToFormat(t,n,r),e._.includes(i,")")?((i=i.split("")).splice(-1,0,o+"BPS"),i=i.join("")):i=i+o+"BPS",i},unformat:function(t){return+(1e-4*e._.stringToNumber(t)).toFixed(15)}}),r={base:1024,suffixes:["B","KiB","MiB","GiB","TiB","PiB","EiB","ZiB","YiB"]},i="("+(i=(n={base:1e3,suffixes:["B","KB","MB","GB","TB","PB","EB","ZB","YB"]}).suffixes.concat(r.suffixes.filter(function(e){return n.suffixes.indexOf(e)<0})).join("|")).replace("B","B(?!PS)")+")",e.register("format","bytes",{regexps:{format:/([0\s]i?b)/,unformat:new RegExp(i)},format:function(t,i,o){var s,a,u,c=e._.includes(i,"ib")?r:n,l=e._.includes(i," b")||e._.includes(i," ib")?" ":"";for(i=i.replace(/\s?i?b/,""),s=0;s<=c.suffixes.length;s++)if(a=Math.pow(c.base,s),u=Math.pow(c.base,s+1),null===t||0===t||t>=a&&t<u){l+=c.suffixes[s],a>0&&(t/=a);break}return e._.numberToFormat(t,i,o)+l},unformat:function(t){var i,o,s=e._.stringToNumber(t);if(s){for(i=n.suffixes.length-1;i>=0;i--){if(e._.includes(t,n.suffixes[i])){o=Math.pow(n.base,i);break}if(e._.includes(t,r.suffixes[i])){o=Math.pow(r.base,i);break}}s*=o||1}return s}}),e.register("format","currency",{regexps:{format:/(\$)/},format:function(t,n,r){var i,o,s=e.locales[e.options.currentLocale],a={before:n.match(/^([\+|\-|\(|\s|\$]*)/)[0],after:n.match(/([\+|\-|\)|\s|\$]*)$/)[0]};for(n=n.replace(/\s?\$\s?/,""),i=e._.numberToFormat(t,n,r),t>=0?(a.before=a.before.replace(/[\-\(]/,""),a.after=a.after.replace(/[\-\)]/,"")):t<0&&!e._.includes(a.before,"-")&&!e._.includes(a.before,"(")&&(a.before="-"+a.before),o=0;o<a.before.length;o++)switch(a.before[o]){case"$":i=e._.insert(i,s.currency.symbol,o);break;case" ":i=e._.insert(i," ",o+s.currency.symbol.length-1)}for(o=a.after.length-1;o>=0;o--)switch(a.after[o]){case"$":i=o===a.after.length-1?i+s.currency.symbol:e._.insert(i,s.currency.symbol,-(a.after.length-(1+o)));break;case" ":i=o===a.after.length-1?i+" ":e._.insert(i," ",-(a.after.length-(1+o)+s.currency.symbol.length-1))}return i}}),e.register("format","exponential",{regexps:{format:/(e\+|e-)/,unformat:/(e\+|e-)/},format:function(t,n,r){var i=("number"!=typeof t||e._.isNaN(t)?"0e+0":t.toExponential()).split("e");return n=n.replace(/e[\+|\-]{1}0/,""),e._.numberToFormat(Number(i[0]),n,r)+"e"+i[1]},unformat:function(t){var n=e._.includes(t,"e+")?t.split("e+"):t.split("e-"),r=Number(n[0]),i=Number(n[1]);return i=e._.includes(t,"e-")?i*=-1:i,e._.reduce([r,Math.pow(10,i)],function(t,n,r,i){var o=e._.correctionFactor(t,n);return t*o*(n*o)/(o*o)},1)}}),e.register("format","ordinal",{regexps:{format:/(o)/},format:function(t,n,r){var i=e.locales[e.options.currentLocale],o=e._.includes(n," o")?" ":"";return n=n.replace(/\s?o/,""),o+=i.ordinal(t),e._.numberToFormat(t,n,r)+o}}),e.register("format","percentage",{regexps:{format:/(%)/,unformat:/(%)/},format:function(t,n,r){var i,o=e._.includes(n," %")?" ":"";return e.options.scalePercentBy100&&(t*=100),n=n.replace(/\s?\%/,""),i=e._.numberToFormat(t,n,r),e._.includes(i,")")?((i=i.split("")).splice(-1,0,o+"%"),i=i.join("")):i=i+o+"%",i},unformat:function(t){var n=e._.stringToNumber(t);return e.options.scalePercentBy100?.01*n:n}}),e.register("format","time",{regexps:{format:/(:)/,unformat:/(:)/},format:function(e,t,n){var r=Math.floor(e/60/60),i=Math.floor((e-60*r*60)/60),o=Math.round(e-60*r*60-60*i);return r+":"+(i<10?"0"+i:i)+":"+(o<10?"0"+o:o)},unformat:function(e){var t=e.split(":"),n=0;return 3===t.length?(n+=60*Number(t[0])*60,n+=60*Number(t[1]),n+=Number(t[2])):2===t.length&&(n+=60*Number(t[0]),n+=Number(t[1])),Number(n)}}),e},e.exports?e.exports=n():(void 0!==t?t:window).numeral=n()});class Eo extends Error{}class So extends Eo{constructor(e){super(`Invalid DateTime: ${e.toMessage()}`)}}class Oo extends Eo{constructor(e){super(`Invalid Interval: ${e.toMessage()}`)}}class xo extends Eo{constructor(e){super(`Invalid Duration: ${e.toMessage()}`)}}class ko extends Eo{}class To extends Eo{constructor(e){super(`Invalid unit ${e}`)}}class jo extends Eo{}class No extends Eo{constructor(){super("Zone is an abstract class")}}const Co="numeric",Mo="short",Ro="long",Io={year:Co,month:Co,day:Co},Ao={year:Co,month:Mo,day:Co},Do={year:Co,month:Ro,day:Co},Lo={year:Co,month:Ro,day:Co,weekday:Ro},Fo={hour:Co,minute:Co},Po={hour:Co,minute:Co,second:Co},Vo={hour:Co,minute:Co,second:Co,timeZoneName:Mo},zo={hour:Co,minute:Co,second:Co,timeZoneName:Ro},Bo={hour:Co,minute:Co,hour12:!1},$o={hour:Co,minute:Co,second:Co,hour12:!1},Uo={hour:Co,minute:Co,second:Co,hour12:!1,timeZoneName:Mo},qo={hour:Co,minute:Co,second:Co,hour12:!1,timeZoneName:Ro},Wo={year:Co,month:Co,day:Co,hour:Co,minute:Co},Yo={year:Co,month:Co,day:Co,hour:Co,minute:Co,second:Co},Zo={year:Co,month:Mo,day:Co,hour:Co,minute:Co},Jo={year:Co,month:Mo,day:Co,hour:Co,minute:Co,second:Co},Ho={year:Co,month:Mo,day:Co,weekday:Mo,hour:Co,minute:Co},Go={year:Co,month:Ro,day:Co,hour:Co,minute:Co,timeZoneName:Mo},Xo={year:Co,month:Ro,day:Co,hour:Co,minute:Co,second:Co,timeZoneName:Mo},Ko={year:Co,month:Ro,day:Co,weekday:Ro,hour:Co,minute:Co,timeZoneName:Ro},Qo={year:Co,month:Ro,day:Co,weekday:Ro,hour:Co,minute:Co,second:Co,timeZoneName:Ro};function es(e){return void 0===e}function ts(e){return"number"==typeof e}function ns(e){return"number"==typeof e&&e%1==0}function rs(){try{return"undefined"!=typeof Intl&&Intl.DateTimeFormat}catch(e){return!1}}function is(){return!es(Intl.DateTimeFormat.prototype.formatToParts)}function os(){try{return"undefined"!=typeof Intl&&!!Intl.RelativeTimeFormat}catch(e){return!1}}function ss(e,t,n){if(0!==e.length)return e.reduce((e,r)=>{const i=[t(r),r];return e&&n(e[0],i[0])===e[0]?e:i},null)[1]}function as(e,t){return t.reduce((t,n)=>(t[n]=e[n],t),{})}function us(e,t){return Object.prototype.hasOwnProperty.call(e,t)}function cs(e,t,n){return ns(e)&&e>=t&&e<=n}function ls(e,t=2){return e.toString().length<t?("0".repeat(t)+e).slice(-t):e.toString()}function hs(e){return es(e)||null===e||""===e?void 0:parseInt(e,10)}function fs(e){if(!es(e)&&null!==e&&""!==e){const t=1e3*parseFloat("0."+e);return Math.floor(t)}}function ds(e,t,n=!1){const r=10**t;return(n?Math.trunc:Math.round)(e*r)/r}function ps(e){return e%4==0&&(e%100!=0||e%400==0)}function ms(e){return ps(e)?366:365}function gs(e,t){const n=(r=t-1)-(i=12)*Math.floor(r/i)+1;var r,i;return 2===n?ps(e+(t-n)/12)?29:28:[31,null,31,30,31,30,31,31,30,31,30,31][n-1]}function ys(e){let t=Date.UTC(e.year,e.month-1,e.day,e.hour,e.minute,e.second,e.millisecond);return e.year<100&&e.year>=0&&(t=new Date(t)).setUTCFullYear(t.getUTCFullYear()-1900),+t}function ws(e){const t=(e+Math.floor(e/4)-Math.floor(e/100)+Math.floor(e/400))%7,n=e-1,r=(n+Math.floor(n/4)-Math.floor(n/100)+Math.floor(n/400))%7;return 4===t||3===r?53:52}function bs(e){return e>99?e:e>60?1900+e:2e3+e}function vs(e,t,n,r=null){const i=new Date(e),o={hour12:!1,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"};r&&(o.timeZone=r);const s=Object.assign({timeZoneName:t},o),a=rs();if(a&&is()){const e=new Intl.DateTimeFormat(n,s).formatToParts(i).find(e=>"timezonename"===e.type.toLowerCase());return e?e.value:null}if(a){const e=new Intl.DateTimeFormat(n,o).format(i);return new Intl.DateTimeFormat(n,s).format(i).substring(e.length).replace(/^[, \u200e]+/,"")}return null}function _s(e,t){let n=parseInt(e,10);Number.isNaN(n)&&(n=0);const r=parseInt(t,10)||0;return 60*n+(n<0||Object.is(n,-0)?-r:r)}function Es(e){const t=Number(e);if("boolean"==typeof e||""===e||Number.isNaN(t))throw new jo(`Invalid unit value ${e}`);return t}function Ss(e,t,n){const r={};for(const i in e)if(us(e,i)){if(n.indexOf(i)>=0)continue;const o=e[i];if(null==o)continue;r[t(i)]=Es(o)}return r}function Os(e,t){const n=Math.trunc(e/60),r=Math.abs(e%60),i=n>=0&&!Object.is(n,-0)?"+":"-",o=`${i}${Math.abs(n)}`;switch(t){case"short":return`${i}${ls(Math.abs(n),2)}:${ls(r,2)}`;case"narrow":return r>0?`${o}:${r}`:o;case"techie":return`${i}${ls(Math.abs(n),2)}${ls(r,2)}`;default:throw new RangeError(`Value format ${t} is out of range for property format`)}}function xs(e){return as(e,["hour","minute","second","millisecond"])}const ks=/[A-Za-z_+-]{1,256}(:?\/[A-Za-z_+-]{1,256}(\/[A-Za-z_+-]{1,256})?)?/;function Ts(e){return JSON.stringify(e,Object.keys(e).sort())}const js=["January","February","March","April","May","June","July","August","September","October","November","December"],Ns=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],Cs=["J","F","M","A","M","J","J","A","S","O","N","D"];function Ms(e){switch(e){case"narrow":return Cs;case"short":return Ns;case"long":return js;case"numeric":return["1","2","3","4","5","6","7","8","9","10","11","12"];case"2-digit":return["01","02","03","04","05","06","07","08","09","10","11","12"];default:return null}}const Rs=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],Is=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],As=["M","T","W","T","F","S","S"];function Ds(e){switch(e){case"narrow":return As;case"short":return Is;case"long":return Rs;case"numeric":return["1","2","3","4","5","6","7"];default:return null}}const Ls=["AM","PM"],Fs=["Before Christ","Anno Domini"],Ps=["BC","AD"],Vs=["B","A"];function zs(e){switch(e){case"narrow":return Vs;case"short":return Ps;case"long":return Fs;default:return null}}function Bs(e,t){let n="";for(const r of e)r.literal?n+=r.val:n+=t(r.val);return n}const $s={D:Io,DD:Ao,DDD:Do,DDDD:Lo,t:Fo,tt:Po,ttt:Vo,tttt:zo,T:Bo,TT:$o,TTT:Uo,TTTT:qo,f:Wo,ff:Zo,fff:Go,ffff:Ko,F:Yo,FF:Jo,FFF:Xo,FFFF:Qo};class Us{static create(e,t={}){return new Us(e,t)}static parseFormat(e){let t=null,n="",r=!1;const i=[];for(let o=0;o<e.length;o++){const s=e.charAt(o);"'"===s?(n.length>0&&i.push({literal:r,val:n}),t=null,n="",r=!r):r?n+=s:s===t?n+=s:(n.length>0&&i.push({literal:!1,val:n}),n=s,t=s)}return n.length>0&&i.push({literal:r,val:n}),i}static macroTokenToFormatOpts(e){return $s[e]}constructor(e,t){this.opts=t,this.loc=e,this.systemLoc=null}formatWithSystemDefault(e,t){return null===this.systemLoc&&(this.systemLoc=this.loc.redefaultToSystem()),this.systemLoc.dtFormatter(e,Object.assign({},this.opts,t)).format()}formatDateTime(e,t={}){return this.loc.dtFormatter(e,Object.assign({},this.opts,t)).format()}formatDateTimeParts(e,t={}){return this.loc.dtFormatter(e,Object.assign({},this.opts,t)).formatToParts()}resolvedOptions(e,t={}){return this.loc.dtFormatter(e,Object.assign({},this.opts,t)).resolvedOptions()}num(e,t=0){if(this.opts.forceSimple)return ls(e,t);const n=Object.assign({},this.opts);return t>0&&(n.padTo=t),this.loc.numberFormatter(n).format(e)}formatDateTimeFromString(e,t){const n="en"===this.loc.listingMode(),r=this.loc.outputCalendar&&"gregory"!==this.loc.outputCalendar&&is(),i=(t,n)=>this.loc.extract(e,t,n),o=t=>e.isOffsetFixed&&0===e.offset&&t.allowZ?"Z":e.isValid?e.zone.formatOffset(e.ts,t.format):"",s=()=>n?function(e){return Ls[e.hour<12?0:1]}(e):i({hour:"numeric",hour12:!0},"dayperiod"),a=(t,r)=>n?function(e,t){return Ms(t)[e.month-1]}(e,t):i(r?{month:t}:{month:t,day:"numeric"},"month"),u=(t,r)=>n?function(e,t){return Ds(t)[e.weekday-1]}(e,t):i(r?{weekday:t}:{weekday:t,month:"long",day:"numeric"},"weekday"),c=t=>{const n=Us.macroTokenToFormatOpts(t);return n?this.formatWithSystemDefault(e,n):t},l=t=>n?function(e,t){return zs(t)[e.year<0?0:1]}(e,t):i({era:t},"era");return Bs(Us.parseFormat(t),t=>{switch(t){case"S":return this.num(e.millisecond);case"u":case"SSS":return this.num(e.millisecond,3);case"s":return this.num(e.second);case"ss":return this.num(e.second,2);case"m":return this.num(e.minute);case"mm":return this.num(e.minute,2);case"h":return this.num(e.hour%12==0?12:e.hour%12);case"hh":return this.num(e.hour%12==0?12:e.hour%12,2);case"H":return this.num(e.hour);case"HH":return this.num(e.hour,2);case"Z":return o({format:"narrow",allowZ:this.opts.allowZ});case"ZZ":return o({format:"short",allowZ:this.opts.allowZ});case"ZZZ":return o({format:"techie",allowZ:!1});case"ZZZZ":return e.zone.offsetName(e.ts,{format:"short",locale:this.loc.locale});case"ZZZZZ":return e.zone.offsetName(e.ts,{format:"long",locale:this.loc.locale});case"z":return e.zoneName;case"a":return s();case"d":return r?i({day:"numeric"},"day"):this.num(e.day);case"dd":return r?i({day:"2-digit"},"day"):this.num(e.day,2);case"c":return this.num(e.weekday);case"ccc":return u("short",!0);case"cccc":return u("long",!0);case"ccccc":return u("narrow",!0);case"E":return this.num(e.weekday);case"EEE":return u("short",!1);case"EEEE":return u("long",!1);case"EEEEE":return u("narrow",!1);case"L":return r?i({month:"numeric",day:"numeric"},"month"):this.num(e.month);case"LL":return r?i({month:"2-digit",day:"numeric"},"month"):this.num(e.month,2);case"LLL":return a("short",!0);case"LLLL":return a("long",!0);case"LLLLL":return a("narrow",!0);case"M":return r?i({month:"numeric"},"month"):this.num(e.month);case"MM":return r?i({month:"2-digit"},"month"):this.num(e.month,2);case"MMM":return a("short",!1);case"MMMM":return a("long",!1);case"MMMMM":return a("narrow",!1);case"y":return r?i({year:"numeric"},"year"):this.num(e.year);case"yy":return r?i({year:"2-digit"},"year"):this.num(e.year.toString().slice(-2),2);case"yyyy":return r?i({year:"numeric"},"year"):this.num(e.year,4);case"yyyyyy":return r?i({year:"numeric"},"year"):this.num(e.year,6);case"G":return l("short");case"GG":return l("long");case"GGGGG":return l("narrow");case"kk":return this.num(e.weekYear.toString().slice(-2),2);case"kkkk":return this.num(e.weekYear,4);case"W":return this.num(e.weekNumber);case"WW":return this.num(e.weekNumber,2);case"o":return this.num(e.ordinal);case"ooo":return this.num(e.ordinal,3);case"q":return this.num(e.quarter);case"qq":return this.num(e.quarter,2);case"X":return this.num(Math.floor(e.ts/1e3));case"x":return this.num(e.ts);default:return c(t)}})}formatDurationFromString(e,t){const n=e=>{switch(e[0]){case"S":return"millisecond";case"s":return"second";case"m":return"minute";case"h":return"hour";case"d":return"day";case"M":return"month";case"y":return"year";default:return null}},r=Us.parseFormat(t),i=r.reduce((e,{literal:t,val:n})=>t?e:e.concat(n),[]);return Bs(r,(e=>t=>{const r=n(t);return r?this.num(e.get(r),t.length):t})(e.shiftTo(...i.map(n).filter(e=>e))))}}class qs{constructor(e,t){this.reason=e,this.explanation=t}toMessage(){return this.explanation?`${this.reason}: ${this.explanation}`:this.reason}}class Ws{get type(){throw new No}get name(){throw new No}get universal(){throw new No}offsetName(e,t){throw new No}formatOffset(e,t){throw new No}offset(e){throw new No}equals(e){throw new No}get isValid(){throw new No}}let Ys=null;class Zs extends Ws{static get instance(){return null===Ys&&(Ys=new Zs),Ys}get type(){return"local"}get name(){return rs()?(new Intl.DateTimeFormat).resolvedOptions().timeZone:"local"}get universal(){return!1}offsetName(e,{format:t,locale:n}){return vs(e,t,n)}formatOffset(e,t){return Os(this.offset(e),t)}offset(e){return-new Date(e).getTimezoneOffset()}equals(e){return"local"===e.type}get isValid(){return!0}}const Js=RegExp(`^${ks.source}$`);let Hs={};const Gs={year:0,month:1,day:2,hour:3,minute:4,second:5};let Xs={};class Ks extends Ws{static create(e){return Xs[e]||(Xs[e]=new Ks(e)),Xs[e]}static resetCache(){Xs={},Hs={}}static isValidSpecifier(e){return!(!e||!e.match(Js))}static isValidZone(e){try{return new Intl.DateTimeFormat("en-US",{timeZone:e}).format(),!0}catch(e){return!1}}static parseGMTOffset(e){if(e){const t=e.match(/^Etc\/GMT([+-]\d{1,2})$/i);if(t)return-60*parseInt(t[1])}return null}constructor(e){super(),this.zoneName=e,this.valid=Ks.isValidZone(e)}get type(){return"iana"}get name(){return this.zoneName}get universal(){return!1}offsetName(e,{format:t,locale:n}){return vs(e,t,n,this.name)}formatOffset(e,t){return Os(this.offset(e),t)}offset(e){const t=new Date(e),n=(c=this.name,Hs[c]||(Hs[c]=new Intl.DateTimeFormat("en-US",{hour12:!1,timeZone:c,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"})),Hs[c]),[r,i,o,s,a,u]=n.formatToParts?function(e,t){const n=e.formatToParts(t),r=[];for(let e=0;e<n.length;e++){const{type:t,value:i}=n[e],o=Gs[t];es(o)||(r[o]=parseInt(i,10))}return r}(n,t):function(e,t){const n=e.format(t).replace(/\u200E/g,""),r=/(\d+)\/(\d+)\/(\d+),? (\d+):(\d+):(\d+)/.exec(n),[,i,o,s,a,u,c]=r;return[s,i,o,a,u,c]}(n,t);var c;let l=+t;const h=l%1e3;return(ys({year:r,month:i,day:o,hour:24===s?0:s,minute:a,second:u,millisecond:0})-(l-=h>=0?h:1e3+h))/6e4}equals(e){return"iana"===e.type&&e.name===this.name}get isValid(){return this.valid}}let Qs=null;class ea extends Ws{static get utcInstance(){return null===Qs&&(Qs=new ea(0)),Qs}static instance(e){return 0===e?ea.utcInstance:new ea(e)}static parseSpecifier(e){if(e){const t=e.match(/^utc(?:([+-]\d{1,2})(?::(\d{2}))?)?$/i);if(t)return new ea(_s(t[1],t[2]))}return null}constructor(e){super(),this.fixed=e}get type(){return"fixed"}get name(){return 0===this.fixed?"UTC":`UTC${Os(this.fixed,"narrow")}`}offsetName(){return this.name}formatOffset(e,t){return Os(this.fixed,t)}get universal(){return!0}offset(){return this.fixed}equals(e){return"fixed"===e.type&&e.fixed===this.fixed}get isValid(){return!0}}class ta extends Ws{constructor(e){super(),this.zoneName=e}get type(){return"invalid"}get name(){return this.zoneName}get universal(){return!1}offsetName(){return null}formatOffset(){return""}offset(){return NaN}equals(){return!1}get isValid(){return!1}}function na(e,t){let n;if(es(e)||null===e)return t;if(e instanceof Ws)return e;if("string"==typeof e){const r=e.toLowerCase();return"local"===r?t:"utc"===r||"gmt"===r?ea.utcInstance:null!=(n=Ks.parseGMTOffset(e))?ea.instance(n):Ks.isValidSpecifier(r)?Ks.create(e):ea.parseSpecifier(r)||new ta(e)}return ts(e)?ea.instance(e):"object"==typeof e&&e.offset&&"number"==typeof e.offset?e:new ta(e)}let ra=()=>Date.now(),ia=null,oa=null,sa=null,aa=null,ua=!1;class ca{static get now(){return ra}static set now(e){ra=e}static get defaultZoneName(){return ca.defaultZone.name}static set defaultZoneName(e){ia=e?na(e):null}static get defaultZone(){return ia||Zs.instance}static get defaultLocale(){return oa}static set defaultLocale(e){oa=e}static get defaultNumberingSystem(){return sa}static set defaultNumberingSystem(e){sa=e}static get defaultOutputCalendar(){return aa}static set defaultOutputCalendar(e){aa=e}static get throwOnInvalid(){return ua}static set throwOnInvalid(e){ua=e}static resetCaches(){ba.resetCache(),Ks.resetCache()}}let la={};function ha(e,t={}){const n=JSON.stringify([e,t]);let r=la[n];return r||(r=new Intl.DateTimeFormat(e,t),la[n]=r),r}let fa={};let da={};let pa=null;function ma(e,t,n,r,i){const o=e.listingMode(n);return"error"===o?null:"en"===o?r(t):i(t)}class ga{constructor(e,t,n){if(this.padTo=n.padTo||0,this.floor=n.floor||!1,!t&&rs()){const t={useGrouping:!1};n.padTo>0&&(t.minimumIntegerDigits=n.padTo),this.inf=function(e,t={}){const n=JSON.stringify([e,t]);let r=fa[n];return r||(r=new Intl.NumberFormat(e,t),fa[n]=r),r}(e,t)}}format(e){if(this.inf){const t=this.floor?Math.floor(e):e;return this.inf.format(t)}return ls(this.floor?Math.floor(e):ds(e,3),this.padTo)}}class ya{constructor(e,t,n){let r;if(this.opts=n,this.hasIntl=rs(),e.zone.universal&&this.hasIntl?(r="UTC",n.timeZoneName?this.dt=e:this.dt=0===e.offset?e:yc.fromMillis(e.ts+60*e.offset*1e3)):"local"===e.zone.type?this.dt=e:(this.dt=e,r=e.zone.name),this.hasIntl){const e=Object.assign({},this.opts);r&&(e.timeZone=r),this.dtf=ha(t,e)}}format(){if(this.hasIntl)return this.dtf.format(this.dt.toJSDate());{const e=function(e){switch(Ts(as(e,["weekday","era","year","month","day","hour","minute","second","timeZoneName","hour12"]))){case Ts(Io):return"M/d/yyyy";case Ts(Ao):return"LLL d, yyyy";case Ts(Do):return"LLLL d, yyyy";case Ts(Lo):return"EEEE, LLLL d, yyyy";case Ts(Fo):return"h:mm a";case Ts(Po):return"h:mm:ss a";case Ts(Vo):case Ts(zo):return"h:mm a";case Ts(Bo):return"HH:mm";case Ts($o):return"HH:mm:ss";case Ts(Uo):case Ts(qo):return"HH:mm";case Ts(Wo):return"M/d/yyyy, h:mm a";case Ts(Zo):return"LLL d, yyyy, h:mm a";case Ts(Go):return"LLLL d, yyyy, h:mm a";case Ts(Ko):return"EEEE, LLLL d, yyyy, h:mm a";case Ts(Yo):return"M/d/yyyy, h:mm:ss a";case Ts(Jo):return"LLL d, yyyy, h:mm:ss a";case Ts(Ho):return"EEE, d LLL yyyy, h:mm a";case Ts(Xo):return"LLLL d, yyyy, h:mm:ss a";case Ts(Qo):return"EEEE, LLLL d, yyyy, h:mm:ss a";default:return"EEEE, LLLL d, yyyy, h:mm a"}}(this.opts),t=ba.create("en-US");return Us.create(t).formatDateTimeFromString(this.dt,e)}}formatToParts(){return this.hasIntl&&is()?this.dtf.formatToParts(this.dt.toJSDate()):[]}resolvedOptions(){return this.hasIntl?this.dtf.resolvedOptions():{locale:"en-US",numberingSystem:"latn",outputCalendar:"gregory"}}}class wa{constructor(e,t,n){this.opts=Object.assign({style:"long"},n),!t&&os()&&(this.rtf=function(e,t={}){const{base:n,...r}=t,i=JSON.stringify([e,r]);let o=da[i];return o||(o=new Intl.RelativeTimeFormat(e,t),da[i]=o),o}(e,n))}format(e,t){return this.rtf?this.rtf.format(e,t):function(e,t,n="always",r=!1){const i={years:["year","yr."],quarters:["quarter","qtr."],months:["month","mo."],weeks:["week","wk."],days:["day","day","days"],hours:["hour","hr."],minutes:["minute","min."],seconds:["second","sec."]},o=-1===["hours","minutes","seconds"].indexOf(e);if("auto"===n&&o){const n="days"===e;switch(t){case 1:return n?"tomorrow":`next ${i[e][0]}`;case-1:return n?"yesterday":`last ${i[e][0]}`;case 0:return n?"today":`this ${i[e][0]}`}}const s=Object.is(t,-0)||t<0,a=Math.abs(t),u=1===a,c=i[e],l=r?u?c[1]:c[2]||c[1]:u?i[e][0]:e;return s?`${a} ${l} ago`:`in ${a} ${l}`}(t,e,this.opts.numeric,"long"!==this.opts.style)}formatToParts(e,t){return this.rtf?this.rtf.formatToParts(e,t):[]}}class ba{static fromOpts(e){return ba.create(e.locale,e.numberingSystem,e.outputCalendar,e.defaultToEN)}static create(e,t,n,r=!1){const i=e||ca.defaultLocale,o=i||(r?"en-US":function(){if(pa)return pa;if(rs()){const e=(new Intl.DateTimeFormat).resolvedOptions().locale;return pa=e&&"und"!==e?e:"en-US"}return pa="en-US"}()),s=t||ca.defaultNumberingSystem,a=n||ca.defaultOutputCalendar;return new ba(o,s,a,i)}static resetCache(){pa=null,la={},fa={},da={}}static fromObject({locale:e,numberingSystem:t,outputCalendar:n}={}){return ba.create(e,t,n)}constructor(e,t,n,r){const[i,o,s]=function(e){const t=e.indexOf("-u-");if(-1===t)return[e];{let n;const r=e.substring(0,t);try{n=ha(e).resolvedOptions()}catch(e){n=ha(r).resolvedOptions()}const{numberingSystem:i,calendar:o}=n;return[r,i,o]}}(e);this.locale=i,this.numberingSystem=t||o||null,this.outputCalendar=n||s||null,this.intl=function(e,t,n){return rs()?n||t?(e+="-u",n&&(e+=`-ca-${n}`),t&&(e+=`-nu-${t}`),e):e:[]}(this.locale,this.numberingSystem,this.outputCalendar),this.weekdaysCache={format:{},standalone:{}},this.monthsCache={format:{},standalone:{}},this.meridiemCache=null,this.eraCache={},this.specifiedLocale=r,this.fastNumbersCached=null}get fastNumbers(){var e;return null==this.fastNumbersCached&&(this.fastNumbersCached=(!(e=this).numberingSystem||"latn"===e.numberingSystem)&&("latn"===e.numberingSystem||!e.locale||e.locale.startsWith("en")||rs()&&"latn"===new Intl.DateTimeFormat(e.intl).resolvedOptions().numberingSystem)),this.fastNumbersCached}listingMode(e=!0){const t=rs()&&is(),n=this.isEnglish(),r=!(null!==this.numberingSystem&&"latn"!==this.numberingSystem||null!==this.outputCalendar&&"gregory"!==this.outputCalendar);return t||n&&r||e?!t||n&&r?"en":"intl":"error"}clone(e){return e&&0!==Object.getOwnPropertyNames(e).length?ba.create(e.locale||this.specifiedLocale,e.numberingSystem||this.numberingSystem,e.outputCalendar||this.outputCalendar,e.defaultToEN||!1):this}redefaultToEN(e={}){return this.clone(Object.assign({},e,{defaultToEN:!0}))}redefaultToSystem(e={}){return this.clone(Object.assign({},e,{defaultToEN:!1}))}months(e,t=!1,n=!0){return ma(this,e,n,Ms,()=>{const n=t?{month:e,day:"numeric"}:{month:e},r=t?"format":"standalone";return this.monthsCache[r][e]||(this.monthsCache[r][e]=function(e){const t=[];for(let n=1;n<=12;n++){const r=yc.utc(2016,n,1);t.push(e(r))}return t}(e=>this.extract(e,n,"month"))),this.monthsCache[r][e]})}weekdays(e,t=!1,n=!0){return ma(this,e,n,Ds,()=>{const n=t?{weekday:e,year:"numeric",month:"long",day:"numeric"}:{weekday:e},r=t?"format":"standalone";return this.weekdaysCache[r][e]||(this.weekdaysCache[r][e]=function(e){const t=[];for(let n=1;n<=7;n++){const r=yc.utc(2016,11,13+n);t.push(e(r))}return t}(e=>this.extract(e,n,"weekday"))),this.weekdaysCache[r][e]})}meridiems(e=!0){return ma(this,void 0,e,()=>Ls,()=>{if(!this.meridiemCache){const e={hour:"numeric",hour12:!0};this.meridiemCache=[yc.utc(2016,11,13,9),yc.utc(2016,11,13,19)].map(t=>this.extract(t,e,"dayperiod"))}return this.meridiemCache})}eras(e,t=!0){return ma(this,e,t,zs,()=>{const t={era:e};return this.eraCache[e]||(this.eraCache[e]=[yc.utc(-40,1,1),yc.utc(2017,1,1)].map(e=>this.extract(e,t,"era"))),this.eraCache[e]})}extract(e,t,n){const r=this.dtFormatter(e,t).formatToParts().find(e=>e.type.toLowerCase()===n);return r?r.value:null}numberFormatter(e={}){return new ga(this.intl,e.forceSimple||this.fastNumbers,e)}dtFormatter(e,t={}){return new ya(e,this.intl,t)}relFormatter(e={}){return new wa(this.intl,this.isEnglish(),e)}isEnglish(){return"en"===this.locale||"en-us"===this.locale.toLowerCase()||rs()&&new Intl.DateTimeFormat(this.intl).resolvedOptions().locale.startsWith("en-us")}equals(e){return this.locale===e.locale&&this.numberingSystem===e.numberingSystem&&this.outputCalendar===e.outputCalendar}}function va(...e){const t=e.reduce((e,t)=>e+t.source,"");return RegExp(`^${t}$`)}function _a(...e){return t=>e.reduce(([e,n,r],i)=>{const[o,s,a]=i(t,r);return[Object.assign(e,o),n||s,a]},[{},null,1]).slice(0,2)}function Ea(e,...t){if(null==e)return[null,null];for(const[n,r]of t){const t=n.exec(e);if(t)return r(t)}return[null,null]}function Sa(...e){return(t,n)=>{const r={};let i;for(i=0;i<e.length;i++)r[e[i]]=hs(t[n+i]);return[r,null,n+i]}}const Oa=/(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/,xa=/(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,9}))?)?)?/,ka=RegExp(`${xa.source}${Oa.source}?`),Ta=RegExp(`(?:T${ka.source})?`),ja=Sa("weekYear","weekNumber","weekDay"),Na=Sa("year","ordinal"),Ca=RegExp(`${xa.source} ?(?:${Oa.source}|(${ks.source}))?`),Ma=RegExp(`(?: ${Ca.source})?`);function Ra(e,t,n){const r=e[t];return es(r)?n:hs(r)}function Ia(e,t){return[{year:Ra(e,t),month:Ra(e,t+1,1),day:Ra(e,t+2,1)},null,t+3]}function Aa(e,t){return[{hour:Ra(e,t,0),minute:Ra(e,t+1,0),second:Ra(e,t+2,0),millisecond:fs(e[t+3])},null,t+4]}function Da(e,t){const n=!e[t]&&!e[t+1],r=_s(e[t+1],e[t+2]);return[{},n?null:ea.instance(r),t+3]}function La(e,t){return[{},e[t]?Ks.create(e[t]):null,t+1]}const Fa=/^P(?:(?:(-?\d{1,9})Y)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})W)?(?:(-?\d{1,9})D)?(?:T(?:(-?\d{1,9})H)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})(?:[.,](-?\d{1,9}))?S)?)?)$/;function Pa(e){const[,t,n,r,i,o,s,a,u]=e;return[{years:hs(t),months:hs(n),weeks:hs(r),days:hs(i),hours:hs(o),minutes:hs(s),seconds:hs(a),milliseconds:fs(u)}]}const Va={GMT:0,EDT:-240,EST:-300,CDT:-300,CST:-360,MDT:-360,MST:-420,PDT:-420,PST:-480};function za(e,t,n,r,i,o,s){const a={year:2===t.length?bs(hs(t)):hs(t),month:Ns.indexOf(n)+1,day:hs(r),hour:hs(i),minute:hs(o)};return s&&(a.second=hs(s)),e&&(a.weekday=e.length>3?Rs.indexOf(e)+1:Is.indexOf(e)+1),a}const Ba=/^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|(?:([+-]\d\d)(\d\d)))$/;function $a(e){const[,t,n,r,i,o,s,a,u,c,l,h]=e,f=za(t,i,r,n,o,s,a);let d;return d=u?Va[u]:c?0:_s(l,h),[f,new ea(d)]}const Ua=/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/,qa=/^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/,Wa=/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;function Ya(e){const[,t,n,r,i,o,s,a]=e;return[za(t,i,r,n,o,s,a),ea.utcInstance]}function Za(e){const[,t,n,r,i,o,s,a]=e;return[za(t,a,n,r,i,o,s),ea.utcInstance]}const Ja=va(/([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/,Ta),Ha=va(/(\d{4})-?W(\d\d)(?:-?(\d))?/,Ta),Ga=va(/(\d{4})-?(\d{3})/,Ta),Xa=va(ka),Ka=_a(Ia,Aa,Da),Qa=_a(ja,Aa,Da),eu=_a(Na,Aa),tu=_a(Aa,Da);const nu=va(/(\d{4})-(\d\d)-(\d\d)/,Ma),ru=va(Ca),iu=_a(Ia,Aa,Da,La),ou=_a(Aa,Da,La);const su="Invalid Duration",au={weeks:{days:7,hours:168,minutes:10080,seconds:604800,milliseconds:6048e5},days:{hours:24,minutes:1440,seconds:86400,milliseconds:864e5},hours:{minutes:60,seconds:3600,milliseconds:36e5},minutes:{seconds:60,milliseconds:6e4},seconds:{milliseconds:1e3}},uu=Object.assign({years:{months:12,weeks:52,days:365,hours:8760,minutes:525600,seconds:31536e3,milliseconds:31536e6},quarters:{months:3,weeks:13,days:91,hours:2184,minutes:131040,milliseconds:78624e5},months:{weeks:4,days:30,hours:720,minutes:43200,seconds:2592e3,milliseconds:2592e6}},au),cu=Object.assign({years:{months:12,weeks:52.1775,days:365.2425,hours:8765.82,minutes:525949.2,seconds:525949.2*60,milliseconds:525949.2*60*1e3},quarters:{months:3,weeks:13.044375,days:91.310625,hours:2191.455,minutes:131487.3,seconds:525949.2*60/4,milliseconds:7889237999.999999},months:{weeks:30.436875/7,days:30.436875,hours:730.485,minutes:43829.1,seconds:2629746,milliseconds:2629746e3}},au),lu=["years","quarters","months","weeks","days","hours","minutes","seconds","milliseconds"],hu=lu.slice(0).reverse();function fu(e,t,n=!1){const r={values:n?t.values:Object.assign({},e.values,t.values||{}),loc:e.loc.clone(t.loc),conversionAccuracy:t.conversionAccuracy||e.conversionAccuracy};return new mu(r)}function du(e,t,n,r,i){const o=e[i][n],s=t[n]/o,a=!(Math.sign(s)===Math.sign(r[i]))&&0!==r[i]&&Math.abs(s)<=1?(u=s)<0?Math.floor(u):Math.ceil(u):Math.trunc(s);var u;r[i]+=a,t[n]-=a*o}function pu(e,t){hu.reduce((n,r)=>es(t[r])?n:(n&&du(e,t,n,t,r),r),null)}class mu{constructor(e){const t="longterm"===e.conversionAccuracy||!1;this.values=e.values,this.loc=e.loc||ba.create(),this.conversionAccuracy=t?"longterm":"casual",this.invalid=e.invalid||null,this.matrix=t?cu:uu,this.isLuxonDuration=!0}static fromMillis(e,t){return mu.fromObject(Object.assign({milliseconds:e},t))}static fromObject(e){if(null==e||"object"!=typeof e)throw new jo(`Duration.fromObject: argument expected to be an object, got ${null===e?"null":typeof e}`);return new mu({values:Ss(e,mu.normalizeUnit,["locale","numberingSystem","conversionAccuracy","zone"]),loc:ba.fromObject(e),conversionAccuracy:e.conversionAccuracy})}static fromISO(e,t){const[n]=Ea(e,[Fa,Pa]);if(n){const e=Object.assign(n,t);return mu.fromObject(e)}return mu.invalid("unparsable",`the input "${e}" can't be parsed as ISO 8601`)}static invalid(e,t=null){if(!e)throw new jo("need to specify a reason the Duration is invalid");const n=e instanceof qs?e:new qs(e,t);if(ca.throwOnInvalid)throw new xo(n);return new mu({invalid:n})}static normalizeUnit(e){const t={year:"years",years:"years",quarter:"quarters",quarters:"quarters",month:"months",months:"months",week:"weeks",weeks:"weeks",day:"days",days:"days",hour:"hours",hours:"hours",minute:"minutes",minutes:"minutes",second:"seconds",seconds:"seconds",millisecond:"milliseconds",milliseconds:"milliseconds"}[e?e.toLowerCase():e];if(!t)throw new To(e);return t}static isDuration(e){return e&&e.isLuxonDuration||!1}get locale(){return this.isValid?this.loc.locale:null}get numberingSystem(){return this.isValid?this.loc.numberingSystem:null}toFormat(e,t={}){const n=Object.assign({},t,{floor:!1!==t.round&&!1!==t.floor});return this.isValid?Us.create(this.loc,n).formatDurationFromString(this,e):su}toObject(e={}){if(!this.isValid)return{};const t=Object.assign({},this.values);return e.includeConfig&&(t.conversionAccuracy=this.conversionAccuracy,t.numberingSystem=this.loc.numberingSystem,t.locale=this.loc.locale),t}toISO(){if(!this.isValid)return null;let e="P";return 0!==this.years&&(e+=this.years+"Y"),0===this.months&&0===this.quarters||(e+=this.months+3*this.quarters+"M"),0!==this.weeks&&(e+=this.weeks+"W"),0!==this.days&&(e+=this.days+"D"),0===this.hours&&0===this.minutes&&0===this.seconds&&0===this.milliseconds||(e+="T"),0!==this.hours&&(e+=this.hours+"H"),0!==this.minutes&&(e+=this.minutes+"M"),0===this.seconds&&0===this.milliseconds||(e+=ds(this.seconds+this.milliseconds/1e3,3)+"S"),"P"===e&&(e+="T0S"),e}toJSON(){return this.toISO()}toString(){return this.toISO()}valueOf(){return this.as("milliseconds")}plus(e){if(!this.isValid)return this;const t=gu(e),n={};for(const e of lu)(us(t.values,e)||us(this.values,e))&&(n[e]=t.get(e)+this.get(e));return fu(this,{values:n},!0)}minus(e){if(!this.isValid)return this;const t=gu(e);return this.plus(t.negate())}mapUnits(e){if(!this.isValid)return this;const t={};for(const n of Object.keys(this.values))t[n]=Es(e(this.values[n],n));return fu(this,{values:t},!0)}get(e){return this[mu.normalizeUnit(e)]}set(e){if(!this.isValid)return this;return fu(this,{values:Object.assign(this.values,Ss(e,mu.normalizeUnit,[]))})}reconfigure({locale:e,numberingSystem:t,conversionAccuracy:n}={}){const r={loc:this.loc.clone({locale:e,numberingSystem:t})};return n&&(r.conversionAccuracy=n),fu(this,r)}as(e){return this.isValid?this.shiftTo(e).get(e):NaN}normalize(){if(!this.isValid)return this;const e=this.toObject();return pu(this.matrix,e),fu(this,{values:e},!0)}shiftTo(...e){if(!this.isValid)return this;if(0===e.length)return this;e=e.map(e=>mu.normalizeUnit(e));const t={},n={},r=this.toObject();let i;pu(this.matrix,r);for(const o of lu)if(e.indexOf(o)>=0){i=o;let e=0;for(const t in n)e+=this.matrix[t][o]*n[t],n[t]=0;ts(r[o])&&(e+=r[o]);const s=Math.trunc(e);t[o]=s,n[o]=e-s;for(const e in r)lu.indexOf(e)>lu.indexOf(o)&&du(this.matrix,r,e,t,o)}else ts(r[o])&&(n[o]=r[o]);for(const e in n)0!==n[e]&&(t[i]+=e===i?n[e]:n[e]/this.matrix[i][e]);return fu(this,{values:t},!0).normalize()}negate(){if(!this.isValid)return this;const e={};for(const t of Object.keys(this.values))e[t]=-this.values[t];return fu(this,{values:e},!0)}get years(){return this.isValid?this.values.years||0:NaN}get quarters(){return this.isValid?this.values.quarters||0:NaN}get months(){return this.isValid?this.values.months||0:NaN}get weeks(){return this.isValid?this.values.weeks||0:NaN}get days(){return this.isValid?this.values.days||0:NaN}get hours(){return this.isValid?this.values.hours||0:NaN}get minutes(){return this.isValid?this.values.minutes||0:NaN}get seconds(){return this.isValid?this.values.seconds||0:NaN}get milliseconds(){return this.isValid?this.values.milliseconds||0:NaN}get isValid(){return null===this.invalid}get invalidReason(){return this.invalid?this.invalid.reason:null}get invalidExplanation(){return this.invalid?this.invalid.explanation:null}equals(e){if(!this.isValid||!e.isValid)return!1;if(!this.loc.equals(e.loc))return!1;for(const t of lu)if(this.values[t]!==e.values[t])return!1;return!0}}function gu(e){if(ts(e))return mu.fromMillis(e);if(mu.isDuration(e))return e;if("object"==typeof e)return mu.fromObject(e);throw new jo(`Unknown duration argument ${e} of type ${typeof e}`)}const yu="Invalid Interval";class wu{constructor(e){this.s=e.start,this.e=e.end,this.invalid=e.invalid||null,this.isLuxonInterval=!0}static invalid(e,t=null){if(!e)throw new jo("need to specify a reason the Interval is invalid");const n=e instanceof qs?e:new qs(e,t);if(ca.throwOnInvalid)throw new Oo(n);return new wu({invalid:n})}static fromDateTimes(e,t){const n=wc(e),r=wc(t),i=function(e,t){return e&&e.isValid?t&&t.isValid?t<e?wu.invalid("end before start",`The end of an interval must be after its start, but you had start=${e.toISO()} and end=${t.toISO()}`):null:wu.invalid("missing or invalid end"):wu.invalid("missing or invalid start")}(n,r);return null==i?new wu({start:n,end:r}):i}static after(e,t){const n=gu(t),r=wc(e);return wu.fromDateTimes(r,r.plus(n))}static before(e,t){const n=gu(t),r=wc(e);return wu.fromDateTimes(r.minus(n),r)}static fromISO(e,t){const[n,r]=(e||"").split("/",2);if(n&&r){const e=yc.fromISO(n,t),i=yc.fromISO(r,t);if(e.isValid&&i.isValid)return wu.fromDateTimes(e,i);if(e.isValid){const n=mu.fromISO(r,t);if(n.isValid)return wu.after(e,n)}else if(i.isValid){const e=mu.fromISO(n,t);if(e.isValid)return wu.before(i,e)}}return wu.invalid("unparsable",`the input "${e}" can't be parsed asISO 8601`)}static isInterval(e){return e&&e.isLuxonInterval||!1}get start(){return this.isValid?this.s:null}get end(){return this.isValid?this.e:null}get isValid(){return null===this.invalidReason}get invalidReason(){return this.invalid?this.invalid.reason:null}get invalidExplanation(){return this.invalid?this.invalid.explanation:null}length(e="milliseconds"){return this.isValid?this.toDuration(e).get(e):NaN}count(e="milliseconds"){if(!this.isValid)return NaN;const t=this.start.startOf(e),n=this.end.startOf(e);return Math.floor(n.diff(t,e).get(e))+1}hasSame(e){return!!this.isValid&&this.e.minus(1).hasSame(this.s,e)}isEmpty(){return this.s.valueOf()===this.e.valueOf()}isAfter(e){return!!this.isValid&&this.s>e}isBefore(e){return!!this.isValid&&this.e<=e}contains(e){return!!this.isValid&&(this.s<=e&&this.e>e)}set({start:e,end:t}={}){return this.isValid?wu.fromDateTimes(e||this.s,t||this.e):this}splitAt(...e){if(!this.isValid)return[];const t=e.map(wc).filter(e=>this.contains(e)).sort(),n=[];let{s:r}=this,i=0;for(;r<this.e;){const e=t[i]||this.e,o=+e>+this.e?this.e:e;n.push(wu.fromDateTimes(r,o)),r=o,i+=1}return n}splitBy(e){const t=gu(e);if(!this.isValid||!t.isValid||0===t.as("milliseconds"))return[];let n,r,{s:i}=this;const o=[];for(;i<this.e;)r=+(n=i.plus(t))>+this.e?this.e:n,o.push(wu.fromDateTimes(i,r)),i=r;return o}divideEqually(e){return this.isValid?this.splitBy(this.length()/e).slice(0,e):[]}overlaps(e){return this.e>e.s&&this.s<e.e}abutsStart(e){return!!this.isValid&&+this.e==+e.s}abutsEnd(e){return!!this.isValid&&+e.e==+this.s}engulfs(e){return!!this.isValid&&(this.s<=e.s&&this.e>=e.e)}equals(e){return!(!this.isValid||!e.isValid)&&(this.s.equals(e.s)&&this.e.equals(e.e))}intersection(e){if(!this.isValid)return this;const t=this.s>e.s?this.s:e.s,n=this.e<e.e?this.e:e.e;return t>n?null:wu.fromDateTimes(t,n)}union(e){if(!this.isValid)return this;const t=this.s<e.s?this.s:e.s,n=this.e>e.e?this.e:e.e;return wu.fromDateTimes(t,n)}static merge(e){const[t,n]=e.sort((e,t)=>e.s-t.s).reduce(([e,t],n)=>t?t.overlaps(n)||t.abutsStart(n)?[e,t.union(n)]:[e.concat([t]),n]:[e,n],[[],null]);return n&&t.push(n),t}static xor(e){let t=null,n=0;const r=[],i=e.map(e=>[{time:e.s,type:"s"},{time:e.e,type:"e"}]),o=Array.prototype.concat(...i).sort((e,t)=>e.time-t.time);for(const e of o)1===(n+="s"===e.type?1:-1)?t=e.time:(t&&+t!=+e.time&&r.push(wu.fromDateTimes(t,e.time)),t=null);return wu.merge(r)}difference(...e){return wu.xor([this].concat(e)).map(e=>this.intersection(e)).filter(e=>e&&!e.isEmpty())}toString(){return this.isValid?`[${this.s.toISO()} – ${this.e.toISO()})`:yu}toISO(e){return this.isValid?`${this.s.toISO(e)}/${this.e.toISO(e)}`:yu}toISODate(){return this.isValid?`${this.s.toISODate()}/${this.e.toISODate()}`:yu}toISOTime(e){return this.isValid?`${this.s.toISOTime(e)}/${this.e.toISOTime(e)}`:yu}toFormat(e,{separator:t=" – "}={}){return this.isValid?`${this.s.toFormat(e)}${t}${this.e.toFormat(e)}`:yu}toDuration(e,t){return this.isValid?this.e.diff(this.s,e,t):mu.invalid(this.invalidReason)}mapEndpoints(e){return wu.fromDateTimes(e(this.s),e(this.e))}}class bu{static hasDST(e=ca.defaultZone){const t=yc.local().setZone(e).set({month:12});return!e.universal&&t.offset!==t.set({month:6}).offset}static isValidIANAZone(e){return Ks.isValidSpecifier(e)&&Ks.isValidZone(e)}static normalizeZone(e){return na(e,ca.defaultZone)}static months(e="long",{locale:t=null,numberingSystem:n=null,outputCalendar:r="gregory"}={}){return ba.create(t,n,r).months(e)}static monthsFormat(e="long",{locale:t=null,numberingSystem:n=null,outputCalendar:r="gregory"}={}){return ba.create(t,n,r).months(e,!0)}static weekdays(e="long",{locale:t=null,numberingSystem:n=null}={}){return ba.create(t,n,null).weekdays(e)}static weekdaysFormat(e="long",{locale:t=null,numberingSystem:n=null}={}){return ba.create(t,n,null).weekdays(e,!0)}static meridiems({locale:e=null}={}){return ba.create(e).meridiems()}static eras(e="short",{locale:t=null}={}){return ba.create(t,null,"gregory").eras(e)}static features(){let e=!1,t=!1,n=!1,r=!1;if(rs()){e=!0,t=is(),r=os();try{n="America/New_York"===new Intl.DateTimeFormat("en",{timeZone:"America/New_York"}).resolvedOptions().timeZone}catch(e){n=!1}}return{intl:e,intlTokens:t,zones:n,relative:r}}}function vu(e,t){const n=e=>e.toUTC(0,{keepLocalTime:!0}).startOf("day").valueOf(),r=n(t)-n(e);return Math.floor(mu.fromMillis(r).as("days"))}function _u(e,t,n,r){let[i,o,s,a]=function(e,t,n){const r=[["years",(e,t)=>t.year-e.year],["months",(e,t)=>t.month-e.month+12*(t.year-e.year)],["weeks",(e,t)=>{const n=vu(e,t);return(n-n%7)/7}],["days",vu]],i={};let o,s;for(const[a,u]of r)if(n.indexOf(a)>=0){o=a;let n=u(e,t);(s=e.plus({[a]:n}))>t?(e=e.plus({[a]:n-1}),n-=1):e=s,i[a]=n}return[e,i,s,o]}(e,t,n);const u=t-i,c=n.filter(e=>["hours","minutes","seconds","milliseconds"].indexOf(e)>=0);0===c.length&&(s<t&&(s=i.plus({[a]:1})),s!==i&&(o[a]=(o[a]||0)+u/(s-i)));const l=mu.fromObject(Object.assign(o,r));return c.length>0?mu.fromMillis(u,r).shiftTo(...c).plus(l):l}const Eu={arab:"[٠-٩]",arabext:"[۰-۹]",bali:"[᭐-᭙]",beng:"[০-৯]",deva:"[०-९]",fullwide:"[０-９]",gujr:"[૦-૯]",hanidec:"[〇|一|二|三|四|五|六|七|八|九]",khmr:"[០-៩]",knda:"[೦-೯]",laoo:"[໐-໙]",limb:"[᥆-᥏]",mlym:"[൦-൯]",mong:"[᠐-᠙]",mymr:"[၀-၉]",orya:"[୦-୯]",tamldec:"[௦-௯]",telu:"[౦-౯]",thai:"[๐-๙]",tibt:"[༠-༩]",latn:"\\d"},Su={arab:[1632,1641],arabext:[1776,1785],bali:[6992,7001],beng:[2534,2543],deva:[2406,2415],fullwide:[65296,65303],gujr:[2790,2799],khmr:[6112,6121],knda:[3302,3311],laoo:[3792,3801],limb:[6470,6479],mlym:[3430,3439],mong:[6160,6169],mymr:[4160,4169],orya:[2918,2927],tamldec:[3046,3055],telu:[3174,3183],thai:[3664,3673],tibt:[3872,3881]},Ou=Eu.hanidec.replace(/[\[|\]]/g,"").split("");function xu({numberingSystem:e},t=""){return new RegExp(`${Eu[e||"latn"]}${t}`)}const ku="missing Intl.DateTimeFormat.formatToParts support";function Tu(e,t=(e=>e)){return{regex:e,deser:([e])=>t(function(e){let t=parseInt(e,10);if(isNaN(t)){t="";for(let n=0;n<e.length;n++){const r=e.charCodeAt(n);if(-1!==e[n].search(Eu.hanidec))t+=Ou.indexOf(e[n]);else for(const e in Su){const[n,i]=Su[e];r>=n&&r<=i&&(t+=r-n)}}return parseInt(t,10)}return t}(e))}}function ju(e){return e.replace(/\./,"\\.?")}function Nu(e){return e.replace(/\./,"").toLowerCase()}function Cu(e,t){return null===e?null:{regex:RegExp(e.map(ju).join("|")),deser:([n])=>e.findIndex(e=>Nu(n)===Nu(e))+t}}function Mu(e,t){return{regex:e,deser:([,e,t])=>_s(e,t),groups:t}}function Ru(e){return{regex:e,deser:([e])=>e}}function Iu(e){return e.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g,"\\$&")}const Au={year:{"2-digit":"yy",numeric:"yyyyy"},month:{numeric:"M","2-digit":"MM",short:"MMM",long:"MMMM"},day:{numeric:"d","2-digit":"dd"},weekday:{short:"EEE",long:"EEEE"},dayperiod:"a",dayPeriod:"a",hour:{numeric:"h","2-digit":"hh"},minute:{numeric:"m","2-digit":"mm"},second:{numeric:"s","2-digit":"ss"}};let Du=null;function Lu(e,t){if(e.literal)return e;const n=Us.macroTokenToFormatOpts(e.val);if(!n)return e;const r=Us.create(t,n).formatDateTimeParts((Du||(Du=yc.fromMillis(1555555555555)),Du)).map(e=>(function(e,t,n){const{type:r,value:i}=e;if("literal"===r)return{literal:!0,val:i};const o=n[r];let s=Au[r];return"object"==typeof s&&(s=s[o]),s?{literal:!1,val:s}:void 0})(e,0,n));return r.includes(void 0)?e:r}function Fu(e,t,n){const r=function(e,t){return Array.prototype.concat(...e.map(e=>Lu(e,t)))}(Us.parseFormat(n),e),i=r.map(t=>(function(e,t){const n=xu(t),r=xu(t,"{2}"),i=xu(t,"{3}"),o=xu(t,"{4}"),s=xu(t,"{6}"),a=xu(t,"{1,2}"),u=xu(t,"{1,3}"),c=xu(t,"{1,6}"),l=xu(t,"{1,9}"),h=xu(t,"{2,4}"),f=xu(t,"{4,6}"),d=e=>({regex:RegExp(Iu(e.val)),deser:([e])=>e,literal:!0}),p=(p=>{if(e.literal)return d(p);switch(p.val){case"G":return Cu(t.eras("short",!1),0);case"GG":return Cu(t.eras("long",!1),0);case"y":return Tu(c);case"yy":return Tu(h,bs);case"yyyy":return Tu(o);case"yyyyy":return Tu(f);case"yyyyyy":return Tu(s);case"M":return Tu(a);case"MM":return Tu(r);case"MMM":return Cu(t.months("short",!0,!1),1);case"MMMM":return Cu(t.months("long",!0,!1),1);case"L":return Tu(a);case"LL":return Tu(r);case"LLL":return Cu(t.months("short",!1,!1),1);case"LLLL":return Cu(t.months("long",!1,!1),1);case"d":return Tu(a);case"dd":return Tu(r);case"o":return Tu(u);case"ooo":return Tu(i);case"HH":return Tu(r);case"H":return Tu(a);case"hh":return Tu(r);case"h":return Tu(a);case"mm":return Tu(r);case"m":case"q":return Tu(a);case"qq":return Tu(r);case"s":return Tu(a);case"ss":return Tu(r);case"S":return Tu(u);case"SSS":return Tu(i);case"u":return Ru(l);case"a":return Cu(t.meridiems(),0);case"kkkk":return Tu(o);case"kk":return Tu(h,bs);case"W":return Tu(a);case"WW":return Tu(r);case"E":case"c":return Tu(n);case"EEE":return Cu(t.weekdays("short",!1,!1),1);case"EEEE":return Cu(t.weekdays("long",!1,!1),1);case"ccc":return Cu(t.weekdays("short",!0,!1),1);case"cccc":return Cu(t.weekdays("long",!0,!1),1);case"Z":case"ZZ":return Mu(new RegExp(`([+-]${a.source})(?::(${r.source}))?`),2);case"ZZZ":return Mu(new RegExp(`([+-]${a.source})(${r.source})?`),2);case"z":return Ru(/[a-z_+-\/]{1,256}?/i);default:return d(p)}})(e)||{invalidReason:ku};return p.token=e,p})(t,e)),o=i.find(e=>e.invalidReason);if(o)return{input:t,tokens:r,invalidReason:o.invalidReason};{const[e,n]=function(e){return[`^${e.map(e=>e.regex).reduce((e,t)=>`${e}(${t.source})`,"")}$`,e]}(i),o=RegExp(e,"i"),[s,a]=function(e,t,n){const r=e.match(t);if(r){const e={};let t=1;for(const i in n)if(us(n,i)){const o=n[i],s=o.groups?o.groups+1:1;!o.literal&&o.token&&(e[o.token.val[0]]=o.deser(r.slice(t,t+s))),t+=s}return[r,e]}return[r,{}]}(t,o,n),[u,c]=a?function(e){let t;return t=es(e.Z)?es(e.z)?null:Ks.create(e.z):new ea(e.Z),es(e.q)||(e.M=3*(e.q-1)+1),es(e.h)||(e.h<12&&1===e.a?e.h+=12:12===e.h&&0===e.a&&(e.h=0)),0===e.G&&e.y&&(e.y=-e.y),es(e.u)||(e.S=fs(e.u)),[Object.keys(e).reduce((t,n)=>{const r=(e=>{switch(e){case"S":return"millisecond";case"s":return"second";case"m":return"minute";case"h":case"H":return"hour";case"d":return"day";case"o":return"ordinal";case"L":case"M":return"month";case"y":return"year";case"E":case"c":return"weekday";case"W":return"weekNumber";case"k":return"weekYear";case"q":return"quarter";default:return null}})(n);return r&&(t[r]=e[n]),t},{}),t]}(a):[null,null];if(us(a,"a")&&us(a,"H"))throw new ko("Can't include meridiem when specifying 24-hour format");return{input:t,tokens:r,regex:o,rawMatches:s,matches:a,result:u,zone:c}}}const Pu=[0,31,59,90,120,151,181,212,243,273,304,334],Vu=[0,31,60,91,121,152,182,213,244,274,305,335];function zu(e,t){return new qs("unit out of range",`you specified ${t} (of type ${typeof t}) as a ${e}, which is invalid`)}function Bu(e,t,n){const r=new Date(Date.UTC(e,t-1,n)).getUTCDay();return 0===r?7:r}function $u(e,t,n){return n+(ps(e)?Vu:Pu)[t-1]}function Uu(e,t){const n=ps(e)?Vu:Pu,r=n.findIndex(e=>e<t);return{month:r+1,day:t-n[r]}}function qu(e){const{year:t,month:n,day:r}=e,i=$u(t,n,r),o=Bu(t,n,r);let s,a=Math.floor((i-o+10)/7);return a<1?a=ws(s=t-1):a>ws(t)?(s=t+1,a=1):s=t,Object.assign({weekYear:s,weekNumber:a,weekday:o},xs(e))}function Wu(e){const{weekYear:t,weekNumber:n,weekday:r}=e,i=Bu(t,1,4),o=ms(t);let s,a=7*n+r-i-3;a<1?a+=ms(s=t-1):a>o?(s=t+1,a-=ms(t)):s=t;const{month:u,day:c}=Uu(s,a);return Object.assign({year:s,month:u,day:c},xs(e))}function Yu(e){const{year:t,month:n,day:r}=e,i=$u(t,n,r);return Object.assign({year:t,ordinal:i},xs(e))}function Zu(e){const{year:t,ordinal:n}=e,{month:r,day:i}=Uu(t,n);return Object.assign({year:t,month:r,day:i},xs(e))}function Ju(e){const t=ns(e.year),n=cs(e.month,1,12),r=cs(e.day,1,gs(e.year,e.month));return t?n?!r&&zu("day",e.day):zu("month",e.month):zu("year",e.year)}function Hu(e){const{hour:t,minute:n,second:r,millisecond:i}=e,o=cs(t,0,23)||24===t&&0===n&&0===r&&0===i,s=cs(n,0,59),a=cs(r,0,59),u=cs(i,0,999);return o?s?a?!u&&zu("millisecond",i):zu("second",r):zu("minute",n):zu("hour",t)}const Gu="Invalid DateTime",Xu=864e13;function Ku(e){return new qs("unsupported zone",`the zone "${e.name}" is not supported`)}function Qu(e){return null===e.weekData&&(e.weekData=qu(e.c)),e.weekData}function ec(e,t){const n={ts:e.ts,zone:e.zone,c:e.c,o:e.o,loc:e.loc,invalid:e.invalid};return new yc(Object.assign({},n,t,{old:n}))}function tc(e,t,n){let r=e-60*t*1e3;const i=n.offset(r);if(t===i)return[r,t];r-=60*(i-t)*1e3;const o=n.offset(r);return i===o?[r,i]:[e-60*Math.min(i,o)*1e3,Math.max(i,o)]}function nc(e,t){const n=new Date(e+=60*t*1e3);return{year:n.getUTCFullYear(),month:n.getUTCMonth()+1,day:n.getUTCDate(),hour:n.getUTCHours(),minute:n.getUTCMinutes(),second:n.getUTCSeconds(),millisecond:n.getUTCMilliseconds()}}function rc(e,t,n){return tc(ys(e),t,n)}function ic(e,t){const n=Object.keys(t.values);-1===n.indexOf("milliseconds")&&n.push("milliseconds"),t=t.shiftTo(...n);const r=e.o,i=e.c.year+t.years,o=e.c.month+t.months+3*t.quarters,s=Object.assign({},e.c,{year:i,month:o,day:Math.min(e.c.day,gs(i,o))+t.days+7*t.weeks}),a=mu.fromObject({hours:t.hours,minutes:t.minutes,seconds:t.seconds,milliseconds:t.milliseconds}).as("milliseconds"),u=ys(s);let[c,l]=tc(u,r,e.zone);return 0!==a&&(c+=a,l=e.zone.offset(c)),{ts:c,o:l}}function oc(e,t,n,r,i){const{setZone:o,zone:s}=n;if(e&&0!==Object.keys(e).length){const r=t||s,i=yc.fromObject(Object.assign(e,n,{zone:r,setZone:void 0}));return o?i:i.setZone(s)}return yc.invalid(new qs("unparsable",`the input "${i}" can't be parsed as ${r}`))}function sc(e,t){return e.isValid?Us.create(ba.create("en-US"),{allowZ:!0,forceSimple:!0}).formatDateTimeFromString(e,t):null}function ac(e,{suppressSeconds:t=!1,suppressMilliseconds:n=!1,includeOffset:r,includeZone:i=!1,spaceZone:o=!1}){let s="HH:mm";return t&&0===e.second&&0===e.millisecond||(s+=":ss",n&&0===e.millisecond||(s+=".SSS")),(i||r)&&o&&(s+=" "),i?s+="z":r&&(s+="ZZ"),sc(e,s)}const uc={month:1,day:1,hour:0,minute:0,second:0,millisecond:0},cc={weekNumber:1,weekday:1,hour:0,minute:0,second:0,millisecond:0},lc={ordinal:1,hour:0,minute:0,second:0,millisecond:0},hc=["year","month","day","hour","minute","second","millisecond"],fc=["weekYear","weekNumber","weekday","hour","minute","second","millisecond"],dc=["year","ordinal","hour","minute","second","millisecond"];function pc(e){const t={year:"year",years:"year",month:"month",months:"month",day:"day",days:"day",hour:"hour",hours:"hour",minute:"minute",minutes:"minute",quarter:"quarter",quarters:"quarter",second:"second",seconds:"second",millisecond:"millisecond",milliseconds:"millisecond",weekday:"weekday",weekdays:"weekday",weeknumber:"weekNumber",weeksnumber:"weekNumber",weeknumbers:"weekNumber",weekyear:"weekYear",weekyears:"weekYear",ordinal:"ordinal"}[e.toLowerCase()];if(!t)throw new To(e);return t}function mc(e,t){for(const t of hc)es(e[t])&&(e[t]=uc[t]);const n=Ju(e)||Hu(e);if(n)return yc.invalid(n);const r=ca.now(),i=t.offset(r),[o,s]=rc(e,i,t);return new yc({ts:o,zone:t,o:s})}function gc(e,t,n){const r=!!es(n.round)||n.round,i=(e,i)=>{return e=ds(e,r||n.calendary?0:2,!0),t.loc.clone(n).relFormatter(n).format(e,i)},o=r=>n.calendary?t.hasSame(e,r)?0:t.startOf(r).diff(e.startOf(r),r).get(r):t.diff(e,r).get(r);if(n.unit)return i(o(n.unit),n.unit);for(const e of n.units){const t=o(e);if(Math.abs(t)>=1)return i(t,e)}return i(0,n.units[n.units.length-1])}class yc{constructor(e){const t=e.zone||ca.defaultZone;let n=e.invalid||(Number.isNaN(e.ts)?new qs("invalid input"):null)||(t.isValid?null:Ku(t));this.ts=es(e.ts)?ca.now():e.ts;let r=null,i=null;if(!n){if(e.old&&e.old.ts===this.ts&&e.old.zone.equals(t))[r,i]=[e.old.c,e.old.o];else{const e=t.offset(this.ts);r=nc(this.ts,e),r=(n=Number.isNaN(r.year)?new qs("invalid input"):null)?null:r,i=n?null:e}}this._zone=t,this.loc=e.loc||ba.create(),this.invalid=n,this.weekData=null,this.c=r,this.o=i,this.isLuxonDateTime=!0}static local(e,t,n,r,i,o,s){return es(e)?new yc({ts:ca.now()}):mc({year:e,month:t,day:n,hour:r,minute:i,second:o,millisecond:s},ca.defaultZone)}static utc(e,t,n,r,i,o,s){return es(e)?new yc({ts:ca.now(),zone:ea.utcInstance}):mc({year:e,month:t,day:n,hour:r,minute:i,second:o,millisecond:s},ea.utcInstance)}static fromJSDate(e,t={}){const n=(r=e,"[object Date]"===Object.prototype.toString.call(r)?e.valueOf():NaN);var r;if(Number.isNaN(n))return yc.invalid("invalid input");const i=na(t.zone,ca.defaultZone);return i.isValid?new yc({ts:n,zone:i,loc:ba.fromObject(t)}):yc.invalid(Ku(i))}static fromMillis(e,t={}){if(ts(e))return e<-Xu||e>Xu?yc.invalid("Timestamp out of range"):new yc({ts:e,zone:na(t.zone,ca.defaultZone),loc:ba.fromObject(t)});throw new jo("fromMillis requires a numerical input")}static fromSeconds(e,t={}){if(ts(e))return new yc({ts:1e3*e,zone:na(t.zone,ca.defaultZone),loc:ba.fromObject(t)});throw new jo("fromSeconds requires a numerical input")}static fromObject(e){const t=na(e.zone,ca.defaultZone);if(!t.isValid)return yc.invalid(Ku(t));const n=ca.now(),r=t.offset(n),i=Ss(e,pc,["zone","locale","outputCalendar","numberingSystem"]),o=!es(i.ordinal),s=!es(i.year),a=!es(i.month)||!es(i.day),u=s||a,c=i.weekYear||i.weekNumber,l=ba.fromObject(e);if((u||o)&&c)throw new ko("Can't mix weekYear/weekNumber units with year/month/day or ordinals");if(a&&o)throw new ko("Can't mix ordinal dates with month/day");const h=c||i.weekday&&!u;let f,d,p=nc(n,r);h?(f=fc,d=cc,p=qu(p)):o?(f=dc,d=lc,p=Yu(p)):(f=hc,d=uc);let m=!1;for(const e of f){es(i[e])?i[e]=m?d[e]:p[e]:m=!0}const g=(h?function(e){const t=ns(e.weekYear),n=cs(e.weekNumber,1,ws(e.weekYear)),r=cs(e.weekday,1,7);return t?n?!r&&zu("weekday",e.weekday):zu("week",e.week):zu("weekYear",e.weekYear)}(i):o?function(e){const t=ns(e.year),n=cs(e.ordinal,1,ms(e.year));return t?!n&&zu("ordinal",e.ordinal):zu("year",e.year)}(i):Ju(i))||Hu(i);if(g)return yc.invalid(g);const y=h?Wu(i):o?Zu(i):i,[w,b]=rc(y,r,t),v=new yc({ts:w,zone:t,o:b,loc:l});return i.weekday&&u&&e.weekday!==v.weekday?yc.invalid("mismatched weekday",`you can't specify both a weekday of ${i.weekday} and a date of ${v.toISO()}`):v}static fromISO(e,t={}){const[n,r]=Ea(e,[Ja,Ka],[Ha,Qa],[Ga,eu],[Xa,tu]);return oc(n,r,t,"ISO 8601",e)}static fromRFC2822(e,t={}){const[n,r]=Ea(function(e){return e.replace(/\([^)]*\)|[\n\t]/g," ").replace(/(\s\s+)/g," ").trim()}(e),[Ba,$a]);return oc(n,r,t,"RFC 2822",e)}static fromHTTP(e,t={}){const[n,r]=Ea(e,[Ua,Ya],[qa,Ya],[Wa,Za]);return oc(n,r,t,"HTTP",t)}static fromFormat(e,t,n={}){if(es(e)||es(t))throw new jo("fromFormat requires an input string and a format");const{locale:r=null,numberingSystem:i=null}=n,o=ba.fromOpts({locale:r,numberingSystem:i,defaultToEN:!0}),[s,a,u]=function(e,t,n){const{result:r,zone:i,invalidReason:o}=Fu(e,t,n);return[r,i,o]}(o,e,t);return u?yc.invalid(u):oc(s,a,n,`format ${t}`,e)}static fromString(e,t,n={}){return yc.fromFormat(e,t,n)}static fromSQL(e,t={}){const[n,r]=Ea(e,[nu,iu],[ru,ou]);return oc(n,r,t,"SQL",e)}static invalid(e,t=null){if(!e)throw new jo("need to specify a reason the DateTime is invalid");const n=e instanceof qs?e:new qs(e,t);if(ca.throwOnInvalid)throw new So(n);return new yc({invalid:n})}static isDateTime(e){return e&&e.isLuxonDateTime||!1}get(e){return this[e]}get isValid(){return null===this.invalid}get invalidReason(){return this.invalid?this.invalid.reason:null}get invalidExplanation(){return this.invalid?this.invalid.explanation:null}get locale(){return this.isValid?this.loc.locale:null}get numberingSystem(){return this.isValid?this.loc.numberingSystem:null}get outputCalendar(){return this.isValid?this.loc.outputCalendar:null}get zone(){return this._zone}get zoneName(){return this.isValid?this.zone.name:null}get year(){return this.isValid?this.c.year:NaN}get quarter(){return this.isValid?Math.ceil(this.c.month/3):NaN}get month(){return this.isValid?this.c.month:NaN}get day(){return this.isValid?this.c.day:NaN}get hour(){return this.isValid?this.c.hour:NaN}get minute(){return this.isValid?this.c.minute:NaN}get second(){return this.isValid?this.c.second:NaN}get millisecond(){return this.isValid?this.c.millisecond:NaN}get weekYear(){return this.isValid?Qu(this).weekYear:NaN}get weekNumber(){return this.isValid?Qu(this).weekNumber:NaN}get weekday(){return this.isValid?Qu(this).weekday:NaN}get ordinal(){return this.isValid?Yu(this.c).ordinal:NaN}get monthShort(){return this.isValid?bu.months("short",{locale:this.locale})[this.month-1]:null}get monthLong(){return this.isValid?bu.months("long",{locale:this.locale})[this.month-1]:null}get weekdayShort(){return this.isValid?bu.weekdays("short",{locale:this.locale})[this.weekday-1]:null}get weekdayLong(){return this.isValid?bu.weekdays("long",{locale:this.locale})[this.weekday-1]:null}get offset(){return this.isValid?+this.o:NaN}get offsetNameShort(){return this.isValid?this.zone.offsetName(this.ts,{format:"short",locale:this.locale}):null}get offsetNameLong(){return this.isValid?this.zone.offsetName(this.ts,{format:"long",locale:this.locale}):null}get isOffsetFixed(){return this.isValid?this.zone.universal:null}get isInDST(){return!this.isOffsetFixed&&(this.offset>this.set({month:1}).offset||this.offset>this.set({month:5}).offset)}get isInLeapYear(){return ps(this.year)}get daysInMonth(){return gs(this.year,this.month)}get daysInYear(){return this.isValid?ms(this.year):NaN}get weeksInWeekYear(){return this.isValid?ws(this.weekYear):NaN}resolvedLocaleOpts(e={}){const{locale:t,numberingSystem:n,calendar:r}=Us.create(this.loc.clone(e),e).resolvedOptions(this);return{locale:t,numberingSystem:n,outputCalendar:r}}toUTC(e=0,t={}){return this.setZone(ea.instance(e),t)}toLocal(){return this.setZone(ca.defaultZone)}setZone(e,{keepLocalTime:t=!1,keepCalendarTime:n=!1}={}){if((e=na(e,ca.defaultZone)).equals(this.zone))return this;if(e.isValid){let r=this.ts;if(t||n){const t=e.offset(this.ts),n=this.toObject();[r]=rc(n,t,e)}return ec(this,{ts:r,zone:e})}return yc.invalid(Ku(e))}reconfigure({locale:e,numberingSystem:t,outputCalendar:n}={}){return ec(this,{loc:this.loc.clone({locale:e,numberingSystem:t,outputCalendar:n})})}setLocale(e){return this.reconfigure({locale:e})}set(e){if(!this.isValid)return this;const t=Ss(e,pc,[]);let n;!es(t.weekYear)||!es(t.weekNumber)||!es(t.weekday)?n=Wu(Object.assign(qu(this.c),t)):es(t.ordinal)?(n=Object.assign(this.toObject(),t),es(t.day)&&(n.day=Math.min(gs(n.year,n.month),n.day))):n=Zu(Object.assign(Yu(this.c),t));const[r,i]=rc(n,this.o,this.zone);return ec(this,{ts:r,o:i})}plus(e){if(!this.isValid)return this;return ec(this,ic(this,gu(e)))}minus(e){if(!this.isValid)return this;return ec(this,ic(this,gu(e).negate()))}startOf(e){if(!this.isValid)return this;const t={},n=mu.normalizeUnit(e);switch(n){case"years":t.month=1;case"quarters":case"months":t.day=1;case"weeks":case"days":t.hour=0;case"hours":t.minute=0;case"minutes":t.second=0;case"seconds":t.millisecond=0}if("weeks"===n&&(t.weekday=1),"quarters"===n){const e=Math.ceil(this.month/3);t.month=3*(e-1)+1}return this.set(t)}endOf(e){return this.isValid?this.plus({[e]:1}).startOf(e).minus(1):this}toFormat(e,t={}){return this.isValid?Us.create(this.loc.redefaultToEN(t)).formatDateTimeFromString(this,e):Gu}toLocaleString(e=Io){return this.isValid?Us.create(this.loc.clone(e),e).formatDateTime(this):Gu}toLocaleParts(e={}){return this.isValid?Us.create(this.loc.clone(e),e).formatDateTimeParts(this):[]}toISO(e={}){return this.isValid?`${this.toISODate()}T${this.toISOTime(e)}`:null}toISODate(){let e="yyyy-MM-dd";return this.year>9999&&(e="+"+e),sc(this,e)}toISOWeekDate(){return sc(this,"kkkk-'W'WW-c")}toISOTime({suppressMilliseconds:e=!1,suppressSeconds:t=!1,includeOffset:n=!0}={}){return ac(this,{suppressSeconds:t,suppressMilliseconds:e,includeOffset:n})}toRFC2822(){return sc(this,"EEE, dd LLL yyyy HH:mm:ss ZZZ")}toHTTP(){return sc(this.toUTC(),"EEE, dd LLL yyyy HH:mm:ss 'GMT'")}toSQLDate(){return sc(this,"yyyy-MM-dd")}toSQLTime({includeOffset:e=!0,includeZone:t=!1}={}){return ac(this,{includeOffset:e,includeZone:t,spaceZone:!0})}toSQL(e={}){return this.isValid?`${this.toSQLDate()} ${this.toSQLTime(e)}`:null}toString(){return this.isValid?this.toISO():Gu}valueOf(){return this.toMillis()}toMillis(){return this.isValid?this.ts:NaN}toSeconds(){return this.isValid?this.ts/1e3:NaN}toJSON(){return this.toISO()}toBSON(){return this.toJSDate()}toObject(e={}){if(!this.isValid)return{};const t=Object.assign({},this.c);return e.includeConfig&&(t.outputCalendar=this.outputCalendar,t.numberingSystem=this.loc.numberingSystem,t.locale=this.loc.locale),t}toJSDate(){return new Date(this.isValid?this.ts:NaN)}diff(e,t="milliseconds",n={}){if(!this.isValid||!e.isValid)return mu.invalid(this.invalid||e.invalid,"created by diffing an invalid DateTime");const r=Object.assign({locale:this.locale,numberingSystem:this.numberingSystem},n),i=(a=t,Array.isArray(a)?a:[a]).map(mu.normalizeUnit),o=e.valueOf()>this.valueOf(),s=_u(o?this:e,o?e:this,i,r);var a;return o?s.negate():s}diffNow(e="milliseconds",t={}){return this.diff(yc.local(),e,t)}until(e){return this.isValid?wu.fromDateTimes(this,e):this}hasSame(e,t){if(!this.isValid)return!1;if("millisecond"===t)return this.valueOf()===e.valueOf();{const n=e.valueOf();return this.startOf(t)<=n&&n<=this.endOf(t)}}equals(e){return this.isValid&&e.isValid&&this.valueOf()===e.valueOf()&&this.zone.equals(e.zone)&&this.loc.equals(e.loc)}toRelative(e={}){if(!this.isValid)return null;const t=e.base||yc.fromObject({zone:this.zone}),n=e.padding?this<t?-e.padding:e.padding:0;return gc(t,this.plus(n),Object.assign(e,{numeric:"always",units:["years","months","days","hours","minutes","seconds"]}))}toRelativeCalendar(e={}){return this.isValid?gc(e.base||yc.fromObject({zone:this.zone}),this,Object.assign(e,{numeric:"auto",units:["years","months","days"],calendary:!0})):null}static min(...e){if(!e.every(yc.isDateTime))throw new jo("min requires all arguments be DateTimes");return ss(e,e=>e.valueOf(),Math.min)}static max(...e){if(!e.every(yc.isDateTime))throw new jo("max requires all arguments be DateTimes");return ss(e,e=>e.valueOf(),Math.max)}static fromFormatExplain(e,t,n={}){const{locale:r=null,numberingSystem:i=null}=n;return Fu(ba.fromOpts({locale:r,numberingSystem:i,defaultToEN:!0}),e,t)}static fromStringExplain(e,t,n={}){return yc.fromFormatExplain(e,t,n)}static get DATE_SHORT(){return Io}static get DATE_MED(){return Ao}static get DATE_FULL(){return Do}static get DATE_HUGE(){return Lo}static get TIME_SIMPLE(){return Fo}static get TIME_WITH_SECONDS(){return Po}static get TIME_WITH_SHORT_OFFSET(){return Vo}static get TIME_WITH_LONG_OFFSET(){return zo}static get TIME_24_SIMPLE(){return Bo}static get TIME_24_WITH_SECONDS(){return $o}static get TIME_24_WITH_SHORT_OFFSET(){return Uo}static get TIME_24_WITH_LONG_OFFSET(){return qo}static get DATETIME_SHORT(){return Wo}static get DATETIME_SHORT_WITH_SECONDS(){return Yo}static get DATETIME_MED(){return Zo}static get DATETIME_MED_WITH_SECONDS(){return Jo}static get DATETIME_MED_WITH_WEEKDAY(){return Ho}static get DATETIME_FULL(){return Go}static get DATETIME_FULL_WITH_SECONDS(){return Xo}static get DATETIME_HUGE(){return Ko}static get DATETIME_HUGE_WITH_SECONDS(){return Qo}}function wc(e){if(yc.isDateTime(e))return e;if(e&&e.valueOf&&ts(e.valueOf()))return yc.fromJSDate(e);if(e&&"object"==typeof e)return yc.fromObject(e);throw new jo(`Unknown datetime argument: ${e}, of type ${typeof e}`)}var bc=Object.freeze({__proto__:null,DateTime:yc,Duration:mu,Interval:wu,Info:bu,Zone:Ws,FixedOffsetZone:ea,IANAZone:Ks,InvalidZone:ta,LocalZone:Zs,Settings:ca}),vc={};function _c(e,t){for(var n=0,r=e.length-1;r>=0;r--){var i=e[r];"."===i?e.splice(r,1):".."===i?(e.splice(r,1),n++):n&&(e.splice(r,1),n--)}if(t)for(;n--;n)e.unshift("..");return e}var Ec=/^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/,Sc=function(e){return Ec.exec(e).slice(1)};function Oc(){for(var e="",t=!1,n=arguments.length-1;n>=-1&&!t;n--){var r=n>=0?arguments[n]:"/";if("string"!=typeof r)throw new TypeError("Arguments to path.resolve must be strings");r&&(e=r+"/"+e,t="/"===r.charAt(0))}return(t?"/":"")+(e=_c(jc(e.split("/"),function(e){return!!e}),!t).join("/"))||"."}function xc(e){var t=kc(e),n="/"===Nc(e,-1);return(e=_c(jc(e.split("/"),function(e){return!!e}),!t).join("/"))||t||(e="."),e&&n&&(e+="/"),(t?"/":"")+e}function kc(e){return"/"===e.charAt(0)}var Tc={extname:function(e){return Sc(e)[3]},basename:function(e,t){var n=Sc(e)[2];return t&&n.substr(-1*t.length)===t&&(n=n.substr(0,n.length-t.length)),n},dirname:function(e){var t=Sc(e),n=t[0],r=t[1];return n||r?(r&&(r=r.substr(0,r.length-1)),n+r):"."},sep:"/",delimiter:":",relative:function(e,t){function n(e){for(var t=0;t<e.length&&""===e[t];t++);for(var n=e.length-1;n>=0&&""===e[n];n--);return t>n?[]:e.slice(t,n-t+1)}e=Oc(e).substr(1),t=Oc(t).substr(1);for(var r=n(e.split("/")),i=n(t.split("/")),o=Math.min(r.length,i.length),s=o,a=0;a<o;a++)if(r[a]!==i[a]){s=a;break}var u=[];for(a=s;a<r.length;a++)u.push("..");return(u=u.concat(i.slice(s))).join("/")},join:function(){return xc(jc(Array.prototype.slice.call(arguments,0),function(e,t){if("string"!=typeof e)throw new TypeError("Arguments to path.join must be strings");return e}).join("/"))},isAbsolute:kc,normalize:xc,resolve:Oc};function jc(e,t){if(e.filter)return e.filter(t);for(var n=[],r=0;r<e.length;r++)t(e[r],r,e)&&n.push(e[r]);return n}var Nc="b"==="ab".substr(-1)?function(e,t,n){return e.substr(t,n)}:function(e,t,n){return t<0&&(t=e.length+t),e.substr(t,n)};const Cc=eval,Mc=new Map;function Rc(e={}){const{jsonx:t={}}=e,n=e.props||t.props||{};return void 0!==n._children?Array.isArray(n._children)||"string"==typeof n._children||"number"==typeof n._children?n._children:t.children:void 0===t.children?n&&n.children&&(void 0!==n.children||Array.isArray(n.children))?n.children:null:t.children}function Ic(e={}){const{jsonx:t={},childjsonx:n,renderIndex:r}=e,i=e.props||t.props||{};return t.passprops&&n&&"object"==typeof n?Object.assign({},n,{props:Object.assign({},i,n.thisprops&&n.thisprops.style||n.asyncprops&&n.asyncprops.style||n.windowprops&&n.windowprops.style?{}:{style:{}},n.props,void 0!==this||this&&this.disableRenderIndexKey?{}:{key:void 0!==r?r+Math.random():Math.random()})}):n}function Ac(e,t){try{const n={method:"GET",headers:[],...t},r=new XMLHttpRequest;if(r.open(n&&n.method||"GET",e,!1),n.headers&&Object.keys(n.headers).forEach(e=>{r.setRequestHeader(e,n.headers[e])}),r.send(n.body?JSON.stringify(n.body):void 0),200!==r.status)throw new Error(r.responseText);return r.responseText}catch(e){throw e}}function Dc(e){const t=Mc.get(e);if(t)return t;if("undefined"!=typeof window&&"function"==typeof window.XMLHttpRequest&&!vc.readFileSync){const t=Ac(e),n=Cc(`(${t})`);return Mc.set(e,n),n}if("string"==typeof e){const t=vc.readFileSync(Tc.resolve(e)).toString(),n=Cc(`(${t})`);return Mc.set(e,n),n}return null}var Lc=Object.freeze({__proto__:null,templateCache:Mc,getChildrenProperty:Rc,getChildrenProps:Ic,fetchJSONSync:Ac,getChildrenTemplate:Dc,clearTemplateCache:function(){Mc.clear()},getJSONXChildren:function(e={jsonx:{}}){const{jsonx:t,resources:n,renderIndex:r,logError:i=console.error}=e;try{const o=this||{},s=e&&e.props?e.props:t&&t.props?t.props:{};if(!t)return null;if(t.children=Rc({jsonx:t,props:s}),s._children=void 0,delete s._children,t.___template)t.children=[Dc(t.___template)];else{if(void 0===t.children||null===t.children)return;t.children&&t.___stringifyChildren?t.children=JSON.stringify.apply(null,[t.children,null,2]):t.children&&t.___toStringChildren?t.children=t.children.toString():t.children&&t.___toNumeral?t.children=_o(t.children).format(t.___toNumeral):t.children&&t.___JSDatetoLuxonString?t.children=yc.fromJSDate(t.children).toFormat(t.___JSDatetoLuxonString):t.children&&t.___ISOtoLuxonString&&(t.children=yc.fromISO(t.children,{zone:t.___FromLuxonTimeZone}).toFormat(t.___ISOtoLuxonString))}return"string"==typeof t.children?t.children:t.children&&Array.isArray(t.children)?t.children.map(e=>Hc.call(o,Ic.call(this,{jsonx:t,childjsonx:e,props:s,renderIndex:r}),n)).filter(e=>null!==e):t.children}catch(e){return this&&this.debug&&i(e,e.stack?e.stack:"no stack"),null}}});const Fc=eval;function Pc(e,t,n){try{let r=t.__jsonx;if(e){const t=vc.readFileSync(e).toString();r=Fc(t.toString())}const i=Object.assign({},t);delete i.__boundConfig,delete i.__DOCTYPE,delete i.__jsonx;const o=Object.assign({},t.__boundConfig);Tc.extname(".json")&&(o.useJSON=!0);const s=Jc.call(o,{jsonx:r,resources:i}),a=`${t.__DOCTYPE||"<!DOCTYPE html>"}\n${s}`;if("function"!=typeof n)return a;n(null,a)}catch(e){if("function"!=typeof n)throw e;n(e)}}const Vc=r.createElement,{componentMap:zc,getComponentFromMap:Bc,getBoundedComponents:$c,DynamicComponent:Uc,FormComponent:qc}=oo,{getComputedProps:Wc}=vo,{getJSONXChildren:Yc}=Lc,{displayComponent:Zc}=qi;function Jc(e={jsonx:{component:""}}){const{jsonx:t,resources:n,type:r="Fragment",props:i,children:o}=e;return this&&this.useJSON?cr.renderToString(Kc.call(this||{},{type:r,props:i,children:o})):cr.renderToString(Hc.call(this||{},t,n))}function Hc(t,n={}){const{componentLibraries:r={},debug:i=!1,returnJSON:o=!1,logError:s=console.error,boundedComponents:a=[],disableRenderIndexKey:u=!0}=this||{};if(!t)return null;if(t.type&&(t.component=t.type),Bi(t)&&(t=$i(t)),!t||!t.component)return Vc("span",{},i?"Error: Missing Component Object":"");try{const c=Object.assign({DynamicComponent:Uc.bind(this)},{FormComponent:qc.bind(this)},zc,this.reactComponents),l=a.length?$c.call(this,{boundedComponents:a,reactComponents:c}):c;e.renderIndex++;const h=Bc({jsonx:t,reactComponents:l,componentLibraries:r,debug:i,logError:s}),f=Wc.call(this,{jsonx:t,resources:n,renderIndex:e.renderIndex,componentLibraries:r,debug:i,logError:s,disableRenderIndexKey:u});if(!t.comparisonprops||Zc.call(this,{jsonx:t,props:f,renderIndex:e.renderIndex,componentLibraries:r,debug:i})){const r=Yc.call(this,{jsonx:t,props:f,resources:n,renderIndex:e.renderIndex});return o?{type:h,props:f,children:r}:t.test?JSON.stringify({element:h,props:f,children:r},null,2):Vc(h,f,r)}return null}catch(e){throw i&&(s({jsonx:t,resources:n},"getReactElementFromJSONX this",this),s(e,e.stack?e.stack:"no stack")),e}}e.renderIndex=0;const Gc=Hc,Xc=Hc;function Kc({type:e,props:t,children:n}){return Vc(e,t,n&&Array.isArray(n)?n.map(Kc):n)}const Qc=Jc;function el(e){const t=e.props?Object.keys(e.props).filter(e=>!1===e.includes("__eval_")).reduce((t,n)=>t+=` ${n.toString()}=${"string"==typeof e.props[n]?`"${e.props[n].toString()}"`:`{${(e.props[`__eval_${n}`]||e.props[n]).toString()}}`}`,""):"";return Array.isArray(e.children)?`<${e.type} ${t}>\n  ${e.children.map(el).join("\r\n")}\n</${e.type}>`:`<${e.type}${t}>${e.children}</${e.type}>`}const tl=Lc,nl=oo,rl=vo,il=qi,ol={numeral:_o,luxon:bc};return e.__express=Pc,e.__getReact=function(){return r},e.__getReactDOM=function(){return n},e._jsonxChildren=tl,e._jsonxComponents=nl,e._jsonxHelpers=ol,e._jsonxProps=rl,e._jsonxUtils=il,e.compile=function(e,t={}){const n=Object.assign({},this,{returnJSON:!0}),r=Hc.call(n,e,t),i=function(e){return r.props=Object.assign({},r.props,e),Kc(r)};return Object.defineProperty(i,"name",{value:this.name}),i},e.default=Hc,e.getReactElement=Xc,e.getReactElementFromJSON=Kc,e.getReactElementFromJSONX=Hc,e.getRenderedJSON=Gc,e.jsonToJSX=el,e.jsonxHTMLString=Qc,e.jsonxRender=function(e={jsonx:{component:""},querySelector:""}){const{jsonx:t,resources:r,querySelector:i,DOM:o,portal:s}=e,a=s?n.createPortal:n.render,u=o||document.querySelector(i),c=Hc.call(this||{},t,r);if(!c)throw ReferenceError("Invalid React Element");if(!u)throw ReferenceError("Invalid Render DOM Element");a(c,u)},e.outputHTML=Jc,e.outputJSON=function(e,t={}){const n=Object.assign({},this,{returnJSON:!0});return Hc.call(n,e,t)},e.outputJSX=function(e,t={}){const n=Object.assign({},this,{returnJSON:!0});return el(Hc.call(n,e,t))},e.renderFile=Pc,e}({},React,ReactDOM);
+var jsonx = (function (exports, React, ReactDOM) {
+	'use strict';
+
+	var React__default = 'default' in React ? React['default'] : React;
+	ReactDOM = ReactDOM && Object.prototype.hasOwnProperty.call(ReactDOM, 'default') ? ReactDOM['default'] : ReactDOM;
+
+	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+	function createCommonjsModule(fn, module) {
+		return module = { exports: {} }, fn(module, module.exports), module.exports;
+	}
+
+	function getCjsExportFromNamespace (n) {
+		return n && n['default'] || n;
+	}
+
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
+	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	function shouldUseNative() {
+		try {
+			if (!Object.assign) {
+				return false;
+			}
+
+			// Detect buggy property enumeration order in older V8 versions.
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+			test1[5] = 'de';
+			if (Object.getOwnPropertyNames(test1)[0] === '5') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test2 = {};
+			for (var i = 0; i < 10; i++) {
+				test2['_' + String.fromCharCode(i)] = i;
+			}
+			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+				return test2[n];
+			});
+			if (order2.join('') !== '0123456789') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test3 = {};
+			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+				test3[letter] = letter;
+			});
+			if (Object.keys(Object.assign({}, test3)).join('') !==
+					'abcdefghijklmnopqrst') {
+				return false;
+			}
+
+			return true;
+		} catch (err) {
+			// We don't expect any of the above to throw, but better to be safe.
+			return false;
+		}
+	}
+
+	var objectAssign = shouldUseNative() ? Object.assign : function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
+
+	var domain;
+
+	// This constructor is used to store event handlers. Instantiating this is
+	// faster than explicitly calling `Object.create(null)` to get a "clean" empty
+	// object (tested with v8 v4.9).
+	function EventHandlers() {}
+	EventHandlers.prototype = Object.create(null);
+
+	function EventEmitter() {
+	  EventEmitter.init.call(this);
+	}
+
+	// nodejs oddity
+	// require('events') === require('events').EventEmitter
+	EventEmitter.EventEmitter = EventEmitter;
+
+	EventEmitter.usingDomains = false;
+
+	EventEmitter.prototype.domain = undefined;
+	EventEmitter.prototype._events = undefined;
+	EventEmitter.prototype._maxListeners = undefined;
+
+	// By default EventEmitters will print a warning if more than 10 listeners are
+	// added to it. This is a useful default which helps finding memory leaks.
+	EventEmitter.defaultMaxListeners = 10;
+
+	EventEmitter.init = function() {
+	  this.domain = null;
+	  if (EventEmitter.usingDomains) {
+	    // if there is an active domain, then attach to it.
+	    if (domain.active ) ;
+	  }
+
+	  if (!this._events || this._events === Object.getPrototypeOf(this)._events) {
+	    this._events = new EventHandlers();
+	    this._eventsCount = 0;
+	  }
+
+	  this._maxListeners = this._maxListeners || undefined;
+	};
+
+	// Obviously not all Emitters should be limited to 10. This function allows
+	// that to be increased. Set to zero for unlimited.
+	EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
+	  if (typeof n !== 'number' || n < 0 || isNaN(n))
+	    throw new TypeError('"n" argument must be a positive number');
+	  this._maxListeners = n;
+	  return this;
+	};
+
+	function $getMaxListeners(that) {
+	  if (that._maxListeners === undefined)
+	    return EventEmitter.defaultMaxListeners;
+	  return that._maxListeners;
+	}
+
+	EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
+	  return $getMaxListeners(this);
+	};
+
+	// These standalone emit* functions are used to optimize calling of event
+	// handlers for fast cases because emit() itself often has a variable number of
+	// arguments and can be deoptimized because of that. These functions always have
+	// the same number of arguments and thus do not get deoptimized, so the code
+	// inside them can execute faster.
+	function emitNone(handler, isFn, self) {
+	  if (isFn)
+	    handler.call(self);
+	  else {
+	    var len = handler.length;
+	    var listeners = arrayClone(handler, len);
+	    for (var i = 0; i < len; ++i)
+	      listeners[i].call(self);
+	  }
+	}
+	function emitOne(handler, isFn, self, arg1) {
+	  if (isFn)
+	    handler.call(self, arg1);
+	  else {
+	    var len = handler.length;
+	    var listeners = arrayClone(handler, len);
+	    for (var i = 0; i < len; ++i)
+	      listeners[i].call(self, arg1);
+	  }
+	}
+	function emitTwo(handler, isFn, self, arg1, arg2) {
+	  if (isFn)
+	    handler.call(self, arg1, arg2);
+	  else {
+	    var len = handler.length;
+	    var listeners = arrayClone(handler, len);
+	    for (var i = 0; i < len; ++i)
+	      listeners[i].call(self, arg1, arg2);
+	  }
+	}
+	function emitThree(handler, isFn, self, arg1, arg2, arg3) {
+	  if (isFn)
+	    handler.call(self, arg1, arg2, arg3);
+	  else {
+	    var len = handler.length;
+	    var listeners = arrayClone(handler, len);
+	    for (var i = 0; i < len; ++i)
+	      listeners[i].call(self, arg1, arg2, arg3);
+	  }
+	}
+
+	function emitMany(handler, isFn, self, args) {
+	  if (isFn)
+	    handler.apply(self, args);
+	  else {
+	    var len = handler.length;
+	    var listeners = arrayClone(handler, len);
+	    for (var i = 0; i < len; ++i)
+	      listeners[i].apply(self, args);
+	  }
+	}
+
+	EventEmitter.prototype.emit = function emit(type) {
+	  var er, handler, len, args, i, events, domain;
+	  var doError = (type === 'error');
+
+	  events = this._events;
+	  if (events)
+	    doError = (doError && events.error == null);
+	  else if (!doError)
+	    return false;
+
+	  domain = this.domain;
+
+	  // If there is no 'error' event listener then throw.
+	  if (doError) {
+	    er = arguments[1];
+	    if (domain) {
+	      if (!er)
+	        er = new Error('Uncaught, unspecified "error" event');
+	      er.domainEmitter = this;
+	      er.domain = domain;
+	      er.domainThrown = false;
+	      domain.emit('error', er);
+	    } else if (er instanceof Error) {
+	      throw er; // Unhandled 'error' event
+	    } else {
+	      // At least give some kind of context to the user
+	      var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+	      err.context = er;
+	      throw err;
+	    }
+	    return false;
+	  }
+
+	  handler = events[type];
+
+	  if (!handler)
+	    return false;
+
+	  var isFn = typeof handler === 'function';
+	  len = arguments.length;
+	  switch (len) {
+	    // fast cases
+	    case 1:
+	      emitNone(handler, isFn, this);
+	      break;
+	    case 2:
+	      emitOne(handler, isFn, this, arguments[1]);
+	      break;
+	    case 3:
+	      emitTwo(handler, isFn, this, arguments[1], arguments[2]);
+	      break;
+	    case 4:
+	      emitThree(handler, isFn, this, arguments[1], arguments[2], arguments[3]);
+	      break;
+	    // slower
+	    default:
+	      args = new Array(len - 1);
+	      for (i = 1; i < len; i++)
+	        args[i - 1] = arguments[i];
+	      emitMany(handler, isFn, this, args);
+	  }
+
+	  return true;
+	};
+
+	function _addListener(target, type, listener, prepend) {
+	  var m;
+	  var events;
+	  var existing;
+
+	  if (typeof listener !== 'function')
+	    throw new TypeError('"listener" argument must be a function');
+
+	  events = target._events;
+	  if (!events) {
+	    events = target._events = new EventHandlers();
+	    target._eventsCount = 0;
+	  } else {
+	    // To avoid recursion in the case that type === "newListener"! Before
+	    // adding it to the listeners, first emit "newListener".
+	    if (events.newListener) {
+	      target.emit('newListener', type,
+	                  listener.listener ? listener.listener : listener);
+
+	      // Re-assign `events` because a newListener handler could have caused the
+	      // this._events to be assigned to a new object
+	      events = target._events;
+	    }
+	    existing = events[type];
+	  }
+
+	  if (!existing) {
+	    // Optimize the case of one listener. Don't need the extra array object.
+	    existing = events[type] = listener;
+	    ++target._eventsCount;
+	  } else {
+	    if (typeof existing === 'function') {
+	      // Adding the second element, need to change to array.
+	      existing = events[type] = prepend ? [listener, existing] :
+	                                          [existing, listener];
+	    } else {
+	      // If we've already got an array, just append.
+	      if (prepend) {
+	        existing.unshift(listener);
+	      } else {
+	        existing.push(listener);
+	      }
+	    }
+
+	    // Check for listener leak
+	    if (!existing.warned) {
+	      m = $getMaxListeners(target);
+	      if (m && m > 0 && existing.length > m) {
+	        existing.warned = true;
+	        var w = new Error('Possible EventEmitter memory leak detected. ' +
+	                            existing.length + ' ' + type + ' listeners added. ' +
+	                            'Use emitter.setMaxListeners() to increase limit');
+	        w.name = 'MaxListenersExceededWarning';
+	        w.emitter = target;
+	        w.type = type;
+	        w.count = existing.length;
+	        emitWarning(w);
+	      }
+	    }
+	  }
+
+	  return target;
+	}
+	function emitWarning(e) {
+	  typeof console.warn === 'function' ? console.warn(e) : console.log(e);
+	}
+	EventEmitter.prototype.addListener = function addListener(type, listener) {
+	  return _addListener(this, type, listener, false);
+	};
+
+	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+	EventEmitter.prototype.prependListener =
+	    function prependListener(type, listener) {
+	      return _addListener(this, type, listener, true);
+	    };
+
+	function _onceWrap(target, type, listener) {
+	  var fired = false;
+	  function g() {
+	    target.removeListener(type, g);
+	    if (!fired) {
+	      fired = true;
+	      listener.apply(target, arguments);
+	    }
+	  }
+	  g.listener = listener;
+	  return g;
+	}
+
+	EventEmitter.prototype.once = function once(type, listener) {
+	  if (typeof listener !== 'function')
+	    throw new TypeError('"listener" argument must be a function');
+	  this.on(type, _onceWrap(this, type, listener));
+	  return this;
+	};
+
+	EventEmitter.prototype.prependOnceListener =
+	    function prependOnceListener(type, listener) {
+	      if (typeof listener !== 'function')
+	        throw new TypeError('"listener" argument must be a function');
+	      this.prependListener(type, _onceWrap(this, type, listener));
+	      return this;
+	    };
+
+	// emits a 'removeListener' event iff the listener was removed
+	EventEmitter.prototype.removeListener =
+	    function removeListener(type, listener) {
+	      var list, events, position, i, originalListener;
+
+	      if (typeof listener !== 'function')
+	        throw new TypeError('"listener" argument must be a function');
+
+	      events = this._events;
+	      if (!events)
+	        return this;
+
+	      list = events[type];
+	      if (!list)
+	        return this;
+
+	      if (list === listener || (list.listener && list.listener === listener)) {
+	        if (--this._eventsCount === 0)
+	          this._events = new EventHandlers();
+	        else {
+	          delete events[type];
+	          if (events.removeListener)
+	            this.emit('removeListener', type, list.listener || listener);
+	        }
+	      } else if (typeof list !== 'function') {
+	        position = -1;
+
+	        for (i = list.length; i-- > 0;) {
+	          if (list[i] === listener ||
+	              (list[i].listener && list[i].listener === listener)) {
+	            originalListener = list[i].listener;
+	            position = i;
+	            break;
+	          }
+	        }
+
+	        if (position < 0)
+	          return this;
+
+	        if (list.length === 1) {
+	          list[0] = undefined;
+	          if (--this._eventsCount === 0) {
+	            this._events = new EventHandlers();
+	            return this;
+	          } else {
+	            delete events[type];
+	          }
+	        } else {
+	          spliceOne(list, position);
+	        }
+
+	        if (events.removeListener)
+	          this.emit('removeListener', type, originalListener || listener);
+	      }
+
+	      return this;
+	    };
+
+	EventEmitter.prototype.removeAllListeners =
+	    function removeAllListeners(type) {
+	      var listeners, events;
+
+	      events = this._events;
+	      if (!events)
+	        return this;
+
+	      // not listening for removeListener, no need to emit
+	      if (!events.removeListener) {
+	        if (arguments.length === 0) {
+	          this._events = new EventHandlers();
+	          this._eventsCount = 0;
+	        } else if (events[type]) {
+	          if (--this._eventsCount === 0)
+	            this._events = new EventHandlers();
+	          else
+	            delete events[type];
+	        }
+	        return this;
+	      }
+
+	      // emit removeListener for all listeners on all events
+	      if (arguments.length === 0) {
+	        var keys = Object.keys(events);
+	        for (var i = 0, key; i < keys.length; ++i) {
+	          key = keys[i];
+	          if (key === 'removeListener') continue;
+	          this.removeAllListeners(key);
+	        }
+	        this.removeAllListeners('removeListener');
+	        this._events = new EventHandlers();
+	        this._eventsCount = 0;
+	        return this;
+	      }
+
+	      listeners = events[type];
+
+	      if (typeof listeners === 'function') {
+	        this.removeListener(type, listeners);
+	      } else if (listeners) {
+	        // LIFO order
+	        do {
+	          this.removeListener(type, listeners[listeners.length - 1]);
+	        } while (listeners[0]);
+	      }
+
+	      return this;
+	    };
+
+	EventEmitter.prototype.listeners = function listeners(type) {
+	  var evlistener;
+	  var ret;
+	  var events = this._events;
+
+	  if (!events)
+	    ret = [];
+	  else {
+	    evlistener = events[type];
+	    if (!evlistener)
+	      ret = [];
+	    else if (typeof evlistener === 'function')
+	      ret = [evlistener.listener || evlistener];
+	    else
+	      ret = unwrapListeners(evlistener);
+	  }
+
+	  return ret;
+	};
+
+	EventEmitter.listenerCount = function(emitter, type) {
+	  if (typeof emitter.listenerCount === 'function') {
+	    return emitter.listenerCount(type);
+	  } else {
+	    return listenerCount.call(emitter, type);
+	  }
+	};
+
+	EventEmitter.prototype.listenerCount = listenerCount;
+	function listenerCount(type) {
+	  var events = this._events;
+
+	  if (events) {
+	    var evlistener = events[type];
+
+	    if (typeof evlistener === 'function') {
+	      return 1;
+	    } else if (evlistener) {
+	      return evlistener.length;
+	    }
+	  }
+
+	  return 0;
+	}
+
+	EventEmitter.prototype.eventNames = function eventNames() {
+	  return this._eventsCount > 0 ? Reflect.ownKeys(this._events) : [];
+	};
+
+	// About 1.5x faster than the two-arg version of Array#splice().
+	function spliceOne(list, index) {
+	  for (var i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1)
+	    list[i] = list[k];
+	  list.pop();
+	}
+
+	function arrayClone(arr, i) {
+	  var copy = new Array(i);
+	  while (i--)
+	    copy[i] = arr[i];
+	  return copy;
+	}
+
+	function unwrapListeners(arr) {
+	  var ret = new Array(arr.length);
+	  for (var i = 0; i < ret.length; ++i) {
+	    ret[i] = arr[i].listener || arr[i];
+	  }
+	  return ret;
+	}
+
+	var global$1 = (typeof global !== "undefined" ? global :
+	            typeof self !== "undefined" ? self :
+	            typeof window !== "undefined" ? window : {});
+
+	var lookup = [];
+	var revLookup = [];
+	var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array;
+	var inited = false;
+	function init () {
+	  inited = true;
+	  var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+	  for (var i = 0, len = code.length; i < len; ++i) {
+	    lookup[i] = code[i];
+	    revLookup[code.charCodeAt(i)] = i;
+	  }
+
+	  revLookup['-'.charCodeAt(0)] = 62;
+	  revLookup['_'.charCodeAt(0)] = 63;
+	}
+
+	function toByteArray (b64) {
+	  if (!inited) {
+	    init();
+	  }
+	  var i, j, l, tmp, placeHolders, arr;
+	  var len = b64.length;
+
+	  if (len % 4 > 0) {
+	    throw new Error('Invalid string. Length must be a multiple of 4')
+	  }
+
+	  // the number of equal signs (place holders)
+	  // if there are two placeholders, than the two characters before it
+	  // represent one byte
+	  // if there is only one, then the three characters before it represent 2 bytes
+	  // this is just a cheap hack to not do indexOf twice
+	  placeHolders = b64[len - 2] === '=' ? 2 : b64[len - 1] === '=' ? 1 : 0;
+
+	  // base64 is 4/3 + up to two characters of the original data
+	  arr = new Arr(len * 3 / 4 - placeHolders);
+
+	  // if there are placeholders, only get up to the last complete 4 chars
+	  l = placeHolders > 0 ? len - 4 : len;
+
+	  var L = 0;
+
+	  for (i = 0, j = 0; i < l; i += 4, j += 3) {
+	    tmp = (revLookup[b64.charCodeAt(i)] << 18) | (revLookup[b64.charCodeAt(i + 1)] << 12) | (revLookup[b64.charCodeAt(i + 2)] << 6) | revLookup[b64.charCodeAt(i + 3)];
+	    arr[L++] = (tmp >> 16) & 0xFF;
+	    arr[L++] = (tmp >> 8) & 0xFF;
+	    arr[L++] = tmp & 0xFF;
+	  }
+
+	  if (placeHolders === 2) {
+	    tmp = (revLookup[b64.charCodeAt(i)] << 2) | (revLookup[b64.charCodeAt(i + 1)] >> 4);
+	    arr[L++] = tmp & 0xFF;
+	  } else if (placeHolders === 1) {
+	    tmp = (revLookup[b64.charCodeAt(i)] << 10) | (revLookup[b64.charCodeAt(i + 1)] << 4) | (revLookup[b64.charCodeAt(i + 2)] >> 2);
+	    arr[L++] = (tmp >> 8) & 0xFF;
+	    arr[L++] = tmp & 0xFF;
+	  }
+
+	  return arr
+	}
+
+	function tripletToBase64 (num) {
+	  return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F]
+	}
+
+	function encodeChunk (uint8, start, end) {
+	  var tmp;
+	  var output = [];
+	  for (var i = start; i < end; i += 3) {
+	    tmp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2]);
+	    output.push(tripletToBase64(tmp));
+	  }
+	  return output.join('')
+	}
+
+	function fromByteArray (uint8) {
+	  if (!inited) {
+	    init();
+	  }
+	  var tmp;
+	  var len = uint8.length;
+	  var extraBytes = len % 3; // if we have 1 byte left, pad 2 bytes
+	  var output = '';
+	  var parts = [];
+	  var maxChunkLength = 16383; // must be multiple of 3
+
+	  // go through the array every three bytes, we'll deal with trailing stuff later
+	  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+	    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)));
+	  }
+
+	  // pad the end with zeros, but make sure to not forget the extra bytes
+	  if (extraBytes === 1) {
+	    tmp = uint8[len - 1];
+	    output += lookup[tmp >> 2];
+	    output += lookup[(tmp << 4) & 0x3F];
+	    output += '==';
+	  } else if (extraBytes === 2) {
+	    tmp = (uint8[len - 2] << 8) + (uint8[len - 1]);
+	    output += lookup[tmp >> 10];
+	    output += lookup[(tmp >> 4) & 0x3F];
+	    output += lookup[(tmp << 2) & 0x3F];
+	    output += '=';
+	  }
+
+	  parts.push(output);
+
+	  return parts.join('')
+	}
+
+	function read (buffer, offset, isLE, mLen, nBytes) {
+	  var e, m;
+	  var eLen = nBytes * 8 - mLen - 1;
+	  var eMax = (1 << eLen) - 1;
+	  var eBias = eMax >> 1;
+	  var nBits = -7;
+	  var i = isLE ? (nBytes - 1) : 0;
+	  var d = isLE ? -1 : 1;
+	  var s = buffer[offset + i];
+
+	  i += d;
+
+	  e = s & ((1 << (-nBits)) - 1);
+	  s >>= (-nBits);
+	  nBits += eLen;
+	  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+	  m = e & ((1 << (-nBits)) - 1);
+	  e >>= (-nBits);
+	  nBits += mLen;
+	  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+	  if (e === 0) {
+	    e = 1 - eBias;
+	  } else if (e === eMax) {
+	    return m ? NaN : ((s ? -1 : 1) * Infinity)
+	  } else {
+	    m = m + Math.pow(2, mLen);
+	    e = e - eBias;
+	  }
+	  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
+	}
+
+	function write (buffer, value, offset, isLE, mLen, nBytes) {
+	  var e, m, c;
+	  var eLen = nBytes * 8 - mLen - 1;
+	  var eMax = (1 << eLen) - 1;
+	  var eBias = eMax >> 1;
+	  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0);
+	  var i = isLE ? 0 : (nBytes - 1);
+	  var d = isLE ? 1 : -1;
+	  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0;
+
+	  value = Math.abs(value);
+
+	  if (isNaN(value) || value === Infinity) {
+	    m = isNaN(value) ? 1 : 0;
+	    e = eMax;
+	  } else {
+	    e = Math.floor(Math.log(value) / Math.LN2);
+	    if (value * (c = Math.pow(2, -e)) < 1) {
+	      e--;
+	      c *= 2;
+	    }
+	    if (e + eBias >= 1) {
+	      value += rt / c;
+	    } else {
+	      value += rt * Math.pow(2, 1 - eBias);
+	    }
+	    if (value * c >= 2) {
+	      e++;
+	      c /= 2;
+	    }
+
+	    if (e + eBias >= eMax) {
+	      m = 0;
+	      e = eMax;
+	    } else if (e + eBias >= 1) {
+	      m = (value * c - 1) * Math.pow(2, mLen);
+	      e = e + eBias;
+	    } else {
+	      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
+	      e = 0;
+	    }
+	  }
+
+	  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
+
+	  e = (e << mLen) | m;
+	  eLen += mLen;
+	  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
+
+	  buffer[offset + i - d] |= s * 128;
+	}
+
+	var toString = {}.toString;
+
+	var isArray = Array.isArray || function (arr) {
+	  return toString.call(arr) == '[object Array]';
+	};
+
+	var INSPECT_MAX_BYTES = 50;
+
+	/**
+	 * If `Buffer.TYPED_ARRAY_SUPPORT`:
+	 *   === true    Use Uint8Array implementation (fastest)
+	 *   === false   Use Object implementation (most compatible, even IE6)
+	 *
+	 * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
+	 * Opera 11.6+, iOS 4.2+.
+	 *
+	 * Due to various browser bugs, sometimes the Object implementation will be used even
+	 * when the browser supports typed arrays.
+	 *
+	 * Note:
+	 *
+	 *   - Firefox 4-29 lacks support for adding new properties to `Uint8Array` instances,
+	 *     See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
+	 *
+	 *   - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
+	 *
+	 *   - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
+	 *     incorrect length in some situations.
+
+	 * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
+	 * get the Object implementation, which is slower but behaves correctly.
+	 */
+	Buffer.TYPED_ARRAY_SUPPORT = (typeof global$1!=="undefined" ? global$1 : window).TYPED_ARRAY_SUPPORT !== undefined
+	  ? (typeof global$1!=="undefined" ? global$1 : window).TYPED_ARRAY_SUPPORT
+	  : true;
+
+	function kMaxLength () {
+	  return Buffer.TYPED_ARRAY_SUPPORT
+	    ? 0x7fffffff
+	    : 0x3fffffff
+	}
+
+	function createBuffer (that, length) {
+	  if (kMaxLength() < length) {
+	    throw new RangeError('Invalid typed array length')
+	  }
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    // Return an augmented `Uint8Array` instance, for best performance
+	    that = new Uint8Array(length);
+	    that.__proto__ = Buffer.prototype;
+	  } else {
+	    // Fallback: Return an object instance of the Buffer class
+	    if (that === null) {
+	      that = new Buffer(length);
+	    }
+	    that.length = length;
+	  }
+
+	  return that
+	}
+
+	/**
+	 * The Buffer constructor returns instances of `Uint8Array` that have their
+	 * prototype changed to `Buffer.prototype`. Furthermore, `Buffer` is a subclass of
+	 * `Uint8Array`, so the returned instances will have all the node `Buffer` methods
+	 * and the `Uint8Array` methods. Square bracket notation works as expected -- it
+	 * returns a single octet.
+	 *
+	 * The `Uint8Array` prototype remains unmodified.
+	 */
+
+	function Buffer (arg, encodingOrOffset, length) {
+	  if (!Buffer.TYPED_ARRAY_SUPPORT && !(this instanceof Buffer)) {
+	    return new Buffer(arg, encodingOrOffset, length)
+	  }
+
+	  // Common case.
+	  if (typeof arg === 'number') {
+	    if (typeof encodingOrOffset === 'string') {
+	      throw new Error(
+	        'If encoding is specified then the first argument must be a string'
+	      )
+	    }
+	    return allocUnsafe(this, arg)
+	  }
+	  return from(this, arg, encodingOrOffset, length)
+	}
+
+	Buffer.poolSize = 8192; // not used by this implementation
+
+	// TODO: Legacy, not needed anymore. Remove in next major version.
+	Buffer._augment = function (arr) {
+	  arr.__proto__ = Buffer.prototype;
+	  return arr
+	};
+
+	function from (that, value, encodingOrOffset, length) {
+	  if (typeof value === 'number') {
+	    throw new TypeError('"value" argument must not be a number')
+	  }
+
+	  if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
+	    return fromArrayBuffer(that, value, encodingOrOffset, length)
+	  }
+
+	  if (typeof value === 'string') {
+	    return fromString(that, value, encodingOrOffset)
+	  }
+
+	  return fromObject(that, value)
+	}
+
+	/**
+	 * Functionally equivalent to Buffer(arg, encoding) but throws a TypeError
+	 * if value is a number.
+	 * Buffer.from(str[, encoding])
+	 * Buffer.from(array)
+	 * Buffer.from(buffer)
+	 * Buffer.from(arrayBuffer[, byteOffset[, length]])
+	 **/
+	Buffer.from = function (value, encodingOrOffset, length) {
+	  return from(null, value, encodingOrOffset, length)
+	};
+
+	if (Buffer.TYPED_ARRAY_SUPPORT) {
+	  Buffer.prototype.__proto__ = Uint8Array.prototype;
+	  Buffer.__proto__ = Uint8Array;
+	}
+
+	function assertSize (size) {
+	  if (typeof size !== 'number') {
+	    throw new TypeError('"size" argument must be a number')
+	  } else if (size < 0) {
+	    throw new RangeError('"size" argument must not be negative')
+	  }
+	}
+
+	function alloc (that, size, fill, encoding) {
+	  assertSize(size);
+	  if (size <= 0) {
+	    return createBuffer(that, size)
+	  }
+	  if (fill !== undefined) {
+	    // Only pay attention to encoding if it's a string. This
+	    // prevents accidentally sending in a number that would
+	    // be interpretted as a start offset.
+	    return typeof encoding === 'string'
+	      ? createBuffer(that, size).fill(fill, encoding)
+	      : createBuffer(that, size).fill(fill)
+	  }
+	  return createBuffer(that, size)
+	}
+
+	/**
+	 * Creates a new filled Buffer instance.
+	 * alloc(size[, fill[, encoding]])
+	 **/
+	Buffer.alloc = function (size, fill, encoding) {
+	  return alloc(null, size, fill, encoding)
+	};
+
+	function allocUnsafe (that, size) {
+	  assertSize(size);
+	  that = createBuffer(that, size < 0 ? 0 : checked(size) | 0);
+	  if (!Buffer.TYPED_ARRAY_SUPPORT) {
+	    for (var i = 0; i < size; ++i) {
+	      that[i] = 0;
+	    }
+	  }
+	  return that
+	}
+
+	/**
+	 * Equivalent to Buffer(num), by default creates a non-zero-filled Buffer instance.
+	 * */
+	Buffer.allocUnsafe = function (size) {
+	  return allocUnsafe(null, size)
+	};
+	/**
+	 * Equivalent to SlowBuffer(num), by default creates a non-zero-filled Buffer instance.
+	 */
+	Buffer.allocUnsafeSlow = function (size) {
+	  return allocUnsafe(null, size)
+	};
+
+	function fromString (that, string, encoding) {
+	  if (typeof encoding !== 'string' || encoding === '') {
+	    encoding = 'utf8';
+	  }
+
+	  if (!Buffer.isEncoding(encoding)) {
+	    throw new TypeError('"encoding" must be a valid string encoding')
+	  }
+
+	  var length = byteLength(string, encoding) | 0;
+	  that = createBuffer(that, length);
+
+	  var actual = that.write(string, encoding);
+
+	  if (actual !== length) {
+	    // Writing a hex string, for example, that contains invalid characters will
+	    // cause everything after the first invalid character to be ignored. (e.g.
+	    // 'abxxcd' will be treated as 'ab')
+	    that = that.slice(0, actual);
+	  }
+
+	  return that
+	}
+
+	function fromArrayLike (that, array) {
+	  var length = array.length < 0 ? 0 : checked(array.length) | 0;
+	  that = createBuffer(that, length);
+	  for (var i = 0; i < length; i += 1) {
+	    that[i] = array[i] & 255;
+	  }
+	  return that
+	}
+
+	function fromArrayBuffer (that, array, byteOffset, length) {
+	  array.byteLength; // this throws if `array` is not a valid ArrayBuffer
+
+	  if (byteOffset < 0 || array.byteLength < byteOffset) {
+	    throw new RangeError('\'offset\' is out of bounds')
+	  }
+
+	  if (array.byteLength < byteOffset + (length || 0)) {
+	    throw new RangeError('\'length\' is out of bounds')
+	  }
+
+	  if (byteOffset === undefined && length === undefined) {
+	    array = new Uint8Array(array);
+	  } else if (length === undefined) {
+	    array = new Uint8Array(array, byteOffset);
+	  } else {
+	    array = new Uint8Array(array, byteOffset, length);
+	  }
+
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    // Return an augmented `Uint8Array` instance, for best performance
+	    that = array;
+	    that.__proto__ = Buffer.prototype;
+	  } else {
+	    // Fallback: Return an object instance of the Buffer class
+	    that = fromArrayLike(that, array);
+	  }
+	  return that
+	}
+
+	function fromObject (that, obj) {
+	  if (internalIsBuffer(obj)) {
+	    var len = checked(obj.length) | 0;
+	    that = createBuffer(that, len);
+
+	    if (that.length === 0) {
+	      return that
+	    }
+
+	    obj.copy(that, 0, 0, len);
+	    return that
+	  }
+
+	  if (obj) {
+	    if ((typeof ArrayBuffer !== 'undefined' &&
+	        obj.buffer instanceof ArrayBuffer) || 'length' in obj) {
+	      if (typeof obj.length !== 'number' || isnan(obj.length)) {
+	        return createBuffer(that, 0)
+	      }
+	      return fromArrayLike(that, obj)
+	    }
+
+	    if (obj.type === 'Buffer' && isArray(obj.data)) {
+	      return fromArrayLike(that, obj.data)
+	    }
+	  }
+
+	  throw new TypeError('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.')
+	}
+
+	function checked (length) {
+	  // Note: cannot use `length < kMaxLength()` here because that fails when
+	  // length is NaN (which is otherwise coerced to zero.)
+	  if (length >= kMaxLength()) {
+	    throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
+	                         'size: 0x' + kMaxLength().toString(16) + ' bytes')
+	  }
+	  return length | 0
+	}
+	Buffer.isBuffer = isBuffer;
+	function internalIsBuffer (b) {
+	  return !!(b != null && b._isBuffer)
+	}
+
+	Buffer.compare = function compare (a, b) {
+	  if (!internalIsBuffer(a) || !internalIsBuffer(b)) {
+	    throw new TypeError('Arguments must be Buffers')
+	  }
+
+	  if (a === b) return 0
+
+	  var x = a.length;
+	  var y = b.length;
+
+	  for (var i = 0, len = Math.min(x, y); i < len; ++i) {
+	    if (a[i] !== b[i]) {
+	      x = a[i];
+	      y = b[i];
+	      break
+	    }
+	  }
+
+	  if (x < y) return -1
+	  if (y < x) return 1
+	  return 0
+	};
+
+	Buffer.isEncoding = function isEncoding (encoding) {
+	  switch (String(encoding).toLowerCase()) {
+	    case 'hex':
+	    case 'utf8':
+	    case 'utf-8':
+	    case 'ascii':
+	    case 'latin1':
+	    case 'binary':
+	    case 'base64':
+	    case 'ucs2':
+	    case 'ucs-2':
+	    case 'utf16le':
+	    case 'utf-16le':
+	      return true
+	    default:
+	      return false
+	  }
+	};
+
+	Buffer.concat = function concat (list, length) {
+	  if (!isArray(list)) {
+	    throw new TypeError('"list" argument must be an Array of Buffers')
+	  }
+
+	  if (list.length === 0) {
+	    return Buffer.alloc(0)
+	  }
+
+	  var i;
+	  if (length === undefined) {
+	    length = 0;
+	    for (i = 0; i < list.length; ++i) {
+	      length += list[i].length;
+	    }
+	  }
+
+	  var buffer = Buffer.allocUnsafe(length);
+	  var pos = 0;
+	  for (i = 0; i < list.length; ++i) {
+	    var buf = list[i];
+	    if (!internalIsBuffer(buf)) {
+	      throw new TypeError('"list" argument must be an Array of Buffers')
+	    }
+	    buf.copy(buffer, pos);
+	    pos += buf.length;
+	  }
+	  return buffer
+	};
+
+	function byteLength (string, encoding) {
+	  if (internalIsBuffer(string)) {
+	    return string.length
+	  }
+	  if (typeof ArrayBuffer !== 'undefined' && typeof ArrayBuffer.isView === 'function' &&
+	      (ArrayBuffer.isView(string) || string instanceof ArrayBuffer)) {
+	    return string.byteLength
+	  }
+	  if (typeof string !== 'string') {
+	    string = '' + string;
+	  }
+
+	  var len = string.length;
+	  if (len === 0) return 0
+
+	  // Use a for loop to avoid recursion
+	  var loweredCase = false;
+	  for (;;) {
+	    switch (encoding) {
+	      case 'ascii':
+	      case 'latin1':
+	      case 'binary':
+	        return len
+	      case 'utf8':
+	      case 'utf-8':
+	      case undefined:
+	        return utf8ToBytes(string).length
+	      case 'ucs2':
+	      case 'ucs-2':
+	      case 'utf16le':
+	      case 'utf-16le':
+	        return len * 2
+	      case 'hex':
+	        return len >>> 1
+	      case 'base64':
+	        return base64ToBytes(string).length
+	      default:
+	        if (loweredCase) return utf8ToBytes(string).length // assume utf8
+	        encoding = ('' + encoding).toLowerCase();
+	        loweredCase = true;
+	    }
+	  }
+	}
+	Buffer.byteLength = byteLength;
+
+	function slowToString (encoding, start, end) {
+	  var loweredCase = false;
+
+	  // No need to verify that "this.length <= MAX_UINT32" since it's a read-only
+	  // property of a typed array.
+
+	  // This behaves neither like String nor Uint8Array in that we set start/end
+	  // to their upper/lower bounds if the value passed is out of range.
+	  // undefined is handled specially as per ECMA-262 6th Edition,
+	  // Section 13.3.3.7 Runtime Semantics: KeyedBindingInitialization.
+	  if (start === undefined || start < 0) {
+	    start = 0;
+	  }
+	  // Return early if start > this.length. Done here to prevent potential uint32
+	  // coercion fail below.
+	  if (start > this.length) {
+	    return ''
+	  }
+
+	  if (end === undefined || end > this.length) {
+	    end = this.length;
+	  }
+
+	  if (end <= 0) {
+	    return ''
+	  }
+
+	  // Force coersion to uint32. This will also coerce falsey/NaN values to 0.
+	  end >>>= 0;
+	  start >>>= 0;
+
+	  if (end <= start) {
+	    return ''
+	  }
+
+	  if (!encoding) encoding = 'utf8';
+
+	  while (true) {
+	    switch (encoding) {
+	      case 'hex':
+	        return hexSlice(this, start, end)
+
+	      case 'utf8':
+	      case 'utf-8':
+	        return utf8Slice(this, start, end)
+
+	      case 'ascii':
+	        return asciiSlice(this, start, end)
+
+	      case 'latin1':
+	      case 'binary':
+	        return latin1Slice(this, start, end)
+
+	      case 'base64':
+	        return base64Slice(this, start, end)
+
+	      case 'ucs2':
+	      case 'ucs-2':
+	      case 'utf16le':
+	      case 'utf-16le':
+	        return utf16leSlice(this, start, end)
+
+	      default:
+	        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+	        encoding = (encoding + '').toLowerCase();
+	        loweredCase = true;
+	    }
+	  }
+	}
+
+	// The property is used by `Buffer.isBuffer` and `is-buffer` (in Safari 5-7) to detect
+	// Buffer instances.
+	Buffer.prototype._isBuffer = true;
+
+	function swap (b, n, m) {
+	  var i = b[n];
+	  b[n] = b[m];
+	  b[m] = i;
+	}
+
+	Buffer.prototype.swap16 = function swap16 () {
+	  var len = this.length;
+	  if (len % 2 !== 0) {
+	    throw new RangeError('Buffer size must be a multiple of 16-bits')
+	  }
+	  for (var i = 0; i < len; i += 2) {
+	    swap(this, i, i + 1);
+	  }
+	  return this
+	};
+
+	Buffer.prototype.swap32 = function swap32 () {
+	  var len = this.length;
+	  if (len % 4 !== 0) {
+	    throw new RangeError('Buffer size must be a multiple of 32-bits')
+	  }
+	  for (var i = 0; i < len; i += 4) {
+	    swap(this, i, i + 3);
+	    swap(this, i + 1, i + 2);
+	  }
+	  return this
+	};
+
+	Buffer.prototype.swap64 = function swap64 () {
+	  var len = this.length;
+	  if (len % 8 !== 0) {
+	    throw new RangeError('Buffer size must be a multiple of 64-bits')
+	  }
+	  for (var i = 0; i < len; i += 8) {
+	    swap(this, i, i + 7);
+	    swap(this, i + 1, i + 6);
+	    swap(this, i + 2, i + 5);
+	    swap(this, i + 3, i + 4);
+	  }
+	  return this
+	};
+
+	Buffer.prototype.toString = function toString () {
+	  var length = this.length | 0;
+	  if (length === 0) return ''
+	  if (arguments.length === 0) return utf8Slice(this, 0, length)
+	  return slowToString.apply(this, arguments)
+	};
+
+	Buffer.prototype.equals = function equals (b) {
+	  if (!internalIsBuffer(b)) throw new TypeError('Argument must be a Buffer')
+	  if (this === b) return true
+	  return Buffer.compare(this, b) === 0
+	};
+
+	Buffer.prototype.inspect = function inspect () {
+	  var str = '';
+	  var max = INSPECT_MAX_BYTES;
+	  if (this.length > 0) {
+	    str = this.toString('hex', 0, max).match(/.{2}/g).join(' ');
+	    if (this.length > max) str += ' ... ';
+	  }
+	  return '<Buffer ' + str + '>'
+	};
+
+	Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
+	  if (!internalIsBuffer(target)) {
+	    throw new TypeError('Argument must be a Buffer')
+	  }
+
+	  if (start === undefined) {
+	    start = 0;
+	  }
+	  if (end === undefined) {
+	    end = target ? target.length : 0;
+	  }
+	  if (thisStart === undefined) {
+	    thisStart = 0;
+	  }
+	  if (thisEnd === undefined) {
+	    thisEnd = this.length;
+	  }
+
+	  if (start < 0 || end > target.length || thisStart < 0 || thisEnd > this.length) {
+	    throw new RangeError('out of range index')
+	  }
+
+	  if (thisStart >= thisEnd && start >= end) {
+	    return 0
+	  }
+	  if (thisStart >= thisEnd) {
+	    return -1
+	  }
+	  if (start >= end) {
+	    return 1
+	  }
+
+	  start >>>= 0;
+	  end >>>= 0;
+	  thisStart >>>= 0;
+	  thisEnd >>>= 0;
+
+	  if (this === target) return 0
+
+	  var x = thisEnd - thisStart;
+	  var y = end - start;
+	  var len = Math.min(x, y);
+
+	  var thisCopy = this.slice(thisStart, thisEnd);
+	  var targetCopy = target.slice(start, end);
+
+	  for (var i = 0; i < len; ++i) {
+	    if (thisCopy[i] !== targetCopy[i]) {
+	      x = thisCopy[i];
+	      y = targetCopy[i];
+	      break
+	    }
+	  }
+
+	  if (x < y) return -1
+	  if (y < x) return 1
+	  return 0
+	};
+
+	// Finds either the first index of `val` in `buffer` at offset >= `byteOffset`,
+	// OR the last index of `val` in `buffer` at offset <= `byteOffset`.
+	//
+	// Arguments:
+	// - buffer - a Buffer to search
+	// - val - a string, Buffer, or number
+	// - byteOffset - an index into `buffer`; will be clamped to an int32
+	// - encoding - an optional encoding, relevant is val is a string
+	// - dir - true for indexOf, false for lastIndexOf
+	function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
+	  // Empty buffer means no match
+	  if (buffer.length === 0) return -1
+
+	  // Normalize byteOffset
+	  if (typeof byteOffset === 'string') {
+	    encoding = byteOffset;
+	    byteOffset = 0;
+	  } else if (byteOffset > 0x7fffffff) {
+	    byteOffset = 0x7fffffff;
+	  } else if (byteOffset < -0x80000000) {
+	    byteOffset = -0x80000000;
+	  }
+	  byteOffset = +byteOffset;  // Coerce to Number.
+	  if (isNaN(byteOffset)) {
+	    // byteOffset: it it's undefined, null, NaN, "foo", etc, search whole buffer
+	    byteOffset = dir ? 0 : (buffer.length - 1);
+	  }
+
+	  // Normalize byteOffset: negative offsets start from the end of the buffer
+	  if (byteOffset < 0) byteOffset = buffer.length + byteOffset;
+	  if (byteOffset >= buffer.length) {
+	    if (dir) return -1
+	    else byteOffset = buffer.length - 1;
+	  } else if (byteOffset < 0) {
+	    if (dir) byteOffset = 0;
+	    else return -1
+	  }
+
+	  // Normalize val
+	  if (typeof val === 'string') {
+	    val = Buffer.from(val, encoding);
+	  }
+
+	  // Finally, search either indexOf (if dir is true) or lastIndexOf
+	  if (internalIsBuffer(val)) {
+	    // Special case: looking for empty string/buffer always fails
+	    if (val.length === 0) {
+	      return -1
+	    }
+	    return arrayIndexOf(buffer, val, byteOffset, encoding, dir)
+	  } else if (typeof val === 'number') {
+	    val = val & 0xFF; // Search for a byte value [0-255]
+	    if (Buffer.TYPED_ARRAY_SUPPORT &&
+	        typeof Uint8Array.prototype.indexOf === 'function') {
+	      if (dir) {
+	        return Uint8Array.prototype.indexOf.call(buffer, val, byteOffset)
+	      } else {
+	        return Uint8Array.prototype.lastIndexOf.call(buffer, val, byteOffset)
+	      }
+	    }
+	    return arrayIndexOf(buffer, [ val ], byteOffset, encoding, dir)
+	  }
+
+	  throw new TypeError('val must be string, number or Buffer')
+	}
+
+	function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
+	  var indexSize = 1;
+	  var arrLength = arr.length;
+	  var valLength = val.length;
+
+	  if (encoding !== undefined) {
+	    encoding = String(encoding).toLowerCase();
+	    if (encoding === 'ucs2' || encoding === 'ucs-2' ||
+	        encoding === 'utf16le' || encoding === 'utf-16le') {
+	      if (arr.length < 2 || val.length < 2) {
+	        return -1
+	      }
+	      indexSize = 2;
+	      arrLength /= 2;
+	      valLength /= 2;
+	      byteOffset /= 2;
+	    }
+	  }
+
+	  function read (buf, i) {
+	    if (indexSize === 1) {
+	      return buf[i]
+	    } else {
+	      return buf.readUInt16BE(i * indexSize)
+	    }
+	  }
+
+	  var i;
+	  if (dir) {
+	    var foundIndex = -1;
+	    for (i = byteOffset; i < arrLength; i++) {
+	      if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
+	        if (foundIndex === -1) foundIndex = i;
+	        if (i - foundIndex + 1 === valLength) return foundIndex * indexSize
+	      } else {
+	        if (foundIndex !== -1) i -= i - foundIndex;
+	        foundIndex = -1;
+	      }
+	    }
+	  } else {
+	    if (byteOffset + valLength > arrLength) byteOffset = arrLength - valLength;
+	    for (i = byteOffset; i >= 0; i--) {
+	      var found = true;
+	      for (var j = 0; j < valLength; j++) {
+	        if (read(arr, i + j) !== read(val, j)) {
+	          found = false;
+	          break
+	        }
+	      }
+	      if (found) return i
+	    }
+	  }
+
+	  return -1
+	}
+
+	Buffer.prototype.includes = function includes (val, byteOffset, encoding) {
+	  return this.indexOf(val, byteOffset, encoding) !== -1
+	};
+
+	Buffer.prototype.indexOf = function indexOf (val, byteOffset, encoding) {
+	  return bidirectionalIndexOf(this, val, byteOffset, encoding, true)
+	};
+
+	Buffer.prototype.lastIndexOf = function lastIndexOf (val, byteOffset, encoding) {
+	  return bidirectionalIndexOf(this, val, byteOffset, encoding, false)
+	};
+
+	function hexWrite (buf, string, offset, length) {
+	  offset = Number(offset) || 0;
+	  var remaining = buf.length - offset;
+	  if (!length) {
+	    length = remaining;
+	  } else {
+	    length = Number(length);
+	    if (length > remaining) {
+	      length = remaining;
+	    }
+	  }
+
+	  // must be an even number of digits
+	  var strLen = string.length;
+	  if (strLen % 2 !== 0) throw new TypeError('Invalid hex string')
+
+	  if (length > strLen / 2) {
+	    length = strLen / 2;
+	  }
+	  for (var i = 0; i < length; ++i) {
+	    var parsed = parseInt(string.substr(i * 2, 2), 16);
+	    if (isNaN(parsed)) return i
+	    buf[offset + i] = parsed;
+	  }
+	  return i
+	}
+
+	function utf8Write (buf, string, offset, length) {
+	  return blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
+	}
+
+	function asciiWrite (buf, string, offset, length) {
+	  return blitBuffer(asciiToBytes(string), buf, offset, length)
+	}
+
+	function latin1Write (buf, string, offset, length) {
+	  return asciiWrite(buf, string, offset, length)
+	}
+
+	function base64Write (buf, string, offset, length) {
+	  return blitBuffer(base64ToBytes(string), buf, offset, length)
+	}
+
+	function ucs2Write (buf, string, offset, length) {
+	  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
+	}
+
+	Buffer.prototype.write = function write (string, offset, length, encoding) {
+	  // Buffer#write(string)
+	  if (offset === undefined) {
+	    encoding = 'utf8';
+	    length = this.length;
+	    offset = 0;
+	  // Buffer#write(string, encoding)
+	  } else if (length === undefined && typeof offset === 'string') {
+	    encoding = offset;
+	    length = this.length;
+	    offset = 0;
+	  // Buffer#write(string, offset[, length][, encoding])
+	  } else if (isFinite(offset)) {
+	    offset = offset | 0;
+	    if (isFinite(length)) {
+	      length = length | 0;
+	      if (encoding === undefined) encoding = 'utf8';
+	    } else {
+	      encoding = length;
+	      length = undefined;
+	    }
+	  // legacy write(string, encoding, offset, length) - remove in v0.13
+	  } else {
+	    throw new Error(
+	      'Buffer.write(string, encoding, offset[, length]) is no longer supported'
+	    )
+	  }
+
+	  var remaining = this.length - offset;
+	  if (length === undefined || length > remaining) length = remaining;
+
+	  if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
+	    throw new RangeError('Attempt to write outside buffer bounds')
+	  }
+
+	  if (!encoding) encoding = 'utf8';
+
+	  var loweredCase = false;
+	  for (;;) {
+	    switch (encoding) {
+	      case 'hex':
+	        return hexWrite(this, string, offset, length)
+
+	      case 'utf8':
+	      case 'utf-8':
+	        return utf8Write(this, string, offset, length)
+
+	      case 'ascii':
+	        return asciiWrite(this, string, offset, length)
+
+	      case 'latin1':
+	      case 'binary':
+	        return latin1Write(this, string, offset, length)
+
+	      case 'base64':
+	        // Warning: maxLength not taken into account in base64Write
+	        return base64Write(this, string, offset, length)
+
+	      case 'ucs2':
+	      case 'ucs-2':
+	      case 'utf16le':
+	      case 'utf-16le':
+	        return ucs2Write(this, string, offset, length)
+
+	      default:
+	        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+	        encoding = ('' + encoding).toLowerCase();
+	        loweredCase = true;
+	    }
+	  }
+	};
+
+	Buffer.prototype.toJSON = function toJSON () {
+	  return {
+	    type: 'Buffer',
+	    data: Array.prototype.slice.call(this._arr || this, 0)
+	  }
+	};
+
+	function base64Slice (buf, start, end) {
+	  if (start === 0 && end === buf.length) {
+	    return fromByteArray(buf)
+	  } else {
+	    return fromByteArray(buf.slice(start, end))
+	  }
+	}
+
+	function utf8Slice (buf, start, end) {
+	  end = Math.min(buf.length, end);
+	  var res = [];
+
+	  var i = start;
+	  while (i < end) {
+	    var firstByte = buf[i];
+	    var codePoint = null;
+	    var bytesPerSequence = (firstByte > 0xEF) ? 4
+	      : (firstByte > 0xDF) ? 3
+	      : (firstByte > 0xBF) ? 2
+	      : 1;
+
+	    if (i + bytesPerSequence <= end) {
+	      var secondByte, thirdByte, fourthByte, tempCodePoint;
+
+	      switch (bytesPerSequence) {
+	        case 1:
+	          if (firstByte < 0x80) {
+	            codePoint = firstByte;
+	          }
+	          break
+	        case 2:
+	          secondByte = buf[i + 1];
+	          if ((secondByte & 0xC0) === 0x80) {
+	            tempCodePoint = (firstByte & 0x1F) << 0x6 | (secondByte & 0x3F);
+	            if (tempCodePoint > 0x7F) {
+	              codePoint = tempCodePoint;
+	            }
+	          }
+	          break
+	        case 3:
+	          secondByte = buf[i + 1];
+	          thirdByte = buf[i + 2];
+	          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80) {
+	            tempCodePoint = (firstByte & 0xF) << 0xC | (secondByte & 0x3F) << 0x6 | (thirdByte & 0x3F);
+	            if (tempCodePoint > 0x7FF && (tempCodePoint < 0xD800 || tempCodePoint > 0xDFFF)) {
+	              codePoint = tempCodePoint;
+	            }
+	          }
+	          break
+	        case 4:
+	          secondByte = buf[i + 1];
+	          thirdByte = buf[i + 2];
+	          fourthByte = buf[i + 3];
+	          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80 && (fourthByte & 0xC0) === 0x80) {
+	            tempCodePoint = (firstByte & 0xF) << 0x12 | (secondByte & 0x3F) << 0xC | (thirdByte & 0x3F) << 0x6 | (fourthByte & 0x3F);
+	            if (tempCodePoint > 0xFFFF && tempCodePoint < 0x110000) {
+	              codePoint = tempCodePoint;
+	            }
+	          }
+	      }
+	    }
+
+	    if (codePoint === null) {
+	      // we did not generate a valid codePoint so insert a
+	      // replacement char (U+FFFD) and advance only 1 byte
+	      codePoint = 0xFFFD;
+	      bytesPerSequence = 1;
+	    } else if (codePoint > 0xFFFF) {
+	      // encode to utf16 (surrogate pair dance)
+	      codePoint -= 0x10000;
+	      res.push(codePoint >>> 10 & 0x3FF | 0xD800);
+	      codePoint = 0xDC00 | codePoint & 0x3FF;
+	    }
+
+	    res.push(codePoint);
+	    i += bytesPerSequence;
+	  }
+
+	  return decodeCodePointsArray(res)
+	}
+
+	// Based on http://stackoverflow.com/a/22747272/680742, the browser with
+	// the lowest limit is Chrome, with 0x10000 args.
+	// We go 1 magnitude less, for safety
+	var MAX_ARGUMENTS_LENGTH = 0x1000;
+
+	function decodeCodePointsArray (codePoints) {
+	  var len = codePoints.length;
+	  if (len <= MAX_ARGUMENTS_LENGTH) {
+	    return String.fromCharCode.apply(String, codePoints) // avoid extra slice()
+	  }
+
+	  // Decode in chunks to avoid "call stack size exceeded".
+	  var res = '';
+	  var i = 0;
+	  while (i < len) {
+	    res += String.fromCharCode.apply(
+	      String,
+	      codePoints.slice(i, i += MAX_ARGUMENTS_LENGTH)
+	    );
+	  }
+	  return res
+	}
+
+	function asciiSlice (buf, start, end) {
+	  var ret = '';
+	  end = Math.min(buf.length, end);
+
+	  for (var i = start; i < end; ++i) {
+	    ret += String.fromCharCode(buf[i] & 0x7F);
+	  }
+	  return ret
+	}
+
+	function latin1Slice (buf, start, end) {
+	  var ret = '';
+	  end = Math.min(buf.length, end);
+
+	  for (var i = start; i < end; ++i) {
+	    ret += String.fromCharCode(buf[i]);
+	  }
+	  return ret
+	}
+
+	function hexSlice (buf, start, end) {
+	  var len = buf.length;
+
+	  if (!start || start < 0) start = 0;
+	  if (!end || end < 0 || end > len) end = len;
+
+	  var out = '';
+	  for (var i = start; i < end; ++i) {
+	    out += toHex(buf[i]);
+	  }
+	  return out
+	}
+
+	function utf16leSlice (buf, start, end) {
+	  var bytes = buf.slice(start, end);
+	  var res = '';
+	  for (var i = 0; i < bytes.length; i += 2) {
+	    res += String.fromCharCode(bytes[i] + bytes[i + 1] * 256);
+	  }
+	  return res
+	}
+
+	Buffer.prototype.slice = function slice (start, end) {
+	  var len = this.length;
+	  start = ~~start;
+	  end = end === undefined ? len : ~~end;
+
+	  if (start < 0) {
+	    start += len;
+	    if (start < 0) start = 0;
+	  } else if (start > len) {
+	    start = len;
+	  }
+
+	  if (end < 0) {
+	    end += len;
+	    if (end < 0) end = 0;
+	  } else if (end > len) {
+	    end = len;
+	  }
+
+	  if (end < start) end = start;
+
+	  var newBuf;
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    newBuf = this.subarray(start, end);
+	    newBuf.__proto__ = Buffer.prototype;
+	  } else {
+	    var sliceLen = end - start;
+	    newBuf = new Buffer(sliceLen, undefined);
+	    for (var i = 0; i < sliceLen; ++i) {
+	      newBuf[i] = this[i + start];
+	    }
+	  }
+
+	  return newBuf
+	};
+
+	/*
+	 * Need to make sure that buffer isn't trying to write out of bounds.
+	 */
+	function checkOffset (offset, ext, length) {
+	  if ((offset % 1) !== 0 || offset < 0) throw new RangeError('offset is not uint')
+	  if (offset + ext > length) throw new RangeError('Trying to access beyond buffer length')
+	}
+
+	Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
+	  offset = offset | 0;
+	  byteLength = byteLength | 0;
+	  if (!noAssert) checkOffset(offset, byteLength, this.length);
+
+	  var val = this[offset];
+	  var mul = 1;
+	  var i = 0;
+	  while (++i < byteLength && (mul *= 0x100)) {
+	    val += this[offset + i] * mul;
+	  }
+
+	  return val
+	};
+
+	Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
+	  offset = offset | 0;
+	  byteLength = byteLength | 0;
+	  if (!noAssert) {
+	    checkOffset(offset, byteLength, this.length);
+	  }
+
+	  var val = this[offset + --byteLength];
+	  var mul = 1;
+	  while (byteLength > 0 && (mul *= 0x100)) {
+	    val += this[offset + --byteLength] * mul;
+	  }
+
+	  return val
+	};
+
+	Buffer.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 1, this.length);
+	  return this[offset]
+	};
+
+	Buffer.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 2, this.length);
+	  return this[offset] | (this[offset + 1] << 8)
+	};
+
+	Buffer.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 2, this.length);
+	  return (this[offset] << 8) | this[offset + 1]
+	};
+
+	Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+
+	  return ((this[offset]) |
+	      (this[offset + 1] << 8) |
+	      (this[offset + 2] << 16)) +
+	      (this[offset + 3] * 0x1000000)
+	};
+
+	Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+
+	  return (this[offset] * 0x1000000) +
+	    ((this[offset + 1] << 16) |
+	    (this[offset + 2] << 8) |
+	    this[offset + 3])
+	};
+
+	Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
+	  offset = offset | 0;
+	  byteLength = byteLength | 0;
+	  if (!noAssert) checkOffset(offset, byteLength, this.length);
+
+	  var val = this[offset];
+	  var mul = 1;
+	  var i = 0;
+	  while (++i < byteLength && (mul *= 0x100)) {
+	    val += this[offset + i] * mul;
+	  }
+	  mul *= 0x80;
+
+	  if (val >= mul) val -= Math.pow(2, 8 * byteLength);
+
+	  return val
+	};
+
+	Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
+	  offset = offset | 0;
+	  byteLength = byteLength | 0;
+	  if (!noAssert) checkOffset(offset, byteLength, this.length);
+
+	  var i = byteLength;
+	  var mul = 1;
+	  var val = this[offset + --i];
+	  while (i > 0 && (mul *= 0x100)) {
+	    val += this[offset + --i] * mul;
+	  }
+	  mul *= 0x80;
+
+	  if (val >= mul) val -= Math.pow(2, 8 * byteLength);
+
+	  return val
+	};
+
+	Buffer.prototype.readInt8 = function readInt8 (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 1, this.length);
+	  if (!(this[offset] & 0x80)) return (this[offset])
+	  return ((0xff - this[offset] + 1) * -1)
+	};
+
+	Buffer.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 2, this.length);
+	  var val = this[offset] | (this[offset + 1] << 8);
+	  return (val & 0x8000) ? val | 0xFFFF0000 : val
+	};
+
+	Buffer.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 2, this.length);
+	  var val = this[offset + 1] | (this[offset] << 8);
+	  return (val & 0x8000) ? val | 0xFFFF0000 : val
+	};
+
+	Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+
+	  return (this[offset]) |
+	    (this[offset + 1] << 8) |
+	    (this[offset + 2] << 16) |
+	    (this[offset + 3] << 24)
+	};
+
+	Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+
+	  return (this[offset] << 24) |
+	    (this[offset + 1] << 16) |
+	    (this[offset + 2] << 8) |
+	    (this[offset + 3])
+	};
+
+	Buffer.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+	  return read(this, offset, true, 23, 4)
+	};
+
+	Buffer.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+	  return read(this, offset, false, 23, 4)
+	};
+
+	Buffer.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 8, this.length);
+	  return read(this, offset, true, 52, 8)
+	};
+
+	Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
+	  if (!noAssert) checkOffset(offset, 8, this.length);
+	  return read(this, offset, false, 52, 8)
+	};
+
+	function checkInt (buf, value, offset, ext, max, min) {
+	  if (!internalIsBuffer(buf)) throw new TypeError('"buffer" argument must be a Buffer instance')
+	  if (value > max || value < min) throw new RangeError('"value" argument is out of bounds')
+	  if (offset + ext > buf.length) throw new RangeError('Index out of range')
+	}
+
+	Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  byteLength = byteLength | 0;
+	  if (!noAssert) {
+	    var maxBytes = Math.pow(2, 8 * byteLength) - 1;
+	    checkInt(this, value, offset, byteLength, maxBytes, 0);
+	  }
+
+	  var mul = 1;
+	  var i = 0;
+	  this[offset] = value & 0xFF;
+	  while (++i < byteLength && (mul *= 0x100)) {
+	    this[offset + i] = (value / mul) & 0xFF;
+	  }
+
+	  return offset + byteLength
+	};
+
+	Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  byteLength = byteLength | 0;
+	  if (!noAssert) {
+	    var maxBytes = Math.pow(2, 8 * byteLength) - 1;
+	    checkInt(this, value, offset, byteLength, maxBytes, 0);
+	  }
+
+	  var i = byteLength - 1;
+	  var mul = 1;
+	  this[offset + i] = value & 0xFF;
+	  while (--i >= 0 && (mul *= 0x100)) {
+	    this[offset + i] = (value / mul) & 0xFF;
+	  }
+
+	  return offset + byteLength
+	};
+
+	Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0);
+	  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
+	  this[offset] = (value & 0xff);
+	  return offset + 1
+	};
+
+	function objectWriteUInt16 (buf, value, offset, littleEndian) {
+	  if (value < 0) value = 0xffff + value + 1;
+	  for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; ++i) {
+	    buf[offset + i] = (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
+	      (littleEndian ? i : 1 - i) * 8;
+	  }
+	}
+
+	Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    this[offset] = (value & 0xff);
+	    this[offset + 1] = (value >>> 8);
+	  } else {
+	    objectWriteUInt16(this, value, offset, true);
+	  }
+	  return offset + 2
+	};
+
+	Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    this[offset] = (value >>> 8);
+	    this[offset + 1] = (value & 0xff);
+	  } else {
+	    objectWriteUInt16(this, value, offset, false);
+	  }
+	  return offset + 2
+	};
+
+	function objectWriteUInt32 (buf, value, offset, littleEndian) {
+	  if (value < 0) value = 0xffffffff + value + 1;
+	  for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; ++i) {
+	    buf[offset + i] = (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff;
+	  }
+	}
+
+	Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    this[offset + 3] = (value >>> 24);
+	    this[offset + 2] = (value >>> 16);
+	    this[offset + 1] = (value >>> 8);
+	    this[offset] = (value & 0xff);
+	  } else {
+	    objectWriteUInt32(this, value, offset, true);
+	  }
+	  return offset + 4
+	};
+
+	Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    this[offset] = (value >>> 24);
+	    this[offset + 1] = (value >>> 16);
+	    this[offset + 2] = (value >>> 8);
+	    this[offset + 3] = (value & 0xff);
+	  } else {
+	    objectWriteUInt32(this, value, offset, false);
+	  }
+	  return offset + 4
+	};
+
+	Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) {
+	    var limit = Math.pow(2, 8 * byteLength - 1);
+
+	    checkInt(this, value, offset, byteLength, limit - 1, -limit);
+	  }
+
+	  var i = 0;
+	  var mul = 1;
+	  var sub = 0;
+	  this[offset] = value & 0xFF;
+	  while (++i < byteLength && (mul *= 0x100)) {
+	    if (value < 0 && sub === 0 && this[offset + i - 1] !== 0) {
+	      sub = 1;
+	    }
+	    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
+	  }
+
+	  return offset + byteLength
+	};
+
+	Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) {
+	    var limit = Math.pow(2, 8 * byteLength - 1);
+
+	    checkInt(this, value, offset, byteLength, limit - 1, -limit);
+	  }
+
+	  var i = byteLength - 1;
+	  var mul = 1;
+	  var sub = 0;
+	  this[offset + i] = value & 0xFF;
+	  while (--i >= 0 && (mul *= 0x100)) {
+	    if (value < 0 && sub === 0 && this[offset + i + 1] !== 0) {
+	      sub = 1;
+	    }
+	    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
+	  }
+
+	  return offset + byteLength
+	};
+
+	Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80);
+	  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
+	  if (value < 0) value = 0xff + value + 1;
+	  this[offset] = (value & 0xff);
+	  return offset + 1
+	};
+
+	Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    this[offset] = (value & 0xff);
+	    this[offset + 1] = (value >>> 8);
+	  } else {
+	    objectWriteUInt16(this, value, offset, true);
+	  }
+	  return offset + 2
+	};
+
+	Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    this[offset] = (value >>> 8);
+	    this[offset + 1] = (value & 0xff);
+	  } else {
+	    objectWriteUInt16(this, value, offset, false);
+	  }
+	  return offset + 2
+	};
+
+	Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    this[offset] = (value & 0xff);
+	    this[offset + 1] = (value >>> 8);
+	    this[offset + 2] = (value >>> 16);
+	    this[offset + 3] = (value >>> 24);
+	  } else {
+	    objectWriteUInt32(this, value, offset, true);
+	  }
+	  return offset + 4
+	};
+
+	Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset | 0;
+	  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
+	  if (value < 0) value = 0xffffffff + value + 1;
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    this[offset] = (value >>> 24);
+	    this[offset + 1] = (value >>> 16);
+	    this[offset + 2] = (value >>> 8);
+	    this[offset + 3] = (value & 0xff);
+	  } else {
+	    objectWriteUInt32(this, value, offset, false);
+	  }
+	  return offset + 4
+	};
+
+	function checkIEEE754 (buf, value, offset, ext, max, min) {
+	  if (offset + ext > buf.length) throw new RangeError('Index out of range')
+	  if (offset < 0) throw new RangeError('Index out of range')
+	}
+
+	function writeFloat (buf, value, offset, littleEndian, noAssert) {
+	  if (!noAssert) {
+	    checkIEEE754(buf, value, offset, 4);
+	  }
+	  write(buf, value, offset, littleEndian, 23, 4);
+	  return offset + 4
+	}
+
+	Buffer.prototype.writeFloatLE = function writeFloatLE (value, offset, noAssert) {
+	  return writeFloat(this, value, offset, true, noAssert)
+	};
+
+	Buffer.prototype.writeFloatBE = function writeFloatBE (value, offset, noAssert) {
+	  return writeFloat(this, value, offset, false, noAssert)
+	};
+
+	function writeDouble (buf, value, offset, littleEndian, noAssert) {
+	  if (!noAssert) {
+	    checkIEEE754(buf, value, offset, 8);
+	  }
+	  write(buf, value, offset, littleEndian, 52, 8);
+	  return offset + 8
+	}
+
+	Buffer.prototype.writeDoubleLE = function writeDoubleLE (value, offset, noAssert) {
+	  return writeDouble(this, value, offset, true, noAssert)
+	};
+
+	Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert) {
+	  return writeDouble(this, value, offset, false, noAssert)
+	};
+
+	// copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
+	Buffer.prototype.copy = function copy (target, targetStart, start, end) {
+	  if (!start) start = 0;
+	  if (!end && end !== 0) end = this.length;
+	  if (targetStart >= target.length) targetStart = target.length;
+	  if (!targetStart) targetStart = 0;
+	  if (end > 0 && end < start) end = start;
+
+	  // Copy 0 bytes; we're done
+	  if (end === start) return 0
+	  if (target.length === 0 || this.length === 0) return 0
+
+	  // Fatal error conditions
+	  if (targetStart < 0) {
+	    throw new RangeError('targetStart out of bounds')
+	  }
+	  if (start < 0 || start >= this.length) throw new RangeError('sourceStart out of bounds')
+	  if (end < 0) throw new RangeError('sourceEnd out of bounds')
+
+	  // Are we oob?
+	  if (end > this.length) end = this.length;
+	  if (target.length - targetStart < end - start) {
+	    end = target.length - targetStart + start;
+	  }
+
+	  var len = end - start;
+	  var i;
+
+	  if (this === target && start < targetStart && targetStart < end) {
+	    // descending copy from end
+	    for (i = len - 1; i >= 0; --i) {
+	      target[i + targetStart] = this[i + start];
+	    }
+	  } else if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
+	    // ascending copy from start
+	    for (i = 0; i < len; ++i) {
+	      target[i + targetStart] = this[i + start];
+	    }
+	  } else {
+	    Uint8Array.prototype.set.call(
+	      target,
+	      this.subarray(start, start + len),
+	      targetStart
+	    );
+	  }
+
+	  return len
+	};
+
+	// Usage:
+	//    buffer.fill(number[, offset[, end]])
+	//    buffer.fill(buffer[, offset[, end]])
+	//    buffer.fill(string[, offset[, end]][, encoding])
+	Buffer.prototype.fill = function fill (val, start, end, encoding) {
+	  // Handle string cases:
+	  if (typeof val === 'string') {
+	    if (typeof start === 'string') {
+	      encoding = start;
+	      start = 0;
+	      end = this.length;
+	    } else if (typeof end === 'string') {
+	      encoding = end;
+	      end = this.length;
+	    }
+	    if (val.length === 1) {
+	      var code = val.charCodeAt(0);
+	      if (code < 256) {
+	        val = code;
+	      }
+	    }
+	    if (encoding !== undefined && typeof encoding !== 'string') {
+	      throw new TypeError('encoding must be a string')
+	    }
+	    if (typeof encoding === 'string' && !Buffer.isEncoding(encoding)) {
+	      throw new TypeError('Unknown encoding: ' + encoding)
+	    }
+	  } else if (typeof val === 'number') {
+	    val = val & 255;
+	  }
+
+	  // Invalid ranges are not set to a default, so can range check early.
+	  if (start < 0 || this.length < start || this.length < end) {
+	    throw new RangeError('Out of range index')
+	  }
+
+	  if (end <= start) {
+	    return this
+	  }
+
+	  start = start >>> 0;
+	  end = end === undefined ? this.length : end >>> 0;
+
+	  if (!val) val = 0;
+
+	  var i;
+	  if (typeof val === 'number') {
+	    for (i = start; i < end; ++i) {
+	      this[i] = val;
+	    }
+	  } else {
+	    var bytes = internalIsBuffer(val)
+	      ? val
+	      : utf8ToBytes(new Buffer(val, encoding).toString());
+	    var len = bytes.length;
+	    for (i = 0; i < end - start; ++i) {
+	      this[i + start] = bytes[i % len];
+	    }
+	  }
+
+	  return this
+	};
+
+	// HELPER FUNCTIONS
+	// ================
+
+	var INVALID_BASE64_RE = /[^+\/0-9A-Za-z-_]/g;
+
+	function base64clean (str) {
+	  // Node strips out invalid characters like \n and \t from the string, base64-js does not
+	  str = stringtrim(str).replace(INVALID_BASE64_RE, '');
+	  // Node converts strings with length < 2 to ''
+	  if (str.length < 2) return ''
+	  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
+	  while (str.length % 4 !== 0) {
+	    str = str + '=';
+	  }
+	  return str
+	}
+
+	function stringtrim (str) {
+	  if (str.trim) return str.trim()
+	  return str.replace(/^\s+|\s+$/g, '')
+	}
+
+	function toHex (n) {
+	  if (n < 16) return '0' + n.toString(16)
+	  return n.toString(16)
+	}
+
+	function utf8ToBytes (string, units) {
+	  units = units || Infinity;
+	  var codePoint;
+	  var length = string.length;
+	  var leadSurrogate = null;
+	  var bytes = [];
+
+	  for (var i = 0; i < length; ++i) {
+	    codePoint = string.charCodeAt(i);
+
+	    // is surrogate component
+	    if (codePoint > 0xD7FF && codePoint < 0xE000) {
+	      // last char was a lead
+	      if (!leadSurrogate) {
+	        // no lead yet
+	        if (codePoint > 0xDBFF) {
+	          // unexpected trail
+	          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+	          continue
+	        } else if (i + 1 === length) {
+	          // unpaired lead
+	          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+	          continue
+	        }
+
+	        // valid lead
+	        leadSurrogate = codePoint;
+
+	        continue
+	      }
+
+	      // 2 leads in a row
+	      if (codePoint < 0xDC00) {
+	        if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+	        leadSurrogate = codePoint;
+	        continue
+	      }
+
+	      // valid surrogate pair
+	      codePoint = (leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00) + 0x10000;
+	    } else if (leadSurrogate) {
+	      // valid bmp char, but last char was a lead
+	      if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+	    }
+
+	    leadSurrogate = null;
+
+	    // encode utf8
+	    if (codePoint < 0x80) {
+	      if ((units -= 1) < 0) break
+	      bytes.push(codePoint);
+	    } else if (codePoint < 0x800) {
+	      if ((units -= 2) < 0) break
+	      bytes.push(
+	        codePoint >> 0x6 | 0xC0,
+	        codePoint & 0x3F | 0x80
+	      );
+	    } else if (codePoint < 0x10000) {
+	      if ((units -= 3) < 0) break
+	      bytes.push(
+	        codePoint >> 0xC | 0xE0,
+	        codePoint >> 0x6 & 0x3F | 0x80,
+	        codePoint & 0x3F | 0x80
+	      );
+	    } else if (codePoint < 0x110000) {
+	      if ((units -= 4) < 0) break
+	      bytes.push(
+	        codePoint >> 0x12 | 0xF0,
+	        codePoint >> 0xC & 0x3F | 0x80,
+	        codePoint >> 0x6 & 0x3F | 0x80,
+	        codePoint & 0x3F | 0x80
+	      );
+	    } else {
+	      throw new Error('Invalid code point')
+	    }
+	  }
+
+	  return bytes
+	}
+
+	function asciiToBytes (str) {
+	  var byteArray = [];
+	  for (var i = 0; i < str.length; ++i) {
+	    // Node's code seems to be doing this and not & 0x7F..
+	    byteArray.push(str.charCodeAt(i) & 0xFF);
+	  }
+	  return byteArray
+	}
+
+	function utf16leToBytes (str, units) {
+	  var c, hi, lo;
+	  var byteArray = [];
+	  for (var i = 0; i < str.length; ++i) {
+	    if ((units -= 2) < 0) break
+
+	    c = str.charCodeAt(i);
+	    hi = c >> 8;
+	    lo = c % 256;
+	    byteArray.push(lo);
+	    byteArray.push(hi);
+	  }
+
+	  return byteArray
+	}
+
+
+	function base64ToBytes (str) {
+	  return toByteArray(base64clean(str))
+	}
+
+	function blitBuffer (src, dst, offset, length) {
+	  for (var i = 0; i < length; ++i) {
+	    if ((i + offset >= dst.length) || (i >= src.length)) break
+	    dst[i + offset] = src[i];
+	  }
+	  return i
+	}
+
+	function isnan (val) {
+	  return val !== val // eslint-disable-line no-self-compare
+	}
+
+
+	// the following is from is-buffer, also by Feross Aboukhadijeh and with same lisence
+	// The _isBuffer check is for Safari 5-7 support, because it's missing
+	// Object.prototype.constructor. Remove this eventually
+	function isBuffer(obj) {
+	  return obj != null && (!!obj._isBuffer || isFastBuffer(obj) || isSlowBuffer(obj))
+	}
+
+	function isFastBuffer (obj) {
+	  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+	}
+
+	// For Node v0.10 support. Remove this eventually.
+	function isSlowBuffer (obj) {
+	  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isFastBuffer(obj.slice(0, 0))
+	}
+
+	// shim for using process in browser
+	// based off https://github.com/defunctzombie/node-process/blob/master/browser.js
+
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
+	var cachedSetTimeout = defaultSetTimout;
+	var cachedClearTimeout = defaultClearTimeout;
+	if (typeof (typeof global$1!=="undefined" ? global$1 : window).setTimeout === 'function') {
+	    cachedSetTimeout = setTimeout;
+	}
+	if (typeof (typeof global$1!=="undefined" ? global$1 : window).clearTimeout === 'function') {
+	    cachedClearTimeout = clearTimeout;
+	}
+
+	function runTimeout(fun) {
+	    if (cachedSetTimeout === setTimeout) {
+	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
+	        return setTimeout(fun, 0);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedSetTimeout(fun, 0);
+	    } catch(e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+	            return cachedSetTimeout.call(null, fun, 0);
+	        } catch(e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+	            return cachedSetTimeout.call(this, fun, 0);
+	        }
+	    }
+
+
+	}
+	function runClearTimeout(marker) {
+	    if (cachedClearTimeout === clearTimeout) {
+	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
+	        return clearTimeout(marker);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedClearTimeout(marker);
+	    } catch (e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+	            return cachedClearTimeout.call(null, marker);
+	        } catch (e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+	            return cachedClearTimeout.call(this, marker);
+	        }
+	    }
+
+
+
+	}
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+
+	function cleanUpNextTick() {
+	    if (!draining || !currentQueue) {
+	        return;
+	    }
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = runTimeout(cleanUpNextTick);
+	    draining = true;
+
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    runClearTimeout(timeout);
+	}
+	function nextTick(fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        runTimeout(drainQueue);
+	    }
+	}
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+
+	// from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
+	var performance = (typeof global$1!=="undefined" ? global$1 : window).performance || {};
+	var performanceNow =
+	  performance.now        ||
+	  performance.mozNow     ||
+	  performance.msNow      ||
+	  performance.oNow       ||
+	  performance.webkitNow  ||
+	  function(){ return (new Date()).getTime() };
+
+	var inherits;
+	if (typeof Object.create === 'function'){
+	  inherits = function inherits(ctor, superCtor) {
+	    // implementation from standard node.js 'util' module
+	    ctor.super_ = superCtor;
+	    ctor.prototype = Object.create(superCtor.prototype, {
+	      constructor: {
+	        value: ctor,
+	        enumerable: false,
+	        writable: true,
+	        configurable: true
+	      }
+	    });
+	  };
+	} else {
+	  inherits = function inherits(ctor, superCtor) {
+	    ctor.super_ = superCtor;
+	    var TempCtor = function () {};
+	    TempCtor.prototype = superCtor.prototype;
+	    ctor.prototype = new TempCtor();
+	    ctor.prototype.constructor = ctor;
+	  };
+	}
+	var inherits$1 = inherits;
+
+	var formatRegExp = /%[sdj%]/g;
+	function format(f) {
+	  if (!isString(f)) {
+	    var objects = [];
+	    for (var i = 0; i < arguments.length; i++) {
+	      objects.push(inspect(arguments[i]));
+	    }
+	    return objects.join(' ');
+	  }
+
+	  var i = 1;
+	  var args = arguments;
+	  var len = args.length;
+	  var str = String(f).replace(formatRegExp, function(x) {
+	    if (x === '%%') return '%';
+	    if (i >= len) return x;
+	    switch (x) {
+	      case '%s': return String(args[i++]);
+	      case '%d': return Number(args[i++]);
+	      case '%j':
+	        try {
+	          return JSON.stringify(args[i++]);
+	        } catch (_) {
+	          return '[Circular]';
+	        }
+	      default:
+	        return x;
+	    }
+	  });
+	  for (var x = args[i]; i < len; x = args[++i]) {
+	    if (isNull(x) || !isObject(x)) {
+	      str += ' ' + x;
+	    } else {
+	      str += ' ' + inspect(x);
+	    }
+	  }
+	  return str;
+	}
+
+	// Mark that a method should not be used.
+	// Returns a modified function which warns once by default.
+	// If --no-deprecation is set, then it is a no-op.
+	function deprecate(fn, msg) {
+	  // Allow for deprecating things in the process of starting up.
+	  if (isUndefined((typeof global$1!=="undefined" ? global$1 : window).process)) {
+	    return function() {
+	      return deprecate(fn, msg).apply(this, arguments);
+	    };
+	  }
+
+	  var warned = false;
+	  function deprecated() {
+	    if (!warned) {
+	      {
+	        console.error(msg);
+	      }
+	      warned = true;
+	    }
+	    return fn.apply(this, arguments);
+	  }
+
+	  return deprecated;
+	}
+
+	var debugs = {};
+	var debugEnviron;
+	function debuglog(set) {
+	  if (isUndefined(debugEnviron))
+	    debugEnviron =  '';
+	  set = set.toUpperCase();
+	  if (!debugs[set]) {
+	    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
+	      var pid = 0;
+	      debugs[set] = function() {
+	        var msg = format.apply(null, arguments);
+	        console.error('%s %d: %s', set, pid, msg);
+	      };
+	    } else {
+	      debugs[set] = function() {};
+	    }
+	  }
+	  return debugs[set];
+	}
+
+	/**
+	 * Echos the value of a value. Trys to print the value out
+	 * in the best way possible given the different types.
+	 *
+	 * @param {Object} obj The object to print out.
+	 * @param {Object} opts Optional options object that alters the output.
+	 */
+	/* legacy: obj, showHidden, depth, colors*/
+	function inspect(obj, opts) {
+	  // default options
+	  var ctx = {
+	    seen: [],
+	    stylize: stylizeNoColor
+	  };
+	  // legacy...
+	  if (arguments.length >= 3) ctx.depth = arguments[2];
+	  if (arguments.length >= 4) ctx.colors = arguments[3];
+	  if (isBoolean(opts)) {
+	    // legacy...
+	    ctx.showHidden = opts;
+	  } else if (opts) {
+	    // got an "options" object
+	    _extend(ctx, opts);
+	  }
+	  // set default options
+	  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
+	  if (isUndefined(ctx.depth)) ctx.depth = 2;
+	  if (isUndefined(ctx.colors)) ctx.colors = false;
+	  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
+	  if (ctx.colors) ctx.stylize = stylizeWithColor;
+	  return formatValue(ctx, obj, ctx.depth);
+	}
+
+	// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
+	inspect.colors = {
+	  'bold' : [1, 22],
+	  'italic' : [3, 23],
+	  'underline' : [4, 24],
+	  'inverse' : [7, 27],
+	  'white' : [37, 39],
+	  'grey' : [90, 39],
+	  'black' : [30, 39],
+	  'blue' : [34, 39],
+	  'cyan' : [36, 39],
+	  'green' : [32, 39],
+	  'magenta' : [35, 39],
+	  'red' : [31, 39],
+	  'yellow' : [33, 39]
+	};
+
+	// Don't use 'blue' not visible on cmd.exe
+	inspect.styles = {
+	  'special': 'cyan',
+	  'number': 'yellow',
+	  'boolean': 'yellow',
+	  'undefined': 'grey',
+	  'null': 'bold',
+	  'string': 'green',
+	  'date': 'magenta',
+	  // "name": intentionally not styling
+	  'regexp': 'red'
+	};
+
+
+	function stylizeWithColor(str, styleType) {
+	  var style = inspect.styles[styleType];
+
+	  if (style) {
+	    return '\u001b[' + inspect.colors[style][0] + 'm' + str +
+	           '\u001b[' + inspect.colors[style][1] + 'm';
+	  } else {
+	    return str;
+	  }
+	}
+
+
+	function stylizeNoColor(str, styleType) {
+	  return str;
+	}
+
+
+	function arrayToHash(array) {
+	  var hash = {};
+
+	  array.forEach(function(val, idx) {
+	    hash[val] = true;
+	  });
+
+	  return hash;
+	}
+
+
+	function formatValue(ctx, value, recurseTimes) {
+	  // Provide a hook for user-specified inspect functions.
+	  // Check that value is an object with an inspect function on it
+	  if (ctx.customInspect &&
+	      value &&
+	      isFunction(value.inspect) &&
+	      // Filter out the util module, it's inspect function is special
+	      value.inspect !== inspect &&
+	      // Also filter out any prototype objects using the circular check.
+	      !(value.constructor && value.constructor.prototype === value)) {
+	    var ret = value.inspect(recurseTimes, ctx);
+	    if (!isString(ret)) {
+	      ret = formatValue(ctx, ret, recurseTimes);
+	    }
+	    return ret;
+	  }
+
+	  // Primitive types cannot have properties
+	  var primitive = formatPrimitive(ctx, value);
+	  if (primitive) {
+	    return primitive;
+	  }
+
+	  // Look up the keys of the object.
+	  var keys = Object.keys(value);
+	  var visibleKeys = arrayToHash(keys);
+
+	  if (ctx.showHidden) {
+	    keys = Object.getOwnPropertyNames(value);
+	  }
+
+	  // IE doesn't make error fields non-enumerable
+	  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
+	  if (isError(value)
+	      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
+	    return formatError(value);
+	  }
+
+	  // Some type of object without properties can be shortcutted.
+	  if (keys.length === 0) {
+	    if (isFunction(value)) {
+	      var name = value.name ? ': ' + value.name : '';
+	      return ctx.stylize('[Function' + name + ']', 'special');
+	    }
+	    if (isRegExp(value)) {
+	      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+	    }
+	    if (isDate(value)) {
+	      return ctx.stylize(Date.prototype.toString.call(value), 'date');
+	    }
+	    if (isError(value)) {
+	      return formatError(value);
+	    }
+	  }
+
+	  var base = '', array = false, braces = ['{', '}'];
+
+	  // Make Array say that they are Array
+	  if (isArray$1(value)) {
+	    array = true;
+	    braces = ['[', ']'];
+	  }
+
+	  // Make functions say that they are functions
+	  if (isFunction(value)) {
+	    var n = value.name ? ': ' + value.name : '';
+	    base = ' [Function' + n + ']';
+	  }
+
+	  // Make RegExps say that they are RegExps
+	  if (isRegExp(value)) {
+	    base = ' ' + RegExp.prototype.toString.call(value);
+	  }
+
+	  // Make dates with properties first say the date
+	  if (isDate(value)) {
+	    base = ' ' + Date.prototype.toUTCString.call(value);
+	  }
+
+	  // Make error with message first say the error
+	  if (isError(value)) {
+	    base = ' ' + formatError(value);
+	  }
+
+	  if (keys.length === 0 && (!array || value.length == 0)) {
+	    return braces[0] + base + braces[1];
+	  }
+
+	  if (recurseTimes < 0) {
+	    if (isRegExp(value)) {
+	      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+	    } else {
+	      return ctx.stylize('[Object]', 'special');
+	    }
+	  }
+
+	  ctx.seen.push(value);
+
+	  var output;
+	  if (array) {
+	    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+	  } else {
+	    output = keys.map(function(key) {
+	      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+	    });
+	  }
+
+	  ctx.seen.pop();
+
+	  return reduceToSingleString(output, base, braces);
+	}
+
+
+	function formatPrimitive(ctx, value) {
+	  if (isUndefined(value))
+	    return ctx.stylize('undefined', 'undefined');
+	  if (isString(value)) {
+	    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
+	                                             .replace(/'/g, "\\'")
+	                                             .replace(/\\"/g, '"') + '\'';
+	    return ctx.stylize(simple, 'string');
+	  }
+	  if (isNumber(value))
+	    return ctx.stylize('' + value, 'number');
+	  if (isBoolean(value))
+	    return ctx.stylize('' + value, 'boolean');
+	  // For some reason typeof null is "object", so special case here.
+	  if (isNull(value))
+	    return ctx.stylize('null', 'null');
+	}
+
+
+	function formatError(value) {
+	  return '[' + Error.prototype.toString.call(value) + ']';
+	}
+
+
+	function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
+	  var output = [];
+	  for (var i = 0, l = value.length; i < l; ++i) {
+	    if (hasOwnProperty$1(value, String(i))) {
+	      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+	          String(i), true));
+	    } else {
+	      output.push('');
+	    }
+	  }
+	  keys.forEach(function(key) {
+	    if (!key.match(/^\d+$/)) {
+	      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+	          key, true));
+	    }
+	  });
+	  return output;
+	}
+
+
+	function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
+	  var name, str, desc;
+	  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
+	  if (desc.get) {
+	    if (desc.set) {
+	      str = ctx.stylize('[Getter/Setter]', 'special');
+	    } else {
+	      str = ctx.stylize('[Getter]', 'special');
+	    }
+	  } else {
+	    if (desc.set) {
+	      str = ctx.stylize('[Setter]', 'special');
+	    }
+	  }
+	  if (!hasOwnProperty$1(visibleKeys, key)) {
+	    name = '[' + key + ']';
+	  }
+	  if (!str) {
+	    if (ctx.seen.indexOf(desc.value) < 0) {
+	      if (isNull(recurseTimes)) {
+	        str = formatValue(ctx, desc.value, null);
+	      } else {
+	        str = formatValue(ctx, desc.value, recurseTimes - 1);
+	      }
+	      if (str.indexOf('\n') > -1) {
+	        if (array) {
+	          str = str.split('\n').map(function(line) {
+	            return '  ' + line;
+	          }).join('\n').substr(2);
+	        } else {
+	          str = '\n' + str.split('\n').map(function(line) {
+	            return '   ' + line;
+	          }).join('\n');
+	        }
+	      }
+	    } else {
+	      str = ctx.stylize('[Circular]', 'special');
+	    }
+	  }
+	  if (isUndefined(name)) {
+	    if (array && key.match(/^\d+$/)) {
+	      return str;
+	    }
+	    name = JSON.stringify('' + key);
+	    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
+	      name = name.substr(1, name.length - 2);
+	      name = ctx.stylize(name, 'name');
+	    } else {
+	      name = name.replace(/'/g, "\\'")
+	                 .replace(/\\"/g, '"')
+	                 .replace(/(^"|"$)/g, "'");
+	      name = ctx.stylize(name, 'string');
+	    }
+	  }
+
+	  return name + ': ' + str;
+	}
+
+
+	function reduceToSingleString(output, base, braces) {
+	  var length = output.reduce(function(prev, cur) {
+	    if (cur.indexOf('\n') >= 0) ;
+	    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
+	  }, 0);
+
+	  if (length > 60) {
+	    return braces[0] +
+	           (base === '' ? '' : base + '\n ') +
+	           ' ' +
+	           output.join(',\n  ') +
+	           ' ' +
+	           braces[1];
+	  }
+
+	  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
+	}
+
+
+	// NOTE: These type checking functions intentionally don't use `instanceof`
+	// because it is fragile and can be easily faked with `Object.create()`.
+	function isArray$1(ar) {
+	  return Array.isArray(ar);
+	}
+
+	function isBoolean(arg) {
+	  return typeof arg === 'boolean';
+	}
+
+	function isNull(arg) {
+	  return arg === null;
+	}
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+
+	function isString(arg) {
+	  return typeof arg === 'string';
+	}
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+
+	function isRegExp(re) {
+	  return isObject(re) && objectToString(re) === '[object RegExp]';
+	}
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+
+	function isDate(d) {
+	  return isObject(d) && objectToString(d) === '[object Date]';
+	}
+
+	function isError(e) {
+	  return isObject(e) &&
+	      (objectToString(e) === '[object Error]' || e instanceof Error);
+	}
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
+	}
+
+	function objectToString(o) {
+	  return Object.prototype.toString.call(o);
+	}
+
+	function _extend(origin, add) {
+	  // Don't do anything if add isn't an object
+	  if (!add || !isObject(add)) return origin;
+
+	  var keys = Object.keys(add);
+	  var i = keys.length;
+	  while (i--) {
+	    origin[keys[i]] = add[keys[i]];
+	  }
+	  return origin;
+	}
+	function hasOwnProperty$1(obj, prop) {
+	  return Object.prototype.hasOwnProperty.call(obj, prop);
+	}
+
+	function BufferList() {
+	  this.head = null;
+	  this.tail = null;
+	  this.length = 0;
+	}
+
+	BufferList.prototype.push = function (v) {
+	  var entry = { data: v, next: null };
+	  if (this.length > 0) this.tail.next = entry;else this.head = entry;
+	  this.tail = entry;
+	  ++this.length;
+	};
+
+	BufferList.prototype.unshift = function (v) {
+	  var entry = { data: v, next: this.head };
+	  if (this.length === 0) this.tail = entry;
+	  this.head = entry;
+	  ++this.length;
+	};
+
+	BufferList.prototype.shift = function () {
+	  if (this.length === 0) return;
+	  var ret = this.head.data;
+	  if (this.length === 1) this.head = this.tail = null;else this.head = this.head.next;
+	  --this.length;
+	  return ret;
+	};
+
+	BufferList.prototype.clear = function () {
+	  this.head = this.tail = null;
+	  this.length = 0;
+	};
+
+	BufferList.prototype.join = function (s) {
+	  if (this.length === 0) return '';
+	  var p = this.head;
+	  var ret = '' + p.data;
+	  while (p = p.next) {
+	    ret += s + p.data;
+	  }return ret;
+	};
+
+	BufferList.prototype.concat = function (n) {
+	  if (this.length === 0) return Buffer.alloc(0);
+	  if (this.length === 1) return this.head.data;
+	  var ret = Buffer.allocUnsafe(n >>> 0);
+	  var p = this.head;
+	  var i = 0;
+	  while (p) {
+	    p.data.copy(ret, i);
+	    i += p.data.length;
+	    p = p.next;
+	  }
+	  return ret;
+	};
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	var isBufferEncoding = Buffer.isEncoding
+	  || function(encoding) {
+	       switch (encoding && encoding.toLowerCase()) {
+	         case 'hex': case 'utf8': case 'utf-8': case 'ascii': case 'binary': case 'base64': case 'ucs2': case 'ucs-2': case 'utf16le': case 'utf-16le': case 'raw': return true;
+	         default: return false;
+	       }
+	     };
+
+
+	function assertEncoding(encoding) {
+	  if (encoding && !isBufferEncoding(encoding)) {
+	    throw new Error('Unknown encoding: ' + encoding);
+	  }
+	}
+
+	// StringDecoder provides an interface for efficiently splitting a series of
+	// buffers into a series of JS strings without breaking apart multi-byte
+	// characters. CESU-8 is handled as part of the UTF-8 encoding.
+	//
+	// @TODO Handling all encodings inside a single object makes it very difficult
+	// to reason about this code, so it should be split up in the future.
+	// @TODO There should be a utf8-strict encoding that rejects invalid UTF-8 code
+	// points as used by CESU-8.
+	function StringDecoder(encoding) {
+	  this.encoding = (encoding || 'utf8').toLowerCase().replace(/[-_]/, '');
+	  assertEncoding(encoding);
+	  switch (this.encoding) {
+	    case 'utf8':
+	      // CESU-8 represents each of Surrogate Pair by 3-bytes
+	      this.surrogateSize = 3;
+	      break;
+	    case 'ucs2':
+	    case 'utf16le':
+	      // UTF-16 represents each of Surrogate Pair by 2-bytes
+	      this.surrogateSize = 2;
+	      this.detectIncompleteChar = utf16DetectIncompleteChar;
+	      break;
+	    case 'base64':
+	      // Base-64 stores 3 bytes in 4 chars, and pads the remainder.
+	      this.surrogateSize = 3;
+	      this.detectIncompleteChar = base64DetectIncompleteChar;
+	      break;
+	    default:
+	      this.write = passThroughWrite;
+	      return;
+	  }
+
+	  // Enough space to store all bytes of a single character. UTF-8 needs 4
+	  // bytes, but CESU-8 may require up to 6 (3 bytes per surrogate).
+	  this.charBuffer = new Buffer(6);
+	  // Number of bytes received for the current incomplete multi-byte character.
+	  this.charReceived = 0;
+	  // Number of bytes expected for the current incomplete multi-byte character.
+	  this.charLength = 0;
+	}
+
+	// write decodes the given buffer and returns it as JS string that is
+	// guaranteed to not contain any partial multi-byte characters. Any partial
+	// character found at the end of the buffer is buffered up, and will be
+	// returned when calling write again with the remaining bytes.
+	//
+	// Note: Converting a Buffer containing an orphan surrogate to a String
+	// currently works, but converting a String to a Buffer (via `new Buffer`, or
+	// Buffer#write) will replace incomplete surrogates with the unicode
+	// replacement character. See https://codereview.chromium.org/121173009/ .
+	StringDecoder.prototype.write = function(buffer) {
+	  var charStr = '';
+	  // if our last write ended with an incomplete multibyte character
+	  while (this.charLength) {
+	    // determine how many remaining bytes this buffer has to offer for this char
+	    var available = (buffer.length >= this.charLength - this.charReceived) ?
+	        this.charLength - this.charReceived :
+	        buffer.length;
+
+	    // add the new bytes to the char buffer
+	    buffer.copy(this.charBuffer, this.charReceived, 0, available);
+	    this.charReceived += available;
+
+	    if (this.charReceived < this.charLength) {
+	      // still not enough chars in this buffer? wait for more ...
+	      return '';
+	    }
+
+	    // remove bytes belonging to the current character from the buffer
+	    buffer = buffer.slice(available, buffer.length);
+
+	    // get the character that was split
+	    charStr = this.charBuffer.slice(0, this.charLength).toString(this.encoding);
+
+	    // CESU-8: lead surrogate (D800-DBFF) is also the incomplete character
+	    var charCode = charStr.charCodeAt(charStr.length - 1);
+	    if (charCode >= 0xD800 && charCode <= 0xDBFF) {
+	      this.charLength += this.surrogateSize;
+	      charStr = '';
+	      continue;
+	    }
+	    this.charReceived = this.charLength = 0;
+
+	    // if there are no more bytes in this buffer, just emit our char
+	    if (buffer.length === 0) {
+	      return charStr;
+	    }
+	    break;
+	  }
+
+	  // determine and set charLength / charReceived
+	  this.detectIncompleteChar(buffer);
+
+	  var end = buffer.length;
+	  if (this.charLength) {
+	    // buffer the incomplete character bytes we got
+	    buffer.copy(this.charBuffer, 0, buffer.length - this.charReceived, end);
+	    end -= this.charReceived;
+	  }
+
+	  charStr += buffer.toString(this.encoding, 0, end);
+
+	  var end = charStr.length - 1;
+	  var charCode = charStr.charCodeAt(end);
+	  // CESU-8: lead surrogate (D800-DBFF) is also the incomplete character
+	  if (charCode >= 0xD800 && charCode <= 0xDBFF) {
+	    var size = this.surrogateSize;
+	    this.charLength += size;
+	    this.charReceived += size;
+	    this.charBuffer.copy(this.charBuffer, size, 0, size);
+	    buffer.copy(this.charBuffer, 0, 0, size);
+	    return charStr.substring(0, end);
+	  }
+
+	  // or just emit the charStr
+	  return charStr;
+	};
+
+	// detectIncompleteChar determines if there is an incomplete UTF-8 character at
+	// the end of the given buffer. If so, it sets this.charLength to the byte
+	// length that character, and sets this.charReceived to the number of bytes
+	// that are available for this character.
+	StringDecoder.prototype.detectIncompleteChar = function(buffer) {
+	  // determine how many bytes we have to check at the end of this buffer
+	  var i = (buffer.length >= 3) ? 3 : buffer.length;
+
+	  // Figure out if one of the last i bytes of our buffer announces an
+	  // incomplete char.
+	  for (; i > 0; i--) {
+	    var c = buffer[buffer.length - i];
+
+	    // See http://en.wikipedia.org/wiki/UTF-8#Description
+
+	    // 110XXXXX
+	    if (i == 1 && c >> 5 == 0x06) {
+	      this.charLength = 2;
+	      break;
+	    }
+
+	    // 1110XXXX
+	    if (i <= 2 && c >> 4 == 0x0E) {
+	      this.charLength = 3;
+	      break;
+	    }
+
+	    // 11110XXX
+	    if (i <= 3 && c >> 3 == 0x1E) {
+	      this.charLength = 4;
+	      break;
+	    }
+	  }
+	  this.charReceived = i;
+	};
+
+	StringDecoder.prototype.end = function(buffer) {
+	  var res = '';
+	  if (buffer && buffer.length)
+	    res = this.write(buffer);
+
+	  if (this.charReceived) {
+	    var cr = this.charReceived;
+	    var buf = this.charBuffer;
+	    var enc = this.encoding;
+	    res += buf.slice(0, cr).toString(enc);
+	  }
+
+	  return res;
+	};
+
+	function passThroughWrite(buffer) {
+	  return buffer.toString(this.encoding);
+	}
+
+	function utf16DetectIncompleteChar(buffer) {
+	  this.charReceived = buffer.length % 2;
+	  this.charLength = this.charReceived ? 2 : 0;
+	}
+
+	function base64DetectIncompleteChar(buffer) {
+	  this.charReceived = buffer.length % 3;
+	  this.charLength = this.charReceived ? 3 : 0;
+	}
+
+	Readable.ReadableState = ReadableState;
+
+	var debug = debuglog('stream');
+	inherits$1(Readable, EventEmitter);
+
+	function prependListener(emitter, event, fn) {
+	  // Sadly this is not cacheable as some libraries bundle their own
+	  // event emitter implementation with them.
+	  if (typeof emitter.prependListener === 'function') {
+	    return emitter.prependListener(event, fn);
+	  } else {
+	    // This is a hack to make sure that our error handler is attached before any
+	    // userland ones.  NEVER DO THIS. This is here only because this code needs
+	    // to continue to work with older versions of Node.js that do not include
+	    // the prependListener() method. The goal is to eventually remove this hack.
+	    if (!emitter._events || !emitter._events[event])
+	      emitter.on(event, fn);
+	    else if (Array.isArray(emitter._events[event]))
+	      emitter._events[event].unshift(fn);
+	    else
+	      emitter._events[event] = [fn, emitter._events[event]];
+	  }
+	}
+	function listenerCount$1 (emitter, type) {
+	  return emitter.listeners(type).length;
+	}
+	function ReadableState(options, stream) {
+
+	  options = options || {};
+
+	  // object stream flag. Used to make read(n) ignore n and to
+	  // make all the buffer merging and length checks go away
+	  this.objectMode = !!options.objectMode;
+
+	  if (stream instanceof Duplex) this.objectMode = this.objectMode || !!options.readableObjectMode;
+
+	  // the point at which it stops calling _read() to fill the buffer
+	  // Note: 0 is a valid value, means "don't call _read preemptively ever"
+	  var hwm = options.highWaterMark;
+	  var defaultHwm = this.objectMode ? 16 : 16 * 1024;
+	  this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
+
+	  // cast to ints.
+	  this.highWaterMark = ~ ~this.highWaterMark;
+
+	  // A linked list is used to store data chunks instead of an array because the
+	  // linked list can remove elements from the beginning faster than
+	  // array.shift()
+	  this.buffer = new BufferList();
+	  this.length = 0;
+	  this.pipes = null;
+	  this.pipesCount = 0;
+	  this.flowing = null;
+	  this.ended = false;
+	  this.endEmitted = false;
+	  this.reading = false;
+
+	  // a flag to be able to tell if the onwrite cb is called immediately,
+	  // or on a later tick.  We set this to true at first, because any
+	  // actions that shouldn't happen until "later" should generally also
+	  // not happen before the first write call.
+	  this.sync = true;
+
+	  // whenever we return null, then we set a flag to say
+	  // that we're awaiting a 'readable' event emission.
+	  this.needReadable = false;
+	  this.emittedReadable = false;
+	  this.readableListening = false;
+	  this.resumeScheduled = false;
+
+	  // Crypto is kind of old and crusty.  Historically, its default string
+	  // encoding is 'binary' so we have to make this configurable.
+	  // Everything else in the universe uses 'utf8', though.
+	  this.defaultEncoding = options.defaultEncoding || 'utf8';
+
+	  // when piping, we only care about 'readable' events that happen
+	  // after read()ing all the bytes and not getting any pushback.
+	  this.ranOut = false;
+
+	  // the number of writers that are awaiting a drain event in .pipe()s
+	  this.awaitDrain = 0;
+
+	  // if true, a maybeReadMore has been scheduled
+	  this.readingMore = false;
+
+	  this.decoder = null;
+	  this.encoding = null;
+	  if (options.encoding) {
+	    this.decoder = new StringDecoder(options.encoding);
+	    this.encoding = options.encoding;
+	  }
+	}
+	function Readable(options) {
+
+	  if (!(this instanceof Readable)) return new Readable(options);
+
+	  this._readableState = new ReadableState(options, this);
+
+	  // legacy
+	  this.readable = true;
+
+	  if (options && typeof options.read === 'function') this._read = options.read;
+
+	  EventEmitter.call(this);
+	}
+
+	// Manually shove something into the read() buffer.
+	// This returns true if the highWaterMark has not been hit yet,
+	// similar to how Writable.write() returns true if you should
+	// write() some more.
+	Readable.prototype.push = function (chunk, encoding) {
+	  var state = this._readableState;
+
+	  if (!state.objectMode && typeof chunk === 'string') {
+	    encoding = encoding || state.defaultEncoding;
+	    if (encoding !== state.encoding) {
+	      chunk = Buffer.from(chunk, encoding);
+	      encoding = '';
+	    }
+	  }
+
+	  return readableAddChunk(this, state, chunk, encoding, false);
+	};
+
+	// Unshift should *always* be something directly out of read()
+	Readable.prototype.unshift = function (chunk) {
+	  var state = this._readableState;
+	  return readableAddChunk(this, state, chunk, '', true);
+	};
+
+	Readable.prototype.isPaused = function () {
+	  return this._readableState.flowing === false;
+	};
+
+	function readableAddChunk(stream, state, chunk, encoding, addToFront) {
+	  var er = chunkInvalid(state, chunk);
+	  if (er) {
+	    stream.emit('error', er);
+	  } else if (chunk === null) {
+	    state.reading = false;
+	    onEofChunk(stream, state);
+	  } else if (state.objectMode || chunk && chunk.length > 0) {
+	    if (state.ended && !addToFront) {
+	      var e = new Error('stream.push() after EOF');
+	      stream.emit('error', e);
+	    } else if (state.endEmitted && addToFront) {
+	      var _e = new Error('stream.unshift() after end event');
+	      stream.emit('error', _e);
+	    } else {
+	      var skipAdd;
+	      if (state.decoder && !addToFront && !encoding) {
+	        chunk = state.decoder.write(chunk);
+	        skipAdd = !state.objectMode && chunk.length === 0;
+	      }
+
+	      if (!addToFront) state.reading = false;
+
+	      // Don't add to the buffer if we've decoded to an empty string chunk and
+	      // we're not in object mode
+	      if (!skipAdd) {
+	        // if we want the data now, just emit it.
+	        if (state.flowing && state.length === 0 && !state.sync) {
+	          stream.emit('data', chunk);
+	          stream.read(0);
+	        } else {
+	          // update the buffer info.
+	          state.length += state.objectMode ? 1 : chunk.length;
+	          if (addToFront) state.buffer.unshift(chunk);else state.buffer.push(chunk);
+
+	          if (state.needReadable) emitReadable(stream);
+	        }
+	      }
+
+	      maybeReadMore(stream, state);
+	    }
+	  } else if (!addToFront) {
+	    state.reading = false;
+	  }
+
+	  return needMoreData(state);
+	}
+
+	// if it's past the high water mark, we can push in some more.
+	// Also, if we have no data yet, we can stand some
+	// more bytes.  This is to work around cases where hwm=0,
+	// such as the repl.  Also, if the push() triggered a
+	// readable event, and the user called read(largeNumber) such that
+	// needReadable was set, then we ought to push more, so that another
+	// 'readable' event will be triggered.
+	function needMoreData(state) {
+	  return !state.ended && (state.needReadable || state.length < state.highWaterMark || state.length === 0);
+	}
+
+	// backwards compatibility.
+	Readable.prototype.setEncoding = function (enc) {
+	  this._readableState.decoder = new StringDecoder(enc);
+	  this._readableState.encoding = enc;
+	  return this;
+	};
+
+	// Don't raise the hwm > 8MB
+	var MAX_HWM = 0x800000;
+	function computeNewHighWaterMark(n) {
+	  if (n >= MAX_HWM) {
+	    n = MAX_HWM;
+	  } else {
+	    // Get the next highest power of 2 to prevent increasing hwm excessively in
+	    // tiny amounts
+	    n--;
+	    n |= n >>> 1;
+	    n |= n >>> 2;
+	    n |= n >>> 4;
+	    n |= n >>> 8;
+	    n |= n >>> 16;
+	    n++;
+	  }
+	  return n;
+	}
+
+	// This function is designed to be inlinable, so please take care when making
+	// changes to the function body.
+	function howMuchToRead(n, state) {
+	  if (n <= 0 || state.length === 0 && state.ended) return 0;
+	  if (state.objectMode) return 1;
+	  if (n !== n) {
+	    // Only flow one buffer at a time
+	    if (state.flowing && state.length) return state.buffer.head.data.length;else return state.length;
+	  }
+	  // If we're asking for more than the current hwm, then raise the hwm.
+	  if (n > state.highWaterMark) state.highWaterMark = computeNewHighWaterMark(n);
+	  if (n <= state.length) return n;
+	  // Don't have enough
+	  if (!state.ended) {
+	    state.needReadable = true;
+	    return 0;
+	  }
+	  return state.length;
+	}
+
+	// you can override either this method, or the async _read(n) below.
+	Readable.prototype.read = function (n) {
+	  debug('read', n);
+	  n = parseInt(n, 10);
+	  var state = this._readableState;
+	  var nOrig = n;
+
+	  if (n !== 0) state.emittedReadable = false;
+
+	  // if we're doing read(0) to trigger a readable event, but we
+	  // already have a bunch of data in the buffer, then just trigger
+	  // the 'readable' event and move on.
+	  if (n === 0 && state.needReadable && (state.length >= state.highWaterMark || state.ended)) {
+	    debug('read: emitReadable', state.length, state.ended);
+	    if (state.length === 0 && state.ended) endReadable(this);else emitReadable(this);
+	    return null;
+	  }
+
+	  n = howMuchToRead(n, state);
+
+	  // if we've ended, and we're now clear, then finish it up.
+	  if (n === 0 && state.ended) {
+	    if (state.length === 0) endReadable(this);
+	    return null;
+	  }
+
+	  // All the actual chunk generation logic needs to be
+	  // *below* the call to _read.  The reason is that in certain
+	  // synthetic stream cases, such as passthrough streams, _read
+	  // may be a completely synchronous operation which may change
+	  // the state of the read buffer, providing enough data when
+	  // before there was *not* enough.
+	  //
+	  // So, the steps are:
+	  // 1. Figure out what the state of things will be after we do
+	  // a read from the buffer.
+	  //
+	  // 2. If that resulting state will trigger a _read, then call _read.
+	  // Note that this may be asynchronous, or synchronous.  Yes, it is
+	  // deeply ugly to write APIs this way, but that still doesn't mean
+	  // that the Readable class should behave improperly, as streams are
+	  // designed to be sync/async agnostic.
+	  // Take note if the _read call is sync or async (ie, if the read call
+	  // has returned yet), so that we know whether or not it's safe to emit
+	  // 'readable' etc.
+	  //
+	  // 3. Actually pull the requested chunks out of the buffer and return.
+
+	  // if we need a readable event, then we need to do some reading.
+	  var doRead = state.needReadable;
+	  debug('need readable', doRead);
+
+	  // if we currently have less than the highWaterMark, then also read some
+	  if (state.length === 0 || state.length - n < state.highWaterMark) {
+	    doRead = true;
+	    debug('length less than watermark', doRead);
+	  }
+
+	  // however, if we've ended, then there's no point, and if we're already
+	  // reading, then it's unnecessary.
+	  if (state.ended || state.reading) {
+	    doRead = false;
+	    debug('reading or ended', doRead);
+	  } else if (doRead) {
+	    debug('do read');
+	    state.reading = true;
+	    state.sync = true;
+	    // if the length is currently zero, then we *need* a readable event.
+	    if (state.length === 0) state.needReadable = true;
+	    // call internal read method
+	    this._read(state.highWaterMark);
+	    state.sync = false;
+	    // If _read pushed data synchronously, then `reading` will be false,
+	    // and we need to re-evaluate how much data we can return to the user.
+	    if (!state.reading) n = howMuchToRead(nOrig, state);
+	  }
+
+	  var ret;
+	  if (n > 0) ret = fromList(n, state);else ret = null;
+
+	  if (ret === null) {
+	    state.needReadable = true;
+	    n = 0;
+	  } else {
+	    state.length -= n;
+	  }
+
+	  if (state.length === 0) {
+	    // If we have nothing in the buffer, then we want to know
+	    // as soon as we *do* get something into the buffer.
+	    if (!state.ended) state.needReadable = true;
+
+	    // If we tried to read() past the EOF, then emit end on the next tick.
+	    if (nOrig !== n && state.ended) endReadable(this);
+	  }
+
+	  if (ret !== null) this.emit('data', ret);
+
+	  return ret;
+	};
+
+	function chunkInvalid(state, chunk) {
+	  var er = null;
+	  if (!isBuffer(chunk) && typeof chunk !== 'string' && chunk !== null && chunk !== undefined && !state.objectMode) {
+	    er = new TypeError('Invalid non-string/buffer chunk');
+	  }
+	  return er;
+	}
+
+	function onEofChunk(stream, state) {
+	  if (state.ended) return;
+	  if (state.decoder) {
+	    var chunk = state.decoder.end();
+	    if (chunk && chunk.length) {
+	      state.buffer.push(chunk);
+	      state.length += state.objectMode ? 1 : chunk.length;
+	    }
+	  }
+	  state.ended = true;
+
+	  // emit 'readable' now to make sure it gets picked up.
+	  emitReadable(stream);
+	}
+
+	// Don't emit readable right away in sync mode, because this can trigger
+	// another read() call => stack overflow.  This way, it might trigger
+	// a nextTick recursion warning, but that's not so bad.
+	function emitReadable(stream) {
+	  var state = stream._readableState;
+	  state.needReadable = false;
+	  if (!state.emittedReadable) {
+	    debug('emitReadable', state.flowing);
+	    state.emittedReadable = true;
+	    if (state.sync) nextTick(emitReadable_, stream);else emitReadable_(stream);
+	  }
+	}
+
+	function emitReadable_(stream) {
+	  debug('emit readable');
+	  stream.emit('readable');
+	  flow(stream);
+	}
+
+	// at this point, the user has presumably seen the 'readable' event,
+	// and called read() to consume some data.  that may have triggered
+	// in turn another _read(n) call, in which case reading = true if
+	// it's in progress.
+	// However, if we're not ended, or reading, and the length < hwm,
+	// then go ahead and try to read some more preemptively.
+	function maybeReadMore(stream, state) {
+	  if (!state.readingMore) {
+	    state.readingMore = true;
+	    nextTick(maybeReadMore_, stream, state);
+	  }
+	}
+
+	function maybeReadMore_(stream, state) {
+	  var len = state.length;
+	  while (!state.reading && !state.flowing && !state.ended && state.length < state.highWaterMark) {
+	    debug('maybeReadMore read 0');
+	    stream.read(0);
+	    if (len === state.length)
+	      // didn't get any data, stop spinning.
+	      break;else len = state.length;
+	  }
+	  state.readingMore = false;
+	}
+
+	// abstract method.  to be overridden in specific implementation classes.
+	// call cb(er, data) where data is <= n in length.
+	// for virtual (non-string, non-buffer) streams, "length" is somewhat
+	// arbitrary, and perhaps not very meaningful.
+	Readable.prototype._read = function (n) {
+	  this.emit('error', new Error('not implemented'));
+	};
+
+	Readable.prototype.pipe = function (dest, pipeOpts) {
+	  var src = this;
+	  var state = this._readableState;
+
+	  switch (state.pipesCount) {
+	    case 0:
+	      state.pipes = dest;
+	      break;
+	    case 1:
+	      state.pipes = [state.pipes, dest];
+	      break;
+	    default:
+	      state.pipes.push(dest);
+	      break;
+	  }
+	  state.pipesCount += 1;
+	  debug('pipe count=%d opts=%j', state.pipesCount, pipeOpts);
+
+	  var doEnd = (!pipeOpts || pipeOpts.end !== false);
+
+	  var endFn = doEnd ? onend : cleanup;
+	  if (state.endEmitted) nextTick(endFn);else src.once('end', endFn);
+
+	  dest.on('unpipe', onunpipe);
+	  function onunpipe(readable) {
+	    debug('onunpipe');
+	    if (readable === src) {
+	      cleanup();
+	    }
+	  }
+
+	  function onend() {
+	    debug('onend');
+	    dest.end();
+	  }
+
+	  // when the dest drains, it reduces the awaitDrain counter
+	  // on the source.  This would be more elegant with a .once()
+	  // handler in flow(), but adding and removing repeatedly is
+	  // too slow.
+	  var ondrain = pipeOnDrain(src);
+	  dest.on('drain', ondrain);
+
+	  var cleanedUp = false;
+	  function cleanup() {
+	    debug('cleanup');
+	    // cleanup event handlers once the pipe is broken
+	    dest.removeListener('close', onclose);
+	    dest.removeListener('finish', onfinish);
+	    dest.removeListener('drain', ondrain);
+	    dest.removeListener('error', onerror);
+	    dest.removeListener('unpipe', onunpipe);
+	    src.removeListener('end', onend);
+	    src.removeListener('end', cleanup);
+	    src.removeListener('data', ondata);
+
+	    cleanedUp = true;
+
+	    // if the reader is waiting for a drain event from this
+	    // specific writer, then it would cause it to never start
+	    // flowing again.
+	    // So, if this is awaiting a drain, then we just call it now.
+	    // If we don't know, then assume that we are waiting for one.
+	    if (state.awaitDrain && (!dest._writableState || dest._writableState.needDrain)) ondrain();
+	  }
+
+	  // If the user pushes more data while we're writing to dest then we'll end up
+	  // in ondata again. However, we only want to increase awaitDrain once because
+	  // dest will only emit one 'drain' event for the multiple writes.
+	  // => Introduce a guard on increasing awaitDrain.
+	  var increasedAwaitDrain = false;
+	  src.on('data', ondata);
+	  function ondata(chunk) {
+	    debug('ondata');
+	    increasedAwaitDrain = false;
+	    var ret = dest.write(chunk);
+	    if (false === ret && !increasedAwaitDrain) {
+	      // If the user unpiped during `dest.write()`, it is possible
+	      // to get stuck in a permanently paused state if that write
+	      // also returned false.
+	      // => Check whether `dest` is still a piping destination.
+	      if ((state.pipesCount === 1 && state.pipes === dest || state.pipesCount > 1 && indexOf(state.pipes, dest) !== -1) && !cleanedUp) {
+	        debug('false write response, pause', src._readableState.awaitDrain);
+	        src._readableState.awaitDrain++;
+	        increasedAwaitDrain = true;
+	      }
+	      src.pause();
+	    }
+	  }
+
+	  // if the dest has an error, then stop piping into it.
+	  // however, don't suppress the throwing behavior for this.
+	  function onerror(er) {
+	    debug('onerror', er);
+	    unpipe();
+	    dest.removeListener('error', onerror);
+	    if (listenerCount$1(dest, 'error') === 0) dest.emit('error', er);
+	  }
+
+	  // Make sure our error handler is attached before userland ones.
+	  prependListener(dest, 'error', onerror);
+
+	  // Both close and finish should trigger unpipe, but only once.
+	  function onclose() {
+	    dest.removeListener('finish', onfinish);
+	    unpipe();
+	  }
+	  dest.once('close', onclose);
+	  function onfinish() {
+	    debug('onfinish');
+	    dest.removeListener('close', onclose);
+	    unpipe();
+	  }
+	  dest.once('finish', onfinish);
+
+	  function unpipe() {
+	    debug('unpipe');
+	    src.unpipe(dest);
+	  }
+
+	  // tell the dest that it's being piped to
+	  dest.emit('pipe', src);
+
+	  // start the flow if it hasn't been started already.
+	  if (!state.flowing) {
+	    debug('pipe resume');
+	    src.resume();
+	  }
+
+	  return dest;
+	};
+
+	function pipeOnDrain(src) {
+	  return function () {
+	    var state = src._readableState;
+	    debug('pipeOnDrain', state.awaitDrain);
+	    if (state.awaitDrain) state.awaitDrain--;
+	    if (state.awaitDrain === 0 && src.listeners('data').length) {
+	      state.flowing = true;
+	      flow(src);
+	    }
+	  };
+	}
+
+	Readable.prototype.unpipe = function (dest) {
+	  var state = this._readableState;
+
+	  // if we're not piping anywhere, then do nothing.
+	  if (state.pipesCount === 0) return this;
+
+	  // just one destination.  most common case.
+	  if (state.pipesCount === 1) {
+	    // passed in one, but it's not the right one.
+	    if (dest && dest !== state.pipes) return this;
+
+	    if (!dest) dest = state.pipes;
+
+	    // got a match.
+	    state.pipes = null;
+	    state.pipesCount = 0;
+	    state.flowing = false;
+	    if (dest) dest.emit('unpipe', this);
+	    return this;
+	  }
+
+	  // slow case. multiple pipe destinations.
+
+	  if (!dest) {
+	    // remove all.
+	    var dests = state.pipes;
+	    var len = state.pipesCount;
+	    state.pipes = null;
+	    state.pipesCount = 0;
+	    state.flowing = false;
+
+	    for (var _i = 0; _i < len; _i++) {
+	      dests[_i].emit('unpipe', this);
+	    }return this;
+	  }
+
+	  // try to find the right one.
+	  var i = indexOf(state.pipes, dest);
+	  if (i === -1) return this;
+
+	  state.pipes.splice(i, 1);
+	  state.pipesCount -= 1;
+	  if (state.pipesCount === 1) state.pipes = state.pipes[0];
+
+	  dest.emit('unpipe', this);
+
+	  return this;
+	};
+
+	// set up data events if they are asked for
+	// Ensure readable listeners eventually get something
+	Readable.prototype.on = function (ev, fn) {
+	  var res = EventEmitter.prototype.on.call(this, ev, fn);
+
+	  if (ev === 'data') {
+	    // Start flowing on next tick if stream isn't explicitly paused
+	    if (this._readableState.flowing !== false) this.resume();
+	  } else if (ev === 'readable') {
+	    var state = this._readableState;
+	    if (!state.endEmitted && !state.readableListening) {
+	      state.readableListening = state.needReadable = true;
+	      state.emittedReadable = false;
+	      if (!state.reading) {
+	        nextTick(nReadingNextTick, this);
+	      } else if (state.length) {
+	        emitReadable(this);
+	      }
+	    }
+	  }
+
+	  return res;
+	};
+	Readable.prototype.addListener = Readable.prototype.on;
+
+	function nReadingNextTick(self) {
+	  debug('readable nexttick read 0');
+	  self.read(0);
+	}
+
+	// pause() and resume() are remnants of the legacy readable stream API
+	// If the user uses them, then switch into old mode.
+	Readable.prototype.resume = function () {
+	  var state = this._readableState;
+	  if (!state.flowing) {
+	    debug('resume');
+	    state.flowing = true;
+	    resume(this, state);
+	  }
+	  return this;
+	};
+
+	function resume(stream, state) {
+	  if (!state.resumeScheduled) {
+	    state.resumeScheduled = true;
+	    nextTick(resume_, stream, state);
+	  }
+	}
+
+	function resume_(stream, state) {
+	  if (!state.reading) {
+	    debug('resume read 0');
+	    stream.read(0);
+	  }
+
+	  state.resumeScheduled = false;
+	  state.awaitDrain = 0;
+	  stream.emit('resume');
+	  flow(stream);
+	  if (state.flowing && !state.reading) stream.read(0);
+	}
+
+	Readable.prototype.pause = function () {
+	  debug('call pause flowing=%j', this._readableState.flowing);
+	  if (false !== this._readableState.flowing) {
+	    debug('pause');
+	    this._readableState.flowing = false;
+	    this.emit('pause');
+	  }
+	  return this;
+	};
+
+	function flow(stream) {
+	  var state = stream._readableState;
+	  debug('flow', state.flowing);
+	  while (state.flowing && stream.read() !== null) {}
+	}
+
+	// wrap an old-style stream as the async data source.
+	// This is *not* part of the readable stream interface.
+	// It is an ugly unfortunate mess of history.
+	Readable.prototype.wrap = function (stream) {
+	  var state = this._readableState;
+	  var paused = false;
+
+	  var self = this;
+	  stream.on('end', function () {
+	    debug('wrapped end');
+	    if (state.decoder && !state.ended) {
+	      var chunk = state.decoder.end();
+	      if (chunk && chunk.length) self.push(chunk);
+	    }
+
+	    self.push(null);
+	  });
+
+	  stream.on('data', function (chunk) {
+	    debug('wrapped data');
+	    if (state.decoder) chunk = state.decoder.write(chunk);
+
+	    // don't skip over falsy values in objectMode
+	    if (state.objectMode && (chunk === null || chunk === undefined)) return;else if (!state.objectMode && (!chunk || !chunk.length)) return;
+
+	    var ret = self.push(chunk);
+	    if (!ret) {
+	      paused = true;
+	      stream.pause();
+	    }
+	  });
+
+	  // proxy all the other methods.
+	  // important when wrapping filters and duplexes.
+	  for (var i in stream) {
+	    if (this[i] === undefined && typeof stream[i] === 'function') {
+	      this[i] = function (method) {
+	        return function () {
+	          return stream[method].apply(stream, arguments);
+	        };
+	      }(i);
+	    }
+	  }
+
+	  // proxy certain important events.
+	  var events = ['error', 'close', 'destroy', 'pause', 'resume'];
+	  forEach(events, function (ev) {
+	    stream.on(ev, self.emit.bind(self, ev));
+	  });
+
+	  // when we try to consume some more bytes, simply unpause the
+	  // underlying stream.
+	  self._read = function (n) {
+	    debug('wrapped _read', n);
+	    if (paused) {
+	      paused = false;
+	      stream.resume();
+	    }
+	  };
+
+	  return self;
+	};
+
+	// exposed for testing purposes only.
+	Readable._fromList = fromList;
+
+	// Pluck off n bytes from an array of buffers.
+	// Length is the combined lengths of all the buffers in the list.
+	// This function is designed to be inlinable, so please take care when making
+	// changes to the function body.
+	function fromList(n, state) {
+	  // nothing buffered
+	  if (state.length === 0) return null;
+
+	  var ret;
+	  if (state.objectMode) ret = state.buffer.shift();else if (!n || n >= state.length) {
+	    // read it all, truncate the list
+	    if (state.decoder) ret = state.buffer.join('');else if (state.buffer.length === 1) ret = state.buffer.head.data;else ret = state.buffer.concat(state.length);
+	    state.buffer.clear();
+	  } else {
+	    // read part of list
+	    ret = fromListPartial(n, state.buffer, state.decoder);
+	  }
+
+	  return ret;
+	}
+
+	// Extracts only enough buffered data to satisfy the amount requested.
+	// This function is designed to be inlinable, so please take care when making
+	// changes to the function body.
+	function fromListPartial(n, list, hasStrings) {
+	  var ret;
+	  if (n < list.head.data.length) {
+	    // slice is the same for buffers and strings
+	    ret = list.head.data.slice(0, n);
+	    list.head.data = list.head.data.slice(n);
+	  } else if (n === list.head.data.length) {
+	    // first chunk is a perfect match
+	    ret = list.shift();
+	  } else {
+	    // result spans more than one buffer
+	    ret = hasStrings ? copyFromBufferString(n, list) : copyFromBuffer(n, list);
+	  }
+	  return ret;
+	}
+
+	// Copies a specified amount of characters from the list of buffered data
+	// chunks.
+	// This function is designed to be inlinable, so please take care when making
+	// changes to the function body.
+	function copyFromBufferString(n, list) {
+	  var p = list.head;
+	  var c = 1;
+	  var ret = p.data;
+	  n -= ret.length;
+	  while (p = p.next) {
+	    var str = p.data;
+	    var nb = n > str.length ? str.length : n;
+	    if (nb === str.length) ret += str;else ret += str.slice(0, n);
+	    n -= nb;
+	    if (n === 0) {
+	      if (nb === str.length) {
+	        ++c;
+	        if (p.next) list.head = p.next;else list.head = list.tail = null;
+	      } else {
+	        list.head = p;
+	        p.data = str.slice(nb);
+	      }
+	      break;
+	    }
+	    ++c;
+	  }
+	  list.length -= c;
+	  return ret;
+	}
+
+	// Copies a specified amount of bytes from the list of buffered data chunks.
+	// This function is designed to be inlinable, so please take care when making
+	// changes to the function body.
+	function copyFromBuffer(n, list) {
+	  var ret = Buffer.allocUnsafe(n);
+	  var p = list.head;
+	  var c = 1;
+	  p.data.copy(ret);
+	  n -= p.data.length;
+	  while (p = p.next) {
+	    var buf = p.data;
+	    var nb = n > buf.length ? buf.length : n;
+	    buf.copy(ret, ret.length - n, 0, nb);
+	    n -= nb;
+	    if (n === 0) {
+	      if (nb === buf.length) {
+	        ++c;
+	        if (p.next) list.head = p.next;else list.head = list.tail = null;
+	      } else {
+	        list.head = p;
+	        p.data = buf.slice(nb);
+	      }
+	      break;
+	    }
+	    ++c;
+	  }
+	  list.length -= c;
+	  return ret;
+	}
+
+	function endReadable(stream) {
+	  var state = stream._readableState;
+
+	  // If we get here before consuming all the bytes, then that is a
+	  // bug in node.  Should never happen.
+	  if (state.length > 0) throw new Error('"endReadable()" called on non-empty stream');
+
+	  if (!state.endEmitted) {
+	    state.ended = true;
+	    nextTick(endReadableNT, state, stream);
+	  }
+	}
+
+	function endReadableNT(state, stream) {
+	  // Check that we didn't get one last unshift.
+	  if (!state.endEmitted && state.length === 0) {
+	    state.endEmitted = true;
+	    stream.readable = false;
+	    stream.emit('end');
+	  }
+	}
+
+	function forEach(xs, f) {
+	  for (var i = 0, l = xs.length; i < l; i++) {
+	    f(xs[i], i);
+	  }
+	}
+
+	function indexOf(xs, x) {
+	  for (var i = 0, l = xs.length; i < l; i++) {
+	    if (xs[i] === x) return i;
+	  }
+	  return -1;
+	}
+
+	// A bit simpler than readable streams.
+	Writable.WritableState = WritableState;
+	inherits$1(Writable, EventEmitter);
+
+	function nop() {}
+
+	function WriteReq(chunk, encoding, cb) {
+	  this.chunk = chunk;
+	  this.encoding = encoding;
+	  this.callback = cb;
+	  this.next = null;
+	}
+
+	function WritableState(options, stream) {
+	  Object.defineProperty(this, 'buffer', {
+	    get: deprecate(function () {
+	      return this.getBuffer();
+	    }, '_writableState.buffer is deprecated. Use _writableState.getBuffer ' + 'instead.')
+	  });
+	  options = options || {};
+
+	  // object stream flag to indicate whether or not this stream
+	  // contains buffers or objects.
+	  this.objectMode = !!options.objectMode;
+
+	  if (stream instanceof Duplex) this.objectMode = this.objectMode || !!options.writableObjectMode;
+
+	  // the point at which write() starts returning false
+	  // Note: 0 is a valid value, means that we always return false if
+	  // the entire buffer is not flushed immediately on write()
+	  var hwm = options.highWaterMark;
+	  var defaultHwm = this.objectMode ? 16 : 16 * 1024;
+	  this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
+
+	  // cast to ints.
+	  this.highWaterMark = ~ ~this.highWaterMark;
+
+	  this.needDrain = false;
+	  // at the start of calling end()
+	  this.ending = false;
+	  // when end() has been called, and returned
+	  this.ended = false;
+	  // when 'finish' is emitted
+	  this.finished = false;
+
+	  // should we decode strings into buffers before passing to _write?
+	  // this is here so that some node-core streams can optimize string
+	  // handling at a lower level.
+	  var noDecode = options.decodeStrings === false;
+	  this.decodeStrings = !noDecode;
+
+	  // Crypto is kind of old and crusty.  Historically, its default string
+	  // encoding is 'binary' so we have to make this configurable.
+	  // Everything else in the universe uses 'utf8', though.
+	  this.defaultEncoding = options.defaultEncoding || 'utf8';
+
+	  // not an actual buffer we keep track of, but a measurement
+	  // of how much we're waiting to get pushed to some underlying
+	  // socket or file.
+	  this.length = 0;
+
+	  // a flag to see when we're in the middle of a write.
+	  this.writing = false;
+
+	  // when true all writes will be buffered until .uncork() call
+	  this.corked = 0;
+
+	  // a flag to be able to tell if the onwrite cb is called immediately,
+	  // or on a later tick.  We set this to true at first, because any
+	  // actions that shouldn't happen until "later" should generally also
+	  // not happen before the first write call.
+	  this.sync = true;
+
+	  // a flag to know if we're processing previously buffered items, which
+	  // may call the _write() callback in the same tick, so that we don't
+	  // end up in an overlapped onwrite situation.
+	  this.bufferProcessing = false;
+
+	  // the callback that's passed to _write(chunk,cb)
+	  this.onwrite = function (er) {
+	    onwrite(stream, er);
+	  };
+
+	  // the callback that the user supplies to write(chunk,encoding,cb)
+	  this.writecb = null;
+
+	  // the amount that is being written when _write is called.
+	  this.writelen = 0;
+
+	  this.bufferedRequest = null;
+	  this.lastBufferedRequest = null;
+
+	  // number of pending user-supplied write callbacks
+	  // this must be 0 before 'finish' can be emitted
+	  this.pendingcb = 0;
+
+	  // emit prefinish if the only thing we're waiting for is _write cbs
+	  // This is relevant for synchronous Transform streams
+	  this.prefinished = false;
+
+	  // True if the error was already emitted and should not be thrown again
+	  this.errorEmitted = false;
+
+	  // count buffered requests
+	  this.bufferedRequestCount = 0;
+
+	  // allocate the first CorkedRequest, there is always
+	  // one allocated and free to use, and we maintain at most two
+	  this.corkedRequestsFree = new CorkedRequest(this);
+	}
+
+	WritableState.prototype.getBuffer = function writableStateGetBuffer() {
+	  var current = this.bufferedRequest;
+	  var out = [];
+	  while (current) {
+	    out.push(current);
+	    current = current.next;
+	  }
+	  return out;
+	};
+	function Writable(options) {
+
+	  // Writable ctor is applied to Duplexes, though they're not
+	  // instanceof Writable, they're instanceof Readable.
+	  if (!(this instanceof Writable) && !(this instanceof Duplex)) return new Writable(options);
+
+	  this._writableState = new WritableState(options, this);
+
+	  // legacy.
+	  this.writable = true;
+
+	  if (options) {
+	    if (typeof options.write === 'function') this._write = options.write;
+
+	    if (typeof options.writev === 'function') this._writev = options.writev;
+	  }
+
+	  EventEmitter.call(this);
+	}
+
+	// Otherwise people can pipe Writable streams, which is just wrong.
+	Writable.prototype.pipe = function () {
+	  this.emit('error', new Error('Cannot pipe, not readable'));
+	};
+
+	function writeAfterEnd(stream, cb) {
+	  var er = new Error('write after end');
+	  // TODO: defer error events consistently everywhere, not just the cb
+	  stream.emit('error', er);
+	  nextTick(cb, er);
+	}
+
+	// If we get something that is not a buffer, string, null, or undefined,
+	// and we're not in objectMode, then that's an error.
+	// Otherwise stream chunks are all considered to be of length=1, and the
+	// watermarks determine how many objects to keep in the buffer, rather than
+	// how many bytes or characters.
+	function validChunk(stream, state, chunk, cb) {
+	  var valid = true;
+	  var er = false;
+	  // Always throw error if a null is written
+	  // if we are not in object mode then throw
+	  // if it is not a buffer, string, or undefined.
+	  if (chunk === null) {
+	    er = new TypeError('May not write null values to stream');
+	  } else if (!Buffer.isBuffer(chunk) && typeof chunk !== 'string' && chunk !== undefined && !state.objectMode) {
+	    er = new TypeError('Invalid non-string/buffer chunk');
+	  }
+	  if (er) {
+	    stream.emit('error', er);
+	    nextTick(cb, er);
+	    valid = false;
+	  }
+	  return valid;
+	}
+
+	Writable.prototype.write = function (chunk, encoding, cb) {
+	  var state = this._writableState;
+	  var ret = false;
+
+	  if (typeof encoding === 'function') {
+	    cb = encoding;
+	    encoding = null;
+	  }
+
+	  if (Buffer.isBuffer(chunk)) encoding = 'buffer';else if (!encoding) encoding = state.defaultEncoding;
+
+	  if (typeof cb !== 'function') cb = nop;
+
+	  if (state.ended) writeAfterEnd(this, cb);else if (validChunk(this, state, chunk, cb)) {
+	    state.pendingcb++;
+	    ret = writeOrBuffer(this, state, chunk, encoding, cb);
+	  }
+
+	  return ret;
+	};
+
+	Writable.prototype.cork = function () {
+	  var state = this._writableState;
+
+	  state.corked++;
+	};
+
+	Writable.prototype.uncork = function () {
+	  var state = this._writableState;
+
+	  if (state.corked) {
+	    state.corked--;
+
+	    if (!state.writing && !state.corked && !state.finished && !state.bufferProcessing && state.bufferedRequest) clearBuffer(this, state);
+	  }
+	};
+
+	Writable.prototype.setDefaultEncoding = function setDefaultEncoding(encoding) {
+	  // node::ParseEncoding() requires lower case.
+	  if (typeof encoding === 'string') encoding = encoding.toLowerCase();
+	  if (!(['hex', 'utf8', 'utf-8', 'ascii', 'binary', 'base64', 'ucs2', 'ucs-2', 'utf16le', 'utf-16le', 'raw'].indexOf((encoding + '').toLowerCase()) > -1)) throw new TypeError('Unknown encoding: ' + encoding);
+	  this._writableState.defaultEncoding = encoding;
+	  return this;
+	};
+
+	function decodeChunk(state, chunk, encoding) {
+	  if (!state.objectMode && state.decodeStrings !== false && typeof chunk === 'string') {
+	    chunk = Buffer.from(chunk, encoding);
+	  }
+	  return chunk;
+	}
+
+	// if we're already writing something, then just put this
+	// in the queue, and wait our turn.  Otherwise, call _write
+	// If we return false, then we need a drain event, so set that flag.
+	function writeOrBuffer(stream, state, chunk, encoding, cb) {
+	  chunk = decodeChunk(state, chunk, encoding);
+
+	  if (Buffer.isBuffer(chunk)) encoding = 'buffer';
+	  var len = state.objectMode ? 1 : chunk.length;
+
+	  state.length += len;
+
+	  var ret = state.length < state.highWaterMark;
+	  // we must ensure that previous needDrain will not be reset to false.
+	  if (!ret) state.needDrain = true;
+
+	  if (state.writing || state.corked) {
+	    var last = state.lastBufferedRequest;
+	    state.lastBufferedRequest = new WriteReq(chunk, encoding, cb);
+	    if (last) {
+	      last.next = state.lastBufferedRequest;
+	    } else {
+	      state.bufferedRequest = state.lastBufferedRequest;
+	    }
+	    state.bufferedRequestCount += 1;
+	  } else {
+	    doWrite(stream, state, false, len, chunk, encoding, cb);
+	  }
+
+	  return ret;
+	}
+
+	function doWrite(stream, state, writev, len, chunk, encoding, cb) {
+	  state.writelen = len;
+	  state.writecb = cb;
+	  state.writing = true;
+	  state.sync = true;
+	  if (writev) stream._writev(chunk, state.onwrite);else stream._write(chunk, encoding, state.onwrite);
+	  state.sync = false;
+	}
+
+	function onwriteError(stream, state, sync, er, cb) {
+	  --state.pendingcb;
+	  if (sync) nextTick(cb, er);else cb(er);
+
+	  stream._writableState.errorEmitted = true;
+	  stream.emit('error', er);
+	}
+
+	function onwriteStateUpdate(state) {
+	  state.writing = false;
+	  state.writecb = null;
+	  state.length -= state.writelen;
+	  state.writelen = 0;
+	}
+
+	function onwrite(stream, er) {
+	  var state = stream._writableState;
+	  var sync = state.sync;
+	  var cb = state.writecb;
+
+	  onwriteStateUpdate(state);
+
+	  if (er) onwriteError(stream, state, sync, er, cb);else {
+	    // Check if we're actually ready to finish, but don't emit yet
+	    var finished = needFinish(state);
+
+	    if (!finished && !state.corked && !state.bufferProcessing && state.bufferedRequest) {
+	      clearBuffer(stream, state);
+	    }
+
+	    if (sync) {
+	      /*<replacement>*/
+	        nextTick(afterWrite, stream, state, finished, cb);
+	      /*</replacement>*/
+	    } else {
+	        afterWrite(stream, state, finished, cb);
+	      }
+	  }
+	}
+
+	function afterWrite(stream, state, finished, cb) {
+	  if (!finished) onwriteDrain(stream, state);
+	  state.pendingcb--;
+	  cb();
+	  finishMaybe(stream, state);
+	}
+
+	// Must force callback to be called on nextTick, so that we don't
+	// emit 'drain' before the write() consumer gets the 'false' return
+	// value, and has a chance to attach a 'drain' listener.
+	function onwriteDrain(stream, state) {
+	  if (state.length === 0 && state.needDrain) {
+	    state.needDrain = false;
+	    stream.emit('drain');
+	  }
+	}
+
+	// if there's something in the buffer waiting, then process it
+	function clearBuffer(stream, state) {
+	  state.bufferProcessing = true;
+	  var entry = state.bufferedRequest;
+
+	  if (stream._writev && entry && entry.next) {
+	    // Fast case, write everything using _writev()
+	    var l = state.bufferedRequestCount;
+	    var buffer = new Array(l);
+	    var holder = state.corkedRequestsFree;
+	    holder.entry = entry;
+
+	    var count = 0;
+	    while (entry) {
+	      buffer[count] = entry;
+	      entry = entry.next;
+	      count += 1;
+	    }
+
+	    doWrite(stream, state, true, state.length, buffer, '', holder.finish);
+
+	    // doWrite is almost always async, defer these to save a bit of time
+	    // as the hot path ends with doWrite
+	    state.pendingcb++;
+	    state.lastBufferedRequest = null;
+	    if (holder.next) {
+	      state.corkedRequestsFree = holder.next;
+	      holder.next = null;
+	    } else {
+	      state.corkedRequestsFree = new CorkedRequest(state);
+	    }
+	  } else {
+	    // Slow case, write chunks one-by-one
+	    while (entry) {
+	      var chunk = entry.chunk;
+	      var encoding = entry.encoding;
+	      var cb = entry.callback;
+	      var len = state.objectMode ? 1 : chunk.length;
+
+	      doWrite(stream, state, false, len, chunk, encoding, cb);
+	      entry = entry.next;
+	      // if we didn't call the onwrite immediately, then
+	      // it means that we need to wait until it does.
+	      // also, that means that the chunk and cb are currently
+	      // being processed, so move the buffer counter past them.
+	      if (state.writing) {
+	        break;
+	      }
+	    }
+
+	    if (entry === null) state.lastBufferedRequest = null;
+	  }
+
+	  state.bufferedRequestCount = 0;
+	  state.bufferedRequest = entry;
+	  state.bufferProcessing = false;
+	}
+
+	Writable.prototype._write = function (chunk, encoding, cb) {
+	  cb(new Error('not implemented'));
+	};
+
+	Writable.prototype._writev = null;
+
+	Writable.prototype.end = function (chunk, encoding, cb) {
+	  var state = this._writableState;
+
+	  if (typeof chunk === 'function') {
+	    cb = chunk;
+	    chunk = null;
+	    encoding = null;
+	  } else if (typeof encoding === 'function') {
+	    cb = encoding;
+	    encoding = null;
+	  }
+
+	  if (chunk !== null && chunk !== undefined) this.write(chunk, encoding);
+
+	  // .end() fully uncorks
+	  if (state.corked) {
+	    state.corked = 1;
+	    this.uncork();
+	  }
+
+	  // ignore unnecessary end() calls.
+	  if (!state.ending && !state.finished) endWritable(this, state, cb);
+	};
+
+	function needFinish(state) {
+	  return state.ending && state.length === 0 && state.bufferedRequest === null && !state.finished && !state.writing;
+	}
+
+	function prefinish(stream, state) {
+	  if (!state.prefinished) {
+	    state.prefinished = true;
+	    stream.emit('prefinish');
+	  }
+	}
+
+	function finishMaybe(stream, state) {
+	  var need = needFinish(state);
+	  if (need) {
+	    if (state.pendingcb === 0) {
+	      prefinish(stream, state);
+	      state.finished = true;
+	      stream.emit('finish');
+	    } else {
+	      prefinish(stream, state);
+	    }
+	  }
+	  return need;
+	}
+
+	function endWritable(stream, state, cb) {
+	  state.ending = true;
+	  finishMaybe(stream, state);
+	  if (cb) {
+	    if (state.finished) nextTick(cb);else stream.once('finish', cb);
+	  }
+	  state.ended = true;
+	  stream.writable = false;
+	}
+
+	// It seems a linked list but it is not
+	// there will be only 2 of these for each stream
+	function CorkedRequest(state) {
+	  var _this = this;
+
+	  this.next = null;
+	  this.entry = null;
+
+	  this.finish = function (err) {
+	    var entry = _this.entry;
+	    _this.entry = null;
+	    while (entry) {
+	      var cb = entry.callback;
+	      state.pendingcb--;
+	      cb(err);
+	      entry = entry.next;
+	    }
+	    if (state.corkedRequestsFree) {
+	      state.corkedRequestsFree.next = _this;
+	    } else {
+	      state.corkedRequestsFree = _this;
+	    }
+	  };
+	}
+
+	inherits$1(Duplex, Readable);
+
+	var keys = Object.keys(Writable.prototype);
+	for (var v = 0; v < keys.length; v++) {
+	  var method = keys[v];
+	  if (!Duplex.prototype[method]) Duplex.prototype[method] = Writable.prototype[method];
+	}
+	function Duplex(options) {
+	  if (!(this instanceof Duplex)) return new Duplex(options);
+
+	  Readable.call(this, options);
+	  Writable.call(this, options);
+
+	  if (options && options.readable === false) this.readable = false;
+
+	  if (options && options.writable === false) this.writable = false;
+
+	  this.allowHalfOpen = true;
+	  if (options && options.allowHalfOpen === false) this.allowHalfOpen = false;
+
+	  this.once('end', onend);
+	}
+
+	// the no-half-open enforcer
+	function onend() {
+	  // if we allow half-open state, or if the writable side ended,
+	  // then we're ok.
+	  if (this.allowHalfOpen || this._writableState.ended) return;
+
+	  // no more data can be written.
+	  // But allow more writes to happen in this tick.
+	  nextTick(onEndNT, this);
+	}
+
+	function onEndNT(self) {
+	  self.end();
+	}
+
+	// a transform stream is a readable/writable stream where you do
+	inherits$1(Transform, Duplex);
+
+	function TransformState(stream) {
+	  this.afterTransform = function (er, data) {
+	    return afterTransform(stream, er, data);
+	  };
+
+	  this.needTransform = false;
+	  this.transforming = false;
+	  this.writecb = null;
+	  this.writechunk = null;
+	  this.writeencoding = null;
+	}
+
+	function afterTransform(stream, er, data) {
+	  var ts = stream._transformState;
+	  ts.transforming = false;
+
+	  var cb = ts.writecb;
+
+	  if (!cb) return stream.emit('error', new Error('no writecb in Transform class'));
+
+	  ts.writechunk = null;
+	  ts.writecb = null;
+
+	  if (data !== null && data !== undefined) stream.push(data);
+
+	  cb(er);
+
+	  var rs = stream._readableState;
+	  rs.reading = false;
+	  if (rs.needReadable || rs.length < rs.highWaterMark) {
+	    stream._read(rs.highWaterMark);
+	  }
+	}
+	function Transform(options) {
+	  if (!(this instanceof Transform)) return new Transform(options);
+
+	  Duplex.call(this, options);
+
+	  this._transformState = new TransformState(this);
+
+	  // when the writable side finishes, then flush out anything remaining.
+	  var stream = this;
+
+	  // start out asking for a readable event once data is transformed.
+	  this._readableState.needReadable = true;
+
+	  // we have implemented the _read method, and done the other things
+	  // that Readable wants before the first _read call, so unset the
+	  // sync guard flag.
+	  this._readableState.sync = false;
+
+	  if (options) {
+	    if (typeof options.transform === 'function') this._transform = options.transform;
+
+	    if (typeof options.flush === 'function') this._flush = options.flush;
+	  }
+
+	  this.once('prefinish', function () {
+	    if (typeof this._flush === 'function') this._flush(function (er) {
+	      done(stream, er);
+	    });else done(stream);
+	  });
+	}
+
+	Transform.prototype.push = function (chunk, encoding) {
+	  this._transformState.needTransform = false;
+	  return Duplex.prototype.push.call(this, chunk, encoding);
+	};
+
+	// This is the part where you do stuff!
+	// override this function in implementation classes.
+	// 'chunk' is an input chunk.
+	//
+	// Call `push(newChunk)` to pass along transformed output
+	// to the readable side.  You may call 'push' zero or more times.
+	//
+	// Call `cb(err)` when you are done with this chunk.  If you pass
+	// an error, then that'll put the hurt on the whole operation.  If you
+	// never call cb(), then you'll never get another chunk.
+	Transform.prototype._transform = function (chunk, encoding, cb) {
+	  throw new Error('Not implemented');
+	};
+
+	Transform.prototype._write = function (chunk, encoding, cb) {
+	  var ts = this._transformState;
+	  ts.writecb = cb;
+	  ts.writechunk = chunk;
+	  ts.writeencoding = encoding;
+	  if (!ts.transforming) {
+	    var rs = this._readableState;
+	    if (ts.needTransform || rs.needReadable || rs.length < rs.highWaterMark) this._read(rs.highWaterMark);
+	  }
+	};
+
+	// Doesn't matter what the args are here.
+	// _transform does all the work.
+	// That we got here means that the readable side wants more data.
+	Transform.prototype._read = function (n) {
+	  var ts = this._transformState;
+
+	  if (ts.writechunk !== null && ts.writecb && !ts.transforming) {
+	    ts.transforming = true;
+	    this._transform(ts.writechunk, ts.writeencoding, ts.afterTransform);
+	  } else {
+	    // mark that we need a transform, so that any data that comes in
+	    // will get processed, now that we've asked for it.
+	    ts.needTransform = true;
+	  }
+	};
+
+	function done(stream, er) {
+	  if (er) return stream.emit('error', er);
+
+	  // if there's nothing in the write buffer, then that means
+	  // that nothing more will ever be provided
+	  var ws = stream._writableState;
+	  var ts = stream._transformState;
+
+	  if (ws.length) throw new Error('Calling transform done when ws.length != 0');
+
+	  if (ts.transforming) throw new Error('Calling transform done when still transforming');
+
+	  return stream.push(null);
+	}
+
+	inherits$1(PassThrough, Transform);
+	function PassThrough(options) {
+	  if (!(this instanceof PassThrough)) return new PassThrough(options);
+
+	  Transform.call(this, options);
+	}
+
+	PassThrough.prototype._transform = function (chunk, encoding, cb) {
+	  cb(null, chunk);
+	};
+
+	inherits$1(Stream, EventEmitter);
+	Stream.Readable = Readable;
+	Stream.Writable = Writable;
+	Stream.Duplex = Duplex;
+	Stream.Transform = Transform;
+	Stream.PassThrough = PassThrough;
+
+	// Backwards-compat with node 0.4.x
+	Stream.Stream = Stream;
+
+	// old-style streams.  Note that the pipe method (the only relevant
+	// part of this class) is overridden in the Readable class.
+
+	function Stream() {
+	  EventEmitter.call(this);
+	}
+
+	Stream.prototype.pipe = function(dest, options) {
+	  var source = this;
+
+	  function ondata(chunk) {
+	    if (dest.writable) {
+	      if (false === dest.write(chunk) && source.pause) {
+	        source.pause();
+	      }
+	    }
+	  }
+
+	  source.on('data', ondata);
+
+	  function ondrain() {
+	    if (source.readable && source.resume) {
+	      source.resume();
+	    }
+	  }
+
+	  dest.on('drain', ondrain);
+
+	  // If the 'end' option is not supplied, dest.end() will be called when
+	  // source gets the 'end' or 'close' events.  Only dest.end() once.
+	  if (!dest._isStdio && (!options || options.end !== false)) {
+	    source.on('end', onend);
+	    source.on('close', onclose);
+	  }
+
+	  var didOnEnd = false;
+	  function onend() {
+	    if (didOnEnd) return;
+	    didOnEnd = true;
+
+	    dest.end();
+	  }
+
+
+	  function onclose() {
+	    if (didOnEnd) return;
+	    didOnEnd = true;
+
+	    if (typeof dest.destroy === 'function') dest.destroy();
+	  }
+
+	  // don't leave dangling pipes when there are errors.
+	  function onerror(er) {
+	    cleanup();
+	    if (EventEmitter.listenerCount(this, 'error') === 0) {
+	      throw er; // Unhandled stream error in pipe.
+	    }
+	  }
+
+	  source.on('error', onerror);
+	  dest.on('error', onerror);
+
+	  // remove all the event listeners that were added.
+	  function cleanup() {
+	    source.removeListener('data', ondata);
+	    dest.removeListener('drain', ondrain);
+
+	    source.removeListener('end', onend);
+	    source.removeListener('close', onclose);
+
+	    source.removeListener('error', onerror);
+	    dest.removeListener('error', onerror);
+
+	    source.removeListener('end', cleanup);
+	    source.removeListener('close', cleanup);
+
+	    dest.removeListener('close', cleanup);
+	  }
+
+	  source.on('end', cleanup);
+	  source.on('close', cleanup);
+
+	  dest.on('close', cleanup);
+
+	  dest.emit('pipe', source);
+
+	  // Allow for unix-like usage: A.pipe(B).pipe(C)
+	  return dest;
+	};
+
+	var stream = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		'default': Stream,
+		Readable: Readable,
+		Writable: Writable,
+		Duplex: Duplex,
+		Transform: Transform,
+		PassThrough: PassThrough,
+		Stream: Stream
+	});
+
+	var aa = getCjsExportFromNamespace(stream);
+
+	function r(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return "Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}
+	var u="function"===typeof Symbol&&Symbol.for,ba=u?Symbol.for("react.portal"):60106,v$1=u?Symbol.for("react.fragment"):60107,ca=u?Symbol.for("react.strict_mode"):60108,da=u?Symbol.for("react.profiler"):60114,w=u?Symbol.for("react.provider"):60109,ea=u?Symbol.for("react.context"):60110,fa=u?Symbol.for("react.concurrent_mode"):60111,ha=u?Symbol.for("react.forward_ref"):60112,B=u?Symbol.for("react.suspense"):60113,ia=u?Symbol.for("react.suspense_list"):60120,ja=u?Symbol.for("react.memo"):60115,ka=u?Symbol.for("react.lazy"):
+	60116,la=u?Symbol.for("react.block"):60121,ma=u?Symbol.for("react.fundamental"):60117,na=u?Symbol.for("react.scope"):60119;function oa(a){if(-1===a._status){a._status=0;var b=a._ctor;b=b();a._result=b;b.then(function(c){0===a._status&&(c=c.default,a._status=1,a._result=c);},function(c){0===a._status&&(a._status=2,a._result=c);});}}
+	function C(a){if(null==a)return null;if("function"===typeof a)return a.displayName||a.name||null;if("string"===typeof a)return a;switch(a){case v$1:return "Fragment";case ba:return "Portal";case da:return "Profiler";case ca:return "StrictMode";case B:return "Suspense";case ia:return "SuspenseList"}if("object"===typeof a)switch(a.$$typeof){case ea:return "Context.Consumer";case w:return "Context.Provider";case ha:var b=a.render;b=b.displayName||b.name||"";return a.displayName||(""!==b?"ForwardRef("+b+")":"ForwardRef");
+	case ja:return C(a.type);case la:return C(a.render);case ka:if(a=1===a._status?a._result:null)return C(a)}return null}var D=React__default.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;D.hasOwnProperty("ReactCurrentDispatcher")||(D.ReactCurrentDispatcher={current:null});D.hasOwnProperty("ReactCurrentBatchConfig")||(D.ReactCurrentBatchConfig={suspense:null});var pa={};function E(a,b){for(var c=a._threadCount|0;c<=b;c++)a[c]=a._currentValue2,a._threadCount=c+1;}
+	function qa(a,b,c,d){if(d&&(d=a.contextType,"object"===typeof d&&null!==d))return E(d,c),d[c];if(a=a.contextTypes){c={};for(var f in a)c[f]=b[f];b=c;}else b=pa;return b}for(var F=new Uint16Array(16),H=0;15>H;H++)F[H]=H+1;F[15]=0;
+	var ra=/^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,sa=Object.prototype.hasOwnProperty,ta={},ua={};
+	function va(a){if(sa.call(ua,a))return !0;if(sa.call(ta,a))return !1;if(ra.test(a))return ua[a]=!0;ta[a]=!0;return !1}function wa(a,b,c,d){if(null!==c&&0===c.type)return !1;switch(typeof b){case "function":case "symbol":return !0;case "boolean":if(d)return !1;if(null!==c)return !c.acceptsBooleans;a=a.toLowerCase().slice(0,5);return "data-"!==a&&"aria-"!==a;default:return !1}}
+	function xa(a,b,c,d){if(null===b||"undefined"===typeof b||wa(a,b,c,d))return !0;if(d)return !1;if(null!==c)switch(c.type){case 3:return !b;case 4:return !1===b;case 5:return isNaN(b);case 6:return isNaN(b)||1>b}return !1}function J(a,b,c,d,f,h){this.acceptsBooleans=2===b||3===b||4===b;this.attributeName=d;this.attributeNamespace=f;this.mustUseProperty=c;this.propertyName=a;this.type=b;this.sanitizeURL=h;}var K={};
+	"children dangerouslySetInnerHTML defaultValue defaultChecked innerHTML suppressContentEditableWarning suppressHydrationWarning style".split(" ").forEach(function(a){K[a]=new J(a,0,!1,a,null,!1);});[["acceptCharset","accept-charset"],["className","class"],["htmlFor","for"],["httpEquiv","http-equiv"]].forEach(function(a){var b=a[0];K[b]=new J(b,1,!1,a[1],null,!1);});["contentEditable","draggable","spellCheck","value"].forEach(function(a){K[a]=new J(a,2,!1,a.toLowerCase(),null,!1);});
+	["autoReverse","externalResourcesRequired","focusable","preserveAlpha"].forEach(function(a){K[a]=new J(a,2,!1,a,null,!1);});"allowFullScreen async autoFocus autoPlay controls default defer disabled disablePictureInPicture formNoValidate hidden loop noModule noValidate open playsInline readOnly required reversed scoped seamless itemScope".split(" ").forEach(function(a){K[a]=new J(a,3,!1,a.toLowerCase(),null,!1);});
+	["checked","multiple","muted","selected"].forEach(function(a){K[a]=new J(a,3,!0,a,null,!1);});["capture","download"].forEach(function(a){K[a]=new J(a,4,!1,a,null,!1);});["cols","rows","size","span"].forEach(function(a){K[a]=new J(a,6,!1,a,null,!1);});["rowSpan","start"].forEach(function(a){K[a]=new J(a,5,!1,a.toLowerCase(),null,!1);});var L=/[\-:]([a-z])/g;function M(a){return a[1].toUpperCase()}
+	"accent-height alignment-baseline arabic-form baseline-shift cap-height clip-path clip-rule color-interpolation color-interpolation-filters color-profile color-rendering dominant-baseline enable-background fill-opacity fill-rule flood-color flood-opacity font-family font-size font-size-adjust font-stretch font-style font-variant font-weight glyph-name glyph-orientation-horizontal glyph-orientation-vertical horiz-adv-x horiz-origin-x image-rendering letter-spacing lighting-color marker-end marker-mid marker-start overline-position overline-thickness paint-order panose-1 pointer-events rendering-intent shape-rendering stop-color stop-opacity strikethrough-position strikethrough-thickness stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin stroke-miterlimit stroke-opacity stroke-width text-anchor text-decoration text-rendering underline-position underline-thickness unicode-bidi unicode-range units-per-em v-alphabetic v-hanging v-ideographic v-mathematical vector-effect vert-adv-y vert-origin-x vert-origin-y word-spacing writing-mode xmlns:xlink x-height".split(" ").forEach(function(a){var b=a.replace(L,
+	M);K[b]=new J(b,1,!1,a,null,!1);});"xlink:actuate xlink:arcrole xlink:role xlink:show xlink:title xlink:type".split(" ").forEach(function(a){var b=a.replace(L,M);K[b]=new J(b,1,!1,a,"http://www.w3.org/1999/xlink",!1);});["xml:base","xml:lang","xml:space"].forEach(function(a){var b=a.replace(L,M);K[b]=new J(b,1,!1,a,"http://www.w3.org/XML/1998/namespace",!1);});["tabIndex","crossOrigin"].forEach(function(a){K[a]=new J(a,1,!1,a.toLowerCase(),null,!1);});
+	K.xlinkHref=new J("xlinkHref",1,!1,"xlink:href","http://www.w3.org/1999/xlink",!0);["src","href","action","formAction"].forEach(function(a){K[a]=new J(a,1,!1,a.toLowerCase(),null,!0);});var ya=/["'&<>]/;
+	function N(a){if("boolean"===typeof a||"number"===typeof a)return ""+a;a=""+a;var b=ya.exec(a);if(b){var c="",d,f=0;for(d=b.index;d<a.length;d++){switch(a.charCodeAt(d)){case 34:b="&quot;";break;case 38:b="&amp;";break;case 39:b="&#x27;";break;case 60:b="&lt;";break;case 62:b="&gt;";break;default:continue}f!==d&&(c+=a.substring(f,d));f=d+1;c+=b;}a=f!==d?c+a.substring(f,d):c;}return a}
+	function za(a,b){var c=K.hasOwnProperty(a)?K[a]:null;var d;if(d="style"!==a)d=null!==c?0===c.type:!(2<a.length)||"o"!==a[0]&&"O"!==a[0]||"n"!==a[1]&&"N"!==a[1]?!1:!0;if(d||xa(a,b,c,!1))return "";if(null!==c){a=c.attributeName;d=c.type;if(3===d||4===d&&!0===b)return a+'=""';c.sanitizeURL&&(b=""+b);return a+'="'+(N(b)+'"')}return va(a)?a+'="'+(N(b)+'"'):""}function Aa(a,b){return a===b&&(0!==a||1/a===1/b)||a!==a&&b!==b}
+	var Ba="function"===typeof Object.is?Object.is:Aa,O=null,P=null,Q=null,R=!1,S=!1,U=null,V=0;function W(){if(null===O)throw Error(r(321));return O}function Ca(){if(0<V)throw Error(r(312));return {memoizedState:null,queue:null,next:null}}function Da(){null===Q?null===P?(R=!1,P=Q=Ca()):(R=!0,Q=P):null===Q.next?(R=!1,Q=Q.next=Ca()):(R=!0,Q=Q.next);return Q}function Ea(a,b,c,d){for(;S;)S=!1,V+=1,Q=null,c=a(b,d);P=O=null;V=0;Q=U=null;return c}function Fa(a,b){return "function"===typeof b?b(a):b}
+	function Ga(a,b,c){O=W();Q=Da();if(R){var d=Q.queue;b=d.dispatch;if(null!==U&&(c=U.get(d),void 0!==c)){U.delete(d);d=Q.memoizedState;do d=a(d,c.action),c=c.next;while(null!==c);Q.memoizedState=d;return [d,b]}return [Q.memoizedState,b]}a=a===Fa?"function"===typeof b?b():b:void 0!==c?c(b):b;Q.memoizedState=a;a=Q.queue={last:null,dispatch:null};a=a.dispatch=Ha.bind(null,O,a);return [Q.memoizedState,a]}
+	function Ha(a,b,c){if(!(25>V))throw Error(r(301));if(a===O)if(S=!0,a={action:c,next:null},null===U&&(U=new Map),c=U.get(b),void 0===c)U.set(b,a);else {for(b=c;null!==b.next;)b=b.next;b.next=a;}}function Ia(){}
+	var X=0,Ja={readContext:function(a){var b=X;E(a,b);return a[b]},useContext:function(a){W();var b=X;E(a,b);return a[b]},useMemo:function(a,b){O=W();Q=Da();b=void 0===b?null:b;if(null!==Q){var c=Q.memoizedState;if(null!==c&&null!==b){a:{var d=c[1];if(null===d)d=!1;else {for(var f=0;f<d.length&&f<b.length;f++)if(!Ba(b[f],d[f])){d=!1;break a}d=!0;}}if(d)return c[0]}}a=a();Q.memoizedState=[a,b];return a},useReducer:Ga,useRef:function(a){O=W();Q=Da();var b=Q.memoizedState;return null===b?(a={current:a},Q.memoizedState=
+	a):b},useState:function(a){return Ga(Fa,a)},useLayoutEffect:function(){},useCallback:function(a){return a},useImperativeHandle:Ia,useEffect:Ia,useDebugValue:Ia,useResponder:function(a,b){return {props:b,responder:a}},useDeferredValue:function(a){W();return a},useTransition:function(){W();return [function(a){a();},!1]}},Ka={html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"};
+	function La(a){switch(a){case "svg":return "http://www.w3.org/2000/svg";case "math":return "http://www.w3.org/1998/Math/MathML";default:return "http://www.w3.org/1999/xhtml"}}
+	var Ma={area:!0,base:!0,br:!0,col:!0,embed:!0,hr:!0,img:!0,input:!0,keygen:!0,link:!0,meta:!0,param:!0,source:!0,track:!0,wbr:!0},Na=objectAssign({menuitem:!0},Ma),Y={animationIterationCount:!0,borderImageOutset:!0,borderImageSlice:!0,borderImageWidth:!0,boxFlex:!0,boxFlexGroup:!0,boxOrdinalGroup:!0,columnCount:!0,columns:!0,flex:!0,flexGrow:!0,flexPositive:!0,flexShrink:!0,flexNegative:!0,flexOrder:!0,gridArea:!0,gridRow:!0,gridRowEnd:!0,gridRowSpan:!0,gridRowStart:!0,gridColumn:!0,gridColumnEnd:!0,gridColumnSpan:!0,
+	gridColumnStart:!0,fontWeight:!0,lineClamp:!0,lineHeight:!0,opacity:!0,order:!0,orphans:!0,tabSize:!0,widows:!0,zIndex:!0,zoom:!0,fillOpacity:!0,floodOpacity:!0,stopOpacity:!0,strokeDasharray:!0,strokeDashoffset:!0,strokeMiterlimit:!0,strokeOpacity:!0,strokeWidth:!0},Oa=["Webkit","ms","Moz","O"];Object.keys(Y).forEach(function(a){Oa.forEach(function(b){b=b+a.charAt(0).toUpperCase()+a.substring(1);Y[b]=Y[a];});});
+	var Pa=/([A-Z])/g,Qa=/^ms-/,Z=React__default.Children.toArray,Ra=D.ReactCurrentDispatcher,Sa={listing:!0,pre:!0,textarea:!0},Ta=/^[a-zA-Z][a-zA-Z:_\.\-\d]*$/,Ua={},Va={};function Wa(a){if(void 0===a||null===a)return a;var b="";React__default.Children.forEach(a,function(a){null!=a&&(b+=a);});return b}var Xa=Object.prototype.hasOwnProperty,Ya={children:null,dangerouslySetInnerHTML:null,suppressContentEditableWarning:null,suppressHydrationWarning:null};function Za(a,b){if(void 0===a)throw Error(r(152,C(b)||"Component"));}
+	function $a(a,b,c){function d(d,h){var e=h.prototype&&h.prototype.isReactComponent,f=qa(h,b,c,e),p=[],g=!1,l={isMounted:function(){return !1},enqueueForceUpdate:function(){if(null===p)return null},enqueueReplaceState:function(a,c){g=!0;p=[c];},enqueueSetState:function(a,c){if(null===p)return null;p.push(c);}};if(e){if(e=new h(d.props,f,l),"function"===typeof h.getDerivedStateFromProps){var x=h.getDerivedStateFromProps.call(null,d.props,e.state);null!=x&&(e.state=objectAssign({},e.state,x));}}else if(O={},e=h(d.props,
+	f,l),e=Ea(h,d.props,e,f),null==e||null==e.render){a=e;Za(a,h);return}e.props=d.props;e.context=f;e.updater=l;l=e.state;void 0===l&&(e.state=l=null);if("function"===typeof e.UNSAFE_componentWillMount||"function"===typeof e.componentWillMount)if("function"===typeof e.componentWillMount&&"function"!==typeof h.getDerivedStateFromProps&&e.componentWillMount(),"function"===typeof e.UNSAFE_componentWillMount&&"function"!==typeof h.getDerivedStateFromProps&&e.UNSAFE_componentWillMount(),p.length){l=p;var t=
+	g;p=null;g=!1;if(t&&1===l.length)e.state=l[0];else {x=t?l[0]:e.state;var y=!0;for(t=t?1:0;t<l.length;t++){var q=l[t];q="function"===typeof q?q.call(e,x,d.props,f):q;null!=q&&(y?(y=!1,x=objectAssign({},x,q)):objectAssign(x,q));}e.state=x;}}else p=null;a=e.render();Za(a,h);if("function"===typeof e.getChildContext&&(d=h.childContextTypes,"object"===typeof d)){var A=e.getChildContext();for(var T in A)if(!(T in d))throw Error(r(108,C(h)||"Unknown",T));}A&&(b=objectAssign({},b,A));}for(;React__default.isValidElement(a);){var f=a,h=f.type;if("function"!==
+	typeof h)break;d(f,h);}return {child:a,context:b}}
+	var ab=function(){function a(a,b){React__default.isValidElement(a)?a.type!==v$1?a=[a]:(a=a.props.children,a=React__default.isValidElement(a)?[a]:Z(a)):a=Z(a);a={type:null,domNamespace:Ka.html,children:a,childIndex:0,context:pa,footer:""};var c=F[0];if(0===c){var d=F;c=d.length;var p=2*c;if(!(65536>=p))throw Error(r(304));var g=new Uint16Array(p);g.set(d);F=g;F[0]=c+1;for(d=c;d<p-1;d++)F[d]=d+1;F[p-1]=0;}else F[0]=F[c];this.threadID=c;this.stack=[a];this.exhausted=!1;this.currentSelectValue=null;this.previousWasTextNode=!1;this.makeStaticMarkup=
+	b;this.suspenseDepth=0;this.contextIndex=-1;this.contextStack=[];this.contextValueStack=[];}var b=a.prototype;b.destroy=function(){if(!this.exhausted){this.exhausted=!0;this.clearProviders();var a=this.threadID;F[a]=F[0];F[0]=a;}};b.pushProvider=function(a){var b=++this.contextIndex,c=a.type._context,h=this.threadID;E(c,h);var p=c[h];this.contextStack[b]=c;this.contextValueStack[b]=p;c[h]=a.props.value;};b.popProvider=function(){var a=this.contextIndex,b=this.contextStack[a],f=this.contextValueStack[a];
+	this.contextStack[a]=null;this.contextValueStack[a]=null;this.contextIndex--;b[this.threadID]=f;};b.clearProviders=function(){for(var a=this.contextIndex;0<=a;a--)this.contextStack[a][this.threadID]=this.contextValueStack[a];};b.read=function(a){if(this.exhausted)return null;var b=X;X=this.threadID;var c=Ra.current;Ra.current=Ja;try{for(var h=[""],p=!1;h[0].length<a;){if(0===this.stack.length){this.exhausted=!0;var g=this.threadID;F[g]=F[0];F[0]=g;break}var e=this.stack[this.stack.length-1];if(p||e.childIndex>=
+	e.children.length){var I=e.footer;""!==I&&(this.previousWasTextNode=!1);this.stack.pop();if("select"===e.type)this.currentSelectValue=null;else if(null!=e.type&&null!=e.type.type&&e.type.type.$$typeof===w)this.popProvider(e.type);else if(e.type===B){this.suspenseDepth--;var G=h.pop();if(p){p=!1;var n=e.fallbackFrame;if(!n)throw Error(r(303));this.stack.push(n);h[this.suspenseDepth]+="\x3c!--$!--\x3e";continue}else h[this.suspenseDepth]+=G;}h[this.suspenseDepth]+=I;}else {var l=e.children[e.childIndex++],
+	x="";try{x+=this.render(l,e.context,e.domNamespace);}catch(t){if(null!=t&&"function"===typeof t.then)throw Error(r(294));throw t;}finally{}h.length<=this.suspenseDepth&&h.push("");h[this.suspenseDepth]+=x;}}return h[0]}finally{Ra.current=c,X=b;}};b.render=function(a,b,f){if("string"===typeof a||"number"===typeof a){f=""+a;if(""===f)return "";if(this.makeStaticMarkup)return N(f);if(this.previousWasTextNode)return "\x3c!-- --\x3e"+N(f);this.previousWasTextNode=!0;return N(f)}b=$a(a,b,this.threadID);a=b.child;
+	b=b.context;if(null===a||!1===a)return "";if(!React__default.isValidElement(a)){if(null!=a&&null!=a.$$typeof){f=a.$$typeof;if(f===ba)throw Error(r(257));throw Error(r(258,f.toString()));}a=Z(a);this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,context:b,footer:""});return ""}var c=a.type;if("string"===typeof c)return this.renderDOM(a,b,f);switch(c){case ca:case fa:case da:case ia:case v$1:return a=Z(a.props.children),this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,context:b,footer:""}),
+	"";case B:throw Error(r(294));}if("object"===typeof c&&null!==c)switch(c.$$typeof){case ha:O={};var d=c.render(a.props,a.ref);d=Ea(c.render,a.props,d,a.ref);d=Z(d);this.stack.push({type:null,domNamespace:f,children:d,childIndex:0,context:b,footer:""});return "";case ja:return a=[React__default.createElement(c.type,objectAssign({ref:a.ref},a.props))],this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,context:b,footer:""}),"";case w:return c=Z(a.props.children),f={type:a,domNamespace:f,children:c,childIndex:0,
+	context:b,footer:""},this.pushProvider(a),this.stack.push(f),"";case ea:c=a.type;d=a.props;var g=this.threadID;E(c,g);c=Z(d.children(c[g]));this.stack.push({type:a,domNamespace:f,children:c,childIndex:0,context:b,footer:""});return "";case ma:throw Error(r(338));case ka:switch(c=a.type,oa(c),c._status){case 1:return a=[React__default.createElement(c._result,objectAssign({ref:a.ref},a.props))],this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,context:b,footer:""}),"";case 2:throw c._result;default:throw Error(r(295));
+	}case na:throw Error(r(343));}throw Error(r(130,null==c?c:typeof c,""));};b.renderDOM=function(a,b,f){var c=a.type.toLowerCase();if(!Ua.hasOwnProperty(c)){if(!Ta.test(c))throw Error(r(65,c));Ua[c]=!0;}var d=a.props;if("input"===c)d=objectAssign({type:void 0},d,{defaultChecked:void 0,defaultValue:void 0,value:null!=d.value?d.value:d.defaultValue,checked:null!=d.checked?d.checked:d.defaultChecked});else if("textarea"===c){var g=d.value;if(null==g){g=d.defaultValue;var e=d.children;if(null!=e){if(null!=
+	g)throw Error(r(92));if(Array.isArray(e)){if(!(1>=e.length))throw Error(r(93));e=e[0];}g=""+e;}null==g&&(g="");}d=objectAssign({},d,{value:void 0,children:""+g});}else if("select"===c)this.currentSelectValue=null!=d.value?d.value:d.defaultValue,d=objectAssign({},d,{value:void 0});else if("option"===c){e=this.currentSelectValue;var I=Wa(d.children);if(null!=e){var G=null!=d.value?d.value+"":I;g=!1;if(Array.isArray(e))for(var n=0;n<e.length;n++){if(""+e[n]===G){g=!0;break}}else g=""+e===G;d=objectAssign({selected:void 0,children:void 0},
+	d,{selected:g,children:I});}}if(g=d){if(Na[c]&&(null!=g.children||null!=g.dangerouslySetInnerHTML))throw Error(r(137,c,""));if(null!=g.dangerouslySetInnerHTML){if(null!=g.children)throw Error(r(60));if(!("object"===typeof g.dangerouslySetInnerHTML&&"__html"in g.dangerouslySetInnerHTML))throw Error(r(61));}if(null!=g.style&&"object"!==typeof g.style)throw Error(r(62,""));}g=d;e=this.makeStaticMarkup;I=1===this.stack.length;G="<"+a.type;for(z in g)if(Xa.call(g,z)){var l=g[z];if(null!=l){if("style"===
+	z){n=void 0;var x="",t="";for(n in l)if(l.hasOwnProperty(n)){var y=0===n.indexOf("--"),q=l[n];if(null!=q){if(y)var A=n;else if(A=n,Va.hasOwnProperty(A))A=Va[A];else {var T=A.replace(Pa,"-$1").toLowerCase().replace(Qa,"-ms-");A=Va[A]=T;}x+=t+A+":";t=n;y=null==q||"boolean"===typeof q||""===q?"":y||"number"!==typeof q||0===q||Y.hasOwnProperty(t)&&Y[t]?(""+q).trim():q+"px";x+=y;t=";";}}l=x||null;}n=null;b:if(y=c,q=g,-1===y.indexOf("-"))y="string"===typeof q.is;else switch(y){case "annotation-xml":case "color-profile":case "font-face":case "font-face-src":case "font-face-uri":case "font-face-format":case "font-face-name":case "missing-glyph":y=
+	!1;break b;default:y=!0;}y?Ya.hasOwnProperty(z)||(n=z,n=va(n)&&null!=l?n+'="'+(N(l)+'"'):""):n=za(z,l);n&&(G+=" "+n);}}e||I&&(G+=' data-reactroot=""');var z=G;g="";Ma.hasOwnProperty(c)?z+="/>":(z+=">",g="</"+a.type+">");a:{e=d.dangerouslySetInnerHTML;if(null!=e){if(null!=e.__html){e=e.__html;break a}}else if(e=d.children,"string"===typeof e||"number"===typeof e){e=N(e);break a}e=null;}null!=e?(d=[],Sa.hasOwnProperty(c)&&"\n"===e.charAt(0)&&(z+="\n"),z+=e):d=Z(d.children);a=a.type;f=null==f||"http://www.w3.org/1999/xhtml"===
+	f?La(a):"http://www.w3.org/2000/svg"===f&&"foreignObject"===a?"http://www.w3.org/1999/xhtml":f;this.stack.push({domNamespace:f,type:c,children:d,childIndex:0,context:b,footer:g});this.previousWasTextNode=!1;return z};return a}();function bb(a,b){a.prototype=Object.create(b.prototype);a.prototype.constructor=a;a.__proto__=b;}
+	var cb=function(a){function b(b,c){var d=a.call(this,{})||this;d.partialRenderer=new ab(b,c);return d}bb(b,a);var c=b.prototype;c._destroy=function(a,b){this.partialRenderer.destroy();b(a);};c._read=function(a){try{this.push(this.partialRenderer.read(a));}catch(f){this.destroy(f);}};return b}(aa.Readable),db={renderToString:function(a){a=new ab(a,!1);try{return a.read(Infinity)}finally{a.destroy();}},renderToStaticMarkup:function(a){a=new ab(a,!0);try{return a.read(Infinity)}finally{a.destroy();}},renderToNodeStream:function(a){return new cb(a,
+	!1)},renderToStaticNodeStream:function(a){return new cb(a,!0)},version:"16.13.1"};var reactDomServer_node_production_min=db.default||db;
+
+	var server_node = createCommonjsModule(function (module) {
+
+	{
+	  module.exports = reactDomServer_node_production_min;
+	}
+	});
+
+	var server = server_node;
+
+	function Cache () {
+	  var _cache = Object.create(null);
+	  var _hitCount = 0;
+	  var _missCount = 0;
+	  var _size = 0;
+	  var _debug = false;
+
+	  this.put = function(key, value, time, timeoutCallback) {
+	    if (_debug) {
+	      console.log('caching: %s = %j (@%s)', key, value, time);
+	    }
+
+	    if (typeof time !== 'undefined' && (typeof time !== 'number' || isNaN(time) || time <= 0)) {
+	      throw new Error('Cache timeout must be a positive number');
+	    } else if (typeof timeoutCallback !== 'undefined' && typeof timeoutCallback !== 'function') {
+	      throw new Error('Cache timeout callback must be a function');
+	    }
+
+	    var oldRecord = _cache[key];
+	    if (oldRecord) {
+	      clearTimeout(oldRecord.timeout);
+	    } else {
+	      _size++;
+	    }
+
+	    var record = {
+	      value: value,
+	      expire: time + Date.now()
+	    };
+
+	    if (!isNaN(record.expire)) {
+	      record.timeout = setTimeout(function() {
+	        _del(key);
+	        if (timeoutCallback) {
+	          timeoutCallback(key, value);
+	        }
+	      }.bind(this), time);
+	    }
+
+	    _cache[key] = record;
+
+	    return value;
+	  };
+
+	  this.del = function(key) {
+	    var canDelete = true;
+
+	    var oldRecord = _cache[key];
+	    if (oldRecord) {
+	      clearTimeout(oldRecord.timeout);
+	      if (!isNaN(oldRecord.expire) && oldRecord.expire < Date.now()) {
+	        canDelete = false;
+	      }
+	    } else {
+	      canDelete = false;
+	    }
+
+	    if (canDelete) {
+	      _del(key);
+	    }
+
+	    return canDelete;
+	  };
+
+	  function _del(key){
+	    _size--;
+	    delete _cache[key];
+	  }
+
+	  this.clear = function() {
+	    for (var key in _cache) {
+	      clearTimeout(_cache[key].timeout);
+	    }
+	    _size = 0;
+	    _cache = Object.create(null);
+	    if (_debug) {
+	      _hitCount = 0;
+	      _missCount = 0;
+	    }
+	  };
+
+	  this.get = function(key) {
+	    var data = _cache[key];
+	    if (typeof data != "undefined") {
+	      if (isNaN(data.expire) || data.expire >= Date.now()) {
+	        if (_debug) _hitCount++;
+	        return data.value;
+	      } else {
+	        // free some space
+	        if (_debug) _missCount++;
+	        _size--;
+	        delete _cache[key];
+	      }
+	    } else if (_debug) {
+	      _missCount++;
+	    }
+	    return null;
+	  };
+
+	  this.size = function() {
+	    return _size;
+	  };
+
+	  this.memsize = function() {
+	    var size = 0,
+	      key;
+	    for (key in _cache) {
+	      size++;
+	    }
+	    return size;
+	  };
+
+	  this.debug = function(bool) {
+	    _debug = bool;
+	  };
+
+	  this.hits = function() {
+	    return _hitCount;
+	  };
+
+	  this.misses = function() {
+	    return _missCount;
+	  };
+
+	  this.keys = function() {
+	    return Object.keys(_cache);
+	  };
+
+	  this.exportJson = function() {
+	    var plainJsCache = {};
+
+	    // Discard the `timeout` property.
+	    // Note: JSON doesn't support `NaN`, so convert it to `'NaN'`.
+	    for (var key in _cache) {
+	      var record = _cache[key];
+	      plainJsCache[key] = {
+	        value: record.value,
+	        expire: record.expire || 'NaN',
+	      };
+	    }
+
+	    return JSON.stringify(plainJsCache);
+	  };
+
+	  this.importJson = function(jsonToImport, options) {
+	    var cacheToImport = JSON.parse(jsonToImport);
+	    var currTime = Date.now();
+
+	    var skipDuplicates = options && options.skipDuplicates;
+
+	    for (var key in cacheToImport) {
+	      if (cacheToImport.hasOwnProperty(key)) {
+	        if (skipDuplicates) {
+	          var existingRecord = _cache[key];
+	          if (existingRecord) {
+	            if (_debug) {
+	              console.log('Skipping duplicate imported key \'%s\'', key);
+	            }
+	            continue;
+	          }
+	        }
+
+	        var record = cacheToImport[key];
+
+	        // record.expire could be `'NaN'` if no expiry was set.
+	        // Try to subtract from it; a string minus a number is `NaN`, which is perfectly fine here.
+	        var remainingTime = record.expire - currTime;
+
+	        if (remainingTime <= 0) {
+	          // Delete any record that might exist with the same key, since this key is expired.
+	          this.del(key);
+	          continue;
+	        }
+
+	        // Remaining time must now be either positive or `NaN`,
+	        // but `put` will throw an error if we try to give it `NaN`.
+	        remainingTime = remainingTime > 0 ? remainingTime : undefined;
+
+	        this.put(key, record.value, remainingTime);
+	      }
+	    }
+
+	    return this.size();
+	  };
+	}
+
+	var memoryCache = new Cache();
+	var Cache_1 = Cache;
+	memoryCache.Cache = Cache_1;
+
+	var isUndefined$1 = (val) => val === undefined;
+
+	var isNullOrUndefined = (value) => value === null || isUndefined$1(value);
+
+	var isArray$2 = (value) => Array.isArray(value);
+
+	const isObjectType = (value) => typeof value === 'object';
+	var isObject$1 = (value) => !isNullOrUndefined(value) && !isArray$2(value) && isObjectType(value);
+
+	var isHTMLElement = (value) => isObject$1(value) && value.nodeType === Node.ELEMENT_NODE;
+
+	const VALIDATION_MODE = {
+	    onBlur: 'onBlur',
+	    onChange: 'onChange',
+	    onSubmit: 'onSubmit',
+	};
+	const VALUE = 'value';
+	const UNDEFINED = 'undefined';
+	const EVENTS = {
+	    BLUR: 'blur',
+	    CHANGE: 'change',
+	    INPUT: 'input',
+	};
+	const INPUT_VALIDATION_RULES = {
+	    max: 'max',
+	    min: 'min',
+	    maxLength: 'maxLength',
+	    minLength: 'minLength',
+	    pattern: 'pattern',
+	    required: 'required',
+	    validate: 'validate',
+	};
+	const REGEX_IS_DEEP_PROP = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/;
+	const REGEX_IS_PLAIN_PROP = /^\w*$/;
+	const REGEX_PROP_NAME = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
+	const REGEX_ESCAPE_CHAR = /\\(\\)?/g;
+
+	function attachEventListeners({ field, handleChange, isRadioOrCheckbox, }) {
+	    const { ref } = field;
+	    if (isHTMLElement(ref) && ref.addEventListener && handleChange) {
+	        ref.addEventListener(isRadioOrCheckbox ? EVENTS.CHANGE : EVENTS.INPUT, handleChange);
+	        ref.addEventListener(EVENTS.BLUR, handleChange);
+	    }
+	}
+
+	var isKey = (value) => !isArray$2(value) &&
+	    (REGEX_IS_PLAIN_PROP.test(value) || !REGEX_IS_DEEP_PROP.test(value));
+
+	var stringToPath = (string) => {
+	    const result = [];
+	    string.replace(REGEX_PROP_NAME, (match, number, quote, string) => {
+	        result.push(quote ? string.replace(REGEX_ESCAPE_CHAR, '$1') : number || match);
+	    });
+	    return result;
+	};
+
+	function set(object, path, value) {
+	    let index = -1;
+	    const tempPath = isKey(path) ? [path] : stringToPath(path);
+	    const length = tempPath.length;
+	    const lastIndex = length - 1;
+	    while (++index < length) {
+	        const key = tempPath[index];
+	        let newValue = value;
+	        if (index !== lastIndex) {
+	            const objValue = object[key];
+	            newValue =
+	                isObject$1(objValue) || isArray$2(objValue)
+	                    ? objValue
+	                    : !isNaN(tempPath[index + 1])
+	                        ? []
+	                        : {};
+	        }
+	        object[key] = newValue;
+	        object = object[key];
+	    }
+	    return object;
+	}
+
+	var transformToNestObject = (data) => Object.entries(data).reduce((previous, [key, value]) => {
+	    if (!isKey(key)) {
+	        set(previous, key, value);
+	        return previous;
+	    }
+	    return Object.assign(Object.assign({}, previous), { [key]: value });
+	}, {});
+
+	var get = (obj, path, defaultValue) => {
+	    const result = path
+	        .split(/[,[\].]+?/)
+	        .filter(Boolean)
+	        .reduce((result, key) => (isNullOrUndefined(result) ? result : result[key]), obj);
+	    return isUndefined$1(result) || result === obj
+	        ? obj[path] || defaultValue
+	        : result;
+	};
+
+	var focusErrorField = (fields, fieldErrors) => {
+	    for (const key in fields) {
+	        if (get(fieldErrors, key)) {
+	            const field = fields[key];
+	            if (field) {
+	                if (isHTMLElement(field.ref) && field.ref.focus) {
+	                    field.ref.focus();
+	                    break;
+	                }
+	                else if (field.options) {
+	                    field.options[0].ref.focus();
+	                    break;
+	                }
+	            }
+	        }
+	    }
+	};
+
+	var removeAllEventListeners = (ref, validateWithStateUpdate) => {
+	    if (isHTMLElement(ref) && ref.removeEventListener) {
+	        ref.removeEventListener(EVENTS.INPUT, validateWithStateUpdate);
+	        ref.removeEventListener(EVENTS.CHANGE, validateWithStateUpdate);
+	        ref.removeEventListener(EVENTS.BLUR, validateWithStateUpdate);
+	    }
+	};
+
+	var isRadioInput = (element) => !!element && element.type === 'radio';
+
+	var isCheckBoxInput = (element) => !!element && element.type === 'checkbox';
+
+	function isDetached(element) {
+	    if (!element) {
+	        return true;
+	    }
+	    if (!(element instanceof HTMLElement) ||
+	        element.nodeType === Node.DOCUMENT_NODE) {
+	        return false;
+	    }
+	    return isDetached(element.parentNode);
+	}
+
+	var isEmptyObject = (value) => isObject$1(value) && !Object.keys(value).length;
+
+	function castPath(value) {
+	    return isArray$2(value) ? value : stringToPath(value);
+	}
+	function baseGet(object, path) {
+	    const updatePath = isKey(path) ? [path] : castPath(path);
+	    const length = path.length;
+	    let index = 0;
+	    while (index < length) {
+	        object = isUndefined$1(object) ? index++ : object[updatePath[index++]];
+	    }
+	    return index == length ? object : undefined;
+	}
+	function baseSlice(array, start, end) {
+	    let index = -1;
+	    let length = array.length;
+	    if (start < 0) {
+	        start = -start > length ? 0 : length + start;
+	    }
+	    end = end > length ? length : end;
+	    if (end < 0) {
+	        end += length;
+	    }
+	    length = start > end ? 0 : end - start;
+	    const result = Array(length);
+	    while (++index < length) {
+	        result[index] = array[index + start];
+	    }
+	    return result;
+	}
+	function parent(object, path) {
+	    return path.length == 1 ? object : baseGet(object, baseSlice(path, 0, -1));
+	}
+	function baseUnset(object, path) {
+	    const updatePath = isKey(path) ? [path] : castPath(path);
+	    const childObject = parent(object, updatePath);
+	    const key = updatePath[updatePath.length - 1];
+	    const result = !(childObject != null) || delete childObject[key];
+	    let previousObjRef = undefined;
+	    for (let k = 0; k < updatePath.slice(0, -1).length; k++) {
+	        let index = -1;
+	        let objectRef = undefined;
+	        const currentPaths = updatePath.slice(0, -(k + 1));
+	        const currentPathsLength = currentPaths.length - 1;
+	        if (k > 0) {
+	            previousObjRef = object;
+	        }
+	        while (++index < currentPaths.length) {
+	            const item = currentPaths[index];
+	            objectRef = objectRef ? objectRef[item] : object[item];
+	            if (currentPathsLength === index) {
+	                if (isObject$1(objectRef) && isEmptyObject(objectRef)) {
+	                    previousObjRef ? delete previousObjRef[item] : delete object[item];
+	                }
+	                else if (isArray$2(objectRef) &&
+	                    !objectRef.filter(data => isObject$1(data) && !isEmptyObject(data))
+	                        .length) {
+	                    if (previousObjRef) {
+	                        delete previousObjRef[item];
+	                    }
+	                }
+	            }
+	            previousObjRef = objectRef;
+	        }
+	    }
+	    return result;
+	}
+	function unset(object, paths) {
+	    paths.forEach(path => {
+	        baseUnset(object, path);
+	    });
+	    return object;
+	}
+
+	function findRemovedFieldAndRemoveListener(fields, handleChange, field, forceDelete) {
+	    if (!field) {
+	        return;
+	    }
+	    const { ref, ref: { name, type }, mutationWatcher, } = field;
+	    if (!type) {
+	        delete fields[name];
+	        return;
+	    }
+	    const fieldValue = fields[name];
+	    if ((isRadioInput(ref) || isCheckBoxInput(ref)) && fieldValue) {
+	        const { options } = fieldValue;
+	        if (isArray$2(options) && options.length) {
+	            options
+	                .filter(Boolean)
+	                .forEach(({ ref, mutationWatcher }, index) => {
+	                if ((ref && isDetached(ref)) || forceDelete) {
+	                    removeAllEventListeners(ref, handleChange);
+	                    if (mutationWatcher) {
+	                        mutationWatcher.disconnect();
+	                    }
+	                    unset(options, [`[${index}]`]);
+	                }
+	            });
+	            if (options && !options.filter(Boolean).length) {
+	                delete fields[name];
+	            }
+	        }
+	        else {
+	            delete fields[name];
+	        }
+	    }
+	    else if (isDetached(ref) || forceDelete) {
+	        removeAllEventListeners(ref, handleChange);
+	        if (mutationWatcher) {
+	            mutationWatcher.disconnect();
+	        }
+	        delete fields[name];
+	    }
+	}
+
+	const defaultReturn = {
+	    isValid: false,
+	    value: '',
+	};
+	var getRadioValue = (options) => isArray$2(options)
+	    ? options.filter(Boolean).reduce((previous, { ref: { checked, value } }) => checked
+	        ? {
+	            isValid: true,
+	            value,
+	        }
+	        : previous, defaultReturn)
+	    : defaultReturn;
+
+	var getMultipleSelectValue = (options) => [...options]
+	    .filter(({ selected }) => selected)
+	    .map(({ value }) => value);
+
+	var isFileInput = (element) => !!element && element.type === 'file';
+
+	var isMultipleSelect = (element) => !!element && element.type === 'select-multiple';
+
+	var isEmptyString = (value) => value === '';
+
+	const defaultResult = {
+	    value: false,
+	    isValid: false,
+	};
+	const validResult = { value: true, isValid: true };
+	var getCheckboxValue = (options) => {
+	    if (isArray$2(options)) {
+	        if (options.length > 1) {
+	            const values = options
+	                .filter(({ ref: { checked } }) => checked)
+	                .map(({ ref: { value } }) => value);
+	            return { value: values, isValid: !!values.length };
+	        }
+	        const { checked, value, attributes } = options[0].ref;
+	        return checked
+	            ? attributes && !isUndefined$1(attributes.value)
+	                ? isUndefined$1(value) || isEmptyString(value)
+	                    ? validResult
+	                    : { value: value, isValid: true }
+	                : validResult
+	            : defaultResult;
+	    }
+	    return defaultResult;
+	};
+
+	function getFieldValue(fields, ref) {
+	    const { name, value } = ref;
+	    const field = fields[name];
+	    if (isFileInput(ref)) {
+	        return ref.files;
+	    }
+	    if (isRadioInput(ref)) {
+	        return field ? getRadioValue(field.options).value : '';
+	    }
+	    if (isMultipleSelect(ref)) {
+	        return getMultipleSelectValue(ref.options);
+	    }
+	    if (isCheckBoxInput(ref)) {
+	        return field ? getCheckboxValue(field.options).value : false;
+	    }
+	    return value;
+	}
+
+	var isString$1 = (value) => typeof value === 'string';
+
+	var getFieldsValues = (fields, search) => {
+	    const output = {};
+	    const isSearchString = isString$1(search);
+	    const isSearchArray = isArray$2(search);
+	    const isNest = search && search.nest;
+	    for (const name in fields) {
+	        if (isUndefined$1(search) ||
+	            isNest ||
+	            (isSearchString && name.startsWith(search)) ||
+	            (isSearchArray &&
+	                search.find((data) => name.startsWith(data)))) {
+	            output[name] = getFieldValue(fields, fields[name].ref);
+	        }
+	    }
+	    return output;
+	};
+
+	var compareObject = (objectA = {}, objectB = {}) => Object.entries(objectA).reduce((previous, [key, value]) => previous ? objectB[key] && objectB[key] === value : false, true);
+
+	var isSameError = (error, { type, types, message, }) => {
+	    return (isObject$1(error) &&
+	        error.type === type &&
+	        error.message === message &&
+	        compareObject(error.types, types));
+	};
+
+	function shouldUpdateWithError({ errors, name, error, validFields, fieldsWithValidation, }) {
+	    const isFieldValid = isEmptyObject(error);
+	    const isFormValid = isEmptyObject(errors);
+	    const currentFieldError = get(error, name);
+	    const existFieldError = get(errors, name);
+	    if ((isFieldValid && validFields.has(name)) ||
+	        (existFieldError && existFieldError.isManual)) {
+	        return false;
+	    }
+	    if (isFormValid !== isFieldValid ||
+	        (!isFormValid && !existFieldError) ||
+	        (isFieldValid && fieldsWithValidation.has(name) && !validFields.has(name))) {
+	        return true;
+	    }
+	    return currentFieldError && !isSameError(existFieldError, currentFieldError);
+	}
+
+	var isRegex = (value) => value instanceof RegExp;
+
+	var getValueAndMessage = (validationData) => {
+	    const isValueMessage = (value) => isObject$1(value) && !isRegex(value);
+	    return isValueMessage(validationData)
+	        ? validationData
+	        : {
+	            value: validationData,
+	            message: '',
+	        };
+	};
+
+	var isFunction$1 = (value) => typeof value === 'function';
+
+	var isBoolean$1 = (value) => typeof value === 'boolean';
+
+	var isMessage = (value) => isString$1(value) || (isObject$1(value) && React.isValidElement(value));
+
+	function getValidateError(result, ref, type = 'validate') {
+	    if (isMessage(result) || (isBoolean$1(result) && !result)) {
+	        const message = isMessage(result) ? result : '';
+	        return {
+	            type,
+	            message,
+	            ref,
+	        };
+	    }
+	}
+
+	var appendErrors = (name, validateAllFieldCriteria, errors, type, message) => {
+	    if (!validateAllFieldCriteria) {
+	        return {};
+	    }
+	    const error = errors[name];
+	    return Object.assign(Object.assign({}, error), { types: Object.assign(Object.assign({}, (error && error.types ? error.types : {})), { [type]: message || true }) });
+	};
+
+	var validateField = async (fieldsRef, validateAllFieldCriteria, { ref, ref: { type, value, name }, options, required, maxLength, minLength, min, max, pattern, validate, }) => {
+	    const fields = fieldsRef.current;
+	    const error = {};
+	    const isRadio = isRadioInput(ref);
+	    const isCheckBox = isCheckBoxInput(ref);
+	    const isRadioOrCheckbox = isRadio || isCheckBox;
+	    const isEmpty = isEmptyString(value);
+	    const appendErrorsCurry = appendErrors.bind(null, name, validateAllFieldCriteria, error);
+	    const getMinMaxMessage = (exceedMax, maxLengthMessage, minLengthMessage, maxType = INPUT_VALIDATION_RULES.maxLength, minType = INPUT_VALIDATION_RULES.minLength) => {
+	        const message = exceedMax ? maxLengthMessage : minLengthMessage;
+	        error[name] = Object.assign({ type: exceedMax ? maxType : minType, message,
+	            ref }, (exceedMax
+	            ? appendErrorsCurry(maxType, message)
+	            : appendErrorsCurry(minType, message)));
+	        if (!validateAllFieldCriteria) {
+	            return error;
+	        }
+	    };
+	    if (required &&
+	        ((!isRadio && !isCheckBox && (isEmpty || isNullOrUndefined(value))) ||
+	            (isBoolean$1(value) && !value) ||
+	            (isCheckBox && !getCheckboxValue(options).isValid) ||
+	            (isRadio && !getRadioValue(options).isValid))) {
+	        const { value: requiredValue, message: requiredMessage } = isMessage(required)
+	            ? { value: !!required, message: required }
+	            : getValueAndMessage(required);
+	        if (requiredValue) {
+	            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.required, message: requiredMessage, ref: isRadioOrCheckbox ? fields[name].options[0].ref : ref }, appendErrorsCurry(INPUT_VALIDATION_RULES.required, requiredMessage));
+	            if (!validateAllFieldCriteria) {
+	                return error;
+	            }
+	        }
+	    }
+	    if (!isNullOrUndefined(min) || !isNullOrUndefined(max)) {
+	        let exceedMax;
+	        let exceedMin;
+	        const { value: maxValue, message: maxMessage } = getValueAndMessage(max);
+	        const { value: minValue, message: minMessage } = getValueAndMessage(min);
+	        if (type === 'number' || (!type && !isNaN(value))) {
+	            const valueNumber = ref.valueAsNumber || parseFloat(value);
+	            if (!isNullOrUndefined(maxValue)) {
+	                exceedMax = valueNumber > maxValue;
+	            }
+	            if (!isNullOrUndefined(minValue)) {
+	                exceedMin = valueNumber < minValue;
+	            }
+	        }
+	        else {
+	            const valueDate = ref.valueAsDate || new Date(value);
+	            if (isString$1(maxValue)) {
+	                exceedMax = valueDate > new Date(maxValue);
+	            }
+	            if (isString$1(minValue)) {
+	                exceedMin = valueDate < new Date(minValue);
+	            }
+	        }
+	        if (exceedMax || exceedMin) {
+	            getMinMaxMessage(!!exceedMax, maxMessage, minMessage, INPUT_VALIDATION_RULES.max, INPUT_VALIDATION_RULES.min);
+	            if (!validateAllFieldCriteria) {
+	                return error;
+	            }
+	        }
+	    }
+	    if (isString$1(value) && !isEmpty && (maxLength || minLength)) {
+	        const { value: maxLengthValue, message: maxLengthMessage, } = getValueAndMessage(maxLength);
+	        const { value: minLengthValue, message: minLengthMessage, } = getValueAndMessage(minLength);
+	        const inputLength = value.toString().length;
+	        const exceedMax = !isNullOrUndefined(maxLengthValue) && inputLength > maxLengthValue;
+	        const exceedMin = !isNullOrUndefined(minLengthValue) && inputLength < minLengthValue;
+	        if (exceedMax || exceedMin) {
+	            getMinMaxMessage(!!exceedMax, maxLengthMessage, minLengthMessage);
+	            if (!validateAllFieldCriteria) {
+	                return error;
+	            }
+	        }
+	    }
+	    if (pattern && !isEmpty) {
+	        const { value: patternValue, message: patternMessage } = getValueAndMessage(pattern);
+	        if (isRegex(patternValue) && !patternValue.test(value)) {
+	            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.pattern, message: patternMessage, ref }, appendErrorsCurry(INPUT_VALIDATION_RULES.pattern, patternMessage));
+	            if (!validateAllFieldCriteria) {
+	                return error;
+	            }
+	        }
+	    }
+	    if (validate) {
+	        const fieldValue = getFieldValue(fields, ref);
+	        const validateRef = isRadioOrCheckbox && options ? options[0].ref : ref;
+	        if (isFunction$1(validate)) {
+	            const result = await validate(fieldValue);
+	            const validateError = getValidateError(result, validateRef);
+	            if (validateError) {
+	                error[name] = Object.assign(Object.assign({}, validateError), appendErrorsCurry(INPUT_VALIDATION_RULES.validate, validateError.message));
+	                if (!validateAllFieldCriteria) {
+	                    return error;
+	                }
+	            }
+	        }
+	        else if (isObject$1(validate)) {
+	            let validationResult = {};
+	            for (const [key, validateFunction] of Object.entries(validate)) {
+	                if (!isEmptyObject(validationResult) && !validateAllFieldCriteria) {
+	                    break;
+	                }
+	                const validateResult = await validateFunction(fieldValue);
+	                const validateError = getValidateError(validateResult, validateRef, key);
+	                if (validateError) {
+	                    validationResult = Object.assign(Object.assign({}, validateError), appendErrorsCurry(key, validateError.message));
+	                    if (validateAllFieldCriteria) {
+	                        error[name] = validationResult;
+	                    }
+	                }
+	            }
+	            if (!isEmptyObject(validationResult)) {
+	                error[name] = Object.assign({ ref: validateRef }, validationResult);
+	                if (!validateAllFieldCriteria) {
+	                    return error;
+	                }
+	            }
+	        }
+	    }
+	    return error;
+	};
+
+	const parseErrorSchema = (error, validateAllFieldCriteria) => isArray$2(error.inner)
+	    ? error.inner.reduce((previous, { path, message, type }) => (Object.assign(Object.assign({}, previous), (previous[path] && validateAllFieldCriteria
+	        ? {
+	            [path]: appendErrors(path, validateAllFieldCriteria, previous, type, message),
+	        }
+	        : {
+	            [path]: previous[path] || Object.assign({ message,
+	                type }, (validateAllFieldCriteria
+	                ? {
+	                    types: { [type]: message || true },
+	                }
+	                : {})),
+	        }))), {})
+	    : {
+	        [error.path]: { message: error.message, type: error.type },
+	    };
+	async function validateWithSchema(validationSchema, validateAllFieldCriteria, data, validationResolver, context) {
+	    if (validationResolver) {
+	        return validationResolver(data, context);
+	    }
+	    try {
+	        return {
+	            values: await validationSchema.validate(data, {
+	                abortEarly: false,
+	                context,
+	            }),
+	            errors: {},
+	        };
+	    }
+	    catch (e) {
+	        return {
+	            values: {},
+	            errors: transformToNestObject(parseErrorSchema(e, validateAllFieldCriteria)),
+	        };
+	    }
+	}
+
+	var getDefaultValue = (defaultValues, name, defaultValue) => isUndefined$1(defaultValues[name])
+	    ? get(defaultValues, name, defaultValue)
+	    : defaultValues[name];
+
+	function flatArray(list) {
+	    return list.reduce((a, b) => a.concat(isArray$2(b) ? flatArray(b) : b), []);
+	}
+
+	var isPrimitive = (value) => isNullOrUndefined(value) || !isObjectType(value);
+
+	const getPath = (path, values) => {
+	    const getInnerPath = (value, key, isObject) => {
+	        const pathWithIndex = isObject ? `${path}.${key}` : `${path}[${key}]`;
+	        return isPrimitive(value) ? pathWithIndex : getPath(pathWithIndex, value);
+	    };
+	    return isArray$2(values)
+	        ? values.map((value, key) => getInnerPath(value, key))
+	        : Object.entries(values).map(([key, value]) => getInnerPath(value, key, true));
+	};
+	var getPath$1 = (parentPath, value) => flatArray(getPath(parentPath, value));
+
+	var assignWatchFields = (fieldValues, fieldName, watchFields, combinedDefaultValues) => {
+	    let value;
+	    watchFields.add(fieldName);
+	    if (isEmptyObject(fieldValues)) {
+	        value = undefined;
+	    }
+	    else if (!isUndefined$1(fieldValues[fieldName])) {
+	        value = fieldValues[fieldName];
+	        watchFields.add(fieldName);
+	    }
+	    else {
+	        value = get(transformToNestObject(fieldValues), fieldName);
+	        if (!isUndefined$1(value)) {
+	            getPath$1(fieldName, value).forEach(name => watchFields.add(name));
+	        }
+	    }
+	    return isUndefined$1(value)
+	        ? isObject$1(combinedDefaultValues)
+	            ? getDefaultValue(combinedDefaultValues, fieldName)
+	            : combinedDefaultValues
+	        : value;
+	};
+
+	var skipValidation = ({ isOnChange, hasError, isBlurEvent, isOnSubmit, isReValidateOnSubmit, isOnBlur, isReValidateOnBlur, isSubmitted, }) => (isOnChange && isBlurEvent) ||
+	    (isOnSubmit && isReValidateOnSubmit) ||
+	    (isOnSubmit && !isSubmitted) ||
+	    (isOnBlur && !isBlurEvent && !hasError) ||
+	    (isReValidateOnBlur && !isBlurEvent && hasError) ||
+	    (isReValidateOnSubmit && isSubmitted);
+
+	var getFieldValueByName = (fields, name) => {
+	    const results = transformToNestObject(getFieldsValues(fields));
+	    return name ? get(results, name, results) : results;
+	};
+
+	function getIsFieldsDifferent(referenceArray, differenceArray) {
+	    let isMatch = false;
+	    if (!isArray$2(referenceArray) ||
+	        !isArray$2(differenceArray) ||
+	        referenceArray.length !== differenceArray.length) {
+	        return true;
+	    }
+	    for (let i = 0; i < referenceArray.length; i++) {
+	        if (isMatch) {
+	            break;
+	        }
+	        const dataA = referenceArray[i];
+	        const dataB = differenceArray[i];
+	        if (isUndefined$1(dataB) ||
+	            Object.keys(dataA).length !== Object.keys(dataB).length) {
+	            isMatch = true;
+	            break;
+	        }
+	        for (const key in dataA) {
+	            if (dataA[key] !== dataB[key]) {
+	                isMatch = true;
+	                break;
+	            }
+	        }
+	    }
+	    return isMatch;
+	}
+
+	const isMatchFieldArrayName = (name, searchName) => name.startsWith(`${searchName}[`);
+	var isNameInFieldArray = (names, name) => [...names].reduce((prev, current) => (isMatchFieldArrayName(name, current) ? true : prev), false);
+
+	var isFileListObject = (data) => typeof FileList !== UNDEFINED && data instanceof FileList;
+
+	function onDomRemove(element, onDetachCallback) {
+	    const observer = new MutationObserver(() => {
+	        if (isDetached(element)) {
+	            observer.disconnect();
+	            onDetachCallback();
+	        }
+	    });
+	    observer.observe(window.document, {
+	        childList: true,
+	        subtree: true,
+	    });
+	    return observer;
+	}
+
+	var modeChecker = (mode) => ({
+	    isOnSubmit: !mode || mode === VALIDATION_MODE.onSubmit,
+	    isOnBlur: mode === VALIDATION_MODE.onBlur,
+	    isOnChange: mode === VALIDATION_MODE.onChange,
+	});
+
+	const { useRef, useState, useCallback, useEffect } = React;
+	function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_MODE.onChange, validationSchema, validationResolver, validationContext, defaultValues = {}, submitFocusError = true, validateCriteriaMode, } = {}) {
+	    const fieldsRef = useRef({});
+	    const validateAllFieldCriteria = validateCriteriaMode === 'all';
+	    const errorsRef = useRef({});
+	    const touchedFieldsRef = useRef({});
+	    const watchFieldsRef = useRef(new Set());
+	    const dirtyFieldsRef = useRef(new Set());
+	    const fieldsWithValidationRef = useRef(new Set());
+	    const validFieldsRef = useRef(new Set());
+	    const isValidRef = useRef(true);
+	    const defaultRenderValuesRef = useRef({});
+	    const defaultValuesRef = useRef(defaultValues);
+	    const isUnMount = useRef(false);
+	    const isWatchAllRef = useRef(false);
+	    const isSubmittedRef = useRef(false);
+	    const isDirtyRef = useRef(false);
+	    const submitCountRef = useRef(0);
+	    const isSubmittingRef = useRef(false);
+	    const handleChangeRef = useRef();
+	    const resetFieldArrayFunctionRef = useRef({});
+	    const validationContextRef = useRef(validationContext);
+	    const fieldArrayNamesRef = useRef(new Set());
+	    const [, render] = useState();
+	    const { isOnBlur, isOnSubmit, isOnChange } = useRef(modeChecker(mode)).current;
+	    const isWindowUndefined = typeof window === UNDEFINED;
+	    const shouldValidateCallback = !!(validationSchema || validationResolver);
+	    const isWeb = typeof document !== UNDEFINED &&
+	        !isWindowUndefined &&
+	        !isUndefined$1(window.HTMLElement);
+	    const isProxyEnabled = isWeb && 'Proxy' in window;
+	    const readFormStateRef = useRef({
+	        dirty: !isProxyEnabled,
+	        dirtyFields: !isProxyEnabled,
+	        isSubmitted: isOnSubmit,
+	        submitCount: !isProxyEnabled,
+	        touched: !isProxyEnabled,
+	        isSubmitting: !isProxyEnabled,
+	        isValid: !isProxyEnabled,
+	    });
+	    const { isOnBlur: isReValidateOnBlur, isOnSubmit: isReValidateOnSubmit, } = useRef(modeChecker(reValidateMode)).current;
+	    const reRender = useCallback(() => {
+	        if (!isUnMount.current) {
+	            render({});
+	        }
+	    }, []);
+	    const shouldRenderBaseOnError = useCallback((name, error, shouldRender, skipReRender) => {
+	        let shouldReRender = shouldRender ||
+	            shouldUpdateWithError({
+	                errors: errorsRef.current,
+	                error,
+	                name,
+	                validFields: validFieldsRef.current,
+	                fieldsWithValidation: fieldsWithValidationRef.current,
+	            });
+	        if (isEmptyObject(error)) {
+	            if (fieldsWithValidationRef.current.has(name) ||
+	                shouldValidateCallback) {
+	                validFieldsRef.current.add(name);
+	                shouldReRender = shouldReRender || get(errorsRef.current, name);
+	            }
+	            errorsRef.current = unset(errorsRef.current, [name]);
+	        }
+	        else {
+	            validFieldsRef.current.delete(name);
+	            shouldReRender = shouldReRender || !get(errorsRef.current, name);
+	            set(errorsRef.current, name, error[name]);
+	        }
+	        if (shouldReRender && !skipReRender) {
+	            reRender();
+	            return true;
+	        }
+	    }, [reRender, shouldValidateCallback]);
+	    const setFieldValue = useCallback((field, rawValue) => {
+	        const ref = field.ref;
+	        const options = field.options;
+	        const { type } = ref;
+	        const value = isWeb && isHTMLElement(ref) && isNullOrUndefined(rawValue)
+	            ? ''
+	            : rawValue;
+	        if (isRadioInput(ref) && options) {
+	            options.forEach(({ ref: radioRef }) => (radioRef.checked = radioRef.value === value));
+	        }
+	        else if (isFileInput(ref)) {
+	            if (isEmptyString(value) ||
+	                isFileListObject(value)) {
+	                ref.files = value;
+	            }
+	            else {
+	                ref.value = value;
+	            }
+	        }
+	        else if (isMultipleSelect(ref)) {
+	            [...ref.options].forEach(selectRef => (selectRef.selected = value.includes(selectRef.value)));
+	        }
+	        else if (isCheckBoxInput(ref) && options) {
+	            options.length > 1
+	                ? options.forEach(({ ref: checkboxRef }) => (checkboxRef.checked = value.includes(checkboxRef.value)))
+	                : (options[0].ref.checked = !!value);
+	        }
+	        else {
+	            ref.value = value;
+	        }
+	        return !!type;
+	    }, [isWeb]);
+	    const setDirty = (name) => {
+	        if (!fieldsRef.current[name] ||
+	            (!readFormStateRef.current.dirty && !readFormStateRef.current.dirtyFields)) {
+	            return false;
+	        }
+	        const isFieldArray = isNameInFieldArray(fieldArrayNamesRef.current, name);
+	        const previousDirtyFieldsLength = dirtyFieldsRef.current.size;
+	        let isDirty = defaultRenderValuesRef.current[name] !==
+	            getFieldValue(fieldsRef.current, fieldsRef.current[name].ref);
+	        if (isFieldArray) {
+	            const fieldArrayName = name.substring(0, name.indexOf('['));
+	            isDirty = getIsFieldsDifferent(getFieldValueByName(fieldsRef.current, fieldArrayName), get(defaultValuesRef.current, fieldArrayName));
+	        }
+	        const isDirtyChanged = (isFieldArray ? isDirtyRef.current : dirtyFieldsRef.current.has(name)) !==
+	            isDirty;
+	        if (isDirty) {
+	            dirtyFieldsRef.current.add(name);
+	        }
+	        else {
+	            dirtyFieldsRef.current.delete(name);
+	        }
+	        isDirtyRef.current = isFieldArray ? isDirty : !!dirtyFieldsRef.current.size;
+	        return readFormStateRef.current.dirty
+	            ? isDirtyChanged
+	            : previousDirtyFieldsLength !== dirtyFieldsRef.current.size;
+	    };
+	    const setDirtyAndTouchedFields = useCallback((fieldName) => {
+	        if (setDirty(fieldName) ||
+	            (!get(touchedFieldsRef.current, fieldName) &&
+	                readFormStateRef.current.touched)) {
+	            return !!set(touchedFieldsRef.current, fieldName, true);
+	        }
+	    }, []);
+	    const setInternalValueBatch = useCallback((name, value, parentFieldName) => {
+	        const isValueArray = isArray$2(value);
+	        for (const key in value) {
+	            const fieldName = `${parentFieldName || name}${isValueArray ? `[${key}]` : `.${key}`}`;
+	            if (isObject$1(value[key])) {
+	                setInternalValueBatch(name, value[key], fieldName);
+	            }
+	            const field = fieldsRef.current[fieldName];
+	            if (field) {
+	                setFieldValue(field, value[key]);
+	                setDirtyAndTouchedFields(fieldName);
+	            }
+	        }
+	    }, [setFieldValue, setDirtyAndTouchedFields]);
+	    const setInternalValue = useCallback((name, value) => {
+	        const field = fieldsRef.current[name];
+	        if (field) {
+	            setFieldValue(field, value);
+	            const output = setDirtyAndTouchedFields(name);
+	            if (isBoolean$1(output)) {
+	                return output;
+	            }
+	        }
+	        else if (!isPrimitive(value)) {
+	            setInternalValueBatch(name, value);
+	        }
+	    }, [setDirtyAndTouchedFields, setFieldValue, setInternalValueBatch]);
+	    const executeValidation = useCallback(async (name, skipReRender) => {
+	        const field = fieldsRef.current[name];
+	        if (!field) {
+	            return false;
+	        }
+	        const error = await validateField(fieldsRef, validateAllFieldCriteria, field);
+	        shouldRenderBaseOnError(name, error, false, skipReRender);
+	        return isEmptyObject(error);
+	    }, [shouldRenderBaseOnError, validateAllFieldCriteria]);
+	    const executeSchemaValidation = useCallback(async (payload) => {
+	        const { errors } = await validateWithSchema(validationSchema, validateAllFieldCriteria, getFieldValueByName(fieldsRef.current), validationResolver, validationContextRef.current);
+	        const previousFormIsValid = isValidRef.current;
+	        isValidRef.current = isEmptyObject(errors);
+	        if (isArray$2(payload)) {
+	            payload.forEach(name => {
+	                const error = get(errors, name);
+	                if (error) {
+	                    set(errorsRef.current, name, error);
+	                }
+	                else {
+	                    unset(errorsRef.current, [name]);
+	                }
+	            });
+	            reRender();
+	        }
+	        else {
+	            shouldRenderBaseOnError(payload, (get(errors, payload)
+	                ? { [payload]: get(errors, payload) }
+	                : {}), previousFormIsValid !== isValidRef.current);
+	        }
+	        return isEmptyObject(errorsRef.current);
+	    }, [
+	        reRender,
+	        shouldRenderBaseOnError,
+	        validateAllFieldCriteria,
+	        validationResolver,
+	        validationSchema,
+	    ]);
+	    const triggerValidation = useCallback(async (payload) => {
+	        const fields = payload || Object.keys(fieldsRef.current);
+	        if (shouldValidateCallback) {
+	            return executeSchemaValidation(fields);
+	        }
+	        if (isArray$2(fields)) {
+	            const result = await Promise.all(fields.map(async (data) => await executeValidation(data, true)));
+	            reRender();
+	            return result.every(Boolean);
+	        }
+	        return await executeValidation(fields);
+	    }, [
+	        executeSchemaValidation,
+	        executeValidation,
+	        reRender,
+	        shouldValidateCallback,
+	    ]);
+	    const isFieldWatched = (name) => isWatchAllRef.current ||
+	        watchFieldsRef.current.has(name) ||
+	        watchFieldsRef.current.has((name.match(/\w+/) || [])[0]);
+	    function setValue(names, valueOrShouldValidate, shouldValidate) {
+	        let shouldRender = false;
+	        const isMultiple = isArray$2(names);
+	        (isMultiple
+	            ? names
+	            : [names]).forEach((name) => {
+	            const isStringFieldName = isString$1(name);
+	            shouldRender =
+	                setInternalValue(isStringFieldName ? name : Object.keys(name)[0], isStringFieldName
+	                    ? valueOrShouldValidate
+	                    : Object.values(name)[0]) || isMultiple
+	                    ? true
+	                    : isFieldWatched(name);
+	        });
+	        if (shouldRender || isMultiple) {
+	            reRender();
+	        }
+	        if (shouldValidate || (isMultiple && valueOrShouldValidate)) {
+	            triggerValidation(isMultiple ? undefined : names);
+	        }
+	    }
+	    handleChangeRef.current = handleChangeRef.current
+	        ? handleChangeRef.current
+	        : async ({ type, target }) => {
+	            const name = target ? target.name : '';
+	            const fields = fieldsRef.current;
+	            const errors = errorsRef.current;
+	            const field = fields[name];
+	            const currentError = get(errors, name);
+	            let error;
+	            if (!field) {
+	                return;
+	            }
+	            const isBlurEvent = type === EVENTS.BLUR;
+	            const shouldSkipValidation = skipValidation({
+	                hasError: !!currentError,
+	                isOnChange,
+	                isBlurEvent,
+	                isOnSubmit,
+	                isReValidateOnSubmit,
+	                isOnBlur,
+	                isReValidateOnBlur,
+	                isSubmitted: isSubmittedRef.current,
+	            });
+	            const shouldUpdateDirty = setDirty(name);
+	            let shouldUpdateState = isFieldWatched(name) || shouldUpdateDirty;
+	            if (isBlurEvent &&
+	                !get(touchedFieldsRef.current, name) &&
+	                readFormStateRef.current.touched) {
+	                set(touchedFieldsRef.current, name, true);
+	                shouldUpdateState = true;
+	            }
+	            if (shouldSkipValidation) {
+	                return shouldUpdateState && reRender();
+	            }
+	            if (shouldValidateCallback) {
+	                const { errors } = await validateWithSchema(validationSchema, validateAllFieldCriteria, getFieldValueByName(fields), validationResolver, validationContextRef.current);
+	                const previousFormIsValid = isValidRef.current;
+	                isValidRef.current = isEmptyObject(errors);
+	                error = (get(errors, name)
+	                    ? { [name]: get(errors, name) }
+	                    : {});
+	                if (previousFormIsValid !== isValidRef.current) {
+	                    shouldUpdateState = true;
+	                }
+	            }
+	            else {
+	                error = await validateField(fieldsRef, validateAllFieldCriteria, field);
+	            }
+	            if (!shouldRenderBaseOnError(name, error) && shouldUpdateState) {
+	                reRender();
+	            }
+	        };
+	    const validateSchemaIsValid = useCallback((values = {}) => {
+	        const fieldValues = isEmptyObject(defaultValuesRef.current)
+	            ? getFieldsValues(fieldsRef.current)
+	            : defaultValuesRef.current;
+	        validateWithSchema(validationSchema, validateAllFieldCriteria, transformToNestObject(Object.assign(Object.assign({}, fieldValues), values)), validationResolver, validationContextRef.current).then(({ errors }) => {
+	            const previousFormIsValid = isValidRef.current;
+	            isValidRef.current = isEmptyObject(errors);
+	            if (previousFormIsValid !== isValidRef.current) {
+	                reRender();
+	            }
+	        });
+	    }, 
+	    // eslint-disable-next-line react-hooks/exhaustive-deps
+	    [reRender, validateAllFieldCriteria, validationResolver]);
+	    const removeFieldEventListener = (field, forceDelete) => {
+	        if (!isUndefined$1(handleChangeRef.current) && field) {
+	            findRemovedFieldAndRemoveListener(fieldsRef.current, handleChangeRef.current, field, forceDelete);
+	        }
+	    };
+	    const removeFieldEventListenerAndRef = useCallback((field, forceDelete) => {
+	        if (!field ||
+	            (field &&
+	                isNameInFieldArray(fieldArrayNamesRef.current, field.ref.name) &&
+	                !forceDelete)) {
+	            return;
+	        }
+	        removeFieldEventListener(field, forceDelete);
+	        const { name } = field.ref;
+	        errorsRef.current = unset(errorsRef.current, [name]);
+	        touchedFieldsRef.current = unset(touchedFieldsRef.current, [name]);
+	        defaultRenderValuesRef.current = unset(defaultRenderValuesRef.current, [
+	            name,
+	        ]);
+	        [
+	            dirtyFieldsRef,
+	            fieldsWithValidationRef,
+	            validFieldsRef,
+	            watchFieldsRef,
+	        ].forEach(data => data.current.delete(name));
+	        if (readFormStateRef.current.isValid ||
+	            readFormStateRef.current.touched) {
+	            reRender();
+	            if (shouldValidateCallback) {
+	                validateSchemaIsValid();
+	            }
+	        }
+	    }, [reRender, shouldValidateCallback, validateSchemaIsValid]);
+	    function clearError(name) {
+	        if (isUndefined$1(name)) {
+	            errorsRef.current = {};
+	        }
+	        else {
+	            unset(errorsRef.current, isArray$2(name) ? name : [name]);
+	        }
+	        reRender();
+	    }
+	    const setInternalError = ({ name, type, types, message, preventRender, }) => {
+	        const field = fieldsRef.current[name];
+	        if (!isSameError(errorsRef.current[name], {
+	            type,
+	            message,
+	            types,
+	        })) {
+	            set(errorsRef.current, name, {
+	                type,
+	                types,
+	                message,
+	                ref: field ? field.ref : {},
+	                isManual: true,
+	            });
+	            if (!preventRender) {
+	                reRender();
+	            }
+	        }
+	    };
+	    function setError(name, type = '', message) {
+	        if (isString$1(name)) {
+	            setInternalError(Object.assign({ name }, (isObject$1(type)
+	                ? {
+	                    types: type,
+	                    type: '',
+	                }
+	                : {
+	                    type,
+	                    message,
+	                })));
+	        }
+	        else if (isArray$2(name)) {
+	            name.forEach(error => setInternalError(Object.assign(Object.assign({}, error), { preventRender: true })));
+	            reRender();
+	        }
+	    }
+	    function watch(fieldNames, defaultValue) {
+	        const combinedDefaultValues = isUndefined$1(defaultValue)
+	            ? isUndefined$1(defaultValuesRef.current)
+	                ? {}
+	                : defaultValuesRef.current
+	            : defaultValue;
+	        const fieldValues = getFieldsValues(fieldsRef.current, fieldNames);
+	        const watchFields = watchFieldsRef.current;
+	        if (isString$1(fieldNames)) {
+	            return assignWatchFields(fieldValues, fieldNames, watchFields, combinedDefaultValues);
+	        }
+	        if (isArray$2(fieldNames)) {
+	            return fieldNames.reduce((previous, name) => (Object.assign(Object.assign({}, previous), { [name]: assignWatchFields(fieldValues, name, watchFields, combinedDefaultValues) })), {});
+	        }
+	        isWatchAllRef.current = true;
+	        const result = (!isEmptyObject(fieldValues) && fieldValues) ||
+	            defaultValue ||
+	            defaultValuesRef.current;
+	        return fieldNames && fieldNames.nest
+	            ? transformToNestObject(result)
+	            : result;
+	    }
+	    function unregister(names) {
+	        if (!isEmptyObject(fieldsRef.current)) {
+	            (isArray$2(names) ? names : [names]).forEach(fieldName => removeFieldEventListenerAndRef(fieldsRef.current[fieldName], true));
+	        }
+	    }
+	    function registerFieldsRef(ref, validateOptions = {}) {
+	        if (!ref.name) {
+	            // eslint-disable-next-line no-console
+	            return console.warn('Missing name @', ref);
+	        }
+	        const { name, type, value } = ref;
+	        const fieldAttributes = Object.assign({ ref }, validateOptions);
+	        const fields = fieldsRef.current;
+	        const isRadioOrCheckbox = isRadioInput(ref) || isCheckBoxInput(ref);
+	        let currentField = fields[name];
+	        let isEmptyDefaultValue = true;
+	        let isFieldArray = false;
+	        let defaultValue;
+	        if (isRadioOrCheckbox
+	            ? currentField &&
+	                isArray$2(currentField.options) &&
+	                currentField.options
+	                    .filter(Boolean)
+	                    .find(({ ref }) => value === ref.value)
+	            : currentField) {
+	            fields[name] = Object.assign(Object.assign({}, currentField), validateOptions);
+	            return;
+	        }
+	        if (type) {
+	            const mutationWatcher = onDomRemove(ref, () => removeFieldEventListenerAndRef(fieldAttributes));
+	            currentField = isRadioOrCheckbox
+	                ? Object.assign({ options: [
+	                        ...((currentField && currentField.options) || []),
+	                        {
+	                            ref,
+	                            mutationWatcher,
+	                        },
+	                    ], ref: { type, name } }, validateOptions) : Object.assign(Object.assign({}, fieldAttributes), { mutationWatcher });
+	        }
+	        else {
+	            currentField = fieldAttributes;
+	        }
+	        fields[name] = currentField;
+	        if (!isEmptyObject(defaultValuesRef.current)) {
+	            defaultValue = getDefaultValue(defaultValuesRef.current, name);
+	            isEmptyDefaultValue = isUndefined$1(defaultValue);
+	            isFieldArray = isNameInFieldArray(fieldArrayNamesRef.current, name);
+	            if (!isEmptyDefaultValue && !isFieldArray) {
+	                setFieldValue(currentField, defaultValue);
+	            }
+	        }
+	        if (shouldValidateCallback &&
+	            !isFieldArray &&
+	            readFormStateRef.current.isValid) {
+	            validateSchemaIsValid();
+	        }
+	        else if (!isEmptyObject(validateOptions)) {
+	            fieldsWithValidationRef.current.add(name);
+	            if (!isOnSubmit && readFormStateRef.current.isValid) {
+	                validateField(fieldsRef, validateAllFieldCriteria, currentField).then(error => {
+	                    const previousFormIsValid = isValidRef.current;
+	                    if (isEmptyObject(error)) {
+	                        validFieldsRef.current.add(name);
+	                    }
+	                    else {
+	                        isValidRef.current = false;
+	                    }
+	                    if (previousFormIsValid !== isValidRef.current) {
+	                        reRender();
+	                    }
+	                });
+	            }
+	        }
+	        if (!defaultRenderValuesRef.current[name] &&
+	            !(isFieldArray && isEmptyDefaultValue)) {
+	            defaultRenderValuesRef.current[name] = isEmptyDefaultValue
+	                ? getFieldValue(fields, currentField.ref)
+	                : defaultValue;
+	        }
+	        if (!type) {
+	            return;
+	        }
+	        const fieldToAttachListener = isRadioOrCheckbox && currentField.options
+	            ? currentField.options[currentField.options.length - 1]
+	            : currentField;
+	        attachEventListeners({
+	            field: fieldToAttachListener,
+	            isRadioOrCheckbox,
+	            handleChange: handleChangeRef.current,
+	        });
+	    }
+	    function register(refOrValidationOptions, validationOptions) {
+	        if (isWindowUndefined) {
+	            return;
+	        }
+	        if (isString$1(refOrValidationOptions)) {
+	            registerFieldsRef({ name: refOrValidationOptions }, validationOptions);
+	            return;
+	        }
+	        if (isObject$1(refOrValidationOptions) && 'name' in refOrValidationOptions) {
+	            registerFieldsRef(refOrValidationOptions, validationOptions);
+	            return;
+	        }
+	        return (ref) => ref && registerFieldsRef(ref, refOrValidationOptions);
+	    }
+	    const handleSubmit = useCallback((callback) => async (e) => {
+	        if (e) {
+	            e.preventDefault();
+	            e.persist();
+	        }
+	        let fieldErrors = {};
+	        let fieldValues = {};
+	        const fields = fieldsRef.current;
+	        if (readFormStateRef.current.isSubmitting) {
+	            isSubmittingRef.current = true;
+	            reRender();
+	        }
+	        try {
+	            if (shouldValidateCallback) {
+	                fieldValues = getFieldsValues(fields);
+	                const { errors, values } = await validateWithSchema(validationSchema, validateAllFieldCriteria, transformToNestObject(fieldValues), validationResolver, validationContextRef.current);
+	                errorsRef.current = errors;
+	                fieldErrors = errors;
+	                fieldValues = values;
+	            }
+	            else {
+	                for (const field of Object.values(fields)) {
+	                    if (field) {
+	                        const { ref, ref: { name }, } = field;
+	                        const fieldError = await validateField(fieldsRef, validateAllFieldCriteria, field);
+	                        if (fieldError[name]) {
+	                            set(fieldErrors, name, fieldError[name]);
+	                            validFieldsRef.current.delete(name);
+	                        }
+	                        else {
+	                            if (fieldsWithValidationRef.current.has(name)) {
+	                                validFieldsRef.current.add(name);
+	                            }
+	                            fieldValues[name] = getFieldValue(fields, ref);
+	                        }
+	                    }
+	                }
+	            }
+	            if (isEmptyObject(fieldErrors)) {
+	                errorsRef.current = {};
+	                await callback(transformToNestObject(fieldValues), e);
+	            }
+	            else {
+	                if (submitFocusError && isWeb) {
+	                    focusErrorField(fields, fieldErrors);
+	                }
+	                errorsRef.current = fieldErrors;
+	            }
+	        }
+	        finally {
+	            isSubmittedRef.current = true;
+	            isSubmittingRef.current = false;
+	            submitCountRef.current = submitCountRef.current + 1;
+	            reRender();
+	        }
+	    }, [
+	        isWeb,
+	        reRender,
+	        shouldValidateCallback,
+	        submitFocusError,
+	        validateAllFieldCriteria,
+	        validationResolver,
+	        validationSchema,
+	    ]);
+	    const resetRefs = ({ errors, dirty, isSubmitted, touched, isValid, submitCount, }) => {
+	        fieldsRef.current = {};
+	        if (!errors) {
+	            errorsRef.current = {};
+	        }
+	        if (!touched) {
+	            touchedFieldsRef.current = {};
+	        }
+	        if (!isValid) {
+	            validFieldsRef.current = new Set();
+	            fieldsWithValidationRef.current = new Set();
+	            isValidRef.current = true;
+	        }
+	        if (!dirty) {
+	            dirtyFieldsRef.current = new Set();
+	            isDirtyRef.current = false;
+	        }
+	        if (!isSubmitted) {
+	            isSubmittedRef.current = false;
+	        }
+	        if (!submitCount) {
+	            submitCountRef.current = 0;
+	        }
+	        defaultRenderValuesRef.current = {};
+	        watchFieldsRef.current = new Set();
+	        isWatchAllRef.current = false;
+	    };
+	    const reset = (values, omitResetState = {}) => {
+	        if (isWeb) {
+	            for (const value of Object.values(fieldsRef.current)) {
+	                if (value && isHTMLElement(value.ref) && value.ref.closest) {
+	                    try {
+	                        value.ref.closest('form').reset();
+	                        break;
+	                    }
+	                    catch (_a) { }
+	                }
+	            }
+	        }
+	        if (values) {
+	            defaultValuesRef.current = values;
+	        }
+	        Object.values(resetFieldArrayFunctionRef.current).forEach(resetFieldArray => isFunction$1(resetFieldArray) && resetFieldArray());
+	        resetRefs(omitResetState);
+	        reRender();
+	    };
+	    const getValues = (payload) => {
+	        const fieldValues = getFieldsValues(fieldsRef.current);
+	        const outputValues = isEmptyObject(fieldValues)
+	            ? defaultValuesRef.current
+	            : fieldValues;
+	        return payload && payload.nest
+	            ? transformToNestObject(outputValues)
+	            : outputValues;
+	    };
+	    useEffect(() => () => {
+	        isUnMount.current = true;
+	        fieldsRef.current &&
+	            "production" === 'production' &&
+	            Object.values(fieldsRef.current).forEach((field) => removeFieldEventListenerAndRef(field, true));
+	    }, [removeFieldEventListenerAndRef]);
+	    if (!shouldValidateCallback) {
+	        isValidRef.current =
+	            validFieldsRef.current.size >= fieldsWithValidationRef.current.size &&
+	                isEmptyObject(errorsRef.current);
+	    }
+	    const formState = {
+	        dirty: isDirtyRef.current,
+	        dirtyFields: dirtyFieldsRef.current,
+	        isSubmitted: isSubmittedRef.current,
+	        submitCount: submitCountRef.current,
+	        touched: touchedFieldsRef.current,
+	        isSubmitting: isSubmittingRef.current,
+	        isValid: isOnSubmit
+	            ? isSubmittedRef.current && isEmptyObject(errorsRef.current)
+	            : isValidRef.current,
+	    };
+	    const control = Object.assign(Object.assign({ register,
+	        unregister,
+	        removeFieldEventListener,
+	        getValues,
+	        setValue,
+	        reRender,
+	        triggerValidation }, (shouldValidateCallback ? { validateSchemaIsValid } : {})), { formState, mode: {
+	            isOnBlur,
+	            isOnSubmit,
+	            isOnChange,
+	        }, reValidateMode: {
+	            isReValidateOnBlur,
+	            isReValidateOnSubmit,
+	        }, errorsRef,
+	        touchedFieldsRef,
+	        fieldsRef,
+	        resetFieldArrayFunctionRef,
+	        validFieldsRef,
+	        dirtyFieldsRef,
+	        fieldsWithValidationRef,
+	        watchFieldsRef,
+	        fieldArrayNamesRef,
+	        isDirtyRef,
+	        readFormStateRef,
+	        defaultValuesRef });
+	    return {
+	        watch,
+	        control,
+	        handleSubmit,
+	        setValue: useCallback(setValue, [
+	            reRender,
+	            setInternalValue,
+	            triggerValidation,
+	        ]),
+	        triggerValidation,
+	        getValues: useCallback(getValues, []),
+	        reset: useCallback(reset, []),
+	        register: useCallback(register, [
+	            defaultValuesRef.current,
+	            defaultRenderValuesRef.current,
+	        ]),
+	        unregister: useCallback(unregister, []),
+	        clearError: useCallback(clearError, []),
+	        setError: useCallback(setError, []),
+	        errors: errorsRef.current,
+	        formState: isProxyEnabled
+	            ? new Proxy(formState, {
+	                get: (obj, prop) => {
+	                    if (prop in obj) {
+	                        readFormStateRef.current[prop] = true;
+	                        return obj[prop];
+	                    }
+	                    return {};
+	                },
+	            })
+	            : formState,
+	    };
+	}
+
+	/*! *****************************************************************************
+	Copyright (c) Microsoft Corporation. All rights reserved.
+	Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of the
+	License at http://www.apache.org/licenses/LICENSE-2.0
+
+	THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+	KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+	WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+	MERCHANTABLITY OR NON-INFRINGEMENT.
+
+	See the Apache Version 2.0 License for specific language governing permissions
+	and limitations under the License.
+	***************************************************************************** */
+
+	function __rest(s, e) {
+	    var t = {};
+	    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+	        t[p] = s[p];
+	    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+	        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+	            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+	                t[p[i]] = s[p[i]];
+	        }
+	    return t;
+	}
+
+	const FormGlobalContext = React.createContext(null);
+	function useFormContext() {
+	    return React.useContext(FormGlobalContext);
+	}
+
+	var getInputValue = (event, isCheckboxInput) => isPrimitive(event) ||
+	    !isObject$1(event.target) ||
+	    (isObject$1(event.target) && !event.type)
+	    ? event
+	    : isCheckboxInput || isUndefined$1(event.target.value)
+	        ? event.target.checked
+	        : event.target.value;
+
+	const Controller = (_a) => {
+	    var { name, rules, as: InnerComponent, onBlur, onChange, onChangeName = VALIDATION_MODE.onChange, onBlurName = VALIDATION_MODE.onBlur, valueName, defaultValue, control } = _a, rest = __rest(_a, ["name", "rules", "as", "onBlur", "onChange", "onChangeName", "onBlurName", "valueName", "defaultValue", "control"]);
+	    const methods = useFormContext();
+	    const { defaultValuesRef, setValue, register, unregister, errorsRef, removeFieldEventListener, triggerValidation, mode: { isOnSubmit, isOnBlur, isOnChange }, reValidateMode: { isReValidateOnBlur, isReValidateOnSubmit }, formState: { isSubmitted }, fieldsRef, fieldArrayNamesRef, } = control || methods.control;
+	    const [value, setInputStateValue] = React.useState(isUndefined$1(defaultValue)
+	        ? get(defaultValuesRef.current, name)
+	        : defaultValue);
+	    const valueRef = React.useRef(value);
+	    const isCheckboxInput = isBoolean$1(value);
+	    const shouldValidate = () => !skipValidation({
+	        hasError: !!get(errorsRef.current, name),
+	        isOnBlur,
+	        isOnSubmit,
+	        isOnChange,
+	        isReValidateOnBlur,
+	        isReValidateOnSubmit,
+	        isSubmitted,
+	    });
+	    const commonTask = (event) => {
+	        const data = getInputValue(event, isCheckboxInput);
+	        setInputStateValue(data);
+	        valueRef.current = data;
+	        return data;
+	    };
+	    const eventWrapper = (event) => (...arg) => setValue(name, commonTask(event(arg)), shouldValidate());
+	    const handleChange = (event) => {
+	        const data = commonTask(event);
+	        setValue(name, data, shouldValidate());
+	    };
+	    const registerField = () => {
+	        if (isNameInFieldArray(fieldArrayNamesRef.current, name) &&
+	            fieldsRef.current[name]) {
+	            removeFieldEventListener(fieldsRef.current[name], true);
+	        }
+	        register(Object.defineProperty({ name }, VALUE, {
+	            set(data) {
+	                setInputStateValue(data);
+	                valueRef.current = data;
+	            },
+	            get() {
+	                return valueRef.current;
+	            },
+	        }), Object.assign({}, rules));
+	    };
+	    React.useEffect(() => {
+	        if (!fieldsRef.current[name]) {
+	            registerField();
+	            setInputStateValue(isUndefined$1(defaultValue)
+	                ? get(defaultValuesRef.current, name)
+	                : defaultValue);
+	        }
+	    });
+	    React.useEffect(() => {
+	        registerField();
+	        return () => {
+	            if (!isNameInFieldArray(fieldArrayNamesRef.current, name)) {
+	                unregister(name);
+	            }
+	        };
+	    }, [name]);
+	    React.useEffect(() => {
+	        registerField();
+	    }, [rules]);
+	    const shouldReValidateOnBlur = isOnBlur || isReValidateOnBlur;
+	    const props = Object.assign(Object.assign(Object.assign(Object.assign({ name }, rest), (onChange
+	        ? { [onChangeName]: eventWrapper(onChange) }
+	        : { [onChangeName]: handleChange })), (onBlur || shouldReValidateOnBlur
+	        ? {
+	            [onBlurName]: (...args) => {
+	                if (onBlur) {
+	                    onBlur(args);
+	                }
+	                if (shouldReValidateOnBlur) {
+	                    triggerValidation(name);
+	                }
+	            },
+	        }
+	        : {})), { [valueName || (isCheckboxInput ? 'checked' : VALUE)]: value });
+	    return React.isValidElement(InnerComponent)
+	        ? React.cloneElement(InnerComponent, props)
+	        : React.createElement(InnerComponent, props);
+	};
+
+	const ErrorMessage = (_a) => {
+	    var { as: InnerComponent, errors, name, message, children } = _a, rest = __rest(_a, ["as", "errors", "name", "message", "children"]);
+	    const methods = useFormContext();
+	    const error = get(errors || methods.errors, name);
+	    if (!error) {
+	        return null;
+	    }
+	    const { message: messageFromRegister, types } = error;
+	    const props = Object.assign(Object.assign({}, (InnerComponent ? rest : {})), { children: children
+	            ? children({ message: messageFromRegister || message, messages: types })
+	            : messageFromRegister || message });
+	    return InnerComponent ? (React.isValidElement(InnerComponent) ? (React.cloneElement(InnerComponent, props)) : (React.createElement(InnerComponent, props))) : (React.createElement(React.Fragment, Object.assign({}, props)));
+	};
+
+	var reactDomFactories = createCommonjsModule(function (module, exports) {
+
+	/**
+	 * Copyright (c) 2015-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 */
+
+	(function(f) {
+	  {
+	    module.exports = f(React__default);
+	    /* global define */
+	  }
+	})(function(React) {
+	  /**
+	   * Create a factory that creates HTML tag elements.
+	   */
+	  function createDOMFactory(type) {
+	    var factory = React.createElement.bind(null, type);
+	    // Expose the type on the factory and the prototype so that it can be
+	    // easily accessed on elements. E.g. `<Foo />.type === Foo`.
+	    // This should not be named `constructor` since this may not be the function
+	    // that created the element, and it may not even be a constructor.
+	    factory.type = type;
+	    return factory;
+	  }
+	  /**
+	   * Creates a mapping from supported HTML tags to `ReactDOMComponent` classes.
+	   */
+	  var ReactDOMFactories = {
+	    a: createDOMFactory('a'),
+	    abbr: createDOMFactory('abbr'),
+	    address: createDOMFactory('address'),
+	    area: createDOMFactory('area'),
+	    article: createDOMFactory('article'),
+	    aside: createDOMFactory('aside'),
+	    audio: createDOMFactory('audio'),
+	    b: createDOMFactory('b'),
+	    base: createDOMFactory('base'),
+	    bdi: createDOMFactory('bdi'),
+	    bdo: createDOMFactory('bdo'),
+	    big: createDOMFactory('big'),
+	    blockquote: createDOMFactory('blockquote'),
+	    body: createDOMFactory('body'),
+	    br: createDOMFactory('br'),
+	    button: createDOMFactory('button'),
+	    canvas: createDOMFactory('canvas'),
+	    caption: createDOMFactory('caption'),
+	    cite: createDOMFactory('cite'),
+	    code: createDOMFactory('code'),
+	    col: createDOMFactory('col'),
+	    colgroup: createDOMFactory('colgroup'),
+	    data: createDOMFactory('data'),
+	    datalist: createDOMFactory('datalist'),
+	    dd: createDOMFactory('dd'),
+	    del: createDOMFactory('del'),
+	    details: createDOMFactory('details'),
+	    dfn: createDOMFactory('dfn'),
+	    dialog: createDOMFactory('dialog'),
+	    div: createDOMFactory('div'),
+	    dl: createDOMFactory('dl'),
+	    dt: createDOMFactory('dt'),
+	    em: createDOMFactory('em'),
+	    embed: createDOMFactory('embed'),
+	    fieldset: createDOMFactory('fieldset'),
+	    figcaption: createDOMFactory('figcaption'),
+	    figure: createDOMFactory('figure'),
+	    footer: createDOMFactory('footer'),
+	    form: createDOMFactory('form'),
+	    h1: createDOMFactory('h1'),
+	    h2: createDOMFactory('h2'),
+	    h3: createDOMFactory('h3'),
+	    h4: createDOMFactory('h4'),
+	    h5: createDOMFactory('h5'),
+	    h6: createDOMFactory('h6'),
+	    head: createDOMFactory('head'),
+	    header: createDOMFactory('header'),
+	    hgroup: createDOMFactory('hgroup'),
+	    hr: createDOMFactory('hr'),
+	    html: createDOMFactory('html'),
+	    i: createDOMFactory('i'),
+	    iframe: createDOMFactory('iframe'),
+	    img: createDOMFactory('img'),
+	    input: createDOMFactory('input'),
+	    ins: createDOMFactory('ins'),
+	    kbd: createDOMFactory('kbd'),
+	    keygen: createDOMFactory('keygen'),
+	    label: createDOMFactory('label'),
+	    legend: createDOMFactory('legend'),
+	    li: createDOMFactory('li'),
+	    link: createDOMFactory('link'),
+	    main: createDOMFactory('main'),
+	    map: createDOMFactory('map'),
+	    mark: createDOMFactory('mark'),
+	    menu: createDOMFactory('menu'),
+	    menuitem: createDOMFactory('menuitem'),
+	    meta: createDOMFactory('meta'),
+	    meter: createDOMFactory('meter'),
+	    nav: createDOMFactory('nav'),
+	    noscript: createDOMFactory('noscript'),
+	    object: createDOMFactory('object'),
+	    ol: createDOMFactory('ol'),
+	    optgroup: createDOMFactory('optgroup'),
+	    option: createDOMFactory('option'),
+	    output: createDOMFactory('output'),
+	    p: createDOMFactory('p'),
+	    param: createDOMFactory('param'),
+	    picture: createDOMFactory('picture'),
+	    pre: createDOMFactory('pre'),
+	    progress: createDOMFactory('progress'),
+	    q: createDOMFactory('q'),
+	    rp: createDOMFactory('rp'),
+	    rt: createDOMFactory('rt'),
+	    ruby: createDOMFactory('ruby'),
+	    s: createDOMFactory('s'),
+	    samp: createDOMFactory('samp'),
+	    script: createDOMFactory('script'),
+	    section: createDOMFactory('section'),
+	    select: createDOMFactory('select'),
+	    small: createDOMFactory('small'),
+	    source: createDOMFactory('source'),
+	    span: createDOMFactory('span'),
+	    strong: createDOMFactory('strong'),
+	    style: createDOMFactory('style'),
+	    sub: createDOMFactory('sub'),
+	    summary: createDOMFactory('summary'),
+	    sup: createDOMFactory('sup'),
+	    table: createDOMFactory('table'),
+	    tbody: createDOMFactory('tbody'),
+	    td: createDOMFactory('td'),
+	    textarea: createDOMFactory('textarea'),
+	    tfoot: createDOMFactory('tfoot'),
+	    th: createDOMFactory('th'),
+	    thead: createDOMFactory('thead'),
+	    time: createDOMFactory('time'),
+	    title: createDOMFactory('title'),
+	    tr: createDOMFactory('tr'),
+	    track: createDOMFactory('track'),
+	    u: createDOMFactory('u'),
+	    ul: createDOMFactory('ul'),
+	    var: createDOMFactory('var'),
+	    video: createDOMFactory('video'),
+	    wbr: createDOMFactory('wbr'),
+
+	    // SVG
+	    circle: createDOMFactory('circle'),
+	    clipPath: createDOMFactory('clipPath'),
+	    defs: createDOMFactory('defs'),
+	    ellipse: createDOMFactory('ellipse'),
+	    g: createDOMFactory('g'),
+	    image: createDOMFactory('image'),
+	    line: createDOMFactory('line'),
+	    linearGradient: createDOMFactory('linearGradient'),
+	    mask: createDOMFactory('mask'),
+	    path: createDOMFactory('path'),
+	    pattern: createDOMFactory('pattern'),
+	    polygon: createDOMFactory('polygon'),
+	    polyline: createDOMFactory('polyline'),
+	    radialGradient: createDOMFactory('radialGradient'),
+	    rect: createDOMFactory('rect'),
+	    stop: createDOMFactory('stop'),
+	    svg: createDOMFactory('svg'),
+	    text: createDOMFactory('text'),
+	    tspan: createDOMFactory('tspan'),
+	  };
+
+	  // due to wrapper and conditionals at the top, this will either become
+	  // `module.exports ReactDOMFactories` if that is available,
+	  // otherwise it will be defined via `define(['react'], ReactDOMFactories)`
+	  // if that is available,
+	  // otherwise it will be defined as global variable.
+	  return ReactDOMFactories;
+	});
+	});
+
+	var uaParser = createCommonjsModule(function (module, exports) {
+	/*!
+	 * UAParser.js v0.7.21
+	 * Lightweight JavaScript-based User-Agent string parser
+	 * https://github.com/faisalman/ua-parser-js
+	 *
+	 * Copyright © 2012-2019 Faisal Salman <f@faisalman.com>
+	 * Licensed under MIT License
+	 */
+
+	(function (window, undefined$1) {
+
+	    //////////////
+	    // Constants
+	    /////////////
+
+
+	    var LIBVERSION  = '0.7.21',
+	        EMPTY       = '',
+	        UNKNOWN     = '?',
+	        FUNC_TYPE   = 'function',
+	        OBJ_TYPE    = 'object',
+	        STR_TYPE    = 'string',
+	        MAJOR       = 'major', // deprecated
+	        MODEL       = 'model',
+	        NAME        = 'name',
+	        TYPE        = 'type',
+	        VENDOR      = 'vendor',
+	        VERSION     = 'version',
+	        ARCHITECTURE= 'architecture',
+	        CONSOLE     = 'console',
+	        MOBILE      = 'mobile',
+	        TABLET      = 'tablet',
+	        SMARTTV     = 'smarttv',
+	        WEARABLE    = 'wearable',
+	        EMBEDDED    = 'embedded';
+
+
+	    ///////////
+	    // Helper
+	    //////////
+
+
+	    var util = {
+	        extend : function (regexes, extensions) {
+	            var mergedRegexes = {};
+	            for (var i in regexes) {
+	                if (extensions[i] && extensions[i].length % 2 === 0) {
+	                    mergedRegexes[i] = extensions[i].concat(regexes[i]);
+	                } else {
+	                    mergedRegexes[i] = regexes[i];
+	                }
+	            }
+	            return mergedRegexes;
+	        },
+	        has : function (str1, str2) {
+	          if (typeof str1 === "string") {
+	            return str2.toLowerCase().indexOf(str1.toLowerCase()) !== -1;
+	          } else {
+	            return false;
+	          }
+	        },
+	        lowerize : function (str) {
+	            return str.toLowerCase();
+	        },
+	        major : function (version) {
+	            return typeof(version) === STR_TYPE ? version.replace(/[^\d\.]/g,'').split(".")[0] : undefined$1;
+	        },
+	        trim : function (str) {
+	          return str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+	        }
+	    };
+
+
+	    ///////////////
+	    // Map helper
+	    //////////////
+
+
+	    var mapper = {
+
+	        rgx : function (ua, arrays) {
+
+	            var i = 0, j, k, p, q, matches, match;
+
+	            // loop through all regexes maps
+	            while (i < arrays.length && !matches) {
+
+	                var regex = arrays[i],       // even sequence (0,2,4,..)
+	                    props = arrays[i + 1];   // odd sequence (1,3,5,..)
+	                j = k = 0;
+
+	                // try matching uastring with regexes
+	                while (j < regex.length && !matches) {
+
+	                    matches = regex[j++].exec(ua);
+
+	                    if (!!matches) {
+	                        for (p = 0; p < props.length; p++) {
+	                            match = matches[++k];
+	                            q = props[p];
+	                            // check if given property is actually array
+	                            if (typeof q === OBJ_TYPE && q.length > 0) {
+	                                if (q.length == 2) {
+	                                    if (typeof q[1] == FUNC_TYPE) {
+	                                        // assign modified match
+	                                        this[q[0]] = q[1].call(this, match);
+	                                    } else {
+	                                        // assign given value, ignore regex match
+	                                        this[q[0]] = q[1];
+	                                    }
+	                                } else if (q.length == 3) {
+	                                    // check whether function or regex
+	                                    if (typeof q[1] === FUNC_TYPE && !(q[1].exec && q[1].test)) {
+	                                        // call function (usually string mapper)
+	                                        this[q[0]] = match ? q[1].call(this, match, q[2]) : undefined$1;
+	                                    } else {
+	                                        // sanitize match using given regex
+	                                        this[q[0]] = match ? match.replace(q[1], q[2]) : undefined$1;
+	                                    }
+	                                } else if (q.length == 4) {
+	                                        this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined$1;
+	                                }
+	                            } else {
+	                                this[q] = match ? match : undefined$1;
+	                            }
+	                        }
+	                    }
+	                }
+	                i += 2;
+	            }
+	        },
+
+	        str : function (str, map) {
+
+	            for (var i in map) {
+	                // check if array
+	                if (typeof map[i] === OBJ_TYPE && map[i].length > 0) {
+	                    for (var j = 0; j < map[i].length; j++) {
+	                        if (util.has(map[i][j], str)) {
+	                            return (i === UNKNOWN) ? undefined$1 : i;
+	                        }
+	                    }
+	                } else if (util.has(map[i], str)) {
+	                    return (i === UNKNOWN) ? undefined$1 : i;
+	                }
+	            }
+	            return str;
+	        }
+	    };
+
+
+	    ///////////////
+	    // String map
+	    //////////////
+
+
+	    var maps = {
+
+	        browser : {
+	            oldsafari : {
+	                version : {
+	                    '1.0'   : '/8',
+	                    '1.2'   : '/1',
+	                    '1.3'   : '/3',
+	                    '2.0'   : '/412',
+	                    '2.0.2' : '/416',
+	                    '2.0.3' : '/417',
+	                    '2.0.4' : '/419',
+	                    '?'     : '/'
+	                }
+	            }
+	        },
+
+	        device : {
+	            amazon : {
+	                model : {
+	                    'Fire Phone' : ['SD', 'KF']
+	                }
+	            },
+	            sprint : {
+	                model : {
+	                    'Evo Shift 4G' : '7373KT'
+	                },
+	                vendor : {
+	                    'HTC'       : 'APA',
+	                    'Sprint'    : 'Sprint'
+	                }
+	            }
+	        },
+
+	        os : {
+	            windows : {
+	                version : {
+	                    'ME'        : '4.90',
+	                    'NT 3.11'   : 'NT3.51',
+	                    'NT 4.0'    : 'NT4.0',
+	                    '2000'      : 'NT 5.0',
+	                    'XP'        : ['NT 5.1', 'NT 5.2'],
+	                    'Vista'     : 'NT 6.0',
+	                    '7'         : 'NT 6.1',
+	                    '8'         : 'NT 6.2',
+	                    '8.1'       : 'NT 6.3',
+	                    '10'        : ['NT 6.4', 'NT 10.0'],
+	                    'RT'        : 'ARM'
+	                }
+	            }
+	        }
+	    };
+
+
+	    //////////////
+	    // Regex map
+	    /////////////
+
+
+	    var regexes = {
+
+	        browser : [[
+
+	            // Presto based
+	            /(opera\smini)\/([\w\.-]+)/i,                                       // Opera Mini
+	            /(opera\s[mobiletab]+).+version\/([\w\.-]+)/i,                      // Opera Mobi/Tablet
+	            /(opera).+version\/([\w\.]+)/i,                                     // Opera > 9.80
+	            /(opera)[\/\s]+([\w\.]+)/i                                          // Opera < 9.80
+	            ], [NAME, VERSION], [
+
+	            /(opios)[\/\s]+([\w\.]+)/i                                          // Opera mini on iphone >= 8.0
+	            ], [[NAME, 'Opera Mini'], VERSION], [
+
+	            /\s(opr)\/([\w\.]+)/i                                               // Opera Webkit
+	            ], [[NAME, 'Opera'], VERSION], [
+
+	            // Mixed
+	            /(kindle)\/([\w\.]+)/i,                                             // Kindle
+	            /(lunascape|maxthon|netfront|jasmine|blazer)[\/\s]?([\w\.]*)/i,
+	                                                                                // Lunascape/Maxthon/Netfront/Jasmine/Blazer
+	            // Trident based
+	            /(avant\s|iemobile|slim)(?:browser)?[\/\s]?([\w\.]*)/i,
+	                                                                                // Avant/IEMobile/SlimBrowser
+	            /(bidubrowser|baidubrowser)[\/\s]?([\w\.]+)/i,                      // Baidu Browser
+	            /(?:ms|\()(ie)\s([\w\.]+)/i,                                        // Internet Explorer
+
+	            // Webkit/KHTML based
+	            /(rekonq)\/([\w\.]*)/i,                                             // Rekonq
+	            /(chromium|flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon)\/([\w\.-]+)/i
+	                                                                                // Chromium/Flock/RockMelt/Midori/Epiphany/Silk/Skyfire/Bolt/Iron/Iridium/PhantomJS/Bowser/QupZilla/Falkon
+	            ], [NAME, VERSION], [
+
+	            /(konqueror)\/([\w\.]+)/i                                           // Konqueror
+	            ], [[NAME, 'Konqueror'], VERSION], [
+
+	            /(trident).+rv[:\s]([\w\.]+).+like\sgecko/i                         // IE11
+	            ], [[NAME, 'IE'], VERSION], [
+
+	            /(edge|edgios|edga|edg)\/((\d+)?[\w\.]+)/i                          // Microsoft Edge
+	            ], [[NAME, 'Edge'], VERSION], [
+
+	            /(yabrowser)\/([\w\.]+)/i                                           // Yandex
+	            ], [[NAME, 'Yandex'], VERSION], [
+
+	            /(Avast)\/([\w\.]+)/i                                               // Avast Secure Browser
+	            ], [[NAME, 'Avast Secure Browser'], VERSION], [
+
+	            /(AVG)\/([\w\.]+)/i                                                 // AVG Secure Browser
+	            ], [[NAME, 'AVG Secure Browser'], VERSION], [
+
+	            /(puffin)\/([\w\.]+)/i                                              // Puffin
+	            ], [[NAME, 'Puffin'], VERSION], [
+
+	            /(focus)\/([\w\.]+)/i                                               // Firefox Focus
+	            ], [[NAME, 'Firefox Focus'], VERSION], [
+
+	            /(opt)\/([\w\.]+)/i                                                 // Opera Touch
+	            ], [[NAME, 'Opera Touch'], VERSION], [
+
+	            /((?:[\s\/])uc?\s?browser|(?:juc.+)ucweb)[\/\s]?([\w\.]+)/i         // UCBrowser
+	            ], [[NAME, 'UCBrowser'], VERSION], [
+
+	            /(comodo_dragon)\/([\w\.]+)/i                                       // Comodo Dragon
+	            ], [[NAME, /_/g, ' '], VERSION], [
+
+	            /(windowswechat qbcore)\/([\w\.]+)/i                                // WeChat Desktop for Windows Built-in Browser
+	            ], [[NAME, 'WeChat(Win) Desktop'], VERSION], [
+
+	            /(micromessenger)\/([\w\.]+)/i                                      // WeChat
+	            ], [[NAME, 'WeChat'], VERSION], [
+
+	            /(brave)\/([\w\.]+)/i                                               // Brave browser
+	            ], [[NAME, 'Brave'], VERSION], [
+
+	            /(qqbrowserlite)\/([\w\.]+)/i                                       // QQBrowserLite
+	            ], [NAME, VERSION], [
+
+	            /(QQ)\/([\d\.]+)/i                                                  // QQ, aka ShouQ
+	            ], [NAME, VERSION], [
+
+	            /m?(qqbrowser)[\/\s]?([\w\.]+)/i                                    // QQBrowser
+	            ], [NAME, VERSION], [
+
+	            /(baiduboxapp)[\/\s]?([\w\.]+)/i                                    // Baidu App
+	            ], [NAME, VERSION], [
+
+	            /(2345Explorer)[\/\s]?([\w\.]+)/i                                   // 2345 Browser
+	            ], [NAME, VERSION], [
+
+	            /(MetaSr)[\/\s]?([\w\.]+)/i                                         // SouGouBrowser
+	            ], [NAME], [
+
+	            /(LBBROWSER)/i                                                      // LieBao Browser
+	            ], [NAME], [
+
+	            /xiaomi\/miuibrowser\/([\w\.]+)/i                                   // MIUI Browser
+	            ], [VERSION, [NAME, 'MIUI Browser']], [
+
+	            /;fbav\/([\w\.]+);/i                                                // Facebook App for iOS & Android
+	            ], [VERSION, [NAME, 'Facebook']], [
+
+	            /safari\s(line)\/([\w\.]+)/i,                                       // Line App for iOS
+	            /android.+(line)\/([\w\.]+)\/iab/i                                  // Line App for Android
+	            ], [NAME, VERSION], [
+
+	            /headlesschrome(?:\/([\w\.]+)|\s)/i                                 // Chrome Headless
+	            ], [VERSION, [NAME, 'Chrome Headless']], [
+
+	            /\swv\).+(chrome)\/([\w\.]+)/i                                      // Chrome WebView
+	            ], [[NAME, /(.+)/, '$1 WebView'], VERSION], [
+
+	            /((?:oculus|samsung)browser)\/([\w\.]+)/i
+	            ], [[NAME, /(.+(?:g|us))(.+)/, '$1 $2'], VERSION], [                // Oculus / Samsung Browser
+
+	            /android.+version\/([\w\.]+)\s+(?:mobile\s?safari|safari)*/i        // Android Browser
+	            ], [VERSION, [NAME, 'Android Browser']], [
+
+	            /(sailfishbrowser)\/([\w\.]+)/i                                     // Sailfish Browser
+	            ], [[NAME, 'Sailfish Browser'], VERSION], [
+
+	            /(chrome|omniweb|arora|[tizenoka]{5}\s?browser)\/v?([\w\.]+)/i
+	                                                                                // Chrome/OmniWeb/Arora/Tizen/Nokia
+	            ], [NAME, VERSION], [
+
+	            /(dolfin)\/([\w\.]+)/i                                              // Dolphin
+	            ], [[NAME, 'Dolphin'], VERSION], [
+
+	            /(qihu|qhbrowser|qihoobrowser|360browser)/i                         // 360
+	            ], [[NAME, '360 Browser']], [
+
+	            /((?:android.+)crmo|crios)\/([\w\.]+)/i                             // Chrome for Android/iOS
+	            ], [[NAME, 'Chrome'], VERSION], [
+
+	            /(coast)\/([\w\.]+)/i                                               // Opera Coast
+	            ], [[NAME, 'Opera Coast'], VERSION], [
+
+	            /fxios\/([\w\.-]+)/i                                                // Firefox for iOS
+	            ], [VERSION, [NAME, 'Firefox']], [
+
+	            /version\/([\w\.]+).+?mobile\/\w+\s(safari)/i                       // Mobile Safari
+	            ], [VERSION, [NAME, 'Mobile Safari']], [
+
+	            /version\/([\w\.]+).+?(mobile\s?safari|safari)/i                    // Safari & Safari Mobile
+	            ], [VERSION, NAME], [
+
+	            /webkit.+?(gsa)\/([\w\.]+).+?(mobile\s?safari|safari)(\/[\w\.]+)/i  // Google Search Appliance on iOS
+	            ], [[NAME, 'GSA'], VERSION], [
+
+	            /webkit.+?(mobile\s?safari|safari)(\/[\w\.]+)/i                     // Safari < 3.0
+	            ], [NAME, [VERSION, mapper.str, maps.browser.oldsafari.version]], [
+
+	            /(webkit|khtml)\/([\w\.]+)/i
+	            ], [NAME, VERSION], [
+
+	            // Gecko based
+	            /(navigator|netscape)\/([\w\.-]+)/i                                 // Netscape
+	            ], [[NAME, 'Netscape'], VERSION], [
+	            /(swiftfox)/i,                                                      // Swiftfox
+	            /(icedragon|iceweasel|camino|chimera|fennec|maemo\sbrowser|minimo|conkeror)[\/\s]?([\w\.\+]+)/i,
+	                                                                                // IceDragon/Iceweasel/Camino/Chimera/Fennec/Maemo/Minimo/Conkeror
+	            /(firefox|seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([\w\.-]+)$/i,
+
+	                                                                                // Firefox/SeaMonkey/K-Meleon/IceCat/IceApe/Firebird/Phoenix
+	            /(mozilla)\/([\w\.]+).+rv\:.+gecko\/\d+/i,                          // Mozilla
+
+	            // Other
+	            /(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir)[\/\s]?([\w\.]+)/i,
+	                                                                                // Polaris/Lynx/Dillo/iCab/Doris/Amaya/w3m/NetSurf/Sleipnir
+	            /(links)\s\(([\w\.]+)/i,                                            // Links
+	            /(gobrowser)\/?([\w\.]*)/i,                                         // GoBrowser
+	            /(ice\s?browser)\/v?([\w\._]+)/i,                                   // ICE Browser
+	            /(mosaic)[\/\s]([\w\.]+)/i                                          // Mosaic
+	            ], [NAME, VERSION]
+	        ],
+
+	        cpu : [[
+
+	            /(?:(amd|x(?:(?:86|64)[_-])?|wow|win)64)[;\)]/i                     // AMD64
+	            ], [[ARCHITECTURE, 'amd64']], [
+
+	            /(ia32(?=;))/i                                                      // IA32 (quicktime)
+	            ], [[ARCHITECTURE, util.lowerize]], [
+
+	            /((?:i[346]|x)86)[;\)]/i                                            // IA32
+	            ], [[ARCHITECTURE, 'ia32']], [
+
+	            // PocketPC mistakenly identified as PowerPC
+	            /windows\s(ce|mobile);\sppc;/i
+	            ], [[ARCHITECTURE, 'arm']], [
+
+	            /((?:ppc|powerpc)(?:64)?)(?:\smac|;|\))/i                           // PowerPC
+	            ], [[ARCHITECTURE, /ower/, '', util.lowerize]], [
+
+	            /(sun4\w)[;\)]/i                                                    // SPARC
+	            ], [[ARCHITECTURE, 'sparc']], [
+
+	            /((?:avr32|ia64(?=;))|68k(?=\))|arm(?:64|(?=v\d+[;l]))|(?=atmel\s)avr|(?:irix|mips|sparc)(?:64)?(?=;)|pa-risc)/i
+	                                                                                // IA64, 68K, ARM/64, AVR/32, IRIX/64, MIPS/64, SPARC/64, PA-RISC
+	            ], [[ARCHITECTURE, util.lowerize]]
+	        ],
+
+	        device : [[
+
+	            /\((ipad|playbook);[\w\s\),;-]+(rim|apple)/i                        // iPad/PlayBook
+	            ], [MODEL, VENDOR, [TYPE, TABLET]], [
+
+	            /applecoremedia\/[\w\.]+ \((ipad)/                                  // iPad
+	            ], [MODEL, [VENDOR, 'Apple'], [TYPE, TABLET]], [
+
+	            /(apple\s{0,1}tv)/i                                                 // Apple TV
+	            ], [[MODEL, 'Apple TV'], [VENDOR, 'Apple'], [TYPE, SMARTTV]], [
+
+	            /(archos)\s(gamepad2?)/i,                                           // Archos
+	            /(hp).+(touchpad)/i,                                                // HP TouchPad
+	            /(hp).+(tablet)/i,                                                  // HP Tablet
+	            /(kindle)\/([\w\.]+)/i,                                             // Kindle
+	            /\s(nook)[\w\s]+build\/(\w+)/i,                                     // Nook
+	            /(dell)\s(strea[kpr\s\d]*[\dko])/i                                  // Dell Streak
+	            ], [VENDOR, MODEL, [TYPE, TABLET]], [
+
+	            /(kf[A-z]+)\sbuild\/.+silk\//i                                      // Kindle Fire HD
+	            ], [MODEL, [VENDOR, 'Amazon'], [TYPE, TABLET]], [
+	            /(sd|kf)[0349hijorstuw]+\sbuild\/.+silk\//i                         // Fire Phone
+	            ], [[MODEL, mapper.str, maps.device.amazon.model], [VENDOR, 'Amazon'], [TYPE, MOBILE]], [
+	            /android.+aft([bms])\sbuild/i                                       // Fire TV
+	            ], [MODEL, [VENDOR, 'Amazon'], [TYPE, SMARTTV]], [
+
+	            /\((ip[honed|\s\w*]+);.+(apple)/i                                   // iPod/iPhone
+	            ], [MODEL, VENDOR, [TYPE, MOBILE]], [
+	            /\((ip[honed|\s\w*]+);/i                                            // iPod/iPhone
+	            ], [MODEL, [VENDOR, 'Apple'], [TYPE, MOBILE]], [
+
+	            /(blackberry)[\s-]?(\w+)/i,                                         // BlackBerry
+	            /(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[\s_-]?([\w-]*)/i,
+	                                                                                // BenQ/Palm/Sony-Ericsson/Acer/Asus/Dell/Meizu/Motorola/Polytron
+	            /(hp)\s([\w\s]+\w)/i,                                               // HP iPAQ
+	            /(asus)-?(\w+)/i                                                    // Asus
+	            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
+	            /\(bb10;\s(\w+)/i                                                   // BlackBerry 10
+	            ], [MODEL, [VENDOR, 'BlackBerry'], [TYPE, MOBILE]], [
+	                                                                                // Asus Tablets
+	            /android.+(transfo[prime\s]{4,10}\s\w+|eeepc|slider\s\w+|nexus 7|padfone|p00c)/i
+	            ], [MODEL, [VENDOR, 'Asus'], [TYPE, TABLET]], [
+
+	            /(sony)\s(tablet\s[ps])\sbuild\//i,                                  // Sony
+	            /(sony)?(?:sgp.+)\sbuild\//i
+	            ], [[VENDOR, 'Sony'], [MODEL, 'Xperia Tablet'], [TYPE, TABLET]], [
+	            /android.+\s([c-g]\d{4}|so[-l]\w+)(?=\sbuild\/|\).+chrome\/(?![1-6]{0,1}\d\.))/i
+	            ], [MODEL, [VENDOR, 'Sony'], [TYPE, MOBILE]], [
+
+	            /\s(ouya)\s/i,                                                      // Ouya
+	            /(nintendo)\s([wids3u]+)/i                                          // Nintendo
+	            ], [VENDOR, MODEL, [TYPE, CONSOLE]], [
+
+	            /android.+;\s(shield)\sbuild/i                                      // Nvidia
+	            ], [MODEL, [VENDOR, 'Nvidia'], [TYPE, CONSOLE]], [
+
+	            /(playstation\s[34portablevi]+)/i                                   // Playstation
+	            ], [MODEL, [VENDOR, 'Sony'], [TYPE, CONSOLE]], [
+
+	            /(sprint\s(\w+))/i                                                  // Sprint Phones
+	            ], [[VENDOR, mapper.str, maps.device.sprint.vendor], [MODEL, mapper.str, maps.device.sprint.model], [TYPE, MOBILE]], [
+
+	            /(htc)[;_\s-]+([\w\s]+(?=\)|\sbuild)|\w+)/i,                        // HTC
+	            /(zte)-(\w*)/i,                                                     // ZTE
+	            /(alcatel|geeksphone|nexian|panasonic|(?=;\s)sony)[_\s-]?([\w-]*)/i
+	                                                                                // Alcatel/GeeksPhone/Nexian/Panasonic/Sony
+	            ], [VENDOR, [MODEL, /_/g, ' '], [TYPE, MOBILE]], [
+
+	            /(nexus\s9)/i                                                       // HTC Nexus 9
+	            ], [MODEL, [VENDOR, 'HTC'], [TYPE, TABLET]], [
+
+	            /d\/huawei([\w\s-]+)[;\)]/i,
+	            /(nexus\s6p|vog-l29|ane-lx1|eml-l29)/i                              // Huawei
+	            ], [MODEL, [VENDOR, 'Huawei'], [TYPE, MOBILE]], [
+
+	            /android.+(bah2?-a?[lw]\d{2})/i                                     // Huawei MediaPad
+	            ], [MODEL, [VENDOR, 'Huawei'], [TYPE, TABLET]], [
+
+	            /(microsoft);\s(lumia[\s\w]+)/i                                     // Microsoft Lumia
+	            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
+
+	            /[\s\(;](xbox(?:\sone)?)[\s\);]/i                                   // Microsoft Xbox
+	            ], [MODEL, [VENDOR, 'Microsoft'], [TYPE, CONSOLE]], [
+	            /(kin\.[onetw]{3})/i                                                // Microsoft Kin
+	            ], [[MODEL, /\./g, ' '], [VENDOR, 'Microsoft'], [TYPE, MOBILE]], [
+
+	                                                                                // Motorola
+	            /\s(milestone|droid(?:[2-4x]|\s(?:bionic|x2|pro|razr))?:?(\s4g)?)[\w\s]+build\//i,
+	            /mot[\s-]?(\w*)/i,
+	            /(XT\d{3,4}) build\//i,
+	            /(nexus\s6)/i
+	            ], [MODEL, [VENDOR, 'Motorola'], [TYPE, MOBILE]], [
+	            /android.+\s(mz60\d|xoom[\s2]{0,2})\sbuild\//i
+	            ], [MODEL, [VENDOR, 'Motorola'], [TYPE, TABLET]], [
+
+	            /hbbtv\/\d+\.\d+\.\d+\s+\([\w\s]*;\s*(\w[^;]*);([^;]*)/i            // HbbTV devices
+	            ], [[VENDOR, util.trim], [MODEL, util.trim], [TYPE, SMARTTV]], [
+
+	            /hbbtv.+maple;(\d+)/i
+	            ], [[MODEL, /^/, 'SmartTV'], [VENDOR, 'Samsung'], [TYPE, SMARTTV]], [
+
+	            /\(dtv[\);].+(aquos)/i                                              // Sharp
+	            ], [MODEL, [VENDOR, 'Sharp'], [TYPE, SMARTTV]], [
+
+	            /android.+((sch-i[89]0\d|shw-m380s|gt-p\d{4}|gt-n\d+|sgh-t8[56]9|nexus 10))/i,
+	            /((SM-T\w+))/i
+	            ], [[VENDOR, 'Samsung'], MODEL, [TYPE, TABLET]], [                  // Samsung
+	            /smart-tv.+(samsung)/i
+	            ], [VENDOR, [TYPE, SMARTTV], MODEL], [
+	            /((s[cgp]h-\w+|gt-\w+|galaxy\snexus|sm-\w[\w\d]+))/i,
+	            /(sam[sung]*)[\s-]*(\w+-?[\w-]*)/i,
+	            /sec-((sgh\w+))/i
+	            ], [[VENDOR, 'Samsung'], MODEL, [TYPE, MOBILE]], [
+
+	            /sie-(\w*)/i                                                        // Siemens
+	            ], [MODEL, [VENDOR, 'Siemens'], [TYPE, MOBILE]], [
+
+	            /(maemo|nokia).*(n900|lumia\s\d+)/i,                                // Nokia
+	            /(nokia)[\s_-]?([\w-]*)/i
+	            ], [[VENDOR, 'Nokia'], MODEL, [TYPE, MOBILE]], [
+
+	            /android[x\d\.\s;]+\s([ab][1-7]\-?[0178a]\d\d?)/i                   // Acer
+	            ], [MODEL, [VENDOR, 'Acer'], [TYPE, TABLET]], [
+
+	            /android.+([vl]k\-?\d{3})\s+build/i                                 // LG Tablet
+	            ], [MODEL, [VENDOR, 'LG'], [TYPE, TABLET]], [
+	            /android\s3\.[\s\w;-]{10}(lg?)-([06cv9]{3,4})/i                     // LG Tablet
+	            ], [[VENDOR, 'LG'], MODEL, [TYPE, TABLET]], [
+	            /(lg) netcast\.tv/i                                                 // LG SmartTV
+	            ], [VENDOR, MODEL, [TYPE, SMARTTV]], [
+	            /(nexus\s[45])/i,                                                   // LG
+	            /lg[e;\s\/-]+(\w*)/i,
+	            /android.+lg(\-?[\d\w]+)\s+build/i
+	            ], [MODEL, [VENDOR, 'LG'], [TYPE, MOBILE]], [
+
+	            /(lenovo)\s?(s(?:5000|6000)(?:[\w-]+)|tab(?:[\s\w]+))/i             // Lenovo tablets
+	            ], [VENDOR, MODEL, [TYPE, TABLET]], [
+	            /android.+(ideatab[a-z0-9\-\s]+)/i                                  // Lenovo
+	            ], [MODEL, [VENDOR, 'Lenovo'], [TYPE, TABLET]], [
+	            /(lenovo)[_\s-]?([\w-]+)/i
+	            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
+
+	            /linux;.+((jolla));/i                                               // Jolla
+	            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
+
+	            /((pebble))app\/[\d\.]+\s/i                                         // Pebble
+	            ], [VENDOR, MODEL, [TYPE, WEARABLE]], [
+
+	            /android.+;\s(oppo)\s?([\w\s]+)\sbuild/i                            // OPPO
+	            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
+
+	            /crkey/i                                                            // Google Chromecast
+	            ], [[MODEL, 'Chromecast'], [VENDOR, 'Google'], [TYPE, SMARTTV]], [
+
+	            /android.+;\s(glass)\s\d/i                                          // Google Glass
+	            ], [MODEL, [VENDOR, 'Google'], [TYPE, WEARABLE]], [
+
+	            /android.+;\s(pixel c)[\s)]/i                                       // Google Pixel C
+	            ], [MODEL, [VENDOR, 'Google'], [TYPE, TABLET]], [
+
+	            /android.+;\s(pixel( [23])?( xl)?)[\s)]/i                              // Google Pixel
+	            ], [MODEL, [VENDOR, 'Google'], [TYPE, MOBILE]], [
+
+	            /android.+;\s(\w+)\s+build\/hm\1/i,                                 // Xiaomi Hongmi 'numeric' models
+	            /android.+(hm[\s\-_]*note?[\s_]*(?:\d\w)?)\s+build/i,               // Xiaomi Hongmi
+	            /android.+(mi[\s\-_]*(?:a\d|one|one[\s_]plus|note lte)?[\s_]*(?:\d?\w?)[\s_]*(?:plus)?)\s+build/i,    
+	                                                                                // Xiaomi Mi
+	            /android.+(redmi[\s\-_]*(?:note)?(?:[\s_]*[\w\s]+))\s+build/i       // Redmi Phones
+	            ], [[MODEL, /_/g, ' '], [VENDOR, 'Xiaomi'], [TYPE, MOBILE]], [
+	            /android.+(mi[\s\-_]*(?:pad)(?:[\s_]*[\w\s]+))\s+build/i            // Mi Pad tablets
+	            ],[[MODEL, /_/g, ' '], [VENDOR, 'Xiaomi'], [TYPE, TABLET]], [
+	            /android.+;\s(m[1-5]\snote)\sbuild/i                                // Meizu
+	            ], [MODEL, [VENDOR, 'Meizu'], [TYPE, MOBILE]], [
+	            /(mz)-([\w-]{2,})/i
+	            ], [[VENDOR, 'Meizu'], MODEL, [TYPE, MOBILE]], [
+
+	            /android.+a000(1)\s+build/i,                                        // OnePlus
+	            /android.+oneplus\s(a\d{4})[\s)]/i
+	            ], [MODEL, [VENDOR, 'OnePlus'], [TYPE, MOBILE]], [
+
+	            /android.+[;\/]\s*(RCT[\d\w]+)\s+build/i                            // RCA Tablets
+	            ], [MODEL, [VENDOR, 'RCA'], [TYPE, TABLET]], [
+
+	            /android.+[;\/\s]+(Venue[\d\s]{2,7})\s+build/i                      // Dell Venue Tablets
+	            ], [MODEL, [VENDOR, 'Dell'], [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s*(Q[T|M][\d\w]+)\s+build/i                         // Verizon Tablet
+	            ], [MODEL, [VENDOR, 'Verizon'], [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s+(Barnes[&\s]+Noble\s+|BN[RT])(V?.*)\s+build/i     // Barnes & Noble Tablet
+	            ], [[VENDOR, 'Barnes & Noble'], MODEL, [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s+(TM\d{3}.*\b)\s+build/i                           // Barnes & Noble Tablet
+	            ], [MODEL, [VENDOR, 'NuVision'], [TYPE, TABLET]], [
+
+	            /android.+;\s(k88)\sbuild/i                                         // ZTE K Series Tablet
+	            ], [MODEL, [VENDOR, 'ZTE'], [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s*(gen\d{3})\s+build.*49h/i                         // Swiss GEN Mobile
+	            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, MOBILE]], [
+
+	            /android.+[;\/]\s*(zur\d{3})\s+build/i                              // Swiss ZUR Tablet
+	            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s*((Zeki)?TB.*\b)\s+build/i                         // Zeki Tablets
+	            ], [MODEL, [VENDOR, 'Zeki'], [TYPE, TABLET]], [
+
+	            /(android).+[;\/]\s+([YR]\d{2})\s+build/i,
+	            /android.+[;\/]\s+(Dragon[\-\s]+Touch\s+|DT)(\w{5})\sbuild/i        // Dragon Touch Tablet
+	            ], [[VENDOR, 'Dragon Touch'], MODEL, [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s*(NS-?\w{0,9})\sbuild/i                            // Insignia Tablets
+	            ], [MODEL, [VENDOR, 'Insignia'], [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s*((NX|Next)-?\w{0,9})\s+build/i                    // NextBook Tablets
+	            ], [MODEL, [VENDOR, 'NextBook'], [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s*(Xtreme\_)?(V(1[045]|2[015]|30|40|60|7[05]|90))\s+build/i
+	            ], [[VENDOR, 'Voice'], MODEL, [TYPE, MOBILE]], [                    // Voice Xtreme Phones
+
+	            /android.+[;\/]\s*(LVTEL\-)?(V1[12])\s+build/i                     // LvTel Phones
+	            ], [[VENDOR, 'LvTel'], MODEL, [TYPE, MOBILE]], [
+
+	            /android.+;\s(PH-1)\s/i
+	            ], [MODEL, [VENDOR, 'Essential'], [TYPE, MOBILE]], [                // Essential PH-1
+
+	            /android.+[;\/]\s*(V(100MD|700NA|7011|917G).*\b)\s+build/i          // Envizen Tablets
+	            ], [MODEL, [VENDOR, 'Envizen'], [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s*(Le[\s\-]+Pan)[\s\-]+(\w{1,9})\s+build/i          // Le Pan Tablets
+	            ], [VENDOR, MODEL, [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s*(Trio[\s\-]*.*)\s+build/i                         // MachSpeed Tablets
+	            ], [MODEL, [VENDOR, 'MachSpeed'], [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s*(Trinity)[\-\s]*(T\d{3})\s+build/i                // Trinity Tablets
+	            ], [VENDOR, MODEL, [TYPE, TABLET]], [
+
+	            /android.+[;\/]\s*TU_(1491)\s+build/i                               // Rotor Tablets
+	            ], [MODEL, [VENDOR, 'Rotor'], [TYPE, TABLET]], [
+
+	            /android.+(KS(.+))\s+build/i                                        // Amazon Kindle Tablets
+	            ], [MODEL, [VENDOR, 'Amazon'], [TYPE, TABLET]], [
+
+	            /android.+(Gigaset)[\s\-]+(Q\w{1,9})\s+build/i                      // Gigaset Tablets
+	            ], [VENDOR, MODEL, [TYPE, TABLET]], [
+
+	            /\s(tablet|tab)[;\/]/i,                                             // Unidentifiable Tablet
+	            /\s(mobile)(?:[;\/]|\ssafari)/i                                     // Unidentifiable Mobile
+	            ], [[TYPE, util.lowerize], VENDOR, MODEL], [
+
+	            /[\s\/\(](smart-?tv)[;\)]/i                                         // SmartTV
+	            ], [[TYPE, SMARTTV]], [
+
+	            /(android[\w\.\s\-]{0,9});.+build/i                                 // Generic Android Device
+	            ], [MODEL, [VENDOR, 'Generic']]
+	        ],
+
+	        engine : [[
+
+	            /windows.+\sedge\/([\w\.]+)/i                                       // EdgeHTML
+	            ], [VERSION, [NAME, 'EdgeHTML']], [
+
+	            /webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i                         // Blink
+	            ], [VERSION, [NAME, 'Blink']], [
+
+	            /(presto)\/([\w\.]+)/i,                                             // Presto
+	            /(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i,     
+	                                                                                // WebKit/Trident/NetFront/NetSurf/Amaya/Lynx/w3m/Goanna
+	            /(khtml|tasman|links)[\/\s]\(?([\w\.]+)/i,                          // KHTML/Tasman/Links
+	            /(icab)[\/\s]([23]\.[\d\.]+)/i                                      // iCab
+	            ], [NAME, VERSION], [
+
+	            /rv\:([\w\.]{1,9}).+(gecko)/i                                       // Gecko
+	            ], [VERSION, NAME]
+	        ],
+
+	        os : [[
+
+	            // Windows based
+	            /microsoft\s(windows)\s(vista|xp)/i                                 // Windows (iTunes)
+	            ], [NAME, VERSION], [
+	            /(windows)\snt\s6\.2;\s(arm)/i,                                     // Windows RT
+	            /(windows\sphone(?:\sos)*)[\s\/]?([\d\.\s\w]*)/i,                   // Windows Phone
+	            /(windows\smobile|windows)[\s\/]?([ntce\d\.\s]+\w)/i
+	            ], [NAME, [VERSION, mapper.str, maps.os.windows.version]], [
+	            /(win(?=3|9|n)|win\s9x\s)([nt\d\.]+)/i
+	            ], [[NAME, 'Windows'], [VERSION, mapper.str, maps.os.windows.version]], [
+
+	            // Mobile/Embedded OS
+	            /\((bb)(10);/i                                                      // BlackBerry 10
+	            ], [[NAME, 'BlackBerry'], VERSION], [
+	            /(blackberry)\w*\/?([\w\.]*)/i,                                     // Blackberry
+	            /(tizen|kaios)[\/\s]([\w\.]+)/i,                                    // Tizen/KaiOS
+	            /(android|webos|palm\sos|qnx|bada|rim\stablet\sos|meego|sailfish|contiki)[\/\s-]?([\w\.]*)/i
+	                                                                                // Android/WebOS/Palm/QNX/Bada/RIM/MeeGo/Contiki/Sailfish OS
+	            ], [NAME, VERSION], [
+	            /(symbian\s?os|symbos|s60(?=;))[\/\s-]?([\w\.]*)/i                  // Symbian
+	            ], [[NAME, 'Symbian'], VERSION], [
+	            /\((series40);/i                                                    // Series 40
+	            ], [NAME], [
+	            /mozilla.+\(mobile;.+gecko.+firefox/i                               // Firefox OS
+	            ], [[NAME, 'Firefox OS'], VERSION], [
+
+	            // Console
+	            /(nintendo|playstation)\s([wids34portablevu]+)/i,                   // Nintendo/Playstation
+
+	            // GNU/Linux based
+	            /(mint)[\/\s\(]?(\w*)/i,                                            // Mint
+	            /(mageia|vectorlinux)[;\s]/i,                                       // Mageia/VectorLinux
+	            /(joli|[kxln]?ubuntu|debian|suse|opensuse|gentoo|(?=\s)arch|slackware|fedora|mandriva|centos|pclinuxos|redhat|zenwalk|linpus)[\/\s-]?(?!chrom)([\w\.-]*)/i,
+	                                                                                // Joli/Ubuntu/Debian/SUSE/Gentoo/Arch/Slackware
+	                                                                                // Fedora/Mandriva/CentOS/PCLinuxOS/RedHat/Zenwalk/Linpus
+	            /(hurd|linux)\s?([\w\.]*)/i,                                        // Hurd/Linux
+	            /(gnu)\s?([\w\.]*)/i                                                // GNU
+	            ], [NAME, VERSION], [
+
+	            /(cros)\s[\w]+\s([\w\.]+\w)/i                                       // Chromium OS
+	            ], [[NAME, 'Chromium OS'], VERSION],[
+
+	            // Solaris
+	            /(sunos)\s?([\w\.\d]*)/i                                            // Solaris
+	            ], [[NAME, 'Solaris'], VERSION], [
+
+	            // BSD based
+	            /\s([frentopc-]{0,4}bsd|dragonfly)\s?([\w\.]*)/i                    // FreeBSD/NetBSD/OpenBSD/PC-BSD/DragonFly
+	            ], [NAME, VERSION],[
+
+	            /(haiku)\s(\w+)/i                                                   // Haiku
+	            ], [NAME, VERSION],[
+
+	            /cfnetwork\/.+darwin/i,
+	            /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i             // iOS
+	            ], [[VERSION, /_/g, '.'], [NAME, 'iOS']], [
+
+	            /(mac\sos\sx)\s?([\w\s\.]*)/i,
+	            /(macintosh|mac(?=_powerpc)\s)/i                                    // Mac OS
+	            ], [[NAME, 'Mac OS'], [VERSION, /_/g, '.']], [
+
+	            // Other
+	            /((?:open)?solaris)[\/\s-]?([\w\.]*)/i,                             // Solaris
+	            /(aix)\s((\d)(?=\.|\)|\s)[\w\.])*/i,                                // AIX
+	            /(plan\s9|minix|beos|os\/2|amigaos|morphos|risc\sos|openvms|fuchsia)/i,
+	                                                                                // Plan9/Minix/BeOS/OS2/AmigaOS/MorphOS/RISCOS/OpenVMS/Fuchsia
+	            /(unix)\s?([\w\.]*)/i                                               // UNIX
+	            ], [NAME, VERSION]
+	        ]
+	    };
+
+
+	    /////////////////
+	    // Constructor
+	    ////////////////
+	    var UAParser = function (uastring, extensions) {
+
+	        if (typeof uastring === 'object') {
+	            extensions = uastring;
+	            uastring = undefined$1;
+	        }
+
+	        if (!(this instanceof UAParser)) {
+	            return new UAParser(uastring, extensions).getResult();
+	        }
+
+	        var ua = uastring || ((window && window.navigator && window.navigator.userAgent) ? window.navigator.userAgent : EMPTY);
+	        var rgxmap = extensions ? util.extend(regexes, extensions) : regexes;
+
+	        this.getBrowser = function () {
+	            var browser = { name: undefined$1, version: undefined$1 };
+	            mapper.rgx.call(browser, ua, rgxmap.browser);
+	            browser.major = util.major(browser.version); // deprecated
+	            return browser;
+	        };
+	        this.getCPU = function () {
+	            var cpu = { architecture: undefined$1 };
+	            mapper.rgx.call(cpu, ua, rgxmap.cpu);
+	            return cpu;
+	        };
+	        this.getDevice = function () {
+	            var device = { vendor: undefined$1, model: undefined$1, type: undefined$1 };
+	            mapper.rgx.call(device, ua, rgxmap.device);
+	            return device;
+	        };
+	        this.getEngine = function () {
+	            var engine = { name: undefined$1, version: undefined$1 };
+	            mapper.rgx.call(engine, ua, rgxmap.engine);
+	            return engine;
+	        };
+	        this.getOS = function () {
+	            var os = { name: undefined$1, version: undefined$1 };
+	            mapper.rgx.call(os, ua, rgxmap.os);
+	            return os;
+	        };
+	        this.getResult = function () {
+	            return {
+	                ua      : this.getUA(),
+	                browser : this.getBrowser(),
+	                engine  : this.getEngine(),
+	                os      : this.getOS(),
+	                device  : this.getDevice(),
+	                cpu     : this.getCPU()
+	            };
+	        };
+	        this.getUA = function () {
+	            return ua;
+	        };
+	        this.setUA = function (uastring) {
+	            ua = uastring;
+	            return this;
+	        };
+	        return this;
+	    };
+
+	    UAParser.VERSION = LIBVERSION;
+	    UAParser.BROWSER = {
+	        NAME    : NAME,
+	        MAJOR   : MAJOR, // deprecated
+	        VERSION : VERSION
+	    };
+	    UAParser.CPU = {
+	        ARCHITECTURE : ARCHITECTURE
+	    };
+	    UAParser.DEVICE = {
+	        MODEL   : MODEL,
+	        VENDOR  : VENDOR,
+	        TYPE    : TYPE,
+	        CONSOLE : CONSOLE,
+	        MOBILE  : MOBILE,
+	        SMARTTV : SMARTTV,
+	        TABLET  : TABLET,
+	        WEARABLE: WEARABLE,
+	        EMBEDDED: EMBEDDED
+	    };
+	    UAParser.ENGINE = {
+	        NAME    : NAME,
+	        VERSION : VERSION
+	    };
+	    UAParser.OS = {
+	        NAME    : NAME,
+	        VERSION : VERSION
+	    };
+
+	    ///////////
+	    // Export
+	    //////////
+
+
+	    // check js environment
+	    {
+	        // nodejs env
+	        if ( module.exports) {
+	            exports = module.exports = UAParser;
+	        }
+	        exports.UAParser = UAParser;
+	    }
+
+	    // jQuery/Zepto specific (optional)
+	    // Note:
+	    //   In AMD env the global scope should be kept clean, but jQuery is an exception.
+	    //   jQuery always exports to global scope, unless jQuery.noConflict(true) is used,
+	    //   and we should catch that.
+	    var $ = window && (window.jQuery || window.Zepto);
+	    if ($ && !$.ua) {
+	        var parser = new UAParser();
+	        $.ua = parser.getResult();
+	        $.ua.get = function () {
+	            return parser.getUA();
+	        };
+	        $.ua.set = function (uastring) {
+	            parser.setUA(uastring);
+	            var result = parser.getResult();
+	            for (var prop in result) {
+	                $.ua[prop] = result[prop];
+	            }
+	        };
+	    }
+
+	})(typeof window === 'object' ? window : commonjsGlobal);
+	});
+	var uaParser_1 = uaParser.UAParser;
+
+	var global$2 = typeof global$2 !== "undefined"
+	    ? global$2
+	    : typeof globalThis !== "undefined"
+	        ? globalThis
+	        : {};
+	/**
+	 * Used to evaluate whether or not to render a component
+	 * @param {Object} options
+	 * @param {Object} options.jsonx - Valid JSONX JSON
+	 * @param {Object} options.props - Props to test comparison values against, usually Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops)
+	 * @returns {Boolean} returns true if all comparisons are true or if using or comparisons, at least one condition is true
+	 * @example
+	 const sampleJSONX = {
+	  component: 'div',
+	  props: {
+	    id: 'generatedJSONX',
+	    className: 'jsonx',
+	    bigNum: 1430931039,
+	    smallNum: 0.425,
+	    falsey: false,
+	    truthy: true,
+	  },
+	  children: 'some div',
+	};
+	const testJSONX = Object.assign({}, sampleJSONX, {
+	  comparisonprops: [{
+	    left: ['truthy',],
+	    operation:'==',
+	    right:['falsey',],
+	  }],
+	});
+	displayComponent({ jsonx: testJSONX, props: testJSONX2.props, }) // => false
+	 */
+	function displayComponent(options = {}) {
+	    const { jsonx = {}, props } = options;
+	    const propsToCompare = jsonx.comparisonprops;
+	    const comparisons = Array.isArray(propsToCompare)
+	        ? propsToCompare.map(comp => {
+	            const compares = {};
+	            if (Array.isArray(comp.left)) {
+	                compares.left = comp.left;
+	            }
+	            if (Array.isArray(comp.right)) {
+	                compares.right = comp.right;
+	            }
+	            const propcompares = traverse(compares, props || jsonx.props);
+	            const opscompares = Object.assign({}, comp, propcompares);
+	            // console.debug({ opscompares, compares, renderedCompProps });
+	            switch (opscompares.operation) {
+	                case "eq":
+	                case "==":
+	                    // return opscompares.left == opscompares.right;
+	                    // eslint-disable-next-line
+	                    return opscompares.left == opscompares.right;
+	                case "dneq":
+	                case "!=":
+	                case "!":
+	                    // return opscompares.left != opscompares.right;
+	                    return opscompares.left !== opscompares.right;
+	                case "dnseq":
+	                case "!==":
+	                    return opscompares.left !== opscompares.right;
+	                case "seq":
+	                case "===":
+	                    return opscompares.left === opscompares.right;
+	                case "lt":
+	                case "<":
+	                    return opscompares.left < opscompares.right;
+	                case "lte":
+	                case "<=":
+	                    return opscompares.left <= opscompares.right;
+	                case "gt":
+	                case ">":
+	                    return opscompares.left > opscompares.right;
+	                case "gte":
+	                case ">=":
+	                    return opscompares.left >= opscompares.right;
+	                case "dne":
+	                case "undefined":
+	                case "null":
+	                    return opscompares.left === undefined || opscompares.left === null;
+	                case "!null":
+	                case "!undefined":
+	                case "exists":
+	                default:
+	                    //'exists'
+	                    return opscompares.left !== undefined && opscompares.left !== null;
+	            }
+	            // }
+	            // if (opscompares.operation === 'eq') {
+	            //   // return opscompares.left == opscompares.right;
+	            //   // eslint-disable-next-line
+	            //   return opscompares.left == opscompares.right;
+	            // } else if (opscompares.operation === 'dneq') {
+	            //   // return opscompares.left != opscompares.right;
+	            //   return opscompares.left !== opscompares.right;
+	            // } else if (opscompares.operation === 'dnseq') {
+	            //   return opscompares.left !== opscompares.right;
+	            // } else if (opscompares.operation === 'seq') {
+	            //   return opscompares.left === opscompares.right;
+	            // } else if (opscompares.operation === 'lt') {
+	            //   return opscompares.left < opscompares.right;
+	            // } else if (opscompares.operation === 'lte') {
+	            //   return opscompares.left <= opscompares.right;
+	            // } else if (opscompares.operation === 'gt') {
+	            //   return opscompares.left > opscompares.right;
+	            // } else if (opscompares.operation === 'gte') {
+	            //   return opscompares.left >= opscompares.right;
+	            // } else if (opscompares.operation === 'dne') {
+	            //   return opscompares.left === undefined || opscompares.left === null;
+	            // } else { //'exists'
+	            //   return opscompares.left !== undefined && opscompares.left !== null;
+	            // }
+	        })
+	        : [];
+	    const validProps = comparisons.filter(comp => comp === true);
+	    if (!jsonx.comparisonprops) {
+	        return true;
+	    }
+	    else if (jsonx.comparisonorprops && validProps.length < 1) {
+	        return false;
+	    }
+	    else if (validProps.length !== comparisons.length &&
+	        !jsonx.comparisonorprops) {
+	        return false;
+	    }
+	    else {
+	        return true;
+	    }
+	}
+	/**
+	 * Use to test if can bind components this context for react-redux-router
+	 * @returns {Boolean} true if browser is not IE or old android / chrome
+	 */
+	function getAdvancedBinding() {
+	    var window = window;
+	    if (typeof window === "undefined") {
+	        if (this && this.window) {
+	            window = this.window;
+	        }
+	        else if (typeof global$2 !== "undefined" && (typeof global$2 !== "undefined" ? global$2 : window).window) {
+	            window = (typeof global$2 !== "undefined" ? global$2 : window).window;
+	        }
+	        else if (typeof globalThis !== "undefined" && globalThis.window) {
+	            window = globalThis.window;
+	        }
+	        if (!window.navigator)
+	            return false;
+	    }
+	    try {
+	        if (window &&
+	            window.navigator &&
+	            window.navigator.userAgent &&
+	            typeof window.navigator.userAgent === "string") {
+	            // console.log('window.navigator.userAgent',window.navigator.userAgent)
+	            if (window.navigator.userAgent.indexOf("Trident") !== -1) {
+	                return false;
+	            }
+	            const uastring = window.navigator.userAgent;
+	            //@ts-ignore
+	            const parser = new uaParser();
+	            parser.setUA(uastring);
+	            const parseUserAgent = parser.getResult();
+	            // console.log({ parseUserAgent, });
+	            if ((parseUserAgent.browser.name === "Chrome" ||
+	                parseUserAgent.browser.name === "Chrome WebView") &&
+	                parseUserAgent.os.name === "Android" &&
+	                parseInt(parseUserAgent.browser.version, 10) < 50) {
+	                return false;
+	            }
+	            if (parseUserAgent.browser.name === "Android Browser") {
+	                return false;
+	            }
+	        }
+	    }
+	    catch (e) {
+	        console.error(e);
+	        // console.warn('could not detect browser support', e);
+	        return false;
+	    }
+	    return true;
+	}
+	/**
+	 * take an object of array paths to traverse and resolve
+	 * @example
+	 * const testObj = {
+	      user: {
+	        name: 'jsonx',
+	        description: 'react withouth javascript',
+	      },
+	      stats: {
+	        logins: 102,
+	        comments: 3,
+	      },
+	      authentication: 'OAuth2',
+	    };
+	const testVals = { auth: ['authentication', ], username: ['user', 'name', ], };
+
+	 traverse(testVals, testObj) // =>{ auth:'OAuth2', username:'jsonx',  }
+	 * @param {Object} paths - an object to resolve array property paths
+	 * @param {Object} data - object to traverse
+	 * @returns {Object} resolved object with traversed properties
+	 * @throws {TypeError}
+	 */
+	function traverse(paths = {}, data = {}) {
+	    let keys = Object.keys(paths);
+	    if (!keys.length)
+	        return paths;
+	    return keys.reduce((result, key) => {
+	        //@ts-ignore
+	        if (typeof paths[key] === "string")
+	            result[key] = data[paths[key]];
+	        else if (Array.isArray(paths[key])) {
+	            let _path = Object.assign([], paths[key]);
+	            let value = data;
+	            while (_path.length && value && typeof value === "object") {
+	                let prop = _path.shift();
+	                //@ts-ignore
+	                value = value[prop];
+	            }
+	            result[key] = _path.length ? undefined : value;
+	        }
+	        else
+	            throw new TypeError("dynamic property paths must be a string or an array of strings or numeric indexes");
+	        return result;
+	    }, {});
+	}
+	/**
+	 * Validates JSONX JSON Syntax
+	 * @example
+	 * validateJSONX({component:'p',children:'hello world'})=>true
+	 * validateJSONX({children:'hello world'})=>throw SyntaxError('[0001] Missing React Component')
+	 * @param {Object} jsonx - JSONX JSON to validate
+	 * @param {Boolean} [returnAllErrors=false] - flag to either throw error or to return all errors in an array of errors
+	 * @returns {Boolean|Error[]} either returns true if JSONX is valid, or throws validation error or returns list of errors in array
+	 * @throws {SyntaxError|TypeError|ReferenceError}
+	 */
+	function validateJSONX(jsonx = {}, returnAllErrors = false) {
+	    const dynamicPropsNames = [
+	        "asyncprops",
+	        "resourceprops",
+	        "windowprops",
+	        "thisprops",
+	        "thisstate",
+	        "thiscontext"
+	    ];
+	    const evalPropNames = [
+	        "__dangerouslyEvalProps",
+	        "__dangerouslyBindEvalProps"
+	    ];
+	    const validKeys = [
+	        "component",
+	        "props",
+	        "test",
+	        "children",
+	        "__spreadComponent",
+	        "__inline",
+	        "__functionargs",
+	        "__dangerouslyInsertComponents",
+	        "__dangerouslyInsertComponentProps",
+	        "__dangerouslyInsertJSONXComponents",
+	        "__functionProps",
+	        "__functionparams",
+	        "__windowComponents",
+	        "__windowComponentProps",
+	        "comparisonprops",
+	        "comparisonorprops",
+	        "passprops",
+	        "exposeprops",
+	        "debug",
+	        "___stringifyChildren",
+	        "___toStringChildren",
+	        "___toNumeral",
+	        "___FromLuxonTimeZone",
+	        "___ISOtoLuxonString",
+	        "___JSDatetoLuxonString",
+	        "___template"
+	    ].concat(dynamicPropsNames, evalPropNames);
+	    let errors = [];
+	    if (!jsonx.component) {
+	        errors.push(SyntaxError("[0001] Missing React Component"));
+	    }
+	    if (jsonx.props) {
+	        if (typeof jsonx.props !== "object" || Array.isArray(jsonx.props)) {
+	            errors.push(TypeError("[0002] " +
+	                jsonx.component +
+	                ": props must be an Object / valid React props"));
+	        }
+	        if (jsonx.props.children &&
+	            (typeof jsonx.props.children !== "string" ||
+	                !Array.isArray(jsonx.props.children))) {
+	            errors.push(TypeError("[0003] " +
+	                jsonx.component +
+	                ": props.children must be an array of JSONX JSON objects or a string"));
+	        }
+	        if (jsonx.props._children &&
+	            (typeof jsonx.props._children !== "string" ||
+	                !Array.isArray(jsonx.props._children))) {
+	            errors.push(TypeError("[0004] " +
+	                jsonx.component +
+	                ": props._children must be an array of JSONX JSON objects or a string"));
+	        }
+	    }
+	    if (jsonx.children) {
+	        if (typeof jsonx.children !== "string" && !Array.isArray(jsonx.children)) {
+	            errors.push(TypeError("[0005] " +
+	                jsonx.component +
+	                ": children must be an array of JSONX JSON objects or a string"));
+	        }
+	        if (Array.isArray(jsonx.children)) {
+	            const childrenErrors = jsonx.children
+	                .filter(c => typeof c === "object")
+	                .map(c => validateJSONX(c, returnAllErrors));
+	            errors = errors.concat(...childrenErrors);
+	        }
+	    }
+	    dynamicPropsNames.forEach(dynamicprop => {
+	        const jsonxDynamicProps = jsonx[dynamicprop];
+	        if (jsonxDynamicProps) {
+	            // if (dynamicprop === 'thisprops') {
+	            //   console.log({ dynamicprop, jsonxDynamicProps });
+	            // }
+	            if (typeof jsonxDynamicProps !== "object") {
+	                errors.push(TypeError(`[0006] ${dynamicprop} must be an object`));
+	            }
+	            Object.keys(jsonxDynamicProps).forEach(resolvedDynamicProp => {
+	                if (!Array.isArray(jsonxDynamicProps[resolvedDynamicProp])) {
+	                    errors.push(TypeError(`[0007] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
+	                }
+	                if (Array.isArray(jsonxDynamicProps[resolvedDynamicProp])) {
+	                    const allStringArray = jsonxDynamicProps[resolvedDynamicProp].filter((propArrayItem) => typeof propArrayItem === "string");
+	                    if (allStringArray.length !==
+	                        jsonxDynamicProps[resolvedDynamicProp].length) {
+	                        errors.push(TypeError(`[0008] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
+	                    }
+	                }
+	            });
+	        }
+	    });
+	    const evalProps = jsonx.__dangerouslyEvalProps;
+	    const boundEvalProps = jsonx.__dangerouslyBindEvalProps;
+	    if (evalProps || boundEvalProps) {
+	        if ((evalProps && typeof evalProps !== "object") ||
+	            (boundEvalProps && typeof boundEvalProps !== "object")) {
+	            errors.push(TypeError("[0009] __dangerouslyEvalProps must be an object of strings to convert to valid javascript"));
+	        }
+	        evalPropNames
+	            .filter(evalProp => jsonx[evalProp])
+	            .forEach(eProps => {
+	            const evProp = jsonx[eProps];
+	            const scopedEval = eval;
+	            Object.keys(evProp).forEach(propToEval => {
+	                if (typeof evProp[propToEval] !== "string") {
+	                    errors.push(TypeError(`[0010] jsonx.${eProps}.${evProp} must be a string`));
+	                }
+	                try {
+	                    // console.log({ eProps });
+	                    if (eProps === "__dangerouslyBindEvalProps") {
+	                        const funcToBind = scopedEval(`(${evProp[propToEval]})`);
+	                        funcToBind.call({ bounded: true });
+	                    }
+	                    else {
+	                        scopedEval(evProp[propToEval]);
+	                    }
+	                }
+	                catch (e) {
+	                    errors.push(e);
+	                }
+	            });
+	        });
+	    }
+	    if (jsonx.__dangerouslyInsertComponents) {
+	        Object.keys(jsonx.__dangerouslyInsertComponents).forEach(insertedComponents => {
+	            try {
+	                if (jsonx.__dangerouslyInsertComponents)
+	                    validateJSONX(jsonx.__dangerouslyInsertComponents[insertedComponents]);
+	            }
+	            catch (e) {
+	                errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${e.toString()}`));
+	            }
+	        });
+	    }
+	    if (jsonx.__functionProps) {
+	        if (typeof jsonx.__functionProps !== "object") {
+	            errors.push(TypeError("[0012] jsonx.__functionProps  must be an object"));
+	        }
+	        else {
+	            Object.keys(jsonx.__functionProps).forEach(fProp => {
+	                if (jsonx.__functionProps &&
+	                    jsonx.__functionProps[fProp] &&
+	                    (typeof jsonx.__functionProps[fProp] !== "string" ||
+	                        jsonx.__functionProps[fProp].indexOf("func:") === -1)) {
+	                    errors.push(ReferenceError(`[0013] jsonx.__functionProps.${fProp} must reference a function (i.e. func:this.props.logoutUser())`));
+	                }
+	            });
+	        }
+	    }
+	    if (jsonx.__windowComponentProps &&
+	        (typeof jsonx.__windowComponentProps !== "object" ||
+	            Array.isArray(jsonx.__windowComponentProps))) {
+	        errors.push(TypeError("[0013] jsonx.__windowComponentProps  must be an object"));
+	    }
+	    if (jsonx.__windowComponents) {
+	        if (typeof jsonx.__windowComponents !== "object") {
+	            errors.push(TypeError("[0014] jsonx.__windowComponents must be an object"));
+	        }
+	        Object.keys(jsonx.__windowComponents).forEach(cProp => {
+	            if (typeof jsonx.__windowComponents[cProp] !== "string" ||
+	                jsonx.__windowComponents[cProp].indexOf("func:") === -1) {
+	                errors.push(ReferenceError(`[0015] jsonx.__windowComponents.${cProp} must reference a window element on window.__jsonx_custom_elements (i.e. func:window.__jsonx_custom_elements.bootstrapModal)`));
+	            }
+	        });
+	    }
+	    if (typeof jsonx.comparisonorprops !== "undefined" &&
+	        typeof jsonx.comparisonorprops !== "boolean") {
+	        errors.push(TypeError("[0016] jsonx.comparisonorprops  must be boolean"));
+	    }
+	    if (jsonx.comparisonprops) {
+	        if (!Array.isArray(jsonx.comparisonprops)) {
+	            errors.push(TypeError("[0017] jsonx.comparisonprops  must be an array or comparisons"));
+	        }
+	        else {
+	            jsonx.comparisonprops.forEach(c => {
+	                if (typeof c !== "object") {
+	                    errors.push(TypeError("[0018] jsonx.comparisonprops  must be an array or comparisons objects"));
+	                }
+	                else if (typeof c.left === "undefined") {
+	                    errors.push(TypeError("[0019] jsonx.comparisonprops  must be have a left comparison value"));
+	                }
+	            });
+	        }
+	    }
+	    if (typeof jsonx.passprops !== "undefined" &&
+	        typeof jsonx.passprops !== "boolean") {
+	        errors.push(TypeError("[0020] jsonx.passprops  must be boolean"));
+	    }
+	    const invalidKeys = Object.keys(jsonx).filter(key => validKeys.indexOf(key) === -1);
+	    if (errors.length) {
+	        if (returnAllErrors)
+	            return errors;
+	        throw errors[0];
+	    }
+	    return invalidKeys.length
+	        ? `Warning: Invalid Keys [${invalidKeys.join()}]`
+	        : true;
+	}
+	/**
+	 * validates simple JSONX Syntax {[component]:{props,children}}
+	 * @param {Object} simpleJSONX - Any valid simple JSONX Syntax
+	 * @return {Boolean} returns true if simpleJSONX is valid
+	 */
+	function validSimpleJSONXSyntax(simpleJSONX = {}) {
+	    if (Object.keys(simpleJSONX).length !== 1 && !simpleJSONX.component) {
+	        return false;
+	    }
+	    else {
+	        const componentName = Object.keys(simpleJSONX)[0];
+	        return Object.keys(simpleJSONX).length === 1 &&
+	            !simpleJSONX[componentName].component &&
+	            typeof simpleJSONX[componentName] === "object"
+	            ? true
+	            : false;
+	    }
+	}
+	/**
+	 * Transforms SimpleJSONX to Valid JSONX JSON {[component]:{props,children}} => {component,props,children}
+	 * @param {Object} simpleJSONX JSON Object
+	 * @return {Object} - returns a valid JSONX JSON Object from a simple JSONX JSON Object
+	 */
+	function simpleJSONXSyntax(simpleJSONX = {}) {
+	    const component = Object.keys(simpleJSONX)[0];
+	    try {
+	        return Object.assign({}, {
+	            component
+	        }, simpleJSONX[component], {
+	            children: simpleJSONX[component] &&
+	                simpleJSONX[component].children &&
+	                Array.isArray(simpleJSONX[component].children)
+	                ? simpleJSONX[component].children.map(simpleJSONXSyntax)
+	                : simpleJSONX[component].children
+	        });
+	    }
+	    catch (e) {
+	        throw SyntaxError("Invalid Simple JSONX Syntax");
+	    }
+	}
+	/**
+	 * Transforms Valid JSONX JSON to SimpleJSONX  {component,props,children} => {[component]:{props,children}}
+	 * @param {Object} jsonx Valid JSONX JSON object
+	 * @return {Object} - returns a simple JSONX JSON Object from a valid JSONX JSON Object
+	 */
+	function getSimplifiedJSONX(jsonx = {}) {
+	    try {
+	        if (!jsonx.component)
+	            return jsonx; //already simple
+	        const componentName = jsonx.component;
+	        jsonx.children = Array.isArray(jsonx.children)
+	            ? jsonx.children
+	                .filter(child => child) //remove empty children
+	                .map(getSimplifiedJSONX)
+	            : jsonx.children;
+	        delete jsonx.component;
+	        return {
+	            [componentName]: jsonx
+	        };
+	    }
+	    catch (e) {
+	        throw e;
+	    }
+	}
+	/**
+	 * Fetches JSON from remote path
+	 * @param {String} path - fetch path url
+	 * @param {Object} options - fetch options
+	 * @return {Object} - returns fetched JSON data
+	 */
+	async function fetchJSON(path = "", options = {}) {
+	    try {
+	        const response = await fetch(path, options);
+	        return await response.json();
+	    }
+	    catch (e) {
+	        throw e;
+	    }
+	}
+
+	var jsonxUtils = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		displayComponent: displayComponent,
+		getAdvancedBinding: getAdvancedBinding,
+		traverse: traverse,
+		validateJSONX: validateJSONX,
+		validSimpleJSONXSyntax: validSimpleJSONXSyntax,
+		simpleJSONXSyntax: simpleJSONXSyntax,
+		getSimplifiedJSONX: getSimplifiedJSONX,
+		fetchJSON: fetchJSON
+	});
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 *
+	 */
+
+	var emptyObject = {};
+
+	var emptyObject_1 = emptyObject;
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 *
+	 */
+
+	function invariant(condition, format, a, b, c, d, e, f) {
+
+	  if (!condition) {
+	    var error;
+	    if (format === undefined) {
+	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	    } else {
+	      var args = [a, b, c, d, e, f];
+	      var argIndex = 0;
+	      error = new Error(format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      }));
+	      error.name = 'Invariant Violation';
+	    }
+
+	    error.framesToPop = 1; // we don't care about invariant's own frame
+	    throw error;
+	  }
+	}
+
+	var invariant_1 = invariant;
+
+	var MIXINS_KEY = 'mixins';
+
+	// Helper function to allow the creation of anonymous functions which do not
+	// have .name set to the name of the variable being assigned to.
+	function identity(fn) {
+	  return fn;
+	}
+
+	function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
+	  /**
+	   * Policies that describe methods in `ReactClassInterface`.
+	   */
+
+	  var injectedMixins = [];
+
+	  /**
+	   * Composite components are higher-level components that compose other composite
+	   * or host components.
+	   *
+	   * To create a new type of `ReactClass`, pass a specification of
+	   * your new class to `React.createClass`. The only requirement of your class
+	   * specification is that you implement a `render` method.
+	   *
+	   *   var MyComponent = React.createClass({
+	   *     render: function() {
+	   *       return <div>Hello World</div>;
+	   *     }
+	   *   });
+	   *
+	   * The class specification supports a specific protocol of methods that have
+	   * special meaning (e.g. `render`). See `ReactClassInterface` for
+	   * more the comprehensive protocol. Any other properties and methods in the
+	   * class specification will be available on the prototype.
+	   *
+	   * @interface ReactClassInterface
+	   * @internal
+	   */
+	  var ReactClassInterface = {
+	    /**
+	     * An array of Mixin objects to include when defining your component.
+	     *
+	     * @type {array}
+	     * @optional
+	     */
+	    mixins: 'DEFINE_MANY',
+
+	    /**
+	     * An object containing properties and methods that should be defined on
+	     * the component's constructor instead of its prototype (static methods).
+	     *
+	     * @type {object}
+	     * @optional
+	     */
+	    statics: 'DEFINE_MANY',
+
+	    /**
+	     * Definition of prop types for this component.
+	     *
+	     * @type {object}
+	     * @optional
+	     */
+	    propTypes: 'DEFINE_MANY',
+
+	    /**
+	     * Definition of context types for this component.
+	     *
+	     * @type {object}
+	     * @optional
+	     */
+	    contextTypes: 'DEFINE_MANY',
+
+	    /**
+	     * Definition of context types this component sets for its children.
+	     *
+	     * @type {object}
+	     * @optional
+	     */
+	    childContextTypes: 'DEFINE_MANY',
+
+	    // ==== Definition methods ====
+
+	    /**
+	     * Invoked when the component is mounted. Values in the mapping will be set on
+	     * `this.props` if that prop is not specified (i.e. using an `in` check).
+	     *
+	     * This method is invoked before `getInitialState` and therefore cannot rely
+	     * on `this.state` or use `this.setState`.
+	     *
+	     * @return {object}
+	     * @optional
+	     */
+	    getDefaultProps: 'DEFINE_MANY_MERGED',
+
+	    /**
+	     * Invoked once before the component is mounted. The return value will be used
+	     * as the initial value of `this.state`.
+	     *
+	     *   getInitialState: function() {
+	     *     return {
+	     *       isOn: false,
+	     *       fooBaz: new BazFoo()
+	     *     }
+	     *   }
+	     *
+	     * @return {object}
+	     * @optional
+	     */
+	    getInitialState: 'DEFINE_MANY_MERGED',
+
+	    /**
+	     * @return {object}
+	     * @optional
+	     */
+	    getChildContext: 'DEFINE_MANY_MERGED',
+
+	    /**
+	     * Uses props from `this.props` and state from `this.state` to render the
+	     * structure of the component.
+	     *
+	     * No guarantees are made about when or how often this method is invoked, so
+	     * it must not have side effects.
+	     *
+	     *   render: function() {
+	     *     var name = this.props.name;
+	     *     return <div>Hello, {name}!</div>;
+	     *   }
+	     *
+	     * @return {ReactComponent}
+	     * @required
+	     */
+	    render: 'DEFINE_ONCE',
+
+	    // ==== Delegate methods ====
+
+	    /**
+	     * Invoked when the component is initially created and about to be mounted.
+	     * This may have side effects, but any external subscriptions or data created
+	     * by this method must be cleaned up in `componentWillUnmount`.
+	     *
+	     * @optional
+	     */
+	    componentWillMount: 'DEFINE_MANY',
+
+	    /**
+	     * Invoked when the component has been mounted and has a DOM representation.
+	     * However, there is no guarantee that the DOM node is in the document.
+	     *
+	     * Use this as an opportunity to operate on the DOM when the component has
+	     * been mounted (initialized and rendered) for the first time.
+	     *
+	     * @param {DOMElement} rootNode DOM element representing the component.
+	     * @optional
+	     */
+	    componentDidMount: 'DEFINE_MANY',
+
+	    /**
+	     * Invoked before the component receives new props.
+	     *
+	     * Use this as an opportunity to react to a prop transition by updating the
+	     * state using `this.setState`. Current props are accessed via `this.props`.
+	     *
+	     *   componentWillReceiveProps: function(nextProps, nextContext) {
+	     *     this.setState({
+	     *       likesIncreasing: nextProps.likeCount > this.props.likeCount
+	     *     });
+	     *   }
+	     *
+	     * NOTE: There is no equivalent `componentWillReceiveState`. An incoming prop
+	     * transition may cause a state change, but the opposite is not true. If you
+	     * need it, you are probably looking for `componentWillUpdate`.
+	     *
+	     * @param {object} nextProps
+	     * @optional
+	     */
+	    componentWillReceiveProps: 'DEFINE_MANY',
+
+	    /**
+	     * Invoked while deciding if the component should be updated as a result of
+	     * receiving new props, state and/or context.
+	     *
+	     * Use this as an opportunity to `return false` when you're certain that the
+	     * transition to the new props/state/context will not require a component
+	     * update.
+	     *
+	     *   shouldComponentUpdate: function(nextProps, nextState, nextContext) {
+	     *     return !equal(nextProps, this.props) ||
+	     *       !equal(nextState, this.state) ||
+	     *       !equal(nextContext, this.context);
+	     *   }
+	     *
+	     * @param {object} nextProps
+	     * @param {?object} nextState
+	     * @param {?object} nextContext
+	     * @return {boolean} True if the component should update.
+	     * @optional
+	     */
+	    shouldComponentUpdate: 'DEFINE_ONCE',
+
+	    /**
+	     * Invoked when the component is about to update due to a transition from
+	     * `this.props`, `this.state` and `this.context` to `nextProps`, `nextState`
+	     * and `nextContext`.
+	     *
+	     * Use this as an opportunity to perform preparation before an update occurs.
+	     *
+	     * NOTE: You **cannot** use `this.setState()` in this method.
+	     *
+	     * @param {object} nextProps
+	     * @param {?object} nextState
+	     * @param {?object} nextContext
+	     * @param {ReactReconcileTransaction} transaction
+	     * @optional
+	     */
+	    componentWillUpdate: 'DEFINE_MANY',
+
+	    /**
+	     * Invoked when the component's DOM representation has been updated.
+	     *
+	     * Use this as an opportunity to operate on the DOM when the component has
+	     * been updated.
+	     *
+	     * @param {object} prevProps
+	     * @param {?object} prevState
+	     * @param {?object} prevContext
+	     * @param {DOMElement} rootNode DOM element representing the component.
+	     * @optional
+	     */
+	    componentDidUpdate: 'DEFINE_MANY',
+
+	    /**
+	     * Invoked when the component is about to be removed from its parent and have
+	     * its DOM representation destroyed.
+	     *
+	     * Use this as an opportunity to deallocate any external resources.
+	     *
+	     * NOTE: There is no `componentDidUnmount` since your component will have been
+	     * destroyed by that point.
+	     *
+	     * @optional
+	     */
+	    componentWillUnmount: 'DEFINE_MANY',
+
+	    /**
+	     * Replacement for (deprecated) `componentWillMount`.
+	     *
+	     * @optional
+	     */
+	    UNSAFE_componentWillMount: 'DEFINE_MANY',
+
+	    /**
+	     * Replacement for (deprecated) `componentWillReceiveProps`.
+	     *
+	     * @optional
+	     */
+	    UNSAFE_componentWillReceiveProps: 'DEFINE_MANY',
+
+	    /**
+	     * Replacement for (deprecated) `componentWillUpdate`.
+	     *
+	     * @optional
+	     */
+	    UNSAFE_componentWillUpdate: 'DEFINE_MANY',
+
+	    // ==== Advanced methods ====
+
+	    /**
+	     * Updates the component's currently mounted DOM representation.
+	     *
+	     * By default, this implements React's rendering and reconciliation algorithm.
+	     * Sophisticated clients may wish to override this.
+	     *
+	     * @param {ReactReconcileTransaction} transaction
+	     * @internal
+	     * @overridable
+	     */
+	    updateComponent: 'OVERRIDE_BASE'
+	  };
+
+	  /**
+	   * Similar to ReactClassInterface but for static methods.
+	   */
+	  var ReactClassStaticInterface = {
+	    /**
+	     * This method is invoked after a component is instantiated and when it
+	     * receives new props. Return an object to update state in response to
+	     * prop changes. Return null to indicate no change to state.
+	     *
+	     * If an object is returned, its keys will be merged into the existing state.
+	     *
+	     * @return {object || null}
+	     * @optional
+	     */
+	    getDerivedStateFromProps: 'DEFINE_MANY_MERGED'
+	  };
+
+	  /**
+	   * Mapping from class specification keys to special processing functions.
+	   *
+	   * Although these are declared like instance properties in the specification
+	   * when defining classes using `React.createClass`, they are actually static
+	   * and are accessible on the constructor instead of the prototype. Despite
+	   * being static, they must be defined outside of the "statics" key under
+	   * which all other static methods are defined.
+	   */
+	  var RESERVED_SPEC_KEYS = {
+	    displayName: function(Constructor, displayName) {
+	      Constructor.displayName = displayName;
+	    },
+	    mixins: function(Constructor, mixins) {
+	      if (mixins) {
+	        for (var i = 0; i < mixins.length; i++) {
+	          mixSpecIntoComponent(Constructor, mixins[i]);
+	        }
+	      }
+	    },
+	    childContextTypes: function(Constructor, childContextTypes) {
+	      Constructor.childContextTypes = objectAssign(
+	        {},
+	        Constructor.childContextTypes,
+	        childContextTypes
+	      );
+	    },
+	    contextTypes: function(Constructor, contextTypes) {
+	      Constructor.contextTypes = objectAssign(
+	        {},
+	        Constructor.contextTypes,
+	        contextTypes
+	      );
+	    },
+	    /**
+	     * Special case getDefaultProps which should move into statics but requires
+	     * automatic merging.
+	     */
+	    getDefaultProps: function(Constructor, getDefaultProps) {
+	      if (Constructor.getDefaultProps) {
+	        Constructor.getDefaultProps = createMergedResultFunction(
+	          Constructor.getDefaultProps,
+	          getDefaultProps
+	        );
+	      } else {
+	        Constructor.getDefaultProps = getDefaultProps;
+	      }
+	    },
+	    propTypes: function(Constructor, propTypes) {
+	      Constructor.propTypes = objectAssign({}, Constructor.propTypes, propTypes);
+	    },
+	    statics: function(Constructor, statics) {
+	      mixStaticSpecIntoComponent(Constructor, statics);
+	    },
+	    autobind: function() {}
+	  };
+
+	  function validateMethodOverride(isAlreadyDefined, name) {
+	    var specPolicy = ReactClassInterface.hasOwnProperty(name)
+	      ? ReactClassInterface[name]
+	      : null;
+
+	    // Disallow overriding of base class methods unless explicitly allowed.
+	    if (ReactClassMixin.hasOwnProperty(name)) {
+	      invariant_1(
+	        specPolicy === 'OVERRIDE_BASE',
+	        'ReactClassInterface: You are attempting to override ' +
+	          '`%s` from your class specification. Ensure that your method names ' +
+	          'do not overlap with React methods.',
+	        name
+	      );
+	    }
+
+	    // Disallow defining methods more than once unless explicitly allowed.
+	    if (isAlreadyDefined) {
+	      invariant_1(
+	        specPolicy === 'DEFINE_MANY' || specPolicy === 'DEFINE_MANY_MERGED',
+	        'ReactClassInterface: You are attempting to define ' +
+	          '`%s` on your component more than once. This conflict may be due ' +
+	          'to a mixin.',
+	        name
+	      );
+	    }
+	  }
+
+	  /**
+	   * Mixin helper which handles policy validation and reserved
+	   * specification keys when building React classes.
+	   */
+	  function mixSpecIntoComponent(Constructor, spec) {
+	    if (!spec) {
+
+	      return;
+	    }
+
+	    invariant_1(
+	      typeof spec !== 'function',
+	      "ReactClass: You're attempting to " +
+	        'use a component class or function as a mixin. Instead, just use a ' +
+	        'regular object.'
+	    );
+	    invariant_1(
+	      !isValidElement(spec),
+	      "ReactClass: You're attempting to " +
+	        'use a component as a mixin. Instead, just use a regular object.'
+	    );
+
+	    var proto = Constructor.prototype;
+	    var autoBindPairs = proto.__reactAutoBindPairs;
+
+	    // By handling mixins before any other properties, we ensure the same
+	    // chaining order is applied to methods with DEFINE_MANY policy, whether
+	    // mixins are listed before or after these methods in the spec.
+	    if (spec.hasOwnProperty(MIXINS_KEY)) {
+	      RESERVED_SPEC_KEYS.mixins(Constructor, spec.mixins);
+	    }
+
+	    for (var name in spec) {
+	      if (!spec.hasOwnProperty(name)) {
+	        continue;
+	      }
+
+	      if (name === MIXINS_KEY) {
+	        // We have already handled mixins in a special case above.
+	        continue;
+	      }
+
+	      var property = spec[name];
+	      var isAlreadyDefined = proto.hasOwnProperty(name);
+	      validateMethodOverride(isAlreadyDefined, name);
+
+	      if (RESERVED_SPEC_KEYS.hasOwnProperty(name)) {
+	        RESERVED_SPEC_KEYS[name](Constructor, property);
+	      } else {
+	        // Setup methods on prototype:
+	        // The following member methods should not be automatically bound:
+	        // 1. Expected ReactClass methods (in the "interface").
+	        // 2. Overridden methods (that were mixed in).
+	        var isReactClassMethod = ReactClassInterface.hasOwnProperty(name);
+	        var isFunction = typeof property === 'function';
+	        var shouldAutoBind =
+	          isFunction &&
+	          !isReactClassMethod &&
+	          !isAlreadyDefined &&
+	          spec.autobind !== false;
+
+	        if (shouldAutoBind) {
+	          autoBindPairs.push(name, property);
+	          proto[name] = property;
+	        } else {
+	          if (isAlreadyDefined) {
+	            var specPolicy = ReactClassInterface[name];
+
+	            // These cases should already be caught by validateMethodOverride.
+	            invariant_1(
+	              isReactClassMethod &&
+	                (specPolicy === 'DEFINE_MANY_MERGED' ||
+	                  specPolicy === 'DEFINE_MANY'),
+	              'ReactClass: Unexpected spec policy %s for key %s ' +
+	                'when mixing in component specs.',
+	              specPolicy,
+	              name
+	            );
+
+	            // For methods which are defined more than once, call the existing
+	            // methods before calling the new property, merging if appropriate.
+	            if (specPolicy === 'DEFINE_MANY_MERGED') {
+	              proto[name] = createMergedResultFunction(proto[name], property);
+	            } else if (specPolicy === 'DEFINE_MANY') {
+	              proto[name] = createChainedFunction(proto[name], property);
+	            }
+	          } else {
+	            proto[name] = property;
+	          }
+	        }
+	      }
+	    }
+	  }
+
+	  function mixStaticSpecIntoComponent(Constructor, statics) {
+	    if (!statics) {
+	      return;
+	    }
+
+	    for (var name in statics) {
+	      var property = statics[name];
+	      if (!statics.hasOwnProperty(name)) {
+	        continue;
+	      }
+
+	      var isReserved = name in RESERVED_SPEC_KEYS;
+	      invariant_1(
+	        !isReserved,
+	        'ReactClass: You are attempting to define a reserved ' +
+	          'property, `%s`, that shouldn\'t be on the "statics" key. Define it ' +
+	          'as an instance property instead; it will still be accessible on the ' +
+	          'constructor.',
+	        name
+	      );
+
+	      var isAlreadyDefined = name in Constructor;
+	      if (isAlreadyDefined) {
+	        var specPolicy = ReactClassStaticInterface.hasOwnProperty(name)
+	          ? ReactClassStaticInterface[name]
+	          : null;
+
+	        invariant_1(
+	          specPolicy === 'DEFINE_MANY_MERGED',
+	          'ReactClass: You are attempting to define ' +
+	            '`%s` on your component more than once. This conflict may be ' +
+	            'due to a mixin.',
+	          name
+	        );
+
+	        Constructor[name] = createMergedResultFunction(Constructor[name], property);
+
+	        return;
+	      }
+
+	      Constructor[name] = property;
+	    }
+	  }
+
+	  /**
+	   * Merge two objects, but throw if both contain the same key.
+	   *
+	   * @param {object} one The first object, which is mutated.
+	   * @param {object} two The second object
+	   * @return {object} one after it has been mutated to contain everything in two.
+	   */
+	  function mergeIntoWithNoDuplicateKeys(one, two) {
+	    invariant_1(
+	      one && two && typeof one === 'object' && typeof two === 'object',
+	      'mergeIntoWithNoDuplicateKeys(): Cannot merge non-objects.'
+	    );
+
+	    for (var key in two) {
+	      if (two.hasOwnProperty(key)) {
+	        invariant_1(
+	          one[key] === undefined,
+	          'mergeIntoWithNoDuplicateKeys(): ' +
+	            'Tried to merge two objects with the same key: `%s`. This conflict ' +
+	            'may be due to a mixin; in particular, this may be caused by two ' +
+	            'getInitialState() or getDefaultProps() methods returning objects ' +
+	            'with clashing keys.',
+	          key
+	        );
+	        one[key] = two[key];
+	      }
+	    }
+	    return one;
+	  }
+
+	  /**
+	   * Creates a function that invokes two functions and merges their return values.
+	   *
+	   * @param {function} one Function to invoke first.
+	   * @param {function} two Function to invoke second.
+	   * @return {function} Function that invokes the two argument functions.
+	   * @private
+	   */
+	  function createMergedResultFunction(one, two) {
+	    return function mergedResult() {
+	      var a = one.apply(this, arguments);
+	      var b = two.apply(this, arguments);
+	      if (a == null) {
+	        return b;
+	      } else if (b == null) {
+	        return a;
+	      }
+	      var c = {};
+	      mergeIntoWithNoDuplicateKeys(c, a);
+	      mergeIntoWithNoDuplicateKeys(c, b);
+	      return c;
+	    };
+	  }
+
+	  /**
+	   * Creates a function that invokes two functions and ignores their return vales.
+	   *
+	   * @param {function} one Function to invoke first.
+	   * @param {function} two Function to invoke second.
+	   * @return {function} Function that invokes the two argument functions.
+	   * @private
+	   */
+	  function createChainedFunction(one, two) {
+	    return function chainedFunction() {
+	      one.apply(this, arguments);
+	      two.apply(this, arguments);
+	    };
+	  }
+
+	  /**
+	   * Binds a method to the component.
+	   *
+	   * @param {object} component Component whose method is going to be bound.
+	   * @param {function} method Method to be bound.
+	   * @return {function} The bound method.
+	   */
+	  function bindAutoBindMethod(component, method) {
+	    var boundMethod = method.bind(component);
+	    return boundMethod;
+	  }
+
+	  /**
+	   * Binds all auto-bound methods in a component.
+	   *
+	   * @param {object} component Component whose method is going to be bound.
+	   */
+	  function bindAutoBindMethods(component) {
+	    var pairs = component.__reactAutoBindPairs;
+	    for (var i = 0; i < pairs.length; i += 2) {
+	      var autoBindKey = pairs[i];
+	      var method = pairs[i + 1];
+	      component[autoBindKey] = bindAutoBindMethod(component, method);
+	    }
+	  }
+
+	  var IsMountedPreMixin = {
+	    componentDidMount: function() {
+	      this.__isMounted = true;
+	    }
+	  };
+
+	  var IsMountedPostMixin = {
+	    componentWillUnmount: function() {
+	      this.__isMounted = false;
+	    }
+	  };
+
+	  /**
+	   * Add more to the ReactClass base class. These are all legacy features and
+	   * therefore not already part of the modern ReactComponent.
+	   */
+	  var ReactClassMixin = {
+	    /**
+	     * TODO: This will be deprecated because state should always keep a consistent
+	     * type signature and the only use case for this, is to avoid that.
+	     */
+	    replaceState: function(newState, callback) {
+	      this.updater.enqueueReplaceState(this, newState, callback);
+	    },
+
+	    /**
+	     * Checks whether or not this composite component is mounted.
+	     * @return {boolean} True if mounted, false otherwise.
+	     * @protected
+	     * @final
+	     */
+	    isMounted: function() {
+	      return !!this.__isMounted;
+	    }
+	  };
+
+	  var ReactClassComponent = function() {};
+	  objectAssign(
+	    ReactClassComponent.prototype,
+	    ReactComponent.prototype,
+	    ReactClassMixin
+	  );
+
+	  /**
+	   * Creates a composite component class given a class specification.
+	   * See https://facebook.github.io/react/docs/top-level-api.html#react.createclass
+	   *
+	   * @param {object} spec Class specification (which must define `render`).
+	   * @return {function} Component constructor function.
+	   * @public
+	   */
+	  function createClass(spec) {
+	    // To keep our warnings more understandable, we'll use a little hack here to
+	    // ensure that Constructor.name !== 'Constructor'. This makes sure we don't
+	    // unnecessarily identify a class without displayName as 'Constructor'.
+	    var Constructor = identity(function(props, context, updater) {
+
+	      // Wire up auto-binding
+	      if (this.__reactAutoBindPairs.length) {
+	        bindAutoBindMethods(this);
+	      }
+
+	      this.props = props;
+	      this.context = context;
+	      this.refs = emptyObject_1;
+	      this.updater = updater || ReactNoopUpdateQueue;
+
+	      this.state = null;
+
+	      // ReactClasses doesn't have constructors. Instead, they use the
+	      // getInitialState and componentWillMount methods for initialization.
+
+	      var initialState = this.getInitialState ? this.getInitialState() : null;
+	      invariant_1(
+	        typeof initialState === 'object' && !Array.isArray(initialState),
+	        '%s.getInitialState(): must return an object or null',
+	        Constructor.displayName || 'ReactCompositeComponent'
+	      );
+
+	      this.state = initialState;
+	    });
+	    Constructor.prototype = new ReactClassComponent();
+	    Constructor.prototype.constructor = Constructor;
+	    Constructor.prototype.__reactAutoBindPairs = [];
+
+	    injectedMixins.forEach(mixSpecIntoComponent.bind(null, Constructor));
+
+	    mixSpecIntoComponent(Constructor, IsMountedPreMixin);
+	    mixSpecIntoComponent(Constructor, spec);
+	    mixSpecIntoComponent(Constructor, IsMountedPostMixin);
+
+	    // Initialize the defaultProps property after all mixins have been merged.
+	    if (Constructor.getDefaultProps) {
+	      Constructor.defaultProps = Constructor.getDefaultProps();
+	    }
+
+	    invariant_1(
+	      Constructor.prototype.render,
+	      'createClass(...): Class specification must implement a `render` method.'
+	    );
+
+	    // Reduce time spent doing lookups by setting these on the prototype.
+	    for (var methodName in ReactClassInterface) {
+	      if (!Constructor.prototype[methodName]) {
+	        Constructor.prototype[methodName] = null;
+	      }
+	    }
+
+	    return Constructor;
+	  }
+
+	  return createClass;
+	}
+
+	var factory_1 = factory;
+
+	if (typeof React__default === 'undefined') {
+	  throw Error(
+	    'create-react-class could not find the React object. If you are using script tags, ' +
+	      'make sure that React is being loaded before create-react-class.'
+	  );
+	}
+
+	// Hack to grab NoopUpdateQueue from isomorphic React
+	var ReactNoopUpdateQueue = new React__default.Component().updater;
+
+	var createReactClass = factory_1(
+	  React__default.Component,
+	  React__default.isValidElement,
+	  ReactNoopUpdateQueue
+	);
+
+	const cache = new Cache_1();
+	// if (typeof window === 'undefined') {
+	//   var window = window || (typeof global!=="undefined" ? global : window).window || {};
+	// }
+	/**
+	 
+	 */
+	//@ts-ignore
+	let advancedBinding = getAdvancedBinding();
+	// require;
+	/**
+	 * object of all react components available for JSONX
+	 
+	 */
+	//@ts-ignore
+	let componentMap = Object.assign({ Fragment: React.Fragment, Suspense: React.Suspense }, reactDomFactories, window && typeof window === "object" ? window.__jsonx_custom_elements : {});
+	/**
+	 * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
+	 
+	 * @param {Object} options - options for getBoundedComponents
+	 * @param {Object} options.reactComponents - all react components available for JSONX
+	 * @param {string[]} boundedComponents - list of components to bind JSONX this context (usually helpful for navigation and redux-router)
+	 * @returns {Object} reactComponents object of all react components available for JSONX
+	 */
+	function getBoundedComponents(options = {}) {
+	    const { reactComponents, boundedComponents = [] } = options;
+	    if (advancedBinding || options.advancedBinding) {
+	        return Object.assign({}, reactComponents, boundedComponents.reduce((result, componentName) => {
+	            result[componentName] = reactComponents[componentName].bind(this);
+	            return result;
+	        }, {}));
+	        // reactComponents.ResponsiveLink = ResponsiveLink.bind(this);
+	    }
+	    else
+	        return reactComponents;
+	}
+	/**
+	 * returns a react component from a component library
+	 
+	 * @param {Object} options - options for getComponentFromLibrary
+	 * @param {Object} [options.componentLibraries={}] - react component library like bootstrap
+	 * @param {Object} [options.jsonx={}] - any valid JSONX JSON
+	 * @returns {function|undefined} react component from react library like bootstrap, material design or bulma
+	 */
+	function getComponentFromLibrary(options = { jsonx: {} }) {
+	    const { componentLibraries = {}, jsonx = {} } = options;
+	    const libComponent = Object.keys(componentLibraries)
+	        .map(libraryName => {
+	        //@ts-ignore
+	        const cleanLibraryName = jsonx.component.replace(`${libraryName}.`, "");
+	        const libraryNameArray = cleanLibraryName.split(".");
+	        if (libraryNameArray.length === 2 &&
+	            componentLibraries[libraryName] &&
+	            componentLibraries[libraryName][libraryNameArray[0]] &&
+	            typeof componentLibraries[libraryName][libraryNameArray[0]][libraryNameArray[1]] !== "undefined") {
+	            return componentLibraries[libraryName][libraryNameArray[0]][libraryNameArray[1]];
+	        }
+	        else if (typeof componentLibraries[libraryName][cleanLibraryName] !== "undefined") {
+	            return componentLibraries[libraryName][cleanLibraryName];
+	        }
+	    })
+	        .filter(val => val)[0];
+	    return libComponent;
+	}
+	/**
+	 * returns a react element from jsonx.component
+	 
+	 * @example
+	 * // returns react elements
+	 * getComponentFromMap({jsonx:{component:'div'}})=>div
+	 * getComponentFromMap({jsonx:{component:'MyModal'},reactComponents:{MyModal:MyModal extends React.Component}})=>MyModal
+	 * getComponentFromMap({jsonx:{component:'reactBootstap.nav'},componentLibraries:{reactBootstrap,}})=>reactBootstap.nav
+	 * @param {Object} options - options for getComponentFromMap
+	 * @param {object} [options.jsonx={}] - any valid JSONX JSON object
+	 * @param {Object} [options.reactComponents={}] - react components to render
+	 * @param {Object} [options.componentLibraries={}] - react components to render from another component library like bootstrap or bulma
+	 * @param {function} [options.logError=console.error] - error logging function
+	 * @param {boolean} [options.debug=false] - use debug messages
+	 * @returns {string|function|class} valid react element
+	 */
+	function getComponentFromMap(options = {}) {
+	    //ReactElementLike | ReactComponentLike | ReactElement | ReactComponentLike
+	    // eslint-disable-next-line
+	    const { jsonx = {}, reactComponents = {}, componentLibraries = {}, logError = console.error, debug } = options;
+	    try {
+	        if (typeof jsonx.component !== "string" &&
+	            typeof jsonx.component === "function") {
+	            return jsonx.component;
+	            //@ts-ignore
+	        }
+	        else if (jsonx.component && reactDomFactories[jsonx.component]) {
+	            return jsonx.component;
+	            //@ts-ignore
+	        }
+	        else if (reactComponents[jsonx.component]) {
+	            //@ts-ignore
+	            return reactComponents[jsonx.component];
+	        }
+	        else if (typeof jsonx.component === "string" &&
+	            jsonx.component.indexOf(".") > 0 &&
+	            getComponentFromLibrary({ jsonx, componentLibraries })) {
+	            return getComponentFromLibrary({ jsonx, componentLibraries });
+	        }
+	        else {
+	            throw new ReferenceError(`Invalid React Component (${jsonx.component})`);
+	        }
+	    }
+	    catch (e) {
+	        if (debug)
+	            logError(e, e.stack ? e.stack : "no stack");
+	        throw e;
+	    }
+	}
+	/**
+	 * Returns a new function from an options object
+	 
+	 * @param {Object} options
+	 * @param {String} [options.body=''] - Function string body
+	 * @param {String[]} [options.args=[]] - Function arguments
+	 * @returns {Function}
+	 */
+	function getFunctionFromEval(options = {}) {
+	    if (typeof options === "function")
+	        return options;
+	    const { body = "", args = [], name } = options;
+	    const argus = [].concat(args);
+	    argus.push(body);
+	    const evalFunction = Function.prototype.constructor.apply({ name }, argus);
+	    if (name) {
+	        Object.defineProperty(evalFunction, "name", { value: name });
+	    }
+	    return evalFunction;
+	}
+	/**
+	 * Returns a new React Component
+	 
+	 * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class
+	 * @param {Object} [options.resources={}] - asyncprops for component
+	 * @param {String} [options.name ] - Component name
+	 * @param {Function} [options.lazy ] - function that resolves {reactComponent,options} to lazy load component for code splitting
+	 * @param {Boolean} [options.use_getState=true] - define getState prop
+	 * @param {Boolean} [options.bindContext=true] - bind class this reference to render function components
+	 * @param {Boolean} [options.passprops ] - pass props to rendered component
+	 * @param {Boolean} [options.passstate] - pass state as props to rendered component
+	 * @param {Object} [reactComponent={}] - an object of functions used for create-react-class
+	 * @param {Object} reactComponent.render.body - Valid JSONX JSON
+	 * @param {String} reactComponent.getDefaultProps.body - return an object for the default props
+	 * @param {String} reactComponent.getInitialState.body - return an object for the default state
+	 * @returns {Function}
+	 * @see {@link https://reactjs.org/docs/react-without-es6.html}
+	 */
+	function getReactClassComponent(reactComponent = {}, options = {}) {
+	    // const util = require('util');
+	    // console.log(util.inspect({ reactComponent },{depth:20}));
+	    if (options.lazy) {
+	        //@ts-ignore
+	        return React.lazy(() => options
+	            .lazy(reactComponent, Object.assign({}, options, { lazy: false }))
+	            .then((lazyComponent) => {
+	            return {
+	                //@ts-ignore
+	                default: getReactClassComponent(...lazyComponent)
+	            };
+	        }));
+	    }
+	    const context = this || {};
+	    const { returnFactory = true, resources = {}, use_getState = true, bindContext = true, disableRenderIndexKey = true } = options;
+	    const rjc = {
+	        //mounting
+	        getDefaultProps: {
+	            body: "return {};"
+	        },
+	        // (unsupported) getDerivedStateFromProps: undefined, // {body:'return null;', args:['props','state',]}
+	        getInitialState: {
+	            body: "return {};"
+	        },
+	        componentDidMount: undefined,
+	        UNSAFE_componentWillMount: undefined,
+	        //updating
+	        // (unsupported) getDerivedStateFromProps 
+	        shouldComponentUpdate: undefined,
+	        getSnapshotBeforeUpdate: undefined,
+	        componentDidUpdate: undefined,
+	        UNSAFE_componentWillUpdate: undefined,
+	        UNSAFE_componentWillReceiveProps: undefined,
+	        //unmounting
+	        componentWillUnmount: undefined,
+	        //error handling
+	        // (unsupported) componentDidCatch:undefined, // { body:'return ;', args:['error','info'] }
+	        // (unsupported) getDerivedStateFromError: undefined, // {body:' return { hasError:true}', args:['error')',]}
+	        //body
+	        ...reactComponent
+	    };
+	    const rjcKeys = Object.keys(rjc);
+	    if (rjcKeys.includes("render") === false) {
+	        throw new ReferenceError("React components require a render method");
+	    }
+	    const classOptions = rjcKeys.reduce((result, val) => {
+	        if (!rjc[val])
+	            return result;
+	        if (typeof rjc[val] === "function")
+	            rjc[val] = { body: rjc[val] };
+	        const args = rjc[val].arguments;
+	        const body = rjc[val].body;
+	        if (!body) {
+	            console.warn({ rjc });
+	            throw new SyntaxError(`Function(${val}) requires a function body`);
+	        }
+	        if (args &&
+	            !Array.isArray(args) &&
+	            args.length &&
+	            args.length &&
+	            args.filter((arg) => typeof arg === "string").length) {
+	            throw new TypeError(`Function(${val}) arguments must be an array or variable names`);
+	        }
+	        if (val === "render") {
+	            result[val] = function () {
+	                //@ts-ignore
+	                if (options.passprops && this && this.props)
+	                    body.props = Object.assign({}, body.props, this.props);
+	                //@ts-ignore
+	                if (options.passstate && this.state)
+	                    body.props = Object.assign({}, body.props, this.state);
+	                return getReactElementFromJSONX.call(Object.assign({}, context, bindContext ? this : { props: {} }, { disableRenderIndexKey }, {
+	                    props: use_getState && this && this.props
+	                        ? //@ts-ignore
+	                            Object.assign({}, this.props, {
+	                                getState: () => this.state
+	                            })
+	                        : //@ts-ignore
+	                            this.props
+	                }), body, resources);
+	            };
+	        }
+	        else {
+	            //@ts-ignore
+	            result[val] =
+	                typeof body === "function"
+	                    ? body
+	                    : getFunctionFromEval({
+	                        body,
+	                        args
+	                    });
+	        }
+	        return result;
+	    }, {});
+	    const reactComponentClass = createReactClass(classOptions);
+	    if (options.name) {
+	        Object.defineProperty(reactComponentClass, "name", {
+	            value: options.name
+	        });
+	    }
+	    const reactClass = returnFactory
+	        ? React__default.createFactory(reactComponentClass)
+	        : reactComponentClass;
+	    return reactClass;
+	}
+	/**
+	 * A helper component that allows you to create forms with [react-hook-form](https://react-hook-form.com/) without needed to add external form libraries
+	 * @param this
+	 * @param props
+	 */
+	function FormComponent(props = {}) {
+	    const { hookFormOptions = {}, formComponent = { component: "div", children: "empty form" }, onSubmit, formWrapperComponent, formKey, formWrapperProps, } = props;
+	    // const { register, unregister, errors, watch, handleSubmit, reset, setError, clearError, setValue, getValues, triggerValidation, control, formState, } = useForm(hookFormOptions);
+	    const reactHookForm = useForm(hookFormOptions);
+	    const context = {
+	        ...this || {},
+	        ...{ reactHookForm, },
+	    };
+	    if (!context.componentLibraries || !context.componentLibraries.ReactHookForm) {
+	        context.componentLibraries = {
+	            ...context.componentLibraries,
+	            ...{
+	                ReactHookForm: {
+	                    Controller, ErrorMessage,
+	                }
+	            }
+	        };
+	    }
+	    const formWrapperJXM = formWrapperComponent || {
+	        component: 'form',
+	        props: {
+	            onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined,
+	            key: formKey ? `formWrapperJXM-${formKey}` : undefined,
+	            ...formWrapperProps,
+	        }
+	    };
+	    formWrapperJXM.children = Array.isArray(formComponent) ? formComponent : [formComponent];
+	    const renderJSONX = React.useMemo(() => getReactElementFromJSONX.bind(context), [
+	        context
+	    ]);
+	    return renderJSONX(formWrapperJXM);
+	}
+	/**
+	 * A helper component that allows you to create components that load data and render asynchronously.
+	 * @param this
+	 * @param props
+	 */
+	function DynamicComponent(props = {}) {
+	    //@ts-ignore
+	    const { useCache = true, cacheTimeout = 60 * 60 * 5, loadingJSONX = { component: "div", children: "...Loading" }, 
+	    //@ts-ignore
+	    loadingErrorJSONX = {
+	        component: "div",
+	        children: [
+	            { component: "span", children: "Error: " },
+	            {
+	                component: "span",
+	                resourceprops: { _children: ["error", "message"] }
+	            }
+	        ]
+	    }, cacheTimeoutFunction = () => { }, jsonx, transformFunction = (data) => data, fetchURL, fetchOptions, fetchFunction } = props;
+	    const context = this || {};
+	    const [state, setState] = React.useState({
+	        hasLoaded: false,
+	        hasError: false,
+	        resources: {},
+	        error: undefined
+	    });
+	    const transformer = React.useMemo(() => getFunctionFromEval(transformFunction), [
+	        transformFunction
+	    ]);
+	    const timeoutFunction = React.useMemo(() => getFunctionFromEval(cacheTimeoutFunction), [cacheTimeoutFunction]);
+	    const renderJSONX = React.useMemo(() => getReactElementFromJSONX.bind(context), [
+	        context
+	    ]);
+	    const loadingComponent = React.useMemo(() => renderJSONX(loadingJSONX), [
+	        loadingJSONX
+	    ]);
+	    const loadingError = React.useMemo(() => renderJSONX(loadingErrorJSONX, { error: state.error }), [loadingErrorJSONX, state.error]);
+	    React.useEffect(() => {
+	        async function getData() {
+	            try {
+	                //@ts-ignore
+	                let transformedData;
+	                if (useCache && cache.get(fetchURL)) {
+	                    transformedData = cache.get(fetchURL);
+	                }
+	                else {
+	                    let fetchedData;
+	                    if (fetchFunction) {
+	                        fetchedData = await fetchFunction(fetchURL, fetchOptions);
+	                    }
+	                    else
+	                        fetchedData = await fetchJSON(fetchURL, fetchOptions);
+	                    transformedData = await transformer(fetchedData);
+	                    if (useCache)
+	                        cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
+	                }
+	                //@ts-ignore
+	                setState(prevState => Object.assign({}, prevState, {
+	                    hasLoaded: true,
+	                    hasError: false,
+	                    resources: { DynamicComponentData: transformedData }
+	                }));
+	            }
+	            catch (e) {
+	                if (context.debug)
+	                    console.warn(e);
+	                //@ts-ignore
+	                setState({ hasError: true, error: e });
+	            }
+	        }
+	        if (fetchURL)
+	            getData();
+	    }, [fetchURL, fetchOptions]);
+	    if (!fetchURL)
+	        return null;
+	    else if (state.hasError) {
+	        return loadingError;
+	    }
+	    else if (state.hasLoaded === false) {
+	        return loadingComponent;
+	    }
+	    else
+	        return renderJSONX(jsonx, state.resources);
+	}
+	/**
+	 * Returns new React Function Component
+	 
+	 * @todo set 'functionprops' to set arguments for function
+	 * @param {*} reactComponent - Valid JSONX to render
+	 * @param {String} functionBody - String of function component body
+	 * @param {String} options.name - Function Component name
+	 * @returns {Function}
+	 * @see {@link https://reactjs.org/docs/hooks-intro.html}
+	 * @example
+	  const jsonxRender = {
+	   component:'div',
+	   passprops:'true',
+	   children:[
+	     {
+	      component:'input',
+	      thisprops:{
+	          value:['count'],
+	        },
+	     },
+	      {
+	        component:'button',
+	       __dangerouslyBindEvalProps:{
+	        onClick:function(count,setCount){
+	          setCount(count+1);
+	          console.log('this is inline',{count,setCount});
+	        },
+	        // onClick:`(function(count,setCount){
+	        //   setCount(count+1)
+	        //   console.log('this is inline',{count,setCount});
+	        // })`,
+	        children:'Click me'
+	      }
+	   ]
+	  };
+	  const functionBody = 'const [count, setCount] = useState(0); const functionprops = {count,setCount};'
+	  const options = { name: IntroHook}
+	  const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({jsonxRender, functionBody, options});
+	   */
+	function getReactFunctionComponent(reactComponent = {}, functionBody = "", options = {}) {
+	    if (options.lazy) {
+	        //@ts-ignore
+	        return React.lazy(() => options
+	            .lazy(reactComponent, functionBody, Object.assign({}, options, { lazy: false }))
+	            .then((lazyComponent) => {
+	            return {
+	                //@ts-ignore
+	                default: getReactFunctionComponent(...lazyComponent)
+	            };
+	        }));
+	    }
+	    if (typeof options === "undefined" || typeof options.bind === "undefined")
+	        options.bind = true;
+	    const { resources = {}, args = [] } = options;
+	    //@ts-ignore
+	    const props = Object.assign({}, reactComponent.props);
+	    const functionArgs = [
+	        React__default,
+	        React.useState,
+	        React.useEffect,
+	        React.useContext,
+	        React.useReducer,
+	        React.useCallback,
+	        React.useMemo,
+	        React.useRef,
+	        React.useImperativeHandle,
+	        React.useLayoutEffect,
+	        React.useDebugValue,
+	        getReactElementFromJSONX,
+	        reactComponent,
+	        resources,
+	        props
+	    ];
+	    //@ts-ignore
+	    if (typeof functionBody === "function")
+	        functionBody = functionBody.toString();
+	    const functionComponent = Function("React", "useState", "useEffect", "useContext", "useReducer", "useCallback", "useMemo", "useRef", "useImperativeHandle", "useLayoutEffect", "useDebugValue", "getReactElementFromJSONX", "reactComponent", "resources", "props", `
+    'use strict';
+    const self = this || {};
+
+    return function ${options.name || "Anonymous"}(props){
+      ${functionBody}
+      if(typeof exposeprops==='undefined' || exposeprops){
+        reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);
+        if(typeof exposeprops!=='undefined') reactComponent.__functionargs = Object.keys(exposeprops);
+      } else{
+        reactComponent.props =  props;
+      }
+      if(!props.children) {
+      //  delete props.children;
+      }
+      const context = ${options.bind ? "Object.assign(self,this||{})" : "this"};
+      return getReactElementFromJSONX.call(context, reactComponent);
+    }
+  `);
+	    if (options.name) {
+	        Object.defineProperty(functionComponent, "name", {
+	            value: options.name
+	        });
+	    }
+	    return options.bind
+	        ? functionComponent.call(this, ...functionArgs)
+	        : functionComponent(...functionArgs);
+	}
+	/**
+	 *
+	 */
+	function getReactContext(options = {}) {
+	    return React.createContext(options.value);
+	}
+
+	var jsonxComponents = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		advancedBinding: advancedBinding,
+		componentMap: componentMap,
+		getBoundedComponents: getBoundedComponents,
+		getComponentFromLibrary: getComponentFromLibrary,
+		getComponentFromMap: getComponentFromMap,
+		getFunctionFromEval: getFunctionFromEval,
+		getReactClassComponent: getReactClassComponent,
+		FormComponent: FormComponent,
+		DynamicComponent: DynamicComponent,
+		getReactFunctionComponent: getReactFunctionComponent,
+		getReactContext: getReactContext
+	});
+
+	//https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically
+	const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
+	const ARGUMENT_NAMES = /([^\s,]+)/g;
+	/**
+	 * returns the names of parameters from a function declaration
+	 * @example
+	 * const arrowFunctionAdd = (a,b)=>a+b;
+	 * function regularFunctionAdd(c,d){return c+d;}
+	 * getParamNames(arrowFunctionAdd) // => ['a','b']
+	 * getParamNames(regularFunctionAdd) // => ['c','d']
+	 * @param {Function} func
+	 * @todo write tests
+	 */
+	function getParamNames(func) {
+	    var fnStr = func.toString().replace(STRIP_COMMENTS, "");
+	    var result = fnStr
+	        .slice(fnStr.indexOf("(") + 1, fnStr.indexOf(")"))
+	        .match(ARGUMENT_NAMES);
+	    if (result === null) {
+	        result = [];
+	    }
+	    return result;
+	}
+	/**
+	 * It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
+	 * @param {Object} [traverseObject={}] - the object that contains values of propName
+	 * @param {Object} options
+	 * @param {Object} options.jsonx - Valid JSONX JSON
+	 * @param {Object} [options.propName='asyncprops'] - Property on JSONX to resolve values onto, i.e (asyncprops,thisprops,windowprops)
+	 * @returns {Object} resolved object
+	 * @example
+	 const traverseObject = {
+	  user: {
+	    name: 'jsonx',
+	    description: 'react withouth javascript',
+	  },
+	  stats: {
+	    logins: 102,
+	    comments: 3,
+	  },
+	  authentication: 'OAuth2',
+	};
+	const testJSONX = {
+	  component: 'div',
+	  props: {
+	    id: 'generatedJSONX',
+	    className:'jsonx',
+	  },
+	  asyncprops:{
+	    auth: [ 'authentication', ],
+	    username: [ 'user', 'name', ],
+	  },
+	  children: [
+	    {
+	      component: 'p',
+	      props: {
+	        style: {
+	          color: 'red',
+	          fontWeight:'bold',
+	        },
+	      },
+	      children:'hello world',
+	    },
+	  ],
+	};
+	const JSONXP = getJSONXProps({ jsonx: testJSONX, traverseObject, });
+	// => {
+	//   auth: 'OAuth2',
+	//   username: 'jsonx'
+	// }
+
+	//finally resolves:
+	const testJSONX = {
+	  component: 'div',
+	  props: {
+	    id: 'generatedJSONX',
+	    className:'jsonx',
+	    auth: 'OAuth2',
+	    username: 'jsonx',
+	  },
+	  children: [
+	    {
+	      component: 'p',
+	      props: {
+	        style: {
+	          color: 'red',
+	          fontWeight:'bold',
+	        },
+	      },
+	      children:'hello world',
+	    },
+	  ],
+	};
+	 */
+	function getJSONXProps(options = {}) {
+	    // eslint-disable-next-line
+	    let { jsonx = {}, propName = "asyncprops", traverseObject = {} } = options;
+	    // return (jsonx.asyncprops && typeof jsonx.asyncprops === 'object')
+	    // ? utilities.traverse(jsonx.asyncprops, resources)
+	    // : {};
+	    return jsonx[propName] && typeof jsonx[propName] === "object"
+	        ? traverse(jsonx[propName], traverseObject)
+	        : {};
+	}
+	/**
+	 * returns children jsonx components defined on __spreadComponent spread over an array on props.__spread
+	 * @param {*} options
+	 */
+	function getChildrenComponents(options = {}) {
+	    const { allProps = {}, jsonx = {} } = options;
+	    // const asyncprops = getJSONXProps({ jsonx, propName: 'spreadprops', traverseObject: allProps, });
+	    if (Array.isArray(allProps.__spread) === false) {
+	        if ((this && this.debug) || jsonx.debug) {
+	            return {
+	                children: new Error("Using __spreadComponent requires an array prop '__spread'").toString()
+	            };
+	        }
+	        else {
+	            return { children: undefined };
+	        }
+	    }
+	    else {
+	        return {
+	            _children: allProps.__spread.map((__item) => {
+	                const clonedChild = Object.assign({}, jsonx.__spreadComponent);
+	                const clonedChildProps = Object.assign({}, clonedChild.props);
+	                clonedChildProps.__item = __item;
+	                clonedChild.props = clonedChildProps;
+	                return clonedChild;
+	            })
+	        };
+	    }
+	}
+	function boundArgsReducer(jsonx = {}) {
+	    return (args, arg) => {
+	        let val;
+	        if (this && this.state && typeof this.state[arg] !== "undefined")
+	            val = this.state[arg];
+	        else if (this && this.props && typeof this.props[arg] !== "undefined")
+	            val = this.props[arg];
+	        else if (jsonx.props && typeof jsonx.props[arg] !== "undefined")
+	            val = jsonx.props[arg];
+	        if (typeof val !== "undefined")
+	            args.push(val);
+	        return args.filter((a) => typeof a !== "undefined");
+	    };
+	}
+	/**
+	 * Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
+	 * @param {Object} options
+	 * @param {Object} options.jsonx - Valid JSONX JSON
+	 * @returns {Object} returns resolved object with evaluated javascript
+	 * @example
+	 const testVals = {
+	    auth: 'true',
+	    username: '(user={})=>user.name',
+	  };
+	  const testJSONX = Object.assign({}, sampleJSONX, {
+	    __dangerouslyEvalProps: testVals, __dangerouslyBindEvalProps: {
+	      email: '(function getUser(user={}){ return this.testBound(); })',
+	    },
+	  });
+	  const JSONXP = getEvalProps.call({ testBound: () => 'bounded', }, { jsonx: testJSONX, });
+	  const evalutedComputedFunc = JSONXP.username({ name: 'bob', });
+	  const evalutedComputedBoundFunc = JSONXP.email({ email:'test@email.domain', });
+	  // expect(JSONXP.auth).to.be.true;
+	  // expect(evalutedComputedFunc).to.eql('bob');
+	  // expect(evalutedComputedBoundFunc).to.eql('bounded');
+	 */
+	function getEvalProps(options = { jsonx: {} }) {
+	    const { jsonx } = options;
+	    const scopedEval = eval; //https://github.com/rollup/rollup/wiki/Troubleshooting#avoiding-eval
+	    let evAllProps = {};
+	    if (jsonx.__dangerouslyEvalAllProps) {
+	        let evVal;
+	        try {
+	            // eslint-disable-next-line
+	            evVal =
+	                typeof evVal === "function"
+	                    ? jsonx.__dangerouslyEvalAllProps
+	                    : scopedEval(jsonx.__dangerouslyEvalAllProps);
+	        }
+	        catch (e) {
+	            if (this.debug || jsonx.debug)
+	                evVal = e;
+	        }
+	        evAllProps = evVal.call(this, { jsonx });
+	    }
+	    const evProps = Object.keys(jsonx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
+	        let evVal;
+	        let evValString;
+	        try {
+	            // eslint-disable-next-line
+	            //@ts-ignore
+	            evVal = scopedEval(jsonx.__dangerouslyEvalProps[epropName]);
+	            evValString = evVal.toString();
+	        }
+	        catch (e) {
+	            if (this.debug || jsonx.debug)
+	                evVal = e;
+	        }
+	        //@ts-ignore
+	        eprops[epropName] =
+	            typeof evVal === "function" ? evVal.call(this, { jsonx }) : evVal;
+	        //@ts-ignore
+	        if (this.exposeEval)
+	            eprops[`__eval_${epropName}`] = evValString;
+	        return eprops;
+	    }, {});
+	    const evBindProps = Object.keys(jsonx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
+	        let evVal;
+	        let evValString;
+	        try {
+	            let args;
+	            //@ts-ignore
+	            const functionBody = jsonx.__dangerouslyBindEvalProps[epropName];
+	            // InlineFunction = Function.prototype.constructor.apply({}, args);
+	            let functionDefinition;
+	            if (typeof functionBody === "function") {
+	                functionDefinition = functionBody;
+	            }
+	            else if (jsonx.__dangerouslyBindEvalProps) {
+	                functionDefinition = scopedEval(jsonx.__dangerouslyBindEvalProps[epropName]);
+	                evValString = functionDefinition.toString();
+	            } // eslint-disable-next-line
+	            if (jsonx.__functionargs && jsonx.__functionargs[epropName]) {
+	                args = [this].concat(jsonx.__functionargs[epropName].reduce(boundArgsReducer.call(this, jsonx), []));
+	            }
+	            else if (jsonx.__functionparams === false) {
+	                args = [this];
+	            }
+	            else {
+	                const functionDefArgs = getParamNames(functionDefinition);
+	                args = [this].concat(functionDefArgs.reduce(boundArgsReducer.call(this, jsonx), []));
+	            }
+	            // eslint-disable-next-line
+	            evVal = functionDefinition.bind(...args);
+	        }
+	        catch (e) {
+	            if (this.debug || jsonx.debug)
+	                evVal = e;
+	        }
+	        // eslint-disable-next-line
+	        //@ts-ignore
+	        eprops[epropName] = evVal;
+	        //@ts-ignore
+	        if (this.exposeEval)
+	            eprops[`__eval_${epropName}`] = evValString;
+	        return eprops;
+	    }, {});
+	    return Object.assign({}, evProps, evBindProps, evAllProps);
+	}
+	/**
+	 * Resolves jsonx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+	 * @param {Object} options
+	 * @param {Object} options.jsonx - Valid JSONX JSON
+	 * @param {Object} [options.resources={}] - object to use for resourceprops(asyncprops), usually a result of an asynchronous call
+	 * @returns {Object} resolved object of React Components
+	 */
+	function getComponentProps(options = { jsonx: {} }) {
+	    const { jsonx, resources } = options;
+	    //@ts-ignore
+	    return Object.keys(jsonx.__dangerouslyInsertComponents).reduce((cprops, cpropName) => {
+	        let componentVal;
+	        try {
+	            // eslint-disable-next-line
+	            if (jsonx.__dangerouslyInsertComponents) {
+	                componentVal = getRenderedJSON.call(this, jsonx.__dangerouslyInsertComponents[cpropName], resources);
+	            }
+	        }
+	        catch (e) {
+	            if (this.debug || jsonx.debug)
+	                componentVal = e;
+	        }
+	        cprops[cpropName] = componentVal;
+	        return cprops;
+	    }, {});
+	}
+	/**
+	 * Used to create components from jsonx as props
+	 * @param this
+	 * @param options
+	 */
+	function getReactComponents(options) {
+	    const { jsonx, resources } = options;
+	    const functionComponents = !jsonx.__dangerouslyInsertFunctionComponents
+	        ? {}
+	        : Object.keys(jsonx.__dangerouslyInsertFunctionComponents).reduce((cprops, cpropName) => {
+	            let componentVal;
+	            try {
+	                const args = jsonx.__dangerouslyInsertFunctionComponents && jsonx.__dangerouslyInsertFunctionComponents[cpropName];
+	                if (args) {
+	                    args.options = Object.assign({}, args.options, { resources });
+	                    // eslint-disable-next-line
+	                    componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+	                }
+	            }
+	            catch (e) {
+	                if (this.debug || jsonx.debug)
+	                    componentVal = e;
+	            }
+	            cprops[cpropName] =
+	                cpropName === "_children" ? [componentVal] : componentVal;
+	            return cprops;
+	        }, {});
+	    const classComponents = !jsonx.__dangerouslyInsertClassComponents
+	        ? {}
+	        : Object.keys(jsonx.__dangerouslyInsertClassComponents).reduce((cprops, cpropName) => {
+	            let componentVal;
+	            try {
+	                const args = jsonx.__dangerouslyInsertClassComponents && jsonx.__dangerouslyInsertClassComponents[cpropName];
+	                if (args) {
+	                    args.options = Object.assign({}, args.options, { resources });
+	                    // eslint-disable-next-line
+	                    componentVal = getReactClassComponent.call(this, args.reactComponent, args.options);
+	                }
+	            }
+	            catch (e) {
+	                if (this.debug || jsonx.debug)
+	                    componentVal = e;
+	            }
+	            cprops[cpropName] =
+	                cpropName === "_children" ? [componentVal] : componentVal;
+	            return cprops;
+	        }, {});
+	    return Object.assign({}, functionComponents, classComponents);
+	}
+	/**
+	 * Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
+	 * @param {Object} options
+	 * @param {Object} options.jsonx - Valid JSONX JSON
+	//  * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
+	 * @returns {Object} resolved object of React Components
+	 */
+	function getReactComponentProps(options = { jsonx: {} }) {
+	    const { jsonx } = options;
+	    const customComponents = this && this.reactComponents ? this.reactComponents : {};
+	    const customLibraries = this && this.componentLibraries ? this.componentLibraries : {};
+	    if (jsonx.__dangerouslyInsertJSONXComponents &&
+	        Object.keys(jsonx.__dangerouslyInsertJSONXComponents).length) {
+	        return Object.keys(jsonx.__dangerouslyInsertJSONXComponents).reduce((cprops, cpropName) => {
+	            let componentVal;
+	            try {
+	                componentVal = getComponentFromMap({
+	                    jsonx: jsonx.__dangerouslyInsertJSONXComponents && jsonx.__dangerouslyInsertJSONXComponents[cpropName],
+	                    reactComponents: customComponents,
+	                    componentLibraries: customLibraries
+	                });
+	            }
+	            catch (e) {
+	                if (this.debug || jsonx.debug)
+	                    componentVal = e;
+	            }
+	            // eslint-disable-next-line
+	            cprops[cpropName] = componentVal;
+	            return cprops;
+	        }, {});
+	    }
+	    else if (jsonx.__dangerouslyInsertReactComponents && Object.keys(jsonx.__dangerouslyInsertReactComponents).length) {
+	        return Object.keys(jsonx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) => {
+	            let componentVal;
+	            try {
+	                componentVal = getComponentFromMap({
+	                    jsonx: {
+	                        component: jsonx.__dangerouslyInsertReactComponents && jsonx.__dangerouslyInsertReactComponents[cpropName],
+	                        props: jsonx.__dangerouslyInsertComponentProps
+	                            ? jsonx.__dangerouslyInsertComponentProps[cpropName]
+	                            : {}
+	                    },
+	                    reactComponents: customComponents,
+	                    componentLibraries: customLibraries
+	                });
+	            }
+	            catch (e) {
+	                if (this.debug || jsonx.debug)
+	                    componentVal = e;
+	            }
+	            // eslint-disable-next-line
+	            cprops[cpropName] = componentVal;
+	            return cprops;
+	        }, {});
+	    }
+	}
+	/**
+	 * Takes a function string and returns a function on either this.props or window. The function can only be 2 levels deep
+	 * @param {Object} options
+	 * @param {String} [options.propFunc='func:'] - function string, like func:window.LocalStorage.getItem or func:this.props.onClick  or func:inline.myInlineFunction
+	 * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, resourceprops, asyncprops, windowprops, evalProps, insertedComponents);
+	 * @returns {Function} returns a function from this.props or window functions
+	 * @example
+	 * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
+	 */
+	function getFunctionFromProps(options = { jsonx: {}, propBody: "" }) {
+	    const { propFunc = "func:", propBody, jsonx, functionProperty = "" } = options;
+	    // eslint-disable-next-line
+	    const { logError = console.error, debug } = this;
+	    let windowObject = {};
+	    if (this.window)
+	        windowObject = this.window;
+	    //@ts-ignore
+	    else if (typeof global !== "undefined" && (typeof global !== "undefined" ? global : window).window)
+	        windowObject = (typeof global !== "undefined" ? global : window).window;
+	    try {
+	        const functionNameString = propFunc.split(":")[1] || "";
+	        const functionNameArray = functionNameString.split(".");
+	        const functionName = functionNameArray.length
+	            ? functionNameArray[functionNameArray.length - 1]
+	            : "";
+	        if (propFunc.includes("func:inline")) {
+	            // eslint-disable-next-line
+	            let InlineFunction;
+	            if (jsonx.__functionargs) {
+	                const args = [].concat(jsonx.__functionargs[functionProperty]);
+	                args.push(propBody);
+	                InlineFunction = Function.prototype.constructor.apply({}, args);
+	            }
+	            else {
+	                InlineFunction = Function("param1", "param2", '"use strict";' + propBody);
+	            }
+	            const [propFuncName, funcName] = propFunc.split(".");
+	            Object.defineProperty(InlineFunction, "name", {
+	                value: funcName
+	            });
+	            if (jsonx.__functionargs) {
+	                const boundArgs = [this].concat(jsonx.__functionargs[functionProperty].map((arg) => jsonx.props[arg]));
+	                return InlineFunction.bind(...boundArgs);
+	            }
+	            else {
+	                return InlineFunction.bind(this);
+	            }
+	        }
+	        else if (propFunc.indexOf("func:window") !== -1) {
+	            if (functionNameArray.length === 3) {
+	                try {
+	                    return windowObject[functionNameArray[1]][functionName].bind(this);
+	                }
+	                catch (e) {
+	                    if (debug) {
+	                        logError(e);
+	                    }
+	                    return windowObject[functionNameArray[1]][functionName];
+	                }
+	            }
+	            else {
+	                try {
+	                    return windowObject[functionName].bind(this);
+	                }
+	                catch (e) {
+	                    if (debug) {
+	                        logError(e);
+	                    }
+	                    return windowObject[functionName];
+	                }
+	            }
+	        }
+	        else if (functionNameArray.length === 4) {
+	            return this.props
+	                ? this.props[functionNameArray[2]][functionName]
+	                : jsonx.props[functionNameArray[2]][functionName];
+	        }
+	        else if (functionNameArray.length === 3) {
+	            return this.props
+	                ? this.props[functionName].bind(this)
+	                : jsonx.props[functionName].bind(this);
+	        }
+	        else {
+	            return function () { };
+	        }
+	    }
+	    catch (e) {
+	        if (this.debug) {
+	            logError(e);
+	            if (jsonx && jsonx.debug)
+	                return e;
+	        }
+	        return function () { };
+	    }
+	}
+	/**
+	 * Returns a resolved object from function strings that has functions pulled from jsonx.__functionProps
+	 * @param {Object} options
+	 * @param {Object} options.jsonx - Valid JSONX JSON
+	 * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents);
+	 * @returns {Object} resolved object of functions from function strings
+	 */
+	function getFunctionProps(options = { jsonx: {} }) {
+	    const { allProps = {}, jsonx = {} } = options;
+	    const getFunction = getFunctionFromProps.bind(this);
+	    const funcProps = jsonx.__functionProps;
+	    //Allowing for window functions
+	    if (funcProps) {
+	        Object.keys(funcProps).forEach(key => {
+	            if (typeof funcProps[key] === "string" &&
+	                funcProps[key].indexOf("func:") !== -1) {
+	                allProps[key] = getFunction({
+	                    propFunc: funcProps[key],
+	                    propBody: jsonx.__inline ? jsonx.__inline[key] : "",
+	                    jsonx,
+	                    functionProperty: key
+	                });
+	            }
+	        });
+	    }
+	    return allProps;
+	}
+	/**
+	 * Returns a resolved object that has React Components pulled from window.__jsonx_custom_elements
+	 * @param {Object} options
+	 * @param {Object} options.jsonx - Valid JSONX JSON
+	 * @param {Object} [options.allProps={}] - merged computed props, Object.assign({ key: renderIndex, }, thisprops, jsonx.props, asyncprops, windowprops, evalProps, insertedComponents);
+	 * @returns {Object} resolved object of with React Components from a window property window.__jsonx_custom_elements
+	 */
+	function getWindowComponents(options = { jsonx: {} }) {
+	    const { allProps, jsonx } = options;
+	    const windowComponents = jsonx.__windowComponents;
+	    //@ts-ignore
+	    const window = this.window || (typeof global !== "undefined" ? global : window).window || {};
+	    const windowFuncPrefix = "func:window.__jsonx_custom_elements";
+	    // if (jsonx.hasWindowComponent && window.__jsonx_custom_elements) {
+	    Object.keys(windowComponents).forEach(key => {
+	        const windowKEY = typeof windowComponents[key] === "string"
+	            ? windowComponents[key].replace(`${windowFuncPrefix}.`, "")
+	            : "";
+	        if (typeof windowComponents[key] === "string" &&
+	            windowComponents[key].indexOf(windowFuncPrefix) !== -1 &&
+	            typeof window.__jsonx_custom_elements[windowKEY] === "function") {
+	            const windowComponentElement = window.__jsonx_custom_elements[windowKEY];
+	            const windowComponentProps = allProps["__windowComponentProps"]
+	                ? allProps["__windowComponentProps"]
+	                : this.props;
+	            allProps[key] = React__default.createElement(windowComponentElement, windowComponentProps, null);
+	        }
+	    });
+	    return allProps;
+	}
+	/**
+	 * Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty
+	 * @param {Object} options
+	 * @param {Object} options.jsonx - Valid JSONX JSON
+	 * @param {Object} [options.resources={}] - object to use for asyncprops, usually a result of an asynchronous call
+	 * @param {Number} options.renderIndex - number used for React key prop
+	 * @param {function} [options.logError=console.error] - error logging function
+	 * @param {Object} [options.componentLibraries] - react components to render with JSONX
+	 * @param {Boolean} [options.useReduxState=true] - use redux props in this.props
+	 * @param {Boolean} [options.ignoreReduxPropsInComponentLibraries=true] - ignore redux props in this.props for component libraries, this is helpful incase these properties collide with component library element properties
+	 * @param {boolean} [options.debug=false] - use debug messages
+	 * @example
+	const testJSONX = { component: 'div',
+	  props: { id: 'generatedJSONX', className: 'jsonx' },
+	  children: [ [Object] ],
+	  asyncprops: { auth: [Array], username: [Array] },
+	  __dangerouslyEvalProps: { getUsername: '(user={})=>user.name' },
+	  __dangerouslyInsertComponents: { myComponent: [Object] }
+	const resources = {
+	  user: {
+	    name: 'jsonx',
+	    description: 'react withouth javascript',
+	  },
+	  stats: {
+	    logins: 102,
+	    comments: 3,
+	  },
+	  authentication: 'OAuth2',
+	};
+	const renderIndex = 1;
+	getComputedProps.call({}, {
+	        jsonx: testJSONX,
+	        resources,
+	        renderIndex,
+	      });
+	computedProps = { key: 1,
+	     id: 'generatedJSONX',
+	     className: 'jsonx',
+	     auth: 'OAuth2',
+	     username: 'jsonx',
+	     getUsername: [Function],
+	     myComponent:
+	      { '$$typeof': Symbol(react.element),
+	        type: 'p',
+	        key: '8',
+	        ref: null,
+	        props: [Object],
+	        _owner: null,
+	        _store: {} } } }
+	 *
+	 */
+	function getComputedProps(options = {}) {
+	    // eslint-disable-next-line
+	    const { jsonx = {}, resources = {}, renderIndex, logError = console.error, useReduxState = true, ignoreReduxPropsInComponentLibraries = true, disableRenderIndexKey = true, debug, componentLibraries = {} } = options;
+	    try {
+	        const componentThisProp = jsonx.thisprops
+	            ? Object.assign({
+	                __jsonx: {
+	                    _component: jsonx,
+	                    _resources: resources
+	                }
+	            }, this.props, jsonx.props, 
+	            //@ts-ignore
+	            useReduxState &&
+	                !jsonx.ignoreReduxProps &&
+	                ignoreReduxPropsInComponentLibraries &&
+	                jsonx.component &&
+	                !componentLibraries[jsonx.component]
+	                ? this.props && this.props.getState
+	                    ? this.props.getState()
+	                    : {}
+	                : {})
+	            : undefined;
+	        const windowTraverse = typeof window !== "undefined" ? window : {};
+	        const asyncprops = jsonx.asyncprops
+	            ? getJSONXProps({
+	                jsonx,
+	                propName: "asyncprops",
+	                traverseObject: resources
+	            })
+	            : {};
+	        const resourceprops = jsonx.resourceprops
+	            ? getJSONXProps({
+	                jsonx,
+	                propName: "resourceprops",
+	                traverseObject: resources
+	            })
+	            : {};
+	        const windowprops = jsonx.windowprops
+	            ? getJSONXProps({
+	                jsonx,
+	                propName: "windowprops",
+	                traverseObject: windowTraverse
+	            })
+	            : {};
+	        const thisprops = jsonx.thisprops
+	            ? getJSONXProps({
+	                jsonx,
+	                propName: "thisprops",
+	                traverseObject: componentThisProp
+	            })
+	            : {};
+	        const thisstate = jsonx.thisstate
+	            ? getJSONXProps({
+	                jsonx,
+	                propName: "thisstate",
+	                traverseObject: this.state
+	            })
+	            : {};
+	        const thiscontext = jsonx.thiscontext
+	            ? getJSONXProps({
+	                jsonx,
+	                propName: "thiscontext",
+	                traverseObject: this || {}
+	            })
+	            : {};
+	        //allowing javascript injections
+	        const evalProps = jsonx.__dangerouslyEvalProps || jsonx.__dangerouslyBindEvalProps
+	            ? getEvalProps.call(this, { jsonx })
+	            : {};
+	        const insertedComponents = jsonx.__dangerouslyInsertComponents
+	            ? getComponentProps.call(this, { jsonx, resources, debug })
+	            : {};
+	        const insertedReactComponents = jsonx.__dangerouslyInsertReactComponents ||
+	            jsonx.__dangerouslyInsertJSONXComponents
+	            ? getReactComponentProps.call(this, { jsonx, debug })
+	            : {};
+	        const insertedComputedComponents = jsonx.__dangerouslyInsertFunctionComponents ||
+	            jsonx.__dangerouslyInsertClassComponents
+	            ? getReactComponents.call(this, { jsonx, debug })
+	            : {};
+	        const evalAllProps = jsonx.__dangerouslyEvalAllProps
+	            ? getEvalProps.call(this, { jsonx })
+	            : {};
+	        const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey
+	            ? {}
+	            : { key: renderIndex }, jsonx.props, thisprops, thisstate, thiscontext, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents, insertedComputedComponents);
+	        const computedProps = Object.assign({}, allProps, jsonx.__functionProps
+	            ? getFunctionProps.call(this, { allProps, jsonx })
+	            : {}, jsonx.__windowComponents
+	            ? getWindowComponents.call(this, { allProps, jsonx })
+	            : {}, jsonx.__spreadComponent
+	            ? getChildrenComponents.call(this, { allProps, jsonx })
+	            : {}, evalAllProps);
+	        if (jsonx.debug)
+	            console.debug({ jsonx, computedProps });
+	        return computedProps;
+	    }
+	    catch (e) {
+	        debug && logError(e, e.stack ? e.stack : "no stack");
+	        return null;
+	    }
+	}
+
+	var jsonxProps = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		STRIP_COMMENTS: STRIP_COMMENTS,
+		ARGUMENT_NAMES: ARGUMENT_NAMES,
+		getParamNames: getParamNames,
+		getJSONXProps: getJSONXProps,
+		getChildrenComponents: getChildrenComponents,
+		boundArgsReducer: boundArgsReducer,
+		getEvalProps: getEvalProps,
+		getComponentProps: getComponentProps,
+		getReactComponents: getReactComponents,
+		getReactComponentProps: getReactComponentProps,
+		getFunctionFromProps: getFunctionFromProps,
+		getFunctionProps: getFunctionProps,
+		getWindowComponents: getWindowComponents,
+		getComputedProps: getComputedProps
+	});
+
+	var numeral = createCommonjsModule(function (module) {
+	/*! @preserve
+	 * numeral.js
+	 * version : 2.0.6
+	 * author : Adam Draper
+	 * license : MIT
+	 * http://adamwdraper.github.com/Numeral-js/
+	 */
+
+	(function (global, factory) {
+	    if ( module.exports) {
+	        module.exports = factory();
+	    } else {
+	        (typeof global!=="undefined" ? global : window).numeral = factory();
+	    }
+	}(commonjsGlobal, function () {
+	    /************************************
+	        Variables
+	    ************************************/
+
+	    var numeral,
+	        _,
+	        VERSION = '2.0.6',
+	        formats = {},
+	        locales = {},
+	        defaults = {
+	            currentLocale: 'en',
+	            zeroFormat: null,
+	            nullFormat: null,
+	            defaultFormat: '0,0',
+	            scalePercentBy100: true
+	        },
+	        options = {
+	            currentLocale: defaults.currentLocale,
+	            zeroFormat: defaults.zeroFormat,
+	            nullFormat: defaults.nullFormat,
+	            defaultFormat: defaults.defaultFormat,
+	            scalePercentBy100: defaults.scalePercentBy100
+	        };
+
+
+	    /************************************
+	        Constructors
+	    ************************************/
+
+	    // Numeral prototype object
+	    function Numeral(input, number) {
+	        this._input = input;
+
+	        this._value = number;
+	    }
+
+	    numeral = function(input) {
+	        var value,
+	            kind,
+	            unformatFunction,
+	            regexp;
+
+	        if (numeral.isNumeral(input)) {
+	            value = input.value();
+	        } else if (input === 0 || typeof input === 'undefined') {
+	            value = 0;
+	        } else if (input === null || _.isNaN(input)) {
+	            value = null;
+	        } else if (typeof input === 'string') {
+	            if (options.zeroFormat && input === options.zeroFormat) {
+	                value = 0;
+	            } else if (options.nullFormat && input === options.nullFormat || !input.replace(/[^0-9]+/g, '').length) {
+	                value = null;
+	            } else {
+	                for (kind in formats) {
+	                    regexp = typeof formats[kind].regexps.unformat === 'function' ? formats[kind].regexps.unformat() : formats[kind].regexps.unformat;
+
+	                    if (regexp && input.match(regexp)) {
+	                        unformatFunction = formats[kind].unformat;
+
+	                        break;
+	                    }
+	                }
+
+	                unformatFunction = unformatFunction || numeral._.stringToNumber;
+
+	                value = unformatFunction(input);
+	            }
+	        } else {
+	            value = Number(input)|| null;
+	        }
+
+	        return new Numeral(input, value);
+	    };
+
+	    // version number
+	    numeral.version = VERSION;
+
+	    // compare numeral object
+	    numeral.isNumeral = function(obj) {
+	        return obj instanceof Numeral;
+	    };
+
+	    // helper functions
+	    numeral._ = _ = {
+	        // formats numbers separators, decimals places, signs, abbreviations
+	        numberToFormat: function(value, format, roundingFunction) {
+	            var locale = locales[numeral.options.currentLocale],
+	                negP = false,
+	                optDec = false,
+	                leadingCount = 0,
+	                abbr = '',
+	                trillion = 1000000000000,
+	                billion = 1000000000,
+	                million = 1000000,
+	                thousand = 1000,
+	                decimal = '',
+	                neg = false,
+	                abbrForce, // force abbreviation
+	                abs,
+	                int,
+	                precision,
+	                signed,
+	                thousands,
+	                output;
+
+	            // make sure we never format a null value
+	            value = value || 0;
+
+	            abs = Math.abs(value);
+
+	            // see if we should use parentheses for negative number or if we should prefix with a sign
+	            // if both are present we default to parentheses
+	            if (numeral._.includes(format, '(')) {
+	                negP = true;
+	                format = format.replace(/[\(|\)]/g, '');
+	            } else if (numeral._.includes(format, '+') || numeral._.includes(format, '-')) {
+	                signed = numeral._.includes(format, '+') ? format.indexOf('+') : value < 0 ? format.indexOf('-') : -1;
+	                format = format.replace(/[\+|\-]/g, '');
+	            }
+
+	            // see if abbreviation is wanted
+	            if (numeral._.includes(format, 'a')) {
+	                abbrForce = format.match(/a(k|m|b|t)?/);
+
+	                abbrForce = abbrForce ? abbrForce[1] : false;
+
+	                // check for space before abbreviation
+	                if (numeral._.includes(format, ' a')) {
+	                    abbr = ' ';
+	                }
+
+	                format = format.replace(new RegExp(abbr + 'a[kmbt]?'), '');
+
+	                if (abs >= trillion && !abbrForce || abbrForce === 't') {
+	                    // trillion
+	                    abbr += locale.abbreviations.trillion;
+	                    value = value / trillion;
+	                } else if (abs < trillion && abs >= billion && !abbrForce || abbrForce === 'b') {
+	                    // billion
+	                    abbr += locale.abbreviations.billion;
+	                    value = value / billion;
+	                } else if (abs < billion && abs >= million && !abbrForce || abbrForce === 'm') {
+	                    // million
+	                    abbr += locale.abbreviations.million;
+	                    value = value / million;
+	                } else if (abs < million && abs >= thousand && !abbrForce || abbrForce === 'k') {
+	                    // thousand
+	                    abbr += locale.abbreviations.thousand;
+	                    value = value / thousand;
+	                }
+	            }
+
+	            // check for optional decimals
+	            if (numeral._.includes(format, '[.]')) {
+	                optDec = true;
+	                format = format.replace('[.]', '.');
+	            }
+
+	            // break number and format
+	            int = value.toString().split('.')[0];
+	            precision = format.split('.')[1];
+	            thousands = format.indexOf(',');
+	            leadingCount = (format.split('.')[0].split(',')[0].match(/0/g) || []).length;
+
+	            if (precision) {
+	                if (numeral._.includes(precision, '[')) {
+	                    precision = precision.replace(']', '');
+	                    precision = precision.split('[');
+	                    decimal = numeral._.toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
+	                } else {
+	                    decimal = numeral._.toFixed(value, precision.length, roundingFunction);
+	                }
+
+	                int = decimal.split('.')[0];
+
+	                if (numeral._.includes(decimal, '.')) {
+	                    decimal = locale.delimiters.decimal + decimal.split('.')[1];
+	                } else {
+	                    decimal = '';
+	                }
+
+	                if (optDec && Number(decimal.slice(1)) === 0) {
+	                    decimal = '';
+	                }
+	            } else {
+	                int = numeral._.toFixed(value, 0, roundingFunction);
+	            }
+
+	            // check abbreviation again after rounding
+	            if (abbr && !abbrForce && Number(int) >= 1000 && abbr !== locale.abbreviations.trillion) {
+	                int = String(Number(int) / 1000);
+
+	                switch (abbr) {
+	                    case locale.abbreviations.thousand:
+	                        abbr = locale.abbreviations.million;
+	                        break;
+	                    case locale.abbreviations.million:
+	                        abbr = locale.abbreviations.billion;
+	                        break;
+	                    case locale.abbreviations.billion:
+	                        abbr = locale.abbreviations.trillion;
+	                        break;
+	                }
+	            }
+
+
+	            // format number
+	            if (numeral._.includes(int, '-')) {
+	                int = int.slice(1);
+	                neg = true;
+	            }
+
+	            if (int.length < leadingCount) {
+	                for (var i = leadingCount - int.length; i > 0; i--) {
+	                    int = '0' + int;
+	                }
+	            }
+
+	            if (thousands > -1) {
+	                int = int.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + locale.delimiters.thousands);
+	            }
+
+	            if (format.indexOf('.') === 0) {
+	                int = '';
+	            }
+
+	            output = int + decimal + (abbr ? abbr : '');
+
+	            if (negP) {
+	                output = (negP && neg ? '(' : '') + output + (negP && neg ? ')' : '');
+	            } else {
+	                if (signed >= 0) {
+	                    output = signed === 0 ? (neg ? '-' : '+') + output : output + (neg ? '-' : '+');
+	                } else if (neg) {
+	                    output = '-' + output;
+	                }
+	            }
+
+	            return output;
+	        },
+	        // unformats numbers separators, decimals places, signs, abbreviations
+	        stringToNumber: function(string) {
+	            var locale = locales[options.currentLocale],
+	                stringOriginal = string,
+	                abbreviations = {
+	                    thousand: 3,
+	                    million: 6,
+	                    billion: 9,
+	                    trillion: 12
+	                },
+	                abbreviation,
+	                value,
+	                regexp;
+
+	            if (options.zeroFormat && string === options.zeroFormat) {
+	                value = 0;
+	            } else if (options.nullFormat && string === options.nullFormat || !string.replace(/[^0-9]+/g, '').length) {
+	                value = null;
+	            } else {
+	                value = 1;
+
+	                if (locale.delimiters.decimal !== '.') {
+	                    string = string.replace(/\./g, '').replace(locale.delimiters.decimal, '.');
+	                }
+
+	                for (abbreviation in abbreviations) {
+	                    regexp = new RegExp('[^a-zA-Z]' + locale.abbreviations[abbreviation] + '(?:\\)|(\\' + locale.currency.symbol + ')?(?:\\))?)?$');
+
+	                    if (stringOriginal.match(regexp)) {
+	                        value *= Math.pow(10, abbreviations[abbreviation]);
+	                        break;
+	                    }
+	                }
+
+	                // check for negative number
+	                value *= (string.split('-').length + Math.min(string.split('(').length - 1, string.split(')').length - 1)) % 2 ? 1 : -1;
+
+	                // remove non numbers
+	                string = string.replace(/[^0-9\.]+/g, '');
+
+	                value *= Number(string);
+	            }
+
+	            return value;
+	        },
+	        isNaN: function(value) {
+	            return typeof value === 'number' && isNaN(value);
+	        },
+	        includes: function(string, search) {
+	            return string.indexOf(search) !== -1;
+	        },
+	        insert: function(string, subString, start) {
+	            return string.slice(0, start) + subString + string.slice(start);
+	        },
+	        reduce: function(array, callback /*, initialValue*/) {
+	            if (this === null) {
+	                throw new TypeError('Array.prototype.reduce called on null or undefined');
+	            }
+
+	            if (typeof callback !== 'function') {
+	                throw new TypeError(callback + ' is not a function');
+	            }
+
+	            var t = Object(array),
+	                len = t.length >>> 0,
+	                k = 0,
+	                value;
+
+	            if (arguments.length === 3) {
+	                value = arguments[2];
+	            } else {
+	                while (k < len && !(k in t)) {
+	                    k++;
+	                }
+
+	                if (k >= len) {
+	                    throw new TypeError('Reduce of empty array with no initial value');
+	                }
+
+	                value = t[k++];
+	            }
+	            for (; k < len; k++) {
+	                if (k in t) {
+	                    value = callback(value, t[k], k, t);
+	                }
+	            }
+	            return value;
+	        },
+	        /**
+	         * Computes the multiplier necessary to make x >= 1,
+	         * effectively eliminating miscalculations caused by
+	         * finite precision.
+	         */
+	        multiplier: function (x) {
+	            var parts = x.toString().split('.');
+
+	            return parts.length < 2 ? 1 : Math.pow(10, parts[1].length);
+	        },
+	        /**
+	         * Given a variable number of arguments, returns the maximum
+	         * multiplier that must be used to normalize an operation involving
+	         * all of them.
+	         */
+	        correctionFactor: function () {
+	            var args = Array.prototype.slice.call(arguments);
+
+	            return args.reduce(function(accum, next) {
+	                var mn = _.multiplier(next);
+	                return accum > mn ? accum : mn;
+	            }, 1);
+	        },
+	        /**
+	         * Implementation of toFixed() that treats floats more like decimals
+	         *
+	         * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
+	         * problems for accounting- and finance-related software.
+	         */
+	        toFixed: function(value, maxDecimals, roundingFunction, optionals) {
+	            var splitValue = value.toString().split('.'),
+	                minDecimals = maxDecimals - (optionals || 0),
+	                boundedPrecision,
+	                optionalsRegExp,
+	                power,
+	                output;
+
+	            // Use the smallest precision value possible to avoid errors from floating point representation
+	            if (splitValue.length === 2) {
+	              boundedPrecision = Math.min(Math.max(splitValue[1].length, minDecimals), maxDecimals);
+	            } else {
+	              boundedPrecision = minDecimals;
+	            }
+
+	            power = Math.pow(10, boundedPrecision);
+
+	            // Multiply up by precision, round accurately, then divide and use native toFixed():
+	            output = (roundingFunction(value + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
+
+	            if (optionals > maxDecimals - boundedPrecision) {
+	                optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
+	                output = output.replace(optionalsRegExp, '');
+	            }
+
+	            return output;
+	        }
+	    };
+
+	    // avaliable options
+	    numeral.options = options;
+
+	    // avaliable formats
+	    numeral.formats = formats;
+
+	    // avaliable formats
+	    numeral.locales = locales;
+
+	    // This function sets the current locale.  If
+	    // no arguments are passed in, it will simply return the current global
+	    // locale key.
+	    numeral.locale = function(key) {
+	        if (key) {
+	            options.currentLocale = key.toLowerCase();
+	        }
+
+	        return options.currentLocale;
+	    };
+
+	    // This function provides access to the loaded locale data.  If
+	    // no arguments are passed in, it will simply return the current
+	    // global locale object.
+	    numeral.localeData = function(key) {
+	        if (!key) {
+	            return locales[options.currentLocale];
+	        }
+
+	        key = key.toLowerCase();
+
+	        if (!locales[key]) {
+	            throw new Error('Unknown locale : ' + key);
+	        }
+
+	        return locales[key];
+	    };
+
+	    numeral.reset = function() {
+	        for (var property in defaults) {
+	            options[property] = defaults[property];
+	        }
+	    };
+
+	    numeral.zeroFormat = function(format) {
+	        options.zeroFormat = typeof(format) === 'string' ? format : null;
+	    };
+
+	    numeral.nullFormat = function (format) {
+	        options.nullFormat = typeof(format) === 'string' ? format : null;
+	    };
+
+	    numeral.defaultFormat = function(format) {
+	        options.defaultFormat = typeof(format) === 'string' ? format : '0.0';
+	    };
+
+	    numeral.register = function(type, name, format) {
+	        name = name.toLowerCase();
+
+	        if (this[type + 's'][name]) {
+	            throw new TypeError(name + ' ' + type + ' already registered.');
+	        }
+
+	        this[type + 's'][name] = format;
+
+	        return format;
+	    };
+
+
+	    numeral.validate = function(val, culture) {
+	        var _decimalSep,
+	            _thousandSep,
+	            _currSymbol,
+	            _valArray,
+	            _abbrObj,
+	            _thousandRegEx,
+	            localeData,
+	            temp;
+
+	        //coerce val to string
+	        if (typeof val !== 'string') {
+	            val += '';
+
+	            if (console.warn) {
+	                console.warn('Numeral.js: Value is not string. It has been co-erced to: ', val);
+	            }
+	        }
+
+	        //trim whitespaces from either sides
+	        val = val.trim();
+
+	        //if val is just digits return true
+	        if (!!val.match(/^\d+$/)) {
+	            return true;
+	        }
+
+	        //if val is empty return false
+	        if (val === '') {
+	            return false;
+	        }
+
+	        //get the decimal and thousands separator from numeral.localeData
+	        try {
+	            //check if the culture is understood by numeral. if not, default it to current locale
+	            localeData = numeral.localeData(culture);
+	        } catch (e) {
+	            localeData = numeral.localeData(numeral.locale());
+	        }
+
+	        //setup the delimiters and currency symbol based on culture/locale
+	        _currSymbol = localeData.currency.symbol;
+	        _abbrObj = localeData.abbreviations;
+	        _decimalSep = localeData.delimiters.decimal;
+	        if (localeData.delimiters.thousands === '.') {
+	            _thousandSep = '\\.';
+	        } else {
+	            _thousandSep = localeData.delimiters.thousands;
+	        }
+
+	        // validating currency symbol
+	        temp = val.match(/^[^\d]+/);
+	        if (temp !== null) {
+	            val = val.substr(1);
+	            if (temp[0] !== _currSymbol) {
+	                return false;
+	            }
+	        }
+
+	        //validating abbreviation symbol
+	        temp = val.match(/[^\d]+$/);
+	        if (temp !== null) {
+	            val = val.slice(0, -1);
+	            if (temp[0] !== _abbrObj.thousand && temp[0] !== _abbrObj.million && temp[0] !== _abbrObj.billion && temp[0] !== _abbrObj.trillion) {
+	                return false;
+	            }
+	        }
+
+	        _thousandRegEx = new RegExp(_thousandSep + '{2}');
+
+	        if (!val.match(/[^\d.,]/g)) {
+	            _valArray = val.split(_decimalSep);
+	            if (_valArray.length > 2) {
+	                return false;
+	            } else {
+	                if (_valArray.length < 2) {
+	                    return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx));
+	                } else {
+	                    if (_valArray[0].length === 1) {
+	                        return ( !! _valArray[0].match(/^\d+$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
+	                    } else {
+	                        return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
+	                    }
+	                }
+	            }
+	        }
+
+	        return false;
+	    };
+
+
+	    /************************************
+	        Numeral Prototype
+	    ************************************/
+
+	    numeral.fn = Numeral.prototype = {
+	        clone: function() {
+	            return numeral(this);
+	        },
+	        format: function(inputString, roundingFunction) {
+	            var value = this._value,
+	                format = inputString || options.defaultFormat,
+	                kind,
+	                output,
+	                formatFunction;
+
+	            // make sure we have a roundingFunction
+	            roundingFunction = roundingFunction || Math.round;
+
+	            // format based on value
+	            if (value === 0 && options.zeroFormat !== null) {
+	                output = options.zeroFormat;
+	            } else if (value === null && options.nullFormat !== null) {
+	                output = options.nullFormat;
+	            } else {
+	                for (kind in formats) {
+	                    if (format.match(formats[kind].regexps.format)) {
+	                        formatFunction = formats[kind].format;
+
+	                        break;
+	                    }
+	                }
+
+	                formatFunction = formatFunction || numeral._.numberToFormat;
+
+	                output = formatFunction(value, format, roundingFunction);
+	            }
+
+	            return output;
+	        },
+	        value: function() {
+	            return this._value;
+	        },
+	        input: function() {
+	            return this._input;
+	        },
+	        set: function(value) {
+	            this._value = Number(value);
+
+	            return this;
+	        },
+	        add: function(value) {
+	            var corrFactor = _.correctionFactor.call(null, this._value, value);
+
+	            function cback(accum, curr, currI, O) {
+	                return accum + Math.round(corrFactor * curr);
+	            }
+
+	            this._value = _.reduce([this._value, value], cback, 0) / corrFactor;
+
+	            return this;
+	        },
+	        subtract: function(value) {
+	            var corrFactor = _.correctionFactor.call(null, this._value, value);
+
+	            function cback(accum, curr, currI, O) {
+	                return accum - Math.round(corrFactor * curr);
+	            }
+
+	            this._value = _.reduce([value], cback, Math.round(this._value * corrFactor)) / corrFactor;
+
+	            return this;
+	        },
+	        multiply: function(value) {
+	            function cback(accum, curr, currI, O) {
+	                var corrFactor = _.correctionFactor(accum, curr);
+	                return Math.round(accum * corrFactor) * Math.round(curr * corrFactor) / Math.round(corrFactor * corrFactor);
+	            }
+
+	            this._value = _.reduce([this._value, value], cback, 1);
+
+	            return this;
+	        },
+	        divide: function(value) {
+	            function cback(accum, curr, currI, O) {
+	                var corrFactor = _.correctionFactor(accum, curr);
+	                return Math.round(accum * corrFactor) / Math.round(curr * corrFactor);
+	            }
+
+	            this._value = _.reduce([this._value, value], cback);
+
+	            return this;
+	        },
+	        difference: function(value) {
+	            return Math.abs(numeral(this._value).subtract(value).value());
+	        }
+	    };
+
+	    /************************************
+	        Default Locale && Format
+	    ************************************/
+
+	    numeral.register('locale', 'en', {
+	        delimiters: {
+	            thousands: ',',
+	            decimal: '.'
+	        },
+	        abbreviations: {
+	            thousand: 'k',
+	            million: 'm',
+	            billion: 'b',
+	            trillion: 't'
+	        },
+	        ordinal: function(number) {
+	            var b = number % 10;
+	            return (~~(number % 100 / 10) === 1) ? 'th' :
+	                (b === 1) ? 'st' :
+	                (b === 2) ? 'nd' :
+	                (b === 3) ? 'rd' : 'th';
+	        },
+	        currency: {
+	            symbol: '$'
+	        }
+	    });
+
+	    
+
+	(function() {
+	        numeral.register('format', 'bps', {
+	            regexps: {
+	                format: /(BPS)/,
+	                unformat: /(BPS)/
+	            },
+	            format: function(value, format, roundingFunction) {
+	                var space = numeral._.includes(format, ' BPS') ? ' ' : '',
+	                    output;
+
+	                value = value * 10000;
+
+	                // check for space before BPS
+	                format = format.replace(/\s?BPS/, '');
+
+	                output = numeral._.numberToFormat(value, format, roundingFunction);
+
+	                if (numeral._.includes(output, ')')) {
+	                    output = output.split('');
+
+	                    output.splice(-1, 0, space + 'BPS');
+
+	                    output = output.join('');
+	                } else {
+	                    output = output + space + 'BPS';
+	                }
+
+	                return output;
+	            },
+	            unformat: function(string) {
+	                return +(numeral._.stringToNumber(string) * 0.0001).toFixed(15);
+	            }
+	        });
+	})();
+
+
+	(function() {
+	        var decimal = {
+	            base: 1000,
+	            suffixes: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+	        },
+	        binary = {
+	            base: 1024,
+	            suffixes: ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+	        };
+
+	    var allSuffixes =  decimal.suffixes.concat(binary.suffixes.filter(function (item) {
+	            return decimal.suffixes.indexOf(item) < 0;
+	        }));
+	        var unformatRegex = allSuffixes.join('|');
+	        // Allow support for BPS (http://www.investopedia.com/terms/b/basispoint.asp)
+	        unformatRegex = '(' + unformatRegex.replace('B', 'B(?!PS)') + ')';
+
+	    numeral.register('format', 'bytes', {
+	        regexps: {
+	            format: /([0\s]i?b)/,
+	            unformat: new RegExp(unformatRegex)
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var output,
+	                bytes = numeral._.includes(format, 'ib') ? binary : decimal,
+	                suffix = numeral._.includes(format, ' b') || numeral._.includes(format, ' ib') ? ' ' : '',
+	                power,
+	                min,
+	                max;
+
+	            // check for space before
+	            format = format.replace(/\s?i?b/, '');
+
+	            for (power = 0; power <= bytes.suffixes.length; power++) {
+	                min = Math.pow(bytes.base, power);
+	                max = Math.pow(bytes.base, power + 1);
+
+	                if (value === null || value === 0 || value >= min && value < max) {
+	                    suffix += bytes.suffixes[power];
+
+	                    if (min > 0) {
+	                        value = value / min;
+	                    }
+
+	                    break;
+	                }
+	            }
+
+	            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+	            return output + suffix;
+	        },
+	        unformat: function(string) {
+	            var value = numeral._.stringToNumber(string),
+	                power,
+	                bytesMultiplier;
+
+	            if (value) {
+	                for (power = decimal.suffixes.length - 1; power >= 0; power--) {
+	                    if (numeral._.includes(string, decimal.suffixes[power])) {
+	                        bytesMultiplier = Math.pow(decimal.base, power);
+
+	                        break;
+	                    }
+
+	                    if (numeral._.includes(string, binary.suffixes[power])) {
+	                        bytesMultiplier = Math.pow(binary.base, power);
+
+	                        break;
+	                    }
+	                }
+
+	                value *= (bytesMultiplier || 1);
+	            }
+
+	            return value;
+	        }
+	    });
+	})();
+
+
+	(function() {
+	        numeral.register('format', 'currency', {
+	        regexps: {
+	            format: /(\$)/
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var locale = numeral.locales[numeral.options.currentLocale],
+	                symbols = {
+	                    before: format.match(/^([\+|\-|\(|\s|\$]*)/)[0],
+	                    after: format.match(/([\+|\-|\)|\s|\$]*)$/)[0]
+	                },
+	                output,
+	                symbol,
+	                i;
+
+	            // strip format of spaces and $
+	            format = format.replace(/\s?\$\s?/, '');
+
+	            // format the number
+	            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+	            // update the before and after based on value
+	            if (value >= 0) {
+	                symbols.before = symbols.before.replace(/[\-\(]/, '');
+	                symbols.after = symbols.after.replace(/[\-\)]/, '');
+	            } else if (value < 0 && (!numeral._.includes(symbols.before, '-') && !numeral._.includes(symbols.before, '('))) {
+	                symbols.before = '-' + symbols.before;
+	            }
+
+	            // loop through each before symbol
+	            for (i = 0; i < symbols.before.length; i++) {
+	                symbol = symbols.before[i];
+
+	                switch (symbol) {
+	                    case '$':
+	                        output = numeral._.insert(output, locale.currency.symbol, i);
+	                        break;
+	                    case ' ':
+	                        output = numeral._.insert(output, ' ', i + locale.currency.symbol.length - 1);
+	                        break;
+	                }
+	            }
+
+	            // loop through each after symbol
+	            for (i = symbols.after.length - 1; i >= 0; i--) {
+	                symbol = symbols.after[i];
+
+	                switch (symbol) {
+	                    case '$':
+	                        output = i === symbols.after.length - 1 ? output + locale.currency.symbol : numeral._.insert(output, locale.currency.symbol, -(symbols.after.length - (1 + i)));
+	                        break;
+	                    case ' ':
+	                        output = i === symbols.after.length - 1 ? output + ' ' : numeral._.insert(output, ' ', -(symbols.after.length - (1 + i) + locale.currency.symbol.length - 1));
+	                        break;
+	                }
+	            }
+
+
+	            return output;
+	        }
+	    });
+	})();
+
+
+	(function() {
+	        numeral.register('format', 'exponential', {
+	        regexps: {
+	            format: /(e\+|e-)/,
+	            unformat: /(e\+|e-)/
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var output,
+	                exponential = typeof value === 'number' && !numeral._.isNaN(value) ? value.toExponential() : '0e+0',
+	                parts = exponential.split('e');
+
+	            format = format.replace(/e[\+|\-]{1}0/, '');
+
+	            output = numeral._.numberToFormat(Number(parts[0]), format, roundingFunction);
+
+	            return output + 'e' + parts[1];
+	        },
+	        unformat: function(string) {
+	            var parts = numeral._.includes(string, 'e+') ? string.split('e+') : string.split('e-'),
+	                value = Number(parts[0]),
+	                power = Number(parts[1]);
+
+	            power = numeral._.includes(string, 'e-') ? power *= -1 : power;
+
+	            function cback(accum, curr, currI, O) {
+	                var corrFactor = numeral._.correctionFactor(accum, curr),
+	                    num = (accum * corrFactor) * (curr * corrFactor) / (corrFactor * corrFactor);
+	                return num;
+	            }
+
+	            return numeral._.reduce([value, Math.pow(10, power)], cback, 1);
+	        }
+	    });
+	})();
+
+
+	(function() {
+	        numeral.register('format', 'ordinal', {
+	        regexps: {
+	            format: /(o)/
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var locale = numeral.locales[numeral.options.currentLocale],
+	                output,
+	                ordinal = numeral._.includes(format, ' o') ? ' ' : '';
+
+	            // check for space before
+	            format = format.replace(/\s?o/, '');
+
+	            ordinal += locale.ordinal(value);
+
+	            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+	            return output + ordinal;
+	        }
+	    });
+	})();
+
+
+	(function() {
+	        numeral.register('format', 'percentage', {
+	        regexps: {
+	            format: /(%)/,
+	            unformat: /(%)/
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var space = numeral._.includes(format, ' %') ? ' ' : '',
+	                output;
+
+	            if (numeral.options.scalePercentBy100) {
+	                value = value * 100;
+	            }
+
+	            // check for space before %
+	            format = format.replace(/\s?\%/, '');
+
+	            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+	            if (numeral._.includes(output, ')')) {
+	                output = output.split('');
+
+	                output.splice(-1, 0, space + '%');
+
+	                output = output.join('');
+	            } else {
+	                output = output + space + '%';
+	            }
+
+	            return output;
+	        },
+	        unformat: function(string) {
+	            var number = numeral._.stringToNumber(string);
+	            if (numeral.options.scalePercentBy100) {
+	                return number * 0.01;
+	            }
+	            return number;
+	        }
+	    });
+	})();
+
+
+	(function() {
+	        numeral.register('format', 'time', {
+	        regexps: {
+	            format: /(:)/,
+	            unformat: /(:)/
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var hours = Math.floor(value / 60 / 60),
+	                minutes = Math.floor((value - (hours * 60 * 60)) / 60),
+	                seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
+
+	            return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
+	        },
+	        unformat: function(string) {
+	            var timeArray = string.split(':'),
+	                seconds = 0;
+
+	            // turn hours and minutes into seconds and add them all up
+	            if (timeArray.length === 3) {
+	                // hours
+	                seconds = seconds + (Number(timeArray[0]) * 60 * 60);
+	                // minutes
+	                seconds = seconds + (Number(timeArray[1]) * 60);
+	                // seconds
+	                seconds = seconds + Number(timeArray[2]);
+	            } else if (timeArray.length === 2) {
+	                // minutes
+	                seconds = seconds + (Number(timeArray[0]) * 60);
+	                // seconds
+	                seconds = seconds + Number(timeArray[1]);
+	            }
+	            return Number(seconds);
+	        }
+	    });
+	})();
+
+	return numeral;
+	}));
+	});
+
+	// these aren't really private, but nor are they really useful to document
+
+	/**
+	 * @private
+	 */
+	class LuxonError extends Error {}
+
+	/**
+	 * @private
+	 */
+	class InvalidDateTimeError extends LuxonError {
+	  constructor(reason) {
+	    super(`Invalid DateTime: ${reason.toMessage()}`);
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+	class InvalidIntervalError extends LuxonError {
+	  constructor(reason) {
+	    super(`Invalid Interval: ${reason.toMessage()}`);
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+	class InvalidDurationError extends LuxonError {
+	  constructor(reason) {
+	    super(`Invalid Duration: ${reason.toMessage()}`);
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+	class ConflictingSpecificationError extends LuxonError {}
+
+	/**
+	 * @private
+	 */
+	class InvalidUnitError extends LuxonError {
+	  constructor(unit) {
+	    super(`Invalid unit ${unit}`);
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+	class InvalidArgumentError extends LuxonError {}
+
+	/**
+	 * @private
+	 */
+	class ZoneIsAbstractError extends LuxonError {
+	  constructor() {
+	    super("Zone is an abstract class");
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+
+	const n = "numeric",
+	  s = "short",
+	  l = "long";
+
+	const DATE_SHORT = {
+	  year: n,
+	  month: n,
+	  day: n
+	};
+
+	const DATE_MED = {
+	  year: n,
+	  month: s,
+	  day: n
+	};
+
+	const DATE_FULL = {
+	  year: n,
+	  month: l,
+	  day: n
+	};
+
+	const DATE_HUGE = {
+	  year: n,
+	  month: l,
+	  day: n,
+	  weekday: l
+	};
+
+	const TIME_SIMPLE = {
+	  hour: n,
+	  minute: n
+	};
+
+	const TIME_WITH_SECONDS = {
+	  hour: n,
+	  minute: n,
+	  second: n
+	};
+
+	const TIME_WITH_SHORT_OFFSET = {
+	  hour: n,
+	  minute: n,
+	  second: n,
+	  timeZoneName: s
+	};
+
+	const TIME_WITH_LONG_OFFSET = {
+	  hour: n,
+	  minute: n,
+	  second: n,
+	  timeZoneName: l
+	};
+
+	const TIME_24_SIMPLE = {
+	  hour: n,
+	  minute: n,
+	  hour12: false
+	};
+
+	/**
+	 * {@link toLocaleString}; format like '09:30:23', always 24-hour.
+	 */
+	const TIME_24_WITH_SECONDS = {
+	  hour: n,
+	  minute: n,
+	  second: n,
+	  hour12: false
+	};
+
+	/**
+	 * {@link toLocaleString}; format like '09:30:23 EDT', always 24-hour.
+	 */
+	const TIME_24_WITH_SHORT_OFFSET = {
+	  hour: n,
+	  minute: n,
+	  second: n,
+	  hour12: false,
+	  timeZoneName: s
+	};
+
+	/**
+	 * {@link toLocaleString}; format like '09:30:23 Eastern Daylight Time', always 24-hour.
+	 */
+	const TIME_24_WITH_LONG_OFFSET = {
+	  hour: n,
+	  minute: n,
+	  second: n,
+	  hour12: false,
+	  timeZoneName: l
+	};
+
+	/**
+	 * {@link toLocaleString}; format like '10/14/1983, 9:30 AM'. Only 12-hour if the locale is.
+	 */
+	const DATETIME_SHORT = {
+	  year: n,
+	  month: n,
+	  day: n,
+	  hour: n,
+	  minute: n
+	};
+
+	/**
+	 * {@link toLocaleString}; format like '10/14/1983, 9:30:33 AM'. Only 12-hour if the locale is.
+	 */
+	const DATETIME_SHORT_WITH_SECONDS = {
+	  year: n,
+	  month: n,
+	  day: n,
+	  hour: n,
+	  minute: n,
+	  second: n
+	};
+
+	const DATETIME_MED = {
+	  year: n,
+	  month: s,
+	  day: n,
+	  hour: n,
+	  minute: n
+	};
+
+	const DATETIME_MED_WITH_SECONDS = {
+	  year: n,
+	  month: s,
+	  day: n,
+	  hour: n,
+	  minute: n,
+	  second: n
+	};
+
+	const DATETIME_MED_WITH_WEEKDAY = {
+	  year: n,
+	  month: s,
+	  day: n,
+	  weekday: s,
+	  hour: n,
+	  minute: n
+	};
+
+	const DATETIME_FULL = {
+	  year: n,
+	  month: l,
+	  day: n,
+	  hour: n,
+	  minute: n,
+	  timeZoneName: s
+	};
+
+	const DATETIME_FULL_WITH_SECONDS = {
+	  year: n,
+	  month: l,
+	  day: n,
+	  hour: n,
+	  minute: n,
+	  second: n,
+	  timeZoneName: s
+	};
+
+	const DATETIME_HUGE = {
+	  year: n,
+	  month: l,
+	  day: n,
+	  weekday: l,
+	  hour: n,
+	  minute: n,
+	  timeZoneName: l
+	};
+
+	const DATETIME_HUGE_WITH_SECONDS = {
+	  year: n,
+	  month: l,
+	  day: n,
+	  weekday: l,
+	  hour: n,
+	  minute: n,
+	  second: n,
+	  timeZoneName: l
+	};
+
+	/*
+	  This is just a junk drawer, containing anything used across multiple classes.
+	  Because Luxon is small(ish), this should stay small and we won't worry about splitting
+	  it up into, say, parsingUtil.js and basicUtil.js and so on. But they are divided up by feature area.
+	*/
+
+	/**
+	 * @private
+	 */
+
+	// TYPES
+
+	function isUndefined$2(o) {
+	  return typeof o === "undefined";
+	}
+
+	function isNumber$1(o) {
+	  return typeof o === "number";
+	}
+
+	function isInteger(o) {
+	  return typeof o === "number" && o % 1 === 0;
+	}
+
+	function isString$2(o) {
+	  return typeof o === "string";
+	}
+
+	function isDate$1(o) {
+	  return Object.prototype.toString.call(o) === "[object Date]";
+	}
+
+	// CAPABILITIES
+
+	function hasIntl() {
+	  try {
+	    return typeof Intl !== "undefined" && Intl.DateTimeFormat;
+	  } catch (e) {
+	    return false;
+	  }
+	}
+
+	function hasFormatToParts() {
+	  return !isUndefined$2(Intl.DateTimeFormat.prototype.formatToParts);
+	}
+
+	function hasRelative() {
+	  try {
+	    return typeof Intl !== "undefined" && !!Intl.RelativeTimeFormat;
+	  } catch (e) {
+	    return false;
+	  }
+	}
+
+	// OBJECTS AND ARRAYS
+
+	function maybeArray(thing) {
+	  return Array.isArray(thing) ? thing : [thing];
+	}
+
+	function bestBy(arr, by, compare) {
+	  if (arr.length === 0) {
+	    return undefined;
+	  }
+	  return arr.reduce((best, next) => {
+	    const pair = [by(next), next];
+	    if (!best) {
+	      return pair;
+	    } else if (compare(best[0], pair[0]) === best[0]) {
+	      return best;
+	    } else {
+	      return pair;
+	    }
+	  }, null)[1];
+	}
+
+	function pick(obj, keys) {
+	  return keys.reduce((a, k) => {
+	    a[k] = obj[k];
+	    return a;
+	  }, {});
+	}
+
+	function hasOwnProperty$2(obj, prop) {
+	  return Object.prototype.hasOwnProperty.call(obj, prop);
+	}
+
+	// NUMBERS AND STRINGS
+
+	function integerBetween(thing, bottom, top) {
+	  return isInteger(thing) && thing >= bottom && thing <= top;
+	}
+
+	// x % n but takes the sign of n instead of x
+	function floorMod(x, n) {
+	  return x - n * Math.floor(x / n);
+	}
+
+	function padStart(input, n = 2) {
+	  if (input.toString().length < n) {
+	    return ("0".repeat(n) + input).slice(-n);
+	  } else {
+	    return input.toString();
+	  }
+	}
+
+	function parseInteger(string) {
+	  if (isUndefined$2(string) || string === null || string === "") {
+	    return undefined;
+	  } else {
+	    return parseInt(string, 10);
+	  }
+	}
+
+	function parseMillis(fraction) {
+	  // Return undefined (instead of 0) in these cases, where fraction is not set
+	  if (isUndefined$2(fraction) || fraction === null || fraction === "") {
+	    return undefined;
+	  } else {
+	    const f = parseFloat("0." + fraction) * 1000;
+	    return Math.floor(f);
+	  }
+	}
+
+	function roundTo(number, digits, towardZero = false) {
+	  const factor = 10 ** digits,
+	    rounder = towardZero ? Math.trunc : Math.round;
+	  return rounder(number * factor) / factor;
+	}
+
+	// DATE BASICS
+
+	function isLeapYear(year) {
+	  return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+	}
+
+	function daysInYear(year) {
+	  return isLeapYear(year) ? 366 : 365;
+	}
+
+	function daysInMonth(year, month) {
+	  const modMonth = floorMod(month - 1, 12) + 1,
+	    modYear = year + (month - modMonth) / 12;
+
+	  if (modMonth === 2) {
+	    return isLeapYear(modYear) ? 29 : 28;
+	  } else {
+	    return [31, null, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][modMonth - 1];
+	  }
+	}
+
+	// covert a calendar object to a local timestamp (epoch, but with the offset baked in)
+	function objToLocalTS(obj) {
+	  let d = Date.UTC(
+	    obj.year,
+	    obj.month - 1,
+	    obj.day,
+	    obj.hour,
+	    obj.minute,
+	    obj.second,
+	    obj.millisecond
+	  );
+
+	  // for legacy reasons, years between 0 and 99 are interpreted as 19XX; revert that
+	  if (obj.year < 100 && obj.year >= 0) {
+	    d = new Date(d);
+	    d.setUTCFullYear(d.getUTCFullYear() - 1900);
+	  }
+	  return +d;
+	}
+
+	function weeksInWeekYear(weekYear) {
+	  const p1 =
+	      (weekYear +
+	        Math.floor(weekYear / 4) -
+	        Math.floor(weekYear / 100) +
+	        Math.floor(weekYear / 400)) %
+	      7,
+	    last = weekYear - 1,
+	    p2 = (last + Math.floor(last / 4) - Math.floor(last / 100) + Math.floor(last / 400)) % 7;
+	  return p1 === 4 || p2 === 3 ? 53 : 52;
+	}
+
+	function untruncateYear(year) {
+	  if (year > 99) {
+	    return year;
+	  } else return year > 60 ? 1900 + year : 2000 + year;
+	}
+
+	// PARSING
+
+	function parseZoneInfo(ts, offsetFormat, locale, timeZone = null) {
+	  const date = new Date(ts),
+	    intlOpts = {
+	      hour12: false,
+	      year: "numeric",
+	      month: "2-digit",
+	      day: "2-digit",
+	      hour: "2-digit",
+	      minute: "2-digit"
+	    };
+
+	  if (timeZone) {
+	    intlOpts.timeZone = timeZone;
+	  }
+
+	  const modified = Object.assign({ timeZoneName: offsetFormat }, intlOpts),
+	    intl = hasIntl();
+
+	  if (intl && hasFormatToParts()) {
+	    const parsed = new Intl.DateTimeFormat(locale, modified)
+	      .formatToParts(date)
+	      .find(m => m.type.toLowerCase() === "timezonename");
+	    return parsed ? parsed.value : null;
+	  } else if (intl) {
+	    // this probably doesn't work for all locales
+	    const without = new Intl.DateTimeFormat(locale, intlOpts).format(date),
+	      included = new Intl.DateTimeFormat(locale, modified).format(date),
+	      diffed = included.substring(without.length),
+	      trimmed = diffed.replace(/^[, \u200e]+/, "");
+	    return trimmed;
+	  } else {
+	    return null;
+	  }
+	}
+
+	// signedOffset('-5', '30') -> -330
+	function signedOffset(offHourStr, offMinuteStr) {
+	  let offHour = parseInt(offHourStr, 10);
+
+	  // don't || this because we want to preserve -0
+	  if (Number.isNaN(offHour)) {
+	    offHour = 0;
+	  }
+
+	  const offMin = parseInt(offMinuteStr, 10) || 0,
+	    offMinSigned = offHour < 0 || Object.is(offHour, -0) ? -offMin : offMin;
+	  return offHour * 60 + offMinSigned;
+	}
+
+	// COERCION
+
+	function asNumber(value) {
+	  const numericValue = Number(value);
+	  if (typeof value === "boolean" || value === "" || Number.isNaN(numericValue))
+	    throw new InvalidArgumentError(`Invalid unit value ${value}`);
+	  return numericValue;
+	}
+
+	function normalizeObject(obj, normalizer, nonUnitKeys) {
+	  const normalized = {};
+	  for (const u in obj) {
+	    if (hasOwnProperty$2(obj, u)) {
+	      if (nonUnitKeys.indexOf(u) >= 0) continue;
+	      const v = obj[u];
+	      if (v === undefined || v === null) continue;
+	      normalized[normalizer(u)] = asNumber(v);
+	    }
+	  }
+	  return normalized;
+	}
+
+	function formatOffset(offset, format) {
+	  const hours = Math.trunc(offset / 60),
+	    minutes = Math.abs(offset % 60),
+	    sign = hours >= 0 && !Object.is(hours, -0) ? "+" : "-",
+	    base = `${sign}${Math.abs(hours)}`;
+
+	  switch (format) {
+	    case "short":
+	      return `${sign}${padStart(Math.abs(hours), 2)}:${padStart(minutes, 2)}`;
+	    case "narrow":
+	      return minutes > 0 ? `${base}:${minutes}` : base;
+	    case "techie":
+	      return `${sign}${padStart(Math.abs(hours), 2)}${padStart(minutes, 2)}`;
+	    default:
+	      throw new RangeError(`Value format ${format} is out of range for property format`);
+	  }
+	}
+
+	function timeObject(obj) {
+	  return pick(obj, ["hour", "minute", "second", "millisecond"]);
+	}
+
+	const ianaRegex = /[A-Za-z_+-]{1,256}(:?\/[A-Za-z_+-]{1,256}(\/[A-Za-z_+-]{1,256})?)?/;
+
+	function stringify(obj) {
+	  return JSON.stringify(obj, Object.keys(obj).sort());
+	}
+
+	/**
+	 * @private
+	 */
+
+	const monthsLong = [
+	  "January",
+	  "February",
+	  "March",
+	  "April",
+	  "May",
+	  "June",
+	  "July",
+	  "August",
+	  "September",
+	  "October",
+	  "November",
+	  "December"
+	];
+
+	const monthsShort = [
+	  "Jan",
+	  "Feb",
+	  "Mar",
+	  "Apr",
+	  "May",
+	  "Jun",
+	  "Jul",
+	  "Aug",
+	  "Sep",
+	  "Oct",
+	  "Nov",
+	  "Dec"
+	];
+
+	const monthsNarrow = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+
+	function months(length) {
+	  switch (length) {
+	    case "narrow":
+	      return monthsNarrow;
+	    case "short":
+	      return monthsShort;
+	    case "long":
+	      return monthsLong;
+	    case "numeric":
+	      return ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+	    case "2-digit":
+	      return ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+	    default:
+	      return null;
+	  }
+	}
+
+	const weekdaysLong = [
+	  "Monday",
+	  "Tuesday",
+	  "Wednesday",
+	  "Thursday",
+	  "Friday",
+	  "Saturday",
+	  "Sunday"
+	];
+
+	const weekdaysShort = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+	const weekdaysNarrow = ["M", "T", "W", "T", "F", "S", "S"];
+
+	function weekdays(length) {
+	  switch (length) {
+	    case "narrow":
+	      return weekdaysNarrow;
+	    case "short":
+	      return weekdaysShort;
+	    case "long":
+	      return weekdaysLong;
+	    case "numeric":
+	      return ["1", "2", "3", "4", "5", "6", "7"];
+	    default:
+	      return null;
+	  }
+	}
+
+	const meridiems = ["AM", "PM"];
+
+	const erasLong = ["Before Christ", "Anno Domini"];
+
+	const erasShort = ["BC", "AD"];
+
+	const erasNarrow = ["B", "A"];
+
+	function eras(length) {
+	  switch (length) {
+	    case "narrow":
+	      return erasNarrow;
+	    case "short":
+	      return erasShort;
+	    case "long":
+	      return erasLong;
+	    default:
+	      return null;
+	  }
+	}
+
+	function meridiemForDateTime(dt) {
+	  return meridiems[dt.hour < 12 ? 0 : 1];
+	}
+
+	function weekdayForDateTime(dt, length) {
+	  return weekdays(length)[dt.weekday - 1];
+	}
+
+	function monthForDateTime(dt, length) {
+	  return months(length)[dt.month - 1];
+	}
+
+	function eraForDateTime(dt, length) {
+	  return eras(length)[dt.year < 0 ? 0 : 1];
+	}
+
+	function formatRelativeTime(unit, count, numeric = "always", narrow = false) {
+	  const units = {
+	    years: ["year", "yr."],
+	    quarters: ["quarter", "qtr."],
+	    months: ["month", "mo."],
+	    weeks: ["week", "wk."],
+	    days: ["day", "day", "days"],
+	    hours: ["hour", "hr."],
+	    minutes: ["minute", "min."],
+	    seconds: ["second", "sec."]
+	  };
+
+	  const lastable = ["hours", "minutes", "seconds"].indexOf(unit) === -1;
+
+	  if (numeric === "auto" && lastable) {
+	    const isDay = unit === "days";
+	    switch (count) {
+	      case 1:
+	        return isDay ? "tomorrow" : `next ${units[unit][0]}`;
+	      case -1:
+	        return isDay ? "yesterday" : `last ${units[unit][0]}`;
+	      case 0:
+	        return isDay ? "today" : `this ${units[unit][0]}`;
+	    }
+	  }
+
+	  const isInPast = Object.is(count, -0) || count < 0,
+	    fmtValue = Math.abs(count),
+	    singular = fmtValue === 1,
+	    lilUnits = units[unit],
+	    fmtUnit = narrow
+	      ? singular
+	        ? lilUnits[1]
+	        : lilUnits[2] || lilUnits[1]
+	      : singular
+	        ? units[unit][0]
+	        : unit;
+	  return isInPast ? `${fmtValue} ${fmtUnit} ago` : `in ${fmtValue} ${fmtUnit}`;
+	}
+
+	function formatString(knownFormat) {
+	  // these all have the offsets removed because we don't have access to them
+	  // without all the intl stuff this is backfilling
+	  const filtered = pick(knownFormat, [
+	      "weekday",
+	      "era",
+	      "year",
+	      "month",
+	      "day",
+	      "hour",
+	      "minute",
+	      "second",
+	      "timeZoneName",
+	      "hour12"
+	    ]),
+	    key = stringify(filtered),
+	    dateTimeHuge = "EEEE, LLLL d, yyyy, h:mm a";
+	  switch (key) {
+	    case stringify(DATE_SHORT):
+	      return "M/d/yyyy";
+	    case stringify(DATE_MED):
+	      return "LLL d, yyyy";
+	    case stringify(DATE_FULL):
+	      return "LLLL d, yyyy";
+	    case stringify(DATE_HUGE):
+	      return "EEEE, LLLL d, yyyy";
+	    case stringify(TIME_SIMPLE):
+	      return "h:mm a";
+	    case stringify(TIME_WITH_SECONDS):
+	      return "h:mm:ss a";
+	    case stringify(TIME_WITH_SHORT_OFFSET):
+	      return "h:mm a";
+	    case stringify(TIME_WITH_LONG_OFFSET):
+	      return "h:mm a";
+	    case stringify(TIME_24_SIMPLE):
+	      return "HH:mm";
+	    case stringify(TIME_24_WITH_SECONDS):
+	      return "HH:mm:ss";
+	    case stringify(TIME_24_WITH_SHORT_OFFSET):
+	      return "HH:mm";
+	    case stringify(TIME_24_WITH_LONG_OFFSET):
+	      return "HH:mm";
+	    case stringify(DATETIME_SHORT):
+	      return "M/d/yyyy, h:mm a";
+	    case stringify(DATETIME_MED):
+	      return "LLL d, yyyy, h:mm a";
+	    case stringify(DATETIME_FULL):
+	      return "LLLL d, yyyy, h:mm a";
+	    case stringify(DATETIME_HUGE):
+	      return dateTimeHuge;
+	    case stringify(DATETIME_SHORT_WITH_SECONDS):
+	      return "M/d/yyyy, h:mm:ss a";
+	    case stringify(DATETIME_MED_WITH_SECONDS):
+	      return "LLL d, yyyy, h:mm:ss a";
+	    case stringify(DATETIME_MED_WITH_WEEKDAY):
+	      return "EEE, d LLL yyyy, h:mm a";
+	    case stringify(DATETIME_FULL_WITH_SECONDS):
+	      return "LLLL d, yyyy, h:mm:ss a";
+	    case stringify(DATETIME_HUGE_WITH_SECONDS):
+	      return "EEEE, LLLL d, yyyy, h:mm:ss a";
+	    default:
+	      return dateTimeHuge;
+	  }
+	}
+
+	function stringifyTokens(splits, tokenToString) {
+	  let s = "";
+	  for (const token of splits) {
+	    if (token.literal) {
+	      s += token.val;
+	    } else {
+	      s += tokenToString(token.val);
+	    }
+	  }
+	  return s;
+	}
+
+	const macroTokenToFormatOpts = {
+	  D: DATE_SHORT,
+	  DD: DATE_MED,
+	  DDD: DATE_FULL,
+	  DDDD: DATE_HUGE,
+	  t: TIME_SIMPLE,
+	  tt: TIME_WITH_SECONDS,
+	  ttt: TIME_WITH_SHORT_OFFSET,
+	  tttt: TIME_WITH_LONG_OFFSET,
+	  T: TIME_24_SIMPLE,
+	  TT: TIME_24_WITH_SECONDS,
+	  TTT: TIME_24_WITH_SHORT_OFFSET,
+	  TTTT: TIME_24_WITH_LONG_OFFSET,
+	  f: DATETIME_SHORT,
+	  ff: DATETIME_MED,
+	  fff: DATETIME_FULL,
+	  ffff: DATETIME_HUGE,
+	  F: DATETIME_SHORT_WITH_SECONDS,
+	  FF: DATETIME_MED_WITH_SECONDS,
+	  FFF: DATETIME_FULL_WITH_SECONDS,
+	  FFFF: DATETIME_HUGE_WITH_SECONDS
+	};
+
+	/**
+	 * @private
+	 */
+
+	class Formatter {
+	  static create(locale, opts = {}) {
+	    return new Formatter(locale, opts);
+	  }
+
+	  static parseFormat(fmt) {
+	    let current = null,
+	      currentFull = "",
+	      bracketed = false;
+	    const splits = [];
+	    for (let i = 0; i < fmt.length; i++) {
+	      const c = fmt.charAt(i);
+	      if (c === "'") {
+	        if (currentFull.length > 0) {
+	          splits.push({ literal: bracketed, val: currentFull });
+	        }
+	        current = null;
+	        currentFull = "";
+	        bracketed = !bracketed;
+	      } else if (bracketed) {
+	        currentFull += c;
+	      } else if (c === current) {
+	        currentFull += c;
+	      } else {
+	        if (currentFull.length > 0) {
+	          splits.push({ literal: false, val: currentFull });
+	        }
+	        currentFull = c;
+	        current = c;
+	      }
+	    }
+
+	    if (currentFull.length > 0) {
+	      splits.push({ literal: bracketed, val: currentFull });
+	    }
+
+	    return splits;
+	  }
+
+	  static macroTokenToFormatOpts(token) {
+	    return macroTokenToFormatOpts[token];
+	  }
+
+	  constructor(locale, formatOpts) {
+	    this.opts = formatOpts;
+	    this.loc = locale;
+	    this.systemLoc = null;
+	  }
+
+	  formatWithSystemDefault(dt, opts) {
+	    if (this.systemLoc === null) {
+	      this.systemLoc = this.loc.redefaultToSystem();
+	    }
+	    const df = this.systemLoc.dtFormatter(dt, Object.assign({}, this.opts, opts));
+	    return df.format();
+	  }
+
+	  formatDateTime(dt, opts = {}) {
+	    const df = this.loc.dtFormatter(dt, Object.assign({}, this.opts, opts));
+	    return df.format();
+	  }
+
+	  formatDateTimeParts(dt, opts = {}) {
+	    const df = this.loc.dtFormatter(dt, Object.assign({}, this.opts, opts));
+	    return df.formatToParts();
+	  }
+
+	  resolvedOptions(dt, opts = {}) {
+	    const df = this.loc.dtFormatter(dt, Object.assign({}, this.opts, opts));
+	    return df.resolvedOptions();
+	  }
+
+	  num(n, p = 0) {
+	    // we get some perf out of doing this here, annoyingly
+	    if (this.opts.forceSimple) {
+	      return padStart(n, p);
+	    }
+
+	    const opts = Object.assign({}, this.opts);
+
+	    if (p > 0) {
+	      opts.padTo = p;
+	    }
+
+	    return this.loc.numberFormatter(opts).format(n);
+	  }
+
+	  formatDateTimeFromString(dt, fmt) {
+	    const knownEnglish = this.loc.listingMode() === "en",
+	      useDateTimeFormatter =
+	        this.loc.outputCalendar && this.loc.outputCalendar !== "gregory" && hasFormatToParts(),
+	      string = (opts, extract) => this.loc.extract(dt, opts, extract),
+	      formatOffset = opts => {
+	        if (dt.isOffsetFixed && dt.offset === 0 && opts.allowZ) {
+	          return "Z";
+	        }
+
+	        return dt.isValid ? dt.zone.formatOffset(dt.ts, opts.format) : "";
+	      },
+	      meridiem = () =>
+	        knownEnglish
+	          ? meridiemForDateTime(dt)
+	          : string({ hour: "numeric", hour12: true }, "dayperiod"),
+	      month = (length, standalone) =>
+	        knownEnglish
+	          ? monthForDateTime(dt, length)
+	          : string(standalone ? { month: length } : { month: length, day: "numeric" }, "month"),
+	      weekday = (length, standalone) =>
+	        knownEnglish
+	          ? weekdayForDateTime(dt, length)
+	          : string(
+	              standalone ? { weekday: length } : { weekday: length, month: "long", day: "numeric" },
+	              "weekday"
+	            ),
+	      maybeMacro = token => {
+	        const formatOpts = Formatter.macroTokenToFormatOpts(token);
+	        if (formatOpts) {
+	          return this.formatWithSystemDefault(dt, formatOpts);
+	        } else {
+	          return token;
+	        }
+	      },
+	      era = length =>
+	        knownEnglish ? eraForDateTime(dt, length) : string({ era: length }, "era"),
+	      tokenToString = token => {
+	        // Where possible: http://cldr.unicode.org/translation/date-time#TOC-Stand-Alone-vs.-Format-Styles
+	        switch (token) {
+	          // ms
+	          case "S":
+	            return this.num(dt.millisecond);
+	          case "u":
+	          // falls through
+	          case "SSS":
+	            return this.num(dt.millisecond, 3);
+	          // seconds
+	          case "s":
+	            return this.num(dt.second);
+	          case "ss":
+	            return this.num(dt.second, 2);
+	          // minutes
+	          case "m":
+	            return this.num(dt.minute);
+	          case "mm":
+	            return this.num(dt.minute, 2);
+	          // hours
+	          case "h":
+	            return this.num(dt.hour % 12 === 0 ? 12 : dt.hour % 12);
+	          case "hh":
+	            return this.num(dt.hour % 12 === 0 ? 12 : dt.hour % 12, 2);
+	          case "H":
+	            return this.num(dt.hour);
+	          case "HH":
+	            return this.num(dt.hour, 2);
+	          // offset
+	          case "Z":
+	            // like +6
+	            return formatOffset({ format: "narrow", allowZ: this.opts.allowZ });
+	          case "ZZ":
+	            // like +06:00
+	            return formatOffset({ format: "short", allowZ: this.opts.allowZ });
+	          case "ZZZ":
+	            // like +0600
+	            return formatOffset({ format: "techie", allowZ: this.opts.allowZ });
+	          case "ZZZZ":
+	            // like EST
+	            return dt.zone.offsetName(dt.ts, { format: "short", locale: this.loc.locale });
+	          case "ZZZZZ":
+	            // like Eastern Standard Time
+	            return dt.zone.offsetName(dt.ts, { format: "long", locale: this.loc.locale });
+	          // zone
+	          case "z":
+	            // like America/New_York
+	            return dt.zoneName;
+	          // meridiems
+	          case "a":
+	            return meridiem();
+	          // dates
+	          case "d":
+	            return useDateTimeFormatter ? string({ day: "numeric" }, "day") : this.num(dt.day);
+	          case "dd":
+	            return useDateTimeFormatter ? string({ day: "2-digit" }, "day") : this.num(dt.day, 2);
+	          // weekdays - standalone
+	          case "c":
+	            // like 1
+	            return this.num(dt.weekday);
+	          case "ccc":
+	            // like 'Tues'
+	            return weekday("short", true);
+	          case "cccc":
+	            // like 'Tuesday'
+	            return weekday("long", true);
+	          case "ccccc":
+	            // like 'T'
+	            return weekday("narrow", true);
+	          // weekdays - format
+	          case "E":
+	            // like 1
+	            return this.num(dt.weekday);
+	          case "EEE":
+	            // like 'Tues'
+	            return weekday("short", false);
+	          case "EEEE":
+	            // like 'Tuesday'
+	            return weekday("long", false);
+	          case "EEEEE":
+	            // like 'T'
+	            return weekday("narrow", false);
+	          // months - standalone
+	          case "L":
+	            // like 1
+	            return useDateTimeFormatter
+	              ? string({ month: "numeric", day: "numeric" }, "month")
+	              : this.num(dt.month);
+	          case "LL":
+	            // like 01, doesn't seem to work
+	            return useDateTimeFormatter
+	              ? string({ month: "2-digit", day: "numeric" }, "month")
+	              : this.num(dt.month, 2);
+	          case "LLL":
+	            // like Jan
+	            return month("short", true);
+	          case "LLLL":
+	            // like January
+	            return month("long", true);
+	          case "LLLLL":
+	            // like J
+	            return month("narrow", true);
+	          // months - format
+	          case "M":
+	            // like 1
+	            return useDateTimeFormatter
+	              ? string({ month: "numeric" }, "month")
+	              : this.num(dt.month);
+	          case "MM":
+	            // like 01
+	            return useDateTimeFormatter
+	              ? string({ month: "2-digit" }, "month")
+	              : this.num(dt.month, 2);
+	          case "MMM":
+	            // like Jan
+	            return month("short", false);
+	          case "MMMM":
+	            // like January
+	            return month("long", false);
+	          case "MMMMM":
+	            // like J
+	            return month("narrow", false);
+	          // years
+	          case "y":
+	            // like 2014
+	            return useDateTimeFormatter ? string({ year: "numeric" }, "year") : this.num(dt.year);
+	          case "yy":
+	            // like 14
+	            return useDateTimeFormatter
+	              ? string({ year: "2-digit" }, "year")
+	              : this.num(dt.year.toString().slice(-2), 2);
+	          case "yyyy":
+	            // like 0012
+	            return useDateTimeFormatter
+	              ? string({ year: "numeric" }, "year")
+	              : this.num(dt.year, 4);
+	          case "yyyyyy":
+	            // like 000012
+	            return useDateTimeFormatter
+	              ? string({ year: "numeric" }, "year")
+	              : this.num(dt.year, 6);
+	          // eras
+	          case "G":
+	            // like AD
+	            return era("short");
+	          case "GG":
+	            // like Anno Domini
+	            return era("long");
+	          case "GGGGG":
+	            return era("narrow");
+	          case "kk":
+	            return this.num(dt.weekYear.toString().slice(-2), 2);
+	          case "kkkk":
+	            return this.num(dt.weekYear, 4);
+	          case "W":
+	            return this.num(dt.weekNumber);
+	          case "WW":
+	            return this.num(dt.weekNumber, 2);
+	          case "o":
+	            return this.num(dt.ordinal);
+	          case "ooo":
+	            return this.num(dt.ordinal, 3);
+	          case "q":
+	            // like 1
+	            return this.num(dt.quarter);
+	          case "qq":
+	            // like 01
+	            return this.num(dt.quarter, 2);
+	          case "X":
+	            return this.num(Math.floor(dt.ts / 1000));
+	          case "x":
+	            return this.num(dt.ts);
+	          default:
+	            return maybeMacro(token);
+	        }
+	      };
+
+	    return stringifyTokens(Formatter.parseFormat(fmt), tokenToString);
+	  }
+
+	  formatDurationFromString(dur, fmt) {
+	    const tokenToField = token => {
+	        switch (token[0]) {
+	          case "S":
+	            return "millisecond";
+	          case "s":
+	            return "second";
+	          case "m":
+	            return "minute";
+	          case "h":
+	            return "hour";
+	          case "d":
+	            return "day";
+	          case "M":
+	            return "month";
+	          case "y":
+	            return "year";
+	          default:
+	            return null;
+	        }
+	      },
+	      tokenToString = lildur => token => {
+	        const mapped = tokenToField(token);
+	        if (mapped) {
+	          return this.num(lildur.get(mapped), token.length);
+	        } else {
+	          return token;
+	        }
+	      },
+	      tokens = Formatter.parseFormat(fmt),
+	      realTokens = tokens.reduce(
+	        (found, { literal, val }) => (literal ? found : found.concat(val)),
+	        []
+	      ),
+	      collapsed = dur.shiftTo(...realTokens.map(tokenToField).filter(t => t));
+	    return stringifyTokens(tokens, tokenToString(collapsed));
+	  }
+	}
+
+	class Invalid {
+	  constructor(reason, explanation) {
+	    this.reason = reason;
+	    this.explanation = explanation;
+	  }
+
+	  toMessage() {
+	    if (this.explanation) {
+	      return `${this.reason}: ${this.explanation}`;
+	    } else {
+	      return this.reason;
+	    }
+	  }
+	}
+
+	/* eslint no-unused-vars: "off" */
+
+	/**
+	 * @interface
+	 */
+	class Zone {
+	  /**
+	   * The type of zone
+	   * @abstract
+	   * @type {string}
+	   */
+	  get type() {
+	    throw new ZoneIsAbstractError();
+	  }
+
+	  /**
+	   * The name of this zone.
+	   * @abstract
+	   * @type {string}
+	   */
+	  get name() {
+	    throw new ZoneIsAbstractError();
+	  }
+
+	  /**
+	   * Returns whether the offset is known to be fixed for the whole year.
+	   * @abstract
+	   * @type {boolean}
+	   */
+	  get universal() {
+	    throw new ZoneIsAbstractError();
+	  }
+
+	  /**
+	   * Returns the offset's common name (such as EST) at the specified timestamp
+	   * @abstract
+	   * @param {number} ts - Epoch milliseconds for which to get the name
+	   * @param {Object} opts - Options to affect the format
+	   * @param {string} opts.format - What style of offset to return. Accepts 'long' or 'short'.
+	   * @param {string} opts.locale - What locale to return the offset name in.
+	   * @return {string}
+	   */
+	  offsetName(ts, opts) {
+	    throw new ZoneIsAbstractError();
+	  }
+
+	  /**
+	   * Returns the offset's value as a string
+	   * @abstract
+	   * @param {number} ts - Epoch milliseconds for which to get the offset
+	   * @param {string} format - What style of offset to return.
+	   *                          Accepts 'narrow', 'short', or 'techie'. Returning '+6', '+06:00', or '+0600' respectively
+	   * @return {string}
+	   */
+	  formatOffset(ts, format) {
+	    throw new ZoneIsAbstractError();
+	  }
+
+	  /**
+	   * Return the offset in minutes for this zone at the specified timestamp.
+	   * @abstract
+	   * @param {number} ts - Epoch milliseconds for which to compute the offset
+	   * @return {number}
+	   */
+	  offset(ts) {
+	    throw new ZoneIsAbstractError();
+	  }
+
+	  /**
+	   * Return whether this Zone is equal to another zone
+	   * @abstract
+	   * @param {Zone} otherZone - the zone to compare
+	   * @return {boolean}
+	   */
+	  equals(otherZone) {
+	    throw new ZoneIsAbstractError();
+	  }
+
+	  /**
+	   * Return whether this Zone is valid.
+	   * @abstract
+	   * @type {boolean}
+	   */
+	  get isValid() {
+	    throw new ZoneIsAbstractError();
+	  }
+	}
+
+	let singleton = null;
+
+	/**
+	 * Represents the local zone for this Javascript environment.
+	 * @implements {Zone}
+	 */
+	class LocalZone extends Zone {
+	  /**
+	   * Get a singleton instance of the local zone
+	   * @return {LocalZone}
+	   */
+	  static get instance() {
+	    if (singleton === null) {
+	      singleton = new LocalZone();
+	    }
+	    return singleton;
+	  }
+
+	  /** @override **/
+	  get type() {
+	    return "local";
+	  }
+
+	  /** @override **/
+	  get name() {
+	    if (hasIntl()) {
+	      return new Intl.DateTimeFormat().resolvedOptions().timeZone;
+	    } else return "local";
+	  }
+
+	  /** @override **/
+	  get universal() {
+	    return false;
+	  }
+
+	  /** @override **/
+	  offsetName(ts, { format, locale }) {
+	    return parseZoneInfo(ts, format, locale);
+	  }
+
+	  /** @override **/
+	  formatOffset(ts, format) {
+	    return formatOffset(this.offset(ts), format);
+	  }
+
+	  /** @override **/
+	  offset(ts) {
+	    return -new Date(ts).getTimezoneOffset();
+	  }
+
+	  /** @override **/
+	  equals(otherZone) {
+	    return otherZone.type === "local";
+	  }
+
+	  /** @override **/
+	  get isValid() {
+	    return true;
+	  }
+	}
+
+	const matchingRegex = RegExp(`^${ianaRegex.source}$`);
+
+	let dtfCache = {};
+	function makeDTF(zone) {
+	  if (!dtfCache[zone]) {
+	    dtfCache[zone] = new Intl.DateTimeFormat("en-US", {
+	      hour12: false,
+	      timeZone: zone,
+	      year: "numeric",
+	      month: "2-digit",
+	      day: "2-digit",
+	      hour: "2-digit",
+	      minute: "2-digit",
+	      second: "2-digit"
+	    });
+	  }
+	  return dtfCache[zone];
+	}
+
+	const typeToPos = {
+	  year: 0,
+	  month: 1,
+	  day: 2,
+	  hour: 3,
+	  minute: 4,
+	  second: 5
+	};
+
+	function hackyOffset(dtf, date) {
+	  const formatted = dtf.format(date).replace(/\u200E/g, ""),
+	    parsed = /(\d+)\/(\d+)\/(\d+),? (\d+):(\d+):(\d+)/.exec(formatted),
+	    [, fMonth, fDay, fYear, fHour, fMinute, fSecond] = parsed;
+	  return [fYear, fMonth, fDay, fHour, fMinute, fSecond];
+	}
+
+	function partsOffset(dtf, date) {
+	  const formatted = dtf.formatToParts(date),
+	    filled = [];
+	  for (let i = 0; i < formatted.length; i++) {
+	    const { type, value } = formatted[i],
+	      pos = typeToPos[type];
+
+	    if (!isUndefined$2(pos)) {
+	      filled[pos] = parseInt(value, 10);
+	    }
+	  }
+	  return filled;
+	}
+
+	let ianaZoneCache = {};
+	/**
+	 * A zone identified by an IANA identifier, like America/New_York
+	 * @implements {Zone}
+	 */
+	class IANAZone extends Zone {
+	  /**
+	   * @param {string} name - Zone name
+	   * @return {IANAZone}
+	   */
+	  static create(name) {
+	    if (!ianaZoneCache[name]) {
+	      ianaZoneCache[name] = new IANAZone(name);
+	    }
+	    return ianaZoneCache[name];
+	  }
+
+	  /**
+	   * Reset local caches. Should only be necessary in testing scenarios.
+	   * @return {void}
+	   */
+	  static resetCache() {
+	    ianaZoneCache = {};
+	    dtfCache = {};
+	  }
+
+	  /**
+	   * Returns whether the provided string is a valid specifier. This only checks the string's format, not that the specifier identifies a known zone; see isValidZone for that.
+	   * @param {string} s - The string to check validity on
+	   * @example IANAZone.isValidSpecifier("America/New_York") //=> true
+	   * @example IANAZone.isValidSpecifier("Fantasia/Castle") //=> true
+	   * @example IANAZone.isValidSpecifier("Sport~~blorp") //=> false
+	   * @return {boolean}
+	   */
+	  static isValidSpecifier(s) {
+	    return !!(s && s.match(matchingRegex));
+	  }
+
+	  /**
+	   * Returns whether the provided string identifies a real zone
+	   * @param {string} zone - The string to check
+	   * @example IANAZone.isValidZone("America/New_York") //=> true
+	   * @example IANAZone.isValidZone("Fantasia/Castle") //=> false
+	   * @example IANAZone.isValidZone("Sport~~blorp") //=> false
+	   * @return {boolean}
+	   */
+	  static isValidZone(zone) {
+	    try {
+	      new Intl.DateTimeFormat("en-US", { timeZone: zone }).format();
+	      return true;
+	    } catch (e) {
+	      return false;
+	    }
+	  }
+
+	  // Etc/GMT+8 -> -480
+	  /** @ignore */
+	  static parseGMTOffset(specifier) {
+	    if (specifier) {
+	      const match = specifier.match(/^Etc\/GMT([+-]\d{1,2})$/i);
+	      if (match) {
+	        return -60 * parseInt(match[1]);
+	      }
+	    }
+	    return null;
+	  }
+
+	  constructor(name) {
+	    super();
+	    /** @private **/
+	    this.zoneName = name;
+	    /** @private **/
+	    this.valid = IANAZone.isValidZone(name);
+	  }
+
+	  /** @override **/
+	  get type() {
+	    return "iana";
+	  }
+
+	  /** @override **/
+	  get name() {
+	    return this.zoneName;
+	  }
+
+	  /** @override **/
+	  get universal() {
+	    return false;
+	  }
+
+	  /** @override **/
+	  offsetName(ts, { format, locale }) {
+	    return parseZoneInfo(ts, format, locale, this.name);
+	  }
+
+	  /** @override **/
+	  formatOffset(ts, format) {
+	    return formatOffset(this.offset(ts), format);
+	  }
+
+	  /** @override **/
+	  offset(ts) {
+	    const date = new Date(ts),
+	      dtf = makeDTF(this.name),
+	      [year, month, day, hour, minute, second] = dtf.formatToParts
+	        ? partsOffset(dtf, date)
+	        : hackyOffset(dtf, date),
+	      // work around https://bugs.chromium.org/p/chromium/issues/detail?id=1025564&can=2&q=%2224%3A00%22%20datetimeformat
+	      adjustedHour = hour === 24 ? 0 : hour;
+
+	    const asUTC = objToLocalTS({
+	      year,
+	      month,
+	      day,
+	      hour: adjustedHour,
+	      minute,
+	      second,
+	      millisecond: 0
+	    });
+
+	    let asTS = +date;
+	    const over = asTS % 1000;
+	    asTS -= over >= 0 ? over : 1000 + over;
+	    return (asUTC - asTS) / (60 * 1000);
+	  }
+
+	  /** @override **/
+	  equals(otherZone) {
+	    return otherZone.type === "iana" && otherZone.name === this.name;
+	  }
+
+	  /** @override **/
+	  get isValid() {
+	    return this.valid;
+	  }
+	}
+
+	let singleton$1 = null;
+
+	/**
+	 * A zone with a fixed offset (meaning no DST)
+	 * @implements {Zone}
+	 */
+	class FixedOffsetZone extends Zone {
+	  /**
+	   * Get a singleton instance of UTC
+	   * @return {FixedOffsetZone}
+	   */
+	  static get utcInstance() {
+	    if (singleton$1 === null) {
+	      singleton$1 = new FixedOffsetZone(0);
+	    }
+	    return singleton$1;
+	  }
+
+	  /**
+	   * Get an instance with a specified offset
+	   * @param {number} offset - The offset in minutes
+	   * @return {FixedOffsetZone}
+	   */
+	  static instance(offset) {
+	    return offset === 0 ? FixedOffsetZone.utcInstance : new FixedOffsetZone(offset);
+	  }
+
+	  /**
+	   * Get an instance of FixedOffsetZone from a UTC offset string, like "UTC+6"
+	   * @param {string} s - The offset string to parse
+	   * @example FixedOffsetZone.parseSpecifier("UTC+6")
+	   * @example FixedOffsetZone.parseSpecifier("UTC+06")
+	   * @example FixedOffsetZone.parseSpecifier("UTC-6:00")
+	   * @return {FixedOffsetZone}
+	   */
+	  static parseSpecifier(s) {
+	    if (s) {
+	      const r = s.match(/^utc(?:([+-]\d{1,2})(?::(\d{2}))?)?$/i);
+	      if (r) {
+	        return new FixedOffsetZone(signedOffset(r[1], r[2]));
+	      }
+	    }
+	    return null;
+	  }
+
+	  constructor(offset) {
+	    super();
+	    /** @private **/
+	    this.fixed = offset;
+	  }
+
+	  /** @override **/
+	  get type() {
+	    return "fixed";
+	  }
+
+	  /** @override **/
+	  get name() {
+	    return this.fixed === 0 ? "UTC" : `UTC${formatOffset(this.fixed, "narrow")}`;
+	  }
+
+	  /** @override **/
+	  offsetName() {
+	    return this.name;
+	  }
+
+	  /** @override **/
+	  formatOffset(ts, format) {
+	    return formatOffset(this.fixed, format);
+	  }
+
+	  /** @override **/
+	  get universal() {
+	    return true;
+	  }
+
+	  /** @override **/
+	  offset() {
+	    return this.fixed;
+	  }
+
+	  /** @override **/
+	  equals(otherZone) {
+	    return otherZone.type === "fixed" && otherZone.fixed === this.fixed;
+	  }
+
+	  /** @override **/
+	  get isValid() {
+	    return true;
+	  }
+	}
+
+	/**
+	 * A zone that failed to parse. You should never need to instantiate this.
+	 * @implements {Zone}
+	 */
+	class InvalidZone extends Zone {
+	  constructor(zoneName) {
+	    super();
+	    /**  @private */
+	    this.zoneName = zoneName;
+	  }
+
+	  /** @override **/
+	  get type() {
+	    return "invalid";
+	  }
+
+	  /** @override **/
+	  get name() {
+	    return this.zoneName;
+	  }
+
+	  /** @override **/
+	  get universal() {
+	    return false;
+	  }
+
+	  /** @override **/
+	  offsetName() {
+	    return null;
+	  }
+
+	  /** @override **/
+	  formatOffset() {
+	    return "";
+	  }
+
+	  /** @override **/
+	  offset() {
+	    return NaN;
+	  }
+
+	  /** @override **/
+	  equals() {
+	    return false;
+	  }
+
+	  /** @override **/
+	  get isValid() {
+	    return false;
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+
+	function normalizeZone(input, defaultZone) {
+	  let offset;
+	  if (isUndefined$2(input) || input === null) {
+	    return defaultZone;
+	  } else if (input instanceof Zone) {
+	    return input;
+	  } else if (isString$2(input)) {
+	    const lowered = input.toLowerCase();
+	    if (lowered === "local") return defaultZone;
+	    else if (lowered === "utc" || lowered === "gmt") return FixedOffsetZone.utcInstance;
+	    else if ((offset = IANAZone.parseGMTOffset(input)) != null) {
+	      // handle Etc/GMT-4, which V8 chokes on
+	      return FixedOffsetZone.instance(offset);
+	    } else if (IANAZone.isValidSpecifier(lowered)) return IANAZone.create(input);
+	    else return FixedOffsetZone.parseSpecifier(lowered) || new InvalidZone(input);
+	  } else if (isNumber$1(input)) {
+	    return FixedOffsetZone.instance(input);
+	  } else if (typeof input === "object" && input.offset && typeof input.offset === "number") {
+	    // This is dumb, but the instanceof check above doesn't seem to really work
+	    // so we're duck checking it
+	    return input;
+	  } else {
+	    return new InvalidZone(input);
+	  }
+	}
+
+	let now = () => Date.now(),
+	  defaultZone = null, // not setting this directly to LocalZone.instance bc loading order issues
+	  defaultLocale = null,
+	  defaultNumberingSystem = null,
+	  defaultOutputCalendar = null,
+	  throwOnInvalid = false;
+
+	/**
+	 * Settings contains static getters and setters that control Luxon's overall behavior. Luxon is a simple library with few options, but the ones it does have live here.
+	 */
+	class Settings {
+	  /**
+	   * Get the callback for returning the current timestamp.
+	   * @type {function}
+	   */
+	  static get now() {
+	    return now;
+	  }
+
+	  /**
+	   * Set the callback for returning the current timestamp.
+	   * The function should return a number, which will be interpreted as an Epoch millisecond count
+	   * @type {function}
+	   * @example Settings.now = () => Date.now() + 3000 // pretend it is 3 seconds in the future
+	   * @example Settings.now = () => 0 // always pretend it's Jan 1, 1970 at midnight in UTC time
+	   */
+	  static set now(n) {
+	    now = n;
+	  }
+
+	  /**
+	   * Get the default time zone to create DateTimes in.
+	   * @type {string}
+	   */
+	  static get defaultZoneName() {
+	    return Settings.defaultZone.name;
+	  }
+
+	  /**
+	   * Set the default time zone to create DateTimes in. Does not affect existing instances.
+	   * @type {string}
+	   */
+	  static set defaultZoneName(z) {
+	    if (!z) {
+	      defaultZone = null;
+	    } else {
+	      defaultZone = normalizeZone(z);
+	    }
+	  }
+
+	  /**
+	   * Get the default time zone object to create DateTimes in. Does not affect existing instances.
+	   * @type {Zone}
+	   */
+	  static get defaultZone() {
+	    return defaultZone || LocalZone.instance;
+	  }
+
+	  /**
+	   * Get the default locale to create DateTimes with. Does not affect existing instances.
+	   * @type {string}
+	   */
+	  static get defaultLocale() {
+	    return defaultLocale;
+	  }
+
+	  /**
+	   * Set the default locale to create DateTimes with. Does not affect existing instances.
+	   * @type {string}
+	   */
+	  static set defaultLocale(locale) {
+	    defaultLocale = locale;
+	  }
+
+	  /**
+	   * Get the default numbering system to create DateTimes with. Does not affect existing instances.
+	   * @type {string}
+	   */
+	  static get defaultNumberingSystem() {
+	    return defaultNumberingSystem;
+	  }
+
+	  /**
+	   * Set the default numbering system to create DateTimes with. Does not affect existing instances.
+	   * @type {string}
+	   */
+	  static set defaultNumberingSystem(numberingSystem) {
+	    defaultNumberingSystem = numberingSystem;
+	  }
+
+	  /**
+	   * Get the default output calendar to create DateTimes with. Does not affect existing instances.
+	   * @type {string}
+	   */
+	  static get defaultOutputCalendar() {
+	    return defaultOutputCalendar;
+	  }
+
+	  /**
+	   * Set the default output calendar to create DateTimes with. Does not affect existing instances.
+	   * @type {string}
+	   */
+	  static set defaultOutputCalendar(outputCalendar) {
+	    defaultOutputCalendar = outputCalendar;
+	  }
+
+	  /**
+	   * Get whether Luxon will throw when it encounters invalid DateTimes, Durations, or Intervals
+	   * @type {boolean}
+	   */
+	  static get throwOnInvalid() {
+	    return throwOnInvalid;
+	  }
+
+	  /**
+	   * Set whether Luxon will throw when it encounters invalid DateTimes, Durations, or Intervals
+	   * @type {boolean}
+	   */
+	  static set throwOnInvalid(t) {
+	    throwOnInvalid = t;
+	  }
+
+	  /**
+	   * Reset Luxon's global caches. Should only be necessary in testing scenarios.
+	   * @return {void}
+	   */
+	  static resetCaches() {
+	    Locale.resetCache();
+	    IANAZone.resetCache();
+	  }
+	}
+
+	let intlDTCache = {};
+	function getCachedDTF(locString, opts = {}) {
+	  const key = JSON.stringify([locString, opts]);
+	  let dtf = intlDTCache[key];
+	  if (!dtf) {
+	    dtf = new Intl.DateTimeFormat(locString, opts);
+	    intlDTCache[key] = dtf;
+	  }
+	  return dtf;
+	}
+
+	let intlNumCache = {};
+	function getCachedINF(locString, opts = {}) {
+	  const key = JSON.stringify([locString, opts]);
+	  let inf = intlNumCache[key];
+	  if (!inf) {
+	    inf = new Intl.NumberFormat(locString, opts);
+	    intlNumCache[key] = inf;
+	  }
+	  return inf;
+	}
+
+	let intlRelCache = {};
+	function getCachedRTF(locString, opts = {}) {
+	  const { base, ...cacheKeyOpts } = opts; // exclude `base` from the options
+	  const key = JSON.stringify([locString, cacheKeyOpts]);
+	  let inf = intlRelCache[key];
+	  if (!inf) {
+	    inf = new Intl.RelativeTimeFormat(locString, opts);
+	    intlRelCache[key] = inf;
+	  }
+	  return inf;
+	}
+
+	let sysLocaleCache = null;
+	function systemLocale() {
+	  if (sysLocaleCache) {
+	    return sysLocaleCache;
+	  } else if (hasIntl()) {
+	    const computedSys = new Intl.DateTimeFormat().resolvedOptions().locale;
+	    // node sometimes defaults to "und". Override that because that is dumb
+	    sysLocaleCache = !computedSys || computedSys === "und" ? "en-US" : computedSys;
+	    return sysLocaleCache;
+	  } else {
+	    sysLocaleCache = "en-US";
+	    return sysLocaleCache;
+	  }
+	}
+
+	function parseLocaleString(localeStr) {
+	  // I really want to avoid writing a BCP 47 parser
+	  // see, e.g. https://github.com/wooorm/bcp-47
+	  // Instead, we'll do this:
+
+	  // a) if the string has no -u extensions, just leave it alone
+	  // b) if it does, use Intl to resolve everything
+	  // c) if Intl fails, try again without the -u
+
+	  const uIndex = localeStr.indexOf("-u-");
+	  if (uIndex === -1) {
+	    return [localeStr];
+	  } else {
+	    let options;
+	    const smaller = localeStr.substring(0, uIndex);
+	    try {
+	      options = getCachedDTF(localeStr).resolvedOptions();
+	    } catch (e) {
+	      options = getCachedDTF(smaller).resolvedOptions();
+	    }
+
+	    const { numberingSystem, calendar } = options;
+	    // return the smaller one so that we can append the calendar and numbering overrides to it
+	    return [smaller, numberingSystem, calendar];
+	  }
+	}
+
+	function intlConfigString(localeStr, numberingSystem, outputCalendar) {
+	  if (hasIntl()) {
+	    if (outputCalendar || numberingSystem) {
+	      localeStr += "-u";
+
+	      if (outputCalendar) {
+	        localeStr += `-ca-${outputCalendar}`;
+	      }
+
+	      if (numberingSystem) {
+	        localeStr += `-nu-${numberingSystem}`;
+	      }
+	      return localeStr;
+	    } else {
+	      return localeStr;
+	    }
+	  } else {
+	    return [];
+	  }
+	}
+
+	function mapMonths(f) {
+	  const ms = [];
+	  for (let i = 1; i <= 12; i++) {
+	    const dt = DateTime.utc(2016, i, 1);
+	    ms.push(f(dt));
+	  }
+	  return ms;
+	}
+
+	function mapWeekdays(f) {
+	  const ms = [];
+	  for (let i = 1; i <= 7; i++) {
+	    const dt = DateTime.utc(2016, 11, 13 + i);
+	    ms.push(f(dt));
+	  }
+	  return ms;
+	}
+
+	function listStuff(loc, length, defaultOK, englishFn, intlFn) {
+	  const mode = loc.listingMode(defaultOK);
+
+	  if (mode === "error") {
+	    return null;
+	  } else if (mode === "en") {
+	    return englishFn(length);
+	  } else {
+	    return intlFn(length);
+	  }
+	}
+
+	function supportsFastNumbers(loc) {
+	  if (loc.numberingSystem && loc.numberingSystem !== "latn") {
+	    return false;
+	  } else {
+	    return (
+	      loc.numberingSystem === "latn" ||
+	      !loc.locale ||
+	      loc.locale.startsWith("en") ||
+	      (hasIntl() && new Intl.DateTimeFormat(loc.intl).resolvedOptions().numberingSystem === "latn")
+	    );
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+
+	class PolyNumberFormatter {
+	  constructor(intl, forceSimple, opts) {
+	    this.padTo = opts.padTo || 0;
+	    this.floor = opts.floor || false;
+
+	    if (!forceSimple && hasIntl()) {
+	      const intlOpts = { useGrouping: false };
+	      if (opts.padTo > 0) intlOpts.minimumIntegerDigits = opts.padTo;
+	      this.inf = getCachedINF(intl, intlOpts);
+	    }
+	  }
+
+	  format(i) {
+	    if (this.inf) {
+	      const fixed = this.floor ? Math.floor(i) : i;
+	      return this.inf.format(fixed);
+	    } else {
+	      // to match the browser's numberformatter defaults
+	      const fixed = this.floor ? Math.floor(i) : roundTo(i, 3);
+	      return padStart(fixed, this.padTo);
+	    }
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+
+	class PolyDateFormatter {
+	  constructor(dt, intl, opts) {
+	    this.opts = opts;
+	    this.hasIntl = hasIntl();
+
+	    let z;
+	    if (dt.zone.universal && this.hasIntl) {
+	      // Chromium doesn't support fixed-offset zones like Etc/GMT+8 in its formatter,
+	      // See https://bugs.chromium.org/p/chromium/issues/detail?id=364374.
+	      // So we have to make do. Two cases:
+	      // 1. The format options tell us to show the zone. We can't do that, so the best
+	      // we can do is format the date in UTC.
+	      // 2. The format options don't tell us to show the zone. Then we can adjust them
+	      // the time and tell the formatter to show it to us in UTC, so that the time is right
+	      // and the bad zone doesn't show up.
+	      // We can clean all this up when Chrome fixes this.
+	      z = "UTC";
+	      if (opts.timeZoneName) {
+	        this.dt = dt;
+	      } else {
+	        this.dt = dt.offset === 0 ? dt : DateTime.fromMillis(dt.ts + dt.offset * 60 * 1000);
+	      }
+	    } else if (dt.zone.type === "local") {
+	      this.dt = dt;
+	    } else {
+	      this.dt = dt;
+	      z = dt.zone.name;
+	    }
+
+	    if (this.hasIntl) {
+	      const intlOpts = Object.assign({}, this.opts);
+	      if (z) {
+	        intlOpts.timeZone = z;
+	      }
+	      this.dtf = getCachedDTF(intl, intlOpts);
+	    }
+	  }
+
+	  format() {
+	    if (this.hasIntl) {
+	      return this.dtf.format(this.dt.toJSDate());
+	    } else {
+	      const tokenFormat = formatString(this.opts),
+	        loc = Locale.create("en-US");
+	      return Formatter.create(loc).formatDateTimeFromString(this.dt, tokenFormat);
+	    }
+	  }
+
+	  formatToParts() {
+	    if (this.hasIntl && hasFormatToParts()) {
+	      return this.dtf.formatToParts(this.dt.toJSDate());
+	    } else {
+	      // This is kind of a cop out. We actually could do this for English. However, we couldn't do it for intl strings
+	      // and IMO it's too weird to have an uncanny valley like that
+	      return [];
+	    }
+	  }
+
+	  resolvedOptions() {
+	    if (this.hasIntl) {
+	      return this.dtf.resolvedOptions();
+	    } else {
+	      return {
+	        locale: "en-US",
+	        numberingSystem: "latn",
+	        outputCalendar: "gregory"
+	      };
+	    }
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+	class PolyRelFormatter {
+	  constructor(intl, isEnglish, opts) {
+	    this.opts = Object.assign({ style: "long" }, opts);
+	    if (!isEnglish && hasRelative()) {
+	      this.rtf = getCachedRTF(intl, opts);
+	    }
+	  }
+
+	  format(count, unit) {
+	    if (this.rtf) {
+	      return this.rtf.format(count, unit);
+	    } else {
+	      return formatRelativeTime(unit, count, this.opts.numeric, this.opts.style !== "long");
+	    }
+	  }
+
+	  formatToParts(count, unit) {
+	    if (this.rtf) {
+	      return this.rtf.formatToParts(count, unit);
+	    } else {
+	      return [];
+	    }
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+
+	class Locale {
+	  static fromOpts(opts) {
+	    return Locale.create(opts.locale, opts.numberingSystem, opts.outputCalendar, opts.defaultToEN);
+	  }
+
+	  static create(locale, numberingSystem, outputCalendar, defaultToEN = false) {
+	    const specifiedLocale = locale || Settings.defaultLocale,
+	      // the system locale is useful for human readable strings but annoying for parsing/formatting known formats
+	      localeR = specifiedLocale || (defaultToEN ? "en-US" : systemLocale()),
+	      numberingSystemR = numberingSystem || Settings.defaultNumberingSystem,
+	      outputCalendarR = outputCalendar || Settings.defaultOutputCalendar;
+	    return new Locale(localeR, numberingSystemR, outputCalendarR, specifiedLocale);
+	  }
+
+	  static resetCache() {
+	    sysLocaleCache = null;
+	    intlDTCache = {};
+	    intlNumCache = {};
+	    intlRelCache = {};
+	  }
+
+	  static fromObject({ locale, numberingSystem, outputCalendar } = {}) {
+	    return Locale.create(locale, numberingSystem, outputCalendar);
+	  }
+
+	  constructor(locale, numbering, outputCalendar, specifiedLocale) {
+	    const [parsedLocale, parsedNumberingSystem, parsedOutputCalendar] = parseLocaleString(locale);
+
+	    this.locale = parsedLocale;
+	    this.numberingSystem = numbering || parsedNumberingSystem || null;
+	    this.outputCalendar = outputCalendar || parsedOutputCalendar || null;
+	    this.intl = intlConfigString(this.locale, this.numberingSystem, this.outputCalendar);
+
+	    this.weekdaysCache = { format: {}, standalone: {} };
+	    this.monthsCache = { format: {}, standalone: {} };
+	    this.meridiemCache = null;
+	    this.eraCache = {};
+
+	    this.specifiedLocale = specifiedLocale;
+	    this.fastNumbersCached = null;
+	  }
+
+	  get fastNumbers() {
+	    if (this.fastNumbersCached == null) {
+	      this.fastNumbersCached = supportsFastNumbers(this);
+	    }
+
+	    return this.fastNumbersCached;
+	  }
+
+	  listingMode(defaultOK = true) {
+	    const intl = hasIntl(),
+	      hasFTP = intl && hasFormatToParts(),
+	      isActuallyEn = this.isEnglish(),
+	      hasNoWeirdness =
+	        (this.numberingSystem === null || this.numberingSystem === "latn") &&
+	        (this.outputCalendar === null || this.outputCalendar === "gregory");
+
+	    if (!hasFTP && !(isActuallyEn && hasNoWeirdness) && !defaultOK) {
+	      return "error";
+	    } else if (!hasFTP || (isActuallyEn && hasNoWeirdness)) {
+	      return "en";
+	    } else {
+	      return "intl";
+	    }
+	  }
+
+	  clone(alts) {
+	    if (!alts || Object.getOwnPropertyNames(alts).length === 0) {
+	      return this;
+	    } else {
+	      return Locale.create(
+	        alts.locale || this.specifiedLocale,
+	        alts.numberingSystem || this.numberingSystem,
+	        alts.outputCalendar || this.outputCalendar,
+	        alts.defaultToEN || false
+	      );
+	    }
+	  }
+
+	  redefaultToEN(alts = {}) {
+	    return this.clone(Object.assign({}, alts, { defaultToEN: true }));
+	  }
+
+	  redefaultToSystem(alts = {}) {
+	    return this.clone(Object.assign({}, alts, { defaultToEN: false }));
+	  }
+
+	  months(length, format = false, defaultOK = true) {
+	    return listStuff(this, length, defaultOK, months, () => {
+	      const intl = format ? { month: length, day: "numeric" } : { month: length },
+	        formatStr = format ? "format" : "standalone";
+	      if (!this.monthsCache[formatStr][length]) {
+	        this.monthsCache[formatStr][length] = mapMonths(dt => this.extract(dt, intl, "month"));
+	      }
+	      return this.monthsCache[formatStr][length];
+	    });
+	  }
+
+	  weekdays(length, format = false, defaultOK = true) {
+	    return listStuff(this, length, defaultOK, weekdays, () => {
+	      const intl = format
+	          ? { weekday: length, year: "numeric", month: "long", day: "numeric" }
+	          : { weekday: length },
+	        formatStr = format ? "format" : "standalone";
+	      if (!this.weekdaysCache[formatStr][length]) {
+	        this.weekdaysCache[formatStr][length] = mapWeekdays(dt =>
+	          this.extract(dt, intl, "weekday")
+	        );
+	      }
+	      return this.weekdaysCache[formatStr][length];
+	    });
+	  }
+
+	  meridiems(defaultOK = true) {
+	    return listStuff(
+	      this,
+	      undefined,
+	      defaultOK,
+	      () => meridiems,
+	      () => {
+	        // In theory there could be aribitrary day periods. We're gonna assume there are exactly two
+	        // for AM and PM. This is probably wrong, but it's makes parsing way easier.
+	        if (!this.meridiemCache) {
+	          const intl = { hour: "numeric", hour12: true };
+	          this.meridiemCache = [DateTime.utc(2016, 11, 13, 9), DateTime.utc(2016, 11, 13, 19)].map(
+	            dt => this.extract(dt, intl, "dayperiod")
+	          );
+	        }
+
+	        return this.meridiemCache;
+	      }
+	    );
+	  }
+
+	  eras(length, defaultOK = true) {
+	    return listStuff(this, length, defaultOK, eras, () => {
+	      const intl = { era: length };
+
+	      // This is utter bullshit. Different calendars are going to define eras totally differently. What I need is the minimum set of dates
+	      // to definitely enumerate them.
+	      if (!this.eraCache[length]) {
+	        this.eraCache[length] = [DateTime.utc(-40, 1, 1), DateTime.utc(2017, 1, 1)].map(dt =>
+	          this.extract(dt, intl, "era")
+	        );
+	      }
+
+	      return this.eraCache[length];
+	    });
+	  }
+
+	  extract(dt, intlOpts, field) {
+	    const df = this.dtFormatter(dt, intlOpts),
+	      results = df.formatToParts(),
+	      matching = results.find(m => m.type.toLowerCase() === field);
+	    return matching ? matching.value : null;
+	  }
+
+	  numberFormatter(opts = {}) {
+	    // this forcesimple option is never used (the only caller short-circuits on it, but it seems safer to leave)
+	    // (in contrast, the rest of the condition is used heavily)
+	    return new PolyNumberFormatter(this.intl, opts.forceSimple || this.fastNumbers, opts);
+	  }
+
+	  dtFormatter(dt, intlOpts = {}) {
+	    return new PolyDateFormatter(dt, this.intl, intlOpts);
+	  }
+
+	  relFormatter(opts = {}) {
+	    return new PolyRelFormatter(this.intl, this.isEnglish(), opts);
+	  }
+
+	  isEnglish() {
+	    return (
+	      this.locale === "en" ||
+	      this.locale.toLowerCase() === "en-us" ||
+	      (hasIntl() && new Intl.DateTimeFormat(this.intl).resolvedOptions().locale.startsWith("en-us"))
+	    );
+	  }
+
+	  equals(other) {
+	    return (
+	      this.locale === other.locale &&
+	      this.numberingSystem === other.numberingSystem &&
+	      this.outputCalendar === other.outputCalendar
+	    );
+	  }
+	}
+
+	/*
+	 * This file handles parsing for well-specified formats. Here's how it works:
+	 * Two things go into parsing: a regex to match with and an extractor to take apart the groups in the match.
+	 * An extractor is just a function that takes a regex match array and returns a { year: ..., month: ... } object
+	 * parse() does the work of executing the regex and applying the extractor. It takes multiple regex/extractor pairs to try in sequence.
+	 * Extractors can take a "cursor" representing the offset in the match to look at. This makes it easy to combine extractors.
+	 * combineExtractors() does the work of combining them, keeping track of the cursor through multiple extractions.
+	 * Some extractions are super dumb and simpleParse and fromStrings help DRY them.
+	 */
+
+	function combineRegexes(...regexes) {
+	  const full = regexes.reduce((f, r) => f + r.source, "");
+	  return RegExp(`^${full}$`);
+	}
+
+	function combineExtractors(...extractors) {
+	  return m =>
+	    extractors
+	      .reduce(
+	        ([mergedVals, mergedZone, cursor], ex) => {
+	          const [val, zone, next] = ex(m, cursor);
+	          return [Object.assign(mergedVals, val), mergedZone || zone, next];
+	        },
+	        [{}, null, 1]
+	      )
+	      .slice(0, 2);
+	}
+
+	function parse(s, ...patterns) {
+	  if (s == null) {
+	    return [null, null];
+	  }
+
+	  for (const [regex, extractor] of patterns) {
+	    const m = regex.exec(s);
+	    if (m) {
+	      return extractor(m);
+	    }
+	  }
+	  return [null, null];
+	}
+
+	function simpleParse(...keys) {
+	  return (match, cursor) => {
+	    const ret = {};
+	    let i;
+
+	    for (i = 0; i < keys.length; i++) {
+	      ret[keys[i]] = parseInteger(match[cursor + i]);
+	    }
+	    return [ret, null, cursor + i];
+	  };
+	}
+
+	// ISO and SQL parsing
+	const offsetRegex = /(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/,
+	  isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,9}))?)?)?/,
+	  isoTimeRegex = RegExp(`${isoTimeBaseRegex.source}${offsetRegex.source}?`),
+	  isoTimeExtensionRegex = RegExp(`(?:T${isoTimeRegex.source})?`),
+	  isoYmdRegex = /([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/,
+	  isoWeekRegex = /(\d{4})-?W(\d\d)(?:-?(\d))?/,
+	  isoOrdinalRegex = /(\d{4})-?(\d{3})/,
+	  extractISOWeekData = simpleParse("weekYear", "weekNumber", "weekDay"),
+	  extractISOOrdinalData = simpleParse("year", "ordinal"),
+	  sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/, // dumbed-down version of the ISO one
+	  sqlTimeRegex = RegExp(
+	    `${isoTimeBaseRegex.source} ?(?:${offsetRegex.source}|(${ianaRegex.source}))?`
+	  ),
+	  sqlTimeExtensionRegex = RegExp(`(?: ${sqlTimeRegex.source})?`);
+
+	function int(match, pos, fallback) {
+	  const m = match[pos];
+	  return isUndefined$2(m) ? fallback : parseInteger(m);
+	}
+
+	function extractISOYmd(match, cursor) {
+	  const item = {
+	    year: int(match, cursor),
+	    month: int(match, cursor + 1, 1),
+	    day: int(match, cursor + 2, 1)
+	  };
+
+	  return [item, null, cursor + 3];
+	}
+
+	function extractISOTime(match, cursor) {
+	  const item = {
+	    hour: int(match, cursor, 0),
+	    minute: int(match, cursor + 1, 0),
+	    second: int(match, cursor + 2, 0),
+	    millisecond: parseMillis(match[cursor + 3])
+	  };
+
+	  return [item, null, cursor + 4];
+	}
+
+	function extractISOOffset(match, cursor) {
+	  const local = !match[cursor] && !match[cursor + 1],
+	    fullOffset = signedOffset(match[cursor + 1], match[cursor + 2]),
+	    zone = local ? null : FixedOffsetZone.instance(fullOffset);
+	  return [{}, zone, cursor + 3];
+	}
+
+	function extractIANAZone(match, cursor) {
+	  const zone = match[cursor] ? IANAZone.create(match[cursor]) : null;
+	  return [{}, zone, cursor + 1];
+	}
+
+	// ISO duration parsing
+
+	const isoDuration = /^P(?:(?:(-?\d{1,9})Y)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})W)?(?:(-?\d{1,9})D)?(?:T(?:(-?\d{1,9})H)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})(?:[.,](-?\d{1,9}))?S)?)?)$/;
+
+	function extractISODuration(match) {
+	  const [
+	    ,
+	    yearStr,
+	    monthStr,
+	    weekStr,
+	    dayStr,
+	    hourStr,
+	    minuteStr,
+	    secondStr,
+	    millisecondsStr
+	  ] = match;
+
+	  return [
+	    {
+	      years: parseInteger(yearStr),
+	      months: parseInteger(monthStr),
+	      weeks: parseInteger(weekStr),
+	      days: parseInteger(dayStr),
+	      hours: parseInteger(hourStr),
+	      minutes: parseInteger(minuteStr),
+	      seconds: parseInteger(secondStr),
+	      milliseconds: parseMillis(millisecondsStr)
+	    }
+	  ];
+	}
+
+	// These are a little braindead. EDT *should* tell us that we're in, say, America/New_York
+	// and not just that we're in -240 *right now*. But since I don't think these are used that often
+	// I'm just going to ignore that
+	const obsOffsets = {
+	  GMT: 0,
+	  EDT: -4 * 60,
+	  EST: -5 * 60,
+	  CDT: -5 * 60,
+	  CST: -6 * 60,
+	  MDT: -6 * 60,
+	  MST: -7 * 60,
+	  PDT: -7 * 60,
+	  PST: -8 * 60
+	};
+
+	function fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr) {
+	  const result = {
+	    year: yearStr.length === 2 ? untruncateYear(parseInteger(yearStr)) : parseInteger(yearStr),
+	    month: monthsShort.indexOf(monthStr) + 1,
+	    day: parseInteger(dayStr),
+	    hour: parseInteger(hourStr),
+	    minute: parseInteger(minuteStr)
+	  };
+
+	  if (secondStr) result.second = parseInteger(secondStr);
+	  if (weekdayStr) {
+	    result.weekday =
+	      weekdayStr.length > 3
+	        ? weekdaysLong.indexOf(weekdayStr) + 1
+	        : weekdaysShort.indexOf(weekdayStr) + 1;
+	  }
+
+	  return result;
+	}
+
+	// RFC 2822/5322
+	const rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|(?:([+-]\d\d)(\d\d)))$/;
+
+	function extractRFC2822(match) {
+	  const [
+	      ,
+	      weekdayStr,
+	      dayStr,
+	      monthStr,
+	      yearStr,
+	      hourStr,
+	      minuteStr,
+	      secondStr,
+	      obsOffset,
+	      milOffset,
+	      offHourStr,
+	      offMinuteStr
+	    ] = match,
+	    result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+
+	  let offset;
+	  if (obsOffset) {
+	    offset = obsOffsets[obsOffset];
+	  } else if (milOffset) {
+	    offset = 0;
+	  } else {
+	    offset = signedOffset(offHourStr, offMinuteStr);
+	  }
+
+	  return [result, new FixedOffsetZone(offset)];
+	}
+
+	function preprocessRFC2822(s) {
+	  // Remove comments and folding whitespace and replace multiple-spaces with a single space
+	  return s
+	    .replace(/\([^)]*\)|[\n\t]/g, " ")
+	    .replace(/(\s\s+)/g, " ")
+	    .trim();
+	}
+
+	// http date
+
+	const rfc1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/,
+	  rfc850 = /^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/,
+	  ascii = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
+
+	function extractRFC1123Or850(match) {
+	  const [, weekdayStr, dayStr, monthStr, yearStr, hourStr, minuteStr, secondStr] = match,
+	    result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+	  return [result, FixedOffsetZone.utcInstance];
+	}
+
+	function extractASCII(match) {
+	  const [, weekdayStr, monthStr, dayStr, hourStr, minuteStr, secondStr, yearStr] = match,
+	    result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+	  return [result, FixedOffsetZone.utcInstance];
+	}
+
+	const isoYmdWithTimeExtensionRegex = combineRegexes(isoYmdRegex, isoTimeExtensionRegex);
+	const isoWeekWithTimeExtensionRegex = combineRegexes(isoWeekRegex, isoTimeExtensionRegex);
+	const isoOrdinalWithTimeExtensionRegex = combineRegexes(isoOrdinalRegex, isoTimeExtensionRegex);
+	const isoTimeCombinedRegex = combineRegexes(isoTimeRegex);
+
+	const extractISOYmdTimeAndOffset = combineExtractors(
+	  extractISOYmd,
+	  extractISOTime,
+	  extractISOOffset
+	);
+	const extractISOWeekTimeAndOffset = combineExtractors(
+	  extractISOWeekData,
+	  extractISOTime,
+	  extractISOOffset
+	);
+	const extractISOOrdinalDataAndTime = combineExtractors(extractISOOrdinalData, extractISOTime);
+	const extractISOTimeAndOffset = combineExtractors(extractISOTime, extractISOOffset);
+
+	/**
+	 * @private
+	 */
+
+	function parseISODate(s) {
+	  return parse(
+	    s,
+	    [isoYmdWithTimeExtensionRegex, extractISOYmdTimeAndOffset],
+	    [isoWeekWithTimeExtensionRegex, extractISOWeekTimeAndOffset],
+	    [isoOrdinalWithTimeExtensionRegex, extractISOOrdinalDataAndTime],
+	    [isoTimeCombinedRegex, extractISOTimeAndOffset]
+	  );
+	}
+
+	function parseRFC2822Date(s) {
+	  return parse(preprocessRFC2822(s), [rfc2822, extractRFC2822]);
+	}
+
+	function parseHTTPDate(s) {
+	  return parse(
+	    s,
+	    [rfc1123, extractRFC1123Or850],
+	    [rfc850, extractRFC1123Or850],
+	    [ascii, extractASCII]
+	  );
+	}
+
+	function parseISODuration(s) {
+	  return parse(s, [isoDuration, extractISODuration]);
+	}
+
+	const sqlYmdWithTimeExtensionRegex = combineRegexes(sqlYmdRegex, sqlTimeExtensionRegex);
+	const sqlTimeCombinedRegex = combineRegexes(sqlTimeRegex);
+
+	const extractISOYmdTimeOffsetAndIANAZone = combineExtractors(
+	  extractISOYmd,
+	  extractISOTime,
+	  extractISOOffset,
+	  extractIANAZone
+	);
+	const extractISOTimeOffsetAndIANAZone = combineExtractors(
+	  extractISOTime,
+	  extractISOOffset,
+	  extractIANAZone
+	);
+
+	function parseSQL(s) {
+	  return parse(
+	    s,
+	    [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeOffsetAndIANAZone],
+	    [sqlTimeCombinedRegex, extractISOTimeOffsetAndIANAZone]
+	  );
+	}
+
+	const INVALID = "Invalid Duration";
+
+	// unit conversion constants
+	const lowOrderMatrix = {
+	    weeks: {
+	      days: 7,
+	      hours: 7 * 24,
+	      minutes: 7 * 24 * 60,
+	      seconds: 7 * 24 * 60 * 60,
+	      milliseconds: 7 * 24 * 60 * 60 * 1000
+	    },
+	    days: {
+	      hours: 24,
+	      minutes: 24 * 60,
+	      seconds: 24 * 60 * 60,
+	      milliseconds: 24 * 60 * 60 * 1000
+	    },
+	    hours: { minutes: 60, seconds: 60 * 60, milliseconds: 60 * 60 * 1000 },
+	    minutes: { seconds: 60, milliseconds: 60 * 1000 },
+	    seconds: { milliseconds: 1000 }
+	  },
+	  casualMatrix = Object.assign(
+	    {
+	      years: {
+	        months: 12,
+	        weeks: 52,
+	        days: 365,
+	        hours: 365 * 24,
+	        minutes: 365 * 24 * 60,
+	        seconds: 365 * 24 * 60 * 60,
+	        milliseconds: 365 * 24 * 60 * 60 * 1000
+	      },
+	      quarters: {
+	        months: 3,
+	        weeks: 13,
+	        days: 91,
+	        hours: 91 * 24,
+	        minutes: 91 * 24 * 60,
+	        milliseconds: 91 * 24 * 60 * 60 * 1000
+	      },
+	      months: {
+	        weeks: 4,
+	        days: 30,
+	        hours: 30 * 24,
+	        minutes: 30 * 24 * 60,
+	        seconds: 30 * 24 * 60 * 60,
+	        milliseconds: 30 * 24 * 60 * 60 * 1000
+	      }
+	    },
+	    lowOrderMatrix
+	  ),
+	  daysInYearAccurate = 146097.0 / 400,
+	  daysInMonthAccurate = 146097.0 / 4800,
+	  accurateMatrix = Object.assign(
+	    {
+	      years: {
+	        months: 12,
+	        weeks: daysInYearAccurate / 7,
+	        days: daysInYearAccurate,
+	        hours: daysInYearAccurate * 24,
+	        minutes: daysInYearAccurate * 24 * 60,
+	        seconds: daysInYearAccurate * 24 * 60 * 60,
+	        milliseconds: daysInYearAccurate * 24 * 60 * 60 * 1000
+	      },
+	      quarters: {
+	        months: 3,
+	        weeks: daysInYearAccurate / 28,
+	        days: daysInYearAccurate / 4,
+	        hours: (daysInYearAccurate * 24) / 4,
+	        minutes: (daysInYearAccurate * 24 * 60) / 4,
+	        seconds: (daysInYearAccurate * 24 * 60 * 60) / 4,
+	        milliseconds: (daysInYearAccurate * 24 * 60 * 60 * 1000) / 4
+	      },
+	      months: {
+	        weeks: daysInMonthAccurate / 7,
+	        days: daysInMonthAccurate,
+	        hours: daysInMonthAccurate * 24,
+	        minutes: daysInMonthAccurate * 24 * 60,
+	        seconds: daysInMonthAccurate * 24 * 60 * 60,
+	        milliseconds: daysInMonthAccurate * 24 * 60 * 60 * 1000
+	      }
+	    },
+	    lowOrderMatrix
+	  );
+
+	// units ordered by size
+	const orderedUnits = [
+	  "years",
+	  "quarters",
+	  "months",
+	  "weeks",
+	  "days",
+	  "hours",
+	  "minutes",
+	  "seconds",
+	  "milliseconds"
+	];
+
+	const reverseUnits = orderedUnits.slice(0).reverse();
+
+	// clone really means "create another instance just like this one, but with these changes"
+	function clone(dur, alts, clear = false) {
+	  // deep merge for vals
+	  const conf = {
+	    values: clear ? alts.values : Object.assign({}, dur.values, alts.values || {}),
+	    loc: dur.loc.clone(alts.loc),
+	    conversionAccuracy: alts.conversionAccuracy || dur.conversionAccuracy
+	  };
+	  return new Duration(conf);
+	}
+
+	function antiTrunc(n) {
+	  return n < 0 ? Math.floor(n) : Math.ceil(n);
+	}
+
+	// NB: mutates parameters
+	function convert(matrix, fromMap, fromUnit, toMap, toUnit) {
+	  const conv = matrix[toUnit][fromUnit],
+	    raw = fromMap[fromUnit] / conv,
+	    sameSign = Math.sign(raw) === Math.sign(toMap[toUnit]),
+	    // ok, so this is wild, but see the matrix in the tests
+	    added =
+	      !sameSign && toMap[toUnit] !== 0 && Math.abs(raw) <= 1 ? antiTrunc(raw) : Math.trunc(raw);
+	  toMap[toUnit] += added;
+	  fromMap[fromUnit] -= added * conv;
+	}
+
+	// NB: mutates parameters
+	function normalizeValues(matrix, vals) {
+	  reverseUnits.reduce((previous, current) => {
+	    if (!isUndefined$2(vals[current])) {
+	      if (previous) {
+	        convert(matrix, vals, previous, vals, current);
+	      }
+	      return current;
+	    } else {
+	      return previous;
+	    }
+	  }, null);
+	}
+
+	/**
+	 * A Duration object represents a period of time, like "2 months" or "1 day, 1 hour". Conceptually, it's just a map of units to their quantities, accompanied by some additional configuration and methods for creating, parsing, interrogating, transforming, and formatting them. They can be used on their own or in conjunction with other Luxon types; for example, you can use {@link DateTime.plus} to add a Duration object to a DateTime, producing another DateTime.
+	 *
+	 * Here is a brief overview of commonly used methods and getters in Duration:
+	 *
+	 * * **Creation** To create a Duration, use {@link Duration.fromMillis}, {@link Duration.fromObject}, or {@link Duration.fromISO}.
+	 * * **Unit values** See the {@link Duration.years}, {@link Duration.months}, {@link Duration.weeks}, {@link Duration.days}, {@link Duration.hours}, {@link Duration.minutes}, {@link Duration.seconds}, {@link Duration.milliseconds} accessors.
+	 * * **Configuration** See  {@link Duration.locale} and {@link Duration.numberingSystem} accessors.
+	 * * **Transformation** To create new Durations out of old ones use {@link Duration.plus}, {@link Duration.minus}, {@link Duration.normalize}, {@link Duration.set}, {@link Duration.reconfigure}, {@link Duration.shiftTo}, and {@link Duration.negate}.
+	 * * **Output** To convert the Duration into other representations, see {@link Duration.as}, {@link Duration.toISO}, {@link Duration.toFormat}, and {@link Duration.toJSON}
+	 *
+	 * There's are more methods documented below. In addition, for more information on subtler topics like internationalization and validity, see the external documentation.
+	 */
+	class Duration {
+	  /**
+	   * @private
+	   */
+	  constructor(config) {
+	    const accurate = config.conversionAccuracy === "longterm" || false;
+	    /**
+	     * @access private
+	     */
+	    this.values = config.values;
+	    /**
+	     * @access private
+	     */
+	    this.loc = config.loc || Locale.create();
+	    /**
+	     * @access private
+	     */
+	    this.conversionAccuracy = accurate ? "longterm" : "casual";
+	    /**
+	     * @access private
+	     */
+	    this.invalid = config.invalid || null;
+	    /**
+	     * @access private
+	     */
+	    this.matrix = accurate ? accurateMatrix : casualMatrix;
+	    /**
+	     * @access private
+	     */
+	    this.isLuxonDuration = true;
+	  }
+
+	  /**
+	   * Create Duration from a number of milliseconds.
+	   * @param {number} count of milliseconds
+	   * @param {Object} opts - options for parsing
+	   * @param {string} [opts.locale='en-US'] - the locale to use
+	   * @param {string} opts.numberingSystem - the numbering system to use
+	   * @param {string} [opts.conversionAccuracy='casual'] - the conversion system to use
+	   * @return {Duration}
+	   */
+	  static fromMillis(count, opts) {
+	    return Duration.fromObject(Object.assign({ milliseconds: count }, opts));
+	  }
+
+	  /**
+	   * Create a Duration from a Javascript object with keys like 'years' and 'hours.
+	   * If this object is empty then a zero milliseconds duration is returned.
+	   * @param {Object} obj - the object to create the DateTime from
+	   * @param {number} obj.years
+	   * @param {number} obj.quarters
+	   * @param {number} obj.months
+	   * @param {number} obj.weeks
+	   * @param {number} obj.days
+	   * @param {number} obj.hours
+	   * @param {number} obj.minutes
+	   * @param {number} obj.seconds
+	   * @param {number} obj.milliseconds
+	   * @param {string} [obj.locale='en-US'] - the locale to use
+	   * @param {string} obj.numberingSystem - the numbering system to use
+	   * @param {string} [obj.conversionAccuracy='casual'] - the conversion system to use
+	   * @return {Duration}
+	   */
+	  static fromObject(obj) {
+	    if (obj == null || typeof obj !== "object") {
+	      throw new InvalidArgumentError(
+	        `Duration.fromObject: argument expected to be an object, got ${
+          obj === null ? "null" : typeof obj
+        }`
+	      );
+	    }
+	    return new Duration({
+	      values: normalizeObject(obj, Duration.normalizeUnit, [
+	        "locale",
+	        "numberingSystem",
+	        "conversionAccuracy",
+	        "zone" // a bit of debt; it's super inconvenient internally not to be able to blindly pass this
+	      ]),
+	      loc: Locale.fromObject(obj),
+	      conversionAccuracy: obj.conversionAccuracy
+	    });
+	  }
+
+	  /**
+	   * Create a Duration from an ISO 8601 duration string.
+	   * @param {string} text - text to parse
+	   * @param {Object} opts - options for parsing
+	   * @param {string} [opts.locale='en-US'] - the locale to use
+	   * @param {string} opts.numberingSystem - the numbering system to use
+	   * @param {string} [opts.conversionAccuracy='casual'] - the conversion system to use
+	   * @see https://en.wikipedia.org/wiki/ISO_8601#Durations
+	   * @example Duration.fromISO('P3Y6M1W4DT12H30M5S').toObject() //=> { years: 3, months: 6, weeks: 1, days: 4, hours: 12, minutes: 30, seconds: 5 }
+	   * @example Duration.fromISO('PT23H').toObject() //=> { hours: 23 }
+	   * @example Duration.fromISO('P5Y3M').toObject() //=> { years: 5, months: 3 }
+	   * @return {Duration}
+	   */
+	  static fromISO(text, opts) {
+	    const [parsed] = parseISODuration(text);
+	    if (parsed) {
+	      const obj = Object.assign(parsed, opts);
+	      return Duration.fromObject(obj);
+	    } else {
+	      return Duration.invalid("unparsable", `the input "${text}" can't be parsed as ISO 8601`);
+	    }
+	  }
+
+	  /**
+	   * Create an invalid Duration.
+	   * @param {string} reason - simple string of why this datetime is invalid. Should not contain parameters or anything else data-dependent
+	   * @param {string} [explanation=null] - longer explanation, may include parameters and other useful debugging information
+	   * @return {Duration}
+	   */
+	  static invalid(reason, explanation = null) {
+	    if (!reason) {
+	      throw new InvalidArgumentError("need to specify a reason the Duration is invalid");
+	    }
+
+	    const invalid = reason instanceof Invalid ? reason : new Invalid(reason, explanation);
+
+	    if (Settings.throwOnInvalid) {
+	      throw new InvalidDurationError(invalid);
+	    } else {
+	      return new Duration({ invalid });
+	    }
+	  }
+
+	  /**
+	   * @private
+	   */
+	  static normalizeUnit(unit) {
+	    const normalized = {
+	      year: "years",
+	      years: "years",
+	      quarter: "quarters",
+	      quarters: "quarters",
+	      month: "months",
+	      months: "months",
+	      week: "weeks",
+	      weeks: "weeks",
+	      day: "days",
+	      days: "days",
+	      hour: "hours",
+	      hours: "hours",
+	      minute: "minutes",
+	      minutes: "minutes",
+	      second: "seconds",
+	      seconds: "seconds",
+	      millisecond: "milliseconds",
+	      milliseconds: "milliseconds"
+	    }[unit ? unit.toLowerCase() : unit];
+
+	    if (!normalized) throw new InvalidUnitError(unit);
+
+	    return normalized;
+	  }
+
+	  /**
+	   * Check if an object is a Duration. Works across context boundaries
+	   * @param {object} o
+	   * @return {boolean}
+	   */
+	  static isDuration(o) {
+	    return (o && o.isLuxonDuration) || false;
+	  }
+
+	  /**
+	   * Get  the locale of a Duration, such 'en-GB'
+	   * @type {string}
+	   */
+	  get locale() {
+	    return this.isValid ? this.loc.locale : null;
+	  }
+
+	  /**
+	   * Get the numbering system of a Duration, such 'beng'. The numbering system is used when formatting the Duration
+	   *
+	   * @type {string}
+	   */
+	  get numberingSystem() {
+	    return this.isValid ? this.loc.numberingSystem : null;
+	  }
+
+	  /**
+	   * Returns a string representation of this Duration formatted according to the specified format string. You may use these tokens:
+	   * * `S` for milliseconds
+	   * * `s` for seconds
+	   * * `m` for minutes
+	   * * `h` for hours
+	   * * `d` for days
+	   * * `M` for months
+	   * * `y` for years
+	   * Notes:
+	   * * Add padding by repeating the token, e.g. "yy" pads the years to two digits, "hhhh" pads the hours out to four digits
+	   * * The duration will be converted to the set of units in the format string using {@link Duration.shiftTo} and the Durations's conversion accuracy setting.
+	   * @param {string} fmt - the format string
+	   * @param {Object} opts - options
+	   * @param {boolean} [opts.floor=true] - floor numerical values
+	   * @example Duration.fromObject({ years: 1, days: 6, seconds: 2 }).toFormat("y d s") //=> "1 6 2"
+	   * @example Duration.fromObject({ years: 1, days: 6, seconds: 2 }).toFormat("yy dd sss") //=> "01 06 002"
+	   * @example Duration.fromObject({ years: 1, days: 6, seconds: 2 }).toFormat("M S") //=> "12 518402000"
+	   * @return {string}
+	   */
+	  toFormat(fmt, opts = {}) {
+	    // reverse-compat since 1.2; we always round down now, never up, and we do it by default
+	    const fmtOpts = Object.assign({}, opts, {
+	      floor: opts.round !== false && opts.floor !== false
+	    });
+	    return this.isValid
+	      ? Formatter.create(this.loc, fmtOpts).formatDurationFromString(this, fmt)
+	      : INVALID;
+	  }
+
+	  /**
+	   * Returns a Javascript object with this Duration's values.
+	   * @param opts - options for generating the object
+	   * @param {boolean} [opts.includeConfig=false] - include configuration attributes in the output
+	   * @example Duration.fromObject({ years: 1, days: 6, seconds: 2 }).toObject() //=> { years: 1, days: 6, seconds: 2 }
+	   * @return {Object}
+	   */
+	  toObject(opts = {}) {
+	    if (!this.isValid) return {};
+
+	    const base = Object.assign({}, this.values);
+
+	    if (opts.includeConfig) {
+	      base.conversionAccuracy = this.conversionAccuracy;
+	      base.numberingSystem = this.loc.numberingSystem;
+	      base.locale = this.loc.locale;
+	    }
+	    return base;
+	  }
+
+	  /**
+	   * Returns an ISO 8601-compliant string representation of this Duration.
+	   * @see https://en.wikipedia.org/wiki/ISO_8601#Durations
+	   * @example Duration.fromObject({ years: 3, seconds: 45 }).toISO() //=> 'P3YT45S'
+	   * @example Duration.fromObject({ months: 4, seconds: 45 }).toISO() //=> 'P4MT45S'
+	   * @example Duration.fromObject({ months: 5 }).toISO() //=> 'P5M'
+	   * @example Duration.fromObject({ minutes: 5 }).toISO() //=> 'PT5M'
+	   * @example Duration.fromObject({ milliseconds: 6 }).toISO() //=> 'PT0.006S'
+	   * @return {string}
+	   */
+	  toISO() {
+	    // we could use the formatter, but this is an easier way to get the minimum string
+	    if (!this.isValid) return null;
+
+	    let s = "P";
+	    if (this.years !== 0) s += this.years + "Y";
+	    if (this.months !== 0 || this.quarters !== 0) s += this.months + this.quarters * 3 + "M";
+	    if (this.weeks !== 0) s += this.weeks + "W";
+	    if (this.days !== 0) s += this.days + "D";
+	    if (this.hours !== 0 || this.minutes !== 0 || this.seconds !== 0 || this.milliseconds !== 0)
+	      s += "T";
+	    if (this.hours !== 0) s += this.hours + "H";
+	    if (this.minutes !== 0) s += this.minutes + "M";
+	    if (this.seconds !== 0 || this.milliseconds !== 0)
+	      // this will handle "floating point madness" by removing extra decimal places
+	      // https://stackoverflow.com/questions/588004/is-floating-point-math-broken
+	      s += roundTo(this.seconds + this.milliseconds / 1000, 3) + "S";
+	    if (s === "P") s += "T0S";
+	    return s;
+	  }
+
+	  /**
+	   * Returns an ISO 8601 representation of this Duration appropriate for use in JSON.
+	   * @return {string}
+	   */
+	  toJSON() {
+	    return this.toISO();
+	  }
+
+	  /**
+	   * Returns an ISO 8601 representation of this Duration appropriate for use in debugging.
+	   * @return {string}
+	   */
+	  toString() {
+	    return this.toISO();
+	  }
+
+	  /**
+	   * Returns an milliseconds value of this Duration.
+	   * @return {number}
+	   */
+	  valueOf() {
+	    return this.as("milliseconds");
+	  }
+
+	  /**
+	   * Make this Duration longer by the specified amount. Return a newly-constructed Duration.
+	   * @param {Duration|Object|number} duration - The amount to add. Either a Luxon Duration, a number of milliseconds, the object argument to Duration.fromObject()
+	   * @return {Duration}
+	   */
+	  plus(duration) {
+	    if (!this.isValid) return this;
+
+	    const dur = friendlyDuration(duration),
+	      result = {};
+
+	    for (const k of orderedUnits) {
+	      if (hasOwnProperty$2(dur.values, k) || hasOwnProperty$2(this.values, k)) {
+	        result[k] = dur.get(k) + this.get(k);
+	      }
+	    }
+
+	    return clone(this, { values: result }, true);
+	  }
+
+	  /**
+	   * Make this Duration shorter by the specified amount. Return a newly-constructed Duration.
+	   * @param {Duration|Object|number} duration - The amount to subtract. Either a Luxon Duration, a number of milliseconds, the object argument to Duration.fromObject()
+	   * @return {Duration}
+	   */
+	  minus(duration) {
+	    if (!this.isValid) return this;
+
+	    const dur = friendlyDuration(duration);
+	    return this.plus(dur.negate());
+	  }
+
+	  /**
+	   * Scale this Duration by the specified amount. Return a newly-constructed Duration.
+	   * @param {function} fn - The function to apply to each unit. Arity is 1 or 2: the value of the unit and, optionally, the unit name. Must return a number.
+	   * @example Duration.fromObject({ hours: 1, minutes: 30 }).mapUnit(x => x * 2) //=> { hours: 2, minutes: 60 }
+	   * @example Duration.fromObject({ hours: 1, minutes: 30 }).mapUnit((x, u) => u === "hour" ? x * 2 : x) //=> { hours: 2, minutes: 30 }
+	   * @return {Duration}
+	   */
+	  mapUnits(fn) {
+	    if (!this.isValid) return this;
+	    const result = {};
+	    for (const k of Object.keys(this.values)) {
+	      result[k] = asNumber(fn(this.values[k], k));
+	    }
+	    return clone(this, { values: result }, true);
+	  }
+
+	  /**
+	   * Get the value of unit.
+	   * @param {string} unit - a unit such as 'minute' or 'day'
+	   * @example Duration.fromObject({years: 2, days: 3}).years //=> 2
+	   * @example Duration.fromObject({years: 2, days: 3}).months //=> 0
+	   * @example Duration.fromObject({years: 2, days: 3}).days //=> 3
+	   * @return {number}
+	   */
+	  get(unit) {
+	    return this[Duration.normalizeUnit(unit)];
+	  }
+
+	  /**
+	   * "Set" the values of specified units. Return a newly-constructed Duration.
+	   * @param {Object} values - a mapping of units to numbers
+	   * @example dur.set({ years: 2017 })
+	   * @example dur.set({ hours: 8, minutes: 30 })
+	   * @return {Duration}
+	   */
+	  set(values) {
+	    if (!this.isValid) return this;
+
+	    const mixed = Object.assign(this.values, normalizeObject(values, Duration.normalizeUnit, []));
+	    return clone(this, { values: mixed });
+	  }
+
+	  /**
+	   * "Set" the locale and/or numberingSystem.  Returns a newly-constructed Duration.
+	   * @example dur.reconfigure({ locale: 'en-GB' })
+	   * @return {Duration}
+	   */
+	  reconfigure({ locale, numberingSystem, conversionAccuracy } = {}) {
+	    const loc = this.loc.clone({ locale, numberingSystem }),
+	      opts = { loc };
+
+	    if (conversionAccuracy) {
+	      opts.conversionAccuracy = conversionAccuracy;
+	    }
+
+	    return clone(this, opts);
+	  }
+
+	  /**
+	   * Return the length of the duration in the specified unit.
+	   * @param {string} unit - a unit such as 'minutes' or 'days'
+	   * @example Duration.fromObject({years: 1}).as('days') //=> 365
+	   * @example Duration.fromObject({years: 1}).as('months') //=> 12
+	   * @example Duration.fromObject({hours: 60}).as('days') //=> 2.5
+	   * @return {number}
+	   */
+	  as(unit) {
+	    return this.isValid ? this.shiftTo(unit).get(unit) : NaN;
+	  }
+
+	  /**
+	   * Reduce this Duration to its canonical representation in its current units.
+	   * @example Duration.fromObject({ years: 2, days: 5000 }).normalize().toObject() //=> { years: 15, days: 255 }
+	   * @example Duration.fromObject({ hours: 12, minutes: -45 }).normalize().toObject() //=> { hours: 11, minutes: 15 }
+	   * @return {Duration}
+	   */
+	  normalize() {
+	    if (!this.isValid) return this;
+	    const vals = this.toObject();
+	    normalizeValues(this.matrix, vals);
+	    return clone(this, { values: vals }, true);
+	  }
+
+	  /**
+	   * Convert this Duration into its representation in a different set of units.
+	   * @example Duration.fromObject({ hours: 1, seconds: 30 }).shiftTo('minutes', 'milliseconds').toObject() //=> { minutes: 60, milliseconds: 30000 }
+	   * @return {Duration}
+	   */
+	  shiftTo(...units) {
+	    if (!this.isValid) return this;
+
+	    if (units.length === 0) {
+	      return this;
+	    }
+
+	    units = units.map(u => Duration.normalizeUnit(u));
+
+	    const built = {},
+	      accumulated = {},
+	      vals = this.toObject();
+	    let lastUnit;
+
+	    normalizeValues(this.matrix, vals);
+
+	    for (const k of orderedUnits) {
+	      if (units.indexOf(k) >= 0) {
+	        lastUnit = k;
+
+	        let own = 0;
+
+	        // anything we haven't boiled down yet should get boiled to this unit
+	        for (const ak in accumulated) {
+	          own += this.matrix[ak][k] * accumulated[ak];
+	          accumulated[ak] = 0;
+	        }
+
+	        // plus anything that's already in this unit
+	        if (isNumber$1(vals[k])) {
+	          own += vals[k];
+	        }
+
+	        const i = Math.trunc(own);
+	        built[k] = i;
+	        accumulated[k] = own - i; // we'd like to absorb these fractions in another unit
+
+	        // plus anything further down the chain that should be rolled up in to this
+	        for (const down in vals) {
+	          if (orderedUnits.indexOf(down) > orderedUnits.indexOf(k)) {
+	            convert(this.matrix, vals, down, built, k);
+	          }
+	        }
+	        // otherwise, keep it in the wings to boil it later
+	      } else if (isNumber$1(vals[k])) {
+	        accumulated[k] = vals[k];
+	      }
+	    }
+
+	    // anything leftover becomes the decimal for the last unit
+	    // lastUnit must be defined since units is not empty
+	    for (const key in accumulated) {
+	      if (accumulated[key] !== 0) {
+	        built[lastUnit] +=
+	          key === lastUnit ? accumulated[key] : accumulated[key] / this.matrix[lastUnit][key];
+	      }
+	    }
+
+	    return clone(this, { values: built }, true).normalize();
+	  }
+
+	  /**
+	   * Return the negative of this Duration.
+	   * @example Duration.fromObject({ hours: 1, seconds: 30 }).negate().toObject() //=> { hours: -1, seconds: -30 }
+	   * @return {Duration}
+	   */
+	  negate() {
+	    if (!this.isValid) return this;
+	    const negated = {};
+	    for (const k of Object.keys(this.values)) {
+	      negated[k] = -this.values[k];
+	    }
+	    return clone(this, { values: negated }, true);
+	  }
+
+	  /**
+	   * Get the years.
+	   * @type {number}
+	   */
+	  get years() {
+	    return this.isValid ? this.values.years || 0 : NaN;
+	  }
+
+	  /**
+	   * Get the quarters.
+	   * @type {number}
+	   */
+	  get quarters() {
+	    return this.isValid ? this.values.quarters || 0 : NaN;
+	  }
+
+	  /**
+	   * Get the months.
+	   * @type {number}
+	   */
+	  get months() {
+	    return this.isValid ? this.values.months || 0 : NaN;
+	  }
+
+	  /**
+	   * Get the weeks
+	   * @type {number}
+	   */
+	  get weeks() {
+	    return this.isValid ? this.values.weeks || 0 : NaN;
+	  }
+
+	  /**
+	   * Get the days.
+	   * @type {number}
+	   */
+	  get days() {
+	    return this.isValid ? this.values.days || 0 : NaN;
+	  }
+
+	  /**
+	   * Get the hours.
+	   * @type {number}
+	   */
+	  get hours() {
+	    return this.isValid ? this.values.hours || 0 : NaN;
+	  }
+
+	  /**
+	   * Get the minutes.
+	   * @type {number}
+	   */
+	  get minutes() {
+	    return this.isValid ? this.values.minutes || 0 : NaN;
+	  }
+
+	  /**
+	   * Get the seconds.
+	   * @return {number}
+	   */
+	  get seconds() {
+	    return this.isValid ? this.values.seconds || 0 : NaN;
+	  }
+
+	  /**
+	   * Get the milliseconds.
+	   * @return {number}
+	   */
+	  get milliseconds() {
+	    return this.isValid ? this.values.milliseconds || 0 : NaN;
+	  }
+
+	  /**
+	   * Returns whether the Duration is invalid. Invalid durations are returned by diff operations
+	   * on invalid DateTimes or Intervals.
+	   * @return {boolean}
+	   */
+	  get isValid() {
+	    return this.invalid === null;
+	  }
+
+	  /**
+	   * Returns an error code if this Duration became invalid, or null if the Duration is valid
+	   * @return {string}
+	   */
+	  get invalidReason() {
+	    return this.invalid ? this.invalid.reason : null;
+	  }
+
+	  /**
+	   * Returns an explanation of why this Duration became invalid, or null if the Duration is valid
+	   * @type {string}
+	   */
+	  get invalidExplanation() {
+	    return this.invalid ? this.invalid.explanation : null;
+	  }
+
+	  /**
+	   * Equality check
+	   * Two Durations are equal iff they have the same units and the same values for each unit.
+	   * @param {Duration} other
+	   * @return {boolean}
+	   */
+	  equals(other) {
+	    if (!this.isValid || !other.isValid) {
+	      return false;
+	    }
+
+	    if (!this.loc.equals(other.loc)) {
+	      return false;
+	    }
+
+	    for (const u of orderedUnits) {
+	      if (this.values[u] !== other.values[u]) {
+	        return false;
+	      }
+	    }
+	    return true;
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+	function friendlyDuration(durationish) {
+	  if (isNumber$1(durationish)) {
+	    return Duration.fromMillis(durationish);
+	  } else if (Duration.isDuration(durationish)) {
+	    return durationish;
+	  } else if (typeof durationish === "object") {
+	    return Duration.fromObject(durationish);
+	  } else {
+	    throw new InvalidArgumentError(
+	      `Unknown duration argument ${durationish} of type ${typeof durationish}`
+	    );
+	  }
+	}
+
+	const INVALID$1 = "Invalid Interval";
+
+	// checks if the start is equal to or before the end
+	function validateStartEnd(start, end) {
+	  if (!start || !start.isValid) {
+	    return Interval.invalid("missing or invalid start");
+	  } else if (!end || !end.isValid) {
+	    return Interval.invalid("missing or invalid end");
+	  } else if (end < start) {
+	    return Interval.invalid(
+	      "end before start",
+	      `The end of an interval must be after its start, but you had start=${start.toISO()} and end=${end.toISO()}`
+	    );
+	  } else {
+	    return null;
+	  }
+	}
+
+	/**
+	 * An Interval object represents a half-open interval of time, where each endpoint is a {@link DateTime}. Conceptually, it's a container for those two endpoints, accompanied by methods for creating, parsing, interrogating, comparing, transforming, and formatting them.
+	 *
+	 * Here is a brief overview of the most commonly used methods and getters in Interval:
+	 *
+	 * * **Creation** To create an Interval, use {@link fromDateTimes}, {@link after}, {@link before}, or {@link fromISO}.
+	 * * **Accessors** Use {@link start} and {@link end} to get the start and end.
+	 * * **Interrogation** To analyze the Interval, use {@link count}, {@link length}, {@link hasSame}, {@link contains}, {@link isAfter}, or {@link isBefore}.
+	 * * **Transformation** To create other Intervals out of this one, use {@link set}, {@link splitAt}, {@link splitBy}, {@link divideEqually}, {@link merge}, {@link xor}, {@link union}, {@link intersection}, or {@link difference}.
+	 * * **Comparison** To compare this Interval to another one, use {@link equals}, {@link overlaps}, {@link abutsStart}, {@link abutsEnd}, {@link engulfs}
+	 * * **Output** To convert the Interval into other representations, see {@link toString}, {@link toISO}, {@link toISODate}, {@link toISOTime}, {@link toFormat}, and {@link toDuration}.
+	 */
+	class Interval {
+	  /**
+	   * @private
+	   */
+	  constructor(config) {
+	    /**
+	     * @access private
+	     */
+	    this.s = config.start;
+	    /**
+	     * @access private
+	     */
+	    this.e = config.end;
+	    /**
+	     * @access private
+	     */
+	    this.invalid = config.invalid || null;
+	    /**
+	     * @access private
+	     */
+	    this.isLuxonInterval = true;
+	  }
+
+	  /**
+	   * Create an invalid Interval.
+	   * @param {string} reason - simple string of why this Interval is invalid. Should not contain parameters or anything else data-dependent
+	   * @param {string} [explanation=null] - longer explanation, may include parameters and other useful debugging information
+	   * @return {Interval}
+	   */
+	  static invalid(reason, explanation = null) {
+	    if (!reason) {
+	      throw new InvalidArgumentError("need to specify a reason the Interval is invalid");
+	    }
+
+	    const invalid = reason instanceof Invalid ? reason : new Invalid(reason, explanation);
+
+	    if (Settings.throwOnInvalid) {
+	      throw new InvalidIntervalError(invalid);
+	    } else {
+	      return new Interval({ invalid });
+	    }
+	  }
+
+	  /**
+	   * Create an Interval from a start DateTime and an end DateTime. Inclusive of the start but not the end.
+	   * @param {DateTime|Date|Object} start
+	   * @param {DateTime|Date|Object} end
+	   * @return {Interval}
+	   */
+	  static fromDateTimes(start, end) {
+	    const builtStart = friendlyDateTime(start),
+	      builtEnd = friendlyDateTime(end);
+
+	    const validateError = validateStartEnd(builtStart, builtEnd);
+
+	    if (validateError == null) {
+	      return new Interval({
+	        start: builtStart,
+	        end: builtEnd
+	      });
+	    } else {
+	      return validateError;
+	    }
+	  }
+
+	  /**
+	   * Create an Interval from a start DateTime and a Duration to extend to.
+	   * @param {DateTime|Date|Object} start
+	   * @param {Duration|Object|number} duration - the length of the Interval.
+	   * @return {Interval}
+	   */
+	  static after(start, duration) {
+	    const dur = friendlyDuration(duration),
+	      dt = friendlyDateTime(start);
+	    return Interval.fromDateTimes(dt, dt.plus(dur));
+	  }
+
+	  /**
+	   * Create an Interval from an end DateTime and a Duration to extend backwards to.
+	   * @param {DateTime|Date|Object} end
+	   * @param {Duration|Object|number} duration - the length of the Interval.
+	   * @return {Interval}
+	   */
+	  static before(end, duration) {
+	    const dur = friendlyDuration(duration),
+	      dt = friendlyDateTime(end);
+	    return Interval.fromDateTimes(dt.minus(dur), dt);
+	  }
+
+	  /**
+	   * Create an Interval from an ISO 8601 string.
+	   * Accepts `<start>/<end>`, `<start>/<duration>`, and `<duration>/<end>` formats.
+	   * @param {string} text - the ISO string to parse
+	   * @param {Object} [opts] - options to pass {@link DateTime.fromISO} and optionally {@link Duration.fromISO}
+	   * @see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
+	   * @return {Interval}
+	   */
+	  static fromISO(text, opts) {
+	    const [s, e] = (text || "").split("/", 2);
+	    if (s && e) {
+	      const start = DateTime.fromISO(s, opts),
+	        end = DateTime.fromISO(e, opts);
+
+	      if (start.isValid && end.isValid) {
+	        return Interval.fromDateTimes(start, end);
+	      }
+
+	      if (start.isValid) {
+	        const dur = Duration.fromISO(e, opts);
+	        if (dur.isValid) {
+	          return Interval.after(start, dur);
+	        }
+	      } else if (end.isValid) {
+	        const dur = Duration.fromISO(s, opts);
+	        if (dur.isValid) {
+	          return Interval.before(end, dur);
+	        }
+	      }
+	    }
+	    return Interval.invalid("unparsable", `the input "${text}" can't be parsed as ISO 8601`);
+	  }
+
+	  /**
+	   * Check if an object is an Interval. Works across context boundaries
+	   * @param {object} o
+	   * @return {boolean}
+	   */
+	  static isInterval(o) {
+	    return (o && o.isLuxonInterval) || false;
+	  }
+
+	  /**
+	   * Returns the start of the Interval
+	   * @type {DateTime}
+	   */
+	  get start() {
+	    return this.isValid ? this.s : null;
+	  }
+
+	  /**
+	   * Returns the end of the Interval
+	   * @type {DateTime}
+	   */
+	  get end() {
+	    return this.isValid ? this.e : null;
+	  }
+
+	  /**
+	   * Returns whether this Interval's end is at least its start, meaning that the Interval isn't 'backwards'.
+	   * @type {boolean}
+	   */
+	  get isValid() {
+	    return this.invalidReason === null;
+	  }
+
+	  /**
+	   * Returns an error code if this Interval is invalid, or null if the Interval is valid
+	   * @type {string}
+	   */
+	  get invalidReason() {
+	    return this.invalid ? this.invalid.reason : null;
+	  }
+
+	  /**
+	   * Returns an explanation of why this Interval became invalid, or null if the Interval is valid
+	   * @type {string}
+	   */
+	  get invalidExplanation() {
+	    return this.invalid ? this.invalid.explanation : null;
+	  }
+
+	  /**
+	   * Returns the length of the Interval in the specified unit.
+	   * @param {string} unit - the unit (such as 'hours' or 'days') to return the length in.
+	   * @return {number}
+	   */
+	  length(unit = "milliseconds") {
+	    return this.isValid ? this.toDuration(...[unit]).get(unit) : NaN;
+	  }
+
+	  /**
+	   * Returns the count of minutes, hours, days, months, or years included in the Interval, even in part.
+	   * Unlike {@link length} this counts sections of the calendar, not periods of time, e.g. specifying 'day'
+	   * asks 'what dates are included in this interval?', not 'how many days long is this interval?'
+	   * @param {string} [unit='milliseconds'] - the unit of time to count.
+	   * @return {number}
+	   */
+	  count(unit = "milliseconds") {
+	    if (!this.isValid) return NaN;
+	    const start = this.start.startOf(unit),
+	      end = this.end.startOf(unit);
+	    return Math.floor(end.diff(start, unit).get(unit)) + 1;
+	  }
+
+	  /**
+	   * Returns whether this Interval's start and end are both in the same unit of time
+	   * @param {string} unit - the unit of time to check sameness on
+	   * @return {boolean}
+	   */
+	  hasSame(unit) {
+	    return this.isValid ? this.e.minus(1).hasSame(this.s, unit) : false;
+	  }
+
+	  /**
+	   * Return whether this Interval has the same start and end DateTimes.
+	   * @return {boolean}
+	   */
+	  isEmpty() {
+	    return this.s.valueOf() === this.e.valueOf();
+	  }
+
+	  /**
+	   * Return whether this Interval's start is after the specified DateTime.
+	   * @param {DateTime} dateTime
+	   * @return {boolean}
+	   */
+	  isAfter(dateTime) {
+	    if (!this.isValid) return false;
+	    return this.s > dateTime;
+	  }
+
+	  /**
+	   * Return whether this Interval's end is before the specified DateTime.
+	   * @param {DateTime} dateTime
+	   * @return {boolean}
+	   */
+	  isBefore(dateTime) {
+	    if (!this.isValid) return false;
+	    return this.e <= dateTime;
+	  }
+
+	  /**
+	   * Return whether this Interval contains the specified DateTime.
+	   * @param {DateTime} dateTime
+	   * @return {boolean}
+	   */
+	  contains(dateTime) {
+	    if (!this.isValid) return false;
+	    return this.s <= dateTime && this.e > dateTime;
+	  }
+
+	  /**
+	   * "Sets" the start and/or end dates. Returns a newly-constructed Interval.
+	   * @param {Object} values - the values to set
+	   * @param {DateTime} values.start - the starting DateTime
+	   * @param {DateTime} values.end - the ending DateTime
+	   * @return {Interval}
+	   */
+	  set({ start, end } = {}) {
+	    if (!this.isValid) return this;
+	    return Interval.fromDateTimes(start || this.s, end || this.e);
+	  }
+
+	  /**
+	   * Split this Interval at each of the specified DateTimes
+	   * @param {...[DateTime]} dateTimes - the unit of time to count.
+	   * @return {[Interval]}
+	   */
+	  splitAt(...dateTimes) {
+	    if (!this.isValid) return [];
+	    const sorted = dateTimes
+	        .map(friendlyDateTime)
+	        .filter(d => this.contains(d))
+	        .sort(),
+	      results = [];
+	    let { s } = this,
+	      i = 0;
+
+	    while (s < this.e) {
+	      const added = sorted[i] || this.e,
+	        next = +added > +this.e ? this.e : added;
+	      results.push(Interval.fromDateTimes(s, next));
+	      s = next;
+	      i += 1;
+	    }
+
+	    return results;
+	  }
+
+	  /**
+	   * Split this Interval into smaller Intervals, each of the specified length.
+	   * Left over time is grouped into a smaller interval
+	   * @param {Duration|Object|number} duration - The length of each resulting interval.
+	   * @return {[Interval]}
+	   */
+	  splitBy(duration) {
+	    const dur = friendlyDuration(duration);
+
+	    if (!this.isValid || !dur.isValid || dur.as("milliseconds") === 0) {
+	      return [];
+	    }
+
+	    let { s } = this,
+	      added,
+	      next;
+
+	    const results = [];
+	    while (s < this.e) {
+	      added = s.plus(dur);
+	      next = +added > +this.e ? this.e : added;
+	      results.push(Interval.fromDateTimes(s, next));
+	      s = next;
+	    }
+
+	    return results;
+	  }
+
+	  /**
+	   * Split this Interval into the specified number of smaller intervals.
+	   * @param {number} numberOfParts - The number of Intervals to divide the Interval into.
+	   * @return {[Interval]}
+	   */
+	  divideEqually(numberOfParts) {
+	    if (!this.isValid) return [];
+	    return this.splitBy(this.length() / numberOfParts).slice(0, numberOfParts);
+	  }
+
+	  /**
+	   * Return whether this Interval overlaps with the specified Interval
+	   * @param {Interval} other
+	   * @return {boolean}
+	   */
+	  overlaps(other) {
+	    return this.e > other.s && this.s < other.e;
+	  }
+
+	  /**
+	   * Return whether this Interval's end is adjacent to the specified Interval's start.
+	   * @param {Interval} other
+	   * @return {boolean}
+	   */
+	  abutsStart(other) {
+	    if (!this.isValid) return false;
+	    return +this.e === +other.s;
+	  }
+
+	  /**
+	   * Return whether this Interval's start is adjacent to the specified Interval's end.
+	   * @param {Interval} other
+	   * @return {boolean}
+	   */
+	  abutsEnd(other) {
+	    if (!this.isValid) return false;
+	    return +other.e === +this.s;
+	  }
+
+	  /**
+	   * Return whether this Interval engulfs the start and end of the specified Interval.
+	   * @param {Interval} other
+	   * @return {boolean}
+	   */
+	  engulfs(other) {
+	    if (!this.isValid) return false;
+	    return this.s <= other.s && this.e >= other.e;
+	  }
+
+	  /**
+	   * Return whether this Interval has the same start and end as the specified Interval.
+	   * @param {Interval} other
+	   * @return {boolean}
+	   */
+	  equals(other) {
+	    if (!this.isValid || !other.isValid) {
+	      return false;
+	    }
+
+	    return this.s.equals(other.s) && this.e.equals(other.e);
+	  }
+
+	  /**
+	   * Return an Interval representing the intersection of this Interval and the specified Interval.
+	   * Specifically, the resulting Interval has the maximum start time and the minimum end time of the two Intervals.
+	   * Returns null if the intersection is empty, meaning, the intervals don't intersect.
+	   * @param {Interval} other
+	   * @return {Interval}
+	   */
+	  intersection(other) {
+	    if (!this.isValid) return this;
+	    const s = this.s > other.s ? this.s : other.s,
+	      e = this.e < other.e ? this.e : other.e;
+
+	    if (s > e) {
+	      return null;
+	    } else {
+	      return Interval.fromDateTimes(s, e);
+	    }
+	  }
+
+	  /**
+	   * Return an Interval representing the union of this Interval and the specified Interval.
+	   * Specifically, the resulting Interval has the minimum start time and the maximum end time of the two Intervals.
+	   * @param {Interval} other
+	   * @return {Interval}
+	   */
+	  union(other) {
+	    if (!this.isValid) return this;
+	    const s = this.s < other.s ? this.s : other.s,
+	      e = this.e > other.e ? this.e : other.e;
+	    return Interval.fromDateTimes(s, e);
+	  }
+
+	  /**
+	   * Merge an array of Intervals into a equivalent minimal set of Intervals.
+	   * Combines overlapping and adjacent Intervals.
+	   * @param {[Interval]} intervals
+	   * @return {[Interval]}
+	   */
+	  static merge(intervals) {
+	    const [found, final] = intervals.sort((a, b) => a.s - b.s).reduce(
+	      ([sofar, current], item) => {
+	        if (!current) {
+	          return [sofar, item];
+	        } else if (current.overlaps(item) || current.abutsStart(item)) {
+	          return [sofar, current.union(item)];
+	        } else {
+	          return [sofar.concat([current]), item];
+	        }
+	      },
+	      [[], null]
+	    );
+	    if (final) {
+	      found.push(final);
+	    }
+	    return found;
+	  }
+
+	  /**
+	   * Return an array of Intervals representing the spans of time that only appear in one of the specified Intervals.
+	   * @param {[Interval]} intervals
+	   * @return {[Interval]}
+	   */
+	  static xor(intervals) {
+	    let start = null,
+	      currentCount = 0;
+	    const results = [],
+	      ends = intervals.map(i => [{ time: i.s, type: "s" }, { time: i.e, type: "e" }]),
+	      flattened = Array.prototype.concat(...ends),
+	      arr = flattened.sort((a, b) => a.time - b.time);
+
+	    for (const i of arr) {
+	      currentCount += i.type === "s" ? 1 : -1;
+
+	      if (currentCount === 1) {
+	        start = i.time;
+	      } else {
+	        if (start && +start !== +i.time) {
+	          results.push(Interval.fromDateTimes(start, i.time));
+	        }
+
+	        start = null;
+	      }
+	    }
+
+	    return Interval.merge(results);
+	  }
+
+	  /**
+	   * Return an Interval representing the span of time in this Interval that doesn't overlap with any of the specified Intervals.
+	   * @param {...Interval} intervals
+	   * @return {[Interval]}
+	   */
+	  difference(...intervals) {
+	    return Interval.xor([this].concat(intervals))
+	      .map(i => this.intersection(i))
+	      .filter(i => i && !i.isEmpty());
+	  }
+
+	  /**
+	   * Returns a string representation of this Interval appropriate for debugging.
+	   * @return {string}
+	   */
+	  toString() {
+	    if (!this.isValid) return INVALID$1;
+	    return `[${this.s.toISO()} – ${this.e.toISO()})`;
+	  }
+
+	  /**
+	   * Returns an ISO 8601-compliant string representation of this Interval.
+	   * @see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
+	   * @param {Object} opts - The same options as {@link DateTime.toISO}
+	   * @return {string}
+	   */
+	  toISO(opts) {
+	    if (!this.isValid) return INVALID$1;
+	    return `${this.s.toISO(opts)}/${this.e.toISO(opts)}`;
+	  }
+
+	  /**
+	   * Returns an ISO 8601-compliant string representation of date of this Interval.
+	   * The time components are ignored.
+	   * @see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
+	   * @return {string}
+	   */
+	  toISODate() {
+	    if (!this.isValid) return INVALID$1;
+	    return `${this.s.toISODate()}/${this.e.toISODate()}`;
+	  }
+
+	  /**
+	   * Returns an ISO 8601-compliant string representation of time of this Interval.
+	   * The date components are ignored.
+	   * @see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
+	   * @param {Object} opts - The same options as {@link DateTime.toISO}
+	   * @return {string}
+	   */
+	  toISOTime(opts) {
+	    if (!this.isValid) return INVALID$1;
+	    return `${this.s.toISOTime(opts)}/${this.e.toISOTime(opts)}`;
+	  }
+
+	  /**
+	   * Returns a string representation of this Interval formatted according to the specified format string.
+	   * @param {string} dateFormat - the format string. This string formats the start and end time. See {@link DateTime.toFormat} for details.
+	   * @param {Object} opts - options
+	   * @param {string} [opts.separator =  ' – '] - a separator to place between the start and end representations
+	   * @return {string}
+	   */
+	  toFormat(dateFormat, { separator = " – " } = {}) {
+	    if (!this.isValid) return INVALID$1;
+	    return `${this.s.toFormat(dateFormat)}${separator}${this.e.toFormat(dateFormat)}`;
+	  }
+
+	  /**
+	   * Return a Duration representing the time spanned by this interval.
+	   * @param {string|string[]} [unit=['milliseconds']] - the unit or units (such as 'hours' or 'days') to include in the duration.
+	   * @param {Object} opts - options that affect the creation of the Duration
+	   * @param {string} [opts.conversionAccuracy='casual'] - the conversion system to use
+	   * @example Interval.fromDateTimes(dt1, dt2).toDuration().toObject() //=> { milliseconds: 88489257 }
+	   * @example Interval.fromDateTimes(dt1, dt2).toDuration('days').toObject() //=> { days: 1.0241812152777778 }
+	   * @example Interval.fromDateTimes(dt1, dt2).toDuration(['hours', 'minutes']).toObject() //=> { hours: 24, minutes: 34.82095 }
+	   * @example Interval.fromDateTimes(dt1, dt2).toDuration(['hours', 'minutes', 'seconds']).toObject() //=> { hours: 24, minutes: 34, seconds: 49.257 }
+	   * @example Interval.fromDateTimes(dt1, dt2).toDuration('seconds').toObject() //=> { seconds: 88489.257 }
+	   * @return {Duration}
+	   */
+	  toDuration(unit, opts) {
+	    if (!this.isValid) {
+	      return Duration.invalid(this.invalidReason);
+	    }
+	    return this.e.diff(this.s, unit, opts);
+	  }
+
+	  /**
+	   * Run mapFn on the interval start and end, returning a new Interval from the resulting DateTimes
+	   * @param {function} mapFn
+	   * @return {Interval}
+	   * @example Interval.fromDateTimes(dt1, dt2).mapEndpoints(endpoint => endpoint.toUTC())
+	   * @example Interval.fromDateTimes(dt1, dt2).mapEndpoints(endpoint => endpoint.plus({ hours: 2 }))
+	   */
+	  mapEndpoints(mapFn) {
+	    return Interval.fromDateTimes(mapFn(this.s), mapFn(this.e));
+	  }
+	}
+
+	/**
+	 * The Info class contains static methods for retrieving general time and date related data. For example, it has methods for finding out if a time zone has a DST, for listing the months in any supported locale, and for discovering which of Luxon features are available in the current environment.
+	 */
+	class Info {
+	  /**
+	   * Return whether the specified zone contains a DST.
+	   * @param {string|Zone} [zone='local'] - Zone to check. Defaults to the environment's local zone.
+	   * @return {boolean}
+	   */
+	  static hasDST(zone = Settings.defaultZone) {
+	    const proto = DateTime.local()
+	      .setZone(zone)
+	      .set({ month: 12 });
+
+	    return !zone.universal && proto.offset !== proto.set({ month: 6 }).offset;
+	  }
+
+	  /**
+	   * Return whether the specified zone is a valid IANA specifier.
+	   * @param {string} zone - Zone to check
+	   * @return {boolean}
+	   */
+	  static isValidIANAZone(zone) {
+	    return IANAZone.isValidSpecifier(zone) && IANAZone.isValidZone(zone);
+	  }
+
+	  /**
+	   * Converts the input into a {@link Zone} instance.
+	   *
+	   * * If `input` is already a Zone instance, it is returned unchanged.
+	   * * If `input` is a string containing a valid time zone name, a Zone instance
+	   *   with that name is returned.
+	   * * If `input` is a string that doesn't refer to a known time zone, a Zone
+	   *   instance with {@link Zone.isValid} == false is returned.
+	   * * If `input is a number, a Zone instance with the specified fixed offset
+	   *   in minutes is returned.
+	   * * If `input` is `null` or `undefined`, the default zone is returned.
+	   * @param {string|Zone|number} [input] - the value to be converted
+	   * @return {Zone}
+	   */
+	  static normalizeZone(input) {
+	    return normalizeZone(input, Settings.defaultZone);
+	  }
+
+	  /**
+	   * Return an array of standalone month names.
+	   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
+	   * @param {string} [length='long'] - the length of the month representation, such as "numeric", "2-digit", "narrow", "short", "long"
+	   * @param {Object} opts - options
+	   * @param {string} [opts.locale] - the locale code
+	   * @param {string} [opts.numberingSystem=null] - the numbering system
+	   * @param {string} [opts.outputCalendar='gregory'] - the calendar
+	   * @example Info.months()[0] //=> 'January'
+	   * @example Info.months('short')[0] //=> 'Jan'
+	   * @example Info.months('numeric')[0] //=> '1'
+	   * @example Info.months('short', { locale: 'fr-CA' } )[0] //=> 'janv.'
+	   * @example Info.months('numeric', { locale: 'ar' })[0] //=> '١'
+	   * @example Info.months('long', { outputCalendar: 'islamic' })[0] //=> 'Rabiʻ I'
+	   * @return {[string]}
+	   */
+	  static months(
+	    length = "long",
+	    { locale = null, numberingSystem = null, outputCalendar = "gregory" } = {}
+	  ) {
+	    return Locale.create(locale, numberingSystem, outputCalendar).months(length);
+	  }
+
+	  /**
+	   * Return an array of format month names.
+	   * Format months differ from standalone months in that they're meant to appear next to the day of the month. In some languages, that
+	   * changes the string.
+	   * See {@link months}
+	   * @param {string} [length='long'] - the length of the month representation, such as "numeric", "2-digit", "narrow", "short", "long"
+	   * @param {Object} opts - options
+	   * @param {string} [opts.locale] - the locale code
+	   * @param {string} [opts.numberingSystem=null] - the numbering system
+	   * @param {string} [opts.outputCalendar='gregory'] - the calendar
+	   * @return {[string]}
+	   */
+	  static monthsFormat(
+	    length = "long",
+	    { locale = null, numberingSystem = null, outputCalendar = "gregory" } = {}
+	  ) {
+	    return Locale.create(locale, numberingSystem, outputCalendar).months(length, true);
+	  }
+
+	  /**
+	   * Return an array of standalone week names.
+	   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
+	   * @param {string} [length='long'] - the length of the month representation, such as "narrow", "short", "long".
+	   * @param {Object} opts - options
+	   * @param {string} [opts.locale] - the locale code
+	   * @param {string} [opts.numberingSystem=null] - the numbering system
+	   * @example Info.weekdays()[0] //=> 'Monday'
+	   * @example Info.weekdays('short')[0] //=> 'Mon'
+	   * @example Info.weekdays('short', { locale: 'fr-CA' })[0] //=> 'lun.'
+	   * @example Info.weekdays('short', { locale: 'ar' })[0] //=> 'الاثنين'
+	   * @return {[string]}
+	   */
+	  static weekdays(length = "long", { locale = null, numberingSystem = null } = {}) {
+	    return Locale.create(locale, numberingSystem, null).weekdays(length);
+	  }
+
+	  /**
+	   * Return an array of format week names.
+	   * Format weekdays differ from standalone weekdays in that they're meant to appear next to more date information. In some languages, that
+	   * changes the string.
+	   * See {@link weekdays}
+	   * @param {string} [length='long'] - the length of the month representation, such as "narrow", "short", "long".
+	   * @param {Object} opts - options
+	   * @param {string} [opts.locale=null] - the locale code
+	   * @param {string} [opts.numberingSystem=null] - the numbering system
+	   * @return {[string]}
+	   */
+	  static weekdaysFormat(length = "long", { locale = null, numberingSystem = null } = {}) {
+	    return Locale.create(locale, numberingSystem, null).weekdays(length, true);
+	  }
+
+	  /**
+	   * Return an array of meridiems.
+	   * @param {Object} opts - options
+	   * @param {string} [opts.locale] - the locale code
+	   * @example Info.meridiems() //=> [ 'AM', 'PM' ]
+	   * @example Info.meridiems({ locale: 'my' }) //=> [ 'နံနက်', 'ညနေ' ]
+	   * @return {[string]}
+	   */
+	  static meridiems({ locale = null } = {}) {
+	    return Locale.create(locale).meridiems();
+	  }
+
+	  /**
+	   * Return an array of eras, such as ['BC', 'AD']. The locale can be specified, but the calendar system is always Gregorian.
+	   * @param {string} [length='short'] - the length of the era representation, such as "short" or "long".
+	   * @param {Object} opts - options
+	   * @param {string} [opts.locale] - the locale code
+	   * @example Info.eras() //=> [ 'BC', 'AD' ]
+	   * @example Info.eras('long') //=> [ 'Before Christ', 'Anno Domini' ]
+	   * @example Info.eras('long', { locale: 'fr' }) //=> [ 'avant Jésus-Christ', 'après Jésus-Christ' ]
+	   * @return {[string]}
+	   */
+	  static eras(length = "short", { locale = null } = {}) {
+	    return Locale.create(locale, null, "gregory").eras(length);
+	  }
+
+	  /**
+	   * Return the set of available features in this environment.
+	   * Some features of Luxon are not available in all environments. For example, on older browsers, timezone support is not available. Use this function to figure out if that's the case.
+	   * Keys:
+	   * * `zones`: whether this environment supports IANA timezones
+	   * * `intlTokens`: whether this environment supports internationalized token-based formatting/parsing
+	   * * `intl`: whether this environment supports general internationalization
+	   * * `relative`: whether this environment supports relative time formatting
+	   * @example Info.features() //=> { intl: true, intlTokens: false, zones: true, relative: false }
+	   * @return {Object}
+	   */
+	  static features() {
+	    let intl = false,
+	      intlTokens = false,
+	      zones = false,
+	      relative = false;
+
+	    if (hasIntl()) {
+	      intl = true;
+	      intlTokens = hasFormatToParts();
+	      relative = hasRelative();
+
+	      try {
+	        zones =
+	          new Intl.DateTimeFormat("en", { timeZone: "America/New_York" }).resolvedOptions()
+	            .timeZone === "America/New_York";
+	      } catch (e) {
+	        zones = false;
+	      }
+	    }
+
+	    return { intl, intlTokens, zones, relative };
+	  }
+	}
+
+	function dayDiff(earlier, later) {
+	  const utcDayStart = dt =>
+	      dt
+	        .toUTC(0, { keepLocalTime: true })
+	        .startOf("day")
+	        .valueOf(),
+	    ms = utcDayStart(later) - utcDayStart(earlier);
+	  return Math.floor(Duration.fromMillis(ms).as("days"));
+	}
+
+	function highOrderDiffs(cursor, later, units) {
+	  const differs = [
+	    ["years", (a, b) => b.year - a.year],
+	    ["months", (a, b) => b.month - a.month + (b.year - a.year) * 12],
+	    [
+	      "weeks",
+	      (a, b) => {
+	        const days = dayDiff(a, b);
+	        return (days - (days % 7)) / 7;
+	      }
+	    ],
+	    ["days", dayDiff]
+	  ];
+
+	  const results = {};
+	  let lowestOrder, highWater;
+
+	  for (const [unit, differ] of differs) {
+	    if (units.indexOf(unit) >= 0) {
+	      lowestOrder = unit;
+
+	      let delta = differ(cursor, later);
+	      highWater = cursor.plus({ [unit]: delta });
+
+	      if (highWater > later) {
+	        cursor = cursor.plus({ [unit]: delta - 1 });
+	        delta -= 1;
+	      } else {
+	        cursor = highWater;
+	      }
+
+	      results[unit] = delta;
+	    }
+	  }
+
+	  return [cursor, results, highWater, lowestOrder];
+	}
+
+	function diff(earlier, later, units, opts) {
+	  let [cursor, results, highWater, lowestOrder] = highOrderDiffs(earlier, later, units);
+
+	  const remainingMillis = later - cursor;
+
+	  const lowerOrderUnits = units.filter(
+	    u => ["hours", "minutes", "seconds", "milliseconds"].indexOf(u) >= 0
+	  );
+
+	  if (lowerOrderUnits.length === 0) {
+	    if (highWater < later) {
+	      highWater = cursor.plus({ [lowestOrder]: 1 });
+	    }
+
+	    if (highWater !== cursor) {
+	      results[lowestOrder] = (results[lowestOrder] || 0) + remainingMillis / (highWater - cursor);
+	    }
+	  }
+
+	  const duration = Duration.fromObject(Object.assign(results, opts));
+
+	  if (lowerOrderUnits.length > 0) {
+	    return Duration.fromMillis(remainingMillis, opts)
+	      .shiftTo(...lowerOrderUnits)
+	      .plus(duration);
+	  } else {
+	    return duration;
+	  }
+	}
+
+	const numberingSystems = {
+	  arab: "[\u0660-\u0669]",
+	  arabext: "[\u06F0-\u06F9]",
+	  bali: "[\u1B50-\u1B59]",
+	  beng: "[\u09E6-\u09EF]",
+	  deva: "[\u0966-\u096F]",
+	  fullwide: "[\uFF10-\uFF19]",
+	  gujr: "[\u0AE6-\u0AEF]",
+	  hanidec: "[〇|一|二|三|四|五|六|七|八|九]",
+	  khmr: "[\u17E0-\u17E9]",
+	  knda: "[\u0CE6-\u0CEF]",
+	  laoo: "[\u0ED0-\u0ED9]",
+	  limb: "[\u1946-\u194F]",
+	  mlym: "[\u0D66-\u0D6F]",
+	  mong: "[\u1810-\u1819]",
+	  mymr: "[\u1040-\u1049]",
+	  orya: "[\u0B66-\u0B6F]",
+	  tamldec: "[\u0BE6-\u0BEF]",
+	  telu: "[\u0C66-\u0C6F]",
+	  thai: "[\u0E50-\u0E59]",
+	  tibt: "[\u0F20-\u0F29]",
+	  latn: "\\d"
+	};
+
+	const numberingSystemsUTF16 = {
+	  arab: [1632, 1641],
+	  arabext: [1776, 1785],
+	  bali: [6992, 7001],
+	  beng: [2534, 2543],
+	  deva: [2406, 2415],
+	  fullwide: [65296, 65303],
+	  gujr: [2790, 2799],
+	  khmr: [6112, 6121],
+	  knda: [3302, 3311],
+	  laoo: [3792, 3801],
+	  limb: [6470, 6479],
+	  mlym: [3430, 3439],
+	  mong: [6160, 6169],
+	  mymr: [4160, 4169],
+	  orya: [2918, 2927],
+	  tamldec: [3046, 3055],
+	  telu: [3174, 3183],
+	  thai: [3664, 3673],
+	  tibt: [3872, 3881]
+	};
+
+	// eslint-disable-next-line
+	const hanidecChars = numberingSystems.hanidec.replace(/[\[|\]]/g, "").split("");
+
+	function parseDigits(str) {
+	  let value = parseInt(str, 10);
+	  if (isNaN(value)) {
+	    value = "";
+	    for (let i = 0; i < str.length; i++) {
+	      const code = str.charCodeAt(i);
+
+	      if (str[i].search(numberingSystems.hanidec) !== -1) {
+	        value += hanidecChars.indexOf(str[i]);
+	      } else {
+	        for (const key in numberingSystemsUTF16) {
+	          const [min, max] = numberingSystemsUTF16[key];
+	          if (code >= min && code <= max) {
+	            value += code - min;
+	          }
+	        }
+	      }
+	    }
+	    return parseInt(value, 10);
+	  } else {
+	    return value;
+	  }
+	}
+
+	function digitRegex({ numberingSystem }, append = "") {
+	  return new RegExp(`${numberingSystems[numberingSystem || "latn"]}${append}`);
+	}
+
+	const MISSING_FTP = "missing Intl.DateTimeFormat.formatToParts support";
+
+	function intUnit(regex, post = i => i) {
+	  return { regex, deser: ([s]) => post(parseDigits(s)) };
+	}
+
+	function fixListRegex(s) {
+	  // make dots optional and also make them literal
+	  return s.replace(/\./, "\\.?");
+	}
+
+	function stripInsensitivities(s) {
+	  return s.replace(/\./, "").toLowerCase();
+	}
+
+	function oneOf(strings, startIndex) {
+	  if (strings === null) {
+	    return null;
+	  } else {
+	    return {
+	      regex: RegExp(strings.map(fixListRegex).join("|")),
+	      deser: ([s]) =>
+	        strings.findIndex(i => stripInsensitivities(s) === stripInsensitivities(i)) + startIndex
+	    };
+	  }
+	}
+
+	function offset(regex, groups) {
+	  return { regex, deser: ([, h, m]) => signedOffset(h, m), groups };
+	}
+
+	function simple(regex) {
+	  return { regex, deser: ([s]) => s };
+	}
+
+	function escapeToken(value) {
+	  // eslint-disable-next-line no-useless-escape
+	  return value.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+	}
+
+	function unitForToken(token, loc) {
+	  const one = digitRegex(loc),
+	    two = digitRegex(loc, "{2}"),
+	    three = digitRegex(loc, "{3}"),
+	    four = digitRegex(loc, "{4}"),
+	    six = digitRegex(loc, "{6}"),
+	    oneOrTwo = digitRegex(loc, "{1,2}"),
+	    oneToThree = digitRegex(loc, "{1,3}"),
+	    oneToSix = digitRegex(loc, "{1,6}"),
+	    oneToNine = digitRegex(loc, "{1,9}"),
+	    twoToFour = digitRegex(loc, "{2,4}"),
+	    fourToSix = digitRegex(loc, "{4,6}"),
+	    literal = t => ({ regex: RegExp(escapeToken(t.val)), deser: ([s]) => s, literal: true }),
+	    unitate = t => {
+	      if (token.literal) {
+	        return literal(t);
+	      }
+	      switch (t.val) {
+	        // era
+	        case "G":
+	          return oneOf(loc.eras("short", false), 0);
+	        case "GG":
+	          return oneOf(loc.eras("long", false), 0);
+	        // years
+	        case "y":
+	          return intUnit(oneToSix);
+	        case "yy":
+	          return intUnit(twoToFour, untruncateYear);
+	        case "yyyy":
+	          return intUnit(four);
+	        case "yyyyy":
+	          return intUnit(fourToSix);
+	        case "yyyyyy":
+	          return intUnit(six);
+	        // months
+	        case "M":
+	          return intUnit(oneOrTwo);
+	        case "MM":
+	          return intUnit(two);
+	        case "MMM":
+	          return oneOf(loc.months("short", true, false), 1);
+	        case "MMMM":
+	          return oneOf(loc.months("long", true, false), 1);
+	        case "L":
+	          return intUnit(oneOrTwo);
+	        case "LL":
+	          return intUnit(two);
+	        case "LLL":
+	          return oneOf(loc.months("short", false, false), 1);
+	        case "LLLL":
+	          return oneOf(loc.months("long", false, false), 1);
+	        // dates
+	        case "d":
+	          return intUnit(oneOrTwo);
+	        case "dd":
+	          return intUnit(two);
+	        // ordinals
+	        case "o":
+	          return intUnit(oneToThree);
+	        case "ooo":
+	          return intUnit(three);
+	        // time
+	        case "HH":
+	          return intUnit(two);
+	        case "H":
+	          return intUnit(oneOrTwo);
+	        case "hh":
+	          return intUnit(two);
+	        case "h":
+	          return intUnit(oneOrTwo);
+	        case "mm":
+	          return intUnit(two);
+	        case "m":
+	          return intUnit(oneOrTwo);
+	        case "q":
+	          return intUnit(oneOrTwo);
+	        case "qq":
+	          return intUnit(two);
+	        case "s":
+	          return intUnit(oneOrTwo);
+	        case "ss":
+	          return intUnit(two);
+	        case "S":
+	          return intUnit(oneToThree);
+	        case "SSS":
+	          return intUnit(three);
+	        case "u":
+	          return simple(oneToNine);
+	        // meridiem
+	        case "a":
+	          return oneOf(loc.meridiems(), 0);
+	        // weekYear (k)
+	        case "kkkk":
+	          return intUnit(four);
+	        case "kk":
+	          return intUnit(twoToFour, untruncateYear);
+	        // weekNumber (W)
+	        case "W":
+	          return intUnit(oneOrTwo);
+	        case "WW":
+	          return intUnit(two);
+	        // weekdays
+	        case "E":
+	        case "c":
+	          return intUnit(one);
+	        case "EEE":
+	          return oneOf(loc.weekdays("short", false, false), 1);
+	        case "EEEE":
+	          return oneOf(loc.weekdays("long", false, false), 1);
+	        case "ccc":
+	          return oneOf(loc.weekdays("short", true, false), 1);
+	        case "cccc":
+	          return oneOf(loc.weekdays("long", true, false), 1);
+	        // offset/zone
+	        case "Z":
+	        case "ZZ":
+	          return offset(new RegExp(`([+-]${oneOrTwo.source})(?::(${two.source}))?`), 2);
+	        case "ZZZ":
+	          return offset(new RegExp(`([+-]${oneOrTwo.source})(${two.source})?`), 2);
+	        // we don't support ZZZZ (PST) or ZZZZZ (Pacific Standard Time) in parsing
+	        // because we don't have any way to figure out what they are
+	        case "z":
+	          return simple(/[a-z_+-/]{1,256}?/i);
+	        default:
+	          return literal(t);
+	      }
+	    };
+
+	  const unit = unitate(token) || {
+	    invalidReason: MISSING_FTP
+	  };
+
+	  unit.token = token;
+
+	  return unit;
+	}
+
+	const partTypeStyleToTokenVal = {
+	  year: {
+	    "2-digit": "yy",
+	    numeric: "yyyyy"
+	  },
+	  month: {
+	    numeric: "M",
+	    "2-digit": "MM",
+	    short: "MMM",
+	    long: "MMMM"
+	  },
+	  day: {
+	    numeric: "d",
+	    "2-digit": "dd"
+	  },
+	  weekday: {
+	    short: "EEE",
+	    long: "EEEE"
+	  },
+	  dayperiod: "a",
+	  dayPeriod: "a",
+	  hour: {
+	    numeric: "h",
+	    "2-digit": "hh"
+	  },
+	  minute: {
+	    numeric: "m",
+	    "2-digit": "mm"
+	  },
+	  second: {
+	    numeric: "s",
+	    "2-digit": "ss"
+	  }
+	};
+
+	function tokenForPart(part, locale, formatOpts) {
+	  const { type, value } = part;
+
+	  if (type === "literal") {
+	    return {
+	      literal: true,
+	      val: value
+	    };
+	  }
+
+	  const style = formatOpts[type];
+
+	  let val = partTypeStyleToTokenVal[type];
+	  if (typeof val === "object") {
+	    val = val[style];
+	  }
+
+	  if (val) {
+	    return {
+	      literal: false,
+	      val
+	    };
+	  }
+
+	  return undefined;
+	}
+
+	function buildRegex(units) {
+	  const re = units.map(u => u.regex).reduce((f, r) => `${f}(${r.source})`, "");
+	  return [`^${re}$`, units];
+	}
+
+	function match(input, regex, handlers) {
+	  const matches = input.match(regex);
+
+	  if (matches) {
+	    const all = {};
+	    let matchIndex = 1;
+	    for (const i in handlers) {
+	      if (hasOwnProperty$2(handlers, i)) {
+	        const h = handlers[i],
+	          groups = h.groups ? h.groups + 1 : 1;
+	        if (!h.literal && h.token) {
+	          all[h.token.val[0]] = h.deser(matches.slice(matchIndex, matchIndex + groups));
+	        }
+	        matchIndex += groups;
+	      }
+	    }
+	    return [matches, all];
+	  } else {
+	    return [matches, {}];
+	  }
+	}
+
+	function dateTimeFromMatches(matches) {
+	  const toField = token => {
+	    switch (token) {
+	      case "S":
+	        return "millisecond";
+	      case "s":
+	        return "second";
+	      case "m":
+	        return "minute";
+	      case "h":
+	      case "H":
+	        return "hour";
+	      case "d":
+	        return "day";
+	      case "o":
+	        return "ordinal";
+	      case "L":
+	      case "M":
+	        return "month";
+	      case "y":
+	        return "year";
+	      case "E":
+	      case "c":
+	        return "weekday";
+	      case "W":
+	        return "weekNumber";
+	      case "k":
+	        return "weekYear";
+	      case "q":
+	        return "quarter";
+	      default:
+	        return null;
+	    }
+	  };
+
+	  let zone;
+	  if (!isUndefined$2(matches.Z)) {
+	    zone = new FixedOffsetZone(matches.Z);
+	  } else if (!isUndefined$2(matches.z)) {
+	    zone = IANAZone.create(matches.z);
+	  } else {
+	    zone = null;
+	  }
+
+	  if (!isUndefined$2(matches.q)) {
+	    matches.M = (matches.q - 1) * 3 + 1;
+	  }
+
+	  if (!isUndefined$2(matches.h)) {
+	    if (matches.h < 12 && matches.a === 1) {
+	      matches.h += 12;
+	    } else if (matches.h === 12 && matches.a === 0) {
+	      matches.h = 0;
+	    }
+	  }
+
+	  if (matches.G === 0 && matches.y) {
+	    matches.y = -matches.y;
+	  }
+
+	  if (!isUndefined$2(matches.u)) {
+	    matches.S = parseMillis(matches.u);
+	  }
+
+	  const vals = Object.keys(matches).reduce((r, k) => {
+	    const f = toField(k);
+	    if (f) {
+	      r[f] = matches[k];
+	    }
+
+	    return r;
+	  }, {});
+
+	  return [vals, zone];
+	}
+
+	let dummyDateTimeCache = null;
+
+	function getDummyDateTime() {
+	  if (!dummyDateTimeCache) {
+	    dummyDateTimeCache = DateTime.fromMillis(1555555555555);
+	  }
+
+	  return dummyDateTimeCache;
+	}
+
+	function maybeExpandMacroToken(token, locale) {
+	  if (token.literal) {
+	    return token;
+	  }
+
+	  const formatOpts = Formatter.macroTokenToFormatOpts(token.val);
+
+	  if (!formatOpts) {
+	    return token;
+	  }
+
+	  const formatter = Formatter.create(locale, formatOpts);
+	  const parts = formatter.formatDateTimeParts(getDummyDateTime());
+
+	  const tokens = parts.map(p => tokenForPart(p, locale, formatOpts));
+
+	  if (tokens.includes(undefined)) {
+	    return token;
+	  }
+
+	  return tokens;
+	}
+
+	function expandMacroTokens(tokens, locale) {
+	  return Array.prototype.concat(...tokens.map(t => maybeExpandMacroToken(t, locale)));
+	}
+
+	/**
+	 * @private
+	 */
+
+	function explainFromTokens(locale, input, format) {
+	  const tokens = expandMacroTokens(Formatter.parseFormat(format), locale),
+	    units = tokens.map(t => unitForToken(t, locale)),
+	    disqualifyingUnit = units.find(t => t.invalidReason);
+
+	  if (disqualifyingUnit) {
+	    return { input, tokens, invalidReason: disqualifyingUnit.invalidReason };
+	  } else {
+	    const [regexString, handlers] = buildRegex(units),
+	      regex = RegExp(regexString, "i"),
+	      [rawMatches, matches] = match(input, regex, handlers),
+	      [result, zone] = matches ? dateTimeFromMatches(matches) : [null, null];
+	    if (hasOwnProperty$2(matches, "a") && hasOwnProperty$2(matches, "H")) {
+	      throw new ConflictingSpecificationError(
+	        "Can't include meridiem when specifying 24-hour format"
+	      );
+	    }
+	    return { input, tokens, regex, rawMatches, matches, result, zone };
+	  }
+	}
+
+	function parseFromTokens(locale, input, format) {
+	  const { result, zone, invalidReason } = explainFromTokens(locale, input, format);
+	  return [result, zone, invalidReason];
+	}
+
+	const nonLeapLadder = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334],
+	  leapLadder = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
+
+	function unitOutOfRange(unit, value) {
+	  return new Invalid(
+	    "unit out of range",
+	    `you specified ${value} (of type ${typeof value}) as a ${unit}, which is invalid`
+	  );
+	}
+
+	function dayOfWeek(year, month, day) {
+	  const js = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+	  return js === 0 ? 7 : js;
+	}
+
+	function computeOrdinal(year, month, day) {
+	  return day + (isLeapYear(year) ? leapLadder : nonLeapLadder)[month - 1];
+	}
+
+	function uncomputeOrdinal(year, ordinal) {
+	  const table = isLeapYear(year) ? leapLadder : nonLeapLadder,
+	    month0 = table.findIndex(i => i < ordinal),
+	    day = ordinal - table[month0];
+	  return { month: month0 + 1, day };
+	}
+
+	/**
+	 * @private
+	 */
+
+	function gregorianToWeek(gregObj) {
+	  const { year, month, day } = gregObj,
+	    ordinal = computeOrdinal(year, month, day),
+	    weekday = dayOfWeek(year, month, day);
+
+	  let weekNumber = Math.floor((ordinal - weekday + 10) / 7),
+	    weekYear;
+
+	  if (weekNumber < 1) {
+	    weekYear = year - 1;
+	    weekNumber = weeksInWeekYear(weekYear);
+	  } else if (weekNumber > weeksInWeekYear(year)) {
+	    weekYear = year + 1;
+	    weekNumber = 1;
+	  } else {
+	    weekYear = year;
+	  }
+
+	  return Object.assign({ weekYear, weekNumber, weekday }, timeObject(gregObj));
+	}
+
+	function weekToGregorian(weekData) {
+	  const { weekYear, weekNumber, weekday } = weekData,
+	    weekdayOfJan4 = dayOfWeek(weekYear, 1, 4),
+	    yearInDays = daysInYear(weekYear);
+
+	  let ordinal = weekNumber * 7 + weekday - weekdayOfJan4 - 3,
+	    year;
+
+	  if (ordinal < 1) {
+	    year = weekYear - 1;
+	    ordinal += daysInYear(year);
+	  } else if (ordinal > yearInDays) {
+	    year = weekYear + 1;
+	    ordinal -= daysInYear(weekYear);
+	  } else {
+	    year = weekYear;
+	  }
+
+	  const { month, day } = uncomputeOrdinal(year, ordinal);
+
+	  return Object.assign({ year, month, day }, timeObject(weekData));
+	}
+
+	function gregorianToOrdinal(gregData) {
+	  const { year, month, day } = gregData,
+	    ordinal = computeOrdinal(year, month, day);
+
+	  return Object.assign({ year, ordinal }, timeObject(gregData));
+	}
+
+	function ordinalToGregorian(ordinalData) {
+	  const { year, ordinal } = ordinalData,
+	    { month, day } = uncomputeOrdinal(year, ordinal);
+
+	  return Object.assign({ year, month, day }, timeObject(ordinalData));
+	}
+
+	function hasInvalidWeekData(obj) {
+	  const validYear = isInteger(obj.weekYear),
+	    validWeek = integerBetween(obj.weekNumber, 1, weeksInWeekYear(obj.weekYear)),
+	    validWeekday = integerBetween(obj.weekday, 1, 7);
+
+	  if (!validYear) {
+	    return unitOutOfRange("weekYear", obj.weekYear);
+	  } else if (!validWeek) {
+	    return unitOutOfRange("week", obj.week);
+	  } else if (!validWeekday) {
+	    return unitOutOfRange("weekday", obj.weekday);
+	  } else return false;
+	}
+
+	function hasInvalidOrdinalData(obj) {
+	  const validYear = isInteger(obj.year),
+	    validOrdinal = integerBetween(obj.ordinal, 1, daysInYear(obj.year));
+
+	  if (!validYear) {
+	    return unitOutOfRange("year", obj.year);
+	  } else if (!validOrdinal) {
+	    return unitOutOfRange("ordinal", obj.ordinal);
+	  } else return false;
+	}
+
+	function hasInvalidGregorianData(obj) {
+	  const validYear = isInteger(obj.year),
+	    validMonth = integerBetween(obj.month, 1, 12),
+	    validDay = integerBetween(obj.day, 1, daysInMonth(obj.year, obj.month));
+
+	  if (!validYear) {
+	    return unitOutOfRange("year", obj.year);
+	  } else if (!validMonth) {
+	    return unitOutOfRange("month", obj.month);
+	  } else if (!validDay) {
+	    return unitOutOfRange("day", obj.day);
+	  } else return false;
+	}
+
+	function hasInvalidTimeData(obj) {
+	  const { hour, minute, second, millisecond } = obj;
+	  const validHour =
+	      integerBetween(hour, 0, 23) ||
+	      (hour === 24 && minute === 0 && second === 0 && millisecond === 0),
+	    validMinute = integerBetween(minute, 0, 59),
+	    validSecond = integerBetween(second, 0, 59),
+	    validMillisecond = integerBetween(millisecond, 0, 999);
+
+	  if (!validHour) {
+	    return unitOutOfRange("hour", hour);
+	  } else if (!validMinute) {
+	    return unitOutOfRange("minute", minute);
+	  } else if (!validSecond) {
+	    return unitOutOfRange("second", second);
+	  } else if (!validMillisecond) {
+	    return unitOutOfRange("millisecond", millisecond);
+	  } else return false;
+	}
+
+	const INVALID$2 = "Invalid DateTime";
+	const MAX_DATE = 8.64e15;
+
+	function unsupportedZone(zone) {
+	  return new Invalid("unsupported zone", `the zone "${zone.name}" is not supported`);
+	}
+
+	// we cache week data on the DT object and this intermediates the cache
+	function possiblyCachedWeekData(dt) {
+	  if (dt.weekData === null) {
+	    dt.weekData = gregorianToWeek(dt.c);
+	  }
+	  return dt.weekData;
+	}
+
+	// clone really means, "make a new object with these modifications". all "setters" really use this
+	// to create a new object while only changing some of the properties
+	function clone$1(inst, alts) {
+	  const current = {
+	    ts: inst.ts,
+	    zone: inst.zone,
+	    c: inst.c,
+	    o: inst.o,
+	    loc: inst.loc,
+	    invalid: inst.invalid
+	  };
+	  return new DateTime(Object.assign({}, current, alts, { old: current }));
+	}
+
+	// find the right offset a given local time. The o input is our guess, which determines which
+	// offset we'll pick in ambiguous cases (e.g. there are two 3 AMs b/c Fallback DST)
+	function fixOffset(localTS, o, tz) {
+	  // Our UTC time is just a guess because our offset is just a guess
+	  let utcGuess = localTS - o * 60 * 1000;
+
+	  // Test whether the zone matches the offset for this ts
+	  const o2 = tz.offset(utcGuess);
+
+	  // If so, offset didn't change and we're done
+	  if (o === o2) {
+	    return [utcGuess, o];
+	  }
+
+	  // If not, change the ts by the difference in the offset
+	  utcGuess -= (o2 - o) * 60 * 1000;
+
+	  // If that gives us the local time we want, we're done
+	  const o3 = tz.offset(utcGuess);
+	  if (o2 === o3) {
+	    return [utcGuess, o2];
+	  }
+
+	  // If it's different, we're in a hole time. The offset has changed, but the we don't adjust the time
+	  return [localTS - Math.min(o2, o3) * 60 * 1000, Math.max(o2, o3)];
+	}
+
+	// convert an epoch timestamp into a calendar object with the given offset
+	function tsToObj(ts, offset) {
+	  ts += offset * 60 * 1000;
+
+	  const d = new Date(ts);
+
+	  return {
+	    year: d.getUTCFullYear(),
+	    month: d.getUTCMonth() + 1,
+	    day: d.getUTCDate(),
+	    hour: d.getUTCHours(),
+	    minute: d.getUTCMinutes(),
+	    second: d.getUTCSeconds(),
+	    millisecond: d.getUTCMilliseconds()
+	  };
+	}
+
+	// convert a calendar object to a epoch timestamp
+	function objToTS(obj, offset, zone) {
+	  return fixOffset(objToLocalTS(obj), offset, zone);
+	}
+
+	// create a new DT instance by adding a duration, adjusting for DSTs
+	function adjustTime(inst, dur) {
+	  const keys = Object.keys(dur.values);
+	  if (keys.indexOf("milliseconds") === -1) {
+	    keys.push("milliseconds");
+	  }
+
+	  dur = dur.shiftTo(...keys);
+
+	  const oPre = inst.o,
+	    year = inst.c.year + dur.years,
+	    month = inst.c.month + dur.months + dur.quarters * 3,
+	    c = Object.assign({}, inst.c, {
+	      year,
+	      month,
+	      day: Math.min(inst.c.day, daysInMonth(year, month)) + dur.days + dur.weeks * 7
+	    }),
+	    millisToAdd = Duration.fromObject({
+	      hours: dur.hours,
+	      minutes: dur.minutes,
+	      seconds: dur.seconds,
+	      milliseconds: dur.milliseconds
+	    }).as("milliseconds"),
+	    localTS = objToLocalTS(c);
+
+	  let [ts, o] = fixOffset(localTS, oPre, inst.zone);
+
+	  if (millisToAdd !== 0) {
+	    ts += millisToAdd;
+	    // that could have changed the offset by going over a DST, but we want to keep the ts the same
+	    o = inst.zone.offset(ts);
+	  }
+
+	  return { ts, o };
+	}
+
+	// helper useful in turning the results of parsing into real dates
+	// by handling the zone options
+	function parseDataToDateTime(parsed, parsedZone, opts, format, text) {
+	  const { setZone, zone } = opts;
+	  if (parsed && Object.keys(parsed).length !== 0) {
+	    const interpretationZone = parsedZone || zone,
+	      inst = DateTime.fromObject(
+	        Object.assign(parsed, opts, {
+	          zone: interpretationZone,
+	          // setZone is a valid option in the calling methods, but not in fromObject
+	          setZone: undefined
+	        })
+	      );
+	    return setZone ? inst : inst.setZone(zone);
+	  } else {
+	    return DateTime.invalid(
+	      new Invalid("unparsable", `the input "${text}" can't be parsed as ${format}`)
+	    );
+	  }
+	}
+
+	// if you want to output a technical format (e.g. RFC 2822), this helper
+	// helps handle the details
+	function toTechFormat(dt, format, allowZ = true) {
+	  return dt.isValid
+	    ? Formatter.create(Locale.create("en-US"), {
+	        allowZ,
+	        forceSimple: true
+	      }).formatDateTimeFromString(dt, format)
+	    : null;
+	}
+
+	// technical time formats (e.g. the time part of ISO 8601), take some options
+	// and this commonizes their handling
+	function toTechTimeFormat(
+	  dt,
+	  {
+	    suppressSeconds = false,
+	    suppressMilliseconds = false,
+	    includeOffset,
+	    includeZone = false,
+	    spaceZone = false,
+	    format = "extended"
+	  }
+	) {
+	  let fmt = format === "basic" ? "HHmm" : "HH:mm";
+
+	  if (!suppressSeconds || dt.second !== 0 || dt.millisecond !== 0) {
+	    fmt += format === "basic" ? "ss" : ":ss";
+	    if (!suppressMilliseconds || dt.millisecond !== 0) {
+	      fmt += ".SSS";
+	    }
+	  }
+
+	  if ((includeZone || includeOffset) && spaceZone) {
+	    fmt += " ";
+	  }
+
+	  if (includeZone) {
+	    fmt += "z";
+	  } else if (includeOffset) {
+	    fmt += format === "basic" ? "ZZZ" : "ZZ";
+	  }
+
+	  return toTechFormat(dt, fmt);
+	}
+
+	// defaults for unspecified units in the supported calendars
+	const defaultUnitValues = {
+	    month: 1,
+	    day: 1,
+	    hour: 0,
+	    minute: 0,
+	    second: 0,
+	    millisecond: 0
+	  },
+	  defaultWeekUnitValues = {
+	    weekNumber: 1,
+	    weekday: 1,
+	    hour: 0,
+	    minute: 0,
+	    second: 0,
+	    millisecond: 0
+	  },
+	  defaultOrdinalUnitValues = {
+	    ordinal: 1,
+	    hour: 0,
+	    minute: 0,
+	    second: 0,
+	    millisecond: 0
+	  };
+
+	// Units in the supported calendars, sorted by bigness
+	const orderedUnits$1 = ["year", "month", "day", "hour", "minute", "second", "millisecond"],
+	  orderedWeekUnits = [
+	    "weekYear",
+	    "weekNumber",
+	    "weekday",
+	    "hour",
+	    "minute",
+	    "second",
+	    "millisecond"
+	  ],
+	  orderedOrdinalUnits = ["year", "ordinal", "hour", "minute", "second", "millisecond"];
+
+	// standardize case and plurality in units
+	function normalizeUnit(unit) {
+	  const normalized = {
+	    year: "year",
+	    years: "year",
+	    month: "month",
+	    months: "month",
+	    day: "day",
+	    days: "day",
+	    hour: "hour",
+	    hours: "hour",
+	    minute: "minute",
+	    minutes: "minute",
+	    quarter: "quarter",
+	    quarters: "quarter",
+	    second: "second",
+	    seconds: "second",
+	    millisecond: "millisecond",
+	    milliseconds: "millisecond",
+	    weekday: "weekday",
+	    weekdays: "weekday",
+	    weeknumber: "weekNumber",
+	    weeksnumber: "weekNumber",
+	    weeknumbers: "weekNumber",
+	    weekyear: "weekYear",
+	    weekyears: "weekYear",
+	    ordinal: "ordinal"
+	  }[unit.toLowerCase()];
+
+	  if (!normalized) throw new InvalidUnitError(unit);
+
+	  return normalized;
+	}
+
+	// this is a dumbed down version of fromObject() that runs about 60% faster
+	// but doesn't do any validation, makes a bunch of assumptions about what units
+	// are present, and so on.
+	function quickDT(obj, zone) {
+	  // assume we have the higher-order units
+	  for (const u of orderedUnits$1) {
+	    if (isUndefined$2(obj[u])) {
+	      obj[u] = defaultUnitValues[u];
+	    }
+	  }
+
+	  const invalid = hasInvalidGregorianData(obj) || hasInvalidTimeData(obj);
+	  if (invalid) {
+	    return DateTime.invalid(invalid);
+	  }
+
+	  const tsNow = Settings.now(),
+	    offsetProvis = zone.offset(tsNow),
+	    [ts, o] = objToTS(obj, offsetProvis, zone);
+
+	  return new DateTime({
+	    ts,
+	    zone,
+	    o
+	  });
+	}
+
+	function diffRelative(start, end, opts) {
+	  const round = isUndefined$2(opts.round) ? true : opts.round,
+	    format = (c, unit) => {
+	      c = roundTo(c, round || opts.calendary ? 0 : 2, true);
+	      const formatter = end.loc.clone(opts).relFormatter(opts);
+	      return formatter.format(c, unit);
+	    },
+	    differ = unit => {
+	      if (opts.calendary) {
+	        if (!end.hasSame(start, unit)) {
+	          return end
+	            .startOf(unit)
+	            .diff(start.startOf(unit), unit)
+	            .get(unit);
+	        } else return 0;
+	      } else {
+	        return end.diff(start, unit).get(unit);
+	      }
+	    };
+
+	  if (opts.unit) {
+	    return format(differ(opts.unit), opts.unit);
+	  }
+
+	  for (const unit of opts.units) {
+	    const count = differ(unit);
+	    if (Math.abs(count) >= 1) {
+	      return format(count, unit);
+	    }
+	  }
+	  return format(0, opts.units[opts.units.length - 1]);
+	}
+
+	/**
+	 * A DateTime is an immutable data structure representing a specific date and time and accompanying methods. It contains class and instance methods for creating, parsing, interrogating, transforming, and formatting them.
+	 *
+	 * A DateTime comprises of:
+	 * * A timestamp. Each DateTime instance refers to a specific millisecond of the Unix epoch.
+	 * * A time zone. Each instance is considered in the context of a specific zone (by default the local system's zone).
+	 * * Configuration properties that effect how output strings are formatted, such as `locale`, `numberingSystem`, and `outputCalendar`.
+	 *
+	 * Here is a brief overview of the most commonly used functionality it provides:
+	 *
+	 * * **Creation**: To create a DateTime from its components, use one of its factory class methods: {@link local}, {@link utc}, and (most flexibly) {@link fromObject}. To create one from a standard string format, use {@link fromISO}, {@link fromHTTP}, and {@link fromRFC2822}. To create one from a custom string format, use {@link fromFormat}. To create one from a native JS date, use {@link fromJSDate}.
+	 * * **Gregorian calendar and time**: To examine the Gregorian properties of a DateTime individually (i.e as opposed to collectively through {@link toObject}), use the {@link year}, {@link month},
+	 * {@link day}, {@link hour}, {@link minute}, {@link second}, {@link millisecond} accessors.
+	 * * **Week calendar**: For ISO week calendar attributes, see the {@link weekYear}, {@link weekNumber}, and {@link weekday} accessors.
+	 * * **Configuration** See the {@link locale} and {@link numberingSystem} accessors.
+	 * * **Transformation**: To transform the DateTime into other DateTimes, use {@link set}, {@link reconfigure}, {@link setZone}, {@link setLocale}, {@link plus}, {@link minus}, {@link endOf}, {@link startOf}, {@link toUTC}, and {@link toLocal}.
+	 * * **Output**: To convert the DateTime to other representations, use the {@link toRelative}, {@link toRelativeCalendar}, {@link toJSON}, {@link toISO}, {@link toHTTP}, {@link toObject}, {@link toRFC2822}, {@link toString}, {@link toLocaleString}, {@link toFormat}, {@link toMillis} and {@link toJSDate}.
+	 *
+	 * There's plenty others documented below. In addition, for more information on subtler topics like internationalization, time zones, alternative calendars, validity, and so on, see the external documentation.
+	 */
+	class DateTime {
+	  /**
+	   * @access private
+	   */
+	  constructor(config) {
+	    const zone = config.zone || Settings.defaultZone;
+
+	    let invalid =
+	      config.invalid ||
+	      (Number.isNaN(config.ts) ? new Invalid("invalid input") : null) ||
+	      (!zone.isValid ? unsupportedZone(zone) : null);
+	    /**
+	     * @access private
+	     */
+	    this.ts = isUndefined$2(config.ts) ? Settings.now() : config.ts;
+
+	    let c = null,
+	      o = null;
+	    if (!invalid) {
+	      const unchanged = config.old && config.old.ts === this.ts && config.old.zone.equals(zone);
+
+	      if (unchanged) {
+	        [c, o] = [config.old.c, config.old.o];
+	      } else {
+	        const ot = zone.offset(this.ts);
+	        c = tsToObj(this.ts, ot);
+	        invalid = Number.isNaN(c.year) ? new Invalid("invalid input") : null;
+	        c = invalid ? null : c;
+	        o = invalid ? null : ot;
+	      }
+	    }
+
+	    /**
+	     * @access private
+	     */
+	    this._zone = zone;
+	    /**
+	     * @access private
+	     */
+	    this.loc = config.loc || Locale.create();
+	    /**
+	     * @access private
+	     */
+	    this.invalid = invalid;
+	    /**
+	     * @access private
+	     */
+	    this.weekData = null;
+	    /**
+	     * @access private
+	     */
+	    this.c = c;
+	    /**
+	     * @access private
+	     */
+	    this.o = o;
+	    /**
+	     * @access private
+	     */
+	    this.isLuxonDateTime = true;
+	  }
+
+	  // CONSTRUCT
+
+	  /**
+	   * Create a local DateTime
+	   * @param {number} [year] - The calendar year. If omitted (as in, call `local()` with no arguments), the current time will be used
+	   * @param {number} [month=1] - The month, 1-indexed
+	   * @param {number} [day=1] - The day of the month
+	   * @param {number} [hour=0] - The hour of the day, in 24-hour time
+	   * @param {number} [minute=0] - The minute of the hour, meaning a number between 0 and 59
+	   * @param {number} [second=0] - The second of the minute, meaning a number between 0 and 59
+	   * @param {number} [millisecond=0] - The millisecond of the second, meaning a number between 0 and 999
+	   * @example DateTime.local()                            //~> now
+	   * @example DateTime.local(2017)                        //~> 2017-01-01T00:00:00
+	   * @example DateTime.local(2017, 3)                     //~> 2017-03-01T00:00:00
+	   * @example DateTime.local(2017, 3, 12)                 //~> 2017-03-12T00:00:00
+	   * @example DateTime.local(2017, 3, 12, 5)              //~> 2017-03-12T05:00:00
+	   * @example DateTime.local(2017, 3, 12, 5, 45)          //~> 2017-03-12T05:45:00
+	   * @example DateTime.local(2017, 3, 12, 5, 45, 10)      //~> 2017-03-12T05:45:10
+	   * @example DateTime.local(2017, 3, 12, 5, 45, 10, 765) //~> 2017-03-12T05:45:10.765
+	   * @return {DateTime}
+	   */
+	  static local(year, month, day, hour, minute, second, millisecond) {
+	    if (isUndefined$2(year)) {
+	      return new DateTime({ ts: Settings.now() });
+	    } else {
+	      return quickDT(
+	        {
+	          year,
+	          month,
+	          day,
+	          hour,
+	          minute,
+	          second,
+	          millisecond
+	        },
+	        Settings.defaultZone
+	      );
+	    }
+	  }
+
+	  /**
+	   * Create a DateTime in UTC
+	   * @param {number} [year] - The calendar year. If omitted (as in, call `utc()` with no arguments), the current time will be used
+	   * @param {number} [month=1] - The month, 1-indexed
+	   * @param {number} [day=1] - The day of the month
+	   * @param {number} [hour=0] - The hour of the day, in 24-hour time
+	   * @param {number} [minute=0] - The minute of the hour, meaning a number between 0 and 59
+	   * @param {number} [second=0] - The second of the minute, meaning a number between 0 and 59
+	   * @param {number} [millisecond=0] - The millisecond of the second, meaning a number between 0 and 999
+	   * @example DateTime.utc()                            //~> now
+	   * @example DateTime.utc(2017)                        //~> 2017-01-01T00:00:00Z
+	   * @example DateTime.utc(2017, 3)                     //~> 2017-03-01T00:00:00Z
+	   * @example DateTime.utc(2017, 3, 12)                 //~> 2017-03-12T00:00:00Z
+	   * @example DateTime.utc(2017, 3, 12, 5)              //~> 2017-03-12T05:00:00Z
+	   * @example DateTime.utc(2017, 3, 12, 5, 45)          //~> 2017-03-12T05:45:00Z
+	   * @example DateTime.utc(2017, 3, 12, 5, 45, 10)      //~> 2017-03-12T05:45:10Z
+	   * @example DateTime.utc(2017, 3, 12, 5, 45, 10, 765) //~> 2017-03-12T05:45:10.765Z
+	   * @return {DateTime}
+	   */
+	  static utc(year, month, day, hour, minute, second, millisecond) {
+	    if (isUndefined$2(year)) {
+	      return new DateTime({
+	        ts: Settings.now(),
+	        zone: FixedOffsetZone.utcInstance
+	      });
+	    } else {
+	      return quickDT(
+	        {
+	          year,
+	          month,
+	          day,
+	          hour,
+	          minute,
+	          second,
+	          millisecond
+	        },
+	        FixedOffsetZone.utcInstance
+	      );
+	    }
+	  }
+
+	  /**
+	   * Create a DateTime from a Javascript Date object. Uses the default zone.
+	   * @param {Date} date - a Javascript Date object
+	   * @param {Object} options - configuration options for the DateTime
+	   * @param {string|Zone} [options.zone='local'] - the zone to place the DateTime into
+	   * @return {DateTime}
+	   */
+	  static fromJSDate(date, options = {}) {
+	    const ts = isDate$1(date) ? date.valueOf() : NaN;
+	    if (Number.isNaN(ts)) {
+	      return DateTime.invalid("invalid input");
+	    }
+
+	    const zoneToUse = normalizeZone(options.zone, Settings.defaultZone);
+	    if (!zoneToUse.isValid) {
+	      return DateTime.invalid(unsupportedZone(zoneToUse));
+	    }
+
+	    return new DateTime({
+	      ts: ts,
+	      zone: zoneToUse,
+	      loc: Locale.fromObject(options)
+	    });
+	  }
+
+	  /**
+	   * Create a DateTime from a number of milliseconds since the epoch (meaning since 1 January 1970 00:00:00 UTC). Uses the default zone.
+	   * @param {number} milliseconds - a number of milliseconds since 1970 UTC
+	   * @param {Object} options - configuration options for the DateTime
+	   * @param {string|Zone} [options.zone='local'] - the zone to place the DateTime into
+	   * @param {string} [options.locale] - a locale to set on the resulting DateTime instance
+	   * @param {string} options.outputCalendar - the output calendar to set on the resulting DateTime instance
+	   * @param {string} options.numberingSystem - the numbering system to set on the resulting DateTime instance
+	   * @return {DateTime}
+	   */
+	  static fromMillis(milliseconds, options = {}) {
+	    if (!isNumber$1(milliseconds)) {
+	      throw new InvalidArgumentError(
+	        `fromMillis requires a numerical input, but received a ${typeof milliseconds} with value ${milliseconds}`
+	      );
+	    } else if (milliseconds < -MAX_DATE || milliseconds > MAX_DATE) {
+	      // this isn't perfect because because we can still end up out of range because of additional shifting, but it's a start
+	      return DateTime.invalid("Timestamp out of range");
+	    } else {
+	      return new DateTime({
+	        ts: milliseconds,
+	        zone: normalizeZone(options.zone, Settings.defaultZone),
+	        loc: Locale.fromObject(options)
+	      });
+	    }
+	  }
+
+	  /**
+	   * Create a DateTime from a number of seconds since the epoch (meaning since 1 January 1970 00:00:00 UTC). Uses the default zone.
+	   * @param {number} seconds - a number of seconds since 1970 UTC
+	   * @param {Object} options - configuration options for the DateTime
+	   * @param {string|Zone} [options.zone='local'] - the zone to place the DateTime into
+	   * @param {string} [options.locale] - a locale to set on the resulting DateTime instance
+	   * @param {string} options.outputCalendar - the output calendar to set on the resulting DateTime instance
+	   * @param {string} options.numberingSystem - the numbering system to set on the resulting DateTime instance
+	   * @return {DateTime}
+	   */
+	  static fromSeconds(seconds, options = {}) {
+	    if (!isNumber$1(seconds)) {
+	      throw new InvalidArgumentError("fromSeconds requires a numerical input");
+	    } else {
+	      return new DateTime({
+	        ts: seconds * 1000,
+	        zone: normalizeZone(options.zone, Settings.defaultZone),
+	        loc: Locale.fromObject(options)
+	      });
+	    }
+	  }
+
+	  /**
+	   * Create a DateTime from a Javascript object with keys like 'year' and 'hour' with reasonable defaults.
+	   * @param {Object} obj - the object to create the DateTime from
+	   * @param {number} obj.year - a year, such as 1987
+	   * @param {number} obj.month - a month, 1-12
+	   * @param {number} obj.day - a day of the month, 1-31, depending on the month
+	   * @param {number} obj.ordinal - day of the year, 1-365 or 366
+	   * @param {number} obj.weekYear - an ISO week year
+	   * @param {number} obj.weekNumber - an ISO week number, between 1 and 52 or 53, depending on the year
+	   * @param {number} obj.weekday - an ISO weekday, 1-7, where 1 is Monday and 7 is Sunday
+	   * @param {number} obj.hour - hour of the day, 0-23
+	   * @param {number} obj.minute - minute of the hour, 0-59
+	   * @param {number} obj.second - second of the minute, 0-59
+	   * @param {number} obj.millisecond - millisecond of the second, 0-999
+	   * @param {string|Zone} [obj.zone='local'] - interpret the numbers in the context of a particular zone. Can take any value taken as the first argument to setZone()
+	   * @param {string} [obj.locale='system's locale'] - a locale to set on the resulting DateTime instance
+	   * @param {string} obj.outputCalendar - the output calendar to set on the resulting DateTime instance
+	   * @param {string} obj.numberingSystem - the numbering system to set on the resulting DateTime instance
+	   * @example DateTime.fromObject({ year: 1982, month: 5, day: 25}).toISODate() //=> '1982-05-25'
+	   * @example DateTime.fromObject({ year: 1982 }).toISODate() //=> '1982-01-01'
+	   * @example DateTime.fromObject({ hour: 10, minute: 26, second: 6 }) //~> today at 10:26:06
+	   * @example DateTime.fromObject({ hour: 10, minute: 26, second: 6, zone: 'utc' }),
+	   * @example DateTime.fromObject({ hour: 10, minute: 26, second: 6, zone: 'local' })
+	   * @example DateTime.fromObject({ hour: 10, minute: 26, second: 6, zone: 'America/New_York' })
+	   * @example DateTime.fromObject({ weekYear: 2016, weekNumber: 2, weekday: 3 }).toISODate() //=> '2016-01-13'
+	   * @return {DateTime}
+	   */
+	  static fromObject(obj) {
+	    const zoneToUse = normalizeZone(obj.zone, Settings.defaultZone);
+	    if (!zoneToUse.isValid) {
+	      return DateTime.invalid(unsupportedZone(zoneToUse));
+	    }
+
+	    const tsNow = Settings.now(),
+	      offsetProvis = zoneToUse.offset(tsNow),
+	      normalized = normalizeObject(obj, normalizeUnit, [
+	        "zone",
+	        "locale",
+	        "outputCalendar",
+	        "numberingSystem"
+	      ]),
+	      containsOrdinal = !isUndefined$2(normalized.ordinal),
+	      containsGregorYear = !isUndefined$2(normalized.year),
+	      containsGregorMD = !isUndefined$2(normalized.month) || !isUndefined$2(normalized.day),
+	      containsGregor = containsGregorYear || containsGregorMD,
+	      definiteWeekDef = normalized.weekYear || normalized.weekNumber,
+	      loc = Locale.fromObject(obj);
+
+	    // cases:
+	    // just a weekday -> this week's instance of that weekday, no worries
+	    // (gregorian data or ordinal) + (weekYear or weekNumber) -> error
+	    // (gregorian month or day) + ordinal -> error
+	    // otherwise just use weeks or ordinals or gregorian, depending on what's specified
+
+	    if ((containsGregor || containsOrdinal) && definiteWeekDef) {
+	      throw new ConflictingSpecificationError(
+	        "Can't mix weekYear/weekNumber units with year/month/day or ordinals"
+	      );
+	    }
+
+	    if (containsGregorMD && containsOrdinal) {
+	      throw new ConflictingSpecificationError("Can't mix ordinal dates with month/day");
+	    }
+
+	    const useWeekData = definiteWeekDef || (normalized.weekday && !containsGregor);
+
+	    // configure ourselves to deal with gregorian dates or week stuff
+	    let units,
+	      defaultValues,
+	      objNow = tsToObj(tsNow, offsetProvis);
+	    if (useWeekData) {
+	      units = orderedWeekUnits;
+	      defaultValues = defaultWeekUnitValues;
+	      objNow = gregorianToWeek(objNow);
+	    } else if (containsOrdinal) {
+	      units = orderedOrdinalUnits;
+	      defaultValues = defaultOrdinalUnitValues;
+	      objNow = gregorianToOrdinal(objNow);
+	    } else {
+	      units = orderedUnits$1;
+	      defaultValues = defaultUnitValues;
+	    }
+
+	    // set default values for missing stuff
+	    let foundFirst = false;
+	    for (const u of units) {
+	      const v = normalized[u];
+	      if (!isUndefined$2(v)) {
+	        foundFirst = true;
+	      } else if (foundFirst) {
+	        normalized[u] = defaultValues[u];
+	      } else {
+	        normalized[u] = objNow[u];
+	      }
+	    }
+
+	    // make sure the values we have are in range
+	    const higherOrderInvalid = useWeekData
+	        ? hasInvalidWeekData(normalized)
+	        : containsOrdinal
+	          ? hasInvalidOrdinalData(normalized)
+	          : hasInvalidGregorianData(normalized),
+	      invalid = higherOrderInvalid || hasInvalidTimeData(normalized);
+
+	    if (invalid) {
+	      return DateTime.invalid(invalid);
+	    }
+
+	    // compute the actual time
+	    const gregorian = useWeekData
+	        ? weekToGregorian(normalized)
+	        : containsOrdinal
+	          ? ordinalToGregorian(normalized)
+	          : normalized,
+	      [tsFinal, offsetFinal] = objToTS(gregorian, offsetProvis, zoneToUse),
+	      inst = new DateTime({
+	        ts: tsFinal,
+	        zone: zoneToUse,
+	        o: offsetFinal,
+	        loc
+	      });
+
+	    // gregorian data + weekday serves only to validate
+	    if (normalized.weekday && containsGregor && obj.weekday !== inst.weekday) {
+	      return DateTime.invalid(
+	        "mismatched weekday",
+	        `you can't specify both a weekday of ${normalized.weekday} and a date of ${inst.toISO()}`
+	      );
+	    }
+
+	    return inst;
+	  }
+
+	  /**
+	   * Create a DateTime from an ISO 8601 string
+	   * @param {string} text - the ISO string
+	   * @param {Object} opts - options to affect the creation
+	   * @param {string|Zone} [opts.zone='local'] - use this zone if no offset is specified in the input string itself. Will also convert the time to this zone
+	   * @param {boolean} [opts.setZone=false] - override the zone with a fixed-offset zone specified in the string itself, if it specifies one
+	   * @param {string} [opts.locale='system's locale'] - a locale to set on the resulting DateTime instance
+	   * @param {string} opts.outputCalendar - the output calendar to set on the resulting DateTime instance
+	   * @param {string} opts.numberingSystem - the numbering system to set on the resulting DateTime instance
+	   * @example DateTime.fromISO('2016-05-25T09:08:34.123')
+	   * @example DateTime.fromISO('2016-05-25T09:08:34.123+06:00')
+	   * @example DateTime.fromISO('2016-05-25T09:08:34.123+06:00', {setZone: true})
+	   * @example DateTime.fromISO('2016-05-25T09:08:34.123', {zone: 'utc'})
+	   * @example DateTime.fromISO('2016-W05-4')
+	   * @return {DateTime}
+	   */
+	  static fromISO(text, opts = {}) {
+	    const [vals, parsedZone] = parseISODate(text);
+	    return parseDataToDateTime(vals, parsedZone, opts, "ISO 8601", text);
+	  }
+
+	  /**
+	   * Create a DateTime from an RFC 2822 string
+	   * @param {string} text - the RFC 2822 string
+	   * @param {Object} opts - options to affect the creation
+	   * @param {string|Zone} [opts.zone='local'] - convert the time to this zone. Since the offset is always specified in the string itself, this has no effect on the interpretation of string, merely the zone the resulting DateTime is expressed in.
+	   * @param {boolean} [opts.setZone=false] - override the zone with a fixed-offset zone specified in the string itself, if it specifies one
+	   * @param {string} [opts.locale='system's locale'] - a locale to set on the resulting DateTime instance
+	   * @param {string} opts.outputCalendar - the output calendar to set on the resulting DateTime instance
+	   * @param {string} opts.numberingSystem - the numbering system to set on the resulting DateTime instance
+	   * @example DateTime.fromRFC2822('25 Nov 2016 13:23:12 GMT')
+	   * @example DateTime.fromRFC2822('Fri, 25 Nov 2016 13:23:12 +0600')
+	   * @example DateTime.fromRFC2822('25 Nov 2016 13:23 Z')
+	   * @return {DateTime}
+	   */
+	  static fromRFC2822(text, opts = {}) {
+	    const [vals, parsedZone] = parseRFC2822Date(text);
+	    return parseDataToDateTime(vals, parsedZone, opts, "RFC 2822", text);
+	  }
+
+	  /**
+	   * Create a DateTime from an HTTP header date
+	   * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1
+	   * @param {string} text - the HTTP header date
+	   * @param {Object} opts - options to affect the creation
+	   * @param {string|Zone} [opts.zone='local'] - convert the time to this zone. Since HTTP dates are always in UTC, this has no effect on the interpretation of string, merely the zone the resulting DateTime is expressed in.
+	   * @param {boolean} [opts.setZone=false] - override the zone with the fixed-offset zone specified in the string. For HTTP dates, this is always UTC, so this option is equivalent to setting the `zone` option to 'utc', but this option is included for consistency with similar methods.
+	   * @param {string} [opts.locale='system's locale'] - a locale to set on the resulting DateTime instance
+	   * @param {string} opts.outputCalendar - the output calendar to set on the resulting DateTime instance
+	   * @param {string} opts.numberingSystem - the numbering system to set on the resulting DateTime instance
+	   * @example DateTime.fromHTTP('Sun, 06 Nov 1994 08:49:37 GMT')
+	   * @example DateTime.fromHTTP('Sunday, 06-Nov-94 08:49:37 GMT')
+	   * @example DateTime.fromHTTP('Sun Nov  6 08:49:37 1994')
+	   * @return {DateTime}
+	   */
+	  static fromHTTP(text, opts = {}) {
+	    const [vals, parsedZone] = parseHTTPDate(text);
+	    return parseDataToDateTime(vals, parsedZone, opts, "HTTP", opts);
+	  }
+
+	  /**
+	   * Create a DateTime from an input string and format string.
+	   * Defaults to en-US if no locale has been specified, regardless of the system's locale.
+	   * @see https://moment.github.io/luxon/docs/manual/parsing.html#table-of-tokens
+	   * @param {string} text - the string to parse
+	   * @param {string} fmt - the format the string is expected to be in (see the link below for the formats)
+	   * @param {Object} opts - options to affect the creation
+	   * @param {string|Zone} [opts.zone='local'] - use this zone if no offset is specified in the input string itself. Will also convert the DateTime to this zone
+	   * @param {boolean} [opts.setZone=false] - override the zone with a zone specified in the string itself, if it specifies one
+	   * @param {string} [opts.locale='en-US'] - a locale string to use when parsing. Will also set the DateTime to this locale
+	   * @param {string} opts.numberingSystem - the numbering system to use when parsing. Will also set the resulting DateTime to this numbering system
+	   * @param {string} opts.outputCalendar - the output calendar to set on the resulting DateTime instance
+	   * @return {DateTime}
+	   */
+	  static fromFormat(text, fmt, opts = {}) {
+	    if (isUndefined$2(text) || isUndefined$2(fmt)) {
+	      throw new InvalidArgumentError("fromFormat requires an input string and a format");
+	    }
+
+	    const { locale = null, numberingSystem = null } = opts,
+	      localeToUse = Locale.fromOpts({
+	        locale,
+	        numberingSystem,
+	        defaultToEN: true
+	      }),
+	      [vals, parsedZone, invalid] = parseFromTokens(localeToUse, text, fmt);
+	    if (invalid) {
+	      return DateTime.invalid(invalid);
+	    } else {
+	      return parseDataToDateTime(vals, parsedZone, opts, `format ${fmt}`, text);
+	    }
+	  }
+
+	  /**
+	   * @deprecated use fromFormat instead
+	   */
+	  static fromString(text, fmt, opts = {}) {
+	    return DateTime.fromFormat(text, fmt, opts);
+	  }
+
+	  /**
+	   * Create a DateTime from a SQL date, time, or datetime
+	   * Defaults to en-US if no locale has been specified, regardless of the system's locale
+	   * @param {string} text - the string to parse
+	   * @param {Object} opts - options to affect the creation
+	   * @param {string|Zone} [opts.zone='local'] - use this zone if no offset is specified in the input string itself. Will also convert the DateTime to this zone
+	   * @param {boolean} [opts.setZone=false] - override the zone with a zone specified in the string itself, if it specifies one
+	   * @param {string} [opts.locale='en-US'] - a locale string to use when parsing. Will also set the DateTime to this locale
+	   * @param {string} opts.numberingSystem - the numbering system to use when parsing. Will also set the resulting DateTime to this numbering system
+	   * @param {string} opts.outputCalendar - the output calendar to set on the resulting DateTime instance
+	   * @example DateTime.fromSQL('2017-05-15')
+	   * @example DateTime.fromSQL('2017-05-15 09:12:34')
+	   * @example DateTime.fromSQL('2017-05-15 09:12:34.342')
+	   * @example DateTime.fromSQL('2017-05-15 09:12:34.342+06:00')
+	   * @example DateTime.fromSQL('2017-05-15 09:12:34.342 America/Los_Angeles')
+	   * @example DateTime.fromSQL('2017-05-15 09:12:34.342 America/Los_Angeles', { setZone: true })
+	   * @example DateTime.fromSQL('2017-05-15 09:12:34.342', { zone: 'America/Los_Angeles' })
+	   * @example DateTime.fromSQL('09:12:34.342')
+	   * @return {DateTime}
+	   */
+	  static fromSQL(text, opts = {}) {
+	    const [vals, parsedZone] = parseSQL(text);
+	    return parseDataToDateTime(vals, parsedZone, opts, "SQL", text);
+	  }
+
+	  /**
+	   * Create an invalid DateTime.
+	   * @param {string} reason - simple string of why this DateTime is invalid. Should not contain parameters or anything else data-dependent
+	   * @param {string} [explanation=null] - longer explanation, may include parameters and other useful debugging information
+	   * @return {DateTime}
+	   */
+	  static invalid(reason, explanation = null) {
+	    if (!reason) {
+	      throw new InvalidArgumentError("need to specify a reason the DateTime is invalid");
+	    }
+
+	    const invalid = reason instanceof Invalid ? reason : new Invalid(reason, explanation);
+
+	    if (Settings.throwOnInvalid) {
+	      throw new InvalidDateTimeError(invalid);
+	    } else {
+	      return new DateTime({ invalid });
+	    }
+	  }
+
+	  /**
+	   * Check if an object is a DateTime. Works across context boundaries
+	   * @param {object} o
+	   * @return {boolean}
+	   */
+	  static isDateTime(o) {
+	    return (o && o.isLuxonDateTime) || false;
+	  }
+
+	  // INFO
+
+	  /**
+	   * Get the value of unit.
+	   * @param {string} unit - a unit such as 'minute' or 'day'
+	   * @example DateTime.local(2017, 7, 4).get('month'); //=> 7
+	   * @example DateTime.local(2017, 7, 4).get('day'); //=> 4
+	   * @return {number}
+	   */
+	  get(unit) {
+	    return this[unit];
+	  }
+
+	  /**
+	   * Returns whether the DateTime is valid. Invalid DateTimes occur when:
+	   * * The DateTime was created from invalid calendar information, such as the 13th month or February 30
+	   * * The DateTime was created by an operation on another invalid date
+	   * @type {boolean}
+	   */
+	  get isValid() {
+	    return this.invalid === null;
+	  }
+
+	  /**
+	   * Returns an error code if this DateTime is invalid, or null if the DateTime is valid
+	   * @type {string}
+	   */
+	  get invalidReason() {
+	    return this.invalid ? this.invalid.reason : null;
+	  }
+
+	  /**
+	   * Returns an explanation of why this DateTime became invalid, or null if the DateTime is valid
+	   * @type {string}
+	   */
+	  get invalidExplanation() {
+	    return this.invalid ? this.invalid.explanation : null;
+	  }
+
+	  /**
+	   * Get the locale of a DateTime, such 'en-GB'. The locale is used when formatting the DateTime
+	   *
+	   * @type {string}
+	   */
+	  get locale() {
+	    return this.isValid ? this.loc.locale : null;
+	  }
+
+	  /**
+	   * Get the numbering system of a DateTime, such 'beng'. The numbering system is used when formatting the DateTime
+	   *
+	   * @type {string}
+	   */
+	  get numberingSystem() {
+	    return this.isValid ? this.loc.numberingSystem : null;
+	  }
+
+	  /**
+	   * Get the output calendar of a DateTime, such 'islamic'. The output calendar is used when formatting the DateTime
+	   *
+	   * @type {string}
+	   */
+	  get outputCalendar() {
+	    return this.isValid ? this.loc.outputCalendar : null;
+	  }
+
+	  /**
+	   * Get the time zone associated with this DateTime.
+	   * @type {Zone}
+	   */
+	  get zone() {
+	    return this._zone;
+	  }
+
+	  /**
+	   * Get the name of the time zone.
+	   * @type {string}
+	   */
+	  get zoneName() {
+	    return this.isValid ? this.zone.name : null;
+	  }
+
+	  /**
+	   * Get the year
+	   * @example DateTime.local(2017, 5, 25).year //=> 2017
+	   * @type {number}
+	   */
+	  get year() {
+	    return this.isValid ? this.c.year : NaN;
+	  }
+
+	  /**
+	   * Get the quarter
+	   * @example DateTime.local(2017, 5, 25).quarter //=> 2
+	   * @type {number}
+	   */
+	  get quarter() {
+	    return this.isValid ? Math.ceil(this.c.month / 3) : NaN;
+	  }
+
+	  /**
+	   * Get the month (1-12).
+	   * @example DateTime.local(2017, 5, 25).month //=> 5
+	   * @type {number}
+	   */
+	  get month() {
+	    return this.isValid ? this.c.month : NaN;
+	  }
+
+	  /**
+	   * Get the day of the month (1-30ish).
+	   * @example DateTime.local(2017, 5, 25).day //=> 25
+	   * @type {number}
+	   */
+	  get day() {
+	    return this.isValid ? this.c.day : NaN;
+	  }
+
+	  /**
+	   * Get the hour of the day (0-23).
+	   * @example DateTime.local(2017, 5, 25, 9).hour //=> 9
+	   * @type {number}
+	   */
+	  get hour() {
+	    return this.isValid ? this.c.hour : NaN;
+	  }
+
+	  /**
+	   * Get the minute of the hour (0-59).
+	   * @example DateTime.local(2017, 5, 25, 9, 30).minute //=> 30
+	   * @type {number}
+	   */
+	  get minute() {
+	    return this.isValid ? this.c.minute : NaN;
+	  }
+
+	  /**
+	   * Get the second of the minute (0-59).
+	   * @example DateTime.local(2017, 5, 25, 9, 30, 52).second //=> 52
+	   * @type {number}
+	   */
+	  get second() {
+	    return this.isValid ? this.c.second : NaN;
+	  }
+
+	  /**
+	   * Get the millisecond of the second (0-999).
+	   * @example DateTime.local(2017, 5, 25, 9, 30, 52, 654).millisecond //=> 654
+	   * @type {number}
+	   */
+	  get millisecond() {
+	    return this.isValid ? this.c.millisecond : NaN;
+	  }
+
+	  /**
+	   * Get the week year
+	   * @see https://en.wikipedia.org/wiki/ISO_week_date
+	   * @example DateTime.local(2014, 11, 31).weekYear //=> 2015
+	   * @type {number}
+	   */
+	  get weekYear() {
+	    return this.isValid ? possiblyCachedWeekData(this).weekYear : NaN;
+	  }
+
+	  /**
+	   * Get the week number of the week year (1-52ish).
+	   * @see https://en.wikipedia.org/wiki/ISO_week_date
+	   * @example DateTime.local(2017, 5, 25).weekNumber //=> 21
+	   * @type {number}
+	   */
+	  get weekNumber() {
+	    return this.isValid ? possiblyCachedWeekData(this).weekNumber : NaN;
+	  }
+
+	  /**
+	   * Get the day of the week.
+	   * 1 is Monday and 7 is Sunday
+	   * @see https://en.wikipedia.org/wiki/ISO_week_date
+	   * @example DateTime.local(2014, 11, 31).weekday //=> 4
+	   * @type {number}
+	   */
+	  get weekday() {
+	    return this.isValid ? possiblyCachedWeekData(this).weekday : NaN;
+	  }
+
+	  /**
+	   * Get the ordinal (meaning the day of the year)
+	   * @example DateTime.local(2017, 5, 25).ordinal //=> 145
+	   * @type {number|DateTime}
+	   */
+	  get ordinal() {
+	    return this.isValid ? gregorianToOrdinal(this.c).ordinal : NaN;
+	  }
+
+	  /**
+	   * Get the human readable short month name, such as 'Oct'.
+	   * Defaults to the system's locale if no locale has been specified
+	   * @example DateTime.local(2017, 10, 30).monthShort //=> Oct
+	   * @type {string}
+	   */
+	  get monthShort() {
+	    return this.isValid ? Info.months("short", { locale: this.locale })[this.month - 1] : null;
+	  }
+
+	  /**
+	   * Get the human readable long month name, such as 'October'.
+	   * Defaults to the system's locale if no locale has been specified
+	   * @example DateTime.local(2017, 10, 30).monthLong //=> October
+	   * @type {string}
+	   */
+	  get monthLong() {
+	    return this.isValid ? Info.months("long", { locale: this.locale })[this.month - 1] : null;
+	  }
+
+	  /**
+	   * Get the human readable short weekday, such as 'Mon'.
+	   * Defaults to the system's locale if no locale has been specified
+	   * @example DateTime.local(2017, 10, 30).weekdayShort //=> Mon
+	   * @type {string}
+	   */
+	  get weekdayShort() {
+	    return this.isValid ? Info.weekdays("short", { locale: this.locale })[this.weekday - 1] : null;
+	  }
+
+	  /**
+	   * Get the human readable long weekday, such as 'Monday'.
+	   * Defaults to the system's locale if no locale has been specified
+	   * @example DateTime.local(2017, 10, 30).weekdayLong //=> Monday
+	   * @type {string}
+	   */
+	  get weekdayLong() {
+	    return this.isValid ? Info.weekdays("long", { locale: this.locale })[this.weekday - 1] : null;
+	  }
+
+	  /**
+	   * Get the UTC offset of this DateTime in minutes
+	   * @example DateTime.local().offset //=> -240
+	   * @example DateTime.utc().offset //=> 0
+	   * @type {number}
+	   */
+	  get offset() {
+	    return this.isValid ? +this.o : NaN;
+	  }
+
+	  /**
+	   * Get the short human name for the zone's current offset, for example "EST" or "EDT".
+	   * Defaults to the system's locale if no locale has been specified
+	   * @type {string}
+	   */
+	  get offsetNameShort() {
+	    if (this.isValid) {
+	      return this.zone.offsetName(this.ts, {
+	        format: "short",
+	        locale: this.locale
+	      });
+	    } else {
+	      return null;
+	    }
+	  }
+
+	  /**
+	   * Get the long human name for the zone's current offset, for example "Eastern Standard Time" or "Eastern Daylight Time".
+	   * Defaults to the system's locale if no locale has been specified
+	   * @type {string}
+	   */
+	  get offsetNameLong() {
+	    if (this.isValid) {
+	      return this.zone.offsetName(this.ts, {
+	        format: "long",
+	        locale: this.locale
+	      });
+	    } else {
+	      return null;
+	    }
+	  }
+
+	  /**
+	   * Get whether this zone's offset ever changes, as in a DST.
+	   * @type {boolean}
+	   */
+	  get isOffsetFixed() {
+	    return this.isValid ? this.zone.universal : null;
+	  }
+
+	  /**
+	   * Get whether the DateTime is in a DST.
+	   * @type {boolean}
+	   */
+	  get isInDST() {
+	    if (this.isOffsetFixed) {
+	      return false;
+	    } else {
+	      return (
+	        this.offset > this.set({ month: 1 }).offset || this.offset > this.set({ month: 5 }).offset
+	      );
+	    }
+	  }
+
+	  /**
+	   * Returns true if this DateTime is in a leap year, false otherwise
+	   * @example DateTime.local(2016).isInLeapYear //=> true
+	   * @example DateTime.local(2013).isInLeapYear //=> false
+	   * @type {boolean}
+	   */
+	  get isInLeapYear() {
+	    return isLeapYear(this.year);
+	  }
+
+	  /**
+	   * Returns the number of days in this DateTime's month
+	   * @example DateTime.local(2016, 2).daysInMonth //=> 29
+	   * @example DateTime.local(2016, 3).daysInMonth //=> 31
+	   * @type {number}
+	   */
+	  get daysInMonth() {
+	    return daysInMonth(this.year, this.month);
+	  }
+
+	  /**
+	   * Returns the number of days in this DateTime's year
+	   * @example DateTime.local(2016).daysInYear //=> 366
+	   * @example DateTime.local(2013).daysInYear //=> 365
+	   * @type {number}
+	   */
+	  get daysInYear() {
+	    return this.isValid ? daysInYear(this.year) : NaN;
+	  }
+
+	  /**
+	   * Returns the number of weeks in this DateTime's year
+	   * @see https://en.wikipedia.org/wiki/ISO_week_date
+	   * @example DateTime.local(2004).weeksInWeekYear //=> 53
+	   * @example DateTime.local(2013).weeksInWeekYear //=> 52
+	   * @type {number}
+	   */
+	  get weeksInWeekYear() {
+	    return this.isValid ? weeksInWeekYear(this.weekYear) : NaN;
+	  }
+
+	  /**
+	   * Returns the resolved Intl options for this DateTime.
+	   * This is useful in understanding the behavior of formatting methods
+	   * @param {Object} opts - the same options as toLocaleString
+	   * @return {Object}
+	   */
+	  resolvedLocaleOpts(opts = {}) {
+	    const { locale, numberingSystem, calendar } = Formatter.create(
+	      this.loc.clone(opts),
+	      opts
+	    ).resolvedOptions(this);
+	    return { locale, numberingSystem, outputCalendar: calendar };
+	  }
+
+	  // TRANSFORM
+
+	  /**
+	   * "Set" the DateTime's zone to UTC. Returns a newly-constructed DateTime.
+	   *
+	   * Equivalent to {@link setZone}('utc')
+	   * @param {number} [offset=0] - optionally, an offset from UTC in minutes
+	   * @param {Object} [opts={}] - options to pass to `setZone()`
+	   * @return {DateTime}
+	   */
+	  toUTC(offset = 0, opts = {}) {
+	    return this.setZone(FixedOffsetZone.instance(offset), opts);
+	  }
+
+	  /**
+	   * "Set" the DateTime's zone to the host's local zone. Returns a newly-constructed DateTime.
+	   *
+	   * Equivalent to `setZone('local')`
+	   * @return {DateTime}
+	   */
+	  toLocal() {
+	    return this.setZone(Settings.defaultZone);
+	  }
+
+	  /**
+	   * "Set" the DateTime's zone to specified zone. Returns a newly-constructed DateTime.
+	   *
+	   * By default, the setter keeps the underlying time the same (as in, the same timestamp), but the new instance will report different local times and consider DSTs when making computations, as with {@link plus}. You may wish to use {@link toLocal} and {@link toUTC} which provide simple convenience wrappers for commonly used zones.
+	   * @param {string|Zone} [zone='local'] - a zone identifier. As a string, that can be any IANA zone supported by the host environment, or a fixed-offset name of the form 'UTC+3', or the strings 'local' or 'utc'. You may also supply an instance of a {@link Zone} class.
+	   * @param {Object} opts - options
+	   * @param {boolean} [opts.keepLocalTime=false] - If true, adjust the underlying time so that the local time stays the same, but in the target zone. You should rarely need this.
+	   * @return {DateTime}
+	   */
+	  setZone(zone, { keepLocalTime = false, keepCalendarTime = false } = {}) {
+	    zone = normalizeZone(zone, Settings.defaultZone);
+	    if (zone.equals(this.zone)) {
+	      return this;
+	    } else if (!zone.isValid) {
+	      return DateTime.invalid(unsupportedZone(zone));
+	    } else {
+	      let newTS = this.ts;
+	      if (keepLocalTime || keepCalendarTime) {
+	        const offsetGuess = zone.offset(this.ts);
+	        const asObj = this.toObject();
+	        [newTS] = objToTS(asObj, offsetGuess, zone);
+	      }
+	      return clone$1(this, { ts: newTS, zone });
+	    }
+	  }
+
+	  /**
+	   * "Set" the locale, numberingSystem, or outputCalendar. Returns a newly-constructed DateTime.
+	   * @param {Object} properties - the properties to set
+	   * @example DateTime.local(2017, 5, 25).reconfigure({ locale: 'en-GB' })
+	   * @return {DateTime}
+	   */
+	  reconfigure({ locale, numberingSystem, outputCalendar } = {}) {
+	    const loc = this.loc.clone({ locale, numberingSystem, outputCalendar });
+	    return clone$1(this, { loc });
+	  }
+
+	  /**
+	   * "Set" the locale. Returns a newly-constructed DateTime.
+	   * Just a convenient alias for reconfigure({ locale })
+	   * @example DateTime.local(2017, 5, 25).setLocale('en-GB')
+	   * @return {DateTime}
+	   */
+	  setLocale(locale) {
+	    return this.reconfigure({ locale });
+	  }
+
+	  /**
+	   * "Set" the values of specified units. Returns a newly-constructed DateTime.
+	   * You can only set units with this method; for "setting" metadata, see {@link reconfigure} and {@link setZone}.
+	   * @param {Object} values - a mapping of units to numbers
+	   * @example dt.set({ year: 2017 })
+	   * @example dt.set({ hour: 8, minute: 30 })
+	   * @example dt.set({ weekday: 5 })
+	   * @example dt.set({ year: 2005, ordinal: 234 })
+	   * @return {DateTime}
+	   */
+	  set(values) {
+	    if (!this.isValid) return this;
+
+	    const normalized = normalizeObject(values, normalizeUnit, []),
+	      settingWeekStuff =
+	        !isUndefined$2(normalized.weekYear) ||
+	        !isUndefined$2(normalized.weekNumber) ||
+	        !isUndefined$2(normalized.weekday);
+
+	    let mixed;
+	    if (settingWeekStuff) {
+	      mixed = weekToGregorian(Object.assign(gregorianToWeek(this.c), normalized));
+	    } else if (!isUndefined$2(normalized.ordinal)) {
+	      mixed = ordinalToGregorian(Object.assign(gregorianToOrdinal(this.c), normalized));
+	    } else {
+	      mixed = Object.assign(this.toObject(), normalized);
+
+	      // if we didn't set the day but we ended up on an overflow date,
+	      // use the last day of the right month
+	      if (isUndefined$2(normalized.day)) {
+	        mixed.day = Math.min(daysInMonth(mixed.year, mixed.month), mixed.day);
+	      }
+	    }
+
+	    const [ts, o] = objToTS(mixed, this.o, this.zone);
+	    return clone$1(this, { ts, o });
+	  }
+
+	  /**
+	   * Add a period of time to this DateTime and return the resulting DateTime
+	   *
+	   * Adding hours, minutes, seconds, or milliseconds increases the timestamp by the right number of milliseconds. Adding days, months, or years shifts the calendar, accounting for DSTs and leap years along the way. Thus, `dt.plus({ hours: 24 })` may result in a different time than `dt.plus({ days: 1 })` if there's a DST shift in between.
+	   * @param {Duration|Object|number} duration - The amount to add. Either a Luxon Duration, a number of milliseconds, the object argument to Duration.fromObject()
+	   * @example DateTime.local().plus(123) //~> in 123 milliseconds
+	   * @example DateTime.local().plus({ minutes: 15 }) //~> in 15 minutes
+	   * @example DateTime.local().plus({ days: 1 }) //~> this time tomorrow
+	   * @example DateTime.local().plus({ days: -1 }) //~> this time yesterday
+	   * @example DateTime.local().plus({ hours: 3, minutes: 13 }) //~> in 3 hr, 13 min
+	   * @example DateTime.local().plus(Duration.fromObject({ hours: 3, minutes: 13 })) //~> in 3 hr, 13 min
+	   * @return {DateTime}
+	   */
+	  plus(duration) {
+	    if (!this.isValid) return this;
+	    const dur = friendlyDuration(duration);
+	    return clone$1(this, adjustTime(this, dur));
+	  }
+
+	  /**
+	   * Subtract a period of time to this DateTime and return the resulting DateTime
+	   * See {@link plus}
+	   * @param {Duration|Object|number} duration - The amount to subtract. Either a Luxon Duration, a number of milliseconds, the object argument to Duration.fromObject()
+	   @return {DateTime}
+	  */
+	  minus(duration) {
+	    if (!this.isValid) return this;
+	    const dur = friendlyDuration(duration).negate();
+	    return clone$1(this, adjustTime(this, dur));
+	  }
+
+	  /**
+	   * "Set" this DateTime to the beginning of a unit of time.
+	   * @param {string} unit - The unit to go to the beginning of. Can be 'year', 'quarter', 'month', 'week', 'day', 'hour', 'minute', 'second', or 'millisecond'.
+	   * @example DateTime.local(2014, 3, 3).startOf('month').toISODate(); //=> '2014-03-01'
+	   * @example DateTime.local(2014, 3, 3).startOf('year').toISODate(); //=> '2014-01-01'
+	   * @example DateTime.local(2014, 3, 3, 5, 30).startOf('day').toISOTime(); //=> '00:00.000-05:00'
+	   * @example DateTime.local(2014, 3, 3, 5, 30).startOf('hour').toISOTime(); //=> '05:00:00.000-05:00'
+	   * @return {DateTime}
+	   */
+	  startOf(unit) {
+	    if (!this.isValid) return this;
+	    const o = {},
+	      normalizedUnit = Duration.normalizeUnit(unit);
+	    switch (normalizedUnit) {
+	      case "years":
+	        o.month = 1;
+	      // falls through
+	      case "quarters":
+	      case "months":
+	        o.day = 1;
+	      // falls through
+	      case "weeks":
+	      case "days":
+	        o.hour = 0;
+	      // falls through
+	      case "hours":
+	        o.minute = 0;
+	      // falls through
+	      case "minutes":
+	        o.second = 0;
+	      // falls through
+	      case "seconds":
+	        o.millisecond = 0;
+	        break;
+	      // no default, invalid units throw in normalizeUnit()
+	    }
+
+	    if (normalizedUnit === "weeks") {
+	      o.weekday = 1;
+	    }
+
+	    if (normalizedUnit === "quarters") {
+	      const q = Math.ceil(this.month / 3);
+	      o.month = (q - 1) * 3 + 1;
+	    }
+
+	    return this.set(o);
+	  }
+
+	  /**
+	   * "Set" this DateTime to the end (meaning the last millisecond) of a unit of time
+	   * @param {string} unit - The unit to go to the end of. Can be 'year', 'month', 'day', 'hour', 'minute', 'second', or 'millisecond'.
+	   * @example DateTime.local(2014, 3, 3).endOf('month').toISO(); //=> '2014-03-31T23:59:59.999-05:00'
+	   * @example DateTime.local(2014, 3, 3).endOf('year').toISO(); //=> '2014-12-31T23:59:59.999-05:00'
+	   * @example DateTime.local(2014, 3, 3, 5, 30).endOf('day').toISO(); //=> '2014-03-03T23:59:59.999-05:00'
+	   * @example DateTime.local(2014, 3, 3, 5, 30).endOf('hour').toISO(); //=> '2014-03-03T05:59:59.999-05:00'
+	   * @return {DateTime}
+	   */
+	  endOf(unit) {
+	    return this.isValid
+	      ? this.plus({ [unit]: 1 })
+	          .startOf(unit)
+	          .minus(1)
+	      : this;
+	  }
+
+	  // OUTPUT
+
+	  /**
+	   * Returns a string representation of this DateTime formatted according to the specified format string.
+	   * **You may not want this.** See {@link toLocaleString} for a more flexible formatting tool. For a table of tokens and their interpretations, see [here](https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens).
+	   * Defaults to en-US if no locale has been specified, regardless of the system's locale.
+	   * @see https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
+	   * @param {string} fmt - the format string
+	   * @param {Object} opts - opts to override the configuration options
+	   * @example DateTime.local().toFormat('yyyy LLL dd') //=> '2017 Apr 22'
+	   * @example DateTime.local().setLocale('fr').toFormat('yyyy LLL dd') //=> '2017 avr. 22'
+	   * @example DateTime.local().toFormat('yyyy LLL dd', { locale: "fr" }) //=> '2017 avr. 22'
+	   * @example DateTime.local().toFormat("HH 'hours and' mm 'minutes'") //=> '20 hours and 55 minutes'
+	   * @return {string}
+	   */
+	  toFormat(fmt, opts = {}) {
+	    return this.isValid
+	      ? Formatter.create(this.loc.redefaultToEN(opts)).formatDateTimeFromString(this, fmt)
+	      : INVALID$2;
+	  }
+
+	  /**
+	   * Returns a localized string representing this date. Accepts the same options as the Intl.DateTimeFormat constructor and any presets defined by Luxon, such as `DateTime.DATE_FULL` or `DateTime.TIME_SIMPLE`.
+	   * The exact behavior of this method is browser-specific, but in general it will return an appropriate representation
+	   * of the DateTime in the assigned locale.
+	   * Defaults to the system's locale if no locale has been specified
+	   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
+	   * @param opts {Object} - Intl.DateTimeFormat constructor options and configuration options
+	   * @example DateTime.local().toLocaleString(); //=> 4/20/2017
+	   * @example DateTime.local().setLocale('en-gb').toLocaleString(); //=> '20/04/2017'
+	   * @example DateTime.local().toLocaleString({ locale: 'en-gb' }); //=> '20/04/2017'
+	   * @example DateTime.local().toLocaleString(DateTime.DATE_FULL); //=> 'April 20, 2017'
+	   * @example DateTime.local().toLocaleString(DateTime.TIME_SIMPLE); //=> '11:32 AM'
+	   * @example DateTime.local().toLocaleString(DateTime.DATETIME_SHORT); //=> '4/20/2017, 11:32 AM'
+	   * @example DateTime.local().toLocaleString({ weekday: 'long', month: 'long', day: '2-digit' }); //=> 'Thursday, April 20'
+	   * @example DateTime.local().toLocaleString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' }); //=> 'Thu, Apr 20, 11:27 AM'
+	   * @example DateTime.local().toLocaleString({ hour: '2-digit', minute: '2-digit', hour12: false }); //=> '11:32'
+	   * @return {string}
+	   */
+	  toLocaleString(opts = DATE_SHORT) {
+	    return this.isValid
+	      ? Formatter.create(this.loc.clone(opts), opts).formatDateTime(this)
+	      : INVALID$2;
+	  }
+
+	  /**
+	   * Returns an array of format "parts", meaning individual tokens along with metadata. This is allows callers to post-process individual sections of the formatted output.
+	   * Defaults to the system's locale if no locale has been specified
+	   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/formatToParts
+	   * @param opts {Object} - Intl.DateTimeFormat constructor options, same as `toLocaleString`.
+	   * @example DateTime.local().toLocaleParts(); //=> [
+	   *                                   //=>   { type: 'day', value: '25' },
+	   *                                   //=>   { type: 'literal', value: '/' },
+	   *                                   //=>   { type: 'month', value: '05' },
+	   *                                   //=>   { type: 'literal', value: '/' },
+	   *                                   //=>   { type: 'year', value: '1982' }
+	   *                                   //=> ]
+	   */
+	  toLocaleParts(opts = {}) {
+	    return this.isValid
+	      ? Formatter.create(this.loc.clone(opts), opts).formatDateTimeParts(this)
+	      : [];
+	  }
+
+	  /**
+	   * Returns an ISO 8601-compliant string representation of this DateTime
+	   * @param {Object} opts - options
+	   * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
+	   * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
+	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @param {string} [opts.format='extended'] - choose between the basic and extended format
+	   * @example DateTime.utc(1982, 5, 25).toISO() //=> '1982-05-25T00:00:00.000Z'
+	   * @example DateTime.local().toISO() //=> '2017-04-22T20:47:05.335-04:00'
+	   * @example DateTime.local().toISO({ includeOffset: false }) //=> '2017-04-22T20:47:05.335'
+	   * @example DateTime.local().toISO({ format: 'basic' }) //=> '20170422T204705.335-0400'
+	   * @return {string}
+	   */
+	  toISO(opts = {}) {
+	    if (!this.isValid) {
+	      return null;
+	    }
+
+	    return `${this.toISODate(opts)}T${this.toISOTime(opts)}`;
+	  }
+
+	  /**
+	   * Returns an ISO 8601-compliant string representation of this DateTime's date component
+	   * @param {Object} opts - options
+	   * @param {string} [opts.format='extended'] - choose between the basic and extended format
+	   * @example DateTime.utc(1982, 5, 25).toISODate() //=> '1982-05-25'
+	   * @example DateTime.utc(1982, 5, 25).toISODate({ format: 'basic' }) //=> '19820525'
+	   * @return {string}
+	   */
+	  toISODate({ format = "extended" } = {}) {
+	    let fmt = format === "basic" ? "yyyyMMdd" : "yyyy-MM-dd";
+	    if (this.year > 9999) {
+	      fmt = "+" + fmt;
+	    }
+
+	    return toTechFormat(this, fmt);
+	  }
+
+	  /**
+	   * Returns an ISO 8601-compliant string representation of this DateTime's week date
+	   * @example DateTime.utc(1982, 5, 25).toISOWeekDate() //=> '1982-W21-2'
+	   * @return {string}
+	   */
+	  toISOWeekDate() {
+	    return toTechFormat(this, "kkkk-'W'WW-c");
+	  }
+
+	  /**
+	   * Returns an ISO 8601-compliant string representation of this DateTime's time component
+	   * @param {Object} opts - options
+	   * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
+	   * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
+	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @param {string} [opts.format='extended'] - choose between the basic and extended format
+	   * @example DateTime.utc().set({ hour: 7, minute: 34 }).toISOTime() //=> '07:34:19.361Z'
+	   * @example DateTime.utc().set({ hour: 7, minute: 34, seconds: 0, milliseconds: 0 }).toISOTime({ suppressSeconds: true }) //=> '07:34Z'
+	   * @example DateTime.utc().set({ hour: 7, minute: 34 }).toISOTime({ format: 'basic' }) //=> '073419.361Z'
+	   * @return {string}
+	   */
+	  toISOTime({
+	    suppressMilliseconds = false,
+	    suppressSeconds = false,
+	    includeOffset = true,
+	    format = "extended"
+	  } = {}) {
+	    return toTechTimeFormat(this, {
+	      suppressSeconds,
+	      suppressMilliseconds,
+	      includeOffset,
+	      format
+	    });
+	  }
+
+	  /**
+	   * Returns an RFC 2822-compatible string representation of this DateTime, always in UTC
+	   * @example DateTime.utc(2014, 7, 13).toRFC2822() //=> 'Sun, 13 Jul 2014 00:00:00 +0000'
+	   * @example DateTime.local(2014, 7, 13).toRFC2822() //=> 'Sun, 13 Jul 2014 00:00:00 -0400'
+	   * @return {string}
+	   */
+	  toRFC2822() {
+	    return toTechFormat(this, "EEE, dd LLL yyyy HH:mm:ss ZZZ", false);
+	  }
+
+	  /**
+	   * Returns a string representation of this DateTime appropriate for use in HTTP headers.
+	   * Specifically, the string conforms to RFC 1123.
+	   * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1
+	   * @example DateTime.utc(2014, 7, 13).toHTTP() //=> 'Sun, 13 Jul 2014 00:00:00 GMT'
+	   * @example DateTime.utc(2014, 7, 13, 19).toHTTP() //=> 'Sun, 13 Jul 2014 19:00:00 GMT'
+	   * @return {string}
+	   */
+	  toHTTP() {
+	    return toTechFormat(this.toUTC(), "EEE, dd LLL yyyy HH:mm:ss 'GMT'");
+	  }
+
+	  /**
+	   * Returns a string representation of this DateTime appropriate for use in SQL Date
+	   * @example DateTime.utc(2014, 7, 13).toSQLDate() //=> '2014-07-13'
+	   * @return {string}
+	   */
+	  toSQLDate() {
+	    return toTechFormat(this, "yyyy-MM-dd");
+	  }
+
+	  /**
+	   * Returns a string representation of this DateTime appropriate for use in SQL Time
+	   * @param {Object} opts - options
+	   * @param {boolean} [opts.includeZone=false] - include the zone, such as 'America/New_York'. Overrides includeOffset.
+	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @example DateTime.utc().toSQL() //=> '05:15:16.345'
+	   * @example DateTime.local().toSQL() //=> '05:15:16.345 -04:00'
+	   * @example DateTime.local().toSQL({ includeOffset: false }) //=> '05:15:16.345'
+	   * @example DateTime.local().toSQL({ includeZone: false }) //=> '05:15:16.345 America/New_York'
+	   * @return {string}
+	   */
+	  toSQLTime({ includeOffset = true, includeZone = false } = {}) {
+	    return toTechTimeFormat(this, {
+	      includeOffset,
+	      includeZone,
+	      spaceZone: true
+	    });
+	  }
+
+	  /**
+	   * Returns a string representation of this DateTime appropriate for use in SQL DateTime
+	   * @param {Object} opts - options
+	   * @param {boolean} [opts.includeZone=false] - include the zone, such as 'America/New_York'. Overrides includeOffset.
+	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @example DateTime.utc(2014, 7, 13).toSQL() //=> '2014-07-13 00:00:00.000 Z'
+	   * @example DateTime.local(2014, 7, 13).toSQL() //=> '2014-07-13 00:00:00.000 -04:00'
+	   * @example DateTime.local(2014, 7, 13).toSQL({ includeOffset: false }) //=> '2014-07-13 00:00:00.000'
+	   * @example DateTime.local(2014, 7, 13).toSQL({ includeZone: true }) //=> '2014-07-13 00:00:00.000 America/New_York'
+	   * @return {string}
+	   */
+	  toSQL(opts = {}) {
+	    if (!this.isValid) {
+	      return null;
+	    }
+
+	    return `${this.toSQLDate()} ${this.toSQLTime(opts)}`;
+	  }
+
+	  /**
+	   * Returns a string representation of this DateTime appropriate for debugging
+	   * @return {string}
+	   */
+	  toString() {
+	    return this.isValid ? this.toISO() : INVALID$2;
+	  }
+
+	  /**
+	   * Returns the epoch milliseconds of this DateTime. Alias of {@link toMillis}
+	   * @return {number}
+	   */
+	  valueOf() {
+	    return this.toMillis();
+	  }
+
+	  /**
+	   * Returns the epoch milliseconds of this DateTime.
+	   * @return {number}
+	   */
+	  toMillis() {
+	    return this.isValid ? this.ts : NaN;
+	  }
+
+	  /**
+	   * Returns the epoch seconds of this DateTime.
+	   * @return {number}
+	   */
+	  toSeconds() {
+	    return this.isValid ? this.ts / 1000 : NaN;
+	  }
+
+	  /**
+	   * Returns an ISO 8601 representation of this DateTime appropriate for use in JSON.
+	   * @return {string}
+	   */
+	  toJSON() {
+	    return this.toISO();
+	  }
+
+	  /**
+	   * Returns a BSON serializable equivalent to this DateTime.
+	   * @return {Date}
+	   */
+	  toBSON() {
+	    return this.toJSDate();
+	  }
+
+	  /**
+	   * Returns a Javascript object with this DateTime's year, month, day, and so on.
+	   * @param opts - options for generating the object
+	   * @param {boolean} [opts.includeConfig=false] - include configuration attributes in the output
+	   * @example DateTime.local().toObject() //=> { year: 2017, month: 4, day: 22, hour: 20, minute: 49, second: 42, millisecond: 268 }
+	   * @return {Object}
+	   */
+	  toObject(opts = {}) {
+	    if (!this.isValid) return {};
+
+	    const base = Object.assign({}, this.c);
+
+	    if (opts.includeConfig) {
+	      base.outputCalendar = this.outputCalendar;
+	      base.numberingSystem = this.loc.numberingSystem;
+	      base.locale = this.loc.locale;
+	    }
+	    return base;
+	  }
+
+	  /**
+	   * Returns a Javascript Date equivalent to this DateTime.
+	   * @return {Date}
+	   */
+	  toJSDate() {
+	    return new Date(this.isValid ? this.ts : NaN);
+	  }
+
+	  // COMPARE
+
+	  /**
+	   * Return the difference between two DateTimes as a Duration.
+	   * @param {DateTime} otherDateTime - the DateTime to compare this one to
+	   * @param {string|string[]} [unit=['milliseconds']] - the unit or array of units (such as 'hours' or 'days') to include in the duration.
+	   * @param {Object} opts - options that affect the creation of the Duration
+	   * @param {string} [opts.conversionAccuracy='casual'] - the conversion system to use
+	   * @example
+	   * var i1 = DateTime.fromISO('1982-05-25T09:45'),
+	   *     i2 = DateTime.fromISO('1983-10-14T10:30');
+	   * i2.diff(i1).toObject() //=> { milliseconds: 43807500000 }
+	   * i2.diff(i1, 'hours').toObject() //=> { hours: 12168.75 }
+	   * i2.diff(i1, ['months', 'days']).toObject() //=> { months: 16, days: 19.03125 }
+	   * i2.diff(i1, ['months', 'days', 'hours']).toObject() //=> { months: 16, days: 19, hours: 0.75 }
+	   * @return {Duration}
+	   */
+	  diff(otherDateTime, unit = "milliseconds", opts = {}) {
+	    if (!this.isValid || !otherDateTime.isValid) {
+	      return Duration.invalid(
+	        this.invalid || otherDateTime.invalid,
+	        "created by diffing an invalid DateTime"
+	      );
+	    }
+
+	    const durOpts = Object.assign(
+	      { locale: this.locale, numberingSystem: this.numberingSystem },
+	      opts
+	    );
+
+	    const units = maybeArray(unit).map(Duration.normalizeUnit),
+	      otherIsLater = otherDateTime.valueOf() > this.valueOf(),
+	      earlier = otherIsLater ? this : otherDateTime,
+	      later = otherIsLater ? otherDateTime : this,
+	      diffed = diff(earlier, later, units, durOpts);
+
+	    return otherIsLater ? diffed.negate() : diffed;
+	  }
+
+	  /**
+	   * Return the difference between this DateTime and right now.
+	   * See {@link diff}
+	   * @param {string|string[]} [unit=['milliseconds']] - the unit or units units (such as 'hours' or 'days') to include in the duration
+	   * @param {Object} opts - options that affect the creation of the Duration
+	   * @param {string} [opts.conversionAccuracy='casual'] - the conversion system to use
+	   * @return {Duration}
+	   */
+	  diffNow(unit = "milliseconds", opts = {}) {
+	    return this.diff(DateTime.local(), unit, opts);
+	  }
+
+	  /**
+	   * Return an Interval spanning between this DateTime and another DateTime
+	   * @param {DateTime} otherDateTime - the other end point of the Interval
+	   * @return {Interval}
+	   */
+	  until(otherDateTime) {
+	    return this.isValid ? Interval.fromDateTimes(this, otherDateTime) : this;
+	  }
+
+	  /**
+	   * Return whether this DateTime is in the same unit of time as another DateTime
+	   * @param {DateTime} otherDateTime - the other DateTime
+	   * @param {string} unit - the unit of time to check sameness on
+	   * @example DateTime.local().hasSame(otherDT, 'day'); //~> true if both the same calendar day
+	   * @return {boolean}
+	   */
+	  hasSame(otherDateTime, unit) {
+	    if (!this.isValid) return false;
+	    if (unit === "millisecond") {
+	      return this.valueOf() === otherDateTime.valueOf();
+	    } else {
+	      const inputMs = otherDateTime.valueOf();
+	      return this.startOf(unit) <= inputMs && inputMs <= this.endOf(unit);
+	    }
+	  }
+
+	  /**
+	   * Equality check
+	   * Two DateTimes are equal iff they represent the same millisecond, have the same zone and location, and are both valid.
+	   * To compare just the millisecond values, use `+dt1 === +dt2`.
+	   * @param {DateTime} other - the other DateTime
+	   * @return {boolean}
+	   */
+	  equals(other) {
+	    return (
+	      this.isValid &&
+	      other.isValid &&
+	      this.valueOf() === other.valueOf() &&
+	      this.zone.equals(other.zone) &&
+	      this.loc.equals(other.loc)
+	    );
+	  }
+
+	  /**
+	   * Returns a string representation of a this time relative to now, such as "in two days". Can only internationalize if your
+	   * platform supports Intl.RelativeTimeFormat. Rounds down by default.
+	   * @param {Object} options - options that affect the output
+	   * @param {DateTime} [options.base=DateTime.local()] - the DateTime to use as the basis to which this time is compared. Defaults to now.
+	   * @param {string} [options.style="long"] - the style of units, must be "long", "short", or "narrow"
+	   * @param {string} options.unit - use a specific unit; if omitted, the method will pick the unit. Use one of "years", "quarters", "months", "weeks", "days", "hours", "minutes", or "seconds"
+	   * @param {boolean} [options.round=true] - whether to round the numbers in the output.
+	   * @param {boolean} [options.padding=0] - padding in milliseconds. This allows you to round up the result if it fits inside the threshold. Don't use in combination with {round: false} because the decimal output will include the padding.
+	   * @param {string} options.locale - override the locale of this DateTime
+	   * @param {string} options.numberingSystem - override the numberingSystem of this DateTime. The Intl system may choose not to honor this
+	   * @example DateTime.local().plus({ days: 1 }).toRelative() //=> "in 1 day"
+	   * @example DateTime.local().setLocale("es").toRelative({ days: 1 }) //=> "dentro de 1 día"
+	   * @example DateTime.local().plus({ days: 1 }).toRelative({ locale: "fr" }) //=> "dans 23 heures"
+	   * @example DateTime.local().minus({ days: 2 }).toRelative() //=> "2 days ago"
+	   * @example DateTime.local().minus({ days: 2 }).toRelative({ unit: "hours" }) //=> "48 hours ago"
+	   * @example DateTime.local().minus({ hours: 36 }).toRelative({ round: false }) //=> "1.5 days ago"
+	   */
+	  toRelative(options = {}) {
+	    if (!this.isValid) return null;
+	    const base = options.base || DateTime.fromObject({ zone: this.zone }),
+	      padding = options.padding ? (this < base ? -options.padding : options.padding) : 0;
+	    return diffRelative(
+	      base,
+	      this.plus(padding),
+	      Object.assign(options, {
+	        numeric: "always",
+	        units: ["years", "months", "days", "hours", "minutes", "seconds"]
+	      })
+	    );
+	  }
+
+	  /**
+	   * Returns a string representation of this date relative to today, such as "yesterday" or "next month".
+	   * Only internationalizes on platforms that supports Intl.RelativeTimeFormat.
+	   * @param {Object} options - options that affect the output
+	   * @param {DateTime} [options.base=DateTime.local()] - the DateTime to use as the basis to which this time is compared. Defaults to now.
+	   * @param {string} options.locale - override the locale of this DateTime
+	   * @param {string} options.unit - use a specific unit; if omitted, the method will pick the unit. Use one of "years", "quarters", "months", "weeks", or "days"
+	   * @param {string} options.numberingSystem - override the numberingSystem of this DateTime. The Intl system may choose not to honor this
+	   * @example DateTime.local().plus({ days: 1 }).toRelativeCalendar() //=> "tomorrow"
+	   * @example DateTime.local().setLocale("es").plus({ days: 1 }).toRelative() //=> ""mañana"
+	   * @example DateTime.local().plus({ days: 1 }).toRelativeCalendar({ locale: "fr" }) //=> "demain"
+	   * @example DateTime.local().minus({ days: 2 }).toRelativeCalendar() //=> "2 days ago"
+	   */
+	  toRelativeCalendar(options = {}) {
+	    if (!this.isValid) return null;
+
+	    return diffRelative(
+	      options.base || DateTime.fromObject({ zone: this.zone }),
+	      this,
+	      Object.assign(options, {
+	        numeric: "auto",
+	        units: ["years", "months", "days"],
+	        calendary: true
+	      })
+	    );
+	  }
+
+	  /**
+	   * Return the min of several date times
+	   * @param {...DateTime} dateTimes - the DateTimes from which to choose the minimum
+	   * @return {DateTime} the min DateTime, or undefined if called with no argument
+	   */
+	  static min(...dateTimes) {
+	    if (!dateTimes.every(DateTime.isDateTime)) {
+	      throw new InvalidArgumentError("min requires all arguments be DateTimes");
+	    }
+	    return bestBy(dateTimes, i => i.valueOf(), Math.min);
+	  }
+
+	  /**
+	   * Return the max of several date times
+	   * @param {...DateTime} dateTimes - the DateTimes from which to choose the maximum
+	   * @return {DateTime} the max DateTime, or undefined if called with no argument
+	   */
+	  static max(...dateTimes) {
+	    if (!dateTimes.every(DateTime.isDateTime)) {
+	      throw new InvalidArgumentError("max requires all arguments be DateTimes");
+	    }
+	    return bestBy(dateTimes, i => i.valueOf(), Math.max);
+	  }
+
+	  // MISC
+
+	  /**
+	   * Explain how a string would be parsed by fromFormat()
+	   * @param {string} text - the string to parse
+	   * @param {string} fmt - the format the string is expected to be in (see description)
+	   * @param {Object} options - options taken by fromFormat()
+	   * @return {Object}
+	   */
+	  static fromFormatExplain(text, fmt, options = {}) {
+	    const { locale = null, numberingSystem = null } = options,
+	      localeToUse = Locale.fromOpts({
+	        locale,
+	        numberingSystem,
+	        defaultToEN: true
+	      });
+	    return explainFromTokens(localeToUse, text, fmt);
+	  }
+
+	  /**
+	   * @deprecated use fromFormatExplain instead
+	   */
+	  static fromStringExplain(text, fmt, options = {}) {
+	    return DateTime.fromFormatExplain(text, fmt, options);
+	  }
+
+	  // FORMAT PRESETS
+
+	  /**
+	   * {@link toLocaleString} format like 10/14/1983
+	   * @type {Object}
+	   */
+	  static get DATE_SHORT() {
+	    return DATE_SHORT;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like 'Oct 14, 1983'
+	   * @type {Object}
+	   */
+	  static get DATE_MED() {
+	    return DATE_MED;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like 'October 14, 1983'
+	   * @type {Object}
+	   */
+	  static get DATE_FULL() {
+	    return DATE_FULL;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like 'Tuesday, October 14, 1983'
+	   * @type {Object}
+	   */
+	  static get DATE_HUGE() {
+	    return DATE_HUGE;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like '09:30 AM'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get TIME_SIMPLE() {
+	    return TIME_SIMPLE;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like '09:30:23 AM'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get TIME_WITH_SECONDS() {
+	    return TIME_WITH_SECONDS;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like '09:30:23 AM EDT'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get TIME_WITH_SHORT_OFFSET() {
+	    return TIME_WITH_SHORT_OFFSET;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like '09:30:23 AM Eastern Daylight Time'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get TIME_WITH_LONG_OFFSET() {
+	    return TIME_WITH_LONG_OFFSET;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like '09:30', always 24-hour.
+	   * @type {Object}
+	   */
+	  static get TIME_24_SIMPLE() {
+	    return TIME_24_SIMPLE;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like '09:30:23', always 24-hour.
+	   * @type {Object}
+	   */
+	  static get TIME_24_WITH_SECONDS() {
+	    return TIME_24_WITH_SECONDS;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like '09:30:23 EDT', always 24-hour.
+	   * @type {Object}
+	   */
+	  static get TIME_24_WITH_SHORT_OFFSET() {
+	    return TIME_24_WITH_SHORT_OFFSET;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like '09:30:23 Eastern Daylight Time', always 24-hour.
+	   * @type {Object}
+	   */
+	  static get TIME_24_WITH_LONG_OFFSET() {
+	    return TIME_24_WITH_LONG_OFFSET;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like '10/14/1983, 9:30 AM'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get DATETIME_SHORT() {
+	    return DATETIME_SHORT;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like '10/14/1983, 9:30:33 AM'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get DATETIME_SHORT_WITH_SECONDS() {
+	    return DATETIME_SHORT_WITH_SECONDS;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like 'Oct 14, 1983, 9:30 AM'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get DATETIME_MED() {
+	    return DATETIME_MED;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like 'Oct 14, 1983, 9:30:33 AM'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get DATETIME_MED_WITH_SECONDS() {
+	    return DATETIME_MED_WITH_SECONDS;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like 'Fri, 14 Oct 1983, 9:30 AM'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get DATETIME_MED_WITH_WEEKDAY() {
+	    return DATETIME_MED_WITH_WEEKDAY;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like 'October 14, 1983, 9:30 AM EDT'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get DATETIME_FULL() {
+	    return DATETIME_FULL;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like 'October 14, 1983, 9:30:33 AM EDT'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get DATETIME_FULL_WITH_SECONDS() {
+	    return DATETIME_FULL_WITH_SECONDS;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like 'Friday, October 14, 1983, 9:30 AM Eastern Daylight Time'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get DATETIME_HUGE() {
+	    return DATETIME_HUGE;
+	  }
+
+	  /**
+	   * {@link toLocaleString} format like 'Friday, October 14, 1983, 9:30:33 AM Eastern Daylight Time'. Only 12-hour if the locale is.
+	   * @type {Object}
+	   */
+	  static get DATETIME_HUGE_WITH_SECONDS() {
+	    return DATETIME_HUGE_WITH_SECONDS;
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+	function friendlyDateTime(dateTimeish) {
+	  if (DateTime.isDateTime(dateTimeish)) {
+	    return dateTimeish;
+	  } else if (dateTimeish && dateTimeish.valueOf && isNumber$1(dateTimeish.valueOf())) {
+	    return DateTime.fromJSDate(dateTimeish);
+	  } else if (dateTimeish && typeof dateTimeish === "object") {
+	    return DateTime.fromObject(dateTimeish);
+	  } else {
+	    throw new InvalidArgumentError(
+	      `Unknown datetime argument: ${dateTimeish}, of type ${typeof dateTimeish}`
+	    );
+	  }
+	}
+
+	var luxon = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		DateTime: DateTime,
+		Duration: Duration,
+		Interval: Interval,
+		Info: Info,
+		Zone: Zone,
+		FixedOffsetZone: FixedOffsetZone,
+		IANAZone: IANAZone,
+		InvalidZone: InvalidZone,
+		LocalZone: LocalZone,
+		Settings: Settings
+	});
+
+	var fs = {};
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	// resolves . and .. elements in a path array with directory names there
+	// must be no slashes, empty elements, or device names (c:\) in the array
+	// (so also no leading and trailing slashes - it does not distinguish
+	// relative and absolute paths)
+	function normalizeArray(parts, allowAboveRoot) {
+	  // if the path tries to go above the root, `up` ends up > 0
+	  var up = 0;
+	  for (var i = parts.length - 1; i >= 0; i--) {
+	    var last = parts[i];
+	    if (last === '.') {
+	      parts.splice(i, 1);
+	    } else if (last === '..') {
+	      parts.splice(i, 1);
+	      up++;
+	    } else if (up) {
+	      parts.splice(i, 1);
+	      up--;
+	    }
+	  }
+
+	  // if the path is allowed to go above the root, restore leading ..s
+	  if (allowAboveRoot) {
+	    for (; up--; up) {
+	      parts.unshift('..');
+	    }
+	  }
+
+	  return parts;
+	}
+
+	// Split a filename into [root, dir, basename, ext], unix version
+	// 'root' is just a slash, or nothing.
+	var splitPathRe =
+	    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+	var splitPath = function(filename) {
+	  return splitPathRe.exec(filename).slice(1);
+	};
+
+	// path.resolve([from ...], to)
+	// posix version
+	function resolve() {
+	  var resolvedPath = '',
+	      resolvedAbsolute = false;
+
+	  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+	    var path = (i >= 0) ? arguments[i] : '/';
+
+	    // Skip empty and invalid entries
+	    if (typeof path !== 'string') {
+	      throw new TypeError('Arguments to path.resolve must be strings');
+	    } else if (!path) {
+	      continue;
+	    }
+
+	    resolvedPath = path + '/' + resolvedPath;
+	    resolvedAbsolute = path.charAt(0) === '/';
+	  }
+
+	  // At this point the path should be resolved to a full absolute path, but
+	  // handle relative paths to be safe (might happen when process.cwd() fails)
+
+	  // Normalize the path
+	  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
+	    return !!p;
+	  }), !resolvedAbsolute).join('/');
+
+	  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
+	}
+	// path.normalize(path)
+	// posix version
+	function normalize(path) {
+	  var isPathAbsolute = isAbsolute(path),
+	      trailingSlash = substr(path, -1) === '/';
+
+	  // Normalize the path
+	  path = normalizeArray(filter(path.split('/'), function(p) {
+	    return !!p;
+	  }), !isPathAbsolute).join('/');
+
+	  if (!path && !isPathAbsolute) {
+	    path = '.';
+	  }
+	  if (path && trailingSlash) {
+	    path += '/';
+	  }
+
+	  return (isPathAbsolute ? '/' : '') + path;
+	}
+	// posix version
+	function isAbsolute(path) {
+	  return path.charAt(0) === '/';
+	}
+
+	// posix version
+	function join() {
+	  var paths = Array.prototype.slice.call(arguments, 0);
+	  return normalize(filter(paths, function(p, index) {
+	    if (typeof p !== 'string') {
+	      throw new TypeError('Arguments to path.join must be strings');
+	    }
+	    return p;
+	  }).join('/'));
+	}
+
+
+	// path.relative(from, to)
+	// posix version
+	function relative(from, to) {
+	  from = resolve(from).substr(1);
+	  to = resolve(to).substr(1);
+
+	  function trim(arr) {
+	    var start = 0;
+	    for (; start < arr.length; start++) {
+	      if (arr[start] !== '') break;
+	    }
+
+	    var end = arr.length - 1;
+	    for (; end >= 0; end--) {
+	      if (arr[end] !== '') break;
+	    }
+
+	    if (start > end) return [];
+	    return arr.slice(start, end - start + 1);
+	  }
+
+	  var fromParts = trim(from.split('/'));
+	  var toParts = trim(to.split('/'));
+
+	  var length = Math.min(fromParts.length, toParts.length);
+	  var samePartsLength = length;
+	  for (var i = 0; i < length; i++) {
+	    if (fromParts[i] !== toParts[i]) {
+	      samePartsLength = i;
+	      break;
+	    }
+	  }
+
+	  var outputParts = [];
+	  for (var i = samePartsLength; i < fromParts.length; i++) {
+	    outputParts.push('..');
+	  }
+
+	  outputParts = outputParts.concat(toParts.slice(samePartsLength));
+
+	  return outputParts.join('/');
+	}
+
+	var sep = '/';
+	var delimiter = ':';
+
+	function dirname(path) {
+	  var result = splitPath(path),
+	      root = result[0],
+	      dir = result[1];
+
+	  if (!root && !dir) {
+	    // No dirname whatsoever
+	    return '.';
+	  }
+
+	  if (dir) {
+	    // It has a dirname, strip trailing slash
+	    dir = dir.substr(0, dir.length - 1);
+	  }
+
+	  return root + dir;
+	}
+
+	function basename(path, ext) {
+	  var f = splitPath(path)[2];
+	  // TODO: make this comparison case-insensitive on windows?
+	  if (ext && f.substr(-1 * ext.length) === ext) {
+	    f = f.substr(0, f.length - ext.length);
+	  }
+	  return f;
+	}
+
+
+	function extname(path) {
+	  return splitPath(path)[3];
+	}
+	var path = {
+	  extname: extname,
+	  basename: basename,
+	  dirname: dirname,
+	  sep: sep,
+	  delimiter: delimiter,
+	  relative: relative,
+	  join: join,
+	  isAbsolute: isAbsolute,
+	  normalize: normalize,
+	  resolve: resolve
+	};
+	function filter (xs, f) {
+	    if (xs.filter) return xs.filter(f);
+	    var res = [];
+	    for (var i = 0; i < xs.length; i++) {
+	        if (f(xs[i], i, xs)) res.push(xs[i]);
+	    }
+	    return res;
+	}
+
+	// String.prototype.substr - negative index don't work in IE8
+	var substr = 'ab'.substr(-1) === 'b' ?
+	    function (str, start, len) { return str.substr(start, len) } :
+	    function (str, start, len) {
+	        if (start < 0) start = str.length + start;
+	        return str.substr(start, len);
+	    }
+	;
+
+	const scopedEval = eval;
+	const templateCache = new Map();
+	/**
+	 * returns a valid jsonx.children property
+	 * @param {Object} options
+	 * @param {Object} [options.jsonx ={}]- Valid JSONX JSON
+	 * @param {Object} [options.props=options.jsonx.children] - Props to pull children  Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops)
+	 * @returns {Object[]|String} returns a valid jsonx.children property that's either an array of JSONX objects or a string
+	 * @example
+	 * const sampleJSONX = {
+	  component: 'div',
+	  props: {
+	    id: 'generatedJSONX',
+	    className:'jsonx',
+	  },
+	  children: [
+	    {
+	      component: 'p',
+	      props: {
+	        style: {
+	          color: 'red',
+	        },
+	      },
+	      children:'hello world',
+	    },
+	    {
+	      component: 'div',
+	      children: [
+	        {
+	          component: 'ul',
+	          children: [
+	            {
+	              component: 'li',
+	              children:'list',
+	            },
+	          ],
+	        },
+	      ],
+	    },
+	  ],
+	};
+	const JSONXChildren = getChildrenProperty({ jsonx: sampleJSONX, }); //=> [ [jsonx Object],[jsonx Object]]
+	const JSONXChildrenPTag = getChildrenProperty({ jsonx: sampleJSONX.children[ 0 ], }); //=>hello world
+	 */
+	function getChildrenProperty(options = {}) {
+	    const { jsonx = {} } = options;
+	    const props = options.props || jsonx.props || {};
+	    if (typeof props._children !== "undefined" /* && !jsonx.children */) {
+	        if (Array.isArray(props._children) ||
+	            typeof props._children === "string" ||
+	            typeof props._children === "number") {
+	            return props._children;
+	        }
+	        else {
+	            return jsonx.children;
+	        }
+	    }
+	    else if (typeof jsonx.children === "undefined") {
+	        if (props &&
+	            props.children &&
+	            (typeof props.children !== "undefined" || Array.isArray(props.children))) {
+	            return props.children;
+	        }
+	        else {
+	            return null;
+	        }
+	    }
+	    else {
+	        return jsonx.children;
+	    }
+	}
+	/**
+	 * Used to pass properties down to child components if passprops is set to true
+	 * @param {Object} options
+	 * @param {Object} [options.jsonx ={}] - Valid JSONX JSON
+	 * @param {Object} [options.childjsonx ={}] - Valid JSONX JSON
+	 * @param {Number} options.renderIndex - React key property
+	 * @param {Object} [options.props=options.jsonx.props] - Props to pull children  Object.assign(jsonx.props,jsonx.asyncprops,jsonx.thisprops,jsonx.windowprops)
+	 * @returns {Object|String} returns a valid  Valid JSONX Child object or a string
+	 */
+	function getChildrenProps(options = {}) {
+	    const { jsonx = {}, childjsonx, renderIndex } = options;
+	    const props = options.props || jsonx.props || {};
+	    return jsonx.passprops && childjsonx && typeof childjsonx === "object"
+	        ? Object.assign({}, childjsonx, {
+	            props: Object.assign({}, props, (childjsonx.thisprops && childjsonx.thisprops.style) || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
+	                (childjsonx.asyncprops && childjsonx.asyncprops.style) ||
+	                (childjsonx.windowprops && childjsonx.windowprops.style)
+	                ? {}
+	                : {
+	                    style: {}
+	                }, childjsonx.props, 
+	            //@ts-ignore
+	            typeof this !== "undefined" || (this && this.disableRenderIndexKey)
+	                ? {}
+	                : { key: typeof renderIndex !== "undefined"
+	                        ? renderIndex + Math.random()
+	                        : Math.random()
+	                })
+	        })
+	        : childjsonx;
+	}
+	function fetchJSONSync(path, options) {
+	    try {
+	        const config = {
+	            method: "GET",
+	            headers: [],
+	            ...options
+	        };
+	        const request = new XMLHttpRequest();
+	        request.open(config && config.method || "GET", path, false); // `false` makes the request synchronous
+	        if (config.headers) {
+	            Object.keys(config.headers).forEach(header => {
+	                request.setRequestHeader(header, config.headers[header]);
+	            });
+	        }
+	        request.send(config.body ? JSON.stringify(config.body) : undefined);
+	        if (request.status !== 200) {
+	            throw new Error(request.responseText);
+	        }
+	        else
+	            return request.responseText;
+	    }
+	    catch (e) {
+	        throw e;
+	    }
+	}
+	function getChildrenTemplate(template) {
+	    const cachedTemplate = templateCache.get(template);
+	    if (cachedTemplate) {
+	        return cachedTemplate;
+	    }
+	    else if (typeof window !== "undefined" &&
+	        typeof window.XMLHttpRequest === "function" &&
+	        !fs.readFileSync) {
+	        const jsFile = fetchJSONSync(template);
+	        const jsonxModule = scopedEval(`(${jsFile})`);
+	        templateCache.set(template, jsonxModule);
+	        return jsonxModule;
+	    }
+	    else if (typeof template === "string") {
+	        const jsFile = fs.readFileSync(path.resolve(template)).toString();
+	        const jsonxModule = scopedEval(`(${jsFile})`);
+	        // console.log({jsonxModule})
+	        templateCache.set(template, jsonxModule);
+	        // console.log({ templateCache });
+	        return jsonxModule;
+	    }
+	    return null;
+	}
+	function clearTemplateCache() {
+	    templateCache.clear();
+	}
+	/**
+	 * returns React Child Elements via JSONX
+	 * @param {*} options
+	 * @property {object} this - options for getReactElementFromJSONX
+	 * @property {Object} [this.componentLibraries] - react components to render with JSONX
+	 * @property {boolean} [this.debug=false] - use debug messages
+	 * @property {function} [this.logError=console.error] - error logging function
+	 * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
+	 */
+	function getJSONXChildren(options = { jsonx: {} }) {
+	    // eslint-disable-next-line
+	    const { jsonx, resources, renderIndex, logError = console.error } = options;
+	    try {
+	        const context = this || {};
+	        const props = options && options.props
+	            ? options.props
+	            : jsonx && jsonx.props
+	                ? jsonx.props
+	                : {};
+	        if (!jsonx)
+	            return null;
+	        jsonx.children = getChildrenProperty({ jsonx, props });
+	        props._children = undefined;
+	        delete props._children;
+	        if (jsonx.___template)
+	            jsonx.children = [getChildrenTemplate(jsonx.___template)];
+	        else if (typeof jsonx.children === 'undefined' || jsonx.children === null)
+	            return undefined;
+	        else if (jsonx.children && jsonx.___stringifyChildren)
+	            jsonx.children = JSON.stringify.apply(null, [jsonx.children, null, 2]);
+	        //TODO: fix passing applied params
+	        else if (jsonx.children && jsonx.___toStringChildren)
+	            jsonx.children = jsonx.children.toString();
+	        else if (jsonx.children && jsonx.___toNumeral)
+	            jsonx.children = numeral(jsonx.children).format(jsonx.___toNumeral);
+	        else if (jsonx.children && jsonx.___JSDatetoLuxonString)
+	            jsonx.children = DateTime.fromJSDate(jsonx.children).toFormat(jsonx.___JSDatetoLuxonString);
+	        else if (jsonx.children && jsonx.___ISOtoLuxonString)
+	            jsonx.children = DateTime.fromISO(jsonx.children, {
+	                zone: jsonx.___FromLuxonTimeZone
+	            }).toFormat(jsonx.___ISOtoLuxonString);
+	        if (typeof jsonx.children === 'string')
+	            return jsonx.children;
+	        const children = jsonx.children && Array.isArray(jsonx.children)
+	            ? jsonx.children
+	                .map(childjsonx => getReactElementFromJSONX.call(context, getChildrenProps.call(this, { jsonx, childjsonx, props, renderIndex }), resources))
+	                .filter(child => child !== null)
+	            : jsonx.children;
+	        return children;
+	    }
+	    catch (e) {
+	        this && this.debug && logError(e, e.stack ? e.stack : "no stack");
+	        return null;
+	    }
+	}
+
+	var jsonxChildren = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		templateCache: templateCache,
+		getChildrenProperty: getChildrenProperty,
+		getChildrenProps: getChildrenProps,
+		fetchJSONSync: fetchJSONSync,
+		getChildrenTemplate: getChildrenTemplate,
+		clearTemplateCache: clearTemplateCache,
+		getJSONXChildren: getJSONXChildren
+	});
+
+	const scopedEval$1 = eval;
+	/**
+	 * Use JSONX for express view rendering
+	 * @param {string} filePath - path to jsonx express view
+	 * @param {object} options - property used for express view {locals}
+	 * @param {object} options.__boundConfig - property used to bind this object for JSONX, can be used to add custom components
+	 * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
+	 * @param {*} callback
+	 */
+	function __express(filePath, options, callback) {
+	    try {
+	        let jsonxModule = options.__jsonx;
+	        if (filePath) {
+	            const jsFile = fs.readFileSync(filePath).toString();
+	            jsonxModule = scopedEval$1(jsFile.toString());
+	        }
+	        const resources = Object.assign({}, options);
+	        delete resources.__boundConfig;
+	        delete resources.__DOCTYPE;
+	        delete resources.__jsonx;
+	        const context = Object.assign({}, options.__boundConfig);
+	        if (path.extname(".json"))
+	            context.useJSON = true;
+	        const jsonxRenderedString = outputHTML.call(context, {
+	            jsonx: jsonxModule,
+	            resources
+	        });
+	        const template = `${options.__DOCTYPE || "<!DOCTYPE html>"}
+${jsonxRenderedString}`;
+	        if (typeof callback === "function")
+	            callback(null, template);
+	        else
+	            return template;
+	    }
+	    catch (e) {
+	        if (typeof callback === "function")
+	            callback(e);
+	        else
+	            throw e;
+	    }
+	}
+
+	// import React, { createElement, } from 'react';
+	const createElement = React__default.createElement;
+	const { componentMap: componentMap$1, getComponentFromMap: getComponentFromMap$1, getBoundedComponents: getBoundedComponents$1, DynamicComponent: DynamicComponent$1, FormComponent: FormComponent$1, } = jsonxComponents;
+	const { getComputedProps: getComputedProps$1 } = jsonxProps;
+	const { getJSONXChildren: getJSONXChildren$1 } = jsonxChildren;
+	const { displayComponent: displayComponent$1 } = jsonxUtils;
+	exports.renderIndex = 0;
+	/**
+	 * Use JSONX without any configuration to render JSONX JSON to HTML and insert JSONX into querySelector using ReactDOM.render
+	 * @example
+	 * // Uses react to create <!DOCTYPE html><body><div id="myApp"><div class="jsonx-generated"><p style="color:red;">hello world</p></div></div></body>
+	 * jsonx.jsonxRender({ jsonx: { component: 'div', props:{className:'jsonx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, querySelector:'#myApp', });
+	 * @param {object} config - options used to inject html via ReactDOM.render
+	 * @param {object} config.jsonx - any valid JSONX JSON object
+	 * @param {object} config.resources - any additional resource used for asynchronous properties
+	 * @param {string} config.querySelector - selector for document.querySelector
+	 * @property {object} this - options for getReactElementFromJSONX
+	 */
+	function jsonxRender(config = { jsonx: { component: "" }, querySelector: "" }) {
+	    const { jsonx, resources, querySelector, DOM, portal } = config;
+	    const Render = portal ? ReactDOM.createPortal : ReactDOM.render;
+	    const RenderDOM = DOM || document.querySelector(querySelector);
+	    const JSONXReactElement = getReactElementFromJSONX.call(this || {}, jsonx, resources);
+	    if (!JSONXReactElement)
+	        throw ReferenceError("Invalid React Element");
+	    else if (!RenderDOM)
+	        throw ReferenceError("Invalid Render DOM Element");
+	    Render(JSONXReactElement, RenderDOM);
+	}
+	/**
+	 * Use ReactDOMServer.renderToString to render html from JSONX
+	 * @example
+	 * // Uses react to create <div class="jsonx-generated"><p style="color:red;">hello world</p></div>
+	 * jsonx.outputHTML({ jsonx: { component: 'div', props:{className:'jsonx-generated',children:[{ component:'p',props:{style:{color:'red'}}, children:'hello world' }]}}, });
+	 * @param {object} config - options used to inject html via ReactDOM.render
+	 * @param {object} config.jsonx - any valid JSONX JSON object
+	 * @param {object} config.resources - any additional resource used for asynchronous properties
+	 * @property {object} this - options for getReactElementFromJSONX
+	 * @returns {string} React genereated html via JSONX JSON
+	 */
+	function outputHTML(config = { jsonx: { component: "" } }) {
+	    const { jsonx, resources, type = "Fragment", props, children } = config;
+	    return this && this.useJSON
+	        ? server.renderToString(getReactElementFromJSON.call(this || {}, { type, props, children }))
+	        : server.renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
+	}
+	/**
+	 * Use React.createElement and JSONX JSON to create React elements
+	 * @example
+	 * // Uses react to create the equivalent JSX <myComponent style={{color:blue}}>hello world</myComponent>
+	 * jsonx.getReactElementFromJSONX({component:'myCompnent',props:{style:{color:'blue'}},children:'hello world'})
+	 * @param {object} jsonx - any valid JSONX JSON object
+	 * @param {object} resources - any additional resource used for asynchronous properties
+	 * @property {object} this - options for getReactElementFromJSONX
+	 * @property {Object} [this.componentLibraries] - react components to render with JSONX
+	 * @property {boolean} [this.debug=false] - use debug messages
+	 * @property {boolean} [this.returnJSON=false] - return json object of {type,props,children} instead of react element
+	 * @property {boolean} [this.disableRenderIndexKey=false] - disables auto assign a key prop
+	 * @property {function} [this.logError=console.error] - error logging function
+	 * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
+	 * @returns {function} React element via React.createElement
+	 */
+	function getReactElementFromJSONX(jsonx, resources = {}) {
+	    // eslint-disable-next-line
+	    const { componentLibraries = {}, debug = false, returnJSON = false, logError = console.error, boundedComponents = [], disableRenderIndexKey = true } = this || {};
+	    // const componentLibraries = this.componentLibraries;
+	    if (!jsonx)
+	        return null;
+	    if (jsonx.type)
+	        jsonx.component = jsonx.type;
+	    if (validSimpleJSONXSyntax(jsonx))
+	        jsonx = simpleJSONXSyntax(jsonx);
+	    if (!jsonx || !jsonx.component)
+	        return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
+	    try {
+	        const components = Object.assign({ DynamicComponent: DynamicComponent$1.bind(this) }, { FormComponent: FormComponent$1.bind(this) }, componentMap$1, this.reactComponents);
+	        const reactComponents = boundedComponents.length
+	            ? getBoundedComponents$1.call(this, {
+	                boundedComponents,
+	                reactComponents: components
+	            })
+	            : components;
+	        exports.renderIndex++;
+	        const element = getComponentFromMap$1({
+	            jsonx,
+	            reactComponents,
+	            componentLibraries,
+	            debug,
+	            logError
+	        });
+	        const props = getComputedProps$1.call(this, {
+	            jsonx,
+	            resources,
+	            renderIndex: exports.renderIndex,
+	            componentLibraries,
+	            debug,
+	            logError,
+	            disableRenderIndexKey
+	        });
+	        const displayElement = jsonx.comparisonprops
+	            ? displayComponent$1.call(this, {
+	                jsonx,
+	                props,
+	                renderIndex: exports.renderIndex,
+	                componentLibraries,
+	                debug
+	            })
+	            : true;
+	        if (displayElement) {
+	            const children = getJSONXChildren$1.call(this, {
+	                jsonx,
+	                props,
+	                resources,
+	                renderIndex: exports.renderIndex
+	            });
+	            //@ts -ignore
+	            if (returnJSON)
+	                return { type: element, props, children };
+	            else if (jsonx.test)
+	                return JSON.stringify({ element, props, children }, null, 2);
+	            //TODO: Fix
+	            else
+	                return createElement(element, props, children);
+	        }
+	        else {
+	            return null;
+	        }
+	    }
+	    catch (e) {
+	        if (debug) {
+	            logError({ jsonx, resources }, "getReactElementFromJSONX this", this);
+	            logError(e, e.stack ? e.stack : "no stack");
+	        }
+	        throw e;
+	    }
+	}
+	const getRenderedJSON = getReactElementFromJSONX;
+	const getReactElement = getReactElementFromJSONX;
+	/** converts a json object {type,props,children} into a react element
+	 * @example
+	 * jsonx.getReactElementFromJSON({type:'div',props:{title:'some title attribute'},children:'inner html text'})
+	 * @param {Object|String} options.type - 'div' or react component
+	 * @param {Object} options.props - props for react element
+	 * @param {String|[Object]} options.children - children elements
+	 * @returns {function} React element via React.createElement
+	 */
+	function getReactElementFromJSON({ type, props, children }) {
+	    return createElement(type, props, children && Array.isArray(children)
+	        ? children.map(getReactElementFromJSON)
+	        : children);
+	}
+	/** converts a jsonx json object into a react function component
+	 * @example
+	 * jsonx.compile({jsonx:{component:'div',props:{title:'some title attribute'},children:'inner html text'}}) //=>React Function Component
+	 * @param {Object} jsonx - valid JSONX JSON
+	 * @param {Object} resources - props for react element
+	 * @returns {function} React element via React.createElement
+	 */
+	function compile(jsonx, resources = {}) {
+	    const context = Object.assign({}, this, { returnJSON: true });
+	    const json = getReactElementFromJSONX.call(context, jsonx, resources);
+	    const func = function compiledJSONX(props) {
+	        json.props = Object.assign({}, json.props, props);
+	        return getReactElementFromJSON(json);
+	    };
+	    Object.defineProperty(func, "name", { value: this.name });
+	    return func;
+	}
+	/**
+	 * converts JSONX JSON IR to JSX
+	 * @example
+	 * jsonx.jsonToJSX({ type: 'div', props: { key: 5, title: 'test' }, children: 'hello' }) // => '<div key={5} title="test">hello</div>'
+	 * @param {Object} json - {type,props,children}
+	 * @returns {String} jsx string
+	 */
+	function outputJSX(jsonx, resources = {}) {
+	    const context = Object.assign({}, this, { returnJSON: true });
+	    const json = getReactElementFromJSONX.call(context, jsonx, resources);
+	    return jsonToJSX(json);
+	}
+	/**
+	 * Compiles JSONX into JSON IR format for react create element
+	 * @example
+	 * jsonx.outputJSON({ component: 'div', props: { title: 'test', }, children: 'hello', }); //=> { type: 'div',
+	 props: { key: 5, title: 'test' },
+	 children: 'hello' }
+	 * @property {object} this - options for getReactElementFromJSONX
+	 * @param {object} jsonx - any valid JSONX JSON object
+	 * @param {object} resources - any additional resource used for asynchronous properties
+	 * @returns {Object} json - {type,props,children}
+	 */
+	function outputJSON(jsonx, resources = {}) {
+	    //@ts-ignore
+	    const context = Object.assign({}, this, { returnJSON: true });
+	    return getReactElementFromJSONX.call(context, jsonx, resources);
+	}
+	const jsonxHTMLString = outputHTML;
+	/**
+	 * converts JSONX JSON IR to JSX
+	 * @example
+	 * jsonx.jsonToJSX({ type: 'div', props: { key: 5, title: 'test' }, children: 'hello' }) // => '<div key={5} title="test">hello</div>'
+	 * @param {Object} json - {type,props,children}
+	 * @returns {String} jsx string
+	 */
+	function jsonToJSX(json) {
+	    const propsString = json.props
+	        ? Object.keys(json.props)
+	            .filter(prop => prop.includes("__eval_") === false)
+	            .reduce((propString, prop) => {
+	            propString += ` ${prop.toString()}=${typeof json.props[prop] === "string"
+                ? `"${json.props[prop].toString()}"`
+                : `{${(json.props[`__eval_${prop}`] || json.props[prop]).toString()}}`}`;
+	            return propString;
+	        }, "")
+	        : "";
+	    return Array.isArray(json.children)
+	        ? `<${json.type} ${propsString}>
+  ${json.children.map(jsonToJSX).join('\r\n')}
+</${json.type}>`
+	        : `<${json.type}${propsString}>${json.children}</${json.type}>`;
+	}
+	/**
+	 * Exposes react module used in JSONX
+	 * @returns {Object} React
+	 */
+	function __getReact() {
+	    return React__default;
+	}
+	/**
+	 * Exposes react dom module used in JSONX
+	 * @returns {Object} ReactDOM
+	 */
+	function __getReactDOM() {
+	    return ReactDOM;
+	}
+	const _jsonxChildren = jsonxChildren;
+	const _jsonxComponents = jsonxComponents;
+	const _jsonxProps = jsonxProps;
+	const _jsonxUtils = jsonxUtils;
+	const _jsonxHelpers = { numeral, luxon };
+
+	exports.__express = __express;
+	exports.__getReact = __getReact;
+	exports.__getReactDOM = __getReactDOM;
+	exports._jsonxChildren = _jsonxChildren;
+	exports._jsonxComponents = _jsonxComponents;
+	exports._jsonxHelpers = _jsonxHelpers;
+	exports._jsonxProps = _jsonxProps;
+	exports._jsonxUtils = _jsonxUtils;
+	exports.compile = compile;
+	exports.default = getReactElementFromJSONX;
+	exports.getReactElement = getReactElement;
+	exports.getReactElementFromJSON = getReactElementFromJSON;
+	exports.getReactElementFromJSONX = getReactElementFromJSONX;
+	exports.getRenderedJSON = getRenderedJSON;
+	exports.jsonToJSX = jsonToJSX;
+	exports.jsonxHTMLString = jsonxHTMLString;
+	exports.jsonxRender = jsonxRender;
+	exports.outputHTML = outputHTML;
+	exports.outputJSON = outputJSON;
+	exports.outputJSX = outputJSX;
+	exports.renderFile = __express;
+
+	return exports;
+
+}({}, React, ReactDOM));

@@ -2339,7 +2339,7 @@ function getReactClassComponent(reactComponent = {}, options = {}) {
  * @param props
  */
 function FormComponent(props = {}) {
-    const { hookFormOptions = {}, formComponent = { component: "div", children: "empty form" }, onSubmit, formWrapperComponent, formKey, } = props;
+    const { hookFormOptions = {}, formComponent = { component: "div", children: "empty form" }, onSubmit, formWrapperComponent, formKey, formWrapperProps, } = props;
     // const { register, unregister, errors, watch, handleSubmit, reset, setError, clearError, setValue, getValues, triggerValidation, control, formState, } = useForm(hookFormOptions);
     const reactHookForm = useForm(hookFormOptions);
     const context = {
@@ -2361,6 +2361,7 @@ function FormComponent(props = {}) {
         props: {
             onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined,
             key: formKey ? `formWrapperJXM-${formKey}` : undefined,
+            ...formWrapperProps,
         }
     };
     formWrapperJXM.children = Array.isArray(formComponent) ? formComponent : [formComponent];
@@ -5264,7 +5265,7 @@ class Formatter {
             return formatOffset({ format: "short", allowZ: this.opts.allowZ });
           case "ZZZ":
             // like +0600
-            return formatOffset({ format: "techie", allowZ: false });
+            return formatOffset({ format: "techie", allowZ: this.opts.allowZ });
           case "ZZZZ":
             // like EST
             return dt.zone.offsetName(dt.ts, { format: "short", locale: this.loc.locale });
@@ -7793,7 +7794,7 @@ class Interval {
         }
       }
     }
-    return Interval.invalid("unparsable", `the input "${text}" can't be parsed asISO 8601`);
+    return Interval.invalid("unparsable", `the input "${text}" can't be parsed as ISO 8601`);
   }
 
   /**
@@ -9254,10 +9255,10 @@ function parseDataToDateTime(parsed, parsedZone, opts, format, text) {
 
 // if you want to output a technical format (e.g. RFC 2822), this helper
 // helps handle the details
-function toTechFormat(dt, format) {
+function toTechFormat(dt, format, allowZ = true) {
   return dt.isValid
     ? Formatter.create(Locale.create("en-US"), {
-        allowZ: true,
+        allowZ,
         forceSimple: true
       }).formatDateTimeFromString(dt, format)
     : null;
@@ -9272,13 +9273,14 @@ function toTechTimeFormat(
     suppressMilliseconds = false,
     includeOffset,
     includeZone = false,
-    spaceZone = false
+    spaceZone = false,
+    format = "extended"
   }
 ) {
-  let fmt = "HH:mm";
+  let fmt = format === "basic" ? "HHmm" : "HH:mm";
 
   if (!suppressSeconds || dt.second !== 0 || dt.millisecond !== 0) {
-    fmt += ":ss";
+    fmt += format === "basic" ? "ss" : ":ss";
     if (!suppressMilliseconds || dt.millisecond !== 0) {
       fmt += ".SSS";
     }
@@ -9291,7 +9293,7 @@ function toTechTimeFormat(
   if (includeZone) {
     fmt += "z";
   } else if (includeOffset) {
-    fmt += "ZZ";
+    fmt += format === "basic" ? "ZZZ" : "ZZ";
   }
 
   return toTechFormat(dt, fmt);
@@ -9629,7 +9631,9 @@ class DateTime {
    */
   static fromMillis(milliseconds, options = {}) {
     if (!isNumber(milliseconds)) {
-      throw new InvalidArgumentError("fromMillis requires a numerical input");
+      throw new InvalidArgumentError(
+        `fromMillis requires a numerical input, but received a ${typeof milliseconds} with value ${milliseconds}`
+      );
     } else if (milliseconds < -MAX_DATE || milliseconds > MAX_DATE) {
       // this isn't perfect because because we can still end up out of range because of additional shifting, but it's a start
       return DateTime.invalid("Timestamp out of range");
@@ -10580,9 +10584,11 @@ class DateTime {
    * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
    * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
    * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+   * @param {string} [opts.format='extended'] - choose between the basic and extended format
    * @example DateTime.utc(1982, 5, 25).toISO() //=> '1982-05-25T00:00:00.000Z'
    * @example DateTime.local().toISO() //=> '2017-04-22T20:47:05.335-04:00'
    * @example DateTime.local().toISO({ includeOffset: false }) //=> '2017-04-22T20:47:05.335'
+   * @example DateTime.local().toISO({ format: 'basic' }) //=> '20170422T204705.335-0400'
    * @return {string}
    */
   toISO(opts = {}) {
@@ -10590,21 +10596,24 @@ class DateTime {
       return null;
     }
 
-    return `${this.toISODate()}T${this.toISOTime(opts)}`;
+    return `${this.toISODate(opts)}T${this.toISOTime(opts)}`;
   }
 
   /**
    * Returns an ISO 8601-compliant string representation of this DateTime's date component
+   * @param {Object} opts - options
+   * @param {string} [opts.format='extended'] - choose between the basic and extended format
    * @example DateTime.utc(1982, 5, 25).toISODate() //=> '1982-05-25'
+   * @example DateTime.utc(1982, 5, 25).toISODate({ format: 'basic' }) //=> '19820525'
    * @return {string}
    */
-  toISODate() {
-    let format = "yyyy-MM-dd";
+  toISODate({ format = "extended" } = {}) {
+    let fmt = format === "basic" ? "yyyyMMdd" : "yyyy-MM-dd";
     if (this.year > 9999) {
-      format = "+" + format;
+      fmt = "+" + fmt;
     }
 
-    return toTechFormat(this, format);
+    return toTechFormat(this, fmt);
   }
 
   /**
@@ -10622,15 +10631,23 @@ class DateTime {
    * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
    * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
    * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
-   * @example DateTime.utc().hour(7).minute(34).toISOTime() //=> '07:34:19.361Z'
-   * @example DateTime.utc().hour(7).minute(34).toISOTime({ suppressSeconds: true }) //=> '07:34Z'
+   * @param {string} [opts.format='extended'] - choose between the basic and extended format
+   * @example DateTime.utc().set({ hour: 7, minute: 34 }).toISOTime() //=> '07:34:19.361Z'
+   * @example DateTime.utc().set({ hour: 7, minute: 34, seconds: 0, milliseconds: 0 }).toISOTime({ suppressSeconds: true }) //=> '07:34Z'
+   * @example DateTime.utc().set({ hour: 7, minute: 34 }).toISOTime({ format: 'basic' }) //=> '073419.361Z'
    * @return {string}
    */
-  toISOTime({ suppressMilliseconds = false, suppressSeconds = false, includeOffset = true } = {}) {
+  toISOTime({
+    suppressMilliseconds = false,
+    suppressSeconds = false,
+    includeOffset = true,
+    format = "extended"
+  } = {}) {
     return toTechTimeFormat(this, {
       suppressSeconds,
       suppressMilliseconds,
-      includeOffset
+      includeOffset,
+      format
     });
   }
 
@@ -10641,7 +10658,7 @@ class DateTime {
    * @return {string}
    */
   toRFC2822() {
-    return toTechFormat(this, "EEE, dd LLL yyyy HH:mm:ss ZZZ");
+    return toTechFormat(this, "EEE, dd LLL yyyy HH:mm:ss ZZZ", false);
   }
 
   /**
@@ -11169,8 +11186,6 @@ function friendlyDateTime(dateTimeish) {
     );
   }
 }
-
-
 
 var luxon = /*#__PURE__*/Object.freeze({
     __proto__: null,
