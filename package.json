@@ -133,7 +133,7 @@
     "memory-cache": "^0.2.0",
     "numeral": "^2.0.6",
     "react-dom-factories": "^1.0.2",
-    "react-hook-form": "^5.2.0",
+    "react-hook-form": "^6.0.0",
     "ua-parser-js": "^0.7.21",
     "use-global-hook": "^0.1.12"
   },
