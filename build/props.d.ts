@@ -146,7 +146,7 @@ export declare function getEvalProps(this: defs.Context, options?: {
  * @param {Object} [options.resources={}] - object to use for resourceprops(asyncprops), usually a result of an asynchronous call
  * @returns {Object} resolved object of React Components
  */
-export declare function getComponentProps(this: defs.Context, options?: defs.Config): any;
+export declare function getComponentProps(this: defs.Context, options?: defs.Config): defs.jsonxResourceProps;
 /**
  * Used to create components from jsonx as props
  * @param this

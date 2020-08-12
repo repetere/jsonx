@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, createContext } from "react";
 import * as memoryCache from "memory-cache";
-import { useForm, Controller, ErrorMessage, } from 'react-hook-form';
+import { useForm, Controller, } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 // import {cache} from 'memory-cache';
 // import cache from 'memory-cache';
 //@ts-ignore

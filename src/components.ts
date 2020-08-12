@@ -18,7 +18,9 @@ import React, {
 } from "react";
 import { ReactElementLike } from "prop-types";
 import * as memoryCache from "memory-cache";
-import { useForm, Controller, ErrorMessage, } from 'react-hook-form';
+import { useForm, Controller, } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
+
 // import {cache} from 'memory-cache';
 // import cache from 'memory-cache';
 //@ts-ignore
