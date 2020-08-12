@@ -71,7 +71,7 @@
     "@rollup/plugin-replace": "2.3.3",
     "@rollup/plugin-sucrase": "3.1.0",
     "@rollup/plugin-typescript": "3.0.0",
-    "@types/chai": "4.2.11",
+    "@types/chai": "4.2.12",
     "@types/enzyme": "3.10.5",
     "@types/enzyme-adapter-react-16": "1.0.6",
     "@types/jest": "25.2.3",
