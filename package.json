@@ -86,7 +86,7 @@
     "@types/ua-parser-js": "0.7.33",
     "@types/use-global-hook": "0.1.2",
     "benchmark": "2.1.4",
-    "bootstrap": "4.4.1",
+    "bootstrap": "4.5.2",
     "bulma": "0.8.2",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
