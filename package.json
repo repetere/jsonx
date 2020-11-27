@@ -128,7 +128,7 @@
     "typescript": "3.9.6"
   },
   "dependencies": {
-    "@hookform/error-message": "0.0.4",
+    "@hookform/error-message": "0.0.5",
     "create-react-class": "15.6.3",
     "memory-cache": "0.2.0",
     "numeral": "2.0.6",
