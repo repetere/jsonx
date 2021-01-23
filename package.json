@@ -93,7 +93,7 @@
     "coveralls": "3.1.0",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.2",
-    "enzyme-adapter-react-16.3": "1.7.2",
+    "enzyme-adapter-react-16.3": "1.7.4",
     "install": "0.13.0",
     "jest": "25.5.4",
     "jsdom": "16.2.2",
