@@ -110,7 +110,7 @@
     "react-materialize": "3.9.2",
     "react-md": "1.16.1",
     "react-spectre": "git+https://github.com/react-spectre/react-spectre.git",
-    "rollup": "2.19.0",
+    "rollup": "2.38.5",
     "rollup-plugin-node-builtins": "2.1.2",
     "rollup-plugin-node-globals": "1.4.0",
     "rollup-plugin-terser-js": "1.0.2",
