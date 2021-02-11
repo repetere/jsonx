@@ -125,7 +125,7 @@
     "tslib": "1.13.0",
     "tslint-config-prettier": "1.18.0",
     "typedoc": "0.18.0",
-    "typescript": "3.9.6"
+    "typescript": "3.9.9"
   },
   "dependencies": {
     "@hookform/error-message": "0.0.4",
