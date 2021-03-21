@@ -49,8 +49,11 @@ describe('jsonx utils', function () {
           left: null,
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.false;
     });
     it('should display if left === null||undefined', () => {
@@ -72,8 +75,11 @@ describe('jsonx utils', function () {
           operation:'null',
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.false;
-      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
+      //@ts-ignore
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false
+      //@ts-ignore;
       expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if left == right', () => {
@@ -98,8 +104,11 @@ describe('jsonx utils', function () {
           right:1,
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
-      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
+      //@ts-ignore
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false
+      //@ts-ignore;
       expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if left === right', () => {
@@ -124,8 +133,11 @@ describe('jsonx utils', function () {
           right:1,
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
-      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
+      //@ts-ignore
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false
+      //@ts-ignore;
       expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.false;
     });
     it('should display if left != right', () => {
@@ -150,8 +162,11 @@ describe('jsonx utils', function () {
           right:1,
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.false;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if left !== right', () => {
@@ -176,8 +191,11 @@ describe('jsonx utils', function () {
           right:1,
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.false;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if left > right', () => {
@@ -202,8 +220,11 @@ describe('jsonx utils', function () {
           right:['smallNum', ],
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
-      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
+      //@ts-ignore
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false
+      //@ts-ignore;
       expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.false;
     });
     it('should display if left >= right', () => {
@@ -228,8 +249,11 @@ describe('jsonx utils', function () {
           right:['smallNum', ],
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
-      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
+      //@ts-ignore
+      expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false
+      //@ts-ignore;
       expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if left < right', () => {
@@ -254,8 +278,11 @@ describe('jsonx utils', function () {
           right:['smallNum', ],
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.false;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.false;
     });
     it('should display if left <= right', () => {
@@ -280,8 +307,11 @@ describe('jsonx utils', function () {
           right:['smallNum', ],
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.false;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.true;
     });
     it('should display if multiple comprisons are true', () => {
@@ -307,7 +337,9 @@ describe('jsonx utils', function () {
           right:['smallNum', ],
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.false;
     });
     it('should display if one or more using comparisonorprops comprisons are true', () => {
@@ -347,8 +379,11 @@ describe('jsonx utils', function () {
           right:['smallNum', ],
         },],
       });
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX, props: testJSONX.props, })).to.be.true;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX2, props: testJSONX2.props, })).to.be.true;
+      //@ts-ignore
       expect(displayComponent({ jsonx: testJSONX3, props: testJSONX3.props, })).to.be.false;
     });
   });

@@ -1,0 +1,318 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Creating new components</title>
+  <link rel="stylesheet" href="https://unpkg.com/style.css">
+  <style type="text/css">
+    .markdown-body {
+      max-width: 46em;
+      margin: 2em auto;
+      padding: 0 1em;
+      overflow: hidden;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <main class="markdown-body"><link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+<hr>
+<h3>JSONX Manual</h3>
+<ul>
+<li><a href="https://jsonx.anydata.app">Home</a></li>
+<li><a href="../getting-started/index.html">Getting Started</a></li>
+<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="../samples/index.html">Samples</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../../index.html">Full API Docs</a></li>
+</ul>
+<hr>
+<h1>Creating new components</h1>
+<p>“With great power comes great responsibility”. Just because you can create new Class and Function components with JSONX it doesn’t mean you should. Typically, components should be bundled as UMDs and imported as Custom/External components to optimize performance.</p>
+<ul>
+<li><a href="#class-component">1. Class Components</a> - Use <code>jsonx._jsonxComponents.getReactClassComponent</code> and JXM to create React Class Components with JSON</li>
+<li><a href="#function-component">2. Function Components</a> - Use <code>jsonx._jsonxComponents.getReactFunctionComponent</code> and JXM to create React Function Components with JSON. Because JSONX can uses React under the hood, all React features are available (e.g. Hooks, Lazy and Suspense).</li>
+<li><a href="#dynamic-component">3. Dynamic Components</a> - Use <code>jsonx._jsonxComponents.DynamicComponent</code> is a special component that renders components after fetching data.</li>
+<li><a href="#form-component">4. Form Components</a> - Use <code>jsonx._jsonxComponents.FormComponent</code> is a special component that create forms with react-hook-form.</li>
+</ul>
+<h2><a name="class-component">1. Class Components </a></h2>
+<p>JSONX exposes the <code>jsonx._jsonxComponents.getReactClassComponent</code> function that can you can use to create React Class Components. <code>getReactClassComponent</code> uses <code>createReactClass</code> underneath the hood. You can read more about using <code>createReactClass</code> in the React docs section about <a href="https://reactjs.org/docs/react-without-es6.html">“React Without ES6”</a>.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getReactClassComponent</span>(<span class="hljs-params">
+  reactComponent = {},
+  options = {},
+</span>): <span class="hljs-title">ReactComponentLike</span>
+</span></code></pre>
+<p><code>getReactClassComponent</code> takes two arguments <code>reactComponent</code> which contains the arguments passed to <code>createReactClass</code> and an <code>options</code> argument.</p>
+<p>The only required function in the <code>reactComponent</code> parameter object is a render function, the body of the function has to be valid JXM JSON. Each property in the object has two properties a <code>body</code> property whose value is the function body and an <code>arguments</code> property which defines the parameters for the function.</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> reactComponent = {
+  <span class="hljs-comment">//</span>
+  <span class="hljs-comment">// Initialization function</span>
+  <span class="hljs-comment">//</span>
+  <span class="hljs-attr">getInitialState</span>:{
+    <span class="hljs-attr">body</span>:<span class="hljs-string">'return { status:"not-loaded", name:"jsonx test", customNumber:1, }'</span>,
+    <span class="hljs-attr">arguments</span>:[],
+  },
+  <span class="hljs-attr">getDefaultProps</span>:{
+    <span class="hljs-attr">body</span>:<span class="hljs-string">'return { someProp:1, someOtherProp:2, status:"original status" }'</span>,
+    <span class="hljs-attr">arguments</span>:[],
+  },
+  <span class="hljs-attr">componentDidMount</span>:{
+    <span class="hljs-attr">body</span>:<span class="hljs-string">`console.log('mounted', 'this.props',this.props, 'this.state',this.state)`</span>,
+    <span class="hljs-attr">arguments</span>:[],
+  },
+  <span class="hljs-attr">componentWillUnmount</span>:{
+    <span class="hljs-attr">body</span>:<span class="hljs-string">`console.log('unmounted',this.props)`</span>,
+    <span class="hljs-attr">arguments</span>:[],
+  },
+  <span class="hljs-comment">//</span>
+  <span class="hljs-comment">// State change functions</span>
+  <span class="hljs-comment">//</span>
+  <span class="hljs-attr">shouldComponentUpdate</span>:{
+    <span class="hljs-attr">body</span>:<span class="hljs-string">'console.log("should update component",{nextProps,nextState}); return true;'</span>,
+    <span class="hljs-attr">arguments</span>:[<span class="hljs-string">'nextProps'</span>, <span class="hljs-string">'nextState'</span>]
+  },
+  <span class="hljs-attr">componentWillUpdate</span>:{
+    <span class="hljs-attr">body</span>:<span class="hljs-string">'console.log("will update component",{nextProps,nextState}); return true;'</span>,
+    <span class="hljs-attr">arguments</span>:[<span class="hljs-string">'nextProps'</span>, <span class="hljs-string">'nextState'</span>]
+  },
+  <span class="hljs-attr">componentDidUpdate</span>:{
+    <span class="hljs-attr">body</span>:<span class="hljs-string">'console.log("did update component",{prevProps,prevState}); return true;'</span>,
+    <span class="hljs-attr">arguments</span>:[<span class="hljs-string">'prevProps'</span>, <span class="hljs-string">'prevState'</span>]
+  },
+  <span class="hljs-comment">//</span>
+  <span class="hljs-comment">// Prop change functions</span>
+  <span class="hljs-comment">//</span>
+  <span class="hljs-attr">componentWillReceiveProps</span>: {
+    <span class="hljs-attr">body</span>:<span class="hljs-string">'console.log("will recieve props",{nextProps}); return true;'</span>,
+    <span class="hljs-attr">arguments</span>:[<span class="hljs-string">'nextProps'</span>]
+  },
+  <span class="hljs-comment">//</span>
+  <span class="hljs-comment">// RENDER IS THE ONLY ***REQUIRED*** FUNCTION</span>
+  <span class="hljs-comment">//</span>
+  <span class="hljs-attr">render</span>:{
+    <span class="hljs-attr">body</span>:{
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'p'</span>,
+      <span class="hljs-attr">props</span>:{
+        <span class="hljs-attr">status</span>:<span class="hljs-string">'from inline prop'</span>
+      },
+      <span class="hljs-attr">passprops</span>:<span class="hljs-literal">true</span>,
+      <span class="hljs-attr">children</span>:[
+        {
+          <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>,
+          <span class="hljs-attr">children</span>: <span class="hljs-string">'My Custom React Component Status: '</span>,
+        },
+        {
+          <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>,
+          <span class="hljs-attr">thisprops</span>:{
+            <span class="hljs-attr">children</span>:[<span class="hljs-string">'status'</span>]
+          }
+        }
+      ]
+    },
+  }
+};
+<span class="hljs-keyword">const</span> options = {
+  <span class="hljs-attr">name</span>:<span class="hljs-string">'MyCustomComponent'</span>,
+};
+<span class="hljs-keyword">const</span> MyCustomComponent = jsonx._jsonxComponents.getReactClassComponent(reactComponent,options);
+<span class="hljs-keyword">const</span> JXM = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'MyCustomComponent'</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">status</span>:<span class="hljs-string">'Amazing'</span>,
+  }
+};
+<span class="hljs-keyword">const</span> boundConfig = {
+  <span class="hljs-attr">debug</span>:<span class="hljs-literal">true</span>, 
+  <span class="hljs-attr">reactComponents</span>:{
+    MyCustomComponent,
+  }
+};
+
+
+jsonx.jsonxRender.call(boundConfig, {
+  <span class="hljs-attr">jsonx</span>: JXM, 
+  <span class="hljs-attr">querySelector</span>:<span class="hljs-string">'#main'</span>, });
+</code></pre>
+<p>Console output after mounting</p>
+<pre><code class="hljs language-javascript">[Log] mounted (<span class="hljs-number">4</span>)
+<span class="hljs-string">"this.props"</span>
+{<span class="hljs-attr">status</span>: <span class="hljs-string">"Amazing"</span>, <span class="hljs-attr">children</span>: {}, <span class="hljs-attr">someProp</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">someOtherProp</span>: <span class="hljs-number">2</span>}
+<span class="hljs-string">"this.state"</span>
+{<span class="hljs-attr">status</span>: <span class="hljs-string">"not-loaded"</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">"jsonx test"</span>, <span class="hljs-attr">customNumber</span>: <span class="hljs-number">1</span>}
+</code></pre>
+<h3>Example Class Components</h3>
+<table style="border:0; width:100%">
+  <tbody><tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ck3oye01/7/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ck3oye01/7/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+    </td>
+  </tr>
+</tbody></table>
+<hr>
+<h2><a name="function-component">2. Function Components </a></h2>
+<p>JSONX exposes the <code>jsonx._jsonxComponents.getReactFunctionComponent</code> function that can you can use to create React Function Components.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getReactFunctionComponent</span>(<span class="hljs-params">
+  reactComponent: JXM_JSON,
+  functionBody: <span class="hljs-built_in">string</span>,
+  options = {},
+</span>): <span class="hljs-title">ReactComponentLike</span>
+</span></code></pre>
+<p><code>getReactFunctionComponent</code> takes three arguments:</p>
+<ol>
+<li><code>reactComponent</code> which contains the JXM JSON for rendering the Function Component.</li>
+<li><code>functionBody</code> which is a string for the Function component (if you are using hooks or want to expose props from inside of your components, assign the props you want to make available to an <code>exposeprops</code> variable)</li>
+<li><code>options</code> used to customize <code>getReactFunctionComponent</code>.</li>
+</ol>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
+  <span class="hljs-comment">//reactComponent</span>
+  {
+    <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>,
+    <span class="hljs-attr">passprops</span>:<span class="hljs-literal">true</span>,
+    <span class="hljs-attr">children</span>:[
+      {
+        <span class="hljs-attr">component</span>:<span class="hljs-string">'button'</span>,
+        <span class="hljs-attr">__dangerouslyBindEvalProps</span>:{
+          <span class="hljs-attr">onClick</span>:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">clicks,set_click</span>)</span>{
+            set_click(clicks+<span class="hljs-number">1</span>);
+          },
+        },
+        <span class="hljs-attr">thisprops</span>:{
+          <span class="hljs-attr">clicks</span>:[<span class="hljs-string">'clicks'</span>],
+          <span class="hljs-attr">set_click</span>:[<span class="hljs-string">'set_click'</span>]
+        },
+        <span class="hljs-attr">children</span>:<span class="hljs-string">'Click Me'</span>,
+      },
+      {
+        <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>,
+        <span class="hljs-attr">children</span>:<span class="hljs-string">' Clicks: '</span>
+      },
+      {
+        <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>,
+        <span class="hljs-attr">thisprops</span>:{
+          <span class="hljs-attr">_children</span>:[<span class="hljs-string">'clicks'</span>],
+        }
+      }
+    ]
+  },
+  <span class="hljs-comment">//functionBody</span>
+  <span class="hljs-string">`
+  const [clicks, set_click] = useState(0);
+  const exposeprops = {clicks,set_click};
+  `</span>,
+  <span class="hljs-comment">//options</span>
+  {
+    <span class="hljs-attr">name</span>:<span class="hljs-string">'hookFunctionComponent'</span>,
+  });
+</code></pre>
+<h3>Example Function Components</h3>
+<table style="border:0; width:100%">
+  <tbody><tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+    </td>
+  </tr>
+</tbody></table>
+<hr>
+<h2><a name="dynamic-component">3. Dynamic Components </a></h2>
+<p>JSONX has a helper component called <code>DynamicComponent</code>. Using <code>DynamicComponent</code> allows you to create components that load data and render asynchronously.</p>
+<p>The typical use case is if you have some kind of dashboard or components that are independently loading data, Dynamic Components are a convenient way to handle dynamic components without Suspense and Lazy Components (they use hooks under the hood).</p>
+<p>Once the data is fetched, the <code>jsonx</code> object passed is rendered and the resolved data is available as  <code>resourceprops.DynamicComponentData</code>.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> JXM = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">'DynamicComponent'</span>,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">useCache</span>: <span class="hljs-built_in">boolean</span>;
+    cacheTimeout: <span class="hljs-built_in">number</span>;<span class="hljs-comment">//milliseconds</span>
+    loadingJSONX: jsonx;
+    loadingErrorJSONX: jsonx;
+    cacheTimeoutFunction: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>,
+    <span class="hljs-attr">jsonx</span>: jsonx;
+    transformFunction: <span class="hljs-function">(<span class="hljs-params">data: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>,
+    <span class="hljs-attr">fetchURL</span>: <span class="hljs-built_in">string</span>;
+    fetchOptions: <span class="hljs-built_in">any</span>;
+    fetchFunction: <span class="hljs-function">(<span class="hljs-params">fetchURL: <span class="hljs-built_in">string</span>, fetchOptions: <span class="hljs-built_in">any</span></span>)=&gt;</span><span class="hljs-built_in">Promise</span>,
+  }
+};
+</code></pre>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> dynamicComponent = jsonx.getReactElementFromJSONX({
+  {
+    <span class="hljs-attr">component</span>:<span class="hljs-string">'DynamicComponent'</span>,
+    <span class="hljs-attr">props</span>:{
+      <span class="hljs-attr">fetchURL</span>:<span class="hljs-string">'/path/to/some/data'</span>
+      <span class="hljs-attr">jsonx</span>:{
+        <span class="hljs-attr">component</span>:<span class="hljs-string">'p'</span>,
+        <span class="hljs-attr">children</span>:<span class="hljs-string">'loaded data'</span>,
+      }
+    }
+  },
+});
+</code></pre>
+<h3>Example Dynamic Components</h3>
+<table style="border:0; width:100%">
+  <tbody><tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/cjm1yshz/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/cjm1yshz/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+    </td>
+  </tr>
+</tbody></table>
+---
+<h2><a name="form-component">4. Form Components </a></h2>
+<p>JSONX has a helper component called <code>FormComponent</code>. Using <code>FormComponent</code> allows you to create forms with <a href="https://react-hook-form.com/">react-hook-form</a> without needed to add external form libraries.</p>
+<p>Form components work by creating a Function Component that uses the <code>useForm</code> hook. You can customize <code>useForm</code> by adding schema validations via <code>Yup</code> or any of the other optional arguments on <a href="https://react-hook-form.com/api#useForm">useForm</a>.</p>
+<p>The actual form elements are passed through the formComponent JXM property. By Default FormComponents are wrapped with <code>form onSubmit={handleSubmit(props.onSubmit)}</code> but the default wrapper can be overwritten with the <code>formWrapperComponent</code>.</p>
+<p>FormComponents will add an additional reactComponentLibrary called <code>ReactHookForm</code> with the <code>Controller</code> and <code>ErrorMessage</code> components included. All of the methods returned from the <code>useForm</code> hook are bound to the function context on the <code>this.reactHookForm</code> property. This is useful when you need to customize and pass registers, errors and other react-hook-form functionality into your JXM JSON Object.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> JXM = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">'FormComponent'</span>,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">hookFormOptions</span>: {},<span class="hljs-comment">// settings for react-hook-form's useForm hook</span>
+    <span class="hljs-attr">formComponent</span>: jsonx,
+    <span class="hljs-attr">onSubmit</span>:<span class="hljs-function">(<span class="hljs-params">formdata: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>,
+    <span class="hljs-attr">formWrapperComponent</span>: jsonx,
+  }
+};
+</code></pre>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> dynamicComponent = jsonx.getReactElementFromJSONX({
+  {
+    <span class="hljs-attr">component</span>:<span class="hljs-string">'FormComponent'</span>,
+    <span class="hljs-attr">props</span>:{
+      <span class="hljs-attr">onSubmit</span>: <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> { <span class="hljs-built_in">console</span>.log({ <span class="hljs-attr">submitData</span>: data }) },
+      <span class="hljs-attr">formComponent</span>:{
+        <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
+        <span class="hljs-attr">props</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">"text"</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">"username"</span>, <span class="hljs-attr">placeholder</span>: <span class="hljs-string">"username"</span> },
+        <span class="hljs-attr">thiscontext</span>:{ <span class="hljs-attr">ref</span>:[<span class="hljs-string">'reactHookForm'</span>,<span class="hljs-string">'register'</span>] },
+      },
+    }
+  },
+});
+</code></pre>
+<h3>Example Form Components</h3>
+<table style="border:0; width:100%">
+  <tbody><tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/18/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/18/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+    </td>
+  </tr>
+</tbody></table>
+<hr>
+<h2><a href="../spec/index.html">JSONX &amp; JXM Spec</a></h2>
+<h3>JSONX Manual</h3>
+<ul>
+<li><a href="https://jsonx.anydata.app">Home</a></li>
+<li><a href="../getting-started/index.html">Getting Started</a></li>
+<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="../samples/index.html">Samples</a></li>
+<li><a href="../roadmap/index.html">Roadmap</a></li>
+<li><a href="../../index.html">Full API Docs</a></li>
+</ul>
+</main>
+
+
+</body></html>

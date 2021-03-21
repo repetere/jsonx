@@ -187,6 +187,7 @@ describe('jsonx', function () {
       //@ts-ignore
       const testDOM = ReactTestUtils.renderIntoDocument(ReactiveJSON());
       // console.log({testDOM});
+      //@ts-ignore
       expect(ReactTestUtils.isDOMComponent(testDOM)).to.be.true;
       expect(ReactiveJSON).to.be.a('function');
       // expect(ReactTestUtils.isCompositeComponent(ReactiveJSON)).to.be.true;
