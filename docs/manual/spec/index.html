@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Full JXM (JSONX Markup) JSON Spec</title>
@@ -42,53 +40,53 @@
 <p>The full <a href="../../interfaces/_types_jsonx_jsonx_.jsonx.html">type definition</a> is also available.</p>
 <pre><code class="hljs language-typescript">jxm = {
   <span class="hljs-comment">//standard properties</span>
-  component:<span class="hljs-built_in">String</span>, <span class="hljs-comment">// Any React DOM element, or custom component div,p, Boomer.Hero, MaterialUI.Button, myCustomComponent (can also use the property &apos;type&apos; instead of &apos;component&apos;)</span>
-  props:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// Standard React component properties</span>
-  children:<span class="hljs-built_in">Array</span>|<span class="hljs-built_in">String</span>, <span class="hljs-comment">// Any String or Array of valid JSONX JSON objects</span>
+  <span class="hljs-attr">component</span>:<span class="hljs-built_in">String</span>, <span class="hljs-comment">// Any React DOM element, or custom component div,p, Boomer.Hero, MaterialUI.Button, myCustomComponent (can also use the property 'type' instead of 'component')</span>
+  <span class="hljs-attr">props</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// Standard React component properties</span>
+  <span class="hljs-attr">children</span>:<span class="hljs-built_in">Array</span>|<span class="hljs-built_in">String</span>, <span class="hljs-comment">// Any String or Array of valid JSONX JSON objects</span>
 
 
   <span class="hljs-comment">//traverse properties</span>
-  resourceprops:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object from async resources to merge onto jsonx.props once fully resolved</span>
-  asyncprops:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object from async resources to merge onto jsonx.props once fully resolved (alias for resourceprops)</span>
-  thisprops:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from properties already bound to this.props</span>
-  thisstate:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from properties already bound to this.state</span>
-  thiscontext:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from properties already bound to this</span>
-  windowprops:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from the window object</span>
+  <span class="hljs-attr">resourceprops</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object from async resources to merge onto jsonx.props once fully resolved</span>
+  <span class="hljs-attr">asyncprops</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object from async resources to merge onto jsonx.props once fully resolved (alias for resourceprops)</span>
+  <span class="hljs-attr">thisprops</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from properties already bound to this.props</span>
+  <span class="hljs-attr">thisstate</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from properties already bound to this.state</span>
+  <span class="hljs-attr">thiscontext</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from properties already bound to this</span>
+  <span class="hljs-attr">windowprops</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object to merge onto jsonx.props from the window object</span>
 
 
   <span class="hljs-comment">//evaluation properties</span>
-  __dangerouslyEvalProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of evaluated JavaScript strings, used as inline functions onto jsonx.props, if the prop is a function it will be called bound to &apos;this&apos; and the returned value will be assigned</span>
-  __dangerouslyBindEvalProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of evaluated JavaScript functions that are bound to this, used as inline functions onto jsonx.props</span>
-  __dangerouslyEvalAllProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// evaluate strings to generate props that are functions bound to `this`</span>
-  __functionProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto jsonx.props</span>
-  __dangerouslyInsertJSONXComponents:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</span>
-  __dangerouslyInsertComponents:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</span>
-  __dangerouslyInsertReactComponents:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that returns the react element from either ReactDOM, reactComponents or componentLibraries.</span>
-  __dangerouslyInsertFunctionComponents:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that returns the react function component.</span>
-  __dangerouslyInsertClassComponents:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that returns the react class component.</span>
-  __spreadComponent:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// A JSONX element that is mapped on any array prop called  __spread</span>
-  __windowComponents:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of components merged onto jsonx.props from window.__jsonx_custom_elements</span>
-  __windowComponentProps:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// Returns a resolved object that has React Components pulled from window.</span>
-  _children: <span class="hljs-built_in">Object</span>, <span class="hljs-comment">// any value assigned to _children will be set as the react element children property. This is typically used when you want to override what&apos;s passed as the children JXM property with a dynamic value later.</span>
+  <span class="hljs-attr">__dangerouslyEvalProps</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of evaluated JavaScript strings, used as inline functions onto jsonx.props, if the prop is a function it will be called bound to 'this' and the returned value will be assigned</span>
+  <span class="hljs-attr">__dangerouslyBindEvalProps</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of evaluated JavaScript functions that are bound to this, used as inline functions onto jsonx.props</span>
+  <span class="hljs-attr">__dangerouslyEvalAllProps</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// evaluate strings to generate props that are functions bound to `this`</span>
+  <span class="hljs-attr">__functionProps</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto jsonx.props</span>
+  <span class="hljs-attr">__dangerouslyInsertJSONXComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</span>
+  <span class="hljs-attr">__dangerouslyInsertComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</span>
+  <span class="hljs-attr">__dangerouslyInsertReactComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that returns the react element from either ReactDOM, reactComponents or componentLibraries.</span>
+  <span class="hljs-attr">__dangerouslyInsertFunctionComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that returns the react function component.</span>
+  <span class="hljs-attr">__dangerouslyInsertClassComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object that returns the react class component.</span>
+  <span class="hljs-attr">__spreadComponent</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// A JSONX element that is mapped on any array prop called  __spread</span>
+  <span class="hljs-attr">__windowComponents</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// An object of components merged onto jsonx.props from window.__jsonx_custom_elements</span>
+  <span class="hljs-attr">__windowComponentProps</span>:<span class="hljs-built_in">Object</span>, <span class="hljs-comment">// Returns a resolved object that has React Components pulled from window.</span>
+  <span class="hljs-attr">_children</span>: <span class="hljs-built_in">Object</span>, <span class="hljs-comment">// any value assigned to _children will be set as the react element children property. This is typically used when you want to override what's passed as the children JXM property with a dynamic value later.</span>
 
   <span class="hljs-comment">//format properties</span>
-  ___FromLuxonTimeZone:<span class="hljs-built_in">String</span>, <span class="hljs-comment">// format date values as strings assigned to `children` prop using Luxon</span>
-  ___ISOtoLuxonString:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to from an ISO String to a Luxon formatted DateTime String </span>
-  ___JSDatetoLuxonString:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to from JavaScript Date to a Luxon formatted DateTime String </span>
-  ___stringifyChildren:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to a string using JSON.stringify </span>
-  ___toNumeral:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts numbers to numeral formatted numbers</span>
-  ___toStringChildren:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to a string using toString()</span>
+  <span class="hljs-attr">___FromLuxonTimeZone</span>:<span class="hljs-built_in">String</span>, <span class="hljs-comment">// format date values as strings assigned to `children` prop using Luxon</span>
+  <span class="hljs-attr">___ISOtoLuxonString</span>:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to from an ISO String to a Luxon formatted DateTime String </span>
+  <span class="hljs-attr">___JSDatetoLuxonString</span>:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to from JavaScript Date to a Luxon formatted DateTime String </span>
+  <span class="hljs-attr">___stringifyChildren</span>:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to a string using JSON.stringify </span>
+  <span class="hljs-attr">___toNumeral</span>:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts numbers to numeral formatted numbers</span>
+  <span class="hljs-attr">___toStringChildren</span>:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//converts the children prop to a string using toString()</span>
 
   
   <span class="hljs-comment">//utility properties</span>
-  debug:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to output the calculated JXM props in the console</span>
-  test:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to output the calculated JXM as a string component</span>
-  passprops:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to pass parent properties to children JSONX objects (except for the style property)</span>
-  ___template:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//imports JXM from a file path into the children property </span>
+  <span class="hljs-attr">debug</span>:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to output the calculated JXM props in the console</span>
+  <span class="hljs-attr">test</span>:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to output the calculated JXM as a string component</span>
+  <span class="hljs-attr">passprops</span>:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to pass parent properties to children JSONX objects (except for the style property)</span>
+  <span class="hljs-attr">___template</span>:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//imports JXM from a file path into the children property </span>
   
   <span class="hljs-comment">//display properties</span>
-  comparisonprops:[<span class="hljs-built_in">Object</span>], <span class="hljs-comment">// An array of Objects used to conditionally display the current jsonx.component</span>
-  comparisonorprops:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to use an or condition instead of and conditions between comparisions</span>
+  <span class="hljs-attr">comparisonprops</span>:[<span class="hljs-built_in">Object</span>], <span class="hljs-comment">// An array of Objects used to conditionally display the current jsonx.component</span>
+  <span class="hljs-attr">comparisonorprops</span>:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to use an or condition instead of and conditions between comparisions</span>
 }
 </code></pre>
 <h2>Simple JSONX Syntax</h2>
@@ -97,17 +95,17 @@
 {
   <span class="hljs-attr">ul</span>: {
     <span class="hljs-attr">props</span>:{
-      <span class="hljs-attr">className</span>:<span class="hljs-string">&apos;list-class&apos;</span>,
+      <span class="hljs-attr">className</span>:<span class="hljs-string">'list-class'</span>,
     },
     <span class="hljs-attr">children</span>:[
       {
         <span class="hljs-attr">li</span>: {
-          <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;first bullet&apos;</span>,
+          <span class="hljs-attr">children</span>:<span class="hljs-string">'first bullet'</span>,
         },
       },
       {
         <span class="hljs-attr">li</span>: {
-          <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;second bullet&apos;</span>,
+          <span class="hljs-attr">children</span>:<span class="hljs-string">'second bullet'</span>,
         },
       }
     ]
@@ -115,7 +113,7 @@
 }
 </code></pre>
 <h3>JSONX Imperative API / Module</h3>
-<pre><code class="hljs language-javascript"><span class="hljs-string">&quot;jsonx&quot;</span> : {
+<pre><code class="hljs language-javascript"><span class="hljs-string">"jsonx"</span> : {
   <span class="hljs-attr">getReactElement</span>: [<span class="hljs-built_in">Function</span>: getReactElement], {<span class="hljs-attr">aliases</span>:[getRenderedJSON,getReactElementFromJSONX]} <span class="hljs-comment">//Use React.createElement and JSONX JSON to create React elements</span>
   <span class="hljs-attr">getReactElementFromJSON</span>: [<span class="hljs-built_in">Function</span>: getReactElementFromJSON], <span class="hljs-comment">// Use compiledJSON object {type,props,children} to create React elements</span>
   <span class="hljs-attr">jsonxRender</span>: [<span class="hljs-built_in">Function</span>: getRenderedJSON], <span class="hljs-comment">//Use JSONX without any configuration to render JSONX JSON to HTML and insert JSONX into querySelector using ReactDOM.render</span>
@@ -147,14 +145,14 @@
     <span class="hljs-attr">DynamicComponent</span>: [<span class="hljs-built_in">Function</span>: DynamicComponent], <span class="hljs-comment">// returns a helper react function component that allows you to create components that load data and render asynchronously. </span>
   },
   <span class="hljs-attr">_jsonxProps</span>: {
-    <span class="hljs-attr">getJSONXProps</span>: [<span class="hljs-built_in">Function</span>: getJSONXProps], <span class="hljs-comment">// It uses traverse on a traverseObject to returns a resolved object on propName. So if you&apos;re making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths</span>
+    <span class="hljs-attr">getJSONXProps</span>: [<span class="hljs-built_in">Function</span>: getJSONXProps], <span class="hljs-comment">// It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths</span>
     <span class="hljs-attr">getEvalProps</span>: [<span class="hljs-built_in">Function</span>: getEvalProps], <span class="hljs-comment">//Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})</span>
     <span class="hljs-attr">getComponentProps</span>: [<span class="hljs-built_in">Function</span>: getComponentProps], <span class="hljs-comment">// Resolves jsonx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.</span>
     <span class="hljs-attr">getReactComponentProps</span>: [<span class="hljs-built_in">Function</span>: getReactComponentProps], <span class="hljs-comment">// Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a the React component from reactComponents, componentLibraries or ReactDOM.</span>
     <span class="hljs-attr">getFunctionFromProps</span>: [<span class="hljs-built_in">Function</span>: getFunctionFromProps], <span class="hljs-comment">// Takes a function string and returns a function on either this.props or window.</span>
     <span class="hljs-attr">getFunctionProps</span>: [<span class="hljs-built_in">Function</span>: getFunctionProps], <span class="hljs-comment">// Returns a resolved object from function strings that has functions pulled from jsonx.__functionProps</span>
     <span class="hljs-attr">getWindowComponents</span>: [<span class="hljs-built_in">Function</span>: getWindowComponents], <span class="hljs-comment">// Returns a resolved object that has React Components pulled from window.__jsonx_custom_elements</span>
-    <span class="hljs-attr">getComputedProps</span>: [<span class="hljs-built_in">Function</span>: getComputedProps], <span class="hljs-comment">// Returns computed properties for React Components and any property that&apos;s prefixed with __ is a computedProperty</span>
+    <span class="hljs-attr">getComputedProps</span>: [<span class="hljs-built_in">Function</span>: getComputedProps], <span class="hljs-comment">// Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty</span>
   },
   <span class="hljs-attr">_jsonxUtils</span>: {
     <span class="hljs-attr">validateJSONX</span>: [<span class="hljs-built_in">Function</span>: validateJSONX], <span class="hljs-comment">//Validates JSONX JSON Syntax</span>
@@ -179,5 +177,6 @@
 <li><a href="../../index.html">Full API Docs</a></li>
 </ul>
 </main>
-</body>
-</html>
+
+
+</body></html>

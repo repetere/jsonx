@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Getting Started</title>
@@ -42,14 +40,14 @@ React.createElement(
 )
 
 <span class="hljs-comment">// Basic JXM</span>
-<span class="hljs-keyword">const</span> JXM = { component:<span class="hljs-string">&apos;div&apos;</span>, props: { title:<span class="hljs-string">&apos;jsonx&apos;</span>, }, children:<span class="hljs-string">&apos;hello&apos;</span>, };
+<span class="hljs-keyword">const</span> JXM = { <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>, <span class="hljs-attr">props</span>: { <span class="hljs-attr">title</span>:<span class="hljs-string">'jsonx'</span>, }, <span class="hljs-attr">children</span>:<span class="hljs-string">'hello'</span>, };
 
 <span class="hljs-comment">// JSONX.getReactElement returns a react element </span>
-JSONX.getReactElement(JXM) =&gt; React.createElement(<span class="hljs-string">&apos;div&apos;</span>, { title: <span class="hljs-string">&apos;jsonx&apos;</span>, }, <span class="hljs-string">&apos;hello&apos;</span>);
+JSONX.getReactElement(JXM) =&gt; React.createElement(<span class="hljs-string">'div'</span>, { <span class="hljs-attr">title</span>: <span class="hljs-string">'jsonx'</span>, }, <span class="hljs-string">'hello'</span>);
 
 <span class="hljs-comment">// eqivalent to JSX </span>
-&lt;div title=<span class="hljs-string">&quot;jsonx&quot;</span>&gt;hello&lt;<span class="hljs-regexp">/div&gt; 
-</span></code></pre>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">title</span>=<span class="hljs-string">"jsonx"</span>&gt;</span>hello<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span> 
+</code></pre>
 <h2>Usages</h2>
 <p>JSONX is great for:</p>
 <ul>
@@ -65,21 +63,21 @@ JSONX.getReactElement(JXM) =&gt; React.createElement(<span class="hljs-string">&
 </ul>
 <h2>Example</h2>
 <table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+  <tbody><tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
 </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
 </td>
   </tr>
-</table>
+</tbody></table>
 <h2>Customizing JSONX</h2>
 <p>The JSONX library has a couple of customization options. The library can be customized by setting the configuration on the <code>this</code> property of JSONX methods. The configuration options are:</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> JSONXConfiguration = {
-  debug: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span>; <span class="hljs-comment">// used to debug component rendering errors, and will send exceptions to the logError function</span>
+  <span class="hljs-attr">debug</span>: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span>; <span class="hljs-comment">// used to debug component rendering errors, and will send exceptions to the logError function</span>
   logError: <span class="hljs-function">(<span class="hljs-params">...args: <span class="hljs-built_in">any</span>[]</span>) =&gt;</span> <span class="hljs-built_in">any</span> = <span class="hljs-built_in">console</span>.error; <span class="hljs-comment">// default(console.error) by default will log errors to console.error but you can define any custom error logging function</span>
   returnJSON: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span>; <span class="hljs-comment">// used to return a JSON object instead of React Components</span>
   disableRenderIndexKey: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">true</span>; <span class="hljs-comment">// used to disable auto assign props.key</span>
-  boundedComponents: jsonx[]; <span class="hljs-comment">// array of components to bind &quot;this&quot; to</span>
+  boundedComponents: jsonx[]; <span class="hljs-comment">// array of components to bind "this" to</span>
   componentLibraries: { 
     [index: libraryName <span class="hljs-keyword">as</span> <span class="hljs-built_in">string</span>]: {
       [index: componentName <span class="hljs-keyword">as</span> <span class="hljs-built_in">string</span>]: ReactComponentLike;
@@ -92,9 +90,9 @@ JSONX.getReactElement(JXM) =&gt; React.createElement(<span class="hljs-string">&
 <span class="hljs-comment">//e.g</span>
 
 jsonx.getReactElementFromJSONX.call(
-  { debug:<span class="hljs-literal">true</span>, reactComponents:{ReactModal}, componentLibraries:{ ReactBootstrap, Antd, } }, <span class="hljs-comment">//custom options bound to &apos;this&apos; </span>
+  { <span class="hljs-attr">debug</span>:<span class="hljs-literal">true</span>, <span class="hljs-attr">reactComponents</span>:{ReactModal}, <span class="hljs-attr">componentLibraries</span>:{ ReactBootstrap, Antd, } }, <span class="hljs-comment">//custom options bound to 'this' </span>
   {
-    component:<span class="hljs-string">&apos;ReactBootstrap.Container&apos;</span>, children:<span class="hljs-string">&apos;hello world&apos;</span>
+    <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Container'</span>, <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span>
   });
 </code></pre>
 <h2>Next: <a href="../using-advanced-props/index.html">Using Advanced Props</a></h2>
@@ -112,5 +110,6 @@ jsonx.getReactElementFromJSONX.call(
 <li><a href="../../index.html">Full API Docs</a></li>
 </ul>
 </main>
-</body>
-</html>
+
+
+</body></html>

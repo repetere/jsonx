@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Examples</title>
@@ -44,41 +42,41 @@ this is raw <strong>html</strong>
 <script src="../../media/basic/basic.js"></script>
 <h3>Example Browser Usage</h3>
 <pre><code class="hljs language-html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"en"</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"utf-8"</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>JSONX TEST<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;jsonx.umd.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"jsonx.umd.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;root&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span>&gt;</span><span class="actionscript">
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"root"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span>&gt;</span><span class="javascript">
       <span class="hljs-keyword">const</span> sampleJSONX = {
-        component: <span class="hljs-string">&apos;div&apos;</span>,
-        props: {
-          id: <span class="hljs-string">&apos;generatedJSONX&apos;</span>,
-          className:<span class="hljs-string">&apos;jsonx&apos;</span>,
+        <span class="hljs-attr">component</span>: <span class="hljs-string">'div'</span>,
+        <span class="hljs-attr">props</span>: {
+          <span class="hljs-attr">id</span>: <span class="hljs-string">'generatedJSONX'</span>,
+          <span class="hljs-attr">className</span>:<span class="hljs-string">'jsonx'</span>,
         },
-        children: [
+        <span class="hljs-attr">children</span>: [
           {
-            component: <span class="hljs-string">&apos;p&apos;</span>,
-            props: {
-              style: {
-                color: <span class="hljs-string">&apos;red&apos;</span>,
-                fontWeight:<span class="hljs-string">&apos;bold&apos;</span>,
+            <span class="hljs-attr">component</span>: <span class="hljs-string">'p'</span>,
+            <span class="hljs-attr">props</span>: {
+              <span class="hljs-attr">style</span>: {
+                <span class="hljs-attr">color</span>: <span class="hljs-string">'red'</span>,
+                <span class="hljs-attr">fontWeight</span>:<span class="hljs-string">'bold'</span>,
               },
             },
-            __dangerouslyEvalProps:{
-              onClick:<span class="hljs-string">&apos;()=&gt;alert(&quot;click works&quot;)&apos;</span>
+            <span class="hljs-attr">__dangerouslyEvalProps</span>:{
+              <span class="hljs-attr">onClick</span>:<span class="hljs-string">'()=&gt;alert("click works")'</span>
             },
-            children:<span class="hljs-string">&apos;hello world&apos;</span>,
+            <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span>,
           },
         ],
       };
       <span class="hljs-keyword">const</span> boundConfig = {
-        debug:<span class="hljs-literal">true</span>, 
+        <span class="hljs-attr">debug</span>:<span class="hljs-literal">true</span>, 
       };
-      jsonx.jsonxRender.call(boundConfig,{ jsonx: sampleJSONX, querySelector:<span class="hljs-string">&apos;#root&apos;</span>, });
+      jsonx.jsonxRender.call(boundConfig,{ <span class="hljs-attr">jsonx</span>: sampleJSONX, <span class="hljs-attr">querySelector</span>:<span class="hljs-string">'#root'</span>, });
     </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
@@ -99,5 +97,6 @@ this is raw <strong>html</strong>
 <li><a href="../examples/index.html">Samples</a></li>
 </ul>
 </main>
-</body>
-</html>
+
+
+</body></html>

@@ -658,6 +658,27 @@ export function getReactFunctionComponent(
     ? functionComponent.call(this, ...functionArgs)
     : functionComponent(...functionArgs);
 }
+
+export function getFunctionBody(func:()=>any){
+  const functionString = func.toString()
+  if(functionString.includes('return')===false) throw new EvalError('JSONX Function Components can not use implicit returns')
+  return functionString.substring(
+    functionString.indexOf("{") + 1,
+    functionString.lastIndexOf("}")
+  )
+}
+
+export function makeFunctionComponent(
+  this: defs.Context,
+  func:()=>any,
+  options:any
+  ){
+  const scopedEval = eval; 
+  const [functionBody,reactComponentString] = getFunctionBody(func).split('return')
+  const reactComponent = scopedEval(`(${reactComponentString})`);
+  const functionOptions = {name:func.name,...options};
+  return getReactFunctionComponent.call(this,reactComponent,functionBody,functionOptions)
+}
 /**
  *
  */

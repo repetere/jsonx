@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>JSONX TEST</title>
+    <!-- <script type="text/javascript" src="jsonx.web.js"></script> -->
+    <script type="text/javascript" src="index.web.js"></script>
+    <script type="text/javascript">
+    window.React = jsonx.__getReact();
+    window.ReactDOM = jsonx.__getReactDOM();
+    // shallowEqual=()=>{};
+    // console.log({jsonx});
+    // console.log({React});
+    </script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/react-md@1.9.2/dist/react-md.js"></script> -->
+    <!-- <link rel="stylesheet" href="../node_modules/react-md/dist/react-md.amber-blue.min.css"> -->
+    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="../node_modules/spectre.css/dist/spectre-icons.min.css">
+    <!-- <script type="text/javascript" src="../node_modules/react-md/dist/react-md.js"></script> -->
+    <!-- <script type="text/javascript" src="../node_modules/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script> -->
+    <script type="text/javascript" src="../design/spectre.umd.js"></script>
+    <!-- <script type="text/javascript" src="../design/semantic.web.js"></script> -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      function someExternalCall(count){
+        console.log('current count is at',count)
+      }
+      function IntroHook(){
+        const [count, setCount] = useState(0);
+
+        useEffect(()=>{
+          console.log('only run once')
+        },[])
+        const exposeprops = {count,setCount,extraVal:'some extra value'};
+        return {
+          component:'div',
+          props:{
+            extra:'ok'
+          },
+          // debug:true,
+
+          passprops:true,
+          children:[
+            {
+              component:'p',
+              children: 'This is from IntroHookComponent '
+            },
+            {
+                component:'p',
+                passprops:true,
+                children:[
+                  {
+                    component:'span',
+                    children:'You clicked ',
+                  },
+                  {
+                    component:'input',
+                    props:{
+                      defaultValue:0
+                    },
+                    thisprops:{
+                      value:['count'],
+                    },
+                  },
+                  {
+                    component:'span',
+                    children:' times'
+                  }
+                ]
+            },
+            {
+              component:'button',
+              __dangerouslyBindEvalProps:{
+                onClick(count,setCount){
+                  // someExternalCall(count+1)
+                  setCount(count+1);
+                },
+              },
+              children:'Click me'
+            }
+          ],
+        }
+      }
+      const IntroHookComponent = jsonx._jsonxComponents.makeFunctionComponent(IntroHook)
+
+      const sampleJSONX = {
+        component: 'div',
+        props: {
+          id: 'generatedJSONX',
+          className:'jsonx',
+          otherProp: 'testing Other Prop',
+          style:{
+            padding:'1rem',
+          }
+        },
+        children: [
+          {
+            component:'IntroHookComponent',
+            props:{
+              status:'custom status prop',
+            },
+            resourceprops:{
+              punc:['punc']
+            }
+          },
+        ],
+      };
+      const boundConfig = {
+        debug:true, 
+        reactComponents:{
+          IntroHookComponent,
+        },
+        componentLibraries:{
+          Spectre,
+        }
+      };
+      // console.log({boundConfig})
+      jsonx.jsonxRender.call(boundConfig,{ 
+        jsonx: sampleJSONX, 
+        resources: { 
+          addedStatus:'LIVE',
+          punc:'TEST RESOURCE!!'
+        },
+        querySelector:'#root', });
+    </script>
+  </body>
+</html>

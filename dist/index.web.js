@@ -42267,6 +42267,19 @@ var jsonx = (function (exports) {
 	        ? functionComponent.call(this, ...functionArgs)
 	        : functionComponent(...functionArgs);
 	}
+	function getFunctionBody(func) {
+	    const functionString = func.toString();
+	    if (functionString.includes('return') === false)
+	        throw new EvalError('JSONX Function Components can not use implicit returns');
+	    return functionString.substring(functionString.indexOf("{") + 1, functionString.lastIndexOf("}"));
+	}
+	function makeFunctionComponent(func, options) {
+	    const scopedEval = eval;
+	    const [functionBody, reactComponentString] = getFunctionBody(func).split('return');
+	    const reactComponent = scopedEval(`(${reactComponentString})`);
+	    const functionOptions = { name: func.name, ...options };
+	    return getReactFunctionComponent.call(this, reactComponent, functionBody, functionOptions);
+	}
 	/**
 	 *
 	 */
@@ -42286,6 +42299,8 @@ var jsonx = (function (exports) {
 		FormComponent: FormComponent,
 		DynamicComponent: DynamicComponent,
 		getReactFunctionComponent: getReactFunctionComponent,
+		getFunctionBody: getFunctionBody,
+		makeFunctionComponent: makeFunctionComponent,
 		getReactContext: getReactContext
 	});
 

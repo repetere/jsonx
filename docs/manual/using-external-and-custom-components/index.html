@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>External Libraries and Components</title>
@@ -32,11 +30,11 @@
 </ul>
 <hr>
 <h1>External Libraries and Components</h1>
-<p>JSONX natively supports any components from React-DOM, but for most real applications you are using either a large open-source component library (e.g. react-bootstrap, ant.design, material UI, etc) or any 3rd-party react components (like react-autocomplete). To use custom 3rd-party components or libraries they need to be assigned to JSONX&#x2019;s <code>this</code> parameter.</p>
+<p>JSONX natively supports any components from React-DOM, but for most real applications you are using either a large open-source component library (e.g. react-bootstrap, ant.design, material UI, etc) or any 3rd-party react components (like react-autocomplete). To use custom 3rd-party components or libraries they need to be assigned to JSONX’s <code>this</code> parameter.</p>
 <h2>Using custom Component Libraries</h2>
 <p>Using a component library is as simple as assigning the Library to the <code>this.componentLibraries</code> property, and referencing the flattened component name as the component value in your JXM JSON Object.</p>
-<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;jsonx&apos;</span>;
-<span class="hljs-keyword">import</span> { * <span class="hljs-keyword">as</span> ReactBootstrap } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-bootstrap&apos;</span>; <span class="hljs-comment">//or in the browser reference the UMD: &lt;script src=&quot;https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js&quot; crossorigin /&gt;</span>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">'jsonx'</span>;
+<span class="hljs-keyword">import</span> { * <span class="hljs-keyword">as</span> ReactBootstrap } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-bootstrap'</span>; <span class="hljs-comment">//or in the browser reference the UMD: &lt;script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin /&gt;</span>
 
 <span class="hljs-keyword">const</span> getReactElement = jsonx.getReactElement.bind({
   <span class="hljs-attr">componentLibraries</span>:{
@@ -45,27 +43,27 @@
 });
 
 <span class="hljs-keyword">const</span> JXM = {
-  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;ReactBootstrap.Container&apos;</span>, 
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Container'</span>, 
   <span class="hljs-attr">children</span>:[
     {
-      <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;ReactBootstrap.Row&apos;</span>, 
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Row'</span>, 
       <span class="hljs-attr">children</span>:[
         {
-          <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;ReactBootstrap.Col&apos;</span>,
+          <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Col'</span>,
           <span class="hljs-attr">children</span>:[
             {
-              <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;ReactBootstrap.Alert&apos;</span>,
-              <span class="hljs-attr">props</span>:{ <span class="hljs-attr">variant</span>:<span class="hljs-string">&apos;primary&apos;</span> },
-              <span class="hljs-attr">children</span>: <span class="hljs-string">&apos;This is a Bootstrap Alert&apos;</span>
+              <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Alert'</span>,
+              <span class="hljs-attr">props</span>:{ <span class="hljs-attr">variant</span>:<span class="hljs-string">'primary'</span> },
+              <span class="hljs-attr">children</span>: <span class="hljs-string">'This is a Bootstrap Alert'</span>
             }
           ]
         },
         {
-          <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;ReactBootstrap.Col&apos;</span>,
+          <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Col'</span>,
           <span class="hljs-attr">children</span>:[
             {
-              <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;ReactBootstrap.Spinner&apos;</span>,
-              <span class="hljs-attr">props</span>:{ <span class="hljs-attr">animation</span>:<span class="hljs-string">&apos;border&apos;</span>, <span class="hljs-attr">role</span>:<span class="hljs-string">&apos;status&apos;</span> },
+              <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Spinner'</span>,
+              <span class="hljs-attr">props</span>:{ <span class="hljs-attr">animation</span>:<span class="hljs-string">'border'</span>, <span class="hljs-attr">role</span>:<span class="hljs-string">'status'</span> },
             }
           ]
         }
@@ -78,18 +76,18 @@
 </code></pre>
 <h3>Example React Bootstrap</h3>
 <table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gctmsojp/22/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+  <tbody><tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gctmsojp/22/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
 </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gctmsojp/22/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gctmsojp/22/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
 </td>
   </tr>
-</table>
+</tbody></table>
 <h2>Using Custom Components</h2>
-<p>If you&#x2019;re only adding single components or using your components you can add them to JSONX&#x2019;s component my individually. The difference between a Custom Component and a Custom Library is <code>this.reactComponents</code> expects each property value to be a react component and <code>this.componentLibraries</code> expects each property value to reference an object that has values that are React Components.</p>
-<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
-<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;jsonx&apos;</span>;
-<span class="hljs-keyword">import</span> { Calendar } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;rc-calendar&apos;</span>;
+<p>If you’re only adding single components or using your components you can add them to JSONX’s component my individually. The difference between a Custom Component and a Custom Library is <code>this.reactComponents</code> expects each property value to be a react component and <code>this.componentLibraries</code> expects each property value to reference an object that has values that are React Components.</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">'jsonx'</span>;
+<span class="hljs-keyword">import</span> { Calendar } <span class="hljs-keyword">from</span> <span class="hljs-string">'rc-calendar'</span>;
 <span class="hljs-keyword">const</span> jsonxRender = jsonx.jsonxRender.bind({ 
   <span class="hljs-attr">reactComponents</span>:{
     <span class="hljs-attr">ReactCalendar</span>: Calendar,
@@ -97,14 +95,14 @@
 });
 
 <span class="hljs-keyword">const</span> JXM = {
-  <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;div&apos;</span>, 
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>, 
   <span class="hljs-attr">children</span>:[
     {
-      <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;h1&apos;</span>, 
-      <span class="hljs-attr">children</span>:<span class="hljs-string">&apos;React Calendar demo&apos;</span>,
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'h1'</span>, 
+      <span class="hljs-attr">children</span>:<span class="hljs-string">'React Calendar demo'</span>,
     },
     {
-      <span class="hljs-attr">component</span>:<span class="hljs-string">&apos;ReactCalendar&apos;</span>,
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactCalendar'</span>,
       <span class="hljs-attr">props</span>:{
       },
     }
@@ -113,18 +111,18 @@
 
 jsonxRender({
   <span class="hljs-attr">jsonx</span>:JXM, 
-  <span class="hljs-attr">querySelector</span>:<span class="hljs-string">&apos;#main&apos;</span>,
+  <span class="hljs-attr">querySelector</span>:<span class="hljs-string">'#main'</span>,
 });
 </code></pre>
 <h3>Example React Calendar</h3>
 <table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/Lqwe3f59/5/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+  <tbody><tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/Lqwe3f59/5/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
 </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/Lqwe3f59/5/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/Lqwe3f59/5/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
 </td>
   </tr>
-</table>
+</tbody></table>
 <hr>
 <h2>Next: <a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></h2>
 <h3>JSONX Manual</h3>
@@ -140,5 +138,6 @@ jsonxRender({
 <li><a href="../../index.html">Full API Docs</a></li>
 </ul>
 </main>
-</body>
-</html>
+
+
+</body></html>
