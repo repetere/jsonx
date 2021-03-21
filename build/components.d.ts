@@ -154,6 +154,8 @@ export declare function DynamicComponent(this: defs.Context, props?: defs.dynami
   const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({jsonxRender, functionBody, options});
    */
 export declare function getReactFunctionComponent(this: defs.Context, reactComponent?: {}, functionBody?: string | defs.functionParam, options?: any): any;
+export declare function getFunctionBody(func: () => any): string;
+export declare function makeFunctionComponent(this: defs.Context, func: () => any, options: any): any;
 /**
  *
  */

@@ -2,12 +2,13 @@ import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import builtins from 'rollup-plugin-node-builtins';
+// import nodePolyfills from 'rollup-plugin-node-polyfills';
 import globals from 'rollup-plugin-node-globals';
 import replace from '@rollup/plugin-replace';
 import terser from 'rollup-plugin-terser-js';
 import alias from '@rollup/plugin-alias';
 import pkg from "./package.json";
-import { cloneElement } from 'react';
+// import { cloneElement } from 'react';
 
 const name = 'jsonx';
 const external = [
@@ -113,16 +114,17 @@ function getPlugins({
   core = false,
 }) {
   const plugins = [
-    // // external(),
     replace({
+      preventAssignment: true,
       'process.env.NODE_ENV': minify ?
         JSON.stringify('production') : JSON.stringify('development'),
       'global.': '(typeof global!=="undefined" ? global : window).'
     }),
+    builtins({}),
+    // // nodePolyfills({}),
     resolve({
       preferBuiltins: true,
     }),
-    builtins({}),
     typescript({
       noEmitOnError: false,
       declaration: false,
@@ -130,19 +132,7 @@ function getPlugins({
       allowJs:true,
     }),
     commonjs({
-      extensions: ['.js', '.ts'],
-      namedExports: {
-        // left-hand side can be an absolute path, a path
-        // relative to the current directory, or the name
-        // of a module in node_modules
-        // 'node_modules/ml-array-utils/src/index.js': [ 'scale' ]
-        'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createContext', 'Fragment', 'Suspense', 'lazy', 'createElement', 'useState', 'useEffect', 'useContext', 'useReducer', 'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect', 'useDebugValue','isValidElement', 'cloneElement', ],
-
-        'node_modules/memory-cache/index.js': [
-          'cache',
-          'default',
-        ],
-      },
+      extensions: ['.js'],
     }), // so Rollup can convert `ms` to an ES module
     globals({
       // react: 'React',
@@ -179,7 +169,7 @@ function getPlugins({
 export default [
   //web
   {
-    input: "src/index.ts",
+    input: "build/index.js",
     output: getOutput({
       minify: false,
       server: false,

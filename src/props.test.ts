@@ -195,8 +195,11 @@ describe('jsonx props', function () {
       // console.log({ testJSONX });
       //@ts-ignore
       const JSONXP = getEvalProps.call({ testBound: () => 'bounded', }, { jsonx: testJSONX, });
+      //@ts-ignore
       const evalutedComputedFunc = JSONXP.username({ name: 'bob', });
+      //@ts-ignore
       const evalutedComputedBoundFunc = JSONXP.email({ email:'test@email.domain', });
+      //@ts-ignore
       expect(JSONXP.auth).to.be.true;
       expect(evalutedComputedFunc).to.eql('bob');
       expect(evalutedComputedBoundFunc).to.eql('bounded');

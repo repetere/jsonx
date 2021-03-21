@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JSONX</title>
+  <link rel="stylesheet" href="https://unpkg.com/style.css">
+  <style type="text/css">
+    .markdown-body {
+      max-width: 46em;
+      margin: 2em auto;
+      padding: 0 1em;
+      overflow: hidden;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <main class="markdown-body"><h1>JSONX</h1>
+<p><a href="https://coveralls.io/github/repetere/jsonx?branch=master"><img src="https://coveralls.io/repos/github/repetere/jsonx/badge.svg?branch=master" alt="Coverage Status"></a> <img src="https://github.com/repetere/jsonx/workflows/Build,%20Test%20&amp;%20Coverage/badge.svg" alt="Build, Test &amp; Coverage"></p>
+<h2>Description</h2>
+<p><strong>JSONX</strong> is a module that creates React Elements, JSX and HTML from JSON.</p>
+<h3>Declarative</h3>
+<p>The JSONX UMD comes with batteries included so you can use JSONX in the browser without transpilers or any additional setup/configuration. The JSONX UMD is ideal for JAMstack Applications.</p>
+<h3>Embeddable</h3>
+<p>JSONX can also be used in existing react applications if you want to dynamically create elements with JSON. This works great for many scenarios when you want to manage your application views and components in a view management system or if you want to dynamically create React elements without using JSX.</p>
+<h3>Fully Featured</h3>
+<p>JSONX supports all of Reacts features including Functional (with Hooks), Class-based, Suspense and Lazy components. JSONX supports JSON objects that implement the JXM (JSONX Markup) Spec.</p>
+<h2>Installation</h2>
+<pre><code class="hljs language-sh">$ npm i jsonx
+</code></pre>
+<h3><a href="https://repetere.github.io/jsonx/">Full Documentation</a></h3>
+<link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+<hr>
+<h3>JSONX Manual</h3>
+<ul>
+<li><a href="https://repetere.github.io/jsonx/manual/getting-started/index.html">Getting Started</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/samples/index.html">Samples</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/roadmap/index.html">Roadmap</a></li>
+<li><a href="https://repetere.github.io/jsonx/">Full API Docs</a></li>
+</ul>
+<hr>
+<h3>Basic Usage</h3>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> { * <span class="hljs-keyword">as</span> jsonx } <span class="hljs-keyword">from</span> <span class="hljs-string">'jsonx'</span>;
+<span class="hljs-keyword">const</span> example_JXM_JSON = {
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'p'</span>,
+  <span class="hljs-attr">props</span>:{ <span class="hljs-attr">style</span>:{ <span class="hljs-attr">color</span>:<span class="hljs-string">'blue'</span> } },
+  <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span>
+};
+<span class="hljs-comment">//Rendering React Components</span>
+jsonx.getReactElement(example_JXM_JSON); <span class="hljs-comment">// =&gt; JSX Equivalent: &lt;p style={{color:'blue'}}&gt;hello world&lt;/p&gt;</span>
+
+<span class="hljs-comment">//Generating HTML strings</span>
+jsonx.outputHTML({ <span class="hljs-attr">jsonx</span>: example_JXM_JSON, }); <span class="hljs-comment">// =&gt; '&lt;p style="color:blue;"&gt;hello world&lt;/p&gt;'</span>
+
+<span class="hljs-comment">//Generating JSX strings</span>
+jsonx.outputJSX({ <span class="hljs-attr">jsonx</span>: example_JXM_JSON, }); <span class="hljs-comment">// =&gt; '&lt;p style={{color:blue,}}&gt;hello world&lt;/p&gt;'</span>
+
+<span class="hljs-comment">//Rendering HTML Dom with React</span>
+jsonx.jsonxRender({ <span class="hljs-attr">jsonx</span>: example_JXM_JSON, <span class="hljs-attr">querySelector</span>:<span class="hljs-string">'#myApp'</span>, });
+<span class="hljs-comment">// &lt;!DOCTYPE html&gt;</span>
+<span class="hljs-comment">//  &lt;body&gt;</span>
+<span class="hljs-comment">//    &lt;div id="myApp"&gt;</span>
+<span class="hljs-comment">//      &lt;p style="color:blue;"&gt;hello world&lt;/p&gt;</span>
+<span class="hljs-comment">//    &lt;/div&gt;</span>
+<span class="hljs-comment">// &lt;/body&gt;</span>
+</code></pre>
+<h3>JXM JSON Spec</h3>
+<p>JSONX works by using JXM JSON to create react elements. JXM JSON Objects are valid JSON Objects that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+<pre><code class="hljs language-javascript">React.createElement(
+  type,
+  [props],
+  [...children]
+)
+</code></pre>
+<p>You can pass React component libraries for additional components, or you own custom components (see <a href="https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html">External and Custom Components</a>
+and <a href="https://repetere.github.io/jsonx/manual/using-advanced-props/index.html">Using Advanced Props</a> for more details).</p>
+<h3>Development</h3>
+<p>Note <em>Make sure you have typescript installed</em></p>
+<pre><code class="hljs language-sh">$ npm i -g typescript 
+</code></pre>
+<p>For generating documentation</p>
+<pre><code class="hljs language-sh">$ npm run doc
+</code></pre>
+<h3>Notes</h3>
+<p>Check out <a href="https://repetere.github.io/jsonx/">https://repetere.github.io/jsonx/</a> for the full jsonx Documentation</p>
+<h3>Testing</h3>
+<pre><code class="hljs language-sh">$ npm <span class="hljs-built_in">test</span>
+</code></pre>
+<h3>Contributing</h3>
+<p>Fork, write tests and create a pull request!</p>
+<p>License</p>
+<hr>
+<p>MIT</p>
+</main>
+
+
+</body></html>
