@@ -23,13 +23,6 @@ jobs:
         run: |
           npm ci
           tsc && rollup -c && typedoc && sitedown manual/ -b docs/manual
-
-      - name: Coveralls Parallel
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.github_token }}
-          parallel: true
-          path-to-lcov: ./coverage/lcov.info # optional (default value)
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
