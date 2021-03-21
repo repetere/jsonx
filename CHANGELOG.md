@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/repetere/jsonx/compare/v1.4.2...v1.5.0) (2021-03-21)
+
+
+### Features
+
+* **lang:** moved completely to TypeScript ([1e51e07](https://github.com/repetere/jsonx/commit/1e51e07fe64f363ced6a72427119304537a4375c))
+
 # Changelog
 
 ## 3.0.0 (2019-04-20)
