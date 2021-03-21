@@ -6,11 +6,14 @@
       name: Build
       runs-on: ubuntu-latest
       steps:
-      - uses: actions/checkout@master
-      - name: Use Node.js 14
-        uses: actions/setup-node@master
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          version: 14
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
       - name: npm install, jestcoverage
         run: |
           npm i jest typescript -g
@@ -18,14 +21,14 @@
           jest --coverage
 
       - name: Coveralls Parallel
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action
         with:
           github-token: ${{ secrets.github_token }}
           parallel: true
           path-to-lcov: ./coverage/lcov.info # optional (default value)
 
       - name: Coveralls Finished
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action
         with:
           github-token: ${{ secrets.github_token }}
           parallel-finished: true
