@@ -17,7 +17,19 @@ jobs:
         with:
           node-version: 14
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm i jest typescript rollup typedoc sitedown -g
+      - name: build files, docs
+        run: |
+          npm ci
+          tsc && rollup -c && typedoc && sitedown manual/ -b docs/manual
+
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel: true
+          path-to-lcov: ./coverage/lcov.info # optional (default value)
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

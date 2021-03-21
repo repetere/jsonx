@@ -7,11 +7,10 @@
       runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@master
-      - name: Use Node.js 13.x
+      - name: Use Node.js 14
         uses: actions/setup-node@master
         with:
-          version: 13.x
-
+          version: 14
       - name: npm install, jestcoverage
         run: |
           npm i jest typescript -g
