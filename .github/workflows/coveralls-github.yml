@@ -14,11 +14,11 @@
         uses: actions/setup-node@v1
         with:
           node-version: 14
-      - name: npm install, jestcoverage
+      - name: npm install, test coverage
         run: |
           npm i jest typescript -g
           npm install
-          jest --coverage
+          jest --coverage --runInBand
 
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
