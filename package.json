@@ -93,7 +93,7 @@
     "puppeteer": "^8.0.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "rollup": "2.42.1",
+    "rollup": "2.42.3",
     "rollup-plugin-node-builtins": "2.1.2",
     "rollup-plugin-node-globals": "1.4.0",
     "rollup-plugin-node-polyfills": "0.2.1",
