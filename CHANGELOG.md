@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/repetere/jsonx/compare/v1.5.0...v1.6.0) (2021-03-23)
+
+
+### Features
+
+* **components:** fix for makeFunctionComponent to allow for more flexible components ([3e15f00](https://github.com/repetere/jsonx/commit/3e15f0013d62561a7c5d69bfb44824cc59ec52d2))
+
 # [1.5.0](https://github.com/repetere/jsonx/compare/v1.4.2...v1.5.0) (2021-03-21)
 
 
