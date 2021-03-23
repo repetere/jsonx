@@ -1,6 +1,6 @@
 # JSONX
 
-[![Coverage Status](https://coveralls.io/repos/github/repetere/jsonx/badge.svg?branch=master)](https://coveralls.io/github/repetere/jsonx?branch=master) ![Build, Test & Coverage](https://github.com/repetere/jsonx/workflows/Build,%20Test%20&%20Coverage/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/repetere/jsonx/badge.svg?branch=main)](https://coveralls.io/github/repetere/jsonx?branch=main) ![Build, Test & Coverage](https://github.com/repetere/jsonx/workflows/Build,%20Test%20&%20Coverage/badge.svg)
 
 ## Description
 
