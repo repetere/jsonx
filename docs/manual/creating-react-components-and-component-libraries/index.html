@@ -32,12 +32,106 @@
 <h1>Creating new components</h1>
 <p>“With great power comes great responsibility”. Just because you can create new Class and Function components with JSONX it doesn’t mean you should. Typically, components should be bundled as UMDs and imported as Custom/External components to optimize performance.</p>
 <ul>
-<li><a href="#class-component">1. Class Components</a> - Use <code>jsonx._jsonxComponents.getReactClassComponent</code> and JXM to create React Class Components with JSON</li>
-<li><a href="#function-component">2. Function Components</a> - Use <code>jsonx._jsonxComponents.getReactFunctionComponent</code> and JXM to create React Function Components with JSON. Because JSONX can uses React under the hood, all React features are available (e.g. Hooks, Lazy and Suspense).</li>
+<li><a href="#function-component">1. Function Components</a> - Use <code>jsonx._jsonxComponents.getReactFunctionComponent</code> and JXM to create React Function Components with JSON. Because JSONX can uses React under the hood, all React features are available (e.g. Hooks, Lazy and Suspense).</li>
+<li><a href="#class-component">2. Class Components</a> - Use <code>jsonx._jsonxComponents.getReactClassComponent</code> and JXM to create React Class Components with JSON</li>
 <li><a href="#dynamic-component">3. Dynamic Components</a> - Use <code>jsonx._jsonxComponents.DynamicComponent</code> is a special component that renders components after fetching data.</li>
 <li><a href="#form-component">4. Form Components</a> - Use <code>jsonx._jsonxComponents.FormComponent</code> is a special component that create forms with react-hook-form.</li>
 </ul>
-<h2><a name="class-component">1. Class Components </a></h2>
+<h2><a name="function-component">1. Function Components </a></h2>
+<p>There are two ways to create function components, either using <code>jsonx._jsonxComponents.getReactFunctionComponent</code> or <code>jsonx._jsonxComponents.makeFunctionComponent</code>. <code>makeFunctionComponent</code> is a shortcut to using <code>getReactFunctionComponent</code>. The difference in component creation with <code>makeFunctionComponent</code> is you can just call that function by passing a regular JavaScript function and underneath the hood, that function will be decomposed into the arguments to the <code>getReactFunctionComponent</code> function.</p>
+<pre><code class="hljs language-TypeScript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">myComponent</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">const</span> [count,setCount] = useState() <span class="hljs-comment">// you can use any react function inside your function</span>
+  <span class="hljs-keyword">const</span> exposeprops = {count,setCount}; <span class="hljs-comment">// you have to define what props you want passed to your rendered component</span>
+  <span class="hljs-keyword">return</span> {<span class="hljs-comment">// you need to return JSONX JSON</span>
+    <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>,
+    <span class="hljs-attr">passprops</span>:<span class="hljs-literal">true</span>, <span class="hljs-comment">//set to true so you can pass 'count' and 'setCount' to child elements </span>
+    <span class="hljs-attr">children</span>: [
+      { <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>, <span class="hljs-attr">children</span>:<span class="hljs-string">'Clicked Count'</span> },
+      {
+        <span class="hljs-attr">component</span>:<span class="hljs-string">'input'</span>,
+        <span class="hljs-attr">props</span>:{ <span class="hljs-attr">defaultValue</span>:<span class="hljs-number">0</span> },
+        <span class="hljs-attr">thisprops</span>:{ <span class="hljs-attr">value</span>:[<span class="hljs-string">'count'</span>], },
+      },
+      {
+        <span class="hljs-attr">component</span>:<span class="hljs-string">'button'</span>,
+        <span class="hljs-attr">__dangerouslyBindEvalProps</span>:{
+          <span class="hljs-function"><span class="hljs-title">onClick</span>(<span class="hljs-params">count,setCount</span>)</span>{
+            setCount(count+<span class="hljs-number">1</span>);
+          },
+        },
+        <span class="hljs-attr">children</span>:<span class="hljs-string">'Click me'</span>
+      }
+    ]
+  }
+}
+
+jsonx._jsonxComponents.makeFunctionComponent(myComponent) <span class="hljs-comment">// return React Function Component</span>
+</code></pre>
+<p>JSONX exposes the <code>jsonx._jsonxComponents.getReactFunctionComponent</code> function that can you can use to create React Function Components.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getReactFunctionComponent</span>(<span class="hljs-params">
+  reactComponent: JXM_JSON,
+  functionBody: <span class="hljs-built_in">string</span>,
+  options = {},
+</span>): <span class="hljs-title">ReactComponentLike</span>
+</span></code></pre>
+<p><code>getReactFunctionComponent</code> takes three arguments:</p>
+<ol>
+<li><code>reactComponent</code> which contains the JXM JSON for rendering the Function Component.</li>
+<li><code>functionBody</code> which is a string for the Function component (if you are using hooks or want to expose props from inside of your components, assign the props you want to make available to an <code>exposeprops</code> variable)</li>
+<li><code>options</code> used to customize <code>getReactFunctionComponent</code>.</li>
+</ol>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
+  <span class="hljs-comment">//reactComponent</span>
+  {
+    <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>,
+    <span class="hljs-attr">passprops</span>:<span class="hljs-literal">true</span>,
+    <span class="hljs-attr">children</span>:[
+      {
+        <span class="hljs-attr">component</span>:<span class="hljs-string">'button'</span>,
+        <span class="hljs-attr">__dangerouslyBindEvalProps</span>:{
+          <span class="hljs-attr">onClick</span>:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">clicks,set_click</span>)</span>{
+            set_click(clicks+<span class="hljs-number">1</span>);
+          },
+        },
+        <span class="hljs-attr">thisprops</span>:{
+          <span class="hljs-attr">clicks</span>:[<span class="hljs-string">'clicks'</span>],
+          <span class="hljs-attr">set_click</span>:[<span class="hljs-string">'set_click'</span>]
+        },
+        <span class="hljs-attr">children</span>:<span class="hljs-string">'Click Me'</span>,
+      },
+      {
+        <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>,
+        <span class="hljs-attr">children</span>:<span class="hljs-string">' Clicks: '</span>
+      },
+      {
+        <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>,
+        <span class="hljs-attr">thisprops</span>:{
+          <span class="hljs-attr">_children</span>:[<span class="hljs-string">'clicks'</span>],
+        }
+      }
+    ]
+  },
+  <span class="hljs-comment">//functionBody</span>
+  <span class="hljs-string">`
+  const [clicks, set_click] = useState(0);
+  const exposeprops = {clicks,set_click};
+  `</span>,
+  <span class="hljs-comment">//options</span>
+  {
+    <span class="hljs-attr">name</span>:<span class="hljs-string">'hookFunctionComponent'</span>,
+  });
+</code></pre>
+<h3>Example Function Components</h3>
+<table style="border:0; width:100%">
+  <tbody><tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+    </td>
+  </tr>
+</tbody></table>
+<hr>
+<h2><a name="class-component">2. Class Components </a></h2>
 <p>JSONX exposes the <code>jsonx._jsonxComponents.getReactClassComponent</code> function that can you can use to create React Class Components. <code>getReactClassComponent</code> uses <code>createReactClass</code> underneath the hood. You can read more about using <code>createReactClass</code> in the React docs section about <a href="https://reactjs.org/docs/react-without-es6.html">“React Without ES6”</a>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getReactClassComponent</span>(<span class="hljs-params">
   reactComponent = {},
@@ -148,71 +242,6 @@ jsonx.jsonxRender.call(boundConfig, {
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ck3oye01/7/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
     </td>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ck3oye01/7/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-  </tr>
-</tbody></table>
-<hr>
-<h2><a name="function-component">2. Function Components </a></h2>
-<p>JSONX exposes the <code>jsonx._jsonxComponents.getReactFunctionComponent</code> function that can you can use to create React Function Components.</p>
-<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getReactFunctionComponent</span>(<span class="hljs-params">
-  reactComponent: JXM_JSON,
-  functionBody: <span class="hljs-built_in">string</span>,
-  options = {},
-</span>): <span class="hljs-title">ReactComponentLike</span>
-</span></code></pre>
-<p><code>getReactFunctionComponent</code> takes three arguments:</p>
-<ol>
-<li><code>reactComponent</code> which contains the JXM JSON for rendering the Function Component.</li>
-<li><code>functionBody</code> which is a string for the Function component (if you are using hooks or want to expose props from inside of your components, assign the props you want to make available to an <code>exposeprops</code> variable)</li>
-<li><code>options</code> used to customize <code>getReactFunctionComponent</code>.</li>
-</ol>
-<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
-  <span class="hljs-comment">//reactComponent</span>
-  {
-    <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>,
-    <span class="hljs-attr">passprops</span>:<span class="hljs-literal">true</span>,
-    <span class="hljs-attr">children</span>:[
-      {
-        <span class="hljs-attr">component</span>:<span class="hljs-string">'button'</span>,
-        <span class="hljs-attr">__dangerouslyBindEvalProps</span>:{
-          <span class="hljs-attr">onClick</span>:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">clicks,set_click</span>)</span>{
-            set_click(clicks+<span class="hljs-number">1</span>);
-          },
-        },
-        <span class="hljs-attr">thisprops</span>:{
-          <span class="hljs-attr">clicks</span>:[<span class="hljs-string">'clicks'</span>],
-          <span class="hljs-attr">set_click</span>:[<span class="hljs-string">'set_click'</span>]
-        },
-        <span class="hljs-attr">children</span>:<span class="hljs-string">'Click Me'</span>,
-      },
-      {
-        <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>,
-        <span class="hljs-attr">children</span>:<span class="hljs-string">' Clicks: '</span>
-      },
-      {
-        <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>,
-        <span class="hljs-attr">thisprops</span>:{
-          <span class="hljs-attr">_children</span>:[<span class="hljs-string">'clicks'</span>],
-        }
-      }
-    ]
-  },
-  <span class="hljs-comment">//functionBody</span>
-  <span class="hljs-string">`
-  const [clicks, set_click] = useState(0);
-  const exposeprops = {clicks,set_click};
-  `</span>,
-  <span class="hljs-comment">//options</span>
-  {
-    <span class="hljs-attr">name</span>:<span class="hljs-string">'hookFunctionComponent'</span>,
-  });
-</code></pre>
-<h3>Example Function Components</h3>
-<table style="border:0; width:100%">
-  <tbody><tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
     </td>
   </tr>
 </tbody></table>

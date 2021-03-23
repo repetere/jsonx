@@ -154,7 +154,29 @@ export declare function DynamicComponent(this: defs.Context, props?: defs.dynami
   const MyCustomFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent({jsonxRender, functionBody, options});
    */
 export declare function getReactFunctionComponent(this: defs.Context, reactComponent?: {}, functionBody?: string | defs.functionParam, options?: any): any;
+/**
+ * Returns the string of a function, the difference between calling .toString() on a function definition is, the toString method will return the entire function definition (with paramaters and the name, etc)
+ * @param {Function} - The function you want the body string for
+ * @returns {String}
+ * @example
+function myFunc(){
+  const a = 1;
+  const b = 3;
+  return a + b;
+}
+getFunctionBody(myFunc) => `
+  const a = 1;
+  const b = 3;
+  return a + b;
+`
+ */
 export declare function getFunctionBody(func: () => any): string;
+/**
+ * A helpful function that lets you write a regular JavaScript function and passes the appropriate arguments to getReactFunctionComponent
+ * @param {Function} func - function definition to turn into React Component Function
+ * @property {object} this - options for getReactElementFromJSONX
+ * @returns {Function} - React Component Function
+ */
 export declare function makeFunctionComponent(this: defs.Context, func: () => any, options: any): any;
 /**
  *

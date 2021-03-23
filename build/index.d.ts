@@ -1,6 +1,3 @@
-/**
- * [[include:getting-started]]
- */
 import React from "react";
 import ReactDOM from "react-dom";
 import * as defs from "./types/jsonx/index";

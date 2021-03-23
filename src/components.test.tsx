@@ -389,6 +389,67 @@ describe('jsonx components', function () {
       expect(MyCustomLazyComponent).to.be.a('object');
     });
   });
+  describe('makeFunctionComponent', () => {
+    const makeFunctionComponent = _jsonxComponents.makeFunctionComponent;
+    it('should create a React Function Component from a regular function', () => { 
+      function functionComponentWithHook(){
+        //@ts-ignore
+        const [count, setCount] = useState(0);
+        //@ts-ignore
+        useEffect(()=>{
+          console.log('only run once')
+        },[])
+        const exposeprops = {count,setCount}
+        return {
+          component:'div',
+          passprops:true,
+          children:[
+            {
+              component:'p',
+              children: 'This is from functionComponentWithHook '
+            },
+            {
+                component:'p',
+                passprops:true,
+                children:[
+                  {
+                    component:'span',
+                    children:'You clicked ',
+                  },
+                  {
+                    component:'input',
+                    props:{
+                      defaultValue:0
+                    },
+                    thisprops:{
+                      value:['count'],
+                    },
+                  },
+                  {
+                    component:'span',
+                    children:' times'
+                  }
+                ]
+            },
+            {
+              component:'button',
+              __dangerouslyBindEvalProps:{
+                //@ts-ignore
+                onClick(count,setCount){
+                  setCount(count+1)
+                },
+              },
+              children:'Click me'
+            }
+          ],
+        }
+      }
+      //@ts-ignore
+      const MyCustomComponentMadeFunction = makeFunctionComponent(functionComponentWithHook);
+      expect(MyCustomComponentMadeFunction.name).to.eql('functionComponentWithHook');
+      expect(MyCustomComponentMadeFunction).to.be.a('function');
+    });
+  }),
   describe('getReactFunctionComponent', () => {
     const getReactFunctionComponent = _jsonxComponents.getReactFunctionComponent;
     it('should react a React Function Component', () => { 
@@ -428,6 +489,7 @@ describe('jsonx components', function () {
       expect(MyCustomComponent.name).to.eql('myComp');
       expect(MyCustomComponent).to.be.a('function');
     });
+
     it('should create suspense/lazy components', () => {
       //@ts-ignore
       const MyCustomLazyComponent = getReactFunctionComponent(

@@ -18,12 +18,118 @@
 
 "With great power comes great responsibility". Just because you can create new Class and Function components with JSONX it doesn't mean you should. Typically, components should be bundled as UMDs and imported as Custom/External components to optimize performance.
 
--  [1. Class Components](#class-component) - Use `jsonx._jsonxComponents.getReactClassComponent` and JXM to create React Class Components with JSON
--  [2. Function Components](#function-component) - Use `jsonx._jsonxComponents.getReactFunctionComponent` and JXM to create React Function Components with JSON. Because JSONX can uses React under the hood, all React features are available (e.g. Hooks, Lazy and Suspense). 
+-  [1. Function Components](#function-component) - Use `jsonx._jsonxComponents.getReactFunctionComponent` and JXM to create React Function Components with JSON. Because JSONX can uses React under the hood, all React features are available (e.g. Hooks, Lazy and Suspense). 
+-  [2. Class Components](#class-component) - Use `jsonx._jsonxComponents.getReactClassComponent` and JXM to create React Class Components with JSON
 -  [3. Dynamic Components](#dynamic-component) - Use `jsonx._jsonxComponents.DynamicComponent` is a special component that renders components after fetching data.
 -  [4. Form Components](#form-component) - Use `jsonx._jsonxComponents.FormComponent` is a special component that create forms with react-hook-form.
 
-## <a name="class-component">1. Class Components </a>
+## <a name="function-component">1. Function Components </a>
+
+There are two ways to create function components, either using `jsonx._jsonxComponents.getReactFunctionComponent` or `jsonx._jsonxComponents.makeFunctionComponent`. `makeFunctionComponent` is a shortcut to using `getReactFunctionComponent`. The difference in component creation with `makeFunctionComponent` is you can just call that function by passing a regular JavaScript function and underneath the hood, that function will be decomposed into the arguments to the `getReactFunctionComponent` function.
+
+```TypeScript
+function myComponent(){
+  const [count,setCount] = useState() // you can use any react function inside your function
+  const exposeprops = {count,setCount}; // you have to define what props you want passed to your rendered component
+  return {// you need to return JSONX JSON
+    component:'div',
+    passprops:true, //set to true so you can pass 'count' and 'setCount' to child elements 
+    children: [
+      { component:'span', children:'Clicked Count' },
+      {
+        component:'input',
+        props:{ defaultValue:0 },
+        thisprops:{ value:['count'], },
+      },
+      {
+        component:'button',
+        __dangerouslyBindEvalProps:{
+          onClick(count,setCount){
+            setCount(count+1);
+          },
+        },
+        children:'Click me'
+      }
+    ]
+  }
+}
+
+jsonx._jsonxComponents.makeFunctionComponent(myComponent) // return React Function Component
+```
+
+
+JSONX exposes the `jsonx._jsonxComponents.getReactFunctionComponent` function that can you can use to create React Function Components. 
+
+```typescript
+export function getReactFunctionComponent(
+  reactComponent: JXM_JSON,
+  functionBody: string,
+  options = {},
+): ReactComponentLike
+```
+
+`getReactFunctionComponent` takes three arguments:
+  1. `reactComponent` which contains the JXM JSON for rendering the Function Component.
+  2. `functionBody` which is a string for the Function component (if you are using hooks or want to expose props from inside of your components, assign the props you want to make available to an `exposeprops` variable)
+  3. `options` used to customize `getReactFunctionComponent`.
+
+
+```typescript
+const hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
+  //reactComponent
+  {
+    component:'div',
+    passprops:true,
+    children:[
+      {
+        component:'button',
+        __dangerouslyBindEvalProps:{
+          onClick:function(clicks,set_click){
+            set_click(clicks+1);
+          },
+        },
+        thisprops:{
+          clicks:['clicks'],
+          set_click:['set_click']
+        },
+        children:'Click Me',
+      },
+      {
+        component:'span',
+        children:' Clicks: '
+      },
+      {
+        component:'span',
+        thisprops:{
+          _children:['clicks'],
+        }
+      }
+    ]
+  },
+  //functionBody
+  `
+  const [clicks, set_click] = useState(0);
+  const exposeprops = {clicks,set_click};
+  `,
+  //options
+  {
+    name:'hookFunctionComponent',
+  });
+```
+
+### Example Function Components
+
+<table style="border:0; width:100%">
+  <tr>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+    </td>
+  </tr>
+</table>
+
+---
+## <a name="class-component">2. Class Components </a>
 
 JSONX exposes the `jsonx._jsonxComponents.getReactClassComponent` function that can you can use to create React Class Components. `getReactClassComponent` uses `createReactClass` underneath the hood. You can read more about using `createReactClass` in the React docs section about ["React Without ES6"](https://reactjs.org/docs/react-without-es6.html).
 
@@ -152,80 +258,6 @@ Console output after mounting
 
 ---
 
-## <a name="function-component">2. Function Components </a>
-
-
-JSONX exposes the `jsonx._jsonxComponents.getReactFunctionComponent` function that can you can use to create React Function Components. 
-
-```typescript
-export function getReactFunctionComponent(
-  reactComponent: JXM_JSON,
-  functionBody: string,
-  options = {},
-): ReactComponentLike
-```
-
-`getReactFunctionComponent` takes three arguments:
-  1. `reactComponent` which contains the JXM JSON for rendering the Function Component.
-  2. `functionBody` which is a string for the Function component (if you are using hooks or want to expose props from inside of your components, assign the props you want to make available to an `exposeprops` variable)
-  3. `options` used to customize `getReactFunctionComponent`.
-
-
-```typescript
-const hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
-  //reactComponent
-  {
-    component:'div',
-    passprops:true,
-    children:[
-      {
-        component:'button',
-        __dangerouslyBindEvalProps:{
-          onClick:function(clicks,set_click){
-            set_click(clicks+1);
-          },
-        },
-        thisprops:{
-          clicks:['clicks'],
-          set_click:['set_click']
-        },
-        children:'Click Me',
-      },
-      {
-        component:'span',
-        children:' Clicks: '
-      },
-      {
-        component:'span',
-        thisprops:{
-          _children:['clicks'],
-        }
-      }
-    ]
-  },
-  //functionBody
-  `
-  const [clicks, set_click] = useState(0);
-  const exposeprops = {clicks,set_click};
-  `,
-  //options
-  {
-    name:'hookFunctionComponent',
-  });
-```
-
-### Example Function Components
-
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
-
----
 
 ## <a name="dynamic-component">3. Dynamic Components </a>
 

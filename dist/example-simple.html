@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>JSONX TEST</title>
     <!-- <script type="text/javascript" src="jsonx.web.js"></script> -->
-    <script type="text/javascript" src="index.web.min.js"></script>
+    <script type="text/javascript" src="index.web.js"></script>
     <script type="text/javascript">
     window.React = jsonx.__getReact();
     window.ReactDOM = jsonx.__getReactDOM();
@@ -17,9 +17,6 @@
   <body>
     <div id="root"></div>
     <script type="text/javascript">
-      function someExternalCall(count){
-        console.log('current count is at',count)
-      }
       function IntroHook(){
         const [count, setCount] = useState(0);
 
@@ -32,8 +29,6 @@
           props:{
             extra:'ok'
           },
-          // debug:true,
-
           passprops:true,
           children:[
             {
@@ -46,6 +41,11 @@
                 children:[
                   {
                     component:'span',
+                    __dangerouslyEvalAllProps:function(){
+                      return { 
+                        style:{color:'red'}
+                       }
+                    },
                     children:'You clicked ',
                   },
                   {
@@ -67,7 +67,6 @@
               component:'button',
               __dangerouslyBindEvalProps:{
                 onClick(count,setCount){
-                  // someExternalCall(count+1)
                   setCount(count+1);
                 },
               },

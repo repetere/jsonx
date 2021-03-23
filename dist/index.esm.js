@@ -2587,16 +2587,40 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = "", optio
         ? functionComponent.call(this, ...functionArgs)
         : functionComponent(...functionArgs);
 }
+/**
+ * Returns the string of a function, the difference between calling .toString() on a function definition is, the toString method will return the entire function definition (with paramaters and the name, etc)
+ * @param {Function} - The function you want the body string for
+ * @returns {String}
+ * @example
+function myFunc(){
+  const a = 1;
+  const b = 3;
+  return a + b;
+}
+getFunctionBody(myFunc) => `
+  const a = 1;
+  const b = 3;
+  return a + b;
+`
+ */
 function getFunctionBody(func) {
     const functionString = func.toString();
     if (functionString.includes('return') === false)
         throw new EvalError('JSONX Function Components can not use implicit returns');
     return functionString.substring(functionString.indexOf("{") + 1, functionString.lastIndexOf("}"));
 }
+/**
+ * A helpful function that lets you write a regular JavaScript function and passes the appropriate arguments to getReactFunctionComponent
+ * @param {Function} func - function definition to turn into React Component Function
+ * @property {object} this - options for getReactElementFromJSONX
+ * @returns {Function} - React Component Function
+ */
 function makeFunctionComponent(func, options) {
     const scopedEval = eval;
-    const [functionBody, reactComponentString] = getFunctionBody(func).split('return');
-    const reactComponent = scopedEval(`(${reactComponentString})`);
+    const fullFunctionBody = getFunctionBody(func);
+    const [functionBody,] = fullFunctionBody.split('return');
+    let reactComponentString = fullFunctionBody.replace(functionBody, '').trim();
+    const reactComponent = scopedEval(`(()=>{${reactComponentString}})()`);
     const functionOptions = { name: func.name, ...options };
     return getReactFunctionComponent.call(this, reactComponent, functionBody, functionOptions);
 }
@@ -11696,9 +11720,7 @@ ${jsonxRenderedString}`;
     }
 }
 
-/**
- * [[include:getting-started]]
- */
+// import React, { createElement, } from 'react';
 const createElement = React.createElement;
 const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, } = jsonxComponents;
 const { getComputedProps } = jsonxProps;
