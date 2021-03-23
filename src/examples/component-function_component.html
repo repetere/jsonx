@@ -3,37 +3,23 @@
   <head>
     <meta charset="utf-8">
     <title>JSONX TEST</title>
-    <!-- <script type="text/javascript" src="jsonx.web.js"></script> -->
     <script type="text/javascript" src="../../dist/index.web.min.js"></script>
-    <script type="text/javascript">
-    window.React = jsonx.__getReact();
-    window.ReactDOM = jsonx.__getReactDOM();
-    // shallowEqual=()=>{};
-    // console.log({jsonx});
-    // console.log({React});
-    </script>
-
   </head>
   <body>
     <div id="root"></div>
     <script type="text/javascript">
-      function IntroHook(){
-        const [count, setCount] = useState(0);
-
+    const functionBody = `const [count, setCount] = useState(0);
         useEffect(()=>{
           console.log('only run once')
         },[])
-        const exposeprops = {count,setCount,extraVal:'some extra value'};
-        return {
+        const exposeprops = {count,setCount};`
+    const reactComponent= {
           component:'div',
-          props:{
-            extra:'ok'
-          },
           passprops:true,
           children:[
             {
               component:'p',
-              children: 'This is from IntroHookComponent '
+              children: 'This is from jxmFunctionComponent '
             },
             {
                 component:'p',
@@ -41,11 +27,6 @@
                 children:[
                   {
                     component:'span',
-                    __dangerouslyEvalAllProps:function(){
-                      return { 
-                        style:{color:'red'}
-                       }
-                    },
                     children:'You clicked ',
                   },
                   {
@@ -78,47 +59,19 @@
             }
           ],
         }
+      const options={
+        name: 'jxmFunctionComponent'
       }
-      const IntroHookComponent = jsonx._jsonxComponents.makeFunctionComponent(IntroHook)
-
-      const sampleJSONX = {
-        component: 'div',
-        props: {
-          id: 'generatedJSONX',
-          className:'jsonx',
-          otherProp: 'testing Other Prop',
-          style:{
-            padding:'1rem',
-          }
-        },
-        children: [
-          {
-            component:'IntroHookComponent',
-            props:{
-              status:'custom status prop',
-            },
-            resourceprops:{
-              punc:['punc']
-            }
-          },
-        ],
-      };
+      const jxmFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(reactComponent,functionBody,options)
       const boundConfig = {
-        debug:true, 
         reactComponents:{
-          IntroHookComponent,
+          jxmFunctionComponent,
         },
-        componentLibraries:{
-          // Spectre,
-        }
       };
-      // console.log({boundConfig})
       jsonx.jsonxRender.call(boundConfig,{ 
-        jsonx: sampleJSONX, 
-        resources: { 
-          addedStatus:'LIVE',
-          punc:'TEST RESOURCE!!'
-        },
+        jsonx: {
+          component:'jxmFunctionComponent',
+        }, 
         querySelector:'#root', });
     </script>
   </body>

@@ -115,7 +115,7 @@
 		return to;
 	};
 
-	/** @license React v17.0.1
+	/** @license React v17.0.2
 	 * react.development.js
 	 *
 	 * Copyright (c) Facebook, Inc. and its affiliates.
@@ -132,7 +132,7 @@
 	var _assign = objectAssign;
 
 	// TODO: this is special because it gets imported during build.
-	var ReactVersion = '17.0.1';
+	var ReactVersion = '17.0.2';
 
 	// ATTENTION
 	// When adding new symbols to this file,
@@ -2453,7 +2453,7 @@
 	}
 	});
 
-	/** @license React v0.20.1
+	/** @license React v0.20.2
 	 * scheduler.development.js
 	 *
 	 * Copyright (c) Facebook, Inc. and its affiliates.
@@ -2468,7 +2468,7 @@
 	  (function() {
 
 	var enableSchedulerDebugging = false;
-	var enableProfiling = true;
+	var enableProfiling = false;
 
 	var requestHostCallback;
 	var requestHostTimeout;
@@ -2738,172 +2738,13 @@
 	}
 
 	// TODO: Use symbols?
-	var NoPriority = 0;
 	var ImmediatePriority = 1;
 	var UserBlockingPriority = 2;
 	var NormalPriority = 3;
 	var LowPriority = 4;
 	var IdlePriority = 5;
 
-	var runIdCounter = 0;
-	var mainThreadIdCounter = 0;
-	var profilingStateSize = 4;
-	var sharedProfilingBuffer =  // $FlowFixMe Flow doesn't know about SharedArrayBuffer
-	typeof SharedArrayBuffer === 'function' ? new SharedArrayBuffer(profilingStateSize * Int32Array.BYTES_PER_ELEMENT) : // $FlowFixMe Flow doesn't know about ArrayBuffer
-	typeof ArrayBuffer === 'function' ? new ArrayBuffer(profilingStateSize * Int32Array.BYTES_PER_ELEMENT) : null // Don't crash the init path on IE9
-	;
-	var profilingState =  sharedProfilingBuffer !== null ? new Int32Array(sharedProfilingBuffer) : []; // We can't read this but it helps save bytes for null checks
-
-	var PRIORITY = 0;
-	var CURRENT_TASK_ID = 1;
-	var CURRENT_RUN_ID = 2;
-	var QUEUE_SIZE = 3;
-
-	{
-	  profilingState[PRIORITY] = NoPriority; // This is maintained with a counter, because the size of the priority queue
-	  // array might include canceled tasks.
-
-	  profilingState[QUEUE_SIZE] = 0;
-	  profilingState[CURRENT_TASK_ID] = 0;
-	} // Bytes per element is 4
-
-
-	var INITIAL_EVENT_LOG_SIZE = 131072;
-	var MAX_EVENT_LOG_SIZE = 524288; // Equivalent to 2 megabytes
-
-	var eventLogSize = 0;
-	var eventLogBuffer = null;
-	var eventLog = null;
-	var eventLogIndex = 0;
-	var TaskStartEvent = 1;
-	var TaskCompleteEvent = 2;
-	var TaskErrorEvent = 3;
-	var TaskCancelEvent = 4;
-	var TaskRunEvent = 5;
-	var TaskYieldEvent = 6;
-	var SchedulerSuspendEvent = 7;
-	var SchedulerResumeEvent = 8;
-
-	function logEvent(entries) {
-	  if (eventLog !== null) {
-	    var offset = eventLogIndex;
-	    eventLogIndex += entries.length;
-
-	    if (eventLogIndex + 1 > eventLogSize) {
-	      eventLogSize *= 2;
-
-	      if (eventLogSize > MAX_EVENT_LOG_SIZE) {
-	        // Using console['error'] to evade Babel and ESLint
-	        console['error']("Scheduler Profiling: Event log exceeded maximum size. Don't " + 'forget to call `stopLoggingProfilingEvents()`.');
-	        stopLoggingProfilingEvents();
-	        return;
-	      }
-
-	      var newEventLog = new Int32Array(eventLogSize * 4);
-	      newEventLog.set(eventLog);
-	      eventLogBuffer = newEventLog.buffer;
-	      eventLog = newEventLog;
-	    }
-
-	    eventLog.set(entries, offset);
-	  }
-	}
-
-	function startLoggingProfilingEvents() {
-	  eventLogSize = INITIAL_EVENT_LOG_SIZE;
-	  eventLogBuffer = new ArrayBuffer(eventLogSize * 4);
-	  eventLog = new Int32Array(eventLogBuffer);
-	  eventLogIndex = 0;
-	}
-	function stopLoggingProfilingEvents() {
-	  var buffer = eventLogBuffer;
-	  eventLogSize = 0;
-	  eventLogBuffer = null;
-	  eventLog = null;
-	  eventLogIndex = 0;
-	  return buffer;
-	}
-	function markTaskStart(task, ms) {
-	  {
-	    profilingState[QUEUE_SIZE]++;
-
-	    if (eventLog !== null) {
-	      // performance.now returns a float, representing milliseconds. When the
-	      // event is logged, it's coerced to an int. Convert to microseconds to
-	      // maintain extra degrees of precision.
-	      logEvent([TaskStartEvent, ms * 1000, task.id, task.priorityLevel]);
-	    }
-	  }
-	}
-	function markTaskCompleted(task, ms) {
-	  {
-	    profilingState[PRIORITY] = NoPriority;
-	    profilingState[CURRENT_TASK_ID] = 0;
-	    profilingState[QUEUE_SIZE]--;
-
-	    if (eventLog !== null) {
-	      logEvent([TaskCompleteEvent, ms * 1000, task.id]);
-	    }
-	  }
-	}
-	function markTaskCanceled(task, ms) {
-	  {
-	    profilingState[QUEUE_SIZE]--;
-
-	    if (eventLog !== null) {
-	      logEvent([TaskCancelEvent, ms * 1000, task.id]);
-	    }
-	  }
-	}
 	function markTaskErrored(task, ms) {
-	  {
-	    profilingState[PRIORITY] = NoPriority;
-	    profilingState[CURRENT_TASK_ID] = 0;
-	    profilingState[QUEUE_SIZE]--;
-
-	    if (eventLog !== null) {
-	      logEvent([TaskErrorEvent, ms * 1000, task.id]);
-	    }
-	  }
-	}
-	function markTaskRun(task, ms) {
-	  {
-	    runIdCounter++;
-	    profilingState[PRIORITY] = task.priorityLevel;
-	    profilingState[CURRENT_TASK_ID] = task.id;
-	    profilingState[CURRENT_RUN_ID] = runIdCounter;
-
-	    if (eventLog !== null) {
-	      logEvent([TaskRunEvent, ms * 1000, task.id, runIdCounter]);
-	    }
-	  }
-	}
-	function markTaskYield(task, ms) {
-	  {
-	    profilingState[PRIORITY] = NoPriority;
-	    profilingState[CURRENT_TASK_ID] = 0;
-	    profilingState[CURRENT_RUN_ID] = 0;
-
-	    if (eventLog !== null) {
-	      logEvent([TaskYieldEvent, ms * 1000, task.id, runIdCounter]);
-	    }
-	  }
-	}
-	function markSchedulerSuspended(ms) {
-	  {
-	    mainThreadIdCounter++;
-
-	    if (eventLog !== null) {
-	      logEvent([SchedulerSuspendEvent, ms * 1000, mainThreadIdCounter]);
-	    }
-	  }
-	}
-	function markSchedulerUnsuspended(ms) {
-	  {
-	    if (eventLog !== null) {
-	      logEvent([SchedulerResumeEvent, ms * 1000, mainThreadIdCounter]);
-	    }
-	  }
 	}
 
 	/* eslint-disable no-var */
@@ -2944,11 +2785,6 @@
 	      pop(timerQueue);
 	      timer.sortIndex = timer.expirationTime;
 	      push(taskQueue, timer);
-
-	      {
-	        markTaskStart(timer, currentTime);
-	        timer.isQueued = true;
-	      }
 	    } else {
 	      // Remaining timers are pending.
 	      return;
@@ -2977,9 +2813,6 @@
 	}
 
 	function flushWork(hasTimeRemaining, initialTime) {
-	  {
-	    markSchedulerUnsuspended(initialTime);
-	  } // We'll need a host callback the next time work is scheduled.
 
 
 	  isHostCallbackScheduled = false;
@@ -2994,29 +2827,14 @@
 	  var previousPriorityLevel = currentPriorityLevel;
 
 	  try {
-	    if (enableProfiling) {
-	      try {
-	        return workLoop(hasTimeRemaining, initialTime);
-	      } catch (error) {
-	        if (currentTask !== null) {
-	          var currentTime = exports.unstable_now();
-	          markTaskErrored(currentTask, currentTime);
-	          currentTask.isQueued = false;
-	        }
-
-	        throw error;
-	      }
+	    var currentTime; if (enableProfiling) ; else {
+	      // No catch in prod code path.
+	      return workLoop(hasTimeRemaining, initialTime);
 	    }
 	  } finally {
 	    currentTask = null;
 	    currentPriorityLevel = previousPriorityLevel;
 	    isPerformingWork = false;
-
-	    {
-	      var _currentTime = exports.unstable_now();
-
-	      markSchedulerSuspended(_currentTime);
-	    }
 	  }
 	}
 
@@ -3037,18 +2855,13 @@
 	      currentTask.callback = null;
 	      currentPriorityLevel = currentTask.priorityLevel;
 	      var didUserCallbackTimeout = currentTask.expirationTime <= currentTime;
-	      markTaskRun(currentTask, currentTime);
+
 	      var continuationCallback = callback(didUserCallbackTimeout);
 	      currentTime = exports.unstable_now();
 
 	      if (typeof continuationCallback === 'function') {
 	        currentTask.callback = continuationCallback;
-	        markTaskYield(currentTask, currentTime);
 	      } else {
-	        {
-	          markTaskCompleted(currentTask, currentTime);
-	          currentTask.isQueued = false;
-	        }
 
 	        if (currentTask === peek(taskQueue)) {
 	          pop(taskQueue);
@@ -3193,10 +3006,6 @@
 	    sortIndex: -1
 	  };
 
-	  {
-	    newTask.isQueued = false;
-	  }
-
 	  if (startTime > currentTime) {
 	    // This is a delayed task.
 	    newTask.sortIndex = startTime;
@@ -3217,11 +3026,6 @@
 	  } else {
 	    newTask.sortIndex = expirationTime;
 	    push(taskQueue, newTask);
-
-	    {
-	      markTaskStart(newTask, currentTime);
-	      newTask.isQueued = true;
-	    } // Schedule a host callback, if needed. If we're already performing work,
 	    // wait until the next time we yield.
 
 
@@ -3250,13 +3054,6 @@
 	}
 
 	function unstable_cancelCallback(task) {
-	  {
-	    if (task.isQueued) {
-	      var currentTime = exports.unstable_now();
-	      markTaskCanceled(task, currentTime);
-	      task.isQueued = false;
-	    }
-	  } // Null out the callback to indicate the task has been canceled. (Can't
 	  // remove from the queue because you can't remove arbitrary nodes from an
 	  // array based heap, only the first one.)
 
@@ -3269,11 +3066,7 @@
 	}
 
 	var unstable_requestPaint = requestPaint;
-	var unstable_Profiling =  {
-	  startLoggingProfilingEvents: startLoggingProfilingEvents,
-	  stopLoggingProfilingEvents: stopLoggingProfilingEvents,
-	  sharedProfilingBuffer: sharedProfilingBuffer
-	} ;
+	var unstable_Profiling =  null;
 
 	exports.unstable_IdlePriority = IdlePriority;
 	exports.unstable_ImmediatePriority = ImmediatePriority;
@@ -3302,7 +3095,7 @@
 	}
 	});
 
-	/** @license React v0.20.1
+	/** @license React v0.20.2
 	 * scheduler-tracing.development.js
 	 *
 	 * Copyright (c) Facebook, Inc. and its affiliates.
@@ -3657,7 +3450,7 @@
 	}
 	});
 
-	/** @license React v17.0.1
+	/** @license React v17.0.2
 	 * react-dom.development.js
 	 *
 	 * Copyright (c) Facebook, Inc. and its affiliates.
@@ -14999,7 +14792,7 @@
 	}
 
 	// TODO: this is special because it gets imported during build.
-	var ReactVersion = '17.0.1';
+	var ReactVersion = '17.0.2';
 
 	var NoMode = 0;
 	var StrictMode = 1; // TODO: Remove BlockingMode and ConcurrentMode by reading from the root
@@ -34888,7 +34681,7 @@
 
 	var require$$2 = /*@__PURE__*/getAugmentedNamespace(stream);
 
-	/** @license React v17.0.1
+	/** @license React v17.0.2
 	 * react-dom-server.node.development.js
 	 *
 	 * Copyright (c) Facebook, Inc. and its affiliates.
@@ -34907,7 +34700,7 @@
 	var stream = require$$2;
 
 	// TODO: this is special because it gets imported during build.
-	var ReactVersion = '17.0.1';
+	var ReactVersion = '17.0.2';
 
 	// Do not require this module directly! Use normal `invariant` calls with
 	// template literal strings. The messages will be replaced with error codes
@@ -43681,6 +43474,7 @@
 	);
 
 	const cache = new Cache_1();
+	const ReactHookForm$1 = { ErrorMessage: o, Controller };
 	// if (typeof window === 'undefined') {
 	//   var window = window || (typeof global!=="undefined" ? global : window).window || {};
 	// }
@@ -43943,36 +43737,52 @@
 	 * @param props
 	 */
 	function FormComponent$1(props = {}) {
-	    const { hookFormOptions = {}, formComponent = { component: "div", children: "empty form" }, onSubmit, formWrapperComponent, formKey, formWrapperProps, } = props;
-	    // const { register, unregister, errors, watch, handleSubmit, reset, setError, clearError, setValue, getValues, triggerValidation, control, formState, } = useForm(hookFormOptions);
-	    const reactHookForm = useForm(hookFormOptions);
-	    const context = {
-	        ...this || {},
-	        ...{ reactHookForm, },
-	    };
-	    if (!context.componentLibraries || !context.componentLibraries.ReactHookForm) {
-	        context.componentLibraries = {
-	            ...context.componentLibraries,
-	            ...{
-	                ReactHookForm: {
-	                    Controller, ErrorMessage: o,
+	    function FormComponentFunction(componentProps) {
+	        const { hookFormOptions = {}, 
+	        // formComponent = { component: "div", children: "empty form" },
+	        onSubmit, formWrapperComponent, formKey, formWrapperProps, } = props;
+	        const formComponent = {
+	            component: "div",
+	            children: "empty form",
+	            ...props.formComponent,
+	        };
+	        formComponent.props = { ...formComponent.props, ...componentProps };
+	        // const { register, unregister, errors, watch, handleSubmit, reset, setError, clearError, setValue, getValues, triggerValidation, control, formState, } = useForm(hookFormOptions);
+	        const reactHookForm = useForm(hookFormOptions);
+	        const context = {
+	            ...this || {},
+	            ...{ reactHookForm, },
+	        };
+	        if (!context.componentLibraries || !context.componentLibraries.ReactHookForm) {
+	            context.componentLibraries = {
+	                ...context.componentLibraries,
+	                ...{
+	                    ReactHookForm: {
+	                        Controller, ErrorMessage: o,
+	                    }
 	                }
+	            };
+	        }
+	        const formWrapperJXM = formWrapperComponent || {
+	            component: 'form',
+	            props: {
+	                onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined,
+	                key: formKey ? `formWrapperJXM-${formKey}` : undefined,
+	                ...formWrapperProps,
 	            }
 	        };
+	        formWrapperJXM.children = Array.isArray(formComponent) ? formComponent : [formComponent];
+	        const renderJSONX = react.useMemo(() => getReactElementFromJSONX.bind(context), [
+	            context
+	        ]);
+	        return renderJSONX(formWrapperJXM);
 	    }
-	    const formWrapperJXM = formWrapperComponent || {
-	        component: 'form',
-	        props: {
-	            onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined,
-	            key: formKey ? `formWrapperJXM-${formKey}` : undefined,
-	            ...formWrapperProps,
-	        }
-	    };
-	    formWrapperJXM.children = Array.isArray(formComponent) ? formComponent : [formComponent];
-	    const renderJSONX = react.useMemo(() => getReactElementFromJSONX.bind(context), [
-	        context
-	    ]);
-	    return renderJSONX(formWrapperJXM);
+	    if (props.name) {
+	        Object.defineProperty(FormComponentFunction, "name", {
+	            value: props.name
+	        });
+	    }
+	    return FormComponentFunction.bind(this);
 	}
 	/**
 	 * A helper component that allows you to create components that load data and render asynchronously.
@@ -43980,83 +43790,95 @@
 	 * @param props
 	 */
 	function DynamicComponent$1(props = {}) {
-	    //@ts-ignore
-	    const { useCache = true, cacheTimeout = 60 * 60 * 5, loadingJSONX = { component: "div", children: "...Loading" }, 
-	    //@ts-ignore
-	    loadingErrorJSONX = {
-	        component: "div",
-	        children: [
-	            { component: "span", children: "Error: " },
-	            {
-	                component: "span",
-	                resourceprops: { _children: ["error", "message"] }
-	            }
-	        ]
-	    }, cacheTimeoutFunction = () => { }, jsonx, transformFunction = (data) => data, fetchURL, fetchOptions, fetchFunction } = props;
-	    const context = this || {};
-	    const [state, setState] = react.useState({
-	        hasLoaded: false,
-	        hasError: false,
-	        resources: {},
-	        error: undefined
-	    });
-	    const transformer = react.useMemo(() => getFunctionFromEval(transformFunction), [
-	        transformFunction
-	    ]);
-	    const timeoutFunction = react.useMemo(() => getFunctionFromEval(cacheTimeoutFunction), [cacheTimeoutFunction]);
-	    const renderJSONX = react.useMemo(() => getReactElementFromJSONX.bind(context), [
-	        context
-	    ]);
-	    const loadingComponent = react.useMemo(() => renderJSONX(loadingJSONX), [
-	        loadingJSONX
-	    ]);
-	    const loadingError = react.useMemo(() => renderJSONX(loadingErrorJSONX, { error: state.error }), [loadingErrorJSONX, state.error]);
-	    react.useEffect(() => {
-	        async function getData() {
-	            try {
-	                //@ts-ignore
-	                let transformedData;
-	                if (useCache && cache.get(fetchURL)) {
-	                    transformedData = cache.get(fetchURL);
+	    function DynamicComponentFunction(componentProps) {
+	        //@ts-ignore
+	        const { useCache = true, cacheTimeout = 60 * 60 * 5, loadingJSONX = { component: "div", children: "...Loading" }, 
+	        //@ts-ignore
+	        loadingErrorJSONX = {
+	            component: "div",
+	            children: [
+	                { component: "span", children: "Error: " },
+	                {
+	                    component: "span",
+	                    resourceprops: { _children: ["error", "message"] }
 	                }
-	                else {
-	                    let fetchedData;
-	                    if (fetchFunction) {
-	                        fetchedData = await fetchFunction(fetchURL, fetchOptions);
+	            ]
+	        }, cacheTimeoutFunction = () => { }, transformFunction = (data) => data, fetchURL, fetchOptions, fetchFunction } = props;
+	        const jsonx = {
+	            ...props.jsonx,
+	        };
+	        jsonx.props = { ...jsonx.props, ...componentProps };
+	        const context = this || {};
+	        const [state, setState] = react.useState({
+	            hasLoaded: false,
+	            hasError: false,
+	            resources: {},
+	            error: undefined
+	        });
+	        const transformer = react.useMemo(() => getFunctionFromEval(transformFunction), [
+	            transformFunction
+	        ]);
+	        const timeoutFunction = react.useMemo(() => getFunctionFromEval(cacheTimeoutFunction), [cacheTimeoutFunction]);
+	        const renderJSONX = react.useMemo(() => getReactElementFromJSONX.bind(context), [
+	            context
+	        ]);
+	        const loadingComponent = react.useMemo(() => renderJSONX(loadingJSONX), [
+	            loadingJSONX
+	        ]);
+	        const loadingError = react.useMemo(() => renderJSONX(loadingErrorJSONX, { error: state.error }), [loadingErrorJSONX, state.error]);
+	        react.useEffect(() => {
+	            async function getData() {
+	                try {
+	                    //@ts-ignore
+	                    let transformedData;
+	                    if (useCache && cache.get(fetchURL)) {
+	                        transformedData = cache.get(fetchURL);
 	                    }
-	                    else
-	                        fetchedData = await fetchJSON(fetchURL, fetchOptions);
-	                    transformedData = await transformer(fetchedData);
-	                    if (useCache)
-	                        cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
+	                    else {
+	                        let fetchedData;
+	                        if (fetchFunction) {
+	                            fetchedData = await fetchFunction(fetchURL, fetchOptions);
+	                        }
+	                        else
+	                            fetchedData = await fetchJSON(fetchURL, fetchOptions);
+	                        transformedData = await transformer(fetchedData);
+	                        if (useCache)
+	                            cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
+	                    }
+	                    //@ts-ignore
+	                    setState(prevState => Object.assign({}, prevState, {
+	                        hasLoaded: true,
+	                        hasError: false,
+	                        resources: { DynamicComponentData: transformedData }
+	                    }));
 	                }
-	                //@ts-ignore
-	                setState(prevState => Object.assign({}, prevState, {
-	                    hasLoaded: true,
-	                    hasError: false,
-	                    resources: { DynamicComponentData: transformedData }
-	                }));
+	                catch (e) {
+	                    if (context.debug)
+	                        console.warn(e);
+	                    //@ts-ignore
+	                    setState({ hasError: true, error: e });
+	                }
 	            }
-	            catch (e) {
-	                if (context.debug)
-	                    console.warn(e);
-	                //@ts-ignore
-	                setState({ hasError: true, error: e });
-	            }
+	            if (fetchURL)
+	                getData();
+	        }, [fetchURL, fetchOptions]);
+	        if (!fetchURL)
+	            return null;
+	        else if (state.hasError) {
+	            return loadingError;
 	        }
-	        if (fetchURL)
-	            getData();
-	    }, [fetchURL, fetchOptions]);
-	    if (!fetchURL)
-	        return null;
-	    else if (state.hasError) {
-	        return loadingError;
+	        else if (state.hasLoaded === false) {
+	            return loadingComponent;
+	        }
+	        else
+	            return renderJSONX(jsonx, state.resources);
 	    }
-	    else if (state.hasLoaded === false) {
-	        return loadingComponent;
+	    if (props.name) {
+	        Object.defineProperty(DynamicComponentFunction, "name", {
+	            value: props.name
+	        });
 	    }
-	    else
-	        return renderJSONX(jsonx, state.resources);
+	    return DynamicComponentFunction.bind(this);
 	}
 	/**
 	 * Returns new React Function Component
@@ -44208,6 +44030,7 @@
 
 	var jsonxComponents = /*#__PURE__*/Object.freeze({
 		__proto__: null,
+		ReactHookForm: ReactHookForm$1,
 		advancedBinding: advancedBinding,
 		componentMap: componentMap$1,
 		getBoundedComponents: getBoundedComponents$1,
@@ -53523,7 +53346,7 @@ ${jsonxRenderedString}`;
 
 	// import React, { createElement, } from 'react';
 	const createElement = react.createElement;
-	const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, } = jsonxComponents;
+	const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, ReactHookForm, } = jsonxComponents;
 	const { getComputedProps } = jsonxProps;
 	const { getJSONXChildren } = jsonxChildren;
 	const { displayComponent } = jsonxUtils;
@@ -53586,7 +53409,7 @@ ${jsonxRenderedString}`;
 	function getReactElementFromJSONX(jsonx, resources = {}) {
 	    // eslint-disable-next-line
 	    const { componentLibraries = {}, debug = false, returnJSON = false, logError = console.error, boundedComponents = [], disableRenderIndexKey = true } = this || {};
-	    // const componentLibraries = this.componentLibraries;
+	    componentLibraries.ReactHookForm = ReactHookForm;
 	    if (!jsonx)
 	        return null;
 	    if (jsonx.type)
@@ -53596,7 +53419,7 @@ ${jsonxRenderedString}`;
 	    if (!jsonx || !jsonx.component)
 	        return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
 	    try {
-	        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this.reactComponents);
+	        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this?.reactComponents);
 	        const reactComponents = boundedComponents.length
 	            ? getBoundedComponents.call(this, {
 	                boundedComponents,

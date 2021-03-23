@@ -9,7 +9,7 @@ import * as jsonxUtils from "./utils";
 import numeral from "numeral";
 import * as luxon from "luxon";
 const createElement = React.createElement;
-const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, } = jsonxComponents;
+const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, ReactHookForm, } = jsonxComponents;
 const { getComputedProps } = jsonxProps;
 const { getJSONXChildren } = jsonxChildren;
 const { displayComponent } = jsonxUtils;
@@ -72,7 +72,7 @@ export function outputHTML(config = { jsonx: { component: "" } }) {
 export function getReactElementFromJSONX(jsonx, resources = {}) {
     // eslint-disable-next-line
     const { componentLibraries = {}, debug = false, returnJSON = false, logError = console.error, boundedComponents = [], disableRenderIndexKey = true } = this || {};
-    // const componentLibraries = this.componentLibraries;
+    componentLibraries.ReactHookForm = ReactHookForm;
     if (!jsonx)
         return null;
     if (jsonx.type)
@@ -82,7 +82,7 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
     if (!jsonx || !jsonx.component)
         return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
     try {
-        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this.reactComponents);
+        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this?.reactComponents);
         const reactComponents = boundedComponents.length
             ? getBoundedComponents.call(this, {
                 boundedComponents,
