@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>FORM COMPONENT TEST</title>
+    <script type="text/javascript" src="../../dist/index.web.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      const myFormComponent = jsonx._jsonxComponents.FormComponent({
+        formComponent:{ 
+          component: "div", 
+          children: "empty form" 
+        },
+        name:'myFormComponent'
+      })
+      const boundConfig = {
+        reactComponents:{
+          myFormComponent,
+        },
+      };
+      jsonx.jsonxRender.call(boundConfig,{ 
+        jsonx: {
+          component:'myFormComponent',
+        }, 
+        querySelector:'#root', });
+    </script>
+  </body>
+</html>

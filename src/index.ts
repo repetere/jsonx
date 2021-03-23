@@ -20,6 +20,7 @@ const {
   getBoundedComponents,
   DynamicComponent,
   FormComponent,
+  ReactHookForm,
 } = jsonxComponents;
 const { getComputedProps } = jsonxProps;
 const { getJSONXChildren } = jsonxChildren;
@@ -115,7 +116,7 @@ export function getReactElementFromJSONX(
     boundedComponents = [],
     disableRenderIndexKey = true
   } = this || {};
-  // const componentLibraries = this.componentLibraries;
+  componentLibraries.ReactHookForm = ReactHookForm
   if (!jsonx) return null;
   if (jsonx.type) jsonx.component = jsonx.type;
   if (jsonxUtils.validSimpleJSONXSyntax(jsonx))
@@ -131,7 +132,7 @@ export function getReactElementFromJSONX(
       { DynamicComponent: DynamicComponent.bind(this) },
       { FormComponent: FormComponent.bind(this) },
       componentMap,
-      this.reactComponents
+      this?.reactComponents
     );
 
     const reactComponents = boundedComponents.length

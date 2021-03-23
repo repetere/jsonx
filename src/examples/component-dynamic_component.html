@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>DYNAMIC COMPONENT TEST</title>
+    <script type="text/javascript" src="../../dist/index.web.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      const myDynamicFunction = jsonx._jsonxComponents.DynamicComponent({
+        jsonx:{
+          component:'div',
+          children:[
+            {
+              component:'h1',
+              props:{
+                id:'fetchedTitle'
+              },
+              children:'Fetched Data'
+            },
+            {
+              component:'p',
+              props:{
+                id:'fetchedP'
+              },
+              resourceprops:{
+                children:['DynamicComponentData','result']
+              }
+            }
+          ]
+        },
+        fetchURL:'#',
+        name: 'myDynamicFunction',
+        fetchFunction:()=>{
+          return new Promise(resolve=>{
+            setTimeout(()=>{
+              resolve({result:'some mock data'})
+            },1000)
+          })  
+        }
+      })
+      const boundConfig = {
+        reactComponents:{
+          myDynamicFunction,
+        },
+      };
+      jsonx.jsonxRender.call(boundConfig,{ 
+        jsonx: {
+          component:'myDynamicFunction',
+        }, 
+        querySelector:'#root', });
+    </script>
+  </body>
+</html>

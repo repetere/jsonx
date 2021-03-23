@@ -17,6 +17,7 @@ export type dynamicComponentProps = {
   loadingErrorJSONX?: jsonx;
   cacheTimeoutFunction?: functionParam;
   jsonx?: jsonx;
+  name?:string;
   transformFunction?: functionParam;
   fetchURL?: string;
   fetchOptions?: any;
@@ -24,6 +25,7 @@ export type dynamicComponentProps = {
 };
 
 export type formComponentProps = {
+  name?:string;
   hookFormOptions?: any;
   onSubmit?: functionParam;
   formComponent?: jsonx;

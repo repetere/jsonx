@@ -49,6 +49,7 @@ declare global {
 }
 
 const cache = new memoryCache.Cache();
+export const ReactHookForm = { ErrorMessage, Controller }
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
@@ -388,44 +389,58 @@ export function getReactClassComponent(
 export function FormComponent(
   this: defs.Context,
   props: defs.formComponentProps = {}) {
+  function FormComponentFunction(this: defs.Context, componentProps:any){
     const {
       hookFormOptions = {},
-      formComponent = { component: "div", children: "empty form" },
+      // formComponent = { component: "div", children: "empty form" },
       onSubmit,
       formWrapperComponent,
       formKey,
       formWrapperProps,
-  } = props;
-  // const { register, unregister, errors, watch, handleSubmit, reset, setError, clearError, setValue, getValues, triggerValidation, control, formState, } = useForm(hookFormOptions);
-  const reactHookForm = useForm(hookFormOptions);
-  const context = {
-    ...this || {},
-    ...{ reactHookForm, },
-  };
-  if (!context.componentLibraries || !context.componentLibraries.ReactHookForm) {
-    context.componentLibraries = {
-    ...context.componentLibraries,
-    ...{
-        ReactHookForm: {
-          Controller, ErrorMessage,
+    } = props;
+    const formComponent = {
+      component: "div", 
+      children: "empty form",
+      ...props.formComponent,
+    }
+    formComponent.props = {...formComponent.props,...componentProps};
+    // const { register, unregister, errors, watch, handleSubmit, reset, setError, clearError, setValue, getValues, triggerValidation, control, formState, } = useForm(hookFormOptions);
+    const reactHookForm = useForm(hookFormOptions);
+    const context = {
+      ...this || {},
+      ...{ reactHookForm, },
+    };
+    if (!context.componentLibraries || !context.componentLibraries.ReactHookForm) {
+      context.componentLibraries = {
+      ...context.componentLibraries,
+      ...{
+          ReactHookForm: {
+            Controller, ErrorMessage,
+          }
         }
       }
     }
-  }
-  const formWrapperJXM = formWrapperComponent||{
-    component: 'form',
-    props: {
-      onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined,
-      key: formKey ? `formWrapperJXM-${formKey}` : undefined,
-      ...formWrapperProps,
-    }
-  };
-  formWrapperJXM.children = Array.isArray(formComponent) ? formComponent : [formComponent];
+    const formWrapperJXM = formWrapperComponent||{
+      component: 'form',
+      props: {
+        onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined,
+        key: formKey ? `formWrapperJXM-${formKey}` : undefined,
+        ...formWrapperProps,
+      }
+    };
+    formWrapperJXM.children = Array.isArray(formComponent) ? formComponent : [formComponent];
 
-  const renderJSONX = useMemo(() => getReactElementFromJSONX.bind(context), [
-    context
-  ]);
-  return renderJSONX(formWrapperJXM);
+    const renderJSONX = useMemo(() => getReactElementFromJSONX.bind(context), [
+      context
+    ]);
+    return renderJSONX(formWrapperJXM);
+  }
+  if (props.name) {
+    Object.defineProperty(FormComponentFunction, "name", {
+      value: props.name
+    });
+  }
+  return FormComponentFunction.bind(this);
 }
 
 /**
@@ -437,92 +452,103 @@ export function DynamicComponent(
   this: defs.Context,
   props: defs.dynamicComponentProps = {}
 ) {
-  //@ts-ignore
-  const {
-    useCache = true,
-    cacheTimeout = 60 * 60 * 5,
-    loadingJSONX = { component: "div", children: "...Loading" },
+  function DynamicComponentFunction(this: defs.Context, componentProps:any){
     //@ts-ignore
-    loadingErrorJSONX = {
-      component: "div",
-      children: [
-        { component: "span", children: "Error: " },
-        {
-          component: "span",
-          resourceprops: { _children: ["error", "message"] }
-        }
-      ]
-    },
-    cacheTimeoutFunction = () => {},
-    jsonx,
-    transformFunction = (data: any) => data,
-    fetchURL,
-    fetchOptions,
-    fetchFunction
-  } = props;
-  const context = this || {};
-  const [state, setState] = useState({
-    hasLoaded: false,
-    hasError: false,
-    resources: {},
-    error: undefined
-  });
-  const transformer = useMemo(() => getFunctionFromEval(transformFunction), [
-    transformFunction
-  ]);
-  const timeoutFunction = useMemo(
-    () => getFunctionFromEval(cacheTimeoutFunction),
-    [cacheTimeoutFunction]
-  );
-  const renderJSONX = useMemo(() => getReactElementFromJSONX.bind(context), [
-    context
-  ]);
-  const loadingComponent = useMemo(() => renderJSONX(loadingJSONX), [
-    loadingJSONX
-  ]);
-  const loadingError = useMemo(
-    () => renderJSONX(loadingErrorJSONX, { error: state.error }),
-    [loadingErrorJSONX, state.error]
-  );
-
-  useEffect(() => {
-    async function getData() {
-      try {
-        //@ts-ignore
-        let transformedData: unknown;
-        if (useCache && cache.get(fetchURL)) {
-          transformedData = cache.get(fetchURL);
-        } else {
-          let fetchedData;
-          if (fetchFunction) {
-            fetchedData = await fetchFunction(fetchURL, fetchOptions);
-          } else fetchedData = await fetchJSON(fetchURL, fetchOptions);
-          transformedData = await transformer(fetchedData);
-          if (useCache)
-            cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
-        }
-        //@ts-ignore
-        setState(prevState =>
-          Object.assign({}, prevState, {
-            hasLoaded: true,
-            hasError: false,
-            resources: { DynamicComponentData: transformedData }
-          })
-        );
-      } catch (e) {
-        if (context.debug) console.warn(e);
-        //@ts-ignore
-        setState({ hasError: true, error: e });
-      }
+    const {
+      useCache = true,
+      cacheTimeout = 60 * 60 * 5,
+      loadingJSONX = { component: "div", children: "...Loading" },
+      //@ts-ignore
+      loadingErrorJSONX = {
+        component: "div",
+        children: [
+          { component: "span", children: "Error: " },
+          {
+            component: "span",
+            resourceprops: { _children: ["error", "message"] }
+          }
+        ]
+      },
+      cacheTimeoutFunction = () => {},
+      transformFunction = (data: any) => data,
+      fetchURL,
+      fetchOptions,
+      fetchFunction
+    } = props;
+    const jsonx = {
+      ...props.jsonx,
     }
-    if (fetchURL) getData();
-  }, [fetchURL, fetchOptions]);
-  if (!fetchURL) return null;
-  else if (state.hasError) {
-    return loadingError;
-  } else if (state.hasLoaded === false) {
-    return loadingComponent;
-  } else return renderJSONX(jsonx, state.resources);
+    jsonx.props = {...jsonx.props,...componentProps};
+    const context = this || {};
+    const [state, setState] = useState({
+      hasLoaded: false,
+      hasError: false,
+      resources: {},
+      error: undefined
+    });
+    const transformer = useMemo(() => getFunctionFromEval(transformFunction), [
+      transformFunction
+    ]);
+    const timeoutFunction = useMemo(
+      () => getFunctionFromEval(cacheTimeoutFunction),
+      [cacheTimeoutFunction]
+    );
+    const renderJSONX = useMemo(() => getReactElementFromJSONX.bind(context), [
+      context
+    ]);
+    const loadingComponent = useMemo(() => renderJSONX(loadingJSONX), [
+      loadingJSONX
+    ]);
+    const loadingError = useMemo(
+      () => renderJSONX(loadingErrorJSONX, { error: state.error }),
+      [loadingErrorJSONX, state.error]
+    );
+
+    useEffect(() => {
+      async function getData() {
+        try {
+          //@ts-ignore
+          let transformedData: unknown;
+          if (useCache && cache.get(fetchURL)) {
+            transformedData = cache.get(fetchURL);
+          } else {
+            let fetchedData;
+            if (fetchFunction) {
+              fetchedData = await fetchFunction(fetchURL, fetchOptions);
+            } else fetchedData = await fetchJSON(fetchURL, fetchOptions);
+            transformedData = await transformer(fetchedData);
+            if (useCache)
+              cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
+          }
+          //@ts-ignore
+          setState(prevState =>
+            Object.assign({}, prevState, {
+              hasLoaded: true,
+              hasError: false,
+              resources: { DynamicComponentData: transformedData }
+            })
+          );
+        } catch (e) {
+          if (context.debug) console.warn(e);
+          //@ts-ignore
+          setState({ hasError: true, error: e });
+        }
+      }
+      if (fetchURL) getData();
+    }, [fetchURL, fetchOptions]);
+    if (!fetchURL) return null;
+    else if (state.hasError) {
+      return loadingError;
+    } else if (state.hasLoaded === false) {
+      return loadingComponent;
+    } else return renderJSONX(jsonx, state.resources);
+  }
+  if (props.name) {
+    Object.defineProperty(DynamicComponentFunction, "name", {
+      value: props.name
+    });
+  }
+  return DynamicComponentFunction.bind(this);
 }
 
 /**
