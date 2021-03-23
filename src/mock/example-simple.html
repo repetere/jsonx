@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>JSONX TEST</title>
     <!-- <script type="text/javascript" src="jsonx.web.js"></script> -->
-    <script type="text/javascript" src="index.web.js"></script>
+    <script type="text/javascript" src="../../dist/index.web.min.js"></script>
     <script type="text/javascript">
     window.React = jsonx.__getReact();
     window.ReactDOM = jsonx.__getReactDOM();
@@ -51,6 +51,7 @@
                   {
                     component:'input',
                     props:{
+                      name:'inputCount',
                       defaultValue:0
                     },
                     thisprops:{
@@ -65,6 +66,9 @@
             },
             {
               component:'button',
+              props:{
+                id:'buttonCount'
+              },
               __dangerouslyBindEvalProps:{
                 onClick(count,setCount){
                   setCount(count+1);
