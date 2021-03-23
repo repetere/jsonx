@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/repetere/jsonx/compare/v1.6.0...v1.6.1) (2021-03-23)
+
+
+### Bug Fixes
+
+* React 17 JSX transform change for functional components ([37eaf46](https://github.com/repetere/jsonx/commit/37eaf467309b36eb45dd131e962e39a851182ef7))
+
 # [1.6.0](https://github.com/repetere/jsonx/compare/v1.5.0...v1.6.0) (2021-03-23)
 
 
