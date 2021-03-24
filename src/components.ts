@@ -18,7 +18,7 @@ import React, {
 } from "react";
 import { ReactElementLike } from "prop-types";
 import * as memoryCache from "memory-cache";
-import { useForm, Controller, } from 'react-hook-form';
+import { useForm, useController, useFieldArray, useWatch, Controller, } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
 // import {cache} from 'memory-cache';
@@ -633,7 +633,11 @@ export function getReactFunctionComponent(
     getReactElementFromJSONX,
     reactComponent,
     resources,
-    props
+    props,
+    useForm, 
+    useController, 
+    useFieldArray, 
+    useWatch,
   ];
   //@ts-ignore
   if (typeof functionBody === "function")
@@ -655,6 +659,10 @@ export function getReactFunctionComponent(
     "reactComponent",
     "resources",
     "props",
+    "useForm", 
+    "useController", 
+    "useFieldArray", 
+    "useWatch",
     `
     'use strict';
     const self = this || {};

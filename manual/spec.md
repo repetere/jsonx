@@ -77,6 +77,9 @@ jxm = {
   //display properties
   comparisonprops:[Object], // An array of Objects used to conditionally display the current jsonx.component
   comparisonorprops:Boolean, // A flag to use an or condition instead of and conditions between comparisions
+  
+  //Applied properties
+  useformregister:Boolean, // A flag to insert react hook form register on component (short hand for  thiscontext: { ref:['reactHookForm','register'] })
 }
 ```
 

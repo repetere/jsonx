@@ -610,6 +610,12 @@ export function getComputedProps(options = {}) {
                     : {}
                 : {})
             : undefined;
+        if (jsonx.useformregister) {
+            jsonx.thiscontext = {
+                ref: ['reactHookForm', 'register'],
+                ...jsonx.thiscontext,
+            };
+        }
         const windowTraverse = typeof window !== "undefined" ? window : {};
         const asyncprops = jsonx.asyncprops
             ? getJSONXProps({

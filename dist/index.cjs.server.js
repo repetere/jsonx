@@ -1449,6 +1449,322 @@ const FormContext = React.createContext(null);
 FormContext.displayName = 'RHFContext';
 const useFormContext = () => React.useContext(FormContext);
 
+var generateId = () => {
+    const d = typeof performance === UNDEFINED ? Date.now() : performance.now() * 1000;
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16 + d) % 16 | 0;
+        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    });
+};
+
+function removeAtIndexes(data, indexes) {
+    let i = 0;
+    const temp = [...data];
+    for (const index of indexes) {
+        temp.splice(index - i, 1);
+        i++;
+    }
+    return compact(temp).length ? temp : [];
+}
+var removeArrayAt = (data, index) => isUndefined$1(index)
+    ? []
+    : removeAtIndexes(data, (Array.isArray(index) ? index : [index]).sort((a, b) => a - b));
+
+var moveArrayAt = (data, from, to) => {
+    if (Array.isArray(data)) {
+        if (isUndefined$1(data[to])) {
+            data[to] = undefined;
+        }
+        data.splice(to, 0, data.splice(from, 1)[0]);
+        return data;
+    }
+    return [];
+};
+
+var swapArrayAt = (data, indexA, indexB) => {
+    const temp = [data[indexB], data[indexA]];
+    data[indexA] = temp[0];
+    data[indexB] = temp[1];
+};
+
+function prepend(data, value) {
+    return [...(Array.isArray(value) ? value : [value || undefined]), ...data];
+}
+
+function insert(data, index, value) {
+    return [
+        ...data.slice(0, index),
+        ...(Array.isArray(value) ? value : [value || undefined]),
+        ...data.slice(index),
+    ];
+}
+
+var fillEmptyArray = (value) => Array.isArray(value) ? Array(value.length).fill(undefined) : undefined;
+
+var fillBooleanArray = (value) => (Array.isArray(value) ? value : [value]).map((data) => {
+    if (isObject(data)) {
+        const object = {};
+        for (const key in data) {
+            object[key] = true;
+        }
+        return object;
+    }
+    return true;
+});
+
+const mapIds = (values = [], keyName, skipWarn) => {
+    {
+        if (!skipWarn) {
+            for (const value of values) {
+                if (typeof value === 'object') {
+                    if (keyName in value) {
+                        console.warn(`📋 useFieldArray fieldValues contain the keyName \`${keyName}\` which is reserved for use by useFieldArray. https://react-hook-form.com/api#useFieldArray`);
+                        break;
+                    }
+                }
+                else {
+                    console.warn(`📋 useFieldArray input's name should be in object shape instead of flat array. https://react-hook-form.com/api#useFieldArray`);
+                    break;
+                }
+            }
+        }
+    }
+    return values.map((value) => (Object.assign({ [keyName]: value[keyName] || generateId() }, value)));
+};
+const useFieldArray = ({ control, name, keyName = 'id', }) => {
+    const methods = useFormContext();
+    {
+        if (!control && !methods) {
+            throw new Error('📋 useFieldArray is missing `control` prop. https://react-hook-form.com/api#useFieldArray');
+        }
+    }
+    const focusIndexRef = React.useRef(-1);
+    const isUnMount = React.useRef(false);
+    const { isFormDirty, updateWatchedValue, resetFieldArrayFunctionRef, fieldArrayNamesRef, fieldsRef, defaultValuesRef, removeFieldEventListener, formStateRef, shallowFieldsStateRef, updateFormState, readFormStateRef, validFieldsRef, fieldsWithValidationRef, fieldArrayDefaultValuesRef, validateResolver, getValues, shouldUnregister, fieldArrayValuesRef, } = control || methods.control;
+    const getDefaultValues = (values) => get(shouldUnregister ? values : shallowFieldsStateRef.current, name, []);
+    const fieldArrayParentName = getFieldArrayParentName(name);
+    const memoizedDefaultValues = React.useRef([
+        ...(get(fieldArrayDefaultValuesRef.current, fieldArrayParentName)
+            ? getDefaultValues(fieldArrayDefaultValuesRef.current)
+            : getDefaultValues(defaultValuesRef.current)),
+    ]);
+    const [fields, setFields] = React.useState(mapIds(memoizedDefaultValues.current, keyName));
+    set(fieldArrayValuesRef.current, name, fields);
+    const omitKey = (fields) => fields.map((_a = {}) => {
+        var _b = keyName; _a[_b]; var rest = __rest(_a, [typeof _b === "symbol" ? _b : _b + ""]);
+        return rest;
+    });
+    fieldArrayNamesRef.current.add(name);
+    const getFieldArrayValue = React.useCallback(() => get(fieldArrayValuesRef.current, name, []), [name]);
+    const getCurrentFieldsValues = () => mapIds(get(getValues(), name, getFieldArrayValue()).map((item, index) => (Object.assign(Object.assign({}, getFieldArrayValue()[index]), item))), keyName, true);
+    fieldArrayNamesRef.current.add(name);
+    if (fieldArrayParentName &&
+        !get(fieldArrayDefaultValuesRef.current, fieldArrayParentName)) {
+        set(fieldArrayDefaultValuesRef.current, fieldArrayParentName, cloneObject(get(defaultValuesRef.current, fieldArrayParentName)));
+    }
+    const setFieldAndValidState = (fieldsValues) => {
+        setFields(fieldsValues);
+        set(fieldArrayValuesRef.current, name, fieldsValues);
+        if (readFormStateRef.current.isValid && validateResolver) {
+            const values = getValues();
+            set(values, name, fieldsValues);
+            validateResolver(values);
+        }
+    };
+    const resetFields = () => {
+        for (const key in fieldsRef.current) {
+            if (isMatchFieldArrayName(key, name)) {
+                removeFieldEventListener(fieldsRef.current[key], true);
+                delete fieldsRef.current[key];
+            }
+        }
+    };
+    const cleanup = (ref) => !compact(get(ref, name, [])).length && unset(ref, name);
+    const updateDirtyFieldsWithDefaultValues = (updatedFieldArrayValues) => {
+        if (updatedFieldArrayValues) {
+            set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(omitKey(updatedFieldArrayValues), get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
+        }
+    };
+    const batchStateUpdate = (method, args, updatedFieldValues, updatedFormValues = [], shouldSet = true, shouldUpdateValid = false) => {
+        if (get(shallowFieldsStateRef.current, name)) {
+            const output = method(get(shallowFieldsStateRef.current, name), args.argA, args.argB);
+            shouldSet && set(shallowFieldsStateRef.current, name, output);
+        }
+        if (get(fieldArrayDefaultValuesRef.current, name)) {
+            const output = method(get(fieldArrayDefaultValuesRef.current, name), args.argA, args.argB);
+            shouldSet && set(fieldArrayDefaultValuesRef.current, name, output);
+        }
+        if (Array.isArray(get(formStateRef.current.errors, name))) {
+            const output = method(get(formStateRef.current.errors, name), args.argA, args.argB);
+            shouldSet && set(formStateRef.current.errors, name, output);
+            cleanup(formStateRef.current.errors);
+        }
+        if (readFormStateRef.current.touched &&
+            get(formStateRef.current.touched, name)) {
+            const output = method(get(formStateRef.current.touched, name), args.argA, args.argB);
+            shouldSet && set(formStateRef.current.touched, name, output);
+            cleanup(formStateRef.current.touched);
+        }
+        if (readFormStateRef.current.dirtyFields ||
+            readFormStateRef.current.isDirty) {
+            set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(omitKey(updatedFormValues), get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
+            updateDirtyFieldsWithDefaultValues(updatedFieldValues);
+            cleanup(formStateRef.current.dirtyFields);
+        }
+        if (shouldUpdateValid &&
+            readFormStateRef.current.isValid &&
+            !validateResolver) {
+            set(validFieldsRef.current, name, method(get(validFieldsRef.current, name, []), args.argA));
+            cleanup(validFieldsRef.current);
+            set(fieldsWithValidationRef.current, name, method(get(fieldsWithValidationRef.current, name, []), args.argA));
+            cleanup(fieldsWithValidationRef.current);
+        }
+        if (!isUnMount.current && readFormStateRef.current.isDirty) {
+            updateFormState({
+                isDirty: isFormDirty(name, omitKey(updatedFormValues)),
+            });
+        }
+    };
+    const append = (value, shouldFocus = true) => {
+        const appendValue = Array.isArray(value) ? value : [value];
+        const updateFormValues = [
+            ...getCurrentFieldsValues(),
+            ...mapIds(appendValue, keyName),
+        ];
+        setFieldAndValidState(updateFormValues);
+        if (readFormStateRef.current.dirtyFields ||
+            readFormStateRef.current.isDirty) {
+            updateDirtyFieldsWithDefaultValues(updateFormValues);
+            updateFormState({
+                isDirty: true,
+                dirtyFields: formStateRef.current.dirtyFields,
+            });
+        }
+        !shouldUnregister &&
+            set(shallowFieldsStateRef.current, name, [
+                ...(get(shallowFieldsStateRef.current, name) || []),
+                ...cloneObject(appendValue),
+            ]);
+        focusIndexRef.current = shouldFocus
+            ? get(fieldArrayValuesRef.current, name).length - 1
+            : -1;
+    };
+    const prepend$1 = (value, shouldFocus = true) => {
+        const emptyArray = fillEmptyArray(value);
+        const updatedFieldArrayValues = prepend(getCurrentFieldsValues(), mapIds(Array.isArray(value) ? value : [value], keyName));
+        setFieldAndValidState(updatedFieldArrayValues);
+        resetFields();
+        batchStateUpdate(prepend, {
+            argA: emptyArray,
+            argC: fillBooleanArray(value),
+        }, updatedFieldArrayValues);
+        focusIndexRef.current = shouldFocus ? 0 : -1;
+    };
+    const remove = (index) => {
+        const fieldValues = getCurrentFieldsValues();
+        const updatedFieldValues = removeArrayAt(fieldValues, index);
+        setFieldAndValidState(updatedFieldValues);
+        resetFields();
+        batchStateUpdate(removeArrayAt, {
+            argA: index,
+            argC: index,
+        }, updatedFieldValues, removeArrayAt(fieldValues, index), true, true);
+    };
+    const insert$1 = (index, value, shouldFocus = true) => {
+        const emptyArray = fillEmptyArray(value);
+        const fieldValues = getCurrentFieldsValues();
+        const updatedFieldArrayValues = insert(fieldValues, index, mapIds(Array.isArray(value) ? value : [value], keyName));
+        setFieldAndValidState(updatedFieldArrayValues);
+        resetFields();
+        batchStateUpdate(insert, {
+            argA: index,
+            argB: emptyArray,
+            argC: index,
+            argD: fillBooleanArray(value),
+        }, updatedFieldArrayValues, insert(fieldValues, index));
+        focusIndexRef.current = shouldFocus ? index : -1;
+    };
+    const swap = (indexA, indexB) => {
+        const fieldValues = getCurrentFieldsValues();
+        swapArrayAt(fieldValues, indexA, indexB);
+        resetFields();
+        setFieldAndValidState([...fieldValues]);
+        batchStateUpdate(swapArrayAt, {
+            argA: indexA,
+            argB: indexB,
+            argC: indexA,
+            argD: indexB,
+        }, undefined, fieldValues, false);
+    };
+    const move = (from, to) => {
+        const fieldValues = getCurrentFieldsValues();
+        moveArrayAt(fieldValues, from, to);
+        resetFields();
+        setFieldAndValidState([...fieldValues]);
+        batchStateUpdate(moveArrayAt, {
+            argA: from,
+            argB: to,
+            argC: from,
+            argD: to,
+        }, undefined, fieldValues, false);
+    };
+    React.useEffect(() => {
+        {
+            if (!name) {
+                console.warn('📋 useFieldArray is missing `name` attribute. https://react-hook-form.com/api#useFieldArray');
+            }
+        }
+        const defaultValues = get(fieldArrayDefaultValuesRef.current, name);
+        if (defaultValues && fields.length < defaultValues.length) {
+            set(fieldArrayDefaultValuesRef.current, name, defaultValues.slice(1));
+        }
+        updateWatchedValue(name);
+        if (focusIndexRef.current > -1) {
+            for (const key in fieldsRef.current) {
+                const field = fieldsRef.current[key];
+                if (key.startsWith(`${name}[${focusIndexRef.current}]`) &&
+                    field.ref.focus) {
+                    field.ref.focus();
+                    break;
+                }
+            }
+        }
+        focusIndexRef.current = -1;
+    }, [fields, name]);
+    React.useEffect(() => {
+        const resetFunctions = resetFieldArrayFunctionRef.current;
+        const fieldArrayNames = fieldArrayNamesRef.current;
+        if (!getFieldArrayParentName(name)) {
+            resetFunctions[name] = (data) => {
+                resetFields();
+                !data && unset(fieldArrayDefaultValuesRef.current, name);
+                unset(shallowFieldsStateRef.current, name);
+                memoizedDefaultValues.current = get(data || defaultValuesRef.current, name);
+                if (!isUnMount.current) {
+                    setFields(mapIds(memoizedDefaultValues.current, keyName));
+                }
+            };
+        }
+        return () => {
+            isUnMount.current = true;
+            shouldUnregister && remove();
+            resetFields();
+            delete resetFunctions[name];
+            unset(fieldArrayValuesRef.current, name);
+            fieldArrayNames.delete(name);
+        };
+    }, []);
+    return {
+        swap: React.useCallback(swap, [name]),
+        move: React.useCallback(move, [name]),
+        prepend: React.useCallback(prepend$1, [name]),
+        append: React.useCallback(append, [name]),
+        remove: React.useCallback(remove, [name]),
+        insert: React.useCallback(insert$1, [name]),
+        fields,
+    };
+};
+
 var getInputValue = (event) => isPrimitive(event) ||
     !isObject(event.target) ||
     (isObject(event.target) && !event.type)
@@ -1585,6 +1901,51 @@ function useController({ name, rules, defaultValue, control, onFocus, }) {
             },
         }),
     };
+}
+
+function useWatch({ control, name, defaultValue, }) {
+    const methods = useFormContext();
+    {
+        if (!control && !methods) {
+            throw new Error('📋 useWatch is missing `control` prop. https://react-hook-form.com/api#useWatch');
+        }
+    }
+    const { useWatchFieldsRef, useWatchRenderFunctionsRef, watchInternal, defaultValuesRef, } = control || methods.control;
+    const updateValue = React.useState()[1];
+    const idRef = React.useRef();
+    const defaultValueRef = React.useRef(defaultValue);
+    React.useEffect(() => {
+        {
+            if (name === '') {
+                console.warn('📋 useWatch is missing `name` attribute. https://react-hook-form.com/api#useWatch');
+            }
+        }
+        const id = (idRef.current = generateId());
+        const watchFieldsHookRender = useWatchRenderFunctionsRef.current;
+        const watchFieldsHook = useWatchFieldsRef.current;
+        watchFieldsHook[id] = new Set();
+        watchFieldsHookRender[id] = () => updateValue({});
+        watchInternal(name, defaultValueRef.current, id);
+        return () => {
+            delete watchFieldsHook[id];
+            delete watchFieldsHookRender[id];
+        };
+    }, [
+        name,
+        useWatchRenderFunctionsRef,
+        useWatchFieldsRef,
+        watchInternal,
+        defaultValueRef,
+    ]);
+    return idRef.current
+        ? watchInternal(name, defaultValueRef.current, idRef.current)
+        : isUndefined$1(defaultValue)
+            ? isString$1(name)
+                ? get(defaultValuesRef.current, name)
+                : Array.isArray(name)
+                    ? name.reduce((previous, inputName) => (Object.assign(Object.assign({}, previous), { [inputName]: get(defaultValuesRef.current, inputName) })), {})
+                    : defaultValuesRef.current
+            : defaultValue;
 }
 
 const Controller = (props) => {
@@ -1871,6 +2232,7 @@ function validateJSONX(jsonx = {}, returnAllErrors = false) {
         "comparisonorprops",
         "passprops",
         "exposeprops",
+        "useformregister",
         "debug",
         "___stringifyChildren",
         "___toStringChildren",
@@ -2618,12 +2980,16 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = "", optio
         getReactElementFromJSONX,
         reactComponent,
         resources,
-        props
+        props,
+        useForm,
+        useController,
+        useFieldArray,
+        useWatch,
     ];
     //@ts-ignore
     if (typeof functionBody === "function")
         functionBody = functionBody.toString();
-    const functionComponent = Function("React", "useState", "useEffect", "useContext", "useReducer", "useCallback", "useMemo", "useRef", "useImperativeHandle", "useLayoutEffect", "useDebugValue", "getReactElementFromJSONX", "reactComponent", "resources", "props", `
+    const functionComponent = Function("React", "useState", "useEffect", "useContext", "useReducer", "useCallback", "useMemo", "useRef", "useImperativeHandle", "useLayoutEffect", "useDebugValue", "getReactElementFromJSONX", "reactComponent", "resources", "props", "useForm", "useController", "useFieldArray", "useWatch", `
     'use strict';
     const self = this || {};
 
@@ -3321,6 +3687,12 @@ function getComputedProps$1(options = {}) {
                     : {}
                 : {})
             : undefined;
+        if (jsonx.useformregister) {
+            jsonx.thiscontext = {
+                ref: ['reactHookForm', 'register'],
+                ...jsonx.thiscontext,
+            };
+        }
         const windowTraverse = typeof window !== "undefined" ? window : {};
         const asyncprops = jsonx.asyncprops
             ? getJSONXProps({

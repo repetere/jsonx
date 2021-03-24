@@ -20,6 +20,7 @@ export interface Context {
   disableRenderIndexKey?: boolean;
   exposeEval?: boolean;
   name?: string;
+  reactHookForm?: any;
 };
 
 export interface JSONContext extends Context {

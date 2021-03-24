@@ -62,7 +62,8 @@ There are five kinds of Advanced Props (Traverse, Evaluation, Format, Display an
 -  [5. Display Props](#display-props) - used to decide whether or not to render elements
     - [5.1 comparisonprops](#display-comparisonprops) - conditionally render elements based on prop values
     - [5.2 comparisonorprops](#display-comparisonorprops) - conditionally render elements flag to use 'or' logic instead of 'and' logic
-
+-  [6. Applied Props](#applied-props) - used to modify other jsonx properties
+    - [6.1 useformregister](#applied-useformregister) - A flag to insert react hook form register on jsonx component
 
 ## <a name="traverse-props">1. Traverse Props </a>
 
@@ -700,6 +701,37 @@ switch (opscompares.operation) {
   </tr>
 </table>
 
+---
+## <a name="applied-props">6. applied Props</a>
+
+_([useformregister](#applied-useformregister)_
+
+Applied Props are properties that are helper properties that are used modify other jsonx properties.
+
+### [useformregister](#applied-useformregister) 
+
+The applied prop `useformregister` is a prop that passes a React Hook Form register to a component. It is a short cut for having to added the reference to the form reference manually.
+
+```javascript
+jsonx = {
+  component: "input",
+  props:{
+    name:'firstName',
+  },
+  useformregister: true,
+};
+
+// is equivalent to
+jsonx = {
+  component: "input",
+  props:{
+    name:'firstName',
+  },
+  thiscontext:{
+    ref: ['reactHookForm', 'register']
+  },
+};
+```
 ---
 
 ## Next: [External and Custom Components](../using-external-and-custom-components/index.html)

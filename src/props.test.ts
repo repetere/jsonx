@@ -89,6 +89,25 @@ describe('jsonx props', function () {
       expect(computedProps.myComponent).to.haveOwnProperty('ref');
       expect(computedProps.myComponent).to.haveOwnProperty('props');
     });
+    it('should apply a form hook register with "useformregister"',()=>{
+      const context = {
+        reactHookForm:{
+          register:'FORM REGISTER'
+        }
+      }
+      const computedProps = getComputedProps.call(context, {
+        disableRenderIndexKey:false,
+        jsonx: {
+          component: "input",
+          props:{
+            name:'firstName',
+          },
+          useformregister: true,
+        },
+        renderIndex:1,
+      });
+      expect(computedProps.ref).to.eql(context.reactHookForm.register);
+    })
   });
   describe('getJSONXProps', () => {
     const getJSONXProps = _jsonxProps.getJSONXProps;

@@ -121,6 +121,8 @@ export interface jsonxElementProperties {
     comparisonprops?: jsonxComparison[];
     /** Display Prop: flag used to conditionally show elements when any comparison values are true */
     comparisonorprops?: Boolean;
+    /** Applied Prop: modify jsonx properties   */
+    useformregister?: boolean;
     [index: string]: any;
 }
 export interface jsonx extends jsonxElementProperties, jsonxChildren {

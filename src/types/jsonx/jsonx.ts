@@ -132,6 +132,9 @@ export interface jsonxElementProperties {
   // __dangerouslyInsertComponents?: {
   //   [index: string]: string | callbackFunc;
   // };
+
+  /** Applied Prop: modify jsonx properties   */
+  useformregister?:boolean;
   [index: string]: any;
 }
 

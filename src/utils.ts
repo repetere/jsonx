@@ -289,6 +289,7 @@ export function validateJSONX(
     "comparisonorprops",
     "passprops",
     "exposeprops",
+    "useformregister",
     "debug",
     "___stringifyChildren",
     "___toStringChildren",

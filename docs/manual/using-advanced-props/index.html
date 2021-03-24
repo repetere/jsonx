@@ -89,6 +89,11 @@
 <li><a href="#display-comparisonorprops">5.2 comparisonorprops</a> - conditionally render elements flag to use ‘or’ logic instead of ‘and’ logic</li>
 </ul>
 </li>
+<li><a href="#applied-props">6. Applied Props</a> - used to modify other jsonx properties
+<ul>
+<li><a href="#applied-useformregister">6.1 useformregister</a> - A flag to insert react hook form register on jsonx component</li>
+</ul>
+</li>
 </ul>
 <h2><a name="traverse-props">1. Traverse Props </a></h2>
 <p><em>(<a href="#traverse-asyncprops">resourceprops/asyncprops</a>, <a href="#traverse-windowprops">windowprops</a>, <a href="#traverse-thisprops">thisprops</a>, <a href="#traverse-thisstate">thisstate</a>, <a href="#traverse-thiscontext">thiscontext</a>)</em></p>
@@ -617,6 +622,31 @@ jsonx = {
     </td>
   </tr>
 </tbody></table>
+<hr>
+<h2><a name="applied-props">6. applied Props</a></h2>
+<p><em>(<a href="#applied-useformregister">useformregister</a></em></p>
+<p>Applied Props are properties that are helper properties that are used modify other jsonx properties.</p>
+<h3><a href="#applied-useformregister">useformregister</a></h3>
+<p>The applied prop <code>useformregister</code> is a prop that passes a React Hook Form register to a component. It is a short cut for having to added the reference to the form reference manually.</p>
+<pre><code class="hljs language-javascript">jsonx = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">name</span>:<span class="hljs-string">'firstName'</span>,
+  },
+  <span class="hljs-attr">useformregister</span>: <span class="hljs-literal">true</span>,
+};
+
+<span class="hljs-comment">// is equivalent to</span>
+jsonx = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">name</span>:<span class="hljs-string">'firstName'</span>,
+  },
+  <span class="hljs-attr">thiscontext</span>:{
+    <span class="hljs-attr">ref</span>: [<span class="hljs-string">'reactHookForm'</span>, <span class="hljs-string">'register'</span>]
+  },
+};
+</code></pre>
 <hr>
 <h2>Next: <a href="../using-external-and-custom-components/index.html">External and Custom Components</a></h2>
 <h3>JSONX Manual</h3>

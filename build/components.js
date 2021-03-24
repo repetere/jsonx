@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, Fragment, Suspense, lazy, createContext } from "react";
 import * as memoryCache from "memory-cache";
-import { useForm, Controller, } from 'react-hook-form';
+import { useForm, useController, useFieldArray, useWatch, Controller, } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 // import {cache} from 'memory-cache';
 // import cache from 'memory-cache';
@@ -488,12 +488,16 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ""
         getReactElementFromJSONX,
         reactComponent,
         resources,
-        props
+        props,
+        useForm,
+        useController,
+        useFieldArray,
+        useWatch,
     ];
     //@ts-ignore
     if (typeof functionBody === "function")
         functionBody = functionBody.toString();
-    const functionComponent = Function("React", "useState", "useEffect", "useContext", "useReducer", "useCallback", "useMemo", "useRef", "useImperativeHandle", "useLayoutEffect", "useDebugValue", "getReactElementFromJSONX", "reactComponent", "resources", "props", `
+    const functionComponent = Function("React", "useState", "useEffect", "useContext", "useReducer", "useCallback", "useMemo", "useRef", "useImperativeHandle", "useLayoutEffect", "useDebugValue", "getReactElementFromJSONX", "reactComponent", "resources", "props", "useForm", "useController", "useFieldArray", "useWatch", `
     'use strict';
     const self = this || {};
 

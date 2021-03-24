@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>JSONX TEST</title>
+    <script type="text/javascript" src="../../dist/index.web.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      function IntroHook(){
+        const { register, handleSubmit, errors, ref, control } = useForm({defaultValues:{title:'my web app'}});
+        const [size, setSize] = useState([1]);
+        const onSubmit = (data) => {
+          console.log('submission:',JSON.stringify(data));
+        };
+
+        console.log(errors);
+        const exposeprops = {size, setSize, onSubmit, register, handleSubmit, errors, ref, control,};
+
+        return {
+          component:'div',
+          passprops:true,
+          children:[
+          {
+            component:'input',
+            props:{
+              placeholder:'Title',
+              name:'title',
+              id:'title',
+              style:{
+                width:'100px'
+              }
+            },
+            thisprops:{
+              ref:['register']
+            },
+          },
+            // {
+            //     component:'p',
+            //     passprops:true,
+            //     children:[
+            //       {
+            //         component:'span',
+            //         children:'You clicked ',
+            //       },
+            //       {
+            //         component:'input',
+            //         props:{
+            //           name:'inputCount',
+            //           defaultValue:0
+            //         },
+            //         thisprops:{
+            //           value:['count'],
+            //         },
+            //       },
+            //       {
+            //         component:'span',
+            //         children:' times'
+            //       }
+            //     ]
+            // },
+            {
+              component:'button',
+              props:{
+                id:'addPerson',
+                // onSubmit:()=>{},
+              },
+              __dangerouslyBindEvalProps:{
+                onClick(_size,_setSize){
+                  const newSize = [].concat(_size);
+                  newSize.push(1);
+                  _setSize(newSize);
+                },
+              },
+              children:'Add Person'
+            },
+            {
+              component:'button',
+              props:{
+                type:'submit',
+                id:'submitButton'
+              },
+              __dangerouslyBindEvalProps:{
+                onClick(onSubmit,handleSubmit){
+                  console.log('in here',{onSubmit,handleSubmit},handleSubmit)
+                  handleSubmit(d=>onSubmit(d))
+                },
+              },
+              children:'Submit'
+            }
+          ],
+        }
+      }
+      const IntroHookComponent = jsonx._jsonxComponents.makeFunctionComponent(IntroHook)
+      const boundConfig = {
+        reactComponents:{
+          IntroHookComponent,
+        },
+      };
+      jsonx.jsonxRender.call(boundConfig,{ 
+        jsonx: {
+          component:'IntroHookComponent',
+        }, 
+        querySelector:'#root', });
+    </script>
+  </body>
+</html>

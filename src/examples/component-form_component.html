@@ -3,26 +3,179 @@
   <head>
     <meta charset="utf-8">
     <title>FORM COMPONENT TEST</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.14.1/antd.min.css" integrity="sha512-GElOEG62hoWTO/9pNNVPBz+b9AELiVOuEEjM3h5jE5nVx+SVHRaKP/TjcJrwjkJC3CfnSK4clQ6l1jxmaeK9tg==" crossorigin="anonymous" />
     <script type="text/javascript" src="../../dist/index.web.js"></script>
+    <script type="text/javascript">
+      window.React = jsonx.__getReact();
+      window.ReactDOM = jsonx.__getReactDOM();
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.14.1/antd.js"></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="text/javascript">
-      const myFormComponent = jsonx._jsonxComponents.FormComponent({
-        formComponent:{ 
-          component: "div", 
-          children: "empty form" 
+      const defaultValues = {
+        firstName: "bill",
+        lastName: "luo",
+        email: "bluebill1049@example.com"
+      };
+      const onSubmit = (formdata)=>{
+        document.querySelector('#formResult').innerHTML=JSON.stringify(formdata,null,2)
+      }
+      const formComponent = {
+        component:'div',
+        children:[
+          {
+            component:'h1',
+            children:'Basic Form'
+          },
+          {
+            component:'label',
+            props:{
+              htmlFor:'firstName'
+            },
+            children:'First Name'
+          },
+          {
+            component:'input',
+            props:{
+              placeholder:'John',
+              name:'firstName',
+              id:'firstName',
+            },
+            thiscontext:{
+              ref:['reactHookForm','register']
+            }
+          },
+          {
+            component:'label',
+            props:{
+              htmlFor:'lastName'
+            },
+            children:'Last Name'
+          },
+          {
+            component:'input',
+            props:{
+              placeholder:'Smith',
+              name:'lastName',
+              id:'lastName',
+            },
+            useformregister:true,
+          },
+          {
+            component:'label',
+            props:{
+              htmlFor:'saveInfo'
+            },
+            children:'Save Info'
+          },
+          {
+            component:'ReactHookForm.Controller',
+            props:{
+              name:'saveInfo',
+              id:'saveInfo',
+            },
+            thiscontext:{
+              control:['reactHookForm','control']
+            },
+            __dangerouslyInsertFunctionComponents:{
+              render:{
+                functionBody: `let exposeProps={}`,
+                reactComponent:{
+                  component:'antd.Switch',
+                  props:{
+                  },
+                  thisprops:{
+                    // onChange:['onChange'],
+                    onBlur:['onBlur'],
+                    value:['value'],
+                    name:['name'],
+                    ref:['ref'],
+                  },
+                  __dangerouslyBindEvalProps:{
+                    onChange(checked){
+                      this.reactHookForm.setValue('saveInfo',checked)
+                    }
+                  },
+                }
+              }
+            }
+          },
+          {
+            component:'ReactHookForm.Controller',
+            props:{
+              name:'email',
+              type:'checkbox',
+              id:'emailInput',
+              addonBefore:'Email'
+            },
+            thiscontext:{
+              control:['reactHookForm','control']
+            },
+            __dangerouslyInsertFunctionComponents:{
+              render:{
+                reactComponent:{
+                  component:'antd.Input',
+                  props:{              
+                    id:'emailInput',
+
+                    name:'inneremail',
+                  },
+                  thisprops:{
+                    onChange:['onChange'],
+                    onBlur:['onBlur'],
+                    value:['value'],
+                    name:['name'],
+                    ref:['ref'],
+                  },
+                }
+              }
+            }
+          },
+          {
+            component:'input',
+            props:{
+              id:'formSubmitButton',
+              type:'submit',
+            }
+          },
+          {component:'hr'},
+          {
+            component:'textarea',
+            props:{id:'formResult', style:{width:'20rem',height:'10rem'}},
+          }
+        ]
+      }
+      const myFormComponent = jsonx._jsonxComponents.FormComponent.call({
+          componentLibraries:{
+            antd:window.antd,
+          },  
         },
-        name:'myFormComponent'
-      })
+        {
+          formComponent,
+          name:'myFormComponent',
+          hookFormOptions: {
+            defaultValues,
+          },
+          onSubmit,
+        })
       const boundConfig = {
         reactComponents:{
           myFormComponent,
         },
+        componentLibraries:{
+          antd:window.antd,
+        },
       };
       jsonx.jsonxRender.call(boundConfig,{ 
         jsonx: {
-          component:'myFormComponent',
+          component:'Fragment',
+          children:[
+            {
+              component:'myFormComponent',
+            }
+          ]
         }, 
         querySelector:'#root', });
     </script>

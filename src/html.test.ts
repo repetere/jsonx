@@ -54,4 +54,41 @@ describe('End to End HTML Tests', function(){
       expect(resolvedContentData).toBe('some mock data')
     },10000)
   })
+  describe('Basic Component Test',()=>{
+    it('should render the page', async()=>{
+      await page.goto(`file://${__dirname}/examples/component-form_component.html`,{
+        waitUntil: 'networkidle2',
+      });
+      const pageTitle = await page.$eval('title',(el:any)=>el.innerText)
+      const initialFormData = await page.$eval('#formResult',(el:any)=>el.value)
+      expect(initialFormData).toBe('')
+      expect(pageTitle).toBe('FORM COMPONENT TEST')
+      await page.evaluate( () => (document.getElementById("firstName") as HTMLInputElement).value = "")
+      await page.focus('#firstName')
+      await page.keyboard.type('Jest')
+
+      await page.evaluate( () => (document.getElementById("lastName") as HTMLInputElement).value = "")
+      await page.focus('#lastName')
+      await page.keyboard.type('Test')
+      await page.$eval('[name="saveInfo"]',(el:any)=>el.click())
+      
+      await page.focus('[name="email"]')
+      await page.keyboard.type('adding from jest')
+
+      await page.$eval('#formSubmitButton',(el:any)=>el.click())
+      await page.focus('#formResult')
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(1000)
+
+      const resolvedFormData = await page.$eval('#formResult',(el:any)=>el.value)
+      const formData = JSON.parse(resolvedFormData)
+      expect(formData).toMatchObject({
+        firstName: 'Jest',
+        lastName: 'Test',
+        saveInfo: true,
+        email: 'bluebill1049@example.comadding from jest'
+      })
+      // expect(resolvedContentData).toBe('some mock data')
+    },10000)
+  })
 })
