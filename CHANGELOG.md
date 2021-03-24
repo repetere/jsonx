@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/repetere/jsonx/compare/v1.6.1...v1.7.0) (2021-03-24)
+
+
+### Features
+
+* **form:** helper methods for react hook form ([021aca8](https://github.com/repetere/jsonx/commit/021aca8afb9bc2e956d72b0683708a1c582b776d))
+
 ## [1.6.1](https://github.com/repetere/jsonx/compare/v1.6.0...v1.6.1) (2021-03-23)
 
 
