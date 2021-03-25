@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/repetere/jsonx/compare/v1.8.1...v1.9.0) (2021-03-25)
+
+
+### Features
+
+* **build:** adding legacy e6 builds ([114ffd2](https://github.com/repetere/jsonx/commit/114ffd257890b4ab17bbd8f707eda20880775b6d))
+
 ## [1.8.1](https://github.com/repetere/jsonx/compare/v1.8.0...v1.8.1) (2021-03-25)
 
 
