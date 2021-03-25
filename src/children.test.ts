@@ -298,6 +298,7 @@ describe("jsonx", function() {
         childjsonx: childjsonx_span,
         renderIndex
       });
+      //@ts-ignore
       expect(childProps_span.props).to.eql({ value: 302, size: 2 })      
     })
   });
