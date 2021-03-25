@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SIMPLE SYNTAX TEST</title>
+    <script type="text/javascript" src="../../dist/index.web.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      const JXM = {
+        main:{
+          debug:true,
+          props:{
+            key:1
+          },
+          children:[
+            {
+              header:{
+                props:{
+                  style:{
+                    fontWeight:'bold',
+                    color:'blue'
+                  }
+                },
+                windowprops:{
+                  children:['document','title']
+                }
+              }
+            },
+            {
+              div:{
+                props:{
+                  title:'this is a passed Title',
+                },
+                passprops:true,
+                children:[
+                  { p:'super short'},
+                  { ul:[{li:'first'},{li:'second'}]},
+                  {
+                    p:{
+                      props:{
+                        key:124,
+                      },
+                      children:'should have passed props'
+                    }
+                  },
+                  {
+                    component:'p',
+                    props:{
+                      key:456
+                    },
+                    children:'mixed usage with regular syntax'
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+      const boundConfig = {
+       
+      };
+      jsonx.jsonxRender.call(boundConfig,{ 
+        jsonx: JXM, 
+        querySelector:'#root', });
+    </script>
+  </body>
+</html>

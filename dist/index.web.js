@@ -42721,7 +42721,7 @@ var jsonx = (function (exports) {
 	 * @param {Object} simpleJSONX - Any valid simple JSONX Syntax
 	 * @return {Boolean} returns true if simpleJSONX is valid
 	 */
-	function validSimpleJSONXSyntax(simpleJSONX = {}) {
+	function validSimpleJSONXSyntax$1(simpleJSONX = {}) {
 	    if (Object.keys(simpleJSONX).length !== 1 && !simpleJSONX.component) {
 	        return false;
 	    }
@@ -42729,9 +42729,9 @@ var jsonx = (function (exports) {
 	        const componentName = Object.keys(simpleJSONX)[0];
 	        return Object.keys(simpleJSONX).length === 1 &&
 	            !simpleJSONX[componentName].component &&
-	            (typeof simpleJSONX[componentName] === "object" || 
-	            typeof simpleJSONX[componentName] === "string") 
-							
+	            (typeof simpleJSONX[componentName] === "object"
+	                ||
+	                    typeof simpleJSONX[componentName] === "string")
 	            ? true
 	            : false;
 	    }
@@ -42741,20 +42741,38 @@ var jsonx = (function (exports) {
 	 * @param {Object} simpleJSONX JSON Object
 	 * @return {Object} - returns a valid JSONX JSON Object from a simple JSONX JSON Object
 	 */
-	function simpleJSONXSyntax(simpleJSONX = {}) {
-			if(simpleJSONX.component) return simpleJSONX
+	function simpleJSONXSyntax$1(simpleJSONX = {}) {
+	    if (simpleJSONX.component)
+	        return simpleJSONX;
 	    const component = Object.keys(simpleJSONX)[0];
 	    try {
-				const children = typeof simpleJSONX[component] ==='string' || Array.isArray(simpleJSONX[component])
-					? simpleJSONX[component]
-					: simpleJSONX[component] && simpleJSONX[component].children && Array.isArray(simpleJSONX[component].children)
-						? simpleJSONX[component].children.map(simpleJSONXSyntax)
-						: simpleJSONX[component].children;
-				const jsonxprops = typeof simpleJSONX[component] ==='object'
-					? simpleJSONX[component]
-					: undefined;
-				const jsonx = {component,...jsonxprops,children}
-				return jsonx
+	        const children = typeof simpleJSONX[component] === 'string' || Array.isArray(simpleJSONX[component])
+	            ? simpleJSONX[component]
+	            : simpleJSONX[component] && simpleJSONX[component].children && Array.isArray(simpleJSONX[component].children)
+	                ? simpleJSONX[component].children.map(simpleJSONXSyntax$1)
+	                : simpleJSONX[component].children;
+	        const jsonxprops = typeof simpleJSONX[component] === 'object'
+	            ? simpleJSONX[component]
+	            : undefined;
+	        const jsonx = { component, ...jsonxprops, children };
+	        return jsonx;
+	        // return Object.assign(
+	        //   {},
+	        //   {
+	        //     component
+	        //   },
+	        //   simpleJSONX[component],
+	        //   {
+	        //     children:
+	        //       simpleJSONX[component] &&
+	        //       simpleJSONX[component].children &&
+	        //       Array.isArray(simpleJSONX[component].children)
+	        //         ? (simpleJSONX[component].children as defs.simpleJsonx[]).map(
+	        //             simpleJSONXSyntax
+	        //           )
+	        //         : simpleJSONX[component].children
+	        //   }
+	        // );
 	    }
 	    catch (e) {
 	        throw SyntaxError("Invalid Simple JSONX Syntax");
@@ -42806,8 +42824,8 @@ var jsonx = (function (exports) {
 		getAdvancedBinding: getAdvancedBinding,
 		traverse: traverse,
 		validateJSONX: validateJSONX,
-		validSimpleJSONXSyntax: validSimpleJSONXSyntax,
-		simpleJSONXSyntax: simpleJSONXSyntax,
+		validSimpleJSONXSyntax: validSimpleJSONXSyntax$1,
+		simpleJSONXSyntax: simpleJSONXSyntax$1,
 		getSimplifiedJSONX: getSimplifiedJSONX,
 		fetchJSON: fetchJSON
 	});
@@ -53748,7 +53766,7 @@ ${jsonxRenderedString}`;
 	const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, ReactHookForm, } = jsonxComponents;
 	const { getComputedProps } = jsonxProps;
 	const { getJSONXChildren } = jsonxChildren;
-	const { displayComponent } = jsonxUtils;
+	const { displayComponent, validSimpleJSONXSyntax, simpleJSONXSyntax } = jsonxUtils;
 	exports.renderIndex = 0;
 	/**
 	 * Use JSONX without any configuration to render JSONX JSON to HTML and insert JSONX into querySelector using ReactDOM.render
@@ -53814,10 +53832,9 @@ ${jsonxRenderedString}`;
 	    if (jsonx.type)
 	        jsonx.component = jsonx.type;
 	    if (!jsonx.component && validSimpleJSONXSyntax(jsonx)) {
-				console.log('this is simple syntax',{jsonx})
-				jsonx = simpleJSONXSyntax(jsonx);
+	        jsonx = simpleJSONXSyntax(jsonx);
 	    }
-			if (!jsonx || !jsonx.component)
+	    if (!jsonx || !jsonx.component)
 	        return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
 	    try {
 	        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this?.reactComponents);

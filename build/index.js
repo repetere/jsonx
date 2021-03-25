@@ -12,7 +12,7 @@ const createElement = React.createElement;
 const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, ReactHookForm, } = jsonxComponents;
 const { getComputedProps } = jsonxProps;
 const { getJSONXChildren } = jsonxChildren;
-const { displayComponent } = jsonxUtils;
+const { displayComponent, validSimpleJSONXSyntax, simpleJSONXSyntax } = jsonxUtils;
 export let renderIndex = 0;
 /**
  * Use JSONX without any configuration to render JSONX JSON to HTML and insert JSONX into querySelector using ReactDOM.render
@@ -77,8 +77,9 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
         return null;
     if (jsonx.type)
         jsonx.component = jsonx.type;
-    if (jsonxUtils.validSimpleJSONXSyntax(jsonx))
-        jsonx = jsonxUtils.simpleJSONXSyntax(jsonx);
+    if (!jsonx.component && validSimpleJSONXSyntax(jsonx)) {
+        jsonx = simpleJSONXSyntax(jsonx);
+    }
     if (!jsonx || !jsonx.component)
         return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
     try {

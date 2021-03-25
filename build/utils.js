@@ -462,7 +462,9 @@ export function validSimpleJSONXSyntax(simpleJSONX = {}) {
         const componentName = Object.keys(simpleJSONX)[0];
         return Object.keys(simpleJSONX).length === 1 &&
             !simpleJSONX[componentName].component &&
-            typeof simpleJSONX[componentName] === "object"
+            (typeof simpleJSONX[componentName] === "object"
+                ||
+                    typeof simpleJSONX[componentName] === "string")
             ? true
             : false;
     }
@@ -473,17 +475,37 @@ export function validSimpleJSONXSyntax(simpleJSONX = {}) {
  * @return {Object} - returns a valid JSONX JSON Object from a simple JSONX JSON Object
  */
 export function simpleJSONXSyntax(simpleJSONX = {}) {
+    if (simpleJSONX.component)
+        return simpleJSONX;
     const component = Object.keys(simpleJSONX)[0];
     try {
-        return Object.assign({}, {
-            component
-        }, simpleJSONX[component], {
-            children: simpleJSONX[component] &&
-                simpleJSONX[component].children &&
-                Array.isArray(simpleJSONX[component].children)
+        const children = typeof simpleJSONX[component] === 'string' || Array.isArray(simpleJSONX[component])
+            ? simpleJSONX[component]
+            : simpleJSONX[component] && simpleJSONX[component].children && Array.isArray(simpleJSONX[component].children)
                 ? simpleJSONX[component].children.map(simpleJSONXSyntax)
-                : simpleJSONX[component].children
-        });
+                : simpleJSONX[component].children;
+        const jsonxprops = typeof simpleJSONX[component] === 'object'
+            ? simpleJSONX[component]
+            : undefined;
+        const jsonx = { component, ...jsonxprops, children };
+        return jsonx;
+        // return Object.assign(
+        //   {},
+        //   {
+        //     component
+        //   },
+        //   simpleJSONX[component],
+        //   {
+        //     children:
+        //       simpleJSONX[component] &&
+        //       simpleJSONX[component].children &&
+        //       Array.isArray(simpleJSONX[component].children)
+        //         ? (simpleJSONX[component].children as defs.simpleJsonx[]).map(
+        //             simpleJSONXSyntax
+        //           )
+        //         : simpleJSONX[component].children
+        //   }
+        // );
     }
     catch (e) {
         throw SyntaxError("Invalid Simple JSONX Syntax");
