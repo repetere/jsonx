@@ -111,6 +111,7 @@
 <span style="color: #000000">  </span><span style="color: #001080">props:</span><span style="color: #000000">{ </span><span style="color: #001080">style:</span><span style="color: #000000">{ </span><span style="color: #001080">color:</span><span style="color: #A31515">&#039;blue&#039;</span><span style="color: #000000"> } },</span>
 <span style="color: #000000">  </span><span style="color: #001080">children:</span><span style="color: #A31515">&#039;hello world&#039;</span>
 <span style="color: #000000">};</span>
+
 <span style="color: #008000">//Rendering React Components</span>
 <span style="color: #001080">jsonx</span><span style="color: #000000">.</span><span style="color: #795E26">getReactElement</span><span style="color: #000000">(</span><span style="color: #001080">example_JXM_JSON</span><span style="color: #000000">); </span><span style="color: #008000">// =&gt; JSX Equivalent: &lt;p style={{color:&#039;blue&#039;}}&gt;hello world&lt;/p&gt;</span>
 
@@ -128,6 +129,22 @@
 <span style="color: #008000">//      &lt;p style=&quot;color:blue;&quot;&gt;hello world&lt;/p&gt;</span>
 <span style="color: #008000">//    &lt;/div&gt;</span>
 <span style="color: #008000">// &lt;/body&gt;</span>
+
+<span style="color: #008000">//you can also use the simplified syntax</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">simpleJXM_JSON</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">  </span><span style="color: #001080">p:</span><span style="color: #000000">{</span>
+<span style="color: #000000">    </span><span style="color: #001080">props:</span><span style="color: #000000">{ </span><span style="color: #001080">style:</span><span style="color: #000000">{ </span><span style="color: #001080">color:</span><span style="color: #A31515">&#039;blue&#039;</span><span style="color: #000000"> } },</span>
+<span style="color: #000000">    </span><span style="color: #001080">children:</span><span style="color: #A31515">&#039;hello world&#039;</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #008000">//or if you have an element with no props, simply use {type:children}</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">superSimpleJXM</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">  </span><span style="color: #001080">ul:</span><span style="color: #000000">[</span>
+<span style="color: #000000">    {</span><span style="color: #001080">li:</span><span style="color: #A31515">&#039;first!&#039;</span><span style="color: #000000">},</span>
+<span style="color: #000000">    {</span><span style="color: #001080">li:</span><span style="color: #A31515">&#039;second!&#039;</span><span style="color: #000000">},</span>
+<span style="color: #000000">  ]</span>
+<span style="color: #000000">}</span>
 </code></pre>
 				<a href="#jxm-json-spec" id="jxm-json-spec" style="color: inherit; text-decoration: none;">
 					<h3>JXM JSON Spec</h3>

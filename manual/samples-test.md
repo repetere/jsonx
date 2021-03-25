@@ -2,7 +2,7 @@
 
 ---
 ### JSONX Manual
- - [Home](https://jsonx.anydata.app)
+ - [Home](https://repetere.github.io/jsonx/)
  - [Getting Started](../getting-started/index.html)
  - [External and Custom Components](../using-external-and-custom-components/index.html)
  - [Using Advanced Props](../using-advanced-props/index.html)

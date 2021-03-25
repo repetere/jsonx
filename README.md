@@ -50,6 +50,7 @@ const example_JXM_JSON = {
   props:{ style:{ color:'blue' } },
   children:'hello world'
 };
+
 //Rendering React Components
 jsonx.getReactElement(example_JXM_JSON); // => JSX Equivalent: <p style={{color:'blue'}}>hello world</p>
 
@@ -67,6 +68,22 @@ jsonx.jsonxRender({ jsonx: example_JXM_JSON, querySelector:'#myApp', });
 //      <p style="color:blue;">hello world</p>
 //    </div>
 // </body>
+
+//you can also use the simplified syntax
+const simpleJXM_JSON = {
+  p:{
+    props:{ style:{ color:'blue' } },
+    children:'hello world'
+  }
+}
+
+//or if you have an element with no props, simply use {type:children}
+const superSimpleJXM = {
+  ul:[
+    {li:'first!'},
+    {li:'second!'},
+  ]
+}
 ```
 
 

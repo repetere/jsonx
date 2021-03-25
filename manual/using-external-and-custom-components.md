@@ -2,7 +2,7 @@
 
 ---
 ### JSONX Manual
- - [Home](https://jsonx.anydata.app)
+ - [Home](https://repetere.github.io/jsonx/)
  - [Getting Started](../getting-started/index.html)
  - [Using Advanced Props](../using-advanced-props/index.html)
  - [External and Custom Components](../using-external-and-custom-components/index.html)
@@ -124,7 +124,7 @@ jsonxRender({
 ## Next: [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
 
 ### JSONX Manual
- - [Home](https://jsonx.anydata.app)
+ - [Home](https://repetere.github.io/jsonx/)
  - [Getting Started](../getting-started/index.html)
  - [External and Custom Components](../using-external-and-custom-components/index.html)
  - [Using Advanced Props](../using-advanced-props/index.html)

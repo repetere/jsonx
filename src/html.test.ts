@@ -143,4 +143,20 @@ describe('End to End HTML Tests', function(){
       
     },10000)
   })
+  describe('Simple Sytanx Test',()=>{
+    it('should render the page', async()=>{
+      await page.goto(`file://${__dirname}/examples/component-simple_syntax.html`,{
+        waitUntil: 'networkidle2',
+      });
+      const pageTitle = await page.$eval('title',(el:any)=>el.innerText)
+      // const initialFormData = await page.$eval('#advanedFormResults',(el:any)=>el.innerText)
+      expect(pageTitle).toBe('SIMPLE SYNTAX TEST')
+      const docTitle = await page.$eval('#docTitle',(el:any)=>el.innerText)
+      expect(docTitle).toBe('SIMPLE SYNTAX TEST')
+      // expect(initialFormData).toBe('{}')
+      const mainContent = await page.$eval('main',(el:any)=>el.innerHTML)
+      expect(mainContent.includes('<li>first</li>')).toBe(true)
+      expect(mainContent.includes('<p title="this is a passed Title">mixed usage with regular syntax</p>')).toBe(true)
+    },10000)
+  })
 })
