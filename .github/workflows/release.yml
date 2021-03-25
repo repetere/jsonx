@@ -19,9 +19,24 @@ jobs:
       - name: Install dependencies
         run: |
           npm i jest typescript rollup typedoc sitedown -g
+          npm ci
+      - name: Test coverage
+        run: |
+          jest --coverage --runInBand
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel: true
+          path-to-lcov: ./coverage/lcov.info # optional (default value)
+
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
       - name: build files, docs
         run: |
-          npm ci
           tsc && rollup -c && typedoc && sitedown manual/ -b docs/manual
       - name: Release
         env:
