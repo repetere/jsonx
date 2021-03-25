@@ -64,6 +64,8 @@ There are five kinds of Advanced Props (Traverse, Evaluation, Format, Display an
     - [5.2 comparisonorprops](#display-comparisonorprops) - conditionally render elements flag to use 'or' logic instead of 'and' logic
 -  [6. Applied Props](#applied-props) - used to modify other jsonx properties
     - [6.1 useformregister](#applied-useformregister) - A flag to insert react hook form register on jsonx component
+    - [6.2 useremoveprops](#applied-useremoveprops) - remove props from component, usually used with passprops
+    - [6.3 useincludeprops](#applied-useincludeprops) - include only defined props, usually used with passprops
 
 ## <a name="traverse-props">1. Traverse Props </a>
 
@@ -535,6 +537,9 @@ const JXM = {
   component: 'div',
   props:{
     type:'radio',
+    size:'large',
+    extraOne:'ok',
+    title:'my radio',
     style:{
       background:'red'
     }
@@ -552,6 +557,9 @@ const JXM = {
   component: 'div',
   props:{
     type:'radio',
+    size:'large',
+    extraOne:'ok',
+    title:'my radio',
     style:{
       background:'red'
     }
@@ -562,6 +570,55 @@ const JXM = {
       component:'input',
       props:{
         type:'radio',
+        size:'large',
+        extraOne:'ok',
+        title:'my radio',
+      },
+    }
+  ]
+};
+*/
+```
+
+You can also pass a select number of props by specifying which props to pass 
+```javascript
+const JXM = {
+  component: 'div',
+  props:{
+    type:'radio',
+    size:'large',
+    title:'my radio',
+    style:{
+      background:'red'
+    }
+  },
+  passprops:['type','title'],
+  children:[
+    {
+      component:'input',
+    }
+  ]
+};
+
+/* computes:
+const JXM = {
+  component: 'div',
+  props:{
+    type:'radio',
+    size:'large',
+    extraOne:'ok',
+    title:'my radio',
+    style:{
+      background:'red'
+    }
+  },
+  passprops:['type','title'],
+  children:[
+    {
+      component:'input',
+      props:{
+        type:'radio',
+        title:'my radio',
       },
     }
   ]
@@ -704,7 +761,8 @@ switch (opscompares.operation) {
 ---
 ## <a name="applied-props">6. applied Props</a>
 
-_([useformregister](#applied-useformregister)_
+_([useformregister](#applied-useformregister), [useremoveprops](#applied-useremoveprops), [useincludeprops](#applied-useincludeprops))_
+
 
 Applied Props are properties that are helper properties that are used modify other jsonx properties.
 
@@ -729,6 +787,54 @@ jsonx = {
   },
   thiscontext:{
     ref: ['reactHookForm', 'register']
+  },
+};
+```
+### [useremoveprops](#applied-useremoveprops) 
+
+The applied prop `useremoveprops` is a prop that removes a list of props from the JXM Object. It is usually used in conjunction with passprops when you want to remove extra passed props.
+
+```javascript
+jsonx = {
+  component: "input",
+  props:{
+    name:'firstName',
+    removeThis:true,
+    extraProp:'remove me',
+  },
+  useremoveprops: ['removeThis','extraProp'],
+};
+
+// is equivalent to
+jsonx = {
+  component: "input",
+  props:{
+    name:'firstName',
+  },
+};
+```
+
+### [useincludeprops](#applied-useincludeprops) 
+
+The applied prop `useincludeprops` is a prop that removes all props from the JXM Object except for a list specified props. It is usually used in conjunction with passprops when you want to remove extra passed props.
+
+```javascript
+jsonx = {
+  component: "input",
+  props:{
+    name:'firstName',
+    removeThis:true,
+    extraProp:'remove me',
+    keepMe:'just this prop',
+  },
+  useincludeprops: ['keepMe'],
+};
+
+// is equivalent to
+jsonx = {
+  component: "input",
+  props:{
+    keepMe:'just this prop',
   },
 };
 ```

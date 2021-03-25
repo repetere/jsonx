@@ -103,29 +103,35 @@ export function getChildrenProps(
   const { jsonx = {}, childjsonx, renderIndex } = options;
   const props = options.props || jsonx.props || {};
 
-  return jsonx.passprops && childjsonx && typeof childjsonx === "object"
-    ? Object.assign({}, childjsonx, {
-        props: Object.assign(
-          {},
-          props,
-          (childjsonx.thisprops && childjsonx.thisprops.style) || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
-            (childjsonx.asyncprops && childjsonx.asyncprops.style) ||
-            (childjsonx.windowprops && childjsonx.windowprops.style)
-            ? {}
-            : {
-                style: {}
-              },
-          childjsonx.props,
-          //@ts-ignore
-          typeof this !== "undefined" ||(this && this.disableRenderIndexKey)
-            ? {}
-            : {  key: typeof renderIndex !== "undefined"
-                ? renderIndex + Math.random()
-                : Math.random()
-            }
-        )
-      })
-    : childjsonx;
+  if(jsonx.passprops && childjsonx && typeof childjsonx === "object"){
+    const passedChildJsonx = Object.assign({}, childjsonx, {
+      props: Object.assign(
+        {},
+        Array.isArray(jsonx.passprops)
+          ? jsonx.passprops.reduce((passedProps:any,prop:string)=>{
+            passedProps[prop] = props[prop]
+            return passedProps;
+          },{})
+          : props,
+        (childjsonx.thisprops && childjsonx.thisprops.style) || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
+          (childjsonx.asyncprops && childjsonx.asyncprops.style) ||
+          (childjsonx.windowprops && childjsonx.windowprops.style)
+          ? {}
+          : {
+              // style: {}
+            },
+        childjsonx.props,
+        //@ts-ignore
+        typeof this !== "undefined" ||(this && this.disableRenderIndexKey)
+          ? {}
+          : {  key: typeof renderIndex !== "undefined"
+              ? renderIndex + Math.random()
+              : Math.random()
+          }
+      )
+    })
+    return passedChildJsonx;
+  } else return childjsonx;
 }
 
 export function fetchJSONSync(path: string, options?: any ) {
@@ -210,8 +216,11 @@ export function getJSONXChildren(
     if (jsonx.___template)
       jsonx.children = [getChildrenTemplate(jsonx.___template)];
     else if (typeof jsonx.children === 'undefined' || jsonx.children === null) return undefined;
+    else if (jsonx.children && jsonx.___stringifyChildren && Array.isArray(jsonx.___stringifyChildren)){
+      const args = [jsonx.children, ...jsonx.___stringifyChildren]
+      jsonx.children = JSON.stringify.apply(null, args as [any]);}
     else if (jsonx.children && jsonx.___stringifyChildren)
-      jsonx.children = JSON.stringify.apply(null, [jsonx.children, null, 2]);
+      jsonx.children = JSON.stringify.apply(null, [jsonx.children as defs.jsonxChildren, null, 2]);
     //TODO: fix passing applied params
     else if (jsonx.children && jsonx.___toStringChildren)
       jsonx.children = jsonx.children.toString();

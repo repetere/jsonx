@@ -89,6 +89,74 @@ describe('jsonx props', function () {
       expect(computedProps.myComponent).to.haveOwnProperty('ref');
       expect(computedProps.myComponent).to.haveOwnProperty('props');
     });
+    it('should remove props with "useremoveprops"',()=>{
+      const jsonx = {
+        component: "input",
+        props:{
+          name:'firstName',
+          pleaseRemove1:'ok',
+          pleaseRemove2:'ok',
+        },
+      }
+      const remove2 = {
+        ...jsonx,
+        useremoveprops: ['pleaseRemove1', 'pleaseRemove2'],
+      }
+      const remove0 = {
+        ...jsonx,
+        useremoveprops: [],
+      }
+      const computedProps = getComputedProps.call({}, {
+        disableRenderIndexKey:false,
+        jsonx:remove2,
+        renderIndex:1,
+      });
+      const computedProps0 = getComputedProps.call({}, {
+        disableRenderIndexKey:false,
+        jsonx:remove0,
+        renderIndex:1,
+      });
+      expect(computedProps).to.eql({ 
+        key: 1, 
+        name: 'firstName' 
+      });
+      expect(computedProps0).to.eql({
+        key: 1,
+        name: 'firstName',
+        pleaseRemove1: 'ok',
+        pleaseRemove2: 'ok'
+      });
+    })
+    it('should only include props with "useincludeprops"',()=>{
+      const jsonx = {
+        component: "input",
+        props:{
+          name:'firstName',
+          pleaseRemove1:'ok',
+          pleaseRemove2:'keep2',
+        },
+      }
+      const remove1 = {
+        ...jsonx,
+        useincludeprops: ['pleaseRemove1', 'name'],
+      }
+      const removeAll = {
+        ...jsonx,
+        useincludeprops: [],
+      }
+      const computedProps = getComputedProps.call({}, {
+        disableRenderIndexKey:false,
+        jsonx:remove1,
+        renderIndex:1,
+      });
+      const computedProps0 = getComputedProps.call({}, {
+        disableRenderIndexKey:false,
+        jsonx:removeAll,
+        renderIndex:1,
+      });
+      expect(computedProps).to.eql({ pleaseRemove1: 'ok', name: 'firstName' });
+      expect(computedProps0).to.eql({ });
+    })
     it('should apply a form hook register with "useformregister"',()=>{
       const context = {
         reactHookForm:{

@@ -3,74 +3,86 @@
   <head>
     <meta charset="utf-8">
     <title>JSONX TEST</title>
-    <script type="text/javascript" src="../../dist/index.web.min.js"></script>
+    <script type="text/javascript" src="../../dist/index.web.js"></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="text/javascript">
       function IntroHook(){
-        const { register, handleSubmit, errors, ref, control } = useForm({defaultValues:{title:'my web app'}});
+        const { register, handleSubmit, errors, ref, control, getValues } = useForm({defaultValues:{title:'my web app'}});
         const [size, setSize] = useState([1]);
+        const [results, setResults] = useState({});
         const onSubmit = (data) => {
+          setResults(data)
           console.log('submission:',JSON.stringify(data));
         };
 
-        console.log(errors);
-        const exposeprops = {size, setSize, onSubmit, register, handleSubmit, errors, ref, control,};
+        console.log('errors',errors);
+        const exposeprops = {size, setSize, _onSubmit:onSubmit, register, handleSubmit, errors, ref, control, getValues, results};
 
         return {
           component:'div',
-          passprops:true,
+          passprops:['register','size','setSize','getValues','results','_onSubmit',],
           children:[
-          {
-            component:'input',
-            props:{
-              placeholder:'Title',
-              name:'title',
-              id:'title',
-              style:{
-                width:'100px'
-              }
+            {
+              component:'input',
+              props:{
+                placeholder:'Title',
+                name:'title',
+                id:'title',
+                style:{
+                  width:'100px'
+                }
+              },
+              // removeprops:['_onSubmit','getValues','setSize','size','results'],
+              useincludeprops:['style','name','ref','id','placeholder'],
+              thisprops:{
+                ref:['register']
+              },
             },
-            thisprops:{
-              ref:['register']
+            {
+              component:'h1',
+              children:'inputs',
+              includeprops:[]
             },
-          },
-            // {
-            //     component:'p',
-            //     passprops:true,
-            //     children:[
-            //       {
-            //         component:'span',
-            //         children:'You clicked ',
-            //       },
-            //       {
-            //         component:'input',
-            //         props:{
-            //           name:'inputCount',
-            //           defaultValue:0
-            //         },
-            //         thisprops:{
-            //           value:['count'],
-            //         },
-            //       },
-            //       {
-            //         component:'span',
-            //         children:' times'
-            //       }
-            //     ]
-            // },
+            {
+              component:'div',
+              passprops:true,
+              __spreadComponent:{
+                component:'section',
+                passprops:true,
+                children:[
+                  { component:'label', children:'API Name'},
+                  {
+                    component:'input',
+                    __dangerouslyEvalAllProps: function({jsonx}){
+                      // console.log('arguments',arguments)
+                      // console.log('this',this)
+                      return {
+                        name:`api[${jsonx.props.__idx}].name`,
+                        style:{
+                          width:'100px'
+                        },
+                        ref:jsonx.props.register
+                      }
+                    }
+                  },
+                ],
+              },
+              thisprops:{
+                __spread:['size']
+              },
+            },
             {
               component:'button',
               props:{
                 id:'addPerson',
-                // onSubmit:()=>{},
               },
               __dangerouslyBindEvalProps:{
-                onClick(_size,_setSize){
-                  const newSize = [].concat(_size);
+                onClick(size,setSize){
+                  const newSize = [].concat(size);
                   newSize.push(1);
-                  _setSize(newSize);
+                  setSize(newSize);
                 },
               },
               children:'Add Person'
@@ -82,12 +94,25 @@
                 id:'submitButton'
               },
               __dangerouslyBindEvalProps:{
-                onClick(onSubmit,handleSubmit){
-                  console.log('in here',{onSubmit,handleSubmit},handleSubmit)
-                  handleSubmit(d=>onSubmit(d))
+                onClick(_onSubmit, getValues){
+                  return _onSubmit(getValues())
                 },
               },
               children:'Submit'
+            },
+            {
+              component:'hr'
+            },
+            {
+              component:'h3',
+              children:'Results'
+            },
+            {
+              component:'pre',
+              ___stringifyChildren:true,
+              thisprops:{
+                children:['results']
+              }
             }
           ],
         }

@@ -125,10 +125,11 @@ export function getChildrenComponents(options = {}) {
     }
     else {
         return {
-            _children: allProps.__spread.map((__item) => {
+            _children: allProps.__spread.map((__item, __idx) => {
                 const clonedChild = Object.assign({}, jsonx.__spreadComponent);
                 const clonedChildProps = Object.assign({}, clonedChild.props);
                 clonedChildProps.__item = __item;
+                clonedChildProps.__idx = __idx;
                 clonedChild.props = clonedChildProps;
                 return clonedChild;
             })
@@ -687,9 +688,20 @@ export function getComputedProps(options = {}) {
             : {}, jsonx.__spreadComponent
             ? getChildrenComponents.call(this, { allProps, jsonx })
             : {}, evalAllProps);
+        if (jsonx.useremoveprops && Array.isArray(jsonx.useremoveprops)) {
+            for (const prop of jsonx.useremoveprops) {
+                computedProps[prop] = undefined;
+                delete computedProps[prop];
+            }
+        }
         if (jsonx.debug)
             console.debug({ jsonx, computedProps });
-        return computedProps;
+        return (jsonx.useincludeprops && Array.isArray(jsonx.useincludeprops))
+            ? jsonx.useincludeprops.reduce((includedProps, prop) => {
+                includedProps[prop] = computedProps[prop];
+                return includedProps;
+            }, {})
+            : computedProps;
     }
     catch (e) {
         debug && logError(e, e.stack ? e.stack : "no stack");

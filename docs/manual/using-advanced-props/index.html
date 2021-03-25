@@ -92,6 +92,8 @@
 <li><a href="#applied-props">6. Applied Props</a> - used to modify other jsonx properties
 <ul>
 <li><a href="#applied-useformregister">6.1 useformregister</a> - A flag to insert react hook form register on jsonx component</li>
+<li><a href="#applied-useremoveprops">6.2 useremoveprops</a> - remove props from component, usually used with passprops</li>
+<li><a href="#applied-useincludeprops">6.3 useincludeprops</a> - include only defined props, usually used with passprops</li>
 </ul>
 </li>
 </ul>
@@ -473,6 +475,9 @@ main();
   <span class="hljs-attr">component</span>: <span class="hljs-string">'div'</span>,
   <span class="hljs-attr">props</span>:{
     <span class="hljs-attr">type</span>:<span class="hljs-string">'radio'</span>,
+    <span class="hljs-attr">size</span>:<span class="hljs-string">'large'</span>,
+    <span class="hljs-attr">extraOne</span>:<span class="hljs-string">'ok'</span>,
+    <span class="hljs-attr">title</span>:<span class="hljs-string">'my radio'</span>,
     <span class="hljs-attr">style</span>:{
       <span class="hljs-attr">background</span>:<span class="hljs-string">'red'</span>
     }
@@ -490,6 +495,9 @@ const JXM = {
   component: 'div',
   props:{
     type:'radio',
+    size:'large',
+    extraOne:'ok',
+    title:'my radio',
     style:{
       background:'red'
     }
@@ -500,6 +508,53 @@ const JXM = {
       component:'input',
       props:{
         type:'radio',
+        size:'large',
+        extraOne:'ok',
+        title:'my radio',
+      },
+    }
+  ]
+};
+*/</span>
+</code></pre>
+<p>You can also pass a select number of props by specifying which props to pass</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> JXM = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">'div'</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">type</span>:<span class="hljs-string">'radio'</span>,
+    <span class="hljs-attr">size</span>:<span class="hljs-string">'large'</span>,
+    <span class="hljs-attr">title</span>:<span class="hljs-string">'my radio'</span>,
+    <span class="hljs-attr">style</span>:{
+      <span class="hljs-attr">background</span>:<span class="hljs-string">'red'</span>
+    }
+  },
+  <span class="hljs-attr">passprops</span>:[<span class="hljs-string">'type'</span>,<span class="hljs-string">'title'</span>],
+  <span class="hljs-attr">children</span>:[
+    {
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'input'</span>,
+    }
+  ]
+};
+
+<span class="hljs-comment">/* computes:
+const JXM = {
+  component: 'div',
+  props:{
+    type:'radio',
+    size:'large',
+    extraOne:'ok',
+    title:'my radio',
+    style:{
+      background:'red'
+    }
+  },
+  passprops:['type','title'],
+  children:[
+    {
+      component:'input',
+      props:{
+        type:'radio',
+        title:'my radio',
       },
     }
   ]
@@ -624,7 +679,7 @@ jsonx = {
 </tbody></table>
 <hr>
 <h2><a name="applied-props">6. applied Props</a></h2>
-<p><em>(<a href="#applied-useformregister">useformregister</a></em></p>
+<p><em>(<a href="#applied-useformregister">useformregister</a>, <a href="#applied-useremoveprops">useremoveprops</a>, <a href="#applied-useincludeprops">useincludeprops</a>)</em></p>
 <p>Applied Props are properties that are helper properties that are used modify other jsonx properties.</p>
 <h3><a href="#applied-useformregister">useformregister</a></h3>
 <p>The applied prop <code>useformregister</code> is a prop that passes a React Hook Form register to a component. It is a short cut for having to added the reference to the form reference manually.</p>
@@ -644,6 +699,47 @@ jsonx = {
   },
   <span class="hljs-attr">thiscontext</span>:{
     <span class="hljs-attr">ref</span>: [<span class="hljs-string">'reactHookForm'</span>, <span class="hljs-string">'register'</span>]
+  },
+};
+</code></pre>
+<h3><a href="#applied-useremoveprops">useremoveprops</a></h3>
+<p>The applied prop <code>useremoveprops</code> is a prop that removes a list of props from the JXM Object. It is usually used in conjunction with passprops when you want to remove extra passed props.</p>
+<pre><code class="hljs language-javascript">jsonx = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">name</span>:<span class="hljs-string">'firstName'</span>,
+    <span class="hljs-attr">removeThis</span>:<span class="hljs-literal">true</span>,
+    <span class="hljs-attr">extraProp</span>:<span class="hljs-string">'remove me'</span>,
+  },
+  <span class="hljs-attr">useremoveprops</span>: [<span class="hljs-string">'removeThis'</span>,<span class="hljs-string">'extraProp'</span>],
+};
+
+<span class="hljs-comment">// is equivalent to</span>
+jsonx = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">name</span>:<span class="hljs-string">'firstName'</span>,
+  },
+};
+</code></pre>
+<h3><a href="#applied-useincludeprops">useincludeprops</a></h3>
+<p>The applied prop <code>useincludeprops</code> is a prop that removes all props from the JXM Object except for a list specified props. It is usually used in conjunction with passprops when you want to remove extra passed props.</p>
+<pre><code class="hljs language-javascript">jsonx = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">name</span>:<span class="hljs-string">'firstName'</span>,
+    <span class="hljs-attr">removeThis</span>:<span class="hljs-literal">true</span>,
+    <span class="hljs-attr">extraProp</span>:<span class="hljs-string">'remove me'</span>,
+    <span class="hljs-attr">keepMe</span>:<span class="hljs-string">'just this prop'</span>,
+  },
+  <span class="hljs-attr">useincludeprops</span>: [<span class="hljs-string">'keepMe'</span>],
+};
+
+<span class="hljs-comment">// is equivalent to</span>
+jsonx = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">keepMe</span>:<span class="hljs-string">'just this prop'</span>,
   },
 };
 </code></pre>

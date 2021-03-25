@@ -114,7 +114,7 @@ export interface jsonxElementProperties {
     /** Utility Prop: insert JXM template from external path */
     ___template?: string | any;
     /** Utility Prop: pass down and merge parent props to children JXM objects */
-    passprops?: boolean;
+    passprops?: boolean | string[];
     /** Utility Prop: output calculated advanced props to console */
     debug?: Boolean;
     /** Display Prop: conditionally show elements based on props when all comparison values are true */
@@ -123,6 +123,10 @@ export interface jsonxElementProperties {
     comparisonorprops?: Boolean;
     /** Applied Prop: modify jsonx properties   */
     useformregister?: boolean;
+    /** Applied Prop: remove props from component, usually used with passprops */
+    useremoveprops?: string[];
+    /** Applied Prop: includes only defined props, usually used with passprops */
+    useincludeprops?: string[];
     [index: string]: any;
 }
 export interface jsonx extends jsonxElementProperties, jsonxChildren {

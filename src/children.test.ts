@@ -263,6 +263,43 @@ describe("jsonx", function() {
       //@ts-ignore
       expect(childProps_span.props.key).to.not.eq(renderIndex);
     });
+    it('should only pass selected props',()=>{
+      const renderIndex = 1;
+      const passableSelectedJSONX = {
+        component: "div",
+        props: {
+          title: "this is passed",
+          anotherProp:true,
+          additionalProp:true,
+          value:302,
+          size:2
+        },
+        passprops: ['value','size'],
+        children: [
+          {
+            component: "span",
+            props:{},
+            children: "should have props"
+          },
+          {
+            component: "p",
+            props: {
+              style: {
+                color: "blue"
+              }
+            },
+            children: "but no style"
+          }
+        ]
+      };
+      const childjsonx_span = getChildrenProperty({ jsonx: passableSelectedJSONX })[0];
+      const childProps_span = getChildrenProps({
+        jsonx: passableSelectedJSONX,
+        childjsonx: childjsonx_span,
+        renderIndex
+      });
+      expect(childProps_span.props).to.eql({ value: 302, size: 2 })      
+    })
   });
   describe("getJSONXChildren", () => {
     const getJSONXChildren = _jsonxChildren.getJSONXChildren;

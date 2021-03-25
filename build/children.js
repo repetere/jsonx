@@ -86,14 +86,19 @@ export function getChildrenProperty(options = {}) {
 export function getChildrenProps(options = {}) {
     const { jsonx = {}, childjsonx, renderIndex } = options;
     const props = options.props || jsonx.props || {};
-    return jsonx.passprops && childjsonx && typeof childjsonx === "object"
-        ? Object.assign({}, childjsonx, {
-            props: Object.assign({}, props, (childjsonx.thisprops && childjsonx.thisprops.style) || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
+    if (jsonx.passprops && childjsonx && typeof childjsonx === "object") {
+        const passedChildJsonx = Object.assign({}, childjsonx, {
+            props: Object.assign({}, Array.isArray(jsonx.passprops)
+                ? jsonx.passprops.reduce((passedProps, prop) => {
+                    passedProps[prop] = props[prop];
+                    return passedProps;
+                }, {})
+                : props, (childjsonx.thisprops && childjsonx.thisprops.style) || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
                 (childjsonx.asyncprops && childjsonx.asyncprops.style) ||
                 (childjsonx.windowprops && childjsonx.windowprops.style)
                 ? {}
                 : {
-                    style: {}
+                // style: {}
                 }, childjsonx.props, 
             //@ts-ignore
             typeof this !== "undefined" || (this && this.disableRenderIndexKey)
@@ -102,8 +107,11 @@ export function getChildrenProps(options = {}) {
                         ? renderIndex + Math.random()
                         : Math.random()
                 })
-        })
-        : childjsonx;
+        });
+        return passedChildJsonx;
+    }
+    else
+        return childjsonx;
 }
 export function fetchJSONSync(path, options) {
     try {
@@ -184,6 +192,10 @@ export function getJSONXChildren(options = { jsonx: {} }) {
             jsonx.children = [getChildrenTemplate(jsonx.___template)];
         else if (typeof jsonx.children === 'undefined' || jsonx.children === null)
             return undefined;
+        else if (jsonx.children && jsonx.___stringifyChildren && Array.isArray(jsonx.___stringifyChildren)) {
+            const args = [jsonx.children, ...jsonx.___stringifyChildren];
+            jsonx.children = JSON.stringify.apply(null, args);
+        }
         else if (jsonx.children && jsonx.___stringifyChildren)
             jsonx.children = JSON.stringify.apply(null, [jsonx.children, null, 2]);
         //TODO: fix passing applied params

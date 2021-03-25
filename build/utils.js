@@ -268,6 +268,8 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
         "comparisonprops",
         "comparisonorprops",
         "passprops",
+        "removeprops",
+        "includeprops",
         "exposeprops",
         "useformregister",
         "debug",
