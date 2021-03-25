@@ -24,7 +24,7 @@ const {
 } = jsonxComponents;
 const { getComputedProps } = jsonxProps;
 const { getJSONXChildren } = jsonxChildren;
-const { displayComponent } = jsonxUtils;
+const { displayComponent, validSimpleJSONXSyntax, simpleJSONXSyntax } = jsonxUtils;
 export let renderIndex = 0;
 
 /**
@@ -119,8 +119,9 @@ export function getReactElementFromJSONX(
   componentLibraries.ReactHookForm = ReactHookForm
   if (!jsonx) return null;
   if (jsonx.type) jsonx.component = jsonx.type;
-  if (jsonxUtils.validSimpleJSONXSyntax(jsonx))
-    jsonx = jsonxUtils.simpleJSONXSyntax(jsonx);
+  if (!jsonx.component && validSimpleJSONXSyntax(jsonx)) {
+    jsonx = simpleJSONXSyntax(jsonx);
+  }
   if (!jsonx || !jsonx.component)
     return createElement(
       "span",

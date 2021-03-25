@@ -81,7 +81,7 @@
   <span class="hljs-comment">//utility properties</span>
   <span class="hljs-attr">debug</span>:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to output the calculated JXM props in the console</span>
   <span class="hljs-attr">test</span>:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to output the calculated JXM as a string component</span>
-  <span class="hljs-attr">passprops</span>:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to pass parent properties to children JSONX objects (except for the style property)</span>
+  <span class="hljs-attr">passprops</span>:<span class="hljs-built_in">Boolean</span>|[<span class="hljs-built_in">String</span>], <span class="hljs-comment">// A flag to pass parent properties to children JSONX objects (except for the style property)</span>
   <span class="hljs-attr">___template</span>:<span class="hljs-built_in">String</span>, <span class="hljs-comment">//imports JXM from a file path into the children property </span>
   
   <span class="hljs-comment">//display properties</span>
@@ -90,6 +90,8 @@
   
   <span class="hljs-comment">//Applied properties</span>
   <span class="hljs-attr">useformregister</span>:<span class="hljs-built_in">Boolean</span>, <span class="hljs-comment">// A flag to insert react hook form register on component (short hand for  thiscontext: { ref:['reactHookForm','register'] })</span>
+  <span class="hljs-attr">useremoveprops</span>:[<span class="hljs-built_in">String</span>], <span class="hljs-comment">// remove props from component, usually used with passprops</span>
+  <span class="hljs-attr">useincludeprops</span>:[<span class="hljs-built_in">String</span>], <span class="hljs-comment">// Applied Prop: includes only defined props, usually used with passprops </span>
 }
 </code></pre>
 <h2>Simple JSONX Syntax</h2>

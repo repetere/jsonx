@@ -91,4 +91,56 @@ describe('End to End HTML Tests', function(){
       // expect(resolvedContentData).toBe('some mock data')
     },10000)
   })
+  describe('Advanced Form Test',()=>{
+    it('should render the page', async()=>{
+      async function click(selector:string = '#submitButton'){
+          // await page.$eval('#submitButton',(el:any)=>el.click())
+          await page.focus(selector)
+          await page.keyboard.press('Enter');
+          await page.waitForTimeout(200)
+      }
+      await page.goto(`file://${__dirname}/examples/component-advanced_form_component.html`,{
+        waitUntil: 'networkidle2',
+      });
+      await page.waitForSelector('#advanedFormResults')
+      const pageTitle = await page.$eval('title',(el:any)=>el.innerText)
+      const initialFormData = await page.$eval('#advanedFormResults',(el:any)=>el.innerText)
+      expect(pageTitle).toBe('STATEFUL FORM TEST')
+      const serverName = await page.$eval('#serverName',(el:any)=>el.value)
+      expect(serverName).toBe('my web app')
+      expect(initialFormData).toBe('{}')
+
+
+      // await page.evaluate( () => (document.querySelector('[name="api[0].name"]') as HTMLInputElement).value = "")
+      await page.focus('[name="api[0].name"]')
+      await page.keyboard.type('Twitter')
+      await click()
+      const firstSubmit = await page.$eval('#advanedFormResults',(el:any)=>el.innerText)
+      expect(JSON.parse(firstSubmit)).toMatchObject({
+        "serverName": "my web app",
+        "api": [
+          {
+            "name": "Twitter"
+          }
+        ]
+      })
+      await click('#addAPI')
+      await page.focus('[name="api[1].name"]')
+      await page.keyboard.type('Facebook')
+      await click()
+      const secondSubmit = await page.$eval('#advanedFormResults',(el:any)=>el.innerText)
+      expect(JSON.parse(secondSubmit)).toMatchObject({
+        "serverName": "my web app",
+        "api": [
+          {
+            "name": "Twitter"
+          },
+          {
+            "name": "Facebook"
+          }
+        ]
+      })
+      
+    },10000)
+  })
 })

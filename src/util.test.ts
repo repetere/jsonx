@@ -741,7 +741,7 @@ describe('jsonx utils', function () {
   describe('validSimpleJSONXSyntax', () => {
     const validSimpleJSONXSyntax = _jsonxUtils.validSimpleJSONXSyntax;
     it('should invalidate shorthard simple syntax', () => {
-      const invalidShorthand = {
+      const validShorthand = {
         component:'p',
       };
       const invalidShorthand2 = {
@@ -765,10 +765,10 @@ describe('jsonx utils', function () {
         },
         children:'hey',
       };
-      const invalidShorthand5 = {
+      const validShorthand5 = {
         children:'p',
       };
-      const invalidShorthand6 = {
+      const validShorthand6 = {
         anything:'p',
       };
       const invalidShorthand7 = {
@@ -776,12 +776,13 @@ describe('jsonx utils', function () {
           component: 'p',
         },
       };
-      expect(validSimpleJSONXSyntax(invalidShorthand)).to.be.false;
+      expect(validSimpleJSONXSyntax(validShorthand)).to.be.true;
       expect(validSimpleJSONXSyntax(invalidShorthand2)).to.be.false;
       expect(validSimpleJSONXSyntax(invalidShorthand3)).to.be.false;
       expect(validSimpleJSONXSyntax(invalidShorthand4)).to.be.false;
-      expect(validSimpleJSONXSyntax(invalidShorthand5)).to.be.false;
-      expect(validSimpleJSONXSyntax(invalidShorthand6)).to.be.false;
+      expect(validSimpleJSONXSyntax(validShorthand5)).to.be.true;
+      expect(validSimpleJSONXSyntax(validShorthand6)).to.be.true;
+      expect(validSimpleJSONXSyntax(invalidShorthand7)).to.be.false;
     });
     it('should validate shorthard simple syntax', () => {
       const validShorthand = {

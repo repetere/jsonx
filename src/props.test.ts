@@ -154,8 +154,8 @@ describe('jsonx props', function () {
         jsonx:removeAll,
         renderIndex:1,
       });
-      expect(computedProps).to.eql({ pleaseRemove1: 'ok', name: 'firstName' });
-      expect(computedProps0).to.eql({ });
+      expect(computedProps).to.eql({ pleaseRemove1: 'ok',key:1, name: 'firstName' });
+      expect(computedProps0).to.eql({ key:1,  });
     })
     it('should apply a form hook register with "useformregister"',()=>{
       const context = {

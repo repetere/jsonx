@@ -2,14 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>JSONX TEST</title>
+    <title>STATEFUL FORM TEST</title>
     <script type="text/javascript" src="../../dist/index.web.js"></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="text/javascript">
       function IntroHook(){
-        const { register, handleSubmit, errors, ref, control, getValues } = useForm({defaultValues:{title:'my web app'}});
+        const { register, handleSubmit, errors, ref, control, getValues } = useForm({defaultValues:{serverName:'my web app'}});
         const [size, setSize] = useState([1]);
         const [results, setResults] = useState({});
         const onSubmit = (data) => {
@@ -22,37 +22,63 @@
 
         return {
           component:'div',
+          props:{key:1},
           passprops:['register','size','setSize','getValues','results','_onSubmit',],
           children:[
             {
+              component:'label',
+              props:{
+                htmlFor:'serverName',
+                key:2
+              },
+              useincludeprops:['htmlFor','key'],
+              children:'Server Name'
+            },
+            {
               component:'input',
               props:{
-                placeholder:'Title',
-                name:'title',
-                id:'title',
+                placeholder:'Server',
+                name:'serverName',
+                id:'serverName',
+                key:3,
                 style:{
                   width:'100px'
                 }
               },
-              // removeprops:['_onSubmit','getValues','setSize','size','results'],
-              useincludeprops:['style','name','ref','id','placeholder'],
+              useincludeprops:['style','name','id','placeholder','key'],
               thisprops:{
-                ref:['register']
+                ref:['register'],
               },
             },
             {
               component:'h1',
               children:'inputs',
-              includeprops:[]
+              props:{key:4},
+              useincludeprops:[]
             },
             {
               component:'div',
-              passprops:true,
+              props:{
+                key:5
+              },
+              passprops:['size','register','__idx'],
               __spreadComponent:{
                 component:'section',
+                props:{key:6},
                 passprops:true,
                 children:[
-                  { component:'label', children:'API Name'},
+                  { 
+                    component:'label', 
+                    children:'API Name',
+                    __dangerouslyEvalAllProps: function({jsonx}){
+                      // console.log('arguments',arguments)
+                      // console.log('this',this)
+                      return {
+                        key:`label-api[${jsonx.props.__idx}].name`,
+                      }
+                    }
+
+                  },
                   {
                     component:'input',
                     __dangerouslyEvalAllProps: function({jsonx}){
@@ -60,6 +86,7 @@
                       // console.log('this',this)
                       return {
                         name:`api[${jsonx.props.__idx}].name`,
+                        key:`api[${jsonx.props.__idx}].name`,
                         style:{
                           width:'100px'
                         },
@@ -76,7 +103,8 @@
             {
               component:'button',
               props:{
-                id:'addPerson',
+                id:'addAPI',
+                key:55
               },
               __dangerouslyBindEvalProps:{
                 onClick(size,setSize){
@@ -85,31 +113,47 @@
                   setSize(newSize);
                 },
               },
-              children:'Add Person'
+              useincludeprops:['size','setSize','id','onClick','key'],
+              children:'Add API'
             },
             {
               component:'button',
               props:{
                 type:'submit',
-                id:'submitButton'
+                id:'submitButton',
+                key:66
               },
               __dangerouslyBindEvalProps:{
                 onClick(_onSubmit, getValues){
                   return _onSubmit(getValues())
                 },
               },
+              useincludeprops:['type','id','_onSubmit','getValues','onClick','key'],
               children:'Submit'
             },
             {
-              component:'hr'
+              component:'hr',
+              props:{
+                key:99
+              },
+              useincludeprops:[],
             },
             {
               component:'h3',
+              props:{
+                key:88
+              },
+              useincludeprops:[],
               children:'Results'
             },
             {
               component:'pre',
               ___stringifyChildren:true,
+              props:{
+                id:'advanedFormResults',
+                key:77
+              },
+              useincludeprops:['results','key','id'],
               thisprops:{
                 children:['results']
               }
@@ -126,6 +170,9 @@
       jsonx.jsonxRender.call(boundConfig,{ 
         jsonx: {
           component:'IntroHookComponent',
+          props:{
+            key:0
+          }
         }, 
         querySelector:'#root', });
     </script>

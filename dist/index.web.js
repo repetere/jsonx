@@ -42729,7 +42729,9 @@ var jsonx = (function (exports) {
 	        const componentName = Object.keys(simpleJSONX)[0];
 	        return Object.keys(simpleJSONX).length === 1 &&
 	            !simpleJSONX[componentName].component &&
-	            typeof simpleJSONX[componentName] === "object"
+	            (typeof simpleJSONX[componentName] === "object" || 
+	            typeof simpleJSONX[componentName] === "string") 
+							
 	            ? true
 	            : false;
 	    }
@@ -42740,17 +42742,19 @@ var jsonx = (function (exports) {
 	 * @return {Object} - returns a valid JSONX JSON Object from a simple JSONX JSON Object
 	 */
 	function simpleJSONXSyntax(simpleJSONX = {}) {
+			if(simpleJSONX.component) return simpleJSONX
 	    const component = Object.keys(simpleJSONX)[0];
 	    try {
-	        return Object.assign({}, {
-	            component
-	        }, simpleJSONX[component], {
-	            children: simpleJSONX[component] &&
-	                simpleJSONX[component].children &&
-	                Array.isArray(simpleJSONX[component].children)
-	                ? simpleJSONX[component].children.map(simpleJSONXSyntax)
-	                : simpleJSONX[component].children
-	        });
+				const children = typeof simpleJSONX[component] ==='string' || Array.isArray(simpleJSONX[component])
+					? simpleJSONX[component]
+					: simpleJSONX[component] && simpleJSONX[component].children && Array.isArray(simpleJSONX[component].children)
+						? simpleJSONX[component].children.map(simpleJSONXSyntax)
+						: simpleJSONX[component].children;
+				const jsonxprops = typeof simpleJSONX[component] ==='object'
+					? simpleJSONX[component]
+					: undefined;
+				const jsonx = {component,...jsonxprops,children}
+				return jsonx
 	    }
 	    catch (e) {
 	        throw SyntaxError("Invalid Simple JSONX Syntax");
@@ -45106,7 +45110,7 @@ var jsonx = (function (exports) {
 	        if (jsonx.debug)
 	            console.debug({ jsonx, computedProps });
 	        return (jsonx.useincludeprops && Array.isArray(jsonx.useincludeprops))
-	            ? jsonx.useincludeprops.reduce((includedProps, prop) => {
+	            ? jsonx.useincludeprops.concat(['key'], Object.keys(thisprops), Object.keys(thisstate), Object.keys(thiscontext), Object.keys(resourceprops), Object.keys(asyncprops), Object.keys(windowprops), Object.keys(evalProps), Object.keys(insertedComponents), Object.keys(insertedReactComponents), Object.keys(insertedComputedComponents)).reduce((includedProps, prop) => {
 	                includedProps[prop] = computedProps[prop];
 	                return includedProps;
 	            }, {})
@@ -53809,9 +53813,11 @@ ${jsonxRenderedString}`;
 	        return null;
 	    if (jsonx.type)
 	        jsonx.component = jsonx.type;
-	    if (validSimpleJSONXSyntax(jsonx))
-	        jsonx = simpleJSONXSyntax(jsonx);
-	    if (!jsonx || !jsonx.component)
+	    if (!jsonx.component && validSimpleJSONXSyntax(jsonx)) {
+				console.log('this is simple syntax',{jsonx})
+				jsonx = simpleJSONXSyntax(jsonx);
+	    }
+			if (!jsonx || !jsonx.component)
 	        return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
 	    try {
 	        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this?.reactComponents);

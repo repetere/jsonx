@@ -3776,7 +3776,7 @@ function getComputedProps$1(options = {}) {
         if (jsonx.debug)
             console.debug({ jsonx, computedProps });
         return (jsonx.useincludeprops && Array.isArray(jsonx.useincludeprops))
-            ? jsonx.useincludeprops.reduce((includedProps, prop) => {
+            ? jsonx.useincludeprops.concat(['key'], Object.keys(thisprops), Object.keys(thisstate), Object.keys(thiscontext), Object.keys(resourceprops), Object.keys(asyncprops), Object.keys(windowprops), Object.keys(evalProps), Object.keys(insertedComponents), Object.keys(insertedReactComponents), Object.keys(insertedComputedComponents)).reduce((includedProps, prop) => {
                 includedProps[prop] = computedProps[prop];
                 return includedProps;
             }, {})
