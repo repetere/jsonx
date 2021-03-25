@@ -154,6 +154,8 @@ describe('jsonx components', function () {
         logError:()=>{},
       };
       const customComponents = _jsonxComponents.getBoundedComponents.call(customThis,{ reactComponents, boundedComponents, advancedBinding:true, });
+      const customComponentsNotBound = _jsonxComponents.getBoundedComponents.call(customThis,{ reactComponents, boundedComponents, advancedBinding:false, });
+      // console.log(customComponents,customComponentsNotBound)
 
       const JSONXPropCheck = jsonx.getRenderedJSON.call(customThis, sampleCustomElementJSONX);
 
@@ -162,6 +164,8 @@ describe('jsonx components', function () {
       expect(JSONXPropCheck.props.title).to.eql(customThis.props.extraname);
       //@ts-ignore
       expect(customComponents.length).to.eql(reactComponents.length);
+      //@ts-ignore
+      expect(customComponentsNotBound).to.be.ok
     });
   });
   describe('getComponentFromMap', () => {
@@ -294,6 +298,13 @@ describe('jsonx components', function () {
       });
       expect(myFunc()).to.eql(3);
     });
+    it('should name the function',()=>{
+      const myFunc = getFunctionFromEval({
+        body: 'return 3;',
+        name:'myFunction'
+      });
+      expect(myFunc.name).to.eql('myFunction');
+    })
   });
   describe('getReactClassComponent', () => {
     const getReactClassComponent = _jsonxComponents.getReactClassComponent;
@@ -465,6 +476,19 @@ describe('jsonx components', function () {
       expect(MyCustomComponentNameless.name).to.eql('Anonymous');
       expect(MyCustomComponentNameless).to.be.a('function');
     });
+    it('should create react a React Function Component', () => { 
+      //@ts-ignore
+      const MyCustomComponentNameless = getReactFunctionComponent(
+        {
+          component:'p',
+          children:'hello',
+        },
+        function myFuncBody(){ console.log('some function body') },
+        { },
+      );
+      expect(MyCustomComponentNameless.name).to.eql('Anonymous');
+      expect(MyCustomComponentNameless).to.be.a('function');
+    });
     it('should create a React Function Component with a name', () => {
       //@ts-ignore
       const MyCustomComponent = getReactFunctionComponent(
@@ -537,6 +561,47 @@ describe('jsonx components', function () {
       // expect(wrapper.text()).to.contain('...Loading');
       expect(DynamicComponent).to.be.a('function');
     });
+    it('should render a component',()=>{
+      const myDynamicFunction = DynamicComponent.call({},{
+        jsonx:{
+          component:'div',
+          children:[
+            {
+              component:'h1',
+              props:{
+                id:'fetchedTitle'
+              },
+              children:'Fetched Data'
+            },
+            {
+              component:'p',
+              props:{
+                id:'fetchedP'
+              },
+              resourceprops:{
+                children:['DynamicComponentData','result']
+              }
+            }
+          ]
+        },
+        fetchURL:'#',
+        name: 'myDynamicFunction',
+        fetchFunction:()=>{
+          return new Promise(resolve=>{
+            setTimeout(()=>{
+              resolve({result:'some mock data'})
+            },1000)
+          })  
+        }
+      })
+      expect(myDynamicFunction).to.be.a('function');
+      expect(myDynamicFunction.name).to.eql('bound myDynamicFunction');
+      //@ts-ignore
+      const m = React.createElement(myDynamicFunction,{},undefined)
+      // console.log({m},m)
+      expect(m.type).to.eql(myDynamicFunction)
+      // console.log('myDynamicFunction',myDynamicFunction,{myDynamicFunction})
+    })
   });
   describe('FormComponent', () => {
     const FormComponent = _jsonxComponents.FormComponent;
@@ -547,12 +612,26 @@ describe('jsonx components', function () {
       // expect(wrapper.text()).to.contain('empty');
       expect(FormComponent).to.be.a('function');
     });
+    it('should render a component',()=>{
+      const myFormComponent = FormComponent.call({},{
+        name:'myFormComponent',
+      })
+      expect(myFormComponent).to.be.a('function');
+      expect(myFormComponent.name).to.eql('bound myFormComponent');
+      // console.log('myFormComponent',myFormComponent,{myFormComponent})
+      //@ts-ignore
+      const m = React.createElement(myFormComponent,undefined,undefined)
+      expect(m.type).to.eql(myFormComponent)
+
+      // console.log({m},m)
+    })
   });
   describe('getReactContext', () => {
     const getReactContext = _jsonxComponents.getReactContext;
     it('should return a React Context Object', () => {
       const context = getReactContext({ some: 'c', });
       expect(ReactTestUtils.isElement(context)).to.be.false;
+      expect(context).to.be.an('object');
       // expect(context).to.be.an.instanceOf(React.createContext);
     });
   });

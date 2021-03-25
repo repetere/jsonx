@@ -1,8 +1,5 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('react-dom')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'react', 'react-dom'], factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((typeof global!=="undefined" ? global : window).jsonx = {}, (typeof global!=="undefined" ? global : window).React, (typeof global!=="undefined" ? global : window).ReactDOM));
-}(this, (function (exports, n$1, ReactDOM) { 'use strict';
+var jsonx = (function (exports, n$1, ReactDOM) {
+	'use strict';
 
 	function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -5171,6 +5168,31 @@
 
 	var server = server_node;
 
+	/*! *****************************************************************************
+	Copyright (c) Microsoft Corporation.
+
+	Permission to use, copy, modify, and/or distribute this software for any
+	purpose with or without fee is hereby granted.
+
+	THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+	REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+	AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+	INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+	LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+	OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+	PERFORMANCE OF THIS SOFTWARE.
+	***************************************************************************** */
+
+	function __awaiter(thisArg, _arguments, P, generator) {
+	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+	    return new (P || (P = Promise))(function (resolve, reject) {
+	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+	        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+	        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+	        step((generator = generator.apply(thisArg, _arguments || [])).next());
+	    });
+	}
+
 	function Cache () {
 	  var _cache = Object.create(null);
 	  var _hitCount = 0;
@@ -8789,7 +8811,7 @@
 	        const jsonxprops = typeof simpleJSONX[component] === 'object'
 	            ? simpleJSONX[component]
 	            : undefined;
-	        const jsonx = { component, ...jsonxprops, children };
+	        const jsonx = Object.assign(Object.assign({ component }, jsonxprops), { children });
 	        return jsonx;
 	        // return Object.assign(
 	        //   {},
@@ -8843,14 +8865,16 @@
 	 * @param {Object} options - fetch options
 	 * @return {Object} - returns fetched JSON data
 	 */
-	async function fetchJSON(path = "", options = {}) {
-	    try {
-	        const response = await fetch(path, options);
-	        return await response.json();
-	    }
-	    catch (e) {
-	        throw e;
-	    }
+	function fetchJSON(path = "", options = {}) {
+	    return __awaiter(this, void 0, void 0, function* () {
+	        try {
+	            const response = yield fetch(path, options);
+	            return yield response.json();
+	        }
+	        catch (e) {
+	            throw e;
+	        }
+	    });
 	}
 
 	var jsonxUtils = /*#__PURE__*/Object.freeze({
@@ -9826,32 +9850,20 @@
 	    }
 	    const context = this || {};
 	    const { returnFactory = true, resources = {}, use_getState = true, bindContext = true, disableRenderIndexKey = true } = options;
-	    const rjc = {
+	    const rjc = Object.assign({ 
 	        //mounting
 	        getDefaultProps: {
 	            body: "return {};"
-	        },
+	        }, 
 	        // (unsupported) getDerivedStateFromProps: undefined, // {body:'return null;', args:['props','state',]}
 	        getInitialState: {
 	            body: "return {};"
-	        },
-	        componentDidMount: undefined,
-	        UNSAFE_componentWillMount: undefined,
+	        }, componentDidMount: undefined, UNSAFE_componentWillMount: undefined, 
 	        //updating
 	        // (unsupported) getDerivedStateFromProps 
-	        shouldComponentUpdate: undefined,
-	        getSnapshotBeforeUpdate: undefined,
-	        componentDidUpdate: undefined,
-	        UNSAFE_componentWillUpdate: undefined,
-	        UNSAFE_componentWillReceiveProps: undefined,
+	        shouldComponentUpdate: undefined, getSnapshotBeforeUpdate: undefined, componentDidUpdate: undefined, UNSAFE_componentWillUpdate: undefined, UNSAFE_componentWillReceiveProps: undefined, 
 	        //unmounting
-	        componentWillUnmount: undefined,
-	        //error handling
-	        // (unsupported) componentDidCatch:undefined, // { body:'return ;', args:['error','info'] }
-	        // (unsupported) getDerivedStateFromError: undefined, // {body:' return { hasError:true}', args:['error')',]}
-	        //body
-	        ...reactComponent
-	    };
+	        componentWillUnmount: undefined }, reactComponent);
 	    const rjcKeys = Object.keys(rjc);
 	    if (rjcKeys.includes("render") === false) {
 	        throw new ReferenceError("React components require a render method");
@@ -9926,35 +9938,21 @@
 	        const { hookFormOptions = {}, 
 	        // formComponent = { component: "div", children: "empty form" },
 	        onSubmit, formWrapperComponent, formKey, formWrapperProps, } = props;
-	        const formComponent = {
-	            component: "div",
-	            children: "empty form",
-	            ...props.formComponent,
-	        };
-	        formComponent.props = { ...formComponent.props, ...componentProps };
+	        const formComponent = Object.assign({ component: "div", children: "empty form" }, props.formComponent);
+	        formComponent.props = Object.assign(Object.assign({}, formComponent.props), componentProps);
 	        // const { register, unregister, errors, watch, handleSubmit, reset, setError, clearError, setValue, getValues, triggerValidation, control, formState, } = useForm(hookFormOptions);
 	        const reactHookForm = useForm(hookFormOptions);
-	        const context = {
-	            ...this || {},
-	            ...{ reactHookForm, },
-	        };
+	        const context = Object.assign(Object.assign({}, this || {}), { reactHookForm, });
 	        if (!context.componentLibraries || !context.componentLibraries.ReactHookForm) {
-	            context.componentLibraries = {
-	                ...context.componentLibraries,
-	                ...{
-	                    ReactHookForm: {
-	                        Controller, ErrorMessage: o,
-	                    }
+	            context.componentLibraries = Object.assign(Object.assign({}, context.componentLibraries), {
+	                ReactHookForm: {
+	                    Controller, ErrorMessage: o,
 	                }
-	            };
+	            });
 	        }
 	        const formWrapperJXM = formWrapperComponent || {
 	            component: 'form',
-	            props: {
-	                onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined,
-	                key: formKey ? `formWrapperJXM-${formKey}` : undefined,
-	                ...formWrapperProps,
-	            }
+	            props: Object.assign({ onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined, key: formKey ? `formWrapperJXM-${formKey}` : undefined }, formWrapperProps)
 	        };
 	        formWrapperJXM.children = Array.isArray(formComponent) ? formComponent : [formComponent];
 	        const renderJSONX = n$1.useMemo(() => getReactElementFromJSONX.bind(context), [
@@ -9989,10 +9987,8 @@
 	                }
 	            ]
 	        }, cacheTimeoutFunction = () => { }, transformFunction = (data) => data, fetchURL, fetchOptions, fetchFunction } = props;
-	        const jsonx = {
-	            ...props.jsonx,
-	        };
-	        jsonx.props = { ...jsonx.props, ...componentProps };
+	        const jsonx = Object.assign({}, props.jsonx);
+	        jsonx.props = Object.assign(Object.assign({}, jsonx.props), componentProps);
 	        const context = this || {};
 	        const [state, setState] = n$1.useState({
 	            hasLoaded: false,
@@ -10012,37 +10008,39 @@
 	        ]);
 	        const loadingError = n$1.useMemo(() => renderJSONX(loadingErrorJSONX, { error: state.error }), [loadingErrorJSONX, state.error]);
 	        n$1.useEffect(() => {
-	            async function getData() {
-	                try {
-	                    //@ts-ignore
-	                    let transformedData;
-	                    if (useCache && cache.get(fetchURL)) {
-	                        transformedData = cache.get(fetchURL);
-	                    }
-	                    else {
-	                        let fetchedData;
-	                        if (fetchFunction) {
-	                            fetchedData = await fetchFunction(fetchURL, fetchOptions);
+	            function getData() {
+	                return __awaiter(this, void 0, void 0, function* () {
+	                    try {
+	                        //@ts-ignore
+	                        let transformedData;
+	                        if (useCache && cache.get(fetchURL)) {
+	                            transformedData = cache.get(fetchURL);
 	                        }
-	                        else
-	                            fetchedData = await fetchJSON(fetchURL, fetchOptions);
-	                        transformedData = await transformer(fetchedData);
-	                        if (useCache)
-	                            cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
+	                        else {
+	                            let fetchedData;
+	                            if (fetchFunction) {
+	                                fetchedData = yield fetchFunction(fetchURL, fetchOptions);
+	                            }
+	                            else
+	                                fetchedData = yield fetchJSON(fetchURL, fetchOptions);
+	                            transformedData = yield transformer(fetchedData);
+	                            if (useCache)
+	                                cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
+	                        }
+	                        //@ts-ignore
+	                        setState(prevState => Object.assign({}, prevState, {
+	                            hasLoaded: true,
+	                            hasError: false,
+	                            resources: { DynamicComponentData: transformedData }
+	                        }));
 	                    }
-	                    //@ts-ignore
-	                    setState(prevState => Object.assign({}, prevState, {
-	                        hasLoaded: true,
-	                        hasError: false,
-	                        resources: { DynamicComponentData: transformedData }
-	                    }));
-	                }
-	                catch (e) {
-	                    if (context.debug)
-	                        console.warn(e);
-	                    //@ts-ignore
-	                    setState({ hasError: true, error: e });
-	                }
+	                    catch (e) {
+	                        if (context.debug)
+	                            console.warn(e);
+	                        //@ts-ignore
+	                        setState({ hasError: true, error: e });
+	                    }
+	                });
 	            }
 	            if (fetchURL)
 	                getData();
@@ -10207,7 +10205,7 @@
 	    const [functionBody,] = fullFunctionBody.split('return');
 	    let reactComponentString = fullFunctionBody.replace(functionBody, '').trim();
 	    const reactComponent = scopedEval(`(()=>{${reactComponentString}})()`);
-	    const functionOptions = { name: func.name, ...options };
+	    const functionOptions = Object.assign({ name: func.name }, options);
 	    return getReactFunctionComponent.call(this, reactComponent, functionBody, functionOptions);
 	}
 	/**
@@ -10845,10 +10843,7 @@
 	                : {})
 	            : undefined;
 	        if (jsonx.useformregister) {
-	            jsonx.thiscontext = {
-	                ref: ['reactHookForm', 'register'],
-	                ...jsonx.thiscontext,
-	            };
+	            jsonx.thiscontext = Object.assign({ ref: ['reactHookForm', 'register'] }, jsonx.thiscontext);
 	        }
 	        const windowTraverse = typeof window !== "undefined" ? window : {};
 	        const asyncprops = jsonx.asyncprops
@@ -19401,11 +19396,7 @@
 	}
 	function fetchJSONSync(path, options) {
 	    try {
-	        const config = {
-	            method: "GET",
-	            headers: [],
-	            ...options
-	        };
+	        const config = Object.assign({ method: "GET", headers: [] }, options);
 	        const request = new XMLHttpRequest();
 	        request.open(config && config.method || "GET", path, false); // `false` makes the request synchronous
 	        if (config.headers) {
@@ -19639,7 +19630,7 @@ ${jsonxRenderedString}`;
 	    if (!jsonx || !jsonx.component)
 	        return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
 	    try {
-	        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this?.reactComponents);
+	        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this === null || this === void 0 ? void 0 : this.reactComponents);
 	        const reactComponents = boundedComponents.length
 	            ? getBoundedComponents.call(this, {
 	                boundedComponents,
@@ -19829,4 +19820,6 @@ ${jsonxRenderedString}`;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+	return exports;
+
+}({}, React, ReactDOM));

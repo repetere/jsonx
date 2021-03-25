@@ -44,6 +44,7 @@ function getOutput({
   server = false,
   serverDom = false,
   core = false,
+  legacy = false,
 }) {
   const output = server ? [{
       file: pkg.main,
@@ -79,7 +80,7 @@ function getOutput({
   if (minify) {
     return output.map(item => {
       const itemFileArray = item.file.split('.');
-      if (core) itemFileArray.splice(itemFileArray.length - 1, 0, 'core-min');
+      if (core) itemFileArray.splice(itemFileArray.length - 1, 0, legacy?'core-legacy-min':'core-min');
       else itemFileArray.splice(itemFileArray.length - 1, 0, 'min');
       item.file = itemFileArray.join('.');
       item.sourcemap = false;
@@ -98,7 +99,7 @@ function getOutput({
   if (core) {
     return output.map(item => {
       const itemFileArray = item.file.split('.');
-      itemFileArray.splice(itemFileArray.length - 1, 0, 'core');
+      itemFileArray.splice(itemFileArray.length - 1, 0, legacy?'core-legacy':'core');
       item.file = itemFileArray.join('.');
       item.sourcemap = false;
       return item;
@@ -112,6 +113,7 @@ function getPlugins({
   server = false,
   serverDom = false,
   core = false,
+  legacy = false,
 }) {
   const plugins = [
     replace({
@@ -130,6 +132,7 @@ function getPlugins({
       declaration: false,
       declarationDir: null,
       allowJs:true,
+      target: legacy?"es6":"esnext",
     }),
     commonjs({
       extensions: ['.js'],
@@ -215,6 +218,66 @@ export default [
     }),
     external: coreWebExternal,
     plugins: getPlugins({
+      minify: true,
+      core: true,
+    }),
+  },
+  //web  legacy
+  {
+    input: "src/index.ts",
+    output: getOutput({
+      minify: false,
+      server: false,
+      legacy: true,
+    }),
+    external,
+    plugins: getPlugins({
+      minify: false,
+      legacy: true,
+    }),
+  },
+  //web  core legacy
+  {
+    input: "src/index.ts",
+    output: getOutput({
+      minify: false,
+      server: false,
+      legacy: true,
+      core: true,
+    }),
+    external: coreWebExternal,
+    plugins: getPlugins({
+      legacy: true,
+      minify: false,
+      core: true,
+    }),
+  },
+  //web minified legacy
+  {
+    input: "src/index.ts",
+    output: getOutput({
+      minify: true,
+      server: false,
+      legacy: true,
+    }),
+    external,
+    plugins: getPlugins({
+      minify: true,
+      legacy: true,
+    }),
+  },
+  //web minified core legacy
+  {
+    input: "src/index.ts",
+    output: getOutput({
+      minify: true,
+      server: false,
+      legacy: true,
+      core: true,
+    }),
+    external: coreWebExternal,
+    plugins: getPlugins({
+      legacy: true,
       minify: true,
       core: true,
     }),

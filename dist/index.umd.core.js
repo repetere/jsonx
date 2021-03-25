@@ -14306,7 +14306,8 @@
 	 */
 	function getBoundedComponents$1(options = {}) {
 	    const { reactComponents, boundedComponents = [] } = options;
-	    if (advancedBinding || options.advancedBinding) {
+	    if ((typeof options.advancedBinding === 'boolean' && options.advancedBinding) || (typeof options.advancedBinding === 'undefined' &&
+	        advancedBinding)) {
 	        return Object.assign({}, reactComponents, boundedComponents.reduce((result, componentName) => {
 	            result[componentName] = reactComponents[componentName].bind(this);
 	            return result;
