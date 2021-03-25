@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/repetere/jsonx/compare/v1.8.0...v1.8.1) (2021-03-25)
+
+
+### Bug Fixes
+
+* **props:** fixed passing props on simple syntax and mixed syntax components ([8e425a7](https://github.com/repetere/jsonx/commit/8e425a7f218b5a4753a93db0e859bd3f57c80a22))
+
 # [1.8.0](https://github.com/repetere/jsonx/compare/v1.7.0...v1.8.0) (2021-03-25)
 
 
