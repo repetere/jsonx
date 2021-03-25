@@ -71,7 +71,7 @@ jxm = {
   //utility properties
   debug:Boolean, // A flag to output the calculated JXM props in the console
   test:Boolean, // A flag to output the calculated JXM as a string component
-  passprops:Boolean, // A flag to pass parent properties to children JSONX objects (except for the style property)
+  passprops:Boolean|[String], // A flag to pass parent properties to children JSONX objects (except for the style property)
   ___template:String, //imports JXM from a file path into the children property 
   
   //display properties
@@ -80,6 +80,8 @@ jxm = {
   
   //Applied properties
   useformregister:Boolean, // A flag to insert react hook form register on component (short hand for  thiscontext: { ref:['reactHookForm','register'] })
+  useremoveprops:[String], // remove props from component, usually used with passprops
+  useincludeprops:[String], // Applied Prop: includes only defined props, usually used with passprops 
 }
 ```
 
