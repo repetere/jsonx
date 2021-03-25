@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/repetere/jsonx/compare/v1.7.0...v1.8.0) (2021-03-25)
+
+
+### Features
+
+* **props:** updated __spreadComponent to include __idx, passprops- as a list, added useremoveprops and useincludeprops ([ddce4fa](https://github.com/repetere/jsonx/commit/ddce4fa62d70bda3c638aee3dee675060459c4e4))
+
 # [1.7.0](https://github.com/repetere/jsonx/compare/v1.6.1...v1.7.0) (2021-03-24)
 
 
