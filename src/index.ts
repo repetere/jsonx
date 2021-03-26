@@ -71,11 +71,11 @@ export function outputHTML(
   this: defs.OutputHTMLContext,
   config: defs.OutputHTMLConfig = { jsonx: { component: "" } }
 ): string {
-  const { jsonx, resources, type = "Fragment", props, children } = config;
+  const { jsonx, resources, type, props, children } = config;
 
   return this && this.useJSON
     ? ReactDOMServer.renderToString(
-        getReactElementFromJSON.call(this || {}, { type, props, children })
+        getReactElementFromJSON.call(this || {}, { type:(type||jsonx.type||jsonx.component||'Fragment' as string), props:props||jsonx.props, children:children||jsonx.children })
       )
     : ReactDOMServer.renderToString(
         getReactElementFromJSONX.call(

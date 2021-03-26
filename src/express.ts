@@ -11,26 +11,29 @@ const scopedEval = eval;
  * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
  * @param {*} callback
  */
-export function __express(filePath: string, options: any, callback: any) {
+export function __express(filePath?: string, options?: any, callback?: any) {
   try {
-    let jsonxModule = options.__jsonx;
-
+    let jsonxModule = options?.__jsonx;
+    let isJSON = false;
     if (filePath) {
+      isJSON = (path.extname(filePath)===".json")
       const jsFile = fs.readFileSync(filePath).toString();
-      jsonxModule = scopedEval(jsFile.toString());
+      jsonxModule = (isJSON)
+        ? scopedEval(`(${jsFile})`)
+        : scopedEval(jsFile);
     }
     const resources = Object.assign({}, options);
     delete resources.__boundConfig;
     delete resources.__DOCTYPE;
     delete resources.__jsonx;
-    const context = Object.assign({}, options.__boundConfig);
-    if (path.extname(".json")) context.useJSON = true;
+    const context = Object.assign({disableRenderIndexKey:false}, options?.__boundConfig);
+    if (isJSON) context.useJSON = true;
 
     const jsonxRenderedString = outputHTML.call(context, {
       jsonx: jsonxModule,
       resources
     });
-    const template = `${options.__DOCTYPE || "<!DOCTYPE html>"}
+    const template = `${options?.__DOCTYPE || "<!DOCTYPE html>"}
 ${jsonxRenderedString}`;
     if (typeof callback === "function") callback(null, template);
     else return template;

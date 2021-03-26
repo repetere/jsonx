@@ -8470,7 +8470,7 @@ var jsonx = (function (exports, n$1, ReactDOM) {
 	        else if (typeof globalThis !== "undefined" && globalThis.window) {
 	            window = globalThis.window;
 	        }
-	        if (!window.navigator)
+	        if (!window || !window.navigator)
 	            return false;
 	    }
 	    try {

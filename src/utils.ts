@@ -159,7 +159,7 @@ export function getAdvancedBinding(this: defs.globalThisWindow): boolean {
     } else if (typeof globalThis !== "undefined" && globalThis.window) {
       window = globalThis.window;
     }
-    if (!window.navigator) return false;
+    if (!window || !window.navigator) return false;
   }
   try {
     if (
