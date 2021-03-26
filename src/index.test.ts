@@ -270,8 +270,10 @@ describe('jsonx', function () {
       //@ts-ignore
       expect(jsonx.__express.bind()).to.throw;
       //@ts-ignore
-      jsonx.__express(null,null, (err) => {
-        expect(err).to.be.a('error');
+      jsonx.__express(null,null, (err,template) => {
+        console.log({err,template})
+        expect(err).to.eql(null);
+        expect(template).to.eql('<!DOCTYPE html>\n');
         done();
       })
     });
