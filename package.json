@@ -63,7 +63,7 @@
     "@types/chai": "4.2.15",
     "@types/enzyme": "3.10.8",
     "@types/enzyme-adapter-react-16": "1.0.6",
-    "@types/jest": "26.0.21",
+    "@types/jest": "^26.0.22",
     "@types/jsdom-global": "3.0.2",
     "@types/luxon": "1.26.2",
     "@types/memory-cache": "0.2.1",

@@ -271,7 +271,6 @@ describe('jsonx', function () {
       expect(jsonx.__express.bind()).to.throw;
       //@ts-ignore
       jsonx.__express(null,null, (err,template) => {
-        console.log({err,template})
         expect(err).to.eql(null);
         expect(template).to.eql('<!DOCTYPE html>\n');
         done();
