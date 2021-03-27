@@ -1,0 +1,16 @@
+{
+  "component":"div",
+  "children":[
+    { 
+      "component":"div",
+      "children":"this is in the main template"
+    },
+    {
+      "component":"div",
+      "props":{
+        "title":"testing templates"
+      },
+      "___template": "./src/mock/simple_template.jxm.json"
+    }
+  ]
+}

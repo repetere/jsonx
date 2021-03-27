@@ -7,7 +7,7 @@ import sinon from 'sinon';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMElements from 'react-dom-factories';
-import { expect, } from 'chai';
+import { expect as EXPECTChai, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
 // import 'mocha-sinon';
@@ -77,17 +77,17 @@ describe('jsonx props', function () {
         resources,
         renderIndex,
       });
-      expect(computedProps.auth).to.eql(resources.authentication);
-      expect(computedProps.username).to.eql(resources.user.name);
-      expect(computedProps.key).to.eql(renderIndex);
-      expect(computedProps.getUsername).to.be.a('string');
-      expect(computedProps.getUsernameFunction).to.be.a('function');
-      expect(computedProps.myComponent).to.be.an('object');
-      expect(computedProps.myComponent).to.haveOwnProperty('$$typeof');
-      expect(computedProps.myComponent).to.haveOwnProperty('type');
-      expect(computedProps.myComponent).to.haveOwnProperty('key');
-      expect(computedProps.myComponent).to.haveOwnProperty('ref');
-      expect(computedProps.myComponent).to.haveOwnProperty('props');
+      EXPECTChai(computedProps.auth).to.eql(resources.authentication);
+      EXPECTChai(computedProps.username).to.eql(resources.user.name);
+      EXPECTChai(computedProps.key).to.eql(renderIndex);
+      EXPECTChai(computedProps.getUsername).to.be.a('string');
+      EXPECTChai(computedProps.getUsernameFunction).to.be.a('function');
+      EXPECTChai(computedProps.myComponent).to.be.an('object');
+      EXPECTChai(computedProps.myComponent).to.haveOwnProperty('$$typeof');
+      EXPECTChai(computedProps.myComponent).to.haveOwnProperty('type');
+      EXPECTChai(computedProps.myComponent).to.haveOwnProperty('key');
+      EXPECTChai(computedProps.myComponent).to.haveOwnProperty('ref');
+      EXPECTChai(computedProps.myComponent).to.haveOwnProperty('props');
     });
     it('should remove props with "useremoveprops"',()=>{
       const jsonx = {
@@ -116,11 +116,11 @@ describe('jsonx props', function () {
         jsonx:remove0,
         renderIndex:1,
       });
-      expect(computedProps).to.eql({ 
+      EXPECTChai(computedProps).to.eql({ 
         key: 1, 
         name: 'firstName' 
       });
-      expect(computedProps0).to.eql({
+      EXPECTChai(computedProps0).to.eql({
         key: 1,
         name: 'firstName',
         pleaseRemove1: 'ok',
@@ -154,8 +154,8 @@ describe('jsonx props', function () {
         jsonx:removeAll,
         renderIndex:1,
       });
-      expect(computedProps).to.eql({ pleaseRemove1: 'ok',key:1, name: 'firstName' });
-      expect(computedProps0).to.eql({ key:1,  });
+      EXPECTChai(computedProps).to.eql({ pleaseRemove1: 'ok',key:1, name: 'firstName' });
+      EXPECTChai(computedProps0).to.eql({ key:1,  });
     })
     it('should apply a form hook register with "useformregister"',()=>{
       const context = {
@@ -174,11 +174,15 @@ describe('jsonx props', function () {
         },
         renderIndex:1,
       });
-      expect(computedProps.ref).to.eql(context.reactHookForm.register);
+      EXPECTChai(computedProps.ref).to.eql(context.reactHookForm.register);
     })
   });
   describe('getJSONXProps', () => {
     const getJSONXProps = _jsonxProps.getJSONXProps;
+    it('should return with no input',()=>{
+      expect(getJSONXProps()).toMatchObject({})
+      expect(getJSONXProps({})).toMatchObject({})
+    })
     it('should return context props', () => { 
       const functionContext = {
         name: 'custom context',
@@ -198,12 +202,12 @@ describe('jsonx props', function () {
       };
       const JSONXCP = getJSONXProps({ jsonx: contextJSONX, traverseObject: functionContext, propName: 'thiscontext', });
       const JSONXJSONX = jsonx.getReactElementFromJSONX.call(functionContext, contextJSONX);
-      expect(JSONXCP).to.haveOwnProperty('contextName');
-      expect(JSONXCP).to.haveOwnProperty('_children');
-      expect(JSONXCP.contextName).to.eql(functionContext.name);
-      expect(JSONXCP._children).to.eql(functionContext.content);
+      EXPECTChai(JSONXCP).to.haveOwnProperty('contextName');
+      EXPECTChai(JSONXCP).to.haveOwnProperty('_children');
+      EXPECTChai(JSONXCP.contextName).to.eql(functionContext.name);
+      EXPECTChai(JSONXCP._children).to.eql(functionContext.content);
       //@ts-ignore
-      expect(JSONXJSONX.children).to.eql(functionContext.content);
+      EXPECTChai(JSONXJSONX.children).to.eql(functionContext.content);
       // const JSONXCP = getJSONXProps.call(functionContext, contextJSONX, { thiscontext: testVals, });
       // console.log({ JSONXCP,JSONXJSONX });
     });
@@ -216,10 +220,10 @@ describe('jsonx props', function () {
       const testJSONX2 = Object.assign({}, sampleJSONX, { thisprops: testVals, });
       const JSONXP = getJSONXProps({ jsonx: testJSONX, traverseObject, });
       const JSONXP2 = getJSONXProps({ jsonx: testJSONX2, traverseObject, propName:'thisprops', });
-      expect(JSONXP.auth).to.eql(traverseObject.authentication);
-      expect(JSONXP.username).to.eql(traverseObject.user.name);
-      expect(JSONXP2.auth).to.eql(traverseObject.authentication);
-      expect(JSONXP2.username).to.eql(traverseObject.user.name);
+      EXPECTChai(JSONXP.auth).to.eql(traverseObject.authentication);
+      EXPECTChai(JSONXP.username).to.eql(traverseObject.user.name);
+      EXPECTChai(JSONXP2.auth).to.eql(traverseObject.authentication);
+      EXPECTChai(JSONXP2.username).to.eql(traverseObject.user.name);
     });
     it('should return resolved dynamic prop with undefined values if reference is invalid', () => {
       const testVals = {
@@ -228,20 +232,20 @@ describe('jsonx props', function () {
       };
       const testJSONX = Object.assign({}, sampleJSONX, { asyncprops: testVals, });
       const JSONXP = getJSONXProps({ jsonx: testJSONX, traverseObject, });
-      expect(JSONXP.auth).to.be.undefined;
-      expect(JSONXP.username).to.be.undefined;
+      EXPECTChai(JSONXP.auth).to.be.undefined;
+      EXPECTChai(JSONXP.username).to.be.undefined;
     });
   });
   describe('getChildrenComponents', () => {
     const getChildrenComponents = _jsonxProps.getChildrenComponents;
     it('should return undefined children if missing __spread prop', () => {
       //@ts-ignore
-      expect(getChildrenComponents().children).to.be.undefined;
+      EXPECTChai(getChildrenComponents().children).to.be.undefined;
     });
     it('should return error in children if missing __spread prop and if in debug mode', () => {
       //@ts-ignore
-      expect(getChildrenComponents({ jsonx:{ debug:true ,}, }).children).to.be.a('string');
-      expect(getChildrenComponents.call({ debug:true ,}).children).to.be.a('string');
+      EXPECTChai(getChildrenComponents({ jsonx:{ debug:true ,}, }).children).to.be.a('string');
+      EXPECTChai(getChildrenComponents.call({ debug:true ,}).children).to.be.a('string');
     });
     it('should spread data as a component on __spread prop', () => {
       const options = {
@@ -256,15 +260,85 @@ describe('jsonx props', function () {
       };
       //@ts-ignore
       const spreadChilds = getChildrenComponents(options);
-      expect(spreadChilds).to.haveOwnProperty('_children');
-      expect(spreadChilds._children).to.have.lengthOf(options.allProps.__spread.length);
-      // expect(getChildrenComponents({ jsonx:{ debug:true ,}, }).children).to.be.a('string');
+      EXPECTChai(spreadChilds).to.haveOwnProperty('_children');
+      EXPECTChai(spreadChilds._children).to.have.lengthOf(options.allProps.__spread.length);
+      // EXPECTChai(getChildrenComponents({ jsonx:{ debug:true ,}, }).children).to.be.a('string');
     });
   });
   describe('boundArgsReducer', () => { 
+    const {boundArgsReducer} =_jsonxProps
     it('should return reducer function', () => {
       //@ts-ignore
-      expect(_jsonxProps.boundArgsReducer.bind()).to.be.a('function');
+      EXPECTChai(_jsonxProps.boundArgsReducer.bind()).to.be.a('function');
+    });
+    it('should return the stateful properties',()=>{
+      const thisObject = {
+        state:{
+          cool:'beans',
+          wow:'factor',
+          not:undefined
+        }
+      }
+      const reducer = boundArgsReducer.call(thisObject)
+      const statefulVal = reducer(['cool'],'cool')
+      const statefulVal2 = reducer(['cool'],'cool2')
+      const statefulVal3 = reducer([],'cool2')
+      const statefulVal4 = reducer([],'cool')
+      const statefulVal5 = reducer([undefined],'cool2')
+      const statefulVal6 = reducer([undefined],'not')
+      expect(statefulVal).toMatchObject([ 'cool', 'beans' ])
+      expect(statefulVal2).toMatchObject([ 'cool' ])
+      expect(statefulVal3).toMatchObject([])
+      expect(statefulVal4).toMatchObject([ 'beans' ])
+      expect(statefulVal5).toMatchObject([])
+      expect(statefulVal6).toMatchObject([])
+    });
+    it('should return the props properties',()=>{
+      const thisObject = {
+        props:{
+          cool:'beans',
+          wow:'factor',
+          not:undefined
+        }
+      }
+      const reducer = boundArgsReducer.call(thisObject)
+      const propsVal = reducer(['cool'],'cool')
+      const propsVal2 = reducer(['cool'],'cool2')
+      const propsVal3 = reducer([],'cool2')
+      const propsVal4 = reducer([],'cool')
+      const propsVal5 = reducer([undefined],'cool2')
+      const propsVal6 = reducer([undefined],'not')
+      expect(propsVal).toMatchObject([ 'cool', 'beans' ])
+      expect(propsVal2).toMatchObject([ 'cool' ])
+      expect(propsVal3).toMatchObject([])
+      expect(propsVal4).toMatchObject([ 'beans' ])
+      expect(propsVal5).toMatchObject([])
+      expect(propsVal6).toMatchObject([])
+    });
+    it('should return the jsonx properties',()=>{
+      const jsonx={
+        props:{
+          cool:'beans',
+          wow:'factor',
+          not:undefined
+        }
+      }
+      const reducer = boundArgsReducer.call({},jsonx)
+      const jsonxVal = reducer(['cool'],'cool')
+      const jsonxVal2 = reducer(['cool'],'cool2')
+      const jsonxVal3 = reducer([],'cool2')
+      const jsonxVal4 = reducer([],'cool')
+      const jsonxVal5 = reducer([undefined],'cool2')
+      const jsonxVal6 = reducer([undefined],'not')
+      //@ts-ignore
+      const jsonxVal7 = reducer([undefined],undefined)
+      expect(jsonxVal).toMatchObject([ 'cool', 'beans' ])
+      expect(jsonxVal2).toMatchObject([ 'cool' ])
+      expect(jsonxVal3).toMatchObject([])
+      expect(jsonxVal4).toMatchObject([ 'beans' ])
+      expect(jsonxVal5).toMatchObject([])
+      expect(jsonxVal6).toMatchObject([])
+      expect(jsonxVal7).toMatchObject([])
     });
   });
   describe('getEvalProps', () => {
@@ -287,9 +361,9 @@ describe('jsonx props', function () {
       //@ts-ignore
       const evalutedComputedBoundFunc = JSONXP.email({ email:'test@email.domain', });
       //@ts-ignore
-      expect(JSONXP.auth).to.be.true;
-      expect(evalutedComputedFunc).to.eql('bob');
-      expect(evalutedComputedBoundFunc).to.eql('bounded');
+      EXPECTChai(JSONXP.auth).to.be.true;
+      EXPECTChai(evalutedComputedFunc).to.eql('bob');
+      EXPECTChai(evalutedComputedBoundFunc).to.eql('bounded');
     });
   });
   describe('getWindowComponents', () => {
@@ -334,8 +408,8 @@ describe('jsonx props', function () {
         allProps,
         jsonx: testJSONX,
       });
-      expect(windowProps.useWelcome.type).to.eql(Welcome);
-      expect(windowProps.useWelcome.props.name).to.eql(allProps.__windowComponentProps.name);
+      EXPECTChai(windowProps.useWelcome.type).to.eql(Welcome);
+      EXPECTChai(windowProps.useWelcome.props.name).to.eql(allProps.__windowComponentProps.name);
     });    
     // afterAll(function () {
     //   // this.jsdom();
@@ -376,11 +450,11 @@ describe('jsonx props', function () {
       const jsonxObj = getFunctionProps.call(thisProp, {
         jsonx: jsonxTest,
       });
-      expect(jsonxObj).is.an('object');
-      expect(Object.keys(jsonxObj)).to.eql(Object.keys(jsonxTest.__functionProps));
-      expect(jsonxObj.onclick()).to.eq('clicked');
-      expect(jsonxObj.printPage()).to.eql('printed');
-      expect(jsonxObj.nav()).to.eql('pushed');
+      EXPECTChai(jsonxObj).is.an('object');
+      EXPECTChai(Object.keys(jsonxObj)).to.eql(Object.keys(jsonxTest.__functionProps));
+      EXPECTChai(jsonxObj.onclick()).to.eq('clicked');
+      EXPECTChai(jsonxObj.printPage()).to.eql('printed');
+      EXPECTChai(jsonxObj.nav()).to.eql('pushed');
     });
   });
   describe('getFunctionFromProps', () => {
@@ -399,11 +473,11 @@ describe('jsonx props', function () {
       //@ts-ignore
       const defaultFunc = getFunctionFromProps.call(thisProp, {});
       // const emptyFunction = function () {};
-      expect(func).to.be.a('function');
-      expect(defaultFunc).to.be.a('function');
-      // expect(func.toString()).to.eq(emptyFunction.toString());
-      // expect(defaultFunc.toString()).to.eq(emptyFunction.toString());
-      expect(logError.called).to.be.true;
+      EXPECTChai(func).to.be.a('function');
+      EXPECTChai(defaultFunc).to.be.a('function');
+      // EXPECTChai(func.toString()).to.eq(emptyFunction.toString());
+      // EXPECTChai(defaultFunc.toString()).to.eq(emptyFunction.toString());
+      EXPECTChai(logError.called).to.be.true;
     });
     it('should return a library function like this.props.reduxRouter.push', () => {
       const logError = sinon.spy();
@@ -421,9 +495,9 @@ describe('jsonx props', function () {
       const func = getFunctionFromProps.call(thisProp, {
         propFunc: 'func:this.props.reduxRouter.push',
       });
-      expect(func).to.be.a('function');
-      expect(func()).to.eq('pushed');
-      expect(logError.called).to.be.false;
+      EXPECTChai(func).to.be.a('function');
+      EXPECTChai(func()).to.eq('pushed');
+      EXPECTChai(logError.called).to.be.false;
     });
     it('should return a function on this.props like this.props.onClick', () => {
       const logError = sinon.spy();
@@ -438,9 +512,9 @@ describe('jsonx props', function () {
       const func = getFunctionFromProps.call(thisProp, {
         propFunc: 'func:this.props.onClick',
       });
-      expect(func).to.be.a('function');
-      expect(func()).to.eq('clicked');
-      expect(logError.called).to.be.false;
+      EXPECTChai(func).to.be.a('function');
+      EXPECTChai(func()).to.eq('clicked');
+      EXPECTChai(logError.called).to.be.false;
     });
     it('should return a window function like window.print or window.localStorage.getItem', () => {
       const logError = sinon.spy();
@@ -463,11 +537,11 @@ describe('jsonx props', function () {
       const funcDeep = getFunctionFromProps.call(thisProp, {
         propFunc: 'func:window.localStorage.getItem',
       });
-      expect(func).to.be.a('function');
-      expect(funcDeep).to.be.a('function');
-      expect(func()).to.eq('printed');
-      expect(funcDeep()).to.eq('gotItem');
-      expect(logError.called).to.be.false;
+      EXPECTChai(func).to.be.a('function');
+      EXPECTChai(funcDeep).to.be.a('function');
+      EXPECTChai(func()).to.eq('printed');
+      EXPECTChai(funcDeep()).to.eq('gotItem');
+      EXPECTChai(logError.called).to.be.false;
     });
   });
   describe('getComponentProps', () => {
@@ -481,12 +555,12 @@ describe('jsonx props', function () {
       };
       const testJSONX = Object.assign({}, sampleJSONX, { __dangerouslyInsertComponents: testVals,  });
       const JSONXP = getComponentProps.call({ }, { jsonx: testJSONX, });
-      expect(JSONXP.myComponent).to.be.an('object');
-      expect(JSONXP.myComponent).to.haveOwnProperty('$$typeof');
-      expect(JSONXP.myComponent).to.haveOwnProperty('type');
-      expect(JSONXP.myComponent).to.haveOwnProperty('key');
-      expect(JSONXP.myComponent).to.haveOwnProperty('ref');
-      expect(JSONXP.myComponent).to.haveOwnProperty('props');
+      EXPECTChai(JSONXP.myComponent).to.be.an('object');
+      EXPECTChai(JSONXP.myComponent).to.haveOwnProperty('$$typeof');
+      EXPECTChai(JSONXP.myComponent).to.haveOwnProperty('type');
+      EXPECTChai(JSONXP.myComponent).to.haveOwnProperty('key');
+      EXPECTChai(JSONXP.myComponent).to.haveOwnProperty('ref');
+      EXPECTChai(JSONXP.myComponent).to.haveOwnProperty('props');
     });
   });
   describe('getReactComponentProps', () => {
@@ -498,9 +572,9 @@ describe('jsonx props', function () {
       const testJSONX = Object.assign({}, sampleJSONX, { __dangerouslyInsertReactComponents: testVals,  });
       const JSONXP = getReactComponentProps.call({}, { jsonx: testJSONX, });
       //@ts-ignore
-      expect(JSONXP.myComponent).to.be.an('string');
+      EXPECTChai(JSONXP.myComponent).to.be.an('string');
       //@ts-ignore
-      expect(JSONXP.myComponent).to.eql('p');
+      EXPECTChai(JSONXP.myComponent).to.eql('p');
     });
   });
 

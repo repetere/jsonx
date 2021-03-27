@@ -27,8 +27,7 @@ export function __express(filePath?: string, options?: any, callback?: any) {
     delete resources.__DOCTYPE;
     delete resources.__jsonx;
     const context = Object.assign({disableRenderIndexKey:false}, options?.__boundConfig);
-    if (isJSON) context.useJSON = true;
-
+    // if (isJSON) context.useJSON = true;
     const jsonxRenderedString = outputHTML.call(context, {
       jsonx: jsonxModule,
       resources

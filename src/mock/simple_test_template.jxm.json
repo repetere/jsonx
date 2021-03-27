@@ -1,0 +1,14 @@
+{
+  "main":[
+    { "div":"this is in the simple template"},
+    {
+      "section":{  
+        "props":{
+          "title":"testing simple templates"
+        },
+        "children":"replace this",
+        "___template": "./src/mock/simple_template.jxm.json"
+      }
+    }
+  ]
+}
