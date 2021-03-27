@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/repetere/jsonx/compare/v1.9.0...v1.9.1) (2021-03-27)
+
+
+### Bug Fixes
+
+* **express:** adding express view tests ([1aee24f](https://github.com/repetere/jsonx/commit/1aee24ff6775ebafec9549148925c7c0feba67ee))
+
 # [1.9.0](https://github.com/repetere/jsonx/compare/v1.8.1...v1.9.0) (2021-03-25)
 
 
