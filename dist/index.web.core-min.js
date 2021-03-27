@@ -9797,6 +9797,7 @@ var jsonx = (function (exports, n$1, ReactDOM) {
 	function getReactClassComponent(reactComponent = {}, options = {}) {
 	    // const util = require('util');
 	    // console.log(util.inspect({ reactComponent },{depth:20}));
+	    // console.log('reactComponent',reactComponent)
 	    if (options.lazy) {
 	        //@ts-ignore
 	        return n$1.lazy(() => options
@@ -9837,6 +9838,7 @@ var jsonx = (function (exports, n$1, ReactDOM) {
 	        ...reactComponent
 	    };
 	    const rjcKeys = Object.keys(rjc);
+	    console.log({ rjcKeys });
 	    if (rjcKeys.includes("render") === false) {
 	        throw new ReferenceError("React components require a render method");
 	    }
@@ -10521,8 +10523,13 @@ var jsonx = (function (exports, n$1, ReactDOM) {
 	                const args = jsonx.__dangerouslyInsertFunctionComponents && jsonx.__dangerouslyInsertFunctionComponents[cpropName];
 	                if (args) {
 	                    args.options = Object.assign({}, args.options, { resources });
-	                    // eslint-disable-next-line
-	                    componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+	                    if (args.function) {
+	                        componentVal = makeFunctionComponent.call(this, args.function, args.options);
+	                    }
+	                    else {
+	                        // eslint-disable-next-line
+	                        componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+	                    }
 	                }
 	            }
 	            catch (e) {

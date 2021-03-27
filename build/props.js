@@ -1,7 +1,7 @@
 import React from "react";
 import { getRenderedJSON } from "./index";
 import * as utilities from "./utils";
-import { getComponentFromMap, getReactFunctionComponent, getReactClassComponent } from "./components";
+import { getComponentFromMap, getReactFunctionComponent, getReactClassComponent, makeFunctionComponent, } from "./components";
 //https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically
 export const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
 export const ARGUMENT_NAMES = /([^\s,]+)/g;
@@ -304,8 +304,13 @@ export function getReactComponents(options) {
                 const args = jsonx.__dangerouslyInsertFunctionComponents && jsonx.__dangerouslyInsertFunctionComponents[cpropName];
                 if (args) {
                     args.options = Object.assign({}, args.options, { resources });
-                    // eslint-disable-next-line
-                    componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+                    if (args.function) {
+                        componentVal = makeFunctionComponent.call(this, args.function, args.options);
+                    }
+                    else {
+                        // eslint-disable-next-line
+                        componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+                    }
                 }
             }
             catch (e) {

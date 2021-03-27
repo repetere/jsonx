@@ -30,7 +30,7 @@ jobs:
             ${{ runner.os }}-
       - name: Install dependencies
         run: |
-          npm i jest typescript rollup typedoc sitedown -g
+          npm i jest typescript rollup@2.42.4 typedoc sitedown -g
           npm ci
       - name: Test coverage
         run: |

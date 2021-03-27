@@ -166,6 +166,7 @@ export function getFunctionFromEval(options = {}) {
 export function getReactClassComponent(reactComponent = {}, options = {}) {
     // const util = require('util');
     // console.log(util.inspect({ reactComponent },{depth:20}));
+    // console.log('reactComponent',reactComponent)
     if (options.lazy) {
         //@ts-ignore
         return lazy(() => options
@@ -206,6 +207,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
         ...reactComponent
     };
     const rjcKeys = Object.keys(rjc);
+    console.log({ rjcKeys });
     if (rjcKeys.includes("render") === false) {
         throw new ReferenceError("React components require a render method");
     }
