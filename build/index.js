@@ -48,9 +48,9 @@ export function jsonxRender(config = { jsonx: { component: "" }, querySelector: 
  * @returns {string} React genereated html via JSONX JSON
  */
 export function outputHTML(config = { jsonx: { component: "" } }) {
-    const { jsonx, resources, type = "Fragment", props, children } = config;
+    const { jsonx, resources, type, props, children } = config;
     return this && this.useJSON
-        ? ReactDOMServer.renderToString(getReactElementFromJSON.call(this || {}, { type, props, children }))
+        ? ReactDOMServer.renderToString(getReactElementFromJSON.call(this || {}, { type: (type || jsonx.type || jsonx.component || 'Fragment'), props: props || jsonx.props, children: children || jsonx.children }))
         : ReactDOMServer.renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
 }
 /**

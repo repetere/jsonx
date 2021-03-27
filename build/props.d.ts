@@ -113,6 +113,12 @@ export declare function getChildrenComponents(this: defs.Context, options?: {
     _children: any;
     children?: undefined;
 };
+/**
+ * returns a reducer function that returns values ot bind to an eval function. This function is used when values need to be passed from a hook function to a prop that is a function
+ * @param {object} this
+ * @param {object} jsonx
+ * @returns {function}
+ */
 export declare function boundArgsReducer(this: defs.Context, jsonx?: defs.jsonx): (args: any, arg: string) => any;
 /**
  * Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})

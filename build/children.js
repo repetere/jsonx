@@ -139,6 +139,7 @@ export function fetchJSONSync(path, options) {
     }
 }
 export function getChildrenTemplate(template) {
+    console.log('template', template);
     const cachedTemplate = templateCache.get(template);
     if (cachedTemplate) {
         return cachedTemplate;
@@ -154,9 +155,7 @@ export function getChildrenTemplate(template) {
     else if (typeof template === "string") {
         const jsFile = fs.readFileSync(path.resolve(template)).toString();
         const jsonxModule = scopedEval(`(${jsFile})`);
-        // console.log({jsonxModule})
         templateCache.set(template, jsonxModule);
-        // console.log({ templateCache });
         return jsonxModule;
     }
     return null;

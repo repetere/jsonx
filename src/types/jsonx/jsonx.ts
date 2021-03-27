@@ -4,12 +4,14 @@ export interface jsonxChildren {
   children?: jsonx[] | string | Date | null ;
 }
 export type createFunctionComponentArgs = {
-  reactComponent: jsonx;
+  reactComponent?: jsonx;
+  function?: callbackFunc;
   functionBody?: string;
   options?: {
-    lazy: boolean;
-    bind: boolean;
-    resources: any;
+    lazy?: boolean;
+    bind?: boolean;
+    resources?: any;
+    name?: string;
   };
 };
 export interface jsonxElementProperties {

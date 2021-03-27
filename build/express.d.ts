@@ -6,4 +6,4 @@
  * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
  * @param {*} callback
  */
-export declare function __express(filePath: string, options: any, callback: any): string | undefined;
+export declare function __express(filePath?: string, options?: any, callback?: any): string | undefined;

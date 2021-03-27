@@ -3238,6 +3238,12 @@ function getChildrenComponents(options = {}) {
         };
     }
 }
+/**
+ * returns a reducer function that returns values ot bind to an eval function. This function is used when values need to be passed from a hook function to a prop that is a function
+ * @param {object} this
+ * @param {object} jsonx
+ * @returns {function}
+ */
 function boundArgsReducer(jsonx = {}) {
     return (args, arg) => {
         let val;
@@ -3289,9 +3295,11 @@ function getEvalProps(options = { jsonx: {} }) {
         }
         catch (e) {
             if (this.debug || jsonx.debug)
-                evVal = e;
+                evVal = function () { return { error: e }; };
         }
-        evAllProps = evVal.call(this, { jsonx });
+        evAllProps = typeof evVal === "function"
+            ? evVal.call(this, { jsonx })
+            : evVal;
     }
     const evProps = Object.keys(jsonx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
         let evVal;
@@ -12068,6 +12076,7 @@ function fetchJSONSync(path, options) {
     }
 }
 function getChildrenTemplate(template) {
+    console.log('template', template);
     const cachedTemplate = templateCache.get(template);
     if (cachedTemplate) {
         return cachedTemplate;
@@ -12083,9 +12092,7 @@ function getChildrenTemplate(template) {
     else if (typeof template === "string") {
         const jsFile = fs.readFileSync(path__default['default'].resolve(template)).toString();
         const jsonxModule = scopedEval$1(`(${jsFile})`);
-        // console.log({jsonxModule})
         templateCache.set(template, jsonxModule);
-        // console.log({ templateCache });
         return jsonxModule;
     }
     return null;
@@ -12175,23 +12182,26 @@ const scopedEval = eval;
  */
 function __express(filePath, options, callback) {
     try {
-        let jsonxModule = options.__jsonx;
+        let jsonxModule = options?.__jsonx;
+        let isJSON = false;
         if (filePath) {
+            isJSON = (path__default['default'].extname(filePath) === ".json");
             const jsFile = fs.readFileSync(filePath).toString();
-            jsonxModule = scopedEval(jsFile.toString());
+            jsonxModule = (isJSON)
+                ? scopedEval(`(${jsFile})`)
+                : scopedEval(jsFile);
         }
         const resources = Object.assign({}, options);
         delete resources.__boundConfig;
         delete resources.__DOCTYPE;
         delete resources.__jsonx;
-        const context = Object.assign({}, options.__boundConfig);
-        if (path__default['default'].extname(".json"))
-            context.useJSON = true;
+        const context = Object.assign({ disableRenderIndexKey: false }, options?.__boundConfig);
+        // if (isJSON) context.useJSON = true;
         const jsonxRenderedString = outputHTML.call(context, {
             jsonx: jsonxModule,
             resources
         });
-        const template = `${options.__DOCTYPE || "<!DOCTYPE html>"}
+        const template = `${options?.__DOCTYPE || "<!DOCTYPE html>"}
 ${jsonxRenderedString}`;
         if (typeof callback === "function")
             callback(null, template);
@@ -12247,9 +12257,9 @@ function jsonxRender(config = { jsonx: { component: "" }, querySelector: "" }) {
  * @returns {string} React genereated html via JSONX JSON
  */
 function outputHTML(config = { jsonx: { component: "" } }) {
-    const { jsonx, resources, type = "Fragment", props, children } = config;
+    const { jsonx, resources, type, props, children } = config;
     return this && this.useJSON
-        ? ReactDOMServer__default['default'].renderToString(getReactElementFromJSON.call(this || {}, { type, props, children }))
+        ? ReactDOMServer__default['default'].renderToString(getReactElementFromJSON.call(this || {}, { type: (type || jsonx.type || jsonx.component || 'Fragment'), props: props || jsonx.props, children: children || jsonx.children }))
         : ReactDOMServer__default['default'].renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
 }
 /**

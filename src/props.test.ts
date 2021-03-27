@@ -665,6 +665,118 @@ describe('jsonx props', function () {
       // console.log({erroredComponent})
     })
   });
+  describe('getReactComponents',()=>{
+    const getReactComponents = _jsonxProps.getReactComponents;
+    it('should create a function component from a function',()=>{
+      const jsonxWithFunc = getReactComponents.call({},{
+        jsonx:{
+          component:'div',
+          __dangerouslyInsertFunctionComponents:{
+            tick:{
+              function:function(){
+                console.log('clicked!')
+                return {
+                  component:'span',
+                  children:'from func'
+                }
+              },
+              options:{
+                name:'spanFunc'
+              }
+            }
+          },
+          children:'click me'
+        }
+      });
+      expect(jsonxWithFunc.tick.name).toBe('spanFunc');
+    });
+    it('should create a function component from createFunctionComponent args',()=>{
+      const jsonxWithFunc = getReactComponents.call({},{
+        jsonx:{
+          component:'div',
+          __dangerouslyInsertFunctionComponents:{
+            tick:{
+              functionBody:'console.log("clicked!")',
+              reactComponent:{
+                component:'span',
+                children:'from func',
+              },
+              options:{
+                name:'spanFunc'
+              }
+            }
+          },
+          children:'click me'
+        }
+      });
+      expect(jsonxWithFunc.tick.name).toBe('spanFunc');
+    });
+    it('should handle errors create a function component from createFunctionComponent args',()=>{
+      const jsonxWithFunc = getReactComponents.call({debug:true},{
+        jsonx:{
+          component:'div',
+          __dangerouslyInsertFunctionComponents:{
+            tick:{
+              functionBody:'INVALID',
+              reactComponent:{
+                component:'INVALID COMPONENT',
+              },
+              options:{
+                name:'000INVALID'
+              }
+            }
+          },
+          children:'click me'
+        }
+      });
+      expect(jsonxWithFunc.tick).toBeInstanceOf(Error);
+      // console.log('jsonxWithFunc',jsonxWithFunc)
+    });
+    it('should handle errors create a class component from classComponents args',()=>{
+      const jsonxWithFunc = getReactComponents.call({debug:true},{
+        jsonx:{
+          component:'div',
+          __dangerouslyInsertClassComponents:{
+            tick:{
+              reactComponent:{
+                component:'INVALID COMPONENT',
+              },
+              options:{
+                name:'000INVALID'
+              }
+            }
+          },
+          children:'click me'
+        }
+      });
+      expect(jsonxWithFunc.tick).toBeInstanceOf(Error);
+    });
+    it('should create a class component from classComponents args',()=>{
+      const jsonxWithFunc = getReactComponents.call({debug:true},{
+        jsonx:{
+          component:'div',
+          __dangerouslyInsertClassComponents:{
+            tick:{
+              reactComponent:{
+                render:{
+                  body:{
+
+                    component:'span',
+                    children:'Class Component'
+                  },
+                },
+              },
+              options:{
+                name:'spanClass'
+              }
+            }
+          },
+          children:'click me'
+        }
+      });
+      expect(typeof jsonxWithFunc.tick).toBe('function');
+    });
+  });
   describe('getReactComponentProps', () => {
     const getReactComponentProps = _jsonxProps.getReactComponentProps;
     it('should return react component props dangerously using eval', () => {

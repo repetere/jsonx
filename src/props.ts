@@ -5,7 +5,7 @@ import {
   getComponentFromMap,
   getReactFunctionComponent,
   getReactClassComponent,
-  getReactContext
+  makeFunctionComponent,
 } from "./components";
 // if (typeof window === 'undefined') {
 //   var window = window || {};
@@ -350,14 +350,18 @@ export function getReactComponents(this: defs.Context, options: defs.Config) {
           try {
             const args = jsonx.__dangerouslyInsertFunctionComponents && jsonx.__dangerouslyInsertFunctionComponents[cpropName] as defs.createFunctionComponentArgs;
             if (args) {
-            args.options = Object.assign({}, args.options, { resources });
-            // eslint-disable-next-line
-            componentVal = getReactFunctionComponent.call(
-              this,
-              args.reactComponent,
-              args.functionBody,
-              args.options
-              );
+              args.options = Object.assign({}, args.options, { resources });
+            if(args.function){
+              componentVal = makeFunctionComponent.call(this,args.function,args.options)
+            } else {
+              // eslint-disable-next-line
+              componentVal = getReactFunctionComponent.call(
+                this,
+                args.reactComponent,
+                args.functionBody,
+                args.options
+                );
+              }
             }
           } catch (e) {
             if (this.debug || jsonx.debug) componentVal = e;
