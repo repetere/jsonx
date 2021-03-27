@@ -365,6 +365,92 @@ describe('jsonx props', function () {
       EXPECTChai(evalutedComputedFunc).to.eql('bob');
       EXPECTChai(evalutedComputedBoundFunc).to.eql('bounded');
     });
+    it('should return all evaluated props using __dangerouslyEvalAllProps',()=>{
+      const jsonx = {
+        component:"div",
+        __dangerouslyEvalAllProps: function(){
+          return {title:'div title', foo:'bar'}
+        },
+        children:'Hello World'
+      }
+      const evaledProps = getEvalProps.call({},{jsonx})
+      expect(evaledProps).toMatchObject( { title: 'div title', foo: 'bar' })
+    })
+    it('should throw errors using __dangerouslyEvalAllProps',()=>{
+      const jsonx = {
+        component:"div",
+        __dangerouslyEvalAllProps: 'INVALID',
+        children:'Hello World'
+      }
+      const evaledProps = getEvalProps.call({ debug: true },{jsonx})
+      const evaledPropsNoDebug = getEvalProps.call({},{jsonx})
+      //@ts-ignore
+      expect(evaledProps.error).toBeInstanceOf(Error)
+      expect(evaledPropsNoDebug).toMatchObject({})
+      // expect(evaledProps).toMatchObject( { title: 'div title', foo: 'bar' })
+    });
+    it('should handle errors with __dangerouslyEvalProps',()=>{
+      const jsonx = {
+        component:"div",
+        __dangerouslyEvalProps:{
+          title:'INVALID',
+        },
+        children:'Hello World'
+      }
+      const evaledProps = getEvalProps.call({ debug: true },{jsonx})
+      const evaledPropsNoDebug = getEvalProps.call({},{jsonx})
+
+      //@ts-ignore
+      expect(evaledProps.title).toBeInstanceOf(Error)
+      //@ts-ignore
+      expect(evaledPropsNoDebug.title).toBe(undefined)
+
+      const evaledPropsExposed = getEvalProps.call({ exposeEval: true },{
+        jsonx:{
+          component:"div",
+          __dangerouslyEvalProps:{
+            title:function(jsonx){return true},
+          },
+        },
+        //@ts-ignore
+        children:'Hello World'
+      })
+      //@ts-ignore
+      expect(evaledPropsExposed.__eval_title).toBe('function (jsonx) { return true; }')
+      // console.log({evaledPropsExposed})
+    })
+    it('should handle __dangerouslyBindEvalProps',()=>{
+      const jsonx = {
+        component:"div",
+        __dangerouslyBindEvalProps:{
+          title:function(a:string){
+            return 'text for title: '+a 
+          },
+        },
+        __functionargs:{
+          title: ['customTitle']
+        },
+        children:'Hello World'
+      }
+      //@ts-ignore
+      const evaledProps = getEvalProps.call({ debug: true, state:{ customTitle:'inserted funcArg'} },{jsonx})
+      //@ts-ignore
+      const calcTitle = evaledProps.title()
+      expect(calcTitle).toBe('text for title: inserted funcArg')
+    })
+    it('should handle errors from __dangerouslyBindEvalProps',()=>{
+      const jsonx = {
+        component:"div",
+        __dangerouslyBindEvalProps:{
+          title:'INVALID',
+        },
+        children:'Hello World'
+      }
+      //@ts-ignore
+      const evaledProps = getEvalProps.call({ debug: true, },{jsonx})
+      //@ts-ignore
+      expect(evaledProps.title).toBeInstanceOf(Error)
+    })
   });
   describe('getWindowComponents', () => {
     const getWindowComponents = _jsonxProps.getWindowComponents;
@@ -562,6 +648,22 @@ describe('jsonx props', function () {
       EXPECTChai(JSONXP.myComponent).to.haveOwnProperty('ref');
       EXPECTChai(JSONXP.myComponent).to.haveOwnProperty('props');
     });
+    it('should handle errors',()=>{
+      const erroredComponent = getComponentProps.call({debug:true, logError:()=>{}},{
+        jsonx:{
+          component:'div',
+          __dangerouslyInsertComponents:{
+            children:{
+              component:'invalid',
+              props:false
+            }
+          }
+        }
+      })
+      //@ts-ignore
+      expect(erroredComponent.children).toBeInstanceOf(Error)
+      // console.log({erroredComponent})
+    })
   });
   describe('getReactComponentProps', () => {
     const getReactComponentProps = _jsonxProps.getReactComponentProps;

@@ -164,6 +164,12 @@ export function getChildrenComponents(
   }
 }
 
+/**
+ * returns a reducer function that returns values ot bind to an eval function. This function is used when values need to be passed from a hook function to a prop that is a function
+ * @param {object} this 
+ * @param {object} jsonx 
+ * @returns {function} 
+ */
 export function boundArgsReducer(this: defs.Context, jsonx: defs.jsonx = {}) {
   return (args: any, arg: string) => {
     let val;
@@ -214,11 +220,13 @@ export function getEvalProps(
       evVal =
         typeof evVal === "function"
           ? jsonx.__dangerouslyEvalAllProps
-          : scopedEval(jsonx.__dangerouslyEvalAllProps);
+          : scopedEval(jsonx.__dangerouslyEvalAllProps as string);
     } catch (e) {
-      if (this.debug || jsonx.debug) evVal = e;
+      if (this.debug || jsonx.debug) evVal = function(){return {error:e}};
     }
-    evAllProps = evVal.call(this, { jsonx });
+    evAllProps = typeof evVal === "function" 
+      ? evVal.call(this, { jsonx })
+      : evVal;
   }
   const evProps = Object.keys(jsonx.__dangerouslyEvalProps || {}).reduce(
     (eprops, epropName) => {

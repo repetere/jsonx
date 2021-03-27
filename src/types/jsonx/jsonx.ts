@@ -47,7 +47,7 @@ export interface jsonxElementProperties {
   /** Evaluation Prop: used to override value of JXM.children */
   _children?: jsonxChildren;
   /** Evaluation Prop: used to set all values of JXM.props */
-  __dangerouslyEvalAllProps?: string;
+  __dangerouslyEvalAllProps?: string | callbackFunc;
   /** Evaluation Prop: used to assign function bound to current this as values of JXM.props from strings */
   __dangerouslyBindEvalProps?: {
     [index: string]: string | callbackFunc;
