@@ -6,6 +6,7 @@ import sinon from 'sinon';
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils'; // ES6
 import ReactDOM from 'react-dom';
+import ReactDOMServer from "react-dom/server";
 import ReactDOMElements from 'react-dom-factories';
 
 import { expect, } from 'chai';
@@ -599,6 +600,9 @@ describe('jsonx components', function () {
       expect(myDynamicFunction.name).to.eql('bound myDynamicFunction');
       //@ts-ignore
       const m = React.createElement(myDynamicFunction,{},undefined)
+      //@ts-ignore
+      const r = ReactDOMServer.renderToString(myDynamicFunction,{title:'called prop'},undefined)
+      // console.log({r},r)
       // console.log({m},m)
       expect(m.type).to.eql(myDynamicFunction)
       // console.log('myDynamicFunction',myDynamicFunction,{myDynamicFunction})
@@ -637,6 +641,7 @@ describe('jsonx components', function () {
           defaultValues:{ title:'testing form component' }
         }
       }
+      //@ts-ignore
       const FormFunctionComponent:React.FunctionComponent = FormComponent.call({},options);
       //@ts-ignore
       const invokedFormFunctionComponent =React.createElement(FormFunctionComponent,{sub_title:'called props'},'');
@@ -647,6 +652,7 @@ describe('jsonx components', function () {
         formWrapperProps:{title:'added wrapped prop'},
         formWrapperComponent:{component:'div'}
       }
+      //@ts-ignore
       const WrappedFormFunctionComponent:React.FunctionComponent = FormComponent.call({},wrapperOptions);
       //@ts-ignore
       const invokedWrappedFormFunctionComponent =React.createElement(WrappedFormFunctionComponent,{sub_title:'called props'},'');
