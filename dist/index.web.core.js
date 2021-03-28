@@ -13224,6 +13224,16 @@ var jsonx = (function (exports, React, ReactDOM) {
 	        throw e;
 	    }
 	}
+	// export function Deprecated(): MethodDecorator {
+	//   return (target: Object, key: string | symbol, descriptor: PropertyDescriptor) => {
+	//       const original = descriptor.value;
+	//       descriptor.value = (...args: any) => {
+	//           console.warn(`Warning: ${String(key)} is deprecated`);
+	//           original(...args);
+	//       }
+	//       return descriptor;
+	//   }
+	// }
 
 	var jsonxUtils = /*#__PURE__*/Object.freeze({
 		__proto__: null,
@@ -14460,7 +14470,6 @@ var jsonx = (function (exports, React, ReactDOM) {
 	        ...reactComponent
 	    };
 	    const rjcKeys = Object.keys(rjc);
-	    console.log({ rjcKeys });
 	    if (rjcKeys.includes("render") === false) {
 	        throw new ReferenceError("React components require a render method");
 	    }
@@ -15248,6 +15257,7 @@ var jsonx = (function (exports, React, ReactDOM) {
 	 * @returns {Function} returns a function from this.props or window functions
 	 * @example
 	 * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
+	 * @deprecated
 	 */
 	function getFunctionFromProps(options = { jsonx: {}, propBody: "" }) {
 	    const { propFunc = "func:", propBody, jsonx, functionProperty = "" } = options;
@@ -24046,7 +24056,6 @@ var jsonx = (function (exports, React, ReactDOM) {
 	    }
 	}
 	function getChildrenTemplate(template) {
-	    console.log('template', template);
 	    const cachedTemplate = templateCache.get(template);
 	    if (cachedTemplate) {
 	        return cachedTemplate;
