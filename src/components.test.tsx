@@ -7,6 +7,7 @@ import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils'; // ES6
 import ReactDOM from 'react-dom';
 import ReactDOMElements from 'react-dom-factories';
+
 import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
@@ -624,6 +625,33 @@ describe('jsonx components', function () {
       expect(m.type).to.eql(myFormComponent)
 
       // console.log({m},m)
+    })
+    it('should handle props passed to function',()=>{
+      const options = {
+        formComponent:{
+          component:'form',
+          children:'using form component'
+        },
+        onSubmit:(data:any)=>'submitted: '+JSON.stringify(data),
+        hookFormOptions:{
+          defaultValues:{ title:'testing form component' }
+        }
+      }
+      const FormFunctionComponent:React.FunctionComponent = FormComponent.call({},options);
+      //@ts-ignore
+      const invokedFormFunctionComponent =React.createElement(FormFunctionComponent,{sub_title:'called props'},'');
+      expect(invokedFormFunctionComponent).to.be.ok
+
+      const wrapperOptions  = { 
+        ...options,
+        formWrapperProps:{title:'added wrapped prop'},
+        formWrapperComponent:{component:'div'}
+      }
+      const WrappedFormFunctionComponent:React.FunctionComponent = FormComponent.call({},wrapperOptions);
+      //@ts-ignore
+      const invokedWrappedFormFunctionComponent =React.createElement(WrappedFormFunctionComponent,{sub_title:'called props'},'');
+      expect(invokedWrappedFormFunctionComponent).to.be.ok
+
     })
   });
   describe('getReactContext', () => {
