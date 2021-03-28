@@ -473,6 +473,7 @@ export function getReactComponentProps(
  * @returns {Function} returns a function from this.props or window functions
  * @example
  * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
+ * @deprecated
  */
 export function getFunctionFromProps(
   this: defs.Context,

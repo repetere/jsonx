@@ -158,8 +158,6 @@ export function fetchJSONSync(path: string, options?: any ) {
 }
 
 export function getChildrenTemplate(template: string | any) {
-  console.log('template',template)
-
   const cachedTemplate = templateCache.get(template);
   if (cachedTemplate) {
     return cachedTemplate;

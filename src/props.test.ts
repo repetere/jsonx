@@ -175,6 +175,25 @@ describe('jsonx props', function () {
         renderIndex:1,
       });
       EXPECTChai(computedProps.ref).to.eql(context.reactHookForm.register);
+    });
+    it('should handle getComputedProps errors',()=>{
+      const mockCallback = jest.fn(()=>{});
+
+      //@ts-ignore
+      const props = getComputedProps.call({props:{getState:()=>{throw new Error('testing error')}}},{
+        debug:true,
+        jsonx:{
+          component:'div',
+          ignoreReduxProps:false,
+          thisprops:{
+
+          }
+        },
+        resources:new Error('testing error handling'),
+        logError:mockCallback
+      })
+      expect(mockCallback.mock.calls.length).toBe(1);
+      expect(props).toBe(null)
     })
   });
   describe('getJSONXProps', () => {
@@ -545,6 +564,7 @@ describe('jsonx props', function () {
   });
   describe('getFunctionFromProps', () => {
     const getFunctionFromProps = _jsonxProps.getFunctionFromProps;
+    const getFunctionProps = _jsonxProps.getFunctionProps;
     it('should return an empty function by default', () => {
       const logError = sinon.spy();
       const thisProp = {
@@ -629,6 +649,37 @@ describe('jsonx props', function () {
       EXPECTChai(funcDeep()).to.eq('gotItem');
       EXPECTChai(logError.called).to.be.false;
     });
+    it('should generate inline functions',()=>{
+      const jsonx = {
+        component: "button",
+        props: {
+          name: "test"
+        },
+        __functionargs: {
+          onClick: ["name"]
+        },
+        __inline: {
+          onClick: ` return ("the name of this component from the prop is:" +arguments[0])`
+        },
+        __functionProps: {
+          onClick: "func:inline.onClick"
+        }
+      };
+      const inlineFunction = getFunctionFromProps.call({},{
+        propFunc:'func:inline.onClick',
+        propBody: ` return ("the name of this component from the prop is:" +arguments[0])`,
+        functionProperty:'onClick',
+        jsonx,
+      })
+      const inlineOutput = inlineFunction()
+      const fromFunctionProps = getFunctionProps.call({},{
+        allProps:{},
+        jsonx,
+      })
+      expect(typeof inlineFunction).toBe('function')
+      expect(inlineOutput).toBe('the name of this component from the prop is:test')
+      expect(inlineFunction()).toMatch(fromFunctionProps.onClick())
+    })
   });
   describe('getComponentProps', () => {
     const getComponentProps = _jsonxProps.getComponentProps;

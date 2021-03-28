@@ -307,7 +307,6 @@ export function getReactClassComponent(
     ...reactComponent
   };
   const rjcKeys = Object.keys(rjc);
-  console.log({rjcKeys})
   if (rjcKeys.includes("render") === false) {
     throw new ReferenceError("React components require a render method");
   }
