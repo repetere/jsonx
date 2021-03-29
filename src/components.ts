@@ -436,7 +436,7 @@ export function FormComponent(
     const renderJSONX = useMemo(() => getReactElementFromJSONX.bind(context), [
       context
     ]);
-    return renderJSONX(formWrapperJXM);
+    return renderJSONX(formWrapperJXM)||null;
   }
   if (props.name) {
     Object.defineProperty(FormComponentFunction, "name", {

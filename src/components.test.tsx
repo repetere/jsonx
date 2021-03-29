@@ -3,11 +3,12 @@ import * as _jsonxComponents from './components';
 import mochaJSDOM from 'jsdom-global';
 import chai from 'chai';
 import sinon from 'sinon';
-import React from 'react';
+import React, { Component, JSXElementConstructor, ReactComponentElement, ReactElement } from 'react';
 import ReactTestUtils from 'react-dom/test-utils'; // ES6
 import ReactDOM from 'react-dom';
 import ReactDOMServer from "react-dom/server";
 import ReactDOMElements from 'react-dom-factories';
+import {render, fireEvent, screen} from '@testing-library/react'
 
 import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
@@ -555,6 +556,11 @@ describe('jsonx components', function () {
   describe('DynamicComponent', () => {
     const DynamicComponent = _jsonxComponents.DynamicComponent;
     it('should react a React Function Component', () => { 
+      // //@ts-ignore
+      const MyDynamicComponent = DynamicComponent.call( {disableRenderIndexKey:false},{ name:'MyDynamicComponent', }) as any
+      // //@ts-ignore
+      const wrapper = render(<MyDynamicComponent id="testingForm" />);
+      expect(wrapper).to.be.ok
       //@ts-ignore
       // const wrapper = mount(<DynamicComponent key={3} 
       //   fetchURL='#'
@@ -612,10 +618,17 @@ describe('jsonx components', function () {
     const FormComponent = _jsonxComponents.FormComponent;
     it('should react a React Function Component', () => { 
       // //@ts-ignore
-      // const wrapper = mount(<FormComponent />);
-      // // console.log('wrapper.text()',wrapper.text())
+      const MyFormComponent = FormComponent.call( {disableRenderIndexKey:false},{ name:'MyFormComponent', }) as ReactElement<any, string | JSXElementConstructor<any>>
+      // //@ts-ignore
+      const wrapper = render(<MyFormComponent id="testingForm" />);
+      // //@ts-ignore
+      // const someElement = wrapper.container.querySelector('#testingForm');
+
+      // console.log('someElement',someElement)
+      // console.log('wrapper.text()',wrapper.text())
       // expect(wrapper.text()).to.contain('empty');
       expect(FormComponent).to.be.a('function');
+      expect(wrapper).to.be.ok
     });
     it('should render a component',()=>{
       const myFormComponent = FormComponent.call({},{
