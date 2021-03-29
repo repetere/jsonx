@@ -6,7 +6,7 @@ import React from "react";
 import ReactTestUtils from "react-dom/test-utils"; // ES6
 import ReactDOM from "react-dom";
 import ReactDOMElements from "react-dom-factories";
-import { expect } from "chai";
+import { expect as expectCHAI } from "chai";
 import { JSDOM } from "jsdom";
 import numeral from "numeral";
 import * as luxon from "luxon";
@@ -92,11 +92,11 @@ describe("jsonx", function() {
       const JSONXChildrenPTag = getChildrenProperty({
         jsonx: sampleJSONX.children[0]
       });
-      expect(JSONXChildren).to.be.an("array");
-      expect(JSONXChildren.length).to.eql(sampleJSONX.children.length);
-      expect(JSONXChildrenPTag).to.be.a("string");
-      expect(JSONXChildrenPTag).to.eql(sampleJSONX.children[0].children);
-      expect(
+      expectCHAI(JSONXChildren).to.be.an("array");
+      expectCHAI(JSONXChildren.length).to.eql(sampleJSONX.children.length);
+      expectCHAI(JSONXChildrenPTag).to.be.a("string");
+      expectCHAI(JSONXChildrenPTag).to.eql(sampleJSONX.children[0].children);
+      expectCHAI(
         getChildrenProperty({
           jsonx: {
             props: { _children: {} },
@@ -104,15 +104,15 @@ describe("jsonx", function() {
           }
         })
       ).to.eql("hello");
-      expect(
+      expectCHAI(
         getChildrenProperty({
           jsonx: {}
         })
       ).to.eql(null);
-      expect(getChildrenProperty({ props: { children: [1, 2, 3] } })).to.be.an(
+      expectCHAI(getChildrenProperty({ props: { children: [1, 2, 3] } })).to.be.an(
         "array"
       );
-      expect(
+      expectCHAI(
         getChildrenProperty({ jsonx: { props: { children: "hello" } } })
       ).to.eql("hello");
     });
@@ -158,12 +158,12 @@ describe("jsonx", function() {
       const JSONXChildren = getChildrenProperty({ jsonx: testJSONX });
       const JSONXChildren2 = getChildrenProperty({ jsonx: testJSONX2 });
       const JSONXChildren3 = getChildrenProperty({ jsonx: testJSONX3 });
-      expect(JSONXChildren).to.be.a("string");
-      expect(JSONXChildren).to.eql(testJSONX.props._children);
-      expect(JSONXChildren2).to.be.an("array");
-      expect(JSONXChildren2.length).to.eql(testJSONX2.props._children.length);
-      expect(JSONXChildren3).to.be.a("string");
-      expect(JSONXChildren3).to.eql(testJSONX3.props._children);
+      expectCHAI(JSONXChildren).to.be.a("string");
+      expectCHAI(JSONXChildren).to.eql(testJSONX.props._children);
+      expectCHAI(JSONXChildren2).to.be.an("array");
+      expectCHAI(JSONXChildren2.length).to.eql(testJSONX2.props._children.length);
+      expectCHAI(JSONXChildren3).to.be.a("string");
+      expectCHAI(JSONXChildren3).to.eql(testJSONX3.props._children);
     });
     it("should get the children from jsonx.props.children property", () => {
       const testJSONX = {
@@ -213,13 +213,13 @@ describe("jsonx", function() {
       const JSONXChildren2 = getChildrenProperty({ jsonx: testJSONX2 });
       const JSONXChildren3 = getChildrenProperty({ jsonx: testJSONX3 });
       const JSONXChildren4 = getChildrenProperty({ jsonx: testJSONX4 });
-      expect(JSONXChildren).to.be.a("string");
-      expect(JSONXChildren).to.eql(testJSONX.props.children);
-      expect(JSONXChildren2).to.be.an("array");
-      expect(JSONXChildren2.length).to.eql(testJSONX2.props.children.length);
-      expect(JSONXChildren3).to.be.a("array");
-      expect(JSONXChildren3).to.eql(testJSONX3.children);
-      expect(JSONXChildren4).to.be.a("function");
+      expectCHAI(JSONXChildren).to.be.a("string");
+      expectCHAI(JSONXChildren).to.eql(testJSONX.props.children);
+      expectCHAI(JSONXChildren2).to.be.an("array");
+      expectCHAI(JSONXChildren2.length).to.eql(testJSONX2.props.children.length);
+      expectCHAI(JSONXChildren3).to.be.a("array");
+      expectCHAI(JSONXChildren3).to.eql(testJSONX3.children);
+      expectCHAI(JSONXChildren4).to.be.a("function");
     });
   });
   describe("getChildrenProps", () => {
@@ -233,7 +233,7 @@ describe("jsonx", function() {
         childjsonx,
         renderIndex
       });
-      expect(childProps).to.eq(childjsonx);
+      expectCHAI(childProps).to.eq(childjsonx);
     });
     it("should pass props except for styles", () => {
       const renderIndex = 1;
@@ -250,18 +250,18 @@ describe("jsonx", function() {
         renderIndex
       });
       //@ts-ignore
-      expect(childProps_span.props.title).to.eq(passableJSONX.props.title);
+      expectCHAI(childProps_span.props.title).to.eq(passableJSONX.props.title);
       //@ts-ignore
-      expect(childProps_p.props.title).to.eq(passableJSONX.props.title);
+      expectCHAI(childProps_p.props.title).to.eq(passableJSONX.props.title);
       //@ts-ignore
-      expect(childProps_p.props.style.color).to.eq(
+      expectCHAI(childProps_p.props.style.color).to.eq(
         //@ts-ignore
         passableJSONX.children[1].props.style.color
       );
       //@ts-ignore
-      expect(childProps_p.props.key).to.not.eq(renderIndex);
+      expectCHAI(childProps_p.props.key).to.not.eq(renderIndex);
       //@ts-ignore
-      expect(childProps_span.props.key).to.not.eq(renderIndex);
+      expectCHAI(childProps_span.props.key).to.not.eq(renderIndex);
     });
     it('should only pass selected props',()=>{
       const renderIndex = 1;
@@ -299,7 +299,7 @@ describe("jsonx", function() {
         renderIndex
       });
       //@ts-ignore
-      expect(childProps_span.props).to.eql({ value: 302, size: 2 })      
+      expectCHAI(childProps_span.props).to.eql({ value: 302, size: 2 })      
     })
   });
   describe("getJSONXChildren", () => {
@@ -336,21 +336,21 @@ describe("jsonx", function() {
       );
       //@ts-ignore
       JSONXChildren.forEach(ReactiveJSON => {
-        expect(ReactiveJSON).to.be.an("object");
-        expect(ReactiveJSON).to.haveOwnProperty("$$typeof");
-        expect(ReactiveJSON).to.haveOwnProperty("type");
-        expect(ReactiveJSON).to.haveOwnProperty("key");
-        expect(ReactiveJSON).to.haveOwnProperty("ref");
-        expect(ReactiveJSON).to.haveOwnProperty("props");
+        expectCHAI(ReactiveJSON).to.be.an("object");
+        expectCHAI(ReactiveJSON).to.haveOwnProperty("$$typeof");
+        expectCHAI(ReactiveJSON).to.haveOwnProperty("type");
+        expectCHAI(ReactiveJSON).to.haveOwnProperty("key");
+        expectCHAI(ReactiveJSON).to.haveOwnProperty("ref");
+        expectCHAI(ReactiveJSON).to.haveOwnProperty("props");
       });
     });
     it("should return null on error", () => {
       //@ts-ignore
-      expect(getJSONXChildren.call({}, { logError: () => {} })).to.eql(null);
+      expectCHAI(getJSONXChildren.call({}, { logError: () => {} })).to.eql(null);
     });
     it("should stringify children", () => {
       const obj = { some: "data", to: "stringify" };
-      expect(
+      expectCHAI(
         getJSONXChildren.call(
           {},
           {
@@ -363,11 +363,25 @@ describe("jsonx", function() {
           }
         )
       ).to.eql(JSON.stringify(obj, null, 2));
+      //normal stringify
+      expectCHAI(
+        //@ts-ignore
+        getJSONXChildren(
+          {
+            jsonx: {
+              //@ts-ignore
+              children: obj,
+              //@ts-ignore
+              ___stringifyChildren: true
+            }
+          }
+        )
+      ).to.eql(JSON.stringify(obj, null, 2));
     });
     it("should toString children", () => {
       const obj = { some: "data", to: "stringify" };
       const testDate = new Date();
-      expect(
+      expectCHAI(
         getJSONXChildren.call(
           {},
           {
@@ -380,7 +394,7 @@ describe("jsonx", function() {
           }
         )
       ).to.eql(obj.toString());
-      expect(
+      expectCHAI(
         getJSONXChildren.call(
           {},
           {
@@ -400,7 +414,7 @@ describe("jsonx", function() {
       const numeralFormattedString = numeral(numeralValue).format(
         numeralFormat
       );
-      expect(
+      expectCHAI(
         //@ts-ignore
         getJSONXChildren.call(
           {},
@@ -419,7 +433,7 @@ describe("jsonx", function() {
         luxonFormat
       );
       // console.log({ testDate, testDateISO, luxonFormat, testLuxonFormat });
-      expect(
+      expectCHAI(
         getJSONXChildren.call(
           {},
           {
@@ -435,7 +449,7 @@ describe("jsonx", function() {
       const testLuxonFormat = luxon.DateTime.fromISO(testDateISO).toFormat(
         luxonFormat
       );
-      expect(
+      expectCHAI(
         getJSONXChildren.call(
           {},
           {
@@ -458,12 +472,117 @@ describe("jsonx", function() {
           }
         }
       );
-      expect(_jsonxChildren.templateCache).to.be.lengthOf(1);
-      expect(importedTemplate).to.be.an("array");
+      expectCHAI(_jsonxChildren.templateCache).to.be.lengthOf(1);
+      expectCHAI(importedTemplate).to.be.an("array");
       //@ts-ignore
-      expect(importedTemplate[0].type).to.eql("div");
+      expectCHAI(importedTemplate[0].type).to.eql("div");
       //@ts-ignore
-      expect(importedTemplate[0].children).to.eql("from external template");
+      expectCHAI(importedTemplate[0].children).to.eql("from external template");
     });
   });
+  describe('fetchJSONSync', () => {
+    const fetchJSONSync = _jsonxChildren.fetchJSONSync;
+    const xmlhttpreq ={
+      status: 200,
+      responseText: '{"some":"data"}',
+      DONE: 1,
+      HEADERS_RECEIVED: 1,
+      LOADING: 1,
+      OPENED: 1,
+      UNSENT: 1,
+    }
+    it('should returns sync json',()=>{
+      const returnJSON = {
+        open            : jest.fn(),
+        send            : jest.fn(),
+        setRequestHeader: jest.fn(),
+      }
+      const xhrMockClass = () => ({
+        ...returnJSON,
+        ...xmlhttpreq
+      }) 
+      //@ts-ignore
+      window.XMLHttpRequest = jest.fn().mockImplementation(xhrMockClass)
+      const response = fetchJSONSync('/mock-endpoint')
+      expect(response).toBe('{"some":"data"}')
+      expect(returnJSON.open).toHaveBeenCalledTimes(1)
+      expect(returnJSON.send).toHaveBeenCalledTimes(1)
+      expect(returnJSON.setRequestHeader).toHaveBeenCalledTimes(0)
+    });
+    it('should apply custom headers',()=>{
+      const cusomtHEADER = {
+        open            : jest.fn(),
+        send            : jest.fn(),
+        setRequestHeader: jest.fn(),
+      }
+      const xhrMockClass = () => ({
+        ...cusomtHEADER,
+        ...xmlhttpreq
+      });
+      //@ts-ignore
+      window.XMLHttpRequest = jest.fn().mockImplementation(xhrMockClass)
+      const response = fetchJSONSync('/mock-endpoint',{headers:[{user:'testUser'}]})
+      expect(response).toBe('{"some":"data"}')
+      expect(cusomtHEADER.open).toHaveBeenCalledTimes(1)
+      expect(cusomtHEADER.send).toHaveBeenCalledTimes(1)
+      expect(cusomtHEADER.setRequestHeader).toHaveBeenCalledTimes(1)
+    });
+    it('should handle request errors',()=>{
+      const handleError = {
+        open            : jest.fn(),
+        send            : jest.fn(),
+        setRequestHeader: jest.fn(),
+      }
+      const xhrMockClass = () => ({
+        ...handleError,
+        ...xmlhttpreq,
+        status: 500,
+        responseText: 'Testing Response Errors',
+      });
+      //@ts-ignore
+      window.XMLHttpRequest = jest.fn().mockImplementation(xhrMockClass)
+      expect(()=>{
+        fetchJSONSync('/mock-endpoint')
+      }).toThrow('Testing Response Errors')
+      // const response = fetchJSONSync('/mock-endpoint')
+      // console.log({response})
+      // expect(response).toBe('{"some":"data"}')
+      expect(handleError.open).toHaveBeenCalledTimes(1)
+      expect(handleError.send).toHaveBeenCalledTimes(1)
+      expect(handleError.setRequestHeader).toHaveBeenCalledTimes(0)
+    });
+  });
+  describe('getChildrenTemplate',()=>{
+    const {getChildrenTemplate,templateCache,clearTemplateCache} = _jsonxChildren;
+    it('should fetch json templates via ajax',()=>{
+      const xhrMockClass = () => ({
+        open            : jest.fn(),
+        send            : jest.fn(),
+        setRequestHeader: jest.fn(),
+        status: 200,
+        responseText: '{"some":"data"}',
+        DONE: 1,
+        HEADERS_RECEIVED: 1,
+        LOADING: 1,
+        OPENED: 1,
+        UNSENT: 1,
+      });
+      //@ts-ignore
+      window.XMLHttpRequest = jest.fn().mockImplementation(xhrMockClass)
+      //@ts-ignore
+      const response = getChildrenTemplate('/mock-endpoint','fetch')
+      expect(response).toMatchObject({ some: 'data' })
+    })
+    it('should handle no input',()=>{
+      //@ts-ignore
+      const response = getChildrenTemplate()
+      expect(response).toBe(null)
+    })
+    it('should clear cache w/clearTemplateCache',()=>{
+      expect(()=>{
+        clearTemplateCache()
+      }).not.toThrow()
+      expect(templateCache.size).toBe(0)
+    })
+  })
 });

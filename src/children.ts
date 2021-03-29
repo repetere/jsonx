@@ -157,7 +157,7 @@ export function fetchJSONSync(path: string, options?: any ) {
   }
 }
 
-export function getChildrenTemplate(template: string | any) {
+export function getChildrenTemplate(template: string | any,type?:'fetch'|'file') {
   const cachedTemplate = templateCache.get(template);
   if (cachedTemplate) {
     return cachedTemplate;
@@ -165,13 +165,13 @@ export function getChildrenTemplate(template: string | any) {
   else if (
     typeof window !== "undefined" &&
     typeof window.XMLHttpRequest === "function" &&
-    !fs.readFileSync
+    (!fs.readFileSync||type==='fetch')
   ) {
     const jsFile = fetchJSONSync(template);
     const jsonxModule = scopedEval(`(${jsFile})`);
     templateCache.set(template, jsonxModule);
     return jsonxModule;
-  } else if (typeof template === "string") {
+  } else if (typeof template === "string"||type==='file') {
     const jsFile = fs.readFileSync(path.resolve(template)).toString();
     const jsonxModule = scopedEval(`(${jsFile})`);
     templateCache.set(template, jsonxModule);
