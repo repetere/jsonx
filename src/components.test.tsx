@@ -618,7 +618,7 @@ describe('jsonx components', function () {
     const FormComponent = _jsonxComponents.FormComponent;
     it('should react a React Function Component', () => { 
       // //@ts-ignore
-      const MyFormComponent = FormComponent.call( {disableRenderIndexKey:false},{ name:'MyFormComponent', }) as ReactElement<any, string | JSXElementConstructor<any>>
+      const MyFormComponent = FormComponent.call( {disableRenderIndexKey:false},{ name:'MyFormComponent', }) as any
       // //@ts-ignore
       const wrapper = render(<MyFormComponent id="testingForm" />);
       // //@ts-ignore
