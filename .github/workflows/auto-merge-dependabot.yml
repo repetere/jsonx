@@ -1,14 +1,30 @@
-name: Dependabot Auto Merge
+# name: Dependabot Auto Merge
 
-on:
-  pull_request:
+# on:
+#   pull_request:
+
+# jobs:
+#   auto-merge:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: ahmadnassri/action-dependabot-auto-merge@v2
+#         with:
+#           target: minor
+#           github-token: ${{ secrets.mytoken }}
+name: Dependabot Auto Merge
+on: [push, pull_request]
 
 jobs:
-  auto-merge:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ahmadnassri/action-dependabot-auto-merge@v2
+      # ...
+
+  automerge:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v2.0.0
         with:
-          target: minor
-          github-token: ${{ secrets.mytoken }}
+          github-token: ${{secrets.GITHUB_TOKEN}}
