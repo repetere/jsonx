@@ -61,7 +61,7 @@
     "@semantic-release/npm": "7.1.0",
     "@semantic-release/release-notes-generator": "9.0.2",
     "@testing-library/react": "^11.2.5",
-    "@types/chai": "4.2.15",
+    "@types/chai": "4.2.16",
     "@types/enzyme": "3.10.8",
     "@types/enzyme-adapter-react-16": "1.0.6",
     "@types/jest": "^26.0.22",
