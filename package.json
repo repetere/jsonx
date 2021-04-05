@@ -116,7 +116,7 @@
     "memory-cache": "0.2.0",
     "numeral": "2.0.6",
     "react-dom-factories": "1.0.2",
-    "react-hook-form": "^6.15.5",
+    "react-hook-form": "^7.0.0",
     "ua-parser-js": "^0.7.24",
     "use-global-hook": "^0.2.1"
   },
