@@ -49,7 +49,8 @@ jobs:
           parallel-finished: true
       - name: build files, docs
         run: |
-          tsc && rollup -c && typedoc && sitedown manual/ -b docs/manual
+          NODE_OPTIONS=--max-old-space-size=15000 npm run build 
+        # tsc && rollup -c && typedoc && sitedown manual/ -b docs/manual
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
