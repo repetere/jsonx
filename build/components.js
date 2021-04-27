@@ -207,7 +207,6 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
         ...reactComponent
     };
     const rjcKeys = Object.keys(rjc);
-    console.log({ rjcKeys });
     if (rjcKeys.includes("render") === false) {
         throw new ReferenceError("React components require a render method");
     }
@@ -315,7 +314,7 @@ export function FormComponent(props = {}) {
         const renderJSONX = useMemo(() => getReactElementFromJSONX.bind(context), [
             context
         ]);
-        return renderJSONX(formWrapperJXM);
+        return renderJSONX(formWrapperJXM) || null;
     }
     if (props.name) {
         Object.defineProperty(FormComponentFunction, "name", {

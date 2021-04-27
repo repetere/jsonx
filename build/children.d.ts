@@ -63,7 +63,7 @@ export declare function getChildrenProps(this: defs.Context, options?: {
     props?: any;
 }): defs.jsonx | undefined;
 export declare function fetchJSONSync(path: string, options?: any): string;
-export declare function getChildrenTemplate(template: string | any): any;
+export declare function getChildrenTemplate(template: string | any, type?: 'fetch' | 'file'): any;
 export declare function clearTemplateCache(): void;
 /**
  * returns React Child Elements via JSONX

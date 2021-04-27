@@ -114,6 +114,28 @@ export declare function getChildrenComponents(this: defs.Context, options?: {
     children?: undefined;
 };
 /**
+ * registers an input to a reactHookForm register function
+ * @param {*} options
+ * @returns {object} - returns name, ref, onBlur, onChange
+ */
+export declare function useFormRegisterHandler(this: {
+    reactHookForm: {
+        register: (ref: string) => {
+            name: string;
+            ref: HTMLElement;
+            onBlur: () => void;
+            onChange: () => void;
+        };
+    };
+}, options?: {
+    jsonx?: defs.jsonx;
+}): {
+    name: string;
+    ref: HTMLElement;
+    onBlur: () => void;
+    onChange: () => void;
+};
+/**
  * returns a reducer function that returns values ot bind to an eval function. This function is used when values need to be passed from a hook function to a prop that is a function
  * @param {object} this
  * @param {object} jsonx
@@ -177,6 +199,7 @@ export declare function getReactComponentProps(this: defs.Context, options?: {
  * @returns {Function} returns a function from this.props or window functions
  * @example
  * getFunctionFromProps({ propFunc='func:this.props.onClick', }) // => this.props.onClick
+ * @deprecated
  */
 export declare function getFunctionFromProps(this: defs.Context, options?: {
     propFunc?: string;

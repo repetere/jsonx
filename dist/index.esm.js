@@ -1467,11 +1467,13 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 name,
                 onChange: handleChange,
                 onBlur: handleChange,
-                ref: (ref) => ref
-                    ? registerFieldRef(name, ref, options)
-                    : (shouldUnregister || (options && options.shouldUnregister)) &&
-                        isWeb &&
-                        unregisterFieldsNamesRef.current.add(name),
+                ref: (ref) => {
+                    ref
+                        ? registerFieldRef(name, ref, options)
+                        : (shouldUnregister || (options && options.shouldUnregister)) &&
+                            isWeb &&
+                            unregisterFieldsNamesRef.current.add(name);
+                },
             };
     }, [defaultValuesRef.current]);
     const handleSubmit = React.useCallback((onValid, onInvalid) => async (e) => {
@@ -1609,11 +1611,14 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         };
     }, []);
     React.useEffect(() => {
+        const isLiveInDom = (ref) => !isHTMLElement(ref) || !document.contains(ref);
         isMountedRef.current = true;
         unregisterFieldsNamesRef.current.forEach((name) => {
             const field = get(fieldsRef.current, name);
             field &&
-                (!isHTMLElement(field._f.ref) || !document.contains(field._f.ref)) &&
+                (field._f.refs
+                    ? field._f.refs.every(isLiveInDom)
+                    : isLiveInDom(field._f.ref)) &&
                 unregisterInternal(name);
         });
         unregisterFieldsNamesRef.current = new Set();

@@ -138,21 +138,20 @@ export function fetchJSONSync(path, options) {
         throw e;
     }
 }
-export function getChildrenTemplate(template) {
-    console.log('template', template);
+export function getChildrenTemplate(template, type) {
     const cachedTemplate = templateCache.get(template);
     if (cachedTemplate) {
         return cachedTemplate;
     }
     else if (typeof window !== "undefined" &&
         typeof window.XMLHttpRequest === "function" &&
-        !fs.readFileSync) {
+        (!fs.readFileSync || type === 'fetch')) {
         const jsFile = fetchJSONSync(template);
         const jsonxModule = scopedEval(`(${jsFile})`);
         templateCache.set(template, jsonxModule);
         return jsonxModule;
     }
-    else if (typeof template === "string") {
+    else if (typeof template === "string" || type === 'file') {
         const jsFile = fs.readFileSync(path.resolve(template)).toString();
         const jsonxModule = scopedEval(`(${jsFile})`);
         templateCache.set(template, jsonxModule);
