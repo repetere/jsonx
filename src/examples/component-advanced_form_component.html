@@ -45,10 +45,13 @@
                   width:'100px'
                 }
               },
-              useincludeprops:['style','name','id','placeholder','key'],
-              thisprops:{
-                ref:['register'],
-              },
+              useincludeprops:['style','name','id','placeholder','key','ref','onBlur','onChange'],
+              // thisprops:{
+              //   ref:['register'],
+              // },
+              __dangerouslyEvalAllProps:function({jsonx}){
+								return jsonx.props.register(jsonx.props.name)
+							}
             },
             {
               component:'h1',
@@ -84,13 +87,14 @@
                     __dangerouslyEvalAllProps: function({jsonx}){
                       // console.log('arguments',arguments)
                       // console.log('this',this)
+                      const inputProps = jsonx.props.register(`api[${jsonx.props.__idx}].name`)
                       return {
                         name:`api[${jsonx.props.__idx}].name`,
                         key:`api[${jsonx.props.__idx}].name`,
                         style:{
                           width:'100px'
                         },
-                        ref:jsonx.props.register
+                        ...inputProps
                       }
                     }
                   },

@@ -43,8 +43,8 @@
               name:'firstName',
               id:'firstName',
             },
-            thiscontext:{
-              ref:['reactHookForm','register']
+            __dangerouslyEvalAllProps:function({jsonx}){
+              return this.reactHookForm.register(jsonx.props.name)
             }
           },
           {
@@ -56,6 +56,8 @@
           },
           {
             component:'input',
+            debug:true,
+
             props:{
               placeholder:'Smith',
               name:'lastName',
@@ -70,6 +72,7 @@
             },
             children:'Save Info'
           },
+
           {
             component:'ReactHookForm.Controller',
             props:{
@@ -87,11 +90,11 @@
                   props:{
                   },
                   thisprops:{
-                    // onChange:['onChange'],
-                    onBlur:['onBlur'],
-                    value:['value'],
-                    name:['name'],
-                    ref:['ref'],
+                    onChange:['field','onChange'],
+                    onBlur:['field','onBlur'],
+                    value:['field','value'],
+                    name:['field','name'],
+                    ref:['field','ref'],
                   },
                   __dangerouslyBindEvalProps:{
                     onChange(checked){
@@ -105,10 +108,10 @@
           {
             component:'ReactHookForm.Controller',
             props:{
-              name:'email',
-              type:'checkbox',
               id:'emailInput',
-              addonBefore:'Email'
+              addonBefore:'Email',
+              name:'inneremail',
+              // type:'text',
             },
             thiscontext:{
               control:['reactHookForm','control']
@@ -119,21 +122,34 @@
                   component:'antd.Input',
                   props:{              
                     id:'emailInput',
-
+                    addonBefore:'Email',
                     name:'inneremail',
                   },
-                  thisprops:{
-                    onChange:['onChange'],
-                    onBlur:['onBlur'],
-                    value:['value'],
-                    name:['name'],
-                    ref:['ref'],
-                  },
+                  __dangerouslyEvalAllProps:function({jsonx}){
+                    console.log('__dangerouslyEvalAllProps this',this)
+                    console.log('__dangerouslyEvalAllProps arguments',arguments)
+                    return {...jsonx.props.field,
+                      id:'emailInput',
+                    addonBefore:'Email',
+                    name:'inneremail',
+                    }
+                    // return jsonx.props.register(jsonx.props.name)
+                  }
+                  // thisprops:{
+                  //   onChange:['field','onChange'],
+                  //   onBlur:['field','onBlur'],
+                  //   value:['field','value'],
+                  //   name:['field','name'],
+                  //   ref:['field','ref'],
+                  // },
                 }
               }
             }
           },
-          {
+          
+          
+         // */
+         {
             component:'input',
             props:{
               id:'formSubmitButton',
@@ -148,6 +164,7 @@
         ]
       }
       const myFormComponent = jsonx._jsonxComponents.FormComponent.call({
+          disableRenderIndexKey:false,
           componentLibraries:{
             antd:window.antd,
           },  
@@ -161,6 +178,7 @@
           onSubmit,
         })
       const boundConfig = {
+        disableRenderIndexKey:false,
         reactComponents:{
           myFormComponent,
         },

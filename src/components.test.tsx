@@ -14,13 +14,13 @@ import { expect, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
 // import 'mocha-sinon';
-import Enzyme, { mount, } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+// import Enzyme, { mount, } from 'enzyme';
+// import Adapter from 'enzyme-adapter-react-16';
 // chai.use(require('sinon-chai'));
 // import 'mocha-sinon';
 
 // import useGlobalHook from 'use-global-hook';
-Enzyme.configure({ adapter: new Adapter() });
+// Enzyme.configure({ adapter: new Adapter() });
 
 const sampleJSONX = {
   component: 'div',

@@ -165,6 +165,27 @@ export function getChildrenComponents(
 }
 
 /**
+ * registers an input to a reactHookForm register function
+ * @param {*} options
+ * @returns {object} - returns name, ref, onBlur, onChange
+ */
+export function useFormRegisterHandler(
+  this:{ 
+    reactHookForm:{
+      register:(ref:string)=>{
+        name:string;
+        ref:HTMLElement;
+        onBlur:()=>void;
+        onChange:()=>void
+      }
+    }
+  }, 
+  options: { jsonx?: defs.jsonx } = {}
+){
+  return this.reactHookForm.register(options?.jsonx?.props?.name)
+}
+
+/**
  * returns a reducer function that returns values ot bind to an eval function. This function is used when values need to be passed from a hook function to a prop that is a function
  * @param {object} this 
  * @param {object} jsonx 
@@ -749,12 +770,6 @@ export function getComputedProps(
             : {}
         )
       : undefined;
-    if(jsonx.useformregister){
-      jsonx.thiscontext = {
-        ref:['reactHookForm','register'],
-        ...jsonx.thiscontext,
-      }
-    }
   
     const windowTraverse = typeof window !== "undefined" ? window : {};
     const asyncprops = jsonx.asyncprops
@@ -792,14 +807,27 @@ export function getComputedProps(
           traverseObject: this.state
         })
       : {};
-    const thiscontext = jsonx.thiscontext
+    let thiscontext = jsonx.thiscontext
       ? getJSONXProps({
           jsonx,
           propName: "thiscontext",
           traverseObject: this || {}
         })
       : {};
-  
+    if(jsonx.useformregister){
+      const evalJSONX = {
+        ...jsonx,
+        __dangerouslyEvalAllProps:useFormRegisterHandler
+      }
+      const contextProps = getEvalProps.call(this,{
+        jsonx: evalJSONX
+      })
+      thiscontext = {
+        ...thiscontext,
+        ...contextProps
+      };
+    }
+
     //allowing javascript injections
     const evalProps =
       jsonx.__dangerouslyEvalProps || jsonx.__dangerouslyBindEvalProps

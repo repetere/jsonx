@@ -160,21 +160,26 @@ describe('jsonx props', function () {
     it('should apply a form hook register with "useformregister"',()=>{
       const context = {
         reactHookForm:{
-          register:'FORM REGISTER'
+          register:()=>({ref:'FORM REGISTER'})
         }
+      }
+      const jsonx = {
+        component: "input",
+        props:{
+          name:'firstName',
+        },
+        useformregister: true,
       }
       const computedProps = getComputedProps.call(context, {
         disableRenderIndexKey:false,
-        jsonx: {
-          component: "input",
-          props:{
-            name:'firstName',
-          },
-          useformregister: true,
-        },
+        jsonx,
         renderIndex:1,
       });
-      EXPECTChai(computedProps.ref).to.eql(context.reactHookForm.register);
+      // console.log({computedProps})
+      //@ts-ignore
+      expect(computedProps.ref).toBe(context.reactHookForm.register().ref);
+      //@ts-ignore
+      expect(_jsonxProps.useFormRegisterHandler.call(context,{jsonx})).toMatchObject(context.reactHookForm.register());
     });
     it('should handle getComputedProps errors',()=>{
       const mockCallback = jest.fn(()=>{});
