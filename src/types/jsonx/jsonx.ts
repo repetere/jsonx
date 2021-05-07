@@ -1,3 +1,5 @@
+import { ReactElementLike } from "prop-types";
+
 export type callbackFunc = (...args: any[]) => any;
 export interface jsonxChildren {
   /** Standard Prop: children argument for React.createElement */
@@ -7,6 +9,7 @@ export type createFunctionComponentArgs = {
   reactComponent?: jsonx;
   function?: callbackFunc;
   functionBody?: string;
+  invoke?: boolean;
   options?: {
     lazy?: boolean;
     bind?: boolean;
@@ -198,19 +201,38 @@ export interface jsonxResourceProps {
   [index: string]: any;
 }
 
+export type genericComponent = React.FunctionComponent
+| React.PureComponent
+| React.Component
+| React.ReactElement
+| callbackFunc;
+
 export type jsonxComponent = {
-  [index: string]:
-    | React.FunctionComponent
-    | React.PureComponent
-    | React.Component
-    | React.ReactElement
-    | callbackFunc;
+  [index: string]: genericComponent;
 };
 
 export interface jsonxLibrary {
-  [index: string]: jsonxComponent;
+  [index: string]: genericComponent;
+}
+export interface jsonxDefinitionLibrary {
+  [index: string]: jsonxCustomComponent;
 }
 
-export interface jsonxComponents {
-  [index: string]: jsonxComponent;
+export interface jsonxComponentLibraries{
+  [index:string]:jsonxLibrary
+};
+
+export type jsonxCustomComponent = {
+  type: 'component'|'function'|'library';
+  name: string;
+  jsonx?: jsonxDefinitionLibrary | jsonx;
+  jsonxComponent?: jsonx;
+  options?: {};
+  functionBody?: (string);
+  functionComponent?: ((props?:any)=>any);
+};
+
+export type jsonxLibrariesAndComponents = {
+  customComponentLibraries: jsonxComponentLibraries;
+  customReactComponents: jsonxComponent;
 }

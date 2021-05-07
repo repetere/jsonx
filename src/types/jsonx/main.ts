@@ -10,6 +10,7 @@ export type JSONReactElement = {
 export interface Context {
   componentLibraries?: jsonx["jsonxLibrary"];
   reactComponents?: jsonx["jsonxComponents"];
+  customComponents?: jsonx['jsonxCustomComponent'][];
   debug?: boolean;
   returnJSON?: boolean;
   logError?: any;
