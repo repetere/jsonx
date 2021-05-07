@@ -32,6 +32,7 @@ import { getReactElementFromJSONX } from ".";
 
 import * as defs from "./types/jsonx/index";
 import { ReactComponentLike } from "prop-types";
+import { jsonxComponent } from "./types/jsonx/index";
 declare global {
   interface window {
     [index: string]: any;
@@ -50,12 +51,11 @@ declare global {
 
 const cache = new memoryCache.Cache();
 export const ReactHookForm = { ErrorMessage, Controller }
+export const generatedCustomComponents:Map< string, defs.jsonx["jsonxComponents"] | Map<string,defs.jsonx["jsonxComponents"]>> = new Map();
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
-/**
- 
- */
+
 //@ts-ignore
 export let advancedBinding = getAdvancedBinding();
 // require;
@@ -251,7 +251,7 @@ export function getReactClassComponent(
   this: defs.Context,
   reactComponent = {},
   options: any = {}
-): ReactComponentLike {
+): unknown {
   // const util = require('util');
   // console.log(util.inspect({ reactComponent },{depth:20}));
   // console.log('reactComponent',reactComponent)
@@ -678,7 +678,7 @@ export function getReactFunctionComponent(
       } else{
         reactComponent.props =  props;
       }
-      if(!props.children) {
+      if(!props?.children) {
       //  delete props.children;
       }
       const context = ${options.bind ? "Object.assign(self,this||{})" : "this"};
@@ -745,4 +745,119 @@ export function makeFunctionComponent(
  */
 export function getReactContext(options: any = {}) {
   return createContext(options.value);
+}
+
+export function getCustomFunctionComponent(this: defs.Context, customComponent: Partial<defs.jsonxCustomComponent>): defs.genericComponent{
+  const { options, functionBody, functionComponent, jsonxComponent, } = customComponent;
+  if (functionComponent) {
+    return makeFunctionComponent.call(this,functionComponent,options);
+  } else {
+    return getReactFunctionComponent.call(this,
+      jsonxComponent,
+      functionBody,
+      options
+    );
+  }
+}
+
+export function getCustomComponentsCacheKey(customComponents:defs.jsonxCustomComponent[]):string{
+  return customComponents.map(({name})=>name).join('')
+}
+
+/**
+ * 
+ * @param this 
+ * @param customComponents 
+ * @returns 
+ * @example
+ const customComponents = [
+   {
+      type: 'library',
+      name: 'someLib',
+      jsonx?: {
+        Header: {
+          type:'function',
+          jsonxComponent: {p:'sample'},
+          functionBody:'console.log(44)',
+        },
+        Footer: {
+          type:'function',
+          jsonxComponent: {p:'sample'},
+          functionBody:'console.log(44)',
+        }
+      }
+   },
+   {
+      type: 'component'|'function'|'library';
+      name: string;
+      jsonx?: jsonxDefinitionLibrary | jsonx;
+      jsonxComponent?: jsonx;
+      options?: {};
+      functionBody?: (string);
+      functionComponent?: ((props?:any)=>any);
+   },
+  ]
+ */
+export function getReactLibrariesAndComponents(this: defs.Context, customComponents: defs.jsonxCustomComponent[]): defs.jsonxLibrariesAndComponents {
+  const customComponentsCacheKey = getCustomComponentsCacheKey(customComponents);
+  if(generatedCustomComponents.has(customComponentsCacheKey)) return generatedCustomComponents.get(customComponentsCacheKey);
+
+  const customComponentLibraries: defs.jsonxComponentLibraries = {};
+  const customReactComponents: defs.jsonxComponent = {};
+
+  if (customComponents && customComponents.length) {
+    customComponents.forEach(customComponent => {
+      const { type, name, jsonx, options, functionBody, functionComponent, jsonxComponent, } = customComponent;
+      if (type === "library") {
+        if (jsonxComponent||functionComponent) {
+          customComponentLibraries[name] = Object
+            .keys(jsonx as defs.jsonxLibrary)
+            .reduce(
+            (result: defs.jsonxLibrary, prop: string) => {
+              const libraryComponent:Partial<defs.jsonxCustomComponent> = (jsonx as defs.jsonxDefinitionLibrary )[prop];
+              const {
+                type,
+                name,
+                jsonxComponent,
+                options,
+                functionBody
+              } = libraryComponent;
+              if (type === "component") {
+                result[name as string] = getReactClassComponent.call(this,
+                  jsonxComponent,
+                  options
+                ) as defs.genericComponent;
+              } else {
+                result[name as string] = getCustomFunctionComponent.call(this, { options, functionBody, functionComponent, jsonxComponent, });
+              }
+              return result;
+            },
+            {}
+          );
+        } else customComponentLibraries[name] = window[name];
+      } else if (type === "component") {
+        if (jsonx) {
+          customReactComponents[name] = getReactClassComponent.call(this,
+            jsonx,
+            options
+          ) as defs.genericComponent;
+        } else customReactComponents[name] = window[name];
+      } else if (type === "function" ) {
+        if (jsonx) {
+          customReactComponents[
+            name
+          ] = getCustomFunctionComponent.call(this, { options, functionBody, functionComponent, jsonxComponent:jsonx, });
+        } else customReactComponents[name] = window[name];
+      }
+    });
+  }
+
+  generatedCustomComponents.set(customComponentsCacheKey,{
+    customComponentLibraries,
+    customReactComponents
+  });
+  return {
+    customComponentLibraries,
+    customReactComponents
+  };
 }

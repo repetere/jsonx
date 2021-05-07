@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SIMPLE SYNTAX TEST</title>
+    <script type="text/javascript" src="../../dist/index.umd.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      const JXM = {
+        main:{
+          props:{
+            key:1
+          },
+          children:[
+            {genFunc:{props:{title:'generated'}}},
+            {div:'components from inserting functions'},
+            {
+              component:'div',
+              props:{
+                testProp:'should be passed'
+              },
+              passprops:true,
+              debug:true,
+              __dangerouslyInsertFunctionComponents:{
+                children:{
+                  functionBody:'console.log("called invoked function")',
+                  reactComponent:{
+                    component:'span',
+                    children:'from func',
+                  },
+                  options:{
+                    name:'spanFunc'
+                  },
+                  invoke:true,
+                }
+              },
+              // children:'click me'
+            },
+          ]
+        }
+      }
+      const boundConfig = {
+        customComponents:[
+          {
+            type: 'function',
+            name: 'genFunc',
+            // jsonx: jsonxDefinitionLibrary | jsonx;
+            // jsonxComponent?: jsonx;
+            // options?: {};
+            // functionBody?: (string);
+            // functionComponent?: ((props?:any)=>any);
+            functionBody:'console.log("called generated function")',
+            jsonx:{
+              component:'span',
+              children:'gen custom',
+            },
+            options:{
+              name:'genFun'
+            }
+          }
+        ]
+      };
+      jsonx.jsonxRender.call(boundConfig,{ 
+        jsonx: JXM, 
+        querySelector:'#root', });
+    </script>
+  </body>
+</html>

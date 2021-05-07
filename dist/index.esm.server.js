@@ -1467,11 +1467,13 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 name,
                 onChange: handleChange,
                 onBlur: handleChange,
-                ref: (ref) => ref
-                    ? registerFieldRef(name, ref, options)
-                    : (shouldUnregister || (options && options.shouldUnregister)) &&
-                        isWeb &&
-                        unregisterFieldsNamesRef.current.add(name),
+                ref: (ref) => {
+                    ref
+                        ? registerFieldRef(name, ref, options)
+                        : (shouldUnregister || (options && options.shouldUnregister)) &&
+                            isWeb &&
+                            unregisterFieldsNamesRef.current.add(name);
+                },
             };
     }, [defaultValuesRef.current]);
     const handleSubmit = React.useCallback((onValid, onInvalid) => async (e) => {
@@ -1609,11 +1611,14 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         };
     }, []);
     React.useEffect(() => {
+        const isLiveInDom = (ref) => !isHTMLElement(ref) || !document.contains(ref);
         isMountedRef.current = true;
         unregisterFieldsNamesRef.current.forEach((name) => {
             const field = get(fieldsRef.current, name);
             field &&
-                (!isHTMLElement(field._f.ref) || !document.contains(field._f.ref)) &&
+                (field._f.refs
+                    ? field._f.refs.every(isLiveInDom)
+                    : isLiveInDom(field._f.ref)) &&
                 unregisterInternal(name);
         });
         unregisterFieldsNamesRef.current = new Set();
@@ -2263,12 +2268,10 @@ var jsonxUtils = /*#__PURE__*/Object.freeze({
 
 const cache = new memoryCache.Cache();
 const ReactHookForm$1 = { ErrorMessage: s$1, Controller };
+const generatedCustomComponents = new Map();
 // if (typeof window === 'undefined') {
 //   var window = window || (typeof global!=="undefined" ? global : window).window || {};
 // }
-/**
- 
- */
 //@ts-ignore
 let advancedBinding = getAdvancedBinding();
 // require;
@@ -2762,7 +2765,7 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = "", optio
       } else{
         reactComponent.props =  props;
       }
-      if(!props.children) {
+      if(!props?.children) {
       //  delete props.children;
       }
       const context = ${options.bind ? "Object.assign(self,this||{})" : "this"};
@@ -2821,10 +2824,110 @@ function makeFunctionComponent(func, options) {
 function getReactContext(options = {}) {
     return createContext(options.value);
 }
+function getCustomFunctionComponent(customComponent) {
+    const { options, functionBody, functionComponent, jsonxComponent, } = customComponent;
+    if (functionComponent) {
+        return makeFunctionComponent.call(this, functionComponent, options);
+    }
+    else {
+        return getReactFunctionComponent.call(this, jsonxComponent, functionBody, options);
+    }
+}
+function getCustomComponentsCacheKey(customComponents) {
+    return customComponents.map(({ name }) => name).join('');
+}
+/**
+ *
+ * @param this
+ * @param customComponents
+ * @returns
+ * @example
+ const customComponents = [
+   {
+      type: 'library',
+      name: 'someLib',
+      jsonx?: {
+        Header: {
+          type:'function',
+          jsonxComponent: {p:'sample'},
+          functionBody:'console.log(44)',
+        },
+        Footer: {
+          type:'function',
+          jsonxComponent: {p:'sample'},
+          functionBody:'console.log(44)',
+        }
+      }
+   },
+   {
+      type: 'component'|'function'|'library';
+      name: string;
+      jsonx?: jsonxDefinitionLibrary | jsonx;
+      jsonxComponent?: jsonx;
+      options?: {};
+      functionBody?: (string);
+      functionComponent?: ((props?:any)=>any);
+   },
+  ]
+ */
+function getReactLibrariesAndComponents$1(customComponents) {
+    const customComponentsCacheKey = getCustomComponentsCacheKey(customComponents);
+    if (generatedCustomComponents.has(customComponentsCacheKey))
+        return generatedCustomComponents.get(customComponentsCacheKey);
+    const customComponentLibraries = {};
+    const customReactComponents = {};
+    if (customComponents && customComponents.length) {
+        customComponents.forEach(customComponent => {
+            const { type, name, jsonx, options, functionBody, functionComponent, jsonxComponent, } = customComponent;
+            if (type === "library") {
+                if (jsonxComponent || functionComponent) {
+                    customComponentLibraries[name] = Object
+                        .keys(jsonx)
+                        .reduce((result, prop) => {
+                        const libraryComponent = jsonx[prop];
+                        const { type, name, jsonxComponent, options, functionBody } = libraryComponent;
+                        if (type === "component") {
+                            result[name] = getReactClassComponent.call(this, jsonxComponent, options);
+                        }
+                        else {
+                            result[name] = getCustomFunctionComponent.call(this, { options, functionBody, functionComponent, jsonxComponent, });
+                        }
+                        return result;
+                    }, {});
+                }
+                else
+                    customComponentLibraries[name] = window[name];
+            }
+            else if (type === "component") {
+                if (jsonx) {
+                    customReactComponents[name] = getReactClassComponent.call(this, jsonx, options);
+                }
+                else
+                    customReactComponents[name] = window[name];
+            }
+            else if (type === "function") {
+                if (jsonx) {
+                    customReactComponents[name] = getCustomFunctionComponent.call(this, { options, functionBody, functionComponent, jsonxComponent: jsonx, });
+                }
+                else
+                    customReactComponents[name] = window[name];
+            }
+        });
+    }
+    generatedCustomComponents.set(customComponentsCacheKey, {
+        customComponentLibraries,
+        customReactComponents
+    });
+    return {
+        customComponentLibraries,
+        customReactComponents
+    };
+}
 
 var jsonxComponents = /*#__PURE__*/Object.freeze({
     __proto__: null,
     ReactHookForm: ReactHookForm$1,
+    generatedCustomComponents: generatedCustomComponents,
     advancedBinding: advancedBinding,
     componentMap: componentMap$1,
     getBoundedComponents: getBoundedComponents$1,
@@ -2837,7 +2940,10 @@ var jsonxComponents = /*#__PURE__*/Object.freeze({
     getReactFunctionComponent: getReactFunctionComponent,
     getFunctionBody: getFunctionBody,
     makeFunctionComponent: makeFunctionComponent,
-    getReactContext: getReactContext
+    getReactContext: getReactContext,
+    getCustomFunctionComponent: getCustomFunctionComponent,
+    getCustomComponentsCacheKey: getCustomComponentsCacheKey,
+    getReactLibrariesAndComponents: getReactLibrariesAndComponents$1
 });
 
 //https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically
@@ -3151,11 +3257,16 @@ function getReactComponents(options) {
                 if (args) {
                     args.options = Object.assign({}, args.options, { resources });
                     if (args.function) {
-                        componentVal = makeFunctionComponent.call(this, args.function, args.options);
+                        const newComponent = makeFunctionComponent.call(this, args.function, args.options);
+                        componentVal = args?.invoke
+                            ? newComponent(jsonx.props)
+                            : newComponent;
                     }
                     else {
-                        // eslint-disable-next-line
-                        componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+                        const newComponent = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+                        componentVal = args?.invoke
+                            ? newComponent(jsonx.props)
+                            : newComponent;
                     }
                 }
             }
@@ -11975,7 +12086,7 @@ ${jsonxRenderedString}`;
 
 // import React, { createElement, } from 'react';
 const createElement = React__default.createElement;
-const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, ReactHookForm, } = jsonxComponents;
+const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, ReactHookForm, getReactLibrariesAndComponents, } = jsonxComponents;
 const { getComputedProps } = jsonxProps;
 const { getJSONXChildren } = jsonxChildren;
 const { displayComponent, validSimpleJSONXSyntax, simpleJSONXSyntax } = jsonxUtils;
@@ -12037,7 +12148,8 @@ function outputHTML(config = { jsonx: { component: "" } }) {
  */
 function getReactElementFromJSONX(jsonx, resources = {}) {
     // eslint-disable-next-line
-    const { componentLibraries = {}, debug = false, returnJSON = false, logError = console.error, boundedComponents = [], disableRenderIndexKey = true } = this || {};
+    const { customComponents, debug = false, returnJSON = false, logError = console.error, boundedComponents = [], disableRenderIndexKey = true } = this || {};
+    let { componentLibraries = {}, } = this || {};
     componentLibraries.ReactHookForm = ReactHookForm;
     if (!jsonx)
         return null;
@@ -12049,14 +12161,21 @@ function getReactElementFromJSONX(jsonx, resources = {}) {
     if (!jsonx || !jsonx.component)
         return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
     try {
-        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this?.reactComponents);
-        const reactComponents = boundedComponents.length
+        let components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this?.reactComponents);
+        let reactComponents = boundedComponents.length
             ? getBoundedComponents.call(this, {
                 boundedComponents,
                 reactComponents: components
             })
             : components;
-        renderIndex++;
+        if (customComponents && Array.isArray(customComponents) && customComponents.length) {
+            const cxt = { ...this, componentLibraries, reactComponents: components };
+            const { customComponentLibraries, customReactComponents } = getReactLibrariesAndComponents.call(cxt, customComponents);
+            componentLibraries = { ...componentLibraries, ...customComponentLibraries };
+            reactComponents = { ...reactComponents, ...customReactComponents };
+        }
+        if (disableRenderIndexKey === false)
+            renderIndex++;
         const element = getComponentFromMap({
             jsonx,
             reactComponents,

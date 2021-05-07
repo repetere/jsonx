@@ -1,3 +1,17 @@
+# [1.10.0](https://github.com/repetere/jsonx/compare/v1.9.2...v1.10.0) (2021-05-07)
+
+
+### Features
+
+* invoked inline functional components and generated custom components ([fb3fb0a](https://github.com/repetere/jsonx/commit/fb3fb0af9270628340aef2873b05c393703a515c))
+
+## [1.9.2](https://github.com/repetere/jsonx/compare/v1.9.1...v1.9.2) (2021-04-27)
+
+
+### Bug Fixes
+
+* react hook form update fix ([45676c8](https://github.com/repetere/jsonx/commit/45676c8428d8a0abd3ae51bd14851228782153e0))
+
 ## [1.9.1](https://github.com/repetere/jsonx/compare/v1.9.0...v1.9.1) (2021-03-27)
 
 

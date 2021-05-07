@@ -746,6 +746,32 @@ describe('jsonx props', function () {
       });
       expect(jsonxWithFunc.tick.name).toBe('spanFunc');
     });
+    it('should invoke a function component from a function',()=>{
+      const jsonxWithFunc = getReactComponents.call({},{
+        jsonx:{
+          component:'div',
+          __dangerouslyInsertFunctionComponents:{
+            children:{
+              function:function(){
+                // console.log('clicked!')
+                return {
+                  component:'p',
+                  children:'from func'
+                }
+              },
+              options:{
+                name:'spanFunc'
+              },
+              invoke:true,
+            }
+          },
+          children:'click me'
+        }
+      });
+      // console.log('typeof jsonxWithFunc.children',typeof jsonxWithFunc.children)
+      // console.log('jsonxWithFunc.children',jsonxWithFunc.children)
+      expect(jsonxWithFunc.children.type).toBe('p');
+    });
     it('should create a function component from createFunctionComponent args',()=>{
       const jsonxWithFunc = getReactComponents.call({},{
         jsonx:{

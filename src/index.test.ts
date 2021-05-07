@@ -110,6 +110,28 @@ describe('jsonx', function () {
       expect(jsonx.__getReactDOM()).to.eql(ReactDOM);
     });
   });
+  it('should generate complex components',()=>{
+      const jsonxWithFunc = {
+        component:'div',
+        __dangerouslyInsertFunctionComponents:{
+          _children:{
+            functionBody:'console.log("clicked!")',
+            reactComponent:{
+              component:'span',
+              children:'from func',
+            },
+            options:{
+              name:'spanFunc'
+            }
+          }
+        },
+        children:'click me'
+      };
+      //@ts-ignore
+      const ReactiveJSON = jsonx.getReactElementFromJSONX(jsonxWithFunc);
+
+      // console.log({jsonxWithFunc,ReactiveJSON})
+  });
   describe('getReactElementFromJSONX', () => {
     it('should return an instance of a react element', () => {
       //@ts-ignore
@@ -151,6 +173,9 @@ describe('jsonx', function () {
       expect(ReactiveJSON).to.include('props');
       expect(ReactiveJSON).to.include('children');
     });
+    it('should create components custom components',()=>{
+      
+    })
   });
   describe('getReactElementFromJSON', () => {
     it('should return an instance of a react element', () => {

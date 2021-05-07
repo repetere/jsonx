@@ -21,6 +21,7 @@ const {
   DynamicComponent,
   FormComponent,
   ReactHookForm,
+  getReactLibrariesAndComponents,
 } = jsonxComponents;
 const { getComputedProps } = jsonxProps;
 const { getJSONXChildren } = jsonxChildren;
@@ -108,14 +109,18 @@ export function getReactElementFromJSONX(
   resources = {}
 ): ReactElementLike | JSONReactElement | null |string|undefined{
   // eslint-disable-next-line
+  
   const {
-    componentLibraries = {},
+    customComponents,
     debug = false,
     returnJSON = false,
     logError = console.error,
     boundedComponents = [],
     disableRenderIndexKey = true
   } = this || {};
+  let {
+    componentLibraries = {},
+  } = this ||{};
   componentLibraries.ReactHookForm = ReactHookForm
   if (!jsonx) return null;
   if (jsonx.type) jsonx.component = jsonx.type;
@@ -129,20 +134,29 @@ export function getReactElementFromJSONX(
       debug ? "Error: Missing Component Object" : ""
     );
   try {
-    const components = Object.assign(
+    let components = Object.assign(
       { DynamicComponent: DynamicComponent.bind(this) },
       { FormComponent: FormComponent.bind(this) },
       componentMap,
       this?.reactComponents
     );
 
-    const reactComponents = boundedComponents.length
+    let reactComponents = boundedComponents.length
       ? getBoundedComponents.call(this, {
           boundedComponents,
           reactComponents: components
         })
       : components;
-    renderIndex++;
+    if(customComponents && Array.isArray(customComponents) && customComponents.length){
+      const cxt = {...this,componentLibraries,reactComponents:components}
+      const {
+        customComponentLibraries,
+        customReactComponents
+      } = getReactLibrariesAndComponents.call(cxt,customComponents);
+      componentLibraries = {...componentLibraries, ...customComponentLibraries};
+      reactComponents = {...reactComponents, ...customReactComponents};
+    }
+    if(disableRenderIndexKey===false) renderIndex++;
     const element = getComponentFromMap({
       jsonx,
       reactComponents,
