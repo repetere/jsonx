@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/repetere/jsonx/compare/v1.9.2...v1.10.0) (2021-05-07)
+
+
+### Features
+
+* invoked inline functional components and generated custom components ([fb3fb0a](https://github.com/repetere/jsonx/commit/fb3fb0af9270628340aef2873b05c393703a515c))
+
 ## [1.9.2](https://github.com/repetere/jsonx/compare/v1.9.1...v1.9.2) (2021-04-27)
 
 
