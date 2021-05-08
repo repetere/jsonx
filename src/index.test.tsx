@@ -271,7 +271,7 @@ describe('jsonx', function () {
               ],
             },
           });
-      console.log('JsonxEl',JsonxEl)
+      // console.log('JsonxEl',JsonxEl)
       expect(JsonxEl).toMatch('<div data-reactroot=""><p>hello world</p><span>gen custom def</span><span>gen custom</span><p><span>My Custom React Component Status: </span><span></span></p><div>gen lib function comp a</div></div>')
       //@ts-ignore
       // const {container}=render(<JsonxEl/>);
