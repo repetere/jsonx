@@ -143,6 +143,22 @@ describe('End to End HTML Tests', function(){
       
     },10000)
   })
+  describe('Custom Components Sytanx Test',()=>{
+    it('should render the page', async()=>{
+      await page.goto(`file://${__dirname}/examples/component-inline_function.html`,{
+        waitUntil: 'networkidle2',
+      });
+      const pageTitle = await page.$eval('title',(el:any)=>el.innerText)
+      // const initialFormData = await page.$eval('#advanedFormResults',(el:any)=>el.innerText)
+      expect(pageTitle).toBe('CUSTOM COMPONENTS INLINE TEST')
+      
+      const mainContent = await page.$eval('main',(el:any)=>el.innerHTML)
+      // console.log({mainContent})
+      expect(mainContent.includes('gen custom')).toBe(true)
+      expect(mainContent.includes('My Custom React Component Status')).toBe(true)
+      expect(mainContent.includes('<div testprop="should be passed"><span testprop="should be passed">from func</span></div>')).toBe(true)
+    },10000)
+  })
   describe('Simple Sytanx Test',()=>{
     it('should render the page', async()=>{
       await page.goto(`file://${__dirname}/examples/component-simple_syntax.html`,{

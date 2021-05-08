@@ -1,16 +1,19 @@
 import * as jsonx from './index';
 import * as _jsonxComponents from './components';
+import {getCustomComponentsCacheKey, getCustomFunctionComponent, getReactLibrariesAndComponents} from './components';
 import mochaJSDOM from 'jsdom-global';
 import chai from 'chai';
 import sinon from 'sinon';
-import React, { Component, JSXElementConstructor, ReactComponentElement, ReactElement } from 'react';
-import ReactTestUtils from 'react-dom/test-utils'; // ES6
+import React, { Component, JSXElementConstructor, ReactComponentElement, ReactElement, ReactInstance } from 'react';
+import ReactTestUtils,{isElement} from 'react-dom/test-utils'; // ES6
 import ReactDOM from 'react-dom';
 import ReactDOMServer from "react-dom/server";
 import ReactDOMElements from 'react-dom-factories';
-import {render, fireEvent, screen} from '@testing-library/react'
+import * as defs from "./types/jsonx/index";
 
-import { expect, } from 'chai';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
+import { expect as expectCHAI, } from 'chai';
 import { JSDOM, } from 'jsdom';
 chai.use(require('sinon-chai'));
 // import 'mocha-sinon';
@@ -111,15 +114,122 @@ class WelcomeNonBind extends React.Component {
   }
 }
 
+const customComponents:defs.jsonxCustomComponent[] = [
+  {
+    type: 'function',
+    name: 'genFuncDef',
+    functionComponent:function(){
+      console.log("called generated function")
+      return {
+        component:'span',
+        children:'gen custom def',
+      }
+    },
+    options:{
+      name:'genFuncDef'
+    }
+  },
+  {
+    type: 'function',
+    name: 'genFunc',
+    functionBody:'console.log("called generated function")',
+    jsonxComponent:{
+      component:'span',
+      children:'gen custom',
+    },
+    options:{
+      name:'genFun'
+    }
+  },
+  {
+    type: 'component',
+    name: 'genClass',
+    jsonx:{
+      componentDidMount: {
+        body: 'console.log(\'mounted\',this.props)',
+        arguments: [],
+      },
+      render: {
+        body: {
+          component: 'p',
+          children: [
+            {
+              component: 'span',
+              children: 'My Custom React Component Status: ',
+            },
+            {
+              component: 'span',
+              thisprops: {
+                children: ['status',],
+              },
+            },
+          ],
+        },
+      },
+    },
+    options:{
+      name:'genClass'
+    }
+  },
+  {
+    type:'library',
+    name:'MyLib',
+    jsonx:{
+      CompA:{
+        name:'CompA',
+        type:'function',
+        functionBody:'console.log("called generated function")',
+        jsonxComponent:{
+          component:'div',
+          children:'gen lib function comp a',
+        },
+        options:{
+          name:'CompA'
+        }
+      },
+      CompB:{
+        name:'CompB',
+        type:'function',
+        jsonxComponent:{
+          component:'div',
+          children:'gen lib function comp b',
+        },
+        options:{
+          name:'CompB'
+        }
+      },
+      CompC:{
+        type: 'component',
+        name: 'CompC',
+        jsonxComponent:{
+          componentDidMount: {
+            body: 'console.log(\'mounted CompC\',this.props)',
+            arguments: [],
+          },
+          render: {
+            body: {
+              component: 'div',
+              children: 'CompC Class Component',
+            },
+          },
+        },
+        options:{
+          name:'genClass'
+        }
+      }
+    }
+  }
+];
+
 describe('jsonx components', function () { 
   describe('advancedBinding', () => {
     it('should use advancedBinding based on user agent', () => {
-      expect(_jsonxComponents.advancedBinding).to.be.true;
+      expectCHAI(_jsonxComponents.advancedBinding).to.be.true;
     });
   });
   describe('componentMap', () => {
     it('should export an object of components', () => {
-      expect(_jsonxComponents.componentMap).to.be.a('object');
+      expectCHAI(_jsonxComponents.componentMap).to.be.a('object');
     });
     // it('should export an object of components', () => {
     //   global.window = {
@@ -129,7 +239,7 @@ describe('jsonx components', function () {
     //   };
     //   const comps = _jsonxComponents.componentMap;
     //   console.log({ comps });
-    //   expect(_jsonxComponents.componentMap.cusEl).to.eql(global.window.__jsonx_custom_elements.cusEl);
+    //   expectCHAI(_jsonxComponents.componentMap.cusEl).to.eql(global.window.__jsonx_custom_elements.cusEl);
     // });
   });
   describe('getBoundedComponents', () => {
@@ -162,13 +272,13 @@ describe('jsonx components', function () {
 
       const JSONXPropCheck = jsonx.getRenderedJSON.call(customThis, sampleCustomElementJSONX);
 
-      expect(bindSpy.called).to.be.true;
+      expectCHAI(bindSpy.called).to.be.true;
       //@ts-ignore
-      expect(JSONXPropCheck.props.title).to.eql(customThis.props.extraname);
+      expectCHAI(JSONXPropCheck.props.title).to.eql(customThis.props.extraname);
       //@ts-ignore
-      expect(customComponents.length).to.eql(reactComponents.length);
+      expectCHAI(customComponents.length).to.eql(reactComponents.length);
       //@ts-ignore
-      expect(customComponentsNotBound).to.be.ok
+      expectCHAI(customComponentsNotBound).to.be.ok
     });
   });
   describe('getComponentFromMap', () => {
@@ -180,7 +290,7 @@ describe('jsonx components', function () {
       reactBootstrap,
     };
     it('should return a function if jsonx.component is not a string', () => {
-      expect(_jsonxComponents.getComponentFromMap({
+      expectCHAI(_jsonxComponents.getComponentFromMap({
         jsonx: {
           //@ts-ignore
           component:Welcome,
@@ -189,7 +299,7 @@ describe('jsonx components', function () {
     it('should return the dom element string if a valid DOM elmenet in ReactDOM', () => {
       ['div', 'span', 'p', 'section', ].forEach(el => {
         const jsonxObj = { jsonx: { component: el, }, };
-        expect(_jsonxComponents.getComponentFromMap(jsonxObj)).to.eql(el);
+        expectCHAI(_jsonxComponents.getComponentFromMap(jsonxObj)).to.eql(el);
       });
     });
     it('should return a custom element', () => {
@@ -201,7 +311,7 @@ describe('jsonx components', function () {
           Welcome,
         },
       };
-      expect(_jsonxComponents.getComponentFromMap(jsonxObj)).to.eql(Welcome);
+      expectCHAI(_jsonxComponents.getComponentFromMap(jsonxObj)).to.eql(Welcome);
     });
     it('should return a component library react element', () => {
       const jsonxObj = {
@@ -210,17 +320,17 @@ describe('jsonx components', function () {
         },
         componentLibraries,
       };
-      expect(_jsonxComponents.getComponentFromMap(jsonxObj)).to.eql(Welcome);
+      expectCHAI(_jsonxComponents.getComponentFromMap(jsonxObj)).to.eql(Welcome);
     });
     it('should handle errors', () => { 
       const logError = sinon.spy();
-      expect(_jsonxComponents.getComponentFromMap.bind(null)).to.throw();
+      expectCHAI(_jsonxComponents.getComponentFromMap.bind(null)).to.throw();
       try {
         //@ts-ignore
         _jsonxComponents.getComponentFromMap({ debug: true, logError, jsonx:false, });
       } catch (e) {
-        expect(e).to.be.a('error');
-        expect(logError.called).to.be.true;
+        expectCHAI(e).to.be.a('error');
+        expectCHAI(logError.called).to.be.true;
       }
     });
   });
@@ -238,7 +348,7 @@ describe('jsonx components', function () {
       },
     };
     it('should return undefined if not valid', () => {
-      expect(_jsonxComponents.getComponentFromLibrary()).to.be.undefined;
+      expectCHAI(_jsonxComponents.getComponentFromLibrary()).to.be.undefined;
     });
     it('should return a function if selecting valid component library', () => {
       const jsonxObj = {
@@ -247,14 +357,14 @@ describe('jsonx components', function () {
         },
         componentLibraries,
       };
-      expect(_jsonxComponents.getComponentFromLibrary(jsonxObj)).to.be.eql(Welcome);
+      expectCHAI(_jsonxComponents.getComponentFromLibrary(jsonxObj)).to.be.eql(Welcome);
       const jsonxObjDeep = {
         jsonx: {
           component: 'testLib.testGrouping.testComponent',
         },
         componentLibraries,
       };
-      expect(_jsonxComponents.getComponentFromLibrary(jsonxObjDeep)).to.be.eql(componentLibraries.testLib.testGrouping.testComponent);
+      expectCHAI(_jsonxComponents.getComponentFromLibrary(jsonxObjDeep)).to.be.eql(componentLibraries.testLib.testGrouping.testComponent);
 
     });
   });
@@ -282,9 +392,9 @@ describe('jsonx components', function () {
     //       const window_test_jsonx = jsonxModule;
     //       console.log('window.__jsonx_custom_elements', window.__jsonx_custom_elements);
 
-    //       expect(window_test_jsonx._jsonxComponents.componentMap).to.haveOwnProperty('Welcome');
-    //       expect(window_test_jsonx._jsonxComponents.componentMap).to.haveOwnProperty('WelcomeNonBind');
-    //       expect(window_test_jsonx._jsonxComponents.componentMap).to.haveOwnProperty('WelcomeBindSpy');
+    //       expectCHAI(window_test_jsonx._jsonxComponents.componentMap).to.haveOwnProperty('Welcome');
+    //       expectCHAI(window_test_jsonx._jsonxComponents.componentMap).to.haveOwnProperty('WelcomeNonBind');
+    //       expectCHAI(window_test_jsonx._jsonxComponents.componentMap).to.haveOwnProperty('WelcomeBindSpy');
     //       done();
     //     })
     //     .catch(done);
@@ -299,14 +409,14 @@ describe('jsonx components', function () {
       const myFunc = getFunctionFromEval({
         body: 'return 3;',
       });
-      expect(myFunc()).to.eql(3);
+      expectCHAI(myFunc()).to.eql(3);
     });
     it('should name the function',()=>{
       const myFunc = getFunctionFromEval({
         body: 'return 3;',
         name:'myFunction'
       });
-      expect(myFunc.name).to.eql('myFunction');
+      expectCHAI(myFunc.name).to.eql('myFunction');
     })
   });
   describe('getReactClassComponent', () => {
@@ -341,10 +451,10 @@ describe('jsonx components', function () {
       const MyCustomComponentClass = getReactClassComponent(classBody, { returnFactory:false, });
       // const MyCustomComponentFactory = getReactClassComponent(classBody);
       // console.log({MyCustomComponentClass});
-      expect(MyCustomComponent).to.be.a('function');
-      expect(MyCustomComponentClass).to.be.a('function');
-      expect(ReactTestUtils.isElement(MyCustomComponent)).to.be.false;
-      // expect(ReactTestUtils.isCompositeComponent(MyCustomComponentClass())).to.be.true;
+      expectCHAI(MyCustomComponent).to.be.a('function');
+      expectCHAI(MyCustomComponentClass).to.be.a('function');
+      expectCHAI(ReactTestUtils.isElement(MyCustomComponent)).to.be.false;
+      // expectCHAI(ReactTestUtils.isCompositeComponent(MyCustomComponentClass())).to.be.true;
     });
     it('should allow for functions as object props', () => {
       const classBodyOpts = Object.assign({}, classBody);
@@ -353,20 +463,20 @@ describe('jsonx components', function () {
         console.log('mounted!');
       };
       //@ts-ignore
-      expect(getReactClassComponent.bind(null, classBodyOpts)).to.not.throw;
+      expectCHAI(getReactClassComponent.bind(null, classBodyOpts)).to.not.throw;
     });
     it('should allow for custom class names', () => { 
       //@ts-ignore
       const MyCustomComponentNameClass = getReactClassComponent(classBody, '', { name: 'myClass', });
-      expect(MyCustomComponentNameClass).to.be.a('function');
+      expectCHAI(MyCustomComponentNameClass).to.be.a('function');
     });
     it('should throw an error if missing a render function', () => { 
       //@ts-ignore
-      expect(getReactClassComponent.bind()).to.throw;
+      expectCHAI(getReactClassComponent.bind()).to.throw;
     });
     it('should throw an error if missing a function is missing a body', () => {
       //@ts-ignore
-      expect(getReactClassComponent.bind({ render: {}, })).to.throw;
+      expectCHAI(getReactClassComponent.bind({ render: {}, })).to.throw;
     });
     it('should create suspense/lazy components', () => {
       //@ts-ignore
@@ -400,7 +510,7 @@ describe('jsonx components', function () {
         },
       );
       
-      expect(MyCustomLazyComponent).to.be.a('object');
+      expectCHAI(MyCustomLazyComponent).to.be.a('object');
     });
   });
   describe('makeFunctionComponent', () => {
@@ -460,8 +570,8 @@ describe('jsonx components', function () {
       }
       //@ts-ignore
       const MyCustomComponentMadeFunction = makeFunctionComponent(functionComponentWithHook);
-      expect(MyCustomComponentMadeFunction.name).to.eql('functionComponentWithHook');
-      expect(MyCustomComponentMadeFunction).to.be.a('function');
+      expectCHAI(MyCustomComponentMadeFunction.name).to.eql('functionComponentWithHook');
+      expectCHAI(MyCustomComponentMadeFunction).to.be.a('function');
     });
   }),
   describe('getReactFunctionComponent', () => {
@@ -476,8 +586,8 @@ describe('jsonx components', function () {
         'console.log("lazy function body");',
         { },
       );
-      expect(MyCustomComponentNameless.name).to.eql('Anonymous');
-      expect(MyCustomComponentNameless).to.be.a('function');
+      expectCHAI(MyCustomComponentNameless.name).to.eql('Anonymous');
+      expectCHAI(MyCustomComponentNameless).to.be.a('function');
     });
     it('should create react a React Function Component', () => { 
       //@ts-ignore
@@ -489,8 +599,8 @@ describe('jsonx components', function () {
         function myFuncBody(){ console.log('some function body') },
         { },
       );
-      expect(MyCustomComponentNameless.name).to.eql('Anonymous');
-      expect(MyCustomComponentNameless).to.be.a('function');
+      expectCHAI(MyCustomComponentNameless.name).to.eql('Anonymous');
+      expectCHAI(MyCustomComponentNameless).to.be.a('function');
     });
     it('should create a React Function Component with a name', () => {
       //@ts-ignore
@@ -513,8 +623,8 @@ describe('jsonx components', function () {
         'console.log("lazy function body");',
         { name:'myComp', },
       );
-      expect(MyCustomComponent.name).to.eql('myComp');
-      expect(MyCustomComponent).to.be.a('function');
+      expectCHAI(MyCustomComponent.name).to.eql('myComp');
+      expectCHAI(MyCustomComponent).to.be.a('function');
     });
 
     it('should create suspense/lazy components', () => {
@@ -550,7 +660,7 @@ describe('jsonx components', function () {
         },
       );
       
-      expect(MyCustomLazyComponent).to.be.a('object');
+      expectCHAI(MyCustomLazyComponent).to.be.a('object');
     });
   });
   describe('DynamicComponent', () => {
@@ -560,14 +670,14 @@ describe('jsonx components', function () {
       const MyDynamicComponent = DynamicComponent.call( {disableRenderIndexKey:false},{ name:'MyDynamicComponent', }) as any
       // //@ts-ignore
       const wrapper = render(<MyDynamicComponent id="testingForm" />);
-      expect(wrapper).to.be.ok
+      expectCHAI(wrapper).to.be.ok
       //@ts-ignore
       // const wrapper = mount(<DynamicComponent key={3} 
       //   fetchURL='#'
       //   fetchOptions={{}} 
       //   jsonx={{ component: 'div', children: 'test' }} />);
-      // expect(wrapper.text()).to.contain('...Loading');
-      expect(DynamicComponent).to.be.a('function');
+      // expectCHAI(wrapper.text()).to.contain('...Loading');
+      expectCHAI(DynamicComponent).to.be.a('function');
     });
     it('should render a component',()=>{
       const myDynamicFunction = DynamicComponent.call({},{
@@ -602,15 +712,15 @@ describe('jsonx components', function () {
           })  
         }
       })
-      expect(myDynamicFunction).to.be.a('function');
-      expect(myDynamicFunction.name).to.eql('bound myDynamicFunction');
+      expectCHAI(myDynamicFunction).to.be.a('function');
+      expectCHAI(myDynamicFunction.name).to.eql('bound myDynamicFunction');
       //@ts-ignore
       const m = React.createElement(myDynamicFunction,{},undefined)
       //@ts-ignore
       const r = ReactDOMServer.renderToString(myDynamicFunction,{title:'called prop'},undefined)
       // console.log({r},r)
       // console.log({m},m)
-      expect(m.type).to.eql(myDynamicFunction)
+      expectCHAI(m.type).to.eql(myDynamicFunction)
       // console.log('myDynamicFunction',myDynamicFunction,{myDynamicFunction})
     })
   });
@@ -626,20 +736,20 @@ describe('jsonx components', function () {
 
       // console.log('someElement',someElement)
       // console.log('wrapper.text()',wrapper.text())
-      // expect(wrapper.text()).to.contain('empty');
-      expect(FormComponent).to.be.a('function');
-      expect(wrapper).to.be.ok
+      // expectCHAI(wrapper.text()).to.contain('empty');
+      expectCHAI(FormComponent).to.be.a('function');
+      expectCHAI(wrapper).to.be.ok
     });
     it('should render a component',()=>{
       const myFormComponent = FormComponent.call({},{
         name:'myFormComponent',
       })
-      expect(myFormComponent).to.be.a('function');
-      expect(myFormComponent.name).to.eql('bound myFormComponent');
+      expectCHAI(myFormComponent).to.be.a('function');
+      expectCHAI(myFormComponent.name).to.eql('bound myFormComponent');
       // console.log('myFormComponent',myFormComponent,{myFormComponent})
       //@ts-ignore
       const m = React.createElement(myFormComponent,undefined,undefined)
-      expect(m.type).to.eql(myFormComponent)
+      expectCHAI(m.type).to.eql(myFormComponent)
 
       // console.log({m},m)
     })
@@ -658,7 +768,7 @@ describe('jsonx components', function () {
       const FormFunctionComponent:React.FunctionComponent = FormComponent.call({},options);
       //@ts-ignore
       const invokedFormFunctionComponent =React.createElement(FormFunctionComponent,{sub_title:'called props'},'');
-      expect(invokedFormFunctionComponent).to.be.ok
+      expectCHAI(invokedFormFunctionComponent).to.be.ok
 
       const wrapperOptions  = { 
         ...options,
@@ -669,7 +779,7 @@ describe('jsonx components', function () {
       const WrappedFormFunctionComponent:React.FunctionComponent = FormComponent.call({},wrapperOptions);
       //@ts-ignore
       const invokedWrappedFormFunctionComponent =React.createElement(WrappedFormFunctionComponent,{sub_title:'called props'},'');
-      expect(invokedWrappedFormFunctionComponent).to.be.ok
+      expectCHAI(invokedWrappedFormFunctionComponent).to.be.ok
 
     })
   });
@@ -677,9 +787,43 @@ describe('jsonx components', function () {
     const getReactContext = _jsonxComponents.getReactContext;
     it('should return a React Context Object', () => {
       const context = getReactContext({ some: 'c', });
-      expect(ReactTestUtils.isElement(context)).to.be.false;
-      expect(context).to.be.an('object');
-      // expect(context).to.be.an.instanceOf(React.createContext);
+      expectCHAI(ReactTestUtils.isElement(context)).to.be.false;
+      expectCHAI(context).to.be.an('object');
+      // expectCHAI(context).to.be.an.instanceOf(React.createContext);
     });
   });
+  describe('getCustomFunctionComponent',()=>{
+    it('should generate function components from custom components',()=>{
+      const FuncString = getCustomFunctionComponent.call({},customComponents[0] as defs.jsonxCustomComponent);
+      const FuncDef = getCustomFunctionComponent.call({},customComponents[1] as defs.jsonxCustomComponent);
+      // console.log('funcString',FuncString)
+      // console.log('FuncDef',FuncDef)
+      const originalConsoleLog = console.log;
+      console.log = jest.fn()
+      //@ts-ignore
+      const {container:containerFuncString} =render(<FuncString />)
+      //@ts-ignore
+      const {container:containerFuncDef} =render(<FuncDef />)
+      expect(containerFuncString.innerHTML).toMatch('<span>gen custom def</span>')
+      expect(containerFuncDef.innerHTML).toMatch('<span>gen custom</span>')
+      expect(console.log).toBeCalledWith('called generated function')
+      console.log=originalConsoleLog
+    })
+  });
+  describe('getCustomComponentsCacheKey',()=>{
+    it('should return a cachekey string from custom components',()=>{
+      expect(getCustomComponentsCacheKey(customComponents as defs.jsonxCustomComponent[])).toMatch( 'genFuncDefgenFuncgenClassMyLib');
+    })
+  });
+  describe('getReactLibrariesAndComponents',()=>{
+    it('should generate components from customComponents',()=>{
+      const { customComponentLibraries, customReactComponents } = getReactLibrariesAndComponents.call({},customComponents);
+      expect(typeof customReactComponents.genFuncDef).toBe('function')
+      expect(typeof customReactComponents.genFunc).toBe('function')
+      expect(typeof customReactComponents.genClass).toBe('function')
+      expect(typeof customComponentLibraries.MyLib.CompA).toBe('function')
+      expect(typeof customComponentLibraries.MyLib.CompB).toBe('function')
+      expect(typeof customComponentLibraries.MyLib.CompC).toBe('function')
+    })
+  })
 });

@@ -157,7 +157,7 @@ export function getReactElementFromJSONX(
       reactComponents = {...reactComponents, ...customReactComponents};
     }
     if(disableRenderIndexKey===false) renderIndex++;
-    const element = getComponentFromMap({
+    const element = getComponentFromMap.call(this, {
       jsonx,
       reactComponents,
       componentLibraries,
@@ -201,6 +201,7 @@ export function getReactElementFromJSONX(
     if (debug) {
       logError({ jsonx, resources }, "getReactElementFromJSONX this", this);
       logError(e, e.stack ? e.stack : "no stack");
+      return e.toString()
     }
     throw e;
   }

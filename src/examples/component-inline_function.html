@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>SIMPLE SYNTAX TEST</title>
+    <title>CUSTOM COMPONENTS INLINE TEST</title>
     <script type="text/javascript" src="../../dist/index.umd.js"></script>
   </head>
   <body>
@@ -14,7 +14,11 @@
             key:1
           },
           children:[
-            {genFunc:{props:{title:'generated'}}},
+            {genFunc:{props:{title:'generated function'}}},
+            {genClass:{props:{title:'generated class',status:'looks good'}}},
+            { component:'MyLib.CompA',},
+            { component:'MyLib.CompB',},
+            { component:'MyLib.CompC',},
             {div:'components from inserting functions'},
             {
               component:'div',
@@ -36,21 +40,16 @@
                   invoke:true,
                 }
               },
-              // children:'click me'
             },
           ]
         }
       }
       const boundConfig = {
+        debug:true,
         customComponents:[
           {
             type: 'function',
             name: 'genFunc',
-            // jsonx: jsonxDefinitionLibrary | jsonx;
-            // jsonxComponent?: jsonx;
-            // options?: {};
-            // functionBody?: (string);
-            // functionComponent?: ((props?:any)=>any);
             functionBody:'console.log("called generated function")',
             jsonx:{
               component:'span',
@@ -58,6 +57,84 @@
             },
             options:{
               name:'genFun'
+            }
+          },
+          {
+            type: 'component',
+            name: 'genClass',
+            jsonx:{
+              componentDidMount: {
+                body: 'console.log(\'mounted\',this.props)',
+                arguments: [],
+              },
+              render: {
+                body: {
+                  component: 'p',
+                  children: [
+                    {
+                      component: 'span',
+                      children: 'My Custom React Component Status: ',
+                    },
+                    {
+                      component: 'span',
+                      thisprops: {
+                        children: ['status',],
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+            options:{
+              name:'genClass'
+            }
+          },
+          {
+            type:'library',
+            name:'MyLib',
+            jsonx:{
+              CompA:{
+                name:'CompA',
+                type:'function',
+                functionBody:'console.log("called generated function")',
+                jsonxComponent:{
+                  component:'div',
+                  children:'gen lib function comp a',
+                },
+                options:{
+                  name:'CompA'
+                }
+              },
+              CompB:{
+                name:'CompB',
+                type:'function',
+                jsonxComponent:{
+                  component:'div',
+                  children:'gen lib function comp b',
+                },
+                options:{
+                  name:'CompB'
+                }
+              },
+              CompC:{
+                type: 'component',
+                name: 'CompC',
+                jsonxComponent:{
+                  componentDidMount: {
+                    body: 'console.log(\'mounted CompC\',this.props)',
+                    arguments: [],
+                  },
+                  render: {
+                    body: {
+                      component: 'div',
+                      children: 'CompC Class Component',
+                    },
+                  },
+                },
+                options:{
+                  name:'genClass'
+                }
+              }
             }
           }
         ]
