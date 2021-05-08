@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/repetere/jsonx/compare/v1.10.0...v1.10.1) (2021-05-08)
+
+
+### Bug Fixes
+
+* fixed custom component generation ([0d4ef98](https://github.com/repetere/jsonx/commit/0d4ef98da5808e8b847e9d73348383b47d4cbdaa))
+
 # [1.10.0](https://github.com/repetere/jsonx/compare/v1.9.2...v1.10.0) (2021-05-07)
 
 
