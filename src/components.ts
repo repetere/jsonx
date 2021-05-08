@@ -747,6 +747,12 @@ export function getReactContext(options: any = {}) {
   return createContext(options.value);
 }
 
+/**
+ * generates react function components from a json definition
+ * @property {object} this 
+ * @param customComponent 
+ * @returns {function} returns react functional component
+ */
 export function getCustomFunctionComponent(this: defs.Context, customComponent: Partial<defs.jsonxCustomComponent>): defs.genericComponent{
   const { options, functionBody, functionComponent, jsonxComponent, } = customComponent;
   if (functionComponent) {
@@ -760,6 +766,11 @@ export function getCustomFunctionComponent(this: defs.Context, customComponent: 
   }
 }
 
+/**
+ * returns a cache key of custom components names
+ * @param customComponents 
+ * @returns {string} cachekey
+ */
 export function getCustomComponentsCacheKey(customComponents:defs.jsonxCustomComponent[]):string{
   return customComponents.map(({name})=>name).join('')
 }
@@ -809,7 +820,7 @@ export function getReactLibrariesAndComponents(this: defs.Context, customCompone
     customComponents.forEach(customComponent => {
       const { type, name, jsonx, options, functionBody, functionComponent, jsonxComponent, } = customComponent;
       if (type === "library") {
-        if (jsonxComponent||functionComponent) {
+        if (jsonx) {
           customComponentLibraries[name] = Object
             .keys(jsonx as defs.jsonxLibrary)
             .reduce(
@@ -843,7 +854,7 @@ export function getReactLibrariesAndComponents(this: defs.Context, customCompone
           ) as defs.genericComponent;
         } else customReactComponents[name] = window[name];
       } else if (type === "function" ) {
-        if (jsonx) {
+        if (functionComponent || functionBody) {
           customReactComponents[
             name
           ] = getCustomFunctionComponent.call(this, { options, functionBody, functionComponent, jsonxComponent:jsonx, });

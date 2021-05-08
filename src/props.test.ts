@@ -717,7 +717,7 @@ describe('jsonx props', function () {
         }
       })
       //@ts-ignore
-      expect(erroredComponent.children).toBeInstanceOf(Error)
+      expect(erroredComponent.children).toMatch("ReferenceError: Invalid React Component (invalid)")
       // console.log({erroredComponent})
     })
   });

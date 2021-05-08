@@ -9773,10 +9773,15 @@
 
 	var isEmptyObject = (value) => isObject(value) && !Object.keys(value).length;
 
-	var shouldRenderFormState = (formState, readFormStateRef, isRoot) => isEmptyObject(formState) ||
-	    Object.keys(formState).length >= Object.keys(readFormStateRef).length ||
-	    Object.keys(formState).find((key) => readFormStateRef[key] ===
-	        (isRoot ? VALIDATION_MODE.all : true));
+	var shouldRenderFormState = (formStateData, readFormStateRef, isRoot) => {
+	    const formState = omit(formStateData, 'name');
+	    return (isEmptyObject(formState) ||
+	        Object.keys(formState).length >= Object.keys(readFormStateRef).length ||
+	        Object.keys(formState).find((key) => readFormStateRef[key] ===
+	            (isRoot ? VALIDATION_MODE.all : true)));
+	};
+
+	var convertToArrayPayload = (value) => Array.isArray(value) ? value : [value];
 
 	var isWeb = typeof window !== UNDEFINED &&
 	    typeof window.HTMLElement !== UNDEFINED &&
@@ -9785,8 +9790,11 @@
 	const isProxyEnabled = isWeb ? 'Proxy' in window : typeof Proxy !== UNDEFINED;
 
 	function useFormState(props) {
+	    const { control, name } = props || {};
 	    const methods = useFormContext();
-	    const { formStateRef, formStateSubjectRef, readFormStateRef } = (props && props.control) || methods.control;
+	    const { formStateRef, formStateSubjectRef, readFormStateRef } = control || methods.control;
+	    const nameRef = React__namespace.useRef(name);
+	    nameRef.current = name;
 	    const [formState, updateFormState] = React__namespace.useState(formStateRef.current);
 	    const readFormState = React__namespace.useRef({
 	        isDirty: false,
@@ -9798,10 +9806,11 @@
 	    });
 	    React__namespace.useEffect(() => {
 	        const formStateSubscription = formStateSubjectRef.current.subscribe({
-	            next: (formState) => {
+	            next: (formState) => (!nameRef.current ||
+	                !formState.name ||
+	                convertToArrayPayload(nameRef.current).includes(formState.name)) &&
 	                shouldRenderFormState(formState, readFormState.current) &&
-	                    updateFormState(Object.assign(Object.assign({}, formStateRef.current), formState));
-	            },
+	                updateFormState(Object.assign(Object.assign({}, formStateRef.current), formState)),
 	        });
 	        return () => formStateSubscription.unsubscribe();
 	    }, []);
@@ -9820,15 +9829,13 @@
 	        : get(fieldsRef.current, name)._f.value);
 	    const formState = useFormState({
 	        control: control || methods.control,
+	        name,
 	    });
 	    get(fieldsRef.current, name)._f.value = value;
 	    React__namespace.useEffect(() => {
 	        const controllerSubscription = controllerSubjectRef.current.subscribe({
 	            next: (data) => (!data.name || name === data.name) &&
 	                setInputStateValue(get(data.values, name)),
-	        });
-	        ref({
-	            target: value,
 	        });
 	        return () => {
 	            controllerSubscription.unsubscribe();
@@ -10047,7 +10054,7 @@
 	var setFieldArrayDirtyFields = (values, defaultValues, dirtyFields) => deepMerge(setDirtyFields(values, defaultValues, dirtyFields.slice(0, values.length)), setDirtyFields(defaultValues, values, dirtyFields.slice(0, values.length)));
 
 	function append(data, value) {
-	    return [...data, ...(Array.isArray(value) ? value : [value])];
+	    return [...data, ...convertToArrayPayload(value)];
 	}
 
 	var fillEmptyArray = (value) => Array.isArray(value) ? Array(value.length).fill(undefined) : undefined;
@@ -10055,7 +10062,7 @@
 	function insert(data, index, value) {
 	    return [
 	        ...data.slice(0, index),
-	        ...(Array.isArray(value) ? value : [value]),
+	        ...convertToArrayPayload(value),
 	        ...data.slice(index),
 	    ];
 	}
@@ -10072,7 +10079,7 @@
 	};
 
 	function prepend(data, value) {
-	    return [...(Array.isArray(value) ? value : [value]), ...data];
+	    return [...convertToArrayPayload(value), ...data];
 	}
 
 	function removeAtIndexes(data, indexes) {
@@ -10086,7 +10093,7 @@
 	}
 	var removeArrayAt = (data, index) => isUndefined$1(index)
 	    ? []
-	    : removeAtIndexes(data, (Array.isArray(index) ? index : [index]).sort((a, b) => a - b));
+	    : removeAtIndexes(data, convertToArrayPayload(index).sort((a, b) => a - b));
 
 	var swapArrayAt = (data, indexA, indexB) => {
 	    data[indexA] = [data[indexB], (data[indexB] = data[indexA])][0];
@@ -10156,7 +10163,7 @@
 	                    ? ''
 	                    : `${name}.${index}`
 	        : `${name}.${index}`;
-	    const resetFields = (index) => (Array.isArray(index) ? index : [index]).forEach((currentIndex) => set(fieldsRef.current, `${name}${isUndefined$1(currentIndex) ? '' : `.${currentIndex}`}`, isUndefined$1(currentIndex) ? [] : undefined));
+	    const resetFields = (index) => convertToArrayPayload(index).forEach((currentIndex) => set(fieldsRef.current, `${name}${isUndefined$1(currentIndex) ? '' : `.${currentIndex}`}`, isUndefined$1(currentIndex) ? [] : undefined));
 	    const setFieldsAndNotify = (fieldsValues = []) => setFields(mapIds(fieldsValues, keyName));
 	    const cleanup = (ref) => !compact(get(ref, name, [])).length && unset(ref, name);
 	    const updateDirtyFieldsWithDefaultValues = (updatedFieldArrayValues) => updatedFieldArrayValues &&
@@ -10211,7 +10218,7 @@
 	                });
 	        }));
 	    const append$1 = (value, options) => {
-	        const appendValue = Array.isArray(value) ? value : [value];
+	        const appendValue = convertToArrayPayload(value);
 	        const updatedFieldArrayValues = append(getCurrentFieldsValues(), appendValue);
 	        const currentIndex = updatedFieldArrayValues.length - appendValue.length;
 	        setFieldsAndNotify(updatedFieldArrayValues);
@@ -10222,7 +10229,7 @@
 	        focusNameRef.current = getFocusDetail(currentIndex, options);
 	    };
 	    const prepend$1 = (value, options) => {
-	        const prependValue = Array.isArray(value) ? value : [value];
+	        const prependValue = convertToArrayPayload(value);
 	        const updatedFieldArrayValues = prepend(getCurrentFieldsValues(), prependValue);
 	        setFieldsAndNotify(updatedFieldArrayValues);
 	        batchStateUpdate(prepend, {
@@ -10240,7 +10247,7 @@
 	        }, updatedFieldArrayValues);
 	    };
 	    const insert$1 = (index, value, options) => {
-	        const insertValue = Array.isArray(value) ? value : [value];
+	        const insertValue = convertToArrayPayload(value);
 	        const updatedFieldArrayValues = insert(getCurrentFieldsValues(), index, insertValue);
 	        setFieldsAndNotify(updatedFieldArrayValues);
 	        batchStateUpdate(insert, {
@@ -10665,7 +10672,7 @@
 	    const fieldArrayNamesRef = React__namespace.useRef(new Set());
 	    const validationMode = getValidationModes(mode);
 	    const isValidateAllFieldCriteria = criteriaMode === VALIDATION_MODE.all;
-	    const [formState, setFormState] = React__namespace.useState({
+	    const [formState, updateFormState] = React__namespace.useState({
 	        isDirty: false,
 	        isValidating: false,
 	        dirtyFields: {},
@@ -10719,7 +10726,7 @@
 	            isWatched) {
 	            const updatedFormState = Object.assign(Object.assign({}, state), { isValid: resolverRef.current ? !!isValid : getIsValid(), errors: formStateRef.current.errors });
 	            formStateRef.current = Object.assign(Object.assign({}, formStateRef.current), updatedFormState);
-	            formStateSubjectRef.current.next(isWatched ? {} : updatedFormState);
+	            formStateSubjectRef.current.next(isWatched ? { name } : updatedFormState);
 	        }
 	        formStateSubjectRef.current.next({
 	            isValidating: false,
@@ -10732,7 +10739,7 @@
 	            const value = isWeb && isHTMLElement(_f.ref) && isNullOrUndefined(rawValue)
 	                ? ''
 	                : rawValue;
-	            _f.value = rawValue;
+	            _f.value = getFieldValueAs(rawValue, _f);
 	            if (isRadioInput(_f.ref)) {
 	                (_f.refs || []).forEach((radioRef) => (radioRef.checked = radioRef.value === value));
 	            }
@@ -10782,6 +10789,7 @@
 	            const state = {
 	                isDirty: formStateRef.current.isDirty,
 	                dirtyFields: formStateRef.current.dirtyFields,
+	                name,
 	            };
 	            const isChanged = (readFormStateRef.current.isDirty &&
 	                previousIsDirty !== state.isDirty) ||
@@ -10835,9 +10843,7 @@
 	    const trigger = React__namespace.useCallback(async (name) => {
 	        const fields = isUndefined$1(name)
 	            ? Object.keys(fieldsRef.current)
-	            : Array.isArray(name)
-	                ? name
-	                : [name];
+	            : convertToArrayPayload(name);
 	        let isValid;
 	        formStateSubjectRef.current.next({
 	            isValidating: true,
@@ -10854,11 +10860,7 @@
 	                    .filter((fieldName) => get(fieldsRef.current, fieldName))
 	                    .map(async (fieldName) => await executeValidation(fieldName, null)))).every(Boolean));
 	        }
-	        formStateSubjectRef.current.next({
-	            errors: formStateRef.current.errors,
-	            isValidating: false,
-	            isValid: resolverRef.current ? isValid : getIsValid(),
-	        });
+	        formStateSubjectRef.current.next(Object.assign(Object.assign({}, (isString$1(name) ? { name } : {})), { errors: formStateRef.current.errors, isValidating: false, isValid: resolverRef.current ? isValid : getIsValid() }));
 	        return isValid;
 	    }, [executeSchemaOrResolverValidation, executeValidation]);
 	    const setInternalValues = React__namespace.useCallback((name, value, options) => Object.entries(value).forEach(([inputKey, inputValue]) => {
@@ -10897,7 +10899,7 @@
 	                    ? set(validFieldsRef.current, name, true)
 	                    : unset(validFieldsRef.current, name);
 	                formStateRef.current.isValid !== getIsValid() &&
-	                    setFormState(Object.assign(Object.assign({}, formStateRef.current), { isValid: getIsValid() }));
+	                    updateFormState(Object.assign(Object.assign({}, formStateRef.current), { isValid: getIsValid() }));
 	            });
 	        }
 	        return defaultValue;
@@ -10916,6 +10918,7 @@
 	                options.shouldDirty) {
 	                set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(value, get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
 	                formStateSubjectRef.current.next({
+	                    name,
 	                    dirtyFields: formStateRef.current.dirtyFields,
 	                    isDirty: getIsDirty(name, value),
 	                });
@@ -10964,7 +10967,7 @@
 	                        value: inputValue,
 	                    });
 	                return (shouldRender &&
-	                    formStateSubjectRef.current.next(isWatched ? {} : state));
+	                    formStateSubjectRef.current.next(isWatched ? { name } : Object.assign(Object.assign({}, state), { name })));
 	            }
 	            formStateSubjectRef.current.next({
 	                isValidating: true,
@@ -11030,7 +11033,7 @@
 	    }, [criteriaMode]);
 	    const clearErrors = (name) => {
 	        name &&
-	            (Array.isArray(name) ? name : [name]).forEach((inputName) => unset(formStateRef.current.errors, inputName));
+	            convertToArrayPayload(name).forEach((inputName) => unset(formStateRef.current.errors, inputName));
 	        formStateSubjectRef.current.next({
 	            errors: name ? formStateRef.current.errors : {},
 	        });
@@ -11039,6 +11042,7 @@
 	        const ref = ((get(fieldsRef.current, name) || { _f: {} })._f || {}).ref;
 	        set(formStateRef.current.errors, name, Object.assign(Object.assign({}, error), { ref }));
 	        formStateSubjectRef.current.next({
+	            name,
 	            errors: formStateRef.current.errors,
 	            isValid: false,
 	        });
@@ -11069,11 +11073,9 @@
 	            next: (info) => fieldName(watchInternal(undefined, defaultValue), info),
 	        })
 	        : watchInternal(fieldName, defaultValue, true);
-	    const unregisterInternal = (name, options = {}, notify) => {
+	    const unregister = (name, options = {}) => {
 	        for (const inputName of name
-	            ? Array.isArray(name)
-	                ? name
-	                : [name]
+	            ? convertToArrayPayload(name)
 	            : Object.keys(fieldsNamesRef.current)) {
 	            fieldsNamesRef.current.delete(inputName);
 	            fieldArrayNamesRef.current.delete(inputName);
@@ -11088,21 +11090,17 @@
 	                    unset(formStateRef.current.dirtyFields, inputName);
 	                !options.keepTouched &&
 	                    unset(formStateRef.current.touchedFields, inputName);
-	                (!shouldUnregister || notify) &&
+	                !shouldUnregister &&
 	                    !options.keepDefaultValue &&
 	                    unset(defaultValuesRef.current, inputName);
-	                notify &&
-	                    watchSubjectRef.current.next({
-	                        name: inputName,
-	                    });
+	                watchSubjectRef.current.next({
+	                    name: inputName,
+	                });
 	            }
 	        }
-	        if (notify) {
-	            formStateSubjectRef.current.next(Object.assign(Object.assign(Object.assign({}, formStateRef.current), (!options.keepDirty ? {} : { isDirty: getIsDirty() })), (resolverRef.current ? {} : { isValid: getIsValid() })));
-	            !options.keepIsValid && updateIsValid();
-	        }
+	        formStateSubjectRef.current.next(Object.assign(Object.assign(Object.assign({}, formStateRef.current), (!options.keepDirty ? {} : { isDirty: getIsDirty() })), (resolverRef.current ? {} : { isValid: getIsValid() })));
+	        !options.keepIsValid && updateIsValid();
 	    };
-	    const unregister = (name, options = {}) => unregisterInternal(name, options, true);
 	    const registerFieldRef = (name, ref, options) => {
 	        register(name, options);
 	        let field = get(fieldsRef.current, name);
@@ -11266,10 +11264,10 @@
 	    const setFocus = (name) => get(fieldsRef.current, name)._f.ref.focus();
 	    React__namespace.useEffect(() => {
 	        const formStateSubscription = formStateSubjectRef.current.subscribe({
-	            next(formState = {}) {
+	            next(formState) {
 	                if (shouldRenderFormState(formState, readFormStateRef.current, true)) {
 	                    formStateRef.current = Object.assign(Object.assign({}, formStateRef.current), formState);
-	                    setFormState(formStateRef.current);
+	                    updateFormState(formStateRef.current);
 	                }
 	            },
 	        });
@@ -11298,7 +11296,7 @@
 	                (field._f.refs
 	                    ? field._f.refs.every(isLiveInDom)
 	                    : isLiveInDom(field._f.ref)) &&
-	                unregisterInternal(name);
+	                unregister(name);
 	        });
 	        unregisterFieldsNamesRef.current = new Set();
 	    });
@@ -11321,7 +11319,7 @@
 	            formStateRef,
 	            defaultValuesRef,
 	            fieldArrayDefaultValuesRef,
-	            unregister: unregisterInternal,
+	            unregister,
 	            shouldUnmountUnregister: shouldUnregister,
 	        }), []),
 	        formState: getProxyFormState(isProxyEnabled, formState, readFormStateRef),
@@ -11353,9 +11351,7 @@
 	        const watchSubscription = watchSubjectRef.current.subscribe({
 	            next: ({ name: inputName, value }) => (!nameRef.current ||
 	                !inputName ||
-	                (Array.isArray(nameRef.current)
-	                    ? nameRef.current
-	                    : [nameRef.current]).some((fieldName) => inputName &&
+	                convertToArrayPayload(nameRef.current).some((fieldName) => inputName &&
 	                    fieldName &&
 	                    (fieldName.startsWith(inputName) ||
 	                        inputName.startsWith(fieldName)))) &&
@@ -14653,7 +14649,7 @@
 	        customComponents.forEach(customComponent => {
 	            const { type, name, jsonx, options, functionBody, functionComponent, jsonxComponent, } = customComponent;
 	            if (type === "library") {
-	                if (jsonxComponent || functionComponent) {
+	                if (jsonx) {
 	                    customComponentLibraries[name] = Object
 	                        .keys(jsonx)
 	                        .reduce((result, prop) => {
@@ -24175,7 +24171,7 @@ ${jsonxRenderedString}`;
 	        }
 	        if (disableRenderIndexKey === false)
 	            exports.renderIndex++;
-	        const element = getComponentFromMap({
+	        const element = getComponentFromMap.call(this, {
 	            jsonx,
 	            reactComponents,
 	            componentLibraries,
@@ -24224,6 +24220,7 @@ ${jsonxRenderedString}`;
 	        if (debug) {
 	            logError({ jsonx, resources }, "getReactElementFromJSONX this", this);
 	            logError(e, e.stack ? e.stack : "no stack");
+	            return e.toString();
 	        }
 	        throw e;
 	    }

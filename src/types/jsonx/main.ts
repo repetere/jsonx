@@ -45,7 +45,7 @@ export type RenderConfig = Config & {
 };
 
 export type OutputHTMLContext = {
-  useJSON: boolean;
+  useJSON?: boolean;
 } & Context;
 
 export type OutputHTMLConfig = {
