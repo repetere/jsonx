@@ -62,7 +62,7 @@
     "@semantic-release/release-notes-generator": "9.0.2",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
-    "@types/chai": "4.2.17",
+    "@types/chai": "4.2.18",
     "@types/jest": "^26.0.22",
     "@types/jsdom-global": "3.0.2",
     "@types/luxon": "1.26.5",
