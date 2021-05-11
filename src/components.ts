@@ -812,6 +812,11 @@ export function getCustomComponentsCacheKey(customComponents:defs.jsonxCustomCom
 export function getReactLibrariesAndComponents(this: defs.Context, customComponents: defs.jsonxCustomComponent[]): defs.jsonxLibrariesAndComponents {
   const customComponentsCacheKey = getCustomComponentsCacheKey(customComponents);
   if(generatedCustomComponents.has(customComponentsCacheKey)) return generatedCustomComponents.get(customComponentsCacheKey);
+  const cxt = {
+    componentLibraries:{},
+    reactComponents:{},
+    ...this,
+  };
 
   const customComponentLibraries: defs.jsonxComponentLibraries = {};
   const customReactComponents: defs.jsonxComponent = {};
@@ -846,6 +851,7 @@ export function getReactLibrariesAndComponents(this: defs.Context, customCompone
             {}
           );
         } else customComponentLibraries[name] = window[name];
+        cxt.componentLibraries[name] = customComponentLibraries[name];
       } else if (type === "component") {
         if (jsonx) {
           customReactComponents[name] = getReactClassComponent.call(this,
@@ -853,12 +859,14 @@ export function getReactLibrariesAndComponents(this: defs.Context, customCompone
             options
           ) as defs.genericComponent;
         } else customReactComponents[name] = window[name];
+        cxt.reactComponents[name] = customReactComponents[name];
       } else if (type === "function" ) {
         if (functionComponent || functionBody) {
           customReactComponents[
             name
           ] = getCustomFunctionComponent.call(this, { options, functionBody, functionComponent, jsonxComponent:jsonx, });
         } else customReactComponents[name] = window[name];
+        cxt.reactComponents[name] = customReactComponents[name];
       }
     });
   }
