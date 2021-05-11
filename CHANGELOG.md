@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/repetere/jsonx/compare/v1.10.1...v1.10.2) (2021-05-11)
+
+
+### Bug Fixes
+
+* cascading context for custom libraries and components ([1de4d8c](https://github.com/repetere/jsonx/commit/1de4d8c391c990b310dbaf6b6c8b2fc5a8702460))
+
 ## [1.10.1](https://github.com/repetere/jsonx/compare/v1.10.0...v1.10.1) (2021-05-08)
 
 
