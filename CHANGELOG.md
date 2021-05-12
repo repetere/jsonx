@@ -1,3 +1,10 @@
+## [1.10.3](https://github.com/repetere/jsonx/compare/v1.10.2...v1.10.3) (2021-05-12)
+
+
+### Bug Fixes
+
+* error handling for generating function components ([21fe78a](https://github.com/repetere/jsonx/commit/21fe78a9ffac8009745f527dde8a03177f9c642b))
+
 ## [1.10.2](https://github.com/repetere/jsonx/compare/v1.10.1...v1.10.2) (2021-05-11)
 
 
