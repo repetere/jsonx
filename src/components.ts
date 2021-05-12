@@ -671,18 +671,24 @@ export function getReactFunctionComponent(
     const self = this || {};
 
     return function ${options.name || "Anonymous"}(props){
-      ${functionBody}
-      if(typeof exposeprops==='undefined' || exposeprops){
-        reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);
-        if(typeof exposeprops!=='undefined') reactComponent.__functionargs = Object.keys(exposeprops);
-      } else{
-        reactComponent.props =  props;
+      try {
+        ${functionBody}
+        if(typeof exposeprops==='undefined' || exposeprops){
+          reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);
+          if(typeof exposeprops!=='undefined') reactComponent.__functionargs = Object.keys(exposeprops);
+        } else{
+          reactComponent.props =  props;
+        }
+        if(!props?.children) {
+        //  delete props.children;
+        }
+        const context = ${options.bind ? "Object.assign(self,this||{})" : "this"};
+        return getReactElementFromJSONX.call(context, reactComponent);
+
+      } catch(e){
+        if(self.debug) return e.toString()
+        else throw e
       }
-      if(!props?.children) {
-      //  delete props.children;
-      }
-      const context = ${options.bind ? "Object.assign(self,this||{})" : "this"};
-      return getReactElementFromJSONX.call(context, reactComponent);
     }
   `
   );
