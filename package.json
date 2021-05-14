@@ -83,7 +83,7 @@
     "jsdom": "16.5.3",
     "jsdom-global": "3.0.2",
     "lodash-es": "4.17.21",
-    "luxon": "1.26.0",
+    "luxon": "1.27.0",
     "microtime": "3.0.0",
     "prettier": "2.3.0",
     "puppeteer": "9.1.1",
