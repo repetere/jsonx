@@ -86,7 +86,7 @@
     "luxon": "1.27.0",
     "microtime": "3.0.0",
     "prettier": "2.3.0",
-    "puppeteer": "9.1.1",
+    "puppeteer": "10.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "rollup": "2.50.5",
