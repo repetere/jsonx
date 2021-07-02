@@ -76,7 +76,7 @@
     "benchmark": "2.1.4",
     "chai": "4.3.4",
     "chai-as-promised": "7.1.1",
-    "coveralls": "3.1.0",
+    "coveralls": "3.1.1",
     "husky": "7.0.0",
     "install": "0.13.0",
     "jest": "26.6.3",
