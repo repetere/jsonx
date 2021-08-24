@@ -116,7 +116,7 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "testEnvironment":"jsdom"
+    "testEnvironment":"./src/jest_custom_test_env.ts"
   },
   "commitlint": {
     "extends": [
