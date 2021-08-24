@@ -66,6 +66,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: fastify/github-action-merge-dependabot@latest
+      - uses: fastify/github-action-merge-dependabot@2.1.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
