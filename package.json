@@ -55,7 +55,7 @@
     "@rollup/plugin-replace": "3.0.0",
     "@rollup/plugin-sucrase": "4.0.0",
     "@rollup/plugin-typescript": "8.2.5",
-    "@semantic-release/changelog": "5.0.1",
+    "@semantic-release/changelog": "6.0.0",
     "@semantic-release/commit-analyzer": "9.0.1",
     "@semantic-release/git": "10.0.0",
     "@semantic-release/npm": "8.0.0",
