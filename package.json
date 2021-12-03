@@ -80,7 +80,7 @@
     "husky": "7.0.4",
     "install": "0.13.0",
     "jest": "^27.0.6",
-    "jsdom": "18.1.1",
+    "jsdom": "19.0.0",
     "jsdom-global": "3.0.2",
     "lodash-es": "4.17.21",
     "luxon": "2.1.1",
