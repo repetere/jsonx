@@ -47,7 +47,7 @@
   "homepage": "https://github.com/repetere/jsonx#readme",
   "devDependencies": {
     "@commitlint/cli": "16.0.0",
-    "@commitlint/config-conventional": "15.0.0",
+    "@commitlint/config-conventional": "16.0.0",
     "@repetere/esdoc-inject-gtm-plugin": "0.1.0",
     "@rollup/plugin-alias": "3.1.8",
     "@rollup/plugin-commonjs": "21.0.1",
