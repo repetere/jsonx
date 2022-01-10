@@ -1,3 +1,10 @@
+## [1.10.4](https://github.com/repetere/jsonx/compare/v1.10.3...v1.10.4) (2022-01-10)
+
+
+### Bug Fixes
+
+* updated typescript error handling ([dd86673](https://github.com/repetere/jsonx/commit/dd866733885826d4e5c99a6c3d34c70c2302ba6b))
+
 ## [1.10.3](https://github.com/repetere/jsonx/compare/v1.10.2...v1.10.3) (2021-05-12)
 
 
