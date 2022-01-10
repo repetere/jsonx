@@ -204,7 +204,7 @@ export function getComponentFromMap(
       throw new ReferenceError(`Invalid React Component (${jsonx.component})`);
     }
   } catch (e) {
-    if (debug) logError(e, e.stack ? e.stack : "no stack");
+    if (debug) logError(e, (e as Error).stack ? (e as Error).stack : "no stack");
     throw e;
   }
 }

@@ -903,7 +903,7 @@ export function getComputedProps(
         },{})	
       : computedProps;
   } catch (e) {
-    debug && logError(e, e.stack ? e.stack : "no stack");
+    debug && logError(e, (e as Error).stack ? (e as Error).stack : "no stack");
     return null;
   }
 }

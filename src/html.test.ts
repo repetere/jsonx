@@ -6,7 +6,7 @@ describe('End to End HTML Tests', function(){
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
-  });
+  },10000);
   afterAll(async () => {
     await browser.close();
   });
@@ -36,7 +36,7 @@ describe('End to End HTML Tests', function(){
       // console.log({initialPageData,modifiedPageData})
       expect(parseInt(modifiedPageData.inputValue)).toBe(3)
       // await page.screenshot({ path: 'example.png' });
-    })
+    },10000)
   })
   describe('Dynamic Component Test',()=>{
     it('should render the page', async()=>{

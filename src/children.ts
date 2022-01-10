@@ -248,7 +248,7 @@ export function getJSONXChildren(
     
     return children as ReactElementLike[]|defs.JSONReactElement[]|null|string|undefined;
   } catch (e) {
-    this && this.debug && logError(e, e.stack ? e.stack : "no stack");
+    this && this.debug && logError(e, (e as Error).stack ? (e as Error).stack : "no stack");
     return null;
   }
 }
