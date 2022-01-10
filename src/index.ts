@@ -200,8 +200,8 @@ export function getReactElementFromJSONX(
   } catch (e) {
     if (debug) {
       logError({ jsonx, resources }, "getReactElementFromJSONX this", this);
-      logError(e, e.stack ? e.stack : "no stack");
-      return e.toString()
+      logError(e, (e as Error).stack ? (e as Error).stack : "no stack");
+      return (e as Error).toString()
     }
     throw e;
   }
