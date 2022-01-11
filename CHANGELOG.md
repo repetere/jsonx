@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/repetere/jsonx/compare/v1.10.5...v1.11.0) (2022-01-11)
+
+
+### Features
+
+* full support for express template rendering ([e6713d2](https://github.com/repetere/jsonx/commit/e6713d278f629252f62cba9b46839d80f8511873))
+
 ## [1.10.5](https://github.com/repetere/jsonx/compare/v1.10.4...v1.10.5) (2022-01-11)
 
 
