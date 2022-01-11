@@ -1,3 +1,10 @@
+## [1.10.5](https://github.com/repetere/jsonx/compare/v1.10.4...v1.10.5) (2022-01-11)
+
+
+### Bug Fixes
+
+* node builtins rollup warnings from npm audit ([a1101c3](https://github.com/repetere/jsonx/commit/a1101c3da1cf8392976fc2831a8982c5f3a7441e))
+
 ## [1.10.4](https://github.com/repetere/jsonx/compare/v1.10.3...v1.10.4) (2022-01-10)
 
 
