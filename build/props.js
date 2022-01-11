@@ -313,11 +313,16 @@ export function getReactComponents(options) {
                 if (args) {
                     args.options = Object.assign({}, args.options, { resources });
                     if (args.function) {
-                        componentVal = makeFunctionComponent.call(this, args.function, args.options);
+                        const newComponent = makeFunctionComponent.call(this, args.function, args.options);
+                        componentVal = args?.invoke
+                            ? newComponent(jsonx.props)
+                            : newComponent;
                     }
                     else {
-                        // eslint-disable-next-line
-                        componentVal = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+                        const newComponent = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
+                        componentVal = args?.invoke
+                            ? newComponent(jsonx.props)
+                            : newComponent;
                     }
                 }
             }

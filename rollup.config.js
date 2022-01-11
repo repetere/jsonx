@@ -1,7 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import builtins from 'rollup-plugin-node-builtins';
+import builtins from '@crokita/rollup-plugin-node-builtins';
 // import nodePolyfills from 'rollup-plugin-node-polyfills';
 // import nodePolyfills from 'rollup-plugin-polyfill-node';
 import globals from 'rollup-plugin-node-globals';

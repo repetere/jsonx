@@ -381,7 +381,7 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
                     validateJSONX(jsonx.__dangerouslyInsertComponents[insertedComponents]);
             }
             catch (e) {
-                errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${e.toString()}`));
+                errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${e?.toString()}`));
             }
         });
     }

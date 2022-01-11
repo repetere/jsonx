@@ -9,7 +9,7 @@ import * as jsonxUtils from "./utils";
 import numeral from "numeral";
 import * as luxon from "luxon";
 const createElement = React.createElement;
-const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, ReactHookForm, } = jsonxComponents;
+const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, ReactHookForm, getReactLibrariesAndComponents, } = jsonxComponents;
 const { getComputedProps } = jsonxProps;
 const { getJSONXChildren } = jsonxChildren;
 const { displayComponent, validSimpleJSONXSyntax, simpleJSONXSyntax } = jsonxUtils;
@@ -71,7 +71,8 @@ export function outputHTML(config = { jsonx: { component: "" } }) {
  */
 export function getReactElementFromJSONX(jsonx, resources = {}) {
     // eslint-disable-next-line
-    const { componentLibraries = {}, debug = false, returnJSON = false, logError = console.error, boundedComponents = [], disableRenderIndexKey = true } = this || {};
+    const { customComponents, debug = false, returnJSON = false, logError = console.error, boundedComponents = [], disableRenderIndexKey = true } = this || {};
+    let { componentLibraries = {}, } = this || {};
     componentLibraries.ReactHookForm = ReactHookForm;
     if (!jsonx)
         return null;
@@ -83,15 +84,22 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
     if (!jsonx || !jsonx.component)
         return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
     try {
-        const components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this?.reactComponents);
-        const reactComponents = boundedComponents.length
+        let components = Object.assign({ DynamicComponent: DynamicComponent.bind(this) }, { FormComponent: FormComponent.bind(this) }, componentMap, this?.reactComponents);
+        let reactComponents = boundedComponents.length
             ? getBoundedComponents.call(this, {
                 boundedComponents,
                 reactComponents: components
             })
             : components;
-        renderIndex++;
-        const element = getComponentFromMap({
+        if (customComponents && Array.isArray(customComponents) && customComponents.length) {
+            const cxt = { ...this, componentLibraries, reactComponents: components };
+            const { customComponentLibraries, customReactComponents } = getReactLibrariesAndComponents.call(cxt, customComponents);
+            componentLibraries = { ...componentLibraries, ...customComponentLibraries };
+            reactComponents = { ...reactComponents, ...customReactComponents };
+        }
+        if (disableRenderIndexKey === false)
+            renderIndex++;
+        const element = getComponentFromMap.call(this, {
             jsonx,
             reactComponents,
             componentLibraries,
@@ -140,6 +148,7 @@ export function getReactElementFromJSONX(jsonx, resources = {}) {
         if (debug) {
             logError({ jsonx, resources }, "getReactElementFromJSONX this", this);
             logError(e, e.stack ? e.stack : "no stack");
+            return e.toString();
         }
         throw e;
     }

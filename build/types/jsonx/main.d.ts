@@ -7,6 +7,7 @@ export declare type JSONReactElement = {
 export interface Context {
     componentLibraries?: jsonx["jsonxLibrary"];
     reactComponents?: jsonx["jsonxComponents"];
+    customComponents?: jsonx['jsonxCustomComponent'][];
     debug?: boolean;
     returnJSON?: boolean;
     logError?: any;
@@ -37,7 +38,7 @@ export declare type RenderConfig = Config & {
     portal?: boolean;
 };
 export declare type OutputHTMLContext = {
-    useJSON: boolean;
+    useJSON?: boolean;
 } & Context;
 export declare type OutputHTMLConfig = {
     type?: string;
