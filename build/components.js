@@ -12,12 +12,10 @@ import createReactClass from "create-react-class";
 import { getReactElementFromJSONX } from ".";
 const cache = new memoryCache.Cache();
 export const ReactHookForm = { ErrorMessage, Controller };
+export const generatedCustomComponents = new Map();
 // if (typeof window === 'undefined') {
 //   var window = window || global.window || {};
 // }
-/**
- 
- */
 //@ts-ignore
 export let advancedBinding = getAdvancedBinding();
 // require;
@@ -504,18 +502,24 @@ export function getReactFunctionComponent(reactComponent = {}, functionBody = ""
     const self = this || {};
 
     return function ${options.name || "Anonymous"}(props){
-      ${functionBody}
-      if(typeof exposeprops==='undefined' || exposeprops){
-        reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);
-        if(typeof exposeprops!=='undefined') reactComponent.__functionargs = Object.keys(exposeprops);
-      } else{
-        reactComponent.props =  props;
+      try {
+        ${functionBody}
+        if(typeof exposeprops==='undefined' || exposeprops){
+          reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);
+          if(typeof exposeprops!=='undefined') reactComponent.__functionargs = Object.keys(exposeprops);
+        } else{
+          reactComponent.props =  props;
+        }
+        if(!props?.children) {
+        //  delete props.children;
+        }
+        const context = ${options.bind ? "Object.assign(self,this||{})" : "this"};
+        return getReactElementFromJSONX.call(context, reactComponent);
+
+      } catch(e){
+        if(self.debug) return e.toString()
+        else throw e
       }
-      if(!props.children) {
-      //  delete props.children;
-      }
-      const context = ${options.bind ? "Object.assign(self,this||{})" : "this"};
-      return getReactElementFromJSONX.call(context, reactComponent);
     }
   `);
     if (options.name) {
@@ -569,4 +573,122 @@ export function makeFunctionComponent(func, options) {
  */
 export function getReactContext(options = {}) {
     return createContext(options.value);
+}
+/**
+ * generates react function components from a json definition
+ * @property {object} this
+ * @param customComponent
+ * @returns {function} returns react functional component
+ */
+export function getCustomFunctionComponent(customComponent) {
+    const { options, functionBody, functionComponent, jsonxComponent, } = customComponent;
+    if (functionComponent) {
+        return makeFunctionComponent.call(this, functionComponent, options);
+    }
+    else {
+        return getReactFunctionComponent.call(this, jsonxComponent, functionBody, options);
+    }
+}
+/**
+ * returns a cache key of custom components names
+ * @param customComponents
+ * @returns {string} cachekey
+ */
+export function getCustomComponentsCacheKey(customComponents) {
+    return customComponents.map(({ name }) => name).join('');
+}
+/**
+ *
+ * @param this
+ * @param customComponents
+ * @returns
+ * @example
+ const customComponents = [
+   {
+      type: 'library',
+      name: 'someLib',
+      jsonx?: {
+        Header: {
+          type:'function',
+          jsonxComponent: {p:'sample'},
+          functionBody:'console.log(44)',
+        },
+        Footer: {
+          type:'function',
+          jsonxComponent: {p:'sample'},
+          functionBody:'console.log(44)',
+        }
+      }
+   },
+   {
+      type: 'component'|'function'|'library';
+      name: string;
+      jsonx?: jsonxDefinitionLibrary | jsonx;
+      jsonxComponent?: jsonx;
+      options?: {};
+      functionBody?: (string);
+      functionComponent?: ((props?:any)=>any);
+   },
+  ]
+ */
+export function getReactLibrariesAndComponents(customComponents) {
+    const customComponentsCacheKey = getCustomComponentsCacheKey(customComponents);
+    if (generatedCustomComponents.has(customComponentsCacheKey))
+        return generatedCustomComponents.get(customComponentsCacheKey);
+    const cxt = {
+        componentLibraries: {},
+        reactComponents: {},
+        ...this,
+    };
+    const customComponentLibraries = {};
+    const customReactComponents = {};
+    if (customComponents && customComponents.length) {
+        customComponents.forEach(customComponent => {
+            const { type, name, jsonx, options, functionBody, functionComponent, jsonxComponent, } = customComponent;
+            if (type === "library") {
+                if (jsonx) {
+                    customComponentLibraries[name] = Object
+                        .keys(jsonx)
+                        .reduce((result, prop) => {
+                        const libraryComponent = jsonx[prop];
+                        const { type, name, jsonxComponent, options, functionBody } = libraryComponent;
+                        if (type === "component") {
+                            result[name] = getReactClassComponent.call(this, jsonxComponent, options);
+                        }
+                        else {
+                            result[name] = getCustomFunctionComponent.call(this, { options, functionBody, functionComponent, jsonxComponent, });
+                        }
+                        return result;
+                    }, {});
+                }
+                else
+                    customComponentLibraries[name] = window[name];
+                cxt.componentLibraries[name] = customComponentLibraries[name];
+            }
+            else if (type === "component") {
+                if (jsonx) {
+                    customReactComponents[name] = getReactClassComponent.call(this, jsonx, options);
+                }
+                else
+                    customReactComponents[name] = window[name];
+                cxt.reactComponents[name] = customReactComponents[name];
+            }
+            else if (type === "function") {
+                if (functionComponent || functionBody) {
+                    customReactComponents[name] = getCustomFunctionComponent.call(this, { options, functionBody, functionComponent, jsonxComponent: jsonx, });
+                }
+                else
+                    customReactComponents[name] = window[name];
+                cxt.reactComponents[name] = customReactComponents[name];
+            }
+        });
+    }
+    generatedCustomComponents.set(customComponentsCacheKey, {
+        customComponentLibraries,
+        customReactComponents
+    });
+    return {
+        customComponentLibraries,
+        customReactComponents
+    };
 }

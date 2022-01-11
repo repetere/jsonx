@@ -1,279 +1,98 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>jsonx</title>
-	<meta name="description" content="Documentation for jsonx">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-	<script async src="assets/js/search.js" id="search-script"></script>
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="index.html" class="title">jsonx</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<h1>jsonx</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<a href="#jsonx" id="jsonx" style="color: inherit; text-decoration: none;">
-					<h1>JSONX</h1>
-				</a>
-				<p><a href="https://coveralls.io/github/repetere/jsonx?branch=main"><img src="https://coveralls.io/repos/github/repetere/jsonx/badge.svg?branch=main" alt="Coverage Status"></a> <img src="https://github.com/repetere/jsonx/workflows/Build,%20Test%20&%20Coverage/badge.svg" alt="Build, Test &amp; Coverage"></p>
-				<a href="#description" id="description" style="color: inherit; text-decoration: none;">
-					<h2>Description</h2>
-				</a>
-				<p><strong>JSONX</strong> is a module that creates React Elements, JSX and HTML from JSON.</p>
-				<a href="#declarative" id="declarative" style="color: inherit; text-decoration: none;">
-					<h3>Declarative</h3>
-				</a>
-				<p>The JSONX UMD comes with batteries included so you can use JSONX in the browser without transpilers or any additional setup/configuration. The JSONX UMD is ideal for JAMstack Applications.</p>
-				<a href="#embeddable" id="embeddable" style="color: inherit; text-decoration: none;">
-					<h3>Embeddable</h3>
-				</a>
-				<p>JSONX can also be used in existing react applications if you want to dynamically create elements with JSON. This works great for many scenarios when you want to manage your application views and components in a view management system or if you want to dynamically create React elements without using JSX.</p>
-				<a href="#fully-featured" id="fully-featured" style="color: inherit; text-decoration: none;">
-					<h3>Fully Featured</h3>
-				</a>
-				<p>JSONX supports all of Reacts features including Functional (with Hooks), Class-based, Suspense and Lazy components. JSONX supports JSON objects that implement the JXM (JSONX Markup) Spec.</p>
-				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
-					<h2>Installation</h2>
-				</a>
-				<pre><code class="language-sh"><span style="color: #000000">$ npm i jsonx</span>
-</code></pre>
-				<a href="#full-documentation" id="full-documentation" style="color: inherit; text-decoration: none;">
-					<h3><a href="https://repetere.github.io/jsonx/">Full Documentation</a></h3>
-				</a>
-				<link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
-				<hr>
-				<a href="#jsonx-manual" id="jsonx-manual" style="color: inherit; text-decoration: none;">
-					<h3>JSONX Manual</h3>
-				</a>
-				<ul>
-					<li><a href="https://repetere.github.io/jsonx/manual/getting-started/index.html">Getting Started</a></li>
-					<li><a href="https://repetere.github.io/jsonx/manual/using-advanced-props/index.html">Using Advanced Props</a></li>
-					<li><a href="https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html">External and Custom Components</a></li>
-					<li><a href="https://repetere.github.io/jsonx/manual/creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-					<li><a href="https://repetere.github.io/jsonx/manual/spec/index.html">JSONX &amp; JXM Spec</a></li>
-					<li><a href="https://repetere.github.io/jsonx/manual/samples/index.html">Samples</a></li>
-					<li><a href="https://repetere.github.io/jsonx/manual/roadmap/index.html">Roadmap</a></li>
-					<li><a href="https://repetere.github.io/jsonx/">Full API Docs</a></li>
-				</ul>
-				<hr>
-				<a href="#basic-usage" id="basic-usage" style="color: inherit; text-decoration: none;">
-					<h3>Basic Usage</h3>
-				</a>
-				<pre><code class="language-javascript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">jsonx</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;jsonx&#039;</span><span style="color: #000000">;</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">example_JXM_JSON</span><span style="color: #000000"> = {</span>
-<span style="color: #000000">  </span><span style="color: #001080">component:</span><span style="color: #A31515">&#039;p&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">  </span><span style="color: #001080">props:</span><span style="color: #000000">{ </span><span style="color: #001080">style:</span><span style="color: #000000">{ </span><span style="color: #001080">color:</span><span style="color: #A31515">&#039;blue&#039;</span><span style="color: #000000"> } },</span>
-<span style="color: #000000">  </span><span style="color: #001080">children:</span><span style="color: #A31515">&#039;hello world&#039;</span>
-<span style="color: #000000">};</span>
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>jsonx</title><meta name="description" content="Documentation for jsonx"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">jsonx</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>jsonx</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#jsonx" id="jsonx" style="color: inherit; text-decoration: none;">
+  <h1>JSONX</h1>
+</a>
+<p><a href="https://coveralls.io/github/repetere/jsonx?branch=main"><img src="https://coveralls.io/repos/github/repetere/jsonx/badge.svg?branch=main" alt="Coverage Status"></a> <img src="https://github.com/repetere/jsonx/workflows/Build,%20Test%20&%20Coverage/badge.svg" alt="Build, Test &amp; Coverage"></p>
 
-<span style="color: #008000">//Rendering React Components</span>
-<span style="color: #001080">jsonx</span><span style="color: #000000">.</span><span style="color: #795E26">getReactElement</span><span style="color: #000000">(</span><span style="color: #001080">example_JXM_JSON</span><span style="color: #000000">); </span><span style="color: #008000">// =&gt; JSX Equivalent: &lt;p style={{color:&#039;blue&#039;}}&gt;hello world&lt;/p&gt;</span>
+<a href="#description" id="description" style="color: inherit; text-decoration: none;">
+  <h2>Description</h2>
+</a>
+<p><strong>JSONX</strong> is a module that creates React Elements, JSX and HTML from JSON.</p>
 
-<span style="color: #008000">//Generating HTML strings</span>
-<span style="color: #001080">jsonx</span><span style="color: #000000">.</span><span style="color: #795E26">outputHTML</span><span style="color: #000000">({ </span><span style="color: #001080">jsonx:</span><span style="color: #000000"> </span><span style="color: #001080">example_JXM_JSON</span><span style="color: #000000">, }); </span><span style="color: #008000">// =&gt; &#039;&lt;p style=&quot;color:blue;&quot;&gt;hello world&lt;/p&gt;&#039;</span>
+<a href="#declarative" id="declarative" style="color: inherit; text-decoration: none;">
+  <h3>Declarative</h3>
+</a>
+<p>The JSONX UMD comes with batteries included so you can use JSONX in the browser without transpilers or any additional setup/configuration. The JSONX UMD is ideal for JAMstack Applications.</p>
 
-<span style="color: #008000">//Generating JSX strings</span>
-<span style="color: #001080">jsonx</span><span style="color: #000000">.</span><span style="color: #795E26">outputJSX</span><span style="color: #000000">({ </span><span style="color: #001080">jsonx:</span><span style="color: #000000"> </span><span style="color: #001080">example_JXM_JSON</span><span style="color: #000000">, }); </span><span style="color: #008000">// =&gt; &#039;&lt;p style={{color:blue,}}&gt;hello world&lt;/p&gt;&#039;</span>
+<a href="#embeddable" id="embeddable" style="color: inherit; text-decoration: none;">
+  <h3>Embeddable</h3>
+</a>
+<p>JSONX can also be used in existing react applications if you want to dynamically create elements with JSON. This works great for many scenarios when you want to manage your application views and components in a view management system or if you want to dynamically create React elements without using JSX.</p>
 
-<span style="color: #008000">//Rendering HTML Dom with React</span>
-<span style="color: #001080">jsonx</span><span style="color: #000000">.</span><span style="color: #795E26">jsonxRender</span><span style="color: #000000">({ </span><span style="color: #001080">jsonx:</span><span style="color: #000000"> </span><span style="color: #001080">example_JXM_JSON</span><span style="color: #000000">, </span><span style="color: #001080">querySelector:</span><span style="color: #A31515">&#039;#myApp&#039;</span><span style="color: #000000">, });</span>
-<span style="color: #008000">// &lt;!DOCTYPE html&gt;</span>
-<span style="color: #008000">//  &lt;body&gt;</span>
-<span style="color: #008000">//    &lt;div id=&quot;myApp&quot;&gt;</span>
-<span style="color: #008000">//      &lt;p style=&quot;color:blue;&quot;&gt;hello world&lt;/p&gt;</span>
-<span style="color: #008000">//    &lt;/div&gt;</span>
-<span style="color: #008000">// &lt;/body&gt;</span>
+<a href="#fully-featured" id="fully-featured" style="color: inherit; text-decoration: none;">
+  <h3>Fully Featured</h3>
+</a>
+<p>JSONX supports all of Reacts features including Functional (with Hooks), Class-based, Suspense and Lazy components. JSONX supports JSON objects that implement the JXM (JSONX Markup) Spec.</p>
 
-<span style="color: #008000">//you can also use the simplified syntax</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">simpleJXM_JSON</span><span style="color: #000000"> = {</span>
-<span style="color: #000000">  </span><span style="color: #001080">p:</span><span style="color: #000000">{</span>
-<span style="color: #000000">    </span><span style="color: #001080">props:</span><span style="color: #000000">{ </span><span style="color: #001080">style:</span><span style="color: #000000">{ </span><span style="color: #001080">color:</span><span style="color: #A31515">&#039;blue&#039;</span><span style="color: #000000"> } },</span>
-<span style="color: #000000">    </span><span style="color: #001080">children:</span><span style="color: #A31515">&#039;hello world&#039;</span>
-<span style="color: #000000">  }</span>
-<span style="color: #000000">}</span>
+<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+  <h2>Installation</h2>
+</a>
+<pre><code class="language-sh"><span class="hl-0">$ npm i jsonx</span>
+</code></pre>
 
-<span style="color: #008000">//or if you have an element with no props, simply use {type:children}</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">superSimpleJXM</span><span style="color: #000000"> = {</span>
-<span style="color: #000000">  </span><span style="color: #001080">ul:</span><span style="color: #000000">[</span>
-<span style="color: #000000">    {</span><span style="color: #001080">li:</span><span style="color: #A31515">&#039;first!&#039;</span><span style="color: #000000">},</span>
-<span style="color: #000000">    {</span><span style="color: #001080">li:</span><span style="color: #A31515">&#039;second!&#039;</span><span style="color: #000000">},</span>
-<span style="color: #000000">  ]</span>
-<span style="color: #000000">}</span>
+<a href="#full-documentation" id="full-documentation" style="color: inherit; text-decoration: none;">
+  <h3><a href="https://repetere.github.io/jsonx/">Full Documentation</a></h3>
+</a>
+<link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+
+<hr>
+
+<a href="#jsonx-manual" id="jsonx-manual" style="color: inherit; text-decoration: none;">
+  <h3>JSONX Manual</h3>
+</a>
+<ul>
+<li><a href="https://repetere.github.io/jsonx/manual/getting-started/index.html">Getting Started</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/using-advanced-props/index.html">Using Advanced Props</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html">External and Custom Components</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/spec/index.html">JSONX &amp; JXM Spec</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/samples/index.html">Samples</a></li>
+<li><a href="https://repetere.github.io/jsonx/manual/roadmap/index.html">Roadmap</a></li>
+<li><a href="https://repetere.github.io/jsonx/">Full API Docs</a></li>
+</ul>
+<hr>
+
+<a href="#basic-usage" id="basic-usage" style="color: inherit; text-decoration: none;">
+  <h3>Basic Usage</h3>
+</a>
+<pre><code class="language-javascript"><span class="hl-1">import</span><span class="hl-0"> { </span><span class="hl-2">*</span><span class="hl-0"> </span><span class="hl-1">as</span><span class="hl-0"> </span><span class="hl-3">jsonx</span><span class="hl-0"> } </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-4">&#39;jsonx&#39;</span><span class="hl-0">;</span><br/><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-5">example_JXM_JSON</span><span class="hl-0"> = {</span><br/><span class="hl-0">  </span><span class="hl-3">component:</span><span class="hl-4">&#39;p&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">  </span><span class="hl-3">props:</span><span class="hl-0">{ </span><span class="hl-3">style:</span><span class="hl-0">{ </span><span class="hl-3">color:</span><span class="hl-4">&#39;blue&#39;</span><span class="hl-0"> } },</span><br/><span class="hl-0">  </span><span class="hl-3">children:</span><span class="hl-4">&#39;hello world&#39;</span><br/><span class="hl-0">};</span><br/><br/><span class="hl-6">//Rendering React Components</span><br/><span class="hl-3">jsonx</span><span class="hl-0">.</span><span class="hl-7">getReactElement</span><span class="hl-0">(</span><span class="hl-3">example_JXM_JSON</span><span class="hl-0">); </span><span class="hl-6">// =&gt; JSX Equivalent: &lt;p style={{color:&#39;blue&#39;}}&gt;hello world&lt;/p&gt;</span><br/><br/><span class="hl-6">//Generating HTML strings</span><br/><span class="hl-3">jsonx</span><span class="hl-0">.</span><span class="hl-7">outputHTML</span><span class="hl-0">({ </span><span class="hl-3">jsonx:</span><span class="hl-0"> </span><span class="hl-3">example_JXM_JSON</span><span class="hl-0">, }); </span><span class="hl-6">// =&gt; &#39;&lt;p style=&quot;color:blue;&quot;&gt;hello world&lt;/p&gt;&#39;</span><br/><br/><span class="hl-6">//Generating JSX strings</span><br/><span class="hl-3">jsonx</span><span class="hl-0">.</span><span class="hl-7">outputJSX</span><span class="hl-0">({ </span><span class="hl-3">jsonx:</span><span class="hl-0"> </span><span class="hl-3">example_JXM_JSON</span><span class="hl-0">, }); </span><span class="hl-6">// =&gt; &#39;&lt;p style={{color:blue,}}&gt;hello world&lt;/p&gt;&#39;</span><br/><br/><span class="hl-6">//Rendering HTML Dom with React</span><br/><span class="hl-3">jsonx</span><span class="hl-0">.</span><span class="hl-7">jsonxRender</span><span class="hl-0">({ </span><span class="hl-3">jsonx:</span><span class="hl-0"> </span><span class="hl-3">example_JXM_JSON</span><span class="hl-0">, </span><span class="hl-3">querySelector:</span><span class="hl-4">&#39;#myApp&#39;</span><span class="hl-0">, });</span><br/><span class="hl-6">// &lt;!DOCTYPE html&gt;</span><br/><span class="hl-6">//  &lt;body&gt;</span><br/><span class="hl-6">//    &lt;div id=&quot;myApp&quot;&gt;</span><br/><span class="hl-6">//      &lt;p style=&quot;color:blue;&quot;&gt;hello world&lt;/p&gt;</span><br/><span class="hl-6">//    &lt;/div&gt;</span><br/><span class="hl-6">// &lt;/body&gt;</span><br/><br/><span class="hl-6">//you can also use the simplified syntax</span><br/><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-5">simpleJXM_JSON</span><span class="hl-0"> = {</span><br/><span class="hl-0">  </span><span class="hl-3">p:</span><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-3">props:</span><span class="hl-0">{ </span><span class="hl-3">style:</span><span class="hl-0">{ </span><span class="hl-3">color:</span><span class="hl-4">&#39;blue&#39;</span><span class="hl-0"> } },</span><br/><span class="hl-0">    </span><span class="hl-3">children:</span><span class="hl-4">&#39;hello world&#39;</span><br/><span class="hl-0">  }</span><br/><span class="hl-0">}</span><br/><br/><span class="hl-6">//or if you have an element with no props, simply use {type:children}</span><br/><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-5">superSimpleJXM</span><span class="hl-0"> = {</span><br/><span class="hl-0">  </span><span class="hl-3">ul:</span><span class="hl-0">[</span><br/><span class="hl-0">    {</span><span class="hl-3">li:</span><span class="hl-4">&#39;first!&#39;</span><span class="hl-0">},</span><br/><span class="hl-0">    {</span><span class="hl-3">li:</span><span class="hl-4">&#39;second!&#39;</span><span class="hl-0">},</span><br/><span class="hl-0">  ]</span><br/><span class="hl-0">}</span>
 </code></pre>
-				<a href="#jxm-json-spec" id="jxm-json-spec" style="color: inherit; text-decoration: none;">
-					<h3>JXM JSON Spec</h3>
-				</a>
-				<p>JSONX works by using JXM JSON to create react elements. JXM JSON Objects are valid JSON Objects that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
-				<pre><code class="language-javascript"><span style="color: #001080">React</span><span style="color: #000000">.</span><span style="color: #795E26">createElement</span><span style="color: #000000">(</span>
-<span style="color: #000000">  </span><span style="color: #001080">type</span><span style="color: #000000">,</span>
-<span style="color: #000000">  [</span><span style="color: #001080">props</span><span style="color: #000000">],</span>
-<span style="color: #000000">  [...</span><span style="color: #001080">children</span><span style="color: #000000">]</span>
-<span style="color: #000000">)</span>
+
+<a href="#jxm-json-spec" id="jxm-json-spec" style="color: inherit; text-decoration: none;">
+  <h3>JXM JSON Spec</h3>
+</a>
+<p>JSONX works by using JXM JSON to create react elements. JXM JSON Objects are valid JSON Objects that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+<pre><code class="language-javascript"><span class="hl-3">React</span><span class="hl-0">.</span><span class="hl-7">createElement</span><span class="hl-0">(</span><br/><span class="hl-0">  </span><span class="hl-3">type</span><span class="hl-0">,</span><br/><span class="hl-0">  [</span><span class="hl-3">props</span><span class="hl-0">],</span><br/><span class="hl-0">  [...</span><span class="hl-3">children</span><span class="hl-0">]</span><br/><span class="hl-0">)</span>
 </code></pre>
-				<p>You can pass React component libraries for additional components, or you own custom components (see <a href="https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html">External and Custom Components</a>
-				and <a href="https://repetere.github.io/jsonx/manual/using-advanced-props/index.html">Using Advanced Props</a> for more details).</p>
-				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
-					<h3>Development</h3>
-				</a>
-				<p>Note <em>Make sure you have typescript installed</em></p>
-				<pre><code class="language-sh"><span style="color: #000000">$ npm i -g typescript </span>
+<p>You can pass React component libraries for additional components, or you own custom components (see <a href="https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html">External and Custom Components</a>
+ and <a href="https://repetere.github.io/jsonx/manual/using-advanced-props/index.html">Using Advanced Props</a> for more details).</p>
+
+<a href="#development" id="development" style="color: inherit; text-decoration: none;">
+  <h3>Development</h3>
+</a>
+<p>Note <em>Make sure you have typescript installed</em></p>
+<pre><code class="language-sh"><span class="hl-0">$ npm i -g typescript </span>
 </code></pre>
-				<p>For generating documentation</p>
-				<pre><code class="language-sh"><span style="color: #000000">$ npm run doc</span>
+<p>For generating documentation</p>
+<pre><code class="language-sh"><span class="hl-0">$ npm run doc</span>
 </code></pre>
-				<a href="#notes" id="notes" style="color: inherit; text-decoration: none;">
-					<h3>Notes</h3>
-				</a>
-				<p>Check out <a href="https://repetere.github.io/jsonx/">https://repetere.github.io/jsonx/</a> for the full jsonx Documentation</p>
-				<a href="#testing" id="testing" style="color: inherit; text-decoration: none;">
-					<h3>Testing</h3>
-				</a>
-				<pre><code class="language-sh"><span style="color: #000000">$ npm </span><span style="color: #795E26">test</span>
+
+<a href="#notes" id="notes" style="color: inherit; text-decoration: none;">
+  <h3>Notes</h3>
+</a>
+<p>Check out <a href="https://repetere.github.io/jsonx/">https://repetere.github.io/jsonx/</a> for the full jsonx Documentation</p>
+
+<a href="#testing" id="testing" style="color: inherit; text-decoration: none;">
+  <h3>Testing</h3>
+</a>
+<pre><code class="language-sh"><span class="hl-0">$ npm </span><span class="hl-7">test</span>
 </code></pre>
-				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
-					<h3>Contributing</h3>
-				</a>
-				<p>Fork, write tests and create a pull request!</p>
-				<p>License</p>
-				<hr>
-				<p>MIT</p>
-			</div>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class=" ">
-						<a href="modules.html">Exports</a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-					<li class=" tsd-kind-reference">
-						<a href="modules.html#default" class="tsd-kind-icon">default</a>
-					</li>
-					<li class=" tsd-kind-reference">
-						<a href="modules.html#renderfile" class="tsd-kind-icon">render<wbr>File</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#_jsonxchildren" class="tsd-kind-icon">_jsonx<wbr>Children</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#_jsonxcomponents" class="tsd-kind-icon">_jsonx<wbr>Components</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#_jsonxhelpers" class="tsd-kind-icon">_jsonx<wbr>Helpers</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#_jsonxprops" class="tsd-kind-icon">_jsonx<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#_jsonxutils" class="tsd-kind-icon">_jsonx<wbr>Utils</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#renderindex" class="tsd-kind-icon">render<wbr>Index</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#__express" class="tsd-kind-icon">__express</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#__getreact" class="tsd-kind-icon">__get<wbr>React</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#__getreactdom" class="tsd-kind-icon">__get<wbr>ReactDOM</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#compile" class="tsd-kind-icon">compile</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#getreactelement" class="tsd-kind-icon">get<wbr>React<wbr>Element</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#getreactelementfromjson" class="tsd-kind-icon">get<wbr>React<wbr>Element<wbr>FromJSON</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#getreactelementfromjsonx" class="tsd-kind-icon">get<wbr>React<wbr>Element<wbr>FromJSONX</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#getrenderedjson" class="tsd-kind-icon">get<wbr>RenderedJSON</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#jsontojsx" class="tsd-kind-icon">json<wbr>ToJSX</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#jsonxhtmlstring" class="tsd-kind-icon">jsonxHTMLString</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#jsonxrender" class="tsd-kind-icon">jsonx<wbr>Render</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#outputhtml" class="tsd-kind-icon">outputHTML</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#outputjson" class="tsd-kind-icon">outputJSON</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#outputjsx" class="tsd-kind-icon">outputJSX</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
-<footer>
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-		</div>
-	</div>
-</footer>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+
+<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+  <h3>Contributing</h3>
+</a>
+<p>Fork, write tests and create a pull request!</p>
+<p>License</p>
+<hr>
+<p>MIT</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-reference"><a href="modules.html#default" class="tsd-kind-icon">default</a></li><li class="tsd-kind-reference"><a href="modules.html#renderFile" class="tsd-kind-icon">render<wbr/>File</a></li><li class="tsd-kind-variable"><a href="modules.html#_jsonxChildren" class="tsd-kind-icon">_jsonx<wbr/>Children</a></li><li class="tsd-kind-variable"><a href="modules.html#_jsonxComponents" class="tsd-kind-icon">_jsonx<wbr/>Components</a></li><li class="tsd-kind-variable"><a href="modules.html#_jsonxHelpers" class="tsd-kind-icon">_jsonx<wbr/>Helpers</a></li><li class="tsd-kind-variable"><a href="modules.html#_jsonxProps" class="tsd-kind-icon">_jsonx<wbr/>Props</a></li><li class="tsd-kind-variable"><a href="modules.html#_jsonxUtils" class="tsd-kind-icon">_jsonx<wbr/>Utils</a></li><li class="tsd-kind-variable"><a href="modules.html#renderIndex" class="tsd-kind-icon">render<wbr/>Index</a></li><li class="tsd-kind-function"><a href="modules.html#__express" class="tsd-kind-icon">__express</a></li><li class="tsd-kind-function"><a href="modules.html#__getReact" class="tsd-kind-icon">__get<wbr/>React</a></li><li class="tsd-kind-function"><a href="modules.html#__getReactDOM" class="tsd-kind-icon">__get<wbr/>ReactDOM</a></li><li class="tsd-kind-function"><a href="modules.html#compile" class="tsd-kind-icon">compile</a></li><li class="tsd-kind-function"><a href="modules.html#getReactElement" class="tsd-kind-icon">get<wbr/>React<wbr/>Element</a></li><li class="tsd-kind-function"><a href="modules.html#getReactElementFromJSON" class="tsd-kind-icon">get<wbr/>React<wbr/>Element<wbr/>FromJSON</a></li><li class="tsd-kind-function"><a href="modules.html#getReactElementFromJSONX" class="tsd-kind-icon">get<wbr/>React<wbr/>Element<wbr/>FromJSONX</a></li><li class="tsd-kind-function"><a href="modules.html#getRenderedJSON" class="tsd-kind-icon">get<wbr/>RenderedJSON</a></li><li class="tsd-kind-function"><a href="modules.html#jsonToJSX" class="tsd-kind-icon">json<wbr/>ToJSX</a></li><li class="tsd-kind-function"><a href="modules.html#jsonxHTMLString" class="tsd-kind-icon">jsonxHTMLString</a></li><li class="tsd-kind-function"><a href="modules.html#jsonxRender" class="tsd-kind-icon">jsonx<wbr/>Render</a></li><li class="tsd-kind-function"><a href="modules.html#outputHTML" class="tsd-kind-icon">outputHTML</a></li><li class="tsd-kind-function"><a href="modules.html#outputJSON" class="tsd-kind-icon">outputJSON</a></li><li class="tsd-kind-function"><a href="modules.html#outputJSX" class="tsd-kind-icon">outputJSX</a></li></ul></nav></div></div></div><footer class=""><div class="container"><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="overlay"></div><script src="assets/main.js"></script></body></html>

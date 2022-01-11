@@ -1,7 +1,6 @@
 import React from "react";
 import { ReactElementLike } from "prop-types";
 import * as defs from "./types/jsonx/index";
-import { ReactComponentLike } from "prop-types";
 declare global {
     interface window {
         [index: string]: any;
@@ -18,12 +17,12 @@ declare global {
     }
 }
 export declare const ReactHookForm: {
-    ErrorMessage: <TFieldErrors extends import("react-hook-form").DeepMap<import("react-hook-form").FieldValues, import("react-hook-form").FieldError>, TAs extends React.ReactElement<any, string | React.JSXElementConstructor<any>> | keyof JSX.IntrinsicElements | React.ComponentType<any> | undefined = undefined>({ as, errors, name, message, render, ...rest }: import("@hookform/error-message").Props<TFieldErrors, TAs>) => React.ReactElement<any, string | React.JSXElementConstructor<any>> | null;
+    ErrorMessage: <TFieldErrors extends {
+        [x: string]: any;
+    }, TAs extends React.ComponentType<any> | React.ReactElement<any, string | React.JSXElementConstructor<any>> | keyof JSX.IntrinsicElements | undefined = undefined>({ as, errors, name, message, render, ...rest }: import("@hookform/error-message").Props<TFieldErrors, TAs>) => React.ReactElement<any, string | React.JSXElementConstructor<any>> | null;
     Controller: <TFieldValues extends import("react-hook-form").FieldValues = import("react-hook-form").FieldValues, TName extends import("react-hook-form").Path<TFieldValues> = import("react-hook-form").Path<TFieldValues>>(props: import("react-hook-form").ControllerProps<TFieldValues, TName>) => React.ReactElement<any, string | React.JSXElementConstructor<any>>;
 };
-/**
- 
- */
+export declare const generatedCustomComponents: Map<string, defs.jsonx["jsonxComponents"] | Map<string, defs.jsonx["jsonxComponents"]>>;
 export declare let advancedBinding: boolean;
 /**
  * object of all react components available for JSONX
@@ -105,7 +104,7 @@ export declare function getFunctionFromEval(options?: any): any;
  * @returns {Function}
  * @see {@link https://reactjs.org/docs/react-without-es6.html}
  */
-export declare function getReactClassComponent(this: defs.Context, reactComponent?: {}, options?: any): ReactComponentLike;
+export declare function getReactClassComponent(this: defs.Context, reactComponent?: {}, options?: any): unknown;
 /**
  * A helper component that allows you to create forms with [react-hook-form](https://react-hook-form.com/) without needed to add external form libraries
  * @param this
@@ -186,3 +185,51 @@ export declare function makeFunctionComponent(this: defs.Context, func: () => an
  *
  */
 export declare function getReactContext(options?: any): React.Context<any>;
+/**
+ * generates react function components from a json definition
+ * @property {object} this
+ * @param customComponent
+ * @returns {function} returns react functional component
+ */
+export declare function getCustomFunctionComponent(this: defs.Context, customComponent: Partial<defs.jsonxCustomComponent>): defs.genericComponent;
+/**
+ * returns a cache key of custom components names
+ * @param customComponents
+ * @returns {string} cachekey
+ */
+export declare function getCustomComponentsCacheKey(customComponents: defs.jsonxCustomComponent[]): string;
+/**
+ *
+ * @param this
+ * @param customComponents
+ * @returns
+ * @example
+ const customComponents = [
+   {
+      type: 'library',
+      name: 'someLib',
+      jsonx?: {
+        Header: {
+          type:'function',
+          jsonxComponent: {p:'sample'},
+          functionBody:'console.log(44)',
+        },
+        Footer: {
+          type:'function',
+          jsonxComponent: {p:'sample'},
+          functionBody:'console.log(44)',
+        }
+      }
+   },
+   {
+      type: 'component'|'function'|'library';
+      name: string;
+      jsonx?: jsonxDefinitionLibrary | jsonx;
+      jsonxComponent?: jsonx;
+      options?: {};
+      functionBody?: (string);
+      functionComponent?: ((props?:any)=>any);
+   },
+  ]
+ */
+export declare function getReactLibrariesAndComponents(this: defs.Context, customComponents: defs.jsonxCustomComponent[]): defs.jsonxLibrariesAndComponents;

@@ -2,7 +2,7 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('react-dom')) :
 	typeof define === 'function' && define.amd ? define(['exports', 'react', 'react-dom'], factory) :
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((typeof global!=="undefined" ? global : window).jsonx = {}, (typeof global!=="undefined" ? global : window).React, (typeof global!=="undefined" ? global : window).ReactDOM));
-}(this, (function (exports, React, ReactDOM) { 'use strict';
+})(this, (function (exports, React$1, ReactDOM) { 'use strict';
 
 	function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -15,19 +15,17 @@
 					var d = Object.getOwnPropertyDescriptor(e, k);
 					Object.defineProperty(n, k, d.get ? d : {
 						enumerable: true,
-						get: function () {
-							return e[k];
-						}
+						get: function () { return e[k]; }
 					});
 				}
 			});
 		}
-		n['default'] = e;
+		n["default"] = e;
 		return Object.freeze(n);
 	}
 
-	var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
-	var React__namespace = /*#__PURE__*/_interopNamespace(React);
+	var React__default = /*#__PURE__*/_interopDefaultLegacy(React$1);
+	var React__namespace = /*#__PURE__*/_interopNamespace(React$1);
 	var ReactDOM__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOM);
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -47,10 +45,9 @@
 		return a;
 	}
 
-	function createCommonjsModule(fn) {
-	  var module = { exports: {} };
-		return fn(module, module.exports), module.exports;
-	}
+	var server_node = {exports: {}};
+
+	var reactDomServer_node_production_min = {};
 
 	/*
 	object-assign
@@ -5120,7 +5117,7 @@
 		Stream: Stream
 	});
 
-	var aa = /*@__PURE__*/getAugmentedNamespace(stream);
+	var require$$2 = /*@__PURE__*/getAugmentedNamespace(stream);
 
 	/** @license React v17.0.2
 	 * react-dom-server.node.production.min.js
@@ -5130,11 +5127,11 @@
 	 * This source code is licensed under the MIT license found in the
 	 * LICENSE file in the root directory of this source tree.
 	 */
-	function p(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return "Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}
+	var l$1=objectAssign,n$1=React__default["default"],aa=require$$2;function p(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return "Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}
 	var q=60106,r=60107,u=60108,z=60114,B=60109,ba=60110,ca=60112,D=60113,da=60120,ea=60115,fa=60116,ha=60121,ia=60117,ja=60119,ka=60129,la=60131;
 	if("function"===typeof Symbol&&Symbol.for){var E=Symbol.for;q=E("react.portal");r=E("react.fragment");u=E("react.strict_mode");z=E("react.profiler");B=E("react.provider");ba=E("react.context");ca=E("react.forward_ref");D=E("react.suspense");da=E("react.suspense_list");ea=E("react.memo");fa=E("react.lazy");ha=E("react.block");ia=E("react.fundamental");ja=E("react.scope");ka=E("react.debug_trace_mode");la=E("react.legacy_hidden");}
 	function F(a){if(null==a)return null;if("function"===typeof a)return a.displayName||a.name||null;if("string"===typeof a)return a;switch(a){case r:return "Fragment";case q:return "Portal";case z:return "Profiler";case u:return "StrictMode";case D:return "Suspense";case da:return "SuspenseList"}if("object"===typeof a)switch(a.$$typeof){case ba:return (a.displayName||"Context")+".Consumer";case B:return (a._context.displayName||"Context")+".Provider";case ca:var b=a.render;b=b.displayName||b.name||"";return a.displayName||
-	(""!==b?"ForwardRef("+b+")":"ForwardRef");case ea:return F(a.type);case ha:return F(a._render);case fa:b=a._payload;a=a._init;try{return F(a(b))}catch(c){}}return null}var ma=React__default['default'].__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,na={};function I(a,b){for(var c=a._threadCount|0;c<=b;c++)a[c]=a._currentValue2,a._threadCount=c+1;}function oa(a,b,c,d){if(d&&(d=a.contextType,"object"===typeof d&&null!==d))return I(d,c),d[c];if(a=a.contextTypes){c={};for(var f in a)c[f]=b[f];b=c;}else b=na;return b}
+	(""!==b?"ForwardRef("+b+")":"ForwardRef");case ea:return F(a.type);case ha:return F(a._render);case fa:b=a._payload;a=a._init;try{return F(a(b))}catch(c){}}return null}var ma=n$1.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,na={};function I(a,b){for(var c=a._threadCount|0;c<=b;c++)a[c]=a._currentValue2,a._threadCount=c+1;}function oa(a,b,c,d){if(d&&(d=a.contextType,"object"===typeof d&&null!==d))return I(d,c),d[c];if(a=a.contextTypes){c={};for(var f in a)c[f]=b[f];b=c;}else b=na;return b}
 	for(var J=new Uint16Array(16),K=0;15>K;K++)J[K]=K+1;J[15]=0;var pa=/^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,qa=Object.prototype.hasOwnProperty,ra={},sa={};
 	function ta(a){if(qa.call(sa,a))return !0;if(qa.call(ra,a))return !1;if(pa.test(a))return sa[a]=!0;ra[a]=!0;return !1}function ua(a,b,c,d){if(null!==c&&0===c.type)return !1;switch(typeof b){case "function":case "symbol":return !0;case "boolean":if(d)return !1;if(null!==c)return !c.acceptsBooleans;a=a.toLowerCase().slice(0,5);return "data-"!==a&&"aria-"!==a;default:return !1}}
 	function va(a,b,c,d){if(null===b||"undefined"===typeof b||ua(a,b,c,d))return !0;if(d)return !1;if(null!==c)switch(c.type){case 3:return !b;case 4:return !1===b;case 5:return isNaN(b);case 6:return isNaN(b)||1>b}return !1}function M(a,b,c,d,f,h,t){this.acceptsBooleans=2===b||3===b||4===b;this.attributeName=d;this.attributeNamespace=f;this.mustUseProperty=c;this.propertyName=a;this.type=b;this.sanitizeURL=h;this.removeEmptyString=t;}var N={};
@@ -5151,46 +5148,35 @@
 	function Ja(a,b){P=W();R=Da();b=void 0===b?null:b;if(null!==R){var c=R.memoizedState;if(null!==c&&null!==b){var d=c[1];a:if(null===d)d=!1;else {for(var f=0;f<d.length&&f<b.length;f++)if(!Ba(b[f],d[f])){d=!1;break a}d=!0;}if(d)return c[0]}}a=a();R.memoizedState=[a,b];return a}function Ia(a,b,c){if(!(25>V))throw Error(p(301));if(a===P)if(T=!0,a={action:c,next:null},null===U&&(U=new Map),c=U.get(b),void 0===c)U.set(b,a);else {for(b=c;null!==b.next;)b=b.next;b.next=a;}}function Ka(){}
 	var X=null,La={readContext:function(a){var b=X.threadID;I(a,b);return a[b]},useContext:function(a){W();var b=X.threadID;I(a,b);return a[b]},useMemo:Ja,useReducer:Ha,useRef:function(a){P=W();R=Da();var b=R.memoizedState;return null===b?(a={current:a},R.memoizedState=a):b},useState:function(a){return Ha(Ga,a)},useLayoutEffect:function(){},useCallback:function(a,b){return Ja(function(){return a},b)},useImperativeHandle:Ka,useEffect:Ka,useDebugValue:Ka,useDeferredValue:function(a){W();return a},useTransition:function(){W();
 	return [function(a){a();},!1]},useOpaqueIdentifier:function(){return (X.identifierPrefix||"")+"R:"+(X.uniqueID++).toString(36)},useMutableSource:function(a,b){W();return b(a._source)}},Ma={html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"};function Na(a){switch(a){case "svg":return "http://www.w3.org/2000/svg";case "math":return "http://www.w3.org/1998/Math/MathML";default:return "http://www.w3.org/1999/xhtml"}}
-	var Oa={area:!0,base:!0,br:!0,col:!0,embed:!0,hr:!0,img:!0,input:!0,keygen:!0,link:!0,meta:!0,param:!0,source:!0,track:!0,wbr:!0},Pa=objectAssign({menuitem:!0},Oa),Y={animationIterationCount:!0,borderImageOutset:!0,borderImageSlice:!0,borderImageWidth:!0,boxFlex:!0,boxFlexGroup:!0,boxOrdinalGroup:!0,columnCount:!0,columns:!0,flex:!0,flexGrow:!0,flexPositive:!0,flexShrink:!0,flexNegative:!0,flexOrder:!0,gridArea:!0,gridRow:!0,gridRowEnd:!0,gridRowSpan:!0,gridRowStart:!0,gridColumn:!0,gridColumnEnd:!0,gridColumnSpan:!0,
+	var Oa={area:!0,base:!0,br:!0,col:!0,embed:!0,hr:!0,img:!0,input:!0,keygen:!0,link:!0,meta:!0,param:!0,source:!0,track:!0,wbr:!0},Pa=l$1({menuitem:!0},Oa),Y={animationIterationCount:!0,borderImageOutset:!0,borderImageSlice:!0,borderImageWidth:!0,boxFlex:!0,boxFlexGroup:!0,boxOrdinalGroup:!0,columnCount:!0,columns:!0,flex:!0,flexGrow:!0,flexPositive:!0,flexShrink:!0,flexNegative:!0,flexOrder:!0,gridArea:!0,gridRow:!0,gridRowEnd:!0,gridRowSpan:!0,gridRowStart:!0,gridColumn:!0,gridColumnEnd:!0,gridColumnSpan:!0,
 	gridColumnStart:!0,fontWeight:!0,lineClamp:!0,lineHeight:!0,opacity:!0,order:!0,orphans:!0,tabSize:!0,widows:!0,zIndex:!0,zoom:!0,fillOpacity:!0,floodOpacity:!0,stopOpacity:!0,strokeDasharray:!0,strokeDashoffset:!0,strokeMiterlimit:!0,strokeOpacity:!0,strokeWidth:!0},Qa=["Webkit","ms","Moz","O"];Object.keys(Y).forEach(function(a){Qa.forEach(function(b){b=b+a.charAt(0).toUpperCase()+a.substring(1);Y[b]=Y[a];});});
-	var Ra=/([A-Z])/g,Sa=/^ms-/,Z=React__default['default'].Children.toArray,Ta=ma.ReactCurrentDispatcher,Ua={listing:!0,pre:!0,textarea:!0},Va=/^[a-zA-Z][a-zA-Z:_\.\-\d]*$/,Wa={},Xa={};function Ya(a){if(void 0===a||null===a)return a;var b="";React__default['default'].Children.forEach(a,function(a){null!=a&&(b+=a);});return b}var Za=Object.prototype.hasOwnProperty,$a={children:null,dangerouslySetInnerHTML:null,suppressContentEditableWarning:null,suppressHydrationWarning:null};function ab(a,b){if(void 0===a)throw Error(p(152,F(b)||"Component"));}
-	function bb(a,b,c){function d(d,h){var e=h.prototype&&h.prototype.isReactComponent,f=oa(h,b,c,e),t=[],g=!1,m={isMounted:function(){return !1},enqueueForceUpdate:function(){if(null===t)return null},enqueueReplaceState:function(a,b){g=!0;t=[b];},enqueueSetState:function(a,b){if(null===t)return null;t.push(b);}};if(e){if(e=new h(d.props,f,m),"function"===typeof h.getDerivedStateFromProps){var k=h.getDerivedStateFromProps.call(null,d.props,e.state);null!=k&&(e.state=objectAssign({},e.state,k));}}else if(P={},e=h(d.props,
+	var Ra=/([A-Z])/g,Sa=/^ms-/,Z=n$1.Children.toArray,Ta=ma.ReactCurrentDispatcher,Ua={listing:!0,pre:!0,textarea:!0},Va=/^[a-zA-Z][a-zA-Z:_\.\-\d]*$/,Wa={},Xa={};function Ya(a){if(void 0===a||null===a)return a;var b="";n$1.Children.forEach(a,function(a){null!=a&&(b+=a);});return b}var Za=Object.prototype.hasOwnProperty,$a={children:null,dangerouslySetInnerHTML:null,suppressContentEditableWarning:null,suppressHydrationWarning:null};function ab(a,b){if(void 0===a)throw Error(p(152,F(b)||"Component"));}
+	function bb(a,b,c){function d(d,h){var e=h.prototype&&h.prototype.isReactComponent,f=oa(h,b,c,e),t=[],g=!1,m={isMounted:function(){return !1},enqueueForceUpdate:function(){if(null===t)return null},enqueueReplaceState:function(a,b){g=!0;t=[b];},enqueueSetState:function(a,b){if(null===t)return null;t.push(b);}};if(e){if(e=new h(d.props,f,m),"function"===typeof h.getDerivedStateFromProps){var k=h.getDerivedStateFromProps.call(null,d.props,e.state);null!=k&&(e.state=l$1({},e.state,k));}}else if(P={},e=h(d.props,
 	f,m),e=Ea(h,d.props,e,f),null==e||null==e.render){a=e;ab(a,h);return}e.props=d.props;e.context=f;e.updater=m;m=e.state;void 0===m&&(e.state=m=null);if("function"===typeof e.UNSAFE_componentWillMount||"function"===typeof e.componentWillMount)if("function"===typeof e.componentWillMount&&"function"!==typeof h.getDerivedStateFromProps&&e.componentWillMount(),"function"===typeof e.UNSAFE_componentWillMount&&"function"!==typeof h.getDerivedStateFromProps&&e.UNSAFE_componentWillMount(),t.length){m=t;var v=
-	g;t=null;g=!1;if(v&&1===m.length)e.state=m[0];else {k=v?m[0]:e.state;var H=!0;for(v=v?1:0;v<m.length;v++){var x=m[v];x="function"===typeof x?x.call(e,k,d.props,f):x;null!=x&&(H?(H=!1,k=objectAssign({},k,x)):objectAssign(k,x));}e.state=k;}}else t=null;a=e.render();ab(a,h);if("function"===typeof e.getChildContext&&(d=h.childContextTypes,"object"===typeof d)){var y=e.getChildContext();for(var A in y)if(!(A in d))throw Error(p(108,F(h)||"Unknown",A));}y&&(b=objectAssign({},b,y));}for(;React__default['default'].isValidElement(a);){var f=a,h=f.type;if("function"!==
+	g;t=null;g=!1;if(v&&1===m.length)e.state=m[0];else {k=v?m[0]:e.state;var H=!0;for(v=v?1:0;v<m.length;v++){var x=m[v];x="function"===typeof x?x.call(e,k,d.props,f):x;null!=x&&(H?(H=!1,k=l$1({},k,x)):l$1(k,x));}e.state=k;}}else t=null;a=e.render();ab(a,h);if("function"===typeof e.getChildContext&&(d=h.childContextTypes,"object"===typeof d)){var y=e.getChildContext();for(var A in y)if(!(A in d))throw Error(p(108,F(h)||"Unknown",A));}y&&(b=l$1({},b,y));}for(;n$1.isValidElement(a);){var f=a,h=f.type;if("function"!==
 	typeof h)break;d(f,h);}return {child:a,context:b}}
-	var cb=function(){function a(a,b,f){React__default['default'].isValidElement(a)?a.type!==r?a=[a]:(a=a.props.children,a=React__default['default'].isValidElement(a)?[a]:Z(a)):a=Z(a);a={type:null,domNamespace:Ma.html,children:a,childIndex:0,context:na,footer:""};var c=J[0];if(0===c){var d=J;c=d.length;var g=2*c;if(!(65536>=g))throw Error(p(304));var e=new Uint16Array(g);e.set(d);J=e;J[0]=c+1;for(d=c;d<g-1;d++)J[d]=d+1;J[g-1]=0;}else J[0]=J[c];this.threadID=c;this.stack=[a];this.exhausted=!1;this.currentSelectValue=null;this.previousWasTextNode=!1;
+	var cb=function(){function a(a,b,f){n$1.isValidElement(a)?a.type!==r?a=[a]:(a=a.props.children,a=n$1.isValidElement(a)?[a]:Z(a)):a=Z(a);a={type:null,domNamespace:Ma.html,children:a,childIndex:0,context:na,footer:""};var c=J[0];if(0===c){var d=J;c=d.length;var g=2*c;if(!(65536>=g))throw Error(p(304));var e=new Uint16Array(g);e.set(d);J=e;J[0]=c+1;for(d=c;d<g-1;d++)J[d]=d+1;J[g-1]=0;}else J[0]=J[c];this.threadID=c;this.stack=[a];this.exhausted=!1;this.currentSelectValue=null;this.previousWasTextNode=!1;
 	this.makeStaticMarkup=b;this.suspenseDepth=0;this.contextIndex=-1;this.contextStack=[];this.contextValueStack=[];this.uniqueID=0;this.identifierPrefix=f&&f.identifierPrefix||"";}var b=a.prototype;b.destroy=function(){if(!this.exhausted){this.exhausted=!0;this.clearProviders();var a=this.threadID;J[a]=J[0];J[0]=a;}};b.pushProvider=function(a){var b=++this.contextIndex,c=a.type._context,h=this.threadID;I(c,h);var t=c[h];this.contextStack[b]=c;this.contextValueStack[b]=t;c[h]=a.props.value;};b.popProvider=
 	function(){var a=this.contextIndex,b=this.contextStack[a],f=this.contextValueStack[a];this.contextStack[a]=null;this.contextValueStack[a]=null;this.contextIndex--;b[this.threadID]=f;};b.clearProviders=function(){for(var a=this.contextIndex;0<=a;a--)this.contextStack[a][this.threadID]=this.contextValueStack[a];};b.read=function(a){if(this.exhausted)return null;var b=X;X=this;var c=Ta.current;Ta.current=La;try{for(var h=[""],t=!1;h[0].length<a;){if(0===this.stack.length){this.exhausted=!0;var g=this.threadID;
 	J[g]=J[0];J[0]=g;break}var e=this.stack[this.stack.length-1];if(t||e.childIndex>=e.children.length){var L=e.footer;""!==L&&(this.previousWasTextNode=!1);this.stack.pop();if("select"===e.type)this.currentSelectValue=null;else if(null!=e.type&&null!=e.type.type&&e.type.type.$$typeof===B)this.popProvider(e.type);else if(e.type===D){this.suspenseDepth--;var G=h.pop();if(t){t=!1;var C=e.fallbackFrame;if(!C)throw Error(p(303));this.stack.push(C);h[this.suspenseDepth]+="\x3c!--$!--\x3e";continue}else h[this.suspenseDepth]+=
 	G;}h[this.suspenseDepth]+=L;}else {var m=e.children[e.childIndex++],k="";try{k+=this.render(m,e.context,e.domNamespace);}catch(v){if(null!=v&&"function"===typeof v.then)throw Error(p(294));throw v;}finally{}h.length<=this.suspenseDepth&&h.push("");h[this.suspenseDepth]+=k;}}return h[0]}finally{Ta.current=c,X=b,Fa();}};b.render=function(a,b,f){if("string"===typeof a||"number"===typeof a){f=""+a;if(""===f)return "";if(this.makeStaticMarkup)return O(f);if(this.previousWasTextNode)return "\x3c!-- --\x3e"+O(f);
-	this.previousWasTextNode=!0;return O(f)}b=bb(a,b,this.threadID);a=b.child;b=b.context;if(null===a||!1===a)return "";if(!React__default['default'].isValidElement(a)){if(null!=a&&null!=a.$$typeof){f=a.$$typeof;if(f===q)throw Error(p(257));throw Error(p(258,f.toString()));}a=Z(a);this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,context:b,footer:""});return ""}var c=a.type;if("string"===typeof c)return this.renderDOM(a,b,f);switch(c){case la:case ka:case u:case z:case da:case r:return a=Z(a.props.children),this.stack.push({type:null,
-	domNamespace:f,children:a,childIndex:0,context:b,footer:""}),"";case D:throw Error(p(294));case ja:throw Error(p(343));}if("object"===typeof c&&null!==c)switch(c.$$typeof){case ca:P={};var d=c.render(a.props,a.ref);d=Ea(c.render,a.props,d,a.ref);d=Z(d);this.stack.push({type:null,domNamespace:f,children:d,childIndex:0,context:b,footer:""});return "";case ea:return a=[React__default['default'].createElement(c.type,objectAssign({ref:a.ref},a.props))],this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,context:b,footer:""}),
-	"";case B:return c=Z(a.props.children),f={type:a,domNamespace:f,children:c,childIndex:0,context:b,footer:""},this.pushProvider(a),this.stack.push(f),"";case ba:c=a.type;d=a.props;var g=this.threadID;I(c,g);c=Z(d.children(c[g]));this.stack.push({type:a,domNamespace:f,children:c,childIndex:0,context:b,footer:""});return "";case ia:throw Error(p(338));case fa:return c=a.type,d=c._init,c=d(c._payload),a=[React__default['default'].createElement(c,objectAssign({ref:a.ref},a.props))],this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,
-	context:b,footer:""}),""}throw Error(p(130,null==c?c:typeof c,""));};b.renderDOM=function(a,b,f){var c=a.type.toLowerCase();if(!Wa.hasOwnProperty(c)){if(!Va.test(c))throw Error(p(65,c));Wa[c]=!0;}var d=a.props;if("input"===c)d=objectAssign({type:void 0},d,{defaultChecked:void 0,defaultValue:void 0,value:null!=d.value?d.value:d.defaultValue,checked:null!=d.checked?d.checked:d.defaultChecked});else if("textarea"===c){var g=d.value;if(null==g){g=d.defaultValue;var e=d.children;if(null!=e){if(null!=
-	g)throw Error(p(92));if(Array.isArray(e)){if(!(1>=e.length))throw Error(p(93));e=e[0];}g=""+e;}null==g&&(g="");}d=objectAssign({},d,{value:void 0,children:""+g});}else if("select"===c)this.currentSelectValue=null!=d.value?d.value:d.defaultValue,d=objectAssign({},d,{value:void 0});else if("option"===c){e=this.currentSelectValue;var L=Ya(d.children);if(null!=e){var G=null!=d.value?d.value+"":L;g=!1;if(Array.isArray(e))for(var C=0;C<e.length;C++){if(""+e[C]===G){g=!0;break}}else g=""+e===G;d=objectAssign({selected:void 0,children:void 0},
+	this.previousWasTextNode=!0;return O(f)}b=bb(a,b,this.threadID);a=b.child;b=b.context;if(null===a||!1===a)return "";if(!n$1.isValidElement(a)){if(null!=a&&null!=a.$$typeof){f=a.$$typeof;if(f===q)throw Error(p(257));throw Error(p(258,f.toString()));}a=Z(a);this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,context:b,footer:""});return ""}var c=a.type;if("string"===typeof c)return this.renderDOM(a,b,f);switch(c){case la:case ka:case u:case z:case da:case r:return a=Z(a.props.children),this.stack.push({type:null,
+	domNamespace:f,children:a,childIndex:0,context:b,footer:""}),"";case D:throw Error(p(294));case ja:throw Error(p(343));}if("object"===typeof c&&null!==c)switch(c.$$typeof){case ca:P={};var d=c.render(a.props,a.ref);d=Ea(c.render,a.props,d,a.ref);d=Z(d);this.stack.push({type:null,domNamespace:f,children:d,childIndex:0,context:b,footer:""});return "";case ea:return a=[n$1.createElement(c.type,l$1({ref:a.ref},a.props))],this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,context:b,footer:""}),
+	"";case B:return c=Z(a.props.children),f={type:a,domNamespace:f,children:c,childIndex:0,context:b,footer:""},this.pushProvider(a),this.stack.push(f),"";case ba:c=a.type;d=a.props;var g=this.threadID;I(c,g);c=Z(d.children(c[g]));this.stack.push({type:a,domNamespace:f,children:c,childIndex:0,context:b,footer:""});return "";case ia:throw Error(p(338));case fa:return c=a.type,d=c._init,c=d(c._payload),a=[n$1.createElement(c,l$1({ref:a.ref},a.props))],this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,
+	context:b,footer:""}),""}throw Error(p(130,null==c?c:typeof c,""));};b.renderDOM=function(a,b,f){var c=a.type.toLowerCase();if(!Wa.hasOwnProperty(c)){if(!Va.test(c))throw Error(p(65,c));Wa[c]=!0;}var d=a.props;if("input"===c)d=l$1({type:void 0},d,{defaultChecked:void 0,defaultValue:void 0,value:null!=d.value?d.value:d.defaultValue,checked:null!=d.checked?d.checked:d.defaultChecked});else if("textarea"===c){var g=d.value;if(null==g){g=d.defaultValue;var e=d.children;if(null!=e){if(null!=
+	g)throw Error(p(92));if(Array.isArray(e)){if(!(1>=e.length))throw Error(p(93));e=e[0];}g=""+e;}null==g&&(g="");}d=l$1({},d,{value:void 0,children:""+g});}else if("select"===c)this.currentSelectValue=null!=d.value?d.value:d.defaultValue,d=l$1({},d,{value:void 0});else if("option"===c){e=this.currentSelectValue;var L=Ya(d.children);if(null!=e){var G=null!=d.value?d.value+"":L;g=!1;if(Array.isArray(e))for(var C=0;C<e.length;C++){if(""+e[C]===G){g=!0;break}}else g=""+e===G;d=l$1({selected:void 0,children:void 0},
 	d,{selected:g,children:L});}}if(g=d){if(Pa[c]&&(null!=g.children||null!=g.dangerouslySetInnerHTML))throw Error(p(137,c));if(null!=g.dangerouslySetInnerHTML){if(null!=g.children)throw Error(p(60));if(!("object"===typeof g.dangerouslySetInnerHTML&&"__html"in g.dangerouslySetInnerHTML))throw Error(p(61));}if(null!=g.style&&"object"!==typeof g.style)throw Error(p(62));}g=d;e=this.makeStaticMarkup;L=1===this.stack.length;G="<"+a.type;b:if(-1===c.indexOf("-"))C="string"===typeof g.is;else switch(c){case "annotation-xml":case "color-profile":case "font-face":case "font-face-src":case "font-face-uri":case "font-face-format":case "font-face-name":case "missing-glyph":C=
 	!1;break b;default:C=!0;}for(w in g)if(Za.call(g,w)){var m=g[w];if(null!=m){if("style"===w){var k=void 0,v="",H="";for(k in m)if(m.hasOwnProperty(k)){var x=0===k.indexOf("--"),y=m[k];if(null!=y){if(x)var A=k;else if(A=k,Xa.hasOwnProperty(A))A=Xa[A];else {var eb=A.replace(Ra,"-$1").toLowerCase().replace(Sa,"-ms-");A=Xa[A]=eb;}v+=H+A+":";H=k;x=null==y||"boolean"===typeof y||""===y?"":x||"number"!==typeof y||0===y||Y.hasOwnProperty(H)&&Y[H]?(""+y).trim():y+"px";v+=x;H=";";}}m=v||null;}k=null;C?$a.hasOwnProperty(w)||
 	(k=w,k=ta(k)&&null!=m?k+'="'+(O(m)+'"'):""):k=za(w,m);k&&(G+=" "+k);}}e||L&&(G+=' data-reactroot=""');var w=G;g="";Oa.hasOwnProperty(c)?w+="/>":(w+=">",g="</"+a.type+">");a:{e=d.dangerouslySetInnerHTML;if(null!=e){if(null!=e.__html){e=e.__html;break a}}else if(e=d.children,"string"===typeof e||"number"===typeof e){e=O(e);break a}e=null;}null!=e?(d=[],Ua.hasOwnProperty(c)&&"\n"===e.charAt(0)&&(w+="\n"),w+=e):d=Z(d.children);a=a.type;f=null==f||"http://www.w3.org/1999/xhtml"===f?Na(a):"http://www.w3.org/2000/svg"===
 	f&&"foreignObject"===a?"http://www.w3.org/1999/xhtml":f;this.stack.push({domNamespace:f,type:c,children:d,childIndex:0,context:b,footer:g});this.previousWasTextNode=!1;return w};return a}();function db(a,b){a.prototype=Object.create(b.prototype);a.prototype.constructor=a;a.__proto__=b;}
-	var fb=function(a){function b(b,c,h){var d=a.call(this,{})||this;d.partialRenderer=new cb(b,c,h);return d}db(b,a);var c=b.prototype;c._destroy=function(a,b){this.partialRenderer.destroy();b(a);};c._read=function(a){try{this.push(this.partialRenderer.read(a));}catch(f){this.destroy(f);}};return b}(aa.Readable);var renderToNodeStream=function(a,b){return new fb(a,!1,b)};var renderToStaticMarkup=function(a,b){a=new cb(a,!0,b);try{return a.read(Infinity)}finally{a.destroy();}};
-	var renderToStaticNodeStream=function(a,b){return new fb(a,!0,b)};var renderToString=function(a,b){a=new cb(a,!1,b);try{return a.read(Infinity)}finally{a.destroy();}};var version="17.0.2";
-
-	var reactDomServer_node_production_min = {
-		renderToNodeStream: renderToNodeStream,
-		renderToStaticMarkup: renderToStaticMarkup,
-		renderToStaticNodeStream: renderToStaticNodeStream,
-		renderToString: renderToString,
-		version: version
-	};
-
-	var server_node = createCommonjsModule(function (module) {
+	var fb=function(a){function b(b,c,h){var d=a.call(this,{})||this;d.partialRenderer=new cb(b,c,h);return d}db(b,a);var c=b.prototype;c._destroy=function(a,b){this.partialRenderer.destroy();b(a);};c._read=function(a){try{this.push(this.partialRenderer.read(a));}catch(f){this.destroy(f);}};return b}(aa.Readable);reactDomServer_node_production_min.renderToNodeStream=function(a,b){return new fb(a,!1,b)};reactDomServer_node_production_min.renderToStaticMarkup=function(a,b){a=new cb(a,!0,b);try{return a.read(Infinity)}finally{a.destroy();}};
+	reactDomServer_node_production_min.renderToStaticNodeStream=function(a,b){return new fb(a,!0,b)};reactDomServer_node_production_min.renderToString=function(a,b){a=new cb(a,!1,b);try{return a.read(Infinity)}finally{a.destroy();}};reactDomServer_node_production_min.version="17.0.2";
 
 	{
-	  module.exports = reactDomServer_node_production_min;
+	  server_node.exports = reactDomServer_node_production_min;
 	}
-	});
 
-	var server = server_node;
+	var server = server_node.exports;
 
 	/*! *****************************************************************************
 	Copyright (c) Microsoft Corporation.
@@ -5216,6 +5202,8 @@
 	        step((generator = generator.apply(thisArg, _arguments || [])).next());
 	    });
 	}
+
+	var memoryCache = {exports: {}};
 
 	function Cache () {
 	  var _cache = Object.create(null);
@@ -5403,11 +5391,12 @@
 	  };
 	}
 
-	var memoryCache = new Cache();
-	var Cache_1 = Cache;
-	memoryCache.Cache = Cache_1;
+	memoryCache.exports = new Cache();
+	var Cache_1 = memoryCache.exports.Cache = Cache;
 
 	var isCheckBoxInput = (element) => element.type === 'checkbox';
+
+	var isDateObject = (data) => data instanceof Date;
 
 	var isNullOrUndefined = (value) => value == null;
 
@@ -5415,9 +5404,9 @@
 	var isObject = (value) => !isNullOrUndefined(value) &&
 	    !Array.isArray(value) &&
 	    isObjectType(value) &&
-	    !(value instanceof Date);
+	    !isDateObject(value);
 
-	var getControllerValue = (event) => isObject(event) && event.target
+	var getEventValue = (event) => isObject(event) && event.target
 	    ? isCheckBoxInput(event.target)
 	        ? event.target.checked
 	        : event.target.value
@@ -5427,17 +5416,20 @@
 
 	var isNameInFieldArray = (names, name) => [...names].some((current) => getNodeParentName(name) === current);
 
-	var compact = (value) => value.filter(Boolean);
+	var compact = (value) => (value || []).filter(Boolean);
 
 	var isUndefined$1 = (val) => val === undefined;
 
-	var get = (obj = {}, path, defaultValue) => {
-	    const result = compact(path.split(/[,[\].]+?/)).reduce((result, key) => (isNullOrUndefined(result) ? result : result[key]), obj);
-	    return isUndefined$1(result) || result === obj
-	        ? isUndefined$1(obj[path])
-	            ? defaultValue
-	            : obj[path]
-	        : result;
+	var get = (obj, path, defaultValue) => {
+	    if (isObject(obj) && path) {
+	        const result = compact(path.split(/[,[\].]+?/)).reduce((result, key) => (isNullOrUndefined(result) ? result : result[key]), obj);
+	        return isUndefined$1(result) || result === obj
+	            ? isUndefined$1(obj[path])
+	                ? defaultValue
+	                : obj[path]
+	            : result;
+	    }
+	    return undefined;
 	};
 
 	const EVENTS = {
@@ -5451,8 +5443,6 @@
 	    onTouched: 'onTouched',
 	    all: 'all',
 	};
-	const SELECT = 'select';
-	const UNDEFINED = 'undefined';
 	const INPUT_VALIDATION_RULES = {
 	    max: 'max',
 	    min: 'min',
@@ -5469,54 +5459,74 @@
 	    return copy;
 	};
 
-	const FormContext = React__namespace.createContext(null);
-	FormContext.displayName = 'RHFContext';
-	const useFormContext = () => React__namespace.useContext(FormContext);
+	const HookFormContext = React__default["default"].createContext(null);
+	const useFormContext = () => React__default["default"].useContext(HookFormContext);
 
-	var getProxyFormState = (isProxyEnabled, formState, readFormStateRef, localReadFormStateRef, isRoot = true) => isProxyEnabled
-	    ? new Proxy(formState, {
-	        get: (obj, prop) => {
-	            if (prop in obj) {
-	                if (readFormStateRef.current[prop] !== VALIDATION_MODE.all) {
-	                    readFormStateRef.current[prop] = isRoot
-	                        ? VALIDATION_MODE.all
-	                        : true;
+	var getProxyFormState = (formState, _proxyFormState, localProxyFormState, isRoot = true) => {
+	    function createGetter(prop) {
+	        return () => {
+	            if (prop in formState) {
+	                if (_proxyFormState[prop] !== VALIDATION_MODE.all) {
+	                    _proxyFormState[prop] = !isRoot || VALIDATION_MODE.all;
 	                }
-	                localReadFormStateRef &&
-	                    (localReadFormStateRef.current[prop] = true);
-	                return obj[prop];
+	                localProxyFormState && (localProxyFormState[prop] = true);
+	                return formState[prop];
 	            }
 	            return undefined;
-	        },
-	    })
-	    : formState;
+	        };
+	    }
+	    const result = {};
+	    for (const key in formState) {
+	        Object.defineProperty(result, key, {
+	            get: createGetter(key),
+	        });
+	    }
+	    return result;
+	};
 
 	var isEmptyObject = (value) => isObject(value) && !Object.keys(value).length;
 
-	var shouldRenderFormState = (formStateData, readFormStateRef, isRoot) => {
+	var shouldRenderFormState = (formStateData, _proxyFormState, isRoot) => {
 	    const formState = omit(formStateData, 'name');
 	    return (isEmptyObject(formState) ||
-	        Object.keys(formState).length >= Object.keys(readFormStateRef).length ||
-	        Object.keys(formState).find((key) => readFormStateRef[key] ===
-	            (isRoot ? VALIDATION_MODE.all : true)));
+	        Object.keys(formState).length >= Object.keys(_proxyFormState).length ||
+	        Object.keys(formState).find((key) => _proxyFormState[key] ===
+	            (!isRoot || VALIDATION_MODE.all)));
 	};
 
-	var convertToArrayPayload = (value) => Array.isArray(value) ? value : [value];
+	var convertToArrayPayload = (value) => (Array.isArray(value) ? value : [value]);
 
-	var isWeb = typeof window !== UNDEFINED &&
-	    typeof window.HTMLElement !== UNDEFINED &&
-	    typeof document !== UNDEFINED;
+	var shouldSubscribeByName = (name, signalName, exact) => exact && signalName
+	    ? name === signalName
+	    : !name ||
+	        !signalName ||
+	        name === signalName ||
+	        convertToArrayPayload(name).some((currentName) => currentName &&
+	            (currentName.startsWith(signalName) ||
+	                signalName.startsWith(currentName)));
 
-	const isProxyEnabled = isWeb ? 'Proxy' in window : typeof Proxy !== UNDEFINED;
+	function useSubscribe(props) {
+	    const _props = React__default["default"].useRef(props);
+	    _props.current = props;
+	    React__default["default"].useEffect(() => {
+	        const tearDown = (subscription) => {
+	            if (subscription) {
+	                subscription.unsubscribe();
+	            }
+	        };
+	        const subscription = !props.disabled &&
+	            _props.current.subject.subscribe({
+	                next: _props.current.callback,
+	            });
+	        return () => tearDown(subscription);
+	    }, [props.disabled]);
+	}
 
 	function useFormState(props) {
-	    const { control, name } = props || {};
 	    const methods = useFormContext();
-	    const { formStateRef, formStateSubjectRef, readFormStateRef } = control || methods.control;
-	    const nameRef = React__namespace.useRef(name);
-	    nameRef.current = name;
-	    const [formState, updateFormState] = React__namespace.useState(formStateRef.current);
-	    const readFormState = React__namespace.useRef({
+	    const { control = methods.control, disabled, name, exact } = props || {};
+	    const [formState, updateFormState] = React__default["default"].useState(control._formState);
+	    const _localProxyFormState = React__default["default"].useRef({
 	        isDirty: false,
 	        dirtyFields: false,
 	        touchedFields: false,
@@ -5524,60 +5534,124 @@
 	        isValid: false,
 	        errors: false,
 	    });
-	    React__namespace.useEffect(() => {
-	        const formStateSubscription = formStateSubjectRef.current.subscribe({
-	            next: (formState) => (!nameRef.current ||
-	                !formState.name ||
-	                convertToArrayPayload(nameRef.current).includes(formState.name)) &&
-	                shouldRenderFormState(formState, readFormState.current) &&
-	                updateFormState(Object.assign(Object.assign({}, formStateRef.current), formState)),
-	        });
-	        return () => formStateSubscription.unsubscribe();
-	    }, []);
-	    return getProxyFormState(isProxyEnabled, formState, readFormStateRef, readFormState, false);
+	    const _name = React__default["default"].useRef(name);
+	    _name.current = name;
+	    useSubscribe({
+	        disabled,
+	        callback: (value) => shouldSubscribeByName(_name.current, value.name, exact) &&
+	            shouldRenderFormState(value, _localProxyFormState.current) &&
+	            updateFormState(Object.assign(Object.assign({}, control._formState), value)),
+	        subject: control._subjects.state,
+	    });
+	    return getProxyFormState(formState, control._proxyFormState, _localProxyFormState.current, false);
 	}
 
-	function useController({ name, rules, defaultValue, control, shouldUnregister, }) {
+	var isString$1 = (value) => typeof value === 'string';
+
+	var generateWatchOutput = (names, _names, formValues, isGlobal) => {
+	    const isArray = Array.isArray(names);
+	    if (isString$1(names)) {
+	        isGlobal && _names.watch.add(names);
+	        return get(formValues, names);
+	    }
+	    if (isArray) {
+	        return names.map((fieldName) => (isGlobal && _names.watch.add(fieldName),
+	            get(formValues, fieldName)));
+	    }
+	    isGlobal && (_names.watchAll = true);
+	    return formValues;
+	};
+
+	var isFunction = (value) => typeof value === 'function';
+
+	var objectHasFunction = (data) => {
+	    for (const key in data) {
+	        if (isFunction(data[key])) {
+	            return true;
+	        }
+	    }
+	    return false;
+	};
+
+	function useWatch(props) {
 	    const methods = useFormContext();
-	    const { defaultValuesRef, register, fieldsRef, unregister, fieldArrayNamesRef, controllerSubjectRef, shouldUnmountUnregister, } = control || methods.control;
-	    const { onChange, onBlur, ref } = register(name, rules);
-	    const [value, setInputStateValue] = React__namespace.useState(isUndefined$1(get(fieldsRef.current, name)._f.value) ||
-	        isNameInFieldArray(fieldArrayNamesRef.current, name)
-	        ? isUndefined$1(defaultValue)
-	            ? get(defaultValuesRef.current, name)
-	            : defaultValue
-	        : get(fieldsRef.current, name)._f.value);
+	    const { control = methods.control, name, defaultValue, disabled, exact, } = props || {};
+	    const _name = React__default["default"].useRef(name);
+	    _name.current = name;
+	    useSubscribe({
+	        disabled,
+	        subject: control._subjects.watch,
+	        callback: (formState) => {
+	            if (shouldSubscribeByName(_name.current, formState.name, exact)) {
+	                const fieldValues = generateWatchOutput(_name.current, control._names, formState.values || control._formValues);
+	                updateValue(isUndefined$1(_name.current) ||
+	                    (isObject(fieldValues) && !objectHasFunction(fieldValues))
+	                    ? Object.assign({}, fieldValues) : Array.isArray(fieldValues)
+	                    ? [...fieldValues]
+	                    : isUndefined$1(fieldValues)
+	                        ? defaultValue
+	                        : fieldValues);
+	            }
+	        },
+	    });
+	    const [value, updateValue] = React__default["default"].useState(isUndefined$1(defaultValue)
+	        ? control._getWatch(name)
+	        : defaultValue);
+	    React__default["default"].useEffect(() => {
+	        control._removeUnmounted();
+	    });
+	    return value;
+	}
+
+	function useController(props) {
+	    const methods = useFormContext();
+	    const { name, control = methods.control, shouldUnregister } = props;
+	    const isArrayField = isNameInFieldArray(control._names.array, name);
+	    const value = useWatch({
+	        control,
+	        name,
+	        defaultValue: get(control._formValues, name, get(control._defaultValues, name, props.defaultValue)),
+	        exact: !isArrayField,
+	    });
 	    const formState = useFormState({
-	        control: control || methods.control,
+	        control,
 	        name,
 	    });
-	    get(fieldsRef.current, name)._f.value = value;
-	    React__namespace.useEffect(() => {
-	        const controllerSubscription = controllerSubjectRef.current.subscribe({
-	            next: (data) => (!data.name || name === data.name) &&
-	                setInputStateValue(get(data.values, name)),
-	        });
-	        return () => {
-	            controllerSubscription.unsubscribe();
-	            (shouldUnmountUnregister || shouldUnregister) && unregister(name);
+	    const _name = React__default["default"].useRef(name);
+	    _name.current = name;
+	    const registerProps = control.register(name, Object.assign(Object.assign({}, props.rules), { value }));
+	    React__default["default"].useEffect(() => {
+	        const updateMounted = (name, value) => {
+	            const field = get(control._fields, name);
+	            if (field) {
+	                field._f.mount = value;
+	            }
 	        };
-	    }, [name]);
+	        updateMounted(name, true);
+	        return () => {
+	            const _shouldUnregisterField = control._options.shouldUnregister || shouldUnregister;
+	            isArrayField
+	                ? _shouldUnregisterField && !control._stateFlags.action
+	                : _shouldUnregisterField
+	                    ? control.unregister(name)
+	                    : updateMounted(name, false);
+	        };
+	    }, [name, control, isArrayField, shouldUnregister]);
 	    return {
 	        field: {
 	            onChange: (event) => {
-	                const value = getControllerValue(event);
-	                setInputStateValue(value);
-	                onChange({
+	                registerProps.onChange({
 	                    target: {
-	                        value,
+	                        value: getEventValue(event),
 	                        name: name,
 	                    },
 	                    type: EVENTS.CHANGE,
 	                });
 	            },
 	            onBlur: () => {
-	                onBlur({
+	                registerProps.onBlur({
 	                    target: {
+	                        value: get(control._formValues, name),
 	                        name: name,
 	                    },
 	                    type: EVENTS.BLUR,
@@ -5585,31 +5659,24 @@
 	            },
 	            name,
 	            value,
-	            ref: (elm) => elm && ref(elm),
+	            ref: (elm) => {
+	                const field = get(control._fields, name);
+	                if (elm && field && elm.focus) {
+	                    field._f.ref = {
+	                        focus: () => elm.focus(),
+	                        setCustomValidity: (message) => elm.setCustomValidity(message),
+	                        reportValidity: () => elm.reportValidity(),
+	                    };
+	                }
+	            },
 	        },
 	        formState,
-	        fieldState: Object.defineProperties({}, {
-	            invalid: {
-	                get() {
-	                    return !!get(formState.errors, name);
-	                },
-	            },
-	            isDirty: {
-	                get() {
-	                    return !!get(formState.dirtyFields, name);
-	                },
-	            },
-	            isTouched: {
-	                get() {
-	                    return !!get(formState.touchedFields, name);
-	                },
-	            },
-	            error: {
-	                get() {
-	                    return get(formState.errors, name);
-	                },
-	            },
-	        }),
+	        fieldState: {
+	            invalid: !!get(formState.errors, name),
+	            isDirty: !!get(formState.dirtyFields, name),
+	            isTouched: !!get(formState.touchedFields, name),
+	            error: get(formState.errors, name),
+	        },
 	    };
 	}
 
@@ -5667,117 +5734,62 @@
 	    }
 	};
 
-	const getFieldsValues = (fieldsRef, defaultValuesRef, output = {}) => {
-	    for (const name in fieldsRef.current) {
-	        const field = fieldsRef.current[name];
-	        if (field) {
-	            const _f = field._f;
-	            const current = omit(field, '_f');
-	            set(output, name, _f
-	                ? _f.ref.disabled || (_f.refs && _f.refs.every((ref) => ref.disabled))
-	                    ? undefined
-	                    : _f.value
-	                : Array.isArray(field)
-	                    ? []
-	                    : {});
-	            if (current) {
-	                getFieldsValues({
-	                    current,
-	                }, defaultValuesRef, output[name]);
-	            }
-	        }
-	    }
-	    return Object.assign(Object.assign({}, defaultValuesRef), output);
-	};
+	var getFocusFieldName = (name, index, options = {}) => options.shouldFocus || isUndefined$1(options.shouldFocus)
+	    ? options.focusName ||
+	        `${name}.${isUndefined$1(options.focusIndex) ? index : options.focusIndex}.`
+	    : '';
+
+	var isWatched = (name, _names, isBlurEvent) => !isBlurEvent &&
+	    (_names.watchAll ||
+	        _names.watch.has(name) ||
+	        [..._names.watch].some((watchName) => name.startsWith(watchName) &&
+	            /^\.\w+/.test(name.slice(watchName.length))));
+
+	var mapCurrentIds = (values, _fieldIds, keyName) => values.map((value, index) => {
+	    const output = _fieldIds.current[index];
+	    return Object.assign(Object.assign({}, value), (output ? { [keyName]: output[keyName] } : {}));
+	});
 
 	var generateId = () => {
-	    const d = typeof performance === UNDEFINED ? Date.now() : performance.now() * 1000;
+	    const d = typeof performance === 'undefined' ? Date.now() : performance.now() * 1000;
 	    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
 	        const r = (Math.random() * 16 + d) % 16 | 0;
 	        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
 	    });
 	};
 
-	var mapIds = (values = [], keyName) => values.map((value) => (Object.assign({ [keyName]: (value && value[keyName]) || generateId() }, value)));
-
-	var isPrimitive = (value) => isNullOrUndefined(value) || !isObjectType(value);
-
-	function deepEqual(object1, object2, isErrorObject) {
-	    if (isPrimitive(object1) ||
-	        isPrimitive(object2) ||
-	        object1 instanceof Date ||
-	        object2 instanceof Date) {
-	        return object1 === object2;
-	    }
-	    if (!React__namespace.isValidElement(object1)) {
-	        const keys1 = Object.keys(object1);
-	        const keys2 = Object.keys(object2);
-	        if (keys1.length !== keys2.length) {
-	            return false;
-	        }
-	        for (const key of keys1) {
-	            const val1 = object1[key];
-	            if (!(isErrorObject && key === 'ref')) {
-	                const val2 = object2[key];
-	                if ((isObject(val1) || Array.isArray(val1)) &&
-	                    (isObject(val2) || Array.isArray(val2))
-	                    ? !deepEqual(val1, val2, isErrorObject)
-	                    : val1 !== val2) {
-	                    return false;
-	                }
-	            }
-	        }
-	    }
-	    return true;
-	}
-
-	function deepMerge(target, source) {
-	    if (isPrimitive(target) || isPrimitive(source)) {
-	        return source;
-	    }
-	    for (const key in source) {
-	        const targetValue = target[key];
-	        const sourceValue = source[key];
-	        try {
-	            target[key] =
-	                (isObject(targetValue) && isObject(sourceValue)) ||
-	                    (Array.isArray(targetValue) && Array.isArray(sourceValue))
-	                    ? deepMerge(targetValue, sourceValue)
-	                    : sourceValue;
-	        }
-	        catch (_a) { }
-	    }
-	    return target;
-	}
-
-	function setDirtyFields(values, defaultValues, dirtyFields, parentNode, parentName) {
-	    let index = -1;
-	    while (++index < values.length) {
-	        for (const key in values[index]) {
-	            if (Array.isArray(values[index][key])) {
-	                !dirtyFields[index] && (dirtyFields[index] = {});
-	                dirtyFields[index][key] = [];
-	                setDirtyFields(values[index][key], get(defaultValues[index] || {}, key, []), dirtyFields[index][key], dirtyFields[index], key);
-	            }
-	            else {
-	                deepEqual(get(defaultValues[index] || {}, key), values[index][key])
-	                    ? set(dirtyFields[index] || {}, key)
-	                    : (dirtyFields[index] = Object.assign(Object.assign({}, dirtyFields[index]), { [key]: true }));
-	            }
-	        }
-	        parentNode &&
-	            !dirtyFields.length &&
-	            delete parentNode[parentName];
-	    }
-	    return dirtyFields;
-	}
-	var setFieldArrayDirtyFields = (values, defaultValues, dirtyFields) => deepMerge(setDirtyFields(values, defaultValues, dirtyFields.slice(0, values.length)), setDirtyFields(defaultValues, values, dirtyFields.slice(0, values.length)));
+	var mapIds = (values = [], keyName) => values.map((value) => (Object.assign(Object.assign({}, (value[keyName] ? {} : { [keyName]: generateId() })), value)));
 
 	function append(data, value) {
-	    return [...data, ...convertToArrayPayload(value)];
+	    return [...convertToArrayPayload(data), ...convertToArrayPayload(value)];
 	}
 
-	var fillEmptyArray = (value) => Array.isArray(value) ? Array(value.length).fill(undefined) : undefined;
+	function cloneObject(data) {
+	    let copy;
+	    const isArray = Array.isArray(data);
+	    if (data instanceof Date) {
+	        copy = new Date(data);
+	    }
+	    else if (data instanceof Set) {
+	        copy = new Set(data);
+	    }
+	    else if (isArray || isObject(data)) {
+	        copy = isArray ? [] : {};
+	        for (const key in data) {
+	            if (isFunction(data[key])) {
+	                copy = data;
+	                break;
+	            }
+	            copy[key] = cloneObject(data[key]);
+	        }
+	    }
+	    else {
+	        return data;
+	    }
+	    return copy;
+	}
+
+	var fillEmptyArray = (value) => Array.isArray(value) ? value.map(() => undefined) : undefined;
 
 	function insert(data, index, value) {
 	    return [
@@ -5798,8 +5810,10 @@
 	    return [];
 	};
 
+	var omitKeys = (fields, keyName) => fields.map((field = {}) => omit(field, keyName));
+
 	function prepend(data, value) {
-	    return [...convertToArrayPayload(value), ...data];
+	    return [...convertToArrayPayload(value), ...convertToArrayPayload(data)];
 	}
 
 	function removeAtIndexes(data, indexes) {
@@ -5819,7 +5833,239 @@
 	    data[indexA] = [data[indexB], (data[indexB] = data[indexA])][0];
 	};
 
+	var updateAt = (fieldValues, index, value) => {
+	    fieldValues[index] = value;
+	    return fieldValues;
+	};
+
+	const useFieldArray = (props) => {
+	    const methods = useFormContext();
+	    const { control = methods.control, name, keyName = 'id', shouldUnregister, } = props;
+	    const [fields, setFields] = React__default["default"].useState(mapIds(control._getFieldArray(name), keyName));
+	    const _fieldIds = React__default["default"].useRef(fields);
+	    const _name = React__default["default"].useRef(name);
+	    const _actioned = React__default["default"].useRef(false);
+	    _name.current = name;
+	    _fieldIds.current = fields;
+	    control._names.array.add(name);
+	    useSubscribe({
+	        callback: ({ values, name: fieldArrayName }) => {
+	            if (fieldArrayName === _name.current || !fieldArrayName) {
+	                setFields(mapIds(get(values, _name.current), keyName));
+	            }
+	        },
+	        subject: control._subjects.array,
+	    });
+	    const updateValues = React__default["default"].useCallback((updatedFieldArrayValuesWithKey) => {
+	        const updatedFieldArrayValues = omitKeys(updatedFieldArrayValuesWithKey, keyName);
+	        _actioned.current = true;
+	        set(control._formValues, name, updatedFieldArrayValues);
+	        return updatedFieldArrayValues;
+	    }, [control, name, keyName]);
+	    const append$1 = (value, options) => {
+	        const appendValue = convertToArrayPayload(cloneObject(value));
+	        const updatedFieldArrayValuesWithKey = append(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), mapIds(appendValue, keyName));
+	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+	        control._names.focus = getFocusFieldName(name, fieldArrayValues.length - 1, options);
+	        setFields(updatedFieldArrayValuesWithKey);
+	        control._updateFieldArray(name, append, {
+	            argA: fillEmptyArray(value),
+	        }, fieldArrayValues);
+	    };
+	    const prepend$1 = (value, options) => {
+	        const updatedFieldArrayValuesWithKey = prepend(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), mapIds(convertToArrayPayload(cloneObject(value)), keyName));
+	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+	        control._names.focus = getFocusFieldName(name, 0, options);
+	        setFields(updatedFieldArrayValuesWithKey);
+	        control._updateFieldArray(name, prepend, {
+	            argA: fillEmptyArray(value),
+	        }, fieldArrayValues);
+	    };
+	    const remove = (index) => {
+	        const updatedFieldArrayValuesWithKey = removeArrayAt(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), index);
+	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+	        setFields(updatedFieldArrayValuesWithKey);
+	        control._updateFieldArray(name, removeArrayAt, {
+	            argA: index,
+	        }, fieldArrayValues);
+	    };
+	    const insert$1 = (index, value, options) => {
+	        const updatedFieldArrayValuesWithKey = insert(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), index, mapIds(convertToArrayPayload(cloneObject(value)), keyName));
+	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+	        control._names.focus = getFocusFieldName(name, index, options);
+	        setFields(updatedFieldArrayValuesWithKey);
+	        control._updateFieldArray(name, insert, {
+	            argA: index,
+	            argB: fillEmptyArray(value),
+	        }, fieldArrayValues);
+	    };
+	    const swap = (indexA, indexB) => {
+	        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
+	        swapArrayAt(updatedFieldArrayValuesWithKey, indexA, indexB);
+	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+	        setFields(updatedFieldArrayValuesWithKey);
+	        control._updateFieldArray(name, swapArrayAt, {
+	            argA: indexA,
+	            argB: indexB,
+	        }, fieldArrayValues, false);
+	    };
+	    const move = (from, to) => {
+	        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
+	        moveArrayAt(updatedFieldArrayValuesWithKey, from, to);
+	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+	        setFields(updatedFieldArrayValuesWithKey);
+	        control._updateFieldArray(name, moveArrayAt, {
+	            argA: from,
+	            argB: to,
+	        }, fieldArrayValues, false);
+	    };
+	    const update = (index, value) => {
+	        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
+	        const updatedFieldArrayValues = updateAt(updatedFieldArrayValuesWithKey, index, value);
+	        _fieldIds.current = mapIds(updatedFieldArrayValues, keyName);
+	        const fieldArrayValues = updateValues(_fieldIds.current);
+	        setFields(_fieldIds.current);
+	        control._updateFieldArray(name, updateAt, {
+	            argA: index,
+	            argB: value,
+	        }, fieldArrayValues, true, false, false);
+	    };
+	    const replace = (value) => {
+	        const updatedFieldArrayValuesWithKey = mapIds(convertToArrayPayload(value), keyName);
+	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+	        setFields(updatedFieldArrayValuesWithKey);
+	        control._updateFieldArray(name, () => updatedFieldArrayValuesWithKey, {}, fieldArrayValues, true, false, false);
+	    };
+	    React__default["default"].useEffect(() => {
+	        control._stateFlags.action = false;
+	        isWatched(name, control._names) && control._subjects.state.next({});
+	        if (_actioned.current) {
+	            control._executeSchema([name]).then((result) => {
+	                const error = get(result.errors, name);
+	                if (error && error.type && !get(control._formState.errors, name)) {
+	                    set(control._formState.errors, name, error);
+	                    control._subjects.state.next({
+	                        errors: control._formState.errors,
+	                    });
+	                }
+	            });
+	        }
+	        control._subjects.watch.next({
+	            name,
+	            values: control._formValues,
+	        });
+	        control._names.focus &&
+	            focusFieldBy(control._fields, (key) => key.startsWith(control._names.focus));
+	        control._names.focus = '';
+	        control._proxyFormState.isValid && control._updateValid();
+	    }, [fields, name, control, keyName]);
+	    React__default["default"].useEffect(() => {
+	        !get(control._formValues, name) && set(control._formValues, name, []);
+	        return () => {
+	            if (control._options.shouldUnregister || shouldUnregister) {
+	                control.unregister(name);
+	            }
+	        };
+	    }, [name, control, keyName, shouldUnregister]);
+	    return {
+	        swap: React__default["default"].useCallback(swap, [updateValues, name, control, keyName]),
+	        move: React__default["default"].useCallback(move, [updateValues, name, control, keyName]),
+	        prepend: React__default["default"].useCallback(prepend$1, [updateValues, name, control, keyName]),
+	        append: React__default["default"].useCallback(append$1, [updateValues, name, control, keyName]),
+	        remove: React__default["default"].useCallback(remove, [updateValues, name, control, keyName]),
+	        insert: React__default["default"].useCallback(insert$1, [updateValues, name, control, keyName]),
+	        update: React__default["default"].useCallback(update, [updateValues, name, control, keyName]),
+	        replace: React__default["default"].useCallback(replace, [updateValues, name, control, keyName]),
+	        fields: fields,
+	    };
+	};
+
+	function createSubject() {
+	    let _observers = [];
+	    const next = (value) => {
+	        for (const observer of _observers) {
+	            observer.next(value);
+	        }
+	    };
+	    const subscribe = (observer) => {
+	        _observers.push(observer);
+	        return {
+	            unsubscribe: () => {
+	                _observers = _observers.filter((o) => o !== observer);
+	            },
+	        };
+	    };
+	    const unsubscribe = () => {
+	        _observers = [];
+	    };
+	    return {
+	        get observers() {
+	            return _observers;
+	        },
+	        next,
+	        subscribe,
+	        unsubscribe,
+	    };
+	}
+
+	var isPrimitive = (value) => isNullOrUndefined(value) || !isObjectType(value);
+
+	function deepEqual(object1, object2) {
+	    if (isPrimitive(object1) || isPrimitive(object2)) {
+	        return object1 === object2;
+	    }
+	    if (isDateObject(object1) && isDateObject(object2)) {
+	        return object1.getTime() === object2.getTime();
+	    }
+	    const keys1 = Object.keys(object1);
+	    const keys2 = Object.keys(object2);
+	    if (keys1.length !== keys2.length) {
+	        return false;
+	    }
+	    for (const key of keys1) {
+	        const val1 = object1[key];
+	        if (!keys2.includes(key)) {
+	            return false;
+	        }
+	        if (key !== 'ref') {
+	            const val2 = object2[key];
+	            if ((isDateObject(val1) && isDateObject(val2)) ||
+	                (isObject(val1) && isObject(val2)) ||
+	                (Array.isArray(val1) && Array.isArray(val2))
+	                ? !deepEqual(val1, val2)
+	                : val1 !== val2) {
+	                return false;
+	            }
+	        }
+	    }
+	    return true;
+	}
+
+	var getValidationModes = (mode) => ({
+	    isOnSubmit: !mode || mode === VALIDATION_MODE.onSubmit,
+	    isOnBlur: mode === VALIDATION_MODE.onBlur,
+	    isOnChange: mode === VALIDATION_MODE.onChange,
+	    isOnAll: mode === VALIDATION_MODE.all,
+	    isOnTouch: mode === VALIDATION_MODE.onTouched,
+	});
+
 	var isBoolean = (value) => typeof value === 'boolean';
+
+	var isFileInput = (element) => element.type === 'file';
+
+	var isHTMLElement = (value) => value instanceof HTMLElement;
+
+	var isMultipleSelect = (element) => element.type === `select-multiple`;
+
+	var isRadioInput = (element) => element.type === 'radio';
+
+	var isRadioOrCheckbox = (ref) => isRadioInput(ref) || isCheckBoxInput(ref);
+
+	var isWeb = typeof window !== 'undefined' &&
+	    typeof window.HTMLElement !== 'undefined' &&
+	    typeof document !== 'undefined';
+
+	var live = (ref) => isHTMLElement(ref) && document.contains(ref);
 
 	function baseGet(object, updatePath) {
 	    const length = updatePath.slice(0, -1).length;
@@ -5860,212 +6106,46 @@
 	    return object;
 	}
 
-	const useFieldArray = ({ control, name, keyName = 'id', shouldUnregister, }) => {
-	    const methods = useFormContext();
-	    const focusNameRef = React__namespace.useRef('');
-	    const { isWatchAllRef, watchFieldsRef, getIsDirty, watchSubjectRef, fieldArraySubjectRef, fieldArrayNamesRef, fieldsRef, defaultValuesRef, formStateRef, formStateSubjectRef, readFormStateRef, validFieldsRef, fieldsWithValidationRef, fieldArrayDefaultValuesRef, unregister, shouldUnmountUnregister, } = control || methods.control;
-	    const [fields, setFields] = React__namespace.useState(mapIds(get(fieldArrayDefaultValuesRef.current, getNodeParentName(name))
-	        ? get(fieldArrayDefaultValuesRef.current, name, [])
-	        : get(defaultValuesRef.current, name, []), keyName));
-	    set(fieldArrayDefaultValuesRef.current, name, [...fields]);
-	    fieldArrayNamesRef.current.add(name);
-	    const omitKey = (fields) => fields.map((field) => omit((field || {}), keyName));
-	    const getCurrentFieldsValues = () => {
-	        const values = get(getFieldsValues(fieldsRef, defaultValuesRef.current), name, []);
-	        return mapIds(get(fieldArrayDefaultValuesRef.current, name, []).map((item, index) => (Object.assign(Object.assign({}, item), values[index]))), keyName);
-	    };
-	    const getFocusDetail = (index, options) => options
-	        ? !isUndefined$1(options.focusIndex)
-	            ? `${name}.${options.focusIndex}`
-	            : options.focusName
-	                ? options.focusName
-	                : !options.shouldFocus
-	                    ? ''
-	                    : `${name}.${index}`
-	        : `${name}.${index}`;
-	    const resetFields = (index) => convertToArrayPayload(index).forEach((currentIndex) => set(fieldsRef.current, `${name}${isUndefined$1(currentIndex) ? '' : `.${currentIndex}`}`, isUndefined$1(currentIndex) ? [] : undefined));
-	    const setFieldsAndNotify = (fieldsValues = []) => setFields(mapIds(fieldsValues, keyName));
-	    const cleanup = (ref) => !compact(get(ref, name, [])).length && unset(ref, name);
-	    const updateDirtyFieldsWithDefaultValues = (updatedFieldArrayValues) => updatedFieldArrayValues &&
-	        set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(omitKey(updatedFieldArrayValues), get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
-	    const batchStateUpdate = (method, args, updatedFieldArrayValues = [], shouldSet = true) => {
-	        if (get(fieldsRef.current, name)) {
-	            const output = method(get(fieldsRef.current, name), args.argA, args.argB);
-	            shouldSet && set(fieldsRef.current, name, output);
-	        }
-	        if (Array.isArray(get(formStateRef.current.errors, name))) {
-	            const output = method(get(formStateRef.current.errors, name), args.argA, args.argB);
-	            shouldSet && set(formStateRef.current.errors, name, output);
-	            cleanup(formStateRef.current.errors);
-	        }
-	        if (readFormStateRef.current.touchedFields &&
-	            get(formStateRef.current.touchedFields, name)) {
-	            const output = method(get(formStateRef.current.touchedFields, name), args.argA, args.argB);
-	            shouldSet && set(formStateRef.current.touchedFields, name, output);
-	            cleanup(formStateRef.current.touchedFields);
-	        }
-	        if (readFormStateRef.current.dirtyFields ||
-	            readFormStateRef.current.isDirty) {
-	            set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(omitKey(updatedFieldArrayValues), get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
-	            updateDirtyFieldsWithDefaultValues(updatedFieldArrayValues);
-	            cleanup(formStateRef.current.dirtyFields);
-	        }
-	        if (readFormStateRef.current.isValid) {
-	            set(validFieldsRef.current, name, method(get(validFieldsRef.current, name, []), args.argA));
-	            cleanup(validFieldsRef.current);
-	            set(fieldsWithValidationRef.current, name, method(get(fieldsWithValidationRef.current, name, []), args.argA));
-	            cleanup(fieldsWithValidationRef.current);
-	        }
-	        formStateSubjectRef.current.next({
-	            isDirty: getIsDirty(name, omitKey(updatedFieldArrayValues)),
-	            errors: formStateRef.current.errors,
-	            isValid: formStateRef.current.isValid,
-	        });
-	    };
-	    const registerFieldArray = (values, index = 0, parentName = '') => values.forEach((appendValueItem, valueIndex) => !isPrimitive(appendValueItem) &&
-	        Object.entries(appendValueItem).forEach(([key, value]) => {
-	            const inputName = `${parentName || name}.${parentName ? valueIndex : index + valueIndex}.${key}`;
-	            Array.isArray(value)
-	                ? registerFieldArray(value, valueIndex, inputName)
-	                : set(fieldsRef.current, inputName, {
-	                    _f: {
-	                        ref: {
-	                            name: inputName,
-	                        },
-	                        name: inputName,
-	                        value,
-	                    },
-	                });
-	        }));
-	    const append$1 = (value, options) => {
-	        const appendValue = convertToArrayPayload(value);
-	        const updatedFieldArrayValues = append(getCurrentFieldsValues(), appendValue);
-	        const currentIndex = updatedFieldArrayValues.length - appendValue.length;
-	        setFieldsAndNotify(updatedFieldArrayValues);
-	        batchStateUpdate(append, {
-	            argA: fillEmptyArray(value),
-	        }, updatedFieldArrayValues, false);
-	        registerFieldArray(appendValue, currentIndex);
-	        focusNameRef.current = getFocusDetail(currentIndex, options);
-	    };
-	    const prepend$1 = (value, options) => {
-	        const prependValue = convertToArrayPayload(value);
-	        const updatedFieldArrayValues = prepend(getCurrentFieldsValues(), prependValue);
-	        setFieldsAndNotify(updatedFieldArrayValues);
-	        batchStateUpdate(prepend, {
-	            argA: fillEmptyArray(value),
-	        }, updatedFieldArrayValues);
-	        registerFieldArray(prependValue);
-	        focusNameRef.current = getFocusDetail(0, options);
-	    };
-	    const remove = (index) => {
-	        const updatedFieldArrayValues = removeArrayAt(getCurrentFieldsValues(), index);
-	        resetFields(index);
-	        setFieldsAndNotify(updatedFieldArrayValues);
-	        batchStateUpdate(removeArrayAt, {
-	            argA: index,
-	        }, updatedFieldArrayValues);
-	    };
-	    const insert$1 = (index, value, options) => {
-	        const insertValue = convertToArrayPayload(value);
-	        const updatedFieldArrayValues = insert(getCurrentFieldsValues(), index, insertValue);
-	        setFieldsAndNotify(updatedFieldArrayValues);
-	        batchStateUpdate(insert, {
-	            argA: index,
-	            argB: fillEmptyArray(value),
-	        }, updatedFieldArrayValues);
-	        registerFieldArray(insertValue, index);
-	        focusNameRef.current = getFocusDetail(index, options);
-	    };
-	    const swap = (indexA, indexB) => {
-	        const fieldValues = getCurrentFieldsValues();
-	        swapArrayAt(fieldValues, indexA, indexB);
-	        batchStateUpdate(swapArrayAt, {
-	            argA: indexA,
-	            argB: indexB,
-	        }, fieldValues, false);
-	        setFieldsAndNotify(fieldValues);
-	    };
-	    const move = (from, to) => {
-	        const fieldValues = getCurrentFieldsValues();
-	        moveArrayAt(fieldValues, from, to);
-	        setFieldsAndNotify(fieldValues);
-	        batchStateUpdate(moveArrayAt, {
-	            argA: from,
-	            argB: to,
-	        }, fieldValues, false);
-	    };
-	    React__namespace.useEffect(() => {
-	        if (isWatchAllRef.current) {
-	            formStateSubjectRef.current.next({});
-	        }
-	        else {
-	            for (const watchField of watchFieldsRef.current) {
-	                if (name.startsWith(watchField)) {
-	                    formStateSubjectRef.current.next({});
-	                    break;
-	                }
+	function markFieldsDirty(data, fields = {}) {
+	    const isParentNodeArray = Array.isArray(data);
+	    if (isObject(data) || isParentNodeArray) {
+	        for (const key in data) {
+	            if (Array.isArray(data[key]) ||
+	                (isObject(data[key]) && !objectHasFunction(data[key]))) {
+	                fields[key] = Array.isArray(data[key]) ? [] : {};
+	                markFieldsDirty(data[key], fields[key]);
+	            }
+	            else if (!isNullOrUndefined(data[key])) {
+	                fields[key] = true;
 	            }
 	        }
-	        watchSubjectRef.current.next({
-	            name,
-	            value: get(getFieldsValues(fieldsRef, defaultValuesRef.current), name, []),
-	        });
-	        focusNameRef.current &&
-	            focusFieldBy(fieldsRef.current, (key) => key.startsWith(focusNameRef.current));
-	        focusNameRef.current = '';
-	        fieldArraySubjectRef.current.next({
-	            name,
-	            fields: omitKey([...fields]),
-	        });
-	    }, [fields, name]);
-	    React__namespace.useEffect(() => {
-	        const fieldArraySubscription = fieldArraySubjectRef.current.subscribe({
-	            next({ name: inputFieldArrayName, fields, isReset }) {
-	                if (isReset) {
-	                    unset(fieldsRef.current, inputFieldArrayName || name);
-	                    inputFieldArrayName
-	                        ? set(fieldArrayDefaultValuesRef.current, inputFieldArrayName, fields)
-	                        : (fieldArrayDefaultValuesRef.current = fields);
-	                    setFieldsAndNotify(get(fieldArrayDefaultValuesRef.current, name));
+	    }
+	    return fields;
+	}
+	function getDirtyFieldsFromDefaultValues(data, formValues, dirtyFieldsFromValues) {
+	    const isParentNodeArray = Array.isArray(data);
+	    if (isObject(data) || isParentNodeArray) {
+	        for (const key in data) {
+	            if (Array.isArray(data[key]) ||
+	                (isObject(data[key]) && !objectHasFunction(data[key]))) {
+	                if (isUndefined$1(formValues) ||
+	                    isPrimitive(dirtyFieldsFromValues[key])) {
+	                    dirtyFieldsFromValues[key] = Array.isArray(data[key])
+	                        ? markFieldsDirty(data[key], [])
+	                        : Object.assign({}, markFieldsDirty(data[key]));
 	                }
-	            },
-	        });
-	        !get(fieldsRef.current, name) && set(fieldsRef.current, name, []);
-	        return () => {
-	            fieldArraySubscription.unsubscribe();
-	            (shouldUnmountUnregister || shouldUnregister) && unregister(name);
-	        };
-	    }, []);
-	    return {
-	        swap: React__namespace.useCallback(swap, [name]),
-	        move: React__namespace.useCallback(move, [name]),
-	        prepend: React__namespace.useCallback(prepend$1, [name]),
-	        append: React__namespace.useCallback(append$1, [name]),
-	        remove: React__namespace.useCallback(remove, [name]),
-	        insert: React__namespace.useCallback(insert$1, [name]),
-	        fields: fields,
-	    };
-	};
-
-	function getFields(fieldsNames, fieldsRefs) {
-	    const currentFields = {};
-	    for (const name of fieldsNames) {
-	        const field = get(fieldsRefs, name);
-	        if (field) {
-	            !isKey(name)
-	                ? set(currentFields, name, field._f)
-	                : (currentFields[name] = field._f);
+	                else {
+	                    getDirtyFieldsFromDefaultValues(data[key], isNullOrUndefined(formValues) ? {} : formValues[key], dirtyFieldsFromValues[key]);
+	                }
+	            }
+	            else {
+	                dirtyFieldsFromValues[key] = !deepEqual(data[key], formValues[key]);
+	            }
 	        }
 	    }
-	    return currentFields;
+	    return dirtyFieldsFromValues;
 	}
-
-	var isFileInput = (element) => element.type === 'file';
-
-	var isMultipleSelect = (element) => element.type === `${SELECT}-multiple`;
-
-	var isRadioInput = (element) => element.type === 'radio';
+	var getDirtyFields = (defaultValues, formValues) => getDirtyFieldsFromDefaultValues(defaultValues, formValues, markFieldsDirty(formValues));
 
 	const defaultResult = {
 	    value: false,
@@ -6092,19 +6172,17 @@
 	    return defaultResult;
 	};
 
-	var getFieldValueAs = (value, { valueAsNumber, valueAsDate, setValueAs }) => valueAsNumber
-	    ? value === ''
-	        ? NaN
-	        : +value
-	    : valueAsDate
-	        ? new Date(value)
-	        : setValueAs
-	            ? setValueAs(value)
-	            : value;
-
-	var getMultipleSelectValue = (options) => [...options]
-	    .filter(({ selected }) => selected)
-	    .map(({ value }) => value);
+	var getFieldValueAs = (value, { valueAsNumber, valueAsDate, setValueAs }) => isUndefined$1(value)
+	    ? value
+	    : valueAsNumber
+	        ? value === ''
+	            ? NaN
+	            : +value
+	        : valueAsDate && isString$1(value)
+	            ? new Date(value)
+	            : setValueAs
+	                ? setValueAs(value)
+	                : value;
 
 	const defaultReturn = {
 	    isValid: false,
@@ -6119,29 +6197,53 @@
 	        : previous, defaultReturn)
 	    : defaultReturn;
 
-	function getFieldValue(field) {
-	    if (field && field._f) {
-	        const ref = field._f.ref;
-	        if (ref.disabled) {
-	            return;
-	        }
-	        if (isFileInput(ref)) {
-	            return ref.files;
-	        }
-	        if (isRadioInput(ref)) {
-	            return getRadioValue(field._f.refs).value;
-	        }
-	        if (isMultipleSelect(ref)) {
-	            return getMultipleSelectValue(ref.options);
-	        }
-	        if (isCheckBoxInput(ref)) {
-	            return getCheckboxValue(field._f.refs).value;
-	        }
-	        return getFieldValueAs(isUndefined$1(ref.value) ? field._f.ref.value : ref.value, field._f);
+	function getFieldValue(_f) {
+	    const ref = _f.ref;
+	    if (_f.refs ? _f.refs.every((ref) => ref.disabled) : ref.disabled) {
+	        return;
 	    }
+	    if (isFileInput(ref)) {
+	        return ref.files;
+	    }
+	    if (isRadioInput(ref)) {
+	        return getRadioValue(_f.refs).value;
+	    }
+	    if (isMultipleSelect(ref)) {
+	        return [...ref.selectedOptions].map(({ value }) => value);
+	    }
+	    if (isCheckBoxInput(ref)) {
+	        return getCheckboxValue(_f.refs).value;
+	    }
+	    return getFieldValueAs(isUndefined$1(ref.value) ? _f.ref.value : ref.value, _f);
 	}
 
-	var hasValidation = (options) => options &&
+	var getResolverOptions = (fieldsNames, _fields, criteriaMode, shouldUseNativeValidation) => {
+	    const fields = {};
+	    for (const name of fieldsNames) {
+	        const field = get(_fields, name);
+	        field && set(fields, name, field._f);
+	    }
+	    return {
+	        criteriaMode,
+	        names: [...fieldsNames],
+	        fields,
+	        shouldUseNativeValidation,
+	    };
+	};
+
+	var isRegex = (value) => value instanceof RegExp;
+
+	var getRuleValue = (rule) => isUndefined$1(rule)
+	    ? undefined
+	    : isRegex(rule)
+	        ? rule.source
+	        : isObject(rule)
+	            ? isRegex(rule.value)
+	                ? rule.value.source
+	                : rule.value
+	            : rule;
+
+	var hasValidation = (options) => options.mount &&
 	    (options.required ||
 	        options.min ||
 	        options.max ||
@@ -6150,32 +6252,59 @@
 	        options.pattern ||
 	        options.validate);
 
-	var skipValidation = ({ isOnBlur, isOnChange, isOnTouch, isTouched, isReValidateOnBlur, isReValidateOnChange, isBlurEvent, isSubmitted, isOnAll, }) => {
-	    if (isOnAll) {
+	function schemaErrorLookup(errors, _fields, name) {
+	    const error = get(errors, name);
+	    if (error || isKey(name)) {
+	        return {
+	            error,
+	            name,
+	        };
+	    }
+	    const names = name.split('.');
+	    while (names.length) {
+	        const fieldName = names.join('.');
+	        const field = get(_fields, fieldName);
+	        const foundError = get(errors, fieldName);
+	        if (field && !Array.isArray(field) && name !== fieldName) {
+	            return { name };
+	        }
+	        if (foundError && foundError.type) {
+	            return {
+	                name: fieldName,
+	                error: foundError,
+	            };
+	        }
+	        names.pop();
+	    }
+	    return {
+	        name,
+	    };
+	}
+
+	var skipValidation = (isBlurEvent, isTouched, isSubmitted, reValidateMode, mode) => {
+	    if (mode.isOnAll) {
 	        return false;
 	    }
-	    else if (!isSubmitted && isOnTouch) {
+	    else if (!isSubmitted && mode.isOnTouch) {
 	        return !(isTouched || isBlurEvent);
 	    }
-	    else if (isSubmitted ? isReValidateOnBlur : isOnBlur) {
+	    else if (isSubmitted ? reValidateMode.isOnBlur : mode.isOnBlur) {
 	        return !isBlurEvent;
 	    }
-	    else if (isSubmitted ? isReValidateOnChange : isOnChange) {
+	    else if (isSubmitted ? reValidateMode.isOnChange : mode.isOnChange) {
 	        return isBlurEvent;
 	    }
 	    return true;
 	};
 
-	var isFunction = (value) => typeof value === 'function';
+	var unsetEmptyArray = (ref, name) => !compact(get(ref, name)).length && unset(ref, name);
 
-	var isString$1 = (value) => typeof value === 'string';
-
-	var isMessage = (value) => isString$1(value) || React__namespace.isValidElement(value);
-
-	var isRegex = (value) => value instanceof RegExp;
+	var isMessage = (value) => isString$1(value) || React__default["default"].isValidElement(value);
 
 	function getValidateError(result, ref, type = 'validate') {
-	    if (isMessage(result) || (isBoolean(result) && !result)) {
+	    if (isMessage(result) ||
+	        (Array.isArray(result) && result.every(isMessage)) ||
+	        (isBoolean(result) && !result)) {
 	        return {
 	            type,
 	            message: isMessage(result) ? result : '',
@@ -6191,7 +6320,18 @@
 	        message: '',
 	    };
 
-	var validateField = async ({ _f: { ref, refs, required, maxLength, minLength, min, max, pattern, validate, name, value: inputValue, valueAsNumber, }, }, validateAllFieldCriteria) => {
+	var validateField = async (field, inputValue, validateAllFieldCriteria, shouldUseNativeValidation) => {
+	    const { ref, refs, required, maxLength, minLength, min, max, pattern, validate, name, valueAsNumber, mount, disabled, } = field._f;
+	    if (!mount || disabled) {
+	        return {};
+	    }
+	    const inputRef = refs ? refs[0] : ref;
+	    const setCustomValidity = (message) => {
+	        if (shouldUseNativeValidation && inputRef.reportValidity) {
+	            inputRef.setCustomValidity(isBoolean(message) ? '' : message || ' ');
+	            inputRef.reportValidity();
+	        }
+	    };
 	    const error = {};
 	    const isRadio = isRadioInput(ref);
 	    const isCheckBox = isCheckBoxInput(ref);
@@ -6206,7 +6346,7 @@
 	            ref }, appendErrorsCurry(exceedMax ? maxType : minType, message));
 	    };
 	    if (required &&
-	        ((!isRadio && !isCheckBox && (isEmpty || isNullOrUndefined(inputValue))) ||
+	        ((!isRadioOrCheckbox && (isEmpty || isNullOrUndefined(inputValue))) ||
 	            (isBoolean(inputValue) && !inputValue) ||
 	            (isCheckBox && !getCheckboxValue(refs).isValid) ||
 	            (isRadio && !getRadioValue(refs).isValid))) {
@@ -6214,20 +6354,21 @@
 	            ? { value: !!required, message: required }
 	            : getValueAndMessage(required);
 	        if (value) {
-	            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.required, message, ref: isRadioOrCheckbox ? (refs || [])[0] || {} : ref }, appendErrorsCurry(INPUT_VALIDATION_RULES.required, message));
+	            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.required, message, ref: inputRef }, appendErrorsCurry(INPUT_VALIDATION_RULES.required, message));
 	            if (!validateAllFieldCriteria) {
+	                setCustomValidity(message);
 	                return error;
 	            }
 	        }
 	    }
-	    if ((!isNullOrUndefined(min) || !isNullOrUndefined(max)) &&
-	        inputValue !== '') {
+	    if (!isEmpty && (!isNullOrUndefined(min) || !isNullOrUndefined(max))) {
 	        let exceedMax;
 	        let exceedMin;
 	        const maxOutput = getValueAndMessage(max);
 	        const minOutput = getValueAndMessage(min);
 	        if (!isNaN(inputValue)) {
-	            const valueNumber = ref.valueAsNumber || parseFloat(inputValue);
+	            const valueNumber = ref.valueAsNumber ||
+	                parseFloat(inputValue);
 	            if (!isNullOrUndefined(maxOutput.value)) {
 	                exceedMax = valueNumber > maxOutput.value;
 	            }
@@ -6247,11 +6388,12 @@
 	        if (exceedMax || exceedMin) {
 	            getMinMaxMessage(!!exceedMax, maxOutput.message, minOutput.message, INPUT_VALIDATION_RULES.max, INPUT_VALIDATION_RULES.min);
 	            if (!validateAllFieldCriteria) {
+	                setCustomValidity(error[name].message);
 	                return error;
 	            }
 	        }
 	    }
-	    if (isString$1(inputValue) && !isEmpty && (maxLength || minLength)) {
+	    if ((maxLength || minLength) && !isEmpty && isString$1(inputValue)) {
 	        const maxLengthOutput = getValueAndMessage(maxLength);
 	        const minLengthOutput = getValueAndMessage(minLength);
 	        const exceedMax = !isNullOrUndefined(maxLengthOutput.value) &&
@@ -6261,138 +6403,69 @@
 	        if (exceedMax || exceedMin) {
 	            getMinMaxMessage(exceedMax, maxLengthOutput.message, minLengthOutput.message);
 	            if (!validateAllFieldCriteria) {
+	                setCustomValidity(error[name].message);
 	                return error;
 	            }
 	        }
 	    }
-	    if (isString$1(inputValue) && pattern && !isEmpty) {
+	    if (pattern && !isEmpty && isString$1(inputValue)) {
 	        const { value: patternValue, message } = getValueAndMessage(pattern);
 	        if (isRegex(patternValue) && !inputValue.match(patternValue)) {
 	            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.pattern, message,
 	                ref }, appendErrorsCurry(INPUT_VALIDATION_RULES.pattern, message));
 	            if (!validateAllFieldCriteria) {
+	                setCustomValidity(message);
 	                return error;
 	            }
 	        }
 	    }
 	    if (validate) {
-	        const validateRef = isRadioOrCheckbox && refs ? refs[0] : ref;
 	        if (isFunction(validate)) {
 	            const result = await validate(inputValue);
-	            const validateError = getValidateError(result, validateRef);
+	            const validateError = getValidateError(result, inputRef);
 	            if (validateError) {
 	                error[name] = Object.assign(Object.assign({}, validateError), appendErrorsCurry(INPUT_VALIDATION_RULES.validate, validateError.message));
 	                if (!validateAllFieldCriteria) {
+	                    setCustomValidity(validateError.message);
 	                    return error;
 	                }
 	            }
 	        }
 	        else if (isObject(validate)) {
 	            let validationResult = {};
-	            for (const [key, validateFunction] of Object.entries(validate)) {
+	            for (const key in validate) {
 	                if (!isEmptyObject(validationResult) && !validateAllFieldCriteria) {
 	                    break;
 	                }
-	                const validateResult = await validateFunction(inputValue);
-	                const validateError = getValidateError(validateResult, validateRef, key);
+	                const validateError = getValidateError(await validate[key](inputValue), inputRef, key);
 	                if (validateError) {
 	                    validationResult = Object.assign(Object.assign({}, validateError), appendErrorsCurry(key, validateError.message));
+	                    setCustomValidity(validateError.message);
 	                    if (validateAllFieldCriteria) {
 	                        error[name] = validationResult;
 	                    }
 	                }
 	            }
 	            if (!isEmptyObject(validationResult)) {
-	                error[name] = Object.assign({ ref: validateRef }, validationResult);
+	                error[name] = Object.assign({ ref: inputRef }, validationResult);
 	                if (!validateAllFieldCriteria) {
 	                    return error;
 	                }
 	            }
 	        }
 	    }
+	    setCustomValidity(true);
 	    return error;
 	};
 
-	var getValidationModes = (mode) => ({
-	    isOnSubmit: !mode || mode === VALIDATION_MODE.onSubmit,
-	    isOnBlur: mode === VALIDATION_MODE.onBlur,
-	    isOnChange: mode === VALIDATION_MODE.onChange,
-	    isOnAll: mode === VALIDATION_MODE.all,
-	    isOnTouch: mode === VALIDATION_MODE.onTouched,
-	});
-
-	var isHTMLElement = (value) => value instanceof HTMLElement;
-
-	var isRadioOrCheckboxFunction = (ref) => isRadioInput(ref) || isCheckBoxInput(ref);
-
-	class Subscription {
-	    constructor() {
-	        this.tearDowns = [];
-	    }
-	    add(tearDown) {
-	        this.tearDowns.push(tearDown);
-	    }
-	    unsubscribe() {
-	        for (const teardown of this.tearDowns) {
-	            teardown();
-	        }
-	        this.tearDowns = [];
-	    }
-	}
-	class Subscriber {
-	    constructor(observer, subscription) {
-	        this.observer = observer;
-	        this.closed = false;
-	        subscription.add(() => (this.closed = true));
-	    }
-	    next(value) {
-	        if (!this.closed) {
-	            this.observer.next(value);
-	        }
-	    }
-	}
-	class Subject {
-	    constructor() {
-	        this.observers = [];
-	    }
-	    next(value) {
-	        for (const observer of this.observers) {
-	            observer.next(value);
-	        }
-	    }
-	    subscribe(observer) {
-	        const subscription = new Subscription();
-	        const subscriber = new Subscriber(observer, subscription);
-	        this.observers.push(subscriber);
-	        return subscription;
-	    }
-	    unsubscribe() {
-	        this.observers = [];
-	    }
-	}
-
-	const isWindowUndefined = typeof window === UNDEFINED;
-	function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_MODE.onChange, resolver, context, defaultValues = {}, shouldFocusError = true, shouldUnregister, criteriaMode, } = {}) {
-	    const fieldsRef = React__namespace.useRef({});
-	    const fieldsNamesRef = React__namespace.useRef(new Set());
-	    const formStateSubjectRef = React__namespace.useRef(new Subject());
-	    const unregisterFieldsNamesRef = React__namespace.useRef(new Set());
-	    const watchSubjectRef = React__namespace.useRef(new Subject());
-	    const controllerSubjectRef = React__namespace.useRef(new Subject());
-	    const fieldArraySubjectRef = React__namespace.useRef(new Subject());
-	    const fieldArrayDefaultValuesRef = React__namespace.useRef({});
-	    const watchFieldsRef = React__namespace.useRef(new Set());
-	    const isMountedRef = React__namespace.useRef(false);
-	    const fieldsWithValidationRef = React__namespace.useRef({});
-	    const validFieldsRef = React__namespace.useRef({});
-	    const defaultValuesRef = React__namespace.useRef(defaultValues);
-	    const isWatchAllRef = React__namespace.useRef(false);
-	    const contextRef = React__namespace.useRef(context);
-	    const resolverRef = React__namespace.useRef(resolver);
-	    const fieldArrayNamesRef = React__namespace.useRef(new Set());
-	    const validationMode = getValidationModes(mode);
-	    const isValidateAllFieldCriteria = criteriaMode === VALIDATION_MODE.all;
-	    const [formState, updateFormState] = React__namespace.useState({
+	const defaultOptions = {
+	    mode: VALIDATION_MODE.onSubmit,
+	    reValidateMode: VALIDATION_MODE.onChange,
+	    shouldFocusError: true,
+	};
+	function createFormControl(props = {}) {
+	    let _options = Object.assign(Object.assign({}, defaultOptions), props);
+	    let _formState = {
 	        isDirty: false,
 	        isValidating: false,
 	        dirtyFields: {},
@@ -6401,694 +6474,797 @@
 	        touchedFields: {},
 	        isSubmitting: false,
 	        isSubmitSuccessful: false,
-	        isValid: !validationMode.isOnSubmit,
+	        isValid: false,
 	        errors: {},
-	    });
-	    const readFormStateRef = React__namespace.useRef({
-	        isDirty: !isProxyEnabled,
-	        dirtyFields: !isProxyEnabled,
-	        touchedFields: !isProxyEnabled,
-	        isValidating: !isProxyEnabled,
-	        isValid: !isProxyEnabled,
-	        errors: !isProxyEnabled,
-	    });
-	    const formStateRef = React__namespace.useRef(formState);
-	    contextRef.current = context;
-	    resolverRef.current = resolver;
-	    const getIsValid = () => (formStateRef.current.isValid =
-	        deepEqual(validFieldsRef.current, fieldsWithValidationRef.current) &&
-	            isEmptyObject(formStateRef.current.errors));
-	    const shouldRenderBaseOnError = React__namespace.useCallback((name, error, shouldRender = false, state = {}, isValid, isWatched) => {
-	        const previousError = get(formStateRef.current.errors, name);
-	        let shouldReRender = shouldRender ||
-	            !deepEqual(previousError, error, true) ||
-	            (readFormStateRef.current.isValid &&
-	                isUndefined$1(error) &&
-	                get(fieldsWithValidationRef.current, name) &&
-	                !get(validFieldsRef.current, name));
-	        if (error) {
-	            unset(validFieldsRef.current, name);
-	            shouldReRender =
-	                shouldReRender ||
-	                    !previousError ||
-	                    !deepEqual(previousError, error, true);
-	            set(formStateRef.current.errors, name, error);
-	        }
-	        else {
-	            if (get(fieldsWithValidationRef.current, name) || resolverRef.current) {
-	                set(validFieldsRef.current, name, true);
-	                shouldReRender = shouldReRender || previousError;
-	            }
-	            unset(formStateRef.current.errors, name);
-	        }
-	        if ((shouldReRender && !isNullOrUndefined(shouldRender)) ||
-	            !isEmptyObject(state) ||
-	            isWatched) {
-	            const updatedFormState = Object.assign(Object.assign({}, state), { isValid: resolverRef.current ? !!isValid : getIsValid(), errors: formStateRef.current.errors });
-	            formStateRef.current = Object.assign(Object.assign({}, formStateRef.current), updatedFormState);
-	            formStateSubjectRef.current.next(isWatched ? { name } : updatedFormState);
-	        }
-	        formStateSubjectRef.current.next({
-	            isValidating: false,
-	        });
-	    }, []);
-	    const setFieldValue = React__namespace.useCallback((name, rawValue, options = {}, shouldRender, shouldRegister) => {
-	        shouldRegister && register(name);
-	        const _f = get(fieldsRef.current, name, {})._f;
-	        if (_f) {
-	            const value = isWeb && isHTMLElement(_f.ref) && isNullOrUndefined(rawValue)
-	                ? ''
-	                : rawValue;
-	            _f.value = getFieldValueAs(rawValue, _f);
-	            if (isRadioInput(_f.ref)) {
-	                (_f.refs || []).forEach((radioRef) => (radioRef.checked = radioRef.value === value));
-	            }
-	            else if (isFileInput(_f.ref) && !isString$1(value)) {
-	                _f.ref.files = value;
-	            }
-	            else if (isMultipleSelect(_f.ref)) {
-	                [..._f.ref.options].forEach((selectRef) => (selectRef.selected = value.includes(selectRef.value)));
-	            }
-	            else if (isCheckBoxInput(_f.ref) && _f.refs) {
-	                _f.refs.length > 1
-	                    ? _f.refs.forEach((checkboxRef) => (checkboxRef.checked = Array.isArray(value)
-	                        ? !!value.find((data) => data === checkboxRef.value)
-	                        : value === checkboxRef.value))
-	                    : (_f.refs[0].checked = !!value);
-	            }
-	            else {
-	                _f.ref.value = value;
-	            }
-	            if (shouldRender) {
-	                const values = getFieldsValues(fieldsRef);
-	                set(values, name, rawValue);
-	                controllerSubjectRef.current.next({
-	                    values: Object.assign(Object.assign({}, defaultValuesRef.current), values),
-	                    name,
+	    };
+	    let _fields = {};
+	    let _defaultValues = _options.defaultValues || {};
+	    let _formValues = _options.shouldUnregister
+	        ? {}
+	        : cloneObject(_defaultValues);
+	    let _stateFlags = {
+	        action: false,
+	        mount: false,
+	        watch: false,
+	    };
+	    let _names = {
+	        mount: new Set(),
+	        unMount: new Set(),
+	        array: new Set(),
+	        watch: new Set(),
+	    };
+	    let delayErrorCallback;
+	    let timer = 0;
+	    let validateFields = {};
+	    const _proxyFormState = {
+	        isDirty: false,
+	        dirtyFields: false,
+	        touchedFields: false,
+	        isValidating: false,
+	        isValid: false,
+	        errors: false,
+	    };
+	    const _subjects = {
+	        watch: createSubject(),
+	        array: createSubject(),
+	        state: createSubject(),
+	    };
+	    const validationModeBeforeSubmit = getValidationModes(_options.mode);
+	    const validationModeAfterSubmit = getValidationModes(_options.reValidateMode);
+	    const shouldDisplayAllAssociatedErrors = _options.criteriaMode === VALIDATION_MODE.all;
+	    const debounce = (callback, wait) => (...args) => {
+	        clearTimeout(timer);
+	        timer = window.setTimeout(() => callback(...args), wait);
+	    };
+	    const _updateValid = async (shouldSkipRender) => {
+	        let isValid = false;
+	        if (_proxyFormState.isValid) {
+	            isValid = _options.resolver
+	                ? isEmptyObject((await _executeSchema()).errors)
+	                : await executeBuildInValidation(_fields, true);
+	            if (!shouldSkipRender && isValid !== _formState.isValid) {
+	                _formState.isValid = isValid;
+	                _subjects.state.next({
+	                    isValid,
 	                });
 	            }
-	            options.shouldDirty && updateAndGetDirtyState(name, value);
-	            options.shouldValidate && trigger(name);
 	        }
-	    }, []);
-	    const getIsDirty = React__namespace.useCallback((name, data) => {
-	        const formValues = getFieldsValues(fieldsRef);
-	        name && data && set(formValues, name, data);
-	        return !deepEqual(formValues, defaultValuesRef.current);
-	    }, []);
-	    const updateAndGetDirtyState = React__namespace.useCallback((name, inputValue, shouldRender = true) => {
-	        if (readFormStateRef.current.isDirty ||
-	            readFormStateRef.current.dirtyFields) {
-	            const isFieldDirty = !deepEqual(get(defaultValuesRef.current, name), inputValue);
-	            const isDirtyFieldExist = get(formStateRef.current.dirtyFields, name);
-	            const previousIsDirty = formStateRef.current.isDirty;
-	            isFieldDirty
-	                ? set(formStateRef.current.dirtyFields, name, true)
-	                : unset(formStateRef.current.dirtyFields, name);
-	            formStateRef.current.isDirty = getIsDirty();
-	            const state = {
-	                isDirty: formStateRef.current.isDirty,
-	                dirtyFields: formStateRef.current.dirtyFields,
-	                name,
-	            };
-	            const isChanged = (readFormStateRef.current.isDirty &&
-	                previousIsDirty !== state.isDirty) ||
-	                (readFormStateRef.current.dirtyFields &&
-	                    isDirtyFieldExist !== get(formStateRef.current.dirtyFields, name));
-	            isChanged && shouldRender && formStateSubjectRef.current.next(state);
-	            return isChanged ? state : {};
+	        return isValid;
+	    };
+	    const _updateFieldArray = (name, method, args, values = [], shouldSetValues = true, shouldSetFields = true, shouldSetError = true) => {
+	        _stateFlags.action = true;
+	        if (shouldSetFields && get(_fields, name)) {
+	            const fieldValues = method(get(_fields, name), args.argA, args.argB);
+	            shouldSetValues && set(_fields, name, fieldValues);
 	        }
-	        return {};
-	    }, []);
-	    const executeValidation = React__namespace.useCallback(async (name, skipReRender) => {
-	        const error = (await validateField(get(fieldsRef.current, name), isValidateAllFieldCriteria))[name];
-	        shouldRenderBaseOnError(name, error, skipReRender);
-	        return isUndefined$1(error);
-	    }, [isValidateAllFieldCriteria]);
-	    const executeSchemaOrResolverValidation = React__namespace.useCallback(async (names, currentNames = []) => {
-	        const { errors } = await resolverRef.current(getFieldsValues(fieldsRef, shouldUnregister ? {} : defaultValuesRef.current), contextRef.current, {
-	            criteriaMode,
-	            names: currentNames,
-	            fields: getFields(fieldsNamesRef.current, fieldsRef.current),
+	        if (shouldSetError && Array.isArray(get(_formState.errors, name))) {
+	            const errors = method(get(_formState.errors, name), args.argA, args.argB);
+	            shouldSetValues && set(_formState.errors, name, errors);
+	            unsetEmptyArray(_formState.errors, name);
+	        }
+	        if (_proxyFormState.touchedFields && get(_formState.touchedFields, name)) {
+	            const touchedFields = method(get(_formState.touchedFields, name), args.argA, args.argB);
+	            shouldSetValues &&
+	                set(_formState.touchedFields, name, touchedFields);
+	            unsetEmptyArray(_formState.touchedFields, name);
+	        }
+	        if (_proxyFormState.dirtyFields || _proxyFormState.isDirty) {
+	            _formState.dirtyFields = getDirtyFields(_defaultValues, _formValues);
+	        }
+	        _subjects.state.next({
+	            isDirty: _getDirty(name, values),
+	            dirtyFields: _formState.dirtyFields,
+	            errors: _formState.errors,
+	            isValid: _formState.isValid,
 	        });
-	        for (const name of names) {
-	            const error = get(errors, name);
+	    };
+	    const updateErrors = (name, error) => (set(_formState.errors, name, error),
+	        _subjects.state.next({
+	            errors: _formState.errors,
+	        }));
+	    const updateValidAndValue = (name, shouldSkipSetValueAs, ref) => {
+	        const field = get(_fields, name);
+	        if (field) {
+	            const defaultValue = get(_formValues, name, get(_defaultValues, name));
+	            isUndefined$1(defaultValue) ||
+	                (ref && ref.defaultChecked) ||
+	                shouldSkipSetValueAs
+	                ? set(_formValues, name, shouldSkipSetValueAs ? defaultValue : getFieldValue(field._f))
+	                : setFieldValue(name, defaultValue);
+	        }
+	        _stateFlags.mount && _updateValid();
+	    };
+	    const updateTouchAndDirty = (name, fieldValue, isCurrentTouched, shouldRender = true) => {
+	        let isFieldDirty = false;
+	        const output = {
+	            name,
+	        };
+	        const isPreviousFieldTouched = get(_formState.touchedFields, name);
+	        if (_proxyFormState.isDirty) {
+	            const isPreviousFormDirty = _formState.isDirty;
+	            _formState.isDirty = output.isDirty = _getDirty();
+	            isFieldDirty = isPreviousFormDirty !== output.isDirty;
+	        }
+	        if (_proxyFormState.dirtyFields && !isCurrentTouched) {
+	            const isPreviousFieldDirty = get(_formState.dirtyFields, name);
+	            const isCurrentFieldPristine = deepEqual(get(_defaultValues, name), fieldValue);
+	            isCurrentFieldPristine
+	                ? unset(_formState.dirtyFields, name)
+	                : set(_formState.dirtyFields, name, true);
+	            output.dirtyFields = _formState.dirtyFields;
+	            isFieldDirty =
+	                isFieldDirty ||
+	                    isPreviousFieldDirty !== get(_formState.dirtyFields, name);
+	        }
+	        if (isCurrentTouched && !isPreviousFieldTouched) {
+	            set(_formState.touchedFields, name, isCurrentTouched);
+	            output.touchedFields = _formState.touchedFields;
+	            isFieldDirty =
+	                isFieldDirty ||
+	                    (_proxyFormState.touchedFields &&
+	                        isPreviousFieldTouched !== isCurrentTouched);
+	        }
+	        isFieldDirty && shouldRender && _subjects.state.next(output);
+	        return isFieldDirty ? output : {};
+	    };
+	    const shouldRenderByError = async (shouldSkipRender, name, isValid, error, fieldState) => {
+	        const previousFieldError = get(_formState.errors, name);
+	        const shouldUpdateValid = _proxyFormState.isValid && _formState.isValid !== isValid;
+	        if (props.delayError && error) {
+	            delayErrorCallback =
+	                delayErrorCallback || debounce(updateErrors, props.delayError);
+	            delayErrorCallback(name, error);
+	        }
+	        else {
+	            clearTimeout(timer);
 	            error
-	                ? set(formStateRef.current.errors, name, error)
-	                : unset(formStateRef.current.errors, name);
+	                ? set(_formState.errors, name, error)
+	                : unset(_formState.errors, name);
+	        }
+	        if (((error ? !deepEqual(previousFieldError, error) : previousFieldError) ||
+	            !isEmptyObject(fieldState) ||
+	            shouldUpdateValid) &&
+	            !shouldSkipRender) {
+	            const updatedFormState = Object.assign(Object.assign(Object.assign({}, fieldState), (shouldUpdateValid ? { isValid } : {})), { errors: _formState.errors, name });
+	            _formState = Object.assign(Object.assign({}, _formState), updatedFormState);
+	            _subjects.state.next(updatedFormState);
+	        }
+	        validateFields[name]--;
+	        if (_proxyFormState.isValidating && !validateFields[name]) {
+	            _subjects.state.next({
+	                isValidating: false,
+	            });
+	            validateFields = {};
+	        }
+	    };
+	    const _executeSchema = async (name) => _options.resolver
+	        ? await _options.resolver(Object.assign({}, _formValues), _options.context, getResolverOptions(name || _names.mount, _fields, _options.criteriaMode, _options.shouldUseNativeValidation))
+	        : {};
+	    const executeSchemaAndUpdateState = async (names) => {
+	        const { errors } = await _executeSchema();
+	        if (names) {
+	            for (const name of names) {
+	                const error = get(errors, name);
+	                error
+	                    ? set(_formState.errors, name, error)
+	                    : unset(_formState.errors, name);
+	            }
+	        }
+	        else {
+	            _formState.errors = errors;
 	        }
 	        return errors;
-	    }, [criteriaMode]);
-	    const validateForm = async (fieldsRef) => {
-	        for (const name in fieldsRef) {
-	            const field = fieldsRef[name];
+	    };
+	    const executeBuildInValidation = async (fields, shouldOnlyCheckValid, context = {
+	        valid: true,
+	    }) => {
+	        for (const name in fields) {
+	            const field = fields[name];
 	            if (field) {
-	                const _f = field._f;
-	                const current = omit(field, '_f');
-	                if (_f) {
-	                    const fieldError = await validateField(field, isValidateAllFieldCriteria);
-	                    if (fieldError[_f.name]) {
-	                        set(formStateRef.current.errors, _f.name, fieldError[_f.name]);
-	                        unset(validFieldsRef.current, _f.name);
+	                const fieldReference = field._f;
+	                const fieldValue = omit(field, '_f');
+	                if (fieldReference) {
+	                    const fieldError = await validateField(field, get(_formValues, fieldReference.name), shouldDisplayAllAssociatedErrors, _options.shouldUseNativeValidation);
+	                    if (fieldError[fieldReference.name]) {
+	                        context.valid = false;
+	                        if (shouldOnlyCheckValid) {
+	                            break;
+	                        }
 	                    }
-	                    else if (get(fieldsWithValidationRef.current, _f.name)) {
-	                        set(validFieldsRef.current, _f.name, true);
-	                        unset(formStateRef.current.errors, _f.name);
+	                    if (!shouldOnlyCheckValid) {
+	                        fieldError[fieldReference.name]
+	                            ? set(_formState.errors, fieldReference.name, fieldError[fieldReference.name])
+	                            : unset(_formState.errors, fieldReference.name);
 	                    }
 	                }
-	                current && (await validateForm(current));
+	                fieldValue &&
+	                    (await executeBuildInValidation(fieldValue, shouldOnlyCheckValid, context));
 	            }
 	        }
+	        return context.valid;
 	    };
-	    const trigger = React__namespace.useCallback(async (name) => {
-	        const fields = isUndefined$1(name)
-	            ? Object.keys(fieldsRef.current)
-	            : convertToArrayPayload(name);
-	        let isValid;
-	        formStateSubjectRef.current.next({
-	            isValidating: true,
-	        });
-	        if (resolverRef.current) {
-	            isValid = isEmptyObject(await executeSchemaOrResolverValidation(fields, isUndefined$1(name)
-	                ? undefined
-	                : fields));
-	        }
-	        else {
-	            isValid = !!(isUndefined$1(name)
-	                ? await validateForm(fieldsRef.current)
-	                : (await Promise.all(fields
-	                    .filter((fieldName) => get(fieldsRef.current, fieldName))
-	                    .map(async (fieldName) => await executeValidation(fieldName, null)))).every(Boolean));
-	        }
-	        formStateSubjectRef.current.next(Object.assign(Object.assign({}, (isString$1(name) ? { name } : {})), { errors: formStateRef.current.errors, isValidating: false, isValid: resolverRef.current ? isValid : getIsValid() }));
-	        return isValid;
-	    }, [executeSchemaOrResolverValidation, executeValidation]);
-	    const setInternalValues = React__namespace.useCallback((name, value, options) => Object.entries(value).forEach(([inputKey, inputValue]) => {
-	        const fieldName = `${name}.${inputKey}`;
-	        const field = get(fieldsRef.current, fieldName);
-	        field && !field._f
-	            ? setInternalValues(fieldName, inputValue, options)
-	            : setFieldValue(fieldName, inputValue, options, true, !field);
-	    }), [trigger]);
-	    const isFieldWatched = (name) => isWatchAllRef.current ||
-	        watchFieldsRef.current.has(name) ||
-	        watchFieldsRef.current.has((name.match(/\w+/) || [])[0]);
-	    const updateValidAndValue = (name, options, ref, isWithinRefCallback) => {
-	        const field = get(fieldsRef.current, name);
-	        const defaultValue = isUndefined$1(field._f.value)
-	            ? get(defaultValuesRef.current, name)
-	            : field._f.value;
-	        if (field && !isUndefined$1(defaultValue)) {
-	            if (ref && ref.defaultChecked) {
-	                field._f.value = getFieldValue(field);
-	            }
-	            else if (!isNameInFieldArray(fieldArrayNamesRef.current, name)) {
-	                setFieldValue(name, defaultValue);
-	            }
-	            else {
-	                field._f.value = defaultValue;
-	            }
-	        }
-	        if ((!isUndefined$1(defaultValue) || isWithinRefCallback) &&
-	            hasValidation(options) &&
-	            !validationMode.isOnSubmit &&
+	    const _removeUnmounted = () => {
+	        for (const name of _names.unMount) {
+	            const field = get(_fields, name);
 	            field &&
-	            readFormStateRef.current.isValid) {
-	            validateField(field, isValidateAllFieldCriteria).then((error) => {
-	                isEmptyObject(error)
-	                    ? set(validFieldsRef.current, name, true)
-	                    : unset(validFieldsRef.current, name);
-	                formStateRef.current.isValid !== getIsValid() &&
-	                    updateFormState(Object.assign(Object.assign({}, formStateRef.current), { isValid: getIsValid() }));
-	            });
+	                (field._f.refs
+	                    ? field._f.refs.every((ref) => !live(ref))
+	                    : !live(field._f.ref)) &&
+	                unregister(name);
 	        }
-	        return defaultValue;
+	        _names.unMount = new Set();
+	    };
+	    const _getDirty = (name, data) => (name && data && set(_formValues, name, data),
+	        !deepEqual(getValues(), _defaultValues));
+	    const _getWatch = (names, defaultValue, isGlobal) => {
+	        const fieldValues = Object.assign({}, (_stateFlags.mount
+	            ? _formValues
+	            : isUndefined$1(defaultValue)
+	                ? _defaultValues
+	                : isString$1(names)
+	                    ? { [names]: defaultValue }
+	                    : defaultValue));
+	        return generateWatchOutput(names, _names, fieldValues, isGlobal);
+	    };
+	    const _getFieldArray = (name) => compact(get(_stateFlags.mount ? _formValues : _defaultValues, name, props.shouldUnregister ? get(_defaultValues, name, []) : []));
+	    const setFieldValue = (name, value, options = {}) => {
+	        const field = get(_fields, name);
+	        let fieldValue = value;
+	        if (field) {
+	            const fieldReference = field._f;
+	            if (fieldReference) {
+	                !fieldReference.disabled &&
+	                    set(_formValues, name, getFieldValueAs(value, fieldReference));
+	                fieldValue =
+	                    isWeb && isHTMLElement(fieldReference.ref) && isNullOrUndefined(value)
+	                        ? ''
+	                        : value;
+	                if (isMultipleSelect(fieldReference.ref)) {
+	                    [...fieldReference.ref.options].forEach((selectRef) => (selectRef.selected = fieldValue.includes(selectRef.value)));
+	                }
+	                else if (fieldReference.refs) {
+	                    if (isCheckBoxInput(fieldReference.ref)) {
+	                        fieldReference.refs.length > 1
+	                            ? fieldReference.refs.forEach((checkboxRef) => (checkboxRef.checked = Array.isArray(fieldValue)
+	                                ? !!fieldValue.find((data) => data === checkboxRef.value)
+	                                : fieldValue === checkboxRef.value))
+	                            : (fieldReference.refs[0].checked = !!fieldValue);
+	                    }
+	                    else {
+	                        fieldReference.refs.forEach((radioRef) => (radioRef.checked = radioRef.value === fieldValue));
+	                    }
+	                }
+	                else if (!isFileInput(fieldReference.ref)) {
+	                    fieldReference.ref.value = fieldValue;
+	                    if (!fieldReference.ref.type) {
+	                        _subjects.watch.next({
+	                            name,
+	                        });
+	                    }
+	                }
+	            }
+	        }
+	        (options.shouldDirty || options.shouldTouch) &&
+	            updateTouchAndDirty(name, fieldValue, options.shouldTouch);
+	        options.shouldValidate && trigger(name);
+	    };
+	    const setValues = (name, value, options) => {
+	        for (const fieldKey in value) {
+	            const fieldValue = value[fieldKey];
+	            const fieldName = `${name}.${fieldKey}`;
+	            const field = get(_fields, fieldName);
+	            (_names.array.has(name) ||
+	                !isPrimitive(fieldValue) ||
+	                (field && !field._f)) &&
+	                !isDateObject(fieldValue)
+	                ? setValues(fieldName, fieldValue, options)
+	                : setFieldValue(fieldName, fieldValue, options);
+	        }
 	    };
 	    const setValue = (name, value, options = {}) => {
-	        const field = get(fieldsRef.current, name);
-	        const isFieldArray = fieldArrayNamesRef.current.has(name);
+	        const field = get(_fields, name);
+	        const isFieldArray = _names.array.has(name);
+	        set(_formValues, name, value);
 	        if (isFieldArray) {
-	            fieldArraySubjectRef.current.next({
-	                fields: value,
+	            _subjects.array.next({
 	                name,
-	                isReset: true,
+	                values: _formValues,
 	            });
-	            if ((readFormStateRef.current.isDirty ||
-	                readFormStateRef.current.dirtyFields) &&
+	            if ((_proxyFormState.isDirty || _proxyFormState.dirtyFields) &&
 	                options.shouldDirty) {
-	                set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(value, get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
-	                formStateSubjectRef.current.next({
+	                _formState.dirtyFields = getDirtyFields(_defaultValues, _formValues);
+	                _subjects.state.next({
 	                    name,
-	                    dirtyFields: formStateRef.current.dirtyFields,
-	                    isDirty: getIsDirty(name, value),
+	                    dirtyFields: _formState.dirtyFields,
+	                    isDirty: _getDirty(name, value),
 	                });
 	            }
-	            !value.length &&
-	                set(fieldsRef.current, name, []) &&
-	                set(fieldArrayDefaultValuesRef.current, name, []);
 	        }
-	        (field && !field._f) || isFieldArray
-	            ? setInternalValues(name, value, isFieldArray ? {} : options)
-	            : setFieldValue(name, value, options, true, !field);
-	        isFieldWatched(name) && formStateSubjectRef.current.next({});
-	        watchSubjectRef.current.next({ name, value });
+	        else {
+	            field && !field._f && !isNullOrUndefined(value)
+	                ? setValues(name, value, options)
+	                : setFieldValue(name, value, options);
+	        }
+	        isWatched(name, _names) && _subjects.state.next({});
+	        _subjects.watch.next({
+	            name,
+	        });
 	    };
-	    const handleChange = React__namespace.useCallback(async ({ type, target, target: { value, type: inputType } }) => {
+	    const onChange = async (event) => {
+	        const target = event.target;
 	        let name = target.name;
-	        let error;
-	        let isValid;
-	        const field = get(fieldsRef.current, name);
+	        const field = get(_fields, name);
 	        if (field) {
-	            let inputValue = inputType ? getFieldValue(field) : undefined;
-	            inputValue = isUndefined$1(inputValue) ? value : inputValue;
-	            const isBlurEvent = type === EVENTS.BLUR;
-	            const { isOnBlur: isReValidateOnBlur, isOnChange: isReValidateOnChange, } = getValidationModes(reValidateMode);
+	            let error;
+	            let isValid;
+	            const fieldValue = target.type
+	                ? getFieldValue(field._f)
+	                : getEventValue(event);
+	            const isBlurEvent = event.type === EVENTS.BLUR;
 	            const shouldSkipValidation = (!hasValidation(field._f) &&
-	                !resolverRef.current &&
-	                !get(formStateRef.current.errors, name)) ||
-	                skipValidation(Object.assign({ isBlurEvent, isTouched: !!get(formStateRef.current.touchedFields, name), isSubmitted: formStateRef.current.isSubmitted, isReValidateOnBlur,
-	                    isReValidateOnChange }, validationMode));
-	            const isWatched = !isBlurEvent && isFieldWatched(name);
-	            if (!isUndefined$1(inputValue)) {
-	                field._f.value = inputValue;
+	                !_options.resolver &&
+	                !get(_formState.errors, name) &&
+	                !field._f.deps) ||
+	                skipValidation(isBlurEvent, get(_formState.touchedFields, name), _formState.isSubmitted, validationModeAfterSubmit, validationModeBeforeSubmit);
+	            const watched = isWatched(name, _names, isBlurEvent);
+	            if (isBlurEvent) {
+	                field._f.onBlur && field._f.onBlur(event);
 	            }
-	            const state = updateAndGetDirtyState(name, field._f.value, false);
-	            if (isBlurEvent && !get(formStateRef.current.touchedFields, name)) {
-	                set(formStateRef.current.touchedFields, name, true);
-	                readFormStateRef.current.touchedFields &&
-	                    (state.touchedFields = formStateRef.current.touchedFields);
+	            else if (field._f.onChange) {
+	                field._f.onChange(event);
 	            }
-	            let shouldRender = !isEmptyObject(state) || isWatched;
-	            if (shouldSkipValidation) {
-	                !isBlurEvent &&
-	                    watchSubjectRef.current.next({
-	                        name,
-	                        type,
-	                        value: inputValue,
-	                    });
-	                return (shouldRender &&
-	                    formStateSubjectRef.current.next(isWatched ? { name } : Object.assign(Object.assign({}, state), { name })));
-	            }
-	            formStateSubjectRef.current.next({
-	                isValidating: true,
-	            });
-	            if (resolverRef.current) {
-	                const { errors } = await resolverRef.current(getFieldsValues(fieldsRef, shouldUnregister ? {} : defaultValuesRef.current), contextRef.current, {
-	                    criteriaMode,
-	                    fields: getFields([name], fieldsRef.current),
-	                    names: [name],
+	            set(_formValues, name, fieldValue);
+	            const fieldState = updateTouchAndDirty(name, fieldValue, isBlurEvent, false);
+	            const shouldRender = !isEmptyObject(fieldState) || watched;
+	            !isBlurEvent &&
+	                _subjects.watch.next({
+	                    name,
+	                    type: event.type,
 	                });
-	                const previousFormIsValid = formStateRef.current.isValid;
-	                error = get(errors, name);
-	                if (isCheckBoxInput(target) && !error) {
-	                    const parentNodeName = getNodeParentName(name);
-	                    const currentError = get(errors, parentNodeName, {});
-	                    currentError.type && currentError.message && (error = currentError);
-	                    if (currentError ||
-	                        get(formStateRef.current.errors, parentNodeName)) {
-	                        name = parentNodeName;
-	                    }
-	                }
+	            if (shouldSkipValidation) {
+	                return (shouldRender &&
+	                    _subjects.state.next(Object.assign({ name }, (watched ? {} : fieldState))));
+	            }
+	            !isBlurEvent && watched && _subjects.state.next({});
+	            validateFields[name] = validateFields[name] ? +1 : 1;
+	            _proxyFormState.isValidating &&
+	                _subjects.state.next({
+	                    isValidating: true,
+	                });
+	            if (_options.resolver) {
+	                const { errors } = await _executeSchema([name]);
+	                const previousErrorLookupResult = schemaErrorLookup(_formState.errors, _fields, name);
+	                const errorLookupResult = schemaErrorLookup(errors, _fields, previousErrorLookupResult.name || name);
+	                error = errorLookupResult.error;
+	                name = errorLookupResult.name;
 	                isValid = isEmptyObject(errors);
-	                previousFormIsValid !== isValid && (shouldRender = true);
 	            }
 	            else {
-	                error = (await validateField(field, isValidateAllFieldCriteria))[name];
+	                error = (await validateField(field, get(_formValues, name), shouldDisplayAllAssociatedErrors, _options.shouldUseNativeValidation))[name];
+	                isValid = await _updateValid(true);
 	            }
-	            !isBlurEvent &&
-	                watchSubjectRef.current.next({
-	                    name,
-	                    type,
-	                    value: inputValue,
-	                });
-	            shouldRenderBaseOnError(name, error, shouldRender, state, isValid, isWatched);
+	            field._f.deps && trigger(field._f.deps);
+	            shouldRenderByError(false, name, isValid, error, fieldState);
 	        }
-	    }, []);
+	    };
+	    const trigger = async (name, options = {}) => {
+	        let isValid;
+	        let validationResult;
+	        const fieldNames = convertToArrayPayload(name);
+	        _subjects.state.next({
+	            isValidating: true,
+	        });
+	        if (_options.resolver) {
+	            const errors = await executeSchemaAndUpdateState(isUndefined$1(name) ? name : fieldNames);
+	            isValid = isEmptyObject(errors);
+	            validationResult = name
+	                ? !fieldNames.some((name) => get(errors, name))
+	                : isValid;
+	        }
+	        else if (name) {
+	            validationResult = (await Promise.all(fieldNames.map(async (fieldName) => {
+	                const field = get(_fields, fieldName);
+	                return await executeBuildInValidation(field && field._f ? { [fieldName]: field } : field);
+	            }))).every(Boolean);
+	            !(!validationResult && !_formState.isValid) && _updateValid();
+	        }
+	        else {
+	            validationResult = isValid = await executeBuildInValidation(_fields);
+	        }
+	        _subjects.state.next(Object.assign(Object.assign(Object.assign({}, (!isString$1(name) ||
+	            (_proxyFormState.isValid && isValid !== _formState.isValid)
+	            ? {}
+	            : { name })), (_options.resolver ? { isValid } : {})), { errors: _formState.errors, isValidating: false }));
+	        options.shouldFocus &&
+	            !validationResult &&
+	            focusFieldBy(_fields, (key) => get(_formState.errors, key), name ? fieldNames : _names.mount);
+	        return validationResult;
+	    };
 	    const getValues = (fieldNames) => {
-	        const values = isMountedRef.current
-	            ? getFieldsValues(fieldsRef, shouldUnregister ? {} : defaultValuesRef.current)
-	            : defaultValuesRef.current;
+	        const values = Object.assign(Object.assign({}, _defaultValues), (_stateFlags.mount ? _formValues : {}));
 	        return isUndefined$1(fieldNames)
 	            ? values
 	            : isString$1(fieldNames)
 	                ? get(values, fieldNames)
 	                : fieldNames.map((name) => get(values, name));
 	    };
-	    const updateIsValid = React__namespace.useCallback(async (values = {}) => {
-	        const previousIsValid = formStateRef.current.isValid;
-	        if (resolver) {
-	            const { errors } = await resolverRef.current(Object.assign(Object.assign({}, getFieldsValues(fieldsRef, shouldUnregister ? {} : defaultValuesRef.current)), values), contextRef.current, {
-	                criteriaMode,
-	                fields: getFields(fieldsNamesRef.current, fieldsRef.current),
-	            });
-	            formStateRef.current.isValid = isEmptyObject(errors);
-	        }
-	        else {
-	            getIsValid();
-	        }
-	        previousIsValid !== formStateRef.current.isValid &&
-	            formStateSubjectRef.current.next({
-	                isValid: formStateRef.current.isValid,
-	            });
-	    }, [criteriaMode]);
 	    const clearErrors = (name) => {
-	        name &&
-	            convertToArrayPayload(name).forEach((inputName) => unset(formStateRef.current.errors, inputName));
-	        formStateSubjectRef.current.next({
-	            errors: name ? formStateRef.current.errors : {},
+	        name
+	            ? convertToArrayPayload(name).forEach((inputName) => unset(_formState.errors, inputName))
+	            : (_formState.errors = {});
+	        _subjects.state.next({
+	            errors: _formState.errors,
+	            isValid: true,
 	        });
 	    };
 	    const setError = (name, error, options) => {
-	        const ref = ((get(fieldsRef.current, name) || { _f: {} })._f || {}).ref;
-	        set(formStateRef.current.errors, name, Object.assign(Object.assign({}, error), { ref }));
-	        formStateSubjectRef.current.next({
+	        const ref = (get(_fields, name, { _f: {} })._f || {}).ref;
+	        set(_formState.errors, name, Object.assign(Object.assign({}, error), { ref }));
+	        _subjects.state.next({
 	            name,
-	            errors: formStateRef.current.errors,
+	            errors: _formState.errors,
 	            isValid: false,
 	        });
 	        options && options.shouldFocus && ref && ref.focus && ref.focus();
 	    };
-	    const watchInternal = React__namespace.useCallback((fieldNames, defaultValue, isGlobal) => {
-	        const isArrayNames = Array.isArray(fieldNames);
-	        const fieldValues = isMountedRef.current
-	            ? getFieldsValues(fieldsRef, defaultValuesRef.current)
-	            : isUndefined$1(defaultValue)
-	                ? defaultValuesRef.current
-	                : isArrayNames
-	                    ? defaultValue || {}
-	                    : { [fieldNames]: defaultValue };
-	        if (isUndefined$1(fieldNames)) {
-	            isGlobal && (isWatchAllRef.current = true);
-	            return fieldValues;
-	        }
-	        const result = [];
-	        for (const fieldName of isArrayNames ? fieldNames : [fieldNames]) {
-	            isGlobal && watchFieldsRef.current.add(fieldName);
-	            result.push(get(fieldValues, fieldName));
-	        }
-	        return isArrayNames ? result : result[0];
-	    }, []);
-	    const watch = (fieldName, defaultValue) => isFunction(fieldName)
-	        ? watchSubjectRef.current.subscribe({
-	            next: (info) => fieldName(watchInternal(undefined, defaultValue), info),
+	    const watch = (name, defaultValue) => isFunction(name)
+	        ? _subjects.watch.subscribe({
+	            next: (info) => name(_getWatch(undefined, defaultValue), info),
 	        })
-	        : watchInternal(fieldName, defaultValue, true);
+	        : _getWatch(name, defaultValue, true);
 	    const unregister = (name, options = {}) => {
-	        for (const inputName of name
-	            ? convertToArrayPayload(name)
-	            : Object.keys(fieldsNamesRef.current)) {
-	            fieldsNamesRef.current.delete(inputName);
-	            fieldArrayNamesRef.current.delete(inputName);
-	            if (get(fieldsRef.current, inputName)) {
-	                if (!options.keepIsValid) {
-	                    unset(fieldsWithValidationRef.current, inputName);
-	                    unset(validFieldsRef.current, inputName);
+	        for (const fieldName of name ? convertToArrayPayload(name) : _names.mount) {
+	            _names.mount.delete(fieldName);
+	            _names.array.delete(fieldName);
+	            if (get(_fields, fieldName)) {
+	                if (!options.keepValue) {
+	                    unset(_fields, fieldName);
+	                    unset(_formValues, fieldName);
 	                }
-	                !options.keepError && unset(formStateRef.current.errors, inputName);
-	                !options.keepValue && unset(fieldsRef.current, inputName);
-	                !options.keepDirty &&
-	                    unset(formStateRef.current.dirtyFields, inputName);
-	                !options.keepTouched &&
-	                    unset(formStateRef.current.touchedFields, inputName);
-	                !shouldUnregister &&
+	                !options.keepError && unset(_formState.errors, fieldName);
+	                !options.keepDirty && unset(_formState.dirtyFields, fieldName);
+	                !options.keepTouched && unset(_formState.touchedFields, fieldName);
+	                !_options.shouldUnregister &&
 	                    !options.keepDefaultValue &&
-	                    unset(defaultValuesRef.current, inputName);
-	                watchSubjectRef.current.next({
-	                    name: inputName,
-	                });
+	                    unset(_defaultValues, fieldName);
 	            }
 	        }
-	        formStateSubjectRef.current.next(Object.assign(Object.assign(Object.assign({}, formStateRef.current), (!options.keepDirty ? {} : { isDirty: getIsDirty() })), (resolverRef.current ? {} : { isValid: getIsValid() })));
-	        !options.keepIsValid && updateIsValid();
+	        _subjects.watch.next({});
+	        _subjects.state.next(Object.assign(Object.assign({}, _formState), (!options.keepDirty ? {} : { isDirty: _getDirty() })));
+	        !options.keepIsValid && _updateValid();
 	    };
-	    const registerFieldRef = (name, ref, options) => {
-	        register(name, options);
-	        let field = get(fieldsRef.current, name);
-	        const isRadioOrCheckbox = isRadioOrCheckboxFunction(ref);
-	        if (ref === field._f.ref ||
-	            (isWeb && isHTMLElement(field._f.ref) && !isHTMLElement(ref)) ||
-	            (isRadioOrCheckbox &&
-	                Array.isArray(field._f.refs) &&
-	                compact(field._f.refs).find((option) => option === ref))) {
-	            return;
-	        }
-	        field = {
-	            _f: isRadioOrCheckbox
-	                ? Object.assign(Object.assign({}, field._f), { refs: [
-	                        ...compact(field._f.refs || []).filter((ref) => isHTMLElement(ref) && document.contains(ref)),
-	                        ref,
-	                    ], ref: { type: ref.type, name } }) : Object.assign(Object.assign({}, field._f), { ref }),
-	        };
-	        set(fieldsRef.current, name, field);
-	        const defaultValue = updateValidAndValue(name, options, ref, true);
-	        if (isRadioOrCheckbox && Array.isArray(defaultValue)
-	            ? !deepEqual(get(fieldsRef.current, name)._f.value, defaultValue)
-	            : isUndefined$1(get(fieldsRef.current, name)._f.value)) {
-	            get(fieldsRef.current, name)._f.value = getFieldValue(get(fieldsRef.current, name));
-	        }
-	    };
-	    const register = React__namespace.useCallback((name, options) => {
-	        const isInitialRegister = !get(fieldsRef.current, name);
-	        set(fieldsRef.current, name, {
-	            _f: Object.assign(Object.assign(Object.assign({}, (isInitialRegister
-	                ? { ref: { name } }
-	                : Object.assign({ ref: (get(fieldsRef.current, name)._f || {}).ref }, get(fieldsRef.current, name)._f))), { name }), options),
+	    const register = (name, options = {}) => {
+	        let field = get(_fields, name);
+	        set(_fields, name, {
+	            _f: Object.assign(Object.assign(Object.assign({}, (field && field._f ? field._f : { ref: { name } })), { name, mount: true }), options),
 	        });
-	        hasValidation(options) &&
-	            set(fieldsWithValidationRef.current, name, true);
-	        fieldsNamesRef.current.add(name);
-	        isInitialRegister && updateValidAndValue(name, options);
-	        return isWindowUndefined
-	            ? { name: name }
-	            : {
-	                name,
-	                onChange: handleChange,
-	                onBlur: handleChange,
-	                ref: (ref) => {
-	                    ref
-	                        ? registerFieldRef(name, ref, options)
-	                        : (shouldUnregister || (options && options.shouldUnregister)) &&
-	                            isWeb &&
-	                            unregisterFieldsNamesRef.current.add(name);
-	                },
-	            };
-	    }, [defaultValuesRef.current]);
-	    const handleSubmit = React__namespace.useCallback((onValid, onInvalid) => async (e) => {
+	        _names.mount.add(name);
+	        !isUndefined$1(options.value) &&
+	            !options.disabled &&
+	            set(_formValues, name, get(_formValues, name, options.value));
+	        field
+	            ? isBoolean(options.disabled) &&
+	                set(_formValues, name, options.disabled
+	                    ? undefined
+	                    : get(_formValues, name, getFieldValue(field._f)))
+	            : updateValidAndValue(name, true);
+	        return Object.assign(Object.assign(Object.assign({}, (isBoolean(options.disabled) ? { disabled: options.disabled } : {})), (_options.shouldUseNativeValidation
+	            ? {
+	                required: !!options.required,
+	                min: getRuleValue(options.min),
+	                max: getRuleValue(options.max),
+	                minLength: getRuleValue(options.minLength),
+	                maxLength: getRuleValue(options.maxLength),
+	                pattern: getRuleValue(options.pattern),
+	            }
+	            : {})), { name,
+	            onChange, onBlur: onChange, ref: (ref) => {
+	                if (ref) {
+	                    register(name, options);
+	                    field = get(_fields, name);
+	                    const fieldRef = isUndefined$1(ref.value)
+	                        ? ref.querySelectorAll
+	                            ? ref.querySelectorAll('input,select,textarea')[0] || ref
+	                            : ref
+	                        : ref;
+	                    const radioOrCheckbox = isRadioOrCheckbox(fieldRef);
+	                    if (fieldRef === field._f.ref ||
+	                        (radioOrCheckbox &&
+	                            compact(field._f.refs).find((option) => option === fieldRef))) {
+	                        return;
+	                    }
+	                    set(_fields, name, {
+	                        _f: radioOrCheckbox
+	                            ? Object.assign(Object.assign({}, field._f), { refs: [...compact(field._f.refs).filter(live), fieldRef], ref: { type: fieldRef.type, name } }) : Object.assign(Object.assign({}, field._f), { ref: fieldRef }),
+	                    });
+	                    updateValidAndValue(name, false, fieldRef);
+	                }
+	                else {
+	                    field = get(_fields, name, {});
+	                    if (field._f) {
+	                        field._f.mount = false;
+	                    }
+	                    (_options.shouldUnregister || options.shouldUnregister) &&
+	                        !(isNameInFieldArray(_names.array, name) && _stateFlags.action) &&
+	                        _names.unMount.add(name);
+	                }
+	            } });
+	    };
+	    const handleSubmit = (onValid, onInvalid) => async (e) => {
 	        if (e) {
 	            e.preventDefault && e.preventDefault();
 	            e.persist && e.persist();
 	        }
-	        let fieldValues = Object.assign(Object.assign({}, (shouldUnregister ? {} : defaultValuesRef.current)), getFieldsValues(fieldsRef));
-	        formStateSubjectRef.current.next({
+	        let hasNoPromiseError = true;
+	        let fieldValues = _options.shouldUnregister
+	            ? cloneObject(_formValues)
+	            : Object.assign({}, _formValues);
+	        _subjects.state.next({
 	            isSubmitting: true,
 	        });
 	        try {
-	            if (resolverRef.current) {
-	                const { errors, values } = await resolverRef.current(fieldValues, contextRef.current, {
-	                    criteriaMode,
-	                    fields: getFields(fieldsNamesRef.current, fieldsRef.current),
-	                });
-	                formStateRef.current.errors = errors;
+	            if (_options.resolver) {
+	                const { errors, values } = await _executeSchema();
+	                _formState.errors = errors;
 	                fieldValues = values;
 	            }
 	            else {
-	                await validateForm(fieldsRef.current);
+	                await executeBuildInValidation(_fields);
 	            }
-	            if (isEmptyObject(formStateRef.current.errors) &&
-	                Object.keys(formStateRef.current.errors).every((name) => get(fieldValues, name))) {
-	                formStateSubjectRef.current.next({
+	            if (isEmptyObject(_formState.errors) &&
+	                Object.keys(_formState.errors).every((name) => get(fieldValues, name))) {
+	                _subjects.state.next({
 	                    errors: {},
 	                    isSubmitting: true,
 	                });
 	                await onValid(fieldValues, e);
 	            }
 	            else {
-	                onInvalid && (await onInvalid(formStateRef.current.errors, e));
-	                shouldFocusError &&
-	                    focusFieldBy(fieldsRef.current, (key) => get(formStateRef.current.errors, key), fieldsNamesRef.current);
+	                onInvalid && (await onInvalid(_formState.errors, e));
+	                _options.shouldFocusError &&
+	                    focusFieldBy(_fields, (key) => get(_formState.errors, key), _names.mount);
 	            }
 	        }
+	        catch (err) {
+	            hasNoPromiseError = false;
+	            throw err;
+	        }
 	        finally {
-	            formStateRef.current.isSubmitted = true;
-	            formStateSubjectRef.current.next({
+	            _formState.isSubmitted = true;
+	            _subjects.state.next({
 	                isSubmitted: true,
 	                isSubmitting: false,
-	                isSubmitSuccessful: isEmptyObject(formStateRef.current.errors),
-	                submitCount: formStateRef.current.submitCount + 1,
-	                errors: formStateRef.current.errors,
+	                isSubmitSuccessful: isEmptyObject(_formState.errors) && hasNoPromiseError,
+	                submitCount: _formState.submitCount + 1,
+	                errors: _formState.errors,
 	            });
 	        }
-	    }, [shouldFocusError, isValidateAllFieldCriteria, criteriaMode]);
-	    const resetFromState = React__namespace.useCallback(({ keepErrors, keepDirty, keepIsSubmitted, keepTouched, keepDefaultValues, keepIsValid, keepSubmitCount, }, values) => {
-	        if (!keepIsValid) {
-	            validFieldsRef.current = {};
-	            fieldsWithValidationRef.current = {};
+	    };
+	    const resetField = (name, options = {}) => {
+	        if (isUndefined$1(options.defaultValue)) {
+	            setValue(name, get(_defaultValues, name));
 	        }
-	        watchFieldsRef.current = new Set();
-	        isWatchAllRef.current = false;
-	        formStateSubjectRef.current.next({
-	            submitCount: keepSubmitCount ? formStateRef.current.submitCount : 0,
-	            isDirty: keepDirty
-	                ? formStateRef.current.isDirty
-	                : keepDefaultValues
-	                    ? deepEqual(values, defaultValuesRef.current)
-	                    : false,
-	            isSubmitted: keepIsSubmitted ? formStateRef.current.isSubmitted : false,
-	            isValid: keepIsValid
-	                ? formStateRef.current.isValid
-	                : !!updateIsValid(values),
-	            dirtyFields: keepDirty ? formStateRef.current.dirtyFields : {},
-	            touchedFields: keepTouched ? formStateRef.current.touchedFields : {},
-	            errors: keepErrors ? formStateRef.current.errors : {},
-	            isSubmitting: false,
-	            isSubmitSuccessful: false,
-	        });
-	    }, []);
-	    const reset = (values, keepStateOptions = {}) => {
-	        const updatedValues = values || defaultValuesRef.current;
-	        if (isWeb && !keepStateOptions.keepValues) {
-	            for (const name of fieldsNamesRef.current) {
-	                const field = get(fieldsRef.current, name);
-	                if (field && field._f) {
-	                    const inputRef = Array.isArray(field._f.refs)
-	                        ? field._f.refs[0]
-	                        : field._f.ref;
-	                    if (isHTMLElement(inputRef)) {
+	        else {
+	            setValue(name, options.defaultValue);
+	            set(_defaultValues, name, options.defaultValue);
+	        }
+	        if (!options.keepTouched) {
+	            unset(_formState.touchedFields, name);
+	        }
+	        if (!options.keepDirty) {
+	            unset(_formState.dirtyFields, name);
+	            _formState.isDirty = options.defaultValue
+	                ? _getDirty(name, get(_defaultValues, name))
+	                : _getDirty();
+	        }
+	        if (!options.keepError) {
+	            unset(_formState.errors, name);
+	            _proxyFormState.isValid && _updateValid();
+	        }
+	        _subjects.state.next(Object.assign({}, _formState));
+	    };
+	    const reset = (formValues, keepStateOptions = {}) => {
+	        const updatedValues = formValues || _defaultValues;
+	        const cloneUpdatedValues = cloneObject(updatedValues);
+	        const values = formValues && !isEmptyObject(formValues)
+	            ? cloneUpdatedValues
+	            : _defaultValues;
+	        if (!keepStateOptions.keepDefaultValues) {
+	            _defaultValues = updatedValues;
+	        }
+	        if (!keepStateOptions.keepValues) {
+	            if (isWeb && isUndefined$1(formValues)) {
+	                for (const name of _names.mount) {
+	                    const field = get(_fields, name);
+	                    if (field && field._f) {
+	                        const fieldReference = Array.isArray(field._f.refs)
+	                            ? field._f.refs[0]
+	                            : field._f.ref;
 	                        try {
-	                            inputRef.closest('form').reset();
+	                            isHTMLElement(fieldReference) &&
+	                                fieldReference.closest('form').reset();
 	                            break;
 	                        }
 	                        catch (_a) { }
 	                    }
 	                }
 	            }
-	        }
-	        !keepStateOptions.keepDefaultValues &&
-	            (defaultValuesRef.current = Object.assign({}, updatedValues));
-	        if (!keepStateOptions.keepValues) {
-	            fieldsRef.current = {};
-	            controllerSubjectRef.current.next({
-	                values: Object.assign({}, updatedValues),
+	            _formValues = props.shouldUnregister
+	                ? keepStateOptions.keepDefaultValues
+	                    ? cloneObject(_defaultValues)
+	                    : {}
+	                : cloneUpdatedValues;
+	            _fields = {};
+	            _subjects.array.next({
+	                values,
 	            });
-	            watchSubjectRef.current.next({
-	                value: Object.assign({}, updatedValues),
-	            });
-	            fieldArraySubjectRef.current.next({
-	                fields: Object.assign({}, updatedValues),
-	                isReset: true,
+	            _subjects.watch.next({
+	                values,
 	            });
 	        }
-	        resetFromState(keepStateOptions, values);
-	        isMountedRef.current = false;
-	    };
-	    const setFocus = (name) => get(fieldsRef.current, name)._f.ref.focus();
-	    React__namespace.useEffect(() => {
-	        const formStateSubscription = formStateSubjectRef.current.subscribe({
-	            next(formState) {
-	                if (shouldRenderFormState(formState, readFormStateRef.current, true)) {
-	                    formStateRef.current = Object.assign(Object.assign({}, formStateRef.current), formState);
-	                    updateFormState(formStateRef.current);
-	                }
-	            },
-	        });
-	        const useFieldArraySubscription = fieldArraySubjectRef.current.subscribe({
-	            next(state) {
-	                if (state.fields && state.name && readFormStateRef.current.isValid) {
-	                    const values = getFieldsValues(fieldsRef);
-	                    set(values, state.name, state.fields);
-	                    updateIsValid(values);
-	                }
-	            },
-	        });
-	        resolverRef.current && readFormStateRef.current.isValid && updateIsValid();
-	        return () => {
-	            watchSubjectRef.current.unsubscribe();
-	            formStateSubscription.unsubscribe();
-	            useFieldArraySubscription.unsubscribe();
+	        _names = {
+	            mount: new Set(),
+	            unMount: new Set(),
+	            array: new Set(),
+	            watch: new Set(),
+	            watchAll: false,
+	            focus: '',
 	        };
-	    }, []);
-	    React__namespace.useEffect(() => {
-	        const isLiveInDom = (ref) => !isHTMLElement(ref) || !document.contains(ref);
-	        isMountedRef.current = true;
-	        unregisterFieldsNamesRef.current.forEach((name) => {
-	            const field = get(fieldsRef.current, name);
-	            field &&
-	                (field._f.refs
-	                    ? field._f.refs.every(isLiveInDom)
-	                    : isLiveInDom(field._f.ref)) &&
-	                unregister(name);
+	        _stateFlags.mount =
+	            !_proxyFormState.isValid || !!keepStateOptions.keepIsValid;
+	        _stateFlags.watch = !!props.shouldUnregister;
+	        _subjects.state.next({
+	            submitCount: keepStateOptions.keepSubmitCount
+	                ? _formState.submitCount
+	                : 0,
+	            isDirty: keepStateOptions.keepDirty
+	                ? _formState.isDirty
+	                : keepStateOptions.keepDefaultValues
+	                    ? !deepEqual(formValues, _defaultValues)
+	                    : false,
+	            isSubmitted: keepStateOptions.keepIsSubmitted
+	                ? _formState.isSubmitted
+	                : false,
+	            dirtyFields: keepStateOptions.keepDirty
+	                ? _formState.dirtyFields
+	                : (keepStateOptions.keepDefaultValues && formValues
+	                    ? Object.entries(formValues).reduce((previous, [key, value]) => (Object.assign(Object.assign({}, previous), { [key]: value !== get(_defaultValues, key) })), {})
+	                    : {}),
+	            touchedFields: keepStateOptions.keepTouched
+	                ? _formState.touchedFields
+	                : {},
+	            errors: keepStateOptions.keepErrors
+	                ? _formState.errors
+	                : {},
+	            isSubmitting: false,
+	            isSubmitSuccessful: false,
 	        });
-	        unregisterFieldsNamesRef.current = new Set();
-	    });
+	    };
+	    const setFocus = (name) => {
+	        const field = get(_fields, name)._f;
+	        (field.ref.focus ? field.ref : field.refs[0]).focus();
+	    };
 	    return {
-	        control: React__namespace.useMemo(() => ({
+	        control: {
 	            register,
-	            isWatchAllRef,
-	            watchFieldsRef,
-	            getIsDirty,
-	            formStateSubjectRef,
-	            fieldArraySubjectRef,
-	            controllerSubjectRef,
-	            watchSubjectRef,
-	            watchInternal,
-	            fieldsRef,
-	            validFieldsRef,
-	            fieldsWithValidationRef,
-	            fieldArrayNamesRef,
-	            readFormStateRef,
-	            formStateRef,
-	            defaultValuesRef,
-	            fieldArrayDefaultValuesRef,
 	            unregister,
-	            shouldUnmountUnregister: shouldUnregister,
-	        }), []),
-	        formState: getProxyFormState(isProxyEnabled, formState, readFormStateRef),
+	            _executeSchema,
+	            _getWatch,
+	            _getDirty,
+	            _updateValid,
+	            _removeUnmounted,
+	            _updateFieldArray,
+	            _getFieldArray,
+	            _subjects,
+	            _proxyFormState,
+	            get _fields() {
+	                return _fields;
+	            },
+	            set _fields(value) {
+	                _fields = value;
+	            },
+	            get _formValues() {
+	                return _formValues;
+	            },
+	            set _formValues(value) {
+	                _formValues = value;
+	            },
+	            get _stateFlags() {
+	                return _stateFlags;
+	            },
+	            set _stateFlags(value) {
+	                _stateFlags = value;
+	            },
+	            get _defaultValues() {
+	                return _defaultValues;
+	            },
+	            set _defaultValues(value) {
+	                _defaultValues = value;
+	            },
+	            get _names() {
+	                return _names;
+	            },
+	            set _names(value) {
+	                _names = value;
+	            },
+	            get _formState() {
+	                return _formState;
+	            },
+	            set _formState(value) {
+	                _formState = value;
+	            },
+	            get _options() {
+	                return _options;
+	            },
+	            set _options(value) {
+	                _options = Object.assign(Object.assign({}, _options), value);
+	            },
+	        },
 	        trigger,
 	        register,
 	        handleSubmit,
-	        watch: React__namespace.useCallback(watch, []),
-	        setValue: React__namespace.useCallback(setValue, [setInternalValues]),
-	        getValues: React__namespace.useCallback(getValues, []),
-	        reset: React__namespace.useCallback(reset, []),
-	        clearErrors: React__namespace.useCallback(clearErrors, []),
-	        unregister: React__namespace.useCallback(unregister, []),
-	        setError: React__namespace.useCallback(setError, []),
-	        setFocus: React__namespace.useCallback(setFocus, []),
+	        watch,
+	        setValue,
+	        getValues,
+	        reset,
+	        resetField,
+	        clearErrors,
+	        unregister,
+	        setError,
+	        setFocus,
 	    };
 	}
 
-	function useWatch(props) {
-	    const { control, name, defaultValue } = props || {};
-	    const methods = useFormContext();
-	    const nameRef = React__namespace.useRef(name);
-	    nameRef.current = name;
-	    const { watchInternal, watchSubjectRef } = control || methods.control;
-	    const [value, updateValue] = React__namespace.useState(isUndefined$1(defaultValue)
-	        ? watchInternal(name)
-	        : defaultValue);
-	    React__namespace.useEffect(() => {
-	        watchInternal(name);
-	        const watchSubscription = watchSubjectRef.current.subscribe({
-	            next: ({ name: inputName, value }) => (!nameRef.current ||
-	                !inputName ||
-	                convertToArrayPayload(nameRef.current).some((fieldName) => inputName &&
-	                    fieldName &&
-	                    (fieldName.startsWith(inputName) ||
-	                        inputName.startsWith(fieldName)))) &&
-	                updateValue(isString$1(inputName) &&
-	                    nameRef.current === inputName &&
-	                    !isUndefined$1(value)
-	                    ? value
-	                    : watchInternal(nameRef.current, defaultValue)),
-	        });
-	        return () => watchSubscription.unsubscribe();
-	    }, []);
-	    return value;
+	function useForm(props = {}) {
+	    const _formControl = React__default["default"].useRef();
+	    const [formState, updateFormState] = React__default["default"].useState({
+	        isDirty: false,
+	        isValidating: false,
+	        dirtyFields: {},
+	        isSubmitted: false,
+	        submitCount: 0,
+	        touchedFields: {},
+	        isSubmitting: false,
+	        isSubmitSuccessful: false,
+	        isValid: false,
+	        errors: {},
+	    });
+	    if (_formControl.current) {
+	        _formControl.current.control._options = props;
+	    }
+	    else {
+	        _formControl.current = Object.assign(Object.assign({}, createFormControl(props)), { formState });
+	    }
+	    const control = _formControl.current.control;
+	    useSubscribe({
+	        subject: control._subjects.state,
+	        callback: (value) => {
+	            if (shouldRenderFormState(value, control._proxyFormState, true)) {
+	                control._formState = Object.assign(Object.assign({}, control._formState), value);
+	                updateFormState(Object.assign({}, control._formState));
+	            }
+	        },
+	    });
+	    React__default["default"].useEffect(() => {
+	        if (!control._stateFlags.mount) {
+	            control._proxyFormState.isValid && control._updateValid();
+	            control._stateFlags.mount = true;
+	        }
+	        if (control._stateFlags.watch) {
+	            control._stateFlags.watch = false;
+	            control._subjects.state.next({});
+	        }
+	        control._removeUnmounted();
+	    });
+	    _formControl.current.formState = getProxyFormState(formState, control._proxyFormState);
+	    return _formControl.current;
 	}
 
 	var s$1=function(s){var t=s.as,a=s.errors,m=s.name,o=s.message,i=s.render,l=function(e,r){if(null==e)return {};var n,s,t={},a=Object.keys(e);for(s=0;s<a.length;s++)r.indexOf(n=a[s])>=0||(t[n]=e[n]);return t}(s,["as","errors","name","message","render"]),f=useFormContext(),c=get(a||f.formState.errors,m);if(!c)return null;var g=c.message,u=c.types,d=Object.assign({},l,{children:g||o});return React__namespace.isValidElement(t)?React__namespace.cloneElement(t,d):i?i({message:g||o,messages:u}):React__namespace.createElement(t||React__namespace.Fragment,d)};
 
-	var reactDomFactories = createCommonjsModule(function (module, exports) {
+	var reactDomFactories = {exports: {}};
+
+	(function (module, exports) {
 
 	/**
 	 * Copyright (c) 2015-present, Facebook, Inc.
@@ -7099,7 +7275,7 @@
 
 	(function(f) {
 	  {
-	    module.exports = f(React__default['default']);
+	    module.exports = f(React__default["default"]);
 	    /* global define */
 	  }
 	})(function(React) {
@@ -7262,18 +7438,23 @@
 	  // otherwise it will be defined as global variable.
 	  return ReactDOMFactories;
 	});
-	});
+	}(reactDomFactories));
 
-	/*!@license
-	 * UAParser.js v0.7.28
-	 * Lightweight JavaScript-based User-Agent string parser
-	 * https://github.com/faisalman/ua-parser-js
-	 *
-	 * Copyright © 2012-2021 Faisal Salman <f@faisalman.com>
-	 * Licensed under MIT License
-	 */
+	var ReactDOMElements = reactDomFactories.exports;
 
-	var uaParser = createCommonjsModule(function (module, exports) {
+	var uaParser = {exports: {}};
+
+	(function (module, exports) {
+	/////////////////////////////////////////////////////////////////////////////////
+	/* UAParser.js v1.0.2
+	   Copyright © 2012-2021 Faisal Salman <f@faisalman.com>
+	   MIT License *//*
+	   Detect Browser, Engine, OS, CPU, and Device type/model from User-Agent data.
+	   Supports browser & node.js environment. 
+	   Demo   : https://faisalman.github.io/ua-parser-js
+	   Source : https://github.com/faisalman/ua-parser-js */
+	/////////////////////////////////////////////////////////////////////////////////
+
 	(function (window, undefined$1) {
 
 	    //////////////
@@ -7281,14 +7462,14 @@
 	    /////////////
 
 
-	    var LIBVERSION  = '0.7.28',
+	    var LIBVERSION  = '1.0.2',
 	        EMPTY       = '',
 	        UNKNOWN     = '?',
 	        FUNC_TYPE   = 'function',
 	        UNDEF_TYPE  = 'undefined',
 	        OBJ_TYPE    = 'object',
 	        STR_TYPE    = 'string',
-	        MAJOR       = 'major', // deprecated
+	        MAJOR       = 'major',
 	        MODEL       = 'model',
 	        NAME        = 'name',
 	        TYPE        = 'type',
@@ -7303,14 +7484,31 @@
 	        EMBEDDED    = 'embedded',
 	        UA_MAX_LENGTH = 255;
 
+	    var AMAZON  = 'Amazon',
+	        APPLE   = 'Apple',
+	        ASUS    = 'ASUS',
+	        BLACKBERRY = 'BlackBerry',
+	        BROWSER = 'Browser',
+	        CHROME  = 'Chrome',
+	        EDGE    = 'Edge',
+	        FIREFOX = 'Firefox',
+	        GOOGLE  = 'Google',
+	        HUAWEI  = 'Huawei',
+	        LG      = 'LG',
+	        MICROSOFT = 'Microsoft',
+	        MOTOROLA  = 'Motorola',
+	        OPERA   = 'Opera',
+	        SAMSUNG = 'Samsung',
+	        SONY    = 'Sony',
+	        XIAOMI  = 'Xiaomi',
+	        ZEBRA   = 'Zebra',
+	        FACEBOOK   = 'Facebook';
 
 	    ///////////
 	    // Helper
 	    //////////
 
-
-	    var util = {
-	        extend : function (regexes, extensions) {
+	    var extend = function (regexes, extensions) {
 	            var mergedRegexes = {};
 	            for (var i in regexes) {
 	                if (extensions[i] && extensions[i].length % 2 === 0) {
@@ -7321,30 +7519,34 @@
 	            }
 	            return mergedRegexes;
 	        },
-	        has : function (str1, str2) {
-	            return typeof str1 === STR_TYPE ? str2.toLowerCase().indexOf(str1.toLowerCase()) !== -1 : false;
+	        enumerize = function (arr) {
+	            var enums = {};
+	            for (var i=0; i<arr.length; i++) {
+	                enums[arr[i].toUpperCase()] = arr[i];
+	            }
+	            return enums;
 	        },
-	        lowerize : function (str) {
+	        has = function (str1, str2) {
+	            return typeof str1 === STR_TYPE ? lowerize(str2).indexOf(lowerize(str1)) !== -1 : false;
+	        },
+	        lowerize = function (str) {
 	            return str.toLowerCase();
 	        },
-	        major : function (version) {
-	            return typeof(version) === STR_TYPE ? version.replace(/[^\d\.]/g,'').split(".")[0] : undefined$1;
+	        majorize = function (version) {
+	            return typeof(version) === STR_TYPE ? version.replace(/[^\d\.]/g, EMPTY).split('.')[0] : undefined$1;
 	        },
-	        trim : function (str, len) {
-	            str = str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
-	            return typeof(len) === UNDEF_TYPE ? str : str.substring(0, UA_MAX_LENGTH);
-	        }
+	        trim = function (str, len) {
+	            if (typeof(str) === STR_TYPE) {
+	                str = str.replace(/^\s\s*/, EMPTY).replace(/\s\s*$/, EMPTY);
+	                return typeof(len) === UNDEF_TYPE ? str : str.substring(0, UA_MAX_LENGTH);
+	            }
 	    };
-
 
 	    ///////////////
 	    // Map helper
 	    //////////////
 
-
-	    var mapper = {
-
-	        rgx : function (ua, arrays) {
+	    var rgxMapper = function (ua, arrays) {
 
 	            var i = 0, j, k, p, q, matches, match;
 
@@ -7366,7 +7568,7 @@
 	                            q = props[p];
 	                            // check if given property is actually array
 	                            if (typeof q === OBJ_TYPE && q.length > 0) {
-	                                if (q.length == 2) {
+	                                if (q.length === 2) {
 	                                    if (typeof q[1] == FUNC_TYPE) {
 	                                        // assign modified match
 	                                        this[q[0]] = q[1].call(this, match);
@@ -7374,7 +7576,7 @@
 	                                        // assign given value, ignore regex match
 	                                        this[q[0]] = q[1];
 	                                    }
-	                                } else if (q.length == 3) {
+	                                } else if (q.length === 3) {
 	                                    // check whether function or regex
 	                                    if (typeof q[1] === FUNC_TYPE && !(q[1].exec && q[1].test)) {
 	                                        // call function (usually string mapper)
@@ -7383,7 +7585,7 @@
 	                                        // sanitize match using given regex
 	                                        this[q[0]] = match ? match.replace(q[1], q[2]) : undefined$1;
 	                                    }
-	                                } else if (q.length == 4) {
+	                                } else if (q.length === 4) {
 	                                        this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined$1;
 	                                }
 	                            } else {
@@ -7396,83 +7598,55 @@
 	            }
 	        },
 
-	        str : function (str, map) {
+	        strMapper = function (str, map) {
 
 	            for (var i in map) {
-	                // check if array
+	                // check if current value is array
 	                if (typeof map[i] === OBJ_TYPE && map[i].length > 0) {
 	                    for (var j = 0; j < map[i].length; j++) {
-	                        if (util.has(map[i][j], str)) {
+	                        if (has(map[i][j], str)) {
 	                            return (i === UNKNOWN) ? undefined$1 : i;
 	                        }
 	                    }
-	                } else if (util.has(map[i], str)) {
+	                } else if (has(map[i], str)) {
 	                    return (i === UNKNOWN) ? undefined$1 : i;
 	                }
 	            }
 	            return str;
-	        }
 	    };
-
 
 	    ///////////////
 	    // String map
 	    //////////////
 
-
-	    var maps = {
-
-	        browser : {
-	            // Safari < 3.0
-	            oldSafari : {
-	                version : {
-	                    '1.0'   : '/8',
-	                    '1.2'   : '/1',
-	                    '1.3'   : '/3',
-	                    '2.0'   : '/412',
-	                    '2.0.2' : '/416',
-	                    '2.0.3' : '/417',
-	                    '2.0.4' : '/419',
-	                    '?'     : '/'
-	                }
-	            },
-	            oldEdge : {
-	                version : {
-	                    '0.1'   : '12.',
-	                    '21'    : '13.',
-	                    '31'    : '14.',
-	                    '39'    : '15.',
-	                    '41'    : '16.',
-	                    '42'    : '17.',
-	                    '44'    : '18.'
-	                }
-	            }
+	    // Safari < 3.0
+	    var oldSafariMap = {
+	            '1.0'   : '/8',
+	            '1.2'   : '/1',
+	            '1.3'   : '/3',
+	            '2.0'   : '/412',
+	            '2.0.2' : '/416',
+	            '2.0.3' : '/417',
+	            '2.0.4' : '/419',
+	            '?'     : '/'
 	        },
-
-	        os : {
-	            windows : {
-	                version : {
-	                    'ME'        : '4.90',
-	                    'NT 3.11'   : 'NT3.51',
-	                    'NT 4.0'    : 'NT4.0',
-	                    '2000'      : 'NT 5.0',
-	                    'XP'        : ['NT 5.1', 'NT 5.2'],
-	                    'Vista'     : 'NT 6.0',
-	                    '7'         : 'NT 6.1',
-	                    '8'         : 'NT 6.2',
-	                    '8.1'       : 'NT 6.3',
-	                    '10'        : ['NT 6.4', 'NT 10.0'],
-	                    'RT'        : 'ARM'
-	                }
-	            }
-	        }
+	        windowsVersionMap = {
+	            'ME'        : '4.90',
+	            'NT 3.11'   : 'NT3.51',
+	            'NT 4.0'    : 'NT4.0',
+	            '2000'      : 'NT 5.0',
+	            'XP'        : ['NT 5.1', 'NT 5.2'],
+	            'Vista'     : 'NT 6.0',
+	            '7'         : 'NT 6.1',
+	            '8'         : 'NT 6.2',
+	            '8.1'       : 'NT 6.3',
+	            '10'        : ['NT 6.4', 'NT 10.0'],
+	            'RT'        : 'ARM'
 	    };
-
 
 	    //////////////
 	    // Regex map
 	    /////////////
-
 
 	    var regexes = {
 
@@ -7482,164 +7656,155 @@
 	            ], [VERSION, [NAME, 'Chrome']], [
 	            /edg(?:e|ios|a)?\/([\w\.]+)/i                                       // Microsoft Edge
 	            ], [VERSION, [NAME, 'Edge']], [
-	            // breaking change (reserved for next major release):
-	            ///edge\/([\w\.]+)/i                                                  // Old Edge (Trident)
-	            //], [[VERSION, mapper.str, maps.browser.oldEdge.version], [NAME, 'Edge']], [
 
 	            // Presto based
-	            /(opera\smini)\/([\w\.-]+)/i,                                       // Opera Mini
-	            /(opera\s[mobiletab]{3,6})\b.+version\/([\w\.-]+)/i,                // Opera Mobi/Tablet
-	            /(opera)(?:.+version\/|[\/\s]+)([\w\.]+)/i,                         // Opera
+	            /(opera mini)\/([-\w\.]+)/i,                                        // Opera Mini
+	            /(opera [mobiletab]{3,6})\b.+version\/([-\w\.]+)/i,                 // Opera Mobi/Tablet
+	            /(opera)(?:.+version\/|[\/ ]+)([\w\.]+)/i                           // Opera
 	            ], [NAME, VERSION], [
-	            /opios[\/\s]+([\w\.]+)/i                                            // Opera mini on iphone >= 8.0
-	            ], [VERSION, [NAME, 'Opera Mini']], [
-	            /\sopr\/([\w\.]+)/i                                                 // Opera Webkit
-	            ], [VERSION, [NAME, 'Opera']], [
+	            /opios[\/ ]+([\w\.]+)/i                                             // Opera mini on iphone >= 8.0
+	            ], [VERSION, [NAME, OPERA+' Mini']], [
+	            /\bopr\/([\w\.]+)/i                                                 // Opera Webkit
+	            ], [VERSION, [NAME, OPERA]], [
 
 	            // Mixed
 	            /(kindle)\/([\w\.]+)/i,                                             // Kindle
-	            /(lunascape|maxthon|netfront|jasmine|blazer)[\/\s]?([\w\.]*)/i,     // Lunascape/Maxthon/Netfront/Jasmine/Blazer
+	            /(lunascape|maxthon|netfront|jasmine|blazer)[\/ ]?([\w\.]*)/i,      // Lunascape/Maxthon/Netfront/Jasmine/Blazer
 	            // Trident based
-	            /(avant\s|iemobile|slim)(?:browser)?[\/\s]?([\w\.]*)/i,             // Avant/IEMobile/SlimBrowser
-	            /(ba?idubrowser)[\/\s]?([\w\.]+)/i,                                 // Baidu Browser
-	            /(?:ms|\()(ie)\s([\w\.]+)/i,                                        // Internet Explorer
+	            /(avant |iemobile|slim)(?:browser)?[\/ ]?([\w\.]*)/i,               // Avant/IEMobile/SlimBrowser
+	            /(ba?idubrowser)[\/ ]?([\w\.]+)/i,                                  // Baidu Browser
+	            /(?:ms|\()(ie) ([\w\.]+)/i,                                         // Internet Explorer
 
-	            // Webkit/KHTML based
-	            /(flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon)\/([\w\.-]+)/i,
-	                                                                                // Flock/RockMelt/Midori/Epiphany/Silk/Skyfire/Bolt/Iron/Iridium/PhantomJS/Bowser/QupZilla/Falkon
-	            /(rekonq|puffin|brave|whale|qqbrowserlite|qq)\/([\w\.]+)/i,         // Rekonq/Puffin/Brave/Whale/QQBrowserLite/QQ, aka ShouQ
+	            // Webkit/KHTML based                                               // Flock/RockMelt/Midori/Epiphany/Silk/Skyfire/Bolt/Iron/Iridium/PhantomJS/Bowser/QupZilla/Falkon
+	            /(flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon|rekonq|puffin|brave|whale|qqbrowserlite|qq)\/([-\w\.]+)/i,
+	                                                                                // Rekonq/Puffin/Brave/Whale/QQBrowserLite/QQ, aka ShouQ
 	            /(weibo)__([\d\.]+)/i                                               // Weibo
 	            ], [NAME, VERSION], [
-	            /(?:[\s\/]uc?\s?browser|(?:juc.+)ucweb)[\/\s]?([\w\.]+)/i           // UCBrowser
-	            ], [VERSION, [NAME, 'UCBrowser']], [
-	            /(?:windowswechat)?\sqbcore\/([\w\.]+)\b.*(?:windowswechat)?/i      // WeChat Desktop for Windows Built-in Browser
+	            /(?:\buc? ?browser|(?:juc.+)ucweb)[\/ ]?([\w\.]+)/i                 // UCBrowser
+	            ], [VERSION, [NAME, 'UC'+BROWSER]], [
+	            /\bqbcore\/([\w\.]+)/i                                              // WeChat Desktop for Windows Built-in Browser
 	            ], [VERSION, [NAME, 'WeChat(Win) Desktop']], [
 	            /micromessenger\/([\w\.]+)/i                                        // WeChat
 	            ], [VERSION, [NAME, 'WeChat']], [
 	            /konqueror\/([\w\.]+)/i                                             // Konqueror
 	            ], [VERSION, [NAME, 'Konqueror']], [
-	            /trident.+rv[:\s]([\w\.]{1,9})\b.+like\sgecko/i                     // IE11
+	            /trident.+rv[: ]([\w\.]{1,9})\b.+like gecko/i                       // IE11
 	            ], [VERSION, [NAME, 'IE']], [
 	            /yabrowser\/([\w\.]+)/i                                             // Yandex
 	            ], [VERSION, [NAME, 'Yandex']], [
 	            /(avast|avg)\/([\w\.]+)/i                                           // Avast/AVG Secure Browser
-	            ], [[NAME, /(.+)/, '$1 Secure Browser'], VERSION], [
-	            /focus\/([\w\.]+)/i                                                 // Firefox Focus
-	            ], [VERSION, [NAME, 'Firefox Focus']], [
-	            /opt\/([\w\.]+)/i                                                   // Opera Touch
-	            ], [VERSION, [NAME, 'Opera Touch']], [
-	            /coc_coc_browser\/([\w\.]+)/i                                       // Coc Coc Browser
+	            ], [[NAME, /(.+)/, '$1 Secure '+BROWSER], VERSION], [
+	            /\bfocus\/([\w\.]+)/i                                               // Firefox Focus
+	            ], [VERSION, [NAME, FIREFOX+' Focus']], [
+	            /\bopt\/([\w\.]+)/i                                                 // Opera Touch
+	            ], [VERSION, [NAME, OPERA+' Touch']], [
+	            /coc_coc\w+\/([\w\.]+)/i                                            // Coc Coc Browser
 	            ], [VERSION, [NAME, 'Coc Coc']], [
 	            /dolfin\/([\w\.]+)/i                                                // Dolphin
 	            ], [VERSION, [NAME, 'Dolphin']], [
 	            /coast\/([\w\.]+)/i                                                 // Opera Coast
-	            ], [VERSION, [NAME, 'Opera Coast']],
-	            [/xiaomi\/miuibrowser\/([\w\.]+)/i                                  // MIUI Browser
-	            ], [VERSION, [NAME, 'MIUI Browser']], [
-	            /fxios\/([\w\.-]+)/i                                                // Firefox for iOS
-	            ], [VERSION, [NAME, 'Firefox']], [
-	            /(qihu|qhbrowser|qihoobrowser|360browser)/i                         // 360
-	            ], [[NAME, '360 Browser']], [
+	            ], [VERSION, [NAME, OPERA+' Coast']], [
+	            /miuibrowser\/([\w\.]+)/i                                           // MIUI Browser
+	            ], [VERSION, [NAME, 'MIUI '+BROWSER]], [
+	            /fxios\/([-\w\.]+)/i                                                // Firefox for iOS
+	            ], [VERSION, [NAME, FIREFOX]], [
+	            /\bqihu|(qi?ho?o?|360)browser/i                                     // 360
+	            ], [[NAME, '360 '+BROWSER]], [
 	            /(oculus|samsung|sailfish)browser\/([\w\.]+)/i
-	            ], [[NAME, /(.+)/, '$1 Browser'], VERSION], [                       // Oculus/Samsung/Sailfish Browser
+	            ], [[NAME, /(.+)/, '$1 '+BROWSER], VERSION], [                      // Oculus/Samsung/Sailfish Browser
 	            /(comodo_dragon)\/([\w\.]+)/i                                       // Comodo Dragon
 	            ], [[NAME, /_/g, ' '], VERSION], [
-	            /\s(electron)\/([\w\.]+)\ssafari/i,                                 // Electron-based App
-	            /(tesla)(?:\sqtcarbrowser|\/(20[12]\d\.[\w\.-]+))/i,                // Tesla
-	            /m?(qqbrowser|baiduboxapp|2345Explorer)[\/\s]?([\w\.]+)/i           // QQBrowser/Baidu App/2345 Browser
+	            /(electron)\/([\w\.]+) safari/i,                                    // Electron-based App
+	            /(tesla)(?: qtcarbrowser|\/(20\d\d\.[-\w\.]+))/i,                   // Tesla
+	            /m?(qqbrowser|baiduboxapp|2345Explorer)[\/ ]?([\w\.]+)/i            // QQBrowser/Baidu App/2345 Browser
 	            ], [NAME, VERSION], [
-	            /(MetaSr)[\/\s]?([\w\.]+)/i,                                        // SouGouBrowser
-	            /(LBBROWSER)/i                                                      // LieBao Browser
+	            /(metasr)[\/ ]?([\w\.]+)/i,                                         // SouGouBrowser
+	            /(lbbrowser)/i                                                      // LieBao Browser
 	            ], [NAME], [
 
 	            // WebView
-	            /;fbav\/([\w\.]+);/i                                                // Facebook App for iOS & Android with version
-	            ], [VERSION, [NAME, 'Facebook']], [
-	            /FBAN\/FBIOS|FB_IAB\/FB4A/i                                         // Facebook App for iOS & Android without version
-	            ], [[NAME, 'Facebook']], [
-	            /safari\s(line)\/([\w\.]+)/i,                                       // Line App for iOS
+	            /((?:fban\/fbios|fb_iab\/fb4a)(?!.+fbav)|;fbav\/([\w\.]+);)/i       // Facebook App for iOS & Android
+	            ], [[NAME, FACEBOOK], VERSION], [
+	            /safari (line)\/([\w\.]+)/i,                                        // Line App for iOS
 	            /\b(line)\/([\w\.]+)\/iab/i,                                        // Line App for Android
-	            /(chromium|instagram)[\/\s]([\w\.-]+)/i                             // Chromium/Instagram
+	            /(chromium|instagram)[\/ ]([-\w\.]+)/i                              // Chromium/Instagram
 	            ], [NAME, VERSION], [
-	            /\bgsa\/([\w\.]+)\s.*safari\//i                                     // Google Search Appliance on iOS
+	            /\bgsa\/([\w\.]+) .*safari\//i                                      // Google Search Appliance on iOS
 	            ], [VERSION, [NAME, 'GSA']], [
 
-	            /headlesschrome(?:\/([\w\.]+)|\s)/i                                 // Chrome Headless
-	            ], [VERSION, [NAME, 'Chrome Headless']], [
+	            /headlesschrome(?:\/([\w\.]+)| )/i                                  // Chrome Headless
+	            ], [VERSION, [NAME, CHROME+' Headless']], [
 
-	            /\swv\).+(chrome)\/([\w\.]+)/i                                      // Chrome WebView
-	            ], [[NAME, 'Chrome WebView'], VERSION], [
+	            / wv\).+(chrome)\/([\w\.]+)/i                                       // Chrome WebView
+	            ], [[NAME, CHROME+' WebView'], VERSION], [
 
-	            /droid.+\sversion\/([\w\.]+)\b.+(?:mobile\ssafari|safari)/i         // Android Browser
-	            ], [VERSION, [NAME, 'Android Browser']], [
+	            /droid.+ version\/([\w\.]+)\b.+(?:mobile safari|safari)/i           // Android Browser
+	            ], [VERSION, [NAME, 'Android '+BROWSER]], [
 
-	            /(chrome|omniweb|arora|[tizenoka]{5}\s?browser)\/v?([\w\.]+)/i      // Chrome/OmniWeb/Arora/Tizen/Nokia
+	            /(chrome|omniweb|arora|[tizenoka]{5} ?browser)\/v?([\w\.]+)/i       // Chrome/OmniWeb/Arora/Tizen/Nokia
 	            ], [NAME, VERSION], [
 
-	            /version\/([\w\.]+)\s.*mobile\/\w+\s(safari)/i                      // Mobile Safari
+	            /version\/([\w\.]+) .*mobile\/\w+ (safari)/i                        // Mobile Safari
 	            ], [VERSION, [NAME, 'Mobile Safari']], [
-	            /version\/([\w\.]+)\s.*(mobile\s?safari|safari)/i                   // Safari & Safari Mobile
+	            /version\/([\w\.]+) .*(mobile ?safari|safari)/i                     // Safari & Safari Mobile
 	            ], [VERSION, NAME], [
-	            /webkit.+?(mobile\s?safari|safari)(\/[\w\.]+)/i                     // Safari < 3.0
-	            ], [NAME, [VERSION, mapper.str, maps.browser.oldSafari.version]], [
+	            /webkit.+?(mobile ?safari|safari)(\/[\w\.]+)/i                      // Safari < 3.0
+	            ], [NAME, [VERSION, strMapper, oldSafariMap]], [
 
 	            /(webkit|khtml)\/([\w\.]+)/i
 	            ], [NAME, VERSION], [
 
 	            // Gecko based
-	            /(navigator|netscape)\/([\w\.-]+)/i                                 // Netscape
+	            /(navigator|netscape\d?)\/([-\w\.]+)/i                              // Netscape
 	            ], [[NAME, 'Netscape'], VERSION], [
-	            /ile\svr;\srv:([\w\.]+)\).+firefox/i                                // Firefox Reality
-	            ], [VERSION, [NAME, 'Firefox Reality']], [
+	            /mobile vr; rv:([\w\.]+)\).+firefox/i                               // Firefox Reality
+	            ], [VERSION, [NAME, FIREFOX+' Reality']], [
 	            /ekiohf.+(flow)\/([\w\.]+)/i,                                       // Flow
 	            /(swiftfox)/i,                                                      // Swiftfox
-	            /(icedragon|iceweasel|camino|chimera|fennec|maemo\sbrowser|minimo|conkeror)[\/\s]?([\w\.\+]+)/i,
-	                                                                                // IceDragon/Iceweasel/Camino/Chimera/Fennec/Maemo/Minimo/Conkeror
-	            /(firefox|seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([\w\.-]+)$/i,
+	            /(icedragon|iceweasel|camino|chimera|fennec|maemo browser|minimo|conkeror|klar)[\/ ]?([\w\.\+]+)/i,
+	                                                                                // IceDragon/Iceweasel/Camino/Chimera/Fennec/Maemo/Minimo/Conkeror/Klar
+	            /(seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([-\w\.]+)$/i,
 	                                                                                // Firefox/SeaMonkey/K-Meleon/IceCat/IceApe/Firebird/Phoenix
-	            /(firefox)\/([\w\.]+)\s[\w\s\-]+\/[\w\.]+$/i,                       // Other Firefox-based
-	            /(mozilla)\/([\w\.]+)\s.+rv\:.+gecko\/\d+/i,                        // Mozilla
+	            /(firefox)\/([\w\.]+)/i,                                            // Other Firefox-based
+	            /(mozilla)\/([\w\.]+) .+rv\:.+gecko\/\d+/i,                         // Mozilla
 
 	            // Other
-	            /(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir)[\/\s]?([\w\.]+)/i,
-	                                                                                // Polaris/Lynx/Dillo/iCab/Doris/Amaya/w3m/NetSurf/Sleipnir
-	            /(links)\s\(([\w\.]+)/i,                                            // Links
-	            /(gobrowser)\/?([\w\.]*)/i,                                         // GoBrowser
-	            /(ice\s?browser)\/v?([\w\._]+)/i,                                   // ICE Browser
-	            /(mosaic)[\/\s]([\w\.]+)/i                                          // Mosaic
+	            /(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir|obigo|mosaic|(?:go|ice|up)[\. ]?browser)[-\/ ]?v?([\w\.]+)/i,
+	                                                                                // Polaris/Lynx/Dillo/iCab/Doris/Amaya/w3m/NetSurf/Sleipnir/Obigo/Mosaic/Go/ICE/UP.Browser
+	            /(links) \(([\w\.]+)/i                                              // Links
 	            ], [NAME, VERSION]
 	        ],
 
 	        cpu : [[
 
-	            /(?:(amd|x(?:(?:86|64)[_-])?|wow|win)64)[;\)]/i                     // AMD64 (x64)
+	            /(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i                     // AMD64 (x64)
 	            ], [[ARCHITECTURE, 'amd64']], [
 
 	            /(ia32(?=;))/i                                                      // IA32 (quicktime)
-	            ], [[ARCHITECTURE, util.lowerize]], [
+	            ], [[ARCHITECTURE, lowerize]], [
 
 	            /((?:i[346]|x)86)[;\)]/i                                            // IA32 (x86)
 	            ], [[ARCHITECTURE, 'ia32']], [
 
-	            /\b(aarch64|armv?8e?l?)\b/i                                         // ARM64
+	            /\b(aarch64|arm(v?8e?l?|_?64))\b/i                                 // ARM64
 	            ], [[ARCHITECTURE, 'arm64']], [
 
 	            /\b(arm(?:v[67])?ht?n?[fl]p?)\b/i                                   // ARMHF
 	            ], [[ARCHITECTURE, 'armhf']], [
 
 	            // PocketPC mistakenly identified as PowerPC
-	            /windows\s(ce|mobile);\sppc;/i
+	            /windows (ce|mobile); ppc;/i
 	            ], [[ARCHITECTURE, 'arm']], [
 
-	            /((?:ppc|powerpc)(?:64)?)(?:\smac|;|\))/i                           // PowerPC
-	            ], [[ARCHITECTURE, /ower/, '', util.lowerize]], [
+	            /((?:ppc|powerpc)(?:64)?)(?: mac|;|\))/i                            // PowerPC
+	            ], [[ARCHITECTURE, /ower/, EMPTY, lowerize]], [
 
 	            /(sun4\w)[;\)]/i                                                    // SPARC
 	            ], [[ARCHITECTURE, 'sparc']], [
 
-	            /((?:avr32|ia64(?=;))|68k(?=\))|\barm(?:64|(?=v(?:[1-7]|[5-7]1)l?|;|eabi))|(?=atmel\s)avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i
+	            /((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i
 	                                                                                // IA64, 68K, ARM/64, AVR/32, IRIX/64, MIPS/64, SPARC/64, PA-RISC
-	            ], [[ARCHITECTURE, util.lowerize]]
+	            ], [[ARCHITECTURE, lowerize]]
 	        ],
 
 	        device : [[
@@ -7650,231 +7815,233 @@
 	            /////////////////////////
 
 	            // Samsung
-	            /\b(sch-i[89]0\d|shw-m380s|sm-[pt]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus\s10)/i
-	            ], [MODEL, [VENDOR, 'Samsung'], [TYPE, TABLET]], [
-	            /\b((?:s[cgp]h|gt|sm)-\w+|galaxy\snexus)/i,
-	            /\ssamsung[\s-]([\w-]+)/i,
+	            /\b(sch-i[89]0\d|shw-m380s|sm-[pt]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus 10)/i
+	            ], [MODEL, [VENDOR, SAMSUNG], [TYPE, TABLET]], [
+	            /\b((?:s[cgp]h|gt|sm)-\w+|galaxy nexus)/i,
+	            /samsung[- ]([-\w]+)/i,
 	            /sec-(sgh\w+)/i
-	            ], [MODEL, [VENDOR, 'Samsung'], [TYPE, MOBILE]], [
+	            ], [MODEL, [VENDOR, SAMSUNG], [TYPE, MOBILE]], [
 
 	            // Apple
-	            /\((ip(?:hone|od)[\s\w]*);/i                                        // iPod/iPhone
-	            ], [MODEL, [VENDOR, 'Apple'], [TYPE, MOBILE]], [
-	            /\((ipad);[\w\s\),;-]+apple/i,                                      // iPad
-	            /applecoremedia\/[\w\.]+\s\((ipad)/i,
+	            /\((ip(?:hone|od)[\w ]*);/i                                         // iPod/iPhone
+	            ], [MODEL, [VENDOR, APPLE], [TYPE, MOBILE]], [
+	            /\((ipad);[-\w\),; ]+apple/i,                                       // iPad
+	            /applecoremedia\/[\w\.]+ \((ipad)/i,
 	            /\b(ipad)\d\d?,\d\d?[;\]].+ios/i
-	            ], [MODEL, [VENDOR, 'Apple'], [TYPE, TABLET]], [
+	            ], [MODEL, [VENDOR, APPLE], [TYPE, TABLET]], [
 
 	            // Huawei
-	            /\b((?:agr|ags[23]|bah2?|sht?)-a?[lw]\d{2})/i,
-	            ], [MODEL, [VENDOR, 'Huawei'], [TYPE, TABLET]], [
-	            /d\/huawei([\w\s-]+)[;\)]/i,
-	            /\b(nexus\s6p|vog-[at]?l\d\d|ane-[at]?l[x\d]\d|eml-a?l\d\da?|lya-[at]?l\d[\dc]|clt-a?l\d\di?|ele-l\d\d)/i,
-	            /\b(\w{2,4}-[atu][ln][01259][019])[;\)\s]/i
-	            ], [MODEL, [VENDOR, 'Huawei'], [TYPE, MOBILE]], [
+	            /\b((?:ag[rs][23]?|bah2?|sht?|btv)-a?[lw]\d{2})\b(?!.+d\/s)/i
+	            ], [MODEL, [VENDOR, HUAWEI], [TYPE, TABLET]], [
+	            /(?:huawei|honor)([-\w ]+)[;\)]/i,
+	            /\b(nexus 6p|\w{2,4}-[atu]?[ln][01259x][012359][an]?)\b(?!.+d\/s)/i
+	            ], [MODEL, [VENDOR, HUAWEI], [TYPE, MOBILE]], [
 
 	            // Xiaomi
-	            /\b(poco[\s\w]+)(?:\sbuild|\))/i,                                   // Xiaomi POCO
-	            /\b;\s(\w+)\sbuild\/hm\1/i,                                         // Xiaomi Hongmi 'numeric' models
-	            /\b(hm[\s\-_]?note?[\s_]?(?:\d\w)?)\sbuild/i,                       // Xiaomi Hongmi
-	            /\b(redmi[\s\-_]?(?:note|k)?[\w\s_]+)(?:\sbuild|\))/i,              // Xiaomi Redmi
-	            /\b(mi[\s\-_]?(?:a\d|one|one[\s_]plus|note lte)?[\s_]?(?:\d?\w?)[\s_]?(?:plus)?)\sbuild/i  // Xiaomi Mi
-	            ], [[MODEL, /_/g, ' '], [VENDOR, 'Xiaomi'], [TYPE, MOBILE]], [
-	            /\b(mi[\s\-_]?(?:pad)(?:[\w\s_]+))(?:\sbuild|\))/i                  // Mi Pad tablets
-	            ],[[MODEL, /_/g, ' '], [VENDOR, 'Xiaomi'], [TYPE, TABLET]], [
+	            /\b(poco[\w ]+)(?: bui|\))/i,                                       // Xiaomi POCO
+	            /\b; (\w+) build\/hm\1/i,                                           // Xiaomi Hongmi 'numeric' models
+	            /\b(hm[-_ ]?note?[_ ]?(?:\d\w)?) bui/i,                             // Xiaomi Hongmi
+	            /\b(redmi[\-_ ]?(?:note|k)?[\w_ ]+)(?: bui|\))/i,                   // Xiaomi Redmi
+	            /\b(mi[-_ ]?(?:a\d|one|one[_ ]plus|note lte|max)?[_ ]?(?:\d?\w?)[_ ]?(?:plus|se|lite)?)(?: bui|\))/i // Xiaomi Mi
+	            ], [[MODEL, /_/g, ' '], [VENDOR, XIAOMI], [TYPE, MOBILE]], [
+	            /\b(mi[-_ ]?(?:pad)(?:[\w_ ]+))(?: bui|\))/i                        // Mi Pad tablets
+	            ],[[MODEL, /_/g, ' '], [VENDOR, XIAOMI], [TYPE, TABLET]], [
 
 	            // OPPO
-	            /;\s(\w+)\sbuild.+\soppo/i,
-	            /\s(cph[12]\d{3}|p(?:af|c[al]|d\w|e[ar])[mt]\d0|x9007)\b/i
+	            /; (\w+) bui.+ oppo/i,
+	            /\b(cph[12]\d{3}|p(?:af|c[al]|d\w|e[ar])[mt]\d0|x9007|a101op)\b/i
 	            ], [MODEL, [VENDOR, 'OPPO'], [TYPE, MOBILE]], [
 
 	            // Vivo
-	            /\svivo\s(\w+)(?:\sbuild|\))/i,
-	            /\s(v[12]\d{3}\w?[at])(?:\sbuild|;)/i
+	            /vivo (\w+)(?: bui|\))/i,
+	            /\b(v[12]\d{3}\w?[at])(?: bui|;)/i
 	            ], [MODEL, [VENDOR, 'Vivo'], [TYPE, MOBILE]], [
 
 	            // Realme
-	            /\s(rmx[12]\d{3})(?:\sbuild|;)/i
+	            /\b(rmx[12]\d{3})(?: bui|;|\))/i
 	            ], [MODEL, [VENDOR, 'Realme'], [TYPE, MOBILE]], [
 
 	            // Motorola
-	            /\s(milestone|droid(?:[2-4x]|\s(?:bionic|x2|pro|razr))?:?(\s4g)?)\b[\w\s]+build\//i,
-	            /\smot(?:orola)?[\s-](\w*)/i,
-	            /((?:moto[\s\w\(\)]+|xt\d{3,4}|nexus\s6)(?=\sbuild|\)))/i
-	            ], [MODEL, [VENDOR, 'Motorola'], [TYPE, MOBILE]], [
-	            /\s(mz60\d|xoom[\s2]{0,2})\sbuild\//i
-	            ], [MODEL, [VENDOR, 'Motorola'], [TYPE, TABLET]], [
+	            /\b(milestone|droid(?:[2-4x]| (?:bionic|x2|pro|razr))?:?( 4g)?)\b[\w ]+build\//i,
+	            /\bmot(?:orola)?[- ](\w*)/i,
+	            /((?:moto[\w\(\) ]+|xt\d{3,4}|nexus 6)(?= bui|\)))/i
+	            ], [MODEL, [VENDOR, MOTOROLA], [TYPE, MOBILE]], [
+	            /\b(mz60\d|xoom[2 ]{0,2}) build\//i
+	            ], [MODEL, [VENDOR, MOTOROLA], [TYPE, TABLET]], [
 
 	            // LG
-	            /((?=lg)?[vl]k\-?\d{3})\sbuild|\s3\.[\s\w;-]{10}lg?-([06cv9]{3,4})/i
-	            ], [MODEL, [VENDOR, 'LG'], [TYPE, TABLET]], [
-	            /(lm-?f100[nv]?|nexus\s[45])/i,
-	            /lg[e;\s\/-]+((?!browser|netcast)\w+)/i,
-	            /\blg(\-?[\d\w]+)\sbuild/i
-	            ], [MODEL, [VENDOR, 'LG'], [TYPE, MOBILE]], [
+	            /((?=lg)?[vl]k\-?\d{3}) bui| 3\.[-\w; ]{10}lg?-([06cv9]{3,4})/i
+	            ], [MODEL, [VENDOR, LG], [TYPE, TABLET]], [
+	            /(lm(?:-?f100[nv]?|-[\w\.]+)(?= bui|\))|nexus [45])/i,
+	            /\blg[-e;\/ ]+((?!browser|netcast|android tv)\w+)/i,
+	            /\blg-?([\d\w]+) bui/i
+	            ], [MODEL, [VENDOR, LG], [TYPE, MOBILE]], [
 
 	            // Lenovo
-	            /(ideatab[\w\-\s]+)/i,
-	            /lenovo\s?(s(?:5000|6000)(?:[\w-]+)|tab(?:[\s\w]+)|yt[\d\w-]{6}|tb[\d\w-]{6})/i        // Lenovo tablets
+	            /(ideatab[-\w ]+)/i,
+	            /lenovo ?(s[56]000[-\w]+|tab(?:[\w ]+)|yt[-\d\w]{6}|tb[-\d\w]{6})/i
 	            ], [MODEL, [VENDOR, 'Lenovo'], [TYPE, TABLET]], [
 
 	            // Nokia
-	            /(?:maemo|nokia).*(n900|lumia\s\d+)/i,
-	            /nokia[\s_-]?([\w\.-]*)/i
+	            /(?:maemo|nokia).*(n900|lumia \d+)/i,
+	            /nokia[-_ ]?([-\w\.]*)/i
 	            ], [[MODEL, /_/g, ' '], [VENDOR, 'Nokia'], [TYPE, MOBILE]], [
 
 	            // Google
-	            /droid.+;\s(pixel\sc)[\s)]/i                                        // Google Pixel C
-	            ], [MODEL, [VENDOR, 'Google'], [TYPE, TABLET]], [
-	            /droid.+;\s(pixel[\s\daxl]{0,6})(?:\sbuild|\))/i                    // Google Pixel
-	            ], [MODEL, [VENDOR, 'Google'], [TYPE, MOBILE]], [
+	            /(pixel c)\b/i                                                      // Google Pixel C
+	            ], [MODEL, [VENDOR, GOOGLE], [TYPE, TABLET]], [
+	            /droid.+; (pixel[\daxl ]{0,6})(?: bui|\))/i                         // Google Pixel
+	            ], [MODEL, [VENDOR, GOOGLE], [TYPE, MOBILE]], [
 
 	            // Sony
-	            /droid.+\s([c-g]\d{4}|so[-l]\w+|xq-a\w[4-7][12])(?=\sbuild\/|\).+chrome\/(?![1-6]{0,1}\d\.))/i
-	            ], [MODEL, [VENDOR, 'Sony'], [TYPE, MOBILE]], [
-	            /sony\stablet\s[ps]\sbuild\//i,
-	            /(?:sony)?sgp\w+(?:\sbuild\/|\))/i
-	            ], [[MODEL, 'Xperia Tablet'], [VENDOR, 'Sony'], [TYPE, TABLET]], [
+	            /droid.+ ([c-g]\d{4}|so[-gl]\w+|xq-a\w[4-7][12])(?= bui|\).+chrome\/(?![1-6]{0,1}\d\.))/i
+	            ], [MODEL, [VENDOR, SONY], [TYPE, MOBILE]], [
+	            /sony tablet [ps]/i,
+	            /\b(?:sony)?sgp\w+(?: bui|\))/i
+	            ], [[MODEL, 'Xperia Tablet'], [VENDOR, SONY], [TYPE, TABLET]], [
 
 	            // OnePlus
-	            /\s(kb2005|in20[12]5|be20[12][59])\b/i,
-	            /\ba000(1)\sbuild/i,                                                // OnePlus
-	            /\boneplus\s(a\d{4})[\s)]/i
+	            / (kb2005|in20[12]5|be20[12][59])\b/i,
+	            /(?:one)?(?:plus)? (a\d0\d\d)(?: b|\))/i
 	            ], [MODEL, [VENDOR, 'OnePlus'], [TYPE, MOBILE]], [
 
 	            // Amazon
 	            /(alexa)webm/i,
-	            /(kf[a-z]{2}wi)(\sbuild\/|\))/i,                                    // Kindle Fire without Silk
-	            /(kf[a-z]+)(\sbuild\/|\)).+silk\//i                                 // Kindle Fire HD
-	            ], [MODEL, [VENDOR, 'Amazon'], [TYPE, TABLET]], [
-	            /(sd|kf)[0349hijorstuw]+(\sbuild\/|\)).+silk\//i                    // Fire Phone
-	            ], [[MODEL, 'Fire Phone'], [VENDOR, 'Amazon'], [TYPE, MOBILE]], [
+	            /(kf[a-z]{2}wi)( bui|\))/i,                                         // Kindle Fire without Silk
+	            /(kf[a-z]+)( bui|\)).+silk\//i                                      // Kindle Fire HD
+	            ], [MODEL, [VENDOR, AMAZON], [TYPE, TABLET]], [
+	            /((?:sd|kf)[0349hijorstuw]+)( bui|\)).+silk\//i                     // Fire Phone
+	            ], [[MODEL, /(.+)/g, 'Fire Phone $1'], [VENDOR, AMAZON], [TYPE, MOBILE]], [
 
 	            // BlackBerry
-	            /\((playbook);[\w\s\),;-]+(rim)/i                                   // BlackBerry PlayBook
+	            /(playbook);[-\w\),; ]+(rim)/i                                      // BlackBerry PlayBook
 	            ], [MODEL, VENDOR, [TYPE, TABLET]], [
-	            /((?:bb[a-f]|st[hv])100-\d)/i,
-	            /\(bb10;\s(\w+)/i                                                   // BlackBerry 10
-	            ], [MODEL, [VENDOR, 'BlackBerry'], [TYPE, MOBILE]], [
+	            /\b((?:bb[a-f]|st[hv])100-\d)/i,
+	            /\(bb10; (\w+)/i                                                    // BlackBerry 10
+	            ], [MODEL, [VENDOR, BLACKBERRY], [TYPE, MOBILE]], [
 
 	            // Asus
-	            /(?:\b|asus_)(transfo[prime\s]{4,10}\s\w+|eeepc|slider\s\w+|nexus\s7|padfone|p00[cj])/i
-	            ], [MODEL, [VENDOR, 'ASUS'], [TYPE, TABLET]], [
-	            /\s(z[es]6[027][01][km][ls]|zenfone\s\d\w?)\b/i
-	            ], [MODEL, [VENDOR, 'ASUS'], [TYPE, MOBILE]], [
+	            /(?:\b|asus_)(transfo[prime ]{4,10} \w+|eeepc|slider \w+|nexus 7|padfone|p00[cj])/i
+	            ], [MODEL, [VENDOR, ASUS], [TYPE, TABLET]], [
+	            / (z[bes]6[027][012][km][ls]|zenfone \d\w?)\b/i
+	            ], [MODEL, [VENDOR, ASUS], [TYPE, MOBILE]], [
 
 	            // HTC
-	            /(nexus\s9)/i                                                       // HTC Nexus 9
+	            /(nexus 9)/i                                                        // HTC Nexus 9
 	            ], [MODEL, [VENDOR, 'HTC'], [TYPE, TABLET]], [
-	            /(htc)[;_\s-]{1,2}([\w\s]+(?=\)|\sbuild)|\w+)/i,                    // HTC
+	            /(htc)[-;_ ]{1,2}([\w ]+(?=\)| bui)|\w+)/i,                         // HTC
 
 	            // ZTE
-	            /(zte)-(\w*)/i,
-	            /(alcatel|geeksphone|nexian|panasonic|(?=;\s)sony)[_\s-]?([\w-]*)/i // Alcatel/GeeksPhone/Nexian/Panasonic/Sony
+	            /(zte)[- ]([\w ]+?)(?: bui|\/|\))/i,
+	            /(alcatel|geeksphone|nexian|panasonic|sony)[-_ ]?([-\w]*)/i         // Alcatel/GeeksPhone/Nexian/Panasonic/Sony
 	            ], [VENDOR, [MODEL, /_/g, ' '], [TYPE, MOBILE]], [
 
 	            // Acer
-	            /droid[x\d\.\s;]+\s([ab][1-7]\-?[0178a]\d\d?)/i
+	            /droid.+; ([ab][1-7]-?[0178a]\d\d?)/i
 	            ], [MODEL, [VENDOR, 'Acer'], [TYPE, TABLET]], [
 
 	            // Meizu
-	            /droid.+;\s(m[1-5]\snote)\sbuild/i,
-	            /\bmz-([\w-]{2,})/i
+	            /droid.+; (m[1-5] note) bui/i,
+	            /\bmz-([-\w]{2,})/i
 	            ], [MODEL, [VENDOR, 'Meizu'], [TYPE, MOBILE]], [
 
+	            // Sharp
+	            /\b(sh-?[altvz]?\d\d[a-ekm]?)/i
+	            ], [MODEL, [VENDOR, 'Sharp'], [TYPE, MOBILE]], [
+
 	            // MIXED
-	            /(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[\s_-]?([\w-]*)/i,
+	            /(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[-_ ]?([-\w]*)/i,
 	                                                                                // BlackBerry/BenQ/Palm/Sony-Ericsson/Acer/Asus/Dell/Meizu/Motorola/Polytron
-	            /(hp)\s([\w\s]+\w)/i,                                               // HP iPAQ
+	            /(hp) ([\w ]+\w)/i,                                                 // HP iPAQ
 	            /(asus)-?(\w+)/i,                                                   // Asus
-	            /(microsoft);\s(lumia[\s\w]+)/i,                                    // Microsoft Lumia
-	            /(lenovo)[_\s-]?([\w-]+)/i,                                         // Lenovo
-	            /linux;.+(jolla);/i,                                                // Jolla
-	            /droid.+;\s(oppo)\s?([\w\s]+)\sbuild/i                              // OPPO
+	            /(microsoft); (lumia[\w ]+)/i,                                      // Microsoft Lumia
+	            /(lenovo)[-_ ]?([-\w]+)/i,                                          // Lenovo
+	            /(jolla)/i,                                                         // Jolla
+	            /(oppo) ?([\w ]+) bui/i                                             // OPPO
 	            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
 
-	            /(archos)\s(gamepad2?)/i,                                           // Archos
+	            /(archos) (gamepad2?)/i,                                            // Archos
 	            /(hp).+(touchpad(?!.+tablet)|tablet)/i,                             // HP TouchPad
 	            /(kindle)\/([\w\.]+)/i,                                             // Kindle
-	            /\s(nook)[\w\s]+build\/(\w+)/i,                                     // Nook
-	            /(dell)\s(strea[kpr\s\d]*[\dko])/i,                                 // Dell Streak
-	            /[;\/]\s?(le[\s\-]+pan)[\s\-]+(\w{1,9})\sbuild/i,                   // Le Pan Tablets
-	            /[;\/]\s?(trinity)[\-\s]*(t\d{3})\sbuild/i,                         // Trinity Tablets
-	            /\b(gigaset)[\s\-]+(q\w{1,9})\sbuild/i,                             // Gigaset Tablets
-	            /\b(vodafone)\s([\w\s]+)(?:\)|\sbuild)/i                            // Vodafone
+	            /(nook)[\w ]+build\/(\w+)/i,                                        // Nook
+	            /(dell) (strea[kpr\d ]*[\dko])/i,                                   // Dell Streak
+	            /(le[- ]+pan)[- ]+(\w{1,9}) bui/i,                                  // Le Pan Tablets
+	            /(trinity)[- ]*(t\d{3}) bui/i,                                      // Trinity Tablets
+	            /(gigaset)[- ]+(q\w{1,9}) bui/i,                                    // Gigaset Tablets
+	            /(vodafone) ([\w ]+)(?:\)| bui)/i                                   // Vodafone
 	            ], [VENDOR, MODEL, [TYPE, TABLET]], [
 
-	            /\s(surface\sduo)\s/i                                               // Surface Duo
-	            ], [MODEL, [VENDOR, 'Microsoft'], [TYPE, TABLET]], [
-	            /droid\s[\d\.]+;\s(fp\du?)\sbuild/i
+	            /(surface duo)/i                                                    // Surface Duo
+	            ], [MODEL, [VENDOR, MICROSOFT], [TYPE, TABLET]], [
+	            /droid [\d\.]+; (fp\du?)(?: b|\))/i                                 // Fairphone
 	            ], [MODEL, [VENDOR, 'Fairphone'], [TYPE, MOBILE]], [
-	            /\s(u304aa)\sbuild/i                                                // AT&T
+	            /(u304aa)/i                                                         // AT&T
 	            ], [MODEL, [VENDOR, 'AT&T'], [TYPE, MOBILE]], [
-	            /sie-(\w*)/i                                                        // Siemens
+	            /\bsie-(\w*)/i                                                      // Siemens
 	            ], [MODEL, [VENDOR, 'Siemens'], [TYPE, MOBILE]], [
-	            /[;\/]\s?(rct\w+)\sbuild/i                                          // RCA Tablets
+	            /\b(rct\w+) b/i                                                     // RCA Tablets
 	            ], [MODEL, [VENDOR, 'RCA'], [TYPE, TABLET]], [
-	            /[;\/\s](venue[\d\s]{2,7})\sbuild/i                                 // Dell Venue Tablets
+	            /\b(venue[\d ]{2,7}) b/i                                            // Dell Venue Tablets
 	            ], [MODEL, [VENDOR, 'Dell'], [TYPE, TABLET]], [
-	            /[;\/]\s?(q(?:mv|ta)\w+)\sbuild/i                                   // Verizon Tablet
+	            /\b(q(?:mv|ta)\w+) b/i                                              // Verizon Tablet
 	            ], [MODEL, [VENDOR, 'Verizon'], [TYPE, TABLET]], [
-	            /[;\/]\s(?:barnes[&\s]+noble\s|bn[rt])([\w\s\+]*)\sbuild/i          // Barnes & Noble Tablet
+	            /\b(?:barnes[& ]+noble |bn[rt])([\w\+ ]*) b/i                       // Barnes & Noble Tablet
 	            ], [MODEL, [VENDOR, 'Barnes & Noble'], [TYPE, TABLET]], [
-	            /[;\/]\s(tm\d{3}\w+)\sbuild/i
+	            /\b(tm\d{3}\w+) b/i
 	            ], [MODEL, [VENDOR, 'NuVision'], [TYPE, TABLET]], [
-	            /;\s(k88)\sbuild/i                                                  // ZTE K Series Tablet
+	            /\b(k88) b/i                                                        // ZTE K Series Tablet
 	            ], [MODEL, [VENDOR, 'ZTE'], [TYPE, TABLET]], [
-	            /;\s(nx\d{3}j)\sbuild/i                                             // ZTE Nubia
+	            /\b(nx\d{3}j) b/i                                                   // ZTE Nubia
 	            ], [MODEL, [VENDOR, 'ZTE'], [TYPE, MOBILE]], [
-	            /[;\/]\s?(gen\d{3})\sbuild.*49h/i                                   // Swiss GEN Mobile
+	            /\b(gen\d{3}) b.+49h/i                                              // Swiss GEN Mobile
 	            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, MOBILE]], [
-	            /[;\/]\s?(zur\d{3})\sbuild/i                                        // Swiss ZUR Tablet
+	            /\b(zur\d{3}) b/i                                                   // Swiss ZUR Tablet
 	            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, TABLET]], [
-	            /[;\/]\s?((zeki)?tb.*\b)\sbuild/i                                   // Zeki Tablets
+	            /\b((zeki)?tb.*\b) b/i                                              // Zeki Tablets
 	            ], [MODEL, [VENDOR, 'Zeki'], [TYPE, TABLET]], [
-	            /[;\/]\s([yr]\d{2})\sbuild/i,
-	            /[;\/]\s(dragon[\-\s]+touch\s|dt)(\w{5})\sbuild/i                   // Dragon Touch Tablet
+	            /\b([yr]\d{2}) b/i,
+	            /\b(dragon[- ]+touch |dt)(\w{5}) b/i                                // Dragon Touch Tablet
 	            ], [[VENDOR, 'Dragon Touch'], MODEL, [TYPE, TABLET]], [
-	            /[;\/]\s?(ns-?\w{0,9})\sbuild/i                                     // Insignia Tablets
+	            /\b(ns-?\w{0,9}) b/i                                                // Insignia Tablets
 	            ], [MODEL, [VENDOR, 'Insignia'], [TYPE, TABLET]], [
-	            /[;\/]\s?((nxa|Next)-?\w{0,9})\sbuild/i                             // NextBook Tablets
+	            /\b((nxa|next)-?\w{0,9}) b/i                                        // NextBook Tablets
 	            ], [MODEL, [VENDOR, 'NextBook'], [TYPE, TABLET]], [
-	            /[;\/]\s?(xtreme\_)?(v(1[045]|2[015]|[3469]0|7[05]))\sbuild/i
-	            ], [[VENDOR, 'Voice'], MODEL, [TYPE, MOBILE]], [                    // Voice Xtreme Phones
-	            /[;\/]\s?(lvtel\-)?(v1[12])\sbuild/i                                // LvTel Phones
+	            /\b(xtreme\_)?(v(1[045]|2[015]|[3469]0|7[05])) b/i                  // Voice Xtreme Phones
+	            ], [[VENDOR, 'Voice'], MODEL, [TYPE, MOBILE]], [
+	            /\b(lvtel\-)?(v1[12]) b/i                                           // LvTel Phones
 	            ], [[VENDOR, 'LvTel'], MODEL, [TYPE, MOBILE]], [
-	            /;\s(ph-1)\s/i
-	            ], [MODEL, [VENDOR, 'Essential'], [TYPE, MOBILE]], [                // Essential PH-1
-	            /[;\/]\s?(v(100md|700na|7011|917g).*\b)\sbuild/i                    // Envizen Tablets
+	            /\b(ph-1) /i                                                        // Essential PH-1
+	            ], [MODEL, [VENDOR, 'Essential'], [TYPE, MOBILE]], [
+	            /\b(v(100md|700na|7011|917g).*\b) b/i                               // Envizen Tablets
 	            ], [MODEL, [VENDOR, 'Envizen'], [TYPE, TABLET]], [
-	            /[;\/]\s?(trio[\s\w\-\.]+)\sbuild/i                                 // MachSpeed Tablets
+	            /\b(trio[-\w\. ]+) b/i                                              // MachSpeed Tablets
 	            ], [MODEL, [VENDOR, 'MachSpeed'], [TYPE, TABLET]], [
-	            /[;\/]\s?tu_(1491)\sbuild/i                                         // Rotor Tablets
+	            /\btu_(1491) b/i                                                    // Rotor Tablets
 	            ], [MODEL, [VENDOR, 'Rotor'], [TYPE, TABLET]], [
-	            /(shield[\w\s]+)\sbuild/i                                           // Nvidia Shield Tablets
+	            /(shield[\w ]+) b/i                                                 // Nvidia Shield Tablets
 	            ], [MODEL, [VENDOR, 'Nvidia'], [TYPE, TABLET]], [
-	            /(sprint)\s(\w+)/i                                                  // Sprint Phones
+	            /(sprint) (\w+)/i                                                   // Sprint Phones
 	            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
 	            /(kin\.[onetw]{3})/i                                                // Microsoft Kin
-	            ], [[MODEL, /\./g, ' '], [VENDOR, 'Microsoft'], [TYPE, MOBILE]], [
-	            /droid\s[\d\.]+;\s(cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i     // Zebra
-	            ], [MODEL, [VENDOR, 'Zebra'], [TYPE, TABLET]], [
-	            /droid\s[\d\.]+;\s(ec30|ps20|tc[2-8]\d[kx])\)/i
-	            ], [MODEL, [VENDOR, 'Zebra'], [TYPE, MOBILE]], [
+	            ], [[MODEL, /\./g, ' '], [VENDOR, MICROSOFT], [TYPE, MOBILE]], [
+	            /droid.+; (cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i             // Zebra
+	            ], [MODEL, [VENDOR, ZEBRA], [TYPE, TABLET]], [
+	            /droid.+; (ec30|ps20|tc[2-8]\d[kx])\)/i
+	            ], [MODEL, [VENDOR, ZEBRA], [TYPE, MOBILE]], [
 
 	            ///////////////////
 	            // CONSOLES
 	            ///////////////////
 
-	            /\s(ouya)\s/i,                                                      // Ouya
-	            /(nintendo)\s([wids3utch]+)/i                                       // Nintendo
+	            /(ouya)/i,                                                          // Ouya
+	            /(nintendo) ([wids3utch]+)/i                                        // Nintendo
 	            ], [VENDOR, MODEL, [TYPE, CONSOLE]], [
-	            /droid.+;\s(shield)\sbuild/i                                        // Nvidia
+	            /droid.+; (shield) bui/i                                            // Nvidia
 	            ], [MODEL, [VENDOR, 'Nvidia'], [TYPE, CONSOLE]], [
-	            /(playstation\s[345portablevi]+)/i                                  // Playstation
-	            ], [MODEL, [VENDOR, 'Sony'], [TYPE, CONSOLE]], [
-	            /[\s\(;](xbox(?:\sone)?(?!;\sxbox))[\s\);]/i                        // Microsoft Xbox
-	            ], [MODEL, [VENDOR, 'Microsoft'], [TYPE, CONSOLE]], [
+	            /(playstation [345portablevi]+)/i                                   // Playstation
+	            ], [MODEL, [VENDOR, SONY], [TYPE, CONSOLE]], [
+	            /\b(xbox(?: one)?(?!; xbox))[\); ]/i                                // Microsoft Xbox
+	            ], [MODEL, [VENDOR, MICROSOFT], [TYPE, CONSOLE]], [
 
 	            ///////////////////
 	            // SMARTTVS
@@ -7883,61 +8050,63 @@
 	            /smart-tv.+(samsung)/i                                              // Samsung
 	            ], [VENDOR, [TYPE, SMARTTV]], [
 	            /hbbtv.+maple;(\d+)/i
-	            ], [[MODEL, /^/, 'SmartTV'], [VENDOR, 'Samsung'], [TYPE, SMARTTV]], [
-	            /(?:linux;\snetcast.+smarttv|lg\snetcast\.tv-201\d)/i,              // LG SmartTV
-	            ], [[VENDOR, 'LG'], [TYPE, SMARTTV]], [
-	            /(apple)\s?tv/i                                                     // Apple TV
-	            ], [VENDOR, [MODEL, 'Apple TV'], [TYPE, SMARTTV]], [
+	            ], [[MODEL, /^/, 'SmartTV'], [VENDOR, SAMSUNG], [TYPE, SMARTTV]], [
+	            /(nux; netcast.+smarttv|lg (netcast\.tv-201\d|android tv))/i        // LG SmartTV
+	            ], [[VENDOR, LG], [TYPE, SMARTTV]], [
+	            /(apple) ?tv/i                                                      // Apple TV
+	            ], [VENDOR, [MODEL, APPLE+' TV'], [TYPE, SMARTTV]], [
 	            /crkey/i                                                            // Google Chromecast
-	            ], [[MODEL, 'Chromecast'], [VENDOR, 'Google'], [TYPE, SMARTTV]], [
-	            /droid.+aft([\w])(\sbuild\/|\))/i                                   // Fire TV
-	            ], [MODEL, [VENDOR, 'Amazon'], [TYPE, SMARTTV]], [
+	            ], [[MODEL, CHROME+'cast'], [VENDOR, GOOGLE], [TYPE, SMARTTV]], [
+	            /droid.+aft(\w)( bui|\))/i                                          // Fire TV
+	            ], [MODEL, [VENDOR, AMAZON], [TYPE, SMARTTV]], [
 	            /\(dtv[\);].+(aquos)/i                                              // Sharp
 	            ], [MODEL, [VENDOR, 'Sharp'], [TYPE, SMARTTV]], [
-	            /hbbtv\/\d+\.\d+\.\d+\s+\([\w\s]*;\s*(\w[^;]*);([^;]*)/i            // HbbTV devices
-	            ], [[VENDOR, util.trim], [MODEL, util.trim], [TYPE, SMARTTV]], [
-	            /[\s\/\(](android\s|smart[-\s]?|opera\s)tv[;\)\s]/i                 // SmartTV from Unidentified Vendors
+	            /\b(roku)[\dx]*[\)\/]((?:dvp-)?[\d\.]*)/i,                          // Roku
+	            /hbbtv\/\d+\.\d+\.\d+ +\([\w ]*; *(\w[^;]*);([^;]*)/i               // HbbTV devices
+	            ], [[VENDOR, trim], [MODEL, trim], [TYPE, SMARTTV]], [
+	            /\b(android tv|smart[- ]?tv|opera tv|tv; rv:)\b/i                   // SmartTV from Unidentified Vendors
 	            ], [[TYPE, SMARTTV]], [
 
 	            ///////////////////
 	            // WEARABLES
 	            ///////////////////
 
-	            /((pebble))app\/[\d\.]+\s/i                                         // Pebble
+	            /((pebble))app/i                                                    // Pebble
 	            ], [VENDOR, MODEL, [TYPE, WEARABLE]], [
-	            /droid.+;\s(glass)\s\d/i                                            // Google Glass
-	            ], [MODEL, [VENDOR, 'Google'], [TYPE, WEARABLE]], [
-	            /droid\s[\d\.]+;\s(wt63?0{2,3})\)/i
-	            ], [MODEL, [VENDOR, 'Zebra'], [TYPE, WEARABLE]], [
+	            /droid.+; (glass) \d/i                                              // Google Glass
+	            ], [MODEL, [VENDOR, GOOGLE], [TYPE, WEARABLE]], [
+	            /droid.+; (wt63?0{2,3})\)/i
+	            ], [MODEL, [VENDOR, ZEBRA], [TYPE, WEARABLE]], [
+	            /(quest( 2)?)/i                                                     // Oculus Quest
+	            ], [MODEL, [VENDOR, FACEBOOK], [TYPE, WEARABLE]], [
 
 	            ///////////////////
 	            // EMBEDDED
 	            ///////////////////
 
-	            /(tesla)(?:\sqtcarbrowser|\/20[12]\d\.[\w\.-]+)/i                   // Tesla
+	            /(tesla)(?: qtcarbrowser|\/[-\w\.]+)/i                              // Tesla
 	            ], [VENDOR, [TYPE, EMBEDDED]], [
 
 	            ////////////////////
 	            // MIXED (GENERIC)
 	            ///////////////////
 
-	            /droid .+?; ([^;]+?)(?: build|\) applewebkit).+? mobile safari/i    // Android Phones from Unidentified Vendors
+	            /droid .+?; ([^;]+?)(?: bui|\) applew).+? mobile safari/i           // Android Phones from Unidentified Vendors
 	            ], [MODEL, [TYPE, MOBILE]], [
-	            /droid .+?;\s([^;]+?)(?: build|\) applewebkit).+?(?! mobile) safari/i  // Android Tablets from Unidentified Vendors
+	            /droid .+?; ([^;]+?)(?: bui|\) applew).+?(?! mobile) safari/i       // Android Tablets from Unidentified Vendors
 	            ], [MODEL, [TYPE, TABLET]], [
-	            /\s(tablet|tab)[;\/]/i,                                             // Unidentifiable Tablet
-	            /\s(mobile)(?:[;\/]|\ssafari)/i                                     // Unidentifiable Mobile
-	            ], [[TYPE, util.lowerize]], [
-	            /(android[\w\.\s\-]{0,9});.+build/i                                 // Generic Android Device
-	            ], [MODEL, [VENDOR, 'Generic']], [
-	            /(phone)/i
-	            ], [[TYPE, MOBILE]]
+	            /\b((tablet|tab)[;\/]|focus\/\d(?!.+mobile))/i                      // Unidentifiable Tablet
+	            ], [[TYPE, TABLET]], [
+	            /(phone|mobile(?:[;\/]| safari)|pda(?=.+windows ce))/i              // Unidentifiable Mobile
+	            ], [[TYPE, MOBILE]], [
+	            /(android[-\w\. ]{0,9});.+buil/i                                    // Generic Android Device
+	            ], [MODEL, [VENDOR, 'Generic']]
 	        ],
 
 	        engine : [[
 
-	            /windows.+\sedge\/([\w\.]+)/i                                       // EdgeHTML
-	            ], [VERSION, [NAME, 'EdgeHTML']], [
+	            /windows.+ edge\/([\w\.]+)/i                                       // EdgeHTML
+	            ], [VERSION, [NAME, EDGE+'HTML']], [
 
 	            /webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i                         // Blink
 	            ], [VERSION, [NAME, 'Blink']], [
@@ -7945,8 +8114,8 @@
 	            /(presto)\/([\w\.]+)/i,                                             // Presto
 	            /(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i, // WebKit/Trident/NetFront/NetSurf/Amaya/Lynx/w3m/Goanna
 	            /ekioh(flow)\/([\w\.]+)/i,                                          // Flow
-	            /(khtml|tasman|links)[\/\s]\(?([\w\.]+)/i,                          // KHTML/Tasman/Links
-	            /(icab)[\/\s]([23]\.[\d\.]+)/i                                      // iCab
+	            /(khtml|tasman|links)[\/ ]\(?([\w\.]+)/i,                           // KHTML/Tasman/Links
+	            /(icab)[\/ ]([23]\.[\d\.]+)/i                                       // iCab
 	            ], [NAME, VERSION], [
 
 	            /rv\:([\w\.]{1,9})\b.+(gecko)/i                                     // Gecko
@@ -7956,81 +8125,79 @@
 	        os : [[
 
 	            // Windows
-	            /microsoft\s(windows)\s(vista|xp)/i                                 // Windows (iTunes)
+	            /microsoft (windows) (vista|xp)/i                                   // Windows (iTunes)
 	            ], [NAME, VERSION], [
-	            /(windows)\snt\s6\.2;\s(arm)/i,                                     // Windows RT
-	            /(windows\sphone(?:\sos)*)[\s\/]?([\d\.\s\w]*)/i,                   // Windows Phone
-	            /(windows\smobile|windows)[\s\/]?([ntce\d\.\s]+\w)(?!.+xbox)/i
-	            ], [NAME, [VERSION, mapper.str, maps.os.windows.version]], [
-	            /(win(?=3|9|n)|win\s9x\s)([nt\d\.]+)/i
-	            ], [[NAME, 'Windows'], [VERSION, mapper.str, maps.os.windows.version]], [
+	            /(windows) nt 6\.2; (arm)/i,                                        // Windows RT
+	            /(windows (?:phone(?: os)?|mobile))[\/ ]?([\d\.\w ]*)/i,            // Windows Phone
+	            /(windows)[\/ ]?([ntce\d\. ]+\w)(?!.+xbox)/i
+	            ], [NAME, [VERSION, strMapper, windowsVersionMap]], [
+	            /(win(?=3|9|n)|win 9x )([nt\d\.]+)/i
+	            ], [[NAME, 'Windows'], [VERSION, strMapper, windowsVersionMap]], [
 
 	            // iOS/macOS
-	            /ip[honead]{2,4}\b(?:.*os\s([\w]+)\slike\smac|;\sopera)/i,          // iOS
+	            /ip[honead]{2,4}\b(?:.*os ([\w]+) like mac|; opera)/i,              // iOS
 	            /cfnetwork\/.+darwin/i
 	            ], [[VERSION, /_/g, '.'], [NAME, 'iOS']], [
-	            /(mac\sos\sx)\s?([\w\s\.]*)/i,
-	            /(macintosh|mac(?=_powerpc)\s)(?!.+haiku)/i                         // Mac OS
+	            /(mac os x) ?([\w\. ]*)/i,
+	            /(macintosh|mac_powerpc\b)(?!.+haiku)/i                             // Mac OS
 	            ], [[NAME, 'Mac OS'], [VERSION, /_/g, '.']], [
 
-	            // Mobile OSes                                                      // Android/WebOS/Palm/QNX/Bada/RIM/MeeGo/Contiki/Sailfish OS
-	            /(android|webos|palm\sos|qnx|bada|rim\stablet\sos|meego|sailfish|contiki)[\/\s-]?([\w\.]*)/i,
+	            // Mobile OSes
+	            /droid ([\w\.]+)\b.+(android[- ]x86)/i                              // Android-x86
+	            ], [VERSION, NAME], [                                               // Android/WebOS/QNX/Bada/RIM/Maemo/MeeGo/Sailfish OS
+	            /(android|webos|qnx|bada|rim tablet os|maemo|meego|sailfish)[-\/ ]?([\w\.]*)/i,
 	            /(blackberry)\w*\/([\w\.]*)/i,                                      // Blackberry
-	            /(tizen|kaios)[\/\s]([\w\.]+)/i,                                    // Tizen/KaiOS
+	            /(tizen|kaios)[\/ ]([\w\.]+)/i,                                     // Tizen/KaiOS
 	            /\((series40);/i                                                    // Series 40
 	            ], [NAME, VERSION], [
 	            /\(bb(10);/i                                                        // BlackBerry 10
-	            ], [VERSION, [NAME, 'BlackBerry']], [
-	            /(?:symbian\s?os|symbos|s60(?=;)|series60)[\/\s-]?([\w\.]*)/i       // Symbian
+	            ], [VERSION, [NAME, BLACKBERRY]], [
+	            /(?:symbian ?os|symbos|s60(?=;)|series60)[-\/ ]?([\w\.]*)/i         // Symbian
 	            ], [VERSION, [NAME, 'Symbian']], [
-	            /mozilla.+\(mobile;.+gecko.+firefox/i                               // Firefox OS
-	            ], [[NAME, 'Firefox OS']], [
+	            /mozilla\/[\d\.]+ \((?:mobile|tablet|tv|mobile; [\w ]+); rv:.+ gecko\/([\w\.]+)/i // Firefox OS
+	            ], [VERSION, [NAME, FIREFOX+' OS']], [
 	            /web0s;.+rt(tv)/i,
 	            /\b(?:hp)?wos(?:browser)?\/([\w\.]+)/i                              // WebOS
 	            ], [VERSION, [NAME, 'webOS']], [
 
 	            // Google Chromecast
 	            /crkey\/([\d\.]+)/i                                                 // Google Chromecast
-	            ], [VERSION, [NAME, 'Chromecast']], [
-	            /(cros)\s[\w]+\s([\w\.]+\w)/i                                       // Chromium OS
+	            ], [VERSION, [NAME, CHROME+'cast']], [
+	            /(cros) [\w]+ ([\w\.]+\w)/i                                         // Chromium OS
 	            ], [[NAME, 'Chromium OS'], VERSION],[
 
 	            // Console
-	            /(nintendo|playstation)\s([wids345portablevuch]+)/i,                // Nintendo/Playstation
-	            /(xbox);\s+xbox\s([^\);]+)/i,                                       // Microsoft Xbox (360, One, X, S, Series X, Series S)
-
-	            // GNU/Linux based
-	            /(mint)[\/\s\(\)]?(\w*)/i,                                          // Mint
-	            /(mageia|vectorlinux)[;\s]/i,                                       // Mageia/VectorLinux
-	            /(joli|[kxln]?ubuntu|debian|suse|opensuse|gentoo|arch(?=\slinux)|slackware|fedora|mandriva|centos|pclinuxos|redhat|zenwalk|linpus|raspbian)(?:\sgnu\/linux)?(?:\slinux)?[\/\s-]?(?!chrom|package)([\w\.-]*)/i,
-	                                                                                // Joli/Ubuntu/Debian/SUSE/Gentoo/Arch/Slackware
-	                                                                                // Fedora/Mandriva/CentOS/PCLinuxOS/RedHat/Zenwalk/Linpus
-	            /(hurd|linux)\s?([\w\.]*)/i,                                        // Hurd/Linux
-	            /(gnu)\s?([\w\.]*)/i,                                               // GNU
-
-	            // BSD based
-	            /\s([frentopc-]{0,4}bsd|dragonfly)\s?(?!amd|[ix346]{1,2}86)([\w\.]*)/i,  // FreeBSD/NetBSD/OpenBSD/PC-BSD/DragonFly
-	            /(haiku)\s(\w+)/i                                                   // Haiku
-	            ], [NAME, VERSION], [
+	            /(nintendo|playstation) ([wids345portablevuch]+)/i,                 // Nintendo/Playstation
+	            /(xbox); +xbox ([^\);]+)/i,                                         // Microsoft Xbox (360, One, X, S, Series X, Series S)
 
 	            // Other
-	            /(sunos)\s?([\w\.\d]*)/i                                            // Solaris
+	            /\b(joli|palm)\b ?(?:os)?\/?([\w\.]*)/i,                            // Joli/Palm
+	            /(mint)[\/\(\) ]?(\w*)/i,                                           // Mint
+	            /(mageia|vectorlinux)[; ]/i,                                        // Mageia/VectorLinux
+	            /([kxln]?ubuntu|debian|suse|opensuse|gentoo|arch(?= linux)|slackware|fedora|mandriva|centos|pclinuxos|red ?hat|zenwalk|linpus|raspbian|plan 9|minix|risc os|contiki|deepin|manjaro|elementary os|sabayon|linspire)(?: gnu\/linux)?(?: enterprise)?(?:[- ]linux)?(?:-gnu)?[-\/ ]?(?!chrom|package)([-\w\.]*)/i,
+	                                                                                // Ubuntu/Debian/SUSE/Gentoo/Arch/Slackware/Fedora/Mandriva/CentOS/PCLinuxOS/RedHat/Zenwalk/Linpus/Raspbian/Plan9/Minix/RISCOS/Contiki/Deepin/Manjaro/elementary/Sabayon/Linspire
+	            /(hurd|linux) ?([\w\.]*)/i,                                         // Hurd/Linux
+	            /(gnu) ?([\w\.]*)/i,                                                // GNU
+	            /\b([-frentopcghs]{0,5}bsd|dragonfly)[\/ ]?(?!amd|[ix346]{1,2}86)([\w\.]*)/i, // FreeBSD/NetBSD/OpenBSD/PC-BSD/GhostBSD/DragonFly
+	            /(haiku) (\w+)/i                                                    // Haiku
+	            ], [NAME, VERSION], [
+	            /(sunos) ?([\w\.\d]*)/i                                             // Solaris
 	            ], [[NAME, 'Solaris'], VERSION], [
-	            /((?:open)?solaris)[\/\s-]?([\w\.]*)/i,                             // Solaris
-	            /(aix)\s((\d)(?=\.|\)|\s)[\w\.])*/i,                                // AIX
-	            /(plan\s9|minix|beos|os\/2|amigaos|morphos|risc\sos|openvms|fuchsia)/i,  // Plan9/Minix/BeOS/OS2/AmigaOS/MorphOS/RISCOS/OpenVMS/Fuchsia
-	            /(unix)\s?([\w\.]*)/i                                               // UNIX
+	            /((?:open)?solaris)[-\/ ]?([\w\.]*)/i,                              // Solaris
+	            /(aix) ((\d)(?=\.|\)| )[\w\.])*/i,                                  // AIX
+	            /\b(beos|os\/2|amigaos|morphos|openvms|fuchsia|hp-ux)/i,            // BeOS/OS2/AmigaOS/MorphOS/OpenVMS/Fuchsia/HP-UX
+	            /(unix) ?([\w\.]*)/i                                                // UNIX
 	            ], [NAME, VERSION]
 	        ]
 	    };
 
-
 	    /////////////////
 	    // Constructor
 	    ////////////////
+
 	    var UAParser = function (ua, extensions) {
 
-	        if (typeof ua === 'object') {
+	        if (typeof ua === OBJ_TYPE) {
 	            extensions = ua;
 	            ua = undefined$1;
 	        }
@@ -8039,33 +8206,43 @@
 	            return new UAParser(ua, extensions).getResult();
 	        }
 
-	        var _ua = ua || ((typeof window !== 'undefined' && window.navigator && window.navigator.userAgent) ? window.navigator.userAgent : EMPTY);
-	        var _rgxmap = extensions ? util.extend(regexes, extensions) : regexes;
+	        var _ua = ua || ((typeof window !== UNDEF_TYPE && window.navigator && window.navigator.userAgent) ? window.navigator.userAgent : EMPTY);
+	        var _rgxmap = extensions ? extend(regexes, extensions) : regexes;
 
 	        this.getBrowser = function () {
-	            var _browser = { name: undefined$1, version: undefined$1 };
-	            mapper.rgx.call(_browser, _ua, _rgxmap.browser);
-	            _browser.major = util.major(_browser.version); // deprecated
+	            var _browser = {};
+	            _browser[NAME] = undefined$1;
+	            _browser[VERSION] = undefined$1;
+	            rgxMapper.call(_browser, _ua, _rgxmap.browser);
+	            _browser.major = majorize(_browser.version);
 	            return _browser;
 	        };
 	        this.getCPU = function () {
-	            var _cpu = { architecture: undefined$1 };
-	            mapper.rgx.call(_cpu, _ua, _rgxmap.cpu);
+	            var _cpu = {};
+	            _cpu[ARCHITECTURE] = undefined$1;
+	            rgxMapper.call(_cpu, _ua, _rgxmap.cpu);
 	            return _cpu;
 	        };
 	        this.getDevice = function () {
-	            var _device = { vendor: undefined$1, model: undefined$1, type: undefined$1 };
-	            mapper.rgx.call(_device, _ua, _rgxmap.device);
+	            var _device = {};
+	            _device[VENDOR] = undefined$1;
+	            _device[MODEL] = undefined$1;
+	            _device[TYPE] = undefined$1;
+	            rgxMapper.call(_device, _ua, _rgxmap.device);
 	            return _device;
 	        };
 	        this.getEngine = function () {
-	            var _engine = { name: undefined$1, version: undefined$1 };
-	            mapper.rgx.call(_engine, _ua, _rgxmap.engine);
+	            var _engine = {};
+	            _engine[NAME] = undefined$1;
+	            _engine[VERSION] = undefined$1;
+	            rgxMapper.call(_engine, _ua, _rgxmap.engine);
 	            return _engine;
 	        };
 	        this.getOS = function () {
-	            var _os = { name: undefined$1, version: undefined$1 };
-	            mapper.rgx.call(_os, _ua, _rgxmap.os);
+	            var _os = {};
+	            _os[NAME] = undefined$1;
+	            _os[VERSION] = undefined$1;
+	            rgxMapper.call(_os, _ua, _rgxmap.os);
 	            return _os;
 	        };
 	        this.getResult = function () {
@@ -8082,7 +8259,7 @@
 	            return _ua;
 	        };
 	        this.setUA = function (ua) {
-	            _ua = (typeof ua === STR_TYPE && ua.length > UA_MAX_LENGTH) ? util.trim(ua, UA_MAX_LENGTH) : ua;
+	            _ua = (typeof ua === STR_TYPE && ua.length > UA_MAX_LENGTH) ? trim(ua, UA_MAX_LENGTH) : ua;
 	            return this;
 	        };
 	        this.setUA(_ua);
@@ -8090,38 +8267,14 @@
 	    };
 
 	    UAParser.VERSION = LIBVERSION;
-	    UAParser.BROWSER = {
-	        NAME    : NAME,
-	        MAJOR   : MAJOR, // deprecated
-	        VERSION : VERSION
-	    };
-	    UAParser.CPU = {
-	        ARCHITECTURE : ARCHITECTURE
-	    };
-	    UAParser.DEVICE = {
-	        MODEL   : MODEL,
-	        VENDOR  : VENDOR,
-	        TYPE    : TYPE,
-	        CONSOLE : CONSOLE,
-	        MOBILE  : MOBILE,
-	        SMARTTV : SMARTTV,
-	        TABLET  : TABLET,
-	        WEARABLE: WEARABLE,
-	        EMBEDDED: EMBEDDED
-	    };
-	    UAParser.ENGINE = {
-	        NAME    : NAME,
-	        VERSION : VERSION
-	    };
-	    UAParser.OS = {
-	        NAME    : NAME,
-	        VERSION : VERSION
-	    };
+	    UAParser.BROWSER =  enumerize([NAME, VERSION, MAJOR]);
+	    UAParser.CPU = enumerize([ARCHITECTURE]);
+	    UAParser.DEVICE = enumerize([MODEL, VENDOR, TYPE, CONSOLE, MOBILE, SMARTTV, TABLET, WEARABLE, EMBEDDED]);
+	    UAParser.ENGINE = UAParser.OS = enumerize([NAME, VERSION]);
 
 	    ///////////
 	    // Export
 	    //////////
-
 
 	    // check js environment
 	    {
@@ -8137,15 +8290,15 @@
 	    //   In AMD env the global scope should be kept clean, but jQuery is an exception.
 	    //   jQuery always exports to global scope, unless jQuery.noConflict(true) is used,
 	    //   and we should catch that.
-	    var $ = typeof window !== 'undefined' && (window.jQuery || window.Zepto);
+	    var $ = typeof window !== UNDEF_TYPE && (window.jQuery || window.Zepto);
 	    if ($ && !$.ua) {
 	        var parser = new UAParser();
 	        $.ua = parser.getResult();
 	        $.ua.get = function () {
 	            return parser.getUA();
 	        };
-	        $.ua.set = function (uastring) {
-	            parser.setUA(uastring);
+	        $.ua.set = function (ua) {
+	            parser.setUA(ua);
 	            var result = parser.getResult();
 	            for (var prop in result) {
 	                $.ua[prop] = result[prop];
@@ -8154,7 +8307,9 @@
 	    }
 
 	})(typeof window === 'object' ? window : commonjsGlobal);
-	});
+	}(uaParser, uaParser.exports));
+
+	var UAParser = uaParser.exports;
 
 	var global$1 = typeof global$1 !== "undefined"
 	    ? global$1
@@ -8316,7 +8471,7 @@
 	            }
 	            const uastring = window.navigator.userAgent;
 	            //@ts-ignore
-	            const parser = new uaParser();
+	            const parser = new UAParser();
 	            parser.setUA(uastring);
 	            const parseUserAgent = parser.getResult();
 	            // console.log({ parseUserAgent, });
@@ -8532,12 +8687,13 @@
 	    }
 	    if (jsonx.__dangerouslyInsertComponents) {
 	        Object.keys(jsonx.__dangerouslyInsertComponents).forEach(insertedComponents => {
+	            var _a;
 	            try {
 	                if (jsonx.__dangerouslyInsertComponents)
 	                    validateJSONX(jsonx.__dangerouslyInsertComponents[insertedComponents]);
 	            }
 	            catch (e) {
-	                errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${e.toString()}`));
+	                errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${(_a = e) === null || _a === void 0 ? void 0 : _a.toString()}`));
 	            }
 	        });
 	    }
@@ -8739,7 +8895,7 @@
 	 *
 	 */
 
-
+	var _assign = objectAssign;
 
 	// -- Inlined from fbjs --
 
@@ -8775,7 +8931,7 @@
 	  return fn;
 	}
 
-	function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
+	function factory$1(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
 	  /**
 	   * Policies that describe methods in `ReactClassInterface`.
 	   */
@@ -9083,14 +9239,14 @@
 	      }
 	    },
 	    childContextTypes: function(Constructor, childContextTypes) {
-	      Constructor.childContextTypes = objectAssign(
+	      Constructor.childContextTypes = _assign(
 	        {},
 	        Constructor.childContextTypes,
 	        childContextTypes
 	      );
 	    },
 	    contextTypes: function(Constructor, contextTypes) {
-	      Constructor.contextTypes = objectAssign(
+	      Constructor.contextTypes = _assign(
 	        {},
 	        Constructor.contextTypes,
 	        contextTypes
@@ -9111,7 +9267,7 @@
 	      }
 	    },
 	    propTypes: function(Constructor, propTypes) {
-	      Constructor.propTypes = objectAssign({}, Constructor.propTypes, propTypes);
+	      Constructor.propTypes = _assign({}, Constructor.propTypes, propTypes);
 	    },
 	    statics: function(Constructor, statics) {
 	      mixStaticSpecIntoComponent(Constructor, statics);
@@ -9417,7 +9573,7 @@
 	  };
 
 	  var ReactClassComponent = function() {};
-	  objectAssign(
+	  _assign(
 	    ReactClassComponent.prototype,
 	    ReactComponent.prototype,
 	    ReactClassMixin
@@ -9494,7 +9650,7 @@
 	  return createClass;
 	}
 
-	var factory_1 = factory;
+	var factory_1 = factory$1;
 
 	/**
 	 * Copyright (c) 2013-present, Facebook, Inc.
@@ -9504,10 +9660,10 @@
 	 *
 	 */
 
+	var React = React__default["default"];
+	var factory = factory_1;
 
-
-
-	if (typeof React__default['default'] === 'undefined') {
+	if (typeof React === 'undefined') {
 	  throw Error(
 	    'create-react-class could not find the React object. If you are using script tags, ' +
 	      'make sure that React is being loaded before create-react-class.'
@@ -9515,11 +9671,11 @@
 	}
 
 	// Hack to grab NoopUpdateQueue from isomorphic React
-	var ReactNoopUpdateQueue = new React__default['default'].Component().updater;
+	var ReactNoopUpdateQueue = new React.Component().updater;
 
-	var createReactClass = factory_1(
-	  React__default['default'].Component,
-	  React__default['default'].isValidElement,
+	var createReactClass = factory(
+	  React.Component,
+	  React.isValidElement,
 	  ReactNoopUpdateQueue
 	);
 
@@ -9537,7 +9693,7 @@
 	 
 	 */
 	//@ts-ignore
-	let componentMap$1 = Object.assign({ Fragment: React.Fragment, Suspense: React.Suspense }, reactDomFactories, window && typeof window === "object" ? window.__jsonx_custom_elements : {});
+	let componentMap$1 = Object.assign({ Fragment: React$1.Fragment, Suspense: React$1.Suspense }, ReactDOMElements, window && typeof window === "object" ? window.__jsonx_custom_elements : {});
 	/**
 	 * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
 	 
@@ -9613,7 +9769,7 @@
 	            return jsonx.component;
 	            //@ts-ignore
 	        }
-	        else if (jsonx.component && reactDomFactories[jsonx.component]) {
+	        else if (jsonx.component && ReactDOMElements[jsonx.component]) {
 	            return jsonx.component;
 	            //@ts-ignore
 	        }
@@ -9680,7 +9836,7 @@
 	    // console.log('reactComponent',reactComponent)
 	    if (options.lazy) {
 	        //@ts-ignore
-	        return React.lazy(() => options
+	        return React$1.lazy(() => options
 	            .lazy(reactComponent, Object.assign({}, options, { lazy: false }))
 	            .then((lazyComponent) => {
 	            return {
@@ -9765,7 +9921,7 @@
 	        });
 	    }
 	    const reactClass = returnFactory
-	        ? React__default['default'].createFactory(reactComponentClass)
+	        ? React__default["default"].createFactory(reactComponentClass)
 	        : reactComponentClass;
 	    return reactClass;
 	}
@@ -9796,7 +9952,7 @@
 	            props: Object.assign({ onSubmit: onSubmit ? reactHookForm.handleSubmit(onSubmit) : undefined, key: formKey ? `formWrapperJXM-${formKey}` : undefined }, formWrapperProps)
 	        };
 	        formWrapperJXM.children = Array.isArray(formComponent) ? formComponent : [formComponent];
-	        const renderJSONX = React.useMemo(() => getReactElementFromJSONX.bind(context), [
+	        const renderJSONX = React$1.useMemo(() => getReactElementFromJSONX.bind(context), [
 	            context
 	        ]);
 	        return renderJSONX(formWrapperJXM) || null;
@@ -9831,24 +9987,24 @@
 	        const jsonx = Object.assign({}, props.jsonx);
 	        jsonx.props = Object.assign(Object.assign({}, jsonx.props), componentProps);
 	        const context = this || {};
-	        const [state, setState] = React.useState({
+	        const [state, setState] = React$1.useState({
 	            hasLoaded: false,
 	            hasError: false,
 	            resources: {},
 	            error: undefined
 	        });
-	        const transformer = React.useMemo(() => getFunctionFromEval(transformFunction), [
+	        const transformer = React$1.useMemo(() => getFunctionFromEval(transformFunction), [
 	            transformFunction
 	        ]);
-	        const timeoutFunction = React.useMemo(() => getFunctionFromEval(cacheTimeoutFunction), [cacheTimeoutFunction]);
-	        const renderJSONX = React.useMemo(() => getReactElementFromJSONX.bind(context), [
+	        const timeoutFunction = React$1.useMemo(() => getFunctionFromEval(cacheTimeoutFunction), [cacheTimeoutFunction]);
+	        const renderJSONX = React$1.useMemo(() => getReactElementFromJSONX.bind(context), [
 	            context
 	        ]);
-	        const loadingComponent = React.useMemo(() => renderJSONX(loadingJSONX), [
+	        const loadingComponent = React$1.useMemo(() => renderJSONX(loadingJSONX), [
 	            loadingJSONX
 	        ]);
-	        const loadingError = React.useMemo(() => renderJSONX(loadingErrorJSONX, { error: state.error }), [loadingErrorJSONX, state.error]);
-	        React.useEffect(() => {
+	        const loadingError = React$1.useMemo(() => renderJSONX(loadingErrorJSONX, { error: state.error }), [loadingErrorJSONX, state.error]);
+	        React$1.useEffect(() => {
 	            function getData() {
 	                return __awaiter(this, void 0, void 0, function* () {
 	                    try {
@@ -9946,7 +10102,7 @@
 	function getReactFunctionComponent(reactComponent = {}, functionBody = "", options = {}) {
 	    if (options.lazy) {
 	        //@ts-ignore
-	        return React.lazy(() => options
+	        return React$1.lazy(() => options
 	            .lazy(reactComponent, functionBody, Object.assign({}, options, { lazy: false }))
 	            .then((lazyComponent) => {
 	            return {
@@ -9961,17 +10117,17 @@
 	    //@ts-ignore
 	    const props = Object.assign({}, reactComponent.props);
 	    const functionArgs = [
-	        React__default['default'],
-	        React.useState,
-	        React.useEffect,
-	        React.useContext,
-	        React.useReducer,
-	        React.useCallback,
-	        React.useMemo,
-	        React.useRef,
-	        React.useImperativeHandle,
-	        React.useLayoutEffect,
-	        React.useDebugValue,
+	        React__default["default"],
+	        React$1.useState,
+	        React$1.useEffect,
+	        React$1.useContext,
+	        React$1.useReducer,
+	        React$1.useCallback,
+	        React$1.useMemo,
+	        React$1.useRef,
+	        React$1.useImperativeHandle,
+	        React$1.useLayoutEffect,
+	        React$1.useDebugValue,
 	        getReactElementFromJSONX,
 	        reactComponent,
 	        resources,
@@ -9989,18 +10145,24 @@
     const self = this || {};
 
     return function ${options.name || "Anonymous"}(props){
-      ${functionBody}
-      if(typeof exposeprops==='undefined' || exposeprops){
-        reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);
-        if(typeof exposeprops!=='undefined') reactComponent.__functionargs = Object.keys(exposeprops);
-      } else{
-        reactComponent.props =  props;
+      try {
+        ${functionBody}
+        if(typeof exposeprops==='undefined' || exposeprops){
+          reactComponent.props = Object.assign({},props,typeof exposeprops==='undefined'?{}:exposeprops);
+          if(typeof exposeprops!=='undefined') reactComponent.__functionargs = Object.keys(exposeprops);
+        } else{
+          reactComponent.props =  props;
+        }
+        if(!props?.children) {
+        //  delete props.children;
+        }
+        const context = ${options.bind ? "Object.assign(self,this||{})" : "this"};
+        return getReactElementFromJSONX.call(context, reactComponent);
+
+      } catch(e){
+        if(self.debug) return e.toString()
+        else throw e
       }
-      if(!props?.children) {
-      //  delete props.children;
-      }
-      const context = ${options.bind ? "Object.assign(self,this||{})" : "this"};
-      return getReactElementFromJSONX.call(context, reactComponent);
     }
   `);
 	    if (options.name) {
@@ -10053,8 +10215,14 @@
 	 *
 	 */
 	function getReactContext(options = {}) {
-	    return React.createContext(options.value);
+	    return React$1.createContext(options.value);
 	}
+	/**
+	 * generates react function components from a json definition
+	 * @property {object} this
+	 * @param customComponent
+	 * @returns {function} returns react functional component
+	 */
 	function getCustomFunctionComponent(customComponent) {
 	    const { options, functionBody, functionComponent, jsonxComponent, } = customComponent;
 	    if (functionComponent) {
@@ -10064,6 +10232,11 @@
 	        return getReactFunctionComponent.call(this, jsonxComponent, functionBody, options);
 	    }
 	}
+	/**
+	 * returns a cache key of custom components names
+	 * @param customComponents
+	 * @returns {string} cachekey
+	 */
 	function getCustomComponentsCacheKey(customComponents) {
 	    return customComponents.map(({ name }) => name).join('');
 	}
@@ -10105,6 +10278,7 @@
 	    const customComponentsCacheKey = getCustomComponentsCacheKey(customComponents);
 	    if (generatedCustomComponents.has(customComponentsCacheKey))
 	        return generatedCustomComponents.get(customComponentsCacheKey);
+	    const cxt = Object.assign({ componentLibraries: {}, reactComponents: {} }, this);
 	    const customComponentLibraries = {};
 	    const customReactComponents = {};
 	    if (customComponents && customComponents.length) {
@@ -10128,6 +10302,7 @@
 	                }
 	                else
 	                    customComponentLibraries[name] = window[name];
+	                cxt.componentLibraries[name] = customComponentLibraries[name];
 	            }
 	            else if (type === "component") {
 	                if (jsonx) {
@@ -10135,13 +10310,15 @@
 	                }
 	                else
 	                    customReactComponents[name] = window[name];
+	                cxt.reactComponents[name] = customReactComponents[name];
 	            }
 	            else if (type === "function") {
-	                if (jsonx) {
+	                if (functionComponent || functionBody) {
 	                    customReactComponents[name] = getCustomFunctionComponent.call(this, { options, functionBody, functionComponent, jsonxComponent: jsonx, });
 	                }
 	                else
 	                    customReactComponents[name] = window[name];
+	                cxt.reactComponents[name] = customReactComponents[name];
 	            }
 	        });
 	    }
@@ -10736,7 +10913,7 @@
 	            const windowComponentProps = allProps["__windowComponentProps"]
 	                ? allProps["__windowComponentProps"]
 	                : this.props;
-	            allProps[key] = React__default['default'].createElement(windowComponentElement, windowComponentProps, null);
+	            allProps[key] = React__default["default"].createElement(windowComponentElement, windowComponentProps, null);
 	        }
 	    });
 	    return allProps;
@@ -10932,6 +11109,8 @@
 		getComputedProps: getComputedProps$1
 	});
 
+	var numeral$1 = {exports: {}};
+
 	/*! @preserve
 	 * numeral.js
 	 * version : 2.0.6
@@ -10940,7 +11119,7 @@
 	 * http://adamwdraper.github.com/Numeral-js/
 	 */
 
-	var numeral = createCommonjsModule(function (module) {
+	(function (module) {
 	(function (global, factory) {
 	    if (module.exports) {
 	        module.exports = factory();
@@ -11940,7 +12119,9 @@
 
 	return numeral;
 	}));
-	});
+	}(numeral$1));
+
+	var numeral = numeral$1.exports;
 
 	// these aren't really private, but nor are they really useful to document
 
@@ -12015,119 +12196,104 @@
 	const DATE_SHORT = {
 	  year: n,
 	  month: n,
-	  day: n
+	  day: n,
 	};
 
 	const DATE_MED = {
 	  year: n,
 	  month: s,
-	  day: n
+	  day: n,
 	};
 
 	const DATE_MED_WITH_WEEKDAY = {
 	  year: n,
 	  month: s,
 	  day: n,
-	  weekday: s
+	  weekday: s,
 	};
 
 	const DATE_FULL = {
 	  year: n,
 	  month: l,
-	  day: n
+	  day: n,
 	};
 
 	const DATE_HUGE = {
 	  year: n,
 	  month: l,
 	  day: n,
-	  weekday: l
+	  weekday: l,
 	};
 
 	const TIME_SIMPLE = {
 	  hour: n,
-	  minute: n
+	  minute: n,
 	};
 
 	const TIME_WITH_SECONDS = {
 	  hour: n,
 	  minute: n,
-	  second: n
+	  second: n,
 	};
 
 	const TIME_WITH_SHORT_OFFSET = {
 	  hour: n,
 	  minute: n,
 	  second: n,
-	  timeZoneName: s
+	  timeZoneName: s,
 	};
 
 	const TIME_WITH_LONG_OFFSET = {
 	  hour: n,
 	  minute: n,
 	  second: n,
-	  timeZoneName: l
+	  timeZoneName: l,
 	};
 
 	const TIME_24_SIMPLE = {
 	  hour: n,
 	  minute: n,
-	  hour12: false
+	  hourCycle: "h23",
 	};
 
-	/**
-	 * {@link toLocaleString}; format like '09:30:23', always 24-hour.
-	 */
 	const TIME_24_WITH_SECONDS = {
 	  hour: n,
 	  minute: n,
 	  second: n,
-	  hour12: false
+	  hourCycle: "h23",
 	};
 
-	/**
-	 * {@link toLocaleString}; format like '09:30:23 EDT', always 24-hour.
-	 */
 	const TIME_24_WITH_SHORT_OFFSET = {
 	  hour: n,
 	  minute: n,
 	  second: n,
-	  hour12: false,
-	  timeZoneName: s
+	  hourCycle: "h23",
+	  timeZoneName: s,
 	};
 
-	/**
-	 * {@link toLocaleString}; format like '09:30:23 Eastern Daylight Time', always 24-hour.
-	 */
 	const TIME_24_WITH_LONG_OFFSET = {
 	  hour: n,
 	  minute: n,
 	  second: n,
-	  hour12: false,
-	  timeZoneName: l
+	  hourCycle: "h23",
+	  timeZoneName: l,
 	};
 
-	/**
-	 * {@link toLocaleString}; format like '10/14/1983, 9:30 AM'. Only 12-hour if the locale is.
-	 */
 	const DATETIME_SHORT = {
 	  year: n,
 	  month: n,
 	  day: n,
 	  hour: n,
-	  minute: n
+	  minute: n,
 	};
 
-	/**
-	 * {@link toLocaleString}; format like '10/14/1983, 9:30:33 AM'. Only 12-hour if the locale is.
-	 */
 	const DATETIME_SHORT_WITH_SECONDS = {
 	  year: n,
 	  month: n,
 	  day: n,
 	  hour: n,
 	  minute: n,
-	  second: n
+	  second: n,
 	};
 
 	const DATETIME_MED = {
@@ -12135,7 +12301,7 @@
 	  month: s,
 	  day: n,
 	  hour: n,
-	  minute: n
+	  minute: n,
 	};
 
 	const DATETIME_MED_WITH_SECONDS = {
@@ -12144,7 +12310,7 @@
 	  day: n,
 	  hour: n,
 	  minute: n,
-	  second: n
+	  second: n,
 	};
 
 	const DATETIME_MED_WITH_WEEKDAY = {
@@ -12153,7 +12319,7 @@
 	  day: n,
 	  weekday: s,
 	  hour: n,
-	  minute: n
+	  minute: n,
 	};
 
 	const DATETIME_FULL = {
@@ -12162,7 +12328,7 @@
 	  day: n,
 	  hour: n,
 	  minute: n,
-	  timeZoneName: s
+	  timeZoneName: s,
 	};
 
 	const DATETIME_FULL_WITH_SECONDS = {
@@ -12172,7 +12338,7 @@
 	  hour: n,
 	  minute: n,
 	  second: n,
-	  timeZoneName: s
+	  timeZoneName: s,
 	};
 
 	const DATETIME_HUGE = {
@@ -12182,7 +12348,7 @@
 	  weekday: l,
 	  hour: n,
 	  minute: n,
-	  timeZoneName: l
+	  timeZoneName: l,
 	};
 
 	const DATETIME_HUGE_WITH_SECONDS = {
@@ -12193,7 +12359,7 @@
 	  hour: n,
 	  minute: n,
 	  second: n,
-	  timeZoneName: l
+	  timeZoneName: l,
 	};
 
 	/*
@@ -12229,18 +12395,6 @@
 	}
 
 	// CAPABILITIES
-
-	function hasIntl() {
-	  try {
-	    return typeof Intl !== "undefined" && Intl.DateTimeFormat;
-	  } catch (e) {
-	    return false;
-	  }
-	}
-
-	function hasFormatToParts() {
-	  return !isUndefined(Intl.DateTimeFormat.prototype.formatToParts);
-	}
 
 	function hasRelative() {
 	  try {
@@ -12295,17 +12449,14 @@
 	}
 
 	function padStart(input, n = 2) {
-	  const minus = input < 0 ? "-" : "";
-	  const target = minus ? input * -1 : input;
-	  let result;
-
-	  if (target.toString().length < n) {
-	    result = ("0".repeat(n) + target).slice(-n);
+	  const isNeg = input < 0;
+	  let padded;
+	  if (isNeg) {
+	    padded = "-" + ("" + -input).padStart(n, "0");
 	  } else {
-	    result = target.toString();
+	    padded = ("" + input).padStart(n, "0");
 	  }
-
-	  return `${minus}${result}`;
+	  return padded;
 	}
 
 	function parseInteger(string) {
@@ -12313,6 +12464,14 @@
 	    return undefined;
 	  } else {
 	    return parseInt(string, 10);
+	  }
+	}
+
+	function parseFloating(string) {
+	  if (isUndefined(string) || string === null || string === "") {
+	    return undefined;
+	  } else {
+	    return parseFloat(string);
 	  }
 	}
 
@@ -12396,36 +12555,24 @@
 	function parseZoneInfo(ts, offsetFormat, locale, timeZone = null) {
 	  const date = new Date(ts),
 	    intlOpts = {
-	      hour12: false,
+	      hourCycle: "h23",
 	      year: "numeric",
 	      month: "2-digit",
 	      day: "2-digit",
 	      hour: "2-digit",
-	      minute: "2-digit"
+	      minute: "2-digit",
 	    };
 
 	  if (timeZone) {
 	    intlOpts.timeZone = timeZone;
 	  }
 
-	  const modified = Object.assign({ timeZoneName: offsetFormat }, intlOpts),
-	    intl = hasIntl();
+	  const modified = { timeZoneName: offsetFormat, ...intlOpts };
 
-	  if (intl && hasFormatToParts()) {
-	    const parsed = new Intl.DateTimeFormat(locale, modified)
-	      .formatToParts(date)
-	      .find(m => m.type.toLowerCase() === "timezonename");
-	    return parsed ? parsed.value : null;
-	  } else if (intl) {
-	    // this probably doesn't work for all locales
-	    const without = new Intl.DateTimeFormat(locale, intlOpts).format(date),
-	      included = new Intl.DateTimeFormat(locale, modified).format(date),
-	      diffed = included.substring(without.length),
-	      trimmed = diffed.replace(/^[, \u200e]+/, "");
-	    return trimmed;
-	  } else {
-	    return null;
-	  }
+	  const parsed = new Intl.DateTimeFormat(locale, modified)
+	    .formatToParts(date)
+	    .find((m) => m.type.toLowerCase() === "timezonename");
+	  return parsed ? parsed.value : null;
 	}
 
 	// signedOffset('-5', '30') -> -330
@@ -12451,11 +12598,10 @@
 	  return numericValue;
 	}
 
-	function normalizeObject(obj, normalizer, nonUnitKeys) {
+	function normalizeObject(obj, normalizer) {
 	  const normalized = {};
 	  for (const u in obj) {
 	    if (hasOwnProperty(obj, u)) {
-	      if (nonUnitKeys.indexOf(u) >= 0) continue;
 	      const v = obj[u];
 	      if (v === undefined || v === null) continue;
 	      normalized[normalizer(u)] = asNumber(v);
@@ -12485,11 +12631,7 @@
 	  return pick(obj, ["hour", "minute", "second", "millisecond"]);
 	}
 
-	const ianaRegex = /[A-Za-z_+-]{1,256}(:?\/[A-Za-z_+-]{1,256}(\/[A-Za-z_+-]{1,256})?)?/;
-
-	function stringify(obj) {
-	  return JSON.stringify(obj, Object.keys(obj).sort());
-	}
+	const ianaRegex = /[A-Za-z_+-]{1,256}(:?\/[A-Za-z0-9_+-]{1,256}(\/[A-Za-z0-9_+-]{1,256})?)?/;
 
 	/**
 	 * @private
@@ -12507,7 +12649,7 @@
 	  "September",
 	  "October",
 	  "November",
-	  "December"
+	  "December",
 	];
 
 	const monthsShort = [
@@ -12522,7 +12664,7 @@
 	  "Sep",
 	  "Oct",
 	  "Nov",
-	  "Dec"
+	  "Dec",
 	];
 
 	const monthsNarrow = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
@@ -12530,11 +12672,11 @@
 	function months(length) {
 	  switch (length) {
 	    case "narrow":
-	      return monthsNarrow;
+	      return [...monthsNarrow];
 	    case "short":
-	      return monthsShort;
+	      return [...monthsShort];
 	    case "long":
-	      return monthsLong;
+	      return [...monthsLong];
 	    case "numeric":
 	      return ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
 	    case "2-digit":
@@ -12551,7 +12693,7 @@
 	  "Thursday",
 	  "Friday",
 	  "Saturday",
-	  "Sunday"
+	  "Sunday",
 	];
 
 	const weekdaysShort = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -12561,11 +12703,11 @@
 	function weekdays(length) {
 	  switch (length) {
 	    case "narrow":
-	      return weekdaysNarrow;
+	      return [...weekdaysNarrow];
 	    case "short":
-	      return weekdaysShort;
+	      return [...weekdaysShort];
 	    case "long":
-	      return weekdaysLong;
+	      return [...weekdaysLong];
 	    case "numeric":
 	      return ["1", "2", "3", "4", "5", "6", "7"];
 	    default:
@@ -12584,11 +12726,11 @@
 	function eras(length) {
 	  switch (length) {
 	    case "narrow":
-	      return erasNarrow;
+	      return [...erasNarrow];
 	    case "short":
-	      return erasShort;
+	      return [...erasShort];
 	    case "long":
-	      return erasLong;
+	      return [...erasLong];
 	    default:
 	      return null;
 	  }
@@ -12619,7 +12761,7 @@
 	    days: ["day", "day", "days"],
 	    hours: ["hour", "hr."],
 	    minutes: ["minute", "min."],
-	    seconds: ["second", "sec."]
+	    seconds: ["second", "sec."],
 	  };
 
 	  const lastable = ["hours", "minutes", "seconds"].indexOf(unit) === -1;
@@ -12645,76 +12787,9 @@
 	        ? lilUnits[1]
 	        : lilUnits[2] || lilUnits[1]
 	      : singular
-	        ? units[unit][0]
-	        : unit;
+	      ? units[unit][0]
+	      : unit;
 	  return isInPast ? `${fmtValue} ${fmtUnit} ago` : `in ${fmtValue} ${fmtUnit}`;
-	}
-
-	function formatString(knownFormat) {
-	  // these all have the offsets removed because we don't have access to them
-	  // without all the intl stuff this is backfilling
-	  const filtered = pick(knownFormat, [
-	      "weekday",
-	      "era",
-	      "year",
-	      "month",
-	      "day",
-	      "hour",
-	      "minute",
-	      "second",
-	      "timeZoneName",
-	      "hour12"
-	    ]),
-	    key = stringify(filtered),
-	    dateTimeHuge = "EEEE, LLLL d, yyyy, h:mm a";
-	  switch (key) {
-	    case stringify(DATE_SHORT):
-	      return "M/d/yyyy";
-	    case stringify(DATE_MED):
-	      return "LLL d, yyyy";
-	    case stringify(DATE_MED_WITH_WEEKDAY):
-	      return "EEE, LLL d, yyyy";
-	    case stringify(DATE_FULL):
-	      return "LLLL d, yyyy";
-	    case stringify(DATE_HUGE):
-	      return "EEEE, LLLL d, yyyy";
-	    case stringify(TIME_SIMPLE):
-	      return "h:mm a";
-	    case stringify(TIME_WITH_SECONDS):
-	      return "h:mm:ss a";
-	    case stringify(TIME_WITH_SHORT_OFFSET):
-	      return "h:mm a";
-	    case stringify(TIME_WITH_LONG_OFFSET):
-	      return "h:mm a";
-	    case stringify(TIME_24_SIMPLE):
-	      return "HH:mm";
-	    case stringify(TIME_24_WITH_SECONDS):
-	      return "HH:mm:ss";
-	    case stringify(TIME_24_WITH_SHORT_OFFSET):
-	      return "HH:mm";
-	    case stringify(TIME_24_WITH_LONG_OFFSET):
-	      return "HH:mm";
-	    case stringify(DATETIME_SHORT):
-	      return "M/d/yyyy, h:mm a";
-	    case stringify(DATETIME_MED):
-	      return "LLL d, yyyy, h:mm a";
-	    case stringify(DATETIME_FULL):
-	      return "LLLL d, yyyy, h:mm a";
-	    case stringify(DATETIME_HUGE):
-	      return dateTimeHuge;
-	    case stringify(DATETIME_SHORT_WITH_SECONDS):
-	      return "M/d/yyyy, h:mm:ss a";
-	    case stringify(DATETIME_MED_WITH_SECONDS):
-	      return "LLL d, yyyy, h:mm:ss a";
-	    case stringify(DATETIME_MED_WITH_WEEKDAY):
-	      return "EEE, d LLL yyyy, h:mm a";
-	    case stringify(DATETIME_FULL_WITH_SECONDS):
-	      return "LLLL d, yyyy, h:mm:ss a";
-	    case stringify(DATETIME_HUGE_WITH_SECONDS):
-	      return "EEEE, LLLL d, yyyy, h:mm:ss a";
-	    default:
-	      return dateTimeHuge;
-	  }
 	}
 
 	function stringifyTokens(splits, tokenToString) {
@@ -12749,7 +12824,7 @@
 	  F: DATETIME_SHORT_WITH_SECONDS,
 	  FF: DATETIME_MED_WITH_SECONDS,
 	  FFF: DATETIME_FULL_WITH_SECONDS,
-	  FFFF: DATETIME_HUGE_WITH_SECONDS
+	  FFFF: DATETIME_HUGE_WITH_SECONDS,
 	};
 
 	/**
@@ -12809,22 +12884,22 @@
 	    if (this.systemLoc === null) {
 	      this.systemLoc = this.loc.redefaultToSystem();
 	    }
-	    const df = this.systemLoc.dtFormatter(dt, Object.assign({}, this.opts, opts));
+	    const df = this.systemLoc.dtFormatter(dt, { ...this.opts, ...opts });
 	    return df.format();
 	  }
 
 	  formatDateTime(dt, opts = {}) {
-	    const df = this.loc.dtFormatter(dt, Object.assign({}, this.opts, opts));
+	    const df = this.loc.dtFormatter(dt, { ...this.opts, ...opts });
 	    return df.format();
 	  }
 
 	  formatDateTimeParts(dt, opts = {}) {
-	    const df = this.loc.dtFormatter(dt, Object.assign({}, this.opts, opts));
+	    const df = this.loc.dtFormatter(dt, { ...this.opts, ...opts });
 	    return df.formatToParts();
 	  }
 
 	  resolvedOptions(dt, opts = {}) {
-	    const df = this.loc.dtFormatter(dt, Object.assign({}, this.opts, opts));
+	    const df = this.loc.dtFormatter(dt, { ...this.opts, ...opts });
 	    return df.resolvedOptions();
 	  }
 
@@ -12834,7 +12909,7 @@
 	      return padStart(n, p);
 	    }
 
-	    const opts = Object.assign({}, this.opts);
+	    const opts = { ...this.opts };
 
 	    if (p > 0) {
 	      opts.padTo = p;
@@ -12845,10 +12920,9 @@
 
 	  formatDateTimeFromString(dt, fmt) {
 	    const knownEnglish = this.loc.listingMode() === "en",
-	      useDateTimeFormatter =
-	        this.loc.outputCalendar && this.loc.outputCalendar !== "gregory" && hasFormatToParts(),
+	      useDateTimeFormatter = this.loc.outputCalendar && this.loc.outputCalendar !== "gregory",
 	      string = (opts, extract) => this.loc.extract(dt, opts, extract),
-	      formatOffset = opts => {
+	      formatOffset = (opts) => {
 	        if (dt.isOffsetFixed && dt.offset === 0 && opts.allowZ) {
 	          return "Z";
 	        }
@@ -12858,7 +12932,7 @@
 	      meridiem = () =>
 	        knownEnglish
 	          ? meridiemForDateTime(dt)
-	          : string({ hour: "numeric", hour12: true }, "dayperiod"),
+	          : string({ hour: "numeric", hourCycle: "h12" }, "dayperiod"),
 	      month = (length, standalone) =>
 	        knownEnglish
 	          ? monthForDateTime(dt, length)
@@ -12870,7 +12944,7 @@
 	              standalone ? { weekday: length } : { weekday: length, month: "long", day: "numeric" },
 	              "weekday"
 	            ),
-	      maybeMacro = token => {
+	      maybeMacro = (token) => {
 	        const formatOpts = Formatter.macroTokenToFormatOpts(token);
 	        if (formatOpts) {
 	          return this.formatWithSystemDefault(dt, formatOpts);
@@ -12878,9 +12952,9 @@
 	          return token;
 	        }
 	      },
-	      era = length =>
+	      era = (length) =>
 	        knownEnglish ? eraForDateTime(dt, length) : string({ era: length }, "era"),
-	      tokenToString = token => {
+	      tokenToString = (token) => {
 	        // Where possible: http://cldr.unicode.org/translation/date-time-1/date-time#TOC-Standalone-vs.-Format-Styles
 	        switch (token) {
 	          // ms
@@ -12895,6 +12969,11 @@
 	            return this.num(dt.second);
 	          case "ss":
 	            return this.num(dt.second, 2);
+	          // fractional seconds
+	          case "uu":
+	            return this.num(Math.floor(dt.millisecond / 10), 2);
+	          case "uuu":
+	            return this.num(Math.floor(dt.millisecond / 100));
 	          // minutes
 	          case "m":
 	            return this.num(dt.minute);
@@ -13062,7 +13141,7 @@
 	  }
 
 	  formatDurationFromString(dur, fmt) {
-	    const tokenToField = token => {
+	    const tokenToField = (token) => {
 	        switch (token[0]) {
 	          case "S":
 	            return "millisecond";
@@ -13082,7 +13161,7 @@
 	            return null;
 	        }
 	      },
-	      tokenToString = lildur => token => {
+	      tokenToString = (lildur) => (token) => {
 	        const mapped = tokenToField(token);
 	        if (mapped) {
 	          return this.num(lildur.get(mapped), token.length);
@@ -13095,7 +13174,7 @@
 	        (found, { literal, val }) => (literal ? found : found.concat(val)),
 	        []
 	      ),
-	      collapsed = dur.shiftTo(...realTokens.map(tokenToField).filter(t => t));
+	      collapsed = dur.shiftTo(...realTokens.map(tokenToField).filter((t) => t));
 	    return stringifyTokens(tokens, tokenToString(collapsed));
 	  }
 	}
@@ -13114,8 +13193,6 @@
 	    }
 	  }
 	}
-
-	/* eslint no-unused-vars: "off" */
 
 	/**
 	 * @interface
@@ -13144,7 +13221,7 @@
 	   * @abstract
 	   * @type {boolean}
 	   */
-	  get universal() {
+	  get isUniversal() {
 	    throw new ZoneIsAbstractError();
 	  }
 
@@ -13209,32 +13286,30 @@
 	 * Represents the local zone for this JavaScript environment.
 	 * @implements {Zone}
 	 */
-	class LocalZone extends Zone {
+	class SystemZone extends Zone {
 	  /**
 	   * Get a singleton instance of the local zone
-	   * @return {LocalZone}
+	   * @return {SystemZone}
 	   */
 	  static get instance() {
 	    if (singleton$1 === null) {
-	      singleton$1 = new LocalZone();
+	      singleton$1 = new SystemZone();
 	    }
 	    return singleton$1;
 	  }
 
 	  /** @override **/
 	  get type() {
-	    return "local";
+	    return "system";
 	  }
 
 	  /** @override **/
 	  get name() {
-	    if (hasIntl()) {
-	      return new Intl.DateTimeFormat().resolvedOptions().timeZone;
-	    } else return "local";
+	    return new Intl.DateTimeFormat().resolvedOptions().timeZone;
 	  }
 
 	  /** @override **/
-	  get universal() {
+	  get isUniversal() {
 	    return false;
 	  }
 
@@ -13255,7 +13330,7 @@
 
 	  /** @override **/
 	  equals(otherZone) {
-	    return otherZone.type === "local";
+	    return otherZone.type === "system";
 	  }
 
 	  /** @override **/
@@ -13277,7 +13352,7 @@
 	      day: "2-digit",
 	      hour: "2-digit",
 	      minute: "2-digit",
-	      second: "2-digit"
+	      second: "2-digit",
 	    });
 	  }
 	  return dtfCache[zone];
@@ -13289,7 +13364,7 @@
 	  day: 2,
 	  hour: 3,
 	  minute: 4,
-	  second: 5
+	  second: 5,
 	};
 
 	function hackyOffset(dtf, date) {
@@ -13360,24 +13435,15 @@
 	   * @return {boolean}
 	   */
 	  static isValidZone(zone) {
+	    if (!zone) {
+	      return false;
+	    }
 	    try {
 	      new Intl.DateTimeFormat("en-US", { timeZone: zone }).format();
 	      return true;
 	    } catch (e) {
 	      return false;
 	    }
-	  }
-
-	  // Etc/GMT+8 -> -480
-	  /** @ignore */
-	  static parseGMTOffset(specifier) {
-	    if (specifier) {
-	      const match = specifier.match(/^Etc\/GMT([+-]\d{1,2})$/i);
-	      if (match) {
-	        return -60 * parseInt(match[1]);
-	      }
-	    }
-	    return null;
 	  }
 
 	  constructor(name) {
@@ -13399,7 +13465,7 @@
 	  }
 
 	  /** @override **/
-	  get universal() {
+	  get isUniversal() {
 	    return false;
 	  }
 
@@ -13415,13 +13481,17 @@
 
 	  /** @override **/
 	  offset(ts) {
-	    const date = new Date(ts),
-	      dtf = makeDTF(this.name),
+	    const date = new Date(ts);
+
+	    if (isNaN(date)) return NaN;
+
+	    const dtf = makeDTF(this.name),
 	      [year, month, day, hour, minute, second] = dtf.formatToParts
 	        ? partsOffset(dtf, date)
-	        : hackyOffset(dtf, date),
-	      // work around https://bugs.chromium.org/p/chromium/issues/detail?id=1025564&can=2&q=%2224%3A00%22%20datetimeformat
-	      adjustedHour = hour === 24 ? 0 : hour;
+	        : hackyOffset(dtf, date);
+
+	    // because we're using hour12 and https://bugs.chromium.org/p/chromium/issues/detail?id=1025564&can=2&q=%2224%3A00%22%20datetimeformat
+	    const adjustedHour = hour === 24 ? 0 : hour;
 
 	    const asUTC = objToLocalTS({
 	      year,
@@ -13430,7 +13500,7 @@
 	      hour: adjustedHour,
 	      minute,
 	      second,
-	      millisecond: 0
+	      millisecond: 0,
 	    });
 
 	    let asTS = +date;
@@ -13522,7 +13592,7 @@
 	  }
 
 	  /** @override **/
-	  get universal() {
+	  get isUniversal() {
 	    return true;
 	  }
 
@@ -13564,7 +13634,7 @@
 	  }
 
 	  /** @override **/
-	  get universal() {
+	  get isUniversal() {
 	    return false;
 	  }
 
@@ -13599,19 +13669,15 @@
 	 */
 
 	function normalizeZone(input, defaultZone) {
-	  let offset;
 	  if (isUndefined(input) || input === null) {
 	    return defaultZone;
 	  } else if (input instanceof Zone) {
 	    return input;
 	  } else if (isString(input)) {
 	    const lowered = input.toLowerCase();
-	    if (lowered === "local") return defaultZone;
+	    if (lowered === "local" || lowered === "system") return defaultZone;
 	    else if (lowered === "utc" || lowered === "gmt") return FixedOffsetZone.utcInstance;
-	    else if ((offset = IANAZone.parseGMTOffset(input)) != null) {
-	      // handle Etc/GMT-4, which V8 chokes on
-	      return FixedOffsetZone.instance(offset);
-	    } else if (IANAZone.isValidSpecifier(lowered)) return IANAZone.create(input);
+	    else if (IANAZone.isValidSpecifier(lowered)) return IANAZone.create(input);
 	    else return FixedOffsetZone.parseSpecifier(lowered) || new InvalidZone(input);
 	  } else if (isNumber(input)) {
 	    return FixedOffsetZone.instance(input);
@@ -13625,11 +13691,11 @@
 	}
 
 	let now = () => Date.now(),
-	  defaultZone = null, // not setting this directly to LocalZone.instance bc loading order issues
+	  defaultZone = "system",
 	  defaultLocale = null,
 	  defaultNumberingSystem = null,
 	  defaultOutputCalendar = null,
-	  throwOnInvalid = false;
+	  throwOnInvalid;
 
 	/**
 	 * Settings contains static getters and setters that control Luxon's overall behavior. Luxon is a simple library with few options, but the ones it does have live here.
@@ -13655,31 +13721,21 @@
 	  }
 
 	  /**
-	   * Get the default time zone to create DateTimes in.
-	   * @type {string}
-	   */
-	  static get defaultZoneName() {
-	    return Settings.defaultZone.name;
-	  }
-
-	  /**
 	   * Set the default time zone to create DateTimes in. Does not affect existing instances.
+	   * Use the value "system" to reset this value to the system's time zone.
 	   * @type {string}
 	   */
-	  static set defaultZoneName(z) {
-	    if (!z) {
-	      defaultZone = null;
-	    } else {
-	      defaultZone = normalizeZone(z);
-	    }
+	  static set defaultZone(zone) {
+	    defaultZone = zone;
 	  }
 
 	  /**
-	   * Get the default time zone object to create DateTimes in. Does not affect existing instances.
+	   * Get the default time zone object currently used to create DateTimes. Does not affect existing instances.
+	   * The default value is the system's time zone (the one set on the machine that runs this code).
 	   * @type {Zone}
 	   */
 	  static get defaultZone() {
-	    return defaultZone || LocalZone.instance;
+	    return normalizeZone(defaultZone, SystemZone.instance);
 	  }
 
 	  /**
@@ -13756,6 +13812,19 @@
 	  }
 	}
 
+	// todo - remap caching
+
+	let intlLFCache = {};
+	function getCachedLF(locString, opts = {}) {
+	  const key = JSON.stringify([locString, opts]);
+	  let dtf = intlLFCache[key];
+	  if (!dtf) {
+	    dtf = new Intl.ListFormat(locString, opts);
+	    intlLFCache[key] = dtf;
+	  }
+	  return dtf;
+	}
+
 	let intlDTCache = {};
 	function getCachedDTF(locString, opts = {}) {
 	  const key = JSON.stringify([locString, opts]);
@@ -13794,13 +13863,8 @@
 	function systemLocale() {
 	  if (sysLocaleCache) {
 	    return sysLocaleCache;
-	  } else if (hasIntl()) {
-	    const computedSys = new Intl.DateTimeFormat().resolvedOptions().locale;
-	    // node sometimes defaults to "und". Override that because that is dumb
-	    sysLocaleCache = !computedSys || computedSys === "und" ? "en-US" : computedSys;
-	    return sysLocaleCache;
 	  } else {
-	    sysLocaleCache = "en-US";
+	    sysLocaleCache = new Intl.DateTimeFormat().resolvedOptions().locale;
 	    return sysLocaleCache;
 	  }
 	}
@@ -13833,23 +13897,19 @@
 	}
 
 	function intlConfigString(localeStr, numberingSystem, outputCalendar) {
-	  if (hasIntl()) {
-	    if (outputCalendar || numberingSystem) {
-	      localeStr += "-u";
+	  if (outputCalendar || numberingSystem) {
+	    localeStr += "-u";
 
-	      if (outputCalendar) {
-	        localeStr += `-ca-${outputCalendar}`;
-	      }
-
-	      if (numberingSystem) {
-	        localeStr += `-nu-${numberingSystem}`;
-	      }
-	      return localeStr;
-	    } else {
-	      return localeStr;
+	    if (outputCalendar) {
+	      localeStr += `-ca-${outputCalendar}`;
 	    }
+
+	    if (numberingSystem) {
+	      localeStr += `-nu-${numberingSystem}`;
+	    }
+	    return localeStr;
 	  } else {
-	    return [];
+	    return localeStr;
 	  }
 	}
 
@@ -13891,7 +13951,7 @@
 	      loc.numberingSystem === "latn" ||
 	      !loc.locale ||
 	      loc.locale.startsWith("en") ||
-	      (hasIntl() && new Intl.DateTimeFormat(loc.intl).resolvedOptions().numberingSystem === "latn")
+	      new Intl.DateTimeFormat(loc.intl).resolvedOptions().numberingSystem === "latn"
 	    );
 	  }
 	}
@@ -13905,8 +13965,10 @@
 	    this.padTo = opts.padTo || 0;
 	    this.floor = opts.floor || false;
 
-	    if (!forceSimple && hasIntl()) {
-	      const intlOpts = { useGrouping: false };
+	    const { padTo, floor, ...otherOpts } = opts;
+
+	    if (!forceSimple || Object.keys(otherOpts).length > 0) {
+	      const intlOpts = { useGrouping: false, ...opts };
 	      if (opts.padTo > 0) intlOpts.minimumIntegerDigits = opts.padTo;
 	      this.inf = getCachedINF(intl, intlOpts);
 	    }
@@ -13931,17 +13993,19 @@
 	class PolyDateFormatter {
 	  constructor(dt, intl, opts) {
 	    this.opts = opts;
-	    this.hasIntl = hasIntl();
 
 	    let z;
-	    if (dt.zone.universal && this.hasIntl) {
+	    if (dt.zone.isUniversal) {
 	      // UTC-8 or Etc/UTC-8 are not part of tzdata, only Etc/GMT+8 and the like.
 	      // That is why fixed-offset TZ is set to that unless it is:
-	      // 1. Outside of the supported range Etc/GMT-14 to Etc/GMT+12.
-	      // 2. Not a whole hour, e.g. UTC+4:30.
+	      // 1. Representing offset 0 when UTC is used to maintain previous behavior and does not become GMT.
+	      // 2. Unsupported by the browser:
+	      //    - some do not support Etc/
+	      //    - < Etc/GMT-14, > Etc/GMT+12, and 30-minute or 45-minute offsets are not part of tzdata
 	      const gmtOffset = -1 * (dt.offset / 60);
-	      if (gmtOffset >= -14 && gmtOffset <= 12 && gmtOffset % 1 === 0) {
-	        z = gmtOffset >= 0 ? `Etc/GMT+${gmtOffset}` : `Etc/GMT${gmtOffset}`;
+	      const offsetZ = gmtOffset >= 0 ? `Etc/GMT+${gmtOffset}` : `Etc/GMT${gmtOffset}`;
+	      if (dt.offset !== 0 && IANAZone.create(offsetZ).valid) {
+	        z = offsetZ;
 	        this.dt = dt;
 	      } else {
 	        // Not all fixed-offset zones like Etc/+4:30 are present in tzdata.
@@ -13958,52 +14022,30 @@
 	          this.dt = dt.offset === 0 ? dt : DateTime.fromMillis(dt.ts + dt.offset * 60 * 1000);
 	        }
 	      }
-	    } else if (dt.zone.type === "local") {
+	    } else if (dt.zone.type === "system") {
 	      this.dt = dt;
 	    } else {
 	      this.dt = dt;
 	      z = dt.zone.name;
 	    }
 
-	    if (this.hasIntl) {
-	      const intlOpts = Object.assign({}, this.opts);
-	      if (z) {
-	        intlOpts.timeZone = z;
-	      }
-	      this.dtf = getCachedDTF(intl, intlOpts);
+	    const intlOpts = { ...this.opts };
+	    if (z) {
+	      intlOpts.timeZone = z;
 	    }
+	    this.dtf = getCachedDTF(intl, intlOpts);
 	  }
 
 	  format() {
-	    if (this.hasIntl) {
-	      return this.dtf.format(this.dt.toJSDate());
-	    } else {
-	      const tokenFormat = formatString(this.opts),
-	        loc = Locale.create("en-US");
-	      return Formatter.create(loc).formatDateTimeFromString(this.dt, tokenFormat);
-	    }
+	    return this.dtf.format(this.dt.toJSDate());
 	  }
 
 	  formatToParts() {
-	    if (this.hasIntl && hasFormatToParts()) {
-	      return this.dtf.formatToParts(this.dt.toJSDate());
-	    } else {
-	      // This is kind of a cop out. We actually could do this for English. However, we couldn't do it for intl strings
-	      // and IMO it's too weird to have an uncanny valley like that
-	      return [];
-	    }
+	    return this.dtf.formatToParts(this.dt.toJSDate());
 	  }
 
 	  resolvedOptions() {
-	    if (this.hasIntl) {
-	      return this.dtf.resolvedOptions();
-	    } else {
-	      return {
-	        locale: "en-US",
-	        numberingSystem: "latn",
-	        outputCalendar: "gregory"
-	      };
-	    }
+	    return this.dtf.resolvedOptions();
 	  }
 	}
 
@@ -14012,7 +14054,7 @@
 	 */
 	class PolyRelFormatter {
 	  constructor(intl, isEnglish, opts) {
-	    this.opts = Object.assign({ style: "long" }, opts);
+	    this.opts = { style: "long", ...opts };
 	    if (!isEnglish && hasRelative()) {
 	      this.rtf = getCachedRTF(intl, opts);
 	    }
@@ -14045,11 +14087,11 @@
 	  }
 
 	  static create(locale, numberingSystem, outputCalendar, defaultToEN = false) {
-	    const specifiedLocale = locale || Settings.defaultLocale,
-	      // the system locale is useful for human readable strings but annoying for parsing/formatting known formats
-	      localeR = specifiedLocale || (defaultToEN ? "en-US" : systemLocale()),
-	      numberingSystemR = numberingSystem || Settings.defaultNumberingSystem,
-	      outputCalendarR = outputCalendar || Settings.defaultOutputCalendar;
+	    const specifiedLocale = locale || Settings.defaultLocale;
+	    // the system locale is useful for human readable strings but annoying for parsing/formatting known formats
+	    const localeR = specifiedLocale || (defaultToEN ? "en-US" : systemLocale());
+	    const numberingSystemR = numberingSystem || Settings.defaultNumberingSystem;
+	    const outputCalendarR = outputCalendar || Settings.defaultOutputCalendar;
 	    return new Locale(localeR, numberingSystemR, outputCalendarR, specifiedLocale);
 	  }
 
@@ -14089,21 +14131,12 @@
 	    return this.fastNumbersCached;
 	  }
 
-	  listingMode(defaultOK = true) {
-	    const intl = hasIntl(),
-	      hasFTP = intl && hasFormatToParts(),
-	      isActuallyEn = this.isEnglish(),
-	      hasNoWeirdness =
-	        (this.numberingSystem === null || this.numberingSystem === "latn") &&
-	        (this.outputCalendar === null || this.outputCalendar === "gregory");
-
-	    if (!hasFTP && !(isActuallyEn && hasNoWeirdness) && !defaultOK) {
-	      return "error";
-	    } else if (!hasFTP || (isActuallyEn && hasNoWeirdness)) {
-	      return "en";
-	    } else {
-	      return "intl";
-	    }
+	  listingMode() {
+	    const isActuallyEn = this.isEnglish();
+	    const hasNoWeirdness =
+	      (this.numberingSystem === null || this.numberingSystem === "latn") &&
+	      (this.outputCalendar === null || this.outputCalendar === "gregory");
+	    return isActuallyEn && hasNoWeirdness ? "en" : "intl";
 	  }
 
 	  clone(alts) {
@@ -14120,11 +14153,11 @@
 	  }
 
 	  redefaultToEN(alts = {}) {
-	    return this.clone(Object.assign({}, alts, { defaultToEN: true }));
+	    return this.clone({ ...alts, defaultToEN: true });
 	  }
 
 	  redefaultToSystem(alts = {}) {
-	    return this.clone(Object.assign({}, alts, { defaultToEN: false }));
+	    return this.clone({ ...alts, defaultToEN: false });
 	  }
 
 	  months(length, format = false, defaultOK = true) {
@@ -14132,7 +14165,7 @@
 	      const intl = format ? { month: length, day: "numeric" } : { month: length },
 	        formatStr = format ? "format" : "standalone";
 	      if (!this.monthsCache[formatStr][length]) {
-	        this.monthsCache[formatStr][length] = mapMonths(dt => this.extract(dt, intl, "month"));
+	        this.monthsCache[formatStr][length] = mapMonths((dt) => this.extract(dt, intl, "month"));
 	      }
 	      return this.monthsCache[formatStr][length];
 	    });
@@ -14145,7 +14178,7 @@
 	          : { weekday: length },
 	        formatStr = format ? "format" : "standalone";
 	      if (!this.weekdaysCache[formatStr][length]) {
-	        this.weekdaysCache[formatStr][length] = mapWeekdays(dt =>
+	        this.weekdaysCache[formatStr][length] = mapWeekdays((dt) =>
 	          this.extract(dt, intl, "weekday")
 	        );
 	      }
@@ -14163,9 +14196,9 @@
 	        // In theory there could be aribitrary day periods. We're gonna assume there are exactly two
 	        // for AM and PM. This is probably wrong, but it's makes parsing way easier.
 	        if (!this.meridiemCache) {
-	          const intl = { hour: "numeric", hour12: true };
+	          const intl = { hour: "numeric", hourCycle: "h12" };
 	          this.meridiemCache = [DateTime.utc(2016, 11, 13, 9), DateTime.utc(2016, 11, 13, 19)].map(
-	            dt => this.extract(dt, intl, "dayperiod")
+	            (dt) => this.extract(dt, intl, "dayperiod")
 	          );
 	        }
 
@@ -14181,7 +14214,7 @@
 	      // This is problematic. Different calendars are going to define eras totally differently. What I need is the minimum set of dates
 	      // to definitely enumerate them.
 	      if (!this.eraCache[length]) {
-	        this.eraCache[length] = [DateTime.utc(-40, 1, 1), DateTime.utc(2017, 1, 1)].map(dt =>
+	        this.eraCache[length] = [DateTime.utc(-40, 1, 1), DateTime.utc(2017, 1, 1)].map((dt) =>
 	          this.extract(dt, intl, "era")
 	        );
 	      }
@@ -14193,7 +14226,7 @@
 	  extract(dt, intlOpts, field) {
 	    const df = this.dtFormatter(dt, intlOpts),
 	      results = df.formatToParts(),
-	      matching = results.find(m => m.type.toLowerCase() === field);
+	      matching = results.find((m) => m.type.toLowerCase() === field);
 	    return matching ? matching.value : null;
 	  }
 
@@ -14211,11 +14244,15 @@
 	    return new PolyRelFormatter(this.intl, this.isEnglish(), opts);
 	  }
 
+	  listFormatter(opts = {}) {
+	    return getCachedLF(this.intl, opts);
+	  }
+
 	  isEnglish() {
 	    return (
 	      this.locale === "en" ||
 	      this.locale.toLowerCase() === "en-us" ||
-	      (hasIntl() && new Intl.DateTimeFormat(this.intl).resolvedOptions().locale.startsWith("en-us"))
+	      new Intl.DateTimeFormat(this.intl).resolvedOptions().locale.startsWith("en-us")
 	    );
 	  }
 
@@ -14244,12 +14281,12 @@
 	}
 
 	function combineExtractors(...extractors) {
-	  return m =>
+	  return (m) =>
 	    extractors
 	      .reduce(
 	        ([mergedVals, mergedZone, cursor], ex) => {
 	          const [val, zone, next] = ex(m, cursor);
-	          return [Object.assign(mergedVals, val), mergedZone || zone, next];
+	          return [{ ...mergedVals, ...val }, mergedZone || zone, next];
 	        },
 	        [{}, null, 1]
 	      )
@@ -14307,7 +14344,7 @@
 	  const item = {
 	    year: int(match, cursor),
 	    month: int(match, cursor + 1, 1),
-	    day: int(match, cursor + 2, 1)
+	    day: int(match, cursor + 2, 1),
 	  };
 
 	  return [item, null, cursor + 3];
@@ -14318,7 +14355,7 @@
 	    hours: int(match, cursor, 0),
 	    minutes: int(match, cursor + 1, 0),
 	    seconds: int(match, cursor + 2, 0),
-	    milliseconds: parseMillis(match[cursor + 3])
+	    milliseconds: parseMillis(match[cursor + 3]),
 	  };
 
 	  return [item, null, cursor + 4];
@@ -14342,36 +14379,30 @@
 
 	// ISO duration parsing
 
-	const isoDuration = /^-?P(?:(?:(-?\d{1,9})Y)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})W)?(?:(-?\d{1,9})D)?(?:T(?:(-?\d{1,9})H)?(?:(-?\d{1,9})M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
+	const isoDuration =
+	  /^-?P(?:(?:(-?\d{1,9}(?:\.\d{1,9})?)Y)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,9}(?:\.\d{1,9})?)W)?(?:(-?\d{1,9}(?:\.\d{1,9})?)D)?(?:T(?:(-?\d{1,9}(?:\.\d{1,9})?)H)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
 
 	function extractISODuration(match) {
-	  const [
-	    s,
-	    yearStr,
-	    monthStr,
-	    weekStr,
-	    dayStr,
-	    hourStr,
-	    minuteStr,
-	    secondStr,
-	    millisecondsStr
-	  ] = match;
+	  const [s, yearStr, monthStr, weekStr, dayStr, hourStr, minuteStr, secondStr, millisecondsStr] =
+	    match;
 
 	  const hasNegativePrefix = s[0] === "-";
+	  const negativeSeconds = secondStr && secondStr[0] === "-";
 
-	  const maybeNegate = num => (num && hasNegativePrefix ? -num : num);
+	  const maybeNegate = (num, force = false) =>
+	    num !== undefined && (force || (num && hasNegativePrefix)) ? -num : num;
 
 	  return [
 	    {
-	      years: maybeNegate(parseInteger(yearStr)),
-	      months: maybeNegate(parseInteger(monthStr)),
-	      weeks: maybeNegate(parseInteger(weekStr)),
-	      days: maybeNegate(parseInteger(dayStr)),
-	      hours: maybeNegate(parseInteger(hourStr)),
-	      minutes: maybeNegate(parseInteger(minuteStr)),
-	      seconds: maybeNegate(parseInteger(secondStr)),
-	      milliseconds: maybeNegate(parseMillis(millisecondsStr))
-	    }
+	      years: maybeNegate(parseFloating(yearStr)),
+	      months: maybeNegate(parseFloating(monthStr)),
+	      weeks: maybeNegate(parseFloating(weekStr)),
+	      days: maybeNegate(parseFloating(dayStr)),
+	      hours: maybeNegate(parseFloating(hourStr)),
+	      minutes: maybeNegate(parseFloating(minuteStr)),
+	      seconds: maybeNegate(parseFloating(secondStr), secondStr === "-0"),
+	      milliseconds: maybeNegate(parseMillis(millisecondsStr), negativeSeconds),
+	    },
 	  ];
 	}
 
@@ -14387,7 +14418,7 @@
 	  MDT: -6 * 60,
 	  MST: -7 * 60,
 	  PDT: -7 * 60,
-	  PST: -8 * 60
+	  PST: -8 * 60,
 	};
 
 	function fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr) {
@@ -14396,7 +14427,7 @@
 	    month: monthsShort.indexOf(monthStr) + 1,
 	    day: parseInteger(dayStr),
 	    hour: parseInteger(hourStr),
-	    minute: parseInteger(minuteStr)
+	    minute: parseInteger(minuteStr),
 	  };
 
 	  if (secondStr) result.second = parseInteger(secondStr);
@@ -14411,7 +14442,8 @@
 	}
 
 	// RFC 2822/5322
-	const rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|(?:([+-]\d\d)(\d\d)))$/;
+	const rfc2822 =
+	  /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|(?:([+-]\d\d)(\d\d)))$/;
 
 	function extractRFC2822(match) {
 	  const [
@@ -14426,7 +14458,7 @@
 	      obsOffset,
 	      milOffset,
 	      offHourStr,
-	      offMinuteStr
+	      offMinuteStr,
 	    ] = match,
 	    result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
 
@@ -14452,9 +14484,12 @@
 
 	// http date
 
-	const rfc1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/,
-	  rfc850 = /^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/,
-	  ascii = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
+	const rfc1123 =
+	    /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/,
+	  rfc850 =
+	    /^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/,
+	  ascii =
+	    /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
 
 	function extractRFC1123Or850(match) {
 	  const [, weekdayStr, dayStr, monthStr, yearStr, hourStr, minuteStr, secondStr] = match,
@@ -14483,7 +14518,11 @@
 	  extractISOTime,
 	  extractISOOffset
 	);
-	const extractISOOrdinalDataAndTime = combineExtractors(extractISOOrdinalData, extractISOTime);
+	const extractISOOrdinalDateAndTime = combineExtractors(
+	  extractISOOrdinalData,
+	  extractISOTime,
+	  extractISOOffset
+	);
 	const extractISOTimeAndOffset = combineExtractors(extractISOTime, extractISOOffset);
 
 	/**
@@ -14495,7 +14534,7 @@
 	    s,
 	    [isoYmdWithTimeExtensionRegex, extractISOYmdTimeAndOffset],
 	    [isoWeekWithTimeExtensionRegex, extractISOWeekTimeAndOffset],
-	    [isoOrdinalWithTimeExtensionRegex, extractISOOrdinalDataAndTime],
+	    [isoOrdinalWithTimeExtensionRegex, extractISOOrdinalDateAndTime],
 	    [isoTimeCombinedRegex, extractISOTimeAndOffset]
 	  );
 	}
@@ -14555,84 +14594,81 @@
 	      hours: 7 * 24,
 	      minutes: 7 * 24 * 60,
 	      seconds: 7 * 24 * 60 * 60,
-	      milliseconds: 7 * 24 * 60 * 60 * 1000
+	      milliseconds: 7 * 24 * 60 * 60 * 1000,
 	    },
 	    days: {
 	      hours: 24,
 	      minutes: 24 * 60,
 	      seconds: 24 * 60 * 60,
-	      milliseconds: 24 * 60 * 60 * 1000
+	      milliseconds: 24 * 60 * 60 * 1000,
 	    },
 	    hours: { minutes: 60, seconds: 60 * 60, milliseconds: 60 * 60 * 1000 },
 	    minutes: { seconds: 60, milliseconds: 60 * 1000 },
-	    seconds: { milliseconds: 1000 }
+	    seconds: { milliseconds: 1000 },
 	  },
-	  casualMatrix = Object.assign(
-	    {
-	      years: {
-	        quarters: 4,
-	        months: 12,
-	        weeks: 52,
-	        days: 365,
-	        hours: 365 * 24,
-	        minutes: 365 * 24 * 60,
-	        seconds: 365 * 24 * 60 * 60,
-	        milliseconds: 365 * 24 * 60 * 60 * 1000
-	      },
-	      quarters: {
-	        months: 3,
-	        weeks: 13,
-	        days: 91,
-	        hours: 91 * 24,
-	        minutes: 91 * 24 * 60,
-	        seconds: 91 * 24 * 60 * 60,
-	        milliseconds: 91 * 24 * 60 * 60 * 1000
-	      },
-	      months: {
-	        weeks: 4,
-	        days: 30,
-	        hours: 30 * 24,
-	        minutes: 30 * 24 * 60,
-	        seconds: 30 * 24 * 60 * 60,
-	        milliseconds: 30 * 24 * 60 * 60 * 1000
-	      }
+	  casualMatrix = {
+	    years: {
+	      quarters: 4,
+	      months: 12,
+	      weeks: 52,
+	      days: 365,
+	      hours: 365 * 24,
+	      minutes: 365 * 24 * 60,
+	      seconds: 365 * 24 * 60 * 60,
+	      milliseconds: 365 * 24 * 60 * 60 * 1000,
 	    },
-	    lowOrderMatrix
-	  ),
+	    quarters: {
+	      months: 3,
+	      weeks: 13,
+	      days: 91,
+	      hours: 91 * 24,
+	      minutes: 91 * 24 * 60,
+	      seconds: 91 * 24 * 60 * 60,
+	      milliseconds: 91 * 24 * 60 * 60 * 1000,
+	    },
+	    months: {
+	      weeks: 4,
+	      days: 30,
+	      hours: 30 * 24,
+	      minutes: 30 * 24 * 60,
+	      seconds: 30 * 24 * 60 * 60,
+	      milliseconds: 30 * 24 * 60 * 60 * 1000,
+	    },
+
+	    ...lowOrderMatrix,
+	  },
 	  daysInYearAccurate = 146097.0 / 400,
 	  daysInMonthAccurate = 146097.0 / 4800,
-	  accurateMatrix = Object.assign(
-	    {
-	      years: {
-	        quarters: 4,
-	        months: 12,
-	        weeks: daysInYearAccurate / 7,
-	        days: daysInYearAccurate,
-	        hours: daysInYearAccurate * 24,
-	        minutes: daysInYearAccurate * 24 * 60,
-	        seconds: daysInYearAccurate * 24 * 60 * 60,
-	        milliseconds: daysInYearAccurate * 24 * 60 * 60 * 1000
-	      },
-	      quarters: {
-	        months: 3,
-	        weeks: daysInYearAccurate / 28,
-	        days: daysInYearAccurate / 4,
-	        hours: (daysInYearAccurate * 24) / 4,
-	        minutes: (daysInYearAccurate * 24 * 60) / 4,
-	        seconds: (daysInYearAccurate * 24 * 60 * 60) / 4,
-	        milliseconds: (daysInYearAccurate * 24 * 60 * 60 * 1000) / 4
-	      },
-	      months: {
-	        weeks: daysInMonthAccurate / 7,
-	        days: daysInMonthAccurate,
-	        hours: daysInMonthAccurate * 24,
-	        minutes: daysInMonthAccurate * 24 * 60,
-	        seconds: daysInMonthAccurate * 24 * 60 * 60,
-	        milliseconds: daysInMonthAccurate * 24 * 60 * 60 * 1000
-	      }
+	  accurateMatrix = {
+	    years: {
+	      quarters: 4,
+	      months: 12,
+	      weeks: daysInYearAccurate / 7,
+	      days: daysInYearAccurate,
+	      hours: daysInYearAccurate * 24,
+	      minutes: daysInYearAccurate * 24 * 60,
+	      seconds: daysInYearAccurate * 24 * 60 * 60,
+	      milliseconds: daysInYearAccurate * 24 * 60 * 60 * 1000,
 	    },
-	    lowOrderMatrix
-	  );
+	    quarters: {
+	      months: 3,
+	      weeks: daysInYearAccurate / 28,
+	      days: daysInYearAccurate / 4,
+	      hours: (daysInYearAccurate * 24) / 4,
+	      minutes: (daysInYearAccurate * 24 * 60) / 4,
+	      seconds: (daysInYearAccurate * 24 * 60 * 60) / 4,
+	      milliseconds: (daysInYearAccurate * 24 * 60 * 60 * 1000) / 4,
+	    },
+	    months: {
+	      weeks: daysInMonthAccurate / 7,
+	      days: daysInMonthAccurate,
+	      hours: daysInMonthAccurate * 24,
+	      minutes: daysInMonthAccurate * 24 * 60,
+	      seconds: daysInMonthAccurate * 24 * 60 * 60,
+	      milliseconds: daysInMonthAccurate * 24 * 60 * 60 * 1000,
+	    },
+	    ...lowOrderMatrix,
+	  };
 
 	// units ordered by size
 	const orderedUnits$1 = [
@@ -14644,7 +14680,7 @@
 	  "hours",
 	  "minutes",
 	  "seconds",
-	  "milliseconds"
+	  "milliseconds",
 	];
 
 	const reverseUnits = orderedUnits$1.slice(0).reverse();
@@ -14653,9 +14689,9 @@
 	function clone$1(dur, alts, clear = false) {
 	  // deep merge for vals
 	  const conf = {
-	    values: clear ? alts.values : Object.assign({}, dur.values, alts.values || {}),
+	    values: clear ? alts.values : { ...dur.values, ...(alts.values || {}) },
 	    loc: dur.loc.clone(alts.loc),
-	    conversionAccuracy: alts.conversionAccuracy || dur.conversionAccuracy
+	    conversionAccuracy: alts.conversionAccuracy || dur.conversionAccuracy,
 	  };
 	  return new Duration(conf);
 	}
@@ -14691,15 +14727,15 @@
 	}
 
 	/**
-	 * A Duration object represents a period of time, like "2 months" or "1 day, 1 hour". Conceptually, it's just a map of units to their quantities, accompanied by some additional configuration and methods for creating, parsing, interrogating, transforming, and formatting them. They can be used on their own or in conjunction with other Luxon types; for example, you can use {@link DateTime.plus} to add a Duration object to a DateTime, producing another DateTime.
+	 * A Duration object represents a period of time, like "2 months" or "1 day, 1 hour". Conceptually, it's just a map of units to their quantities, accompanied by some additional configuration and methods for creating, parsing, interrogating, transforming, and formatting them. They can be used on their own or in conjunction with other Luxon types; for example, you can use {@link DateTime#plus} to add a Duration object to a DateTime, producing another DateTime.
 	 *
 	 * Here is a brief overview of commonly used methods and getters in Duration:
 	 *
-	 * * **Creation** To create a Duration, use {@link Duration.fromMillis}, {@link Duration.fromObject}, or {@link Duration.fromISO}.
-	 * * **Unit values** See the {@link Duration.years}, {@link Duration.months}, {@link Duration.weeks}, {@link Duration.days}, {@link Duration.hours}, {@link Duration.minutes}, {@link Duration.seconds}, {@link Duration.milliseconds} accessors.
-	 * * **Configuration** See  {@link Duration.locale} and {@link Duration.numberingSystem} accessors.
-	 * * **Transformation** To create new Durations out of old ones use {@link Duration.plus}, {@link Duration.minus}, {@link Duration.normalize}, {@link Duration.set}, {@link Duration.reconfigure}, {@link Duration.shiftTo}, and {@link Duration.negate}.
-	 * * **Output** To convert the Duration into other representations, see {@link Duration.as}, {@link Duration.toISO}, {@link Duration.toFormat}, and {@link Duration.toJSON}
+	 * * **Creation** To create a Duration, use {@link Duration#fromMillis}, {@link Duration#fromObject}, or {@link Duration#fromISO}.
+	 * * **Unit values** See the {@link Duration#years}, {@link Duration.months}, {@link Duration#weeks}, {@link Duration#days}, {@link Duration#hours}, {@link Duration#minutes}, {@link Duration#seconds}, {@link Duration#milliseconds} accessors.
+	 * * **Configuration** See  {@link Duration#locale} and {@link Duration#numberingSystem} accessors.
+	 * * **Transformation** To create new Durations out of old ones use {@link Duration#plus}, {@link Duration#minus}, {@link Duration#normalize}, {@link Duration#set}, {@link Duration#reconfigure}, {@link Duration#shiftTo}, and {@link Duration#negate}.
+	 * * **Output** To convert the Duration into other representations, see {@link Duration#as}, {@link Duration#toISO}, {@link Duration#toFormat}, and {@link Duration#toJSON}
 	 *
 	 * There's are more methods documented below. In addition, for more information on subtler topics like internationalization and validity, see the external documentation.
 	 */
@@ -14745,11 +14781,11 @@
 	   * @return {Duration}
 	   */
 	  static fromMillis(count, opts) {
-	    return Duration.fromObject(Object.assign({ milliseconds: count }, opts));
+	    return Duration.fromObject({ milliseconds: count }, opts);
 	  }
 
 	  /**
-	   * Create a Duration from a JavaScript object with keys like 'years' and 'hours.
+	   * Create a Duration from a JavaScript object with keys like 'years' and 'hours'.
 	   * If this object is empty then a zero milliseconds duration is returned.
 	   * @param {Object} obj - the object to create the DateTime from
 	   * @param {number} obj.years
@@ -14761,12 +14797,13 @@
 	   * @param {number} obj.minutes
 	   * @param {number} obj.seconds
 	   * @param {number} obj.milliseconds
-	   * @param {string} [obj.locale='en-US'] - the locale to use
-	   * @param {string} obj.numberingSystem - the numbering system to use
-	   * @param {string} [obj.conversionAccuracy='casual'] - the conversion system to use
+	   * @param {Object} [opts=[]] - options for creating this Duration
+	   * @param {string} [opts.locale='en-US'] - the locale to use
+	   * @param {string} opts.numberingSystem - the numbering system to use
+	   * @param {string} [opts.conversionAccuracy='casual'] - the conversion system to use
 	   * @return {Duration}
 	   */
-	  static fromObject(obj) {
+	  static fromObject(obj, opts = {}) {
 	    if (obj == null || typeof obj !== "object") {
 	      throw new InvalidArgumentError(
 	        `Duration.fromObject: argument expected to be an object, got ${
@@ -14774,16 +14811,36 @@
         }`
 	      );
 	    }
+
 	    return new Duration({
-	      values: normalizeObject(obj, Duration.normalizeUnit, [
-	        "locale",
-	        "numberingSystem",
-	        "conversionAccuracy",
-	        "zone" // a bit of debt; it's super inconvenient internally not to be able to blindly pass this
-	      ]),
-	      loc: Locale.fromObject(obj),
-	      conversionAccuracy: obj.conversionAccuracy
+	      values: normalizeObject(obj, Duration.normalizeUnit),
+	      loc: Locale.fromObject(opts),
+	      conversionAccuracy: opts.conversionAccuracy,
 	    });
+	  }
+
+	  /**
+	   * Create a Duration from DurationLike.
+	   *
+	   * @param {Object | number | Duration} durationLike
+	   * One of:
+	   * - object with keys like 'years' and 'hours'.
+	   * - number representing milliseconds
+	   * - Duration instance
+	   * @return {Duration}
+	   */
+	  static fromDurationLike(durationLike) {
+	    if (isNumber(durationLike)) {
+	      return Duration.fromMillis(durationLike);
+	    } else if (Duration.isDuration(durationLike)) {
+	      return durationLike;
+	    } else if (typeof durationLike === "object") {
+	      return Duration.fromObject(durationLike);
+	    } else {
+	      throw new InvalidArgumentError(
+	        `Unknown duration argument ${durationLike} of type ${typeof durationLike}`
+	      );
+	    }
 	  }
 
 	  /**
@@ -14802,8 +14859,7 @@
 	  static fromISO(text, opts) {
 	    const [parsed] = parseISODuration(text);
 	    if (parsed) {
-	      const obj = Object.assign(parsed, opts);
-	      return Duration.fromObject(obj);
+	      return Duration.fromObject(parsed, opts);
 	    } else {
 	      return Duration.invalid("unparsable", `the input "${text}" can't be parsed as ISO 8601`);
 	    }
@@ -14827,8 +14883,7 @@
 	  static fromISOTime(text, opts) {
 	    const [parsed] = parseISOTimeOnly(text);
 	    if (parsed) {
-	      const obj = Object.assign(parsed, opts);
-	      return Duration.fromObject(obj);
+	      return Duration.fromObject(parsed, opts);
 	    } else {
 	      return Duration.invalid("unparsable", `the input "${text}" can't be parsed as ISO 8601`);
 	    }
@@ -14876,7 +14931,7 @@
 	      second: "seconds",
 	      seconds: "seconds",
 	      millisecond: "milliseconds",
-	      milliseconds: "milliseconds"
+	      milliseconds: "milliseconds",
 	    }[unit ? unit.toLowerCase() : unit];
 
 	    if (!normalized) throw new InvalidUnitError(unit);
@@ -14921,7 +14976,7 @@
 	   * * `y` for years
 	   * Notes:
 	   * * Add padding by repeating the token, e.g. "yy" pads the years to two digits, "hhhh" pads the hours out to four digits
-	   * * The duration will be converted to the set of units in the format string using {@link Duration.shiftTo} and the Durations's conversion accuracy setting.
+	   * * The duration will be converted to the set of units in the format string using {@link Duration#shiftTo} and the Durations's conversion accuracy setting.
 	   * @param {string} fmt - the format string
 	   * @param {Object} opts - options
 	   * @param {boolean} [opts.floor=true] - floor numerical values
@@ -14932,32 +14987,53 @@
 	   */
 	  toFormat(fmt, opts = {}) {
 	    // reverse-compat since 1.2; we always round down now, never up, and we do it by default
-	    const fmtOpts = Object.assign({}, opts, {
-	      floor: opts.round !== false && opts.floor !== false
-	    });
+	    const fmtOpts = {
+	      ...opts,
+	      floor: opts.round !== false && opts.floor !== false,
+	    };
 	    return this.isValid
 	      ? Formatter.create(this.loc, fmtOpts).formatDurationFromString(this, fmt)
 	      : INVALID$2;
 	  }
 
 	  /**
+	   * Returns a string representation of a Duration with all units included
+	   * To modify its behavior use the `listStyle` and any Intl.NumberFormat option, though `unitDisplay` is especially relevant. See {@link Intl.NumberFormat}.
+	   * @param opts - On option object to override the formatting. Accepts the same keys as the options parameter of the native `Int.NumberFormat` constructor, as well as `listStyle`.
+	   * @example
+	   * ```js
+	   * var dur = Duration.fromObject({ days: 1, hours: 5, minutes: 6 })
+	   * dur.toHuman() //=> '1 day, 5 hours, 6 minutes'
+	   * dur.toHuman({ listStyle: "long" }) //=> '1 day, 5 hours, and 6 minutes'
+	   * dur.toHuman({ unitDisplay: "short" }) //=> '1 day, 5 hr, 6 min'
+	   * ```
+	   */
+	  toHuman(opts = {}) {
+	    const l = orderedUnits$1
+	      .map((unit) => {
+	        const val = this.values[unit];
+	        if (isUndefined(val)) {
+	          return null;
+	        }
+	        return this.loc
+	          .numberFormatter({ style: "unit", unitDisplay: "long", ...opts, unit: unit.slice(0, -1) })
+	          .format(val);
+	      })
+	      .filter((n) => n);
+
+	    return this.loc
+	      .listFormatter({ type: "conjunction", style: opts.listStyle || "narrow", ...opts })
+	      .format(l);
+	  }
+
+	  /**
 	   * Returns a JavaScript object with this Duration's values.
-	   * @param opts - options for generating the object
-	   * @param {boolean} [opts.includeConfig=false] - include configuration attributes in the output
 	   * @example Duration.fromObject({ years: 1, days: 6, seconds: 2 }).toObject() //=> { years: 1, days: 6, seconds: 2 }
 	   * @return {Object}
 	   */
-	  toObject(opts = {}) {
+	  toObject() {
 	    if (!this.isValid) return {};
-
-	    const base = Object.assign({}, this.values);
-
-	    if (opts.includeConfig) {
-	      base.conversionAccuracy = this.conversionAccuracy;
-	      base.numberingSystem = this.loc.numberingSystem;
-	      base.locale = this.loc.locale;
-	    }
-	    return base;
+	    return { ...this.values };
 	  }
 
 	  /**
@@ -15013,15 +15089,13 @@
 	    const millis = this.toMillis();
 	    if (millis < 0 || millis >= 86400000) return null;
 
-	    opts = Object.assign(
-	      {
-	        suppressMilliseconds: false,
-	        suppressSeconds: false,
-	        includePrefix: false,
-	        format: "extended"
-	      },
-	      opts
-	    );
+	    opts = {
+	      suppressMilliseconds: false,
+	      suppressSeconds: false,
+	      includePrefix: false,
+	      format: "extended",
+	      ...opts,
+	    };
 
 	    const value = this.shiftTo("hours", "minutes", "seconds", "milliseconds");
 
@@ -15083,7 +15157,7 @@
 	  plus(duration) {
 	    if (!this.isValid) return this;
 
-	    const dur = friendlyDuration(duration),
+	    const dur = Duration.fromDurationLike(duration),
 	      result = {};
 
 	    for (const k of orderedUnits$1) {
@@ -15103,15 +15177,15 @@
 	  minus(duration) {
 	    if (!this.isValid) return this;
 
-	    const dur = friendlyDuration(duration);
+	    const dur = Duration.fromDurationLike(duration);
 	    return this.plus(dur.negate());
 	  }
 
 	  /**
 	   * Scale this Duration by the specified amount. Return a newly-constructed Duration.
 	   * @param {function} fn - The function to apply to each unit. Arity is 1 or 2: the value of the unit and, optionally, the unit name. Must return a number.
-	   * @example Duration.fromObject({ hours: 1, minutes: 30 }).mapUnit(x => x * 2) //=> { hours: 2, minutes: 60 }
-	   * @example Duration.fromObject({ hours: 1, minutes: 30 }).mapUnit((x, u) => u === "hour" ? x * 2 : x) //=> { hours: 2, minutes: 30 }
+	   * @example Duration.fromObject({ hours: 1, minutes: 30 }).mapUnits(x => x * 2) //=> { hours: 2, minutes: 60 }
+	   * @example Duration.fromObject({ hours: 1, minutes: 30 }).mapUnits((x, u) => u === "hour" ? x * 2 : x) //=> { hours: 2, minutes: 30 }
 	   * @return {Duration}
 	   */
 	  mapUnits(fn) {
@@ -15126,9 +15200,9 @@
 	  /**
 	   * Get the value of unit.
 	   * @param {string} unit - a unit such as 'minute' or 'day'
-	   * @example Duration.fromObject({years: 2, days: 3}).years //=> 2
-	   * @example Duration.fromObject({years: 2, days: 3}).months //=> 0
-	   * @example Duration.fromObject({years: 2, days: 3}).days //=> 3
+	   * @example Duration.fromObject({years: 2, days: 3}).get('years') //=> 2
+	   * @example Duration.fromObject({years: 2, days: 3}).get('months') //=> 0
+	   * @example Duration.fromObject({years: 2, days: 3}).get('days') //=> 3
 	   * @return {number}
 	   */
 	  get(unit) {
@@ -15145,7 +15219,7 @@
 	  set(values) {
 	    if (!this.isValid) return this;
 
-	    const mixed = Object.assign(this.values, normalizeObject(values, Duration.normalizeUnit, []));
+	    const mixed = { ...this.values, ...normalizeObject(values, Duration.normalizeUnit) };
 	    return clone$1(this, { values: mixed });
 	  }
 
@@ -15202,7 +15276,7 @@
 	      return this;
 	    }
 
-	    units = units.map(u => Duration.normalizeUnit(u));
+	    units = units.map((u) => Duration.normalizeUnit(u));
 
 	    const built = {},
 	      accumulated = {},
@@ -15228,7 +15302,7 @@
 
 	        const i = Math.trunc(own);
 	        built[k] = i;
-	        accumulated[k] = own - i; // we'd like to absorb these fractions in another unit
+	        accumulated[k] = (own * 1000 - i * 1000) / 1000;
 
 	        // plus anything further down the chain that should be rolled up in to this
 	        for (const down in vals) {
@@ -15395,23 +15469,6 @@
 	  }
 	}
 
-	/**
-	 * @private
-	 */
-	function friendlyDuration(durationish) {
-	  if (isNumber(durationish)) {
-	    return Duration.fromMillis(durationish);
-	  } else if (Duration.isDuration(durationish)) {
-	    return durationish;
-	  } else if (typeof durationish === "object") {
-	    return Duration.fromObject(durationish);
-	  } else {
-	    throw new InvalidArgumentError(
-	      `Unknown duration argument ${durationish} of type ${typeof durationish}`
-	    );
-	  }
-	}
-
 	const INVALID$1 = "Invalid Interval";
 
 	// checks if the start is equal to or before the end
@@ -15435,12 +15492,12 @@
 	 *
 	 * Here is a brief overview of the most commonly used methods and getters in Interval:
 	 *
-	 * * **Creation** To create an Interval, use {@link fromDateTimes}, {@link after}, {@link before}, or {@link fromISO}.
-	 * * **Accessors** Use {@link start} and {@link end} to get the start and end.
-	 * * **Interrogation** To analyze the Interval, use {@link count}, {@link length}, {@link hasSame}, {@link contains}, {@link isAfter}, or {@link isBefore}.
-	 * * **Transformation** To create other Intervals out of this one, use {@link set}, {@link splitAt}, {@link splitBy}, {@link divideEqually}, {@link merge}, {@link xor}, {@link union}, {@link intersection}, or {@link difference}.
-	 * * **Comparison** To compare this Interval to another one, use {@link equals}, {@link overlaps}, {@link abutsStart}, {@link abutsEnd}, {@link engulfs}.
-	 * * **Output** To convert the Interval into other representations, see {@link toString}, {@link toISO}, {@link toISODate}, {@link toISOTime}, {@link toFormat}, and {@link toDuration}.
+	 * * **Creation** To create an Interval, use {@link Interval#fromDateTimes}, {@link Interval#after}, {@link Interval#before}, or {@link Interval#fromISO}.
+	 * * **Accessors** Use {@link Interval#start} and {@link Interval#end} to get the start and end.
+	 * * **Interrogation** To analyze the Interval, use {@link Interval#count}, {@link Interval#length}, {@link Interval#hasSame}, {@link Interval#contains}, {@link Interval#isAfter}, or {@link Interval#isBefore}.
+	 * * **Transformation** To create other Intervals out of this one, use {@link Interval#set}, {@link Interval#splitAt}, {@link Interval#splitBy}, {@link Interval#divideEqually}, {@link Interval#merge}, {@link Interval#xor}, {@link Interval#union}, {@link Interval#intersection}, or {@link Interval#difference}.
+	 * * **Comparison** To compare this Interval to another one, use {@link Interval#equals}, {@link Interval#overlaps}, {@link Interval#abutsStart}, {@link Interval#abutsEnd}, {@link Interval#engulfs}
+	 * * **Output** To convert the Interval into other representations, see {@link Interval#toString}, {@link Interval#toISO}, {@link Interval#toISODate}, {@link Interval#toISOTime}, {@link Interval#toFormat}, and {@link Interval#toDuration}.
 	 */
 	class Interval {
 	  /**
@@ -15500,7 +15557,7 @@
 	    if (validateError == null) {
 	      return new Interval({
 	        start: builtStart,
-	        end: builtEnd
+	        end: builtEnd,
 	      });
 	    } else {
 	      return validateError;
@@ -15514,7 +15571,7 @@
 	   * @return {Interval}
 	   */
 	  static after(start, duration) {
-	    const dur = friendlyDuration(duration),
+	    const dur = Duration.fromDurationLike(duration),
 	      dt = friendlyDateTime(start);
 	    return Interval.fromDateTimes(dt, dt.plus(dur));
 	  }
@@ -15526,7 +15583,7 @@
 	   * @return {Interval}
 	   */
 	  static before(end, duration) {
-	    const dur = friendlyDuration(duration),
+	    const dur = Duration.fromDurationLike(duration),
 	      dt = friendlyDateTime(end);
 	    return Interval.fromDateTimes(dt.minus(dur), dt);
 	  }
@@ -15535,7 +15592,7 @@
 	   * Create an Interval from an ISO 8601 string.
 	   * Accepts `<start>/<end>`, `<start>/<duration>`, and `<duration>/<end>` formats.
 	   * @param {string} text - the ISO string to parse
-	   * @param {Object} [opts] - options to pass {@link DateTime.fromISO} and optionally {@link Duration.fromISO}
+	   * @param {Object} [opts] - options to pass {@link DateTime#fromISO} and optionally {@link Duration#fromISO}
 	   * @see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
 	   * @return {Interval}
 	   */
@@ -15637,7 +15694,7 @@
 
 	  /**
 	   * Returns the count of minutes, hours, days, months, or years included in the Interval, even in part.
-	   * Unlike {@link length} this counts sections of the calendar, not periods of time, e.g. specifying 'day'
+	   * Unlike {@link Interval#length} this counts sections of the calendar, not periods of time, e.g. specifying 'day'
 	   * asks 'what dates are included in this interval?', not 'how many days long is this interval?'
 	   * @param {string} [unit='milliseconds'] - the unit of time to count.
 	   * @return {number}
@@ -15710,14 +15767,14 @@
 
 	  /**
 	   * Split this Interval at each of the specified DateTimes
-	   * @param {...[DateTime]} dateTimes - the unit of time to count.
-	   * @return {[Interval]}
+	   * @param {...DateTime} dateTimes - the unit of time to count.
+	   * @return {Array}
 	   */
 	  splitAt(...dateTimes) {
 	    if (!this.isValid) return [];
 	    const sorted = dateTimes
 	        .map(friendlyDateTime)
-	        .filter(d => this.contains(d))
+	        .filter((d) => this.contains(d))
 	        .sort(),
 	      results = [];
 	    let { s } = this,
@@ -15738,25 +15795,26 @@
 	   * Split this Interval into smaller Intervals, each of the specified length.
 	   * Left over time is grouped into a smaller interval
 	   * @param {Duration|Object|number} duration - The length of each resulting interval.
-	   * @return {[Interval]}
+	   * @return {Array}
 	   */
 	  splitBy(duration) {
-	    const dur = friendlyDuration(duration);
+	    const dur = Duration.fromDurationLike(duration);
 
 	    if (!this.isValid || !dur.isValid || dur.as("milliseconds") === 0) {
 	      return [];
 	    }
 
 	    let { s } = this,
-	      added,
+	      idx = 1,
 	      next;
 
 	    const results = [];
 	    while (s < this.e) {
-	      added = s.plus(dur);
+	      const added = this.start.plus(dur.mapUnits((x) => x * idx));
 	      next = +added > +this.e ? this.e : added;
 	      results.push(Interval.fromDateTimes(s, next));
 	      s = next;
+	      idx += 1;
 	    }
 
 	    return results;
@@ -15765,7 +15823,7 @@
 	  /**
 	   * Split this Interval into the specified number of smaller intervals.
 	   * @param {number} numberOfParts - The number of Intervals to divide the Interval into.
-	   * @return {[Interval]}
+	   * @return {Array}
 	   */
 	  divideEqually(numberOfParts) {
 	    if (!this.isValid) return [];
@@ -15836,7 +15894,7 @@
 	    const s = this.s > other.s ? this.s : other.s,
 	      e = this.e < other.e ? this.e : other.e;
 
-	    if (s > e) {
+	    if (s >= e) {
 	      return null;
 	    } else {
 	      return Interval.fromDateTimes(s, e);
@@ -15859,22 +15917,24 @@
 	  /**
 	   * Merge an array of Intervals into a equivalent minimal set of Intervals.
 	   * Combines overlapping and adjacent Intervals.
-	   * @param {[Interval]} intervals
-	   * @return {[Interval]}
+	   * @param {Array} intervals
+	   * @return {Array}
 	   */
 	  static merge(intervals) {
-	    const [found, final] = intervals.sort((a, b) => a.s - b.s).reduce(
-	      ([sofar, current], item) => {
-	        if (!current) {
-	          return [sofar, item];
-	        } else if (current.overlaps(item) || current.abutsStart(item)) {
-	          return [sofar, current.union(item)];
-	        } else {
-	          return [sofar.concat([current]), item];
-	        }
-	      },
-	      [[], null]
-	    );
+	    const [found, final] = intervals
+	      .sort((a, b) => a.s - b.s)
+	      .reduce(
+	        ([sofar, current], item) => {
+	          if (!current) {
+	            return [sofar, item];
+	          } else if (current.overlaps(item) || current.abutsStart(item)) {
+	            return [sofar, current.union(item)];
+	          } else {
+	            return [sofar.concat([current]), item];
+	          }
+	        },
+	        [[], null]
+	      );
 	    if (final) {
 	      found.push(final);
 	    }
@@ -15883,14 +15943,17 @@
 
 	  /**
 	   * Return an array of Intervals representing the spans of time that only appear in one of the specified Intervals.
-	   * @param {[Interval]} intervals
-	   * @return {[Interval]}
+	   * @param {Array} intervals
+	   * @return {Array}
 	   */
 	  static xor(intervals) {
 	    let start = null,
 	      currentCount = 0;
 	    const results = [],
-	      ends = intervals.map(i => [{ time: i.s, type: "s" }, { time: i.e, type: "e" }]),
+	      ends = intervals.map((i) => [
+	        { time: i.s, type: "s" },
+	        { time: i.e, type: "e" },
+	      ]),
 	      flattened = Array.prototype.concat(...ends),
 	      arr = flattened.sort((a, b) => a.time - b.time);
 
@@ -15914,12 +15977,12 @@
 	  /**
 	   * Return an Interval representing the span of time in this Interval that doesn't overlap with any of the specified Intervals.
 	   * @param {...Interval} intervals
-	   * @return {[Interval]}
+	   * @return {Array}
 	   */
 	  difference(...intervals) {
 	    return Interval.xor([this].concat(intervals))
-	      .map(i => this.intersection(i))
-	      .filter(i => i && !i.isEmpty());
+	      .map((i) => this.intersection(i))
+	      .filter((i) => i && !i.isEmpty());
 	  }
 
 	  /**
@@ -15934,7 +15997,7 @@
 	  /**
 	   * Returns an ISO 8601-compliant string representation of this Interval.
 	   * @see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
-	   * @param {Object} opts - The same options as {@link DateTime.toISO}
+	   * @param {Object} opts - The same options as {@link DateTime#toISO}
 	   * @return {string}
 	   */
 	  toISO(opts) {
@@ -15957,7 +16020,7 @@
 	   * Returns an ISO 8601-compliant string representation of time of this Interval.
 	   * The date components are ignored.
 	   * @see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
-	   * @param {Object} opts - The same options as {@link DateTime.toISO}
+	   * @param {Object} opts - The same options as {@link DateTime#toISO}
 	   * @return {string}
 	   */
 	  toISOTime(opts) {
@@ -15967,7 +16030,7 @@
 
 	  /**
 	   * Returns a string representation of this Interval formatted according to the specified format string.
-	   * @param {string} dateFormat - the format string. This string formats the start and end time. See {@link DateTime.toFormat} for details.
+	   * @param {string} dateFormat - the format string. This string formats the start and end time. See {@link DateTime#toFormat} for details.
 	   * @param {Object} opts - options
 	   * @param {string} [opts.separator =  ' – '] - a separator to place between the start and end representations
 	   * @return {string}
@@ -16018,11 +16081,9 @@
 	   * @return {boolean}
 	   */
 	  static hasDST(zone = Settings.defaultZone) {
-	    const proto = DateTime.now()
-	      .setZone(zone)
-	      .set({ month: 12 });
+	    const proto = DateTime.now().setZone(zone).set({ month: 12 });
 
-	    return !zone.universal && proto.offset !== proto.set({ month: 6 }).offset;
+	    return !zone.isUniversal && proto.offset !== proto.set({ month: 6 }).offset;
 	  }
 
 	  /**
@@ -16041,7 +16102,7 @@
 	   * * If `input` is a string containing a valid time zone name, a Zone instance
 	   *   with that name is returned.
 	   * * If `input` is a string that doesn't refer to a known time zone, a Zone
-	   *   instance with {@link Zone.isValid} == false is returned.
+	   *   instance with {@link Zone#isValid} == false is returned.
 	   * * If `input is a number, a Zone instance with the specified fixed offset
 	   *   in minutes is returned.
 	   * * If `input` is `null` or `undefined`, the default zone is returned.
@@ -16059,6 +16120,7 @@
 	   * @param {Object} opts - options
 	   * @param {string} [opts.locale] - the locale code
 	   * @param {string} [opts.numberingSystem=null] - the numbering system
+	   * @param {string} [opts.locObj=null] - an existing locale object to use
 	   * @param {string} [opts.outputCalendar='gregory'] - the calendar
 	   * @example Info.months()[0] //=> 'January'
 	   * @example Info.months('short')[0] //=> 'Jan'
@@ -16066,32 +16128,33 @@
 	   * @example Info.months('short', { locale: 'fr-CA' } )[0] //=> 'janv.'
 	   * @example Info.months('numeric', { locale: 'ar' })[0] //=> '١'
 	   * @example Info.months('long', { outputCalendar: 'islamic' })[0] //=> 'Rabiʻ I'
-	   * @return {[string]}
+	   * @return {Array}
 	   */
 	  static months(
 	    length = "long",
-	    { locale = null, numberingSystem = null, outputCalendar = "gregory" } = {}
+	    { locale = null, numberingSystem = null, locObj = null, outputCalendar = "gregory" } = {}
 	  ) {
-	    return Locale.create(locale, numberingSystem, outputCalendar).months(length);
+	    return (locObj || Locale.create(locale, numberingSystem, outputCalendar)).months(length);
 	  }
 
 	  /**
 	   * Return an array of format month names.
 	   * Format months differ from standalone months in that they're meant to appear next to the day of the month. In some languages, that
 	   * changes the string.
-	   * See {@link months}
+	   * See {@link Info#months}
 	   * @param {string} [length='long'] - the length of the month representation, such as "numeric", "2-digit", "narrow", "short", "long"
 	   * @param {Object} opts - options
 	   * @param {string} [opts.locale] - the locale code
 	   * @param {string} [opts.numberingSystem=null] - the numbering system
+	   * @param {string} [opts.locObj=null] - an existing locale object to use
 	   * @param {string} [opts.outputCalendar='gregory'] - the calendar
-	   * @return {[string]}
+	   * @return {Array}
 	   */
 	  static monthsFormat(
 	    length = "long",
-	    { locale = null, numberingSystem = null, outputCalendar = "gregory" } = {}
+	    { locale = null, numberingSystem = null, locObj = null, outputCalendar = "gregory" } = {}
 	  ) {
-	    return Locale.create(locale, numberingSystem, outputCalendar).months(length, true);
+	    return (locObj || Locale.create(locale, numberingSystem, outputCalendar)).months(length, true);
 	  }
 
 	  /**
@@ -16101,29 +16164,34 @@
 	   * @param {Object} opts - options
 	   * @param {string} [opts.locale] - the locale code
 	   * @param {string} [opts.numberingSystem=null] - the numbering system
+	   * @param {string} [opts.locObj=null] - an existing locale object to use
 	   * @example Info.weekdays()[0] //=> 'Monday'
 	   * @example Info.weekdays('short')[0] //=> 'Mon'
 	   * @example Info.weekdays('short', { locale: 'fr-CA' })[0] //=> 'lun.'
 	   * @example Info.weekdays('short', { locale: 'ar' })[0] //=> 'الاثنين'
-	   * @return {[string]}
+	   * @return {Array}
 	   */
-	  static weekdays(length = "long", { locale = null, numberingSystem = null } = {}) {
-	    return Locale.create(locale, numberingSystem, null).weekdays(length);
+	  static weekdays(length = "long", { locale = null, numberingSystem = null, locObj = null } = {}) {
+	    return (locObj || Locale.create(locale, numberingSystem, null)).weekdays(length);
 	  }
 
 	  /**
 	   * Return an array of format week names.
 	   * Format weekdays differ from standalone weekdays in that they're meant to appear next to more date information. In some languages, that
 	   * changes the string.
-	   * See {@link weekdays}
-	   * @param {string} [length='long'] - the length of the weekday representation, such as "narrow", "short", "long".
+	   * See {@link Info#weekdays}
+	   * @param {string} [length='long'] - the length of the month representation, such as "narrow", "short", "long".
 	   * @param {Object} opts - options
 	   * @param {string} [opts.locale=null] - the locale code
 	   * @param {string} [opts.numberingSystem=null] - the numbering system
-	   * @return {[string]}
+	   * @param {string} [opts.locObj=null] - an existing locale object to use
+	   * @return {Array}
 	   */
-	  static weekdaysFormat(length = "long", { locale = null, numberingSystem = null } = {}) {
-	    return Locale.create(locale, numberingSystem, null).weekdays(length, true);
+	  static weekdaysFormat(
+	    length = "long",
+	    { locale = null, numberingSystem = null, locObj = null } = {}
+	  ) {
+	    return (locObj || Locale.create(locale, numberingSystem, null)).weekdays(length, true);
 	  }
 
 	  /**
@@ -16132,7 +16200,7 @@
 	   * @param {string} [opts.locale] - the locale code
 	   * @example Info.meridiems() //=> [ 'AM', 'PM' ]
 	   * @example Info.meridiems({ locale: 'my' }) //=> [ 'နံနက်', 'ညနေ' ]
-	   * @return {[string]}
+	   * @return {Array}
 	   */
 	  static meridiems({ locale = null } = {}) {
 	    return Locale.create(locale).meridiems();
@@ -16146,7 +16214,7 @@
 	   * @example Info.eras() //=> [ 'BC', 'AD' ]
 	   * @example Info.eras('long') //=> [ 'Before Christ', 'Anno Domini' ]
 	   * @example Info.eras('long', { locale: 'fr' }) //=> [ 'avant Jésus-Christ', 'après Jésus-Christ' ]
-	   * @return {[string]}
+	   * @return {Array}
 	   */
 	  static eras(length = "short", { locale = null } = {}) {
 	    return Locale.create(locale, null, "gregory").eras(length);
@@ -16154,45 +16222,19 @@
 
 	  /**
 	   * Return the set of available features in this environment.
-	   * Some features of Luxon are not available in all environments. For example, on older browsers, timezone support is not available. Use this function to figure out if that's the case.
+	   * Some features of Luxon are not available in all environments. For example, on older browsers, relative time formatting support is not available. Use this function to figure out if that's the case.
 	   * Keys:
-	   * * `zones`: whether this environment supports IANA timezones
-	   * * `intlTokens`: whether this environment supports internationalized token-based formatting/parsing
-	   * * `intl`: whether this environment supports general internationalization
 	   * * `relative`: whether this environment supports relative time formatting
-	   * @example Info.features() //=> { intl: true, intlTokens: false, zones: true, relative: false }
+	   * @example Info.features() //=> { relative: false }
 	   * @return {Object}
 	   */
 	  static features() {
-	    let intl = false,
-	      intlTokens = false,
-	      zones = false,
-	      relative = false;
-
-	    if (hasIntl()) {
-	      intl = true;
-	      intlTokens = hasFormatToParts();
-	      relative = hasRelative();
-
-	      try {
-	        zones =
-	          new Intl.DateTimeFormat("en", { timeZone: "America/New_York" }).resolvedOptions()
-	            .timeZone === "America/New_York";
-	      } catch (e) {
-	        zones = false;
-	      }
-	    }
-
-	    return { intl, intlTokens, zones, relative };
+	    return { relative: hasRelative() };
 	  }
 	}
 
 	function dayDiff(earlier, later) {
-	  const utcDayStart = dt =>
-	      dt
-	        .toUTC(0, { keepLocalTime: true })
-	        .startOf("day")
-	        .valueOf(),
+	  const utcDayStart = (dt) => dt.toUTC(0, { keepLocalTime: true }).startOf("day").valueOf(),
 	    ms = utcDayStart(later) - utcDayStart(earlier);
 	  return Math.floor(Duration.fromMillis(ms).as("days"));
 	}
@@ -16207,9 +16249,9 @@
 	      (a, b) => {
 	        const days = dayDiff(a, b);
 	        return (days - (days % 7)) / 7;
-	      }
+	      },
 	    ],
-	    ["days", dayDiff]
+	    ["days", dayDiff],
 	  ];
 
 	  const results = {};
@@ -16236,13 +16278,13 @@
 	  return [cursor, results, highWater, lowestOrder];
 	}
 
-	function diff(earlier, later, units, opts) {
+	function diff (earlier, later, units, opts) {
 	  let [cursor, results, highWater, lowestOrder] = highOrderDiffs(earlier, later, units);
 
 	  const remainingMillis = later - cursor;
 
 	  const lowerOrderUnits = units.filter(
-	    u => ["hours", "minutes", "seconds", "milliseconds"].indexOf(u) >= 0
+	    (u) => ["hours", "minutes", "seconds", "milliseconds"].indexOf(u) >= 0
 	  );
 
 	  if (lowerOrderUnits.length === 0) {
@@ -16255,7 +16297,7 @@
 	    }
 	  }
 
-	  const duration = Duration.fromObject(Object.assign(results, opts));
+	  const duration = Duration.fromObject(results, opts);
 
 	  if (lowerOrderUnits.length > 0) {
 	    return Duration.fromMillis(remainingMillis, opts)
@@ -16287,7 +16329,7 @@
 	  telu: "[\u0C66-\u0C6F]",
 	  thai: "[\u0E50-\u0E59]",
 	  tibt: "[\u0F20-\u0F29]",
-	  latn: "\\d"
+	  latn: "\\d",
 	};
 
 	const numberingSystemsUTF16 = {
@@ -16309,10 +16351,9 @@
 	  tamldec: [3046, 3055],
 	  telu: [3174, 3183],
 	  thai: [3664, 3673],
-	  tibt: [3872, 3881]
+	  tibt: [3872, 3881],
 	};
 
-	// eslint-disable-next-line
 	const hanidecChars = numberingSystems.hanidec.replace(/[\[|\]]/g, "").split("");
 
 	function parseDigits(str) {
@@ -16345,7 +16386,7 @@
 
 	const MISSING_FTP = "missing Intl.DateTimeFormat.formatToParts support";
 
-	function intUnit(regex, post = i => i) {
+	function intUnit(regex, post = (i) => i) {
 	  return { regex, deser: ([s]) => post(parseDigits(s)) };
 	}
 
@@ -16373,7 +16414,7 @@
 	    return {
 	      regex: RegExp(strings.map(fixListRegex).join("|")),
 	      deser: ([s]) =>
-	        strings.findIndex(i => stripInsensitivities(s) === stripInsensitivities(i)) + startIndex
+	        strings.findIndex((i) => stripInsensitivities(s) === stripInsensitivities(i)) + startIndex,
 	    };
 	  }
 	}
@@ -16387,7 +16428,6 @@
 	}
 
 	function escapeToken(value) {
-	  // eslint-disable-next-line no-useless-escape
 	  return value.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
 	}
 
@@ -16403,8 +16443,8 @@
 	    oneToNine = digitRegex(loc, "{1,9}"),
 	    twoToFour = digitRegex(loc, "{2,4}"),
 	    fourToSix = digitRegex(loc, "{4,6}"),
-	    literal = t => ({ regex: RegExp(escapeToken(t.val)), deser: ([s]) => s, literal: true }),
-	    unitate = t => {
+	    literal = (t) => ({ regex: RegExp(escapeToken(t.val)), deser: ([s]) => s, literal: true }),
+	    unitate = (t) => {
 	      if (token.literal) {
 	        return literal(t);
 	      }
@@ -16479,6 +16519,10 @@
 	          return intUnit(three);
 	        case "u":
 	          return simple(oneToNine);
+	        case "uu":
+	          return simple(oneOrTwo);
+	        case "uuu":
+	          return intUnit(one);
 	        // meridiem
 	        case "a":
 	          return oneOf(loc.meridiems(), 0);
@@ -16520,7 +16564,7 @@
 	    };
 
 	  const unit = unitate(token) || {
-	    invalidReason: MISSING_FTP
+	    invalidReason: MISSING_FTP,
 	  };
 
 	  unit.token = token;
@@ -16531,36 +16575,36 @@
 	const partTypeStyleToTokenVal = {
 	  year: {
 	    "2-digit": "yy",
-	    numeric: "yyyyy"
+	    numeric: "yyyyy",
 	  },
 	  month: {
 	    numeric: "M",
 	    "2-digit": "MM",
 	    short: "MMM",
-	    long: "MMMM"
+	    long: "MMMM",
 	  },
 	  day: {
 	    numeric: "d",
-	    "2-digit": "dd"
+	    "2-digit": "dd",
 	  },
 	  weekday: {
 	    short: "EEE",
-	    long: "EEEE"
+	    long: "EEEE",
 	  },
 	  dayperiod: "a",
 	  dayPeriod: "a",
 	  hour: {
 	    numeric: "h",
-	    "2-digit": "hh"
+	    "2-digit": "hh",
 	  },
 	  minute: {
 	    numeric: "m",
-	    "2-digit": "mm"
+	    "2-digit": "mm",
 	  },
 	  second: {
 	    numeric: "s",
-	    "2-digit": "ss"
-	  }
+	    "2-digit": "ss",
+	  },
 	};
 
 	function tokenForPart(part, locale, formatOpts) {
@@ -16569,7 +16613,7 @@
 	  if (type === "literal") {
 	    return {
 	      literal: true,
-	      val: value
+	      val: value,
 	    };
 	  }
 
@@ -16583,7 +16627,7 @@
 	  if (val) {
 	    return {
 	      literal: false,
-	      val
+	      val,
 	    };
 	  }
 
@@ -16591,7 +16635,7 @@
 	}
 
 	function buildRegex(units) {
-	  const re = units.map(u => u.regex).reduce((f, r) => `${f}(${r.source})`, "");
+	  const re = units.map((u) => u.regex).reduce((f, r) => `${f}(${r.source})`, "");
 	  return [`^${re}$`, units];
 	}
 
@@ -16618,7 +16662,7 @@
 	}
 
 	function dateTimeFromMatches(matches) {
-	  const toField = token => {
+	  const toField = (token) => {
 	    switch (token) {
 	      case "S":
 	        return "millisecond";
@@ -16652,13 +16696,17 @@
 	    }
 	  };
 
-	  let zone;
-	  if (!isUndefined(matches.Z)) {
-	    zone = new FixedOffsetZone(matches.Z);
-	  } else if (!isUndefined(matches.z)) {
+	  let zone = null;
+	  let specificOffset;
+	  if (!isUndefined(matches.z)) {
 	    zone = IANAZone.create(matches.z);
-	  } else {
-	    zone = null;
+	  }
+
+	  if (!isUndefined(matches.Z)) {
+	    if (!zone) {
+	      zone = new FixedOffsetZone(matches.Z);
+	    }
+	    specificOffset = matches.Z;
 	  }
 
 	  if (!isUndefined(matches.q)) {
@@ -16690,7 +16738,7 @@
 	    return r;
 	  }, {});
 
-	  return [vals, zone];
+	  return [vals, zone, specificOffset];
 	}
 
 	let dummyDateTimeCache = null;
@@ -16717,7 +16765,7 @@
 	  const formatter = Formatter.create(locale, formatOpts);
 	  const parts = formatter.formatDateTimeParts(getDummyDateTime());
 
-	  const tokens = parts.map(p => tokenForPart(p, locale, formatOpts));
+	  const tokens = parts.map((p) => tokenForPart(p, locale, formatOpts));
 
 	  if (tokens.includes(undefined)) {
 	    return token;
@@ -16727,7 +16775,7 @@
 	}
 
 	function expandMacroTokens(tokens, locale) {
-	  return Array.prototype.concat(...tokens.map(t => maybeExpandMacroToken(t, locale)));
+	  return Array.prototype.concat(...tokens.map((t) => maybeExpandMacroToken(t, locale)));
 	}
 
 	/**
@@ -16736,8 +16784,8 @@
 
 	function explainFromTokens(locale, input, format) {
 	  const tokens = expandMacroTokens(Formatter.parseFormat(format), locale),
-	    units = tokens.map(t => unitForToken(t, locale)),
-	    disqualifyingUnit = units.find(t => t.invalidReason);
+	    units = tokens.map((t) => unitForToken(t, locale)),
+	    disqualifyingUnit = units.find((t) => t.invalidReason);
 
 	  if (disqualifyingUnit) {
 	    return { input, tokens, invalidReason: disqualifyingUnit.invalidReason };
@@ -16745,19 +16793,21 @@
 	    const [regexString, handlers] = buildRegex(units),
 	      regex = RegExp(regexString, "i"),
 	      [rawMatches, matches] = match(input, regex, handlers),
-	      [result, zone] = matches ? dateTimeFromMatches(matches) : [null, null];
+	      [result, zone, specificOffset] = matches
+	        ? dateTimeFromMatches(matches)
+	        : [null, null, undefined];
 	    if (hasOwnProperty(matches, "a") && hasOwnProperty(matches, "H")) {
 	      throw new ConflictingSpecificationError(
 	        "Can't include meridiem when specifying 24-hour format"
 	      );
 	    }
-	    return { input, tokens, regex, rawMatches, matches, result, zone };
+	    return { input, tokens, regex, rawMatches, matches, result, zone, specificOffset };
 	  }
 	}
 
 	function parseFromTokens(locale, input, format) {
-	  const { result, zone, invalidReason } = explainFromTokens(locale, input, format);
-	  return [result, zone, invalidReason];
+	  const { result, zone, specificOffset, invalidReason } = explainFromTokens(locale, input, format);
+	  return [result, zone, specificOffset, invalidReason];
 	}
 
 	const nonLeapLadder = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334],
@@ -16781,7 +16831,7 @@
 
 	function uncomputeOrdinal(year, ordinal) {
 	  const table = isLeapYear(year) ? leapLadder : nonLeapLadder,
-	    month0 = table.findIndex(i => i < ordinal),
+	    month0 = table.findIndex((i) => i < ordinal),
 	    day = ordinal - table[month0];
 	  return { month: month0 + 1, day };
 	}
@@ -16808,7 +16858,7 @@
 	    weekYear = year;
 	  }
 
-	  return Object.assign({ weekYear, weekNumber, weekday }, timeObject(gregObj));
+	  return { weekYear, weekNumber, weekday, ...timeObject(gregObj) };
 	}
 
 	function weekToGregorian(weekData) {
@@ -16830,22 +16880,19 @@
 	  }
 
 	  const { month, day } = uncomputeOrdinal(year, ordinal);
-
-	  return Object.assign({ year, month, day }, timeObject(weekData));
+	  return { year, month, day, ...timeObject(weekData) };
 	}
 
 	function gregorianToOrdinal(gregData) {
-	  const { year, month, day } = gregData,
-	    ordinal = computeOrdinal(year, month, day);
-
-	  return Object.assign({ year, ordinal }, timeObject(gregData));
+	  const { year, month, day } = gregData;
+	  const ordinal = computeOrdinal(year, month, day);
+	  return { year, ordinal, ...timeObject(gregData) };
 	}
 
 	function ordinalToGregorian(ordinalData) {
-	  const { year, ordinal } = ordinalData,
-	    { month, day } = uncomputeOrdinal(year, ordinal);
-
-	  return Object.assign({ year, month, day }, timeObject(ordinalData));
+	  const { year, ordinal } = ordinalData;
+	  const { month, day } = uncomputeOrdinal(year, ordinal);
+	  return { year, month, day, ...timeObject(ordinalData) };
 	}
 
 	function hasInvalidWeekData(obj) {
@@ -16931,9 +16978,9 @@
 	    c: inst.c,
 	    o: inst.o,
 	    loc: inst.loc,
-	    invalid: inst.invalid
+	    invalid: inst.invalid,
 	  };
-	  return new DateTime(Object.assign({}, current, alts, { old: current }));
+	  return new DateTime({ ...current, ...alts, old: current });
 	}
 
 	// find the right offset a given local time. The o input is our guess, which determines which
@@ -16976,7 +17023,7 @@
 	    hour: d.getUTCHours(),
 	    minute: d.getUTCMinutes(),
 	    second: d.getUTCSeconds(),
-	    millisecond: d.getUTCMilliseconds()
+	    millisecond: d.getUTCMilliseconds(),
 	  };
 	}
 
@@ -16990,14 +17037,15 @@
 	  const oPre = inst.o,
 	    year = inst.c.year + Math.trunc(dur.years),
 	    month = inst.c.month + Math.trunc(dur.months) + Math.trunc(dur.quarters) * 3,
-	    c = Object.assign({}, inst.c, {
+	    c = {
+	      ...inst.c,
 	      year,
 	      month,
 	      day:
 	        Math.min(inst.c.day, daysInMonth(year, month)) +
 	        Math.trunc(dur.days) +
-	        Math.trunc(dur.weeks) * 7
-	    }),
+	        Math.trunc(dur.weeks) * 7,
+	    },
 	    millisToAdd = Duration.fromObject({
 	      years: dur.years - Math.trunc(dur.years),
 	      quarters: dur.quarters - Math.trunc(dur.quarters),
@@ -17007,7 +17055,7 @@
 	      hours: dur.hours,
 	      minutes: dur.minutes,
 	      seconds: dur.seconds,
-	      milliseconds: dur.milliseconds
+	      milliseconds: dur.milliseconds,
 	    }).as("milliseconds"),
 	    localTS = objToLocalTS(c);
 
@@ -17024,17 +17072,15 @@
 
 	// helper useful in turning the results of parsing into real dates
 	// by handling the zone options
-	function parseDataToDateTime(parsed, parsedZone, opts, format, text) {
+	function parseDataToDateTime(parsed, parsedZone, opts, format, text, specificOffset) {
 	  const { setZone, zone } = opts;
 	  if (parsed && Object.keys(parsed).length !== 0) {
 	    const interpretationZone = parsedZone || zone,
-	      inst = DateTime.fromObject(
-	        Object.assign(parsed, opts, {
-	          zone: interpretationZone,
-	          // setZone is a valid option in the calling methods, but not in fromObject
-	          setZone: undefined
-	        })
-	      );
+	      inst = DateTime.fromObject(parsed, {
+	        ...opts,
+	        zone: interpretationZone,
+	        specificOffset,
+	      });
 	    return setZone ? inst : inst.setZone(zone);
 	  } else {
 	    return DateTime.invalid(
@@ -17049,51 +17095,66 @@
 	  return dt.isValid
 	    ? Formatter.create(Locale.create("en-US"), {
 	        allowZ,
-	        forceSimple: true
+	        forceSimple: true,
 	      }).formatDateTimeFromString(dt, format)
 	    : null;
 	}
 
-	// technical time formats (e.g. the time part of ISO 8601), take some options
-	// and this commonizes their handling
-	function toTechTimeFormat(
-	  dt,
-	  {
-	    suppressSeconds = false,
-	    suppressMilliseconds = false,
-	    includeOffset,
-	    includePrefix = false,
-	    includeZone = false,
-	    spaceZone = false,
-	    format = "extended"
-	  }
-	) {
-	  let fmt = format === "basic" ? "HHmm" : "HH:mm";
+	function toISODate(o, extended) {
+	  const longFormat = o.c.year > 9999 || o.c.year < 0;
+	  let c = "";
+	  if (longFormat && o.c.year >= 0) c += "+";
+	  c += padStart(o.c.year, longFormat ? 6 : 4);
 
-	  if (!suppressSeconds || dt.second !== 0 || dt.millisecond !== 0) {
-	    fmt += format === "basic" ? "ss" : ":ss";
-	    if (!suppressMilliseconds || dt.millisecond !== 0) {
-	      fmt += ".SSS";
+	  if (extended) {
+	    c += "-";
+	    c += padStart(o.c.month);
+	    c += "-";
+	    c += padStart(o.c.day);
+	  } else {
+	    c += padStart(o.c.month);
+	    c += padStart(o.c.day);
+	  }
+	  return c;
+	}
+
+	function toISOTime(o, extended, suppressSeconds, suppressMilliseconds, includeOffset) {
+	  let c = padStart(o.c.hour);
+	  if (extended) {
+	    c += ":";
+	    c += padStart(o.c.minute);
+	    if (o.c.second !== 0 || !suppressSeconds) {
+	      c += ":";
+	    }
+	  } else {
+	    c += padStart(o.c.minute);
+	  }
+
+	  if (o.c.second !== 0 || !suppressSeconds) {
+	    c += padStart(o.c.second);
+
+	    if (o.c.millisecond !== 0 || !suppressMilliseconds) {
+	      c += ".";
+	      c += padStart(o.c.millisecond, 3);
 	    }
 	  }
 
-	  if ((includeZone || includeOffset) && spaceZone) {
-	    fmt += " ";
+	  if (includeOffset) {
+	    if (o.isOffsetFixed && o.offset === 0) {
+	      c += "Z";
+	    } else if (o.o < 0) {
+	      c += "-";
+	      c += padStart(Math.trunc(-o.o / 60));
+	      c += ":";
+	      c += padStart(Math.trunc(-o.o % 60));
+	    } else {
+	      c += "+";
+	      c += padStart(Math.trunc(o.o / 60));
+	      c += ":";
+	      c += padStart(Math.trunc(o.o % 60));
+	    }
 	  }
-
-	  if (includeZone) {
-	    fmt += "z";
-	  } else if (includeOffset) {
-	    fmt += format === "basic" ? "ZZZ" : "ZZ";
-	  }
-
-	  let str = toTechFormat(dt, fmt);
-
-	  if (includePrefix) {
-	    str = "T" + str;
-	  }
-
-	  return str;
+	  return c;
 	}
 
 	// defaults for unspecified units in the supported calendars
@@ -17103,7 +17164,7 @@
 	    hour: 0,
 	    minute: 0,
 	    second: 0,
-	    millisecond: 0
+	    millisecond: 0,
 	  },
 	  defaultWeekUnitValues = {
 	    weekNumber: 1,
@@ -17111,14 +17172,14 @@
 	    hour: 0,
 	    minute: 0,
 	    second: 0,
-	    millisecond: 0
+	    millisecond: 0,
 	  },
 	  defaultOrdinalUnitValues = {
 	    ordinal: 1,
 	    hour: 0,
 	    minute: 0,
 	    second: 0,
-	    millisecond: 0
+	    millisecond: 0,
 	  };
 
 	// Units in the supported calendars, sorted by bigness
@@ -17130,7 +17191,7 @@
 	    "hour",
 	    "minute",
 	    "second",
-	    "millisecond"
+	    "millisecond",
 	  ],
 	  orderedOrdinalUnits = ["year", "ordinal", "hour", "minute", "second", "millisecond"];
 
@@ -17160,7 +17221,7 @@
 	    weeknumbers: "weekNumber",
 	    weekyear: "weekYear",
 	    weekyears: "weekYear",
-	    ordinal: "ordinal"
+	    ordinal: "ordinal",
 	  }[unit.toLowerCase()];
 
 	  if (!normalized) throw new InvalidUnitError(unit);
@@ -17171,28 +17232,37 @@
 	// this is a dumbed down version of fromObject() that runs about 60% faster
 	// but doesn't do any validation, makes a bunch of assumptions about what units
 	// are present, and so on.
-	function quickDT(obj, zone) {
+
+	// this is a dumbed down version of fromObject() that runs about 60% faster
+	// but doesn't do any validation, makes a bunch of assumptions about what units
+	// are present, and so on.
+	function quickDT(obj, opts) {
+	  const zone = normalizeZone(opts.zone, Settings.defaultZone),
+	    loc = Locale.fromObject(opts),
+	    tsNow = Settings.now();
+
+	  let ts, o;
+
 	  // assume we have the higher-order units
-	  for (const u of orderedUnits) {
-	    if (isUndefined(obj[u])) {
-	      obj[u] = defaultUnitValues[u];
+	  if (!isUndefined(obj.year)) {
+	    for (const u of orderedUnits) {
+	      if (isUndefined(obj[u])) {
+	        obj[u] = defaultUnitValues[u];
+	      }
 	    }
-	  }
 
-	  const invalid = hasInvalidGregorianData(obj) || hasInvalidTimeData(obj);
-	  if (invalid) {
-	    return DateTime.invalid(invalid);
-	  }
+	    const invalid = hasInvalidGregorianData(obj) || hasInvalidTimeData(obj);
+	    if (invalid) {
+	      return DateTime.invalid(invalid);
+	    }
 
-	  const tsNow = Settings.now(),
-	    offsetProvis = zone.offset(tsNow),
+	    const offsetProvis = zone.offset(tsNow);
 	    [ts, o] = objToTS(obj, offsetProvis, zone);
+	  } else {
+	    ts = tsNow;
+	  }
 
-	  return new DateTime({
-	    ts,
-	    zone,
-	    o
-	  });
+	  return new DateTime({ ts, zone, loc, o });
 	}
 
 	function diffRelative(start, end, opts) {
@@ -17202,13 +17272,10 @@
 	      const formatter = end.loc.clone(opts).relFormatter(opts);
 	      return formatter.format(c, unit);
 	    },
-	    differ = unit => {
+	    differ = (unit) => {
 	      if (opts.calendary) {
 	        if (!end.hasSame(start, unit)) {
-	          return end
-	            .startOf(unit)
-	            .diff(start.startOf(unit), unit)
-	            .get(unit);
+	          return end.startOf(unit).diff(start.startOf(unit), unit).get(unit);
 	        } else return 0;
 	      } else {
 	        return end.diff(start, unit).get(unit);
@@ -17225,7 +17292,19 @@
 	      return format(count, unit);
 	    }
 	  }
-	  return format(0, opts.units[opts.units.length - 1]);
+	  return format(start > end ? -0 : 0, opts.units[opts.units.length - 1]);
+	}
+
+	function lastOpts(argList) {
+	  let opts = {},
+	    args;
+	  if (argList.length > 0 && typeof argList[argList.length - 1] === "object") {
+	    opts = argList[argList.length - 1];
+	    args = Array.from(argList).slice(0, argList.length - 1);
+	  } else {
+	    args = Array.from(argList);
+	  }
+	  return [opts, args];
 	}
 
 	/**
@@ -17238,13 +17317,13 @@
 	 *
 	 * Here is a brief overview of the most commonly used functionality it provides:
 	 *
-	 * * **Creation**: To create a DateTime from its components, use one of its factory class methods: {@link local}, {@link utc}, and (most flexibly) {@link fromObject}. To create one from a standard string format, use {@link fromISO}, {@link fromHTTP}, and {@link fromRFC2822}. To create one from a custom string format, use {@link fromFormat}. To create one from a native JS date, use {@link fromJSDate}.
-	 * * **Gregorian calendar and time**: To examine the Gregorian properties of a DateTime individually (i.e as opposed to collectively through {@link toObject}), use the {@link year}, {@link month},
-	 * {@link day}, {@link hour}, {@link minute}, {@link second}, {@link millisecond} accessors.
-	 * * **Week calendar**: For ISO week calendar attributes, see the {@link weekYear}, {@link weekNumber}, and {@link weekday} accessors.
-	 * * **Configuration** See the {@link locale} and {@link numberingSystem} accessors.
-	 * * **Transformation**: To transform the DateTime into other DateTimes, use {@link set}, {@link reconfigure}, {@link setZone}, {@link setLocale}, {@link plus}, {@link minus}, {@link endOf}, {@link startOf}, {@link toUTC}, and {@link toLocal}.
-	 * * **Output**: To convert the DateTime to other representations, use the {@link toRelative}, {@link toRelativeCalendar}, {@link toJSON}, {@link toISO}, {@link toHTTP}, {@link toObject}, {@link toRFC2822}, {@link toString}, {@link toLocaleString}, {@link toFormat}, {@link toMillis} and {@link toJSDate}.
+	 * * **Creation**: To create a DateTime from its components, use one of its factory class methods: {@link DateTime#local}, {@link DateTime#utc}, and (most flexibly) {@link DateTime#fromObject}. To create one from a standard string format, use {@link DateTime#fromISO}, {@link DateTime#fromHTTP}, and {@link DateTime#fromRFC2822}. To create one from a custom string format, use {@link DateTime#fromFormat}. To create one from a native JS date, use {@link DateTime#fromJSDate}.
+	 * * **Gregorian calendar and time**: To examine the Gregorian properties of a DateTime individually (i.e as opposed to collectively through {@link DateTime#toObject}), use the {@link DateTime#year}, {@link DateTime#month},
+	 * {@link DateTime#day}, {@link DateTime#hour}, {@link DateTime#minute}, {@link DateTime#second}, {@link DateTime#millisecond} accessors.
+	 * * **Week calendar**: For ISO week calendar attributes, see the {@link DateTime#weekYear}, {@link DateTime#weekNumber}, and {@link DateTime#weekday} accessors.
+	 * * **Configuration** See the {@link DateTime#locale} and {@link DateTime#numberingSystem} accessors.
+	 * * **Transformation**: To transform the DateTime into other DateTimes, use {@link DateTime#set}, {@link DateTime#reconfigure}, {@link DateTime#setZone}, {@link DateTime#setLocale}, {@link DateTime.plus}, {@link DateTime#minus}, {@link DateTime#endOf}, {@link DateTime#startOf}, {@link DateTime#toUTC}, and {@link DateTime#toLocal}.
+	 * * **Output**: To convert the DateTime to other representations, use the {@link DateTime#toRelative}, {@link DateTime#toRelativeCalendar}, {@link DateTime#toJSON}, {@link DateTime#toISO}, {@link DateTime#toHTTP}, {@link DateTime#toObject}, {@link DateTime#toRFC2822}, {@link DateTime#toString}, {@link DateTime#toLocaleString}, {@link DateTime#toFormat}, {@link DateTime#toMillis} and {@link DateTime#toJSDate}.
 	 *
 	 * There's plenty others documented below. In addition, for more information on subtler topics like internationalization, time zones, alternative calendars, validity, and so on, see the external documentation.
 	 */
@@ -17332,33 +17411,22 @@
 	   * @param {number} [minute=0] - The minute of the hour, meaning a number between 0 and 59
 	   * @param {number} [second=0] - The second of the minute, meaning a number between 0 and 59
 	   * @param {number} [millisecond=0] - The millisecond of the second, meaning a number between 0 and 999
-	   * @example DateTime.local()                            //~> now
-	   * @example DateTime.local(2017)                        //~> 2017-01-01T00:00:00
-	   * @example DateTime.local(2017, 3)                     //~> 2017-03-01T00:00:00
-	   * @example DateTime.local(2017, 3, 12)                 //~> 2017-03-12T00:00:00
-	   * @example DateTime.local(2017, 3, 12, 5)              //~> 2017-03-12T05:00:00
-	   * @example DateTime.local(2017, 3, 12, 5, 45)          //~> 2017-03-12T05:45:00
-	   * @example DateTime.local(2017, 3, 12, 5, 45, 10)      //~> 2017-03-12T05:45:10
-	   * @example DateTime.local(2017, 3, 12, 5, 45, 10, 765) //~> 2017-03-12T05:45:10.765
+	   * @example DateTime.local()                                  //~> now
+	   * @example DateTime.local({ zone: "America/New_York" })      //~> now, in US east coast time
+	   * @example DateTime.local(2017)                              //~> 2017-01-01T00:00:00
+	   * @example DateTime.local(2017, 3)                           //~> 2017-03-01T00:00:00
+	   * @example DateTime.local(2017, 3, 12, { locale: "fr" })     //~> 2017-03-12T00:00:00, with a French locale
+	   * @example DateTime.local(2017, 3, 12, 5)                    //~> 2017-03-12T05:00:00
+	   * @example DateTime.local(2017, 3, 12, 5, { zone: "utc" })   //~> 2017-03-12T05:00:00, in UTC
+	   * @example DateTime.local(2017, 3, 12, 5, 45)                //~> 2017-03-12T05:45:00
+	   * @example DateTime.local(2017, 3, 12, 5, 45, 10)            //~> 2017-03-12T05:45:10
+	   * @example DateTime.local(2017, 3, 12, 5, 45, 10, 765)       //~> 2017-03-12T05:45:10.765
 	   * @return {DateTime}
 	   */
-	  static local(year, month, day, hour, minute, second, millisecond) {
-	    if (isUndefined(year)) {
-	      return new DateTime({});
-	    } else {
-	      return quickDT(
-	        {
-	          year,
-	          month,
-	          day,
-	          hour,
-	          minute,
-	          second,
-	          millisecond
-	        },
-	        Settings.defaultZone
-	      );
-	    }
+	  static local() {
+	    const [opts, args] = lastOpts(arguments),
+	      [year, month, day, hour, minute, second, millisecond] = args;
+	    return quickDT({ year, month, day, hour, minute, second, millisecond }, opts);
 	  }
 
 	  /**
@@ -17370,36 +17438,27 @@
 	   * @param {number} [minute=0] - The minute of the hour, meaning a number between 0 and 59
 	   * @param {number} [second=0] - The second of the minute, meaning a number between 0 and 59
 	   * @param {number} [millisecond=0] - The millisecond of the second, meaning a number between 0 and 999
-	   * @example DateTime.utc()                            //~> now
-	   * @example DateTime.utc(2017)                        //~> 2017-01-01T00:00:00Z
-	   * @example DateTime.utc(2017, 3)                     //~> 2017-03-01T00:00:00Z
-	   * @example DateTime.utc(2017, 3, 12)                 //~> 2017-03-12T00:00:00Z
-	   * @example DateTime.utc(2017, 3, 12, 5)              //~> 2017-03-12T05:00:00Z
-	   * @example DateTime.utc(2017, 3, 12, 5, 45)          //~> 2017-03-12T05:45:00Z
-	   * @example DateTime.utc(2017, 3, 12, 5, 45, 10)      //~> 2017-03-12T05:45:10Z
-	   * @example DateTime.utc(2017, 3, 12, 5, 45, 10, 765) //~> 2017-03-12T05:45:10.765Z
+	   * @param {Object} options - configuration options for the DateTime
+	   * @param {string} [options.locale] - a locale to set on the resulting DateTime instance
+	   * @param {string} [options.outputCalendar] - the output calendar to set on the resulting DateTime instance
+	   * @param {string} [options.numberingSystem] - the numbering system to set on the resulting DateTime instance
+	   * @example DateTime.utc()                                              //~> now
+	   * @example DateTime.utc(2017)                                          //~> 2017-01-01T00:00:00Z
+	   * @example DateTime.utc(2017, 3)                                       //~> 2017-03-01T00:00:00Z
+	   * @example DateTime.utc(2017, 3, 12)                                   //~> 2017-03-12T00:00:00Z
+	   * @example DateTime.utc(2017, 3, 12, 5)                                //~> 2017-03-12T05:00:00Z
+	   * @example DateTime.utc(2017, 3, 12, 5, 45)                            //~> 2017-03-12T05:45:00Z
+	   * @example DateTime.utc(2017, 3, 12, 5, 45, { locale: "fr" })          //~> 2017-03-12T05:45:00Z with a French locale
+	   * @example DateTime.utc(2017, 3, 12, 5, 45, 10)                        //~> 2017-03-12T05:45:10Z
+	   * @example DateTime.utc(2017, 3, 12, 5, 45, 10, 765, { locale: "fr" }) //~> 2017-03-12T05:45:10.765Z with a French locale
 	   * @return {DateTime}
 	   */
-	  static utc(year, month, day, hour, minute, second, millisecond) {
-	    if (isUndefined(year)) {
-	      return new DateTime({
-	        ts: Settings.now(),
-	        zone: FixedOffsetZone.utcInstance
-	      });
-	    } else {
-	      return quickDT(
-	        {
-	          year,
-	          month,
-	          day,
-	          hour,
-	          minute,
-	          second,
-	          millisecond
-	        },
-	        FixedOffsetZone.utcInstance
-	      );
-	    }
+	  static utc() {
+	    const [opts, args] = lastOpts(arguments),
+	      [year, month, day, hour, minute, second, millisecond] = args;
+
+	    opts.zone = FixedOffsetZone.utcInstance;
+	    return quickDT({ year, month, day, hour, minute, second, millisecond }, opts);
 	  }
 
 	  /**
@@ -17423,7 +17482,7 @@
 	    return new DateTime({
 	      ts: ts,
 	      zone: zoneToUse,
-	      loc: Locale.fromObject(options)
+	      loc: Locale.fromObject(options),
 	    });
 	  }
 
@@ -17449,7 +17508,7 @@
 	      return new DateTime({
 	        ts: milliseconds,
 	        zone: normalizeZone(options.zone, Settings.defaultZone),
-	        loc: Locale.fromObject(options)
+	        loc: Locale.fromObject(options),
 	      });
 	    }
 	  }
@@ -17471,7 +17530,7 @@
 	      return new DateTime({
 	        ts: seconds * 1000,
 	        zone: normalizeZone(options.zone, Settings.defaultZone),
-	        loc: Locale.fromObject(options)
+	        loc: Locale.fromObject(options),
 	      });
 	    }
 	  }
@@ -17490,39 +17549,38 @@
 	   * @param {number} obj.minute - minute of the hour, 0-59
 	   * @param {number} obj.second - second of the minute, 0-59
 	   * @param {number} obj.millisecond - millisecond of the second, 0-999
-	   * @param {string|Zone} [obj.zone='local'] - interpret the numbers in the context of a particular zone. Can take any value taken as the first argument to setZone()
-	   * @param {string} [obj.locale='system's locale'] - a locale to set on the resulting DateTime instance
-	   * @param {string} obj.outputCalendar - the output calendar to set on the resulting DateTime instance
-	   * @param {string} obj.numberingSystem - the numbering system to set on the resulting DateTime instance
+	   * @param {Object} opts - options for creating this DateTime
+	   * @param {string|Zone} [opts.zone='local'] - interpret the numbers in the context of a particular zone. Can take any value taken as the first argument to setZone()
+	   * @param {string} [opts.locale='system's locale'] - a locale to set on the resulting DateTime instance
+	   * @param {string} opts.outputCalendar - the output calendar to set on the resulting DateTime instance
+	   * @param {string} opts.numberingSystem - the numbering system to set on the resulting DateTime instance
 	   * @example DateTime.fromObject({ year: 1982, month: 5, day: 25}).toISODate() //=> '1982-05-25'
 	   * @example DateTime.fromObject({ year: 1982 }).toISODate() //=> '1982-01-01'
 	   * @example DateTime.fromObject({ hour: 10, minute: 26, second: 6 }) //~> today at 10:26:06
-	   * @example DateTime.fromObject({ hour: 10, minute: 26, second: 6, zone: 'utc' }),
-	   * @example DateTime.fromObject({ hour: 10, minute: 26, second: 6, zone: 'local' })
-	   * @example DateTime.fromObject({ hour: 10, minute: 26, second: 6, zone: 'America/New_York' })
+	   * @example DateTime.fromObject({ hour: 10, minute: 26, second: 6 }, { zone: 'utc' }),
+	   * @example DateTime.fromObject({ hour: 10, minute: 26, second: 6 }, { zone: 'local' })
+	   * @example DateTime.fromObject({ hour: 10, minute: 26, second: 6 }, { zone: 'America/New_York' })
 	   * @example DateTime.fromObject({ weekYear: 2016, weekNumber: 2, weekday: 3 }).toISODate() //=> '2016-01-13'
 	   * @return {DateTime}
 	   */
-	  static fromObject(obj) {
-	    const zoneToUse = normalizeZone(obj.zone, Settings.defaultZone);
+	  static fromObject(obj, opts = {}) {
+	    obj = obj || {};
+	    const zoneToUse = normalizeZone(opts.zone, Settings.defaultZone);
 	    if (!zoneToUse.isValid) {
 	      return DateTime.invalid(unsupportedZone(zoneToUse));
 	    }
 
 	    const tsNow = Settings.now(),
-	      offsetProvis = zoneToUse.offset(tsNow),
-	      normalized = normalizeObject(obj, normalizeUnit, [
-	        "zone",
-	        "locale",
-	        "outputCalendar",
-	        "numberingSystem"
-	      ]),
+	      offsetProvis = !isUndefined(opts.specificOffset)
+	        ? opts.specificOffset
+	        : zoneToUse.offset(tsNow),
+	      normalized = normalizeObject(obj, normalizeUnit),
 	      containsOrdinal = !isUndefined(normalized.ordinal),
 	      containsGregorYear = !isUndefined(normalized.year),
 	      containsGregorMD = !isUndefined(normalized.month) || !isUndefined(normalized.day),
 	      containsGregor = containsGregorYear || containsGregorMD,
 	      definiteWeekDef = normalized.weekYear || normalized.weekNumber,
-	      loc = Locale.fromObject(obj);
+	      loc = Locale.fromObject(opts);
 
 	    // cases:
 	    // just a weekday -> this week's instance of that weekday, no worries
@@ -17576,8 +17634,8 @@
 	    const higherOrderInvalid = useWeekData
 	        ? hasInvalidWeekData(normalized)
 	        : containsOrdinal
-	          ? hasInvalidOrdinalData(normalized)
-	          : hasInvalidGregorianData(normalized),
+	        ? hasInvalidOrdinalData(normalized)
+	        : hasInvalidGregorianData(normalized),
 	      invalid = higherOrderInvalid || hasInvalidTimeData(normalized);
 
 	    if (invalid) {
@@ -17588,14 +17646,14 @@
 	    const gregorian = useWeekData
 	        ? weekToGregorian(normalized)
 	        : containsOrdinal
-	          ? ordinalToGregorian(normalized)
-	          : normalized,
+	        ? ordinalToGregorian(normalized)
+	        : normalized,
 	      [tsFinal, offsetFinal] = objToTS(gregorian, offsetProvis, zoneToUse),
 	      inst = new DateTime({
 	        ts: tsFinal,
 	        zone: zoneToUse,
 	        o: offsetFinal,
-	        loc
+	        loc,
 	      });
 
 	    // gregorian data + weekday serves only to validate
@@ -17616,8 +17674,8 @@
 	   * @param {string|Zone} [opts.zone='local'] - use this zone if no offset is specified in the input string itself. Will also convert the time to this zone
 	   * @param {boolean} [opts.setZone=false] - override the zone with a fixed-offset zone specified in the string itself, if it specifies one
 	   * @param {string} [opts.locale='system's locale'] - a locale to set on the resulting DateTime instance
-	   * @param {string} opts.outputCalendar - the output calendar to set on the resulting DateTime instance
-	   * @param {string} opts.numberingSystem - the numbering system to set on the resulting DateTime instance
+	   * @param {string} [opts.outputCalendar] - the output calendar to set on the resulting DateTime instance
+	   * @param {string} [opts.numberingSystem] - the numbering system to set on the resulting DateTime instance
 	   * @example DateTime.fromISO('2016-05-25T09:08:34.123')
 	   * @example DateTime.fromISO('2016-05-25T09:08:34.123+06:00')
 	   * @example DateTime.fromISO('2016-05-25T09:08:34.123+06:00', {setZone: true})
@@ -17671,8 +17729,7 @@
 
 	  /**
 	   * Create a DateTime from an input string and format string.
-	   * Defaults to en-US if no locale has been specified, regardless of the system's locale.
-	   * @see https://moment.github.io/luxon/docs/manual/parsing.html#table-of-tokens
+	   * Defaults to en-US if no locale has been specified, regardless of the system's locale. For a table of tokens and their interpretations, see [here](https://moment.github.io/luxon/#/parsing?id=table-of-tokens).
 	   * @param {string} text - the string to parse
 	   * @param {string} fmt - the format the string is expected to be in (see the link below for the formats)
 	   * @param {Object} opts - options to affect the creation
@@ -17692,13 +17749,13 @@
 	      localeToUse = Locale.fromOpts({
 	        locale,
 	        numberingSystem,
-	        defaultToEN: true
+	        defaultToEN: true,
 	      }),
-	      [vals, parsedZone, invalid] = parseFromTokens(localeToUse, text, fmt);
+	      [vals, parsedZone, specificOffset, invalid] = parseFromTokens(localeToUse, text, fmt);
 	    if (invalid) {
 	      return DateTime.invalid(invalid);
 	    } else {
-	      return parseDataToDateTime(vals, parsedZone, opts, `format ${fmt}`, text);
+	      return parseDataToDateTime(vals, parsedZone, opts, `format ${fmt}`, text, specificOffset);
 	    }
 	  }
 
@@ -17920,7 +17977,7 @@
 	  /**
 	   * Get the week year
 	   * @see https://en.wikipedia.org/wiki/ISO_week_date
-	   * @example DateTime.local(2014, 11, 31).weekYear //=> 2015
+	   * @example DateTime.local(2014, 12, 31).weekYear //=> 2015
 	   * @type {number}
 	   */
 	  get weekYear() {
@@ -17964,7 +18021,7 @@
 	   * @type {string}
 	   */
 	  get monthShort() {
-	    return this.isValid ? Info.months("short", { locale: this.locale })[this.month - 1] : null;
+	    return this.isValid ? Info.months("short", { locObj: this.loc })[this.month - 1] : null;
 	  }
 
 	  /**
@@ -17974,7 +18031,7 @@
 	   * @type {string}
 	   */
 	  get monthLong() {
-	    return this.isValid ? Info.months("long", { locale: this.locale })[this.month - 1] : null;
+	    return this.isValid ? Info.months("long", { locObj: this.loc })[this.month - 1] : null;
 	  }
 
 	  /**
@@ -17984,7 +18041,7 @@
 	   * @type {string}
 	   */
 	  get weekdayShort() {
-	    return this.isValid ? Info.weekdays("short", { locale: this.locale })[this.weekday - 1] : null;
+	    return this.isValid ? Info.weekdays("short", { locObj: this.loc })[this.weekday - 1] : null;
 	  }
 
 	  /**
@@ -17994,7 +18051,7 @@
 	   * @type {string}
 	   */
 	  get weekdayLong() {
-	    return this.isValid ? Info.weekdays("long", { locale: this.locale })[this.weekday - 1] : null;
+	    return this.isValid ? Info.weekdays("long", { locObj: this.loc })[this.weekday - 1] : null;
 	  }
 
 	  /**
@@ -18016,7 +18073,7 @@
 	    if (this.isValid) {
 	      return this.zone.offsetName(this.ts, {
 	        format: "short",
-	        locale: this.locale
+	        locale: this.locale,
 	      });
 	    } else {
 	      return null;
@@ -18032,7 +18089,7 @@
 	    if (this.isValid) {
 	      return this.zone.offsetName(this.ts, {
 	        format: "long",
-	        locale: this.locale
+	        locale: this.locale,
 	      });
 	    } else {
 	      return null;
@@ -18044,7 +18101,7 @@
 	   * @type {boolean}
 	   */
 	  get isOffsetFixed() {
-	    return this.isValid ? this.zone.universal : null;
+	    return this.isValid ? this.zone.isUniversal : null;
 	  }
 
 	  /**
@@ -18108,7 +18165,7 @@
 	   * @param {Object} opts - the same options as toLocaleString
 	   * @return {Object}
 	   */
-	  resolvedLocaleOpts(opts = {}) {
+	  resolvedLocaleOptions(opts = {}) {
 	    const { locale, numberingSystem, calendar } = Formatter.create(
 	      this.loc.clone(opts),
 	      opts
@@ -18121,7 +18178,7 @@
 	  /**
 	   * "Set" the DateTime's zone to UTC. Returns a newly-constructed DateTime.
 	   *
-	   * Equivalent to {@link setZone}('utc')
+	   * Equivalent to {@link DateTime#setZone}('utc')
 	   * @param {number} [offset=0] - optionally, an offset from UTC in minutes
 	   * @param {Object} [opts={}] - options to pass to `setZone()`
 	   * @return {DateTime}
@@ -18143,8 +18200,8 @@
 	  /**
 	   * "Set" the DateTime's zone to specified zone. Returns a newly-constructed DateTime.
 	   *
-	   * By default, the setter keeps the underlying time the same (as in, the same timestamp), but the new instance will report different local times and consider DSTs when making computations, as with {@link plus}. You may wish to use {@link toLocal} and {@link toUTC} which provide simple convenience wrappers for commonly used zones.
-	   * @param {string|Zone} [zone='local'] - a zone identifier. As a string, that can be any IANA zone supported by the host environment, or a fixed-offset name of the form 'UTC+3', or the strings 'local' or 'utc'. You may also supply an instance of a {@link Zone} class.
+	   * By default, the setter keeps the underlying time the same (as in, the same timestamp), but the new instance will report different local times and consider DSTs when making computations, as with {@link DateTime#plus}. You may wish to use {@link DateTime#toLocal} and {@link DateTime#toUTC} which provide simple convenience wrappers for commonly used zones.
+	   * @param {string|Zone} [zone='local'] - a zone identifier. As a string, that can be any IANA zone supported by the host environment, or a fixed-offset name of the form 'UTC+3', or the strings 'local' or 'utc'. You may also supply an instance of a {@link DateTime#Zone} class.
 	   * @param {Object} opts - options
 	   * @param {boolean} [opts.keepLocalTime=false] - If true, adjust the underlying time so that the local time stays the same, but in the target zone. You should rarely need this.
 	   * @return {DateTime}
@@ -18189,7 +18246,7 @@
 
 	  /**
 	   * "Set" the values of specified units. Returns a newly-constructed DateTime.
-	   * You can only set units with this method; for "setting" metadata, see {@link reconfigure} and {@link setZone}.
+	   * You can only set units with this method; for "setting" metadata, see {@link DateTime#reconfigure} and {@link DateTime#setZone}.
 	   * @param {Object} values - a mapping of units to numbers
 	   * @example dt.set({ year: 2017 })
 	   * @example dt.set({ hour: 8, minute: 30 })
@@ -18200,19 +18257,34 @@
 	  set(values) {
 	    if (!this.isValid) return this;
 
-	    const normalized = normalizeObject(values, normalizeUnit, []),
+	    const normalized = normalizeObject(values, normalizeUnit),
 	      settingWeekStuff =
 	        !isUndefined(normalized.weekYear) ||
 	        !isUndefined(normalized.weekNumber) ||
-	        !isUndefined(normalized.weekday);
+	        !isUndefined(normalized.weekday),
+	      containsOrdinal = !isUndefined(normalized.ordinal),
+	      containsGregorYear = !isUndefined(normalized.year),
+	      containsGregorMD = !isUndefined(normalized.month) || !isUndefined(normalized.day),
+	      containsGregor = containsGregorYear || containsGregorMD,
+	      definiteWeekDef = normalized.weekYear || normalized.weekNumber;
+
+	    if ((containsGregor || containsOrdinal) && definiteWeekDef) {
+	      throw new ConflictingSpecificationError(
+	        "Can't mix weekYear/weekNumber units with year/month/day or ordinals"
+	      );
+	    }
+
+	    if (containsGregorMD && containsOrdinal) {
+	      throw new ConflictingSpecificationError("Can't mix ordinal dates with month/day");
+	    }
 
 	    let mixed;
 	    if (settingWeekStuff) {
-	      mixed = weekToGregorian(Object.assign(gregorianToWeek(this.c), normalized));
+	      mixed = weekToGregorian({ ...gregorianToWeek(this.c), ...normalized });
 	    } else if (!isUndefined(normalized.ordinal)) {
-	      mixed = ordinalToGregorian(Object.assign(gregorianToOrdinal(this.c), normalized));
+	      mixed = ordinalToGregorian({ ...gregorianToOrdinal(this.c), ...normalized });
 	    } else {
-	      mixed = Object.assign(this.toObject(), normalized);
+	      mixed = { ...this.toObject(), ...normalized };
 
 	      // if we didn't set the day but we ended up on an overflow date,
 	      // use the last day of the right month
@@ -18240,19 +18312,19 @@
 	   */
 	  plus(duration) {
 	    if (!this.isValid) return this;
-	    const dur = friendlyDuration(duration);
+	    const dur = Duration.fromDurationLike(duration);
 	    return clone(this, adjustTime(this, dur));
 	  }
 
 	  /**
 	   * Subtract a period of time to this DateTime and return the resulting DateTime
-	   * See {@link plus}
+	   * See {@link DateTime#plus}
 	   * @param {Duration|Object|number} duration - The amount to subtract. Either a Luxon Duration, a number of milliseconds, the object argument to Duration.fromObject()
 	   @return {DateTime}
-	  */
+	   */
 	  minus(duration) {
 	    if (!this.isValid) return this;
-	    const dur = friendlyDuration(duration).negate();
+	    const dur = Duration.fromDurationLike(duration).negate();
 	    return clone(this, adjustTime(this, dur));
 	  }
 
@@ -18328,11 +18400,10 @@
 
 	  /**
 	   * Returns a string representation of this DateTime formatted according to the specified format string.
-	   * **You may not want this.** See {@link toLocaleString} for a more flexible formatting tool. For a table of tokens and their interpretations, see [here](https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens).
+	   * **You may not want this.** See {@link DateTime#toLocaleString} for a more flexible formatting tool. For a table of tokens and their interpretations, see [here](https://moment.github.io/luxon/#/formatting?id=table-of-tokens).
 	   * Defaults to en-US if no locale has been specified, regardless of the system's locale.
-	   * @see https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
 	   * @param {string} fmt - the format string
-	   * @param {Object} opts - opts to override the configuration options
+	   * @param {Object} opts - opts to override the configuration options on this DateTime
 	   * @example DateTime.now().toFormat('yyyy LLL dd') //=> '2017 Apr 22'
 	   * @example DateTime.now().setLocale('fr').toFormat('yyyy LLL dd') //=> '2017 avr. 22'
 	   * @example DateTime.now().toFormat('yyyy LLL dd', { locale: "fr" }) //=> '2017 avr. 22'
@@ -18351,7 +18422,8 @@
 	   * of the DateTime in the assigned locale.
 	   * Defaults to the system's locale if no locale has been specified
 	   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
-	   * @param opts {Object} - Intl.DateTimeFormat constructor options and configuration options
+	   * @param formatOpts {Object} - Intl.DateTimeFormat constructor options and configuration options
+	   * @param {Object} opts - opts to override the configuration options on this DateTime
 	   * @example DateTime.now().toLocaleString(); //=> 4/20/2017
 	   * @example DateTime.now().setLocale('en-gb').toLocaleString(); //=> '20/04/2017'
 	   * @example DateTime.now().toLocaleString({ locale: 'en-gb' }); //=> '20/04/2017'
@@ -18360,12 +18432,12 @@
 	   * @example DateTime.now().toLocaleString(DateTime.DATETIME_SHORT); //=> '4/20/2017, 11:32 AM'
 	   * @example DateTime.now().toLocaleString({ weekday: 'long', month: 'long', day: '2-digit' }); //=> 'Thursday, April 20'
 	   * @example DateTime.now().toLocaleString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' }); //=> 'Thu, Apr 20, 11:27 AM'
-	   * @example DateTime.now().toLocaleString({ hour: '2-digit', minute: '2-digit', hour12: false }); //=> '11:32'
+	   * @example DateTime.now().toLocaleString({ hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }); //=> '11:32'
 	   * @return {string}
 	   */
-	  toLocaleString(opts = DATE_SHORT) {
+	  toLocaleString(formatOpts = DATE_SHORT, opts = {}) {
 	    return this.isValid
-	      ? Formatter.create(this.loc.clone(opts), opts).formatDateTime(this)
+	      ? Formatter.create(this.loc.clone(opts), formatOpts).formatDateTime(this)
 	      : INVALID;
 	  }
 
@@ -18395,18 +18467,28 @@
 	   * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
 	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
 	   * @param {string} [opts.format='extended'] - choose between the basic and extended format
-	   * @example DateTime.utc(1982, 5, 25).toISO() //=> '1982-05-25T00:00:00.000Z'
+	   * @example DateTime.utc(1983, 5, 25).toISO() //=> '1982-05-25T00:00:00.000Z'
 	   * @example DateTime.now().toISO() //=> '2017-04-22T20:47:05.335-04:00'
 	   * @example DateTime.now().toISO({ includeOffset: false }) //=> '2017-04-22T20:47:05.335'
 	   * @example DateTime.now().toISO({ format: 'basic' }) //=> '20170422T204705.335-0400'
 	   * @return {string}
 	   */
-	  toISO(opts = {}) {
+	  toISO({
+	    format = "extended",
+	    suppressSeconds = false,
+	    suppressMilliseconds = false,
+	    includeOffset = true,
+	  } = {}) {
 	    if (!this.isValid) {
 	      return null;
 	    }
 
-	    return `${this.toISODate(opts)}T${this.toISOTime(opts)}`;
+	    const ext = format === "extended";
+
+	    let c = toISODate(this, ext);
+	    c += "T";
+	    c += toISOTime(this, ext, suppressSeconds, suppressMilliseconds, includeOffset);
+	    return c;
 	  }
 
 	  /**
@@ -18418,12 +18500,11 @@
 	   * @return {string}
 	   */
 	  toISODate({ format = "extended" } = {}) {
-	    let fmt = format === "basic" ? "yyyyMMdd" : "yyyy-MM-dd";
-	    if (this.year > 9999) {
-	      fmt = "+" + fmt;
+	    if (!this.isValid) {
+	      return null;
 	    }
 
-	    return toTechFormat(this, fmt);
+	    return toISODate(this, format === "extended");
 	  }
 
 	  /**
@@ -18454,19 +18535,21 @@
 	    suppressSeconds = false,
 	    includeOffset = true,
 	    includePrefix = false,
-	    format = "extended"
+	    format = "extended",
 	  } = {}) {
-	    return toTechTimeFormat(this, {
-	      suppressSeconds,
-	      suppressMilliseconds,
-	      includeOffset,
-	      includePrefix,
-	      format
-	    });
+	    if (!this.isValid) {
+	      return null;
+	    }
+
+	    let c = includePrefix ? "T" : "";
+	    return (
+	      c +
+	      toISOTime(this, format === "extended", suppressSeconds, suppressMilliseconds, includeOffset)
+	    );
 	  }
 
 	  /**
-	   * Returns an RFC 2822-compatible string representation of this DateTime, always in UTC
+	   * Returns an RFC 2822-compatible string representation of this DateTime
 	   * @example DateTime.utc(2014, 7, 13).toRFC2822() //=> 'Sun, 13 Jul 2014 00:00:00 +0000'
 	   * @example DateTime.local(2014, 7, 13).toRFC2822() //=> 'Sun, 13 Jul 2014 00:00:00 -0400'
 	   * @return {string}
@@ -18476,7 +18559,7 @@
 	  }
 
 	  /**
-	   * Returns a string representation of this DateTime appropriate for use in HTTP headers.
+	   * Returns a string representation of this DateTime appropriate for use in HTTP headers. The output is always expressed in GMT.
 	   * Specifically, the string conforms to RFC 1123.
 	   * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1
 	   * @example DateTime.utc(2014, 7, 13).toHTTP() //=> 'Sun, 13 Jul 2014 00:00:00 GMT'
@@ -18493,7 +18576,10 @@
 	   * @return {string}
 	   */
 	  toSQLDate() {
-	    return toTechFormat(this, "yyyy-MM-dd");
+	    if (!this.isValid) {
+	      return null;
+	    }
+	    return toISODate(this, true);
 	  }
 
 	  /**
@@ -18508,11 +18594,18 @@
 	   * @return {string}
 	   */
 	  toSQLTime({ includeOffset = true, includeZone = false } = {}) {
-	    return toTechTimeFormat(this, {
-	      includeOffset,
-	      includeZone,
-	      spaceZone: true
-	    });
+	    let fmt = "HH:mm:ss.SSS";
+
+	    if (includeZone || includeOffset) {
+	      fmt += " ";
+	      if (includeZone) {
+	        fmt += "z";
+	      } else if (includeOffset) {
+	        fmt += "ZZ";
+	      }
+	    }
+
+	    return toTechFormat(this, fmt, true);
 	  }
 
 	  /**
@@ -18543,7 +18636,7 @@
 	  }
 
 	  /**
-	   * Returns the epoch milliseconds of this DateTime. Alias of {@link toMillis}
+	   * Returns the epoch milliseconds of this DateTime. Alias of {@link DateTime#toMillis}
 	   * @return {number}
 	   */
 	  valueOf() {
@@ -18592,7 +18685,7 @@
 	  toObject(opts = {}) {
 	    if (!this.isValid) return {};
 
-	    const base = Object.assign({}, this.c);
+	    const base = { ...this.c };
 
 	    if (opts.includeConfig) {
 	      base.outputCalendar = this.outputCalendar;
@@ -18629,16 +18722,10 @@
 	   */
 	  diff(otherDateTime, unit = "milliseconds", opts = {}) {
 	    if (!this.isValid || !otherDateTime.isValid) {
-	      return Duration.invalid(
-	        this.invalid || otherDateTime.invalid,
-	        "created by diffing an invalid DateTime"
-	      );
+	      return Duration.invalid("created by diffing an invalid DateTime");
 	    }
 
-	    const durOpts = Object.assign(
-	      { locale: this.locale, numberingSystem: this.numberingSystem },
-	      opts
-	    );
+	    const durOpts = { locale: this.locale, numberingSystem: this.numberingSystem, ...opts };
 
 	    const units = maybeArray(unit).map(Duration.normalizeUnit),
 	      otherIsLater = otherDateTime.valueOf() > this.valueOf(),
@@ -18651,7 +18738,7 @@
 
 	  /**
 	   * Return the difference between this DateTime and right now.
-	   * See {@link diff}
+	   * See {@link DateTime#diff}
 	   * @param {string|string[]} [unit=['milliseconds']] - the unit or units units (such as 'hours' or 'days') to include in the duration
 	   * @param {Object} opts - options that affect the creation of the Duration
 	   * @param {string} [opts.conversionAccuracy='casual'] - the conversion system to use
@@ -18673,7 +18760,7 @@
 	  /**
 	   * Return whether this DateTime is in the same unit of time as another DateTime.
 	   * Higher-order units must also be identical for this function to return `true`.
-	   * Note that time zones are **ignored** in this comparison, which compares the **local** calendar time. Use {@link setZone} to convert one of the dates if needed.
+	   * Note that time zones are **ignored** in this comparison, which compares the **local** calendar time. Use {@link DateTime#setZone} to convert one of the dates if needed.
 	   * @param {DateTime} otherDateTime - the other DateTime
 	   * @param {string} unit - the unit of time to check sameness on
 	   * @example DateTime.now().hasSame(otherDT, 'day'); //~> true if otherDT is in the same current calendar day
@@ -18683,8 +18770,8 @@
 	    if (!this.isValid) return false;
 
 	    const inputMs = otherDateTime.valueOf();
-	    const otherZoneDateTime = this.setZone(otherDateTime.zone, { keepLocalTime: true });
-	    return otherZoneDateTime.startOf(unit) <= inputMs && inputMs <= otherZoneDateTime.endOf(unit);
+	    const adjustedToZone = this.setZone(otherDateTime.zone, { keepLocalTime: true });
+	    return adjustedToZone.startOf(unit) <= inputMs && inputMs <= adjustedToZone.endOf(unit);
 	  }
 
 	  /**
@@ -18710,7 +18797,7 @@
 	   * @param {Object} options - options that affect the output
 	   * @param {DateTime} [options.base=DateTime.now()] - the DateTime to use as the basis to which this time is compared. Defaults to now.
 	   * @param {string} [options.style="long"] - the style of units, must be "long", "short", or "narrow"
-	   * @param {string} options.unit - use a specific unit; if omitted, the method will pick the unit. Use one of "years", "quarters", "months", "weeks", "days", "hours", "minutes", or "seconds"
+	   * @param {string|string[]} options.unit - use a specific unit or array of units; if omitted, or an array, the method will pick the best unit. Use an array or one of "years", "quarters", "months", "weeks", "days", "hours", "minutes", or "seconds"
 	   * @param {boolean} [options.round=true] - whether to round the numbers in the output.
 	   * @param {number} [options.padding=0] - padding in milliseconds. This allows you to round up the result if it fits inside the threshold. Don't use in combination with {round: false} because the decimal output will include the padding.
 	   * @param {string} options.locale - override the locale of this DateTime
@@ -18724,16 +18811,20 @@
 	   */
 	  toRelative(options = {}) {
 	    if (!this.isValid) return null;
-	    const base = options.base || DateTime.fromObject({ zone: this.zone }),
+	    const base = options.base || DateTime.fromObject({}, { zone: this.zone }),
 	      padding = options.padding ? (this < base ? -options.padding : options.padding) : 0;
-	    return diffRelative(
-	      base,
-	      this.plus(padding),
-	      Object.assign(options, {
-	        numeric: "always",
-	        units: ["years", "months", "days", "hours", "minutes", "seconds"]
-	      })
-	    );
+	    let units = ["years", "months", "days", "hours", "minutes", "seconds"];
+	    let unit = options.unit;
+	    if (Array.isArray(options.unit)) {
+	      units = options.unit;
+	      unit = undefined;
+	    }
+	    return diffRelative(base, this.plus(padding), {
+	      ...options,
+	      numeric: "always",
+	      units,
+	      unit,
+	    });
 	  }
 
 	  /**
@@ -18752,15 +18843,12 @@
 	  toRelativeCalendar(options = {}) {
 	    if (!this.isValid) return null;
 
-	    return diffRelative(
-	      options.base || DateTime.fromObject({ zone: this.zone }),
-	      this,
-	      Object.assign(options, {
-	        numeric: "auto",
-	        units: ["years", "months", "days"],
-	        calendary: true
-	      })
-	    );
+	    return diffRelative(options.base || DateTime.fromObject({}, { zone: this.zone }), this, {
+	      ...options,
+	      numeric: "auto",
+	      units: ["years", "months", "days"],
+	      calendary: true,
+	    });
 	  }
 
 	  /**
@@ -18772,7 +18860,7 @@
 	    if (!dateTimes.every(DateTime.isDateTime)) {
 	      throw new InvalidArgumentError("min requires all arguments be DateTimes");
 	    }
-	    return bestBy(dateTimes, i => i.valueOf(), Math.min);
+	    return bestBy(dateTimes, (i) => i.valueOf(), Math.min);
 	  }
 
 	  /**
@@ -18784,7 +18872,7 @@
 	    if (!dateTimes.every(DateTime.isDateTime)) {
 	      throw new InvalidArgumentError("max requires all arguments be DateTimes");
 	    }
-	    return bestBy(dateTimes, i => i.valueOf(), Math.max);
+	    return bestBy(dateTimes, (i) => i.valueOf(), Math.max);
 	  }
 
 	  // MISC
@@ -18801,7 +18889,7 @@
 	      localeToUse = Locale.fromOpts({
 	        locale,
 	        numberingSystem,
-	        defaultToEN: true
+	        defaultToEN: true,
 	      });
 	    return explainFromTokens(localeToUse, text, fmt);
 	  }
@@ -18816,7 +18904,7 @@
 	  // FORMAT PRESETS
 
 	  /**
-	   * {@link toLocaleString} format like 10/14/1983
+	   * {@link DateTime#toLocaleString} format like 10/14/1983
 	   * @type {Object}
 	   */
 	  static get DATE_SHORT() {
@@ -18824,7 +18912,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like 'Oct 14, 1983'
+	   * {@link DateTime#toLocaleString} format like 'Oct 14, 1983'
 	   * @type {Object}
 	   */
 	  static get DATE_MED() {
@@ -18832,7 +18920,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like 'Fri, Oct 14, 1983'
+	   * {@link DateTime#toLocaleString} format like 'Fri, Oct 14, 1983'
 	   * @type {Object}
 	   */
 	  static get DATE_MED_WITH_WEEKDAY() {
@@ -18840,7 +18928,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like 'October 14, 1983'
+	   * {@link DateTime#toLocaleString} format like 'October 14, 1983'
 	   * @type {Object}
 	   */
 	  static get DATE_FULL() {
@@ -18848,7 +18936,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like 'Tuesday, October 14, 1983'
+	   * {@link DateTime#toLocaleString} format like 'Tuesday, October 14, 1983'
 	   * @type {Object}
 	   */
 	  static get DATE_HUGE() {
@@ -18856,7 +18944,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like '09:30 AM'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like '09:30 AM'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get TIME_SIMPLE() {
@@ -18864,7 +18952,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like '09:30:23 AM'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like '09:30:23 AM'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get TIME_WITH_SECONDS() {
@@ -18872,7 +18960,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like '09:30:23 AM EDT'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like '09:30:23 AM EDT'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get TIME_WITH_SHORT_OFFSET() {
@@ -18880,7 +18968,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like '09:30:23 AM Eastern Daylight Time'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like '09:30:23 AM Eastern Daylight Time'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get TIME_WITH_LONG_OFFSET() {
@@ -18888,7 +18976,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like '09:30', always 24-hour.
+	   * {@link DateTime#toLocaleString} format like '09:30', always 24-hour.
 	   * @type {Object}
 	   */
 	  static get TIME_24_SIMPLE() {
@@ -18896,7 +18984,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like '09:30:23', always 24-hour.
+	   * {@link DateTime#toLocaleString} format like '09:30:23', always 24-hour.
 	   * @type {Object}
 	   */
 	  static get TIME_24_WITH_SECONDS() {
@@ -18904,7 +18992,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like '09:30:23 EDT', always 24-hour.
+	   * {@link DateTime#toLocaleString} format like '09:30:23 EDT', always 24-hour.
 	   * @type {Object}
 	   */
 	  static get TIME_24_WITH_SHORT_OFFSET() {
@@ -18912,7 +19000,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like '09:30:23 Eastern Daylight Time', always 24-hour.
+	   * {@link DateTime#toLocaleString} format like '09:30:23 Eastern Daylight Time', always 24-hour.
 	   * @type {Object}
 	   */
 	  static get TIME_24_WITH_LONG_OFFSET() {
@@ -18920,7 +19008,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like '10/14/1983, 9:30 AM'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like '10/14/1983, 9:30 AM'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get DATETIME_SHORT() {
@@ -18928,7 +19016,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like '10/14/1983, 9:30:33 AM'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like '10/14/1983, 9:30:33 AM'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get DATETIME_SHORT_WITH_SECONDS() {
@@ -18936,7 +19024,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like 'Oct 14, 1983, 9:30 AM'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like 'Oct 14, 1983, 9:30 AM'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get DATETIME_MED() {
@@ -18944,7 +19032,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like 'Oct 14, 1983, 9:30:33 AM'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like 'Oct 14, 1983, 9:30:33 AM'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get DATETIME_MED_WITH_SECONDS() {
@@ -18952,7 +19040,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like 'Fri, 14 Oct 1983, 9:30 AM'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like 'Fri, 14 Oct 1983, 9:30 AM'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get DATETIME_MED_WITH_WEEKDAY() {
@@ -18960,7 +19048,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like 'October 14, 1983, 9:30 AM EDT'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like 'October 14, 1983, 9:30 AM EDT'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get DATETIME_FULL() {
@@ -18968,7 +19056,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like 'October 14, 1983, 9:30:33 AM EDT'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like 'October 14, 1983, 9:30:33 AM EDT'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get DATETIME_FULL_WITH_SECONDS() {
@@ -18976,7 +19064,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like 'Friday, October 14, 1983, 9:30 AM Eastern Daylight Time'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like 'Friday, October 14, 1983, 9:30 AM Eastern Daylight Time'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get DATETIME_HUGE() {
@@ -18984,7 +19072,7 @@
 	  }
 
 	  /**
-	   * {@link toLocaleString} format like 'Friday, October 14, 1983, 9:30:33 AM Eastern Daylight Time'. Only 12-hour if the locale is.
+	   * {@link DateTime#toLocaleString} format like 'Friday, October 14, 1983, 9:30:33 AM Eastern Daylight Time'. Only 12-hour if the locale is.
 	   * @type {Object}
 	   */
 	  static get DATETIME_HUGE_WITH_SECONDS() {
@@ -19009,7 +19097,7 @@
 	  }
 	}
 
-	const VERSION = "1.26.0";
+	const VERSION = "2.3.0";
 
 	var luxon = /*#__PURE__*/Object.freeze({
 		__proto__: null,
@@ -19022,7 +19110,7 @@
 		FixedOffsetZone: FixedOffsetZone,
 		IANAZone: IANAZone,
 		InvalidZone: InvalidZone,
-		LocalZone: LocalZone,
+		SystemZone: SystemZone,
 		Settings: Settings
 	});
 
@@ -19399,7 +19487,7 @@
 	    }
 	    else if (typeof window !== "undefined" &&
 	        typeof window.XMLHttpRequest === "function" &&
-	        (!fs.readFileSync || type === 'fetch')) {
+	        (!fs.readFileSync )) {
 	        const jsFile = fetchJSONSync(template);
 	        const jsonxModule = scopedEval$1(`(${jsFile})`);
 	        templateCache.set(template, jsonxModule);
@@ -19533,7 +19621,7 @@ ${jsonxRenderedString}`;
 	}
 
 	// import React, { createElement, } from 'react';
-	const createElement = React__default['default'].createElement;
+	const createElement = React__default["default"].createElement;
 	const { componentMap, getComponentFromMap, getBoundedComponents, DynamicComponent, FormComponent, ReactHookForm, getReactLibrariesAndComponents, } = jsonxComponents;
 	const { getComputedProps } = jsonxProps;
 	const { getJSONXChildren } = jsonxChildren;
@@ -19552,7 +19640,7 @@ ${jsonxRenderedString}`;
 	 */
 	function jsonxRender(config = { jsonx: { component: "" }, querySelector: "" }) {
 	    const { jsonx, resources, querySelector, DOM, portal } = config;
-	    const Render = portal ? ReactDOM__default['default'].createPortal : ReactDOM__default['default'].render;
+	    const Render = portal ? ReactDOM__default["default"].createPortal : ReactDOM__default["default"].render;
 	    const RenderDOM = DOM || document.querySelector(querySelector);
 	    const JSONXReactElement = getReactElementFromJSONX.call(this || {}, jsonx, resources);
 	    if (!JSONXReactElement)
@@ -19768,14 +19856,14 @@ ${jsonxRenderedString}`;
 	 * @returns {Object} React
 	 */
 	function __getReact() {
-	    return React__default['default'];
+	    return React__default["default"];
 	}
 	/**
 	 * Exposes react dom module used in JSONX
 	 * @returns {Object} ReactDOM
 	 */
 	function __getReactDOM() {
-	    return ReactDOM__default['default'];
+	    return ReactDOM__default["default"];
 	}
 	const _jsonxChildren = jsonxChildren;
 	const _jsonxComponents = jsonxComponents;
@@ -19792,7 +19880,7 @@ ${jsonxRenderedString}`;
 	exports._jsonxProps = _jsonxProps;
 	exports._jsonxUtils = _jsonxUtils;
 	exports.compile = compile;
-	exports.default = getReactElementFromJSONX;
+	exports["default"] = getReactElementFromJSONX;
 	exports.getReactElement = getReactElement;
 	exports.getReactElementFromJSON = getReactElementFromJSON;
 	exports.getReactElementFromJSONX = getReactElementFromJSONX;
@@ -19807,4 +19895,4 @@ ${jsonxRenderedString}`;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));

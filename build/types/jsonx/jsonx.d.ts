@@ -8,6 +8,7 @@ export declare type createFunctionComponentArgs = {
     reactComponent?: jsonx;
     function?: callbackFunc;
     functionBody?: string;
+    invoke?: boolean;
     options?: {
         lazy?: boolean;
         bind?: boolean;
@@ -154,12 +155,29 @@ export declare type jsonxComparison = {
 export interface jsonxResourceProps {
     [index: string]: any;
 }
+export declare type genericComponent = React.FunctionComponent | React.PureComponent | React.Component | React.ReactElement | callbackFunc;
 export declare type jsonxComponent = {
-    [index: string]: React.FunctionComponent | React.PureComponent | React.Component | React.ReactElement | callbackFunc;
+    [index: string]: genericComponent;
 };
 export interface jsonxLibrary {
-    [index: string]: jsonxComponent;
+    [index: string]: genericComponent;
 }
-export interface jsonxComponents {
-    [index: string]: jsonxComponent;
+export interface jsonxDefinitionLibrary {
+    [index: string]: jsonxCustomComponent;
 }
+export interface jsonxComponentLibraries {
+    [index: string]: jsonxLibrary;
+}
+export declare type jsonxCustomComponent = {
+    type: 'component' | 'function' | 'library';
+    name: string;
+    jsonx?: jsonxDefinitionLibrary | jsonx;
+    jsonxComponent?: jsonx;
+    options?: {};
+    functionBody?: (string);
+    functionComponent?: ((props?: any) => any);
+};
+export declare type jsonxLibrariesAndComponents = {
+    customComponentLibraries: jsonxComponentLibraries;
+    customReactComponents: jsonxComponent;
+};
