@@ -24,7 +24,7 @@ export let advancedBinding = getAdvancedBinding();
  
  */
 //@ts-ignore
-export let componentMap = Object.assign({ Fragment, Suspense }, ReactDOMElements, window && typeof window === "object" ? window.__jsonx_custom_elements : {});
+export let componentMap = Object.assign({ Fragment, Suspense }, ReactDOMElements, typeof window === "object" && window ? window.__jsonx_custom_elements : {});
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
  

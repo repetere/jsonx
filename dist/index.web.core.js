@@ -14206,7 +14206,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	 
 	 */
 	//@ts-ignore
-	let componentMap$1 = Object.assign({ Fragment: React$1.Fragment, Suspense: React$1.Suspense }, ReactDOMElements, window && typeof window === "object" ? window.__jsonx_custom_elements : {});
+	let componentMap$1 = Object.assign({ Fragment: React$1.Fragment, Suspense: React$1.Suspense }, ReactDOMElements, typeof window === "object" && window ? window.__jsonx_custom_elements : {});
 	/**
 	 * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
 	 

@@ -123,7 +123,12 @@ function getPlugins({
         JSON.stringify('production') : JSON.stringify('development'),
       'global.': '(typeof global!=="undefined" ? global : window).'
     }),
-    builtins({}),
+  ];
+  if(server===false){
+    plugins.push(builtins({}));
+  }
+  plugins.push(...[
+    
     // nodePolyfills({}),
     resolve({
       preferBuiltins: true,
@@ -142,7 +147,7 @@ function getPlugins({
       // react: 'React',
       // 'react-dom': 'ReactDOM'
     }),
-  ];
+  ]);
   if (serverDom) {
     plugins.push(alias({
       entries: {

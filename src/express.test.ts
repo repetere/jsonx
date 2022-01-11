@@ -1,5 +1,8 @@
 import * as jsonx from './index';
+import supertest from 'supertest';
+import express from 'express';
 import path from 'path';
+const expressApp = express();
 
 describe('express', function(){
   describe('__express',()=>{
@@ -39,6 +42,24 @@ describe('express', function(){
       '<div data-reactroot=""><div>this is in the main template</div><div title="testing templates"><div>from external template</div></div></div>');
       expect(simple_template).toMatch(`<!DOCTYPE html>
 <main data-reactroot=""><div>this is in the simple template</div><section title="testing simple templates"><div>from external template</div></section></main>`)
+    })
+  })
+  describe('rendering',()=>{
+    expressApp.engine('jsonx',jsonx.__express);
+    expressApp.set('views', path.resolve('./src/mock/mock-views')); // specify the views directory
+    expressApp.set('view engine', 'jsonx'); // register the template engine
+    expressApp.get('/', (req, res) => {
+      res.render('index-jxm', { title: 'Hey', spantext: 'Hello there!' });
+      console.log('rendered page');
+    });
+    it('should render a jsonx json file', async () => {
+      console.log = jest.fn();
+      await supertest(expressApp).get('/')
+        .expect(200)
+        .then(res=>{
+          expect(console.log).toBeCalledWith('rendered page')
+          expect(res.text).toMatch('Hello JSONX World!')
+        });
     })
   })
 })
