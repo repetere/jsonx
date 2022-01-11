@@ -43800,7 +43800,7 @@ var jsonx = (function (exports) {
 	 
 	 */
 	//@ts-ignore
-	let componentMap$1 = Object.assign({ Fragment: react.exports.Fragment, Suspense: react.exports.Suspense }, ReactDOMElements, window && typeof window === "object" ? window.__jsonx_custom_elements : {});
+	let componentMap$1 = Object.assign({ Fragment: react.exports.Fragment, Suspense: react.exports.Suspense }, ReactDOMElements, typeof window === "object" && window ? window.__jsonx_custom_elements : {});
 	/**
 	 * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
 	 
@@ -53685,6 +53685,9 @@ var jsonx = (function (exports) {
 	const scopedEval = eval;
 	/**
 	 * Use JSONX for express view rendering
+	 *
+	 * files ending with anything other than '.json' or '.jsonx' are processed as javascript files. Express templates support template views on the __template property.
+	 *
 	 * @param {string} filePath - path to jsonx express view
 	 * @param {object} options - property used for express view {locals}
 	 * @param {object} options.__boundConfig - property used to bind this object for JSONX, can be used to add custom components
@@ -53696,7 +53699,7 @@ var jsonx = (function (exports) {
 	        let jsonxModule = options === null || options === void 0 ? void 0 : options.__jsonx;
 	        let isJSON = false;
 	        if (filePath) {
-	            isJSON = (path.extname(filePath) === ".json");
+	            isJSON = ([".json", ".jsonx"].includes(path.extname(filePath)));
 	            const jsFile = fs.readFileSync(filePath).toString();
 	            jsonxModule = (isJSON)
 	                ? scopedEval(`(${jsFile})`)

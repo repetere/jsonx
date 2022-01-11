@@ -1,72 +1,3 @@
-// const jsonx = require('../../dist/jsonx.cjs.js');
-// let c = jsonx._jsonxComponents.getFunctionFromEval({ body: 'console.log("hello")', });
-// const MyCustomComponent = jsonx._jsonxComponents.getReactClassComponent({
-//   //
-//   // Initialization function
-//   //
-//   getInitialState: {
-//     body: 'return { status:"not-loaded", name:"jsonx test", customNumber:1, }',
-//     arguments: [],
-//   },
-//   getDefaultProps: {
-//     body: 'return { someProp:1, someOtherProp:2, status:"original status" }',
-//     arguments: [],
-//   },
-//   componentDidMount: {
-//     body: 'console.log(\'mounted\', \'this.props\',this.props, \'this.state\',this.state)',
-//     arguments: [],
-//   },
-//   componentWillUnmount: {
-//     body: 'console.log(\'unmounted\',this.props)',
-//     arguments: [],
-//   },
-//   //
-//   // State change functions
-//   //
-//   shouldComponentUpdate: {
-//     body: 'console.log("should update component",{nextProps,nextState}); return true;',
-//     arguments: ['nextProps', 'nextState',],
-//   },
-//   componentWillUpdate: {
-//     body: 'console.log("will update component",{nextProps,nextState}); return true;',
-//     arguments: ['nextProps', 'nextState',],
-//   },
-//   componentDidUpdate: {
-//     body: 'console.log("did update component",{prevProps,prevState}); return true;',
-//     arguments: ['prevProps', 'prevState',],
-//   },
-//   //
-//   // Prop change functions
-//   //
-//   componentWillReceiveProps: {
-//     body: 'console.log("will recieve props",{nextProps}); return true;',
-//     arguments: ['nextProps',],
-//   },
-//   //
-//   // RENDER IS THE ONLY ***REQUIRED*** FUNCTION
-//   //
-//   render: {
-//     body: {
-//       component: 'p',
-//       props: {
-//         status: 'from inline prop',
-//       },
-//       passprops: true,
-//       children: [
-//         {
-//           component: 'span',
-//           children: 'My Custom React Component Status: ',
-//         },
-//         {
-//           component: 'span',
-//           thisprops: {
-//             children: ['status',],
-//           },
-//         },
-//       ],
-//     },
-//   },
-// });
 ({
   component: 'html',
   props: {
@@ -187,4 +118,4 @@
       ],
     },
   ],
-});
+})

@@ -14209,7 +14209,7 @@
 	 
 	 */
 	//@ts-ignore
-	let componentMap$1 = Object.assign({ Fragment: React$1.Fragment, Suspense: React$1.Suspense }, ReactDOMElements, window && typeof window === "object" ? window.__jsonx_custom_elements : {});
+	let componentMap$1 = Object.assign({ Fragment: React$1.Fragment, Suspense: React$1.Suspense }, ReactDOMElements, typeof window === "object" && window ? window.__jsonx_custom_elements : {});
 	/**
 	 * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
 	 
@@ -24133,6 +24133,9 @@
 	const scopedEval = eval;
 	/**
 	 * Use JSONX for express view rendering
+	 *
+	 * files ending with anything other than '.json' or '.jsonx' are processed as javascript files. Express templates support template views on the __template property.
+	 *
 	 * @param {string} filePath - path to jsonx express view
 	 * @param {object} options - property used for express view {locals}
 	 * @param {object} options.__boundConfig - property used to bind this object for JSONX, can be used to add custom components
@@ -24144,7 +24147,7 @@
 	        let jsonxModule = options?.__jsonx;
 	        let isJSON = false;
 	        if (filePath) {
-	            isJSON = (path.extname(filePath) === ".json");
+	            isJSON = ([".json", ".jsonx"].includes(path.extname(filePath)));
 	            const jsFile = fs.readFileSync(filePath).toString();
 	            jsonxModule = (isJSON)
 	                ? scopedEval(`(${jsFile})`)

@@ -9,6 +9,7 @@ var memoryCache = require('memory-cache');
 var ReactDOMElements = require('react-dom-factories');
 var UAParser = require('ua-parser-js');
 var createReactClass = require('create-react-class');
+var fs = require('fs');
 var path = require('path');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -39,6 +40,7 @@ var memoryCache__namespace = /*#__PURE__*/_interopNamespace(memoryCache);
 var ReactDOMElements__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOMElements);
 var UAParser__default = /*#__PURE__*/_interopDefaultLegacy(UAParser);
 var createReactClass__default = /*#__PURE__*/_interopDefaultLegacy(createReactClass);
+var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
 var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
 
 var isCheckBoxInput = (element) => element.type === 'checkbox';
@@ -2496,7 +2498,7 @@ let advancedBinding = getAdvancedBinding();
  
  */
 //@ts-ignore
-let componentMap$1 = Object.assign({ Fragment: React.Fragment, Suspense: React.Suspense }, ReactDOMElements__default["default"], window && typeof window === "object" ? window.__jsonx_custom_elements : {});
+let componentMap$1 = Object.assign({ Fragment: React.Fragment, Suspense: React.Suspense }, ReactDOMElements__default["default"], typeof window === "object" && window ? window.__jsonx_custom_elements : {});
 /**
  * getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
  
@@ -11954,8 +11956,6 @@ var luxon = /*#__PURE__*/Object.freeze({
     Settings: Settings
 });
 
-var fs = {};
-
 const scopedEval$1 = eval;
 const templateCache = new Map();
 /**
@@ -12098,14 +12098,14 @@ function getChildrenTemplate(template, type) {
     }
     else if (typeof window !== "undefined" &&
         typeof window.XMLHttpRequest === "function" &&
-        (!fs.readFileSync )) {
+        (!fs__default["default"].readFileSync || type === 'fetch')) {
         const jsFile = fetchJSONSync(template);
         const jsonxModule = scopedEval$1(`(${jsFile})`);
         templateCache.set(template, jsonxModule);
         return jsonxModule;
     }
     else if (typeof template === "string" || type === 'file') {
-        const jsFile = fs.readFileSync(path__default["default"].resolve(template)).toString();
+        const jsFile = fs__default["default"].readFileSync(path__default["default"].resolve(template)).toString();
         const jsonxModule = scopedEval$1(`(${jsFile})`);
         templateCache.set(template, jsonxModule);
         return jsonxModule;
@@ -12189,6 +12189,9 @@ var jsonxChildren = /*#__PURE__*/Object.freeze({
 const scopedEval = eval;
 /**
  * Use JSONX for express view rendering
+ *
+ * files ending with anything other than '.json' or '.jsonx' are processed as javascript files. Express templates support template views on the __template property.
+ *
  * @param {string} filePath - path to jsonx express view
  * @param {object} options - property used for express view {locals}
  * @param {object} options.__boundConfig - property used to bind this object for JSONX, can be used to add custom components
@@ -12200,8 +12203,8 @@ function __express(filePath, options, callback) {
         let jsonxModule = options?.__jsonx;
         let isJSON = false;
         if (filePath) {
-            isJSON = (path__default["default"].extname(filePath) === ".json");
-            const jsFile = fs.readFileSync(filePath).toString();
+            isJSON = ([".json", ".jsonx"].includes(path__default["default"].extname(filePath)));
+            const jsFile = fs__default["default"].readFileSync(filePath).toString();
             jsonxModule = (isJSON)
                 ? scopedEval(`(${jsFile})`)
                 : scopedEval(jsFile);

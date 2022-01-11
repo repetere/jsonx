@@ -1,0 +1,121 @@
+({
+  component: 'html',
+  props: {
+    key: 41
+  },
+  children: [
+    {
+      component: 'head',
+      props: {
+        key: 31
+      },
+      children: [
+        {
+          component: 'title',
+          children: 'sample jsonx page',
+          props: {
+            key: 30
+          }
+        },
+        {
+          component: 'meta',
+          props: {
+            name: 'Description',
+            content: 'JSONX page for Express',
+            key: 0
+          },
+        },
+      ],
+    },
+    {
+      component: 'body',
+      props: {
+        key: 19
+      },
+      children: [
+        {
+          component: 'div',
+          props: {
+            id: 'generatedJSONX',
+            className: 'jsonx',
+            key: 0
+          },
+          resourceprops: {
+            title: ['spantext',],
+          },
+          // passprops:true,
+          children: [
+            {
+              component: 'h1',
+              props: {
+                key: 8,
+                style: {
+                  color: 'darkgrey',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+
+                },
+              },
+              __dangerouslyEvalProps: {
+                onClick: '()=>()=>alert("click works")',
+              },
+              children: 'Hello JSONX World!',
+            },
+            {
+              component: 'p',
+              props: {
+                key: 10
+              },
+              passprops: true,
+              children: [
+                {
+                  component: 'span',
+                  children: 'Express View Data (spantext): ',
+                  props: {
+                    key: 1
+                  }
+                },
+                {
+                  component: 'span',
+                  props: {
+                    key: 2
+                  },
+                  resourceprops: {
+                    _children: ['spantext',],
+                  },
+                },
+              ],
+            },
+            // {
+            //   component: 'MyCustomComponent',
+            //   props: {
+            //     status: 'Amazing',
+            //   },
+            // },
+            {
+              p: {
+                props: {
+                  style: {
+                    color: 'blue',
+                  },
+                  key: 3
+                },
+                children: 'this is using shorthand jsonx',
+              },
+            },
+          ],
+        },
+        {
+          component: 'script',
+          props: {
+            type: 'text/javascript',
+            key: 4,
+            dangerouslySetInnerHTML: {
+              __html: 'console.log("hello");',
+            },
+          },
+        }
+      ],
+    },
+  ],
+})
