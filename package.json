@@ -68,7 +68,7 @@
     "@types/jest": "^27.0.1",
     "@types/jsdom-global": "3.0.2",
     "@types/luxon": "2.0.9",
-    "@types/memory-cache": "0.2.1",
+    "@types/memory-cache": "0.2.2",
     "@types/numeral": "2.0.2",
     "@types/react": "17.0.38",
     "@types/react-dom": "17.0.11",
