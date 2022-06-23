@@ -123,8 +123,19 @@
     "preset": "ts-jest",
     "testEnvironment": "./src/jest_custom_test_env.ts",
     "extensionsToTreatAsEsm": [
-      ".ts"
-    ]
+      ".ts",
+      ".js"
+    ],
+    "globals": {
+      "ts-jest": {
+        "extensionsToTreatAsEsm": [
+          ".ts",
+          ".js"
+        ],
+        "useESM": true,
+        "diagnostics": false
+      }
+    }
   },
   "commitlint": {
     "extends": [
