@@ -34,7 +34,7 @@ jobs:
           npm ci
       - name: Test coverage
         run: |
-          jest --coverage --runInBand
+          jest --coverage --runInBand --ci --no-cache
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:
