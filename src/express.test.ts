@@ -39,9 +39,9 @@ describe('express', function(){
       const template:string = jsonx.__express(path.resolve('./src/mock/test_template.jxm.json')) as string
       const simple_template:string = jsonx.__express(path.resolve('./src/mock/simple_test_template.jxm.json')) as string
       expect(template).toMatch('<!DOCTYPE html>\n' +
-      '<div data-reactroot=""><div>this is in the main template</div><div title="testing templates"><div>from external template</div></div></div>');
+      '<div><div>this is in the main template</div><div title="testing templates"><div>from external template</div></div></div>');
       expect(simple_template).toMatch(`<!DOCTYPE html>
-<main data-reactroot=""><div>this is in the simple template</div><section title="testing simple templates"><div>from external template</div></section></main>`)
+<main><div>this is in the simple template</div><section title="testing simple templates"><div>from external template</div></section></main>`)
     })
   })
   describe('rendering',()=>{
