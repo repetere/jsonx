@@ -116,6 +116,7 @@
     "numeral": "2.0.6",
     "react-dom-factories": "1.0.2",
     "react-hook-form": "^7.3.4",
+    "sitedown": "^5.1.2",
     "ua-parser-js": "^1.0.1"
   },
   "jest": {
