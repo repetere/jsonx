@@ -8,7 +8,7 @@
 
 ### Declarative
 
-The JSONX UMD comes with batteries included so you can use JSONX in the browser without transpilers or any additional setup/configuration. The JSONX UMD is ideal for JAMstack Applications.
+The JSONX web module comes with batteries included so you can use JSONX in the browser without transpilers or any additional setup/configuration. The JSONX UMD is ideal for JAMstack Applications.
 
 ### Embeddable
 

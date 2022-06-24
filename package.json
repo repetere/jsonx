@@ -158,7 +158,7 @@
             },
             {
               "type": "refactor",
-              "release": "patch"
+              "release": "major"
             },
             {
               "type": "style",
