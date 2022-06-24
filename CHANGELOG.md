@@ -1,3 +1,16 @@
+# [1.12.0](https://github.com/repetere/jsonx/compare/v1.11.0...v1.12.0) (2022-06-24)
+
+
+### Bug Fixes
+
+* removing unused files ([d579075](https://github.com/repetere/jsonx/commit/d579075aceb0c21dacd2226a65558edd5e5e0f72))
+* updated and fixed tests with updated deps ([015e76c](https://github.com/repetere/jsonx/commit/015e76c74fb322aac0917c7c511595e35903a167))
+
+
+### Features
+
+* removed old compiled dist files with esbuild versions ([6163e49](https://github.com/repetere/jsonx/commit/6163e49eb3f517dfa57ac628ac14154d44deaca2))
+
 # [1.11.0](https://github.com/repetere/jsonx/compare/v1.10.5...v1.11.0) (2022-01-11)
 
 
