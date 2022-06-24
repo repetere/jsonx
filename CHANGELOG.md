@@ -1,3 +1,5 @@
+# [2.0.0](https://github.com/repetere/jsonx/compare/v1.12.0...v2.0.0) (2022-06-24)
+
 # [1.12.0](https://github.com/repetere/jsonx/compare/v1.11.0...v1.12.0) (2022-06-24)
 
 
