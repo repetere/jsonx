@@ -1,6 +1,7 @@
 // import React, { createElement, } from 'react';
 import React from "react";
 import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 import ReactDOMServer from "react-dom/server";
 import * as jsonxComponents from "./components";
 import * as jsonxProps from "./props";
@@ -27,14 +28,18 @@ export let renderIndex = 0;
  */
 export function jsonxRender(config = { jsonx: { component: "" }, querySelector: "" }) {
     const { jsonx, resources, querySelector, DOM, portal } = config;
-    const Render = portal ? ReactDOM.createPortal : ReactDOM.render;
     const RenderDOM = DOM || document.querySelector(querySelector);
     const JSONXReactElement = getReactElementFromJSONX.call(this || {}, jsonx, resources);
     if (!JSONXReactElement)
         throw ReferenceError("Invalid React Element");
     else if (!RenderDOM)
         throw ReferenceError("Invalid Render DOM Element");
-    Render(JSONXReactElement, RenderDOM);
+    if (portal)
+        ReactDOM.createPortal(JSONXReactElement, RenderDOM);
+    else {
+        const root = createRoot(RenderDOM);
+        root.render(JSONXReactElement);
+    }
 }
 /**
  * Use ReactDOMServer.renderToString to render html from JSONX
