@@ -11,7 +11,7 @@ import path from 'path';
 
 var isCheckBoxInput = (element) => element.type === 'checkbox';
 
-var isDateObject = (data) => data instanceof Date;
+var isDateObject = (value) => value instanceof Date;
 
 var isNullOrUndefined = (value) => value == null;
 
@@ -27,28 +27,29 @@ var getEventValue = (event) => isObject(event) && event.target
         : event.target.value
     : event;
 
-var getNodeParentName = (name) => name.substring(0, name.search(/.\d/)) || name;
+var getNodeParentName = (name) => name.substring(0, name.search(/\.\d+(\.|$)/)) || name;
 
-var isNameInFieldArray = (names, name) => [...names].some((current) => getNodeParentName(name) === current);
+var isNameInFieldArray = (names, name) => names.has(getNodeParentName(name));
 
-var compact = (value) => (value || []).filter(Boolean);
+var compact = (value) => Array.isArray(value) ? value.filter(Boolean) : [];
 
 var isUndefined$1 = (val) => val === undefined;
 
 var get = (obj, path, defaultValue) => {
-    if (isObject(obj) && path) {
-        const result = compact(path.split(/[,[\].]+?/)).reduce((result, key) => (isNullOrUndefined(result) ? result : result[key]), obj);
-        return isUndefined$1(result) || result === obj
-            ? isUndefined$1(obj[path])
-                ? defaultValue
-                : obj[path]
-            : result;
+    if (!path || !isObject(obj)) {
+        return defaultValue;
     }
-    return undefined;
+    const result = compact(path.split(/[,[\].]+?/)).reduce((result, key) => isNullOrUndefined(result) ? result : result[key], obj);
+    return isUndefined$1(result) || result === obj
+        ? isUndefined$1(obj[path])
+            ? defaultValue
+            : obj[path]
+        : result;
 };
 
 const EVENTS = {
     BLUR: 'blur',
+    FOCUS_OUT: 'focusout',
     CHANGE: 'change',
 };
 const VALIDATION_MODE = {
@@ -68,32 +69,51 @@ const INPUT_VALIDATION_RULES = {
     validate: 'validate',
 };
 
-var omit = (source, key) => {
-    const copy = Object.assign({}, source);
-    delete copy[key];
-    return copy;
-};
-
 const HookFormContext = React__default.createContext(null);
+/**
+ * This custom hook allows you to access the form context. useFormContext is intended to be used in deeply nested structures, where it would become inconvenient to pass the context as a prop. To be used with {@link FormProvider}.
+ *
+ * @remarks
+ * [API](https://react-hook-form.com/api/useformcontext) • [Demo](https://codesandbox.io/s/react-hook-form-v7-form-context-ytudi)
+ *
+ * @returns return all useForm methods
+ *
+ * @example
+ * ```tsx
+ * function App() {
+ *   const methods = useForm();
+ *   const onSubmit = data => console.log(data);
+ *
+ *   return (
+ *     <FormProvider {...methods} >
+ *       <form onSubmit={methods.handleSubmit(onSubmit)}>
+ *         <NestedInput />
+ *         <input type="submit" />
+ *       </form>
+ *     </FormProvider>
+ *   );
+ * }
+ *
+ *  function NestedInput() {
+ *   const { register } = useFormContext(); // retrieve all hook methods
+ *   return <input {...register("test")} />;
+ * }
+ * ```
+ */
 const useFormContext = () => React__default.useContext(HookFormContext);
 
 var getProxyFormState = (formState, _proxyFormState, localProxyFormState, isRoot = true) => {
-    function createGetter(prop) {
-        return () => {
-            if (prop in formState) {
-                if (_proxyFormState[prop] !== VALIDATION_MODE.all) {
-                    _proxyFormState[prop] = !isRoot || VALIDATION_MODE.all;
-                }
-                localProxyFormState && (localProxyFormState[prop] = true);
-                return formState[prop];
-            }
-            return undefined;
-        };
-    }
     const result = {};
     for (const key in formState) {
         Object.defineProperty(result, key, {
-            get: createGetter(key),
+            get: () => {
+                const _key = key;
+                if (_proxyFormState[_key] !== VALIDATION_MODE.all) {
+                    _proxyFormState[_key] = !isRoot || VALIDATION_MODE.all;
+                }
+                localProxyFormState && (localProxyFormState[_key] = true);
+                return formState[_key];
+            },
         });
     }
     return result;
@@ -102,7 +122,7 @@ var getProxyFormState = (formState, _proxyFormState, localProxyFormState, isRoot
 var isEmptyObject = (value) => isObject(value) && !Object.keys(value).length;
 
 var shouldRenderFormState = (formStateData, _proxyFormState, isRoot) => {
-    const formState = omit(formStateData, 'name');
+    const { name, ...formState } = formStateData;
     return (isEmptyObject(formState) ||
         Object.keys(formState).length >= Object.keys(_proxyFormState).length ||
         Object.keys(formState).find((key) => _proxyFormState[key] ===
@@ -137,6 +157,36 @@ function useSubscribe(props) {
     }, [props.disabled]);
 }
 
+/**
+ * This custom hook allows you to subscribe to each form state, and isolate the re-render at the custom hook level. It has its scope in terms of form state subscription, so it would not affect other useFormState and useForm. Using this hook can reduce the re-render impact on large and complex form application.
+ *
+ * @remarks
+ * [API](https://react-hook-form.com/api/useformstate) • [Demo](https://codesandbox.io/s/useformstate-75xly)
+ *
+ * @param props - include options on specify fields to subscribe. {@link UseFormStateReturn}
+ *
+ * @example
+ * ```tsx
+ * function App() {
+ *   const { register, handleSubmit, control } = useForm({
+ *     defaultValues: {
+ *     firstName: "firstName"
+ *   }});
+ *   const { dirtyFields } = useFormState({
+ *     control
+ *   });
+ *   const onSubmit = (data) => console.log(data);
+ *
+ *   return (
+ *     <form onSubmit={handleSubmit(onSubmit)}>
+ *       <input {...register("firstName")} placeholder="First Name" />
+ *       {dirtyFields.firstName && <p>Field is dirty.</p>}
+ *       <input type="submit" />
+ *     </form>
+ *   );
+ * }
+ * ```
+ */
 function useFormState(props) {
     const methods = useFormContext();
     const { control = methods.control, disabled, name, exact } = props || {};
@@ -150,14 +200,26 @@ function useFormState(props) {
         errors: false,
     });
     const _name = React__default.useRef(name);
+    const _mounted = React__default.useRef(true);
     _name.current = name;
+    const callback = React__default.useCallback((value) => _mounted.current &&
+        shouldSubscribeByName(_name.current, value.name, exact) &&
+        shouldRenderFormState(value, _localProxyFormState.current) &&
+        updateFormState({
+            ...control._formState,
+            ...value,
+        }), [control, exact]);
     useSubscribe({
         disabled,
-        callback: (value) => shouldSubscribeByName(_name.current, value.name, exact) &&
-            shouldRenderFormState(value, _localProxyFormState.current) &&
-            updateFormState(Object.assign(Object.assign({}, control._formState), value)),
+        callback,
         subject: control._subjects.state,
     });
+    React__default.useEffect(() => {
+        _mounted.current = true;
+        return () => {
+            _mounted.current = false;
+        };
+    }, []);
     return getProxyFormState(formState, control._proxyFormState, _localProxyFormState.current, false);
 }
 
@@ -188,26 +250,44 @@ var objectHasFunction = (data) => {
     return false;
 };
 
+/**
+ * Custom hook to subscribe to field change and isolate re-rendering at the component level.
+ *
+ * @remarks
+ *
+ * [API](https://react-hook-form.com/api/usewatch) • [Demo](https://codesandbox.io/s/react-hook-form-v7-ts-usewatch-h9i5e)
+ *
+ * @example
+ * ```tsx
+ * const { watch } = useForm();
+ * const values = useWatch({
+ *   name: "fieldName"
+ *   control,
+ * })
+ * ```
+ */
 function useWatch(props) {
     const methods = useFormContext();
     const { control = methods.control, name, defaultValue, disabled, exact, } = props || {};
     const _name = React__default.useRef(name);
     _name.current = name;
-    useSubscribe({
-        disabled,
-        subject: control._subjects.watch,
-        callback: (formState) => {
-            if (shouldSubscribeByName(_name.current, formState.name, exact)) {
-                const fieldValues = generateWatchOutput(_name.current, control._names, formState.values || control._formValues);
-                updateValue(isUndefined$1(_name.current) ||
-                    (isObject(fieldValues) && !objectHasFunction(fieldValues))
-                    ? Object.assign({}, fieldValues) : Array.isArray(fieldValues)
+    const callback = React__default.useCallback((formState) => {
+        if (shouldSubscribeByName(_name.current, formState.name, exact)) {
+            const fieldValues = generateWatchOutput(_name.current, control._names, formState.values || control._formValues);
+            updateValue(isUndefined$1(_name.current) ||
+                (isObject(fieldValues) && !objectHasFunction(fieldValues))
+                ? { ...fieldValues }
+                : Array.isArray(fieldValues)
                     ? [...fieldValues]
                     : isUndefined$1(fieldValues)
                         ? defaultValue
                         : fieldValues);
-            }
-        },
+        }
+    }, [control, exact, defaultValue]);
+    useSubscribe({
+        disabled,
+        subject: control._subjects.watch,
+        callback,
     });
     const [value, updateValue] = React__default.useState(isUndefined$1(defaultValue)
         ? control._getWatch(name)
@@ -218,6 +298,30 @@ function useWatch(props) {
     return value;
 }
 
+/**
+ * Custom hook to work with controlled component, this function provide you with both form and field level state. Re-render is isolated at the hook level.
+ *
+ * @remarks
+ * [API](https://react-hook-form.com/api/usecontroller) • [Demo](https://codesandbox.io/s/usecontroller-0o8px)
+ *
+ * @param props - the path name to the form field value, and validation rules.
+ *
+ * @returns field properties, field and form state. {@link UseControllerReturn}
+ *
+ * @example
+ * ```tsx
+ * function Input(props) {
+ *   const { field, fieldState, formState } = useController(props);
+ *   return (
+ *     <div>
+ *       <input {...field} placeholder={props.name} />
+ *       <p>{fieldState.isTouched && "Touched"}</p>
+ *       <p>{formState.isSubmitted ? "submitted" : ""}</p>
+ *     </div>
+ *   );
+ * }
+ * ```
+ */
 function useController(props) {
     const methods = useFormContext();
     const { name, control = methods.control, shouldUnregister } = props;
@@ -226,15 +330,16 @@ function useController(props) {
         control,
         name,
         defaultValue: get(control._formValues, name, get(control._defaultValues, name, props.defaultValue)),
-        exact: !isArrayField,
+        exact: true,
     });
     const formState = useFormState({
         control,
         name,
     });
-    const _name = React__default.useRef(name);
-    _name.current = name;
-    const registerProps = control.register(name, Object.assign(Object.assign({}, props.rules), { value }));
+    const _registerProps = React__default.useRef(control.register(name, {
+        ...props.rules,
+        value,
+    }));
     React__default.useEffect(() => {
         const updateMounted = (name, value) => {
             const field = get(control._fields, name);
@@ -245,36 +350,36 @@ function useController(props) {
         updateMounted(name, true);
         return () => {
             const _shouldUnregisterField = control._options.shouldUnregister || shouldUnregister;
-            isArrayField
+            (isArrayField
                 ? _shouldUnregisterField && !control._stateFlags.action
-                : _shouldUnregisterField
-                    ? control.unregister(name)
-                    : updateMounted(name, false);
+                : _shouldUnregisterField)
+                ? control.unregister(name)
+                : updateMounted(name, false);
         };
     }, [name, control, isArrayField, shouldUnregister]);
     return {
         field: {
-            onChange: (event) => {
-                registerProps.onChange({
+            name,
+            value,
+            onChange: React__default.useCallback((event) => {
+                _registerProps.current.onChange({
                     target: {
                         value: getEventValue(event),
                         name: name,
                     },
                     type: EVENTS.CHANGE,
                 });
-            },
-            onBlur: () => {
-                registerProps.onBlur({
+            }, [name]),
+            onBlur: React__default.useCallback(() => {
+                _registerProps.current.onBlur({
                     target: {
                         value: get(control._formValues, name),
                         name: name,
                     },
                     type: EVENTS.BLUR,
                 });
-            },
-            name,
-            value,
-            ref: (elm) => {
+            }, [name, control]),
+            ref: React__default.useCallback((elm) => {
                 const field = get(control._fields, name);
                 if (elm && field && elm.focus) {
                     field._f.ref = {
@@ -283,22 +388,79 @@ function useController(props) {
                         reportValidity: () => elm.reportValidity(),
                     };
                 }
-            },
+            }, [name, control._fields]),
         },
         formState,
-        fieldState: {
-            invalid: !!get(formState.errors, name),
-            isDirty: !!get(formState.dirtyFields, name),
-            isTouched: !!get(formState.touchedFields, name),
-            error: get(formState.errors, name),
-        },
+        fieldState: Object.defineProperties({}, {
+            invalid: {
+                get: () => !!get(formState.errors, name),
+            },
+            isDirty: {
+                get: () => !!get(formState.dirtyFields, name),
+            },
+            isTouched: {
+                get: () => !!get(formState.touchedFields, name),
+            },
+            error: {
+                get: () => get(formState.errors, name),
+            },
+        }),
     };
 }
 
+/**
+ * Component based on `useController` hook to work with controlled component.
+ *
+ * @remarks
+ * [API](https://react-hook-form.com/api/usecontroller/controller) • [Demo](https://codesandbox.io/s/react-hook-form-v6-controller-ts-jwyzw) • [Video](https://www.youtube.com/watch?v=N2UNk_UCVyA)
+ *
+ * @param props - the path name to the form field value, and validation rules.
+ *
+ * @returns provide field handler functions, field and form state.
+ *
+ * @example
+ * ```tsx
+ * function App() {
+ *   const { control } = useForm<FormValues>({
+ *     defaultValues: {
+ *       test: ""
+ *     }
+ *   });
+ *
+ *   return (
+ *     <form>
+ *       <Controller
+ *         control={control}
+ *         name="test"
+ *         render={({ field: { onChange, onBlur, value, ref }, formState, fieldState }) => (
+ *           <>
+ *             <input
+ *               onChange={onChange} // send value to hook form
+ *               onBlur={onBlur} // notify when input is touched
+ *               value={value} // return updated value
+ *               ref={ref} // set ref for focus management
+ *             />
+ *             <p>{formState.isSubmitted ? "submitted" : ""}</p>
+ *             <p>{fieldState.isTouched ? "touched" : ""}</p>
+ *           </>
+ *         )}
+ *       />
+ *     </form>
+ *   );
+ * }
+ * ```
+ */
 const Controller = (props) => props.render(useController(props));
 
 var appendErrors = (name, validateAllFieldCriteria, errors, type, message) => validateAllFieldCriteria
-    ? Object.assign(Object.assign({}, errors[name]), { types: Object.assign(Object.assign({}, (errors[name] && errors[name].types ? errors[name].types : {})), { [type]: message || true }) }) : {};
+    ? {
+        ...errors[name],
+        types: {
+            ...(errors[name] && errors[name].types ? errors[name].types : {}),
+            [type]: message || true,
+        },
+    }
+    : {};
 
 var isKey = (value) => /^\w*$/.test(value);
 
@@ -331,8 +493,7 @@ const focusFieldBy = (fields, callback, fieldsNames) => {
     for (const key of fieldsNames || Object.keys(fields)) {
         const field = get(fields, key);
         if (field) {
-            const _f = field._f;
-            const current = omit(field, '_f');
+            const { _f, ...currentField } = field;
             if (_f && callback(_f.name)) {
                 if (_f.ref.focus && isUndefined$1(_f.ref.focus())) {
                     break;
@@ -342,11 +503,19 @@ const focusFieldBy = (fields, callback, fieldsNames) => {
                     break;
                 }
             }
-            else if (isObject(current)) {
-                focusFieldBy(current, callback);
+            else if (isObject(currentField)) {
+                focusFieldBy(currentField, callback);
             }
         }
     }
+};
+
+var generateId = () => {
+    const d = typeof performance === 'undefined' ? Date.now() : performance.now() * 1000;
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16 + d) % 16 | 0;
+        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    });
 };
 
 var getFocusFieldName = (name, index, options = {}) => options.shouldFocus || isUndefined$1(options.shouldFocus)
@@ -360,24 +529,13 @@ var isWatched = (name, _names, isBlurEvent) => !isBlurEvent &&
         [..._names.watch].some((watchName) => name.startsWith(watchName) &&
             /^\.\w+/.test(name.slice(watchName.length))));
 
-var mapCurrentIds = (values, _fieldIds, keyName) => values.map((value, index) => {
-    const output = _fieldIds.current[index];
-    return Object.assign(Object.assign({}, value), (output ? { [keyName]: output[keyName] } : {}));
-});
-
-var generateId = () => {
-    const d = typeof performance === 'undefined' ? Date.now() : performance.now() * 1000;
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-        const r = (Math.random() * 16 + d) % 16 | 0;
-        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
-    });
-};
-
-var mapIds = (values = [], keyName) => values.map((value) => (Object.assign(Object.assign({}, (value[keyName] ? {} : { [keyName]: generateId() })), value)));
-
 function append(data, value) {
-    return [...convertToArrayPayload(data), ...convertToArrayPayload(value)];
+    return [...data, ...convertToArrayPayload(value)];
 }
+
+var isWeb = typeof window !== 'undefined' &&
+    typeof window.HTMLElement !== 'undefined' &&
+    typeof document !== 'undefined';
 
 function cloneObject(data) {
     let copy;
@@ -388,7 +546,8 @@ function cloneObject(data) {
     else if (data instanceof Set) {
         copy = new Set(data);
     }
-    else if (isArray || isObject(data)) {
+    else if (!(isWeb && (data instanceof Blob || data instanceof FileList)) &&
+        (isArray || isObject(data))) {
         copy = isArray ? [] : {};
         for (const key in data) {
             if (isFunction(data[key])) {
@@ -415,17 +574,15 @@ function insert(data, index, value) {
 }
 
 var moveArrayAt = (data, from, to) => {
-    if (Array.isArray(data)) {
-        if (isUndefined$1(data[to])) {
-            data[to] = undefined;
-        }
-        data.splice(to, 0, data.splice(from, 1)[0]);
-        return data;
+    if (!Array.isArray(data)) {
+        return [];
     }
-    return [];
+    if (isUndefined$1(data[to])) {
+        data[to] = undefined;
+    }
+    data.splice(to, 0, data.splice(from, 1)[0]);
+    return data;
 };
-
-var omitKeys = (fields, keyName) => fields.map((field = {}) => omit(field, keyName));
 
 function prepend(data, value) {
     return [...convertToArrayPayload(value), ...convertToArrayPayload(data)];
@@ -448,108 +605,195 @@ var swapArrayAt = (data, indexA, indexB) => {
     data[indexA] = [data[indexB], (data[indexB] = data[indexA])][0];
 };
 
+function baseGet(object, updatePath) {
+    const length = updatePath.slice(0, -1).length;
+    let index = 0;
+    while (index < length) {
+        object = isUndefined$1(object) ? index++ : object[updatePath[index++]];
+    }
+    return object;
+}
+function unset(object, path) {
+    const updatePath = isKey(path) ? [path] : stringToPath(path);
+    const childObject = updatePath.length == 1 ? object : baseGet(object, updatePath);
+    const key = updatePath[updatePath.length - 1];
+    let previousObjRef;
+    if (childObject) {
+        delete childObject[key];
+    }
+    for (let k = 0; k < updatePath.slice(0, -1).length; k++) {
+        let index = -1;
+        let objectRef;
+        const currentPaths = updatePath.slice(0, -(k + 1));
+        const currentPathsLength = currentPaths.length - 1;
+        if (k > 0) {
+            previousObjRef = object;
+        }
+        while (++index < currentPaths.length) {
+            const item = currentPaths[index];
+            objectRef = objectRef ? objectRef[item] : object[item];
+            if (currentPathsLength === index &&
+                ((isObject(objectRef) && isEmptyObject(objectRef)) ||
+                    (Array.isArray(objectRef) &&
+                        !objectRef.filter((data) => !isUndefined$1(data)).length))) {
+                previousObjRef ? delete previousObjRef[item] : delete object[item];
+            }
+            previousObjRef = objectRef;
+        }
+    }
+    return object;
+}
+
 var updateAt = (fieldValues, index, value) => {
     fieldValues[index] = value;
     return fieldValues;
 };
 
-const useFieldArray = (props) => {
+/**
+ * A custom hook that exposes convenient methods to perform operations with a list of dynamic inputs that need to be appended, updated, removed etc.
+ *
+ * @remarks
+ * [API](https://react-hook-form.com/api/usefieldarray) • [Demo](https://codesandbox.io/s/react-hook-form-usefieldarray-ssugn)
+ *
+ * @param props - useFieldArray props
+ *
+ * @returns methods - functions to manipulate with the Field Arrays (dynamic inputs) {@link UseFieldArrayReturn}
+ *
+ * @example
+ * ```tsx
+ * function App() {
+ *   const { register, control, handleSubmit, reset, trigger, setError } = useForm({
+ *     defaultValues: {
+ *       test: []
+ *     }
+ *   });
+ *   const { fields, append } = useFieldArray({
+ *     control,
+ *     name: "test"
+ *   });
+ *
+ *   return (
+ *     <form onSubmit={handleSubmit(data => console.log(data))}>
+ *       {fields.map((item, index) => (
+ *          <input key={item.id} {...register(`test.${index}.firstName`)}  />
+ *       ))}
+ *       <button type="button" onClick={() => append({ firstName: "bill" })}>
+ *         append
+ *       </button>
+ *       <input type="submit" />
+ *     </form>
+ *   );
+ * }
+ * ```
+ */
+function useFieldArray(props) {
     const methods = useFormContext();
     const { control = methods.control, name, keyName = 'id', shouldUnregister, } = props;
-    const [fields, setFields] = React__default.useState(mapIds(control._getFieldArray(name), keyName));
+    const [fields, setFields] = React__default.useState(control._getFieldArray(name));
+    const ids = React__default.useRef(control._getFieldArray(name).map(generateId));
     const _fieldIds = React__default.useRef(fields);
     const _name = React__default.useRef(name);
     const _actioned = React__default.useRef(false);
     _name.current = name;
     _fieldIds.current = fields;
     control._names.array.add(name);
+    const callback = React__default.useCallback(({ values, name: fieldArrayName }) => {
+        if (fieldArrayName === _name.current || !fieldArrayName) {
+            const fieldValues = get(values, _name.current, []);
+            setFields(fieldValues);
+            ids.current = fieldValues.map(generateId);
+        }
+    }, []);
     useSubscribe({
-        callback: ({ values, name: fieldArrayName }) => {
-            if (fieldArrayName === _name.current || !fieldArrayName) {
-                setFields(mapIds(get(values, _name.current), keyName));
-            }
-        },
+        callback,
         subject: control._subjects.array,
     });
-    const updateValues = React__default.useCallback((updatedFieldArrayValuesWithKey) => {
-        const updatedFieldArrayValues = omitKeys(updatedFieldArrayValuesWithKey, keyName);
+    const updateValues = React__default.useCallback((updatedFieldArrayValues) => {
         _actioned.current = true;
-        set(control._formValues, name, updatedFieldArrayValues);
-        return updatedFieldArrayValues;
-    }, [control, name, keyName]);
+        control._updateFieldArray(name, updatedFieldArrayValues);
+    }, [control, name]);
     const append$1 = (value, options) => {
         const appendValue = convertToArrayPayload(cloneObject(value));
-        const updatedFieldArrayValuesWithKey = append(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), mapIds(appendValue, keyName));
-        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-        control._names.focus = getFocusFieldName(name, fieldArrayValues.length - 1, options);
-        setFields(updatedFieldArrayValuesWithKey);
-        control._updateFieldArray(name, append, {
+        const updatedFieldArrayValues = append(control._getFieldArray(name), appendValue);
+        control._names.focus = getFocusFieldName(name, updatedFieldArrayValues.length - 1, options);
+        ids.current = append(ids.current, appendValue.map(generateId));
+        updateValues(updatedFieldArrayValues);
+        setFields(updatedFieldArrayValues);
+        control._updateFieldArray(name, updatedFieldArrayValues, append, {
             argA: fillEmptyArray(value),
-        }, fieldArrayValues);
+        });
     };
     const prepend$1 = (value, options) => {
-        const updatedFieldArrayValuesWithKey = prepend(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), mapIds(convertToArrayPayload(cloneObject(value)), keyName));
-        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+        const prependValue = convertToArrayPayload(cloneObject(value));
+        const updatedFieldArrayValues = prepend(control._getFieldArray(name), prependValue);
         control._names.focus = getFocusFieldName(name, 0, options);
-        setFields(updatedFieldArrayValuesWithKey);
-        control._updateFieldArray(name, prepend, {
+        ids.current = prepend(ids.current, prependValue.map(generateId));
+        updateValues(updatedFieldArrayValues);
+        setFields(updatedFieldArrayValues);
+        control._updateFieldArray(name, updatedFieldArrayValues, prepend, {
             argA: fillEmptyArray(value),
-        }, fieldArrayValues);
+        });
     };
     const remove = (index) => {
-        const updatedFieldArrayValuesWithKey = removeArrayAt(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), index);
-        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-        setFields(updatedFieldArrayValuesWithKey);
-        control._updateFieldArray(name, removeArrayAt, {
+        const updatedFieldArrayValues = removeArrayAt(control._getFieldArray(name), index);
+        ids.current = removeArrayAt(ids.current, index);
+        updateValues(updatedFieldArrayValues);
+        setFields(updatedFieldArrayValues);
+        control._updateFieldArray(name, updatedFieldArrayValues, removeArrayAt, {
             argA: index,
-        }, fieldArrayValues);
+        });
     };
     const insert$1 = (index, value, options) => {
-        const updatedFieldArrayValuesWithKey = insert(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), index, mapIds(convertToArrayPayload(cloneObject(value)), keyName));
-        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+        const insertValue = convertToArrayPayload(cloneObject(value));
+        const updatedFieldArrayValues = insert(control._getFieldArray(name), index, insertValue);
         control._names.focus = getFocusFieldName(name, index, options);
-        setFields(updatedFieldArrayValuesWithKey);
-        control._updateFieldArray(name, insert, {
+        ids.current = insert(ids.current, index, insertValue.map(generateId));
+        updateValues(updatedFieldArrayValues);
+        setFields(updatedFieldArrayValues);
+        control._updateFieldArray(name, updatedFieldArrayValues, insert, {
             argA: index,
             argB: fillEmptyArray(value),
-        }, fieldArrayValues);
+        });
     };
     const swap = (indexA, indexB) => {
-        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
-        swapArrayAt(updatedFieldArrayValuesWithKey, indexA, indexB);
-        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-        setFields(updatedFieldArrayValuesWithKey);
-        control._updateFieldArray(name, swapArrayAt, {
+        const updatedFieldArrayValues = control._getFieldArray(name);
+        swapArrayAt(updatedFieldArrayValues, indexA, indexB);
+        swapArrayAt(ids.current, indexA, indexB);
+        updateValues(updatedFieldArrayValues);
+        setFields(updatedFieldArrayValues);
+        control._updateFieldArray(name, updatedFieldArrayValues, swapArrayAt, {
             argA: indexA,
             argB: indexB,
-        }, fieldArrayValues, false);
+        }, false);
     };
     const move = (from, to) => {
-        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
-        moveArrayAt(updatedFieldArrayValuesWithKey, from, to);
-        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-        setFields(updatedFieldArrayValuesWithKey);
-        control._updateFieldArray(name, moveArrayAt, {
+        const updatedFieldArrayValues = control._getFieldArray(name);
+        moveArrayAt(updatedFieldArrayValues, from, to);
+        moveArrayAt(ids.current, from, to);
+        updateValues(updatedFieldArrayValues);
+        setFields(updatedFieldArrayValues);
+        control._updateFieldArray(name, updatedFieldArrayValues, moveArrayAt, {
             argA: from,
             argB: to,
-        }, fieldArrayValues, false);
+        }, false);
     };
     const update = (index, value) => {
-        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
-        const updatedFieldArrayValues = updateAt(updatedFieldArrayValuesWithKey, index, value);
-        _fieldIds.current = mapIds(updatedFieldArrayValues, keyName);
-        const fieldArrayValues = updateValues(_fieldIds.current);
-        setFields(_fieldIds.current);
-        control._updateFieldArray(name, updateAt, {
+        const updateValue = cloneObject(value);
+        const updatedFieldArrayValues = updateAt(control._getFieldArray(name), index, updateValue);
+        ids.current = [...updatedFieldArrayValues].map((item, i) => !item || i === index ? generateId() : ids.current[i]);
+        updateValues(updatedFieldArrayValues);
+        setFields([...updatedFieldArrayValues]);
+        control._updateFieldArray(name, updatedFieldArrayValues, updateAt, {
             argA: index,
-            argB: value,
-        }, fieldArrayValues, true, false, false);
+            argB: updateValue,
+        }, true, false);
     };
     const replace = (value) => {
-        const updatedFieldArrayValuesWithKey = mapIds(convertToArrayPayload(value), keyName);
-        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-        setFields(updatedFieldArrayValuesWithKey);
-        control._updateFieldArray(name, () => updatedFieldArrayValuesWithKey, {}, fieldArrayValues, true, false, false);
+        const updatedFieldArrayValues = convertToArrayPayload(cloneObject(value));
+        ids.current = updatedFieldArrayValues.map(generateId);
+        updateValues([...updatedFieldArrayValues]);
+        setFields([...updatedFieldArrayValues]);
+        control._updateFieldArray(name, [...updatedFieldArrayValues], (data) => data, {}, true, false);
     };
     React__default.useEffect(() => {
         control._stateFlags.action = false;
@@ -557,8 +801,11 @@ const useFieldArray = (props) => {
         if (_actioned.current) {
             control._executeSchema([name]).then((result) => {
                 const error = get(result.errors, name);
-                if (error && error.type && !get(control._formState.errors, name)) {
-                    set(control._formState.errors, name, error);
+                const existingError = get(control._formState.errors, name);
+                if (existingError ? !error && existingError.type : error && error.type) {
+                    error
+                        ? set(control._formState.errors, name, error)
+                        : unset(control._formState.errors, name);
                     control._subjects.state.next({
                         errors: control._formState.errors,
                     });
@@ -573,27 +820,29 @@ const useFieldArray = (props) => {
             focusFieldBy(control._fields, (key) => key.startsWith(control._names.focus));
         control._names.focus = '';
         control._proxyFormState.isValid && control._updateValid();
-    }, [fields, name, control, keyName]);
+    }, [fields, name, control]);
     React__default.useEffect(() => {
-        !get(control._formValues, name) && set(control._formValues, name, []);
+        !get(control._formValues, name) && control._updateFieldArray(name);
         return () => {
-            if (control._options.shouldUnregister || shouldUnregister) {
+            (control._options.shouldUnregister || shouldUnregister) &&
                 control.unregister(name);
-            }
         };
     }, [name, control, keyName, shouldUnregister]);
     return {
-        swap: React__default.useCallback(swap, [updateValues, name, control, keyName]),
-        move: React__default.useCallback(move, [updateValues, name, control, keyName]),
-        prepend: React__default.useCallback(prepend$1, [updateValues, name, control, keyName]),
-        append: React__default.useCallback(append$1, [updateValues, name, control, keyName]),
-        remove: React__default.useCallback(remove, [updateValues, name, control, keyName]),
-        insert: React__default.useCallback(insert$1, [updateValues, name, control, keyName]),
-        update: React__default.useCallback(update, [updateValues, name, control, keyName]),
-        replace: React__default.useCallback(replace, [updateValues, name, control, keyName]),
-        fields: fields,
+        swap: React__default.useCallback(swap, [updateValues, name, control]),
+        move: React__default.useCallback(move, [updateValues, name, control]),
+        prepend: React__default.useCallback(prepend$1, [updateValues, name, control]),
+        append: React__default.useCallback(append$1, [updateValues, name, control]),
+        remove: React__default.useCallback(remove, [updateValues, name, control]),
+        insert: React__default.useCallback(insert$1, [updateValues, name, control]),
+        update: React__default.useCallback(update, [updateValues, name, control]),
+        replace: React__default.useCallback(replace, [updateValues, name, control]),
+        fields: React__default.useMemo(() => fields.map((field, index) => ({
+            ...field,
+            [keyName]: ids.current[index] || generateId(),
+        })), [fields, keyName]),
     };
-};
+}
 
 function createSubject() {
     let _observers = [];
@@ -668,7 +917,11 @@ var isBoolean = (value) => typeof value === 'boolean';
 
 var isFileInput = (element) => element.type === 'file';
 
-var isHTMLElement = (value) => value instanceof HTMLElement;
+var isHTMLElement = (value) => {
+    const owner = value ? value.ownerDocument : 0;
+    const ElementClass = owner && owner.defaultView ? owner.defaultView.HTMLElement : HTMLElement;
+    return value instanceof ElementClass;
+};
 
 var isMultipleSelect = (element) => element.type === `select-multiple`;
 
@@ -676,50 +929,7 @@ var isRadioInput = (element) => element.type === 'radio';
 
 var isRadioOrCheckbox = (ref) => isRadioInput(ref) || isCheckBoxInput(ref);
 
-var isWeb = typeof window !== 'undefined' &&
-    typeof window.HTMLElement !== 'undefined' &&
-    typeof document !== 'undefined';
-
-var live = (ref) => isHTMLElement(ref) && document.contains(ref);
-
-function baseGet(object, updatePath) {
-    const length = updatePath.slice(0, -1).length;
-    let index = 0;
-    while (index < length) {
-        object = isUndefined$1(object) ? index++ : object[updatePath[index++]];
-    }
-    return object;
-}
-function unset(object, path) {
-    const updatePath = isKey(path) ? [path] : stringToPath(path);
-    const childObject = updatePath.length == 1 ? object : baseGet(object, updatePath);
-    const key = updatePath[updatePath.length - 1];
-    let previousObjRef;
-    if (childObject) {
-        delete childObject[key];
-    }
-    for (let k = 0; k < updatePath.slice(0, -1).length; k++) {
-        let index = -1;
-        let objectRef;
-        const currentPaths = updatePath.slice(0, -(k + 1));
-        const currentPathsLength = currentPaths.length - 1;
-        if (k > 0) {
-            previousObjRef = object;
-        }
-        while (++index < currentPaths.length) {
-            const item = currentPaths[index];
-            objectRef = objectRef ? objectRef[item] : object[item];
-            if (currentPathsLength === index &&
-                ((isObject(objectRef) && isEmptyObject(objectRef)) ||
-                    (Array.isArray(objectRef) &&
-                        !objectRef.filter((data) => (isObject(data) && !isEmptyObject(data)) || isBoolean(data)).length))) {
-                previousObjRef ? delete previousObjRef[item] : delete object[item];
-            }
-            previousObjRef = objectRef;
-        }
-    }
-    return object;
-}
+var live = (ref) => isHTMLElement(ref) && ref.isConnected;
 
 function markFieldsDirty(data, fields = {}) {
     const isParentNodeArray = Array.isArray(data);
@@ -747,7 +957,7 @@ function getDirtyFieldsFromDefaultValues(data, formValues, dirtyFieldsFromValues
                     isPrimitive(dirtyFieldsFromValues[key])) {
                     dirtyFieldsFromValues[key] = Array.isArray(data[key])
                         ? markFieldsDirty(data[key], [])
-                        : Object.assign({}, markFieldsDirty(data[key]));
+                        : { ...markFieldsDirty(data[key]) };
                 }
                 else {
                     getDirtyFieldsFromDefaultValues(data[key], isNullOrUndefined(formValues) ? {} : formValues[key], dirtyFieldsFromValues[key]);
@@ -790,7 +1000,7 @@ var getCheckboxValue = (options) => {
 var getFieldValueAs = (value, { valueAsNumber, valueAsDate, setValueAs }) => isUndefined$1(value)
     ? value
     : valueAsNumber
-        ? value === ''
+        ? value === '' || isNullOrUndefined(value)
             ? NaN
             : +value
         : valueAsDate && isString$1(value)
@@ -957,8 +1167,12 @@ var validateField = async (field, inputValue, validateAllFieldCriteria, shouldUs
     const appendErrorsCurry = appendErrors.bind(null, name, validateAllFieldCriteria, error);
     const getMinMaxMessage = (exceedMax, maxLengthMessage, minLengthMessage, maxType = INPUT_VALIDATION_RULES.maxLength, minType = INPUT_VALIDATION_RULES.minLength) => {
         const message = exceedMax ? maxLengthMessage : minLengthMessage;
-        error[name] = Object.assign({ type: exceedMax ? maxType : minType, message,
-            ref }, appendErrorsCurry(exceedMax ? maxType : minType, message));
+        error[name] = {
+            type: exceedMax ? maxType : minType,
+            message,
+            ref,
+            ...appendErrorsCurry(exceedMax ? maxType : minType, message),
+        };
     };
     if (required &&
         ((!isRadioOrCheckbox && (isEmpty || isNullOrUndefined(inputValue))) ||
@@ -969,7 +1183,12 @@ var validateField = async (field, inputValue, validateAllFieldCriteria, shouldUs
             ? { value: !!required, message: required }
             : getValueAndMessage(required);
         if (value) {
-            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.required, message, ref: inputRef }, appendErrorsCurry(INPUT_VALIDATION_RULES.required, message));
+            error[name] = {
+                type: INPUT_VALIDATION_RULES.required,
+                message,
+                ref: inputRef,
+                ...appendErrorsCurry(INPUT_VALIDATION_RULES.required, message),
+            };
             if (!validateAllFieldCriteria) {
                 setCustomValidity(message);
                 return error;
@@ -981,9 +1200,8 @@ var validateField = async (field, inputValue, validateAllFieldCriteria, shouldUs
         let exceedMin;
         const maxOutput = getValueAndMessage(max);
         const minOutput = getValueAndMessage(min);
-        if (!isNaN(inputValue)) {
-            const valueNumber = ref.valueAsNumber ||
-                parseFloat(inputValue);
+        if (!isNullOrUndefined(inputValue) && !isNaN(inputValue)) {
+            const valueNumber = ref.valueAsNumber || +inputValue;
             if (!isNullOrUndefined(maxOutput.value)) {
                 exceedMax = valueNumber > maxOutput.value;
             }
@@ -1026,8 +1244,12 @@ var validateField = async (field, inputValue, validateAllFieldCriteria, shouldUs
     if (pattern && !isEmpty && isString$1(inputValue)) {
         const { value: patternValue, message } = getValueAndMessage(pattern);
         if (isRegex(patternValue) && !inputValue.match(patternValue)) {
-            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.pattern, message,
-                ref }, appendErrorsCurry(INPUT_VALIDATION_RULES.pattern, message));
+            error[name] = {
+                type: INPUT_VALIDATION_RULES.pattern,
+                message,
+                ref,
+                ...appendErrorsCurry(INPUT_VALIDATION_RULES.pattern, message),
+            };
             if (!validateAllFieldCriteria) {
                 setCustomValidity(message);
                 return error;
@@ -1039,7 +1261,10 @@ var validateField = async (field, inputValue, validateAllFieldCriteria, shouldUs
             const result = await validate(inputValue);
             const validateError = getValidateError(result, inputRef);
             if (validateError) {
-                error[name] = Object.assign(Object.assign({}, validateError), appendErrorsCurry(INPUT_VALIDATION_RULES.validate, validateError.message));
+                error[name] = {
+                    ...validateError,
+                    ...appendErrorsCurry(INPUT_VALIDATION_RULES.validate, validateError.message),
+                };
                 if (!validateAllFieldCriteria) {
                     setCustomValidity(validateError.message);
                     return error;
@@ -1054,7 +1279,10 @@ var validateField = async (field, inputValue, validateAllFieldCriteria, shouldUs
                 }
                 const validateError = getValidateError(await validate[key](inputValue), inputRef, key);
                 if (validateError) {
-                    validationResult = Object.assign(Object.assign({}, validateError), appendErrorsCurry(key, validateError.message));
+                    validationResult = {
+                        ...validateError,
+                        ...appendErrorsCurry(key, validateError.message),
+                    };
                     setCustomValidity(validateError.message);
                     if (validateAllFieldCriteria) {
                         error[name] = validationResult;
@@ -1062,7 +1290,10 @@ var validateField = async (field, inputValue, validateAllFieldCriteria, shouldUs
                 }
             }
             if (!isEmptyObject(validationResult)) {
-                error[name] = Object.assign({ ref: inputRef }, validationResult);
+                error[name] = {
+                    ref: inputRef,
+                    ...validationResult,
+                };
                 if (!validateAllFieldCriteria) {
                     return error;
                 }
@@ -1079,7 +1310,10 @@ const defaultOptions = {
     shouldFocusError: true,
 };
 function createFormControl(props = {}) {
-    let _options = Object.assign(Object.assign({}, defaultOptions), props);
+    let _options = {
+        ...defaultOptions,
+        ...props,
+    };
     let _formState = {
         isDirty: false,
         isValidating: false,
@@ -1093,7 +1327,7 @@ function createFormControl(props = {}) {
         errors: {},
     };
     let _fields = {};
-    let _defaultValues = _options.defaultValues || {};
+    let _defaultValues = cloneObject(_options.defaultValues) || {};
     let _formValues = _options.shouldUnregister
         ? {}
         : cloneObject(_defaultValues);
@@ -1127,9 +1361,9 @@ function createFormControl(props = {}) {
     const validationModeBeforeSubmit = getValidationModes(_options.mode);
     const validationModeAfterSubmit = getValidationModes(_options.reValidateMode);
     const shouldDisplayAllAssociatedErrors = _options.criteriaMode === VALIDATION_MODE.all;
-    const debounce = (callback, wait) => (...args) => {
+    const debounce = (callback) => (wait) => {
         clearTimeout(timer);
-        timer = window.setTimeout(() => callback(...args), wait);
+        timer = window.setTimeout(callback, wait);
     };
     const _updateValid = async (shouldSkipRender) => {
         let isValid = false;
@@ -1146,50 +1380,59 @@ function createFormControl(props = {}) {
         }
         return isValid;
     };
-    const _updateFieldArray = (name, method, args, values = [], shouldSetValues = true, shouldSetFields = true, shouldSetError = true) => {
-        _stateFlags.action = true;
-        if (shouldSetFields && get(_fields, name)) {
-            const fieldValues = method(get(_fields, name), args.argA, args.argB);
-            shouldSetValues && set(_fields, name, fieldValues);
+    const _updateFieldArray = (name, values = [], method, args, shouldSetValues = true, shouldUpdateFieldsAndState = true) => {
+        if (args && method) {
+            _stateFlags.action = true;
+            if (shouldUpdateFieldsAndState && Array.isArray(get(_fields, name))) {
+                const fieldValues = method(get(_fields, name), args.argA, args.argB);
+                shouldSetValues && set(_fields, name, fieldValues);
+            }
+            if (_proxyFormState.errors &&
+                shouldUpdateFieldsAndState &&
+                Array.isArray(get(_formState.errors, name))) {
+                const errors = method(get(_formState.errors, name), args.argA, args.argB);
+                shouldSetValues && set(_formState.errors, name, errors);
+                unsetEmptyArray(_formState.errors, name);
+            }
+            if (_proxyFormState.touchedFields &&
+                shouldUpdateFieldsAndState &&
+                Array.isArray(get(_formState.touchedFields, name))) {
+                const touchedFields = method(get(_formState.touchedFields, name), args.argA, args.argB);
+                shouldSetValues && set(_formState.touchedFields, name, touchedFields);
+            }
+            if (_proxyFormState.dirtyFields) {
+                _formState.dirtyFields = getDirtyFields(_defaultValues, _formValues);
+            }
+            _subjects.state.next({
+                isDirty: _getDirty(name, values),
+                dirtyFields: _formState.dirtyFields,
+                errors: _formState.errors,
+                isValid: _formState.isValid,
+            });
         }
-        if (shouldSetError && Array.isArray(get(_formState.errors, name))) {
-            const errors = method(get(_formState.errors, name), args.argA, args.argB);
-            shouldSetValues && set(_formState.errors, name, errors);
-            unsetEmptyArray(_formState.errors, name);
+        else {
+            set(_formValues, name, values);
         }
-        if (_proxyFormState.touchedFields && get(_formState.touchedFields, name)) {
-            const touchedFields = method(get(_formState.touchedFields, name), args.argA, args.argB);
-            shouldSetValues &&
-                set(_formState.touchedFields, name, touchedFields);
-            unsetEmptyArray(_formState.touchedFields, name);
-        }
-        if (_proxyFormState.dirtyFields || _proxyFormState.isDirty) {
-            _formState.dirtyFields = getDirtyFields(_defaultValues, _formValues);
-        }
+    };
+    const updateErrors = (name, error) => {
+        set(_formState.errors, name, error);
         _subjects.state.next({
-            isDirty: _getDirty(name, values),
-            dirtyFields: _formState.dirtyFields,
             errors: _formState.errors,
-            isValid: _formState.isValid,
         });
     };
-    const updateErrors = (name, error) => (set(_formState.errors, name, error),
-        _subjects.state.next({
-            errors: _formState.errors,
-        }));
-    const updateValidAndValue = (name, shouldSkipSetValueAs, ref) => {
+    const updateValidAndValue = (name, shouldSkipSetValueAs, value, ref) => {
         const field = get(_fields, name);
         if (field) {
-            const defaultValue = get(_formValues, name, get(_defaultValues, name));
+            const defaultValue = get(_formValues, name, isUndefined$1(value) ? get(_defaultValues, name) : value);
             isUndefined$1(defaultValue) ||
                 (ref && ref.defaultChecked) ||
                 shouldSkipSetValueAs
                 ? set(_formValues, name, shouldSkipSetValueAs ? defaultValue : getFieldValue(field._f))
                 : setFieldValue(name, defaultValue);
+            _stateFlags.mount && _updateValid();
         }
-        _stateFlags.mount && _updateValid();
     };
-    const updateTouchAndDirty = (name, fieldValue, isCurrentTouched, shouldRender = true) => {
+    const updateTouchAndDirty = (name, fieldValue, isBlurEvent, shouldDirty, shouldRender) => {
         let isFieldDirty = false;
         const output = {
             name,
@@ -1200,7 +1443,7 @@ function createFormControl(props = {}) {
             _formState.isDirty = output.isDirty = _getDirty();
             isFieldDirty = isPreviousFormDirty !== output.isDirty;
         }
-        if (_proxyFormState.dirtyFields && !isCurrentTouched) {
+        if (_proxyFormState.dirtyFields && (!isBlurEvent || shouldDirty)) {
             const isPreviousFieldDirty = get(_formState.dirtyFields, name);
             const isCurrentFieldPristine = deepEqual(get(_defaultValues, name), fieldValue);
             isCurrentFieldPristine
@@ -1211,41 +1454,49 @@ function createFormControl(props = {}) {
                 isFieldDirty ||
                     isPreviousFieldDirty !== get(_formState.dirtyFields, name);
         }
-        if (isCurrentTouched && !isPreviousFieldTouched) {
-            set(_formState.touchedFields, name, isCurrentTouched);
+        if (isBlurEvent && !isPreviousFieldTouched) {
+            set(_formState.touchedFields, name, isBlurEvent);
             output.touchedFields = _formState.touchedFields;
             isFieldDirty =
                 isFieldDirty ||
                     (_proxyFormState.touchedFields &&
-                        isPreviousFieldTouched !== isCurrentTouched);
+                        isPreviousFieldTouched !== isBlurEvent);
         }
         isFieldDirty && shouldRender && _subjects.state.next(output);
         return isFieldDirty ? output : {};
     };
-    const shouldRenderByError = async (shouldSkipRender, name, isValid, error, fieldState) => {
+    const shouldRenderByError = async (name, isValid, error, fieldState) => {
         const previousFieldError = get(_formState.errors, name);
         const shouldUpdateValid = _proxyFormState.isValid && _formState.isValid !== isValid;
         if (props.delayError && error) {
-            delayErrorCallback =
-                delayErrorCallback || debounce(updateErrors, props.delayError);
-            delayErrorCallback(name, error);
+            delayErrorCallback = debounce(() => updateErrors(name, error));
+            delayErrorCallback(props.delayError);
         }
         else {
             clearTimeout(timer);
+            delayErrorCallback = null;
             error
                 ? set(_formState.errors, name, error)
                 : unset(_formState.errors, name);
         }
-        if (((error ? !deepEqual(previousFieldError, error) : previousFieldError) ||
+        if ((error ? !deepEqual(previousFieldError, error) : previousFieldError) ||
             !isEmptyObject(fieldState) ||
-            shouldUpdateValid) &&
-            !shouldSkipRender) {
-            const updatedFormState = Object.assign(Object.assign(Object.assign({}, fieldState), (shouldUpdateValid ? { isValid } : {})), { errors: _formState.errors, name });
-            _formState = Object.assign(Object.assign({}, _formState), updatedFormState);
+            shouldUpdateValid) {
+            const updatedFormState = {
+                ...fieldState,
+                ...(shouldUpdateValid ? { isValid } : {}),
+                errors: _formState.errors,
+                name,
+            };
+            _formState = {
+                ..._formState,
+                ...updatedFormState,
+            };
             _subjects.state.next(updatedFormState);
         }
         validateFields[name]--;
-        if (_proxyFormState.isValidating && !validateFields[name]) {
+        if (_proxyFormState.isValidating &&
+            !Object.values(validateFields).some((v) => v)) {
             _subjects.state.next({
                 isValidating: false,
             });
@@ -1253,7 +1504,7 @@ function createFormControl(props = {}) {
         }
     };
     const _executeSchema = async (name) => _options.resolver
-        ? await _options.resolver(Object.assign({}, _formValues), _options.context, getResolverOptions(name || _names.mount, _fields, _options.criteriaMode, _options.shouldUseNativeValidation))
+        ? await _options.resolver({ ..._formValues }, _options.context, getResolverOptions(name || _names.mount, _fields, _options.criteriaMode, _options.shouldUseNativeValidation))
         : {};
     const executeSchemaAndUpdateState = async (names) => {
         const { errors } = await _executeSchema();
@@ -1276,8 +1527,7 @@ function createFormControl(props = {}) {
         for (const name in fields) {
             const field = fields[name];
             if (field) {
-                const fieldReference = field._f;
-                const fieldValue = omit(field, '_f');
+                const { _f: fieldReference, ...fieldValue } = field;
                 if (fieldReference) {
                     const fieldError = await validateField(field, get(_formValues, fieldReference.name), shouldDisplayAllAssociatedErrors, _options.shouldUseNativeValidation);
                     if (fieldError[fieldReference.name]) {
@@ -1312,13 +1562,15 @@ function createFormControl(props = {}) {
     const _getDirty = (name, data) => (name && data && set(_formValues, name, data),
         !deepEqual(getValues(), _defaultValues));
     const _getWatch = (names, defaultValue, isGlobal) => {
-        const fieldValues = Object.assign({}, (_stateFlags.mount
-            ? _formValues
-            : isUndefined$1(defaultValue)
-                ? _defaultValues
-                : isString$1(names)
-                    ? { [names]: defaultValue }
-                    : defaultValue));
+        const fieldValues = {
+            ...(_stateFlags.mount
+                ? _formValues
+                : isUndefined$1(defaultValue)
+                    ? _defaultValues
+                    : isString$1(names)
+                        ? { [names]: defaultValue }
+                        : defaultValue),
+        };
         return generateWatchOutput(names, _names, fieldValues, isGlobal);
     };
     const _getFieldArray = (name) => compact(get(_stateFlags.mount ? _formValues : _defaultValues, name, props.shouldUnregister ? get(_defaultValues, name, []) : []));
@@ -1340,16 +1592,21 @@ function createFormControl(props = {}) {
                 else if (fieldReference.refs) {
                     if (isCheckBoxInput(fieldReference.ref)) {
                         fieldReference.refs.length > 1
-                            ? fieldReference.refs.forEach((checkboxRef) => (checkboxRef.checked = Array.isArray(fieldValue)
-                                ? !!fieldValue.find((data) => data === checkboxRef.value)
-                                : fieldValue === checkboxRef.value))
-                            : (fieldReference.refs[0].checked = !!fieldValue);
+                            ? fieldReference.refs.forEach((checkboxRef) => !checkboxRef.disabled &&
+                                (checkboxRef.checked = Array.isArray(fieldValue)
+                                    ? !!fieldValue.find((data) => data === checkboxRef.value)
+                                    : fieldValue === checkboxRef.value))
+                            : fieldReference.refs[0] &&
+                                (fieldReference.refs[0].checked = !!fieldValue);
                     }
                     else {
                         fieldReference.refs.forEach((radioRef) => (radioRef.checked = radioRef.value === fieldValue));
                     }
                 }
-                else if (!isFileInput(fieldReference.ref)) {
+                else if (isFileInput(fieldReference.ref)) {
+                    fieldReference.ref.value = '';
+                }
+                else {
                     fieldReference.ref.value = fieldValue;
                     if (!fieldReference.ref.type) {
                         _subjects.watch.next({
@@ -1360,7 +1617,7 @@ function createFormControl(props = {}) {
             }
         }
         (options.shouldDirty || options.shouldTouch) &&
-            updateTouchAndDirty(name, fieldValue, options.shouldTouch);
+            updateTouchAndDirty(name, fieldValue, options.shouldTouch, options.shouldDirty, true);
         options.shouldValidate && trigger(name);
     };
     const setValues = (name, value, options) => {
@@ -1379,7 +1636,8 @@ function createFormControl(props = {}) {
     const setValue = (name, value, options = {}) => {
         const field = get(_fields, name);
         const isFieldArray = _names.array.has(name);
-        set(_formValues, name, value);
+        const cloneValue = cloneObject(value);
+        set(_formValues, name, cloneValue);
         if (isFieldArray) {
             _subjects.array.next({
                 name,
@@ -1391,14 +1649,14 @@ function createFormControl(props = {}) {
                 _subjects.state.next({
                     name,
                     dirtyFields: _formState.dirtyFields,
-                    isDirty: _getDirty(name, value),
+                    isDirty: _getDirty(name, cloneValue),
                 });
             }
         }
         else {
-            field && !field._f && !isNullOrUndefined(value)
-                ? setValues(name, value, options)
-                : setFieldValue(name, value, options);
+            field && !field._f && !isNullOrUndefined(cloneValue)
+                ? setValues(name, cloneValue, options)
+                : setFieldValue(name, cloneValue, options);
         }
         isWatched(name, _names) && _subjects.state.next({});
         _subjects.watch.next({
@@ -1415,20 +1673,21 @@ function createFormControl(props = {}) {
             const fieldValue = target.type
                 ? getFieldValue(field._f)
                 : getEventValue(event);
-            const isBlurEvent = event.type === EVENTS.BLUR;
+            const isBlurEvent = event.type === EVENTS.BLUR || event.type === EVENTS.FOCUS_OUT;
             const shouldSkipValidation = (!hasValidation(field._f) &&
                 !_options.resolver &&
                 !get(_formState.errors, name) &&
                 !field._f.deps) ||
                 skipValidation(isBlurEvent, get(_formState.touchedFields, name), _formState.isSubmitted, validationModeAfterSubmit, validationModeBeforeSubmit);
             const watched = isWatched(name, _names, isBlurEvent);
+            set(_formValues, name, fieldValue);
             if (isBlurEvent) {
                 field._f.onBlur && field._f.onBlur(event);
+                delayErrorCallback && delayErrorCallback(0);
             }
             else if (field._f.onChange) {
                 field._f.onChange(event);
             }
-            set(_formValues, name, fieldValue);
             const fieldState = updateTouchAndDirty(name, fieldValue, isBlurEvent, false);
             const shouldRender = !isEmptyObject(fieldState) || watched;
             !isBlurEvent &&
@@ -1438,14 +1697,13 @@ function createFormControl(props = {}) {
                 });
             if (shouldSkipValidation) {
                 return (shouldRender &&
-                    _subjects.state.next(Object.assign({ name }, (watched ? {} : fieldState))));
+                    _subjects.state.next({ name, ...(watched ? {} : fieldState) }));
             }
             !isBlurEvent && watched && _subjects.state.next({});
             validateFields[name] = validateFields[name] ? +1 : 1;
-            _proxyFormState.isValidating &&
-                _subjects.state.next({
-                    isValidating: true,
-                });
+            _subjects.state.next({
+                isValidating: true,
+            });
             if (_options.resolver) {
                 const { errors } = await _executeSchema([name]);
                 const previousErrorLookupResult = schemaErrorLookup(_formState.errors, _fields, name);
@@ -1458,8 +1716,9 @@ function createFormControl(props = {}) {
                 error = (await validateField(field, get(_formValues, name), shouldDisplayAllAssociatedErrors, _options.shouldUseNativeValidation))[name];
                 isValid = await _updateValid(true);
             }
-            field._f.deps && trigger(field._f.deps);
-            shouldRenderByError(false, name, isValid, error, fieldState);
+            field._f.deps &&
+                trigger(field._f.deps);
+            shouldRenderByError(name, isValid, error, fieldState);
         }
     };
     const trigger = async (name, options = {}) => {
@@ -1486,35 +1745,51 @@ function createFormControl(props = {}) {
         else {
             validationResult = isValid = await executeBuildInValidation(_fields);
         }
-        _subjects.state.next(Object.assign(Object.assign(Object.assign({}, (!isString$1(name) ||
-            (_proxyFormState.isValid && isValid !== _formState.isValid)
-            ? {}
-            : { name })), (_options.resolver ? { isValid } : {})), { errors: _formState.errors, isValidating: false }));
+        _subjects.state.next({
+            ...(!isString$1(name) ||
+                (_proxyFormState.isValid && isValid !== _formState.isValid)
+                ? {}
+                : { name }),
+            ...(_options.resolver ? { isValid } : {}),
+            errors: _formState.errors,
+            isValidating: false,
+        });
         options.shouldFocus &&
             !validationResult &&
             focusFieldBy(_fields, (key) => get(_formState.errors, key), name ? fieldNames : _names.mount);
         return validationResult;
     };
     const getValues = (fieldNames) => {
-        const values = Object.assign(Object.assign({}, _defaultValues), (_stateFlags.mount ? _formValues : {}));
+        const values = {
+            ..._defaultValues,
+            ...(_stateFlags.mount ? _formValues : {}),
+        };
         return isUndefined$1(fieldNames)
             ? values
             : isString$1(fieldNames)
                 ? get(values, fieldNames)
                 : fieldNames.map((name) => get(values, name));
     };
+    const getFieldState = (name, formState) => ({
+        invalid: !!get((formState || _formState).errors, name),
+        isDirty: !!get((formState || _formState).dirtyFields, name),
+        isTouched: !!get((formState || _formState).touchedFields, name),
+        error: get((formState || _formState).errors, name),
+    });
     const clearErrors = (name) => {
         name
             ? convertToArrayPayload(name).forEach((inputName) => unset(_formState.errors, inputName))
             : (_formState.errors = {});
         _subjects.state.next({
             errors: _formState.errors,
-            isValid: true,
         });
     };
     const setError = (name, error, options) => {
         const ref = (get(_fields, name, { _f: {} })._f || {}).ref;
-        set(_formState.errors, name, Object.assign(Object.assign({}, error), { ref }));
+        set(_formState.errors, name, {
+            ...error,
+            ref,
+        });
         _subjects.state.next({
             name,
             errors: _formState.errors,
@@ -1545,35 +1820,46 @@ function createFormControl(props = {}) {
             }
         }
         _subjects.watch.next({});
-        _subjects.state.next(Object.assign(Object.assign({}, _formState), (!options.keepDirty ? {} : { isDirty: _getDirty() })));
+        _subjects.state.next({
+            ..._formState,
+            ...(!options.keepDirty ? {} : { isDirty: _getDirty() }),
+        });
         !options.keepIsValid && _updateValid();
     };
     const register = (name, options = {}) => {
         let field = get(_fields, name);
+        const disabledIsDefined = isBoolean(options.disabled);
         set(_fields, name, {
-            _f: Object.assign(Object.assign(Object.assign({}, (field && field._f ? field._f : { ref: { name } })), { name, mount: true }), options),
+            _f: {
+                ...(field && field._f ? field._f : { ref: { name } }),
+                name,
+                mount: true,
+                ...options,
+            },
         });
         _names.mount.add(name);
-        !isUndefined$1(options.value) &&
-            !options.disabled &&
-            set(_formValues, name, get(_formValues, name, options.value));
         field
-            ? isBoolean(options.disabled) &&
+            ? disabledIsDefined &&
                 set(_formValues, name, options.disabled
                     ? undefined
                     : get(_formValues, name, getFieldValue(field._f)))
-            : updateValidAndValue(name, true);
-        return Object.assign(Object.assign(Object.assign({}, (isBoolean(options.disabled) ? { disabled: options.disabled } : {})), (_options.shouldUseNativeValidation
-            ? {
-                required: !!options.required,
-                min: getRuleValue(options.min),
-                max: getRuleValue(options.max),
-                minLength: getRuleValue(options.minLength),
-                maxLength: getRuleValue(options.maxLength),
-                pattern: getRuleValue(options.pattern),
-            }
-            : {})), { name,
-            onChange, onBlur: onChange, ref: (ref) => {
+            : updateValidAndValue(name, true, options.value);
+        return {
+            ...(disabledIsDefined ? { disabled: options.disabled } : {}),
+            ...(_options.shouldUseNativeValidation
+                ? {
+                    required: !!options.required,
+                    min: getRuleValue(options.min),
+                    max: getRuleValue(options.max),
+                    minLength: getRuleValue(options.minLength),
+                    maxLength: getRuleValue(options.maxLength),
+                    pattern: getRuleValue(options.pattern),
+                }
+                : {}),
+            name,
+            onChange,
+            onBlur: onChange,
+            ref: (ref) => {
                 if (ref) {
                     register(name, options);
                     field = get(_fields, name);
@@ -1583,16 +1869,30 @@ function createFormControl(props = {}) {
                             : ref
                         : ref;
                     const radioOrCheckbox = isRadioOrCheckbox(fieldRef);
-                    if (fieldRef === field._f.ref ||
-                        (radioOrCheckbox &&
-                            compact(field._f.refs).find((option) => option === fieldRef))) {
+                    const refs = field._f.refs || [];
+                    if (radioOrCheckbox
+                        ? refs.find((option) => option === fieldRef)
+                        : fieldRef === field._f.ref) {
                         return;
                     }
                     set(_fields, name, {
-                        _f: radioOrCheckbox
-                            ? Object.assign(Object.assign({}, field._f), { refs: [...compact(field._f.refs).filter(live), fieldRef], ref: { type: fieldRef.type, name } }) : Object.assign(Object.assign({}, field._f), { ref: fieldRef }),
+                        _f: {
+                            ...field._f,
+                            ...(radioOrCheckbox
+                                ? {
+                                    refs: [
+                                        ...refs.filter(live),
+                                        fieldRef,
+                                        ...(!!Array.isArray(get(_defaultValues, name))
+                                            ? [{}]
+                                            : []),
+                                    ],
+                                    ref: { type: fieldRef.type, name },
+                                }
+                                : { ref: fieldRef }),
+                        },
                     });
-                    updateValidAndValue(name, false, fieldRef);
+                    updateValidAndValue(name, false, undefined, fieldRef);
                 }
                 else {
                     field = get(_fields, name, {});
@@ -1603,7 +1903,8 @@ function createFormControl(props = {}) {
                         !(isNameInFieldArray(_names.array, name) && _stateFlags.action) &&
                         _names.unMount.add(name);
                 }
-            } });
+            },
+        };
     };
     const handleSubmit = (onValid, onInvalid) => async (e) => {
         if (e) {
@@ -1611,9 +1912,7 @@ function createFormControl(props = {}) {
             e.persist && e.persist();
         }
         let hasNoPromiseError = true;
-        let fieldValues = _options.shouldUnregister
-            ? cloneObject(_formValues)
-            : Object.assign({}, _formValues);
+        let fieldValues = cloneObject(_formValues);
         _subjects.state.next({
             isSubmitting: true,
         });
@@ -1626,8 +1925,7 @@ function createFormControl(props = {}) {
             else {
                 await executeBuildInValidation(_fields);
             }
-            if (isEmptyObject(_formState.errors) &&
-                Object.keys(_formState.errors).every((name) => get(fieldValues, name))) {
+            if (isEmptyObject(_formState.errors)) {
                 _subjects.state.next({
                     errors: {},
                     isSubmitting: true,
@@ -1635,7 +1933,9 @@ function createFormControl(props = {}) {
                 await onValid(fieldValues, e);
             }
             else {
-                onInvalid && (await onInvalid(_formState.errors, e));
+                if (onInvalid) {
+                    await onInvalid({ ..._formState.errors }, e);
+                }
                 _options.shouldFocusError &&
                     focusFieldBy(_fields, (key) => get(_formState.errors, key), _names.mount);
             }
@@ -1656,27 +1956,29 @@ function createFormControl(props = {}) {
         }
     };
     const resetField = (name, options = {}) => {
-        if (isUndefined$1(options.defaultValue)) {
-            setValue(name, get(_defaultValues, name));
+        if (get(_fields, name)) {
+            if (isUndefined$1(options.defaultValue)) {
+                setValue(name, get(_defaultValues, name));
+            }
+            else {
+                setValue(name, options.defaultValue);
+                set(_defaultValues, name, options.defaultValue);
+            }
+            if (!options.keepTouched) {
+                unset(_formState.touchedFields, name);
+            }
+            if (!options.keepDirty) {
+                unset(_formState.dirtyFields, name);
+                _formState.isDirty = options.defaultValue
+                    ? _getDirty(name, get(_defaultValues, name))
+                    : _getDirty();
+            }
+            if (!options.keepError) {
+                unset(_formState.errors, name);
+                _proxyFormState.isValid && _updateValid();
+            }
+            _subjects.state.next({ ..._formState });
         }
-        else {
-            setValue(name, options.defaultValue);
-            set(_defaultValues, name, options.defaultValue);
-        }
-        if (!options.keepTouched) {
-            unset(_formState.touchedFields, name);
-        }
-        if (!options.keepDirty) {
-            unset(_formState.dirtyFields, name);
-            _formState.isDirty = options.defaultValue
-                ? _getDirty(name, get(_defaultValues, name))
-                : _getDirty();
-        }
-        if (!options.keepError) {
-            unset(_formState.errors, name);
-            _proxyFormState.isValid && _updateValid();
-        }
-        _subjects.state.next(Object.assign({}, _formState));
     };
     const reset = (formValues, keepStateOptions = {}) => {
         const updatedValues = formValues || _defaultValues;
@@ -1688,28 +1990,37 @@ function createFormControl(props = {}) {
             _defaultValues = updatedValues;
         }
         if (!keepStateOptions.keepValues) {
-            if (isWeb && isUndefined$1(formValues)) {
-                for (const name of _names.mount) {
-                    const field = get(_fields, name);
-                    if (field && field._f) {
-                        const fieldReference = Array.isArray(field._f.refs)
-                            ? field._f.refs[0]
-                            : field._f.ref;
-                        try {
-                            isHTMLElement(fieldReference) &&
-                                fieldReference.closest('form').reset();
-                            break;
+            if (keepStateOptions.keepDirtyValues) {
+                for (const fieldName of _names.mount) {
+                    get(_formState.dirtyFields, fieldName)
+                        ? set(values, fieldName, get(_formValues, fieldName))
+                        : setValue(fieldName, get(values, fieldName));
+                }
+            }
+            else {
+                if (isWeb && isUndefined$1(formValues)) {
+                    for (const name of _names.mount) {
+                        const field = get(_fields, name);
+                        if (field && field._f) {
+                            const fieldReference = Array.isArray(field._f.refs)
+                                ? field._f.refs[0]
+                                : field._f.ref;
+                            try {
+                                isHTMLElement(fieldReference) &&
+                                    fieldReference.closest('form').reset();
+                                break;
+                            }
+                            catch (_a) { }
                         }
-                        catch (_a) { }
                     }
                 }
+                _fields = {};
             }
             _formValues = props.shouldUnregister
                 ? keepStateOptions.keepDefaultValues
                     ? cloneObject(_defaultValues)
                     : {}
                 : cloneUpdatedValues;
-            _fields = {};
             _subjects.array.next({
                 values,
             });
@@ -1732,19 +2043,18 @@ function createFormControl(props = {}) {
             submitCount: keepStateOptions.keepSubmitCount
                 ? _formState.submitCount
                 : 0,
-            isDirty: keepStateOptions.keepDirty
+            isDirty: keepStateOptions.keepDirty || keepStateOptions.keepDirtyValues
                 ? _formState.isDirty
-                : keepStateOptions.keepDefaultValues
-                    ? !deepEqual(formValues, _defaultValues)
-                    : false,
+                : !!(keepStateOptions.keepDefaultValues &&
+                    !deepEqual(formValues, _defaultValues)),
             isSubmitted: keepStateOptions.keepIsSubmitted
                 ? _formState.isSubmitted
                 : false,
-            dirtyFields: keepStateOptions.keepDirty
+            dirtyFields: keepStateOptions.keepDirty || keepStateOptions.keepDirtyValues
                 ? _formState.dirtyFields
-                : (keepStateOptions.keepDefaultValues && formValues
-                    ? Object.entries(formValues).reduce((previous, [key, value]) => (Object.assign(Object.assign({}, previous), { [key]: value !== get(_defaultValues, key) })), {})
-                    : {}),
+                : keepStateOptions.keepDefaultValues && formValues
+                    ? getDirtyFields(_defaultValues, formValues)
+                    : {},
             touchedFields: keepStateOptions.keepTouched
                 ? _formState.touchedFields
                 : {},
@@ -1755,14 +2065,16 @@ function createFormControl(props = {}) {
             isSubmitSuccessful: false,
         });
     };
-    const setFocus = (name) => {
+    const setFocus = (name, options = {}) => {
         const field = get(_fields, name)._f;
-        (field.ref.focus ? field.ref : field.refs[0]).focus();
+        const fieldRef = field.refs ? field.refs[0] : field.ref;
+        options.shouldSelect ? fieldRef.select() : fieldRef.focus();
     };
     return {
         control: {
             register,
             unregister,
+            getFieldState,
             _executeSchema,
             _getWatch,
             _getDirty,
@@ -1775,14 +2087,8 @@ function createFormControl(props = {}) {
             get _fields() {
                 return _fields;
             },
-            set _fields(value) {
-                _fields = value;
-            },
             get _formValues() {
                 return _formValues;
-            },
-            set _formValues(value) {
-                _formValues = value;
             },
             get _stateFlags() {
                 return _stateFlags;
@@ -1792,9 +2098,6 @@ function createFormControl(props = {}) {
             },
             get _defaultValues() {
                 return _defaultValues;
-            },
-            set _defaultValues(value) {
-                _defaultValues = value;
             },
             get _names() {
                 return _names;
@@ -1812,7 +2115,10 @@ function createFormControl(props = {}) {
                 return _options;
             },
             set _options(value) {
-                _options = Object.assign(Object.assign({}, _options), value);
+                _options = {
+                    ..._options,
+                    ...value,
+                };
             },
         },
         trigger,
@@ -1827,9 +2133,39 @@ function createFormControl(props = {}) {
         unregister,
         setError,
         setFocus,
+        getFieldState,
     };
 }
 
+/**
+ * Custom hook to mange the entire form.
+ *
+ * @remarks
+ * [API](https://react-hook-form.com/api/useform) • [Demo](https://codesandbox.io/s/react-hook-form-get-started-ts-5ksmm) • [Video](https://www.youtube.com/watch?v=RkXv4AXXC_4)
+ *
+ * @param props - form configuration and validation parameters.
+ *
+ * @returns methods - individual functions to manage the form state. {@link UseFormReturn}
+ *
+ * @example
+ * ```tsx
+ * function App() {
+ *   const { register, handleSubmit, watch, formState: { errors } } = useForm();
+ *   const onSubmit = data => console.log(data);
+ *
+ *   console.log(watch("example"));
+ *
+ *   return (
+ *     <form onSubmit={handleSubmit(onSubmit)}>
+ *       <input defaultValue="test" {...register("example")} />
+ *       <input {...register("exampleRequired", { required: true })} />
+ *       {errors.exampleRequired && <span>This field is required</span>}
+ *       <input type="submit" />
+ *     </form>
+ *   );
+ * }
+ * ```
+ */
 function useForm(props = {}) {
     const _formControl = React__default.useRef();
     const [formState, updateFormState] = React__default.useState({
@@ -1848,17 +2184,24 @@ function useForm(props = {}) {
         _formControl.current.control._options = props;
     }
     else {
-        _formControl.current = Object.assign(Object.assign({}, createFormControl(props)), { formState });
+        _formControl.current = {
+            ...createFormControl(props),
+            formState,
+        };
     }
     const control = _formControl.current.control;
+    const callback = React__default.useCallback((value) => {
+        if (shouldRenderFormState(value, control._proxyFormState, true)) {
+            control._formState = {
+                ...control._formState,
+                ...value,
+            };
+            updateFormState({ ...control._formState });
+        }
+    }, [control]);
     useSubscribe({
         subject: control._subjects.state,
-        callback: (value) => {
-            if (shouldRenderFormState(value, control._proxyFormState, true)) {
-                control._formState = Object.assign(Object.assign({}, control._formState), value);
-                updateFormState(Object.assign({}, control._formState));
-            }
-        },
+        callback,
     });
     React__default.useEffect(() => {
         if (!control._stateFlags.mount) {
@@ -3928,1006 +4271,1006 @@ var numeral$1 = {exports: {}};
  */
 
 (function (module) {
-(function (global, factory) {
-    if (module.exports) {
-        module.exports = factory();
-    } else {
-        (typeof global!=="undefined" ? global : window).numeral = factory();
-    }
-}(commonjsGlobal, function () {
-    /************************************
-        Variables
-    ************************************/
-
-    var numeral,
-        _,
-        VERSION = '2.0.6',
-        formats = {},
-        locales = {},
-        defaults = {
-            currentLocale: 'en',
-            zeroFormat: null,
-            nullFormat: null,
-            defaultFormat: '0,0',
-            scalePercentBy100: true
-        },
-        options = {
-            currentLocale: defaults.currentLocale,
-            zeroFormat: defaults.zeroFormat,
-            nullFormat: defaults.nullFormat,
-            defaultFormat: defaults.defaultFormat,
-            scalePercentBy100: defaults.scalePercentBy100
-        };
-
-
-    /************************************
-        Constructors
-    ************************************/
-
-    // Numeral prototype object
-    function Numeral(input, number) {
-        this._input = input;
-
-        this._value = number;
-    }
-
-    numeral = function(input) {
-        var value,
-            kind,
-            unformatFunction,
-            regexp;
-
-        if (numeral.isNumeral(input)) {
-            value = input.value();
-        } else if (input === 0 || typeof input === 'undefined') {
-            value = 0;
-        } else if (input === null || _.isNaN(input)) {
-            value = null;
-        } else if (typeof input === 'string') {
-            if (options.zeroFormat && input === options.zeroFormat) {
-                value = 0;
-            } else if (options.nullFormat && input === options.nullFormat || !input.replace(/[^0-9]+/g, '').length) {
-                value = null;
-            } else {
-                for (kind in formats) {
-                    regexp = typeof formats[kind].regexps.unformat === 'function' ? formats[kind].regexps.unformat() : formats[kind].regexps.unformat;
-
-                    if (regexp && input.match(regexp)) {
-                        unformatFunction = formats[kind].unformat;
-
-                        break;
-                    }
-                }
-
-                unformatFunction = unformatFunction || numeral._.stringToNumber;
-
-                value = unformatFunction(input);
-            }
-        } else {
-            value = Number(input)|| null;
-        }
-
-        return new Numeral(input, value);
-    };
-
-    // version number
-    numeral.version = VERSION;
-
-    // compare numeral object
-    numeral.isNumeral = function(obj) {
-        return obj instanceof Numeral;
-    };
-
-    // helper functions
-    numeral._ = _ = {
-        // formats numbers separators, decimals places, signs, abbreviations
-        numberToFormat: function(value, format, roundingFunction) {
-            var locale = locales[numeral.options.currentLocale],
-                negP = false,
-                optDec = false,
-                leadingCount = 0,
-                abbr = '',
-                trillion = 1000000000000,
-                billion = 1000000000,
-                million = 1000000,
-                thousand = 1000,
-                decimal = '',
-                neg = false,
-                abbrForce, // force abbreviation
-                abs,
-                int,
-                precision,
-                signed,
-                thousands,
-                output;
-
-            // make sure we never format a null value
-            value = value || 0;
-
-            abs = Math.abs(value);
-
-            // see if we should use parentheses for negative number or if we should prefix with a sign
-            // if both are present we default to parentheses
-            if (numeral._.includes(format, '(')) {
-                negP = true;
-                format = format.replace(/[\(|\)]/g, '');
-            } else if (numeral._.includes(format, '+') || numeral._.includes(format, '-')) {
-                signed = numeral._.includes(format, '+') ? format.indexOf('+') : value < 0 ? format.indexOf('-') : -1;
-                format = format.replace(/[\+|\-]/g, '');
-            }
-
-            // see if abbreviation is wanted
-            if (numeral._.includes(format, 'a')) {
-                abbrForce = format.match(/a(k|m|b|t)?/);
-
-                abbrForce = abbrForce ? abbrForce[1] : false;
-
-                // check for space before abbreviation
-                if (numeral._.includes(format, ' a')) {
-                    abbr = ' ';
-                }
-
-                format = format.replace(new RegExp(abbr + 'a[kmbt]?'), '');
-
-                if (abs >= trillion && !abbrForce || abbrForce === 't') {
-                    // trillion
-                    abbr += locale.abbreviations.trillion;
-                    value = value / trillion;
-                } else if (abs < trillion && abs >= billion && !abbrForce || abbrForce === 'b') {
-                    // billion
-                    abbr += locale.abbreviations.billion;
-                    value = value / billion;
-                } else if (abs < billion && abs >= million && !abbrForce || abbrForce === 'm') {
-                    // million
-                    abbr += locale.abbreviations.million;
-                    value = value / million;
-                } else if (abs < million && abs >= thousand && !abbrForce || abbrForce === 'k') {
-                    // thousand
-                    abbr += locale.abbreviations.thousand;
-                    value = value / thousand;
-                }
-            }
-
-            // check for optional decimals
-            if (numeral._.includes(format, '[.]')) {
-                optDec = true;
-                format = format.replace('[.]', '.');
-            }
-
-            // break number and format
-            int = value.toString().split('.')[0];
-            precision = format.split('.')[1];
-            thousands = format.indexOf(',');
-            leadingCount = (format.split('.')[0].split(',')[0].match(/0/g) || []).length;
-
-            if (precision) {
-                if (numeral._.includes(precision, '[')) {
-                    precision = precision.replace(']', '');
-                    precision = precision.split('[');
-                    decimal = numeral._.toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
-                } else {
-                    decimal = numeral._.toFixed(value, precision.length, roundingFunction);
-                }
-
-                int = decimal.split('.')[0];
-
-                if (numeral._.includes(decimal, '.')) {
-                    decimal = locale.delimiters.decimal + decimal.split('.')[1];
-                } else {
-                    decimal = '';
-                }
-
-                if (optDec && Number(decimal.slice(1)) === 0) {
-                    decimal = '';
-                }
-            } else {
-                int = numeral._.toFixed(value, 0, roundingFunction);
-            }
-
-            // check abbreviation again after rounding
-            if (abbr && !abbrForce && Number(int) >= 1000 && abbr !== locale.abbreviations.trillion) {
-                int = String(Number(int) / 1000);
-
-                switch (abbr) {
-                    case locale.abbreviations.thousand:
-                        abbr = locale.abbreviations.million;
-                        break;
-                    case locale.abbreviations.million:
-                        abbr = locale.abbreviations.billion;
-                        break;
-                    case locale.abbreviations.billion:
-                        abbr = locale.abbreviations.trillion;
-                        break;
-                }
-            }
-
-
-            // format number
-            if (numeral._.includes(int, '-')) {
-                int = int.slice(1);
-                neg = true;
-            }
-
-            if (int.length < leadingCount) {
-                for (var i = leadingCount - int.length; i > 0; i--) {
-                    int = '0' + int;
-                }
-            }
-
-            if (thousands > -1) {
-                int = int.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + locale.delimiters.thousands);
-            }
-
-            if (format.indexOf('.') === 0) {
-                int = '';
-            }
-
-            output = int + decimal + (abbr ? abbr : '');
-
-            if (negP) {
-                output = (negP && neg ? '(' : '') + output + (negP && neg ? ')' : '');
-            } else {
-                if (signed >= 0) {
-                    output = signed === 0 ? (neg ? '-' : '+') + output : output + (neg ? '-' : '+');
-                } else if (neg) {
-                    output = '-' + output;
-                }
-            }
-
-            return output;
-        },
-        // unformats numbers separators, decimals places, signs, abbreviations
-        stringToNumber: function(string) {
-            var locale = locales[options.currentLocale],
-                stringOriginal = string,
-                abbreviations = {
-                    thousand: 3,
-                    million: 6,
-                    billion: 9,
-                    trillion: 12
-                },
-                abbreviation,
-                value,
-                regexp;
-
-            if (options.zeroFormat && string === options.zeroFormat) {
-                value = 0;
-            } else if (options.nullFormat && string === options.nullFormat || !string.replace(/[^0-9]+/g, '').length) {
-                value = null;
-            } else {
-                value = 1;
-
-                if (locale.delimiters.decimal !== '.') {
-                    string = string.replace(/\./g, '').replace(locale.delimiters.decimal, '.');
-                }
-
-                for (abbreviation in abbreviations) {
-                    regexp = new RegExp('[^a-zA-Z]' + locale.abbreviations[abbreviation] + '(?:\\)|(\\' + locale.currency.symbol + ')?(?:\\))?)?$');
-
-                    if (stringOriginal.match(regexp)) {
-                        value *= Math.pow(10, abbreviations[abbreviation]);
-                        break;
-                    }
-                }
-
-                // check for negative number
-                value *= (string.split('-').length + Math.min(string.split('(').length - 1, string.split(')').length - 1)) % 2 ? 1 : -1;
-
-                // remove non numbers
-                string = string.replace(/[^0-9\.]+/g, '');
-
-                value *= Number(string);
-            }
-
-            return value;
-        },
-        isNaN: function(value) {
-            return typeof value === 'number' && isNaN(value);
-        },
-        includes: function(string, search) {
-            return string.indexOf(search) !== -1;
-        },
-        insert: function(string, subString, start) {
-            return string.slice(0, start) + subString + string.slice(start);
-        },
-        reduce: function(array, callback /*, initialValue*/) {
-            if (this === null) {
-                throw new TypeError('Array.prototype.reduce called on null or undefined');
-            }
-
-            if (typeof callback !== 'function') {
-                throw new TypeError(callback + ' is not a function');
-            }
-
-            var t = Object(array),
-                len = t.length >>> 0,
-                k = 0,
-                value;
-
-            if (arguments.length === 3) {
-                value = arguments[2];
-            } else {
-                while (k < len && !(k in t)) {
-                    k++;
-                }
-
-                if (k >= len) {
-                    throw new TypeError('Reduce of empty array with no initial value');
-                }
-
-                value = t[k++];
-            }
-            for (; k < len; k++) {
-                if (k in t) {
-                    value = callback(value, t[k], k, t);
-                }
-            }
-            return value;
-        },
-        /**
-         * Computes the multiplier necessary to make x >= 1,
-         * effectively eliminating miscalculations caused by
-         * finite precision.
-         */
-        multiplier: function (x) {
-            var parts = x.toString().split('.');
-
-            return parts.length < 2 ? 1 : Math.pow(10, parts[1].length);
-        },
-        /**
-         * Given a variable number of arguments, returns the maximum
-         * multiplier that must be used to normalize an operation involving
-         * all of them.
-         */
-        correctionFactor: function () {
-            var args = Array.prototype.slice.call(arguments);
-
-            return args.reduce(function(accum, next) {
-                var mn = _.multiplier(next);
-                return accum > mn ? accum : mn;
-            }, 1);
-        },
-        /**
-         * Implementation of toFixed() that treats floats more like decimals
-         *
-         * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
-         * problems for accounting- and finance-related software.
-         */
-        toFixed: function(value, maxDecimals, roundingFunction, optionals) {
-            var splitValue = value.toString().split('.'),
-                minDecimals = maxDecimals - (optionals || 0),
-                boundedPrecision,
-                optionalsRegExp,
-                power,
-                output;
-
-            // Use the smallest precision value possible to avoid errors from floating point representation
-            if (splitValue.length === 2) {
-              boundedPrecision = Math.min(Math.max(splitValue[1].length, minDecimals), maxDecimals);
-            } else {
-              boundedPrecision = minDecimals;
-            }
-
-            power = Math.pow(10, boundedPrecision);
-
-            // Multiply up by precision, round accurately, then divide and use native toFixed():
-            output = (roundingFunction(value + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
-
-            if (optionals > maxDecimals - boundedPrecision) {
-                optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
-                output = output.replace(optionalsRegExp, '');
-            }
-
-            return output;
-        }
-    };
-
-    // avaliable options
-    numeral.options = options;
-
-    // avaliable formats
-    numeral.formats = formats;
-
-    // avaliable formats
-    numeral.locales = locales;
-
-    // This function sets the current locale.  If
-    // no arguments are passed in, it will simply return the current global
-    // locale key.
-    numeral.locale = function(key) {
-        if (key) {
-            options.currentLocale = key.toLowerCase();
-        }
-
-        return options.currentLocale;
-    };
-
-    // This function provides access to the loaded locale data.  If
-    // no arguments are passed in, it will simply return the current
-    // global locale object.
-    numeral.localeData = function(key) {
-        if (!key) {
-            return locales[options.currentLocale];
-        }
-
-        key = key.toLowerCase();
-
-        if (!locales[key]) {
-            throw new Error('Unknown locale : ' + key);
-        }
-
-        return locales[key];
-    };
-
-    numeral.reset = function() {
-        for (var property in defaults) {
-            options[property] = defaults[property];
-        }
-    };
-
-    numeral.zeroFormat = function(format) {
-        options.zeroFormat = typeof(format) === 'string' ? format : null;
-    };
-
-    numeral.nullFormat = function (format) {
-        options.nullFormat = typeof(format) === 'string' ? format : null;
-    };
-
-    numeral.defaultFormat = function(format) {
-        options.defaultFormat = typeof(format) === 'string' ? format : '0.0';
-    };
-
-    numeral.register = function(type, name, format) {
-        name = name.toLowerCase();
-
-        if (this[type + 's'][name]) {
-            throw new TypeError(name + ' ' + type + ' already registered.');
-        }
-
-        this[type + 's'][name] = format;
-
-        return format;
-    };
-
-
-    numeral.validate = function(val, culture) {
-        var _decimalSep,
-            _thousandSep,
-            _currSymbol,
-            _valArray,
-            _abbrObj,
-            _thousandRegEx,
-            localeData,
-            temp;
-
-        //coerce val to string
-        if (typeof val !== 'string') {
-            val += '';
-
-            if (console.warn) {
-                console.warn('Numeral.js: Value is not string. It has been co-erced to: ', val);
-            }
-        }
-
-        //trim whitespaces from either sides
-        val = val.trim();
-
-        //if val is just digits return true
-        if (!!val.match(/^\d+$/)) {
-            return true;
-        }
-
-        //if val is empty return false
-        if (val === '') {
-            return false;
-        }
-
-        //get the decimal and thousands separator from numeral.localeData
-        try {
-            //check if the culture is understood by numeral. if not, default it to current locale
-            localeData = numeral.localeData(culture);
-        } catch (e) {
-            localeData = numeral.localeData(numeral.locale());
-        }
-
-        //setup the delimiters and currency symbol based on culture/locale
-        _currSymbol = localeData.currency.symbol;
-        _abbrObj = localeData.abbreviations;
-        _decimalSep = localeData.delimiters.decimal;
-        if (localeData.delimiters.thousands === '.') {
-            _thousandSep = '\\.';
-        } else {
-            _thousandSep = localeData.delimiters.thousands;
-        }
-
-        // validating currency symbol
-        temp = val.match(/^[^\d]+/);
-        if (temp !== null) {
-            val = val.substr(1);
-            if (temp[0] !== _currSymbol) {
-                return false;
-            }
-        }
-
-        //validating abbreviation symbol
-        temp = val.match(/[^\d]+$/);
-        if (temp !== null) {
-            val = val.slice(0, -1);
-            if (temp[0] !== _abbrObj.thousand && temp[0] !== _abbrObj.million && temp[0] !== _abbrObj.billion && temp[0] !== _abbrObj.trillion) {
-                return false;
-            }
-        }
-
-        _thousandRegEx = new RegExp(_thousandSep + '{2}');
-
-        if (!val.match(/[^\d.,]/g)) {
-            _valArray = val.split(_decimalSep);
-            if (_valArray.length > 2) {
-                return false;
-            } else {
-                if (_valArray.length < 2) {
-                    return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx));
-                } else {
-                    if (_valArray[0].length === 1) {
-                        return ( !! _valArray[0].match(/^\d+$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
-                    } else {
-                        return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
-                    }
-                }
-            }
-        }
-
-        return false;
-    };
-
-
-    /************************************
-        Numeral Prototype
-    ************************************/
-
-    numeral.fn = Numeral.prototype = {
-        clone: function() {
-            return numeral(this);
-        },
-        format: function(inputString, roundingFunction) {
-            var value = this._value,
-                format = inputString || options.defaultFormat,
-                kind,
-                output,
-                formatFunction;
-
-            // make sure we have a roundingFunction
-            roundingFunction = roundingFunction || Math.round;
-
-            // format based on value
-            if (value === 0 && options.zeroFormat !== null) {
-                output = options.zeroFormat;
-            } else if (value === null && options.nullFormat !== null) {
-                output = options.nullFormat;
-            } else {
-                for (kind in formats) {
-                    if (format.match(formats[kind].regexps.format)) {
-                        formatFunction = formats[kind].format;
-
-                        break;
-                    }
-                }
-
-                formatFunction = formatFunction || numeral._.numberToFormat;
-
-                output = formatFunction(value, format, roundingFunction);
-            }
-
-            return output;
-        },
-        value: function() {
-            return this._value;
-        },
-        input: function() {
-            return this._input;
-        },
-        set: function(value) {
-            this._value = Number(value);
-
-            return this;
-        },
-        add: function(value) {
-            var corrFactor = _.correctionFactor.call(null, this._value, value);
-
-            function cback(accum, curr, currI, O) {
-                return accum + Math.round(corrFactor * curr);
-            }
-
-            this._value = _.reduce([this._value, value], cback, 0) / corrFactor;
-
-            return this;
-        },
-        subtract: function(value) {
-            var corrFactor = _.correctionFactor.call(null, this._value, value);
-
-            function cback(accum, curr, currI, O) {
-                return accum - Math.round(corrFactor * curr);
-            }
-
-            this._value = _.reduce([value], cback, Math.round(this._value * corrFactor)) / corrFactor;
-
-            return this;
-        },
-        multiply: function(value) {
-            function cback(accum, curr, currI, O) {
-                var corrFactor = _.correctionFactor(accum, curr);
-                return Math.round(accum * corrFactor) * Math.round(curr * corrFactor) / Math.round(corrFactor * corrFactor);
-            }
-
-            this._value = _.reduce([this._value, value], cback, 1);
-
-            return this;
-        },
-        divide: function(value) {
-            function cback(accum, curr, currI, O) {
-                var corrFactor = _.correctionFactor(accum, curr);
-                return Math.round(accum * corrFactor) / Math.round(curr * corrFactor);
-            }
-
-            this._value = _.reduce([this._value, value], cback);
-
-            return this;
-        },
-        difference: function(value) {
-            return Math.abs(numeral(this._value).subtract(value).value());
-        }
-    };
-
-    /************************************
-        Default Locale && Format
-    ************************************/
-
-    numeral.register('locale', 'en', {
-        delimiters: {
-            thousands: ',',
-            decimal: '.'
-        },
-        abbreviations: {
-            thousand: 'k',
-            million: 'm',
-            billion: 'b',
-            trillion: 't'
-        },
-        ordinal: function(number) {
-            var b = number % 10;
-            return (~~(number % 100 / 10) === 1) ? 'th' :
-                (b === 1) ? 'st' :
-                (b === 2) ? 'nd' :
-                (b === 3) ? 'rd' : 'th';
-        },
-        currency: {
-            symbol: '$'
-        }
-    });
-
-    
-
-(function() {
-        numeral.register('format', 'bps', {
-            regexps: {
-                format: /(BPS)/,
-                unformat: /(BPS)/
-            },
-            format: function(value, format, roundingFunction) {
-                var space = numeral._.includes(format, ' BPS') ? ' ' : '',
-                    output;
-
-                value = value * 10000;
-
-                // check for space before BPS
-                format = format.replace(/\s?BPS/, '');
-
-                output = numeral._.numberToFormat(value, format, roundingFunction);
-
-                if (numeral._.includes(output, ')')) {
-                    output = output.split('');
-
-                    output.splice(-1, 0, space + 'BPS');
-
-                    output = output.join('');
-                } else {
-                    output = output + space + 'BPS';
-                }
-
-                return output;
-            },
-            unformat: function(string) {
-                return +(numeral._.stringToNumber(string) * 0.0001).toFixed(15);
-            }
-        });
-})();
-
-
-(function() {
-        var decimal = {
-            base: 1000,
-            suffixes: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-        },
-        binary = {
-            base: 1024,
-            suffixes: ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
-        };
-
-    var allSuffixes =  decimal.suffixes.concat(binary.suffixes.filter(function (item) {
-            return decimal.suffixes.indexOf(item) < 0;
-        }));
-        var unformatRegex = allSuffixes.join('|');
-        // Allow support for BPS (http://www.investopedia.com/terms/b/basispoint.asp)
-        unformatRegex = '(' + unformatRegex.replace('B', 'B(?!PS)') + ')';
-
-    numeral.register('format', 'bytes', {
-        regexps: {
-            format: /([0\s]i?b)/,
-            unformat: new RegExp(unformatRegex)
-        },
-        format: function(value, format, roundingFunction) {
-            var output,
-                bytes = numeral._.includes(format, 'ib') ? binary : decimal,
-                suffix = numeral._.includes(format, ' b') || numeral._.includes(format, ' ib') ? ' ' : '',
-                power,
-                min,
-                max;
-
-            // check for space before
-            format = format.replace(/\s?i?b/, '');
-
-            for (power = 0; power <= bytes.suffixes.length; power++) {
-                min = Math.pow(bytes.base, power);
-                max = Math.pow(bytes.base, power + 1);
-
-                if (value === null || value === 0 || value >= min && value < max) {
-                    suffix += bytes.suffixes[power];
-
-                    if (min > 0) {
-                        value = value / min;
-                    }
-
-                    break;
-                }
-            }
-
-            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-            return output + suffix;
-        },
-        unformat: function(string) {
-            var value = numeral._.stringToNumber(string),
-                power,
-                bytesMultiplier;
-
-            if (value) {
-                for (power = decimal.suffixes.length - 1; power >= 0; power--) {
-                    if (numeral._.includes(string, decimal.suffixes[power])) {
-                        bytesMultiplier = Math.pow(decimal.base, power);
-
-                        break;
-                    }
-
-                    if (numeral._.includes(string, binary.suffixes[power])) {
-                        bytesMultiplier = Math.pow(binary.base, power);
-
-                        break;
-                    }
-                }
-
-                value *= (bytesMultiplier || 1);
-            }
-
-            return value;
-        }
-    });
-})();
-
-
-(function() {
-        numeral.register('format', 'currency', {
-        regexps: {
-            format: /(\$)/
-        },
-        format: function(value, format, roundingFunction) {
-            var locale = numeral.locales[numeral.options.currentLocale],
-                symbols = {
-                    before: format.match(/^([\+|\-|\(|\s|\$]*)/)[0],
-                    after: format.match(/([\+|\-|\)|\s|\$]*)$/)[0]
-                },
-                output,
-                symbol,
-                i;
-
-            // strip format of spaces and $
-            format = format.replace(/\s?\$\s?/, '');
-
-            // format the number
-            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-            // update the before and after based on value
-            if (value >= 0) {
-                symbols.before = symbols.before.replace(/[\-\(]/, '');
-                symbols.after = symbols.after.replace(/[\-\)]/, '');
-            } else if (value < 0 && (!numeral._.includes(symbols.before, '-') && !numeral._.includes(symbols.before, '('))) {
-                symbols.before = '-' + symbols.before;
-            }
-
-            // loop through each before symbol
-            for (i = 0; i < symbols.before.length; i++) {
-                symbol = symbols.before[i];
-
-                switch (symbol) {
-                    case '$':
-                        output = numeral._.insert(output, locale.currency.symbol, i);
-                        break;
-                    case ' ':
-                        output = numeral._.insert(output, ' ', i + locale.currency.symbol.length - 1);
-                        break;
-                }
-            }
-
-            // loop through each after symbol
-            for (i = symbols.after.length - 1; i >= 0; i--) {
-                symbol = symbols.after[i];
-
-                switch (symbol) {
-                    case '$':
-                        output = i === symbols.after.length - 1 ? output + locale.currency.symbol : numeral._.insert(output, locale.currency.symbol, -(symbols.after.length - (1 + i)));
-                        break;
-                    case ' ':
-                        output = i === symbols.after.length - 1 ? output + ' ' : numeral._.insert(output, ' ', -(symbols.after.length - (1 + i) + locale.currency.symbol.length - 1));
-                        break;
-                }
-            }
-
-
-            return output;
-        }
-    });
-})();
-
-
-(function() {
-        numeral.register('format', 'exponential', {
-        regexps: {
-            format: /(e\+|e-)/,
-            unformat: /(e\+|e-)/
-        },
-        format: function(value, format, roundingFunction) {
-            var output,
-                exponential = typeof value === 'number' && !numeral._.isNaN(value) ? value.toExponential() : '0e+0',
-                parts = exponential.split('e');
-
-            format = format.replace(/e[\+|\-]{1}0/, '');
-
-            output = numeral._.numberToFormat(Number(parts[0]), format, roundingFunction);
-
-            return output + 'e' + parts[1];
-        },
-        unformat: function(string) {
-            var parts = numeral._.includes(string, 'e+') ? string.split('e+') : string.split('e-'),
-                value = Number(parts[0]),
-                power = Number(parts[1]);
-
-            power = numeral._.includes(string, 'e-') ? power *= -1 : power;
-
-            function cback(accum, curr, currI, O) {
-                var corrFactor = numeral._.correctionFactor(accum, curr),
-                    num = (accum * corrFactor) * (curr * corrFactor) / (corrFactor * corrFactor);
-                return num;
-            }
-
-            return numeral._.reduce([value, Math.pow(10, power)], cback, 1);
-        }
-    });
-})();
-
-
-(function() {
-        numeral.register('format', 'ordinal', {
-        regexps: {
-            format: /(o)/
-        },
-        format: function(value, format, roundingFunction) {
-            var locale = numeral.locales[numeral.options.currentLocale],
-                output,
-                ordinal = numeral._.includes(format, ' o') ? ' ' : '';
-
-            // check for space before
-            format = format.replace(/\s?o/, '');
-
-            ordinal += locale.ordinal(value);
-
-            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-            return output + ordinal;
-        }
-    });
-})();
-
-
-(function() {
-        numeral.register('format', 'percentage', {
-        regexps: {
-            format: /(%)/,
-            unformat: /(%)/
-        },
-        format: function(value, format, roundingFunction) {
-            var space = numeral._.includes(format, ' %') ? ' ' : '',
-                output;
-
-            if (numeral.options.scalePercentBy100) {
-                value = value * 100;
-            }
-
-            // check for space before %
-            format = format.replace(/\s?\%/, '');
-
-            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-            if (numeral._.includes(output, ')')) {
-                output = output.split('');
-
-                output.splice(-1, 0, space + '%');
-
-                output = output.join('');
-            } else {
-                output = output + space + '%';
-            }
-
-            return output;
-        },
-        unformat: function(string) {
-            var number = numeral._.stringToNumber(string);
-            if (numeral.options.scalePercentBy100) {
-                return number * 0.01;
-            }
-            return number;
-        }
-    });
-})();
-
-
-(function() {
-        numeral.register('format', 'time', {
-        regexps: {
-            format: /(:)/,
-            unformat: /(:)/
-        },
-        format: function(value, format, roundingFunction) {
-            var hours = Math.floor(value / 60 / 60),
-                minutes = Math.floor((value - (hours * 60 * 60)) / 60),
-                seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
-
-            return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
-        },
-        unformat: function(string) {
-            var timeArray = string.split(':'),
-                seconds = 0;
-
-            // turn hours and minutes into seconds and add them all up
-            if (timeArray.length === 3) {
-                // hours
-                seconds = seconds + (Number(timeArray[0]) * 60 * 60);
-                // minutes
-                seconds = seconds + (Number(timeArray[1]) * 60);
-                // seconds
-                seconds = seconds + Number(timeArray[2]);
-            } else if (timeArray.length === 2) {
-                // minutes
-                seconds = seconds + (Number(timeArray[0]) * 60);
-                // seconds
-                seconds = seconds + Number(timeArray[1]);
-            }
-            return Number(seconds);
-        }
-    });
-})();
-
-return numeral;
-}));
-}(numeral$1));
+	(function (global, factory) {
+	    if (module.exports) {
+	        module.exports = factory();
+	    } else {
+	        (typeof global!=="undefined" ? global : window).numeral = factory();
+	    }
+	}(commonjsGlobal, function () {
+	    /************************************
+	        Variables
+	    ************************************/
+
+	    var numeral,
+	        _,
+	        VERSION = '2.0.6',
+	        formats = {},
+	        locales = {},
+	        defaults = {
+	            currentLocale: 'en',
+	            zeroFormat: null,
+	            nullFormat: null,
+	            defaultFormat: '0,0',
+	            scalePercentBy100: true
+	        },
+	        options = {
+	            currentLocale: defaults.currentLocale,
+	            zeroFormat: defaults.zeroFormat,
+	            nullFormat: defaults.nullFormat,
+	            defaultFormat: defaults.defaultFormat,
+	            scalePercentBy100: defaults.scalePercentBy100
+	        };
+
+
+	    /************************************
+	        Constructors
+	    ************************************/
+
+	    // Numeral prototype object
+	    function Numeral(input, number) {
+	        this._input = input;
+
+	        this._value = number;
+	    }
+
+	    numeral = function(input) {
+	        var value,
+	            kind,
+	            unformatFunction,
+	            regexp;
+
+	        if (numeral.isNumeral(input)) {
+	            value = input.value();
+	        } else if (input === 0 || typeof input === 'undefined') {
+	            value = 0;
+	        } else if (input === null || _.isNaN(input)) {
+	            value = null;
+	        } else if (typeof input === 'string') {
+	            if (options.zeroFormat && input === options.zeroFormat) {
+	                value = 0;
+	            } else if (options.nullFormat && input === options.nullFormat || !input.replace(/[^0-9]+/g, '').length) {
+	                value = null;
+	            } else {
+	                for (kind in formats) {
+	                    regexp = typeof formats[kind].regexps.unformat === 'function' ? formats[kind].regexps.unformat() : formats[kind].regexps.unformat;
+
+	                    if (regexp && input.match(regexp)) {
+	                        unformatFunction = formats[kind].unformat;
+
+	                        break;
+	                    }
+	                }
+
+	                unformatFunction = unformatFunction || numeral._.stringToNumber;
+
+	                value = unformatFunction(input);
+	            }
+	        } else {
+	            value = Number(input)|| null;
+	        }
+
+	        return new Numeral(input, value);
+	    };
+
+	    // version number
+	    numeral.version = VERSION;
+
+	    // compare numeral object
+	    numeral.isNumeral = function(obj) {
+	        return obj instanceof Numeral;
+	    };
+
+	    // helper functions
+	    numeral._ = _ = {
+	        // formats numbers separators, decimals places, signs, abbreviations
+	        numberToFormat: function(value, format, roundingFunction) {
+	            var locale = locales[numeral.options.currentLocale],
+	                negP = false,
+	                optDec = false,
+	                leadingCount = 0,
+	                abbr = '',
+	                trillion = 1000000000000,
+	                billion = 1000000000,
+	                million = 1000000,
+	                thousand = 1000,
+	                decimal = '',
+	                neg = false,
+	                abbrForce, // force abbreviation
+	                abs,
+	                int,
+	                precision,
+	                signed,
+	                thousands,
+	                output;
+
+	            // make sure we never format a null value
+	            value = value || 0;
+
+	            abs = Math.abs(value);
+
+	            // see if we should use parentheses for negative number or if we should prefix with a sign
+	            // if both are present we default to parentheses
+	            if (numeral._.includes(format, '(')) {
+	                negP = true;
+	                format = format.replace(/[\(|\)]/g, '');
+	            } else if (numeral._.includes(format, '+') || numeral._.includes(format, '-')) {
+	                signed = numeral._.includes(format, '+') ? format.indexOf('+') : value < 0 ? format.indexOf('-') : -1;
+	                format = format.replace(/[\+|\-]/g, '');
+	            }
+
+	            // see if abbreviation is wanted
+	            if (numeral._.includes(format, 'a')) {
+	                abbrForce = format.match(/a(k|m|b|t)?/);
+
+	                abbrForce = abbrForce ? abbrForce[1] : false;
+
+	                // check for space before abbreviation
+	                if (numeral._.includes(format, ' a')) {
+	                    abbr = ' ';
+	                }
+
+	                format = format.replace(new RegExp(abbr + 'a[kmbt]?'), '');
+
+	                if (abs >= trillion && !abbrForce || abbrForce === 't') {
+	                    // trillion
+	                    abbr += locale.abbreviations.trillion;
+	                    value = value / trillion;
+	                } else if (abs < trillion && abs >= billion && !abbrForce || abbrForce === 'b') {
+	                    // billion
+	                    abbr += locale.abbreviations.billion;
+	                    value = value / billion;
+	                } else if (abs < billion && abs >= million && !abbrForce || abbrForce === 'm') {
+	                    // million
+	                    abbr += locale.abbreviations.million;
+	                    value = value / million;
+	                } else if (abs < million && abs >= thousand && !abbrForce || abbrForce === 'k') {
+	                    // thousand
+	                    abbr += locale.abbreviations.thousand;
+	                    value = value / thousand;
+	                }
+	            }
+
+	            // check for optional decimals
+	            if (numeral._.includes(format, '[.]')) {
+	                optDec = true;
+	                format = format.replace('[.]', '.');
+	            }
+
+	            // break number and format
+	            int = value.toString().split('.')[0];
+	            precision = format.split('.')[1];
+	            thousands = format.indexOf(',');
+	            leadingCount = (format.split('.')[0].split(',')[0].match(/0/g) || []).length;
+
+	            if (precision) {
+	                if (numeral._.includes(precision, '[')) {
+	                    precision = precision.replace(']', '');
+	                    precision = precision.split('[');
+	                    decimal = numeral._.toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
+	                } else {
+	                    decimal = numeral._.toFixed(value, precision.length, roundingFunction);
+	                }
+
+	                int = decimal.split('.')[0];
+
+	                if (numeral._.includes(decimal, '.')) {
+	                    decimal = locale.delimiters.decimal + decimal.split('.')[1];
+	                } else {
+	                    decimal = '';
+	                }
+
+	                if (optDec && Number(decimal.slice(1)) === 0) {
+	                    decimal = '';
+	                }
+	            } else {
+	                int = numeral._.toFixed(value, 0, roundingFunction);
+	            }
+
+	            // check abbreviation again after rounding
+	            if (abbr && !abbrForce && Number(int) >= 1000 && abbr !== locale.abbreviations.trillion) {
+	                int = String(Number(int) / 1000);
+
+	                switch (abbr) {
+	                    case locale.abbreviations.thousand:
+	                        abbr = locale.abbreviations.million;
+	                        break;
+	                    case locale.abbreviations.million:
+	                        abbr = locale.abbreviations.billion;
+	                        break;
+	                    case locale.abbreviations.billion:
+	                        abbr = locale.abbreviations.trillion;
+	                        break;
+	                }
+	            }
+
+
+	            // format number
+	            if (numeral._.includes(int, '-')) {
+	                int = int.slice(1);
+	                neg = true;
+	            }
+
+	            if (int.length < leadingCount) {
+	                for (var i = leadingCount - int.length; i > 0; i--) {
+	                    int = '0' + int;
+	                }
+	            }
+
+	            if (thousands > -1) {
+	                int = int.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + locale.delimiters.thousands);
+	            }
+
+	            if (format.indexOf('.') === 0) {
+	                int = '';
+	            }
+
+	            output = int + decimal + (abbr ? abbr : '');
+
+	            if (negP) {
+	                output = (negP && neg ? '(' : '') + output + (negP && neg ? ')' : '');
+	            } else {
+	                if (signed >= 0) {
+	                    output = signed === 0 ? (neg ? '-' : '+') + output : output + (neg ? '-' : '+');
+	                } else if (neg) {
+	                    output = '-' + output;
+	                }
+	            }
+
+	            return output;
+	        },
+	        // unformats numbers separators, decimals places, signs, abbreviations
+	        stringToNumber: function(string) {
+	            var locale = locales[options.currentLocale],
+	                stringOriginal = string,
+	                abbreviations = {
+	                    thousand: 3,
+	                    million: 6,
+	                    billion: 9,
+	                    trillion: 12
+	                },
+	                abbreviation,
+	                value,
+	                regexp;
+
+	            if (options.zeroFormat && string === options.zeroFormat) {
+	                value = 0;
+	            } else if (options.nullFormat && string === options.nullFormat || !string.replace(/[^0-9]+/g, '').length) {
+	                value = null;
+	            } else {
+	                value = 1;
+
+	                if (locale.delimiters.decimal !== '.') {
+	                    string = string.replace(/\./g, '').replace(locale.delimiters.decimal, '.');
+	                }
+
+	                for (abbreviation in abbreviations) {
+	                    regexp = new RegExp('[^a-zA-Z]' + locale.abbreviations[abbreviation] + '(?:\\)|(\\' + locale.currency.symbol + ')?(?:\\))?)?$');
+
+	                    if (stringOriginal.match(regexp)) {
+	                        value *= Math.pow(10, abbreviations[abbreviation]);
+	                        break;
+	                    }
+	                }
+
+	                // check for negative number
+	                value *= (string.split('-').length + Math.min(string.split('(').length - 1, string.split(')').length - 1)) % 2 ? 1 : -1;
+
+	                // remove non numbers
+	                string = string.replace(/[^0-9\.]+/g, '');
+
+	                value *= Number(string);
+	            }
+
+	            return value;
+	        },
+	        isNaN: function(value) {
+	            return typeof value === 'number' && isNaN(value);
+	        },
+	        includes: function(string, search) {
+	            return string.indexOf(search) !== -1;
+	        },
+	        insert: function(string, subString, start) {
+	            return string.slice(0, start) + subString + string.slice(start);
+	        },
+	        reduce: function(array, callback /*, initialValue*/) {
+	            if (this === null) {
+	                throw new TypeError('Array.prototype.reduce called on null or undefined');
+	            }
+
+	            if (typeof callback !== 'function') {
+	                throw new TypeError(callback + ' is not a function');
+	            }
+
+	            var t = Object(array),
+	                len = t.length >>> 0,
+	                k = 0,
+	                value;
+
+	            if (arguments.length === 3) {
+	                value = arguments[2];
+	            } else {
+	                while (k < len && !(k in t)) {
+	                    k++;
+	                }
+
+	                if (k >= len) {
+	                    throw new TypeError('Reduce of empty array with no initial value');
+	                }
+
+	                value = t[k++];
+	            }
+	            for (; k < len; k++) {
+	                if (k in t) {
+	                    value = callback(value, t[k], k, t);
+	                }
+	            }
+	            return value;
+	        },
+	        /**
+	         * Computes the multiplier necessary to make x >= 1,
+	         * effectively eliminating miscalculations caused by
+	         * finite precision.
+	         */
+	        multiplier: function (x) {
+	            var parts = x.toString().split('.');
+
+	            return parts.length < 2 ? 1 : Math.pow(10, parts[1].length);
+	        },
+	        /**
+	         * Given a variable number of arguments, returns the maximum
+	         * multiplier that must be used to normalize an operation involving
+	         * all of them.
+	         */
+	        correctionFactor: function () {
+	            var args = Array.prototype.slice.call(arguments);
+
+	            return args.reduce(function(accum, next) {
+	                var mn = _.multiplier(next);
+	                return accum > mn ? accum : mn;
+	            }, 1);
+	        },
+	        /**
+	         * Implementation of toFixed() that treats floats more like decimals
+	         *
+	         * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
+	         * problems for accounting- and finance-related software.
+	         */
+	        toFixed: function(value, maxDecimals, roundingFunction, optionals) {
+	            var splitValue = value.toString().split('.'),
+	                minDecimals = maxDecimals - (optionals || 0),
+	                boundedPrecision,
+	                optionalsRegExp,
+	                power,
+	                output;
+
+	            // Use the smallest precision value possible to avoid errors from floating point representation
+	            if (splitValue.length === 2) {
+	              boundedPrecision = Math.min(Math.max(splitValue[1].length, minDecimals), maxDecimals);
+	            } else {
+	              boundedPrecision = minDecimals;
+	            }
+
+	            power = Math.pow(10, boundedPrecision);
+
+	            // Multiply up by precision, round accurately, then divide and use native toFixed():
+	            output = (roundingFunction(value + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
+
+	            if (optionals > maxDecimals - boundedPrecision) {
+	                optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
+	                output = output.replace(optionalsRegExp, '');
+	            }
+
+	            return output;
+	        }
+	    };
+
+	    // avaliable options
+	    numeral.options = options;
+
+	    // avaliable formats
+	    numeral.formats = formats;
+
+	    // avaliable formats
+	    numeral.locales = locales;
+
+	    // This function sets the current locale.  If
+	    // no arguments are passed in, it will simply return the current global
+	    // locale key.
+	    numeral.locale = function(key) {
+	        if (key) {
+	            options.currentLocale = key.toLowerCase();
+	        }
+
+	        return options.currentLocale;
+	    };
+
+	    // This function provides access to the loaded locale data.  If
+	    // no arguments are passed in, it will simply return the current
+	    // global locale object.
+	    numeral.localeData = function(key) {
+	        if (!key) {
+	            return locales[options.currentLocale];
+	        }
+
+	        key = key.toLowerCase();
+
+	        if (!locales[key]) {
+	            throw new Error('Unknown locale : ' + key);
+	        }
+
+	        return locales[key];
+	    };
+
+	    numeral.reset = function() {
+	        for (var property in defaults) {
+	            options[property] = defaults[property];
+	        }
+	    };
+
+	    numeral.zeroFormat = function(format) {
+	        options.zeroFormat = typeof(format) === 'string' ? format : null;
+	    };
+
+	    numeral.nullFormat = function (format) {
+	        options.nullFormat = typeof(format) === 'string' ? format : null;
+	    };
+
+	    numeral.defaultFormat = function(format) {
+	        options.defaultFormat = typeof(format) === 'string' ? format : '0.0';
+	    };
+
+	    numeral.register = function(type, name, format) {
+	        name = name.toLowerCase();
+
+	        if (this[type + 's'][name]) {
+	            throw new TypeError(name + ' ' + type + ' already registered.');
+	        }
+
+	        this[type + 's'][name] = format;
+
+	        return format;
+	    };
+
+
+	    numeral.validate = function(val, culture) {
+	        var _decimalSep,
+	            _thousandSep,
+	            _currSymbol,
+	            _valArray,
+	            _abbrObj,
+	            _thousandRegEx,
+	            localeData,
+	            temp;
+
+	        //coerce val to string
+	        if (typeof val !== 'string') {
+	            val += '';
+
+	            if (console.warn) {
+	                console.warn('Numeral.js: Value is not string. It has been co-erced to: ', val);
+	            }
+	        }
+
+	        //trim whitespaces from either sides
+	        val = val.trim();
+
+	        //if val is just digits return true
+	        if (!!val.match(/^\d+$/)) {
+	            return true;
+	        }
+
+	        //if val is empty return false
+	        if (val === '') {
+	            return false;
+	        }
+
+	        //get the decimal and thousands separator from numeral.localeData
+	        try {
+	            //check if the culture is understood by numeral. if not, default it to current locale
+	            localeData = numeral.localeData(culture);
+	        } catch (e) {
+	            localeData = numeral.localeData(numeral.locale());
+	        }
+
+	        //setup the delimiters and currency symbol based on culture/locale
+	        _currSymbol = localeData.currency.symbol;
+	        _abbrObj = localeData.abbreviations;
+	        _decimalSep = localeData.delimiters.decimal;
+	        if (localeData.delimiters.thousands === '.') {
+	            _thousandSep = '\\.';
+	        } else {
+	            _thousandSep = localeData.delimiters.thousands;
+	        }
+
+	        // validating currency symbol
+	        temp = val.match(/^[^\d]+/);
+	        if (temp !== null) {
+	            val = val.substr(1);
+	            if (temp[0] !== _currSymbol) {
+	                return false;
+	            }
+	        }
+
+	        //validating abbreviation symbol
+	        temp = val.match(/[^\d]+$/);
+	        if (temp !== null) {
+	            val = val.slice(0, -1);
+	            if (temp[0] !== _abbrObj.thousand && temp[0] !== _abbrObj.million && temp[0] !== _abbrObj.billion && temp[0] !== _abbrObj.trillion) {
+	                return false;
+	            }
+	        }
+
+	        _thousandRegEx = new RegExp(_thousandSep + '{2}');
+
+	        if (!val.match(/[^\d.,]/g)) {
+	            _valArray = val.split(_decimalSep);
+	            if (_valArray.length > 2) {
+	                return false;
+	            } else {
+	                if (_valArray.length < 2) {
+	                    return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx));
+	                } else {
+	                    if (_valArray[0].length === 1) {
+	                        return ( !! _valArray[0].match(/^\d+$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
+	                    } else {
+	                        return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
+	                    }
+	                }
+	            }
+	        }
+
+	        return false;
+	    };
+
+
+	    /************************************
+	        Numeral Prototype
+	    ************************************/
+
+	    numeral.fn = Numeral.prototype = {
+	        clone: function() {
+	            return numeral(this);
+	        },
+	        format: function(inputString, roundingFunction) {
+	            var value = this._value,
+	                format = inputString || options.defaultFormat,
+	                kind,
+	                output,
+	                formatFunction;
+
+	            // make sure we have a roundingFunction
+	            roundingFunction = roundingFunction || Math.round;
+
+	            // format based on value
+	            if (value === 0 && options.zeroFormat !== null) {
+	                output = options.zeroFormat;
+	            } else if (value === null && options.nullFormat !== null) {
+	                output = options.nullFormat;
+	            } else {
+	                for (kind in formats) {
+	                    if (format.match(formats[kind].regexps.format)) {
+	                        formatFunction = formats[kind].format;
+
+	                        break;
+	                    }
+	                }
+
+	                formatFunction = formatFunction || numeral._.numberToFormat;
+
+	                output = formatFunction(value, format, roundingFunction);
+	            }
+
+	            return output;
+	        },
+	        value: function() {
+	            return this._value;
+	        },
+	        input: function() {
+	            return this._input;
+	        },
+	        set: function(value) {
+	            this._value = Number(value);
+
+	            return this;
+	        },
+	        add: function(value) {
+	            var corrFactor = _.correctionFactor.call(null, this._value, value);
+
+	            function cback(accum, curr, currI, O) {
+	                return accum + Math.round(corrFactor * curr);
+	            }
+
+	            this._value = _.reduce([this._value, value], cback, 0) / corrFactor;
+
+	            return this;
+	        },
+	        subtract: function(value) {
+	            var corrFactor = _.correctionFactor.call(null, this._value, value);
+
+	            function cback(accum, curr, currI, O) {
+	                return accum - Math.round(corrFactor * curr);
+	            }
+
+	            this._value = _.reduce([value], cback, Math.round(this._value * corrFactor)) / corrFactor;
+
+	            return this;
+	        },
+	        multiply: function(value) {
+	            function cback(accum, curr, currI, O) {
+	                var corrFactor = _.correctionFactor(accum, curr);
+	                return Math.round(accum * corrFactor) * Math.round(curr * corrFactor) / Math.round(corrFactor * corrFactor);
+	            }
+
+	            this._value = _.reduce([this._value, value], cback, 1);
+
+	            return this;
+	        },
+	        divide: function(value) {
+	            function cback(accum, curr, currI, O) {
+	                var corrFactor = _.correctionFactor(accum, curr);
+	                return Math.round(accum * corrFactor) / Math.round(curr * corrFactor);
+	            }
+
+	            this._value = _.reduce([this._value, value], cback);
+
+	            return this;
+	        },
+	        difference: function(value) {
+	            return Math.abs(numeral(this._value).subtract(value).value());
+	        }
+	    };
+
+	    /************************************
+	        Default Locale && Format
+	    ************************************/
+
+	    numeral.register('locale', 'en', {
+	        delimiters: {
+	            thousands: ',',
+	            decimal: '.'
+	        },
+	        abbreviations: {
+	            thousand: 'k',
+	            million: 'm',
+	            billion: 'b',
+	            trillion: 't'
+	        },
+	        ordinal: function(number) {
+	            var b = number % 10;
+	            return (~~(number % 100 / 10) === 1) ? 'th' :
+	                (b === 1) ? 'st' :
+	                (b === 2) ? 'nd' :
+	                (b === 3) ? 'rd' : 'th';
+	        },
+	        currency: {
+	            symbol: '$'
+	        }
+	    });
+
+	    
+
+	(function() {
+	        numeral.register('format', 'bps', {
+	            regexps: {
+	                format: /(BPS)/,
+	                unformat: /(BPS)/
+	            },
+	            format: function(value, format, roundingFunction) {
+	                var space = numeral._.includes(format, ' BPS') ? ' ' : '',
+	                    output;
+
+	                value = value * 10000;
+
+	                // check for space before BPS
+	                format = format.replace(/\s?BPS/, '');
+
+	                output = numeral._.numberToFormat(value, format, roundingFunction);
+
+	                if (numeral._.includes(output, ')')) {
+	                    output = output.split('');
+
+	                    output.splice(-1, 0, space + 'BPS');
+
+	                    output = output.join('');
+	                } else {
+	                    output = output + space + 'BPS';
+	                }
+
+	                return output;
+	            },
+	            unformat: function(string) {
+	                return +(numeral._.stringToNumber(string) * 0.0001).toFixed(15);
+	            }
+	        });
+	})();
+
+
+	(function() {
+	        var decimal = {
+	            base: 1000,
+	            suffixes: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+	        },
+	        binary = {
+	            base: 1024,
+	            suffixes: ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+	        };
+
+	    var allSuffixes =  decimal.suffixes.concat(binary.suffixes.filter(function (item) {
+	            return decimal.suffixes.indexOf(item) < 0;
+	        }));
+	        var unformatRegex = allSuffixes.join('|');
+	        // Allow support for BPS (http://www.investopedia.com/terms/b/basispoint.asp)
+	        unformatRegex = '(' + unformatRegex.replace('B', 'B(?!PS)') + ')';
+
+	    numeral.register('format', 'bytes', {
+	        regexps: {
+	            format: /([0\s]i?b)/,
+	            unformat: new RegExp(unformatRegex)
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var output,
+	                bytes = numeral._.includes(format, 'ib') ? binary : decimal,
+	                suffix = numeral._.includes(format, ' b') || numeral._.includes(format, ' ib') ? ' ' : '',
+	                power,
+	                min,
+	                max;
+
+	            // check for space before
+	            format = format.replace(/\s?i?b/, '');
+
+	            for (power = 0; power <= bytes.suffixes.length; power++) {
+	                min = Math.pow(bytes.base, power);
+	                max = Math.pow(bytes.base, power + 1);
+
+	                if (value === null || value === 0 || value >= min && value < max) {
+	                    suffix += bytes.suffixes[power];
+
+	                    if (min > 0) {
+	                        value = value / min;
+	                    }
+
+	                    break;
+	                }
+	            }
+
+	            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+	            return output + suffix;
+	        },
+	        unformat: function(string) {
+	            var value = numeral._.stringToNumber(string),
+	                power,
+	                bytesMultiplier;
+
+	            if (value) {
+	                for (power = decimal.suffixes.length - 1; power >= 0; power--) {
+	                    if (numeral._.includes(string, decimal.suffixes[power])) {
+	                        bytesMultiplier = Math.pow(decimal.base, power);
+
+	                        break;
+	                    }
+
+	                    if (numeral._.includes(string, binary.suffixes[power])) {
+	                        bytesMultiplier = Math.pow(binary.base, power);
+
+	                        break;
+	                    }
+	                }
+
+	                value *= (bytesMultiplier || 1);
+	            }
+
+	            return value;
+	        }
+	    });
+	})();
+
+
+	(function() {
+	        numeral.register('format', 'currency', {
+	        regexps: {
+	            format: /(\$)/
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var locale = numeral.locales[numeral.options.currentLocale],
+	                symbols = {
+	                    before: format.match(/^([\+|\-|\(|\s|\$]*)/)[0],
+	                    after: format.match(/([\+|\-|\)|\s|\$]*)$/)[0]
+	                },
+	                output,
+	                symbol,
+	                i;
+
+	            // strip format of spaces and $
+	            format = format.replace(/\s?\$\s?/, '');
+
+	            // format the number
+	            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+	            // update the before and after based on value
+	            if (value >= 0) {
+	                symbols.before = symbols.before.replace(/[\-\(]/, '');
+	                symbols.after = symbols.after.replace(/[\-\)]/, '');
+	            } else if (value < 0 && (!numeral._.includes(symbols.before, '-') && !numeral._.includes(symbols.before, '('))) {
+	                symbols.before = '-' + symbols.before;
+	            }
+
+	            // loop through each before symbol
+	            for (i = 0; i < symbols.before.length; i++) {
+	                symbol = symbols.before[i];
+
+	                switch (symbol) {
+	                    case '$':
+	                        output = numeral._.insert(output, locale.currency.symbol, i);
+	                        break;
+	                    case ' ':
+	                        output = numeral._.insert(output, ' ', i + locale.currency.symbol.length - 1);
+	                        break;
+	                }
+	            }
+
+	            // loop through each after symbol
+	            for (i = symbols.after.length - 1; i >= 0; i--) {
+	                symbol = symbols.after[i];
+
+	                switch (symbol) {
+	                    case '$':
+	                        output = i === symbols.after.length - 1 ? output + locale.currency.symbol : numeral._.insert(output, locale.currency.symbol, -(symbols.after.length - (1 + i)));
+	                        break;
+	                    case ' ':
+	                        output = i === symbols.after.length - 1 ? output + ' ' : numeral._.insert(output, ' ', -(symbols.after.length - (1 + i) + locale.currency.symbol.length - 1));
+	                        break;
+	                }
+	            }
+
+
+	            return output;
+	        }
+	    });
+	})();
+
+
+	(function() {
+	        numeral.register('format', 'exponential', {
+	        regexps: {
+	            format: /(e\+|e-)/,
+	            unformat: /(e\+|e-)/
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var output,
+	                exponential = typeof value === 'number' && !numeral._.isNaN(value) ? value.toExponential() : '0e+0',
+	                parts = exponential.split('e');
+
+	            format = format.replace(/e[\+|\-]{1}0/, '');
+
+	            output = numeral._.numberToFormat(Number(parts[0]), format, roundingFunction);
+
+	            return output + 'e' + parts[1];
+	        },
+	        unformat: function(string) {
+	            var parts = numeral._.includes(string, 'e+') ? string.split('e+') : string.split('e-'),
+	                value = Number(parts[0]),
+	                power = Number(parts[1]);
+
+	            power = numeral._.includes(string, 'e-') ? power *= -1 : power;
+
+	            function cback(accum, curr, currI, O) {
+	                var corrFactor = numeral._.correctionFactor(accum, curr),
+	                    num = (accum * corrFactor) * (curr * corrFactor) / (corrFactor * corrFactor);
+	                return num;
+	            }
+
+	            return numeral._.reduce([value, Math.pow(10, power)], cback, 1);
+	        }
+	    });
+	})();
+
+
+	(function() {
+	        numeral.register('format', 'ordinal', {
+	        regexps: {
+	            format: /(o)/
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var locale = numeral.locales[numeral.options.currentLocale],
+	                output,
+	                ordinal = numeral._.includes(format, ' o') ? ' ' : '';
+
+	            // check for space before
+	            format = format.replace(/\s?o/, '');
+
+	            ordinal += locale.ordinal(value);
+
+	            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+	            return output + ordinal;
+	        }
+	    });
+	})();
+
+
+	(function() {
+	        numeral.register('format', 'percentage', {
+	        regexps: {
+	            format: /(%)/,
+	            unformat: /(%)/
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var space = numeral._.includes(format, ' %') ? ' ' : '',
+	                output;
+
+	            if (numeral.options.scalePercentBy100) {
+	                value = value * 100;
+	            }
+
+	            // check for space before %
+	            format = format.replace(/\s?\%/, '');
+
+	            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+	            if (numeral._.includes(output, ')')) {
+	                output = output.split('');
+
+	                output.splice(-1, 0, space + '%');
+
+	                output = output.join('');
+	            } else {
+	                output = output + space + '%';
+	            }
+
+	            return output;
+	        },
+	        unformat: function(string) {
+	            var number = numeral._.stringToNumber(string);
+	            if (numeral.options.scalePercentBy100) {
+	                return number * 0.01;
+	            }
+	            return number;
+	        }
+	    });
+	})();
+
+
+	(function() {
+	        numeral.register('format', 'time', {
+	        regexps: {
+	            format: /(:)/,
+	            unformat: /(:)/
+	        },
+	        format: function(value, format, roundingFunction) {
+	            var hours = Math.floor(value / 60 / 60),
+	                minutes = Math.floor((value - (hours * 60 * 60)) / 60),
+	                seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
+
+	            return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
+	        },
+	        unformat: function(string) {
+	            var timeArray = string.split(':'),
+	                seconds = 0;
+
+	            // turn hours and minutes into seconds and add them all up
+	            if (timeArray.length === 3) {
+	                // hours
+	                seconds = seconds + (Number(timeArray[0]) * 60 * 60);
+	                // minutes
+	                seconds = seconds + (Number(timeArray[1]) * 60);
+	                // seconds
+	                seconds = seconds + Number(timeArray[2]);
+	            } else if (timeArray.length === 2) {
+	                // minutes
+	                seconds = seconds + (Number(timeArray[0]) * 60);
+	                // seconds
+	                seconds = seconds + Number(timeArray[1]);
+	            }
+	            return Number(seconds);
+	        }
+	    });
+	})();
+
+	return numeral;
+	}));
+} (numeral$1));
 
 var numeral = numeral$1.exports;
 
@@ -5439,7 +5782,8 @@ function timeObject(obj) {
   return pick(obj, ["hour", "minute", "second", "millisecond"]);
 }
 
-const ianaRegex = /[A-Za-z_+-]{1,256}(:?\/[A-Za-z0-9_+-]{1,256}(\/[A-Za-z0-9_+-]{1,256})?)?/;
+const ianaRegex =
+  /[A-Za-z_+-]{1,256}(?::?\/[A-Za-z0-9_+-]{1,256}(?:\/[A-Za-z0-9_+-]{1,256})?)?/;
 
 /**
  * @private
@@ -5961,6 +6305,8 @@ class Formatter {
             return "hour";
           case "d":
             return "day";
+          case "w":
+            return "week";
           case "M":
             return "month";
           case "y":
@@ -6022,6 +6368,10 @@ class Zone {
    */
   get name() {
     throw new ZoneIsAbstractError();
+  }
+
+  get ianaName() {
+    return this.name;
   }
 
   /**
@@ -6147,8 +6497,6 @@ class SystemZone extends Zone {
   }
 }
 
-const matchingRegex = RegExp(`^${ianaRegex.source}$`);
-
 let dtfCache = {};
 function makeDTF(zone) {
   if (!dtfCache[zone]) {
@@ -6161,6 +6509,7 @@ function makeDTF(zone) {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
+      era: "short",
     });
   }
   return dtfCache[zone];
@@ -6170,26 +6519,29 @@ const typeToPos = {
   year: 0,
   month: 1,
   day: 2,
-  hour: 3,
-  minute: 4,
-  second: 5,
+  era: 3,
+  hour: 4,
+  minute: 5,
+  second: 6,
 };
 
 function hackyOffset(dtf, date) {
   const formatted = dtf.format(date).replace(/\u200E/g, ""),
-    parsed = /(\d+)\/(\d+)\/(\d+),? (\d+):(\d+):(\d+)/.exec(formatted),
-    [, fMonth, fDay, fYear, fHour, fMinute, fSecond] = parsed;
-  return [fYear, fMonth, fDay, fHour, fMinute, fSecond];
+    parsed = /(\d+)\/(\d+)\/(\d+) (AD|BC),? (\d+):(\d+):(\d+)/.exec(formatted),
+    [, fMonth, fDay, fYear, fadOrBc, fHour, fMinute, fSecond] = parsed;
+  return [fYear, fMonth, fDay, fadOrBc, fHour, fMinute, fSecond];
 }
 
 function partsOffset(dtf, date) {
-  const formatted = dtf.formatToParts(date),
-    filled = [];
+  const formatted = dtf.formatToParts(date);
+  const filled = [];
   for (let i = 0; i < formatted.length; i++) {
-    const { type, value } = formatted[i],
-      pos = typeToPos[type];
+    const { type, value } = formatted[i];
+    const pos = typeToPos[type];
 
-    if (!isUndefined(pos)) {
+    if (type === "era") {
+      filled[pos] = value;
+    } else if (!isUndefined(pos)) {
       filled[pos] = parseInt(value, 10);
     }
   }
@@ -6226,12 +6578,12 @@ class IANAZone extends Zone {
    * Returns whether the provided string is a valid specifier. This only checks the string's format, not that the specifier identifies a known zone; see isValidZone for that.
    * @param {string} s - The string to check validity on
    * @example IANAZone.isValidSpecifier("America/New_York") //=> true
-   * @example IANAZone.isValidSpecifier("Fantasia/Castle") //=> true
    * @example IANAZone.isValidSpecifier("Sport~~blorp") //=> false
+   * @deprecated This method returns false for some valid IANA names. Use isValidZone instead.
    * @return {boolean}
    */
   static isValidSpecifier(s) {
-    return !!(s && s.match(matchingRegex));
+    return this.isValidZone(s);
   }
 
   /**
@@ -6293,10 +6645,14 @@ class IANAZone extends Zone {
 
     if (isNaN(date)) return NaN;
 
-    const dtf = makeDTF(this.name),
-      [year, month, day, hour, minute, second] = dtf.formatToParts
-        ? partsOffset(dtf, date)
-        : hackyOffset(dtf, date);
+    const dtf = makeDTF(this.name);
+    let [year, month, day, adOrBc, hour, minute, second] = dtf.formatToParts
+      ? partsOffset(dtf, date)
+      : hackyOffset(dtf, date);
+
+    if (adOrBc === "BC") {
+      year = -Math.abs(year) + 1;
+    }
 
     // because we're using hour12 and https://bugs.chromium.org/p/chromium/issues/detail?id=1025564&can=2&q=%2224%3A00%22%20datetimeformat
     const adjustedHour = hour === 24 ? 0 : hour;
@@ -6387,6 +6743,14 @@ class FixedOffsetZone extends Zone {
   /** @override **/
   get name() {
     return this.fixed === 0 ? "UTC" : `UTC${formatOffset(this.fixed, "narrow")}`;
+  }
+
+  get ianaName() {
+    if (this.fixed === 0) {
+      return "Etc/UTC";
+    } else {
+      return `Etc/GMT${formatOffset(-this.fixed, "narrow")}`;
+    }
   }
 
   /** @override **/
@@ -6485,8 +6849,7 @@ function normalizeZone(input, defaultZone) {
     const lowered = input.toLowerCase();
     if (lowered === "local" || lowered === "system") return defaultZone;
     else if (lowered === "utc" || lowered === "gmt") return FixedOffsetZone.utcInstance;
-    else if (IANAZone.isValidSpecifier(lowered)) return IANAZone.create(input);
-    else return FixedOffsetZone.parseSpecifier(lowered) || new InvalidZone(input);
+    else return FixedOffsetZone.parseSpecifier(lowered) || IANAZone.create(input);
   } else if (isNumber(input)) {
     return FixedOffsetZone.instance(input);
   } else if (typeof input === "object" && input.offset && typeof input.offset === "number") {
@@ -7094,7 +7457,7 @@ function combineExtractors(...extractors) {
       .reduce(
         ([mergedVals, mergedZone, cursor], ex) => {
           const [val, zone, next] = ex(m, cursor);
-          return [{ ...mergedVals, ...val }, mergedZone || zone, next];
+          return [{ ...mergedVals, ...val }, zone || mergedZone, next];
         },
         [{}, null, 1]
       )
@@ -7128,20 +7491,21 @@ function simpleParse(...keys) {
 }
 
 // ISO and SQL parsing
-const offsetRegex = /(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/,
-  isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,30}))?)?)?/,
-  isoTimeRegex = RegExp(`${isoTimeBaseRegex.source}${offsetRegex.source}?`),
-  isoTimeExtensionRegex = RegExp(`(?:T${isoTimeRegex.source})?`),
-  isoYmdRegex = /([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/,
-  isoWeekRegex = /(\d{4})-?W(\d\d)(?:-?(\d))?/,
-  isoOrdinalRegex = /(\d{4})-?(\d{3})/,
-  extractISOWeekData = simpleParse("weekYear", "weekNumber", "weekDay"),
-  extractISOOrdinalData = simpleParse("year", "ordinal"),
-  sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/, // dumbed-down version of the ISO one
-  sqlTimeRegex = RegExp(
-    `${isoTimeBaseRegex.source} ?(?:${offsetRegex.source}|(${ianaRegex.source}))?`
-  ),
-  sqlTimeExtensionRegex = RegExp(`(?: ${sqlTimeRegex.source})?`);
+const offsetRegex = /(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/;
+const isoExtendedZone = `(?:${offsetRegex.source}?(?:\\[(${ianaRegex.source})\\])?)?`;
+const isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,30}))?)?)?/;
+const isoTimeRegex = RegExp(`${isoTimeBaseRegex.source}${isoExtendedZone}`);
+const isoTimeExtensionRegex = RegExp(`(?:T${isoTimeRegex.source})?`);
+const isoYmdRegex = /([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/;
+const isoWeekRegex = /(\d{4})-?W(\d\d)(?:-?(\d))?/;
+const isoOrdinalRegex = /(\d{4})-?(\d{3})/;
+const extractISOWeekData = simpleParse("weekYear", "weekNumber", "weekDay");
+const extractISOOrdinalData = simpleParse("year", "ordinal");
+const sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/; // dumbed-down version of the ISO one
+const sqlTimeRegex = RegExp(
+  `${isoTimeBaseRegex.source} ?(?:${offsetRegex.source}|(${ianaRegex.source}))?`
+);
+const sqlTimeExtensionRegex = RegExp(`(?: ${sqlTimeRegex.source})?`);
 
 function int(match, pos, fallback) {
   const m = match[pos];
@@ -7319,21 +7683,28 @@ const isoTimeCombinedRegex = combineRegexes(isoTimeRegex);
 const extractISOYmdTimeAndOffset = combineExtractors(
   extractISOYmd,
   extractISOTime,
-  extractISOOffset
+  extractISOOffset,
+  extractIANAZone
 );
 const extractISOWeekTimeAndOffset = combineExtractors(
   extractISOWeekData,
   extractISOTime,
-  extractISOOffset
+  extractISOOffset,
+  extractIANAZone
 );
 const extractISOOrdinalDateAndTime = combineExtractors(
   extractISOOrdinalData,
   extractISOTime,
-  extractISOOffset
+  extractISOOffset,
+  extractIANAZone
 );
-const extractISOTimeAndOffset = combineExtractors(extractISOTime, extractISOOffset);
+const extractISOTimeAndOffset = combineExtractors(
+  extractISOTime,
+  extractISOOffset,
+  extractIANAZone
+);
 
-/**
+/*
  * @private
  */
 
@@ -7373,12 +7744,6 @@ function parseISOTimeOnly(s) {
 const sqlYmdWithTimeExtensionRegex = combineRegexes(sqlYmdRegex, sqlTimeExtensionRegex);
 const sqlTimeCombinedRegex = combineRegexes(sqlTimeRegex);
 
-const extractISOYmdTimeOffsetAndIANAZone = combineExtractors(
-  extractISOYmd,
-  extractISOTime,
-  extractISOOffset,
-  extractIANAZone
-);
 const extractISOTimeOffsetAndIANAZone = combineExtractors(
   extractISOTime,
   extractISOOffset,
@@ -7388,7 +7753,7 @@ const extractISOTimeOffsetAndIANAZone = combineExtractors(
 function parseSQL(s) {
   return parse(
     s,
-    [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeOffsetAndIANAZone],
+    [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeAndOffset],
     [sqlTimeCombinedRegex, extractISOTimeOffsetAndIANAZone]
   );
 }
@@ -7780,6 +8145,7 @@ class Duration {
    * * `m` for minutes
    * * `h` for hours
    * * `d` for days
+   * * `w` for weeks
    * * `M` for months
    * * `y` for years
    * Notes:
@@ -7805,8 +8171,9 @@ class Duration {
   }
 
   /**
-   * Returns a string representation of a Duration with all units included
-   * To modify its behavior use the `listStyle` and any Intl.NumberFormat option, though `unitDisplay` is especially relevant. See {@link Intl.NumberFormat}.
+   * Returns a string representation of a Duration with all units included.
+   * To modify its behavior use the `listStyle` and any Intl.NumberFormat option, though `unitDisplay` is especially relevant.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
    * @param opts - On option object to override the formatting. Accepts the same keys as the options parameter of the native `Int.NumberFormat` constructor, as well as `listStyle`.
    * @example
    * ```js
@@ -8145,7 +8512,7 @@ class Duration {
     if (!this.isValid) return this;
     const negated = {};
     for (const k of Object.keys(this.values)) {
-      negated[k] = -this.values[k];
+      negated[k] = this.values[k] === 0 ? 0 : -this.values[k];
     }
     return clone$1(this, { values: negated }, true);
   }
@@ -8900,7 +9267,7 @@ class Info {
    * @return {boolean}
    */
   static isValidIANAZone(zone) {
-    return IANAZone.isValidSpecifier(zone) && IANAZone.isValidZone(zone);
+    return IANAZone.isValidZone(zone);
   }
 
   /**
@@ -9199,7 +9566,7 @@ function intUnit(regex, post = (i) => i) {
 }
 
 const NBSP = String.fromCharCode(160);
-const spaceOrNBSP = `( |${NBSP})`;
+const spaceOrNBSP = `[ ${NBSP}]`;
 const spaceOrNBSPRegExp = new RegExp(spaceOrNBSP, "g");
 
 function fixListRegex(s) {
@@ -9629,7 +9996,14 @@ function unitOutOfRange(unit, value) {
 }
 
 function dayOfWeek(year, month, day) {
-  const js = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+  const d = new Date(Date.UTC(year, month - 1, day));
+
+  if (year < 100 && year >= 0) {
+    d.setUTCFullYear(d.getUTCFullYear() - 1900);
+  }
+
+  const js = d.getUTCDay();
+
   return js === 0 ? 7 : js;
 }
 
@@ -9926,7 +10300,14 @@ function toISODate(o, extended) {
   return c;
 }
 
-function toISOTime(o, extended, suppressSeconds, suppressMilliseconds, includeOffset) {
+function toISOTime(
+  o,
+  extended,
+  suppressSeconds,
+  suppressMilliseconds,
+  includeOffset,
+  extendedZone
+) {
   let c = padStart(o.c.hour);
   if (extended) {
     c += ":";
@@ -9948,7 +10329,7 @@ function toISOTime(o, extended, suppressSeconds, suppressMilliseconds, includeOf
   }
 
   if (includeOffset) {
-    if (o.isOffsetFixed && o.offset === 0) {
+    if (o.isOffsetFixed && o.offset === 0 && !extendedZone) {
       c += "Z";
     } else if (o.o < 0) {
       c += "-";
@@ -9961,6 +10342,10 @@ function toISOTime(o, extended, suppressSeconds, suppressMilliseconds, includeOf
       c += ":";
       c += padStart(Math.trunc(o.o % 60));
     }
+  }
+
+  if (extendedZone) {
+    c += "[" + o.zone.ianaName + "]";
   }
   return c;
 }
@@ -10036,10 +10421,6 @@ function normalizeUnit(unit) {
 
   return normalized;
 }
-
-// this is a dumbed down version of fromObject() that runs about 60% faster
-// but doesn't do any validation, makes a bunch of assumptions about what units
-// are present, and so on.
 
 // this is a dumbed down version of fromObject() that runs about 60% faster
 // but doesn't do any validation, makes a bunch of assumptions about what units
@@ -10620,7 +11001,7 @@ class DateTime {
   }
 
   /**
-   * Check if an object is a DateTime. Works across context boundaries
+   * Check if an object is an instance of DateTime. Works across context boundaries
    * @param {object} o
    * @return {boolean}
    */
@@ -10921,7 +11302,8 @@ class DateTime {
       return false;
     } else {
       return (
-        this.offset > this.set({ month: 1 }).offset || this.offset > this.set({ month: 5 }).offset
+        this.offset > this.set({ month: 1, day: 1 }).offset ||
+        this.offset > this.set({ month: 5 }).offset
       );
     }
   }
@@ -11274,6 +11656,7 @@ class DateTime {
    * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
    * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
    * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+   * @param {boolean} [opts.extendedZone=true] - add the time zone format extension
    * @param {string} [opts.format='extended'] - choose between the basic and extended format
    * @example DateTime.utc(1983, 5, 25).toISO() //=> '1982-05-25T00:00:00.000Z'
    * @example DateTime.now().toISO() //=> '2017-04-22T20:47:05.335-04:00'
@@ -11286,6 +11669,7 @@ class DateTime {
     suppressSeconds = false,
     suppressMilliseconds = false,
     includeOffset = true,
+    extendedZone = false,
   } = {}) {
     if (!this.isValid) {
       return null;
@@ -11295,7 +11679,7 @@ class DateTime {
 
     let c = toISODate(this, ext);
     c += "T";
-    c += toISOTime(this, ext, suppressSeconds, suppressMilliseconds, includeOffset);
+    c += toISOTime(this, ext, suppressSeconds, suppressMilliseconds, includeOffset, extendedZone);
     return c;
   }
 
@@ -11330,6 +11714,7 @@ class DateTime {
    * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
    * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
    * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+   * @param {boolean} [opts.extendedZone=true] - add the time zone format extension
    * @param {boolean} [opts.includePrefix=false] - include the `T` prefix
    * @param {string} [opts.format='extended'] - choose between the basic and extended format
    * @example DateTime.utc().set({ hour: 7, minute: 34 }).toISOTime() //=> '07:34:19.361Z'
@@ -11343,6 +11728,7 @@ class DateTime {
     suppressSeconds = false,
     includeOffset = true,
     includePrefix = false,
+    extendedZone = false,
     format = "extended",
   } = {}) {
     if (!this.isValid) {
@@ -11352,7 +11738,14 @@ class DateTime {
     let c = includePrefix ? "T" : "";
     return (
       c +
-      toISOTime(this, format === "extended", suppressSeconds, suppressMilliseconds, includeOffset)
+      toISOTime(
+        this,
+        format === "extended",
+        suppressSeconds,
+        suppressMilliseconds,
+        includeOffset,
+        extendedZone
+      )
     );
   }
 
@@ -11395,17 +11788,20 @@ class DateTime {
    * @param {Object} opts - options
    * @param {boolean} [opts.includeZone=false] - include the zone, such as 'America/New_York'. Overrides includeOffset.
    * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+   * @param {boolean} [opts.includeOffsetSpace=true] - include the space between the time and the offset, such as '05:15:16.345 -04:00'
    * @example DateTime.utc().toSQL() //=> '05:15:16.345'
    * @example DateTime.now().toSQL() //=> '05:15:16.345 -04:00'
    * @example DateTime.now().toSQL({ includeOffset: false }) //=> '05:15:16.345'
    * @example DateTime.now().toSQL({ includeZone: false }) //=> '05:15:16.345 America/New_York'
    * @return {string}
    */
-  toSQLTime({ includeOffset = true, includeZone = false } = {}) {
+  toSQLTime({ includeOffset = true, includeZone = false, includeOffsetSpace = true } = {}) {
     let fmt = "HH:mm:ss.SSS";
 
     if (includeZone || includeOffset) {
-      fmt += " ";
+      if (includeOffsetSpace) {
+        fmt += " ";
+      }
       if (includeZone) {
         fmt += "z";
       } else if (includeOffset) {
@@ -11421,6 +11817,7 @@ class DateTime {
    * @param {Object} opts - options
    * @param {boolean} [opts.includeZone=false] - include the zone, such as 'America/New_York'. Overrides includeOffset.
    * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+   * @param {boolean} [opts.includeOffsetSpace=true] - include the space between the time and the offset, such as '05:15:16.345 -04:00'
    * @example DateTime.utc(2014, 7, 13).toSQL() //=> '2014-07-13 00:00:00.000 Z'
    * @example DateTime.local(2014, 7, 13).toSQL() //=> '2014-07-13 00:00:00.000 -04:00'
    * @example DateTime.local(2014, 7, 13).toSQL({ includeOffset: false }) //=> '2014-07-13 00:00:00.000'
@@ -11465,6 +11862,14 @@ class DateTime {
    */
   toSeconds() {
     return this.isValid ? this.ts / 1000 : NaN;
+  }
+
+  /**
+   * Returns the epoch seconds (as a whole number) of this DateTime.
+   * @return {number}
+   */
+  toUnixInteger() {
+    return this.isValid ? Math.floor(this.ts / 1000) : NaN;
   }
 
   /**
@@ -11905,7 +12310,7 @@ function friendlyDateTime(dateTimeish) {
   }
 }
 
-const VERSION = "2.3.0";
+const VERSION = "2.4.0";
 
 var luxon = /*#__PURE__*/Object.freeze({
     __proto__: null,

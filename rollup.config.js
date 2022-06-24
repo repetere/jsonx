@@ -119,9 +119,15 @@ function getPlugins({
   const plugins = [
     replace({
       preventAssignment: true,
-      'process.env.NODE_ENV': minify ?
+      values:{
+
+        'process.env.NODE_ENV': minify ?
         JSON.stringify('production') : JSON.stringify('development'),
-      'global.': '(typeof global!=="undefined" ? global : window).'
+        'util.TextEncoder()':'TextEncoder()',
+        'global.': '(typeof global!=="undefined" ? global : window).',
+      },  hook: "writeBundle",
+
+
     }),
   ];
   if(server===false){
@@ -148,6 +154,7 @@ function getPlugins({
       // 'react-dom': 'ReactDOM'
     }),
   ]);
+
   if (serverDom) {
     plugins.push(alias({
       entries: {
@@ -188,133 +195,133 @@ export default [
       minify: false,
     }),
   },
-  //web core
-  {
-    input: "src/index.ts",
-    output: getOutput({
-      minify: false,
-      server: false,
-      core: true,
-    }),
-    external: coreWebExternal,
-    plugins: getPlugins({
-      minify: false,
-      core: true,
-    }),
-  },
-  //web minified
-  {
-    input: "src/index.ts",
-    output: getOutput({
-      minify: true,
-      server: false,
-    }),
-    external,
-    plugins: getPlugins({
-      minify: true,
-    }),
-  },
-  //web minified core
-  {
-    input: "src/index.ts",
-    output: getOutput({
-      minify: true,
-      server: false,
-      core: true,
-    }),
-    external: coreWebExternal,
-    plugins: getPlugins({
-      minify: true,
-      core: true,
-    }),
-  },
-  //web  legacy
-  {
-    input: "src/index.ts",
-    output: getOutput({
-      minify: false,
-      server: false,
-      legacy: true,
-    }),
-    external,
-    plugins: getPlugins({
-      minify: false,
-      legacy: true,
-    }),
-  },
-  //web  core legacy
-  {
-    input: "src/index.ts",
-    output: getOutput({
-      minify: false,
-      server: false,
-      legacy: true,
-      core: true,
-    }),
-    external: coreWebExternal,
-    plugins: getPlugins({
-      legacy: true,
-      minify: false,
-      core: true,
-    }),
-  },
-  //web minified legacy
-  {
-    input: "src/index.ts",
-    output: getOutput({
-      minify: true,
-      server: false,
-      legacy: true,
-    }),
-    external,
-    plugins: getPlugins({
-      minify: true,
-      legacy: true,
-    }),
-  },
-  //web minified core legacy
-  {
-    input: "src/index.ts",
-    output: getOutput({
-      minify: true,
-      server: false,
-      legacy: true,
-      core: true,
-    }),
-    external: coreWebExternal,
-    plugins: getPlugins({
-      legacy: true,
-      minify: true,
-      core: true,
-    }),
-  },
+  // //web core
+  // {
+  //   input: "src/index.ts",
+  //   output: getOutput({
+  //     minify: false,
+  //     server: false,
+  //     core: true,
+  //   }),
+  //   external: coreWebExternal,
+  //   plugins: getPlugins({
+  //     minify: false,
+  //     core: true,
+  //   }),
+  // },
+  // //web minified
+  // {
+  //   input: "src/index.ts",
+  //   output: getOutput({
+  //     minify: true,
+  //     server: false,
+  //   }),
+  //   external,
+  //   plugins: getPlugins({
+  //     minify: true,
+  //   }),
+  // },
+  // //web minified core
+  // {
+  //   input: "src/index.ts",
+  //   output: getOutput({
+  //     minify: true,
+  //     server: false,
+  //     core: true,
+  //   }),
+  //   external: coreWebExternal,
+  //   plugins: getPlugins({
+  //     minify: true,
+  //     core: true,
+  //   }),
+  // },
+  // //web  legacy
+  // {
+  //   input: "src/index.ts",
+  //   output: getOutput({
+  //     minify: false,
+  //     server: false,
+  //     legacy: true,
+  //   }),
+  //   external,
+  //   plugins: getPlugins({
+  //     minify: false,
+  //     legacy: true,
+  //   }),
+  // },
+  // //web  core legacy
+  // {
+  //   input: "src/index.ts",
+  //   output: getOutput({
+  //     minify: false,
+  //     server: false,
+  //     legacy: true,
+  //     core: true,
+  //   }),
+  //   external: coreWebExternal,
+  //   plugins: getPlugins({
+  //     legacy: true,
+  //     minify: false,
+  //     core: true,
+  //   }),
+  // },
+  // //web minified legacy
+  // {
+  //   input: "src/index.ts",
+  //   output: getOutput({
+  //     minify: true,
+  //     server: false,
+  //     legacy: true,
+  //   }),
+  //   external,
+  //   plugins: getPlugins({
+  //     minify: true,
+  //     legacy: true,
+  //   }),
+  // },
+  // //web minified core legacy
+  // {
+  //   input: "src/index.ts",
+  //   output: getOutput({
+  //     minify: true,
+  //     server: false,
+  //     legacy: true,
+  //     core: true,
+  //   }),
+  //   external: coreWebExternal,
+  //   plugins: getPlugins({
+  //     legacy: true,
+  //     minify: true,
+  //     core: true,
+  //   }),
+  // },
 
-  //server
-  {
-    input: "src/index.ts",
-    output: getOutput({
-      minify: false,
-      server: true,
-    }),
-    external: serverExternal,
-    plugins: getPlugins({
-      minify: false,
-      server: true,
-    }),
-  },
-  //server react-dom-server
-  {
-    input: "src/index.ts",
-    output: getOutput({
-      minify: false,
-      server: true,
-      serverDom: true,
-    }),
-    external: serverExternal,
-    plugins: getPlugins({
-      minify: false,
-      server: true,
-      serverDom: true,
-    }),
-  },
+  // //server
+  // {
+  //   input: "src/index.ts",
+  //   output: getOutput({
+  //     minify: false,
+  //     server: true,
+  //   }),
+  //   external: serverExternal,
+  //   plugins: getPlugins({
+  //     minify: false,
+  //     server: true,
+  //   }),
+  // },
+  // //server react-dom-server
+  // {
+  //   input: "src/index.ts",
+  //   output: getOutput({
+  //     minify: false,
+  //     server: true,
+  //     serverDom: true,
+  //   }),
+  //   external: serverExternal,
+  //   plugins: getPlugins({
+  //     minify: false,
+  //     server: true,
+  //     serverDom: true,
+  //   }),
+  // },
 ];

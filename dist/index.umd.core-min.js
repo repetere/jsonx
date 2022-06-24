@@ -31,8 +31,14 @@
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 	function getAugmentedNamespace(n) {
-		if (n.__esModule) return n;
-		var a = Object.defineProperty({}, '__esModule', {value: true});
+	  var f = n.default;
+		if (typeof f == "function") {
+			var a = function () {
+				return f.apply(this, arguments);
+			};
+			a.prototype = f.prototype;
+	  } else a = {};
+	  Object.defineProperty(a, '__esModule', {value: true});
 		Object.keys(n).forEach(function (k) {
 			var d = Object.getOwnPropertyDescriptor(n, k);
 			Object.defineProperty(a, k, d.get ? d : {
@@ -45,98 +51,9 @@
 		return a;
 	}
 
-	var server_node = {exports: {}};
+	var server_node = {};
 
-	var reactDomServer_node_production_min = {};
-
-	/*
-	object-assign
-	(c) Sindre Sorhus
-	@license MIT
-	*/
-	/* eslint-disable no-unused-vars */
-	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-	var hasOwnProperty$2 = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-	function toObject(val) {
-		if (val === null || val === undefined) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	function shouldUseNative() {
-		try {
-			if (!Object.assign) {
-				return false;
-			}
-
-			// Detect buggy property enumeration order in older V8 versions.
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
-			test1[5] = 'de';
-			if (Object.getOwnPropertyNames(test1)[0] === '5') {
-				return false;
-			}
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test2 = {};
-			for (var i = 0; i < 10; i++) {
-				test2['_' + String.fromCharCode(i)] = i;
-			}
-			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-				return test2[n];
-			});
-			if (order2.join('') !== '0123456789') {
-				return false;
-			}
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test3 = {};
-			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-				test3[letter] = letter;
-			});
-			if (Object.keys(Object.assign({}, test3)).join('') !==
-					'abcdefghijklmnopqrst') {
-				return false;
-			}
-
-			return true;
-		} catch (err) {
-			// We don't expect any of the above to throw, but better to be safe.
-			return false;
-		}
-	}
-
-	var objectAssign = shouldUseNative() ? Object.assign : function (target, source) {
-		var from;
-		var to = toObject(target);
-		var symbols;
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
-
-			for (var key in from) {
-				if (hasOwnProperty$2.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
-
-			if (getOwnPropertySymbols) {
-				symbols = getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
-
-		return to;
-	};
+	var reactDomServerLegacy_node_production_min = {};
 
 	var domain;
 
@@ -839,6 +756,11 @@
 	  ? (typeof global$2!=="undefined" ? global$2 : window).TYPED_ARRAY_SUPPORT
 	  : true;
 
+	/*
+	 * Export kMaxLength after typed array support is determined.
+	 */
+	kMaxLength();
+
 	function kMaxLength () {
 	  return Buffer.TYPED_ARRAY_SUPPORT
 	    ? 0x7fffffff
@@ -930,6 +852,8 @@
 	if (Buffer.TYPED_ARRAY_SUPPORT) {
 	  Buffer.prototype.__proto__ = Uint8Array.prototype;
 	  Buffer.__proto__ = Uint8Array;
+	  if (typeof Symbol !== 'undefined' && Symbol.species &&
+	      Buffer[Symbol.species] === Buffer) ;
 	}
 
 	function assertSize (size) {
@@ -1090,7 +1014,7 @@
 	  }
 	  return length | 0
 	}
-	Buffer.isBuffer = isBuffer;
+	Buffer.isBuffer = isBuffer$1;
 	function internalIsBuffer (b) {
 	  return !!(b != null && b._isBuffer)
 	}
@@ -2556,7 +2480,7 @@
 	// the following is from is-buffer, also by Feross Aboukhadijeh and with same lisence
 	// The _isBuffer check is for Safari 5-7 support, because it's missing
 	// Object.prototype.constructor. Remove this eventually
-	function isBuffer(obj) {
+	function isBuffer$1(obj) {
 	  return obj != null && (!!obj._isBuffer || isFastBuffer(obj) || isSlowBuffer(obj))
 	}
 
@@ -2702,15 +2626,94 @@
 	Item.prototype.run = function () {
 	    this.fun.apply(null, this.array);
 	};
+	var title = 'browser';
+	var platform = 'browser';
+	var browser = true;
+	var env = {};
+	var argv = [];
+	var version = ''; // empty string to avoid regexp issues
+	var versions = {};
+	var release = {};
+	var config = {};
+
+	function noop() {}
+
+	var on = noop;
+	var addListener = noop;
+	var once = noop;
+	var off = noop;
+	var removeListener = noop;
+	var removeAllListeners = noop;
+	var emit = noop;
+
+	function binding(name) {
+	    throw new Error('process.binding is not supported');
+	}
+
+	function cwd () { return '/' }
+	function chdir (dir) {
+	    throw new Error('process.chdir is not supported');
+	}function umask() { return 0; }
 
 	// from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
 	var performance$1 = (typeof global$2!=="undefined" ? global$2 : window).performance || {};
-	performance$1.now        ||
+	var performanceNow =
+	  performance$1.now        ||
 	  performance$1.mozNow     ||
 	  performance$1.msNow      ||
 	  performance$1.oNow       ||
 	  performance$1.webkitNow  ||
 	  function(){ return (new Date()).getTime() };
+
+	// generate timestamp or delta
+	// see http://nodejs.org/api/process.html#process_process_hrtime
+	function hrtime(previousTimestamp){
+	  var clocktime = performanceNow.call(performance$1)*1e-3;
+	  var seconds = Math.floor(clocktime);
+	  var nanoseconds = Math.floor((clocktime%1)*1e9);
+	  if (previousTimestamp) {
+	    seconds = seconds - previousTimestamp[0];
+	    nanoseconds = nanoseconds - previousTimestamp[1];
+	    if (nanoseconds<0) {
+	      seconds--;
+	      nanoseconds += 1e9;
+	    }
+	  }
+	  return [seconds,nanoseconds]
+	}
+
+	var startTime = new Date();
+	function uptime() {
+	  var currentTime = new Date();
+	  var dif = currentTime - startTime;
+	  return dif / 1000;
+	}
+
+	var process = {
+	  nextTick: nextTick,
+	  title: title,
+	  browser: browser,
+	  env: env,
+	  argv: argv,
+	  version: version,
+	  versions: versions,
+	  on: on,
+	  addListener: addListener,
+	  once: once,
+	  off: off,
+	  removeListener: removeListener,
+	  removeAllListeners: removeAllListeners,
+	  emit: emit,
+	  binding: binding,
+	  cwd: cwd,
+	  chdir: chdir,
+	  umask: umask,
+	  hrtime: hrtime,
+	  platform: platform,
+	  release: release,
+	  config: config,
+	  uptime: uptime
+	};
 
 	var inherits;
 	if (typeof Object.create === 'function'){
@@ -2787,10 +2790,18 @@
 	    };
 	  }
 
+	  if (process.noDeprecation === true) {
+	    return fn;
+	  }
+
 	  var warned = false;
 	  function deprecated() {
 	    if (!warned) {
-	      {
+	      if (process.throwDeprecation) {
+	        throw new Error(msg);
+	      } else if (process.traceDeprecation) {
+	        console.trace(msg);
+	      } else {
 	        console.error(msg);
 	      }
 	      warned = true;
@@ -2805,7 +2816,7 @@
 	var debugEnviron;
 	function debuglog(set) {
 	  if (isUndefined$2(debugEnviron))
-	    debugEnviron = '';
+	    debugEnviron = process.env.NODE_DEBUG || '';
 	  set = set.toUpperCase();
 	  if (!debugs[set]) {
 	    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
@@ -3053,7 +3064,7 @@
 	function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
 	  var output = [];
 	  for (var i = 0, l = value.length; i < l; ++i) {
-	    if (hasOwnProperty$1(value, String(i))) {
+	    if (hasOwnProperty$2(value, String(i))) {
 	      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
 	          String(i), true));
 	    } else {
@@ -3084,7 +3095,7 @@
 	      str = ctx.stylize('[Setter]', 'special');
 	    }
 	  }
-	  if (!hasOwnProperty$1(visibleKeys, key)) {
+	  if (!hasOwnProperty$2(visibleKeys, key)) {
 	    name = '[' + key + ']';
 	  }
 	  if (!str) {
@@ -3162,12 +3173,20 @@
 	  return arg === null;
 	}
 
+	function isNullOrUndefined$1(arg) {
+	  return arg == null;
+	}
+
 	function isNumber$1(arg) {
 	  return typeof arg === 'number';
 	}
 
 	function isString$2(arg) {
 	  return typeof arg === 'string';
+	}
+
+	function isSymbol(arg) {
+	  return typeof arg === 'symbol';
 	}
 
 	function isUndefined$2(arg) {
@@ -3195,8 +3214,45 @@
 	  return typeof arg === 'function';
 	}
 
+	function isPrimitive$1(arg) {
+	  return arg === null ||
+	         typeof arg === 'boolean' ||
+	         typeof arg === 'number' ||
+	         typeof arg === 'string' ||
+	         typeof arg === 'symbol' ||  // ES6 symbol
+	         typeof arg === 'undefined';
+	}
+
+	function isBuffer(maybeBuf) {
+	  return isBuffer$1(maybeBuf);
+	}
+
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
+	}
+
+
+	function pad(n) {
+	  return n < 10 ? '0' + n.toString(10) : n.toString(10);
+	}
+
+
+	var months$1 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+	              'Oct', 'Nov', 'Dec'];
+
+	// 26 Feb 16:19:34
+	function timestamp() {
+	  var d = new Date();
+	  var time = [pad(d.getHours()),
+	              pad(d.getMinutes()),
+	              pad(d.getSeconds())].join(':');
+	  return [d.getDate(), months$1[d.getMonth()], time].join(' ');
+	}
+
+
+	// log is just a thin wrapper to console.log that prepends a timestamp
+	function log() {
+	  console.log('%s - %s', timestamp(), format.apply(null, arguments));
 	}
 
 	function _extend(origin, add) {
@@ -3210,9 +3266,61 @@
 	  }
 	  return origin;
 	}
-	function hasOwnProperty$1(obj, prop) {
+	function hasOwnProperty$2(obj, prop) {
 	  return Object.prototype.hasOwnProperty.call(obj, prop);
 	}
+
+	var util = {
+	  inherits: inherits$1,
+	  _extend: _extend,
+	  log: log,
+	  isBuffer: isBuffer,
+	  isPrimitive: isPrimitive$1,
+	  isFunction: isFunction$1,
+	  isError: isError,
+	  isDate: isDate$1,
+	  isObject: isObject$1,
+	  isRegExp: isRegExp,
+	  isUndefined: isUndefined$2,
+	  isSymbol: isSymbol,
+	  isString: isString$2,
+	  isNumber: isNumber$1,
+	  isNullOrUndefined: isNullOrUndefined$1,
+	  isNull: isNull,
+	  isBoolean: isBoolean$1,
+	  isArray: isArray,
+	  inspect: inspect,
+	  deprecate: deprecate,
+	  format: format,
+	  debuglog: debuglog
+	};
+
+	var util$1 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		format: format,
+		deprecate: deprecate,
+		debuglog: debuglog,
+		inspect: inspect,
+		isArray: isArray,
+		isBoolean: isBoolean$1,
+		isNull: isNull,
+		isNullOrUndefined: isNullOrUndefined$1,
+		isNumber: isNumber$1,
+		isString: isString$2,
+		isSymbol: isSymbol,
+		isUndefined: isUndefined$2,
+		isRegExp: isRegExp,
+		isObject: isObject$1,
+		isDate: isDate$1,
+		isError: isError,
+		isFunction: isFunction$1,
+		isPrimitive: isPrimitive$1,
+		isBuffer: isBuffer,
+		log: log,
+		inherits: inherits$1,
+		_extend: _extend,
+		'default': util
+	});
 
 	function BufferList() {
 	  this.head = null;
@@ -3811,7 +3919,7 @@
 
 	function chunkInvalid(state, chunk) {
 	  var er = null;
-	  if (!isBuffer(chunk) && typeof chunk !== 'string' && chunk !== null && chunk !== undefined && !state.objectMode) {
+	  if (!isBuffer$1(chunk) && typeof chunk !== 'string' && chunk !== null && chunk !== undefined && !state.objectMode) {
 	    er = new TypeError('Invalid non-string/buffer chunk');
 	  }
 	  return er;
@@ -4832,8 +4940,8 @@
 	inherits$1(Duplex, Readable);
 
 	var keys = Object.keys(Writable.prototype);
-	for (var v = 0; v < keys.length; v++) {
-	  var method = keys[v];
+	for (var v$1 = 0; v$1 < keys.length; v$1++) {
+	  var method = keys[v$1];
 	  if (!Duplex.prototype[method]) Duplex.prototype[method] = Writable.prototype[method];
 	}
 	function Duplex(options) {
@@ -5117,9 +5225,116 @@
 		Stream: Stream
 	});
 
-	var require$$2 = /*@__PURE__*/getAugmentedNamespace(stream);
+	var require$$1 = /*@__PURE__*/getAugmentedNamespace(stream);
 
-	/** @license React v17.0.2
+	/**
+	 * @license React
+	 * react-dom-server-legacy.node.production.min.js
+	 *
+	 * Copyright (c) Facebook, Inc. and its affiliates.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 */
+	var ea$1=React__default["default"],fa$1=require$$1,n$1=Object.prototype.hasOwnProperty,ha$1=/^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,ia$1={},ja$1={};
+	function ka$1(a){if(n$1.call(ja$1,a))return !0;if(n$1.call(ia$1,a))return !1;if(ha$1.test(a))return ja$1[a]=!0;ia$1[a]=!0;return !1}function q$1(a,b,c,d,f,e,g){this.acceptsBooleans=2===b||3===b||4===b;this.attributeName=d;this.attributeNamespace=f;this.mustUseProperty=c;this.propertyName=a;this.type=b;this.sanitizeURL=e;this.removeEmptyString=g;}var r$1={};
+	"children dangerouslySetInnerHTML defaultValue defaultChecked innerHTML suppressContentEditableWarning suppressHydrationWarning style".split(" ").forEach(function(a){r$1[a]=new q$1(a,0,!1,a,null,!1,!1);});[["acceptCharset","accept-charset"],["className","class"],["htmlFor","for"],["httpEquiv","http-equiv"]].forEach(function(a){var b=a[0];r$1[b]=new q$1(b,1,!1,a[1],null,!1,!1);});["contentEditable","draggable","spellCheck","value"].forEach(function(a){r$1[a]=new q$1(a,2,!1,a.toLowerCase(),null,!1,!1);});
+	["autoReverse","externalResourcesRequired","focusable","preserveAlpha"].forEach(function(a){r$1[a]=new q$1(a,2,!1,a,null,!1,!1);});"allowFullScreen async autoFocus autoPlay controls default defer disabled disablePictureInPicture disableRemotePlayback formNoValidate hidden loop noModule noValidate open playsInline readOnly required reversed scoped seamless itemScope".split(" ").forEach(function(a){r$1[a]=new q$1(a,3,!1,a.toLowerCase(),null,!1,!1);});
+	["checked","multiple","muted","selected"].forEach(function(a){r$1[a]=new q$1(a,3,!0,a,null,!1,!1);});["capture","download"].forEach(function(a){r$1[a]=new q$1(a,4,!1,a,null,!1,!1);});["cols","rows","size","span"].forEach(function(a){r$1[a]=new q$1(a,6,!1,a,null,!1,!1);});["rowSpan","start"].forEach(function(a){r$1[a]=new q$1(a,5,!1,a.toLowerCase(),null,!1,!1);});var la$1=/[\-:]([a-z])/g;function ma$1(a){return a[1].toUpperCase()}
+	"accent-height alignment-baseline arabic-form baseline-shift cap-height clip-path clip-rule color-interpolation color-interpolation-filters color-profile color-rendering dominant-baseline enable-background fill-opacity fill-rule flood-color flood-opacity font-family font-size font-size-adjust font-stretch font-style font-variant font-weight glyph-name glyph-orientation-horizontal glyph-orientation-vertical horiz-adv-x horiz-origin-x image-rendering letter-spacing lighting-color marker-end marker-mid marker-start overline-position overline-thickness paint-order panose-1 pointer-events rendering-intent shape-rendering stop-color stop-opacity strikethrough-position strikethrough-thickness stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin stroke-miterlimit stroke-opacity stroke-width text-anchor text-decoration text-rendering underline-position underline-thickness unicode-bidi unicode-range units-per-em v-alphabetic v-hanging v-ideographic v-mathematical vector-effect vert-adv-y vert-origin-x vert-origin-y word-spacing writing-mode xmlns:xlink x-height".split(" ").forEach(function(a){var b=a.replace(la$1,
+	ma$1);r$1[b]=new q$1(b,1,!1,a,null,!1,!1);});"xlink:actuate xlink:arcrole xlink:role xlink:show xlink:title xlink:type".split(" ").forEach(function(a){var b=a.replace(la$1,ma$1);r$1[b]=new q$1(b,1,!1,a,"http://www.w3.org/1999/xlink",!1,!1);});["xml:base","xml:lang","xml:space"].forEach(function(a){var b=a.replace(la$1,ma$1);r$1[b]=new q$1(b,1,!1,a,"http://www.w3.org/XML/1998/namespace",!1,!1);});["tabIndex","crossOrigin"].forEach(function(a){r$1[a]=new q$1(a,1,!1,a.toLowerCase(),null,!1,!1);});
+	r$1.xlinkHref=new q$1("xlinkHref",1,!1,"xlink:href","http://www.w3.org/1999/xlink",!0,!1);["src","href","action","formAction"].forEach(function(a){r$1[a]=new q$1(a,1,!1,a.toLowerCase(),null,!0,!0);});
+	var t$1={animationIterationCount:!0,aspectRatio:!0,borderImageOutset:!0,borderImageSlice:!0,borderImageWidth:!0,boxFlex:!0,boxFlexGroup:!0,boxOrdinalGroup:!0,columnCount:!0,columns:!0,flex:!0,flexGrow:!0,flexPositive:!0,flexShrink:!0,flexNegative:!0,flexOrder:!0,gridArea:!0,gridRow:!0,gridRowEnd:!0,gridRowSpan:!0,gridRowStart:!0,gridColumn:!0,gridColumnEnd:!0,gridColumnSpan:!0,gridColumnStart:!0,fontWeight:!0,lineClamp:!0,lineHeight:!0,opacity:!0,order:!0,orphans:!0,tabSize:!0,widows:!0,zIndex:!0,zoom:!0,
+	fillOpacity:!0,floodOpacity:!0,stopOpacity:!0,strokeDasharray:!0,strokeDashoffset:!0,strokeMiterlimit:!0,strokeOpacity:!0,strokeWidth:!0},na=["Webkit","ms","Moz","O"];Object.keys(t$1).forEach(function(a){na.forEach(function(b){b=b+a.charAt(0).toUpperCase()+a.substring(1);t$1[b]=t$1[a];});});var oa=/["'&<>]/;
+	function u$1(a){if("boolean"===typeof a||"number"===typeof a)return ""+a;a=""+a;var b=oa.exec(a);if(b){var c="",d,f=0;for(d=b.index;d<a.length;d++){switch(a.charCodeAt(d)){case 34:b="&quot;";break;case 38:b="&amp;";break;case 39:b="&#x27;";break;case 60:b="&lt;";break;case 62:b="&gt;";break;default:continue}f!==d&&(c+=a.substring(f,d));f=d+1;c+=b;}a=f!==d?c+a.substring(f,d):c;}return a}var pa$1=/([A-Z])/g,qa$1=/^ms-/,ra$1=Array.isArray;function v(a,b){return {insertionMode:a,selectedValue:b}}
+	function sa$1(a,b,c){switch(b){case "select":return v(1,null!=c.value?c.value:c.defaultValue);case "svg":return v(2,null);case "math":return v(3,null);case "foreignObject":return v(1,null);case "table":return v(4,null);case "thead":case "tbody":case "tfoot":return v(5,null);case "colgroup":return v(7,null);case "tr":return v(6,null)}return 4<=a.insertionMode||0===a.insertionMode?v(1,null):a}var ta$1=new Map;
+	function ua$1(a,b,c){if("object"!==typeof c)throw Error("The `style` prop expects a mapping from style properties to values, not a string. For example, style={{marginRight: spacing + 'em'}} when using JSX.");b=!0;for(var d in c)if(n$1.call(c,d)){var f=c[d];if(null!=f&&"boolean"!==typeof f&&""!==f){if(0===d.indexOf("--")){var e=u$1(d);f=u$1((""+f).trim());}else {e=d;var g=ta$1.get(e);void 0!==g?e=g:(g=u$1(e.replace(pa$1,"-$1").toLowerCase().replace(qa$1,"-ms-")),ta$1.set(e,g),e=g);f="number"===typeof f?0===f||n$1.call(t$1,
+	d)?""+f:f+"px":u$1((""+f).trim());}b?(b=!1,a.push(' style="',e,":",f)):a.push(";",e,":",f);}}b||a.push('"');}
+	function w$1(a,b,c,d){switch(c){case "style":ua$1(a,b,d);return;case "defaultValue":case "defaultChecked":case "innerHTML":case "suppressContentEditableWarning":case "suppressHydrationWarning":return}if(!(2<c.length)||"o"!==c[0]&&"O"!==c[0]||"n"!==c[1]&&"N"!==c[1])if(b=r$1.hasOwnProperty(c)?r$1[c]:null,null!==b){switch(typeof d){case "function":case "symbol":return;case "boolean":if(!b.acceptsBooleans)return}c=b.attributeName;switch(b.type){case 3:d&&a.push(" ",c,'=""');break;case 4:!0===d?a.push(" ",c,'=""'):
+	!1!==d&&a.push(" ",c,'="',u$1(d),'"');break;case 5:isNaN(d)||a.push(" ",c,'="',u$1(d),'"');break;case 6:!isNaN(d)&&1<=d&&a.push(" ",c,'="',u$1(d),'"');break;default:b.sanitizeURL&&(d=""+d),a.push(" ",c,'="',u$1(d),'"');}}else if(ka$1(c)){switch(typeof d){case "function":case "symbol":return;case "boolean":if(b=c.toLowerCase().slice(0,5),"data-"!==b&&"aria-"!==b)return}a.push(" ",c,'="',u$1(d),'"');}}
+	function x$1(a,b,c){if(null!=b){if(null!=c)throw Error("Can only set one of `children` or `props.dangerouslySetInnerHTML`.");if("object"!==typeof b||!("__html"in b))throw Error("`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. Please visit https://reactjs.org/link/dangerously-set-inner-html for more information.");b=b.__html;null!==b&&void 0!==b&&a.push(""+b);}}function va$1(a){var b="";ea$1.Children.forEach(a,function(a){null!=a&&(b+=a);});return b}
+	function wa$1(a,b,c,d){a.push(z$1(c));var f=c=null,e;for(e in b)if(n$1.call(b,e)){var g=b[e];if(null!=g)switch(e){case "children":c=g;break;case "dangerouslySetInnerHTML":f=g;break;default:w$1(a,d,e,g);}}a.push(">");x$1(a,f,c);return "string"===typeof c?(a.push(u$1(c)),null):c}var xa$1=/^[a-zA-Z][a-zA-Z:_\.\-\d]*$/,ya$1=new Map;function z$1(a){var b=ya$1.get(a);if(void 0===b){if(!xa$1.test(a))throw Error("Invalid tag: "+a);b="<"+a;ya$1.set(a,b);}return b}
+	function za$1(a,b,c,d,f){switch(b){case "select":a.push(z$1("select"));var e=null,g=null;for(l in c)if(n$1.call(c,l)){var h=c[l];if(null!=h)switch(l){case "children":e=h;break;case "dangerouslySetInnerHTML":g=h;break;case "defaultValue":case "value":break;default:w$1(a,d,l,h);}}a.push(">");x$1(a,g,e);return e;case "option":g=f.selectedValue;a.push(z$1("option"));var k=h=null,m=null;var l=null;for(e in c)if(n$1.call(c,e)){var p=c[e];if(null!=p)switch(e){case "children":h=p;break;case "selected":m=p;break;case "dangerouslySetInnerHTML":l=
+	p;break;case "value":k=p;default:w$1(a,d,e,p);}}if(null!=g)if(c=null!==k?""+k:va$1(h),ra$1(g))for(d=0;d<g.length;d++){if(""+g[d]===c){a.push(' selected=""');break}}else ""+g===c&&a.push(' selected=""');else m&&a.push(' selected=""');a.push(">");x$1(a,l,h);return h;case "textarea":a.push(z$1("textarea"));l=g=e=null;for(h in c)if(n$1.call(c,h)&&(k=c[h],null!=k))switch(h){case "children":l=k;break;case "value":e=k;break;case "defaultValue":g=k;break;case "dangerouslySetInnerHTML":throw Error("`dangerouslySetInnerHTML` does not make sense on <textarea>.");
+	default:w$1(a,d,h,k);}null===e&&null!==g&&(e=g);a.push(">");if(null!=l){if(null!=e)throw Error("If you supply `defaultValue` on a <textarea>, do not pass children.");if(ra$1(l)&&1<l.length)throw Error("<textarea> can only have at most one child.");e=""+l;}"string"===typeof e&&"\n"===e[0]&&a.push("\n");null!==e&&a.push(u$1(""+e));return null;case "input":a.push(z$1("input"));k=l=h=e=null;for(g in c)if(n$1.call(c,g)&&(m=c[g],null!=m))switch(g){case "children":case "dangerouslySetInnerHTML":throw Error("input is a self-closing tag and must neither have `children` nor use `dangerouslySetInnerHTML`.");
+	case "defaultChecked":k=m;break;case "defaultValue":h=m;break;case "checked":l=m;break;case "value":e=m;break;default:w$1(a,d,g,m);}null!==l?w$1(a,d,"checked",l):null!==k&&w$1(a,d,"checked",k);null!==e?w$1(a,d,"value",e):null!==h&&w$1(a,d,"value",h);a.push("/>");return null;case "menuitem":a.push(z$1("menuitem"));for(var B in c)if(n$1.call(c,B)&&(e=c[B],null!=e))switch(B){case "children":case "dangerouslySetInnerHTML":throw Error("menuitems cannot have `children` nor `dangerouslySetInnerHTML`.");default:w$1(a,d,B,
+	e);}a.push(">");return null;case "title":a.push(z$1("title"));e=null;for(p in c)if(n$1.call(c,p)&&(g=c[p],null!=g))switch(p){case "children":e=g;break;case "dangerouslySetInnerHTML":throw Error("`dangerouslySetInnerHTML` does not make sense on <title>.");default:w$1(a,d,p,g);}a.push(">");return e;case "listing":case "pre":a.push(z$1(b));g=e=null;for(k in c)if(n$1.call(c,k)&&(h=c[k],null!=h))switch(k){case "children":e=h;break;case "dangerouslySetInnerHTML":g=h;break;default:w$1(a,d,k,h);}a.push(">");if(null!=g){if(null!=
+	e)throw Error("Can only set one of `children` or `props.dangerouslySetInnerHTML`.");if("object"!==typeof g||!("__html"in g))throw Error("`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. Please visit https://reactjs.org/link/dangerously-set-inner-html for more information.");c=g.__html;null!==c&&void 0!==c&&("string"===typeof c&&0<c.length&&"\n"===c[0]?a.push("\n",c):a.push(""+c));}"string"===typeof e&&"\n"===e[0]&&a.push("\n");return e;case "area":case "base":case "br":case "col":case "embed":case "hr":case "img":case "keygen":case "link":case "meta":case "param":case "source":case "track":case "wbr":a.push(z$1(b));
+	for(var C in c)if(n$1.call(c,C)&&(e=c[C],null!=e))switch(C){case "children":case "dangerouslySetInnerHTML":throw Error(b+" is a self-closing tag and must neither have `children` nor use `dangerouslySetInnerHTML`.");default:w$1(a,d,C,e);}a.push("/>");return null;case "annotation-xml":case "color-profile":case "font-face":case "font-face-src":case "font-face-uri":case "font-face-format":case "font-face-name":case "missing-glyph":return wa$1(a,c,b,d);case "html":return 0===f.insertionMode&&a.push("<!DOCTYPE html>"),
+	wa$1(a,c,b,d);default:if(-1===b.indexOf("-")&&"string"!==typeof c.is)return wa$1(a,c,b,d);a.push(z$1(b));g=e=null;for(m in c)if(n$1.call(c,m)&&(h=c[m],null!=h))switch(m){case "children":e=h;break;case "dangerouslySetInnerHTML":g=h;break;case "style":ua$1(a,d,h);break;case "suppressContentEditableWarning":case "suppressHydrationWarning":break;default:ka$1(m)&&"function"!==typeof h&&"symbol"!==typeof h&&a.push(" ",m,'="',u$1(h),'"');}a.push(">");x$1(a,g,e);return e}}
+	function Aa$1(a,b,c){a.push('\x3c!--$?--\x3e<template id="');if(null===c)throw Error("An ID must have been assigned before we can complete the boundary.");a.push(c);return a.push('"></template>')}
+	function Ba$1(a,b,c,d){switch(c.insertionMode){case 0:case 1:return a.push('<div hidden id="'),a.push(b.segmentPrefix),b=d.toString(16),a.push(b),a.push('">');case 2:return a.push('<svg aria-hidden="true" style="display:none" id="'),a.push(b.segmentPrefix),b=d.toString(16),a.push(b),a.push('">');case 3:return a.push('<math aria-hidden="true" style="display:none" id="'),a.push(b.segmentPrefix),b=d.toString(16),a.push(b),a.push('">');case 4:return a.push('<table hidden id="'),a.push(b.segmentPrefix),
+	b=d.toString(16),a.push(b),a.push('">');case 5:return a.push('<table hidden><tbody id="'),a.push(b.segmentPrefix),b=d.toString(16),a.push(b),a.push('">');case 6:return a.push('<table hidden><tr id="'),a.push(b.segmentPrefix),b=d.toString(16),a.push(b),a.push('">');case 7:return a.push('<table hidden><colgroup id="'),a.push(b.segmentPrefix),b=d.toString(16),a.push(b),a.push('">');default:throw Error("Unknown insertion mode. This is a bug in React.");}}
+	function Ca$1(a,b){switch(b.insertionMode){case 0:case 1:return a.push("</div>");case 2:return a.push("</svg>");case 3:return a.push("</math>");case 4:return a.push("</table>");case 5:return a.push("</tbody></table>");case 6:return a.push("</tr></table>");case 7:return a.push("</colgroup></table>");default:throw Error("Unknown insertion mode. This is a bug in React.");}}var Da$1=/[<\u2028\u2029]/g;
+	function Ea$1(a){return JSON.stringify(a).replace(Da$1,function(a){switch(a){case "<":return "\\u003c";case "\u2028":return "\\u2028";case "\u2029":return "\\u2029";default:throw Error("escapeJSStringsForInstructionScripts encountered a match it does not know how to replace. this means the match regex and the replacement characters are no longer in sync. This is a bug in React");}})}
+	function Fa$1(a,b){b=void 0===b?"":b;return {bootstrapChunks:[],startInlineScript:"<script>",placeholderPrefix:b+"P:",segmentPrefix:b+"S:",boundaryPrefix:b+"B:",idPrefix:b,nextSuspenseID:0,sentCompleteSegmentFunction:!1,sentCompleteBoundaryFunction:!1,sentClientRenderFunction:!1,generateStaticMarkup:a}}function Ga$1(){return {insertionMode:1,selectedValue:null}}function Ha$1(a,b,c,d){if(c.generateStaticMarkup)return a.push(u$1(b)),!1;""===b?a=d:(d&&a.push("\x3c!-- --\x3e"),a.push(u$1(b)),a=!0);return a}
+	var A$1=Object.assign,Ia$1=Symbol.for("react.element"),Ja$1=Symbol.for("react.portal"),Ka$1=Symbol.for("react.fragment"),La$1=Symbol.for("react.strict_mode"),Ma$1=Symbol.for("react.profiler"),Na$1=Symbol.for("react.provider"),Oa$1=Symbol.for("react.context"),Pa$1=Symbol.for("react.forward_ref"),Qa$1=Symbol.for("react.suspense"),Ra$1=Symbol.for("react.suspense_list"),Sa$1=Symbol.for("react.memo"),Ta$1=Symbol.for("react.lazy"),Ua$1=Symbol.for("react.scope"),Va$1=Symbol.for("react.debug_trace_mode"),Wa$1=Symbol.for("react.legacy_hidden"),
+	Xa$1=Symbol.for("react.default_value"),Ya$1=Symbol.iterator;
+	function Za$1(a){if(null==a)return null;if("function"===typeof a)return a.displayName||a.name||null;if("string"===typeof a)return a;switch(a){case Ka$1:return "Fragment";case Ja$1:return "Portal";case Ma$1:return "Profiler";case La$1:return "StrictMode";case Qa$1:return "Suspense";case Ra$1:return "SuspenseList"}if("object"===typeof a)switch(a.$$typeof){case Oa$1:return (a.displayName||"Context")+".Consumer";case Na$1:return (a._context.displayName||"Context")+".Provider";case Pa$1:var b=a.render;a=a.displayName;a||(a=b.displayName||
+	b.name||"",a=""!==a?"ForwardRef("+a+")":"ForwardRef");return a;case Sa$1:return b=a.displayName||null,null!==b?b:Za$1(a.type)||"Memo";case Ta$1:b=a._payload;a=a._init;try{return Za$1(a(b))}catch(c){}}return null}var $a$1={};function ab$1(a,b){a=a.contextTypes;if(!a)return $a$1;var c={},d;for(d in a)c[d]=b[d];return c}var D=null;
+	function E(a,b){if(a!==b){a.context._currentValue2=a.parentValue;a=a.parent;var c=b.parent;if(null===a){if(null!==c)throw Error("The stacks must reach the root at the same time. This is a bug in React.");}else {if(null===c)throw Error("The stacks must reach the root at the same time. This is a bug in React.");E(a,c);}b.context._currentValue2=b.value;}}function bb$1(a){a.context._currentValue2=a.parentValue;a=a.parent;null!==a&&bb$1(a);}
+	function cb$1(a){var b=a.parent;null!==b&&cb$1(b);a.context._currentValue2=a.value;}function db$1(a,b){a.context._currentValue2=a.parentValue;a=a.parent;if(null===a)throw Error("The depth must equal at least at zero before reaching the root. This is a bug in React.");a.depth===b.depth?E(a,b):db$1(a,b);}
+	function eb$1(a,b){var c=b.parent;if(null===c)throw Error("The depth must equal at least at zero before reaching the root. This is a bug in React.");a.depth===c.depth?E(a,c):eb$1(a,c);b.context._currentValue2=b.value;}function F$1(a){var b=D;b!==a&&(null===b?cb$1(a):null===a?bb$1(b):b.depth===a.depth?E(b,a):b.depth>a.depth?db$1(b,a):eb$1(b,a),D=a);}
+	var fb$1={isMounted:function(){return !1},enqueueSetState:function(a,b){a=a._reactInternals;null!==a.queue&&a.queue.push(b);},enqueueReplaceState:function(a,b){a=a._reactInternals;a.replace=!0;a.queue=[b];},enqueueForceUpdate:function(){}};
+	function gb$1(a,b,c,d){var f=void 0!==a.state?a.state:null;a.updater=fb$1;a.props=c;a.state=f;var e={queue:[],replace:!1};a._reactInternals=e;var g=b.contextType;a.context="object"===typeof g&&null!==g?g._currentValue2:d;g=b.getDerivedStateFromProps;"function"===typeof g&&(g=g(c,f),f=null===g||void 0===g?f:A$1({},f,g),a.state=f);if("function"!==typeof b.getDerivedStateFromProps&&"function"!==typeof a.getSnapshotBeforeUpdate&&("function"===typeof a.UNSAFE_componentWillMount||"function"===typeof a.componentWillMount))if(b=
+	a.state,"function"===typeof a.componentWillMount&&a.componentWillMount(),"function"===typeof a.UNSAFE_componentWillMount&&a.UNSAFE_componentWillMount(),b!==a.state&&fb$1.enqueueReplaceState(a,a.state,null),null!==e.queue&&0<e.queue.length)if(b=e.queue,g=e.replace,e.queue=null,e.replace=!1,g&&1===b.length)a.state=b[0];else {e=g?b[0]:a.state;f=!0;for(g=g?1:0;g<b.length;g++){var h=b[g];h="function"===typeof h?h.call(a,e,c,d):h;null!=h&&(f?(f=!1,e=A$1({},e,h)):A$1(e,h));}a.state=e;}else e.queue=null;}
+	var hb$1={id:1,overflow:""};function ib$1(a,b,c){var d=a.id;a=a.overflow;var f=32-G$1(d)-1;d&=~(1<<f);c+=1;var e=32-G$1(b)+f;if(30<e){var g=f-f%5;e=(d&(1<<g)-1).toString(32);d>>=g;f-=g;return {id:1<<32-G$1(b)+f|c<<f|d,overflow:e+a}}return {id:1<<e|c<<f|d,overflow:a}}var G$1=Math.clz32?Math.clz32:jb$1,kb$1=Math.log,lb$1=Math.LN2;function jb$1(a){a>>>=0;return 0===a?32:31-(kb$1(a)/lb$1|0)|0}function mb$1(a,b){return a===b&&(0!==a||1/a===1/b)||a!==a&&b!==b}
+	var nb$1="function"===typeof Object.is?Object.is:mb$1,H$1=null,ob$1=null,I$1=null,J$1=null,K$1=!1,L$1=!1,M$1=0,N$1=null,O$1=0;
+	function P$1(){if(null===H$1)throw Error("Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.");return H$1}
+	function rb$1(){if(0<O$1)throw Error("Rendered more hooks than during the previous render");return {memoizedState:null,queue:null,next:null}}function sb$1(){null===J$1?null===I$1?(K$1=!1,I$1=J$1=rb$1()):(K$1=!0,J$1=I$1):null===J$1.next?(K$1=!1,J$1=J$1.next=rb$1()):(K$1=!0,J$1=J$1.next);return J$1}function tb$1(){ob$1=H$1=null;L$1=!1;I$1=null;O$1=0;J$1=N$1=null;}function ub$1(a,b){return "function"===typeof b?b(a):b}
+	function vb$1(a,b,c){H$1=P$1();J$1=sb$1();if(K$1){var d=J$1.queue;b=d.dispatch;if(null!==N$1&&(c=N$1.get(d),void 0!==c)){N$1.delete(d);d=J$1.memoizedState;do d=a(d,c.action),c=c.next;while(null!==c);J$1.memoizedState=d;return [d,b]}return [J$1.memoizedState,b]}a=a===ub$1?"function"===typeof b?b():b:void 0!==c?c(b):b;J$1.memoizedState=a;a=J$1.queue={last:null,dispatch:null};a=a.dispatch=wb$1.bind(null,H$1,a);return [J$1.memoizedState,a]}
+	function xb$1(a,b){H$1=P$1();J$1=sb$1();b=void 0===b?null:b;if(null!==J$1){var c=J$1.memoizedState;if(null!==c&&null!==b){var d=c[1];a:if(null===d)d=!1;else {for(var f=0;f<d.length&&f<b.length;f++)if(!nb$1(b[f],d[f])){d=!1;break a}d=!0;}if(d)return c[0]}}a=a();J$1.memoizedState=[a,b];return a}
+	function wb$1(a,b,c){if(25<=O$1)throw Error("Too many re-renders. React limits the number of renders to prevent an infinite loop.");if(a===H$1)if(L$1=!0,a={action:c,next:null},null===N$1&&(N$1=new Map),c=N$1.get(b),void 0===c)N$1.set(b,a);else {for(b=c;null!==b.next;)b=b.next;b.next=a;}}function yb$1(){throw Error("startTransition cannot be called during server rendering.");}function Q$1(){}
+	var zb$1={readContext:function(a){return a._currentValue2},useContext:function(a){P$1();return a._currentValue2},useMemo:xb$1,useReducer:vb$1,useRef:function(a){H$1=P$1();J$1=sb$1();var b=J$1.memoizedState;return null===b?(a={current:a},J$1.memoizedState=a):b},useState:function(a){return vb$1(ub$1,a)},useInsertionEffect:Q$1,useLayoutEffect:function(){},useCallback:function(a,b){return xb$1(function(){return a},b)},useImperativeHandle:Q$1,useEffect:Q$1,useDebugValue:Q$1,useDeferredValue:function(a){P$1();return a},useTransition:function(){P$1();
+	return [!1,yb$1]},useId:function(){var a=ob$1.treeContext;var b=a.overflow;a=a.id;a=(a&~(1<<32-G$1(a)-1)).toString(32)+b;var c=R$1;if(null===c)throw Error("Invalid hook call. Hooks can only be called inside of the body of a function component.");b=M$1++;a=":"+c.idPrefix+"R"+a;0<b&&(a+="H"+b.toString(32));return a+":"},useMutableSource:function(a,b){P$1();return b(a._source)},useSyncExternalStore:function(a,b,c){if(void 0===c)throw Error("Missing getServerSnapshot, which is required for server-rendered content. Will revert to client rendering.");
+	return c()}},R$1=null,Ab$1=ea$1.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher;function Bb$1(a){console.error(a);return null}function S$1(){}
+	function Cb$1(a,b,c,d,f,e,g,h,k){var m=[],l=new Set;b={destination:null,responseState:b,progressiveChunkSize:void 0===d?12800:d,status:0,fatalError:null,nextSegmentId:0,allPendingTasks:0,pendingRootTasks:0,completedRootSegment:null,abortableTasks:l,pingedTasks:m,clientRenderedBoundaries:[],completedBoundaries:[],partialBoundaries:[],onError:void 0===f?Bb$1:f,onAllReady:void 0===e?S$1:e,onShellReady:void 0===g?S$1:g,onShellError:void 0===h?S$1:h,onFatalError:void 0===k?S$1:k};c=T$1(b,0,null,c,!1,!1);c.parentFlushed=
+	!0;a=Db$1(b,a,null,c,l,$a$1,null,hb$1);m.push(a);return b}function Db$1(a,b,c,d,f,e,g,h){a.allPendingTasks++;null===c?a.pendingRootTasks++:c.pendingTasks++;var k={node:b,ping:function(){var b=a.pingedTasks;b.push(k);1===b.length&&Eb(a);},blockedBoundary:c,blockedSegment:d,abortSet:f,legacyContext:e,context:g,treeContext:h};f.add(k);return k}function T$1(a,b,c,d,f,e){return {status:0,id:-1,index:b,parentFlushed:!1,chunks:[],children:[],formatContext:d,boundary:c,lastPushedText:f,textEmbedded:e}}
+	function U$1(a,b){a=a.onError(b);if(null!=a&&"string"!==typeof a)throw Error('onError returned something with a type other than "string". onError should return a string and may return null or undefined but must not return anything else. It received something of type "'+typeof a+'" instead');return a}function V$1(a,b){var c=a.onShellError;c(b);c=a.onFatalError;c(b);null!==a.destination?(a.status=2,a.destination.destroy(b)):(a.status=1,a.fatalError=b);}
+	function Fb$1(a,b,c,d,f){H$1={};ob$1=b;M$1=0;for(a=c(d,f);L$1;)L$1=!1,M$1=0,O$1+=1,J$1=null,a=c(d,f);tb$1();return a}function Gb$1(a,b,c,d){var f=c.render(),e=d.childContextTypes;if(null!==e&&void 0!==e){var g=b.legacyContext;if("function"!==typeof c.getChildContext)d=g;else {c=c.getChildContext();for(var h in c)if(!(h in e))throw Error((Za$1(d)||"Unknown")+'.getChildContext(): key "'+h+'" is not defined in childContextTypes.');d=A$1({},g,c);}b.legacyContext=d;W$1(a,b,f);b.legacyContext=g;}else W$1(a,b,f);}
+	function Hb$1(a,b){if(a&&a.defaultProps){b=A$1({},b);a=a.defaultProps;for(var c in a)void 0===b[c]&&(b[c]=a[c]);return b}return b}
+	function Ib$1(a,b,c,d,f){if("function"===typeof c)if(c.prototype&&c.prototype.isReactComponent){f=ab$1(c,b.legacyContext);var e=c.contextType;e=new c(d,"object"===typeof e&&null!==e?e._currentValue2:f);gb$1(e,c,d,f);Gb$1(a,b,e,c);}else {e=ab$1(c,b.legacyContext);f=Fb$1(a,b,c,d,e);var g=0!==M$1;if("object"===typeof f&&null!==f&&"function"===typeof f.render&&void 0===f.$$typeof)gb$1(f,c,d,e),Gb$1(a,b,f,c);else if(g){d=b.treeContext;b.treeContext=ib$1(d,1,0);try{W$1(a,b,f);}finally{b.treeContext=d;}}else W$1(a,b,f);}else if("string"===
+	typeof c){f=b.blockedSegment;e=za$1(f.chunks,c,d,a.responseState,f.formatContext);f.lastPushedText=!1;g=f.formatContext;f.formatContext=sa$1(g,c,d);Jb$1(a,b,e);f.formatContext=g;switch(c){case "area":case "base":case "br":case "col":case "embed":case "hr":case "img":case "input":case "keygen":case "link":case "meta":case "param":case "source":case "track":case "wbr":break;default:f.chunks.push("</",c,">");}f.lastPushedText=!1;}else {switch(c){case Wa$1:case Va$1:case La$1:case Ma$1:case Ka$1:W$1(a,b,d.children);return;
+	case Ra$1:W$1(a,b,d.children);return;case Ua$1:throw Error("ReactDOMServer does not yet support scope components.");case Qa$1:a:{c=b.blockedBoundary;f=b.blockedSegment;e=d.fallback;d=d.children;g=new Set;var h={id:null,rootSegmentID:-1,parentFlushed:!1,pendingTasks:0,forceClientRender:!1,completedSegments:[],byteSize:0,fallbackAbortableTasks:g,errorDigest:null},k=T$1(a,f.chunks.length,h,f.formatContext,!1,!1);f.children.push(k);f.lastPushedText=!1;var m=T$1(a,0,null,f.formatContext,!1,!1);m.parentFlushed=!0;
+	b.blockedBoundary=h;b.blockedSegment=m;try{if(Jb$1(a,b,d),a.responseState.generateStaticMarkup||m.lastPushedText&&m.textEmbedded&&m.chunks.push("\x3c!-- --\x3e"),m.status=1,X$1(h,m),0===h.pendingTasks)break a}catch(l){m.status=4,h.forceClientRender=!0,h.errorDigest=U$1(a,l);}finally{b.blockedBoundary=c,b.blockedSegment=f;}b=Db$1(a,e,c,k,g,b.legacyContext,b.context,b.treeContext);a.pingedTasks.push(b);}return}if("object"===typeof c&&null!==c)switch(c.$$typeof){case Pa$1:d=Fb$1(a,b,c.render,d,f);if(0!==M$1){c=b.treeContext;
+	b.treeContext=ib$1(c,1,0);try{W$1(a,b,d);}finally{b.treeContext=c;}}else W$1(a,b,d);return;case Sa$1:c=c.type;d=Hb$1(c,d);Ib$1(a,b,c,d,f);return;case Na$1:f=d.children;c=c._context;d=d.value;e=c._currentValue2;c._currentValue2=d;g=D;D=d={parent:g,depth:null===g?0:g.depth+1,context:c,parentValue:e,value:d};b.context=d;W$1(a,b,f);a=D;if(null===a)throw Error("Tried to pop a Context at the root of the app. This is a bug in React.");d=a.parentValue;a.context._currentValue2=d===Xa$1?a.context._defaultValue:d;a=D=a.parent;
+	b.context=a;return;case Oa$1:d=d.children;d=d(c._currentValue2);W$1(a,b,d);return;case Ta$1:f=c._init;c=f(c._payload);d=Hb$1(c,d);Ib$1(a,b,c,d,void 0);return}throw Error("Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: "+((null==c?c:typeof c)+"."));}}
+	function W$1(a,b,c){b.node=c;if("object"===typeof c&&null!==c){switch(c.$$typeof){case Ia$1:Ib$1(a,b,c.type,c.props,c.ref);return;case Ja$1:throw Error("Portals are not currently supported by the server renderer. Render them conditionally so that they only appear on the client render.");case Ta$1:var d=c._init;c=d(c._payload);W$1(a,b,c);return}if(ra$1(c)){Kb$1(a,b,c);return}null===c||"object"!==typeof c?d=null:(d=Ya$1&&c[Ya$1]||c["@@iterator"],d="function"===typeof d?d:null);if(d&&(d=d.call(c))){c=d.next();if(!c.done){var f=
+	[];do f.push(c.value),c=d.next();while(!c.done);Kb$1(a,b,f);}return}a=Object.prototype.toString.call(c);throw Error("Objects are not valid as a React child (found: "+("[object Object]"===a?"object with keys {"+Object.keys(c).join(", ")+"}":a)+"). If you meant to render a collection of children, use an array instead.");}"string"===typeof c?(d=b.blockedSegment,d.lastPushedText=Ha$1(b.blockedSegment.chunks,c,a.responseState,d.lastPushedText)):"number"===typeof c&&(d=b.blockedSegment,d.lastPushedText=Ha$1(b.blockedSegment.chunks,
+	""+c,a.responseState,d.lastPushedText));}function Kb$1(a,b,c){for(var d=c.length,f=0;f<d;f++){var e=b.treeContext;b.treeContext=ib$1(e,d,f);try{Jb$1(a,b,c[f]);}finally{b.treeContext=e;}}}
+	function Jb$1(a,b,c){var d=b.blockedSegment.formatContext,f=b.legacyContext,e=b.context;try{return W$1(a,b,c)}catch(k){if(tb$1(),"object"===typeof k&&null!==k&&"function"===typeof k.then){c=k;var g=b.blockedSegment,h=T$1(a,g.chunks.length,null,g.formatContext,g.lastPushedText,!0);g.children.push(h);g.lastPushedText=!1;a=Db$1(a,b.node,b.blockedBoundary,h,b.abortSet,b.legacyContext,b.context,b.treeContext).ping;c.then(a,a);b.blockedSegment.formatContext=d;b.legacyContext=f;b.context=e;F$1(e);}else throw b.blockedSegment.formatContext=
+	d,b.legacyContext=f,b.context=e,F$1(e),k;}}function Lb$1(a){var b=a.blockedBoundary;a=a.blockedSegment;a.status=3;Mb$1(this,b,a);}
+	function Nb$1(a,b,c){var d=a.blockedBoundary;a.blockedSegment.status=3;null===d?(b.allPendingTasks--,2!==b.status&&(b.status=2,null!==b.destination&&b.destination.push(null))):(d.pendingTasks--,d.forceClientRender||(d.forceClientRender=!0,d.errorDigest=b.onError(void 0===c?Error("The render was aborted by the server without a reason."):c),d.parentFlushed&&b.clientRenderedBoundaries.push(d)),d.fallbackAbortableTasks.forEach(function(a){return Nb$1(a,b,c)}),d.fallbackAbortableTasks.clear(),b.allPendingTasks--,
+	0===b.allPendingTasks&&(a=b.onAllReady,a()));}function X$1(a,b){if(0===b.chunks.length&&1===b.children.length&&null===b.children[0].boundary){var c=b.children[0];c.id=b.id;c.parentFlushed=!0;1===c.status&&X$1(a,c);}else a.completedSegments.push(b);}
+	function Mb$1(a,b,c){if(null===b){if(c.parentFlushed){if(null!==a.completedRootSegment)throw Error("There can only be one root segment. This is a bug in React.");a.completedRootSegment=c;}a.pendingRootTasks--;0===a.pendingRootTasks&&(a.onShellError=S$1,b=a.onShellReady,b());}else b.pendingTasks--,b.forceClientRender||(0===b.pendingTasks?(c.parentFlushed&&1===c.status&&X$1(b,c),b.parentFlushed&&a.completedBoundaries.push(b),b.fallbackAbortableTasks.forEach(Lb$1,a),b.fallbackAbortableTasks.clear()):c.parentFlushed&&
+	1===c.status&&(X$1(b,c),1===b.completedSegments.length&&b.parentFlushed&&a.partialBoundaries.push(b)));a.allPendingTasks--;0===a.allPendingTasks&&(a=a.onAllReady,a());}
+	function Eb(a){if(2!==a.status){var b=D,c=Ab$1.current;Ab$1.current=zb$1;var d=R$1;R$1=a.responseState;try{var f=a.pingedTasks,e;for(e=0;e<f.length;e++){var g=f[e];var h=a,k=g.blockedSegment;if(0===k.status){F$1(g.context);try{W$1(h,g,g.node),h.responseState.generateStaticMarkup||k.lastPushedText&&k.textEmbedded&&k.chunks.push("\x3c!-- --\x3e"),g.abortSet.delete(g),k.status=1,Mb$1(h,g.blockedBoundary,k);}catch(y){if(tb$1(),"object"===typeof y&&null!==y&&"function"===typeof y.then){var m=g.ping;y.then(m,m);}else {g.abortSet.delete(g);
+	k.status=4;var l=g.blockedBoundary,p=y,B=U$1(h,p);null===l?V$1(h,p):(l.pendingTasks--,l.forceClientRender||(l.forceClientRender=!0,l.errorDigest=B,l.parentFlushed&&h.clientRenderedBoundaries.push(l)));h.allPendingTasks--;if(0===h.allPendingTasks){var C=h.onAllReady;C();}}}finally{}}}f.splice(0,e);null!==a.destination&&Ob$1(a,a.destination);}catch(y){U$1(a,y),V$1(a,y);}finally{R$1=d,Ab$1.current=c,c===zb$1&&F$1(b);}}}
+	function Y$1(a,b,c){c.parentFlushed=!0;switch(c.status){case 0:var d=c.id=a.nextSegmentId++;c.lastPushedText=!1;c.textEmbedded=!1;a=a.responseState;b.push('<template id="');b.push(a.placeholderPrefix);a=d.toString(16);b.push(a);return b.push('"></template>');case 1:c.status=2;var f=!0;d=c.chunks;var e=0;c=c.children;for(var g=0;g<c.length;g++){for(f=c[g];e<f.index;e++)b.push(d[e]);f=Z$1(a,b,f);}for(;e<d.length-1;e++)b.push(d[e]);e<d.length&&(f=b.push(d[e]));return f;default:throw Error("Aborted, errored or already flushed boundaries should not be flushed again. This is a bug in React.");
+	}}
+	function Z$1(a,b,c){var d=c.boundary;if(null===d)return Y$1(a,b,c);d.parentFlushed=!0;if(d.forceClientRender)return a.responseState.generateStaticMarkup||(d=d.errorDigest,b.push("\x3c!--$!--\x3e"),b.push("<template"),d&&(b.push(' data-dgst="'),d=u$1(d),b.push(d),b.push('"')),b.push("></template>")),Y$1(a,b,c),a=a.responseState.generateStaticMarkup?!0:b.push("\x3c!--/$--\x3e"),a;if(0<d.pendingTasks){d.rootSegmentID=a.nextSegmentId++;0<d.completedSegments.length&&a.partialBoundaries.push(d);var f=a.responseState;var e=
+	f.nextSuspenseID++;f=f.boundaryPrefix+e.toString(16);d=d.id=f;Aa$1(b,a.responseState,d);Y$1(a,b,c);return b.push("\x3c!--/$--\x3e")}if(d.byteSize>a.progressiveChunkSize)return d.rootSegmentID=a.nextSegmentId++,a.completedBoundaries.push(d),Aa$1(b,a.responseState,d.id),Y$1(a,b,c),b.push("\x3c!--/$--\x3e");a.responseState.generateStaticMarkup||b.push("\x3c!--$--\x3e");c=d.completedSegments;if(1!==c.length)throw Error("A previously unvisited boundary must have exactly one root segment. This is a bug in React.");
+	Z$1(a,b,c[0]);a=a.responseState.generateStaticMarkup?!0:b.push("\x3c!--/$--\x3e");return a}function Pb$1(a,b,c){Ba$1(b,a.responseState,c.formatContext,c.id);Z$1(a,b,c);return Ca$1(b,c.formatContext)}
+	function Qb$1(a,b,c){for(var d=c.completedSegments,f=0;f<d.length;f++)Rb$1(a,b,c,d[f]);d.length=0;a=a.responseState;d=c.id;c=c.rootSegmentID;b.push(a.startInlineScript);a.sentCompleteBoundaryFunction?b.push('$RC("'):(a.sentCompleteBoundaryFunction=!0,b.push('function $RC(a,b){a=document.getElementById(a);b=document.getElementById(b);b.parentNode.removeChild(b);if(a){a=a.previousSibling;var f=a.parentNode,c=a.nextSibling,e=0;do{if(c&&8===c.nodeType){var d=c.data;if("/$"===d)if(0===e)break;else e--;else"$"!==d&&"$?"!==d&&"$!"!==d||e++}d=c.nextSibling;f.removeChild(c);c=d}while(c);for(;b.firstChild;)f.insertBefore(b.firstChild,c);a.data="$";a._reactRetry&&a._reactRetry()}};$RC("'));if(null===
+	d)throw Error("An ID must have been assigned before we can complete the boundary.");c=c.toString(16);b.push(d);b.push('","');b.push(a.segmentPrefix);b.push(c);return b.push('")\x3c/script>')}
+	function Rb$1(a,b,c,d){if(2===d.status)return !0;var f=d.id;if(-1===f){if(-1===(d.id=c.rootSegmentID))throw Error("A root segment ID must have been assigned by now. This is a bug in React.");return Pb$1(a,b,d)}Pb$1(a,b,d);a=a.responseState;b.push(a.startInlineScript);a.sentCompleteSegmentFunction?b.push('$RS("'):(a.sentCompleteSegmentFunction=!0,b.push('function $RS(a,b){a=document.getElementById(a);b=document.getElementById(b);for(a.parentNode.removeChild(a);a.firstChild;)b.parentNode.insertBefore(a.firstChild,b);b.parentNode.removeChild(b)};$RS("'));
+	b.push(a.segmentPrefix);f=f.toString(16);b.push(f);b.push('","');b.push(a.placeholderPrefix);b.push(f);return b.push('")\x3c/script>')}
+	function Ob$1(a,b){try{var c=a.completedRootSegment;if(null!==c&&0===a.pendingRootTasks){Z$1(a,b,c);a.completedRootSegment=null;var d=a.responseState.bootstrapChunks;for(c=0;c<d.length-1;c++)b.push(d[c]);c<d.length&&b.push(d[c]);}var f=a.clientRenderedBoundaries,e;for(e=0;e<f.length;e++){var g=f[e];d=b;var h=a.responseState,k=g.id,m=g.errorDigest,l=g.errorMessage,p=g.errorComponentStack;d.push(h.startInlineScript);h.sentClientRenderFunction?d.push('$RX("'):(h.sentClientRenderFunction=!0,d.push('function $RX(b,c,d,e){var a=document.getElementById(b);a&&(b=a.previousSibling,b.data="$!",a=a.dataset,c&&(a.dgst=c),d&&(a.msg=d),e&&(a.stck=e),b._reactRetry&&b._reactRetry())};$RX("'));
+	if(null===k)throw Error("An ID must have been assigned before we can complete the boundary.");d.push(k);d.push('"');if(m||l||p){d.push(",");var B=Ea$1(m||"");d.push(B);}if(l||p){d.push(",");var C=Ea$1(l||"");d.push(C);}if(p){d.push(",");var y=Ea$1(p);d.push(y);}if(!d.push(")\x3c/script>")){a.destination=null;e++;f.splice(0,e);return}}f.splice(0,e);var aa=a.completedBoundaries;for(e=0;e<aa.length;e++)if(!Qb$1(a,b,aa[e])){a.destination=null;e++;aa.splice(0,e);return}aa.splice(0,e);var ba=a.partialBoundaries;for(e=
+	0;e<ba.length;e++){var pb=ba[e];a:{f=a;g=b;var ca=pb.completedSegments;for(h=0;h<ca.length;h++)if(!Rb$1(f,g,pb,ca[h])){h++;ca.splice(0,h);var qb=!1;break a}ca.splice(0,h);qb=!0;}if(!qb){a.destination=null;e++;ba.splice(0,e);return}}ba.splice(0,e);var da=a.completedBoundaries;for(e=0;e<da.length;e++)if(!Qb$1(a,b,da[e])){a.destination=null;e++;da.splice(0,e);return}da.splice(0,e);}finally{0===a.allPendingTasks&&0===a.pingedTasks.length&&0===a.clientRenderedBoundaries.length&&0===a.completedBoundaries.length&&
+	b.push(null);}}function Sb$1(a,b){if(1===a.status)a.status=2,b.destroy(a.fatalError);else if(2!==a.status&&null===a.destination){a.destination=b;try{Ob$1(a,b);}catch(c){U$1(a,c),V$1(a,c);}}}function Tb$1(a,b){try{var c=a.abortableTasks;c.forEach(function(c){return Nb$1(c,a,b)});c.clear();null!==a.destination&&Ob$1(a,a.destination);}catch(d){U$1(a,d),V$1(a,d);}}function Ub$1(){}
+	function Vb$1(a,b,c,d){var f=!1,e=null,g="",h=!1;a=Cb$1(a,Fa$1(c,b?b.identifierPrefix:void 0),Ga$1(),Infinity,Ub$1,void 0,function(){h=!0;},void 0,void 0);Eb(a);Tb$1(a,d);Sb$1(a,{push:function(a){null!==a&&(g+=a);return !0},destroy:function(a){f=!0;e=a;}});if(f)throw e;if(!h)throw Error("A component suspended while responding to synchronous input. This will cause the UI to be replaced with a loading indicator. To fix, updates that suspend should be wrapped with startTransition.");return g}
+	function Wb$1(a,b){a.prototype=Object.create(b.prototype);a.prototype.constructor=a;a.__proto__=b;}var Xb$1=function(a){function b(){var b=a.call(this,{})||this;b.request=null;b.startedFlowing=!1;return b}Wb$1(b,a);var c=b.prototype;c._destroy=function(a,b){Tb$1(this.request);b(a);};c._read=function(){this.startedFlowing&&Sb$1(this.request,this);};return b}(fa$1.Readable);function Yb$1(){}
+	function Zb$1(a,b){var c=new Xb$1,d=Cb$1(a,Fa$1(!1,b?b.identifierPrefix:void 0),Ga$1(),Infinity,Yb$1,function(){c.startedFlowing=!0;Sb$1(d,c);},void 0,void 0);c.request=d;Eb(d);return c}reactDomServerLegacy_node_production_min.renderToNodeStream=function(a,b){return Zb$1(a,b)};reactDomServerLegacy_node_production_min.renderToStaticMarkup=function(a,b){return Vb$1(a,b,!0,'The server used "renderToStaticMarkup" which does not support Suspense. If you intended to have the server wait for the suspended component please switch to "renderToPipeableStream" which supports Suspense on the server')};
+	reactDomServerLegacy_node_production_min.renderToStaticNodeStream=function(a,b){return Zb$1(a,b)};reactDomServerLegacy_node_production_min.renderToString=function(a,b){return Vb$1(a,b,!1,'The server used "renderToString" which does not support Suspense. If you intended for this Suspense boundary to render the fallback content on the server consider throwing an Error somewhere within the Suspense boundary. If you intended to have the server wait for the suspended component please switch to "renderToPipeableStream" which supports Suspense on the server')};
+	reactDomServerLegacy_node_production_min.version="18.2.0";
+
+	var reactDomServer_node_production_min = {};
+
+	var require$$0 = /*@__PURE__*/getAugmentedNamespace(util$1);
+
+	/**
+	 * @license React
 	 * react-dom-server.node.production.min.js
 	 *
 	 * Copyright (c) Facebook, Inc. and its affiliates.
@@ -5127,56 +5342,112 @@
 	 * This source code is licensed under the MIT license found in the
 	 * LICENSE file in the root directory of this source tree.
 	 */
-	var l$1=objectAssign,n$1=React__default["default"],aa=require$$2;function p(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return "Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}
-	var q=60106,r=60107,u=60108,z=60114,B=60109,ba=60110,ca=60112,D=60113,da=60120,ea=60115,fa=60116,ha=60121,ia=60117,ja=60119,ka=60129,la=60131;
-	if("function"===typeof Symbol&&Symbol.for){var E=Symbol.for;q=E("react.portal");r=E("react.fragment");u=E("react.strict_mode");z=E("react.profiler");B=E("react.provider");ba=E("react.context");ca=E("react.forward_ref");D=E("react.suspense");da=E("react.suspense_list");ea=E("react.memo");fa=E("react.lazy");ha=E("react.block");ia=E("react.fundamental");ja=E("react.scope");ka=E("react.debug_trace_mode");la=E("react.legacy_hidden");}
-	function F(a){if(null==a)return null;if("function"===typeof a)return a.displayName||a.name||null;if("string"===typeof a)return a;switch(a){case r:return "Fragment";case q:return "Portal";case z:return "Profiler";case u:return "StrictMode";case D:return "Suspense";case da:return "SuspenseList"}if("object"===typeof a)switch(a.$$typeof){case ba:return (a.displayName||"Context")+".Consumer";case B:return (a._context.displayName||"Context")+".Provider";case ca:var b=a.render;b=b.displayName||b.name||"";return a.displayName||
-	(""!==b?"ForwardRef("+b+")":"ForwardRef");case ea:return F(a.type);case ha:return F(a._render);case fa:b=a._payload;a=a._init;try{return F(a(b))}catch(c){}}return null}var ma=n$1.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,na={};function I(a,b){for(var c=a._threadCount|0;c<=b;c++)a[c]=a._currentValue2,a._threadCount=c+1;}function oa(a,b,c,d){if(d&&(d=a.contextType,"object"===typeof d&&null!==d))return I(d,c),d[c];if(a=a.contextTypes){c={};for(var f in a)c[f]=b[f];b=c;}else b=na;return b}
-	for(var J=new Uint16Array(16),K=0;15>K;K++)J[K]=K+1;J[15]=0;var pa=/^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,qa=Object.prototype.hasOwnProperty,ra={},sa={};
-	function ta(a){if(qa.call(sa,a))return !0;if(qa.call(ra,a))return !1;if(pa.test(a))return sa[a]=!0;ra[a]=!0;return !1}function ua(a,b,c,d){if(null!==c&&0===c.type)return !1;switch(typeof b){case "function":case "symbol":return !0;case "boolean":if(d)return !1;if(null!==c)return !c.acceptsBooleans;a=a.toLowerCase().slice(0,5);return "data-"!==a&&"aria-"!==a;default:return !1}}
-	function va(a,b,c,d){if(null===b||"undefined"===typeof b||ua(a,b,c,d))return !0;if(d)return !1;if(null!==c)switch(c.type){case 3:return !b;case 4:return !1===b;case 5:return isNaN(b);case 6:return isNaN(b)||1>b}return !1}function M(a,b,c,d,f,h,t){this.acceptsBooleans=2===b||3===b||4===b;this.attributeName=d;this.attributeNamespace=f;this.mustUseProperty=c;this.propertyName=a;this.type=b;this.sanitizeURL=h;this.removeEmptyString=t;}var N={};
-	"children dangerouslySetInnerHTML defaultValue defaultChecked innerHTML suppressContentEditableWarning suppressHydrationWarning style".split(" ").forEach(function(a){N[a]=new M(a,0,!1,a,null,!1,!1);});[["acceptCharset","accept-charset"],["className","class"],["htmlFor","for"],["httpEquiv","http-equiv"]].forEach(function(a){var b=a[0];N[b]=new M(b,1,!1,a[1],null,!1,!1);});["contentEditable","draggable","spellCheck","value"].forEach(function(a){N[a]=new M(a,2,!1,a.toLowerCase(),null,!1,!1);});
-	["autoReverse","externalResourcesRequired","focusable","preserveAlpha"].forEach(function(a){N[a]=new M(a,2,!1,a,null,!1,!1);});"allowFullScreen async autoFocus autoPlay controls default defer disabled disablePictureInPicture disableRemotePlayback formNoValidate hidden loop noModule noValidate open playsInline readOnly required reversed scoped seamless itemScope".split(" ").forEach(function(a){N[a]=new M(a,3,!1,a.toLowerCase(),null,!1,!1);});
-	["checked","multiple","muted","selected"].forEach(function(a){N[a]=new M(a,3,!0,a,null,!1,!1);});["capture","download"].forEach(function(a){N[a]=new M(a,4,!1,a,null,!1,!1);});["cols","rows","size","span"].forEach(function(a){N[a]=new M(a,6,!1,a,null,!1,!1);});["rowSpan","start"].forEach(function(a){N[a]=new M(a,5,!1,a.toLowerCase(),null,!1,!1);});var wa=/[\-:]([a-z])/g;function xa(a){return a[1].toUpperCase()}
-	"accent-height alignment-baseline arabic-form baseline-shift cap-height clip-path clip-rule color-interpolation color-interpolation-filters color-profile color-rendering dominant-baseline enable-background fill-opacity fill-rule flood-color flood-opacity font-family font-size font-size-adjust font-stretch font-style font-variant font-weight glyph-name glyph-orientation-horizontal glyph-orientation-vertical horiz-adv-x horiz-origin-x image-rendering letter-spacing lighting-color marker-end marker-mid marker-start overline-position overline-thickness paint-order panose-1 pointer-events rendering-intent shape-rendering stop-color stop-opacity strikethrough-position strikethrough-thickness stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin stroke-miterlimit stroke-opacity stroke-width text-anchor text-decoration text-rendering underline-position underline-thickness unicode-bidi unicode-range units-per-em v-alphabetic v-hanging v-ideographic v-mathematical vector-effect vert-adv-y vert-origin-x vert-origin-y word-spacing writing-mode xmlns:xlink x-height".split(" ").forEach(function(a){var b=a.replace(wa,
-	xa);N[b]=new M(b,1,!1,a,null,!1,!1);});"xlink:actuate xlink:arcrole xlink:role xlink:show xlink:title xlink:type".split(" ").forEach(function(a){var b=a.replace(wa,xa);N[b]=new M(b,1,!1,a,"http://www.w3.org/1999/xlink",!1,!1);});["xml:base","xml:lang","xml:space"].forEach(function(a){var b=a.replace(wa,xa);N[b]=new M(b,1,!1,a,"http://www.w3.org/XML/1998/namespace",!1,!1);});["tabIndex","crossOrigin"].forEach(function(a){N[a]=new M(a,1,!1,a.toLowerCase(),null,!1,!1);});
-	N.xlinkHref=new M("xlinkHref",1,!1,"xlink:href","http://www.w3.org/1999/xlink",!0,!1);["src","href","action","formAction"].forEach(function(a){N[a]=new M(a,1,!1,a.toLowerCase(),null,!0,!0);});var ya=/["'&<>]/;
-	function O(a){if("boolean"===typeof a||"number"===typeof a)return ""+a;a=""+a;var b=ya.exec(a);if(b){var c="",d,f=0;for(d=b.index;d<a.length;d++){switch(a.charCodeAt(d)){case 34:b="&quot;";break;case 38:b="&amp;";break;case 39:b="&#x27;";break;case 60:b="&lt;";break;case 62:b="&gt;";break;default:continue}f!==d&&(c+=a.substring(f,d));f=d+1;c+=b;}a=f!==d?c+a.substring(f,d):c;}return a}
-	function za(a,b){var c=N.hasOwnProperty(a)?N[a]:null;var d;if(d="style"!==a)d=null!==c?0===c.type:!(2<a.length)||"o"!==a[0]&&"O"!==a[0]||"n"!==a[1]&&"N"!==a[1]?!1:!0;if(d||va(a,b,c,!1))return "";if(null!==c){a=c.attributeName;d=c.type;if(3===d||4===d&&!0===b)return a+'=""';c.sanitizeURL&&(b=""+b);return a+'="'+(O(b)+'"')}return ta(a)?a+'="'+(O(b)+'"'):""}function Aa(a,b){return a===b&&(0!==a||1/a===1/b)||a!==a&&b!==b}
-	var Ba="function"===typeof Object.is?Object.is:Aa,P=null,Q=null,R=null,S=!1,T=!1,U=null,V=0;function W(){if(null===P)throw Error(p(321));return P}function Ca(){if(0<V)throw Error(p(312));return {memoizedState:null,queue:null,next:null}}function Da(){null===R?null===Q?(S=!1,Q=R=Ca()):(S=!0,R=Q):null===R.next?(S=!1,R=R.next=Ca()):(S=!0,R=R.next);return R}function Ea(a,b,c,d){for(;T;)T=!1,V+=1,R=null,c=a(b,d);Fa();return c}function Fa(){P=null;T=!1;Q=null;V=0;R=U=null;}
-	function Ga(a,b){return "function"===typeof b?b(a):b}function Ha(a,b,c){P=W();R=Da();if(S){var d=R.queue;b=d.dispatch;if(null!==U&&(c=U.get(d),void 0!==c)){U.delete(d);d=R.memoizedState;do d=a(d,c.action),c=c.next;while(null!==c);R.memoizedState=d;return [d,b]}return [R.memoizedState,b]}a=a===Ga?"function"===typeof b?b():b:void 0!==c?c(b):b;R.memoizedState=a;a=R.queue={last:null,dispatch:null};a=a.dispatch=Ia.bind(null,P,a);return [R.memoizedState,a]}
-	function Ja(a,b){P=W();R=Da();b=void 0===b?null:b;if(null!==R){var c=R.memoizedState;if(null!==c&&null!==b){var d=c[1];a:if(null===d)d=!1;else {for(var f=0;f<d.length&&f<b.length;f++)if(!Ba(b[f],d[f])){d=!1;break a}d=!0;}if(d)return c[0]}}a=a();R.memoizedState=[a,b];return a}function Ia(a,b,c){if(!(25>V))throw Error(p(301));if(a===P)if(T=!0,a={action:c,next:null},null===U&&(U=new Map),c=U.get(b),void 0===c)U.set(b,a);else {for(b=c;null!==b.next;)b=b.next;b.next=a;}}function Ka(){}
-	var X=null,La={readContext:function(a){var b=X.threadID;I(a,b);return a[b]},useContext:function(a){W();var b=X.threadID;I(a,b);return a[b]},useMemo:Ja,useReducer:Ha,useRef:function(a){P=W();R=Da();var b=R.memoizedState;return null===b?(a={current:a},R.memoizedState=a):b},useState:function(a){return Ha(Ga,a)},useLayoutEffect:function(){},useCallback:function(a,b){return Ja(function(){return a},b)},useImperativeHandle:Ka,useEffect:Ka,useDebugValue:Ka,useDeferredValue:function(a){W();return a},useTransition:function(){W();
-	return [function(a){a();},!1]},useOpaqueIdentifier:function(){return (X.identifierPrefix||"")+"R:"+(X.uniqueID++).toString(36)},useMutableSource:function(a,b){W();return b(a._source)}},Ma={html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"};function Na(a){switch(a){case "svg":return "http://www.w3.org/2000/svg";case "math":return "http://www.w3.org/1998/Math/MathML";default:return "http://www.w3.org/1999/xhtml"}}
-	var Oa={area:!0,base:!0,br:!0,col:!0,embed:!0,hr:!0,img:!0,input:!0,keygen:!0,link:!0,meta:!0,param:!0,source:!0,track:!0,wbr:!0},Pa=l$1({menuitem:!0},Oa),Y={animationIterationCount:!0,borderImageOutset:!0,borderImageSlice:!0,borderImageWidth:!0,boxFlex:!0,boxFlexGroup:!0,boxOrdinalGroup:!0,columnCount:!0,columns:!0,flex:!0,flexGrow:!0,flexPositive:!0,flexShrink:!0,flexNegative:!0,flexOrder:!0,gridArea:!0,gridRow:!0,gridRowEnd:!0,gridRowSpan:!0,gridRowStart:!0,gridColumn:!0,gridColumnEnd:!0,gridColumnSpan:!0,
-	gridColumnStart:!0,fontWeight:!0,lineClamp:!0,lineHeight:!0,opacity:!0,order:!0,orphans:!0,tabSize:!0,widows:!0,zIndex:!0,zoom:!0,fillOpacity:!0,floodOpacity:!0,stopOpacity:!0,strokeDasharray:!0,strokeDashoffset:!0,strokeMiterlimit:!0,strokeOpacity:!0,strokeWidth:!0},Qa=["Webkit","ms","Moz","O"];Object.keys(Y).forEach(function(a){Qa.forEach(function(b){b=b+a.charAt(0).toUpperCase()+a.substring(1);Y[b]=Y[a];});});
-	var Ra=/([A-Z])/g,Sa=/^ms-/,Z=n$1.Children.toArray,Ta=ma.ReactCurrentDispatcher,Ua={listing:!0,pre:!0,textarea:!0},Va=/^[a-zA-Z][a-zA-Z:_\.\-\d]*$/,Wa={},Xa={};function Ya(a){if(void 0===a||null===a)return a;var b="";n$1.Children.forEach(a,function(a){null!=a&&(b+=a);});return b}var Za=Object.prototype.hasOwnProperty,$a={children:null,dangerouslySetInnerHTML:null,suppressContentEditableWarning:null,suppressHydrationWarning:null};function ab(a,b){if(void 0===a)throw Error(p(152,F(b)||"Component"));}
-	function bb(a,b,c){function d(d,h){var e=h.prototype&&h.prototype.isReactComponent,f=oa(h,b,c,e),t=[],g=!1,m={isMounted:function(){return !1},enqueueForceUpdate:function(){if(null===t)return null},enqueueReplaceState:function(a,b){g=!0;t=[b];},enqueueSetState:function(a,b){if(null===t)return null;t.push(b);}};if(e){if(e=new h(d.props,f,m),"function"===typeof h.getDerivedStateFromProps){var k=h.getDerivedStateFromProps.call(null,d.props,e.state);null!=k&&(e.state=l$1({},e.state,k));}}else if(P={},e=h(d.props,
-	f,m),e=Ea(h,d.props,e,f),null==e||null==e.render){a=e;ab(a,h);return}e.props=d.props;e.context=f;e.updater=m;m=e.state;void 0===m&&(e.state=m=null);if("function"===typeof e.UNSAFE_componentWillMount||"function"===typeof e.componentWillMount)if("function"===typeof e.componentWillMount&&"function"!==typeof h.getDerivedStateFromProps&&e.componentWillMount(),"function"===typeof e.UNSAFE_componentWillMount&&"function"!==typeof h.getDerivedStateFromProps&&e.UNSAFE_componentWillMount(),t.length){m=t;var v=
-	g;t=null;g=!1;if(v&&1===m.length)e.state=m[0];else {k=v?m[0]:e.state;var H=!0;for(v=v?1:0;v<m.length;v++){var x=m[v];x="function"===typeof x?x.call(e,k,d.props,f):x;null!=x&&(H?(H=!1,k=l$1({},k,x)):l$1(k,x));}e.state=k;}}else t=null;a=e.render();ab(a,h);if("function"===typeof e.getChildContext&&(d=h.childContextTypes,"object"===typeof d)){var y=e.getChildContext();for(var A in y)if(!(A in d))throw Error(p(108,F(h)||"Unknown",A));}y&&(b=l$1({},b,y));}for(;n$1.isValidElement(a);){var f=a,h=f.type;if("function"!==
-	typeof h)break;d(f,h);}return {child:a,context:b}}
-	var cb=function(){function a(a,b,f){n$1.isValidElement(a)?a.type!==r?a=[a]:(a=a.props.children,a=n$1.isValidElement(a)?[a]:Z(a)):a=Z(a);a={type:null,domNamespace:Ma.html,children:a,childIndex:0,context:na,footer:""};var c=J[0];if(0===c){var d=J;c=d.length;var g=2*c;if(!(65536>=g))throw Error(p(304));var e=new Uint16Array(g);e.set(d);J=e;J[0]=c+1;for(d=c;d<g-1;d++)J[d]=d+1;J[g-1]=0;}else J[0]=J[c];this.threadID=c;this.stack=[a];this.exhausted=!1;this.currentSelectValue=null;this.previousWasTextNode=!1;
-	this.makeStaticMarkup=b;this.suspenseDepth=0;this.contextIndex=-1;this.contextStack=[];this.contextValueStack=[];this.uniqueID=0;this.identifierPrefix=f&&f.identifierPrefix||"";}var b=a.prototype;b.destroy=function(){if(!this.exhausted){this.exhausted=!0;this.clearProviders();var a=this.threadID;J[a]=J[0];J[0]=a;}};b.pushProvider=function(a){var b=++this.contextIndex,c=a.type._context,h=this.threadID;I(c,h);var t=c[h];this.contextStack[b]=c;this.contextValueStack[b]=t;c[h]=a.props.value;};b.popProvider=
-	function(){var a=this.contextIndex,b=this.contextStack[a],f=this.contextValueStack[a];this.contextStack[a]=null;this.contextValueStack[a]=null;this.contextIndex--;b[this.threadID]=f;};b.clearProviders=function(){for(var a=this.contextIndex;0<=a;a--)this.contextStack[a][this.threadID]=this.contextValueStack[a];};b.read=function(a){if(this.exhausted)return null;var b=X;X=this;var c=Ta.current;Ta.current=La;try{for(var h=[""],t=!1;h[0].length<a;){if(0===this.stack.length){this.exhausted=!0;var g=this.threadID;
-	J[g]=J[0];J[0]=g;break}var e=this.stack[this.stack.length-1];if(t||e.childIndex>=e.children.length){var L=e.footer;""!==L&&(this.previousWasTextNode=!1);this.stack.pop();if("select"===e.type)this.currentSelectValue=null;else if(null!=e.type&&null!=e.type.type&&e.type.type.$$typeof===B)this.popProvider(e.type);else if(e.type===D){this.suspenseDepth--;var G=h.pop();if(t){t=!1;var C=e.fallbackFrame;if(!C)throw Error(p(303));this.stack.push(C);h[this.suspenseDepth]+="\x3c!--$!--\x3e";continue}else h[this.suspenseDepth]+=
-	G;}h[this.suspenseDepth]+=L;}else {var m=e.children[e.childIndex++],k="";try{k+=this.render(m,e.context,e.domNamespace);}catch(v){if(null!=v&&"function"===typeof v.then)throw Error(p(294));throw v;}finally{}h.length<=this.suspenseDepth&&h.push("");h[this.suspenseDepth]+=k;}}return h[0]}finally{Ta.current=c,X=b,Fa();}};b.render=function(a,b,f){if("string"===typeof a||"number"===typeof a){f=""+a;if(""===f)return "";if(this.makeStaticMarkup)return O(f);if(this.previousWasTextNode)return "\x3c!-- --\x3e"+O(f);
-	this.previousWasTextNode=!0;return O(f)}b=bb(a,b,this.threadID);a=b.child;b=b.context;if(null===a||!1===a)return "";if(!n$1.isValidElement(a)){if(null!=a&&null!=a.$$typeof){f=a.$$typeof;if(f===q)throw Error(p(257));throw Error(p(258,f.toString()));}a=Z(a);this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,context:b,footer:""});return ""}var c=a.type;if("string"===typeof c)return this.renderDOM(a,b,f);switch(c){case la:case ka:case u:case z:case da:case r:return a=Z(a.props.children),this.stack.push({type:null,
-	domNamespace:f,children:a,childIndex:0,context:b,footer:""}),"";case D:throw Error(p(294));case ja:throw Error(p(343));}if("object"===typeof c&&null!==c)switch(c.$$typeof){case ca:P={};var d=c.render(a.props,a.ref);d=Ea(c.render,a.props,d,a.ref);d=Z(d);this.stack.push({type:null,domNamespace:f,children:d,childIndex:0,context:b,footer:""});return "";case ea:return a=[n$1.createElement(c.type,l$1({ref:a.ref},a.props))],this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,context:b,footer:""}),
-	"";case B:return c=Z(a.props.children),f={type:a,domNamespace:f,children:c,childIndex:0,context:b,footer:""},this.pushProvider(a),this.stack.push(f),"";case ba:c=a.type;d=a.props;var g=this.threadID;I(c,g);c=Z(d.children(c[g]));this.stack.push({type:a,domNamespace:f,children:c,childIndex:0,context:b,footer:""});return "";case ia:throw Error(p(338));case fa:return c=a.type,d=c._init,c=d(c._payload),a=[n$1.createElement(c,l$1({ref:a.ref},a.props))],this.stack.push({type:null,domNamespace:f,children:a,childIndex:0,
-	context:b,footer:""}),""}throw Error(p(130,null==c?c:typeof c,""));};b.renderDOM=function(a,b,f){var c=a.type.toLowerCase();if(!Wa.hasOwnProperty(c)){if(!Va.test(c))throw Error(p(65,c));Wa[c]=!0;}var d=a.props;if("input"===c)d=l$1({type:void 0},d,{defaultChecked:void 0,defaultValue:void 0,value:null!=d.value?d.value:d.defaultValue,checked:null!=d.checked?d.checked:d.defaultChecked});else if("textarea"===c){var g=d.value;if(null==g){g=d.defaultValue;var e=d.children;if(null!=e){if(null!=
-	g)throw Error(p(92));if(Array.isArray(e)){if(!(1>=e.length))throw Error(p(93));e=e[0];}g=""+e;}null==g&&(g="");}d=l$1({},d,{value:void 0,children:""+g});}else if("select"===c)this.currentSelectValue=null!=d.value?d.value:d.defaultValue,d=l$1({},d,{value:void 0});else if("option"===c){e=this.currentSelectValue;var L=Ya(d.children);if(null!=e){var G=null!=d.value?d.value+"":L;g=!1;if(Array.isArray(e))for(var C=0;C<e.length;C++){if(""+e[C]===G){g=!0;break}}else g=""+e===G;d=l$1({selected:void 0,children:void 0},
-	d,{selected:g,children:L});}}if(g=d){if(Pa[c]&&(null!=g.children||null!=g.dangerouslySetInnerHTML))throw Error(p(137,c));if(null!=g.dangerouslySetInnerHTML){if(null!=g.children)throw Error(p(60));if(!("object"===typeof g.dangerouslySetInnerHTML&&"__html"in g.dangerouslySetInnerHTML))throw Error(p(61));}if(null!=g.style&&"object"!==typeof g.style)throw Error(p(62));}g=d;e=this.makeStaticMarkup;L=1===this.stack.length;G="<"+a.type;b:if(-1===c.indexOf("-"))C="string"===typeof g.is;else switch(c){case "annotation-xml":case "color-profile":case "font-face":case "font-face-src":case "font-face-uri":case "font-face-format":case "font-face-name":case "missing-glyph":C=
-	!1;break b;default:C=!0;}for(w in g)if(Za.call(g,w)){var m=g[w];if(null!=m){if("style"===w){var k=void 0,v="",H="";for(k in m)if(m.hasOwnProperty(k)){var x=0===k.indexOf("--"),y=m[k];if(null!=y){if(x)var A=k;else if(A=k,Xa.hasOwnProperty(A))A=Xa[A];else {var eb=A.replace(Ra,"-$1").toLowerCase().replace(Sa,"-ms-");A=Xa[A]=eb;}v+=H+A+":";H=k;x=null==y||"boolean"===typeof y||""===y?"":x||"number"!==typeof y||0===y||Y.hasOwnProperty(H)&&Y[H]?(""+y).trim():y+"px";v+=x;H=";";}}m=v||null;}k=null;C?$a.hasOwnProperty(w)||
-	(k=w,k=ta(k)&&null!=m?k+'="'+(O(m)+'"'):""):k=za(w,m);k&&(G+=" "+k);}}e||L&&(G+=' data-reactroot=""');var w=G;g="";Oa.hasOwnProperty(c)?w+="/>":(w+=">",g="</"+a.type+">");a:{e=d.dangerouslySetInnerHTML;if(null!=e){if(null!=e.__html){e=e.__html;break a}}else if(e=d.children,"string"===typeof e||"number"===typeof e){e=O(e);break a}e=null;}null!=e?(d=[],Ua.hasOwnProperty(c)&&"\n"===e.charAt(0)&&(w+="\n"),w+=e):d=Z(d.children);a=a.type;f=null==f||"http://www.w3.org/1999/xhtml"===f?Na(a):"http://www.w3.org/2000/svg"===
-	f&&"foreignObject"===a?"http://www.w3.org/1999/xhtml":f;this.stack.push({domNamespace:f,type:c,children:d,childIndex:0,context:b,footer:g});this.previousWasTextNode=!1;return w};return a}();function db(a,b){a.prototype=Object.create(b.prototype);a.prototype.constructor=a;a.__proto__=b;}
-	var fb=function(a){function b(b,c,h){var d=a.call(this,{})||this;d.partialRenderer=new cb(b,c,h);return d}db(b,a);var c=b.prototype;c._destroy=function(a,b){this.partialRenderer.destroy();b(a);};c._read=function(a){try{this.push(this.partialRenderer.read(a));}catch(f){this.destroy(f);}};return b}(aa.Readable);reactDomServer_node_production_min.renderToNodeStream=function(a,b){return new fb(a,!1,b)};reactDomServer_node_production_min.renderToStaticMarkup=function(a,b){a=new cb(a,!0,b);try{return a.read(Infinity)}finally{a.destroy();}};
-	reactDomServer_node_production_min.renderToStaticNodeStream=function(a,b){return new fb(a,!0,b)};reactDomServer_node_production_min.renderToString=function(a,b){a=new cb(a,!1,b);try{return a.read(Infinity)}finally{a.destroy();}};reactDomServer_node_production_min.version="17.0.2";
+	var aa=require$$0,ba=React__default["default"],k=null,l$2=0,q=!0;
+	function r(a,b){if("string"===typeof b){if(0!==b.length)if(2048<3*b.length)0<l$2&&(t(a,k.subarray(0,l$2)),k=new Uint8Array(2048),l$2=0),t(a,u.encode(b));else {var c=k;0<l$2&&(c=k.subarray(l$2));c=u.encodeInto(b,c);var d=c.read;l$2+=c.written;d<b.length&&(t(a,k),k=new Uint8Array(2048),l$2=u.encodeInto(b.slice(d),k).written);2048===l$2&&(t(a,k),k=new Uint8Array(2048),l$2=0);}}else 0!==b.byteLength&&(2048<b.byteLength?(0<l$2&&(t(a,k.subarray(0,l$2)),k=new Uint8Array(2048),l$2=0),t(a,b)):(c=k.length-l$2,c<b.byteLength&&(0===c?t(a,
+	k):(k.set(b.subarray(0,c),l$2),l$2+=c,t(a,k),b=b.subarray(c)),k=new Uint8Array(2048),l$2=0),k.set(b,l$2),l$2+=b.byteLength,2048===l$2&&(t(a,k),k=new Uint8Array(2048),l$2=0)));}function t(a,b){a=a.write(b);q=q&&a;}function w(a,b){r(a,b);return q}function ca(a){k&&0<l$2&&a.write(k.subarray(0,l$2));k=null;l$2=0;q=!0;}var u=new aa.TextEncoder;function x(a){return u.encode(a)}
+	var y=Object.prototype.hasOwnProperty,da=/^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,ea={},fa={};
+	function ha(a){if(y.call(fa,a))return !0;if(y.call(ea,a))return !1;if(da.test(a))return fa[a]=!0;ea[a]=!0;return !1}function z(a,b,c,d,f,e,g){this.acceptsBooleans=2===b||3===b||4===b;this.attributeName=d;this.attributeNamespace=f;this.mustUseProperty=c;this.propertyName=a;this.type=b;this.sanitizeURL=e;this.removeEmptyString=g;}var A={};
+	"children dangerouslySetInnerHTML defaultValue defaultChecked innerHTML suppressContentEditableWarning suppressHydrationWarning style".split(" ").forEach(function(a){A[a]=new z(a,0,!1,a,null,!1,!1);});[["acceptCharset","accept-charset"],["className","class"],["htmlFor","for"],["httpEquiv","http-equiv"]].forEach(function(a){var b=a[0];A[b]=new z(b,1,!1,a[1],null,!1,!1);});["contentEditable","draggable","spellCheck","value"].forEach(function(a){A[a]=new z(a,2,!1,a.toLowerCase(),null,!1,!1);});
+	["autoReverse","externalResourcesRequired","focusable","preserveAlpha"].forEach(function(a){A[a]=new z(a,2,!1,a,null,!1,!1);});"allowFullScreen async autoFocus autoPlay controls default defer disabled disablePictureInPicture disableRemotePlayback formNoValidate hidden loop noModule noValidate open playsInline readOnly required reversed scoped seamless itemScope".split(" ").forEach(function(a){A[a]=new z(a,3,!1,a.toLowerCase(),null,!1,!1);});
+	["checked","multiple","muted","selected"].forEach(function(a){A[a]=new z(a,3,!0,a,null,!1,!1);});["capture","download"].forEach(function(a){A[a]=new z(a,4,!1,a,null,!1,!1);});["cols","rows","size","span"].forEach(function(a){A[a]=new z(a,6,!1,a,null,!1,!1);});["rowSpan","start"].forEach(function(a){A[a]=new z(a,5,!1,a.toLowerCase(),null,!1,!1);});var ia=/[\-:]([a-z])/g;function ja(a){return a[1].toUpperCase()}
+	"accent-height alignment-baseline arabic-form baseline-shift cap-height clip-path clip-rule color-interpolation color-interpolation-filters color-profile color-rendering dominant-baseline enable-background fill-opacity fill-rule flood-color flood-opacity font-family font-size font-size-adjust font-stretch font-style font-variant font-weight glyph-name glyph-orientation-horizontal glyph-orientation-vertical horiz-adv-x horiz-origin-x image-rendering letter-spacing lighting-color marker-end marker-mid marker-start overline-position overline-thickness paint-order panose-1 pointer-events rendering-intent shape-rendering stop-color stop-opacity strikethrough-position strikethrough-thickness stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin stroke-miterlimit stroke-opacity stroke-width text-anchor text-decoration text-rendering underline-position underline-thickness unicode-bidi unicode-range units-per-em v-alphabetic v-hanging v-ideographic v-mathematical vector-effect vert-adv-y vert-origin-x vert-origin-y word-spacing writing-mode xmlns:xlink x-height".split(" ").forEach(function(a){var b=a.replace(ia,
+	ja);A[b]=new z(b,1,!1,a,null,!1,!1);});"xlink:actuate xlink:arcrole xlink:role xlink:show xlink:title xlink:type".split(" ").forEach(function(a){var b=a.replace(ia,ja);A[b]=new z(b,1,!1,a,"http://www.w3.org/1999/xlink",!1,!1);});["xml:base","xml:lang","xml:space"].forEach(function(a){var b=a.replace(ia,ja);A[b]=new z(b,1,!1,a,"http://www.w3.org/XML/1998/namespace",!1,!1);});["tabIndex","crossOrigin"].forEach(function(a){A[a]=new z(a,1,!1,a.toLowerCase(),null,!1,!1);});
+	A.xlinkHref=new z("xlinkHref",1,!1,"xlink:href","http://www.w3.org/1999/xlink",!0,!1);["src","href","action","formAction"].forEach(function(a){A[a]=new z(a,1,!1,a.toLowerCase(),null,!0,!0);});
+	var B={animationIterationCount:!0,aspectRatio:!0,borderImageOutset:!0,borderImageSlice:!0,borderImageWidth:!0,boxFlex:!0,boxFlexGroup:!0,boxOrdinalGroup:!0,columnCount:!0,columns:!0,flex:!0,flexGrow:!0,flexPositive:!0,flexShrink:!0,flexNegative:!0,flexOrder:!0,gridArea:!0,gridRow:!0,gridRowEnd:!0,gridRowSpan:!0,gridRowStart:!0,gridColumn:!0,gridColumnEnd:!0,gridColumnSpan:!0,gridColumnStart:!0,fontWeight:!0,lineClamp:!0,lineHeight:!0,opacity:!0,order:!0,orphans:!0,tabSize:!0,widows:!0,zIndex:!0,zoom:!0,
+	fillOpacity:!0,floodOpacity:!0,stopOpacity:!0,strokeDasharray:!0,strokeDashoffset:!0,strokeMiterlimit:!0,strokeOpacity:!0,strokeWidth:!0},ka=["Webkit","ms","Moz","O"];Object.keys(B).forEach(function(a){ka.forEach(function(b){b=b+a.charAt(0).toUpperCase()+a.substring(1);B[b]=B[a];});});var la=/["'&<>]/;
+	function F(a){if("boolean"===typeof a||"number"===typeof a)return ""+a;a=""+a;var b=la.exec(a);if(b){var c="",d,f=0;for(d=b.index;d<a.length;d++){switch(a.charCodeAt(d)){case 34:b="&quot;";break;case 38:b="&amp;";break;case 39:b="&#x27;";break;case 60:b="&lt;";break;case 62:b="&gt;";break;default:continue}f!==d&&(c+=a.substring(f,d));f=d+1;c+=b;}a=f!==d?c+a.substring(f,d):c;}return a}
+	var ma=/([A-Z])/g,pa=/^ms-/,qa=Array.isArray,ra=x("<script>"),sa=x("\x3c/script>"),ta=x('<script src="'),ua=x('<script type="module" src="'),va=x('" async="">\x3c/script>'),wa=/(<\/|<)(s)(cript)/gi;function xa(a,b,c,d){return ""+b+("s"===c?"\\u0073":"\\u0053")+d}function G(a,b){return {insertionMode:a,selectedValue:b}}
+	function ya(a,b,c){switch(b){case "select":return G(1,null!=c.value?c.value:c.defaultValue);case "svg":return G(2,null);case "math":return G(3,null);case "foreignObject":return G(1,null);case "table":return G(4,null);case "thead":case "tbody":case "tfoot":return G(5,null);case "colgroup":return G(7,null);case "tr":return G(6,null)}return 4<=a.insertionMode||0===a.insertionMode?G(1,null):a}var za=x("\x3c!-- --\x3e");function Aa(a,b,c,d){if(""===b)return d;d&&a.push(za);a.push(F(b));return !0}
+	var Ba=new Map,Ca=x(' style="'),Da=x(":"),Ea=x(";");
+	function Fa(a,b,c){if("object"!==typeof c)throw Error("The `style` prop expects a mapping from style properties to values, not a string. For example, style={{marginRight: spacing + 'em'}} when using JSX.");b=!0;for(var d in c)if(y.call(c,d)){var f=c[d];if(null!=f&&"boolean"!==typeof f&&""!==f){if(0===d.indexOf("--")){var e=F(d);f=F((""+f).trim());}else {e=d;var g=Ba.get(e);void 0!==g?e=g:(g=x(F(e.replace(ma,"-$1").toLowerCase().replace(pa,"-ms-"))),Ba.set(e,g),e=g);f="number"===typeof f?0===f||y.call(B,
+	d)?""+f:f+"px":F((""+f).trim());}b?(b=!1,a.push(Ca,e,Da,f)):a.push(Ea,e,Da,f);}}b||a.push(H);}var I=x(" "),J=x('="'),H=x('"'),Ga=x('=""');
+	function K(a,b,c,d){switch(c){case "style":Fa(a,b,d);return;case "defaultValue":case "defaultChecked":case "innerHTML":case "suppressContentEditableWarning":case "suppressHydrationWarning":return}if(!(2<c.length)||"o"!==c[0]&&"O"!==c[0]||"n"!==c[1]&&"N"!==c[1])if(b=A.hasOwnProperty(c)?A[c]:null,null!==b){switch(typeof d){case "function":case "symbol":return;case "boolean":if(!b.acceptsBooleans)return}c=b.attributeName;switch(b.type){case 3:d&&a.push(I,c,Ga);break;case 4:!0===d?a.push(I,c,Ga):!1!==
+	d&&a.push(I,c,J,F(d),H);break;case 5:isNaN(d)||a.push(I,c,J,F(d),H);break;case 6:!isNaN(d)&&1<=d&&a.push(I,c,J,F(d),H);break;default:b.sanitizeURL&&(d=""+d),a.push(I,c,J,F(d),H);}}else if(ha(c)){switch(typeof d){case "function":case "symbol":return;case "boolean":if(b=c.toLowerCase().slice(0,5),"data-"!==b&&"aria-"!==b)return}a.push(I,c,J,F(d),H);}}var L=x(">"),Ha=x("/>");
+	function M(a,b,c){if(null!=b){if(null!=c)throw Error("Can only set one of `children` or `props.dangerouslySetInnerHTML`.");if("object"!==typeof b||!("__html"in b))throw Error("`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. Please visit https://reactjs.org/link/dangerously-set-inner-html for more information.");b=b.__html;null!==b&&void 0!==b&&a.push(""+b);}}function Ia(a){var b="";ba.Children.forEach(a,function(a){null!=a&&(b+=a);});return b}var Ja=x(' selected=""');
+	function Ka(a,b,c,d){a.push(N(c));var f=c=null,e;for(e in b)if(y.call(b,e)){var g=b[e];if(null!=g)switch(e){case "children":c=g;break;case "dangerouslySetInnerHTML":f=g;break;default:K(a,d,e,g);}}a.push(L);M(a,f,c);return "string"===typeof c?(a.push(F(c)),null):c}var La=x("\n"),Ma=/^[a-zA-Z][a-zA-Z:_\.\-\d]*$/,Na=new Map;function N(a){var b=Na.get(a);if(void 0===b){if(!Ma.test(a))throw Error("Invalid tag: "+a);b=x("<"+a);Na.set(a,b);}return b}var Oa=x("<!DOCTYPE html>");
+	function Pa(a,b,c,d,f){switch(b){case "select":a.push(N("select"));var e=null,g=null;for(p in c)if(y.call(c,p)){var h=c[p];if(null!=h)switch(p){case "children":e=h;break;case "dangerouslySetInnerHTML":g=h;break;case "defaultValue":case "value":break;default:K(a,d,p,h);}}a.push(L);M(a,g,e);return e;case "option":g=f.selectedValue;a.push(N("option"));var m=h=null,n=null;var p=null;for(e in c)if(y.call(c,e)){var v=c[e];if(null!=v)switch(e){case "children":h=v;break;case "selected":n=v;break;case "dangerouslySetInnerHTML":p=
+	v;break;case "value":m=v;default:K(a,d,e,v);}}if(null!=g)if(c=null!==m?""+m:Ia(h),qa(g))for(d=0;d<g.length;d++){if(""+g[d]===c){a.push(Ja);break}}else ""+g===c&&a.push(Ja);else n&&a.push(Ja);a.push(L);M(a,p,h);return h;case "textarea":a.push(N("textarea"));p=g=e=null;for(h in c)if(y.call(c,h)&&(m=c[h],null!=m))switch(h){case "children":p=m;break;case "value":e=m;break;case "defaultValue":g=m;break;case "dangerouslySetInnerHTML":throw Error("`dangerouslySetInnerHTML` does not make sense on <textarea>.");
+	default:K(a,d,h,m);}null===e&&null!==g&&(e=g);a.push(L);if(null!=p){if(null!=e)throw Error("If you supply `defaultValue` on a <textarea>, do not pass children.");if(qa(p)&&1<p.length)throw Error("<textarea> can only have at most one child.");e=""+p;}"string"===typeof e&&"\n"===e[0]&&a.push(La);null!==e&&a.push(F(""+e));return null;case "input":a.push(N("input"));m=p=h=e=null;for(g in c)if(y.call(c,g)&&(n=c[g],null!=n))switch(g){case "children":case "dangerouslySetInnerHTML":throw Error("input is a self-closing tag and must neither have `children` nor use `dangerouslySetInnerHTML`.");
+	case "defaultChecked":m=n;break;case "defaultValue":h=n;break;case "checked":p=n;break;case "value":e=n;break;default:K(a,d,g,n);}null!==p?K(a,d,"checked",p):null!==m&&K(a,d,"checked",m);null!==e?K(a,d,"value",e):null!==h&&K(a,d,"value",h);a.push(Ha);return null;case "menuitem":a.push(N("menuitem"));for(var C in c)if(y.call(c,C)&&(e=c[C],null!=e))switch(C){case "children":case "dangerouslySetInnerHTML":throw Error("menuitems cannot have `children` nor `dangerouslySetInnerHTML`.");default:K(a,d,C,e);}a.push(L);
+	return null;case "title":a.push(N("title"));e=null;for(v in c)if(y.call(c,v)&&(g=c[v],null!=g))switch(v){case "children":e=g;break;case "dangerouslySetInnerHTML":throw Error("`dangerouslySetInnerHTML` does not make sense on <title>.");default:K(a,d,v,g);}a.push(L);return e;case "listing":case "pre":a.push(N(b));g=e=null;for(m in c)if(y.call(c,m)&&(h=c[m],null!=h))switch(m){case "children":e=h;break;case "dangerouslySetInnerHTML":g=h;break;default:K(a,d,m,h);}a.push(L);if(null!=g){if(null!=e)throw Error("Can only set one of `children` or `props.dangerouslySetInnerHTML`.");
+	if("object"!==typeof g||!("__html"in g))throw Error("`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. Please visit https://reactjs.org/link/dangerously-set-inner-html for more information.");c=g.__html;null!==c&&void 0!==c&&("string"===typeof c&&0<c.length&&"\n"===c[0]?a.push(La,c):a.push(""+c));}"string"===typeof e&&"\n"===e[0]&&a.push(La);return e;case "area":case "base":case "br":case "col":case "embed":case "hr":case "img":case "keygen":case "link":case "meta":case "param":case "source":case "track":case "wbr":a.push(N(b));
+	for(var D in c)if(y.call(c,D)&&(e=c[D],null!=e))switch(D){case "children":case "dangerouslySetInnerHTML":throw Error(b+" is a self-closing tag and must neither have `children` nor use `dangerouslySetInnerHTML`.");default:K(a,d,D,e);}a.push(Ha);return null;case "annotation-xml":case "color-profile":case "font-face":case "font-face-src":case "font-face-uri":case "font-face-format":case "font-face-name":case "missing-glyph":return Ka(a,c,b,d);case "html":return 0===f.insertionMode&&a.push(Oa),Ka(a,c,
+	b,d);default:if(-1===b.indexOf("-")&&"string"!==typeof c.is)return Ka(a,c,b,d);a.push(N(b));g=e=null;for(n in c)if(y.call(c,n)&&(h=c[n],null!=h))switch(n){case "children":e=h;break;case "dangerouslySetInnerHTML":g=h;break;case "style":Fa(a,d,h);break;case "suppressContentEditableWarning":case "suppressHydrationWarning":break;default:ha(n)&&"function"!==typeof h&&"symbol"!==typeof h&&a.push(I,n,J,F(h),H);}a.push(L);M(a,g,e);return e}}
+	var Qa=x("</"),Ra=x(">"),Sa=x('<template id="'),Ta=x('"></template>'),Ua=x("\x3c!--$--\x3e"),Va=x('\x3c!--$?--\x3e<template id="'),Wa=x('"></template>'),Xa=x("\x3c!--$!--\x3e"),Ya=x("\x3c!--/$--\x3e"),Za=x("<template"),$a=x('"'),ab=x(' data-dgst="');x(' data-msg="');x(' data-stck="');var bb=x("></template>");function cb(a,b,c){r(a,Va);if(null===c)throw Error("An ID must have been assigned before we can complete the boundary.");r(a,c);return w(a,Wa)}
+	var db=x('<div hidden id="'),eb=x('">'),fb=x("</div>"),gb=x('<svg aria-hidden="true" style="display:none" id="'),hb=x('">'),ib=x("</svg>"),jb=x('<math aria-hidden="true" style="display:none" id="'),kb=x('">'),lb=x("</math>"),mb=x('<table hidden id="'),nb=x('">'),ob=x("</table>"),pb=x('<table hidden><tbody id="'),qb=x('">'),rb=x("</tbody></table>"),sb=x('<table hidden><tr id="'),tb=x('">'),ub=x("</tr></table>"),vb=x('<table hidden><colgroup id="'),wb=x('">'),xb=x("</colgroup></table>");
+	function yb(a,b,c,d){switch(c.insertionMode){case 0:case 1:return r(a,db),r(a,b.segmentPrefix),r(a,d.toString(16)),w(a,eb);case 2:return r(a,gb),r(a,b.segmentPrefix),r(a,d.toString(16)),w(a,hb);case 3:return r(a,jb),r(a,b.segmentPrefix),r(a,d.toString(16)),w(a,kb);case 4:return r(a,mb),r(a,b.segmentPrefix),r(a,d.toString(16)),w(a,nb);case 5:return r(a,pb),r(a,b.segmentPrefix),r(a,d.toString(16)),w(a,qb);case 6:return r(a,sb),r(a,b.segmentPrefix),r(a,d.toString(16)),w(a,tb);case 7:return r(a,vb),r(a,
+	b.segmentPrefix),r(a,d.toString(16)),w(a,wb);default:throw Error("Unknown insertion mode. This is a bug in React.");}}function zb(a,b){switch(b.insertionMode){case 0:case 1:return w(a,fb);case 2:return w(a,ib);case 3:return w(a,lb);case 4:return w(a,ob);case 5:return w(a,rb);case 6:return w(a,ub);case 7:return w(a,xb);default:throw Error("Unknown insertion mode. This is a bug in React.");}}
+	var Ab=x('function $RS(a,b){a=document.getElementById(a);b=document.getElementById(b);for(a.parentNode.removeChild(a);a.firstChild;)b.parentNode.insertBefore(a.firstChild,b);b.parentNode.removeChild(b)};$RS("'),Bb=x('$RS("'),Cb=x('","'),Db=x('")\x3c/script>'),Fb=x('function $RC(a,b){a=document.getElementById(a);b=document.getElementById(b);b.parentNode.removeChild(b);if(a){a=a.previousSibling;var f=a.parentNode,c=a.nextSibling,e=0;do{if(c&&8===c.nodeType){var d=c.data;if("/$"===d)if(0===e)break;else e--;else"$"!==d&&"$?"!==d&&"$!"!==d||e++}d=c.nextSibling;f.removeChild(c);c=d}while(c);for(;b.firstChild;)f.insertBefore(b.firstChild,c);a.data="$";a._reactRetry&&a._reactRetry()}};$RC("'),
+	Gb=x('$RC("'),Hb=x('","'),Ib=x('")\x3c/script>'),Jb=x('function $RX(b,c,d,e){var a=document.getElementById(b);a&&(b=a.previousSibling,b.data="$!",a=a.dataset,c&&(a.dgst=c),d&&(a.msg=d),e&&(a.stck=e),b._reactRetry&&b._reactRetry())};$RX("'),Kb=x('$RX("'),Lb=x('"'),Mb=x(")\x3c/script>"),Nb=x(","),Ob=/[<\u2028\u2029]/g;
+	function Pb(a){return JSON.stringify(a).replace(Ob,function(a){switch(a){case "<":return "\\u003c";case "\u2028":return "\\u2028";case "\u2029":return "\\u2029";default:throw Error("escapeJSStringsForInstructionScripts encountered a match it does not know how to replace. this means the match regex and the replacement characters are no longer in sync. This is a bug in React");}})}
+	var O=Object.assign,Qb=Symbol.for("react.element"),Rb=Symbol.for("react.portal"),Sb=Symbol.for("react.fragment"),Tb=Symbol.for("react.strict_mode"),Ub=Symbol.for("react.profiler"),Vb=Symbol.for("react.provider"),Wb=Symbol.for("react.context"),Xb=Symbol.for("react.forward_ref"),Yb=Symbol.for("react.suspense"),Zb=Symbol.for("react.suspense_list"),$b=Symbol.for("react.memo"),ac=Symbol.for("react.lazy"),bc=Symbol.for("react.scope"),cc=Symbol.for("react.debug_trace_mode"),dc=Symbol.for("react.legacy_hidden"),
+	ec=Symbol.for("react.default_value"),fc=Symbol.iterator;
+	function gc(a){if(null==a)return null;if("function"===typeof a)return a.displayName||a.name||null;if("string"===typeof a)return a;switch(a){case Sb:return "Fragment";case Rb:return "Portal";case Ub:return "Profiler";case Tb:return "StrictMode";case Yb:return "Suspense";case Zb:return "SuspenseList"}if("object"===typeof a)switch(a.$$typeof){case Wb:return (a.displayName||"Context")+".Consumer";case Vb:return (a._context.displayName||"Context")+".Provider";case Xb:var b=a.render;a=a.displayName;a||(a=b.displayName||
+	b.name||"",a=""!==a?"ForwardRef("+a+")":"ForwardRef");return a;case $b:return b=a.displayName||null,null!==b?b:gc(a.type)||"Memo";case ac:b=a._payload;a=a._init;try{return gc(a(b))}catch(c){}}return null}var hc={};function ic(a,b){a=a.contextTypes;if(!a)return hc;var c={},d;for(d in a)c[d]=b[d];return c}var P=null;
+	function Q(a,b){if(a!==b){a.context._currentValue=a.parentValue;a=a.parent;var c=b.parent;if(null===a){if(null!==c)throw Error("The stacks must reach the root at the same time. This is a bug in React.");}else {if(null===c)throw Error("The stacks must reach the root at the same time. This is a bug in React.");Q(a,c);}b.context._currentValue=b.value;}}function jc(a){a.context._currentValue=a.parentValue;a=a.parent;null!==a&&jc(a);}
+	function kc(a){var b=a.parent;null!==b&&kc(b);a.context._currentValue=a.value;}function lc(a,b){a.context._currentValue=a.parentValue;a=a.parent;if(null===a)throw Error("The depth must equal at least at zero before reaching the root. This is a bug in React.");a.depth===b.depth?Q(a,b):lc(a,b);}
+	function mc(a,b){var c=b.parent;if(null===c)throw Error("The depth must equal at least at zero before reaching the root. This is a bug in React.");a.depth===c.depth?Q(a,c):mc(a,c);b.context._currentValue=b.value;}function nc(a){var b=P;b!==a&&(null===b?kc(a):null===a?jc(b):b.depth===a.depth?Q(b,a):b.depth>a.depth?lc(b,a):mc(b,a),P=a);}
+	var oc={isMounted:function(){return !1},enqueueSetState:function(a,b){a=a._reactInternals;null!==a.queue&&a.queue.push(b);},enqueueReplaceState:function(a,b){a=a._reactInternals;a.replace=!0;a.queue=[b];},enqueueForceUpdate:function(){}};
+	function pc(a,b,c,d){var f=void 0!==a.state?a.state:null;a.updater=oc;a.props=c;a.state=f;var e={queue:[],replace:!1};a._reactInternals=e;var g=b.contextType;a.context="object"===typeof g&&null!==g?g._currentValue:d;g=b.getDerivedStateFromProps;"function"===typeof g&&(g=g(c,f),f=null===g||void 0===g?f:O({},f,g),a.state=f);if("function"!==typeof b.getDerivedStateFromProps&&"function"!==typeof a.getSnapshotBeforeUpdate&&("function"===typeof a.UNSAFE_componentWillMount||"function"===typeof a.componentWillMount))if(b=
+	a.state,"function"===typeof a.componentWillMount&&a.componentWillMount(),"function"===typeof a.UNSAFE_componentWillMount&&a.UNSAFE_componentWillMount(),b!==a.state&&oc.enqueueReplaceState(a,a.state,null),null!==e.queue&&0<e.queue.length)if(b=e.queue,g=e.replace,e.queue=null,e.replace=!1,g&&1===b.length)a.state=b[0];else {e=g?b[0]:a.state;f=!0;for(g=g?1:0;g<b.length;g++){var h=b[g];h="function"===typeof h?h.call(a,e,c,d):h;null!=h&&(f?(f=!1,e=O({},e,h)):O(e,h));}a.state=e;}else e.queue=null;}
+	var qc={id:1,overflow:""};function rc(a,b,c){var d=a.id;a=a.overflow;var f=32-sc(d)-1;d&=~(1<<f);c+=1;var e=32-sc(b)+f;if(30<e){var g=f-f%5;e=(d&(1<<g)-1).toString(32);d>>=g;f-=g;return {id:1<<32-sc(b)+f|c<<f|d,overflow:e+a}}return {id:1<<e|c<<f|d,overflow:a}}var sc=Math.clz32?Math.clz32:tc,uc=Math.log,vc=Math.LN2;function tc(a){a>>>=0;return 0===a?32:31-(uc(a)/vc|0)|0}function wc(a,b){return a===b&&(0!==a||1/a===1/b)||a!==a&&b!==b}
+	var xc="function"===typeof Object.is?Object.is:wc,R=null,yc=null,zc=null,S=null,T=!1,Ac=!1,U=0,V=null,Bc=0;
+	function W(){if(null===R)throw Error("Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.");return R}
+	function Cc(){if(0<Bc)throw Error("Rendered more hooks than during the previous render");return {memoizedState:null,queue:null,next:null}}function Dc(){null===S?null===zc?(T=!1,zc=S=Cc()):(T=!0,S=zc):null===S.next?(T=!1,S=S.next=Cc()):(T=!0,S=S.next);return S}function Ec(){yc=R=null;Ac=!1;zc=null;Bc=0;S=V=null;}function Fc(a,b){return "function"===typeof b?b(a):b}
+	function Gc(a,b,c){R=W();S=Dc();if(T){var d=S.queue;b=d.dispatch;if(null!==V&&(c=V.get(d),void 0!==c)){V.delete(d);d=S.memoizedState;do d=a(d,c.action),c=c.next;while(null!==c);S.memoizedState=d;return [d,b]}return [S.memoizedState,b]}a=a===Fc?"function"===typeof b?b():b:void 0!==c?c(b):b;S.memoizedState=a;a=S.queue={last:null,dispatch:null};a=a.dispatch=Hc.bind(null,R,a);return [S.memoizedState,a]}
+	function Ic(a,b){R=W();S=Dc();b=void 0===b?null:b;if(null!==S){var c=S.memoizedState;if(null!==c&&null!==b){var d=c[1];a:if(null===d)d=!1;else {for(var f=0;f<d.length&&f<b.length;f++)if(!xc(b[f],d[f])){d=!1;break a}d=!0;}if(d)return c[0]}}a=a();S.memoizedState=[a,b];return a}
+	function Hc(a,b,c){if(25<=Bc)throw Error("Too many re-renders. React limits the number of renders to prevent an infinite loop.");if(a===R)if(Ac=!0,a={action:c,next:null},null===V&&(V=new Map),c=V.get(b),void 0===c)V.set(b,a);else {for(b=c;null!==b.next;)b=b.next;b.next=a;}}function Jc(){throw Error("startTransition cannot be called during server rendering.");}function Kc(){}
+	var Mc={readContext:function(a){return a._currentValue},useContext:function(a){W();return a._currentValue},useMemo:Ic,useReducer:Gc,useRef:function(a){R=W();S=Dc();var b=S.memoizedState;return null===b?(a={current:a},S.memoizedState=a):b},useState:function(a){return Gc(Fc,a)},useInsertionEffect:Kc,useLayoutEffect:function(){},useCallback:function(a,b){return Ic(function(){return a},b)},useImperativeHandle:Kc,useEffect:Kc,useDebugValue:Kc,useDeferredValue:function(a){W();return a},useTransition:function(){W();
+	return [!1,Jc]},useId:function(){var a=yc.treeContext;var b=a.overflow;a=a.id;a=(a&~(1<<32-sc(a)-1)).toString(32)+b;var c=Lc;if(null===c)throw Error("Invalid hook call. Hooks can only be called inside of the body of a function component.");b=U++;a=":"+c.idPrefix+"R"+a;0<b&&(a+="H"+b.toString(32));return a+":"},useMutableSource:function(a,b){W();return b(a._source)},useSyncExternalStore:function(a,b,c){if(void 0===c)throw Error("Missing getServerSnapshot, which is required for server-rendered content. Will revert to client rendering.");
+	return c()}},Lc=null,Nc=ba.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher;function Oc(a){console.error(a);return null}function X(){}function Pc(a,b){var c=a.pingedTasks;c.push(b);1===c.length&&setImmediate(function(){return Qc(a)});}
+	function Rc(a,b,c,d,f,e,g,h){a.allPendingTasks++;null===c?a.pendingRootTasks++:c.pendingTasks++;var m={node:b,ping:function(){return Pc(a,m)},blockedBoundary:c,blockedSegment:d,abortSet:f,legacyContext:e,context:g,treeContext:h};f.add(m);return m}function Sc(a,b,c,d,f,e){return {status:0,id:-1,index:b,parentFlushed:!1,chunks:[],children:[],formatContext:d,boundary:c,lastPushedText:f,textEmbedded:e}}
+	function Y(a,b){a=a.onError(b);if(null!=a&&"string"!==typeof a)throw Error('onError returned something with a type other than "string". onError should return a string and may return null or undefined but must not return anything else. It received something of type "'+typeof a+'" instead');return a}function Tc(a,b){var c=a.onShellError;c(b);c=a.onFatalError;c(b);null!==a.destination?(a.status=2,a.destination.destroy(b)):(a.status=1,a.fatalError=b);}
+	function Uc(a,b,c,d,f){R={};yc=b;U=0;for(a=c(d,f);Ac;)Ac=!1,U=0,Bc+=1,S=null,a=c(d,f);Ec();return a}function Vc(a,b,c,d){var f=c.render(),e=d.childContextTypes;if(null!==e&&void 0!==e){var g=b.legacyContext;if("function"!==typeof c.getChildContext)d=g;else {c=c.getChildContext();for(var h in c)if(!(h in e))throw Error((gc(d)||"Unknown")+'.getChildContext(): key "'+h+'" is not defined in childContextTypes.');d=O({},g,c);}b.legacyContext=d;Z(a,b,f);b.legacyContext=g;}else Z(a,b,f);}
+	function Wc(a,b){if(a&&a.defaultProps){b=O({},b);a=a.defaultProps;for(var c in a)void 0===b[c]&&(b[c]=a[c]);return b}return b}
+	function Xc(a,b,c,d,f){if("function"===typeof c)if(c.prototype&&c.prototype.isReactComponent){f=ic(c,b.legacyContext);var e=c.contextType;e=new c(d,"object"===typeof e&&null!==e?e._currentValue:f);pc(e,c,d,f);Vc(a,b,e,c);}else {e=ic(c,b.legacyContext);f=Uc(a,b,c,d,e);var g=0!==U;if("object"===typeof f&&null!==f&&"function"===typeof f.render&&void 0===f.$$typeof)pc(f,c,d,e),Vc(a,b,f,c);else if(g){d=b.treeContext;b.treeContext=rc(d,1,0);try{Z(a,b,f);}finally{b.treeContext=d;}}else Z(a,b,f);}else if("string"===
+	typeof c){f=b.blockedSegment;e=Pa(f.chunks,c,d,a.responseState,f.formatContext);f.lastPushedText=!1;g=f.formatContext;f.formatContext=ya(g,c,d);Yc(a,b,e);f.formatContext=g;switch(c){case "area":case "base":case "br":case "col":case "embed":case "hr":case "img":case "input":case "keygen":case "link":case "meta":case "param":case "source":case "track":case "wbr":break;default:f.chunks.push(Qa,c,Ra);}f.lastPushedText=!1;}else {switch(c){case dc:case cc:case Tb:case Ub:case Sb:Z(a,b,d.children);return;case Zb:Z(a,
+	b,d.children);return;case bc:throw Error("ReactDOMServer does not yet support scope components.");case Yb:a:{c=b.blockedBoundary;f=b.blockedSegment;e=d.fallback;d=d.children;g=new Set;var h={id:null,rootSegmentID:-1,parentFlushed:!1,pendingTasks:0,forceClientRender:!1,completedSegments:[],byteSize:0,fallbackAbortableTasks:g,errorDigest:null},m=Sc(a,f.chunks.length,h,f.formatContext,!1,!1);f.children.push(m);f.lastPushedText=!1;var n=Sc(a,0,null,f.formatContext,!1,!1);n.parentFlushed=!0;b.blockedBoundary=
+	h;b.blockedSegment=n;try{if(Yc(a,b,d),n.lastPushedText&&n.textEmbedded&&n.chunks.push(za),n.status=1,Zc(h,n),0===h.pendingTasks)break a}catch(p){n.status=4,h.forceClientRender=!0,h.errorDigest=Y(a,p);}finally{b.blockedBoundary=c,b.blockedSegment=f;}b=Rc(a,e,c,m,g,b.legacyContext,b.context,b.treeContext);a.pingedTasks.push(b);}return}if("object"===typeof c&&null!==c)switch(c.$$typeof){case Xb:d=Uc(a,b,c.render,d,f);if(0!==U){c=b.treeContext;b.treeContext=rc(c,1,0);try{Z(a,b,d);}finally{b.treeContext=c;}}else Z(a,
+	b,d);return;case $b:c=c.type;d=Wc(c,d);Xc(a,b,c,d,f);return;case Vb:f=d.children;c=c._context;d=d.value;e=c._currentValue;c._currentValue=d;g=P;P=d={parent:g,depth:null===g?0:g.depth+1,context:c,parentValue:e,value:d};b.context=d;Z(a,b,f);a=P;if(null===a)throw Error("Tried to pop a Context at the root of the app. This is a bug in React.");d=a.parentValue;a.context._currentValue=d===ec?a.context._defaultValue:d;a=P=a.parent;b.context=a;return;case Wb:d=d.children;d=d(c._currentValue);Z(a,b,d);return;
+	case ac:f=c._init;c=f(c._payload);d=Wc(c,d);Xc(a,b,c,d,void 0);return}throw Error("Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: "+((null==c?c:typeof c)+"."));}}
+	function Z(a,b,c){b.node=c;if("object"===typeof c&&null!==c){switch(c.$$typeof){case Qb:Xc(a,b,c.type,c.props,c.ref);return;case Rb:throw Error("Portals are not currently supported by the server renderer. Render them conditionally so that they only appear on the client render.");case ac:var d=c._init;c=d(c._payload);Z(a,b,c);return}if(qa(c)){$c(a,b,c);return}null===c||"object"!==typeof c?d=null:(d=fc&&c[fc]||c["@@iterator"],d="function"===typeof d?d:null);if(d&&(d=d.call(c))){c=d.next();if(!c.done){var f=
+	[];do f.push(c.value),c=d.next();while(!c.done);$c(a,b,f);}return}a=Object.prototype.toString.call(c);throw Error("Objects are not valid as a React child (found: "+("[object Object]"===a?"object with keys {"+Object.keys(c).join(", ")+"}":a)+"). If you meant to render a collection of children, use an array instead.");}"string"===typeof c?(d=b.blockedSegment,d.lastPushedText=Aa(b.blockedSegment.chunks,c,a.responseState,d.lastPushedText)):"number"===typeof c&&(d=b.blockedSegment,d.lastPushedText=Aa(b.blockedSegment.chunks,
+	""+c,a.responseState,d.lastPushedText));}function $c(a,b,c){for(var d=c.length,f=0;f<d;f++){var e=b.treeContext;b.treeContext=rc(e,d,f);try{Yc(a,b,c[f]);}finally{b.treeContext=e;}}}
+	function Yc(a,b,c){var d=b.blockedSegment.formatContext,f=b.legacyContext,e=b.context;try{return Z(a,b,c)}catch(m){if(Ec(),"object"===typeof m&&null!==m&&"function"===typeof m.then){c=m;var g=b.blockedSegment,h=Sc(a,g.chunks.length,null,g.formatContext,g.lastPushedText,!0);g.children.push(h);g.lastPushedText=!1;a=Rc(a,b.node,b.blockedBoundary,h,b.abortSet,b.legacyContext,b.context,b.treeContext).ping;c.then(a,a);b.blockedSegment.formatContext=d;b.legacyContext=f;b.context=e;nc(e);}else throw b.blockedSegment.formatContext=
+	d,b.legacyContext=f,b.context=e,nc(e),m;}}function ad(a){var b=a.blockedBoundary;a=a.blockedSegment;a.status=3;bd(this,b,a);}
+	function cd(a,b,c){var d=a.blockedBoundary;a.blockedSegment.status=3;null===d?(b.allPendingTasks--,2!==b.status&&(b.status=2,null!==b.destination&&b.destination.end())):(d.pendingTasks--,d.forceClientRender||(d.forceClientRender=!0,d.errorDigest=b.onError(void 0===c?Error("The render was aborted by the server without a reason."):c),d.parentFlushed&&b.clientRenderedBoundaries.push(d)),d.fallbackAbortableTasks.forEach(function(a){return cd(a,b,c)}),d.fallbackAbortableTasks.clear(),b.allPendingTasks--,
+	0===b.allPendingTasks&&(a=b.onAllReady,a()));}function Zc(a,b){if(0===b.chunks.length&&1===b.children.length&&null===b.children[0].boundary){var c=b.children[0];c.id=b.id;c.parentFlushed=!0;1===c.status&&Zc(a,c);}else a.completedSegments.push(b);}
+	function bd(a,b,c){if(null===b){if(c.parentFlushed){if(null!==a.completedRootSegment)throw Error("There can only be one root segment. This is a bug in React.");a.completedRootSegment=c;}a.pendingRootTasks--;0===a.pendingRootTasks&&(a.onShellError=X,b=a.onShellReady,b());}else b.pendingTasks--,b.forceClientRender||(0===b.pendingTasks?(c.parentFlushed&&1===c.status&&Zc(b,c),b.parentFlushed&&a.completedBoundaries.push(b),b.fallbackAbortableTasks.forEach(ad,a),b.fallbackAbortableTasks.clear()):c.parentFlushed&&
+	1===c.status&&(Zc(b,c),1===b.completedSegments.length&&b.parentFlushed&&a.partialBoundaries.push(b)));a.allPendingTasks--;0===a.allPendingTasks&&(a=a.onAllReady,a());}
+	function Qc(a){if(2!==a.status){var b=P,c=Nc.current;Nc.current=Mc;var d=Lc;Lc=a.responseState;try{var f=a.pingedTasks,e;for(e=0;e<f.length;e++){var g=f[e];var h=a,m=g.blockedSegment;if(0===m.status){nc(g.context);try{Z(h,g,g.node),m.lastPushedText&&m.textEmbedded&&m.chunks.push(za),g.abortSet.delete(g),m.status=1,bd(h,g.blockedBoundary,m);}catch(E){if(Ec(),"object"===typeof E&&null!==E&&"function"===typeof E.then){var n=g.ping;E.then(n,n);}else {g.abortSet.delete(g);m.status=4;var p=g.blockedBoundary,
+	v=E,C=Y(h,v);null===p?Tc(h,v):(p.pendingTasks--,p.forceClientRender||(p.forceClientRender=!0,p.errorDigest=C,p.parentFlushed&&h.clientRenderedBoundaries.push(p)));h.allPendingTasks--;if(0===h.allPendingTasks){var D=h.onAllReady;D();}}}finally{}}}f.splice(0,e);null!==a.destination&&dd(a,a.destination);}catch(E){Y(a,E),Tc(a,E);}finally{Lc=d,Nc.current=c,c===Mc&&nc(b);}}}
+	function ed(a,b,c){c.parentFlushed=!0;switch(c.status){case 0:var d=c.id=a.nextSegmentId++;c.lastPushedText=!1;c.textEmbedded=!1;a=a.responseState;r(b,Sa);r(b,a.placeholderPrefix);a=d.toString(16);r(b,a);return w(b,Ta);case 1:c.status=2;var f=!0;d=c.chunks;var e=0;c=c.children;for(var g=0;g<c.length;g++){for(f=c[g];e<f.index;e++)r(b,d[e]);f=fd(a,b,f);}for(;e<d.length-1;e++)r(b,d[e]);e<d.length&&(f=w(b,d[e]));return f;default:throw Error("Aborted, errored or already flushed boundaries should not be flushed again. This is a bug in React.");
+	}}
+	function fd(a,b,c){var d=c.boundary;if(null===d)return ed(a,b,c);d.parentFlushed=!0;if(d.forceClientRender)d=d.errorDigest,w(b,Xa),r(b,Za),d&&(r(b,ab),r(b,F(d)),r(b,$a)),w(b,bb),ed(a,b,c);else if(0<d.pendingTasks){d.rootSegmentID=a.nextSegmentId++;0<d.completedSegments.length&&a.partialBoundaries.push(d);var f=a.responseState;var e=f.nextSuspenseID++;f=x(f.boundaryPrefix+e.toString(16));d=d.id=f;cb(b,a.responseState,d);ed(a,b,c);}else if(d.byteSize>a.progressiveChunkSize)d.rootSegmentID=a.nextSegmentId++,a.completedBoundaries.push(d),
+	cb(b,a.responseState,d.id),ed(a,b,c);else {w(b,Ua);c=d.completedSegments;if(1!==c.length)throw Error("A previously unvisited boundary must have exactly one root segment. This is a bug in React.");fd(a,b,c[0]);}return w(b,Ya)}function gd(a,b,c){yb(b,a.responseState,c.formatContext,c.id);fd(a,b,c);return zb(b,c.formatContext)}
+	function hd(a,b,c){for(var d=c.completedSegments,f=0;f<d.length;f++)id(a,b,c,d[f]);d.length=0;a=a.responseState;d=c.id;c=c.rootSegmentID;r(b,a.startInlineScript);a.sentCompleteBoundaryFunction?r(b,Gb):(a.sentCompleteBoundaryFunction=!0,r(b,Fb));if(null===d)throw Error("An ID must have been assigned before we can complete the boundary.");c=c.toString(16);r(b,d);r(b,Hb);r(b,a.segmentPrefix);r(b,c);return w(b,Ib)}
+	function id(a,b,c,d){if(2===d.status)return !0;var f=d.id;if(-1===f){if(-1===(d.id=c.rootSegmentID))throw Error("A root segment ID must have been assigned by now. This is a bug in React.");return gd(a,b,d)}gd(a,b,d);a=a.responseState;r(b,a.startInlineScript);a.sentCompleteSegmentFunction?r(b,Bb):(a.sentCompleteSegmentFunction=!0,r(b,Ab));r(b,a.segmentPrefix);f=f.toString(16);r(b,f);r(b,Cb);r(b,a.placeholderPrefix);r(b,f);return w(b,Db)}
+	function dd(a,b){k=new Uint8Array(2048);l$2=0;q=!0;try{var c=a.completedRootSegment;if(null!==c&&0===a.pendingRootTasks){fd(a,b,c);a.completedRootSegment=null;var d=a.responseState.bootstrapChunks;for(c=0;c<d.length-1;c++)r(b,d[c]);c<d.length&&w(b,d[c]);}var f=a.clientRenderedBoundaries,e;for(e=0;e<f.length;e++){var g=f[e];d=b;var h=a.responseState,m=g.id,n=g.errorDigest,p=g.errorMessage,v=g.errorComponentStack;r(d,h.startInlineScript);h.sentClientRenderFunction?r(d,Kb):(h.sentClientRenderFunction=!0,
+	r(d,Jb));if(null===m)throw Error("An ID must have been assigned before we can complete the boundary.");r(d,m);r(d,Lb);if(n||p||v)r(d,Nb),r(d,Pb(n||""));if(p||v)r(d,Nb),r(d,Pb(p||""));v&&(r(d,Nb),r(d,Pb(v)));if(!w(d,Mb)){a.destination=null;e++;f.splice(0,e);return}}f.splice(0,e);var C=a.completedBoundaries;for(e=0;e<C.length;e++)if(!hd(a,b,C[e])){a.destination=null;e++;C.splice(0,e);return}C.splice(0,e);ca(b);k=new Uint8Array(2048);l$2=0;q=!0;var D=a.partialBoundaries;for(e=0;e<D.length;e++){var E=D[e];
+	a:{f=a;g=b;var na=E.completedSegments;for(h=0;h<na.length;h++)if(!id(f,g,E,na[h])){h++;na.splice(0,h);var Eb=!1;break a}na.splice(0,h);Eb=!0;}if(!Eb){a.destination=null;e++;D.splice(0,e);return}}D.splice(0,e);var oa=a.completedBoundaries;for(e=0;e<oa.length;e++)if(!hd(a,b,oa[e])){a.destination=null;e++;oa.splice(0,e);return}oa.splice(0,e);}finally{ca(b),"function"===typeof b.flush&&b.flush(),0===a.allPendingTasks&&0===a.pingedTasks.length&&0===a.clientRenderedBoundaries.length&&0===a.completedBoundaries.length&&
+	b.end();}}function jd(a){setImmediate(function(){return Qc(a)});}function kd(a,b){if(1===a.status)a.status=2,b.destroy(a.fatalError);else if(2!==a.status&&null===a.destination){a.destination=b;try{dd(a,b);}catch(c){Y(a,c),Tc(a,c);}}}function ld(a,b){try{var c=a.abortableTasks;c.forEach(function(c){return cd(c,a,b)});c.clear();null!==a.destination&&dd(a,a.destination);}catch(d){Y(a,d),Tc(a,d);}}function md(a,b){return function(){return kd(b,a)}}function nd(a,b){return function(){return ld(a,b)}}
+	function od(a,b){var c=b?b.identifierPrefix:void 0,d=b?b.nonce:void 0,f=b?b.bootstrapScriptContent:void 0,e=b?b.bootstrapScripts:void 0;var g=b?b.bootstrapModules:void 0;c=void 0===c?"":c;d=void 0===d?ra:x('<script nonce="'+F(d)+'">');var h=[];void 0!==f&&h.push(d,(""+f).replace(wa,xa),sa);if(void 0!==e)for(f=0;f<e.length;f++)h.push(ta,F(e[f]),va);if(void 0!==g)for(e=0;e<g.length;e++)h.push(ua,F(g[e]),va);g={bootstrapChunks:h,startInlineScript:d,placeholderPrefix:x(c+"P:"),segmentPrefix:x(c+"S:"),
+	boundaryPrefix:c+"B:",idPrefix:c,nextSuspenseID:0,sentCompleteSegmentFunction:!1,sentCompleteBoundaryFunction:!1,sentClientRenderFunction:!1};e=b?b.namespaceURI:void 0;e=G("http://www.w3.org/2000/svg"===e?2:"http://www.w3.org/1998/Math/MathML"===e?3:0,null);f=b?b.progressiveChunkSize:void 0;d=b?b.onError:void 0;h=b?b.onAllReady:void 0;var m=b?b.onShellReady:void 0,n=b?b.onShellError:void 0;b=[];c=new Set;g={destination:null,responseState:g,progressiveChunkSize:void 0===f?12800:f,status:0,fatalError:null,
+	nextSegmentId:0,allPendingTasks:0,pendingRootTasks:0,completedRootSegment:null,abortableTasks:c,pingedTasks:b,clientRenderedBoundaries:[],completedBoundaries:[],partialBoundaries:[],onError:void 0===d?Oc:d,onAllReady:void 0===h?X:h,onShellReady:void 0===m?X:m,onShellError:void 0===n?X:n,onFatalError:X};e=Sc(g,0,null,e,!1,!1);e.parentFlushed=!0;a=Rc(g,a,null,e,c,hc,null,qc);b.push(a);return g}
+	reactDomServer_node_production_min.renderToPipeableStream=function(a,b){var c=od(a,b),d=!1;jd(c);return {pipe:function(a){if(d)throw Error("React currently only supports piping to one writable stream.");d=!0;kd(c,a);a.on("drain",md(a,c));a.on("error",nd(c,Error("The destination stream errored while writing data.")));a.on("close",nd(c,Error("The destination stream closed early.")));return a},abort:function(a){ld(c,a);}}};reactDomServer_node_production_min.version="18.2.0";
 
+	var l$1, s$2;
 	{
-	  server_node.exports = reactDomServer_node_production_min;
+	  l$1 = reactDomServerLegacy_node_production_min;
+	  s$2 = reactDomServer_node_production_min;
 	}
 
-	var server = server_node.exports;
+	server_node.version = l$1.version;
+	server_node.renderToString = l$1.renderToString;
+	server_node.renderToStaticMarkup = l$1.renderToStaticMarkup;
+	server_node.renderToNodeStream = l$1.renderToNodeStream;
+	server_node.renderToStaticNodeStream = l$1.renderToStaticNodeStream;
+	server_node.renderToPipeableStream = s$2.renderToPipeableStream;
 
 	var memoryCache = {exports: {}};
 
@@ -5371,7 +5642,7 @@
 
 	var isCheckBoxInput = (element) => element.type === 'checkbox';
 
-	var isDateObject = (data) => data instanceof Date;
+	var isDateObject = (value) => value instanceof Date;
 
 	var isNullOrUndefined = (value) => value == null;
 
@@ -5387,28 +5658,29 @@
 	        : event.target.value
 	    : event;
 
-	var getNodeParentName = (name) => name.substring(0, name.search(/.\d/)) || name;
+	var getNodeParentName = (name) => name.substring(0, name.search(/\.\d+(\.|$)/)) || name;
 
-	var isNameInFieldArray = (names, name) => [...names].some((current) => getNodeParentName(name) === current);
+	var isNameInFieldArray = (names, name) => names.has(getNodeParentName(name));
 
-	var compact = (value) => (value || []).filter(Boolean);
+	var compact = (value) => Array.isArray(value) ? value.filter(Boolean) : [];
 
 	var isUndefined$1 = (val) => val === undefined;
 
 	var get = (obj, path, defaultValue) => {
-	    if (isObject(obj) && path) {
-	        const result = compact(path.split(/[,[\].]+?/)).reduce((result, key) => (isNullOrUndefined(result) ? result : result[key]), obj);
-	        return isUndefined$1(result) || result === obj
-	            ? isUndefined$1(obj[path])
-	                ? defaultValue
-	                : obj[path]
-	            : result;
+	    if (!path || !isObject(obj)) {
+	        return defaultValue;
 	    }
-	    return undefined;
+	    const result = compact(path.split(/[,[\].]+?/)).reduce((result, key) => isNullOrUndefined(result) ? result : result[key], obj);
+	    return isUndefined$1(result) || result === obj
+	        ? isUndefined$1(obj[path])
+	            ? defaultValue
+	            : obj[path]
+	        : result;
 	};
 
 	const EVENTS = {
 	    BLUR: 'blur',
+	    FOCUS_OUT: 'focusout',
 	    CHANGE: 'change',
 	};
 	const VALIDATION_MODE = {
@@ -5428,32 +5700,51 @@
 	    validate: 'validate',
 	};
 
-	var omit = (source, key) => {
-	    const copy = Object.assign({}, source);
-	    delete copy[key];
-	    return copy;
-	};
-
 	const HookFormContext = React__default["default"].createContext(null);
+	/**
+	 * This custom hook allows you to access the form context. useFormContext is intended to be used in deeply nested structures, where it would become inconvenient to pass the context as a prop. To be used with {@link FormProvider}.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/useformcontext) • [Demo](https://codesandbox.io/s/react-hook-form-v7-form-context-ytudi)
+	 *
+	 * @returns return all useForm methods
+	 *
+	 * @example
+	 * ```tsx
+	 * function App() {
+	 *   const methods = useForm();
+	 *   const onSubmit = data => console.log(data);
+	 *
+	 *   return (
+	 *     <FormProvider {...methods} >
+	 *       <form onSubmit={methods.handleSubmit(onSubmit)}>
+	 *         <NestedInput />
+	 *         <input type="submit" />
+	 *       </form>
+	 *     </FormProvider>
+	 *   );
+	 * }
+	 *
+	 *  function NestedInput() {
+	 *   const { register } = useFormContext(); // retrieve all hook methods
+	 *   return <input {...register("test")} />;
+	 * }
+	 * ```
+	 */
 	const useFormContext = () => React__default["default"].useContext(HookFormContext);
 
 	var getProxyFormState = (formState, _proxyFormState, localProxyFormState, isRoot = true) => {
-	    function createGetter(prop) {
-	        return () => {
-	            if (prop in formState) {
-	                if (_proxyFormState[prop] !== VALIDATION_MODE.all) {
-	                    _proxyFormState[prop] = !isRoot || VALIDATION_MODE.all;
-	                }
-	                localProxyFormState && (localProxyFormState[prop] = true);
-	                return formState[prop];
-	            }
-	            return undefined;
-	        };
-	    }
 	    const result = {};
 	    for (const key in formState) {
 	        Object.defineProperty(result, key, {
-	            get: createGetter(key),
+	            get: () => {
+	                const _key = key;
+	                if (_proxyFormState[_key] !== VALIDATION_MODE.all) {
+	                    _proxyFormState[_key] = !isRoot || VALIDATION_MODE.all;
+	                }
+	                localProxyFormState && (localProxyFormState[_key] = true);
+	                return formState[_key];
+	            },
 	        });
 	    }
 	    return result;
@@ -5462,7 +5753,7 @@
 	var isEmptyObject = (value) => isObject(value) && !Object.keys(value).length;
 
 	var shouldRenderFormState = (formStateData, _proxyFormState, isRoot) => {
-	    const formState = omit(formStateData, 'name');
+	    const { name, ...formState } = formStateData;
 	    return (isEmptyObject(formState) ||
 	        Object.keys(formState).length >= Object.keys(_proxyFormState).length ||
 	        Object.keys(formState).find((key) => _proxyFormState[key] ===
@@ -5497,6 +5788,36 @@
 	    }, [props.disabled]);
 	}
 
+	/**
+	 * This custom hook allows you to subscribe to each form state, and isolate the re-render at the custom hook level. It has its scope in terms of form state subscription, so it would not affect other useFormState and useForm. Using this hook can reduce the re-render impact on large and complex form application.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/useformstate) • [Demo](https://codesandbox.io/s/useformstate-75xly)
+	 *
+	 * @param props - include options on specify fields to subscribe. {@link UseFormStateReturn}
+	 *
+	 * @example
+	 * ```tsx
+	 * function App() {
+	 *   const { register, handleSubmit, control } = useForm({
+	 *     defaultValues: {
+	 *     firstName: "firstName"
+	 *   }});
+	 *   const { dirtyFields } = useFormState({
+	 *     control
+	 *   });
+	 *   const onSubmit = (data) => console.log(data);
+	 *
+	 *   return (
+	 *     <form onSubmit={handleSubmit(onSubmit)}>
+	 *       <input {...register("firstName")} placeholder="First Name" />
+	 *       {dirtyFields.firstName && <p>Field is dirty.</p>}
+	 *       <input type="submit" />
+	 *     </form>
+	 *   );
+	 * }
+	 * ```
+	 */
 	function useFormState(props) {
 	    const methods = useFormContext();
 	    const { control = methods.control, disabled, name, exact } = props || {};
@@ -5510,14 +5831,26 @@
 	        errors: false,
 	    });
 	    const _name = React__default["default"].useRef(name);
+	    const _mounted = React__default["default"].useRef(true);
 	    _name.current = name;
+	    const callback = React__default["default"].useCallback((value) => _mounted.current &&
+	        shouldSubscribeByName(_name.current, value.name, exact) &&
+	        shouldRenderFormState(value, _localProxyFormState.current) &&
+	        updateFormState({
+	            ...control._formState,
+	            ...value,
+	        }), [control, exact]);
 	    useSubscribe({
 	        disabled,
-	        callback: (value) => shouldSubscribeByName(_name.current, value.name, exact) &&
-	            shouldRenderFormState(value, _localProxyFormState.current) &&
-	            updateFormState(Object.assign(Object.assign({}, control._formState), value)),
+	        callback,
 	        subject: control._subjects.state,
 	    });
+	    React__default["default"].useEffect(() => {
+	        _mounted.current = true;
+	        return () => {
+	            _mounted.current = false;
+	        };
+	    }, []);
 	    return getProxyFormState(formState, control._proxyFormState, _localProxyFormState.current, false);
 	}
 
@@ -5548,26 +5881,44 @@
 	    return false;
 	};
 
+	/**
+	 * Custom hook to subscribe to field change and isolate re-rendering at the component level.
+	 *
+	 * @remarks
+	 *
+	 * [API](https://react-hook-form.com/api/usewatch) • [Demo](https://codesandbox.io/s/react-hook-form-v7-ts-usewatch-h9i5e)
+	 *
+	 * @example
+	 * ```tsx
+	 * const { watch } = useForm();
+	 * const values = useWatch({
+	 *   name: "fieldName"
+	 *   control,
+	 * })
+	 * ```
+	 */
 	function useWatch(props) {
 	    const methods = useFormContext();
 	    const { control = methods.control, name, defaultValue, disabled, exact, } = props || {};
 	    const _name = React__default["default"].useRef(name);
 	    _name.current = name;
-	    useSubscribe({
-	        disabled,
-	        subject: control._subjects.watch,
-	        callback: (formState) => {
-	            if (shouldSubscribeByName(_name.current, formState.name, exact)) {
-	                const fieldValues = generateWatchOutput(_name.current, control._names, formState.values || control._formValues);
-	                updateValue(isUndefined$1(_name.current) ||
-	                    (isObject(fieldValues) && !objectHasFunction(fieldValues))
-	                    ? Object.assign({}, fieldValues) : Array.isArray(fieldValues)
+	    const callback = React__default["default"].useCallback((formState) => {
+	        if (shouldSubscribeByName(_name.current, formState.name, exact)) {
+	            const fieldValues = generateWatchOutput(_name.current, control._names, formState.values || control._formValues);
+	            updateValue(isUndefined$1(_name.current) ||
+	                (isObject(fieldValues) && !objectHasFunction(fieldValues))
+	                ? { ...fieldValues }
+	                : Array.isArray(fieldValues)
 	                    ? [...fieldValues]
 	                    : isUndefined$1(fieldValues)
 	                        ? defaultValue
 	                        : fieldValues);
-	            }
-	        },
+	        }
+	    }, [control, exact, defaultValue]);
+	    useSubscribe({
+	        disabled,
+	        subject: control._subjects.watch,
+	        callback,
 	    });
 	    const [value, updateValue] = React__default["default"].useState(isUndefined$1(defaultValue)
 	        ? control._getWatch(name)
@@ -5578,6 +5929,30 @@
 	    return value;
 	}
 
+	/**
+	 * Custom hook to work with controlled component, this function provide you with both form and field level state. Re-render is isolated at the hook level.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/usecontroller) • [Demo](https://codesandbox.io/s/usecontroller-0o8px)
+	 *
+	 * @param props - the path name to the form field value, and validation rules.
+	 *
+	 * @returns field properties, field and form state. {@link UseControllerReturn}
+	 *
+	 * @example
+	 * ```tsx
+	 * function Input(props) {
+	 *   const { field, fieldState, formState } = useController(props);
+	 *   return (
+	 *     <div>
+	 *       <input {...field} placeholder={props.name} />
+	 *       <p>{fieldState.isTouched && "Touched"}</p>
+	 *       <p>{formState.isSubmitted ? "submitted" : ""}</p>
+	 *     </div>
+	 *   );
+	 * }
+	 * ```
+	 */
 	function useController(props) {
 	    const methods = useFormContext();
 	    const { name, control = methods.control, shouldUnregister } = props;
@@ -5586,15 +5961,16 @@
 	        control,
 	        name,
 	        defaultValue: get(control._formValues, name, get(control._defaultValues, name, props.defaultValue)),
-	        exact: !isArrayField,
+	        exact: true,
 	    });
 	    const formState = useFormState({
 	        control,
 	        name,
 	    });
-	    const _name = React__default["default"].useRef(name);
-	    _name.current = name;
-	    const registerProps = control.register(name, Object.assign(Object.assign({}, props.rules), { value }));
+	    const _registerProps = React__default["default"].useRef(control.register(name, {
+	        ...props.rules,
+	        value,
+	    }));
 	    React__default["default"].useEffect(() => {
 	        const updateMounted = (name, value) => {
 	            const field = get(control._fields, name);
@@ -5605,36 +5981,36 @@
 	        updateMounted(name, true);
 	        return () => {
 	            const _shouldUnregisterField = control._options.shouldUnregister || shouldUnregister;
-	            isArrayField
+	            (isArrayField
 	                ? _shouldUnregisterField && !control._stateFlags.action
-	                : _shouldUnregisterField
-	                    ? control.unregister(name)
-	                    : updateMounted(name, false);
+	                : _shouldUnregisterField)
+	                ? control.unregister(name)
+	                : updateMounted(name, false);
 	        };
 	    }, [name, control, isArrayField, shouldUnregister]);
 	    return {
 	        field: {
-	            onChange: (event) => {
-	                registerProps.onChange({
+	            name,
+	            value,
+	            onChange: React__default["default"].useCallback((event) => {
+	                _registerProps.current.onChange({
 	                    target: {
 	                        value: getEventValue(event),
 	                        name: name,
 	                    },
 	                    type: EVENTS.CHANGE,
 	                });
-	            },
-	            onBlur: () => {
-	                registerProps.onBlur({
+	            }, [name]),
+	            onBlur: React__default["default"].useCallback(() => {
+	                _registerProps.current.onBlur({
 	                    target: {
 	                        value: get(control._formValues, name),
 	                        name: name,
 	                    },
 	                    type: EVENTS.BLUR,
 	                });
-	            },
-	            name,
-	            value,
-	            ref: (elm) => {
+	            }, [name, control]),
+	            ref: React__default["default"].useCallback((elm) => {
 	                const field = get(control._fields, name);
 	                if (elm && field && elm.focus) {
 	                    field._f.ref = {
@@ -5643,22 +6019,79 @@
 	                        reportValidity: () => elm.reportValidity(),
 	                    };
 	                }
-	            },
+	            }, [name, control._fields]),
 	        },
 	        formState,
-	        fieldState: {
-	            invalid: !!get(formState.errors, name),
-	            isDirty: !!get(formState.dirtyFields, name),
-	            isTouched: !!get(formState.touchedFields, name),
-	            error: get(formState.errors, name),
-	        },
+	        fieldState: Object.defineProperties({}, {
+	            invalid: {
+	                get: () => !!get(formState.errors, name),
+	            },
+	            isDirty: {
+	                get: () => !!get(formState.dirtyFields, name),
+	            },
+	            isTouched: {
+	                get: () => !!get(formState.touchedFields, name),
+	            },
+	            error: {
+	                get: () => get(formState.errors, name),
+	            },
+	        }),
 	    };
 	}
 
+	/**
+	 * Component based on `useController` hook to work with controlled component.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/usecontroller/controller) • [Demo](https://codesandbox.io/s/react-hook-form-v6-controller-ts-jwyzw) • [Video](https://www.youtube.com/watch?v=N2UNk_UCVyA)
+	 *
+	 * @param props - the path name to the form field value, and validation rules.
+	 *
+	 * @returns provide field handler functions, field and form state.
+	 *
+	 * @example
+	 * ```tsx
+	 * function App() {
+	 *   const { control } = useForm<FormValues>({
+	 *     defaultValues: {
+	 *       test: ""
+	 *     }
+	 *   });
+	 *
+	 *   return (
+	 *     <form>
+	 *       <Controller
+	 *         control={control}
+	 *         name="test"
+	 *         render={({ field: { onChange, onBlur, value, ref }, formState, fieldState }) => (
+	 *           <>
+	 *             <input
+	 *               onChange={onChange} // send value to hook form
+	 *               onBlur={onBlur} // notify when input is touched
+	 *               value={value} // return updated value
+	 *               ref={ref} // set ref for focus management
+	 *             />
+	 *             <p>{formState.isSubmitted ? "submitted" : ""}</p>
+	 *             <p>{fieldState.isTouched ? "touched" : ""}</p>
+	 *           </>
+	 *         )}
+	 *       />
+	 *     </form>
+	 *   );
+	 * }
+	 * ```
+	 */
 	const Controller = (props) => props.render(useController(props));
 
 	var appendErrors = (name, validateAllFieldCriteria, errors, type, message) => validateAllFieldCriteria
-	    ? Object.assign(Object.assign({}, errors[name]), { types: Object.assign(Object.assign({}, (errors[name] && errors[name].types ? errors[name].types : {})), { [type]: message || true }) }) : {};
+	    ? {
+	        ...errors[name],
+	        types: {
+	            ...(errors[name] && errors[name].types ? errors[name].types : {}),
+	            [type]: message || true,
+	        },
+	    }
+	    : {};
 
 	var isKey = (value) => /^\w*$/.test(value);
 
@@ -5691,8 +6124,7 @@
 	    for (const key of fieldsNames || Object.keys(fields)) {
 	        const field = get(fields, key);
 	        if (field) {
-	            const _f = field._f;
-	            const current = omit(field, '_f');
+	            const { _f, ...currentField } = field;
 	            if (_f && callback(_f.name)) {
 	                if (_f.ref.focus && isUndefined$1(_f.ref.focus())) {
 	                    break;
@@ -5702,11 +6134,19 @@
 	                    break;
 	                }
 	            }
-	            else if (isObject(current)) {
-	                focusFieldBy(current, callback);
+	            else if (isObject(currentField)) {
+	                focusFieldBy(currentField, callback);
 	            }
 	        }
 	    }
+	};
+
+	var generateId = () => {
+	    const d = typeof performance === 'undefined' ? Date.now() : performance.now() * 1000;
+	    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+	        const r = (Math.random() * 16 + d) % 16 | 0;
+	        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+	    });
 	};
 
 	var getFocusFieldName = (name, index, options = {}) => options.shouldFocus || isUndefined$1(options.shouldFocus)
@@ -5720,24 +6160,13 @@
 	        [..._names.watch].some((watchName) => name.startsWith(watchName) &&
 	            /^\.\w+/.test(name.slice(watchName.length))));
 
-	var mapCurrentIds = (values, _fieldIds, keyName) => values.map((value, index) => {
-	    const output = _fieldIds.current[index];
-	    return Object.assign(Object.assign({}, value), (output ? { [keyName]: output[keyName] } : {}));
-	});
-
-	var generateId = () => {
-	    const d = typeof performance === 'undefined' ? Date.now() : performance.now() * 1000;
-	    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-	        const r = (Math.random() * 16 + d) % 16 | 0;
-	        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
-	    });
-	};
-
-	var mapIds = (values = [], keyName) => values.map((value) => (Object.assign(Object.assign({}, (value[keyName] ? {} : { [keyName]: generateId() })), value)));
-
 	function append(data, value) {
-	    return [...convertToArrayPayload(data), ...convertToArrayPayload(value)];
+	    return [...data, ...convertToArrayPayload(value)];
 	}
+
+	var isWeb = typeof window !== 'undefined' &&
+	    typeof window.HTMLElement !== 'undefined' &&
+	    typeof document !== 'undefined';
 
 	function cloneObject(data) {
 	    let copy;
@@ -5748,7 +6177,8 @@
 	    else if (data instanceof Set) {
 	        copy = new Set(data);
 	    }
-	    else if (isArray || isObject(data)) {
+	    else if (!(isWeb && (data instanceof Blob || data instanceof FileList)) &&
+	        (isArray || isObject(data))) {
 	        copy = isArray ? [] : {};
 	        for (const key in data) {
 	            if (isFunction(data[key])) {
@@ -5775,17 +6205,15 @@
 	}
 
 	var moveArrayAt = (data, from, to) => {
-	    if (Array.isArray(data)) {
-	        if (isUndefined$1(data[to])) {
-	            data[to] = undefined;
-	        }
-	        data.splice(to, 0, data.splice(from, 1)[0]);
-	        return data;
+	    if (!Array.isArray(data)) {
+	        return [];
 	    }
-	    return [];
+	    if (isUndefined$1(data[to])) {
+	        data[to] = undefined;
+	    }
+	    data.splice(to, 0, data.splice(from, 1)[0]);
+	    return data;
 	};
-
-	var omitKeys = (fields, keyName) => fields.map((field = {}) => omit(field, keyName));
 
 	function prepend(data, value) {
 	    return [...convertToArrayPayload(value), ...convertToArrayPayload(data)];
@@ -5808,108 +6236,195 @@
 	    data[indexA] = [data[indexB], (data[indexB] = data[indexA])][0];
 	};
 
+	function baseGet(object, updatePath) {
+	    const length = updatePath.slice(0, -1).length;
+	    let index = 0;
+	    while (index < length) {
+	        object = isUndefined$1(object) ? index++ : object[updatePath[index++]];
+	    }
+	    return object;
+	}
+	function unset(object, path) {
+	    const updatePath = isKey(path) ? [path] : stringToPath(path);
+	    const childObject = updatePath.length == 1 ? object : baseGet(object, updatePath);
+	    const key = updatePath[updatePath.length - 1];
+	    let previousObjRef;
+	    if (childObject) {
+	        delete childObject[key];
+	    }
+	    for (let k = 0; k < updatePath.slice(0, -1).length; k++) {
+	        let index = -1;
+	        let objectRef;
+	        const currentPaths = updatePath.slice(0, -(k + 1));
+	        const currentPathsLength = currentPaths.length - 1;
+	        if (k > 0) {
+	            previousObjRef = object;
+	        }
+	        while (++index < currentPaths.length) {
+	            const item = currentPaths[index];
+	            objectRef = objectRef ? objectRef[item] : object[item];
+	            if (currentPathsLength === index &&
+	                ((isObject(objectRef) && isEmptyObject(objectRef)) ||
+	                    (Array.isArray(objectRef) &&
+	                        !objectRef.filter((data) => !isUndefined$1(data)).length))) {
+	                previousObjRef ? delete previousObjRef[item] : delete object[item];
+	            }
+	            previousObjRef = objectRef;
+	        }
+	    }
+	    return object;
+	}
+
 	var updateAt = (fieldValues, index, value) => {
 	    fieldValues[index] = value;
 	    return fieldValues;
 	};
 
-	const useFieldArray = (props) => {
+	/**
+	 * A custom hook that exposes convenient methods to perform operations with a list of dynamic inputs that need to be appended, updated, removed etc.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/usefieldarray) • [Demo](https://codesandbox.io/s/react-hook-form-usefieldarray-ssugn)
+	 *
+	 * @param props - useFieldArray props
+	 *
+	 * @returns methods - functions to manipulate with the Field Arrays (dynamic inputs) {@link UseFieldArrayReturn}
+	 *
+	 * @example
+	 * ```tsx
+	 * function App() {
+	 *   const { register, control, handleSubmit, reset, trigger, setError } = useForm({
+	 *     defaultValues: {
+	 *       test: []
+	 *     }
+	 *   });
+	 *   const { fields, append } = useFieldArray({
+	 *     control,
+	 *     name: "test"
+	 *   });
+	 *
+	 *   return (
+	 *     <form onSubmit={handleSubmit(data => console.log(data))}>
+	 *       {fields.map((item, index) => (
+	 *          <input key={item.id} {...register(`test.${index}.firstName`)}  />
+	 *       ))}
+	 *       <button type="button" onClick={() => append({ firstName: "bill" })}>
+	 *         append
+	 *       </button>
+	 *       <input type="submit" />
+	 *     </form>
+	 *   );
+	 * }
+	 * ```
+	 */
+	function useFieldArray(props) {
 	    const methods = useFormContext();
 	    const { control = methods.control, name, keyName = 'id', shouldUnregister, } = props;
-	    const [fields, setFields] = React__default["default"].useState(mapIds(control._getFieldArray(name), keyName));
+	    const [fields, setFields] = React__default["default"].useState(control._getFieldArray(name));
+	    const ids = React__default["default"].useRef(control._getFieldArray(name).map(generateId));
 	    const _fieldIds = React__default["default"].useRef(fields);
 	    const _name = React__default["default"].useRef(name);
 	    const _actioned = React__default["default"].useRef(false);
 	    _name.current = name;
 	    _fieldIds.current = fields;
 	    control._names.array.add(name);
+	    const callback = React__default["default"].useCallback(({ values, name: fieldArrayName }) => {
+	        if (fieldArrayName === _name.current || !fieldArrayName) {
+	            const fieldValues = get(values, _name.current, []);
+	            setFields(fieldValues);
+	            ids.current = fieldValues.map(generateId);
+	        }
+	    }, []);
 	    useSubscribe({
-	        callback: ({ values, name: fieldArrayName }) => {
-	            if (fieldArrayName === _name.current || !fieldArrayName) {
-	                setFields(mapIds(get(values, _name.current), keyName));
-	            }
-	        },
+	        callback,
 	        subject: control._subjects.array,
 	    });
-	    const updateValues = React__default["default"].useCallback((updatedFieldArrayValuesWithKey) => {
-	        const updatedFieldArrayValues = omitKeys(updatedFieldArrayValuesWithKey, keyName);
+	    const updateValues = React__default["default"].useCallback((updatedFieldArrayValues) => {
 	        _actioned.current = true;
-	        set(control._formValues, name, updatedFieldArrayValues);
-	        return updatedFieldArrayValues;
-	    }, [control, name, keyName]);
+	        control._updateFieldArray(name, updatedFieldArrayValues);
+	    }, [control, name]);
 	    const append$1 = (value, options) => {
 	        const appendValue = convertToArrayPayload(cloneObject(value));
-	        const updatedFieldArrayValuesWithKey = append(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), mapIds(appendValue, keyName));
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-	        control._names.focus = getFocusFieldName(name, fieldArrayValues.length - 1, options);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, append, {
+	        const updatedFieldArrayValues = append(control._getFieldArray(name), appendValue);
+	        control._names.focus = getFocusFieldName(name, updatedFieldArrayValues.length - 1, options);
+	        ids.current = append(ids.current, appendValue.map(generateId));
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, append, {
 	            argA: fillEmptyArray(value),
-	        }, fieldArrayValues);
+	        });
 	    };
 	    const prepend$1 = (value, options) => {
-	        const updatedFieldArrayValuesWithKey = prepend(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), mapIds(convertToArrayPayload(cloneObject(value)), keyName));
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+	        const prependValue = convertToArrayPayload(cloneObject(value));
+	        const updatedFieldArrayValues = prepend(control._getFieldArray(name), prependValue);
 	        control._names.focus = getFocusFieldName(name, 0, options);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, prepend, {
+	        ids.current = prepend(ids.current, prependValue.map(generateId));
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, prepend, {
 	            argA: fillEmptyArray(value),
-	        }, fieldArrayValues);
+	        });
 	    };
 	    const remove = (index) => {
-	        const updatedFieldArrayValuesWithKey = removeArrayAt(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), index);
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, removeArrayAt, {
+	        const updatedFieldArrayValues = removeArrayAt(control._getFieldArray(name), index);
+	        ids.current = removeArrayAt(ids.current, index);
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, removeArrayAt, {
 	            argA: index,
-	        }, fieldArrayValues);
+	        });
 	    };
 	    const insert$1 = (index, value, options) => {
-	        const updatedFieldArrayValuesWithKey = insert(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), index, mapIds(convertToArrayPayload(cloneObject(value)), keyName));
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+	        const insertValue = convertToArrayPayload(cloneObject(value));
+	        const updatedFieldArrayValues = insert(control._getFieldArray(name), index, insertValue);
 	        control._names.focus = getFocusFieldName(name, index, options);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, insert, {
+	        ids.current = insert(ids.current, index, insertValue.map(generateId));
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, insert, {
 	            argA: index,
 	            argB: fillEmptyArray(value),
-	        }, fieldArrayValues);
+	        });
 	    };
 	    const swap = (indexA, indexB) => {
-	        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
-	        swapArrayAt(updatedFieldArrayValuesWithKey, indexA, indexB);
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, swapArrayAt, {
+	        const updatedFieldArrayValues = control._getFieldArray(name);
+	        swapArrayAt(updatedFieldArrayValues, indexA, indexB);
+	        swapArrayAt(ids.current, indexA, indexB);
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, swapArrayAt, {
 	            argA: indexA,
 	            argB: indexB,
-	        }, fieldArrayValues, false);
+	        }, false);
 	    };
 	    const move = (from, to) => {
-	        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
-	        moveArrayAt(updatedFieldArrayValuesWithKey, from, to);
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, moveArrayAt, {
+	        const updatedFieldArrayValues = control._getFieldArray(name);
+	        moveArrayAt(updatedFieldArrayValues, from, to);
+	        moveArrayAt(ids.current, from, to);
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, moveArrayAt, {
 	            argA: from,
 	            argB: to,
-	        }, fieldArrayValues, false);
+	        }, false);
 	    };
 	    const update = (index, value) => {
-	        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
-	        const updatedFieldArrayValues = updateAt(updatedFieldArrayValuesWithKey, index, value);
-	        _fieldIds.current = mapIds(updatedFieldArrayValues, keyName);
-	        const fieldArrayValues = updateValues(_fieldIds.current);
-	        setFields(_fieldIds.current);
-	        control._updateFieldArray(name, updateAt, {
+	        const updateValue = cloneObject(value);
+	        const updatedFieldArrayValues = updateAt(control._getFieldArray(name), index, updateValue);
+	        ids.current = [...updatedFieldArrayValues].map((item, i) => !item || i === index ? generateId() : ids.current[i]);
+	        updateValues(updatedFieldArrayValues);
+	        setFields([...updatedFieldArrayValues]);
+	        control._updateFieldArray(name, updatedFieldArrayValues, updateAt, {
 	            argA: index,
-	            argB: value,
-	        }, fieldArrayValues, true, false, false);
+	            argB: updateValue,
+	        }, true, false);
 	    };
 	    const replace = (value) => {
-	        const updatedFieldArrayValuesWithKey = mapIds(convertToArrayPayload(value), keyName);
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, () => updatedFieldArrayValuesWithKey, {}, fieldArrayValues, true, false, false);
+	        const updatedFieldArrayValues = convertToArrayPayload(cloneObject(value));
+	        ids.current = updatedFieldArrayValues.map(generateId);
+	        updateValues([...updatedFieldArrayValues]);
+	        setFields([...updatedFieldArrayValues]);
+	        control._updateFieldArray(name, [...updatedFieldArrayValues], (data) => data, {}, true, false);
 	    };
 	    React__default["default"].useEffect(() => {
 	        control._stateFlags.action = false;
@@ -5917,8 +6432,11 @@
 	        if (_actioned.current) {
 	            control._executeSchema([name]).then((result) => {
 	                const error = get(result.errors, name);
-	                if (error && error.type && !get(control._formState.errors, name)) {
-	                    set(control._formState.errors, name, error);
+	                const existingError = get(control._formState.errors, name);
+	                if (existingError ? !error && existingError.type : error && error.type) {
+	                    error
+	                        ? set(control._formState.errors, name, error)
+	                        : unset(control._formState.errors, name);
 	                    control._subjects.state.next({
 	                        errors: control._formState.errors,
 	                    });
@@ -5933,27 +6451,29 @@
 	            focusFieldBy(control._fields, (key) => key.startsWith(control._names.focus));
 	        control._names.focus = '';
 	        control._proxyFormState.isValid && control._updateValid();
-	    }, [fields, name, control, keyName]);
+	    }, [fields, name, control]);
 	    React__default["default"].useEffect(() => {
-	        !get(control._formValues, name) && set(control._formValues, name, []);
+	        !get(control._formValues, name) && control._updateFieldArray(name);
 	        return () => {
-	            if (control._options.shouldUnregister || shouldUnregister) {
+	            (control._options.shouldUnregister || shouldUnregister) &&
 	                control.unregister(name);
-	            }
 	        };
 	    }, [name, control, keyName, shouldUnregister]);
 	    return {
-	        swap: React__default["default"].useCallback(swap, [updateValues, name, control, keyName]),
-	        move: React__default["default"].useCallback(move, [updateValues, name, control, keyName]),
-	        prepend: React__default["default"].useCallback(prepend$1, [updateValues, name, control, keyName]),
-	        append: React__default["default"].useCallback(append$1, [updateValues, name, control, keyName]),
-	        remove: React__default["default"].useCallback(remove, [updateValues, name, control, keyName]),
-	        insert: React__default["default"].useCallback(insert$1, [updateValues, name, control, keyName]),
-	        update: React__default["default"].useCallback(update, [updateValues, name, control, keyName]),
-	        replace: React__default["default"].useCallback(replace, [updateValues, name, control, keyName]),
-	        fields: fields,
+	        swap: React__default["default"].useCallback(swap, [updateValues, name, control]),
+	        move: React__default["default"].useCallback(move, [updateValues, name, control]),
+	        prepend: React__default["default"].useCallback(prepend$1, [updateValues, name, control]),
+	        append: React__default["default"].useCallback(append$1, [updateValues, name, control]),
+	        remove: React__default["default"].useCallback(remove, [updateValues, name, control]),
+	        insert: React__default["default"].useCallback(insert$1, [updateValues, name, control]),
+	        update: React__default["default"].useCallback(update, [updateValues, name, control]),
+	        replace: React__default["default"].useCallback(replace, [updateValues, name, control]),
+	        fields: React__default["default"].useMemo(() => fields.map((field, index) => ({
+	            ...field,
+	            [keyName]: ids.current[index] || generateId(),
+	        })), [fields, keyName]),
 	    };
-	};
+	}
 
 	function createSubject() {
 	    let _observers = [];
@@ -6028,7 +6548,11 @@
 
 	var isFileInput = (element) => element.type === 'file';
 
-	var isHTMLElement = (value) => value instanceof HTMLElement;
+	var isHTMLElement = (value) => {
+	    const owner = value ? value.ownerDocument : 0;
+	    const ElementClass = owner && owner.defaultView ? owner.defaultView.HTMLElement : HTMLElement;
+	    return value instanceof ElementClass;
+	};
 
 	var isMultipleSelect = (element) => element.type === `select-multiple`;
 
@@ -6036,50 +6560,7 @@
 
 	var isRadioOrCheckbox = (ref) => isRadioInput(ref) || isCheckBoxInput(ref);
 
-	var isWeb = typeof window !== 'undefined' &&
-	    typeof window.HTMLElement !== 'undefined' &&
-	    typeof document !== 'undefined';
-
-	var live = (ref) => isHTMLElement(ref) && document.contains(ref);
-
-	function baseGet(object, updatePath) {
-	    const length = updatePath.slice(0, -1).length;
-	    let index = 0;
-	    while (index < length) {
-	        object = isUndefined$1(object) ? index++ : object[updatePath[index++]];
-	    }
-	    return object;
-	}
-	function unset(object, path) {
-	    const updatePath = isKey(path) ? [path] : stringToPath(path);
-	    const childObject = updatePath.length == 1 ? object : baseGet(object, updatePath);
-	    const key = updatePath[updatePath.length - 1];
-	    let previousObjRef;
-	    if (childObject) {
-	        delete childObject[key];
-	    }
-	    for (let k = 0; k < updatePath.slice(0, -1).length; k++) {
-	        let index = -1;
-	        let objectRef;
-	        const currentPaths = updatePath.slice(0, -(k + 1));
-	        const currentPathsLength = currentPaths.length - 1;
-	        if (k > 0) {
-	            previousObjRef = object;
-	        }
-	        while (++index < currentPaths.length) {
-	            const item = currentPaths[index];
-	            objectRef = objectRef ? objectRef[item] : object[item];
-	            if (currentPathsLength === index &&
-	                ((isObject(objectRef) && isEmptyObject(objectRef)) ||
-	                    (Array.isArray(objectRef) &&
-	                        !objectRef.filter((data) => (isObject(data) && !isEmptyObject(data)) || isBoolean(data)).length))) {
-	                previousObjRef ? delete previousObjRef[item] : delete object[item];
-	            }
-	            previousObjRef = objectRef;
-	        }
-	    }
-	    return object;
-	}
+	var live = (ref) => isHTMLElement(ref) && ref.isConnected;
 
 	function markFieldsDirty(data, fields = {}) {
 	    const isParentNodeArray = Array.isArray(data);
@@ -6107,7 +6588,7 @@
 	                    isPrimitive(dirtyFieldsFromValues[key])) {
 	                    dirtyFieldsFromValues[key] = Array.isArray(data[key])
 	                        ? markFieldsDirty(data[key], [])
-	                        : Object.assign({}, markFieldsDirty(data[key]));
+	                        : { ...markFieldsDirty(data[key]) };
 	                }
 	                else {
 	                    getDirtyFieldsFromDefaultValues(data[key], isNullOrUndefined(formValues) ? {} : formValues[key], dirtyFieldsFromValues[key]);
@@ -6150,7 +6631,7 @@
 	var getFieldValueAs = (value, { valueAsNumber, valueAsDate, setValueAs }) => isUndefined$1(value)
 	    ? value
 	    : valueAsNumber
-	        ? value === ''
+	        ? value === '' || isNullOrUndefined(value)
 	            ? NaN
 	            : +value
 	        : valueAsDate && isString$1(value)
@@ -6317,8 +6798,12 @@
 	    const appendErrorsCurry = appendErrors.bind(null, name, validateAllFieldCriteria, error);
 	    const getMinMaxMessage = (exceedMax, maxLengthMessage, minLengthMessage, maxType = INPUT_VALIDATION_RULES.maxLength, minType = INPUT_VALIDATION_RULES.minLength) => {
 	        const message = exceedMax ? maxLengthMessage : minLengthMessage;
-	        error[name] = Object.assign({ type: exceedMax ? maxType : minType, message,
-	            ref }, appendErrorsCurry(exceedMax ? maxType : minType, message));
+	        error[name] = {
+	            type: exceedMax ? maxType : minType,
+	            message,
+	            ref,
+	            ...appendErrorsCurry(exceedMax ? maxType : minType, message),
+	        };
 	    };
 	    if (required &&
 	        ((!isRadioOrCheckbox && (isEmpty || isNullOrUndefined(inputValue))) ||
@@ -6329,7 +6814,12 @@
 	            ? { value: !!required, message: required }
 	            : getValueAndMessage(required);
 	        if (value) {
-	            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.required, message, ref: inputRef }, appendErrorsCurry(INPUT_VALIDATION_RULES.required, message));
+	            error[name] = {
+	                type: INPUT_VALIDATION_RULES.required,
+	                message,
+	                ref: inputRef,
+	                ...appendErrorsCurry(INPUT_VALIDATION_RULES.required, message),
+	            };
 	            if (!validateAllFieldCriteria) {
 	                setCustomValidity(message);
 	                return error;
@@ -6341,9 +6831,8 @@
 	        let exceedMin;
 	        const maxOutput = getValueAndMessage(max);
 	        const minOutput = getValueAndMessage(min);
-	        if (!isNaN(inputValue)) {
-	            const valueNumber = ref.valueAsNumber ||
-	                parseFloat(inputValue);
+	        if (!isNullOrUndefined(inputValue) && !isNaN(inputValue)) {
+	            const valueNumber = ref.valueAsNumber || +inputValue;
 	            if (!isNullOrUndefined(maxOutput.value)) {
 	                exceedMax = valueNumber > maxOutput.value;
 	            }
@@ -6386,8 +6875,12 @@
 	    if (pattern && !isEmpty && isString$1(inputValue)) {
 	        const { value: patternValue, message } = getValueAndMessage(pattern);
 	        if (isRegex(patternValue) && !inputValue.match(patternValue)) {
-	            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.pattern, message,
-	                ref }, appendErrorsCurry(INPUT_VALIDATION_RULES.pattern, message));
+	            error[name] = {
+	                type: INPUT_VALIDATION_RULES.pattern,
+	                message,
+	                ref,
+	                ...appendErrorsCurry(INPUT_VALIDATION_RULES.pattern, message),
+	            };
 	            if (!validateAllFieldCriteria) {
 	                setCustomValidity(message);
 	                return error;
@@ -6399,7 +6892,10 @@
 	            const result = await validate(inputValue);
 	            const validateError = getValidateError(result, inputRef);
 	            if (validateError) {
-	                error[name] = Object.assign(Object.assign({}, validateError), appendErrorsCurry(INPUT_VALIDATION_RULES.validate, validateError.message));
+	                error[name] = {
+	                    ...validateError,
+	                    ...appendErrorsCurry(INPUT_VALIDATION_RULES.validate, validateError.message),
+	                };
 	                if (!validateAllFieldCriteria) {
 	                    setCustomValidity(validateError.message);
 	                    return error;
@@ -6414,7 +6910,10 @@
 	                }
 	                const validateError = getValidateError(await validate[key](inputValue), inputRef, key);
 	                if (validateError) {
-	                    validationResult = Object.assign(Object.assign({}, validateError), appendErrorsCurry(key, validateError.message));
+	                    validationResult = {
+	                        ...validateError,
+	                        ...appendErrorsCurry(key, validateError.message),
+	                    };
 	                    setCustomValidity(validateError.message);
 	                    if (validateAllFieldCriteria) {
 	                        error[name] = validationResult;
@@ -6422,7 +6921,10 @@
 	                }
 	            }
 	            if (!isEmptyObject(validationResult)) {
-	                error[name] = Object.assign({ ref: inputRef }, validationResult);
+	                error[name] = {
+	                    ref: inputRef,
+	                    ...validationResult,
+	                };
 	                if (!validateAllFieldCriteria) {
 	                    return error;
 	                }
@@ -6439,7 +6941,10 @@
 	    shouldFocusError: true,
 	};
 	function createFormControl(props = {}) {
-	    let _options = Object.assign(Object.assign({}, defaultOptions), props);
+	    let _options = {
+	        ...defaultOptions,
+	        ...props,
+	    };
 	    let _formState = {
 	        isDirty: false,
 	        isValidating: false,
@@ -6453,7 +6958,7 @@
 	        errors: {},
 	    };
 	    let _fields = {};
-	    let _defaultValues = _options.defaultValues || {};
+	    let _defaultValues = cloneObject(_options.defaultValues) || {};
 	    let _formValues = _options.shouldUnregister
 	        ? {}
 	        : cloneObject(_defaultValues);
@@ -6487,9 +6992,9 @@
 	    const validationModeBeforeSubmit = getValidationModes(_options.mode);
 	    const validationModeAfterSubmit = getValidationModes(_options.reValidateMode);
 	    const shouldDisplayAllAssociatedErrors = _options.criteriaMode === VALIDATION_MODE.all;
-	    const debounce = (callback, wait) => (...args) => {
+	    const debounce = (callback) => (wait) => {
 	        clearTimeout(timer);
-	        timer = window.setTimeout(() => callback(...args), wait);
+	        timer = window.setTimeout(callback, wait);
 	    };
 	    const _updateValid = async (shouldSkipRender) => {
 	        let isValid = false;
@@ -6506,50 +7011,59 @@
 	        }
 	        return isValid;
 	    };
-	    const _updateFieldArray = (name, method, args, values = [], shouldSetValues = true, shouldSetFields = true, shouldSetError = true) => {
-	        _stateFlags.action = true;
-	        if (shouldSetFields && get(_fields, name)) {
-	            const fieldValues = method(get(_fields, name), args.argA, args.argB);
-	            shouldSetValues && set(_fields, name, fieldValues);
+	    const _updateFieldArray = (name, values = [], method, args, shouldSetValues = true, shouldUpdateFieldsAndState = true) => {
+	        if (args && method) {
+	            _stateFlags.action = true;
+	            if (shouldUpdateFieldsAndState && Array.isArray(get(_fields, name))) {
+	                const fieldValues = method(get(_fields, name), args.argA, args.argB);
+	                shouldSetValues && set(_fields, name, fieldValues);
+	            }
+	            if (_proxyFormState.errors &&
+	                shouldUpdateFieldsAndState &&
+	                Array.isArray(get(_formState.errors, name))) {
+	                const errors = method(get(_formState.errors, name), args.argA, args.argB);
+	                shouldSetValues && set(_formState.errors, name, errors);
+	                unsetEmptyArray(_formState.errors, name);
+	            }
+	            if (_proxyFormState.touchedFields &&
+	                shouldUpdateFieldsAndState &&
+	                Array.isArray(get(_formState.touchedFields, name))) {
+	                const touchedFields = method(get(_formState.touchedFields, name), args.argA, args.argB);
+	                shouldSetValues && set(_formState.touchedFields, name, touchedFields);
+	            }
+	            if (_proxyFormState.dirtyFields) {
+	                _formState.dirtyFields = getDirtyFields(_defaultValues, _formValues);
+	            }
+	            _subjects.state.next({
+	                isDirty: _getDirty(name, values),
+	                dirtyFields: _formState.dirtyFields,
+	                errors: _formState.errors,
+	                isValid: _formState.isValid,
+	            });
 	        }
-	        if (shouldSetError && Array.isArray(get(_formState.errors, name))) {
-	            const errors = method(get(_formState.errors, name), args.argA, args.argB);
-	            shouldSetValues && set(_formState.errors, name, errors);
-	            unsetEmptyArray(_formState.errors, name);
+	        else {
+	            set(_formValues, name, values);
 	        }
-	        if (_proxyFormState.touchedFields && get(_formState.touchedFields, name)) {
-	            const touchedFields = method(get(_formState.touchedFields, name), args.argA, args.argB);
-	            shouldSetValues &&
-	                set(_formState.touchedFields, name, touchedFields);
-	            unsetEmptyArray(_formState.touchedFields, name);
-	        }
-	        if (_proxyFormState.dirtyFields || _proxyFormState.isDirty) {
-	            _formState.dirtyFields = getDirtyFields(_defaultValues, _formValues);
-	        }
+	    };
+	    const updateErrors = (name, error) => {
+	        set(_formState.errors, name, error);
 	        _subjects.state.next({
-	            isDirty: _getDirty(name, values),
-	            dirtyFields: _formState.dirtyFields,
 	            errors: _formState.errors,
-	            isValid: _formState.isValid,
 	        });
 	    };
-	    const updateErrors = (name, error) => (set(_formState.errors, name, error),
-	        _subjects.state.next({
-	            errors: _formState.errors,
-	        }));
-	    const updateValidAndValue = (name, shouldSkipSetValueAs, ref) => {
+	    const updateValidAndValue = (name, shouldSkipSetValueAs, value, ref) => {
 	        const field = get(_fields, name);
 	        if (field) {
-	            const defaultValue = get(_formValues, name, get(_defaultValues, name));
+	            const defaultValue = get(_formValues, name, isUndefined$1(value) ? get(_defaultValues, name) : value);
 	            isUndefined$1(defaultValue) ||
 	                (ref && ref.defaultChecked) ||
 	                shouldSkipSetValueAs
 	                ? set(_formValues, name, shouldSkipSetValueAs ? defaultValue : getFieldValue(field._f))
 	                : setFieldValue(name, defaultValue);
+	            _stateFlags.mount && _updateValid();
 	        }
-	        _stateFlags.mount && _updateValid();
 	    };
-	    const updateTouchAndDirty = (name, fieldValue, isCurrentTouched, shouldRender = true) => {
+	    const updateTouchAndDirty = (name, fieldValue, isBlurEvent, shouldDirty, shouldRender) => {
 	        let isFieldDirty = false;
 	        const output = {
 	            name,
@@ -6560,7 +7074,7 @@
 	            _formState.isDirty = output.isDirty = _getDirty();
 	            isFieldDirty = isPreviousFormDirty !== output.isDirty;
 	        }
-	        if (_proxyFormState.dirtyFields && !isCurrentTouched) {
+	        if (_proxyFormState.dirtyFields && (!isBlurEvent || shouldDirty)) {
 	            const isPreviousFieldDirty = get(_formState.dirtyFields, name);
 	            const isCurrentFieldPristine = deepEqual(get(_defaultValues, name), fieldValue);
 	            isCurrentFieldPristine
@@ -6571,41 +7085,49 @@
 	                isFieldDirty ||
 	                    isPreviousFieldDirty !== get(_formState.dirtyFields, name);
 	        }
-	        if (isCurrentTouched && !isPreviousFieldTouched) {
-	            set(_formState.touchedFields, name, isCurrentTouched);
+	        if (isBlurEvent && !isPreviousFieldTouched) {
+	            set(_formState.touchedFields, name, isBlurEvent);
 	            output.touchedFields = _formState.touchedFields;
 	            isFieldDirty =
 	                isFieldDirty ||
 	                    (_proxyFormState.touchedFields &&
-	                        isPreviousFieldTouched !== isCurrentTouched);
+	                        isPreviousFieldTouched !== isBlurEvent);
 	        }
 	        isFieldDirty && shouldRender && _subjects.state.next(output);
 	        return isFieldDirty ? output : {};
 	    };
-	    const shouldRenderByError = async (shouldSkipRender, name, isValid, error, fieldState) => {
+	    const shouldRenderByError = async (name, isValid, error, fieldState) => {
 	        const previousFieldError = get(_formState.errors, name);
 	        const shouldUpdateValid = _proxyFormState.isValid && _formState.isValid !== isValid;
 	        if (props.delayError && error) {
-	            delayErrorCallback =
-	                delayErrorCallback || debounce(updateErrors, props.delayError);
-	            delayErrorCallback(name, error);
+	            delayErrorCallback = debounce(() => updateErrors(name, error));
+	            delayErrorCallback(props.delayError);
 	        }
 	        else {
 	            clearTimeout(timer);
+	            delayErrorCallback = null;
 	            error
 	                ? set(_formState.errors, name, error)
 	                : unset(_formState.errors, name);
 	        }
-	        if (((error ? !deepEqual(previousFieldError, error) : previousFieldError) ||
+	        if ((error ? !deepEqual(previousFieldError, error) : previousFieldError) ||
 	            !isEmptyObject(fieldState) ||
-	            shouldUpdateValid) &&
-	            !shouldSkipRender) {
-	            const updatedFormState = Object.assign(Object.assign(Object.assign({}, fieldState), (shouldUpdateValid ? { isValid } : {})), { errors: _formState.errors, name });
-	            _formState = Object.assign(Object.assign({}, _formState), updatedFormState);
+	            shouldUpdateValid) {
+	            const updatedFormState = {
+	                ...fieldState,
+	                ...(shouldUpdateValid ? { isValid } : {}),
+	                errors: _formState.errors,
+	                name,
+	            };
+	            _formState = {
+	                ..._formState,
+	                ...updatedFormState,
+	            };
 	            _subjects.state.next(updatedFormState);
 	        }
 	        validateFields[name]--;
-	        if (_proxyFormState.isValidating && !validateFields[name]) {
+	        if (_proxyFormState.isValidating &&
+	            !Object.values(validateFields).some((v) => v)) {
 	            _subjects.state.next({
 	                isValidating: false,
 	            });
@@ -6613,7 +7135,7 @@
 	        }
 	    };
 	    const _executeSchema = async (name) => _options.resolver
-	        ? await _options.resolver(Object.assign({}, _formValues), _options.context, getResolverOptions(name || _names.mount, _fields, _options.criteriaMode, _options.shouldUseNativeValidation))
+	        ? await _options.resolver({ ..._formValues }, _options.context, getResolverOptions(name || _names.mount, _fields, _options.criteriaMode, _options.shouldUseNativeValidation))
 	        : {};
 	    const executeSchemaAndUpdateState = async (names) => {
 	        const { errors } = await _executeSchema();
@@ -6636,8 +7158,7 @@
 	        for (const name in fields) {
 	            const field = fields[name];
 	            if (field) {
-	                const fieldReference = field._f;
-	                const fieldValue = omit(field, '_f');
+	                const { _f: fieldReference, ...fieldValue } = field;
 	                if (fieldReference) {
 	                    const fieldError = await validateField(field, get(_formValues, fieldReference.name), shouldDisplayAllAssociatedErrors, _options.shouldUseNativeValidation);
 	                    if (fieldError[fieldReference.name]) {
@@ -6672,13 +7193,15 @@
 	    const _getDirty = (name, data) => (name && data && set(_formValues, name, data),
 	        !deepEqual(getValues(), _defaultValues));
 	    const _getWatch = (names, defaultValue, isGlobal) => {
-	        const fieldValues = Object.assign({}, (_stateFlags.mount
-	            ? _formValues
-	            : isUndefined$1(defaultValue)
-	                ? _defaultValues
-	                : isString$1(names)
-	                    ? { [names]: defaultValue }
-	                    : defaultValue));
+	        const fieldValues = {
+	            ...(_stateFlags.mount
+	                ? _formValues
+	                : isUndefined$1(defaultValue)
+	                    ? _defaultValues
+	                    : isString$1(names)
+	                        ? { [names]: defaultValue }
+	                        : defaultValue),
+	        };
 	        return generateWatchOutput(names, _names, fieldValues, isGlobal);
 	    };
 	    const _getFieldArray = (name) => compact(get(_stateFlags.mount ? _formValues : _defaultValues, name, props.shouldUnregister ? get(_defaultValues, name, []) : []));
@@ -6700,16 +7223,21 @@
 	                else if (fieldReference.refs) {
 	                    if (isCheckBoxInput(fieldReference.ref)) {
 	                        fieldReference.refs.length > 1
-	                            ? fieldReference.refs.forEach((checkboxRef) => (checkboxRef.checked = Array.isArray(fieldValue)
-	                                ? !!fieldValue.find((data) => data === checkboxRef.value)
-	                                : fieldValue === checkboxRef.value))
-	                            : (fieldReference.refs[0].checked = !!fieldValue);
+	                            ? fieldReference.refs.forEach((checkboxRef) => !checkboxRef.disabled &&
+	                                (checkboxRef.checked = Array.isArray(fieldValue)
+	                                    ? !!fieldValue.find((data) => data === checkboxRef.value)
+	                                    : fieldValue === checkboxRef.value))
+	                            : fieldReference.refs[0] &&
+	                                (fieldReference.refs[0].checked = !!fieldValue);
 	                    }
 	                    else {
 	                        fieldReference.refs.forEach((radioRef) => (radioRef.checked = radioRef.value === fieldValue));
 	                    }
 	                }
-	                else if (!isFileInput(fieldReference.ref)) {
+	                else if (isFileInput(fieldReference.ref)) {
+	                    fieldReference.ref.value = '';
+	                }
+	                else {
 	                    fieldReference.ref.value = fieldValue;
 	                    if (!fieldReference.ref.type) {
 	                        _subjects.watch.next({
@@ -6720,7 +7248,7 @@
 	            }
 	        }
 	        (options.shouldDirty || options.shouldTouch) &&
-	            updateTouchAndDirty(name, fieldValue, options.shouldTouch);
+	            updateTouchAndDirty(name, fieldValue, options.shouldTouch, options.shouldDirty, true);
 	        options.shouldValidate && trigger(name);
 	    };
 	    const setValues = (name, value, options) => {
@@ -6739,7 +7267,8 @@
 	    const setValue = (name, value, options = {}) => {
 	        const field = get(_fields, name);
 	        const isFieldArray = _names.array.has(name);
-	        set(_formValues, name, value);
+	        const cloneValue = cloneObject(value);
+	        set(_formValues, name, cloneValue);
 	        if (isFieldArray) {
 	            _subjects.array.next({
 	                name,
@@ -6751,14 +7280,14 @@
 	                _subjects.state.next({
 	                    name,
 	                    dirtyFields: _formState.dirtyFields,
-	                    isDirty: _getDirty(name, value),
+	                    isDirty: _getDirty(name, cloneValue),
 	                });
 	            }
 	        }
 	        else {
-	            field && !field._f && !isNullOrUndefined(value)
-	                ? setValues(name, value, options)
-	                : setFieldValue(name, value, options);
+	            field && !field._f && !isNullOrUndefined(cloneValue)
+	                ? setValues(name, cloneValue, options)
+	                : setFieldValue(name, cloneValue, options);
 	        }
 	        isWatched(name, _names) && _subjects.state.next({});
 	        _subjects.watch.next({
@@ -6775,20 +7304,21 @@
 	            const fieldValue = target.type
 	                ? getFieldValue(field._f)
 	                : getEventValue(event);
-	            const isBlurEvent = event.type === EVENTS.BLUR;
+	            const isBlurEvent = event.type === EVENTS.BLUR || event.type === EVENTS.FOCUS_OUT;
 	            const shouldSkipValidation = (!hasValidation(field._f) &&
 	                !_options.resolver &&
 	                !get(_formState.errors, name) &&
 	                !field._f.deps) ||
 	                skipValidation(isBlurEvent, get(_formState.touchedFields, name), _formState.isSubmitted, validationModeAfterSubmit, validationModeBeforeSubmit);
 	            const watched = isWatched(name, _names, isBlurEvent);
+	            set(_formValues, name, fieldValue);
 	            if (isBlurEvent) {
 	                field._f.onBlur && field._f.onBlur(event);
+	                delayErrorCallback && delayErrorCallback(0);
 	            }
 	            else if (field._f.onChange) {
 	                field._f.onChange(event);
 	            }
-	            set(_formValues, name, fieldValue);
 	            const fieldState = updateTouchAndDirty(name, fieldValue, isBlurEvent, false);
 	            const shouldRender = !isEmptyObject(fieldState) || watched;
 	            !isBlurEvent &&
@@ -6798,14 +7328,13 @@
 	                });
 	            if (shouldSkipValidation) {
 	                return (shouldRender &&
-	                    _subjects.state.next(Object.assign({ name }, (watched ? {} : fieldState))));
+	                    _subjects.state.next({ name, ...(watched ? {} : fieldState) }));
 	            }
 	            !isBlurEvent && watched && _subjects.state.next({});
 	            validateFields[name] = validateFields[name] ? +1 : 1;
-	            _proxyFormState.isValidating &&
-	                _subjects.state.next({
-	                    isValidating: true,
-	                });
+	            _subjects.state.next({
+	                isValidating: true,
+	            });
 	            if (_options.resolver) {
 	                const { errors } = await _executeSchema([name]);
 	                const previousErrorLookupResult = schemaErrorLookup(_formState.errors, _fields, name);
@@ -6818,8 +7347,9 @@
 	                error = (await validateField(field, get(_formValues, name), shouldDisplayAllAssociatedErrors, _options.shouldUseNativeValidation))[name];
 	                isValid = await _updateValid(true);
 	            }
-	            field._f.deps && trigger(field._f.deps);
-	            shouldRenderByError(false, name, isValid, error, fieldState);
+	            field._f.deps &&
+	                trigger(field._f.deps);
+	            shouldRenderByError(name, isValid, error, fieldState);
 	        }
 	    };
 	    const trigger = async (name, options = {}) => {
@@ -6846,35 +7376,51 @@
 	        else {
 	            validationResult = isValid = await executeBuildInValidation(_fields);
 	        }
-	        _subjects.state.next(Object.assign(Object.assign(Object.assign({}, (!isString$1(name) ||
-	            (_proxyFormState.isValid && isValid !== _formState.isValid)
-	            ? {}
-	            : { name })), (_options.resolver ? { isValid } : {})), { errors: _formState.errors, isValidating: false }));
+	        _subjects.state.next({
+	            ...(!isString$1(name) ||
+	                (_proxyFormState.isValid && isValid !== _formState.isValid)
+	                ? {}
+	                : { name }),
+	            ...(_options.resolver ? { isValid } : {}),
+	            errors: _formState.errors,
+	            isValidating: false,
+	        });
 	        options.shouldFocus &&
 	            !validationResult &&
 	            focusFieldBy(_fields, (key) => get(_formState.errors, key), name ? fieldNames : _names.mount);
 	        return validationResult;
 	    };
 	    const getValues = (fieldNames) => {
-	        const values = Object.assign(Object.assign({}, _defaultValues), (_stateFlags.mount ? _formValues : {}));
+	        const values = {
+	            ..._defaultValues,
+	            ...(_stateFlags.mount ? _formValues : {}),
+	        };
 	        return isUndefined$1(fieldNames)
 	            ? values
 	            : isString$1(fieldNames)
 	                ? get(values, fieldNames)
 	                : fieldNames.map((name) => get(values, name));
 	    };
+	    const getFieldState = (name, formState) => ({
+	        invalid: !!get((formState || _formState).errors, name),
+	        isDirty: !!get((formState || _formState).dirtyFields, name),
+	        isTouched: !!get((formState || _formState).touchedFields, name),
+	        error: get((formState || _formState).errors, name),
+	    });
 	    const clearErrors = (name) => {
 	        name
 	            ? convertToArrayPayload(name).forEach((inputName) => unset(_formState.errors, inputName))
 	            : (_formState.errors = {});
 	        _subjects.state.next({
 	            errors: _formState.errors,
-	            isValid: true,
 	        });
 	    };
 	    const setError = (name, error, options) => {
 	        const ref = (get(_fields, name, { _f: {} })._f || {}).ref;
-	        set(_formState.errors, name, Object.assign(Object.assign({}, error), { ref }));
+	        set(_formState.errors, name, {
+	            ...error,
+	            ref,
+	        });
 	        _subjects.state.next({
 	            name,
 	            errors: _formState.errors,
@@ -6905,35 +7451,46 @@
 	            }
 	        }
 	        _subjects.watch.next({});
-	        _subjects.state.next(Object.assign(Object.assign({}, _formState), (!options.keepDirty ? {} : { isDirty: _getDirty() })));
+	        _subjects.state.next({
+	            ..._formState,
+	            ...(!options.keepDirty ? {} : { isDirty: _getDirty() }),
+	        });
 	        !options.keepIsValid && _updateValid();
 	    };
 	    const register = (name, options = {}) => {
 	        let field = get(_fields, name);
+	        const disabledIsDefined = isBoolean(options.disabled);
 	        set(_fields, name, {
-	            _f: Object.assign(Object.assign(Object.assign({}, (field && field._f ? field._f : { ref: { name } })), { name, mount: true }), options),
+	            _f: {
+	                ...(field && field._f ? field._f : { ref: { name } }),
+	                name,
+	                mount: true,
+	                ...options,
+	            },
 	        });
 	        _names.mount.add(name);
-	        !isUndefined$1(options.value) &&
-	            !options.disabled &&
-	            set(_formValues, name, get(_formValues, name, options.value));
 	        field
-	            ? isBoolean(options.disabled) &&
+	            ? disabledIsDefined &&
 	                set(_formValues, name, options.disabled
 	                    ? undefined
 	                    : get(_formValues, name, getFieldValue(field._f)))
-	            : updateValidAndValue(name, true);
-	        return Object.assign(Object.assign(Object.assign({}, (isBoolean(options.disabled) ? { disabled: options.disabled } : {})), (_options.shouldUseNativeValidation
-	            ? {
-	                required: !!options.required,
-	                min: getRuleValue(options.min),
-	                max: getRuleValue(options.max),
-	                minLength: getRuleValue(options.minLength),
-	                maxLength: getRuleValue(options.maxLength),
-	                pattern: getRuleValue(options.pattern),
-	            }
-	            : {})), { name,
-	            onChange, onBlur: onChange, ref: (ref) => {
+	            : updateValidAndValue(name, true, options.value);
+	        return {
+	            ...(disabledIsDefined ? { disabled: options.disabled } : {}),
+	            ...(_options.shouldUseNativeValidation
+	                ? {
+	                    required: !!options.required,
+	                    min: getRuleValue(options.min),
+	                    max: getRuleValue(options.max),
+	                    minLength: getRuleValue(options.minLength),
+	                    maxLength: getRuleValue(options.maxLength),
+	                    pattern: getRuleValue(options.pattern),
+	                }
+	                : {}),
+	            name,
+	            onChange,
+	            onBlur: onChange,
+	            ref: (ref) => {
 	                if (ref) {
 	                    register(name, options);
 	                    field = get(_fields, name);
@@ -6943,16 +7500,30 @@
 	                            : ref
 	                        : ref;
 	                    const radioOrCheckbox = isRadioOrCheckbox(fieldRef);
-	                    if (fieldRef === field._f.ref ||
-	                        (radioOrCheckbox &&
-	                            compact(field._f.refs).find((option) => option === fieldRef))) {
+	                    const refs = field._f.refs || [];
+	                    if (radioOrCheckbox
+	                        ? refs.find((option) => option === fieldRef)
+	                        : fieldRef === field._f.ref) {
 	                        return;
 	                    }
 	                    set(_fields, name, {
-	                        _f: radioOrCheckbox
-	                            ? Object.assign(Object.assign({}, field._f), { refs: [...compact(field._f.refs).filter(live), fieldRef], ref: { type: fieldRef.type, name } }) : Object.assign(Object.assign({}, field._f), { ref: fieldRef }),
+	                        _f: {
+	                            ...field._f,
+	                            ...(radioOrCheckbox
+	                                ? {
+	                                    refs: [
+	                                        ...refs.filter(live),
+	                                        fieldRef,
+	                                        ...(!!Array.isArray(get(_defaultValues, name))
+	                                            ? [{}]
+	                                            : []),
+	                                    ],
+	                                    ref: { type: fieldRef.type, name },
+	                                }
+	                                : { ref: fieldRef }),
+	                        },
 	                    });
-	                    updateValidAndValue(name, false, fieldRef);
+	                    updateValidAndValue(name, false, undefined, fieldRef);
 	                }
 	                else {
 	                    field = get(_fields, name, {});
@@ -6963,7 +7534,8 @@
 	                        !(isNameInFieldArray(_names.array, name) && _stateFlags.action) &&
 	                        _names.unMount.add(name);
 	                }
-	            } });
+	            },
+	        };
 	    };
 	    const handleSubmit = (onValid, onInvalid) => async (e) => {
 	        if (e) {
@@ -6971,9 +7543,7 @@
 	            e.persist && e.persist();
 	        }
 	        let hasNoPromiseError = true;
-	        let fieldValues = _options.shouldUnregister
-	            ? cloneObject(_formValues)
-	            : Object.assign({}, _formValues);
+	        let fieldValues = cloneObject(_formValues);
 	        _subjects.state.next({
 	            isSubmitting: true,
 	        });
@@ -6986,8 +7556,7 @@
 	            else {
 	                await executeBuildInValidation(_fields);
 	            }
-	            if (isEmptyObject(_formState.errors) &&
-	                Object.keys(_formState.errors).every((name) => get(fieldValues, name))) {
+	            if (isEmptyObject(_formState.errors)) {
 	                _subjects.state.next({
 	                    errors: {},
 	                    isSubmitting: true,
@@ -6995,7 +7564,9 @@
 	                await onValid(fieldValues, e);
 	            }
 	            else {
-	                onInvalid && (await onInvalid(_formState.errors, e));
+	                if (onInvalid) {
+	                    await onInvalid({ ..._formState.errors }, e);
+	                }
 	                _options.shouldFocusError &&
 	                    focusFieldBy(_fields, (key) => get(_formState.errors, key), _names.mount);
 	            }
@@ -7016,27 +7587,29 @@
 	        }
 	    };
 	    const resetField = (name, options = {}) => {
-	        if (isUndefined$1(options.defaultValue)) {
-	            setValue(name, get(_defaultValues, name));
+	        if (get(_fields, name)) {
+	            if (isUndefined$1(options.defaultValue)) {
+	                setValue(name, get(_defaultValues, name));
+	            }
+	            else {
+	                setValue(name, options.defaultValue);
+	                set(_defaultValues, name, options.defaultValue);
+	            }
+	            if (!options.keepTouched) {
+	                unset(_formState.touchedFields, name);
+	            }
+	            if (!options.keepDirty) {
+	                unset(_formState.dirtyFields, name);
+	                _formState.isDirty = options.defaultValue
+	                    ? _getDirty(name, get(_defaultValues, name))
+	                    : _getDirty();
+	            }
+	            if (!options.keepError) {
+	                unset(_formState.errors, name);
+	                _proxyFormState.isValid && _updateValid();
+	            }
+	            _subjects.state.next({ ..._formState });
 	        }
-	        else {
-	            setValue(name, options.defaultValue);
-	            set(_defaultValues, name, options.defaultValue);
-	        }
-	        if (!options.keepTouched) {
-	            unset(_formState.touchedFields, name);
-	        }
-	        if (!options.keepDirty) {
-	            unset(_formState.dirtyFields, name);
-	            _formState.isDirty = options.defaultValue
-	                ? _getDirty(name, get(_defaultValues, name))
-	                : _getDirty();
-	        }
-	        if (!options.keepError) {
-	            unset(_formState.errors, name);
-	            _proxyFormState.isValid && _updateValid();
-	        }
-	        _subjects.state.next(Object.assign({}, _formState));
 	    };
 	    const reset = (formValues, keepStateOptions = {}) => {
 	        const updatedValues = formValues || _defaultValues;
@@ -7048,28 +7621,37 @@
 	            _defaultValues = updatedValues;
 	        }
 	        if (!keepStateOptions.keepValues) {
-	            if (isWeb && isUndefined$1(formValues)) {
-	                for (const name of _names.mount) {
-	                    const field = get(_fields, name);
-	                    if (field && field._f) {
-	                        const fieldReference = Array.isArray(field._f.refs)
-	                            ? field._f.refs[0]
-	                            : field._f.ref;
-	                        try {
-	                            isHTMLElement(fieldReference) &&
-	                                fieldReference.closest('form').reset();
-	                            break;
+	            if (keepStateOptions.keepDirtyValues) {
+	                for (const fieldName of _names.mount) {
+	                    get(_formState.dirtyFields, fieldName)
+	                        ? set(values, fieldName, get(_formValues, fieldName))
+	                        : setValue(fieldName, get(values, fieldName));
+	                }
+	            }
+	            else {
+	                if (isWeb && isUndefined$1(formValues)) {
+	                    for (const name of _names.mount) {
+	                        const field = get(_fields, name);
+	                        if (field && field._f) {
+	                            const fieldReference = Array.isArray(field._f.refs)
+	                                ? field._f.refs[0]
+	                                : field._f.ref;
+	                            try {
+	                                isHTMLElement(fieldReference) &&
+	                                    fieldReference.closest('form').reset();
+	                                break;
+	                            }
+	                            catch (_a) { }
 	                        }
-	                        catch (_a) { }
 	                    }
 	                }
+	                _fields = {};
 	            }
 	            _formValues = props.shouldUnregister
 	                ? keepStateOptions.keepDefaultValues
 	                    ? cloneObject(_defaultValues)
 	                    : {}
 	                : cloneUpdatedValues;
-	            _fields = {};
 	            _subjects.array.next({
 	                values,
 	            });
@@ -7092,19 +7674,18 @@
 	            submitCount: keepStateOptions.keepSubmitCount
 	                ? _formState.submitCount
 	                : 0,
-	            isDirty: keepStateOptions.keepDirty
+	            isDirty: keepStateOptions.keepDirty || keepStateOptions.keepDirtyValues
 	                ? _formState.isDirty
-	                : keepStateOptions.keepDefaultValues
-	                    ? !deepEqual(formValues, _defaultValues)
-	                    : false,
+	                : !!(keepStateOptions.keepDefaultValues &&
+	                    !deepEqual(formValues, _defaultValues)),
 	            isSubmitted: keepStateOptions.keepIsSubmitted
 	                ? _formState.isSubmitted
 	                : false,
-	            dirtyFields: keepStateOptions.keepDirty
+	            dirtyFields: keepStateOptions.keepDirty || keepStateOptions.keepDirtyValues
 	                ? _formState.dirtyFields
-	                : (keepStateOptions.keepDefaultValues && formValues
-	                    ? Object.entries(formValues).reduce((previous, [key, value]) => (Object.assign(Object.assign({}, previous), { [key]: value !== get(_defaultValues, key) })), {})
-	                    : {}),
+	                : keepStateOptions.keepDefaultValues && formValues
+	                    ? getDirtyFields(_defaultValues, formValues)
+	                    : {},
 	            touchedFields: keepStateOptions.keepTouched
 	                ? _formState.touchedFields
 	                : {},
@@ -7115,14 +7696,16 @@
 	            isSubmitSuccessful: false,
 	        });
 	    };
-	    const setFocus = (name) => {
+	    const setFocus = (name, options = {}) => {
 	        const field = get(_fields, name)._f;
-	        (field.ref.focus ? field.ref : field.refs[0]).focus();
+	        const fieldRef = field.refs ? field.refs[0] : field.ref;
+	        options.shouldSelect ? fieldRef.select() : fieldRef.focus();
 	    };
 	    return {
 	        control: {
 	            register,
 	            unregister,
+	            getFieldState,
 	            _executeSchema,
 	            _getWatch,
 	            _getDirty,
@@ -7135,14 +7718,8 @@
 	            get _fields() {
 	                return _fields;
 	            },
-	            set _fields(value) {
-	                _fields = value;
-	            },
 	            get _formValues() {
 	                return _formValues;
-	            },
-	            set _formValues(value) {
-	                _formValues = value;
 	            },
 	            get _stateFlags() {
 	                return _stateFlags;
@@ -7152,9 +7729,6 @@
 	            },
 	            get _defaultValues() {
 	                return _defaultValues;
-	            },
-	            set _defaultValues(value) {
-	                _defaultValues = value;
 	            },
 	            get _names() {
 	                return _names;
@@ -7172,7 +7746,10 @@
 	                return _options;
 	            },
 	            set _options(value) {
-	                _options = Object.assign(Object.assign({}, _options), value);
+	                _options = {
+	                    ..._options,
+	                    ...value,
+	                };
 	            },
 	        },
 	        trigger,
@@ -7187,9 +7764,39 @@
 	        unregister,
 	        setError,
 	        setFocus,
+	        getFieldState,
 	    };
 	}
 
+	/**
+	 * Custom hook to mange the entire form.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/useform) • [Demo](https://codesandbox.io/s/react-hook-form-get-started-ts-5ksmm) • [Video](https://www.youtube.com/watch?v=RkXv4AXXC_4)
+	 *
+	 * @param props - form configuration and validation parameters.
+	 *
+	 * @returns methods - individual functions to manage the form state. {@link UseFormReturn}
+	 *
+	 * @example
+	 * ```tsx
+	 * function App() {
+	 *   const { register, handleSubmit, watch, formState: { errors } } = useForm();
+	 *   const onSubmit = data => console.log(data);
+	 *
+	 *   console.log(watch("example"));
+	 *
+	 *   return (
+	 *     <form onSubmit={handleSubmit(onSubmit)}>
+	 *       <input defaultValue="test" {...register("example")} />
+	 *       <input {...register("exampleRequired", { required: true })} />
+	 *       {errors.exampleRequired && <span>This field is required</span>}
+	 *       <input type="submit" />
+	 *     </form>
+	 *   );
+	 * }
+	 * ```
+	 */
 	function useForm(props = {}) {
 	    const _formControl = React__default["default"].useRef();
 	    const [formState, updateFormState] = React__default["default"].useState({
@@ -7208,17 +7815,24 @@
 	        _formControl.current.control._options = props;
 	    }
 	    else {
-	        _formControl.current = Object.assign(Object.assign({}, createFormControl(props)), { formState });
+	        _formControl.current = {
+	            ...createFormControl(props),
+	            formState,
+	        };
 	    }
 	    const control = _formControl.current.control;
+	    const callback = React__default["default"].useCallback((value) => {
+	        if (shouldRenderFormState(value, control._proxyFormState, true)) {
+	            control._formState = {
+	                ...control._formState,
+	                ...value,
+	            };
+	            updateFormState({ ...control._formState });
+	        }
+	    }, [control]);
 	    useSubscribe({
 	        subject: control._subjects.state,
-	        callback: (value) => {
-	            if (shouldRenderFormState(value, control._proxyFormState, true)) {
-	                control._formState = Object.assign(Object.assign({}, control._formState), value);
-	                updateFormState(Object.assign({}, control._formState));
-	            }
-	        },
+	        callback,
 	    });
 	    React__default["default"].useEffect(() => {
 	        if (!control._stateFlags.mount) {
@@ -7241,1048 +7855,1048 @@
 
 	(function (module, exports) {
 
-	/**
-	 * Copyright (c) 2015-present, Facebook, Inc.
-	 *
-	 * This source code is licensed under the MIT license found in the
-	 * LICENSE file in the root directory of this source tree.
-	 */
+		/**
+		 * Copyright (c) 2015-present, Facebook, Inc.
+		 *
+		 * This source code is licensed under the MIT license found in the
+		 * LICENSE file in the root directory of this source tree.
+		 */
 
-	(function(f) {
-	  {
-	    module.exports = f(React__default["default"]);
-	    /* global define */
-	  }
-	})(function(React) {
-	  /**
-	   * Create a factory that creates HTML tag elements.
-	   */
-	  function createDOMFactory(type) {
-	    var factory = React.createElement.bind(null, type);
-	    // Expose the type on the factory and the prototype so that it can be
-	    // easily accessed on elements. E.g. `<Foo />.type === Foo`.
-	    // This should not be named `constructor` since this may not be the function
-	    // that created the element, and it may not even be a constructor.
-	    factory.type = type;
-	    return factory;
-	  }
-	  /**
-	   * Creates a mapping from supported HTML tags to `ReactDOMComponent` classes.
-	   */
-	  var ReactDOMFactories = {
-	    a: createDOMFactory('a'),
-	    abbr: createDOMFactory('abbr'),
-	    address: createDOMFactory('address'),
-	    area: createDOMFactory('area'),
-	    article: createDOMFactory('article'),
-	    aside: createDOMFactory('aside'),
-	    audio: createDOMFactory('audio'),
-	    b: createDOMFactory('b'),
-	    base: createDOMFactory('base'),
-	    bdi: createDOMFactory('bdi'),
-	    bdo: createDOMFactory('bdo'),
-	    big: createDOMFactory('big'),
-	    blockquote: createDOMFactory('blockquote'),
-	    body: createDOMFactory('body'),
-	    br: createDOMFactory('br'),
-	    button: createDOMFactory('button'),
-	    canvas: createDOMFactory('canvas'),
-	    caption: createDOMFactory('caption'),
-	    cite: createDOMFactory('cite'),
-	    code: createDOMFactory('code'),
-	    col: createDOMFactory('col'),
-	    colgroup: createDOMFactory('colgroup'),
-	    data: createDOMFactory('data'),
-	    datalist: createDOMFactory('datalist'),
-	    dd: createDOMFactory('dd'),
-	    del: createDOMFactory('del'),
-	    details: createDOMFactory('details'),
-	    dfn: createDOMFactory('dfn'),
-	    dialog: createDOMFactory('dialog'),
-	    div: createDOMFactory('div'),
-	    dl: createDOMFactory('dl'),
-	    dt: createDOMFactory('dt'),
-	    em: createDOMFactory('em'),
-	    embed: createDOMFactory('embed'),
-	    fieldset: createDOMFactory('fieldset'),
-	    figcaption: createDOMFactory('figcaption'),
-	    figure: createDOMFactory('figure'),
-	    footer: createDOMFactory('footer'),
-	    form: createDOMFactory('form'),
-	    h1: createDOMFactory('h1'),
-	    h2: createDOMFactory('h2'),
-	    h3: createDOMFactory('h3'),
-	    h4: createDOMFactory('h4'),
-	    h5: createDOMFactory('h5'),
-	    h6: createDOMFactory('h6'),
-	    head: createDOMFactory('head'),
-	    header: createDOMFactory('header'),
-	    hgroup: createDOMFactory('hgroup'),
-	    hr: createDOMFactory('hr'),
-	    html: createDOMFactory('html'),
-	    i: createDOMFactory('i'),
-	    iframe: createDOMFactory('iframe'),
-	    img: createDOMFactory('img'),
-	    input: createDOMFactory('input'),
-	    ins: createDOMFactory('ins'),
-	    kbd: createDOMFactory('kbd'),
-	    keygen: createDOMFactory('keygen'),
-	    label: createDOMFactory('label'),
-	    legend: createDOMFactory('legend'),
-	    li: createDOMFactory('li'),
-	    link: createDOMFactory('link'),
-	    main: createDOMFactory('main'),
-	    map: createDOMFactory('map'),
-	    mark: createDOMFactory('mark'),
-	    menu: createDOMFactory('menu'),
-	    menuitem: createDOMFactory('menuitem'),
-	    meta: createDOMFactory('meta'),
-	    meter: createDOMFactory('meter'),
-	    nav: createDOMFactory('nav'),
-	    noscript: createDOMFactory('noscript'),
-	    object: createDOMFactory('object'),
-	    ol: createDOMFactory('ol'),
-	    optgroup: createDOMFactory('optgroup'),
-	    option: createDOMFactory('option'),
-	    output: createDOMFactory('output'),
-	    p: createDOMFactory('p'),
-	    param: createDOMFactory('param'),
-	    picture: createDOMFactory('picture'),
-	    pre: createDOMFactory('pre'),
-	    progress: createDOMFactory('progress'),
-	    q: createDOMFactory('q'),
-	    rp: createDOMFactory('rp'),
-	    rt: createDOMFactory('rt'),
-	    ruby: createDOMFactory('ruby'),
-	    s: createDOMFactory('s'),
-	    samp: createDOMFactory('samp'),
-	    script: createDOMFactory('script'),
-	    section: createDOMFactory('section'),
-	    select: createDOMFactory('select'),
-	    small: createDOMFactory('small'),
-	    source: createDOMFactory('source'),
-	    span: createDOMFactory('span'),
-	    strong: createDOMFactory('strong'),
-	    style: createDOMFactory('style'),
-	    sub: createDOMFactory('sub'),
-	    summary: createDOMFactory('summary'),
-	    sup: createDOMFactory('sup'),
-	    table: createDOMFactory('table'),
-	    tbody: createDOMFactory('tbody'),
-	    td: createDOMFactory('td'),
-	    textarea: createDOMFactory('textarea'),
-	    tfoot: createDOMFactory('tfoot'),
-	    th: createDOMFactory('th'),
-	    thead: createDOMFactory('thead'),
-	    time: createDOMFactory('time'),
-	    title: createDOMFactory('title'),
-	    tr: createDOMFactory('tr'),
-	    track: createDOMFactory('track'),
-	    u: createDOMFactory('u'),
-	    ul: createDOMFactory('ul'),
-	    var: createDOMFactory('var'),
-	    video: createDOMFactory('video'),
-	    wbr: createDOMFactory('wbr'),
+		(function(f) {
+		  {
+		    module.exports = f(React__default["default"]);
+		    /* global define */
+		  }
+		})(function(React) {
+		  /**
+		   * Create a factory that creates HTML tag elements.
+		   */
+		  function createDOMFactory(type) {
+		    var factory = React.createElement.bind(null, type);
+		    // Expose the type on the factory and the prototype so that it can be
+		    // easily accessed on elements. E.g. `<Foo />.type === Foo`.
+		    // This should not be named `constructor` since this may not be the function
+		    // that created the element, and it may not even be a constructor.
+		    factory.type = type;
+		    return factory;
+		  }
+		  /**
+		   * Creates a mapping from supported HTML tags to `ReactDOMComponent` classes.
+		   */
+		  var ReactDOMFactories = {
+		    a: createDOMFactory('a'),
+		    abbr: createDOMFactory('abbr'),
+		    address: createDOMFactory('address'),
+		    area: createDOMFactory('area'),
+		    article: createDOMFactory('article'),
+		    aside: createDOMFactory('aside'),
+		    audio: createDOMFactory('audio'),
+		    b: createDOMFactory('b'),
+		    base: createDOMFactory('base'),
+		    bdi: createDOMFactory('bdi'),
+		    bdo: createDOMFactory('bdo'),
+		    big: createDOMFactory('big'),
+		    blockquote: createDOMFactory('blockquote'),
+		    body: createDOMFactory('body'),
+		    br: createDOMFactory('br'),
+		    button: createDOMFactory('button'),
+		    canvas: createDOMFactory('canvas'),
+		    caption: createDOMFactory('caption'),
+		    cite: createDOMFactory('cite'),
+		    code: createDOMFactory('code'),
+		    col: createDOMFactory('col'),
+		    colgroup: createDOMFactory('colgroup'),
+		    data: createDOMFactory('data'),
+		    datalist: createDOMFactory('datalist'),
+		    dd: createDOMFactory('dd'),
+		    del: createDOMFactory('del'),
+		    details: createDOMFactory('details'),
+		    dfn: createDOMFactory('dfn'),
+		    dialog: createDOMFactory('dialog'),
+		    div: createDOMFactory('div'),
+		    dl: createDOMFactory('dl'),
+		    dt: createDOMFactory('dt'),
+		    em: createDOMFactory('em'),
+		    embed: createDOMFactory('embed'),
+		    fieldset: createDOMFactory('fieldset'),
+		    figcaption: createDOMFactory('figcaption'),
+		    figure: createDOMFactory('figure'),
+		    footer: createDOMFactory('footer'),
+		    form: createDOMFactory('form'),
+		    h1: createDOMFactory('h1'),
+		    h2: createDOMFactory('h2'),
+		    h3: createDOMFactory('h3'),
+		    h4: createDOMFactory('h4'),
+		    h5: createDOMFactory('h5'),
+		    h6: createDOMFactory('h6'),
+		    head: createDOMFactory('head'),
+		    header: createDOMFactory('header'),
+		    hgroup: createDOMFactory('hgroup'),
+		    hr: createDOMFactory('hr'),
+		    html: createDOMFactory('html'),
+		    i: createDOMFactory('i'),
+		    iframe: createDOMFactory('iframe'),
+		    img: createDOMFactory('img'),
+		    input: createDOMFactory('input'),
+		    ins: createDOMFactory('ins'),
+		    kbd: createDOMFactory('kbd'),
+		    keygen: createDOMFactory('keygen'),
+		    label: createDOMFactory('label'),
+		    legend: createDOMFactory('legend'),
+		    li: createDOMFactory('li'),
+		    link: createDOMFactory('link'),
+		    main: createDOMFactory('main'),
+		    map: createDOMFactory('map'),
+		    mark: createDOMFactory('mark'),
+		    menu: createDOMFactory('menu'),
+		    menuitem: createDOMFactory('menuitem'),
+		    meta: createDOMFactory('meta'),
+		    meter: createDOMFactory('meter'),
+		    nav: createDOMFactory('nav'),
+		    noscript: createDOMFactory('noscript'),
+		    object: createDOMFactory('object'),
+		    ol: createDOMFactory('ol'),
+		    optgroup: createDOMFactory('optgroup'),
+		    option: createDOMFactory('option'),
+		    output: createDOMFactory('output'),
+		    p: createDOMFactory('p'),
+		    param: createDOMFactory('param'),
+		    picture: createDOMFactory('picture'),
+		    pre: createDOMFactory('pre'),
+		    progress: createDOMFactory('progress'),
+		    q: createDOMFactory('q'),
+		    rp: createDOMFactory('rp'),
+		    rt: createDOMFactory('rt'),
+		    ruby: createDOMFactory('ruby'),
+		    s: createDOMFactory('s'),
+		    samp: createDOMFactory('samp'),
+		    script: createDOMFactory('script'),
+		    section: createDOMFactory('section'),
+		    select: createDOMFactory('select'),
+		    small: createDOMFactory('small'),
+		    source: createDOMFactory('source'),
+		    span: createDOMFactory('span'),
+		    strong: createDOMFactory('strong'),
+		    style: createDOMFactory('style'),
+		    sub: createDOMFactory('sub'),
+		    summary: createDOMFactory('summary'),
+		    sup: createDOMFactory('sup'),
+		    table: createDOMFactory('table'),
+		    tbody: createDOMFactory('tbody'),
+		    td: createDOMFactory('td'),
+		    textarea: createDOMFactory('textarea'),
+		    tfoot: createDOMFactory('tfoot'),
+		    th: createDOMFactory('th'),
+		    thead: createDOMFactory('thead'),
+		    time: createDOMFactory('time'),
+		    title: createDOMFactory('title'),
+		    tr: createDOMFactory('tr'),
+		    track: createDOMFactory('track'),
+		    u: createDOMFactory('u'),
+		    ul: createDOMFactory('ul'),
+		    var: createDOMFactory('var'),
+		    video: createDOMFactory('video'),
+		    wbr: createDOMFactory('wbr'),
 
-	    // SVG
-	    circle: createDOMFactory('circle'),
-	    clipPath: createDOMFactory('clipPath'),
-	    defs: createDOMFactory('defs'),
-	    ellipse: createDOMFactory('ellipse'),
-	    g: createDOMFactory('g'),
-	    image: createDOMFactory('image'),
-	    line: createDOMFactory('line'),
-	    linearGradient: createDOMFactory('linearGradient'),
-	    mask: createDOMFactory('mask'),
-	    path: createDOMFactory('path'),
-	    pattern: createDOMFactory('pattern'),
-	    polygon: createDOMFactory('polygon'),
-	    polyline: createDOMFactory('polyline'),
-	    radialGradient: createDOMFactory('radialGradient'),
-	    rect: createDOMFactory('rect'),
-	    stop: createDOMFactory('stop'),
-	    svg: createDOMFactory('svg'),
-	    text: createDOMFactory('text'),
-	    tspan: createDOMFactory('tspan'),
-	  };
+		    // SVG
+		    circle: createDOMFactory('circle'),
+		    clipPath: createDOMFactory('clipPath'),
+		    defs: createDOMFactory('defs'),
+		    ellipse: createDOMFactory('ellipse'),
+		    g: createDOMFactory('g'),
+		    image: createDOMFactory('image'),
+		    line: createDOMFactory('line'),
+		    linearGradient: createDOMFactory('linearGradient'),
+		    mask: createDOMFactory('mask'),
+		    path: createDOMFactory('path'),
+		    pattern: createDOMFactory('pattern'),
+		    polygon: createDOMFactory('polygon'),
+		    polyline: createDOMFactory('polyline'),
+		    radialGradient: createDOMFactory('radialGradient'),
+		    rect: createDOMFactory('rect'),
+		    stop: createDOMFactory('stop'),
+		    svg: createDOMFactory('svg'),
+		    text: createDOMFactory('text'),
+		    tspan: createDOMFactory('tspan'),
+		  };
 
-	  // due to wrapper and conditionals at the top, this will either become
-	  // `module.exports ReactDOMFactories` if that is available,
-	  // otherwise it will be defined via `define(['react'], ReactDOMFactories)`
-	  // if that is available,
-	  // otherwise it will be defined as global variable.
-	  return ReactDOMFactories;
-	});
-	}(reactDomFactories));
+		  // due to wrapper and conditionals at the top, this will either become
+		  // `module.exports ReactDOMFactories` if that is available,
+		  // otherwise it will be defined via `define(['react'], ReactDOMFactories)`
+		  // if that is available,
+		  // otherwise it will be defined as global variable.
+		  return ReactDOMFactories;
+		});
+	} (reactDomFactories));
 
 	var ReactDOMElements = reactDomFactories.exports;
 
 	var uaParser = {exports: {}};
 
 	(function (module, exports) {
-	/////////////////////////////////////////////////////////////////////////////////
-	/* UAParser.js v1.0.2
-	   Copyright © 2012-2021 Faisal Salman <f@faisalman.com>
-	   MIT License *//*
-	   Detect Browser, Engine, OS, CPU, and Device type/model from User-Agent data.
-	   Supports browser & node.js environment. 
-	   Demo   : https://faisalman.github.io/ua-parser-js
-	   Source : https://github.com/faisalman/ua-parser-js */
-	/////////////////////////////////////////////////////////////////////////////////
-
-	(function (window, undefined$1) {
-
-	    //////////////
-	    // Constants
-	    /////////////
-
-
-	    var LIBVERSION  = '1.0.2',
-	        EMPTY       = '',
-	        UNKNOWN     = '?',
-	        FUNC_TYPE   = 'function',
-	        UNDEF_TYPE  = 'undefined',
-	        OBJ_TYPE    = 'object',
-	        STR_TYPE    = 'string',
-	        MAJOR       = 'major',
-	        MODEL       = 'model',
-	        NAME        = 'name',
-	        TYPE        = 'type',
-	        VENDOR      = 'vendor',
-	        VERSION     = 'version',
-	        ARCHITECTURE= 'architecture',
-	        CONSOLE     = 'console',
-	        MOBILE      = 'mobile',
-	        TABLET      = 'tablet',
-	        SMARTTV     = 'smarttv',
-	        WEARABLE    = 'wearable',
-	        EMBEDDED    = 'embedded',
-	        UA_MAX_LENGTH = 255;
-
-	    var AMAZON  = 'Amazon',
-	        APPLE   = 'Apple',
-	        ASUS    = 'ASUS',
-	        BLACKBERRY = 'BlackBerry',
-	        BROWSER = 'Browser',
-	        CHROME  = 'Chrome',
-	        EDGE    = 'Edge',
-	        FIREFOX = 'Firefox',
-	        GOOGLE  = 'Google',
-	        HUAWEI  = 'Huawei',
-	        LG      = 'LG',
-	        MICROSOFT = 'Microsoft',
-	        MOTOROLA  = 'Motorola',
-	        OPERA   = 'Opera',
-	        SAMSUNG = 'Samsung',
-	        SONY    = 'Sony',
-	        XIAOMI  = 'Xiaomi',
-	        ZEBRA   = 'Zebra',
-	        FACEBOOK   = 'Facebook';
-
-	    ///////////
-	    // Helper
-	    //////////
-
-	    var extend = function (regexes, extensions) {
-	            var mergedRegexes = {};
-	            for (var i in regexes) {
-	                if (extensions[i] && extensions[i].length % 2 === 0) {
-	                    mergedRegexes[i] = extensions[i].concat(regexes[i]);
-	                } else {
-	                    mergedRegexes[i] = regexes[i];
-	                }
-	            }
-	            return mergedRegexes;
-	        },
-	        enumerize = function (arr) {
-	            var enums = {};
-	            for (var i=0; i<arr.length; i++) {
-	                enums[arr[i].toUpperCase()] = arr[i];
-	            }
-	            return enums;
-	        },
-	        has = function (str1, str2) {
-	            return typeof str1 === STR_TYPE ? lowerize(str2).indexOf(lowerize(str1)) !== -1 : false;
-	        },
-	        lowerize = function (str) {
-	            return str.toLowerCase();
-	        },
-	        majorize = function (version) {
-	            return typeof(version) === STR_TYPE ? version.replace(/[^\d\.]/g, EMPTY).split('.')[0] : undefined$1;
-	        },
-	        trim = function (str, len) {
-	            if (typeof(str) === STR_TYPE) {
-	                str = str.replace(/^\s\s*/, EMPTY).replace(/\s\s*$/, EMPTY);
-	                return typeof(len) === UNDEF_TYPE ? str : str.substring(0, UA_MAX_LENGTH);
-	            }
-	    };
-
-	    ///////////////
-	    // Map helper
-	    //////////////
-
-	    var rgxMapper = function (ua, arrays) {
-
-	            var i = 0, j, k, p, q, matches, match;
-
-	            // loop through all regexes maps
-	            while (i < arrays.length && !matches) {
-
-	                var regex = arrays[i],       // even sequence (0,2,4,..)
-	                    props = arrays[i + 1];   // odd sequence (1,3,5,..)
-	                j = k = 0;
-
-	                // try matching uastring with regexes
-	                while (j < regex.length && !matches) {
-
-	                    matches = regex[j++].exec(ua);
-
-	                    if (!!matches) {
-	                        for (p = 0; p < props.length; p++) {
-	                            match = matches[++k];
-	                            q = props[p];
-	                            // check if given property is actually array
-	                            if (typeof q === OBJ_TYPE && q.length > 0) {
-	                                if (q.length === 2) {
-	                                    if (typeof q[1] == FUNC_TYPE) {
-	                                        // assign modified match
-	                                        this[q[0]] = q[1].call(this, match);
-	                                    } else {
-	                                        // assign given value, ignore regex match
-	                                        this[q[0]] = q[1];
-	                                    }
-	                                } else if (q.length === 3) {
-	                                    // check whether function or regex
-	                                    if (typeof q[1] === FUNC_TYPE && !(q[1].exec && q[1].test)) {
-	                                        // call function (usually string mapper)
-	                                        this[q[0]] = match ? q[1].call(this, match, q[2]) : undefined$1;
-	                                    } else {
-	                                        // sanitize match using given regex
-	                                        this[q[0]] = match ? match.replace(q[1], q[2]) : undefined$1;
-	                                    }
-	                                } else if (q.length === 4) {
-	                                        this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined$1;
-	                                }
-	                            } else {
-	                                this[q] = match ? match : undefined$1;
-	                            }
-	                        }
-	                    }
-	                }
-	                i += 2;
-	            }
-	        },
-
-	        strMapper = function (str, map) {
-
-	            for (var i in map) {
-	                // check if current value is array
-	                if (typeof map[i] === OBJ_TYPE && map[i].length > 0) {
-	                    for (var j = 0; j < map[i].length; j++) {
-	                        if (has(map[i][j], str)) {
-	                            return (i === UNKNOWN) ? undefined$1 : i;
-	                        }
-	                    }
-	                } else if (has(map[i], str)) {
-	                    return (i === UNKNOWN) ? undefined$1 : i;
-	                }
-	            }
-	            return str;
-	    };
-
-	    ///////////////
-	    // String map
-	    //////////////
-
-	    // Safari < 3.0
-	    var oldSafariMap = {
-	            '1.0'   : '/8',
-	            '1.2'   : '/1',
-	            '1.3'   : '/3',
-	            '2.0'   : '/412',
-	            '2.0.2' : '/416',
-	            '2.0.3' : '/417',
-	            '2.0.4' : '/419',
-	            '?'     : '/'
-	        },
-	        windowsVersionMap = {
-	            'ME'        : '4.90',
-	            'NT 3.11'   : 'NT3.51',
-	            'NT 4.0'    : 'NT4.0',
-	            '2000'      : 'NT 5.0',
-	            'XP'        : ['NT 5.1', 'NT 5.2'],
-	            'Vista'     : 'NT 6.0',
-	            '7'         : 'NT 6.1',
-	            '8'         : 'NT 6.2',
-	            '8.1'       : 'NT 6.3',
-	            '10'        : ['NT 6.4', 'NT 10.0'],
-	            'RT'        : 'ARM'
-	    };
-
-	    //////////////
-	    // Regex map
-	    /////////////
-
-	    var regexes = {
-
-	        browser : [[
-
-	            /\b(?:crmo|crios)\/([\w\.]+)/i                                      // Chrome for Android/iOS
-	            ], [VERSION, [NAME, 'Chrome']], [
-	            /edg(?:e|ios|a)?\/([\w\.]+)/i                                       // Microsoft Edge
-	            ], [VERSION, [NAME, 'Edge']], [
-
-	            // Presto based
-	            /(opera mini)\/([-\w\.]+)/i,                                        // Opera Mini
-	            /(opera [mobiletab]{3,6})\b.+version\/([-\w\.]+)/i,                 // Opera Mobi/Tablet
-	            /(opera)(?:.+version\/|[\/ ]+)([\w\.]+)/i                           // Opera
-	            ], [NAME, VERSION], [
-	            /opios[\/ ]+([\w\.]+)/i                                             // Opera mini on iphone >= 8.0
-	            ], [VERSION, [NAME, OPERA+' Mini']], [
-	            /\bopr\/([\w\.]+)/i                                                 // Opera Webkit
-	            ], [VERSION, [NAME, OPERA]], [
-
-	            // Mixed
-	            /(kindle)\/([\w\.]+)/i,                                             // Kindle
-	            /(lunascape|maxthon|netfront|jasmine|blazer)[\/ ]?([\w\.]*)/i,      // Lunascape/Maxthon/Netfront/Jasmine/Blazer
-	            // Trident based
-	            /(avant |iemobile|slim)(?:browser)?[\/ ]?([\w\.]*)/i,               // Avant/IEMobile/SlimBrowser
-	            /(ba?idubrowser)[\/ ]?([\w\.]+)/i,                                  // Baidu Browser
-	            /(?:ms|\()(ie) ([\w\.]+)/i,                                         // Internet Explorer
-
-	            // Webkit/KHTML based                                               // Flock/RockMelt/Midori/Epiphany/Silk/Skyfire/Bolt/Iron/Iridium/PhantomJS/Bowser/QupZilla/Falkon
-	            /(flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon|rekonq|puffin|brave|whale|qqbrowserlite|qq)\/([-\w\.]+)/i,
-	                                                                                // Rekonq/Puffin/Brave/Whale/QQBrowserLite/QQ, aka ShouQ
-	            /(weibo)__([\d\.]+)/i                                               // Weibo
-	            ], [NAME, VERSION], [
-	            /(?:\buc? ?browser|(?:juc.+)ucweb)[\/ ]?([\w\.]+)/i                 // UCBrowser
-	            ], [VERSION, [NAME, 'UC'+BROWSER]], [
-	            /\bqbcore\/([\w\.]+)/i                                              // WeChat Desktop for Windows Built-in Browser
-	            ], [VERSION, [NAME, 'WeChat(Win) Desktop']], [
-	            /micromessenger\/([\w\.]+)/i                                        // WeChat
-	            ], [VERSION, [NAME, 'WeChat']], [
-	            /konqueror\/([\w\.]+)/i                                             // Konqueror
-	            ], [VERSION, [NAME, 'Konqueror']], [
-	            /trident.+rv[: ]([\w\.]{1,9})\b.+like gecko/i                       // IE11
-	            ], [VERSION, [NAME, 'IE']], [
-	            /yabrowser\/([\w\.]+)/i                                             // Yandex
-	            ], [VERSION, [NAME, 'Yandex']], [
-	            /(avast|avg)\/([\w\.]+)/i                                           // Avast/AVG Secure Browser
-	            ], [[NAME, /(.+)/, '$1 Secure '+BROWSER], VERSION], [
-	            /\bfocus\/([\w\.]+)/i                                               // Firefox Focus
-	            ], [VERSION, [NAME, FIREFOX+' Focus']], [
-	            /\bopt\/([\w\.]+)/i                                                 // Opera Touch
-	            ], [VERSION, [NAME, OPERA+' Touch']], [
-	            /coc_coc\w+\/([\w\.]+)/i                                            // Coc Coc Browser
-	            ], [VERSION, [NAME, 'Coc Coc']], [
-	            /dolfin\/([\w\.]+)/i                                                // Dolphin
-	            ], [VERSION, [NAME, 'Dolphin']], [
-	            /coast\/([\w\.]+)/i                                                 // Opera Coast
-	            ], [VERSION, [NAME, OPERA+' Coast']], [
-	            /miuibrowser\/([\w\.]+)/i                                           // MIUI Browser
-	            ], [VERSION, [NAME, 'MIUI '+BROWSER]], [
-	            /fxios\/([-\w\.]+)/i                                                // Firefox for iOS
-	            ], [VERSION, [NAME, FIREFOX]], [
-	            /\bqihu|(qi?ho?o?|360)browser/i                                     // 360
-	            ], [[NAME, '360 '+BROWSER]], [
-	            /(oculus|samsung|sailfish)browser\/([\w\.]+)/i
-	            ], [[NAME, /(.+)/, '$1 '+BROWSER], VERSION], [                      // Oculus/Samsung/Sailfish Browser
-	            /(comodo_dragon)\/([\w\.]+)/i                                       // Comodo Dragon
-	            ], [[NAME, /_/g, ' '], VERSION], [
-	            /(electron)\/([\w\.]+) safari/i,                                    // Electron-based App
-	            /(tesla)(?: qtcarbrowser|\/(20\d\d\.[-\w\.]+))/i,                   // Tesla
-	            /m?(qqbrowser|baiduboxapp|2345Explorer)[\/ ]?([\w\.]+)/i            // QQBrowser/Baidu App/2345 Browser
-	            ], [NAME, VERSION], [
-	            /(metasr)[\/ ]?([\w\.]+)/i,                                         // SouGouBrowser
-	            /(lbbrowser)/i                                                      // LieBao Browser
-	            ], [NAME], [
-
-	            // WebView
-	            /((?:fban\/fbios|fb_iab\/fb4a)(?!.+fbav)|;fbav\/([\w\.]+);)/i       // Facebook App for iOS & Android
-	            ], [[NAME, FACEBOOK], VERSION], [
-	            /safari (line)\/([\w\.]+)/i,                                        // Line App for iOS
-	            /\b(line)\/([\w\.]+)\/iab/i,                                        // Line App for Android
-	            /(chromium|instagram)[\/ ]([-\w\.]+)/i                              // Chromium/Instagram
-	            ], [NAME, VERSION], [
-	            /\bgsa\/([\w\.]+) .*safari\//i                                      // Google Search Appliance on iOS
-	            ], [VERSION, [NAME, 'GSA']], [
-
-	            /headlesschrome(?:\/([\w\.]+)| )/i                                  // Chrome Headless
-	            ], [VERSION, [NAME, CHROME+' Headless']], [
-
-	            / wv\).+(chrome)\/([\w\.]+)/i                                       // Chrome WebView
-	            ], [[NAME, CHROME+' WebView'], VERSION], [
-
-	            /droid.+ version\/([\w\.]+)\b.+(?:mobile safari|safari)/i           // Android Browser
-	            ], [VERSION, [NAME, 'Android '+BROWSER]], [
-
-	            /(chrome|omniweb|arora|[tizenoka]{5} ?browser)\/v?([\w\.]+)/i       // Chrome/OmniWeb/Arora/Tizen/Nokia
-	            ], [NAME, VERSION], [
-
-	            /version\/([\w\.]+) .*mobile\/\w+ (safari)/i                        // Mobile Safari
-	            ], [VERSION, [NAME, 'Mobile Safari']], [
-	            /version\/([\w\.]+) .*(mobile ?safari|safari)/i                     // Safari & Safari Mobile
-	            ], [VERSION, NAME], [
-	            /webkit.+?(mobile ?safari|safari)(\/[\w\.]+)/i                      // Safari < 3.0
-	            ], [NAME, [VERSION, strMapper, oldSafariMap]], [
-
-	            /(webkit|khtml)\/([\w\.]+)/i
-	            ], [NAME, VERSION], [
-
-	            // Gecko based
-	            /(navigator|netscape\d?)\/([-\w\.]+)/i                              // Netscape
-	            ], [[NAME, 'Netscape'], VERSION], [
-	            /mobile vr; rv:([\w\.]+)\).+firefox/i                               // Firefox Reality
-	            ], [VERSION, [NAME, FIREFOX+' Reality']], [
-	            /ekiohf.+(flow)\/([\w\.]+)/i,                                       // Flow
-	            /(swiftfox)/i,                                                      // Swiftfox
-	            /(icedragon|iceweasel|camino|chimera|fennec|maemo browser|minimo|conkeror|klar)[\/ ]?([\w\.\+]+)/i,
-	                                                                                // IceDragon/Iceweasel/Camino/Chimera/Fennec/Maemo/Minimo/Conkeror/Klar
-	            /(seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([-\w\.]+)$/i,
-	                                                                                // Firefox/SeaMonkey/K-Meleon/IceCat/IceApe/Firebird/Phoenix
-	            /(firefox)\/([\w\.]+)/i,                                            // Other Firefox-based
-	            /(mozilla)\/([\w\.]+) .+rv\:.+gecko\/\d+/i,                         // Mozilla
-
-	            // Other
-	            /(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir|obigo|mosaic|(?:go|ice|up)[\. ]?browser)[-\/ ]?v?([\w\.]+)/i,
-	                                                                                // Polaris/Lynx/Dillo/iCab/Doris/Amaya/w3m/NetSurf/Sleipnir/Obigo/Mosaic/Go/ICE/UP.Browser
-	            /(links) \(([\w\.]+)/i                                              // Links
-	            ], [NAME, VERSION]
-	        ],
-
-	        cpu : [[
-
-	            /(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i                     // AMD64 (x64)
-	            ], [[ARCHITECTURE, 'amd64']], [
-
-	            /(ia32(?=;))/i                                                      // IA32 (quicktime)
-	            ], [[ARCHITECTURE, lowerize]], [
-
-	            /((?:i[346]|x)86)[;\)]/i                                            // IA32 (x86)
-	            ], [[ARCHITECTURE, 'ia32']], [
-
-	            /\b(aarch64|arm(v?8e?l?|_?64))\b/i                                 // ARM64
-	            ], [[ARCHITECTURE, 'arm64']], [
-
-	            /\b(arm(?:v[67])?ht?n?[fl]p?)\b/i                                   // ARMHF
-	            ], [[ARCHITECTURE, 'armhf']], [
-
-	            // PocketPC mistakenly identified as PowerPC
-	            /windows (ce|mobile); ppc;/i
-	            ], [[ARCHITECTURE, 'arm']], [
-
-	            /((?:ppc|powerpc)(?:64)?)(?: mac|;|\))/i                            // PowerPC
-	            ], [[ARCHITECTURE, /ower/, EMPTY, lowerize]], [
-
-	            /(sun4\w)[;\)]/i                                                    // SPARC
-	            ], [[ARCHITECTURE, 'sparc']], [
-
-	            /((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i
-	                                                                                // IA64, 68K, ARM/64, AVR/32, IRIX/64, MIPS/64, SPARC/64, PA-RISC
-	            ], [[ARCHITECTURE, lowerize]]
-	        ],
-
-	        device : [[
-
-	            //////////////////////////
-	            // MOBILES & TABLETS
-	            // Ordered by popularity
-	            /////////////////////////
-
-	            // Samsung
-	            /\b(sch-i[89]0\d|shw-m380s|sm-[pt]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus 10)/i
-	            ], [MODEL, [VENDOR, SAMSUNG], [TYPE, TABLET]], [
-	            /\b((?:s[cgp]h|gt|sm)-\w+|galaxy nexus)/i,
-	            /samsung[- ]([-\w]+)/i,
-	            /sec-(sgh\w+)/i
-	            ], [MODEL, [VENDOR, SAMSUNG], [TYPE, MOBILE]], [
-
-	            // Apple
-	            /\((ip(?:hone|od)[\w ]*);/i                                         // iPod/iPhone
-	            ], [MODEL, [VENDOR, APPLE], [TYPE, MOBILE]], [
-	            /\((ipad);[-\w\),; ]+apple/i,                                       // iPad
-	            /applecoremedia\/[\w\.]+ \((ipad)/i,
-	            /\b(ipad)\d\d?,\d\d?[;\]].+ios/i
-	            ], [MODEL, [VENDOR, APPLE], [TYPE, TABLET]], [
-
-	            // Huawei
-	            /\b((?:ag[rs][23]?|bah2?|sht?|btv)-a?[lw]\d{2})\b(?!.+d\/s)/i
-	            ], [MODEL, [VENDOR, HUAWEI], [TYPE, TABLET]], [
-	            /(?:huawei|honor)([-\w ]+)[;\)]/i,
-	            /\b(nexus 6p|\w{2,4}-[atu]?[ln][01259x][012359][an]?)\b(?!.+d\/s)/i
-	            ], [MODEL, [VENDOR, HUAWEI], [TYPE, MOBILE]], [
-
-	            // Xiaomi
-	            /\b(poco[\w ]+)(?: bui|\))/i,                                       // Xiaomi POCO
-	            /\b; (\w+) build\/hm\1/i,                                           // Xiaomi Hongmi 'numeric' models
-	            /\b(hm[-_ ]?note?[_ ]?(?:\d\w)?) bui/i,                             // Xiaomi Hongmi
-	            /\b(redmi[\-_ ]?(?:note|k)?[\w_ ]+)(?: bui|\))/i,                   // Xiaomi Redmi
-	            /\b(mi[-_ ]?(?:a\d|one|one[_ ]plus|note lte|max)?[_ ]?(?:\d?\w?)[_ ]?(?:plus|se|lite)?)(?: bui|\))/i // Xiaomi Mi
-	            ], [[MODEL, /_/g, ' '], [VENDOR, XIAOMI], [TYPE, MOBILE]], [
-	            /\b(mi[-_ ]?(?:pad)(?:[\w_ ]+))(?: bui|\))/i                        // Mi Pad tablets
-	            ],[[MODEL, /_/g, ' '], [VENDOR, XIAOMI], [TYPE, TABLET]], [
-
-	            // OPPO
-	            /; (\w+) bui.+ oppo/i,
-	            /\b(cph[12]\d{3}|p(?:af|c[al]|d\w|e[ar])[mt]\d0|x9007|a101op)\b/i
-	            ], [MODEL, [VENDOR, 'OPPO'], [TYPE, MOBILE]], [
-
-	            // Vivo
-	            /vivo (\w+)(?: bui|\))/i,
-	            /\b(v[12]\d{3}\w?[at])(?: bui|;)/i
-	            ], [MODEL, [VENDOR, 'Vivo'], [TYPE, MOBILE]], [
-
-	            // Realme
-	            /\b(rmx[12]\d{3})(?: bui|;|\))/i
-	            ], [MODEL, [VENDOR, 'Realme'], [TYPE, MOBILE]], [
-
-	            // Motorola
-	            /\b(milestone|droid(?:[2-4x]| (?:bionic|x2|pro|razr))?:?( 4g)?)\b[\w ]+build\//i,
-	            /\bmot(?:orola)?[- ](\w*)/i,
-	            /((?:moto[\w\(\) ]+|xt\d{3,4}|nexus 6)(?= bui|\)))/i
-	            ], [MODEL, [VENDOR, MOTOROLA], [TYPE, MOBILE]], [
-	            /\b(mz60\d|xoom[2 ]{0,2}) build\//i
-	            ], [MODEL, [VENDOR, MOTOROLA], [TYPE, TABLET]], [
-
-	            // LG
-	            /((?=lg)?[vl]k\-?\d{3}) bui| 3\.[-\w; ]{10}lg?-([06cv9]{3,4})/i
-	            ], [MODEL, [VENDOR, LG], [TYPE, TABLET]], [
-	            /(lm(?:-?f100[nv]?|-[\w\.]+)(?= bui|\))|nexus [45])/i,
-	            /\blg[-e;\/ ]+((?!browser|netcast|android tv)\w+)/i,
-	            /\blg-?([\d\w]+) bui/i
-	            ], [MODEL, [VENDOR, LG], [TYPE, MOBILE]], [
-
-	            // Lenovo
-	            /(ideatab[-\w ]+)/i,
-	            /lenovo ?(s[56]000[-\w]+|tab(?:[\w ]+)|yt[-\d\w]{6}|tb[-\d\w]{6})/i
-	            ], [MODEL, [VENDOR, 'Lenovo'], [TYPE, TABLET]], [
-
-	            // Nokia
-	            /(?:maemo|nokia).*(n900|lumia \d+)/i,
-	            /nokia[-_ ]?([-\w\.]*)/i
-	            ], [[MODEL, /_/g, ' '], [VENDOR, 'Nokia'], [TYPE, MOBILE]], [
-
-	            // Google
-	            /(pixel c)\b/i                                                      // Google Pixel C
-	            ], [MODEL, [VENDOR, GOOGLE], [TYPE, TABLET]], [
-	            /droid.+; (pixel[\daxl ]{0,6})(?: bui|\))/i                         // Google Pixel
-	            ], [MODEL, [VENDOR, GOOGLE], [TYPE, MOBILE]], [
-
-	            // Sony
-	            /droid.+ ([c-g]\d{4}|so[-gl]\w+|xq-a\w[4-7][12])(?= bui|\).+chrome\/(?![1-6]{0,1}\d\.))/i
-	            ], [MODEL, [VENDOR, SONY], [TYPE, MOBILE]], [
-	            /sony tablet [ps]/i,
-	            /\b(?:sony)?sgp\w+(?: bui|\))/i
-	            ], [[MODEL, 'Xperia Tablet'], [VENDOR, SONY], [TYPE, TABLET]], [
-
-	            // OnePlus
-	            / (kb2005|in20[12]5|be20[12][59])\b/i,
-	            /(?:one)?(?:plus)? (a\d0\d\d)(?: b|\))/i
-	            ], [MODEL, [VENDOR, 'OnePlus'], [TYPE, MOBILE]], [
-
-	            // Amazon
-	            /(alexa)webm/i,
-	            /(kf[a-z]{2}wi)( bui|\))/i,                                         // Kindle Fire without Silk
-	            /(kf[a-z]+)( bui|\)).+silk\//i                                      // Kindle Fire HD
-	            ], [MODEL, [VENDOR, AMAZON], [TYPE, TABLET]], [
-	            /((?:sd|kf)[0349hijorstuw]+)( bui|\)).+silk\//i                     // Fire Phone
-	            ], [[MODEL, /(.+)/g, 'Fire Phone $1'], [VENDOR, AMAZON], [TYPE, MOBILE]], [
-
-	            // BlackBerry
-	            /(playbook);[-\w\),; ]+(rim)/i                                      // BlackBerry PlayBook
-	            ], [MODEL, VENDOR, [TYPE, TABLET]], [
-	            /\b((?:bb[a-f]|st[hv])100-\d)/i,
-	            /\(bb10; (\w+)/i                                                    // BlackBerry 10
-	            ], [MODEL, [VENDOR, BLACKBERRY], [TYPE, MOBILE]], [
-
-	            // Asus
-	            /(?:\b|asus_)(transfo[prime ]{4,10} \w+|eeepc|slider \w+|nexus 7|padfone|p00[cj])/i
-	            ], [MODEL, [VENDOR, ASUS], [TYPE, TABLET]], [
-	            / (z[bes]6[027][012][km][ls]|zenfone \d\w?)\b/i
-	            ], [MODEL, [VENDOR, ASUS], [TYPE, MOBILE]], [
-
-	            // HTC
-	            /(nexus 9)/i                                                        // HTC Nexus 9
-	            ], [MODEL, [VENDOR, 'HTC'], [TYPE, TABLET]], [
-	            /(htc)[-;_ ]{1,2}([\w ]+(?=\)| bui)|\w+)/i,                         // HTC
-
-	            // ZTE
-	            /(zte)[- ]([\w ]+?)(?: bui|\/|\))/i,
-	            /(alcatel|geeksphone|nexian|panasonic|sony)[-_ ]?([-\w]*)/i         // Alcatel/GeeksPhone/Nexian/Panasonic/Sony
-	            ], [VENDOR, [MODEL, /_/g, ' '], [TYPE, MOBILE]], [
-
-	            // Acer
-	            /droid.+; ([ab][1-7]-?[0178a]\d\d?)/i
-	            ], [MODEL, [VENDOR, 'Acer'], [TYPE, TABLET]], [
-
-	            // Meizu
-	            /droid.+; (m[1-5] note) bui/i,
-	            /\bmz-([-\w]{2,})/i
-	            ], [MODEL, [VENDOR, 'Meizu'], [TYPE, MOBILE]], [
-
-	            // Sharp
-	            /\b(sh-?[altvz]?\d\d[a-ekm]?)/i
-	            ], [MODEL, [VENDOR, 'Sharp'], [TYPE, MOBILE]], [
-
-	            // MIXED
-	            /(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[-_ ]?([-\w]*)/i,
-	                                                                                // BlackBerry/BenQ/Palm/Sony-Ericsson/Acer/Asus/Dell/Meizu/Motorola/Polytron
-	            /(hp) ([\w ]+\w)/i,                                                 // HP iPAQ
-	            /(asus)-?(\w+)/i,                                                   // Asus
-	            /(microsoft); (lumia[\w ]+)/i,                                      // Microsoft Lumia
-	            /(lenovo)[-_ ]?([-\w]+)/i,                                          // Lenovo
-	            /(jolla)/i,                                                         // Jolla
-	            /(oppo) ?([\w ]+) bui/i                                             // OPPO
-	            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
-
-	            /(archos) (gamepad2?)/i,                                            // Archos
-	            /(hp).+(touchpad(?!.+tablet)|tablet)/i,                             // HP TouchPad
-	            /(kindle)\/([\w\.]+)/i,                                             // Kindle
-	            /(nook)[\w ]+build\/(\w+)/i,                                        // Nook
-	            /(dell) (strea[kpr\d ]*[\dko])/i,                                   // Dell Streak
-	            /(le[- ]+pan)[- ]+(\w{1,9}) bui/i,                                  // Le Pan Tablets
-	            /(trinity)[- ]*(t\d{3}) bui/i,                                      // Trinity Tablets
-	            /(gigaset)[- ]+(q\w{1,9}) bui/i,                                    // Gigaset Tablets
-	            /(vodafone) ([\w ]+)(?:\)| bui)/i                                   // Vodafone
-	            ], [VENDOR, MODEL, [TYPE, TABLET]], [
-
-	            /(surface duo)/i                                                    // Surface Duo
-	            ], [MODEL, [VENDOR, MICROSOFT], [TYPE, TABLET]], [
-	            /droid [\d\.]+; (fp\du?)(?: b|\))/i                                 // Fairphone
-	            ], [MODEL, [VENDOR, 'Fairphone'], [TYPE, MOBILE]], [
-	            /(u304aa)/i                                                         // AT&T
-	            ], [MODEL, [VENDOR, 'AT&T'], [TYPE, MOBILE]], [
-	            /\bsie-(\w*)/i                                                      // Siemens
-	            ], [MODEL, [VENDOR, 'Siemens'], [TYPE, MOBILE]], [
-	            /\b(rct\w+) b/i                                                     // RCA Tablets
-	            ], [MODEL, [VENDOR, 'RCA'], [TYPE, TABLET]], [
-	            /\b(venue[\d ]{2,7}) b/i                                            // Dell Venue Tablets
-	            ], [MODEL, [VENDOR, 'Dell'], [TYPE, TABLET]], [
-	            /\b(q(?:mv|ta)\w+) b/i                                              // Verizon Tablet
-	            ], [MODEL, [VENDOR, 'Verizon'], [TYPE, TABLET]], [
-	            /\b(?:barnes[& ]+noble |bn[rt])([\w\+ ]*) b/i                       // Barnes & Noble Tablet
-	            ], [MODEL, [VENDOR, 'Barnes & Noble'], [TYPE, TABLET]], [
-	            /\b(tm\d{3}\w+) b/i
-	            ], [MODEL, [VENDOR, 'NuVision'], [TYPE, TABLET]], [
-	            /\b(k88) b/i                                                        // ZTE K Series Tablet
-	            ], [MODEL, [VENDOR, 'ZTE'], [TYPE, TABLET]], [
-	            /\b(nx\d{3}j) b/i                                                   // ZTE Nubia
-	            ], [MODEL, [VENDOR, 'ZTE'], [TYPE, MOBILE]], [
-	            /\b(gen\d{3}) b.+49h/i                                              // Swiss GEN Mobile
-	            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, MOBILE]], [
-	            /\b(zur\d{3}) b/i                                                   // Swiss ZUR Tablet
-	            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, TABLET]], [
-	            /\b((zeki)?tb.*\b) b/i                                              // Zeki Tablets
-	            ], [MODEL, [VENDOR, 'Zeki'], [TYPE, TABLET]], [
-	            /\b([yr]\d{2}) b/i,
-	            /\b(dragon[- ]+touch |dt)(\w{5}) b/i                                // Dragon Touch Tablet
-	            ], [[VENDOR, 'Dragon Touch'], MODEL, [TYPE, TABLET]], [
-	            /\b(ns-?\w{0,9}) b/i                                                // Insignia Tablets
-	            ], [MODEL, [VENDOR, 'Insignia'], [TYPE, TABLET]], [
-	            /\b((nxa|next)-?\w{0,9}) b/i                                        // NextBook Tablets
-	            ], [MODEL, [VENDOR, 'NextBook'], [TYPE, TABLET]], [
-	            /\b(xtreme\_)?(v(1[045]|2[015]|[3469]0|7[05])) b/i                  // Voice Xtreme Phones
-	            ], [[VENDOR, 'Voice'], MODEL, [TYPE, MOBILE]], [
-	            /\b(lvtel\-)?(v1[12]) b/i                                           // LvTel Phones
-	            ], [[VENDOR, 'LvTel'], MODEL, [TYPE, MOBILE]], [
-	            /\b(ph-1) /i                                                        // Essential PH-1
-	            ], [MODEL, [VENDOR, 'Essential'], [TYPE, MOBILE]], [
-	            /\b(v(100md|700na|7011|917g).*\b) b/i                               // Envizen Tablets
-	            ], [MODEL, [VENDOR, 'Envizen'], [TYPE, TABLET]], [
-	            /\b(trio[-\w\. ]+) b/i                                              // MachSpeed Tablets
-	            ], [MODEL, [VENDOR, 'MachSpeed'], [TYPE, TABLET]], [
-	            /\btu_(1491) b/i                                                    // Rotor Tablets
-	            ], [MODEL, [VENDOR, 'Rotor'], [TYPE, TABLET]], [
-	            /(shield[\w ]+) b/i                                                 // Nvidia Shield Tablets
-	            ], [MODEL, [VENDOR, 'Nvidia'], [TYPE, TABLET]], [
-	            /(sprint) (\w+)/i                                                   // Sprint Phones
-	            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
-	            /(kin\.[onetw]{3})/i                                                // Microsoft Kin
-	            ], [[MODEL, /\./g, ' '], [VENDOR, MICROSOFT], [TYPE, MOBILE]], [
-	            /droid.+; (cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i             // Zebra
-	            ], [MODEL, [VENDOR, ZEBRA], [TYPE, TABLET]], [
-	            /droid.+; (ec30|ps20|tc[2-8]\d[kx])\)/i
-	            ], [MODEL, [VENDOR, ZEBRA], [TYPE, MOBILE]], [
-
-	            ///////////////////
-	            // CONSOLES
-	            ///////////////////
-
-	            /(ouya)/i,                                                          // Ouya
-	            /(nintendo) ([wids3utch]+)/i                                        // Nintendo
-	            ], [VENDOR, MODEL, [TYPE, CONSOLE]], [
-	            /droid.+; (shield) bui/i                                            // Nvidia
-	            ], [MODEL, [VENDOR, 'Nvidia'], [TYPE, CONSOLE]], [
-	            /(playstation [345portablevi]+)/i                                   // Playstation
-	            ], [MODEL, [VENDOR, SONY], [TYPE, CONSOLE]], [
-	            /\b(xbox(?: one)?(?!; xbox))[\); ]/i                                // Microsoft Xbox
-	            ], [MODEL, [VENDOR, MICROSOFT], [TYPE, CONSOLE]], [
-
-	            ///////////////////
-	            // SMARTTVS
-	            ///////////////////
-
-	            /smart-tv.+(samsung)/i                                              // Samsung
-	            ], [VENDOR, [TYPE, SMARTTV]], [
-	            /hbbtv.+maple;(\d+)/i
-	            ], [[MODEL, /^/, 'SmartTV'], [VENDOR, SAMSUNG], [TYPE, SMARTTV]], [
-	            /(nux; netcast.+smarttv|lg (netcast\.tv-201\d|android tv))/i        // LG SmartTV
-	            ], [[VENDOR, LG], [TYPE, SMARTTV]], [
-	            /(apple) ?tv/i                                                      // Apple TV
-	            ], [VENDOR, [MODEL, APPLE+' TV'], [TYPE, SMARTTV]], [
-	            /crkey/i                                                            // Google Chromecast
-	            ], [[MODEL, CHROME+'cast'], [VENDOR, GOOGLE], [TYPE, SMARTTV]], [
-	            /droid.+aft(\w)( bui|\))/i                                          // Fire TV
-	            ], [MODEL, [VENDOR, AMAZON], [TYPE, SMARTTV]], [
-	            /\(dtv[\);].+(aquos)/i                                              // Sharp
-	            ], [MODEL, [VENDOR, 'Sharp'], [TYPE, SMARTTV]], [
-	            /\b(roku)[\dx]*[\)\/]((?:dvp-)?[\d\.]*)/i,                          // Roku
-	            /hbbtv\/\d+\.\d+\.\d+ +\([\w ]*; *(\w[^;]*);([^;]*)/i               // HbbTV devices
-	            ], [[VENDOR, trim], [MODEL, trim], [TYPE, SMARTTV]], [
-	            /\b(android tv|smart[- ]?tv|opera tv|tv; rv:)\b/i                   // SmartTV from Unidentified Vendors
-	            ], [[TYPE, SMARTTV]], [
-
-	            ///////////////////
-	            // WEARABLES
-	            ///////////////////
-
-	            /((pebble))app/i                                                    // Pebble
-	            ], [VENDOR, MODEL, [TYPE, WEARABLE]], [
-	            /droid.+; (glass) \d/i                                              // Google Glass
-	            ], [MODEL, [VENDOR, GOOGLE], [TYPE, WEARABLE]], [
-	            /droid.+; (wt63?0{2,3})\)/i
-	            ], [MODEL, [VENDOR, ZEBRA], [TYPE, WEARABLE]], [
-	            /(quest( 2)?)/i                                                     // Oculus Quest
-	            ], [MODEL, [VENDOR, FACEBOOK], [TYPE, WEARABLE]], [
-
-	            ///////////////////
-	            // EMBEDDED
-	            ///////////////////
-
-	            /(tesla)(?: qtcarbrowser|\/[-\w\.]+)/i                              // Tesla
-	            ], [VENDOR, [TYPE, EMBEDDED]], [
-
-	            ////////////////////
-	            // MIXED (GENERIC)
-	            ///////////////////
-
-	            /droid .+?; ([^;]+?)(?: bui|\) applew).+? mobile safari/i           // Android Phones from Unidentified Vendors
-	            ], [MODEL, [TYPE, MOBILE]], [
-	            /droid .+?; ([^;]+?)(?: bui|\) applew).+?(?! mobile) safari/i       // Android Tablets from Unidentified Vendors
-	            ], [MODEL, [TYPE, TABLET]], [
-	            /\b((tablet|tab)[;\/]|focus\/\d(?!.+mobile))/i                      // Unidentifiable Tablet
-	            ], [[TYPE, TABLET]], [
-	            /(phone|mobile(?:[;\/]| safari)|pda(?=.+windows ce))/i              // Unidentifiable Mobile
-	            ], [[TYPE, MOBILE]], [
-	            /(android[-\w\. ]{0,9});.+buil/i                                    // Generic Android Device
-	            ], [MODEL, [VENDOR, 'Generic']]
-	        ],
-
-	        engine : [[
-
-	            /windows.+ edge\/([\w\.]+)/i                                       // EdgeHTML
-	            ], [VERSION, [NAME, EDGE+'HTML']], [
-
-	            /webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i                         // Blink
-	            ], [VERSION, [NAME, 'Blink']], [
-
-	            /(presto)\/([\w\.]+)/i,                                             // Presto
-	            /(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i, // WebKit/Trident/NetFront/NetSurf/Amaya/Lynx/w3m/Goanna
-	            /ekioh(flow)\/([\w\.]+)/i,                                          // Flow
-	            /(khtml|tasman|links)[\/ ]\(?([\w\.]+)/i,                           // KHTML/Tasman/Links
-	            /(icab)[\/ ]([23]\.[\d\.]+)/i                                       // iCab
-	            ], [NAME, VERSION], [
-
-	            /rv\:([\w\.]{1,9})\b.+(gecko)/i                                     // Gecko
-	            ], [VERSION, NAME]
-	        ],
-
-	        os : [[
-
-	            // Windows
-	            /microsoft (windows) (vista|xp)/i                                   // Windows (iTunes)
-	            ], [NAME, VERSION], [
-	            /(windows) nt 6\.2; (arm)/i,                                        // Windows RT
-	            /(windows (?:phone(?: os)?|mobile))[\/ ]?([\d\.\w ]*)/i,            // Windows Phone
-	            /(windows)[\/ ]?([ntce\d\. ]+\w)(?!.+xbox)/i
-	            ], [NAME, [VERSION, strMapper, windowsVersionMap]], [
-	            /(win(?=3|9|n)|win 9x )([nt\d\.]+)/i
-	            ], [[NAME, 'Windows'], [VERSION, strMapper, windowsVersionMap]], [
-
-	            // iOS/macOS
-	            /ip[honead]{2,4}\b(?:.*os ([\w]+) like mac|; opera)/i,              // iOS
-	            /cfnetwork\/.+darwin/i
-	            ], [[VERSION, /_/g, '.'], [NAME, 'iOS']], [
-	            /(mac os x) ?([\w\. ]*)/i,
-	            /(macintosh|mac_powerpc\b)(?!.+haiku)/i                             // Mac OS
-	            ], [[NAME, 'Mac OS'], [VERSION, /_/g, '.']], [
-
-	            // Mobile OSes
-	            /droid ([\w\.]+)\b.+(android[- ]x86)/i                              // Android-x86
-	            ], [VERSION, NAME], [                                               // Android/WebOS/QNX/Bada/RIM/Maemo/MeeGo/Sailfish OS
-	            /(android|webos|qnx|bada|rim tablet os|maemo|meego|sailfish)[-\/ ]?([\w\.]*)/i,
-	            /(blackberry)\w*\/([\w\.]*)/i,                                      // Blackberry
-	            /(tizen|kaios)[\/ ]([\w\.]+)/i,                                     // Tizen/KaiOS
-	            /\((series40);/i                                                    // Series 40
-	            ], [NAME, VERSION], [
-	            /\(bb(10);/i                                                        // BlackBerry 10
-	            ], [VERSION, [NAME, BLACKBERRY]], [
-	            /(?:symbian ?os|symbos|s60(?=;)|series60)[-\/ ]?([\w\.]*)/i         // Symbian
-	            ], [VERSION, [NAME, 'Symbian']], [
-	            /mozilla\/[\d\.]+ \((?:mobile|tablet|tv|mobile; [\w ]+); rv:.+ gecko\/([\w\.]+)/i // Firefox OS
-	            ], [VERSION, [NAME, FIREFOX+' OS']], [
-	            /web0s;.+rt(tv)/i,
-	            /\b(?:hp)?wos(?:browser)?\/([\w\.]+)/i                              // WebOS
-	            ], [VERSION, [NAME, 'webOS']], [
-
-	            // Google Chromecast
-	            /crkey\/([\d\.]+)/i                                                 // Google Chromecast
-	            ], [VERSION, [NAME, CHROME+'cast']], [
-	            /(cros) [\w]+ ([\w\.]+\w)/i                                         // Chromium OS
-	            ], [[NAME, 'Chromium OS'], VERSION],[
-
-	            // Console
-	            /(nintendo|playstation) ([wids345portablevuch]+)/i,                 // Nintendo/Playstation
-	            /(xbox); +xbox ([^\);]+)/i,                                         // Microsoft Xbox (360, One, X, S, Series X, Series S)
-
-	            // Other
-	            /\b(joli|palm)\b ?(?:os)?\/?([\w\.]*)/i,                            // Joli/Palm
-	            /(mint)[\/\(\) ]?(\w*)/i,                                           // Mint
-	            /(mageia|vectorlinux)[; ]/i,                                        // Mageia/VectorLinux
-	            /([kxln]?ubuntu|debian|suse|opensuse|gentoo|arch(?= linux)|slackware|fedora|mandriva|centos|pclinuxos|red ?hat|zenwalk|linpus|raspbian|plan 9|minix|risc os|contiki|deepin|manjaro|elementary os|sabayon|linspire)(?: gnu\/linux)?(?: enterprise)?(?:[- ]linux)?(?:-gnu)?[-\/ ]?(?!chrom|package)([-\w\.]*)/i,
-	                                                                                // Ubuntu/Debian/SUSE/Gentoo/Arch/Slackware/Fedora/Mandriva/CentOS/PCLinuxOS/RedHat/Zenwalk/Linpus/Raspbian/Plan9/Minix/RISCOS/Contiki/Deepin/Manjaro/elementary/Sabayon/Linspire
-	            /(hurd|linux) ?([\w\.]*)/i,                                         // Hurd/Linux
-	            /(gnu) ?([\w\.]*)/i,                                                // GNU
-	            /\b([-frentopcghs]{0,5}bsd|dragonfly)[\/ ]?(?!amd|[ix346]{1,2}86)([\w\.]*)/i, // FreeBSD/NetBSD/OpenBSD/PC-BSD/GhostBSD/DragonFly
-	            /(haiku) (\w+)/i                                                    // Haiku
-	            ], [NAME, VERSION], [
-	            /(sunos) ?([\w\.\d]*)/i                                             // Solaris
-	            ], [[NAME, 'Solaris'], VERSION], [
-	            /((?:open)?solaris)[-\/ ]?([\w\.]*)/i,                              // Solaris
-	            /(aix) ((\d)(?=\.|\)| )[\w\.])*/i,                                  // AIX
-	            /\b(beos|os\/2|amigaos|morphos|openvms|fuchsia|hp-ux)/i,            // BeOS/OS2/AmigaOS/MorphOS/OpenVMS/Fuchsia/HP-UX
-	            /(unix) ?([\w\.]*)/i                                                // UNIX
-	            ], [NAME, VERSION]
-	        ]
-	    };
-
-	    /////////////////
-	    // Constructor
-	    ////////////////
-
-	    var UAParser = function (ua, extensions) {
-
-	        if (typeof ua === OBJ_TYPE) {
-	            extensions = ua;
-	            ua = undefined$1;
-	        }
-
-	        if (!(this instanceof UAParser)) {
-	            return new UAParser(ua, extensions).getResult();
-	        }
-
-	        var _ua = ua || ((typeof window !== UNDEF_TYPE && window.navigator && window.navigator.userAgent) ? window.navigator.userAgent : EMPTY);
-	        var _rgxmap = extensions ? extend(regexes, extensions) : regexes;
-
-	        this.getBrowser = function () {
-	            var _browser = {};
-	            _browser[NAME] = undefined$1;
-	            _browser[VERSION] = undefined$1;
-	            rgxMapper.call(_browser, _ua, _rgxmap.browser);
-	            _browser.major = majorize(_browser.version);
-	            return _browser;
-	        };
-	        this.getCPU = function () {
-	            var _cpu = {};
-	            _cpu[ARCHITECTURE] = undefined$1;
-	            rgxMapper.call(_cpu, _ua, _rgxmap.cpu);
-	            return _cpu;
-	        };
-	        this.getDevice = function () {
-	            var _device = {};
-	            _device[VENDOR] = undefined$1;
-	            _device[MODEL] = undefined$1;
-	            _device[TYPE] = undefined$1;
-	            rgxMapper.call(_device, _ua, _rgxmap.device);
-	            return _device;
-	        };
-	        this.getEngine = function () {
-	            var _engine = {};
-	            _engine[NAME] = undefined$1;
-	            _engine[VERSION] = undefined$1;
-	            rgxMapper.call(_engine, _ua, _rgxmap.engine);
-	            return _engine;
-	        };
-	        this.getOS = function () {
-	            var _os = {};
-	            _os[NAME] = undefined$1;
-	            _os[VERSION] = undefined$1;
-	            rgxMapper.call(_os, _ua, _rgxmap.os);
-	            return _os;
-	        };
-	        this.getResult = function () {
-	            return {
-	                ua      : this.getUA(),
-	                browser : this.getBrowser(),
-	                engine  : this.getEngine(),
-	                os      : this.getOS(),
-	                device  : this.getDevice(),
-	                cpu     : this.getCPU()
-	            };
-	        };
-	        this.getUA = function () {
-	            return _ua;
-	        };
-	        this.setUA = function (ua) {
-	            _ua = (typeof ua === STR_TYPE && ua.length > UA_MAX_LENGTH) ? trim(ua, UA_MAX_LENGTH) : ua;
-	            return this;
-	        };
-	        this.setUA(_ua);
-	        return this;
-	    };
-
-	    UAParser.VERSION = LIBVERSION;
-	    UAParser.BROWSER =  enumerize([NAME, VERSION, MAJOR]);
-	    UAParser.CPU = enumerize([ARCHITECTURE]);
-	    UAParser.DEVICE = enumerize([MODEL, VENDOR, TYPE, CONSOLE, MOBILE, SMARTTV, TABLET, WEARABLE, EMBEDDED]);
-	    UAParser.ENGINE = UAParser.OS = enumerize([NAME, VERSION]);
-
-	    ///////////
-	    // Export
-	    //////////
-
-	    // check js environment
-	    {
-	        // nodejs env
-	        if (module.exports) {
-	            exports = module.exports = UAParser;
-	        }
-	        exports.UAParser = UAParser;
-	    }
-
-	    // jQuery/Zepto specific (optional)
-	    // Note:
-	    //   In AMD env the global scope should be kept clean, but jQuery is an exception.
-	    //   jQuery always exports to global scope, unless jQuery.noConflict(true) is used,
-	    //   and we should catch that.
-	    var $ = typeof window !== UNDEF_TYPE && (window.jQuery || window.Zepto);
-	    if ($ && !$.ua) {
-	        var parser = new UAParser();
-	        $.ua = parser.getResult();
-	        $.ua.get = function () {
-	            return parser.getUA();
-	        };
-	        $.ua.set = function (ua) {
-	            parser.setUA(ua);
-	            var result = parser.getResult();
-	            for (var prop in result) {
-	                $.ua[prop] = result[prop];
-	            }
-	        };
-	    }
-
-	})(typeof window === 'object' ? window : commonjsGlobal);
-	}(uaParser, uaParser.exports));
+		/////////////////////////////////////////////////////////////////////////////////
+		/* UAParser.js v1.0.2
+		   Copyright © 2012-2021 Faisal Salman <f@faisalman.com>
+		   MIT License *//*
+		   Detect Browser, Engine, OS, CPU, and Device type/model from User-Agent data.
+		   Supports browser & node.js environment. 
+		   Demo   : https://faisalman.github.io/ua-parser-js
+		   Source : https://github.com/faisalman/ua-parser-js */
+		/////////////////////////////////////////////////////////////////////////////////
+
+		(function (window, undefined$1) {
+
+		    //////////////
+		    // Constants
+		    /////////////
+
+
+		    var LIBVERSION  = '1.0.2',
+		        EMPTY       = '',
+		        UNKNOWN     = '?',
+		        FUNC_TYPE   = 'function',
+		        UNDEF_TYPE  = 'undefined',
+		        OBJ_TYPE    = 'object',
+		        STR_TYPE    = 'string',
+		        MAJOR       = 'major',
+		        MODEL       = 'model',
+		        NAME        = 'name',
+		        TYPE        = 'type',
+		        VENDOR      = 'vendor',
+		        VERSION     = 'version',
+		        ARCHITECTURE= 'architecture',
+		        CONSOLE     = 'console',
+		        MOBILE      = 'mobile',
+		        TABLET      = 'tablet',
+		        SMARTTV     = 'smarttv',
+		        WEARABLE    = 'wearable',
+		        EMBEDDED    = 'embedded',
+		        UA_MAX_LENGTH = 255;
+
+		    var AMAZON  = 'Amazon',
+		        APPLE   = 'Apple',
+		        ASUS    = 'ASUS',
+		        BLACKBERRY = 'BlackBerry',
+		        BROWSER = 'Browser',
+		        CHROME  = 'Chrome',
+		        EDGE    = 'Edge',
+		        FIREFOX = 'Firefox',
+		        GOOGLE  = 'Google',
+		        HUAWEI  = 'Huawei',
+		        LG      = 'LG',
+		        MICROSOFT = 'Microsoft',
+		        MOTOROLA  = 'Motorola',
+		        OPERA   = 'Opera',
+		        SAMSUNG = 'Samsung',
+		        SONY    = 'Sony',
+		        XIAOMI  = 'Xiaomi',
+		        ZEBRA   = 'Zebra',
+		        FACEBOOK   = 'Facebook';
+
+		    ///////////
+		    // Helper
+		    //////////
+
+		    var extend = function (regexes, extensions) {
+		            var mergedRegexes = {};
+		            for (var i in regexes) {
+		                if (extensions[i] && extensions[i].length % 2 === 0) {
+		                    mergedRegexes[i] = extensions[i].concat(regexes[i]);
+		                } else {
+		                    mergedRegexes[i] = regexes[i];
+		                }
+		            }
+		            return mergedRegexes;
+		        },
+		        enumerize = function (arr) {
+		            var enums = {};
+		            for (var i=0; i<arr.length; i++) {
+		                enums[arr[i].toUpperCase()] = arr[i];
+		            }
+		            return enums;
+		        },
+		        has = function (str1, str2) {
+		            return typeof str1 === STR_TYPE ? lowerize(str2).indexOf(lowerize(str1)) !== -1 : false;
+		        },
+		        lowerize = function (str) {
+		            return str.toLowerCase();
+		        },
+		        majorize = function (version) {
+		            return typeof(version) === STR_TYPE ? version.replace(/[^\d\.]/g, EMPTY).split('.')[0] : undefined$1;
+		        },
+		        trim = function (str, len) {
+		            if (typeof(str) === STR_TYPE) {
+		                str = str.replace(/^\s\s*/, EMPTY).replace(/\s\s*$/, EMPTY);
+		                return typeof(len) === UNDEF_TYPE ? str : str.substring(0, UA_MAX_LENGTH);
+		            }
+		    };
+
+		    ///////////////
+		    // Map helper
+		    //////////////
+
+		    var rgxMapper = function (ua, arrays) {
+
+		            var i = 0, j, k, p, q, matches, match;
+
+		            // loop through all regexes maps
+		            while (i < arrays.length && !matches) {
+
+		                var regex = arrays[i],       // even sequence (0,2,4,..)
+		                    props = arrays[i + 1];   // odd sequence (1,3,5,..)
+		                j = k = 0;
+
+		                // try matching uastring with regexes
+		                while (j < regex.length && !matches) {
+
+		                    matches = regex[j++].exec(ua);
+
+		                    if (!!matches) {
+		                        for (p = 0; p < props.length; p++) {
+		                            match = matches[++k];
+		                            q = props[p];
+		                            // check if given property is actually array
+		                            if (typeof q === OBJ_TYPE && q.length > 0) {
+		                                if (q.length === 2) {
+		                                    if (typeof q[1] == FUNC_TYPE) {
+		                                        // assign modified match
+		                                        this[q[0]] = q[1].call(this, match);
+		                                    } else {
+		                                        // assign given value, ignore regex match
+		                                        this[q[0]] = q[1];
+		                                    }
+		                                } else if (q.length === 3) {
+		                                    // check whether function or regex
+		                                    if (typeof q[1] === FUNC_TYPE && !(q[1].exec && q[1].test)) {
+		                                        // call function (usually string mapper)
+		                                        this[q[0]] = match ? q[1].call(this, match, q[2]) : undefined$1;
+		                                    } else {
+		                                        // sanitize match using given regex
+		                                        this[q[0]] = match ? match.replace(q[1], q[2]) : undefined$1;
+		                                    }
+		                                } else if (q.length === 4) {
+		                                        this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined$1;
+		                                }
+		                            } else {
+		                                this[q] = match ? match : undefined$1;
+		                            }
+		                        }
+		                    }
+		                }
+		                i += 2;
+		            }
+		        },
+
+		        strMapper = function (str, map) {
+
+		            for (var i in map) {
+		                // check if current value is array
+		                if (typeof map[i] === OBJ_TYPE && map[i].length > 0) {
+		                    for (var j = 0; j < map[i].length; j++) {
+		                        if (has(map[i][j], str)) {
+		                            return (i === UNKNOWN) ? undefined$1 : i;
+		                        }
+		                    }
+		                } else if (has(map[i], str)) {
+		                    return (i === UNKNOWN) ? undefined$1 : i;
+		                }
+		            }
+		            return str;
+		    };
+
+		    ///////////////
+		    // String map
+		    //////////////
+
+		    // Safari < 3.0
+		    var oldSafariMap = {
+		            '1.0'   : '/8',
+		            '1.2'   : '/1',
+		            '1.3'   : '/3',
+		            '2.0'   : '/412',
+		            '2.0.2' : '/416',
+		            '2.0.3' : '/417',
+		            '2.0.4' : '/419',
+		            '?'     : '/'
+		        },
+		        windowsVersionMap = {
+		            'ME'        : '4.90',
+		            'NT 3.11'   : 'NT3.51',
+		            'NT 4.0'    : 'NT4.0',
+		            '2000'      : 'NT 5.0',
+		            'XP'        : ['NT 5.1', 'NT 5.2'],
+		            'Vista'     : 'NT 6.0',
+		            '7'         : 'NT 6.1',
+		            '8'         : 'NT 6.2',
+		            '8.1'       : 'NT 6.3',
+		            '10'        : ['NT 6.4', 'NT 10.0'],
+		            'RT'        : 'ARM'
+		    };
+
+		    //////////////
+		    // Regex map
+		    /////////////
+
+		    var regexes = {
+
+		        browser : [[
+
+		            /\b(?:crmo|crios)\/([\w\.]+)/i                                      // Chrome for Android/iOS
+		            ], [VERSION, [NAME, 'Chrome']], [
+		            /edg(?:e|ios|a)?\/([\w\.]+)/i                                       // Microsoft Edge
+		            ], [VERSION, [NAME, 'Edge']], [
+
+		            // Presto based
+		            /(opera mini)\/([-\w\.]+)/i,                                        // Opera Mini
+		            /(opera [mobiletab]{3,6})\b.+version\/([-\w\.]+)/i,                 // Opera Mobi/Tablet
+		            /(opera)(?:.+version\/|[\/ ]+)([\w\.]+)/i                           // Opera
+		            ], [NAME, VERSION], [
+		            /opios[\/ ]+([\w\.]+)/i                                             // Opera mini on iphone >= 8.0
+		            ], [VERSION, [NAME, OPERA+' Mini']], [
+		            /\bopr\/([\w\.]+)/i                                                 // Opera Webkit
+		            ], [VERSION, [NAME, OPERA]], [
+
+		            // Mixed
+		            /(kindle)\/([\w\.]+)/i,                                             // Kindle
+		            /(lunascape|maxthon|netfront|jasmine|blazer)[\/ ]?([\w\.]*)/i,      // Lunascape/Maxthon/Netfront/Jasmine/Blazer
+		            // Trident based
+		            /(avant |iemobile|slim)(?:browser)?[\/ ]?([\w\.]*)/i,               // Avant/IEMobile/SlimBrowser
+		            /(ba?idubrowser)[\/ ]?([\w\.]+)/i,                                  // Baidu Browser
+		            /(?:ms|\()(ie) ([\w\.]+)/i,                                         // Internet Explorer
+
+		            // Webkit/KHTML based                                               // Flock/RockMelt/Midori/Epiphany/Silk/Skyfire/Bolt/Iron/Iridium/PhantomJS/Bowser/QupZilla/Falkon
+		            /(flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon|rekonq|puffin|brave|whale|qqbrowserlite|qq)\/([-\w\.]+)/i,
+		                                                                                // Rekonq/Puffin/Brave/Whale/QQBrowserLite/QQ, aka ShouQ
+		            /(weibo)__([\d\.]+)/i                                               // Weibo
+		            ], [NAME, VERSION], [
+		            /(?:\buc? ?browser|(?:juc.+)ucweb)[\/ ]?([\w\.]+)/i                 // UCBrowser
+		            ], [VERSION, [NAME, 'UC'+BROWSER]], [
+		            /\bqbcore\/([\w\.]+)/i                                              // WeChat Desktop for Windows Built-in Browser
+		            ], [VERSION, [NAME, 'WeChat(Win) Desktop']], [
+		            /micromessenger\/([\w\.]+)/i                                        // WeChat
+		            ], [VERSION, [NAME, 'WeChat']], [
+		            /konqueror\/([\w\.]+)/i                                             // Konqueror
+		            ], [VERSION, [NAME, 'Konqueror']], [
+		            /trident.+rv[: ]([\w\.]{1,9})\b.+like gecko/i                       // IE11
+		            ], [VERSION, [NAME, 'IE']], [
+		            /yabrowser\/([\w\.]+)/i                                             // Yandex
+		            ], [VERSION, [NAME, 'Yandex']], [
+		            /(avast|avg)\/([\w\.]+)/i                                           // Avast/AVG Secure Browser
+		            ], [[NAME, /(.+)/, '$1 Secure '+BROWSER], VERSION], [
+		            /\bfocus\/([\w\.]+)/i                                               // Firefox Focus
+		            ], [VERSION, [NAME, FIREFOX+' Focus']], [
+		            /\bopt\/([\w\.]+)/i                                                 // Opera Touch
+		            ], [VERSION, [NAME, OPERA+' Touch']], [
+		            /coc_coc\w+\/([\w\.]+)/i                                            // Coc Coc Browser
+		            ], [VERSION, [NAME, 'Coc Coc']], [
+		            /dolfin\/([\w\.]+)/i                                                // Dolphin
+		            ], [VERSION, [NAME, 'Dolphin']], [
+		            /coast\/([\w\.]+)/i                                                 // Opera Coast
+		            ], [VERSION, [NAME, OPERA+' Coast']], [
+		            /miuibrowser\/([\w\.]+)/i                                           // MIUI Browser
+		            ], [VERSION, [NAME, 'MIUI '+BROWSER]], [
+		            /fxios\/([-\w\.]+)/i                                                // Firefox for iOS
+		            ], [VERSION, [NAME, FIREFOX]], [
+		            /\bqihu|(qi?ho?o?|360)browser/i                                     // 360
+		            ], [[NAME, '360 '+BROWSER]], [
+		            /(oculus|samsung|sailfish)browser\/([\w\.]+)/i
+		            ], [[NAME, /(.+)/, '$1 '+BROWSER], VERSION], [                      // Oculus/Samsung/Sailfish Browser
+		            /(comodo_dragon)\/([\w\.]+)/i                                       // Comodo Dragon
+		            ], [[NAME, /_/g, ' '], VERSION], [
+		            /(electron)\/([\w\.]+) safari/i,                                    // Electron-based App
+		            /(tesla)(?: qtcarbrowser|\/(20\d\d\.[-\w\.]+))/i,                   // Tesla
+		            /m?(qqbrowser|baiduboxapp|2345Explorer)[\/ ]?([\w\.]+)/i            // QQBrowser/Baidu App/2345 Browser
+		            ], [NAME, VERSION], [
+		            /(metasr)[\/ ]?([\w\.]+)/i,                                         // SouGouBrowser
+		            /(lbbrowser)/i                                                      // LieBao Browser
+		            ], [NAME], [
+
+		            // WebView
+		            /((?:fban\/fbios|fb_iab\/fb4a)(?!.+fbav)|;fbav\/([\w\.]+);)/i       // Facebook App for iOS & Android
+		            ], [[NAME, FACEBOOK], VERSION], [
+		            /safari (line)\/([\w\.]+)/i,                                        // Line App for iOS
+		            /\b(line)\/([\w\.]+)\/iab/i,                                        // Line App for Android
+		            /(chromium|instagram)[\/ ]([-\w\.]+)/i                              // Chromium/Instagram
+		            ], [NAME, VERSION], [
+		            /\bgsa\/([\w\.]+) .*safari\//i                                      // Google Search Appliance on iOS
+		            ], [VERSION, [NAME, 'GSA']], [
+
+		            /headlesschrome(?:\/([\w\.]+)| )/i                                  // Chrome Headless
+		            ], [VERSION, [NAME, CHROME+' Headless']], [
+
+		            / wv\).+(chrome)\/([\w\.]+)/i                                       // Chrome WebView
+		            ], [[NAME, CHROME+' WebView'], VERSION], [
+
+		            /droid.+ version\/([\w\.]+)\b.+(?:mobile safari|safari)/i           // Android Browser
+		            ], [VERSION, [NAME, 'Android '+BROWSER]], [
+
+		            /(chrome|omniweb|arora|[tizenoka]{5} ?browser)\/v?([\w\.]+)/i       // Chrome/OmniWeb/Arora/Tizen/Nokia
+		            ], [NAME, VERSION], [
+
+		            /version\/([\w\.]+) .*mobile\/\w+ (safari)/i                        // Mobile Safari
+		            ], [VERSION, [NAME, 'Mobile Safari']], [
+		            /version\/([\w\.]+) .*(mobile ?safari|safari)/i                     // Safari & Safari Mobile
+		            ], [VERSION, NAME], [
+		            /webkit.+?(mobile ?safari|safari)(\/[\w\.]+)/i                      // Safari < 3.0
+		            ], [NAME, [VERSION, strMapper, oldSafariMap]], [
+
+		            /(webkit|khtml)\/([\w\.]+)/i
+		            ], [NAME, VERSION], [
+
+		            // Gecko based
+		            /(navigator|netscape\d?)\/([-\w\.]+)/i                              // Netscape
+		            ], [[NAME, 'Netscape'], VERSION], [
+		            /mobile vr; rv:([\w\.]+)\).+firefox/i                               // Firefox Reality
+		            ], [VERSION, [NAME, FIREFOX+' Reality']], [
+		            /ekiohf.+(flow)\/([\w\.]+)/i,                                       // Flow
+		            /(swiftfox)/i,                                                      // Swiftfox
+		            /(icedragon|iceweasel|camino|chimera|fennec|maemo browser|minimo|conkeror|klar)[\/ ]?([\w\.\+]+)/i,
+		                                                                                // IceDragon/Iceweasel/Camino/Chimera/Fennec/Maemo/Minimo/Conkeror/Klar
+		            /(seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([-\w\.]+)$/i,
+		                                                                                // Firefox/SeaMonkey/K-Meleon/IceCat/IceApe/Firebird/Phoenix
+		            /(firefox)\/([\w\.]+)/i,                                            // Other Firefox-based
+		            /(mozilla)\/([\w\.]+) .+rv\:.+gecko\/\d+/i,                         // Mozilla
+
+		            // Other
+		            /(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir|obigo|mosaic|(?:go|ice|up)[\. ]?browser)[-\/ ]?v?([\w\.]+)/i,
+		                                                                                // Polaris/Lynx/Dillo/iCab/Doris/Amaya/w3m/NetSurf/Sleipnir/Obigo/Mosaic/Go/ICE/UP.Browser
+		            /(links) \(([\w\.]+)/i                                              // Links
+		            ], [NAME, VERSION]
+		        ],
+
+		        cpu : [[
+
+		            /(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i                     // AMD64 (x64)
+		            ], [[ARCHITECTURE, 'amd64']], [
+
+		            /(ia32(?=;))/i                                                      // IA32 (quicktime)
+		            ], [[ARCHITECTURE, lowerize]], [
+
+		            /((?:i[346]|x)86)[;\)]/i                                            // IA32 (x86)
+		            ], [[ARCHITECTURE, 'ia32']], [
+
+		            /\b(aarch64|arm(v?8e?l?|_?64))\b/i                                 // ARM64
+		            ], [[ARCHITECTURE, 'arm64']], [
+
+		            /\b(arm(?:v[67])?ht?n?[fl]p?)\b/i                                   // ARMHF
+		            ], [[ARCHITECTURE, 'armhf']], [
+
+		            // PocketPC mistakenly identified as PowerPC
+		            /windows (ce|mobile); ppc;/i
+		            ], [[ARCHITECTURE, 'arm']], [
+
+		            /((?:ppc|powerpc)(?:64)?)(?: mac|;|\))/i                            // PowerPC
+		            ], [[ARCHITECTURE, /ower/, EMPTY, lowerize]], [
+
+		            /(sun4\w)[;\)]/i                                                    // SPARC
+		            ], [[ARCHITECTURE, 'sparc']], [
+
+		            /((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i
+		                                                                                // IA64, 68K, ARM/64, AVR/32, IRIX/64, MIPS/64, SPARC/64, PA-RISC
+		            ], [[ARCHITECTURE, lowerize]]
+		        ],
+
+		        device : [[
+
+		            //////////////////////////
+		            // MOBILES & TABLETS
+		            // Ordered by popularity
+		            /////////////////////////
+
+		            // Samsung
+		            /\b(sch-i[89]0\d|shw-m380s|sm-[pt]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus 10)/i
+		            ], [MODEL, [VENDOR, SAMSUNG], [TYPE, TABLET]], [
+		            /\b((?:s[cgp]h|gt|sm)-\w+|galaxy nexus)/i,
+		            /samsung[- ]([-\w]+)/i,
+		            /sec-(sgh\w+)/i
+		            ], [MODEL, [VENDOR, SAMSUNG], [TYPE, MOBILE]], [
+
+		            // Apple
+		            /\((ip(?:hone|od)[\w ]*);/i                                         // iPod/iPhone
+		            ], [MODEL, [VENDOR, APPLE], [TYPE, MOBILE]], [
+		            /\((ipad);[-\w\),; ]+apple/i,                                       // iPad
+		            /applecoremedia\/[\w\.]+ \((ipad)/i,
+		            /\b(ipad)\d\d?,\d\d?[;\]].+ios/i
+		            ], [MODEL, [VENDOR, APPLE], [TYPE, TABLET]], [
+
+		            // Huawei
+		            /\b((?:ag[rs][23]?|bah2?|sht?|btv)-a?[lw]\d{2})\b(?!.+d\/s)/i
+		            ], [MODEL, [VENDOR, HUAWEI], [TYPE, TABLET]], [
+		            /(?:huawei|honor)([-\w ]+)[;\)]/i,
+		            /\b(nexus 6p|\w{2,4}-[atu]?[ln][01259x][012359][an]?)\b(?!.+d\/s)/i
+		            ], [MODEL, [VENDOR, HUAWEI], [TYPE, MOBILE]], [
+
+		            // Xiaomi
+		            /\b(poco[\w ]+)(?: bui|\))/i,                                       // Xiaomi POCO
+		            /\b; (\w+) build\/hm\1/i,                                           // Xiaomi Hongmi 'numeric' models
+		            /\b(hm[-_ ]?note?[_ ]?(?:\d\w)?) bui/i,                             // Xiaomi Hongmi
+		            /\b(redmi[\-_ ]?(?:note|k)?[\w_ ]+)(?: bui|\))/i,                   // Xiaomi Redmi
+		            /\b(mi[-_ ]?(?:a\d|one|one[_ ]plus|note lte|max)?[_ ]?(?:\d?\w?)[_ ]?(?:plus|se|lite)?)(?: bui|\))/i // Xiaomi Mi
+		            ], [[MODEL, /_/g, ' '], [VENDOR, XIAOMI], [TYPE, MOBILE]], [
+		            /\b(mi[-_ ]?(?:pad)(?:[\w_ ]+))(?: bui|\))/i                        // Mi Pad tablets
+		            ],[[MODEL, /_/g, ' '], [VENDOR, XIAOMI], [TYPE, TABLET]], [
+
+		            // OPPO
+		            /; (\w+) bui.+ oppo/i,
+		            /\b(cph[12]\d{3}|p(?:af|c[al]|d\w|e[ar])[mt]\d0|x9007|a101op)\b/i
+		            ], [MODEL, [VENDOR, 'OPPO'], [TYPE, MOBILE]], [
+
+		            // Vivo
+		            /vivo (\w+)(?: bui|\))/i,
+		            /\b(v[12]\d{3}\w?[at])(?: bui|;)/i
+		            ], [MODEL, [VENDOR, 'Vivo'], [TYPE, MOBILE]], [
+
+		            // Realme
+		            /\b(rmx[12]\d{3})(?: bui|;|\))/i
+		            ], [MODEL, [VENDOR, 'Realme'], [TYPE, MOBILE]], [
+
+		            // Motorola
+		            /\b(milestone|droid(?:[2-4x]| (?:bionic|x2|pro|razr))?:?( 4g)?)\b[\w ]+build\//i,
+		            /\bmot(?:orola)?[- ](\w*)/i,
+		            /((?:moto[\w\(\) ]+|xt\d{3,4}|nexus 6)(?= bui|\)))/i
+		            ], [MODEL, [VENDOR, MOTOROLA], [TYPE, MOBILE]], [
+		            /\b(mz60\d|xoom[2 ]{0,2}) build\//i
+		            ], [MODEL, [VENDOR, MOTOROLA], [TYPE, TABLET]], [
+
+		            // LG
+		            /((?=lg)?[vl]k\-?\d{3}) bui| 3\.[-\w; ]{10}lg?-([06cv9]{3,4})/i
+		            ], [MODEL, [VENDOR, LG], [TYPE, TABLET]], [
+		            /(lm(?:-?f100[nv]?|-[\w\.]+)(?= bui|\))|nexus [45])/i,
+		            /\blg[-e;\/ ]+((?!browser|netcast|android tv)\w+)/i,
+		            /\blg-?([\d\w]+) bui/i
+		            ], [MODEL, [VENDOR, LG], [TYPE, MOBILE]], [
+
+		            // Lenovo
+		            /(ideatab[-\w ]+)/i,
+		            /lenovo ?(s[56]000[-\w]+|tab(?:[\w ]+)|yt[-\d\w]{6}|tb[-\d\w]{6})/i
+		            ], [MODEL, [VENDOR, 'Lenovo'], [TYPE, TABLET]], [
+
+		            // Nokia
+		            /(?:maemo|nokia).*(n900|lumia \d+)/i,
+		            /nokia[-_ ]?([-\w\.]*)/i
+		            ], [[MODEL, /_/g, ' '], [VENDOR, 'Nokia'], [TYPE, MOBILE]], [
+
+		            // Google
+		            /(pixel c)\b/i                                                      // Google Pixel C
+		            ], [MODEL, [VENDOR, GOOGLE], [TYPE, TABLET]], [
+		            /droid.+; (pixel[\daxl ]{0,6})(?: bui|\))/i                         // Google Pixel
+		            ], [MODEL, [VENDOR, GOOGLE], [TYPE, MOBILE]], [
+
+		            // Sony
+		            /droid.+ ([c-g]\d{4}|so[-gl]\w+|xq-a\w[4-7][12])(?= bui|\).+chrome\/(?![1-6]{0,1}\d\.))/i
+		            ], [MODEL, [VENDOR, SONY], [TYPE, MOBILE]], [
+		            /sony tablet [ps]/i,
+		            /\b(?:sony)?sgp\w+(?: bui|\))/i
+		            ], [[MODEL, 'Xperia Tablet'], [VENDOR, SONY], [TYPE, TABLET]], [
+
+		            // OnePlus
+		            / (kb2005|in20[12]5|be20[12][59])\b/i,
+		            /(?:one)?(?:plus)? (a\d0\d\d)(?: b|\))/i
+		            ], [MODEL, [VENDOR, 'OnePlus'], [TYPE, MOBILE]], [
+
+		            // Amazon
+		            /(alexa)webm/i,
+		            /(kf[a-z]{2}wi)( bui|\))/i,                                         // Kindle Fire without Silk
+		            /(kf[a-z]+)( bui|\)).+silk\//i                                      // Kindle Fire HD
+		            ], [MODEL, [VENDOR, AMAZON], [TYPE, TABLET]], [
+		            /((?:sd|kf)[0349hijorstuw]+)( bui|\)).+silk\//i                     // Fire Phone
+		            ], [[MODEL, /(.+)/g, 'Fire Phone $1'], [VENDOR, AMAZON], [TYPE, MOBILE]], [
+
+		            // BlackBerry
+		            /(playbook);[-\w\),; ]+(rim)/i                                      // BlackBerry PlayBook
+		            ], [MODEL, VENDOR, [TYPE, TABLET]], [
+		            /\b((?:bb[a-f]|st[hv])100-\d)/i,
+		            /\(bb10; (\w+)/i                                                    // BlackBerry 10
+		            ], [MODEL, [VENDOR, BLACKBERRY], [TYPE, MOBILE]], [
+
+		            // Asus
+		            /(?:\b|asus_)(transfo[prime ]{4,10} \w+|eeepc|slider \w+|nexus 7|padfone|p00[cj])/i
+		            ], [MODEL, [VENDOR, ASUS], [TYPE, TABLET]], [
+		            / (z[bes]6[027][012][km][ls]|zenfone \d\w?)\b/i
+		            ], [MODEL, [VENDOR, ASUS], [TYPE, MOBILE]], [
+
+		            // HTC
+		            /(nexus 9)/i                                                        // HTC Nexus 9
+		            ], [MODEL, [VENDOR, 'HTC'], [TYPE, TABLET]], [
+		            /(htc)[-;_ ]{1,2}([\w ]+(?=\)| bui)|\w+)/i,                         // HTC
+
+		            // ZTE
+		            /(zte)[- ]([\w ]+?)(?: bui|\/|\))/i,
+		            /(alcatel|geeksphone|nexian|panasonic|sony)[-_ ]?([-\w]*)/i         // Alcatel/GeeksPhone/Nexian/Panasonic/Sony
+		            ], [VENDOR, [MODEL, /_/g, ' '], [TYPE, MOBILE]], [
+
+		            // Acer
+		            /droid.+; ([ab][1-7]-?[0178a]\d\d?)/i
+		            ], [MODEL, [VENDOR, 'Acer'], [TYPE, TABLET]], [
+
+		            // Meizu
+		            /droid.+; (m[1-5] note) bui/i,
+		            /\bmz-([-\w]{2,})/i
+		            ], [MODEL, [VENDOR, 'Meizu'], [TYPE, MOBILE]], [
+
+		            // Sharp
+		            /\b(sh-?[altvz]?\d\d[a-ekm]?)/i
+		            ], [MODEL, [VENDOR, 'Sharp'], [TYPE, MOBILE]], [
+
+		            // MIXED
+		            /(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[-_ ]?([-\w]*)/i,
+		                                                                                // BlackBerry/BenQ/Palm/Sony-Ericsson/Acer/Asus/Dell/Meizu/Motorola/Polytron
+		            /(hp) ([\w ]+\w)/i,                                                 // HP iPAQ
+		            /(asus)-?(\w+)/i,                                                   // Asus
+		            /(microsoft); (lumia[\w ]+)/i,                                      // Microsoft Lumia
+		            /(lenovo)[-_ ]?([-\w]+)/i,                                          // Lenovo
+		            /(jolla)/i,                                                         // Jolla
+		            /(oppo) ?([\w ]+) bui/i                                             // OPPO
+		            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
+
+		            /(archos) (gamepad2?)/i,                                            // Archos
+		            /(hp).+(touchpad(?!.+tablet)|tablet)/i,                             // HP TouchPad
+		            /(kindle)\/([\w\.]+)/i,                                             // Kindle
+		            /(nook)[\w ]+build\/(\w+)/i,                                        // Nook
+		            /(dell) (strea[kpr\d ]*[\dko])/i,                                   // Dell Streak
+		            /(le[- ]+pan)[- ]+(\w{1,9}) bui/i,                                  // Le Pan Tablets
+		            /(trinity)[- ]*(t\d{3}) bui/i,                                      // Trinity Tablets
+		            /(gigaset)[- ]+(q\w{1,9}) bui/i,                                    // Gigaset Tablets
+		            /(vodafone) ([\w ]+)(?:\)| bui)/i                                   // Vodafone
+		            ], [VENDOR, MODEL, [TYPE, TABLET]], [
+
+		            /(surface duo)/i                                                    // Surface Duo
+		            ], [MODEL, [VENDOR, MICROSOFT], [TYPE, TABLET]], [
+		            /droid [\d\.]+; (fp\du?)(?: b|\))/i                                 // Fairphone
+		            ], [MODEL, [VENDOR, 'Fairphone'], [TYPE, MOBILE]], [
+		            /(u304aa)/i                                                         // AT&T
+		            ], [MODEL, [VENDOR, 'AT&T'], [TYPE, MOBILE]], [
+		            /\bsie-(\w*)/i                                                      // Siemens
+		            ], [MODEL, [VENDOR, 'Siemens'], [TYPE, MOBILE]], [
+		            /\b(rct\w+) b/i                                                     // RCA Tablets
+		            ], [MODEL, [VENDOR, 'RCA'], [TYPE, TABLET]], [
+		            /\b(venue[\d ]{2,7}) b/i                                            // Dell Venue Tablets
+		            ], [MODEL, [VENDOR, 'Dell'], [TYPE, TABLET]], [
+		            /\b(q(?:mv|ta)\w+) b/i                                              // Verizon Tablet
+		            ], [MODEL, [VENDOR, 'Verizon'], [TYPE, TABLET]], [
+		            /\b(?:barnes[& ]+noble |bn[rt])([\w\+ ]*) b/i                       // Barnes & Noble Tablet
+		            ], [MODEL, [VENDOR, 'Barnes & Noble'], [TYPE, TABLET]], [
+		            /\b(tm\d{3}\w+) b/i
+		            ], [MODEL, [VENDOR, 'NuVision'], [TYPE, TABLET]], [
+		            /\b(k88) b/i                                                        // ZTE K Series Tablet
+		            ], [MODEL, [VENDOR, 'ZTE'], [TYPE, TABLET]], [
+		            /\b(nx\d{3}j) b/i                                                   // ZTE Nubia
+		            ], [MODEL, [VENDOR, 'ZTE'], [TYPE, MOBILE]], [
+		            /\b(gen\d{3}) b.+49h/i                                              // Swiss GEN Mobile
+		            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, MOBILE]], [
+		            /\b(zur\d{3}) b/i                                                   // Swiss ZUR Tablet
+		            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, TABLET]], [
+		            /\b((zeki)?tb.*\b) b/i                                              // Zeki Tablets
+		            ], [MODEL, [VENDOR, 'Zeki'], [TYPE, TABLET]], [
+		            /\b([yr]\d{2}) b/i,
+		            /\b(dragon[- ]+touch |dt)(\w{5}) b/i                                // Dragon Touch Tablet
+		            ], [[VENDOR, 'Dragon Touch'], MODEL, [TYPE, TABLET]], [
+		            /\b(ns-?\w{0,9}) b/i                                                // Insignia Tablets
+		            ], [MODEL, [VENDOR, 'Insignia'], [TYPE, TABLET]], [
+		            /\b((nxa|next)-?\w{0,9}) b/i                                        // NextBook Tablets
+		            ], [MODEL, [VENDOR, 'NextBook'], [TYPE, TABLET]], [
+		            /\b(xtreme\_)?(v(1[045]|2[015]|[3469]0|7[05])) b/i                  // Voice Xtreme Phones
+		            ], [[VENDOR, 'Voice'], MODEL, [TYPE, MOBILE]], [
+		            /\b(lvtel\-)?(v1[12]) b/i                                           // LvTel Phones
+		            ], [[VENDOR, 'LvTel'], MODEL, [TYPE, MOBILE]], [
+		            /\b(ph-1) /i                                                        // Essential PH-1
+		            ], [MODEL, [VENDOR, 'Essential'], [TYPE, MOBILE]], [
+		            /\b(v(100md|700na|7011|917g).*\b) b/i                               // Envizen Tablets
+		            ], [MODEL, [VENDOR, 'Envizen'], [TYPE, TABLET]], [
+		            /\b(trio[-\w\. ]+) b/i                                              // MachSpeed Tablets
+		            ], [MODEL, [VENDOR, 'MachSpeed'], [TYPE, TABLET]], [
+		            /\btu_(1491) b/i                                                    // Rotor Tablets
+		            ], [MODEL, [VENDOR, 'Rotor'], [TYPE, TABLET]], [
+		            /(shield[\w ]+) b/i                                                 // Nvidia Shield Tablets
+		            ], [MODEL, [VENDOR, 'Nvidia'], [TYPE, TABLET]], [
+		            /(sprint) (\w+)/i                                                   // Sprint Phones
+		            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
+		            /(kin\.[onetw]{3})/i                                                // Microsoft Kin
+		            ], [[MODEL, /\./g, ' '], [VENDOR, MICROSOFT], [TYPE, MOBILE]], [
+		            /droid.+; (cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i             // Zebra
+		            ], [MODEL, [VENDOR, ZEBRA], [TYPE, TABLET]], [
+		            /droid.+; (ec30|ps20|tc[2-8]\d[kx])\)/i
+		            ], [MODEL, [VENDOR, ZEBRA], [TYPE, MOBILE]], [
+
+		            ///////////////////
+		            // CONSOLES
+		            ///////////////////
+
+		            /(ouya)/i,                                                          // Ouya
+		            /(nintendo) ([wids3utch]+)/i                                        // Nintendo
+		            ], [VENDOR, MODEL, [TYPE, CONSOLE]], [
+		            /droid.+; (shield) bui/i                                            // Nvidia
+		            ], [MODEL, [VENDOR, 'Nvidia'], [TYPE, CONSOLE]], [
+		            /(playstation [345portablevi]+)/i                                   // Playstation
+		            ], [MODEL, [VENDOR, SONY], [TYPE, CONSOLE]], [
+		            /\b(xbox(?: one)?(?!; xbox))[\); ]/i                                // Microsoft Xbox
+		            ], [MODEL, [VENDOR, MICROSOFT], [TYPE, CONSOLE]], [
+
+		            ///////////////////
+		            // SMARTTVS
+		            ///////////////////
+
+		            /smart-tv.+(samsung)/i                                              // Samsung
+		            ], [VENDOR, [TYPE, SMARTTV]], [
+		            /hbbtv.+maple;(\d+)/i
+		            ], [[MODEL, /^/, 'SmartTV'], [VENDOR, SAMSUNG], [TYPE, SMARTTV]], [
+		            /(nux; netcast.+smarttv|lg (netcast\.tv-201\d|android tv))/i        // LG SmartTV
+		            ], [[VENDOR, LG], [TYPE, SMARTTV]], [
+		            /(apple) ?tv/i                                                      // Apple TV
+		            ], [VENDOR, [MODEL, APPLE+' TV'], [TYPE, SMARTTV]], [
+		            /crkey/i                                                            // Google Chromecast
+		            ], [[MODEL, CHROME+'cast'], [VENDOR, GOOGLE], [TYPE, SMARTTV]], [
+		            /droid.+aft(\w)( bui|\))/i                                          // Fire TV
+		            ], [MODEL, [VENDOR, AMAZON], [TYPE, SMARTTV]], [
+		            /\(dtv[\);].+(aquos)/i                                              // Sharp
+		            ], [MODEL, [VENDOR, 'Sharp'], [TYPE, SMARTTV]], [
+		            /\b(roku)[\dx]*[\)\/]((?:dvp-)?[\d\.]*)/i,                          // Roku
+		            /hbbtv\/\d+\.\d+\.\d+ +\([\w ]*; *(\w[^;]*);([^;]*)/i               // HbbTV devices
+		            ], [[VENDOR, trim], [MODEL, trim], [TYPE, SMARTTV]], [
+		            /\b(android tv|smart[- ]?tv|opera tv|tv; rv:)\b/i                   // SmartTV from Unidentified Vendors
+		            ], [[TYPE, SMARTTV]], [
+
+		            ///////////////////
+		            // WEARABLES
+		            ///////////////////
+
+		            /((pebble))app/i                                                    // Pebble
+		            ], [VENDOR, MODEL, [TYPE, WEARABLE]], [
+		            /droid.+; (glass) \d/i                                              // Google Glass
+		            ], [MODEL, [VENDOR, GOOGLE], [TYPE, WEARABLE]], [
+		            /droid.+; (wt63?0{2,3})\)/i
+		            ], [MODEL, [VENDOR, ZEBRA], [TYPE, WEARABLE]], [
+		            /(quest( 2)?)/i                                                     // Oculus Quest
+		            ], [MODEL, [VENDOR, FACEBOOK], [TYPE, WEARABLE]], [
+
+		            ///////////////////
+		            // EMBEDDED
+		            ///////////////////
+
+		            /(tesla)(?: qtcarbrowser|\/[-\w\.]+)/i                              // Tesla
+		            ], [VENDOR, [TYPE, EMBEDDED]], [
+
+		            ////////////////////
+		            // MIXED (GENERIC)
+		            ///////////////////
+
+		            /droid .+?; ([^;]+?)(?: bui|\) applew).+? mobile safari/i           // Android Phones from Unidentified Vendors
+		            ], [MODEL, [TYPE, MOBILE]], [
+		            /droid .+?; ([^;]+?)(?: bui|\) applew).+?(?! mobile) safari/i       // Android Tablets from Unidentified Vendors
+		            ], [MODEL, [TYPE, TABLET]], [
+		            /\b((tablet|tab)[;\/]|focus\/\d(?!.+mobile))/i                      // Unidentifiable Tablet
+		            ], [[TYPE, TABLET]], [
+		            /(phone|mobile(?:[;\/]| safari)|pda(?=.+windows ce))/i              // Unidentifiable Mobile
+		            ], [[TYPE, MOBILE]], [
+		            /(android[-\w\. ]{0,9});.+buil/i                                    // Generic Android Device
+		            ], [MODEL, [VENDOR, 'Generic']]
+		        ],
+
+		        engine : [[
+
+		            /windows.+ edge\/([\w\.]+)/i                                       // EdgeHTML
+		            ], [VERSION, [NAME, EDGE+'HTML']], [
+
+		            /webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i                         // Blink
+		            ], [VERSION, [NAME, 'Blink']], [
+
+		            /(presto)\/([\w\.]+)/i,                                             // Presto
+		            /(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i, // WebKit/Trident/NetFront/NetSurf/Amaya/Lynx/w3m/Goanna
+		            /ekioh(flow)\/([\w\.]+)/i,                                          // Flow
+		            /(khtml|tasman|links)[\/ ]\(?([\w\.]+)/i,                           // KHTML/Tasman/Links
+		            /(icab)[\/ ]([23]\.[\d\.]+)/i                                       // iCab
+		            ], [NAME, VERSION], [
+
+		            /rv\:([\w\.]{1,9})\b.+(gecko)/i                                     // Gecko
+		            ], [VERSION, NAME]
+		        ],
+
+		        os : [[
+
+		            // Windows
+		            /microsoft (windows) (vista|xp)/i                                   // Windows (iTunes)
+		            ], [NAME, VERSION], [
+		            /(windows) nt 6\.2; (arm)/i,                                        // Windows RT
+		            /(windows (?:phone(?: os)?|mobile))[\/ ]?([\d\.\w ]*)/i,            // Windows Phone
+		            /(windows)[\/ ]?([ntce\d\. ]+\w)(?!.+xbox)/i
+		            ], [NAME, [VERSION, strMapper, windowsVersionMap]], [
+		            /(win(?=3|9|n)|win 9x )([nt\d\.]+)/i
+		            ], [[NAME, 'Windows'], [VERSION, strMapper, windowsVersionMap]], [
+
+		            // iOS/macOS
+		            /ip[honead]{2,4}\b(?:.*os ([\w]+) like mac|; opera)/i,              // iOS
+		            /cfnetwork\/.+darwin/i
+		            ], [[VERSION, /_/g, '.'], [NAME, 'iOS']], [
+		            /(mac os x) ?([\w\. ]*)/i,
+		            /(macintosh|mac_powerpc\b)(?!.+haiku)/i                             // Mac OS
+		            ], [[NAME, 'Mac OS'], [VERSION, /_/g, '.']], [
+
+		            // Mobile OSes
+		            /droid ([\w\.]+)\b.+(android[- ]x86)/i                              // Android-x86
+		            ], [VERSION, NAME], [                                               // Android/WebOS/QNX/Bada/RIM/Maemo/MeeGo/Sailfish OS
+		            /(android|webos|qnx|bada|rim tablet os|maemo|meego|sailfish)[-\/ ]?([\w\.]*)/i,
+		            /(blackberry)\w*\/([\w\.]*)/i,                                      // Blackberry
+		            /(tizen|kaios)[\/ ]([\w\.]+)/i,                                     // Tizen/KaiOS
+		            /\((series40);/i                                                    // Series 40
+		            ], [NAME, VERSION], [
+		            /\(bb(10);/i                                                        // BlackBerry 10
+		            ], [VERSION, [NAME, BLACKBERRY]], [
+		            /(?:symbian ?os|symbos|s60(?=;)|series60)[-\/ ]?([\w\.]*)/i         // Symbian
+		            ], [VERSION, [NAME, 'Symbian']], [
+		            /mozilla\/[\d\.]+ \((?:mobile|tablet|tv|mobile; [\w ]+); rv:.+ gecko\/([\w\.]+)/i // Firefox OS
+		            ], [VERSION, [NAME, FIREFOX+' OS']], [
+		            /web0s;.+rt(tv)/i,
+		            /\b(?:hp)?wos(?:browser)?\/([\w\.]+)/i                              // WebOS
+		            ], [VERSION, [NAME, 'webOS']], [
+
+		            // Google Chromecast
+		            /crkey\/([\d\.]+)/i                                                 // Google Chromecast
+		            ], [VERSION, [NAME, CHROME+'cast']], [
+		            /(cros) [\w]+ ([\w\.]+\w)/i                                         // Chromium OS
+		            ], [[NAME, 'Chromium OS'], VERSION],[
+
+		            // Console
+		            /(nintendo|playstation) ([wids345portablevuch]+)/i,                 // Nintendo/Playstation
+		            /(xbox); +xbox ([^\);]+)/i,                                         // Microsoft Xbox (360, One, X, S, Series X, Series S)
+
+		            // Other
+		            /\b(joli|palm)\b ?(?:os)?\/?([\w\.]*)/i,                            // Joli/Palm
+		            /(mint)[\/\(\) ]?(\w*)/i,                                           // Mint
+		            /(mageia|vectorlinux)[; ]/i,                                        // Mageia/VectorLinux
+		            /([kxln]?ubuntu|debian|suse|opensuse|gentoo|arch(?= linux)|slackware|fedora|mandriva|centos|pclinuxos|red ?hat|zenwalk|linpus|raspbian|plan 9|minix|risc os|contiki|deepin|manjaro|elementary os|sabayon|linspire)(?: gnu\/linux)?(?: enterprise)?(?:[- ]linux)?(?:-gnu)?[-\/ ]?(?!chrom|package)([-\w\.]*)/i,
+		                                                                                // Ubuntu/Debian/SUSE/Gentoo/Arch/Slackware/Fedora/Mandriva/CentOS/PCLinuxOS/RedHat/Zenwalk/Linpus/Raspbian/Plan9/Minix/RISCOS/Contiki/Deepin/Manjaro/elementary/Sabayon/Linspire
+		            /(hurd|linux) ?([\w\.]*)/i,                                         // Hurd/Linux
+		            /(gnu) ?([\w\.]*)/i,                                                // GNU
+		            /\b([-frentopcghs]{0,5}bsd|dragonfly)[\/ ]?(?!amd|[ix346]{1,2}86)([\w\.]*)/i, // FreeBSD/NetBSD/OpenBSD/PC-BSD/GhostBSD/DragonFly
+		            /(haiku) (\w+)/i                                                    // Haiku
+		            ], [NAME, VERSION], [
+		            /(sunos) ?([\w\.\d]*)/i                                             // Solaris
+		            ], [[NAME, 'Solaris'], VERSION], [
+		            /((?:open)?solaris)[-\/ ]?([\w\.]*)/i,                              // Solaris
+		            /(aix) ((\d)(?=\.|\)| )[\w\.])*/i,                                  // AIX
+		            /\b(beos|os\/2|amigaos|morphos|openvms|fuchsia|hp-ux)/i,            // BeOS/OS2/AmigaOS/MorphOS/OpenVMS/Fuchsia/HP-UX
+		            /(unix) ?([\w\.]*)/i                                                // UNIX
+		            ], [NAME, VERSION]
+		        ]
+		    };
+
+		    /////////////////
+		    // Constructor
+		    ////////////////
+
+		    var UAParser = function (ua, extensions) {
+
+		        if (typeof ua === OBJ_TYPE) {
+		            extensions = ua;
+		            ua = undefined$1;
+		        }
+
+		        if (!(this instanceof UAParser)) {
+		            return new UAParser(ua, extensions).getResult();
+		        }
+
+		        var _ua = ua || ((typeof window !== UNDEF_TYPE && window.navigator && window.navigator.userAgent) ? window.navigator.userAgent : EMPTY);
+		        var _rgxmap = extensions ? extend(regexes, extensions) : regexes;
+
+		        this.getBrowser = function () {
+		            var _browser = {};
+		            _browser[NAME] = undefined$1;
+		            _browser[VERSION] = undefined$1;
+		            rgxMapper.call(_browser, _ua, _rgxmap.browser);
+		            _browser.major = majorize(_browser.version);
+		            return _browser;
+		        };
+		        this.getCPU = function () {
+		            var _cpu = {};
+		            _cpu[ARCHITECTURE] = undefined$1;
+		            rgxMapper.call(_cpu, _ua, _rgxmap.cpu);
+		            return _cpu;
+		        };
+		        this.getDevice = function () {
+		            var _device = {};
+		            _device[VENDOR] = undefined$1;
+		            _device[MODEL] = undefined$1;
+		            _device[TYPE] = undefined$1;
+		            rgxMapper.call(_device, _ua, _rgxmap.device);
+		            return _device;
+		        };
+		        this.getEngine = function () {
+		            var _engine = {};
+		            _engine[NAME] = undefined$1;
+		            _engine[VERSION] = undefined$1;
+		            rgxMapper.call(_engine, _ua, _rgxmap.engine);
+		            return _engine;
+		        };
+		        this.getOS = function () {
+		            var _os = {};
+		            _os[NAME] = undefined$1;
+		            _os[VERSION] = undefined$1;
+		            rgxMapper.call(_os, _ua, _rgxmap.os);
+		            return _os;
+		        };
+		        this.getResult = function () {
+		            return {
+		                ua      : this.getUA(),
+		                browser : this.getBrowser(),
+		                engine  : this.getEngine(),
+		                os      : this.getOS(),
+		                device  : this.getDevice(),
+		                cpu     : this.getCPU()
+		            };
+		        };
+		        this.getUA = function () {
+		            return _ua;
+		        };
+		        this.setUA = function (ua) {
+		            _ua = (typeof ua === STR_TYPE && ua.length > UA_MAX_LENGTH) ? trim(ua, UA_MAX_LENGTH) : ua;
+		            return this;
+		        };
+		        this.setUA(_ua);
+		        return this;
+		    };
+
+		    UAParser.VERSION = LIBVERSION;
+		    UAParser.BROWSER =  enumerize([NAME, VERSION, MAJOR]);
+		    UAParser.CPU = enumerize([ARCHITECTURE]);
+		    UAParser.DEVICE = enumerize([MODEL, VENDOR, TYPE, CONSOLE, MOBILE, SMARTTV, TABLET, WEARABLE, EMBEDDED]);
+		    UAParser.ENGINE = UAParser.OS = enumerize([NAME, VERSION]);
+
+		    ///////////
+		    // Export
+		    //////////
+
+		    // check js environment
+		    {
+		        // nodejs env
+		        if (module.exports) {
+		            exports = module.exports = UAParser;
+		        }
+		        exports.UAParser = UAParser;
+		    }
+
+		    // jQuery/Zepto specific (optional)
+		    // Note:
+		    //   In AMD env the global scope should be kept clean, but jQuery is an exception.
+		    //   jQuery always exports to global scope, unless jQuery.noConflict(true) is used,
+		    //   and we should catch that.
+		    var $ = typeof window !== UNDEF_TYPE && (window.jQuery || window.Zepto);
+		    if ($ && !$.ua) {
+		        var parser = new UAParser();
+		        $.ua = parser.getResult();
+		        $.ua.get = function () {
+		            return parser.getUA();
+		        };
+		        $.ua.set = function (ua) {
+		            parser.setUA(ua);
+		            var result = parser.getResult();
+		            for (var prop in result) {
+		                $.ua[prop] = result[prop];
+		            }
+		        };
+		    }
+
+		})(typeof window === 'object' ? window : commonjsGlobal);
+	} (uaParser, uaParser.exports));
 
 	var UAParser = uaParser.exports;
 
@@ -8858,6 +9472,95 @@
 		getSimplifiedJSONX: getSimplifiedJSONX,
 		fetchJSON: fetchJSON
 	});
+
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
+	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+	var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	function shouldUseNative() {
+		try {
+			if (!Object.assign) {
+				return false;
+			}
+
+			// Detect buggy property enumeration order in older V8 versions.
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+			test1[5] = 'de';
+			if (Object.getOwnPropertyNames(test1)[0] === '5') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test2 = {};
+			for (var i = 0; i < 10; i++) {
+				test2['_' + String.fromCharCode(i)] = i;
+			}
+			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+				return test2[n];
+			});
+			if (order2.join('') !== '0123456789') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test3 = {};
+			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+				test3[letter] = letter;
+			});
+			if (Object.keys(Object.assign({}, test3)).join('') !==
+					'abcdefghijklmnopqrst') {
+				return false;
+			}
+
+			return true;
+		} catch (err) {
+			// We don't expect any of the above to throw, but better to be safe.
+			return false;
+		}
+	}
+
+	var objectAssign = shouldUseNative() ? Object.assign : function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty$1.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
 
 	/**
 	 * Copyright (c) 2013-present, Facebook, Inc.
@@ -11127,1006 +11830,1006 @@
 	 */
 
 	(function (module) {
-	(function (global, factory) {
-	    if (module.exports) {
-	        module.exports = factory();
-	    } else {
-	        (typeof global!=="undefined" ? global : window).numeral = factory();
-	    }
-	}(commonjsGlobal, function () {
-	    /************************************
-	        Variables
-	    ************************************/
-
-	    var numeral,
-	        _,
-	        VERSION = '2.0.6',
-	        formats = {},
-	        locales = {},
-	        defaults = {
-	            currentLocale: 'en',
-	            zeroFormat: null,
-	            nullFormat: null,
-	            defaultFormat: '0,0',
-	            scalePercentBy100: true
-	        },
-	        options = {
-	            currentLocale: defaults.currentLocale,
-	            zeroFormat: defaults.zeroFormat,
-	            nullFormat: defaults.nullFormat,
-	            defaultFormat: defaults.defaultFormat,
-	            scalePercentBy100: defaults.scalePercentBy100
-	        };
-
-
-	    /************************************
-	        Constructors
-	    ************************************/
-
-	    // Numeral prototype object
-	    function Numeral(input, number) {
-	        this._input = input;
-
-	        this._value = number;
-	    }
-
-	    numeral = function(input) {
-	        var value,
-	            kind,
-	            unformatFunction,
-	            regexp;
-
-	        if (numeral.isNumeral(input)) {
-	            value = input.value();
-	        } else if (input === 0 || typeof input === 'undefined') {
-	            value = 0;
-	        } else if (input === null || _.isNaN(input)) {
-	            value = null;
-	        } else if (typeof input === 'string') {
-	            if (options.zeroFormat && input === options.zeroFormat) {
-	                value = 0;
-	            } else if (options.nullFormat && input === options.nullFormat || !input.replace(/[^0-9]+/g, '').length) {
-	                value = null;
-	            } else {
-	                for (kind in formats) {
-	                    regexp = typeof formats[kind].regexps.unformat === 'function' ? formats[kind].regexps.unformat() : formats[kind].regexps.unformat;
-
-	                    if (regexp && input.match(regexp)) {
-	                        unformatFunction = formats[kind].unformat;
-
-	                        break;
-	                    }
-	                }
-
-	                unformatFunction = unformatFunction || numeral._.stringToNumber;
-
-	                value = unformatFunction(input);
-	            }
-	        } else {
-	            value = Number(input)|| null;
-	        }
-
-	        return new Numeral(input, value);
-	    };
-
-	    // version number
-	    numeral.version = VERSION;
-
-	    // compare numeral object
-	    numeral.isNumeral = function(obj) {
-	        return obj instanceof Numeral;
-	    };
-
-	    // helper functions
-	    numeral._ = _ = {
-	        // formats numbers separators, decimals places, signs, abbreviations
-	        numberToFormat: function(value, format, roundingFunction) {
-	            var locale = locales[numeral.options.currentLocale],
-	                negP = false,
-	                optDec = false,
-	                leadingCount = 0,
-	                abbr = '',
-	                trillion = 1000000000000,
-	                billion = 1000000000,
-	                million = 1000000,
-	                thousand = 1000,
-	                decimal = '',
-	                neg = false,
-	                abbrForce, // force abbreviation
-	                abs,
-	                int,
-	                precision,
-	                signed,
-	                thousands,
-	                output;
-
-	            // make sure we never format a null value
-	            value = value || 0;
-
-	            abs = Math.abs(value);
-
-	            // see if we should use parentheses for negative number or if we should prefix with a sign
-	            // if both are present we default to parentheses
-	            if (numeral._.includes(format, '(')) {
-	                negP = true;
-	                format = format.replace(/[\(|\)]/g, '');
-	            } else if (numeral._.includes(format, '+') || numeral._.includes(format, '-')) {
-	                signed = numeral._.includes(format, '+') ? format.indexOf('+') : value < 0 ? format.indexOf('-') : -1;
-	                format = format.replace(/[\+|\-]/g, '');
-	            }
-
-	            // see if abbreviation is wanted
-	            if (numeral._.includes(format, 'a')) {
-	                abbrForce = format.match(/a(k|m|b|t)?/);
-
-	                abbrForce = abbrForce ? abbrForce[1] : false;
-
-	                // check for space before abbreviation
-	                if (numeral._.includes(format, ' a')) {
-	                    abbr = ' ';
-	                }
-
-	                format = format.replace(new RegExp(abbr + 'a[kmbt]?'), '');
-
-	                if (abs >= trillion && !abbrForce || abbrForce === 't') {
-	                    // trillion
-	                    abbr += locale.abbreviations.trillion;
-	                    value = value / trillion;
-	                } else if (abs < trillion && abs >= billion && !abbrForce || abbrForce === 'b') {
-	                    // billion
-	                    abbr += locale.abbreviations.billion;
-	                    value = value / billion;
-	                } else if (abs < billion && abs >= million && !abbrForce || abbrForce === 'm') {
-	                    // million
-	                    abbr += locale.abbreviations.million;
-	                    value = value / million;
-	                } else if (abs < million && abs >= thousand && !abbrForce || abbrForce === 'k') {
-	                    // thousand
-	                    abbr += locale.abbreviations.thousand;
-	                    value = value / thousand;
-	                }
-	            }
-
-	            // check for optional decimals
-	            if (numeral._.includes(format, '[.]')) {
-	                optDec = true;
-	                format = format.replace('[.]', '.');
-	            }
-
-	            // break number and format
-	            int = value.toString().split('.')[0];
-	            precision = format.split('.')[1];
-	            thousands = format.indexOf(',');
-	            leadingCount = (format.split('.')[0].split(',')[0].match(/0/g) || []).length;
-
-	            if (precision) {
-	                if (numeral._.includes(precision, '[')) {
-	                    precision = precision.replace(']', '');
-	                    precision = precision.split('[');
-	                    decimal = numeral._.toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
-	                } else {
-	                    decimal = numeral._.toFixed(value, precision.length, roundingFunction);
-	                }
-
-	                int = decimal.split('.')[0];
-
-	                if (numeral._.includes(decimal, '.')) {
-	                    decimal = locale.delimiters.decimal + decimal.split('.')[1];
-	                } else {
-	                    decimal = '';
-	                }
-
-	                if (optDec && Number(decimal.slice(1)) === 0) {
-	                    decimal = '';
-	                }
-	            } else {
-	                int = numeral._.toFixed(value, 0, roundingFunction);
-	            }
-
-	            // check abbreviation again after rounding
-	            if (abbr && !abbrForce && Number(int) >= 1000 && abbr !== locale.abbreviations.trillion) {
-	                int = String(Number(int) / 1000);
-
-	                switch (abbr) {
-	                    case locale.abbreviations.thousand:
-	                        abbr = locale.abbreviations.million;
-	                        break;
-	                    case locale.abbreviations.million:
-	                        abbr = locale.abbreviations.billion;
-	                        break;
-	                    case locale.abbreviations.billion:
-	                        abbr = locale.abbreviations.trillion;
-	                        break;
-	                }
-	            }
-
-
-	            // format number
-	            if (numeral._.includes(int, '-')) {
-	                int = int.slice(1);
-	                neg = true;
-	            }
-
-	            if (int.length < leadingCount) {
-	                for (var i = leadingCount - int.length; i > 0; i--) {
-	                    int = '0' + int;
-	                }
-	            }
-
-	            if (thousands > -1) {
-	                int = int.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + locale.delimiters.thousands);
-	            }
-
-	            if (format.indexOf('.') === 0) {
-	                int = '';
-	            }
-
-	            output = int + decimal + (abbr ? abbr : '');
-
-	            if (negP) {
-	                output = (negP && neg ? '(' : '') + output + (negP && neg ? ')' : '');
-	            } else {
-	                if (signed >= 0) {
-	                    output = signed === 0 ? (neg ? '-' : '+') + output : output + (neg ? '-' : '+');
-	                } else if (neg) {
-	                    output = '-' + output;
-	                }
-	            }
-
-	            return output;
-	        },
-	        // unformats numbers separators, decimals places, signs, abbreviations
-	        stringToNumber: function(string) {
-	            var locale = locales[options.currentLocale],
-	                stringOriginal = string,
-	                abbreviations = {
-	                    thousand: 3,
-	                    million: 6,
-	                    billion: 9,
-	                    trillion: 12
-	                },
-	                abbreviation,
-	                value,
-	                regexp;
-
-	            if (options.zeroFormat && string === options.zeroFormat) {
-	                value = 0;
-	            } else if (options.nullFormat && string === options.nullFormat || !string.replace(/[^0-9]+/g, '').length) {
-	                value = null;
-	            } else {
-	                value = 1;
-
-	                if (locale.delimiters.decimal !== '.') {
-	                    string = string.replace(/\./g, '').replace(locale.delimiters.decimal, '.');
-	                }
-
-	                for (abbreviation in abbreviations) {
-	                    regexp = new RegExp('[^a-zA-Z]' + locale.abbreviations[abbreviation] + '(?:\\)|(\\' + locale.currency.symbol + ')?(?:\\))?)?$');
-
-	                    if (stringOriginal.match(regexp)) {
-	                        value *= Math.pow(10, abbreviations[abbreviation]);
-	                        break;
-	                    }
-	                }
-
-	                // check for negative number
-	                value *= (string.split('-').length + Math.min(string.split('(').length - 1, string.split(')').length - 1)) % 2 ? 1 : -1;
-
-	                // remove non numbers
-	                string = string.replace(/[^0-9\.]+/g, '');
-
-	                value *= Number(string);
-	            }
-
-	            return value;
-	        },
-	        isNaN: function(value) {
-	            return typeof value === 'number' && isNaN(value);
-	        },
-	        includes: function(string, search) {
-	            return string.indexOf(search) !== -1;
-	        },
-	        insert: function(string, subString, start) {
-	            return string.slice(0, start) + subString + string.slice(start);
-	        },
-	        reduce: function(array, callback /*, initialValue*/) {
-	            if (this === null) {
-	                throw new TypeError('Array.prototype.reduce called on null or undefined');
-	            }
-
-	            if (typeof callback !== 'function') {
-	                throw new TypeError(callback + ' is not a function');
-	            }
-
-	            var t = Object(array),
-	                len = t.length >>> 0,
-	                k = 0,
-	                value;
-
-	            if (arguments.length === 3) {
-	                value = arguments[2];
-	            } else {
-	                while (k < len && !(k in t)) {
-	                    k++;
-	                }
-
-	                if (k >= len) {
-	                    throw new TypeError('Reduce of empty array with no initial value');
-	                }
-
-	                value = t[k++];
-	            }
-	            for (; k < len; k++) {
-	                if (k in t) {
-	                    value = callback(value, t[k], k, t);
-	                }
-	            }
-	            return value;
-	        },
-	        /**
-	         * Computes the multiplier necessary to make x >= 1,
-	         * effectively eliminating miscalculations caused by
-	         * finite precision.
-	         */
-	        multiplier: function (x) {
-	            var parts = x.toString().split('.');
-
-	            return parts.length < 2 ? 1 : Math.pow(10, parts[1].length);
-	        },
-	        /**
-	         * Given a variable number of arguments, returns the maximum
-	         * multiplier that must be used to normalize an operation involving
-	         * all of them.
-	         */
-	        correctionFactor: function () {
-	            var args = Array.prototype.slice.call(arguments);
-
-	            return args.reduce(function(accum, next) {
-	                var mn = _.multiplier(next);
-	                return accum > mn ? accum : mn;
-	            }, 1);
-	        },
-	        /**
-	         * Implementation of toFixed() that treats floats more like decimals
-	         *
-	         * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
-	         * problems for accounting- and finance-related software.
-	         */
-	        toFixed: function(value, maxDecimals, roundingFunction, optionals) {
-	            var splitValue = value.toString().split('.'),
-	                minDecimals = maxDecimals - (optionals || 0),
-	                boundedPrecision,
-	                optionalsRegExp,
-	                power,
-	                output;
-
-	            // Use the smallest precision value possible to avoid errors from floating point representation
-	            if (splitValue.length === 2) {
-	              boundedPrecision = Math.min(Math.max(splitValue[1].length, minDecimals), maxDecimals);
-	            } else {
-	              boundedPrecision = minDecimals;
-	            }
-
-	            power = Math.pow(10, boundedPrecision);
-
-	            // Multiply up by precision, round accurately, then divide and use native toFixed():
-	            output = (roundingFunction(value + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
-
-	            if (optionals > maxDecimals - boundedPrecision) {
-	                optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
-	                output = output.replace(optionalsRegExp, '');
-	            }
-
-	            return output;
-	        }
-	    };
-
-	    // avaliable options
-	    numeral.options = options;
-
-	    // avaliable formats
-	    numeral.formats = formats;
-
-	    // avaliable formats
-	    numeral.locales = locales;
-
-	    // This function sets the current locale.  If
-	    // no arguments are passed in, it will simply return the current global
-	    // locale key.
-	    numeral.locale = function(key) {
-	        if (key) {
-	            options.currentLocale = key.toLowerCase();
-	        }
-
-	        return options.currentLocale;
-	    };
-
-	    // This function provides access to the loaded locale data.  If
-	    // no arguments are passed in, it will simply return the current
-	    // global locale object.
-	    numeral.localeData = function(key) {
-	        if (!key) {
-	            return locales[options.currentLocale];
-	        }
-
-	        key = key.toLowerCase();
-
-	        if (!locales[key]) {
-	            throw new Error('Unknown locale : ' + key);
-	        }
-
-	        return locales[key];
-	    };
-
-	    numeral.reset = function() {
-	        for (var property in defaults) {
-	            options[property] = defaults[property];
-	        }
-	    };
-
-	    numeral.zeroFormat = function(format) {
-	        options.zeroFormat = typeof(format) === 'string' ? format : null;
-	    };
-
-	    numeral.nullFormat = function (format) {
-	        options.nullFormat = typeof(format) === 'string' ? format : null;
-	    };
-
-	    numeral.defaultFormat = function(format) {
-	        options.defaultFormat = typeof(format) === 'string' ? format : '0.0';
-	    };
-
-	    numeral.register = function(type, name, format) {
-	        name = name.toLowerCase();
-
-	        if (this[type + 's'][name]) {
-	            throw new TypeError(name + ' ' + type + ' already registered.');
-	        }
-
-	        this[type + 's'][name] = format;
-
-	        return format;
-	    };
-
-
-	    numeral.validate = function(val, culture) {
-	        var _decimalSep,
-	            _thousandSep,
-	            _currSymbol,
-	            _valArray,
-	            _abbrObj,
-	            _thousandRegEx,
-	            localeData,
-	            temp;
-
-	        //coerce val to string
-	        if (typeof val !== 'string') {
-	            val += '';
-
-	            if (console.warn) {
-	                console.warn('Numeral.js: Value is not string. It has been co-erced to: ', val);
-	            }
-	        }
-
-	        //trim whitespaces from either sides
-	        val = val.trim();
-
-	        //if val is just digits return true
-	        if (!!val.match(/^\d+$/)) {
-	            return true;
-	        }
-
-	        //if val is empty return false
-	        if (val === '') {
-	            return false;
-	        }
-
-	        //get the decimal and thousands separator from numeral.localeData
-	        try {
-	            //check if the culture is understood by numeral. if not, default it to current locale
-	            localeData = numeral.localeData(culture);
-	        } catch (e) {
-	            localeData = numeral.localeData(numeral.locale());
-	        }
-
-	        //setup the delimiters and currency symbol based on culture/locale
-	        _currSymbol = localeData.currency.symbol;
-	        _abbrObj = localeData.abbreviations;
-	        _decimalSep = localeData.delimiters.decimal;
-	        if (localeData.delimiters.thousands === '.') {
-	            _thousandSep = '\\.';
-	        } else {
-	            _thousandSep = localeData.delimiters.thousands;
-	        }
-
-	        // validating currency symbol
-	        temp = val.match(/^[^\d]+/);
-	        if (temp !== null) {
-	            val = val.substr(1);
-	            if (temp[0] !== _currSymbol) {
-	                return false;
-	            }
-	        }
-
-	        //validating abbreviation symbol
-	        temp = val.match(/[^\d]+$/);
-	        if (temp !== null) {
-	            val = val.slice(0, -1);
-	            if (temp[0] !== _abbrObj.thousand && temp[0] !== _abbrObj.million && temp[0] !== _abbrObj.billion && temp[0] !== _abbrObj.trillion) {
-	                return false;
-	            }
-	        }
-
-	        _thousandRegEx = new RegExp(_thousandSep + '{2}');
-
-	        if (!val.match(/[^\d.,]/g)) {
-	            _valArray = val.split(_decimalSep);
-	            if (_valArray.length > 2) {
-	                return false;
-	            } else {
-	                if (_valArray.length < 2) {
-	                    return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx));
-	                } else {
-	                    if (_valArray[0].length === 1) {
-	                        return ( !! _valArray[0].match(/^\d+$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
-	                    } else {
-	                        return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
-	                    }
-	                }
-	            }
-	        }
-
-	        return false;
-	    };
-
-
-	    /************************************
-	        Numeral Prototype
-	    ************************************/
-
-	    numeral.fn = Numeral.prototype = {
-	        clone: function() {
-	            return numeral(this);
-	        },
-	        format: function(inputString, roundingFunction) {
-	            var value = this._value,
-	                format = inputString || options.defaultFormat,
-	                kind,
-	                output,
-	                formatFunction;
-
-	            // make sure we have a roundingFunction
-	            roundingFunction = roundingFunction || Math.round;
-
-	            // format based on value
-	            if (value === 0 && options.zeroFormat !== null) {
-	                output = options.zeroFormat;
-	            } else if (value === null && options.nullFormat !== null) {
-	                output = options.nullFormat;
-	            } else {
-	                for (kind in formats) {
-	                    if (format.match(formats[kind].regexps.format)) {
-	                        formatFunction = formats[kind].format;
-
-	                        break;
-	                    }
-	                }
-
-	                formatFunction = formatFunction || numeral._.numberToFormat;
-
-	                output = formatFunction(value, format, roundingFunction);
-	            }
-
-	            return output;
-	        },
-	        value: function() {
-	            return this._value;
-	        },
-	        input: function() {
-	            return this._input;
-	        },
-	        set: function(value) {
-	            this._value = Number(value);
-
-	            return this;
-	        },
-	        add: function(value) {
-	            var corrFactor = _.correctionFactor.call(null, this._value, value);
-
-	            function cback(accum, curr, currI, O) {
-	                return accum + Math.round(corrFactor * curr);
-	            }
-
-	            this._value = _.reduce([this._value, value], cback, 0) / corrFactor;
-
-	            return this;
-	        },
-	        subtract: function(value) {
-	            var corrFactor = _.correctionFactor.call(null, this._value, value);
-
-	            function cback(accum, curr, currI, O) {
-	                return accum - Math.round(corrFactor * curr);
-	            }
-
-	            this._value = _.reduce([value], cback, Math.round(this._value * corrFactor)) / corrFactor;
-
-	            return this;
-	        },
-	        multiply: function(value) {
-	            function cback(accum, curr, currI, O) {
-	                var corrFactor = _.correctionFactor(accum, curr);
-	                return Math.round(accum * corrFactor) * Math.round(curr * corrFactor) / Math.round(corrFactor * corrFactor);
-	            }
-
-	            this._value = _.reduce([this._value, value], cback, 1);
-
-	            return this;
-	        },
-	        divide: function(value) {
-	            function cback(accum, curr, currI, O) {
-	                var corrFactor = _.correctionFactor(accum, curr);
-	                return Math.round(accum * corrFactor) / Math.round(curr * corrFactor);
-	            }
-
-	            this._value = _.reduce([this._value, value], cback);
-
-	            return this;
-	        },
-	        difference: function(value) {
-	            return Math.abs(numeral(this._value).subtract(value).value());
-	        }
-	    };
-
-	    /************************************
-	        Default Locale && Format
-	    ************************************/
-
-	    numeral.register('locale', 'en', {
-	        delimiters: {
-	            thousands: ',',
-	            decimal: '.'
-	        },
-	        abbreviations: {
-	            thousand: 'k',
-	            million: 'm',
-	            billion: 'b',
-	            trillion: 't'
-	        },
-	        ordinal: function(number) {
-	            var b = number % 10;
-	            return (~~(number % 100 / 10) === 1) ? 'th' :
-	                (b === 1) ? 'st' :
-	                (b === 2) ? 'nd' :
-	                (b === 3) ? 'rd' : 'th';
-	        },
-	        currency: {
-	            symbol: '$'
-	        }
-	    });
-
-	    
-
-	(function() {
-	        numeral.register('format', 'bps', {
-	            regexps: {
-	                format: /(BPS)/,
-	                unformat: /(BPS)/
-	            },
-	            format: function(value, format, roundingFunction) {
-	                var space = numeral._.includes(format, ' BPS') ? ' ' : '',
-	                    output;
-
-	                value = value * 10000;
-
-	                // check for space before BPS
-	                format = format.replace(/\s?BPS/, '');
-
-	                output = numeral._.numberToFormat(value, format, roundingFunction);
-
-	                if (numeral._.includes(output, ')')) {
-	                    output = output.split('');
-
-	                    output.splice(-1, 0, space + 'BPS');
-
-	                    output = output.join('');
-	                } else {
-	                    output = output + space + 'BPS';
-	                }
-
-	                return output;
-	            },
-	            unformat: function(string) {
-	                return +(numeral._.stringToNumber(string) * 0.0001).toFixed(15);
-	            }
-	        });
-	})();
-
-
-	(function() {
-	        var decimal = {
-	            base: 1000,
-	            suffixes: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-	        },
-	        binary = {
-	            base: 1024,
-	            suffixes: ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
-	        };
-
-	    var allSuffixes =  decimal.suffixes.concat(binary.suffixes.filter(function (item) {
-	            return decimal.suffixes.indexOf(item) < 0;
-	        }));
-	        var unformatRegex = allSuffixes.join('|');
-	        // Allow support for BPS (http://www.investopedia.com/terms/b/basispoint.asp)
-	        unformatRegex = '(' + unformatRegex.replace('B', 'B(?!PS)') + ')';
-
-	    numeral.register('format', 'bytes', {
-	        regexps: {
-	            format: /([0\s]i?b)/,
-	            unformat: new RegExp(unformatRegex)
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var output,
-	                bytes = numeral._.includes(format, 'ib') ? binary : decimal,
-	                suffix = numeral._.includes(format, ' b') || numeral._.includes(format, ' ib') ? ' ' : '',
-	                power,
-	                min,
-	                max;
-
-	            // check for space before
-	            format = format.replace(/\s?i?b/, '');
-
-	            for (power = 0; power <= bytes.suffixes.length; power++) {
-	                min = Math.pow(bytes.base, power);
-	                max = Math.pow(bytes.base, power + 1);
-
-	                if (value === null || value === 0 || value >= min && value < max) {
-	                    suffix += bytes.suffixes[power];
-
-	                    if (min > 0) {
-	                        value = value / min;
-	                    }
-
-	                    break;
-	                }
-	            }
-
-	            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-	            return output + suffix;
-	        },
-	        unformat: function(string) {
-	            var value = numeral._.stringToNumber(string),
-	                power,
-	                bytesMultiplier;
-
-	            if (value) {
-	                for (power = decimal.suffixes.length - 1; power >= 0; power--) {
-	                    if (numeral._.includes(string, decimal.suffixes[power])) {
-	                        bytesMultiplier = Math.pow(decimal.base, power);
-
-	                        break;
-	                    }
-
-	                    if (numeral._.includes(string, binary.suffixes[power])) {
-	                        bytesMultiplier = Math.pow(binary.base, power);
-
-	                        break;
-	                    }
-	                }
-
-	                value *= (bytesMultiplier || 1);
-	            }
-
-	            return value;
-	        }
-	    });
-	})();
-
-
-	(function() {
-	        numeral.register('format', 'currency', {
-	        regexps: {
-	            format: /(\$)/
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var locale = numeral.locales[numeral.options.currentLocale],
-	                symbols = {
-	                    before: format.match(/^([\+|\-|\(|\s|\$]*)/)[0],
-	                    after: format.match(/([\+|\-|\)|\s|\$]*)$/)[0]
-	                },
-	                output,
-	                symbol,
-	                i;
-
-	            // strip format of spaces and $
-	            format = format.replace(/\s?\$\s?/, '');
-
-	            // format the number
-	            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-	            // update the before and after based on value
-	            if (value >= 0) {
-	                symbols.before = symbols.before.replace(/[\-\(]/, '');
-	                symbols.after = symbols.after.replace(/[\-\)]/, '');
-	            } else if (value < 0 && (!numeral._.includes(symbols.before, '-') && !numeral._.includes(symbols.before, '('))) {
-	                symbols.before = '-' + symbols.before;
-	            }
-
-	            // loop through each before symbol
-	            for (i = 0; i < symbols.before.length; i++) {
-	                symbol = symbols.before[i];
-
-	                switch (symbol) {
-	                    case '$':
-	                        output = numeral._.insert(output, locale.currency.symbol, i);
-	                        break;
-	                    case ' ':
-	                        output = numeral._.insert(output, ' ', i + locale.currency.symbol.length - 1);
-	                        break;
-	                }
-	            }
-
-	            // loop through each after symbol
-	            for (i = symbols.after.length - 1; i >= 0; i--) {
-	                symbol = symbols.after[i];
-
-	                switch (symbol) {
-	                    case '$':
-	                        output = i === symbols.after.length - 1 ? output + locale.currency.symbol : numeral._.insert(output, locale.currency.symbol, -(symbols.after.length - (1 + i)));
-	                        break;
-	                    case ' ':
-	                        output = i === symbols.after.length - 1 ? output + ' ' : numeral._.insert(output, ' ', -(symbols.after.length - (1 + i) + locale.currency.symbol.length - 1));
-	                        break;
-	                }
-	            }
-
-
-	            return output;
-	        }
-	    });
-	})();
-
-
-	(function() {
-	        numeral.register('format', 'exponential', {
-	        regexps: {
-	            format: /(e\+|e-)/,
-	            unformat: /(e\+|e-)/
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var output,
-	                exponential = typeof value === 'number' && !numeral._.isNaN(value) ? value.toExponential() : '0e+0',
-	                parts = exponential.split('e');
-
-	            format = format.replace(/e[\+|\-]{1}0/, '');
-
-	            output = numeral._.numberToFormat(Number(parts[0]), format, roundingFunction);
-
-	            return output + 'e' + parts[1];
-	        },
-	        unformat: function(string) {
-	            var parts = numeral._.includes(string, 'e+') ? string.split('e+') : string.split('e-'),
-	                value = Number(parts[0]),
-	                power = Number(parts[1]);
-
-	            power = numeral._.includes(string, 'e-') ? power *= -1 : power;
-
-	            function cback(accum, curr, currI, O) {
-	                var corrFactor = numeral._.correctionFactor(accum, curr),
-	                    num = (accum * corrFactor) * (curr * corrFactor) / (corrFactor * corrFactor);
-	                return num;
-	            }
-
-	            return numeral._.reduce([value, Math.pow(10, power)], cback, 1);
-	        }
-	    });
-	})();
-
-
-	(function() {
-	        numeral.register('format', 'ordinal', {
-	        regexps: {
-	            format: /(o)/
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var locale = numeral.locales[numeral.options.currentLocale],
-	                output,
-	                ordinal = numeral._.includes(format, ' o') ? ' ' : '';
-
-	            // check for space before
-	            format = format.replace(/\s?o/, '');
-
-	            ordinal += locale.ordinal(value);
-
-	            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-	            return output + ordinal;
-	        }
-	    });
-	})();
-
-
-	(function() {
-	        numeral.register('format', 'percentage', {
-	        regexps: {
-	            format: /(%)/,
-	            unformat: /(%)/
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var space = numeral._.includes(format, ' %') ? ' ' : '',
-	                output;
-
-	            if (numeral.options.scalePercentBy100) {
-	                value = value * 100;
-	            }
-
-	            // check for space before %
-	            format = format.replace(/\s?\%/, '');
-
-	            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-	            if (numeral._.includes(output, ')')) {
-	                output = output.split('');
-
-	                output.splice(-1, 0, space + '%');
-
-	                output = output.join('');
-	            } else {
-	                output = output + space + '%';
-	            }
-
-	            return output;
-	        },
-	        unformat: function(string) {
-	            var number = numeral._.stringToNumber(string);
-	            if (numeral.options.scalePercentBy100) {
-	                return number * 0.01;
-	            }
-	            return number;
-	        }
-	    });
-	})();
-
-
-	(function() {
-	        numeral.register('format', 'time', {
-	        regexps: {
-	            format: /(:)/,
-	            unformat: /(:)/
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var hours = Math.floor(value / 60 / 60),
-	                minutes = Math.floor((value - (hours * 60 * 60)) / 60),
-	                seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
-
-	            return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
-	        },
-	        unformat: function(string) {
-	            var timeArray = string.split(':'),
-	                seconds = 0;
-
-	            // turn hours and minutes into seconds and add them all up
-	            if (timeArray.length === 3) {
-	                // hours
-	                seconds = seconds + (Number(timeArray[0]) * 60 * 60);
-	                // minutes
-	                seconds = seconds + (Number(timeArray[1]) * 60);
-	                // seconds
-	                seconds = seconds + Number(timeArray[2]);
-	            } else if (timeArray.length === 2) {
-	                // minutes
-	                seconds = seconds + (Number(timeArray[0]) * 60);
-	                // seconds
-	                seconds = seconds + Number(timeArray[1]);
-	            }
-	            return Number(seconds);
-	        }
-	    });
-	})();
-
-	return numeral;
-	}));
-	}(numeral$1));
+		(function (global, factory) {
+		    if (module.exports) {
+		        module.exports = factory();
+		    } else {
+		        (typeof global!=="undefined" ? global : window).numeral = factory();
+		    }
+		}(commonjsGlobal, function () {
+		    /************************************
+		        Variables
+		    ************************************/
+
+		    var numeral,
+		        _,
+		        VERSION = '2.0.6',
+		        formats = {},
+		        locales = {},
+		        defaults = {
+		            currentLocale: 'en',
+		            zeroFormat: null,
+		            nullFormat: null,
+		            defaultFormat: '0,0',
+		            scalePercentBy100: true
+		        },
+		        options = {
+		            currentLocale: defaults.currentLocale,
+		            zeroFormat: defaults.zeroFormat,
+		            nullFormat: defaults.nullFormat,
+		            defaultFormat: defaults.defaultFormat,
+		            scalePercentBy100: defaults.scalePercentBy100
+		        };
+
+
+		    /************************************
+		        Constructors
+		    ************************************/
+
+		    // Numeral prototype object
+		    function Numeral(input, number) {
+		        this._input = input;
+
+		        this._value = number;
+		    }
+
+		    numeral = function(input) {
+		        var value,
+		            kind,
+		            unformatFunction,
+		            regexp;
+
+		        if (numeral.isNumeral(input)) {
+		            value = input.value();
+		        } else if (input === 0 || typeof input === 'undefined') {
+		            value = 0;
+		        } else if (input === null || _.isNaN(input)) {
+		            value = null;
+		        } else if (typeof input === 'string') {
+		            if (options.zeroFormat && input === options.zeroFormat) {
+		                value = 0;
+		            } else if (options.nullFormat && input === options.nullFormat || !input.replace(/[^0-9]+/g, '').length) {
+		                value = null;
+		            } else {
+		                for (kind in formats) {
+		                    regexp = typeof formats[kind].regexps.unformat === 'function' ? formats[kind].regexps.unformat() : formats[kind].regexps.unformat;
+
+		                    if (regexp && input.match(regexp)) {
+		                        unformatFunction = formats[kind].unformat;
+
+		                        break;
+		                    }
+		                }
+
+		                unformatFunction = unformatFunction || numeral._.stringToNumber;
+
+		                value = unformatFunction(input);
+		            }
+		        } else {
+		            value = Number(input)|| null;
+		        }
+
+		        return new Numeral(input, value);
+		    };
+
+		    // version number
+		    numeral.version = VERSION;
+
+		    // compare numeral object
+		    numeral.isNumeral = function(obj) {
+		        return obj instanceof Numeral;
+		    };
+
+		    // helper functions
+		    numeral._ = _ = {
+		        // formats numbers separators, decimals places, signs, abbreviations
+		        numberToFormat: function(value, format, roundingFunction) {
+		            var locale = locales[numeral.options.currentLocale],
+		                negP = false,
+		                optDec = false,
+		                leadingCount = 0,
+		                abbr = '',
+		                trillion = 1000000000000,
+		                billion = 1000000000,
+		                million = 1000000,
+		                thousand = 1000,
+		                decimal = '',
+		                neg = false,
+		                abbrForce, // force abbreviation
+		                abs,
+		                int,
+		                precision,
+		                signed,
+		                thousands,
+		                output;
+
+		            // make sure we never format a null value
+		            value = value || 0;
+
+		            abs = Math.abs(value);
+
+		            // see if we should use parentheses for negative number or if we should prefix with a sign
+		            // if both are present we default to parentheses
+		            if (numeral._.includes(format, '(')) {
+		                negP = true;
+		                format = format.replace(/[\(|\)]/g, '');
+		            } else if (numeral._.includes(format, '+') || numeral._.includes(format, '-')) {
+		                signed = numeral._.includes(format, '+') ? format.indexOf('+') : value < 0 ? format.indexOf('-') : -1;
+		                format = format.replace(/[\+|\-]/g, '');
+		            }
+
+		            // see if abbreviation is wanted
+		            if (numeral._.includes(format, 'a')) {
+		                abbrForce = format.match(/a(k|m|b|t)?/);
+
+		                abbrForce = abbrForce ? abbrForce[1] : false;
+
+		                // check for space before abbreviation
+		                if (numeral._.includes(format, ' a')) {
+		                    abbr = ' ';
+		                }
+
+		                format = format.replace(new RegExp(abbr + 'a[kmbt]?'), '');
+
+		                if (abs >= trillion && !abbrForce || abbrForce === 't') {
+		                    // trillion
+		                    abbr += locale.abbreviations.trillion;
+		                    value = value / trillion;
+		                } else if (abs < trillion && abs >= billion && !abbrForce || abbrForce === 'b') {
+		                    // billion
+		                    abbr += locale.abbreviations.billion;
+		                    value = value / billion;
+		                } else if (abs < billion && abs >= million && !abbrForce || abbrForce === 'm') {
+		                    // million
+		                    abbr += locale.abbreviations.million;
+		                    value = value / million;
+		                } else if (abs < million && abs >= thousand && !abbrForce || abbrForce === 'k') {
+		                    // thousand
+		                    abbr += locale.abbreviations.thousand;
+		                    value = value / thousand;
+		                }
+		            }
+
+		            // check for optional decimals
+		            if (numeral._.includes(format, '[.]')) {
+		                optDec = true;
+		                format = format.replace('[.]', '.');
+		            }
+
+		            // break number and format
+		            int = value.toString().split('.')[0];
+		            precision = format.split('.')[1];
+		            thousands = format.indexOf(',');
+		            leadingCount = (format.split('.')[0].split(',')[0].match(/0/g) || []).length;
+
+		            if (precision) {
+		                if (numeral._.includes(precision, '[')) {
+		                    precision = precision.replace(']', '');
+		                    precision = precision.split('[');
+		                    decimal = numeral._.toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
+		                } else {
+		                    decimal = numeral._.toFixed(value, precision.length, roundingFunction);
+		                }
+
+		                int = decimal.split('.')[0];
+
+		                if (numeral._.includes(decimal, '.')) {
+		                    decimal = locale.delimiters.decimal + decimal.split('.')[1];
+		                } else {
+		                    decimal = '';
+		                }
+
+		                if (optDec && Number(decimal.slice(1)) === 0) {
+		                    decimal = '';
+		                }
+		            } else {
+		                int = numeral._.toFixed(value, 0, roundingFunction);
+		            }
+
+		            // check abbreviation again after rounding
+		            if (abbr && !abbrForce && Number(int) >= 1000 && abbr !== locale.abbreviations.trillion) {
+		                int = String(Number(int) / 1000);
+
+		                switch (abbr) {
+		                    case locale.abbreviations.thousand:
+		                        abbr = locale.abbreviations.million;
+		                        break;
+		                    case locale.abbreviations.million:
+		                        abbr = locale.abbreviations.billion;
+		                        break;
+		                    case locale.abbreviations.billion:
+		                        abbr = locale.abbreviations.trillion;
+		                        break;
+		                }
+		            }
+
+
+		            // format number
+		            if (numeral._.includes(int, '-')) {
+		                int = int.slice(1);
+		                neg = true;
+		            }
+
+		            if (int.length < leadingCount) {
+		                for (var i = leadingCount - int.length; i > 0; i--) {
+		                    int = '0' + int;
+		                }
+		            }
+
+		            if (thousands > -1) {
+		                int = int.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + locale.delimiters.thousands);
+		            }
+
+		            if (format.indexOf('.') === 0) {
+		                int = '';
+		            }
+
+		            output = int + decimal + (abbr ? abbr : '');
+
+		            if (negP) {
+		                output = (negP && neg ? '(' : '') + output + (negP && neg ? ')' : '');
+		            } else {
+		                if (signed >= 0) {
+		                    output = signed === 0 ? (neg ? '-' : '+') + output : output + (neg ? '-' : '+');
+		                } else if (neg) {
+		                    output = '-' + output;
+		                }
+		            }
+
+		            return output;
+		        },
+		        // unformats numbers separators, decimals places, signs, abbreviations
+		        stringToNumber: function(string) {
+		            var locale = locales[options.currentLocale],
+		                stringOriginal = string,
+		                abbreviations = {
+		                    thousand: 3,
+		                    million: 6,
+		                    billion: 9,
+		                    trillion: 12
+		                },
+		                abbreviation,
+		                value,
+		                regexp;
+
+		            if (options.zeroFormat && string === options.zeroFormat) {
+		                value = 0;
+		            } else if (options.nullFormat && string === options.nullFormat || !string.replace(/[^0-9]+/g, '').length) {
+		                value = null;
+		            } else {
+		                value = 1;
+
+		                if (locale.delimiters.decimal !== '.') {
+		                    string = string.replace(/\./g, '').replace(locale.delimiters.decimal, '.');
+		                }
+
+		                for (abbreviation in abbreviations) {
+		                    regexp = new RegExp('[^a-zA-Z]' + locale.abbreviations[abbreviation] + '(?:\\)|(\\' + locale.currency.symbol + ')?(?:\\))?)?$');
+
+		                    if (stringOriginal.match(regexp)) {
+		                        value *= Math.pow(10, abbreviations[abbreviation]);
+		                        break;
+		                    }
+		                }
+
+		                // check for negative number
+		                value *= (string.split('-').length + Math.min(string.split('(').length - 1, string.split(')').length - 1)) % 2 ? 1 : -1;
+
+		                // remove non numbers
+		                string = string.replace(/[^0-9\.]+/g, '');
+
+		                value *= Number(string);
+		            }
+
+		            return value;
+		        },
+		        isNaN: function(value) {
+		            return typeof value === 'number' && isNaN(value);
+		        },
+		        includes: function(string, search) {
+		            return string.indexOf(search) !== -1;
+		        },
+		        insert: function(string, subString, start) {
+		            return string.slice(0, start) + subString + string.slice(start);
+		        },
+		        reduce: function(array, callback /*, initialValue*/) {
+		            if (this === null) {
+		                throw new TypeError('Array.prototype.reduce called on null or undefined');
+		            }
+
+		            if (typeof callback !== 'function') {
+		                throw new TypeError(callback + ' is not a function');
+		            }
+
+		            var t = Object(array),
+		                len = t.length >>> 0,
+		                k = 0,
+		                value;
+
+		            if (arguments.length === 3) {
+		                value = arguments[2];
+		            } else {
+		                while (k < len && !(k in t)) {
+		                    k++;
+		                }
+
+		                if (k >= len) {
+		                    throw new TypeError('Reduce of empty array with no initial value');
+		                }
+
+		                value = t[k++];
+		            }
+		            for (; k < len; k++) {
+		                if (k in t) {
+		                    value = callback(value, t[k], k, t);
+		                }
+		            }
+		            return value;
+		        },
+		        /**
+		         * Computes the multiplier necessary to make x >= 1,
+		         * effectively eliminating miscalculations caused by
+		         * finite precision.
+		         */
+		        multiplier: function (x) {
+		            var parts = x.toString().split('.');
+
+		            return parts.length < 2 ? 1 : Math.pow(10, parts[1].length);
+		        },
+		        /**
+		         * Given a variable number of arguments, returns the maximum
+		         * multiplier that must be used to normalize an operation involving
+		         * all of them.
+		         */
+		        correctionFactor: function () {
+		            var args = Array.prototype.slice.call(arguments);
+
+		            return args.reduce(function(accum, next) {
+		                var mn = _.multiplier(next);
+		                return accum > mn ? accum : mn;
+		            }, 1);
+		        },
+		        /**
+		         * Implementation of toFixed() that treats floats more like decimals
+		         *
+		         * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
+		         * problems for accounting- and finance-related software.
+		         */
+		        toFixed: function(value, maxDecimals, roundingFunction, optionals) {
+		            var splitValue = value.toString().split('.'),
+		                minDecimals = maxDecimals - (optionals || 0),
+		                boundedPrecision,
+		                optionalsRegExp,
+		                power,
+		                output;
+
+		            // Use the smallest precision value possible to avoid errors from floating point representation
+		            if (splitValue.length === 2) {
+		              boundedPrecision = Math.min(Math.max(splitValue[1].length, minDecimals), maxDecimals);
+		            } else {
+		              boundedPrecision = minDecimals;
+		            }
+
+		            power = Math.pow(10, boundedPrecision);
+
+		            // Multiply up by precision, round accurately, then divide and use native toFixed():
+		            output = (roundingFunction(value + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
+
+		            if (optionals > maxDecimals - boundedPrecision) {
+		                optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
+		                output = output.replace(optionalsRegExp, '');
+		            }
+
+		            return output;
+		        }
+		    };
+
+		    // avaliable options
+		    numeral.options = options;
+
+		    // avaliable formats
+		    numeral.formats = formats;
+
+		    // avaliable formats
+		    numeral.locales = locales;
+
+		    // This function sets the current locale.  If
+		    // no arguments are passed in, it will simply return the current global
+		    // locale key.
+		    numeral.locale = function(key) {
+		        if (key) {
+		            options.currentLocale = key.toLowerCase();
+		        }
+
+		        return options.currentLocale;
+		    };
+
+		    // This function provides access to the loaded locale data.  If
+		    // no arguments are passed in, it will simply return the current
+		    // global locale object.
+		    numeral.localeData = function(key) {
+		        if (!key) {
+		            return locales[options.currentLocale];
+		        }
+
+		        key = key.toLowerCase();
+
+		        if (!locales[key]) {
+		            throw new Error('Unknown locale : ' + key);
+		        }
+
+		        return locales[key];
+		    };
+
+		    numeral.reset = function() {
+		        for (var property in defaults) {
+		            options[property] = defaults[property];
+		        }
+		    };
+
+		    numeral.zeroFormat = function(format) {
+		        options.zeroFormat = typeof(format) === 'string' ? format : null;
+		    };
+
+		    numeral.nullFormat = function (format) {
+		        options.nullFormat = typeof(format) === 'string' ? format : null;
+		    };
+
+		    numeral.defaultFormat = function(format) {
+		        options.defaultFormat = typeof(format) === 'string' ? format : '0.0';
+		    };
+
+		    numeral.register = function(type, name, format) {
+		        name = name.toLowerCase();
+
+		        if (this[type + 's'][name]) {
+		            throw new TypeError(name + ' ' + type + ' already registered.');
+		        }
+
+		        this[type + 's'][name] = format;
+
+		        return format;
+		    };
+
+
+		    numeral.validate = function(val, culture) {
+		        var _decimalSep,
+		            _thousandSep,
+		            _currSymbol,
+		            _valArray,
+		            _abbrObj,
+		            _thousandRegEx,
+		            localeData,
+		            temp;
+
+		        //coerce val to string
+		        if (typeof val !== 'string') {
+		            val += '';
+
+		            if (console.warn) {
+		                console.warn('Numeral.js: Value is not string. It has been co-erced to: ', val);
+		            }
+		        }
+
+		        //trim whitespaces from either sides
+		        val = val.trim();
+
+		        //if val is just digits return true
+		        if (!!val.match(/^\d+$/)) {
+		            return true;
+		        }
+
+		        //if val is empty return false
+		        if (val === '') {
+		            return false;
+		        }
+
+		        //get the decimal and thousands separator from numeral.localeData
+		        try {
+		            //check if the culture is understood by numeral. if not, default it to current locale
+		            localeData = numeral.localeData(culture);
+		        } catch (e) {
+		            localeData = numeral.localeData(numeral.locale());
+		        }
+
+		        //setup the delimiters and currency symbol based on culture/locale
+		        _currSymbol = localeData.currency.symbol;
+		        _abbrObj = localeData.abbreviations;
+		        _decimalSep = localeData.delimiters.decimal;
+		        if (localeData.delimiters.thousands === '.') {
+		            _thousandSep = '\\.';
+		        } else {
+		            _thousandSep = localeData.delimiters.thousands;
+		        }
+
+		        // validating currency symbol
+		        temp = val.match(/^[^\d]+/);
+		        if (temp !== null) {
+		            val = val.substr(1);
+		            if (temp[0] !== _currSymbol) {
+		                return false;
+		            }
+		        }
+
+		        //validating abbreviation symbol
+		        temp = val.match(/[^\d]+$/);
+		        if (temp !== null) {
+		            val = val.slice(0, -1);
+		            if (temp[0] !== _abbrObj.thousand && temp[0] !== _abbrObj.million && temp[0] !== _abbrObj.billion && temp[0] !== _abbrObj.trillion) {
+		                return false;
+		            }
+		        }
+
+		        _thousandRegEx = new RegExp(_thousandSep + '{2}');
+
+		        if (!val.match(/[^\d.,]/g)) {
+		            _valArray = val.split(_decimalSep);
+		            if (_valArray.length > 2) {
+		                return false;
+		            } else {
+		                if (_valArray.length < 2) {
+		                    return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx));
+		                } else {
+		                    if (_valArray[0].length === 1) {
+		                        return ( !! _valArray[0].match(/^\d+$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
+		                    } else {
+		                        return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
+		                    }
+		                }
+		            }
+		        }
+
+		        return false;
+		    };
+
+
+		    /************************************
+		        Numeral Prototype
+		    ************************************/
+
+		    numeral.fn = Numeral.prototype = {
+		        clone: function() {
+		            return numeral(this);
+		        },
+		        format: function(inputString, roundingFunction) {
+		            var value = this._value,
+		                format = inputString || options.defaultFormat,
+		                kind,
+		                output,
+		                formatFunction;
+
+		            // make sure we have a roundingFunction
+		            roundingFunction = roundingFunction || Math.round;
+
+		            // format based on value
+		            if (value === 0 && options.zeroFormat !== null) {
+		                output = options.zeroFormat;
+		            } else if (value === null && options.nullFormat !== null) {
+		                output = options.nullFormat;
+		            } else {
+		                for (kind in formats) {
+		                    if (format.match(formats[kind].regexps.format)) {
+		                        formatFunction = formats[kind].format;
+
+		                        break;
+		                    }
+		                }
+
+		                formatFunction = formatFunction || numeral._.numberToFormat;
+
+		                output = formatFunction(value, format, roundingFunction);
+		            }
+
+		            return output;
+		        },
+		        value: function() {
+		            return this._value;
+		        },
+		        input: function() {
+		            return this._input;
+		        },
+		        set: function(value) {
+		            this._value = Number(value);
+
+		            return this;
+		        },
+		        add: function(value) {
+		            var corrFactor = _.correctionFactor.call(null, this._value, value);
+
+		            function cback(accum, curr, currI, O) {
+		                return accum + Math.round(corrFactor * curr);
+		            }
+
+		            this._value = _.reduce([this._value, value], cback, 0) / corrFactor;
+
+		            return this;
+		        },
+		        subtract: function(value) {
+		            var corrFactor = _.correctionFactor.call(null, this._value, value);
+
+		            function cback(accum, curr, currI, O) {
+		                return accum - Math.round(corrFactor * curr);
+		            }
+
+		            this._value = _.reduce([value], cback, Math.round(this._value * corrFactor)) / corrFactor;
+
+		            return this;
+		        },
+		        multiply: function(value) {
+		            function cback(accum, curr, currI, O) {
+		                var corrFactor = _.correctionFactor(accum, curr);
+		                return Math.round(accum * corrFactor) * Math.round(curr * corrFactor) / Math.round(corrFactor * corrFactor);
+		            }
+
+		            this._value = _.reduce([this._value, value], cback, 1);
+
+		            return this;
+		        },
+		        divide: function(value) {
+		            function cback(accum, curr, currI, O) {
+		                var corrFactor = _.correctionFactor(accum, curr);
+		                return Math.round(accum * corrFactor) / Math.round(curr * corrFactor);
+		            }
+
+		            this._value = _.reduce([this._value, value], cback);
+
+		            return this;
+		        },
+		        difference: function(value) {
+		            return Math.abs(numeral(this._value).subtract(value).value());
+		        }
+		    };
+
+		    /************************************
+		        Default Locale && Format
+		    ************************************/
+
+		    numeral.register('locale', 'en', {
+		        delimiters: {
+		            thousands: ',',
+		            decimal: '.'
+		        },
+		        abbreviations: {
+		            thousand: 'k',
+		            million: 'm',
+		            billion: 'b',
+		            trillion: 't'
+		        },
+		        ordinal: function(number) {
+		            var b = number % 10;
+		            return (~~(number % 100 / 10) === 1) ? 'th' :
+		                (b === 1) ? 'st' :
+		                (b === 2) ? 'nd' :
+		                (b === 3) ? 'rd' : 'th';
+		        },
+		        currency: {
+		            symbol: '$'
+		        }
+		    });
+
+		    
+
+		(function() {
+		        numeral.register('format', 'bps', {
+		            regexps: {
+		                format: /(BPS)/,
+		                unformat: /(BPS)/
+		            },
+		            format: function(value, format, roundingFunction) {
+		                var space = numeral._.includes(format, ' BPS') ? ' ' : '',
+		                    output;
+
+		                value = value * 10000;
+
+		                // check for space before BPS
+		                format = format.replace(/\s?BPS/, '');
+
+		                output = numeral._.numberToFormat(value, format, roundingFunction);
+
+		                if (numeral._.includes(output, ')')) {
+		                    output = output.split('');
+
+		                    output.splice(-1, 0, space + 'BPS');
+
+		                    output = output.join('');
+		                } else {
+		                    output = output + space + 'BPS';
+		                }
+
+		                return output;
+		            },
+		            unformat: function(string) {
+		                return +(numeral._.stringToNumber(string) * 0.0001).toFixed(15);
+		            }
+		        });
+		})();
+
+
+		(function() {
+		        var decimal = {
+		            base: 1000,
+		            suffixes: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+		        },
+		        binary = {
+		            base: 1024,
+		            suffixes: ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+		        };
+
+		    var allSuffixes =  decimal.suffixes.concat(binary.suffixes.filter(function (item) {
+		            return decimal.suffixes.indexOf(item) < 0;
+		        }));
+		        var unformatRegex = allSuffixes.join('|');
+		        // Allow support for BPS (http://www.investopedia.com/terms/b/basispoint.asp)
+		        unformatRegex = '(' + unformatRegex.replace('B', 'B(?!PS)') + ')';
+
+		    numeral.register('format', 'bytes', {
+		        regexps: {
+		            format: /([0\s]i?b)/,
+		            unformat: new RegExp(unformatRegex)
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var output,
+		                bytes = numeral._.includes(format, 'ib') ? binary : decimal,
+		                suffix = numeral._.includes(format, ' b') || numeral._.includes(format, ' ib') ? ' ' : '',
+		                power,
+		                min,
+		                max;
+
+		            // check for space before
+		            format = format.replace(/\s?i?b/, '');
+
+		            for (power = 0; power <= bytes.suffixes.length; power++) {
+		                min = Math.pow(bytes.base, power);
+		                max = Math.pow(bytes.base, power + 1);
+
+		                if (value === null || value === 0 || value >= min && value < max) {
+		                    suffix += bytes.suffixes[power];
+
+		                    if (min > 0) {
+		                        value = value / min;
+		                    }
+
+		                    break;
+		                }
+		            }
+
+		            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+		            return output + suffix;
+		        },
+		        unformat: function(string) {
+		            var value = numeral._.stringToNumber(string),
+		                power,
+		                bytesMultiplier;
+
+		            if (value) {
+		                for (power = decimal.suffixes.length - 1; power >= 0; power--) {
+		                    if (numeral._.includes(string, decimal.suffixes[power])) {
+		                        bytesMultiplier = Math.pow(decimal.base, power);
+
+		                        break;
+		                    }
+
+		                    if (numeral._.includes(string, binary.suffixes[power])) {
+		                        bytesMultiplier = Math.pow(binary.base, power);
+
+		                        break;
+		                    }
+		                }
+
+		                value *= (bytesMultiplier || 1);
+		            }
+
+		            return value;
+		        }
+		    });
+		})();
+
+
+		(function() {
+		        numeral.register('format', 'currency', {
+		        regexps: {
+		            format: /(\$)/
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var locale = numeral.locales[numeral.options.currentLocale],
+		                symbols = {
+		                    before: format.match(/^([\+|\-|\(|\s|\$]*)/)[0],
+		                    after: format.match(/([\+|\-|\)|\s|\$]*)$/)[0]
+		                },
+		                output,
+		                symbol,
+		                i;
+
+		            // strip format of spaces and $
+		            format = format.replace(/\s?\$\s?/, '');
+
+		            // format the number
+		            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+		            // update the before and after based on value
+		            if (value >= 0) {
+		                symbols.before = symbols.before.replace(/[\-\(]/, '');
+		                symbols.after = symbols.after.replace(/[\-\)]/, '');
+		            } else if (value < 0 && (!numeral._.includes(symbols.before, '-') && !numeral._.includes(symbols.before, '('))) {
+		                symbols.before = '-' + symbols.before;
+		            }
+
+		            // loop through each before symbol
+		            for (i = 0; i < symbols.before.length; i++) {
+		                symbol = symbols.before[i];
+
+		                switch (symbol) {
+		                    case '$':
+		                        output = numeral._.insert(output, locale.currency.symbol, i);
+		                        break;
+		                    case ' ':
+		                        output = numeral._.insert(output, ' ', i + locale.currency.symbol.length - 1);
+		                        break;
+		                }
+		            }
+
+		            // loop through each after symbol
+		            for (i = symbols.after.length - 1; i >= 0; i--) {
+		                symbol = symbols.after[i];
+
+		                switch (symbol) {
+		                    case '$':
+		                        output = i === symbols.after.length - 1 ? output + locale.currency.symbol : numeral._.insert(output, locale.currency.symbol, -(symbols.after.length - (1 + i)));
+		                        break;
+		                    case ' ':
+		                        output = i === symbols.after.length - 1 ? output + ' ' : numeral._.insert(output, ' ', -(symbols.after.length - (1 + i) + locale.currency.symbol.length - 1));
+		                        break;
+		                }
+		            }
+
+
+		            return output;
+		        }
+		    });
+		})();
+
+
+		(function() {
+		        numeral.register('format', 'exponential', {
+		        regexps: {
+		            format: /(e\+|e-)/,
+		            unformat: /(e\+|e-)/
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var output,
+		                exponential = typeof value === 'number' && !numeral._.isNaN(value) ? value.toExponential() : '0e+0',
+		                parts = exponential.split('e');
+
+		            format = format.replace(/e[\+|\-]{1}0/, '');
+
+		            output = numeral._.numberToFormat(Number(parts[0]), format, roundingFunction);
+
+		            return output + 'e' + parts[1];
+		        },
+		        unformat: function(string) {
+		            var parts = numeral._.includes(string, 'e+') ? string.split('e+') : string.split('e-'),
+		                value = Number(parts[0]),
+		                power = Number(parts[1]);
+
+		            power = numeral._.includes(string, 'e-') ? power *= -1 : power;
+
+		            function cback(accum, curr, currI, O) {
+		                var corrFactor = numeral._.correctionFactor(accum, curr),
+		                    num = (accum * corrFactor) * (curr * corrFactor) / (corrFactor * corrFactor);
+		                return num;
+		            }
+
+		            return numeral._.reduce([value, Math.pow(10, power)], cback, 1);
+		        }
+		    });
+		})();
+
+
+		(function() {
+		        numeral.register('format', 'ordinal', {
+		        regexps: {
+		            format: /(o)/
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var locale = numeral.locales[numeral.options.currentLocale],
+		                output,
+		                ordinal = numeral._.includes(format, ' o') ? ' ' : '';
+
+		            // check for space before
+		            format = format.replace(/\s?o/, '');
+
+		            ordinal += locale.ordinal(value);
+
+		            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+		            return output + ordinal;
+		        }
+		    });
+		})();
+
+
+		(function() {
+		        numeral.register('format', 'percentage', {
+		        regexps: {
+		            format: /(%)/,
+		            unformat: /(%)/
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var space = numeral._.includes(format, ' %') ? ' ' : '',
+		                output;
+
+		            if (numeral.options.scalePercentBy100) {
+		                value = value * 100;
+		            }
+
+		            // check for space before %
+		            format = format.replace(/\s?\%/, '');
+
+		            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+		            if (numeral._.includes(output, ')')) {
+		                output = output.split('');
+
+		                output.splice(-1, 0, space + '%');
+
+		                output = output.join('');
+		            } else {
+		                output = output + space + '%';
+		            }
+
+		            return output;
+		        },
+		        unformat: function(string) {
+		            var number = numeral._.stringToNumber(string);
+		            if (numeral.options.scalePercentBy100) {
+		                return number * 0.01;
+		            }
+		            return number;
+		        }
+		    });
+		})();
+
+
+		(function() {
+		        numeral.register('format', 'time', {
+		        regexps: {
+		            format: /(:)/,
+		            unformat: /(:)/
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var hours = Math.floor(value / 60 / 60),
+		                minutes = Math.floor((value - (hours * 60 * 60)) / 60),
+		                seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
+
+		            return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
+		        },
+		        unformat: function(string) {
+		            var timeArray = string.split(':'),
+		                seconds = 0;
+
+		            // turn hours and minutes into seconds and add them all up
+		            if (timeArray.length === 3) {
+		                // hours
+		                seconds = seconds + (Number(timeArray[0]) * 60 * 60);
+		                // minutes
+		                seconds = seconds + (Number(timeArray[1]) * 60);
+		                // seconds
+		                seconds = seconds + Number(timeArray[2]);
+		            } else if (timeArray.length === 2) {
+		                // minutes
+		                seconds = seconds + (Number(timeArray[0]) * 60);
+		                // seconds
+		                seconds = seconds + Number(timeArray[1]);
+		            }
+		            return Number(seconds);
+		        }
+		    });
+		})();
+
+		return numeral;
+		}));
+	} (numeral$1));
 
 	var numeral = numeral$1.exports;
 
@@ -12638,7 +13341,8 @@
 	  return pick(obj, ["hour", "minute", "second", "millisecond"]);
 	}
 
-	const ianaRegex = /[A-Za-z_+-]{1,256}(:?\/[A-Za-z0-9_+-]{1,256}(\/[A-Za-z0-9_+-]{1,256})?)?/;
+	const ianaRegex =
+	  /[A-Za-z_+-]{1,256}(?::?\/[A-Za-z0-9_+-]{1,256}(?:\/[A-Za-z0-9_+-]{1,256})?)?/;
 
 	/**
 	 * @private
@@ -13160,6 +13864,8 @@
 	            return "hour";
 	          case "d":
 	            return "day";
+	          case "w":
+	            return "week";
 	          case "M":
 	            return "month";
 	          case "y":
@@ -13221,6 +13927,10 @@
 	   */
 	  get name() {
 	    throw new ZoneIsAbstractError();
+	  }
+
+	  get ianaName() {
+	    return this.name;
 	  }
 
 	  /**
@@ -13346,8 +14056,6 @@
 	  }
 	}
 
-	const matchingRegex = RegExp(`^${ianaRegex.source}$`);
-
 	let dtfCache = {};
 	function makeDTF(zone) {
 	  if (!dtfCache[zone]) {
@@ -13360,6 +14068,7 @@
 	      hour: "2-digit",
 	      minute: "2-digit",
 	      second: "2-digit",
+	      era: "short",
 	    });
 	  }
 	  return dtfCache[zone];
@@ -13369,26 +14078,29 @@
 	  year: 0,
 	  month: 1,
 	  day: 2,
-	  hour: 3,
-	  minute: 4,
-	  second: 5,
+	  era: 3,
+	  hour: 4,
+	  minute: 5,
+	  second: 6,
 	};
 
 	function hackyOffset(dtf, date) {
 	  const formatted = dtf.format(date).replace(/\u200E/g, ""),
-	    parsed = /(\d+)\/(\d+)\/(\d+),? (\d+):(\d+):(\d+)/.exec(formatted),
-	    [, fMonth, fDay, fYear, fHour, fMinute, fSecond] = parsed;
-	  return [fYear, fMonth, fDay, fHour, fMinute, fSecond];
+	    parsed = /(\d+)\/(\d+)\/(\d+) (AD|BC),? (\d+):(\d+):(\d+)/.exec(formatted),
+	    [, fMonth, fDay, fYear, fadOrBc, fHour, fMinute, fSecond] = parsed;
+	  return [fYear, fMonth, fDay, fadOrBc, fHour, fMinute, fSecond];
 	}
 
 	function partsOffset(dtf, date) {
-	  const formatted = dtf.formatToParts(date),
-	    filled = [];
+	  const formatted = dtf.formatToParts(date);
+	  const filled = [];
 	  for (let i = 0; i < formatted.length; i++) {
-	    const { type, value } = formatted[i],
-	      pos = typeToPos[type];
+	    const { type, value } = formatted[i];
+	    const pos = typeToPos[type];
 
-	    if (!isUndefined(pos)) {
+	    if (type === "era") {
+	      filled[pos] = value;
+	    } else if (!isUndefined(pos)) {
 	      filled[pos] = parseInt(value, 10);
 	    }
 	  }
@@ -13425,12 +14137,12 @@
 	   * Returns whether the provided string is a valid specifier. This only checks the string's format, not that the specifier identifies a known zone; see isValidZone for that.
 	   * @param {string} s - The string to check validity on
 	   * @example IANAZone.isValidSpecifier("America/New_York") //=> true
-	   * @example IANAZone.isValidSpecifier("Fantasia/Castle") //=> true
 	   * @example IANAZone.isValidSpecifier("Sport~~blorp") //=> false
+	   * @deprecated This method returns false for some valid IANA names. Use isValidZone instead.
 	   * @return {boolean}
 	   */
 	  static isValidSpecifier(s) {
-	    return !!(s && s.match(matchingRegex));
+	    return this.isValidZone(s);
 	  }
 
 	  /**
@@ -13492,10 +14204,14 @@
 
 	    if (isNaN(date)) return NaN;
 
-	    const dtf = makeDTF(this.name),
-	      [year, month, day, hour, minute, second] = dtf.formatToParts
-	        ? partsOffset(dtf, date)
-	        : hackyOffset(dtf, date);
+	    const dtf = makeDTF(this.name);
+	    let [year, month, day, adOrBc, hour, minute, second] = dtf.formatToParts
+	      ? partsOffset(dtf, date)
+	      : hackyOffset(dtf, date);
+
+	    if (adOrBc === "BC") {
+	      year = -Math.abs(year) + 1;
+	    }
 
 	    // because we're using hour12 and https://bugs.chromium.org/p/chromium/issues/detail?id=1025564&can=2&q=%2224%3A00%22%20datetimeformat
 	    const adjustedHour = hour === 24 ? 0 : hour;
@@ -13586,6 +14302,14 @@
 	  /** @override **/
 	  get name() {
 	    return this.fixed === 0 ? "UTC" : `UTC${formatOffset(this.fixed, "narrow")}`;
+	  }
+
+	  get ianaName() {
+	    if (this.fixed === 0) {
+	      return "Etc/UTC";
+	    } else {
+	      return `Etc/GMT${formatOffset(-this.fixed, "narrow")}`;
+	    }
 	  }
 
 	  /** @override **/
@@ -13684,8 +14408,7 @@
 	    const lowered = input.toLowerCase();
 	    if (lowered === "local" || lowered === "system") return defaultZone;
 	    else if (lowered === "utc" || lowered === "gmt") return FixedOffsetZone.utcInstance;
-	    else if (IANAZone.isValidSpecifier(lowered)) return IANAZone.create(input);
-	    else return FixedOffsetZone.parseSpecifier(lowered) || new InvalidZone(input);
+	    else return FixedOffsetZone.parseSpecifier(lowered) || IANAZone.create(input);
 	  } else if (isNumber(input)) {
 	    return FixedOffsetZone.instance(input);
 	  } else if (typeof input === "object" && input.offset && typeof input.offset === "number") {
@@ -14293,7 +15016,7 @@
 	      .reduce(
 	        ([mergedVals, mergedZone, cursor], ex) => {
 	          const [val, zone, next] = ex(m, cursor);
-	          return [{ ...mergedVals, ...val }, mergedZone || zone, next];
+	          return [{ ...mergedVals, ...val }, zone || mergedZone, next];
 	        },
 	        [{}, null, 1]
 	      )
@@ -14327,20 +15050,21 @@
 	}
 
 	// ISO and SQL parsing
-	const offsetRegex = /(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/,
-	  isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,30}))?)?)?/,
-	  isoTimeRegex = RegExp(`${isoTimeBaseRegex.source}${offsetRegex.source}?`),
-	  isoTimeExtensionRegex = RegExp(`(?:T${isoTimeRegex.source})?`),
-	  isoYmdRegex = /([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/,
-	  isoWeekRegex = /(\d{4})-?W(\d\d)(?:-?(\d))?/,
-	  isoOrdinalRegex = /(\d{4})-?(\d{3})/,
-	  extractISOWeekData = simpleParse("weekYear", "weekNumber", "weekDay"),
-	  extractISOOrdinalData = simpleParse("year", "ordinal"),
-	  sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/, // dumbed-down version of the ISO one
-	  sqlTimeRegex = RegExp(
-	    `${isoTimeBaseRegex.source} ?(?:${offsetRegex.source}|(${ianaRegex.source}))?`
-	  ),
-	  sqlTimeExtensionRegex = RegExp(`(?: ${sqlTimeRegex.source})?`);
+	const offsetRegex = /(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/;
+	const isoExtendedZone = `(?:${offsetRegex.source}?(?:\\[(${ianaRegex.source})\\])?)?`;
+	const isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,30}))?)?)?/;
+	const isoTimeRegex = RegExp(`${isoTimeBaseRegex.source}${isoExtendedZone}`);
+	const isoTimeExtensionRegex = RegExp(`(?:T${isoTimeRegex.source})?`);
+	const isoYmdRegex = /([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/;
+	const isoWeekRegex = /(\d{4})-?W(\d\d)(?:-?(\d))?/;
+	const isoOrdinalRegex = /(\d{4})-?(\d{3})/;
+	const extractISOWeekData = simpleParse("weekYear", "weekNumber", "weekDay");
+	const extractISOOrdinalData = simpleParse("year", "ordinal");
+	const sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/; // dumbed-down version of the ISO one
+	const sqlTimeRegex = RegExp(
+	  `${isoTimeBaseRegex.source} ?(?:${offsetRegex.source}|(${ianaRegex.source}))?`
+	);
+	const sqlTimeExtensionRegex = RegExp(`(?: ${sqlTimeRegex.source})?`);
 
 	function int(match, pos, fallback) {
 	  const m = match[pos];
@@ -14518,21 +15242,28 @@
 	const extractISOYmdTimeAndOffset = combineExtractors(
 	  extractISOYmd,
 	  extractISOTime,
-	  extractISOOffset
+	  extractISOOffset,
+	  extractIANAZone
 	);
 	const extractISOWeekTimeAndOffset = combineExtractors(
 	  extractISOWeekData,
 	  extractISOTime,
-	  extractISOOffset
+	  extractISOOffset,
+	  extractIANAZone
 	);
 	const extractISOOrdinalDateAndTime = combineExtractors(
 	  extractISOOrdinalData,
 	  extractISOTime,
-	  extractISOOffset
+	  extractISOOffset,
+	  extractIANAZone
 	);
-	const extractISOTimeAndOffset = combineExtractors(extractISOTime, extractISOOffset);
+	const extractISOTimeAndOffset = combineExtractors(
+	  extractISOTime,
+	  extractISOOffset,
+	  extractIANAZone
+	);
 
-	/**
+	/*
 	 * @private
 	 */
 
@@ -14572,12 +15303,6 @@
 	const sqlYmdWithTimeExtensionRegex = combineRegexes(sqlYmdRegex, sqlTimeExtensionRegex);
 	const sqlTimeCombinedRegex = combineRegexes(sqlTimeRegex);
 
-	const extractISOYmdTimeOffsetAndIANAZone = combineExtractors(
-	  extractISOYmd,
-	  extractISOTime,
-	  extractISOOffset,
-	  extractIANAZone
-	);
 	const extractISOTimeOffsetAndIANAZone = combineExtractors(
 	  extractISOTime,
 	  extractISOOffset,
@@ -14587,7 +15312,7 @@
 	function parseSQL(s) {
 	  return parse(
 	    s,
-	    [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeOffsetAndIANAZone],
+	    [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeAndOffset],
 	    [sqlTimeCombinedRegex, extractISOTimeOffsetAndIANAZone]
 	  );
 	}
@@ -14979,6 +15704,7 @@
 	   * * `m` for minutes
 	   * * `h` for hours
 	   * * `d` for days
+	   * * `w` for weeks
 	   * * `M` for months
 	   * * `y` for years
 	   * Notes:
@@ -15004,8 +15730,9 @@
 	  }
 
 	  /**
-	   * Returns a string representation of a Duration with all units included
-	   * To modify its behavior use the `listStyle` and any Intl.NumberFormat option, though `unitDisplay` is especially relevant. See {@link Intl.NumberFormat}.
+	   * Returns a string representation of a Duration with all units included.
+	   * To modify its behavior use the `listStyle` and any Intl.NumberFormat option, though `unitDisplay` is especially relevant.
+	   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 	   * @param opts - On option object to override the formatting. Accepts the same keys as the options parameter of the native `Int.NumberFormat` constructor, as well as `listStyle`.
 	   * @example
 	   * ```js
@@ -15344,7 +16071,7 @@
 	    if (!this.isValid) return this;
 	    const negated = {};
 	    for (const k of Object.keys(this.values)) {
-	      negated[k] = -this.values[k];
+	      negated[k] = this.values[k] === 0 ? 0 : -this.values[k];
 	    }
 	    return clone$1(this, { values: negated }, true);
 	  }
@@ -16099,7 +16826,7 @@
 	   * @return {boolean}
 	   */
 	  static isValidIANAZone(zone) {
-	    return IANAZone.isValidSpecifier(zone) && IANAZone.isValidZone(zone);
+	    return IANAZone.isValidZone(zone);
 	  }
 
 	  /**
@@ -16398,7 +17125,7 @@
 	}
 
 	const NBSP = String.fromCharCode(160);
-	const spaceOrNBSP = `( |${NBSP})`;
+	const spaceOrNBSP = `[ ${NBSP}]`;
 	const spaceOrNBSPRegExp = new RegExp(spaceOrNBSP, "g");
 
 	function fixListRegex(s) {
@@ -16828,7 +17555,14 @@
 	}
 
 	function dayOfWeek(year, month, day) {
-	  const js = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+	  const d = new Date(Date.UTC(year, month - 1, day));
+
+	  if (year < 100 && year >= 0) {
+	    d.setUTCFullYear(d.getUTCFullYear() - 1900);
+	  }
+
+	  const js = d.getUTCDay();
+
 	  return js === 0 ? 7 : js;
 	}
 
@@ -17125,7 +17859,14 @@
 	  return c;
 	}
 
-	function toISOTime(o, extended, suppressSeconds, suppressMilliseconds, includeOffset) {
+	function toISOTime(
+	  o,
+	  extended,
+	  suppressSeconds,
+	  suppressMilliseconds,
+	  includeOffset,
+	  extendedZone
+	) {
 	  let c = padStart(o.c.hour);
 	  if (extended) {
 	    c += ":";
@@ -17147,7 +17888,7 @@
 	  }
 
 	  if (includeOffset) {
-	    if (o.isOffsetFixed && o.offset === 0) {
+	    if (o.isOffsetFixed && o.offset === 0 && !extendedZone) {
 	      c += "Z";
 	    } else if (o.o < 0) {
 	      c += "-";
@@ -17160,6 +17901,10 @@
 	      c += ":";
 	      c += padStart(Math.trunc(o.o % 60));
 	    }
+	  }
+
+	  if (extendedZone) {
+	    c += "[" + o.zone.ianaName + "]";
 	  }
 	  return c;
 	}
@@ -17235,10 +17980,6 @@
 
 	  return normalized;
 	}
-
-	// this is a dumbed down version of fromObject() that runs about 60% faster
-	// but doesn't do any validation, makes a bunch of assumptions about what units
-	// are present, and so on.
 
 	// this is a dumbed down version of fromObject() that runs about 60% faster
 	// but doesn't do any validation, makes a bunch of assumptions about what units
@@ -17819,7 +18560,7 @@
 	  }
 
 	  /**
-	   * Check if an object is a DateTime. Works across context boundaries
+	   * Check if an object is an instance of DateTime. Works across context boundaries
 	   * @param {object} o
 	   * @return {boolean}
 	   */
@@ -18120,7 +18861,8 @@
 	      return false;
 	    } else {
 	      return (
-	        this.offset > this.set({ month: 1 }).offset || this.offset > this.set({ month: 5 }).offset
+	        this.offset > this.set({ month: 1, day: 1 }).offset ||
+	        this.offset > this.set({ month: 5 }).offset
 	      );
 	    }
 	  }
@@ -18473,6 +19215,7 @@
 	   * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
 	   * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
 	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @param {boolean} [opts.extendedZone=true] - add the time zone format extension
 	   * @param {string} [opts.format='extended'] - choose between the basic and extended format
 	   * @example DateTime.utc(1983, 5, 25).toISO() //=> '1982-05-25T00:00:00.000Z'
 	   * @example DateTime.now().toISO() //=> '2017-04-22T20:47:05.335-04:00'
@@ -18485,6 +19228,7 @@
 	    suppressSeconds = false,
 	    suppressMilliseconds = false,
 	    includeOffset = true,
+	    extendedZone = false,
 	  } = {}) {
 	    if (!this.isValid) {
 	      return null;
@@ -18494,7 +19238,7 @@
 
 	    let c = toISODate(this, ext);
 	    c += "T";
-	    c += toISOTime(this, ext, suppressSeconds, suppressMilliseconds, includeOffset);
+	    c += toISOTime(this, ext, suppressSeconds, suppressMilliseconds, includeOffset, extendedZone);
 	    return c;
 	  }
 
@@ -18529,6 +19273,7 @@
 	   * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
 	   * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
 	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @param {boolean} [opts.extendedZone=true] - add the time zone format extension
 	   * @param {boolean} [opts.includePrefix=false] - include the `T` prefix
 	   * @param {string} [opts.format='extended'] - choose between the basic and extended format
 	   * @example DateTime.utc().set({ hour: 7, minute: 34 }).toISOTime() //=> '07:34:19.361Z'
@@ -18542,6 +19287,7 @@
 	    suppressSeconds = false,
 	    includeOffset = true,
 	    includePrefix = false,
+	    extendedZone = false,
 	    format = "extended",
 	  } = {}) {
 	    if (!this.isValid) {
@@ -18551,7 +19297,14 @@
 	    let c = includePrefix ? "T" : "";
 	    return (
 	      c +
-	      toISOTime(this, format === "extended", suppressSeconds, suppressMilliseconds, includeOffset)
+	      toISOTime(
+	        this,
+	        format === "extended",
+	        suppressSeconds,
+	        suppressMilliseconds,
+	        includeOffset,
+	        extendedZone
+	      )
 	    );
 	  }
 
@@ -18594,17 +19347,20 @@
 	   * @param {Object} opts - options
 	   * @param {boolean} [opts.includeZone=false] - include the zone, such as 'America/New_York'. Overrides includeOffset.
 	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @param {boolean} [opts.includeOffsetSpace=true] - include the space between the time and the offset, such as '05:15:16.345 -04:00'
 	   * @example DateTime.utc().toSQL() //=> '05:15:16.345'
 	   * @example DateTime.now().toSQL() //=> '05:15:16.345 -04:00'
 	   * @example DateTime.now().toSQL({ includeOffset: false }) //=> '05:15:16.345'
 	   * @example DateTime.now().toSQL({ includeZone: false }) //=> '05:15:16.345 America/New_York'
 	   * @return {string}
 	   */
-	  toSQLTime({ includeOffset = true, includeZone = false } = {}) {
+	  toSQLTime({ includeOffset = true, includeZone = false, includeOffsetSpace = true } = {}) {
 	    let fmt = "HH:mm:ss.SSS";
 
 	    if (includeZone || includeOffset) {
-	      fmt += " ";
+	      if (includeOffsetSpace) {
+	        fmt += " ";
+	      }
 	      if (includeZone) {
 	        fmt += "z";
 	      } else if (includeOffset) {
@@ -18620,6 +19376,7 @@
 	   * @param {Object} opts - options
 	   * @param {boolean} [opts.includeZone=false] - include the zone, such as 'America/New_York'. Overrides includeOffset.
 	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @param {boolean} [opts.includeOffsetSpace=true] - include the space between the time and the offset, such as '05:15:16.345 -04:00'
 	   * @example DateTime.utc(2014, 7, 13).toSQL() //=> '2014-07-13 00:00:00.000 Z'
 	   * @example DateTime.local(2014, 7, 13).toSQL() //=> '2014-07-13 00:00:00.000 -04:00'
 	   * @example DateTime.local(2014, 7, 13).toSQL({ includeOffset: false }) //=> '2014-07-13 00:00:00.000'
@@ -18664,6 +19421,14 @@
 	   */
 	  toSeconds() {
 	    return this.isValid ? this.ts / 1000 : NaN;
+	  }
+
+	  /**
+	   * Returns the epoch seconds (as a whole number) of this DateTime.
+	   * @return {number}
+	   */
+	  toUnixInteger() {
+	    return this.isValid ? Math.floor(this.ts / 1000) : NaN;
 	  }
 
 	  /**
@@ -19104,7 +19869,7 @@
 	  }
 	}
 
-	const VERSION = "2.3.0";
+	const VERSION = "2.4.0";
 
 	var luxon = /*#__PURE__*/Object.freeze({
 		__proto__: null,
@@ -19498,7 +20263,7 @@
 	    }
 	    else if (typeof window !== "undefined" &&
 	        typeof window.XMLHttpRequest === "function" &&
-	        (!fs.readFileSync )) {
+	        (!fs.readFileSync || type === 'fetch')) {
 	        const jsFile = fetchJSONSync(template);
 	        const jsonxModule = scopedEval$1(`(${jsFile})`);
 	        templateCache.set(template, jsonxModule);
@@ -19677,8 +20442,8 @@ ${jsonxRenderedString}`;
 	function outputHTML(config = { jsonx: { component: "" } }) {
 	    const { jsonx, resources, type, props, children } = config;
 	    return this && this.useJSON
-	        ? server.renderToString(getReactElementFromJSON.call(this || {}, { type: (type || jsonx.type || jsonx.component || 'Fragment'), props: props || jsonx.props, children: children || jsonx.children }))
-	        : server.renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
+	        ? server_node.renderToString(getReactElementFromJSON.call(this || {}, { type: (type || jsonx.type || jsonx.component || 'Fragment'), props: props || jsonx.props, children: children || jsonx.children }))
+	        : server_node.renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
 	}
 	/**
 	 * Use React.createElement and JSONX JSON to create React elements

@@ -28,8 +28,14 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 	function getAugmentedNamespace(n) {
-		if (n.__esModule) return n;
-		var a = Object.defineProperty({}, '__esModule', {value: true});
+	  var f = n.default;
+		if (typeof f == "function") {
+			var a = function () {
+				return f.apply(this, arguments);
+			};
+			a.prototype = f.prototype;
+	  } else a = {};
+	  Object.defineProperty(a, '__esModule', {value: true});
 		Object.keys(n).forEach(function (k) {
 			var d = Object.getOwnPropertyDescriptor(n, k);
 			Object.defineProperty(a, k, d.get ? d : {
@@ -42,98 +48,9 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 		return a;
 	}
 
-	var server_node = {exports: {}};
+	var server_node = {};
 
-	var reactDomServer_node_development = {};
-
-	/*
-	object-assign
-	(c) Sindre Sorhus
-	@license MIT
-	*/
-	/* eslint-disable no-unused-vars */
-	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-	var hasOwnProperty$2 = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-	function toObject(val) {
-		if (val === null || val === undefined) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	function shouldUseNative() {
-		try {
-			if (!Object.assign) {
-				return false;
-			}
-
-			// Detect buggy property enumeration order in older V8 versions.
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
-			test1[5] = 'de';
-			if (Object.getOwnPropertyNames(test1)[0] === '5') {
-				return false;
-			}
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test2 = {};
-			for (var i = 0; i < 10; i++) {
-				test2['_' + String.fromCharCode(i)] = i;
-			}
-			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-				return test2[n];
-			});
-			if (order2.join('') !== '0123456789') {
-				return false;
-			}
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test3 = {};
-			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-				test3[letter] = letter;
-			});
-			if (Object.keys(Object.assign({}, test3)).join('') !==
-					'abcdefghijklmnopqrst') {
-				return false;
-			}
-
-			return true;
-		} catch (err) {
-			// We don't expect any of the above to throw, but better to be safe.
-			return false;
-		}
-	}
-
-	var objectAssign = shouldUseNative() ? Object.assign : function (target, source) {
-		var from;
-		var to = toObject(target);
-		var symbols;
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
-
-			for (var key in from) {
-				if (hasOwnProperty$2.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
-
-			if (getOwnPropertySymbols) {
-				symbols = getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
-
-		return to;
-	};
+	var reactDomServerLegacy_node_development = {};
 
 	var domain;
 
@@ -836,6 +753,11 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  ? (typeof global$2!=="undefined" ? global$2 : window).TYPED_ARRAY_SUPPORT
 	  : true;
 
+	/*
+	 * Export kMaxLength after typed array support is determined.
+	 */
+	kMaxLength();
+
 	function kMaxLength () {
 	  return Buffer.TYPED_ARRAY_SUPPORT
 	    ? 0x7fffffff
@@ -927,6 +849,8 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	if (Buffer.TYPED_ARRAY_SUPPORT) {
 	  Buffer.prototype.__proto__ = Uint8Array.prototype;
 	  Buffer.__proto__ = Uint8Array;
+	  if (typeof Symbol !== 'undefined' && Symbol.species &&
+	      Buffer[Symbol.species] === Buffer) ;
 	}
 
 	function assertSize (size) {
@@ -1087,7 +1011,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  }
 	  return length | 0
 	}
-	Buffer.isBuffer = isBuffer;
+	Buffer.isBuffer = isBuffer$1;
 	function internalIsBuffer (b) {
 	  return !!(b != null && b._isBuffer)
 	}
@@ -2553,7 +2477,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	// the following is from is-buffer, also by Feross Aboukhadijeh and with same lisence
 	// The _isBuffer check is for Safari 5-7 support, because it's missing
 	// Object.prototype.constructor. Remove this eventually
-	function isBuffer(obj) {
+	function isBuffer$1(obj) {
 	  return obj != null && (!!obj._isBuffer || isFastBuffer(obj) || isSlowBuffer(obj))
 	}
 
@@ -2699,15 +2623,94 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	Item.prototype.run = function () {
 	    this.fun.apply(null, this.array);
 	};
+	var title = 'browser';
+	var platform = 'browser';
+	var browser = true;
+	var env = {};
+	var argv = [];
+	var version = ''; // empty string to avoid regexp issues
+	var versions = {};
+	var release = {};
+	var config = {};
+
+	function noop() {}
+
+	var on = noop;
+	var addListener = noop;
+	var once = noop;
+	var off = noop;
+	var removeListener = noop;
+	var removeAllListeners = noop;
+	var emit = noop;
+
+	function binding(name) {
+	    throw new Error('process.binding is not supported');
+	}
+
+	function cwd () { return '/' }
+	function chdir (dir) {
+	    throw new Error('process.chdir is not supported');
+	}function umask() { return 0; }
 
 	// from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
 	var performance$1 = (typeof global$2!=="undefined" ? global$2 : window).performance || {};
-	performance$1.now        ||
+	var performanceNow =
+	  performance$1.now        ||
 	  performance$1.mozNow     ||
 	  performance$1.msNow      ||
 	  performance$1.oNow       ||
 	  performance$1.webkitNow  ||
 	  function(){ return (new Date()).getTime() };
+
+	// generate timestamp or delta
+	// see http://nodejs.org/api/process.html#process_process_hrtime
+	function hrtime(previousTimestamp){
+	  var clocktime = performanceNow.call(performance$1)*1e-3;
+	  var seconds = Math.floor(clocktime);
+	  var nanoseconds = Math.floor((clocktime%1)*1e9);
+	  if (previousTimestamp) {
+	    seconds = seconds - previousTimestamp[0];
+	    nanoseconds = nanoseconds - previousTimestamp[1];
+	    if (nanoseconds<0) {
+	      seconds--;
+	      nanoseconds += 1e9;
+	    }
+	  }
+	  return [seconds,nanoseconds]
+	}
+
+	var startTime = new Date();
+	function uptime() {
+	  var currentTime = new Date();
+	  var dif = currentTime - startTime;
+	  return dif / 1000;
+	}
+
+	var process = {
+	  nextTick: nextTick,
+	  title: title,
+	  browser: browser,
+	  env: env,
+	  argv: argv,
+	  version: version,
+	  versions: versions,
+	  on: on,
+	  addListener: addListener,
+	  once: once,
+	  off: off,
+	  removeListener: removeListener,
+	  removeAllListeners: removeAllListeners,
+	  emit: emit,
+	  binding: binding,
+	  cwd: cwd,
+	  chdir: chdir,
+	  umask: umask,
+	  hrtime: hrtime,
+	  platform: platform,
+	  release: release,
+	  config: config,
+	  uptime: uptime
+	};
 
 	var inherits;
 	if (typeof Object.create === 'function'){
@@ -2784,10 +2787,18 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    };
 	  }
 
+	  if (process.noDeprecation === true) {
+	    return fn;
+	  }
+
 	  var warned = false;
 	  function deprecated() {
 	    if (!warned) {
-	      {
+	      if (process.throwDeprecation) {
+	        throw new Error(msg);
+	      } else if (process.traceDeprecation) {
+	        console.trace(msg);
+	      } else {
 	        console.error(msg);
 	      }
 	      warned = true;
@@ -2802,7 +2813,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	var debugEnviron;
 	function debuglog(set) {
 	  if (isUndefined$2(debugEnviron))
-	    debugEnviron = '';
+	    debugEnviron = process.env.NODE_DEBUG || '';
 	  set = set.toUpperCase();
 	  if (!debugs[set]) {
 	    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
@@ -3050,7 +3061,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
 	  var output = [];
 	  for (var i = 0, l = value.length; i < l; ++i) {
-	    if (hasOwnProperty$1(value, String(i))) {
+	    if (hasOwnProperty$2(value, String(i))) {
 	      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
 	          String(i), true));
 	    } else {
@@ -3081,7 +3092,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	      str = ctx.stylize('[Setter]', 'special');
 	    }
 	  }
-	  if (!hasOwnProperty$1(visibleKeys, key)) {
+	  if (!hasOwnProperty$2(visibleKeys, key)) {
 	    name = '[' + key + ']';
 	  }
 	  if (!str) {
@@ -3159,12 +3170,20 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  return arg === null;
 	}
 
+	function isNullOrUndefined$1(arg) {
+	  return arg == null;
+	}
+
 	function isNumber$1(arg) {
 	  return typeof arg === 'number';
 	}
 
 	function isString$2(arg) {
 	  return typeof arg === 'string';
+	}
+
+	function isSymbol(arg) {
+	  return typeof arg === 'symbol';
 	}
 
 	function isUndefined$2(arg) {
@@ -3192,8 +3211,45 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  return typeof arg === 'function';
 	}
 
+	function isPrimitive$1(arg) {
+	  return arg === null ||
+	         typeof arg === 'boolean' ||
+	         typeof arg === 'number' ||
+	         typeof arg === 'string' ||
+	         typeof arg === 'symbol' ||  // ES6 symbol
+	         typeof arg === 'undefined';
+	}
+
+	function isBuffer(maybeBuf) {
+	  return isBuffer$1(maybeBuf);
+	}
+
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
+	}
+
+
+	function pad(n) {
+	  return n < 10 ? '0' + n.toString(10) : n.toString(10);
+	}
+
+
+	var months$1 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+	              'Oct', 'Nov', 'Dec'];
+
+	// 26 Feb 16:19:34
+	function timestamp() {
+	  var d = new Date();
+	  var time = [pad(d.getHours()),
+	              pad(d.getMinutes()),
+	              pad(d.getSeconds())].join(':');
+	  return [d.getDate(), months$1[d.getMonth()], time].join(' ');
+	}
+
+
+	// log is just a thin wrapper to console.log that prepends a timestamp
+	function log() {
+	  console.log('%s - %s', timestamp(), format.apply(null, arguments));
 	}
 
 	function _extend(origin, add) {
@@ -3207,9 +3263,61 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  }
 	  return origin;
 	}
-	function hasOwnProperty$1(obj, prop) {
+	function hasOwnProperty$2(obj, prop) {
 	  return Object.prototype.hasOwnProperty.call(obj, prop);
 	}
+
+	var util = {
+	  inherits: inherits$1,
+	  _extend: _extend,
+	  log: log,
+	  isBuffer: isBuffer,
+	  isPrimitive: isPrimitive$1,
+	  isFunction: isFunction$1,
+	  isError: isError,
+	  isDate: isDate$1,
+	  isObject: isObject$1,
+	  isRegExp: isRegExp,
+	  isUndefined: isUndefined$2,
+	  isSymbol: isSymbol,
+	  isString: isString$2,
+	  isNumber: isNumber$1,
+	  isNullOrUndefined: isNullOrUndefined$1,
+	  isNull: isNull,
+	  isBoolean: isBoolean$1,
+	  isArray: isArray,
+	  inspect: inspect,
+	  deprecate: deprecate,
+	  format: format,
+	  debuglog: debuglog
+	};
+
+	var util$1 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		format: format,
+		deprecate: deprecate,
+		debuglog: debuglog,
+		inspect: inspect,
+		isArray: isArray,
+		isBoolean: isBoolean$1,
+		isNull: isNull,
+		isNullOrUndefined: isNullOrUndefined$1,
+		isNumber: isNumber$1,
+		isString: isString$2,
+		isSymbol: isSymbol,
+		isUndefined: isUndefined$2,
+		isRegExp: isRegExp,
+		isObject: isObject$1,
+		isDate: isDate$1,
+		isError: isError,
+		isFunction: isFunction$1,
+		isPrimitive: isPrimitive$1,
+		isBuffer: isBuffer,
+		log: log,
+		inherits: inherits$1,
+		_extend: _extend,
+		'default': util
+	});
 
 	function BufferList() {
 	  this.head = null;
@@ -3808,7 +3916,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 
 	function chunkInvalid(state, chunk) {
 	  var er = null;
-	  if (!isBuffer(chunk) && typeof chunk !== 'string' && chunk !== null && chunk !== undefined && !state.objectMode) {
+	  if (!isBuffer$1(chunk) && typeof chunk !== 'string' && chunk !== null && chunk !== undefined && !state.objectMode) {
 	    er = new TypeError('Invalid non-string/buffer chunk');
 	  }
 	  return er;
@@ -5114,10 +5222,11 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 		Stream: Stream
 	});
 
-	var require$$2 = /*@__PURE__*/getAugmentedNamespace(stream);
+	var require$$1$1 = /*@__PURE__*/getAugmentedNamespace(stream);
 
-	/** @license React v17.0.2
-	 * react-dom-server.node.development.js
+	/**
+	 * @license React
+	 * react-dom-server-legacy.node.development.js
 	 *
 	 * Copyright (c) Facebook, Inc. and its affiliates.
 	 *
@@ -5129,24 +5238,9 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  (function() {
 
 	var React = React__default["default"];
-	var _assign = objectAssign;
-	var stream = require$$2;
+	var stream = require$$1$1;
 
-	// TODO: this is special because it gets imported during build.
-	var ReactVersion = '17.0.2';
-
-	// Do not require this module directly! Use normal `invariant` calls with
-	// template literal strings. The messages will be replaced with error codes
-	// during build.
-	function formatProdErrorMessage(code) {
-	  var url = 'https://reactjs.org/docs/error-decoder.html?invariant=' + code;
-
-	  for (var i = 1; i < arguments.length; i++) {
-	    url += '&args[]=' + encodeURIComponent(arguments[i]);
-	  }
-
-	  return "Minified React error #" + code + "; visit " + url + " for the full message or " + 'use the non-minified dev environment for full errors and additional ' + 'helpful warnings.';
-	}
+	var ReactVersion = '18.2.0';
 
 	var ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 
@@ -5157,20 +5251,24 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 
 	function warn(format) {
 	  {
-	    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	      args[_key - 1] = arguments[_key];
-	    }
+	    {
+	      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        args[_key - 1] = arguments[_key];
+	      }
 
-	    printWarning('warn', format, args);
+	      printWarning('warn', format, args);
+	    }
 	  }
 	}
 	function error(format) {
 	  {
-	    for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-	      args[_key2 - 1] = arguments[_key2];
-	    }
+	    {
+	      for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	        args[_key2 - 1] = arguments[_key2];
+	      }
 
-	    printWarning('error', format, args);
+	      printWarning('error', format, args);
+	    }
 	  }
 	}
 
@@ -5184,10 +5282,11 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    if (stack !== '') {
 	      format += '%s';
 	      args = args.concat([stack]);
-	    }
+	    } // eslint-disable-next-line react-internal/safe-string-coercion
+
 
 	    var argsWithFormat = args.map(function (item) {
-	      return '' + item;
+	      return String(item);
 	    }); // Careful: RN currently depends on this prefix
 
 	    argsWithFormat.unshift('Warning: ' + format); // We intentionally don't use spread (or .apply) directly because it
@@ -5197,691 +5296,119 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    Function.prototype.apply.call(console[level], console, argsWithFormat);
 	  }
 	}
-	var REACT_PORTAL_TYPE = 0xeaca;
-	var REACT_FRAGMENT_TYPE = 0xeacb;
-	var REACT_STRICT_MODE_TYPE = 0xeacc;
-	var REACT_PROFILER_TYPE = 0xead2;
-	var REACT_PROVIDER_TYPE = 0xeacd;
-	var REACT_CONTEXT_TYPE = 0xeace;
-	var REACT_FORWARD_REF_TYPE = 0xead0;
-	var REACT_SUSPENSE_TYPE = 0xead1;
-	var REACT_SUSPENSE_LIST_TYPE = 0xead8;
-	var REACT_MEMO_TYPE = 0xead3;
-	var REACT_LAZY_TYPE = 0xead4;
-	var REACT_BLOCK_TYPE = 0xead9;
-	var REACT_FUNDAMENTAL_TYPE = 0xead5;
-	var REACT_SCOPE_TYPE = 0xead7;
-	var REACT_DEBUG_TRACING_MODE_TYPE = 0xeae1;
-	var REACT_LEGACY_HIDDEN_TYPE = 0xeae3;
 
-	if (typeof Symbol === 'function' && Symbol.for) {
-	  var symbolFor = Symbol.for;
-	  symbolFor('react.element');
-	  REACT_PORTAL_TYPE = symbolFor('react.portal');
-	  REACT_FRAGMENT_TYPE = symbolFor('react.fragment');
-	  REACT_STRICT_MODE_TYPE = symbolFor('react.strict_mode');
-	  REACT_PROFILER_TYPE = symbolFor('react.profiler');
-	  REACT_PROVIDER_TYPE = symbolFor('react.provider');
-	  REACT_CONTEXT_TYPE = symbolFor('react.context');
-	  REACT_FORWARD_REF_TYPE = symbolFor('react.forward_ref');
-	  REACT_SUSPENSE_TYPE = symbolFor('react.suspense');
-	  REACT_SUSPENSE_LIST_TYPE = symbolFor('react.suspense_list');
-	  REACT_MEMO_TYPE = symbolFor('react.memo');
-	  REACT_LAZY_TYPE = symbolFor('react.lazy');
-	  REACT_BLOCK_TYPE = symbolFor('react.block');
-	  symbolFor('react.server.block');
-	  REACT_FUNDAMENTAL_TYPE = symbolFor('react.fundamental');
-	  REACT_SCOPE_TYPE = symbolFor('react.scope');
-	  symbolFor('react.opaque.id');
-	  REACT_DEBUG_TRACING_MODE_TYPE = symbolFor('react.debug_trace_mode');
-	  symbolFor('react.offscreen');
-	  REACT_LEGACY_HIDDEN_TYPE = symbolFor('react.legacy_hidden');
+	function scheduleWork(callback) {
+	  callback();
+	}
+	function beginWriting(destination) {}
+	function writeChunk(destination, chunk) {
+	  writeChunkAndReturn(destination, chunk);
+	}
+	function writeChunkAndReturn(destination, chunk) {
+	  return destination.push(chunk);
+	}
+	function completeWriting(destination) {}
+	function close(destination) {
+	  destination.push(null);
+	}
+	function stringToChunk(content) {
+	  return content;
+	}
+	function stringToPrecomputedChunk(content) {
+	  return content;
+	}
+	function closeWithError(destination, error) {
+	  // $FlowFixMe: This is an Error object or the destination accepts other types.
+	  destination.destroy(error);
 	}
 
-	function getWrappedName(outerType, innerType, wrapperName) {
-	  var functionName = innerType.displayName || innerType.name || '';
-	  return outerType.displayName || (functionName !== '' ? wrapperName + "(" + functionName + ")" : wrapperName);
-	}
-
-	function getContextName(type) {
-	  return type.displayName || 'Context';
-	}
-
-	function getComponentName(type) {
-	  if (type == null) {
-	    // Host root, text node or just invalid type.
-	    return null;
-	  }
-
+	/*
+	 * The `'' + value` pattern (used in in perf-sensitive code) throws for Symbol
+	 * and Temporal.* types. See https://github.com/facebook/react/pull/22064.
+	 *
+	 * The functions in this module will throw an easier-to-understand,
+	 * easier-to-debug exception with a clear errors message message explaining the
+	 * problem. (Instead of a confusing exception thrown inside the implementation
+	 * of the `value` object).
+	 */
+	// $FlowFixMe only called in DEV, so void return is not possible.
+	function typeName(value) {
 	  {
-	    if (typeof type.tag === 'number') {
-	      error('Received an unexpected object in getComponentName(). ' + 'This is likely a bug in React. Please file an issue.');
-	    }
-	  }
-
-	  if (typeof type === 'function') {
-	    return type.displayName || type.name || null;
-	  }
-
-	  if (typeof type === 'string') {
+	    // toStringTag is needed for namespaced types like Temporal.Instant
+	    var hasToStringTag = typeof Symbol === 'function' && Symbol.toStringTag;
+	    var type = hasToStringTag && value[Symbol.toStringTag] || value.constructor.name || 'Object';
 	    return type;
 	  }
+	} // $FlowFixMe only called in DEV, so void return is not possible.
 
-	  switch (type) {
-	    case REACT_FRAGMENT_TYPE:
-	      return 'Fragment';
 
-	    case REACT_PORTAL_TYPE:
-	      return 'Portal';
-
-	    case REACT_PROFILER_TYPE:
-	      return 'Profiler';
-
-	    case REACT_STRICT_MODE_TYPE:
-	      return 'StrictMode';
-
-	    case REACT_SUSPENSE_TYPE:
-	      return 'Suspense';
-
-	    case REACT_SUSPENSE_LIST_TYPE:
-	      return 'SuspenseList';
-	  }
-
-	  if (typeof type === 'object') {
-	    switch (type.$$typeof) {
-	      case REACT_CONTEXT_TYPE:
-	        var context = type;
-	        return getContextName(context) + '.Consumer';
-
-	      case REACT_PROVIDER_TYPE:
-	        var provider = type;
-	        return getContextName(provider._context) + '.Provider';
-
-	      case REACT_FORWARD_REF_TYPE:
-	        return getWrappedName(type, type.render, 'ForwardRef');
-
-	      case REACT_MEMO_TYPE:
-	        return getComponentName(type.type);
-
-	      case REACT_BLOCK_TYPE:
-	        return getComponentName(type._render);
-
-	      case REACT_LAZY_TYPE:
-	        {
-	          var lazyComponent = type;
-	          var payload = lazyComponent._payload;
-	          var init = lazyComponent._init;
-
-	          try {
-	            return getComponentName(init(payload));
-	          } catch (x) {
-	            return null;
-	          }
-	        }
-	    }
-	  }
-
-	  return null;
-	}
-
-	// Filter certain DOM attributes (e.g. src, href) if their values are empty strings.
-
-	var enableSuspenseServerRenderer = false;
-
-	// Helpers to patch console.logs to avoid logging during side-effect free
-	// replaying on render function. This currently only patches the object
-	// lazily which won't cover if the log function was extracted eagerly.
-	// We could also eagerly patch the method.
-	var disabledDepth = 0;
-	var prevLog;
-	var prevInfo;
-	var prevWarn;
-	var prevError;
-	var prevGroup;
-	var prevGroupCollapsed;
-	var prevGroupEnd;
-
-	function disabledLog() {}
-
-	disabledLog.__reactDisabledLog = true;
-	function disableLogs() {
+	function willCoercionThrow(value) {
 	  {
-	    if (disabledDepth === 0) {
-	      /* eslint-disable react-internal/no-production-logging */
-	      prevLog = console.log;
-	      prevInfo = console.info;
-	      prevWarn = console.warn;
-	      prevError = console.error;
-	      prevGroup = console.group;
-	      prevGroupCollapsed = console.groupCollapsed;
-	      prevGroupEnd = console.groupEnd; // https://github.com/facebook/react/issues/19099
-
-	      var props = {
-	        configurable: true,
-	        enumerable: true,
-	        value: disabledLog,
-	        writable: true
-	      }; // $FlowFixMe Flow thinks console is immutable.
-
-	      Object.defineProperties(console, {
-	        info: props,
-	        log: props,
-	        warn: props,
-	        error: props,
-	        group: props,
-	        groupCollapsed: props,
-	        groupEnd: props
-	      });
-	      /* eslint-enable react-internal/no-production-logging */
+	    try {
+	      testStringCoercion(value);
+	      return false;
+	    } catch (e) {
+	      return true;
 	    }
-
-	    disabledDepth++;
 	  }
 	}
-	function reenableLogs() {
+
+	function testStringCoercion(value) {
+	  // If you ended up here by following an exception call stack, here's what's
+	  // happened: you supplied an object or symbol value to React (as a prop, key,
+	  // DOM attribute, CSS property, string ref, etc.) and when React tried to
+	  // coerce it to a string using `'' + value`, an exception was thrown.
+	  //
+	  // The most common types that will cause this exception are `Symbol` instances
+	  // and Temporal objects like `Temporal.Instant`. But any object that has a
+	  // `valueOf` or `[Symbol.toPrimitive]` method that throws will also cause this
+	  // exception. (Library authors do this to prevent users from using built-in
+	  // numeric operators like `+` or comparison operators like `>=` because custom
+	  // methods are needed to perform accurate arithmetic or comparison.)
+	  //
+	  // To fix the problem, coerce this object or symbol value to a string before
+	  // passing it to React. The most reliable way is usually `String(value)`.
+	  //
+	  // To find which value is throwing, check the browser or debugger console.
+	  // Before this exception was thrown, there should be `console.error` output
+	  // that shows the type (Symbol, Temporal.PlainDate, etc.) that caused the
+	  // problem and how that type was used: key, atrribute, input value prop, etc.
+	  // In most cases, this console output also shows the component and its
+	  // ancestor components where the exception happened.
+	  //
+	  // eslint-disable-next-line react-internal/safe-string-coercion
+	  return '' + value;
+	}
+
+	function checkAttributeStringCoercion(value, attributeName) {
 	  {
-	    disabledDepth--;
+	    if (willCoercionThrow(value)) {
+	      error('The provided `%s` attribute is an unsupported type %s.' + ' This value must be coerced to a string before before using it here.', attributeName, typeName(value));
 
-	    if (disabledDepth === 0) {
-	      /* eslint-disable react-internal/no-production-logging */
-	      var props = {
-	        configurable: true,
-	        enumerable: true,
-	        writable: true
-	      }; // $FlowFixMe Flow thinks console is immutable.
-
-	      Object.defineProperties(console, {
-	        log: _assign({}, props, {
-	          value: prevLog
-	        }),
-	        info: _assign({}, props, {
-	          value: prevInfo
-	        }),
-	        warn: _assign({}, props, {
-	          value: prevWarn
-	        }),
-	        error: _assign({}, props, {
-	          value: prevError
-	        }),
-	        group: _assign({}, props, {
-	          value: prevGroup
-	        }),
-	        groupCollapsed: _assign({}, props, {
-	          value: prevGroupCollapsed
-	        }),
-	        groupEnd: _assign({}, props, {
-	          value: prevGroupEnd
-	        })
-	      });
-	      /* eslint-enable react-internal/no-production-logging */
-	    }
-
-	    if (disabledDepth < 0) {
-	      error('disabledDepth fell below zero. ' + 'This is a bug in React. Please file an issue.');
+	      return testStringCoercion(value); // throw (to help callers find troubleshooting comments)
 	    }
 	  }
 	}
-
-	var ReactCurrentDispatcher = ReactSharedInternals.ReactCurrentDispatcher;
-	var prefix;
-	function describeBuiltInComponentFrame(name, source, ownerFn) {
+	function checkCSSPropertyStringCoercion(value, propName) {
 	  {
-	    if (prefix === undefined) {
-	      // Extract the VM specific prefix used by each line.
-	      try {
-	        throw Error();
-	      } catch (x) {
-	        var match = x.stack.trim().match(/\n( *(at )?)/);
-	        prefix = match && match[1] || '';
-	      }
-	    } // We use the prefix to ensure our stacks line up with native stack frames.
+	    if (willCoercionThrow(value)) {
+	      error('The provided `%s` CSS property is an unsupported type %s.' + ' This value must be coerced to a string before before using it here.', propName, typeName(value));
 
-
-	    return '\n' + prefix + name;
+	      return testStringCoercion(value); // throw (to help callers find troubleshooting comments)
+	    }
 	  }
 	}
-	var reentry = false;
-	var componentFrameCache;
-
-	{
-	  var PossiblyWeakMap = typeof WeakMap === 'function' ? WeakMap : Map;
-	  componentFrameCache = new PossiblyWeakMap();
-	}
-
-	function describeNativeComponentFrame(fn, construct) {
-	  // If something asked for a stack inside a fake render, it should get ignored.
-	  if (!fn || reentry) {
-	    return '';
-	  }
-
+	function checkHtmlStringCoercion(value) {
 	  {
-	    var frame = componentFrameCache.get(fn);
+	    if (willCoercionThrow(value)) {
+	      error('The provided HTML markup uses a value of unsupported type %s.' + ' This value must be coerced to a string before before using it here.', typeName(value));
 
-	    if (frame !== undefined) {
-	      return frame;
-	    }
-	  }
-
-	  var control;
-	  reentry = true;
-	  var previousPrepareStackTrace = Error.prepareStackTrace; // $FlowFixMe It does accept undefined.
-
-	  Error.prepareStackTrace = undefined;
-	  var previousDispatcher;
-
-	  {
-	    previousDispatcher = ReactCurrentDispatcher.current; // Set the dispatcher in DEV because this might be call in the render function
-	    // for warnings.
-
-	    ReactCurrentDispatcher.current = null;
-	    disableLogs();
-	  }
-
-	  try {
-	    // This should throw.
-	    if (construct) {
-	      // Something should be setting the props in the constructor.
-	      var Fake = function () {
-	        throw Error();
-	      }; // $FlowFixMe
-
-
-	      Object.defineProperty(Fake.prototype, 'props', {
-	        set: function () {
-	          // We use a throwing setter instead of frozen or non-writable props
-	          // because that won't throw in a non-strict mode function.
-	          throw Error();
-	        }
-	      });
-
-	      if (typeof Reflect === 'object' && Reflect.construct) {
-	        // We construct a different control for this case to include any extra
-	        // frames added by the construct call.
-	        try {
-	          Reflect.construct(Fake, []);
-	        } catch (x) {
-	          control = x;
-	        }
-
-	        Reflect.construct(fn, [], Fake);
-	      } else {
-	        try {
-	          Fake.call();
-	        } catch (x) {
-	          control = x;
-	        }
-
-	        fn.call(Fake.prototype);
-	      }
-	    } else {
-	      try {
-	        throw Error();
-	      } catch (x) {
-	        control = x;
-	      }
-
-	      fn();
-	    }
-	  } catch (sample) {
-	    // This is inlined manually because closure doesn't do it for us.
-	    if (sample && control && typeof sample.stack === 'string') {
-	      // This extracts the first frame from the sample that isn't also in the control.
-	      // Skipping one frame that we assume is the frame that calls the two.
-	      var sampleLines = sample.stack.split('\n');
-	      var controlLines = control.stack.split('\n');
-	      var s = sampleLines.length - 1;
-	      var c = controlLines.length - 1;
-
-	      while (s >= 1 && c >= 0 && sampleLines[s] !== controlLines[c]) {
-	        // We expect at least one stack frame to be shared.
-	        // Typically this will be the root most one. However, stack frames may be
-	        // cut off due to maximum stack limits. In this case, one maybe cut off
-	        // earlier than the other. We assume that the sample is longer or the same
-	        // and there for cut off earlier. So we should find the root most frame in
-	        // the sample somewhere in the control.
-	        c--;
-	      }
-
-	      for (; s >= 1 && c >= 0; s--, c--) {
-	        // Next we find the first one that isn't the same which should be the
-	        // frame that called our sample function and the control.
-	        if (sampleLines[s] !== controlLines[c]) {
-	          // In V8, the first line is describing the message but other VMs don't.
-	          // If we're about to return the first line, and the control is also on the same
-	          // line, that's a pretty good indicator that our sample threw at same line as
-	          // the control. I.e. before we entered the sample frame. So we ignore this result.
-	          // This can happen if you passed a class to function component, or non-function.
-	          if (s !== 1 || c !== 1) {
-	            do {
-	              s--;
-	              c--; // We may still have similar intermediate frames from the construct call.
-	              // The next one that isn't the same should be our match though.
-
-	              if (c < 0 || sampleLines[s] !== controlLines[c]) {
-	                // V8 adds a "new" prefix for native classes. Let's remove it to make it prettier.
-	                var _frame = '\n' + sampleLines[s].replace(' at new ', ' at ');
-
-	                {
-	                  if (typeof fn === 'function') {
-	                    componentFrameCache.set(fn, _frame);
-	                  }
-	                } // Return the line we found.
-
-
-	                return _frame;
-	              }
-	            } while (s >= 1 && c >= 0);
-	          }
-
-	          break;
-	        }
-	      }
-	    }
-	  } finally {
-	    reentry = false;
-
-	    {
-	      ReactCurrentDispatcher.current = previousDispatcher;
-	      reenableLogs();
-	    }
-
-	    Error.prepareStackTrace = previousPrepareStackTrace;
-	  } // Fallback to just using the name if we couldn't make it throw.
-
-
-	  var name = fn ? fn.displayName || fn.name : '';
-	  var syntheticFrame = name ? describeBuiltInComponentFrame(name) : '';
-
-	  {
-	    if (typeof fn === 'function') {
-	      componentFrameCache.set(fn, syntheticFrame);
-	    }
-	  }
-
-	  return syntheticFrame;
-	}
-	function describeFunctionComponentFrame(fn, source, ownerFn) {
-	  {
-	    return describeNativeComponentFrame(fn, false);
-	  }
-	}
-
-	function shouldConstruct(Component) {
-	  var prototype = Component.prototype;
-	  return !!(prototype && prototype.isReactComponent);
-	}
-
-	function describeUnknownElementTypeFrameInDEV(type, source, ownerFn) {
-
-	  if (type == null) {
-	    return '';
-	  }
-
-	  if (typeof type === 'function') {
-	    {
-	      return describeNativeComponentFrame(type, shouldConstruct(type));
-	    }
-	  }
-
-	  if (typeof type === 'string') {
-	    return describeBuiltInComponentFrame(type);
-	  }
-
-	  switch (type) {
-	    case REACT_SUSPENSE_TYPE:
-	      return describeBuiltInComponentFrame('Suspense');
-
-	    case REACT_SUSPENSE_LIST_TYPE:
-	      return describeBuiltInComponentFrame('SuspenseList');
-	  }
-
-	  if (typeof type === 'object') {
-	    switch (type.$$typeof) {
-	      case REACT_FORWARD_REF_TYPE:
-	        return describeFunctionComponentFrame(type.render);
-
-	      case REACT_MEMO_TYPE:
-	        // Memo may contain any component type so we recursively resolve it.
-	        return describeUnknownElementTypeFrameInDEV(type.type, source, ownerFn);
-
-	      case REACT_BLOCK_TYPE:
-	        return describeFunctionComponentFrame(type._render);
-
-	      case REACT_LAZY_TYPE:
-	        {
-	          var lazyComponent = type;
-	          var payload = lazyComponent._payload;
-	          var init = lazyComponent._init;
-
-	          try {
-	            // Lazy may contain any component type so we recursively resolve it.
-	            return describeUnknownElementTypeFrameInDEV(init(payload), source, ownerFn);
-	          } catch (x) {}
-	        }
-	    }
-	  }
-
-	  return '';
-	}
-
-	var loggedTypeFailures = {};
-	var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
-
-	function setCurrentlyValidatingElement(element) {
-	  {
-	    if (element) {
-	      var owner = element._owner;
-	      var stack = describeUnknownElementTypeFrameInDEV(element.type, element._source, owner ? owner.type : null);
-	      ReactDebugCurrentFrame.setExtraStackFrame(stack);
-	    } else {
-	      ReactDebugCurrentFrame.setExtraStackFrame(null);
+	      return testStringCoercion(value); // throw (to help callers find troubleshooting comments)
 	    }
 	  }
 	}
 
-	function checkPropTypes(typeSpecs, values, location, componentName, element) {
-	  {
-	    // $FlowFixMe This is okay but Flow doesn't know it.
-	    var has = Function.call.bind(Object.prototype.hasOwnProperty);
-
-	    for (var typeSpecName in typeSpecs) {
-	      if (has(typeSpecs, typeSpecName)) {
-	        var error$1 = void 0; // Prop type validation may throw. In case they do, we don't want to
-	        // fail the render phase where it didn't fail before. So we log it.
-	        // After these have been cleaned up, we'll let them throw.
-
-	        try {
-	          // This is intentionally an invariant that gets caught. It's the same
-	          // behavior as without this statement except with a better message.
-	          if (typeof typeSpecs[typeSpecName] !== 'function') {
-	            var err = Error((componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' + 'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.' + 'This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.');
-	            err.name = 'Invariant Violation';
-	            throw err;
-	          }
-
-	          error$1 = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED');
-	        } catch (ex) {
-	          error$1 = ex;
-	        }
-
-	        if (error$1 && !(error$1 instanceof Error)) {
-	          setCurrentlyValidatingElement(element);
-
-	          error('%s: type specification of %s' + ' `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error$1);
-
-	          setCurrentlyValidatingElement(null);
-	        }
-
-	        if (error$1 instanceof Error && !(error$1.message in loggedTypeFailures)) {
-	          // Only monitor this failure once because there tends to be a lot of the
-	          // same error.
-	          loggedTypeFailures[error$1.message] = true;
-	          setCurrentlyValidatingElement(element);
-
-	          error('Failed %s type: %s', location, error$1.message);
-
-	          setCurrentlyValidatingElement(null);
-	        }
-	      }
-	    }
-	  }
-	}
-
-	var didWarnAboutInvalidateContextType;
-
-	{
-	  didWarnAboutInvalidateContextType = new Set();
-	}
-
-	var emptyObject = {};
-
-	{
-	  Object.freeze(emptyObject);
-	}
-
-	function maskContext(type, context) {
-	  var contextTypes = type.contextTypes;
-
-	  if (!contextTypes) {
-	    return emptyObject;
-	  }
-
-	  var maskedContext = {};
-
-	  for (var contextName in contextTypes) {
-	    maskedContext[contextName] = context[contextName];
-	  }
-
-	  return maskedContext;
-	}
-
-	function checkContextTypes(typeSpecs, values, location) {
-	  {
-	    checkPropTypes(typeSpecs, values, location, 'Component');
-	  }
-	}
-
-	function validateContextBounds(context, threadID) {
-	  // If we don't have enough slots in this context to store this threadID,
-	  // fill it in without leaving any holes to ensure that the VM optimizes
-	  // this as non-holey index properties.
-	  // (Note: If `react` package is < 16.6, _threadCount is undefined.)
-	  for (var i = context._threadCount | 0; i <= threadID; i++) {
-	    // We assume that this is the same as the defaultValue which might not be
-	    // true if we're rendering inside a secondary renderer but they are
-	    // secondary because these use cases are very rare.
-	    context[i] = context._currentValue2;
-	    context._threadCount = i + 1;
-	  }
-	}
-	function processContext(type, context, threadID, isClass) {
-	  if (isClass) {
-	    var contextType = type.contextType;
-
-	    {
-	      if ('contextType' in type) {
-	        var isValid = // Allow null for conditional declaration
-	        contextType === null || contextType !== undefined && contextType.$$typeof === REACT_CONTEXT_TYPE && contextType._context === undefined; // Not a <Context.Consumer>
-
-	        if (!isValid && !didWarnAboutInvalidateContextType.has(type)) {
-	          didWarnAboutInvalidateContextType.add(type);
-	          var addendum = '';
-
-	          if (contextType === undefined) {
-	            addendum = ' However, it is set to undefined. ' + 'This can be caused by a typo or by mixing up named and default imports. ' + 'This can also happen due to a circular dependency, so ' + 'try moving the createContext() call to a separate file.';
-	          } else if (typeof contextType !== 'object') {
-	            addendum = ' However, it is set to a ' + typeof contextType + '.';
-	          } else if (contextType.$$typeof === REACT_PROVIDER_TYPE) {
-	            addendum = ' Did you accidentally pass the Context.Provider instead?';
-	          } else if (contextType._context !== undefined) {
-	            // <Context.Consumer>
-	            addendum = ' Did you accidentally pass the Context.Consumer instead?';
-	          } else {
-	            addendum = ' However, it is set to an object with keys {' + Object.keys(contextType).join(', ') + '}.';
-	          }
-
-	          error('%s defines an invalid contextType. ' + 'contextType should point to the Context object returned by React.createContext().%s', getComponentName(type) || 'Component', addendum);
-	        }
-	      }
-	    }
-
-	    if (typeof contextType === 'object' && contextType !== null) {
-	      validateContextBounds(contextType, threadID);
-	      return contextType[threadID];
-	    }
-
-	    {
-	      var maskedContext = maskContext(type, context);
-
-	      {
-	        if (type.contextTypes) {
-	          checkContextTypes(type.contextTypes, maskedContext, 'context');
-	        }
-	      }
-
-	      return maskedContext;
-	    }
-	  } else {
-	    {
-	      var _maskedContext = maskContext(type, context);
-
-	      {
-	        if (type.contextTypes) {
-	          checkContextTypes(type.contextTypes, _maskedContext, 'context');
-	        }
-	      }
-
-	      return _maskedContext;
-	    }
-	  }
-	}
-
-	var nextAvailableThreadIDs = new Uint16Array(16);
-
-	for (var i = 0; i < 15; i++) {
-	  nextAvailableThreadIDs[i] = i + 1;
-	}
-
-	nextAvailableThreadIDs[15] = 0;
-
-	function growThreadCountAndReturnNextAvailable() {
-	  var oldArray = nextAvailableThreadIDs;
-	  var oldSize = oldArray.length;
-	  var newSize = oldSize * 2;
-
-	  if (!(newSize <= 0x10000)) {
-	    {
-	      throw Error( "Maximum number of concurrent React renderers exceeded. This can happen if you are not properly destroying the Readable provided by React. Ensure that you call .destroy() on it if you no longer want to read from it, and did not read to the end. If you use .pipe() this should be automatic." );
-	    }
-	  }
-
-	  var newArray = new Uint16Array(newSize);
-	  newArray.set(oldArray);
-	  nextAvailableThreadIDs = newArray;
-	  nextAvailableThreadIDs[0] = oldSize + 1;
-
-	  for (var _i = oldSize; _i < newSize - 1; _i++) {
-	    nextAvailableThreadIDs[_i] = _i + 1;
-	  }
-
-	  nextAvailableThreadIDs[newSize - 1] = 0;
-	  return oldSize;
-	}
-
-	function allocThreadID() {
-	  var nextID = nextAvailableThreadIDs[0];
-
-	  if (nextID === 0) {
-	    return growThreadCountAndReturnNextAvailable();
-	  }
-
-	  nextAvailableThreadIDs[0] = nextAvailableThreadIDs[nextID];
-	  return nextID;
-	}
-	function freeThreadID(id) {
-	  nextAvailableThreadIDs[id] = nextAvailableThreadIDs[0];
-	  nextAvailableThreadIDs[0] = id;
-	}
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 	// A reserved attribute.
 	// It is handled by React separately and shouldn't be written to the DOM.
@@ -5915,9 +5442,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	/* eslint-enable max-len */
 
 	var ATTRIBUTE_NAME_CHAR = ATTRIBUTE_NAME_START_CHAR + "\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040";
-	var ROOT_ATTRIBUTE_NAME = 'data-reactroot';
 	var VALID_ATTRIBUTE_NAME_REGEX = new RegExp('^[' + ATTRIBUTE_NAME_START_CHAR + '][' + ATTRIBUTE_NAME_CHAR + ']*$');
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var illegalAttributeNameCache = {};
 	var validatedAttributeNameCache = {};
 	function isAttributeNameSafe(attributeName) {
@@ -5938,21 +5463,6 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 
 	  {
 	    error('Invalid attribute name: `%s`', attributeName);
-	  }
-
-	  return false;
-	}
-	function shouldIgnoreAttribute(name, propertyInfo, isCustomComponentTag) {
-	  if (propertyInfo !== null) {
-	    return propertyInfo.type === RESERVED;
-	  }
-
-	  if (isCustomComponentTag) {
-	    return false;
-	  }
-
-	  if (name.length > 2 && (name[0] === 'o' || name[0] === 'O') && (name[1] === 'n' || name[1] === 'N')) {
-	    return true;
 	  }
 
 	  return false;
@@ -5987,38 +5497,6 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	      return false;
 	  }
 	}
-	function shouldRemoveAttribute(name, value, propertyInfo, isCustomComponentTag) {
-	  if (value === null || typeof value === 'undefined') {
-	    return true;
-	  }
-
-	  if (shouldRemoveAttributeWithWarning(name, value, propertyInfo, isCustomComponentTag)) {
-	    return true;
-	  }
-
-	  if (isCustomComponentTag) {
-	    return false;
-	  }
-
-	  if (propertyInfo !== null) {
-
-	    switch (propertyInfo.type) {
-	      case BOOLEAN:
-	        return !value;
-
-	      case OVERLOADED_BOOLEAN:
-	        return value === false;
-
-	      case NUMERIC:
-	        return isNaN(value);
-
-	      case POSITIVE_NUMERIC:
-	        return isNaN(value) || value < 1;
-	    }
-	  }
-
-	  return false;
-	}
 	function getPropertyInfo(name) {
 	  return properties.hasOwnProperty(name) ? properties[name] : null;
 	}
@@ -6043,6 +5521,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	// elements (not just inputs). Now that ReactDOMInput assigns to the
 	// defaultValue property -- do we need this?
 	'defaultValue', 'defaultChecked', 'innerHTML', 'suppressContentEditableWarning', 'suppressHydrationWarning', 'style'];
+
 	reservedProps.forEach(function (name) {
 	  properties[name] = new PropertyInfoRecord(name, RESERVED, false, // mustUseProperty
 	  name, // attributeName
@@ -6203,756 +5682,12 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  true);
 	});
 
-	// and any newline or tab are filtered out as if they're not part of the URL.
-	// https://url.spec.whatwg.org/#url-parsing
-	// Tab or newline are defined as \r\n\t:
-	// https://infra.spec.whatwg.org/#ascii-tab-or-newline
-	// A C0 control is a code point in the range \u0000 NULL to \u001F
-	// INFORMATION SEPARATOR ONE, inclusive:
-	// https://infra.spec.whatwg.org/#c0-control-or-space
-
-	/* eslint-disable max-len */
-
-	var isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*\:/i;
-	var didWarn = false;
-
-	function sanitizeURL(url) {
-	  {
-	    if (!didWarn && isJavaScriptProtocol.test(url)) {
-	      didWarn = true;
-
-	      error('A future version of React will block javascript: URLs as a security precaution. ' + 'Use event handlers instead if you can. If you need to generate unsafe HTML try ' + 'using dangerouslySetInnerHTML instead. React was passed %s.', JSON.stringify(url));
-	    }
-	  }
-	}
-
-	// code copied and modified from escape-html
-
-	/**
-	 * Module variables.
-	 * @private
-	 */
-	var matchHtmlRegExp = /["'&<>]/;
-	/**
-	 * Escapes special characters and HTML entities in a given html string.
-	 *
-	 * @param  {string} string HTML string to escape for later insertion
-	 * @return {string}
-	 * @public
-	 */
-
-	function escapeHtml(string) {
-	  var str = '' + string;
-	  var match = matchHtmlRegExp.exec(str);
-
-	  if (!match) {
-	    return str;
-	  }
-
-	  var escape;
-	  var html = '';
-	  var index;
-	  var lastIndex = 0;
-
-	  for (index = match.index; index < str.length; index++) {
-	    switch (str.charCodeAt(index)) {
-	      case 34:
-	        // "
-	        escape = '&quot;';
-	        break;
-
-	      case 38:
-	        // &
-	        escape = '&amp;';
-	        break;
-
-	      case 39:
-	        // '
-	        escape = '&#x27;'; // modified from escape-html; used to be '&#39'
-
-	        break;
-
-	      case 60:
-	        // <
-	        escape = '&lt;';
-	        break;
-
-	      case 62:
-	        // >
-	        escape = '&gt;';
-	        break;
-
-	      default:
-	        continue;
-	    }
-
-	    if (lastIndex !== index) {
-	      html += str.substring(lastIndex, index);
-	    }
-
-	    lastIndex = index + 1;
-	    html += escape;
-	  }
-
-	  return lastIndex !== index ? html + str.substring(lastIndex, index) : html;
-	} // end code copied and modified from escape-html
-
-	/**
-	 * Escapes text to prevent scripting attacks.
-	 *
-	 * @param {*} text Text value to escape.
-	 * @return {string} An escaped string.
-	 */
-
-
-	function escapeTextForBrowser(text) {
-	  if (typeof text === 'boolean' || typeof text === 'number') {
-	    // this shortcircuit helps perf for types that we know will never have
-	    // special characters, especially given that this function is used often
-	    // for numeric dom ids.
-	    return '' + text;
-	  }
-
-	  return escapeHtml(text);
-	}
-
-	/**
-	 * Escapes attribute value to prevent scripting attacks.
-	 *
-	 * @param {*} value Value to escape.
-	 * @return {string} An escaped string.
-	 */
-
-	function quoteAttributeValueForBrowser(value) {
-	  return '"' + escapeTextForBrowser(value) + '"';
-	}
-
-	function createMarkupForRoot() {
-	  return ROOT_ATTRIBUTE_NAME + '=""';
-	}
-	/**
-	 * Creates markup for a property.
-	 *
-	 * @param {string} name
-	 * @param {*} value
-	 * @return {?string} Markup string, or null if the property was invalid.
-	 */
-
-	function createMarkupForProperty(name, value) {
-	  var propertyInfo = getPropertyInfo(name);
-
-	  if (name !== 'style' && shouldIgnoreAttribute(name, propertyInfo, false)) {
-	    return '';
-	  }
-
-	  if (shouldRemoveAttribute(name, value, propertyInfo, false)) {
-	    return '';
-	  }
-
-	  if (propertyInfo !== null) {
-	    var attributeName = propertyInfo.attributeName;
-	    var type = propertyInfo.type;
-
-	    if (type === BOOLEAN || type === OVERLOADED_BOOLEAN && value === true) {
-	      return attributeName + '=""';
-	    } else {
-	      if (propertyInfo.sanitizeURL) {
-	        value = '' + value;
-	        sanitizeURL(value);
-	      }
-
-	      return attributeName + '=' + quoteAttributeValueForBrowser(value);
-	    }
-	  } else if (isAttributeNameSafe(name)) {
-	    return name + '=' + quoteAttributeValueForBrowser(value);
-	  }
-
-	  return '';
-	}
-	/**
-	 * Creates markup for a custom property.
-	 *
-	 * @param {string} name
-	 * @param {*} value
-	 * @return {string} Markup string, or empty string if the property was invalid.
-	 */
-
-	function createMarkupForCustomAttribute(name, value) {
-	  if (!isAttributeNameSafe(name) || value == null) {
-	    return '';
-	  }
-
-	  return name + '=' + quoteAttributeValueForBrowser(value);
-	}
-
-	/**
-	 * inlined Object.is polyfill to avoid requiring consumers ship their own
-	 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-	 */
-	function is(x, y) {
-	  return x === y && (x !== 0 || 1 / x === 1 / y) || x !== x && y !== y // eslint-disable-line no-self-compare
-	  ;
-	}
-
-	var objectIs = typeof Object.is === 'function' ? Object.is : is;
-
-	var currentlyRenderingComponent = null;
-	var firstWorkInProgressHook = null;
-	var workInProgressHook = null; // Whether the work-in-progress hook is a re-rendered hook
-
-	var isReRender = false; // Whether an update was scheduled during the currently executing render pass.
-
-	var didScheduleRenderPhaseUpdate = false; // Lazily created map of render-phase updates
-
-	var renderPhaseUpdates = null; // Counter to prevent infinite loops.
-
-	var numberOfReRenders = 0;
-	var RE_RENDER_LIMIT = 25;
-	var isInHookUserCodeInDev = false; // In DEV, this is the name of the currently executing primitive hook
-
-	var currentHookNameInDev;
-
-	function resolveCurrentlyRenderingComponent() {
-	  if (!(currentlyRenderingComponent !== null)) {
-	    {
-	      throw Error( "Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem." );
-	    }
-	  }
-
-	  {
-	    if (isInHookUserCodeInDev) {
-	      error('Do not call Hooks inside useEffect(...), useMemo(...), or other built-in Hooks. ' + 'You can only call Hooks at the top level of your React function. ' + 'For more information, see ' + 'https://reactjs.org/link/rules-of-hooks');
-	    }
-	  }
-
-	  return currentlyRenderingComponent;
-	}
-
-	function areHookInputsEqual(nextDeps, prevDeps) {
-	  if (prevDeps === null) {
-	    {
-	      error('%s received a final argument during this render, but not during ' + 'the previous render. Even though the final argument is optional, ' + 'its type cannot change between renders.', currentHookNameInDev);
-	    }
-
-	    return false;
-	  }
-
-	  {
-	    // Don't bother comparing lengths in prod because these arrays should be
-	    // passed inline.
-	    if (nextDeps.length !== prevDeps.length) {
-	      error('The final argument passed to %s changed size between renders. The ' + 'order and size of this array must remain constant.\n\n' + 'Previous: %s\n' + 'Incoming: %s', currentHookNameInDev, "[" + nextDeps.join(', ') + "]", "[" + prevDeps.join(', ') + "]");
-	    }
-	  }
-
-	  for (var i = 0; i < prevDeps.length && i < nextDeps.length; i++) {
-	    if (objectIs(nextDeps[i], prevDeps[i])) {
-	      continue;
-	    }
-
-	    return false;
-	  }
-
-	  return true;
-	}
-
-	function createHook() {
-	  if (numberOfReRenders > 0) {
-	    {
-	      {
-	        throw Error( "Rendered more hooks than during the previous render" );
-	      }
-	    }
-	  }
-
-	  return {
-	    memoizedState: null,
-	    queue: null,
-	    next: null
-	  };
-	}
-
-	function createWorkInProgressHook() {
-	  if (workInProgressHook === null) {
-	    // This is the first hook in the list
-	    if (firstWorkInProgressHook === null) {
-	      isReRender = false;
-	      firstWorkInProgressHook = workInProgressHook = createHook();
-	    } else {
-	      // There's already a work-in-progress. Reuse it.
-	      isReRender = true;
-	      workInProgressHook = firstWorkInProgressHook;
-	    }
-	  } else {
-	    if (workInProgressHook.next === null) {
-	      isReRender = false; // Append to the end of the list
-
-	      workInProgressHook = workInProgressHook.next = createHook();
-	    } else {
-	      // There's already a work-in-progress. Reuse it.
-	      isReRender = true;
-	      workInProgressHook = workInProgressHook.next;
-	    }
-	  }
-
-	  return workInProgressHook;
-	}
-
-	function prepareToUseHooks(componentIdentity) {
-	  currentlyRenderingComponent = componentIdentity;
-
-	  {
-	    isInHookUserCodeInDev = false;
-	  } // The following should have already been reset
-	  // didScheduleRenderPhaseUpdate = false;
-	  // firstWorkInProgressHook = null;
-	  // numberOfReRenders = 0;
-	  // renderPhaseUpdates = null;
-	  // workInProgressHook = null;
-
-	}
-	function finishHooks(Component, props, children, refOrContext) {
-	  // This must be called after every function component to prevent hooks from
-	  // being used in classes.
-	  while (didScheduleRenderPhaseUpdate) {
-	    // Updates were scheduled during the render phase. They are stored in
-	    // the `renderPhaseUpdates` map. Call the component again, reusing the
-	    // work-in-progress hooks and applying the additional updates on top. Keep
-	    // restarting until no more updates are scheduled.
-	    didScheduleRenderPhaseUpdate = false;
-	    numberOfReRenders += 1; // Start over from the beginning of the list
-
-	    workInProgressHook = null;
-	    children = Component(props, refOrContext);
-	  }
-
-	  resetHooksState();
-	  return children;
-	} // Reset the internal hooks state if an error occurs while rendering a component
-
-	function resetHooksState() {
-	  {
-	    isInHookUserCodeInDev = false;
-	  }
-
-	  currentlyRenderingComponent = null;
-	  didScheduleRenderPhaseUpdate = false;
-	  firstWorkInProgressHook = null;
-	  numberOfReRenders = 0;
-	  renderPhaseUpdates = null;
-	  workInProgressHook = null;
-	}
-
-	function readContext(context, observedBits) {
-	  var threadID = currentPartialRenderer.threadID;
-	  validateContextBounds(context, threadID);
-
-	  {
-	    if (isInHookUserCodeInDev) {
-	      error('Context can only be read while React is rendering. ' + 'In classes, you can read it in the render method or getDerivedStateFromProps. ' + 'In function components, you can read it directly in the function body, but not ' + 'inside Hooks like useReducer() or useMemo().');
-	    }
-	  }
-
-	  return context[threadID];
-	}
-
-	function useContext(context, observedBits) {
-	  {
-	    currentHookNameInDev = 'useContext';
-	  }
-
-	  resolveCurrentlyRenderingComponent();
-	  var threadID = currentPartialRenderer.threadID;
-	  validateContextBounds(context, threadID);
-	  return context[threadID];
-	}
-
-	function basicStateReducer(state, action) {
-	  // $FlowFixMe: Flow doesn't like mixed types
-	  return typeof action === 'function' ? action(state) : action;
-	}
-
-	function useState(initialState) {
-	  {
-	    currentHookNameInDev = 'useState';
-	  }
-
-	  return useReducer(basicStateReducer, // useReducer has a special case to support lazy useState initializers
-	  initialState);
-	}
-	function useReducer(reducer, initialArg, init) {
-	  {
-	    if (reducer !== basicStateReducer) {
-	      currentHookNameInDev = 'useReducer';
-	    }
-	  }
-
-	  currentlyRenderingComponent = resolveCurrentlyRenderingComponent();
-	  workInProgressHook = createWorkInProgressHook();
-
-	  if (isReRender) {
-	    // This is a re-render. Apply the new render phase updates to the previous
-	    // current hook.
-	    var queue = workInProgressHook.queue;
-	    var dispatch = queue.dispatch;
-
-	    if (renderPhaseUpdates !== null) {
-	      // Render phase updates are stored in a map of queue -> linked list
-	      var firstRenderPhaseUpdate = renderPhaseUpdates.get(queue);
-
-	      if (firstRenderPhaseUpdate !== undefined) {
-	        renderPhaseUpdates.delete(queue);
-	        var newState = workInProgressHook.memoizedState;
-	        var update = firstRenderPhaseUpdate;
-
-	        do {
-	          // Process this render phase update. We don't have to check the
-	          // priority because it will always be the same as the current
-	          // render's.
-	          var action = update.action;
-
-	          {
-	            isInHookUserCodeInDev = true;
-	          }
-
-	          newState = reducer(newState, action);
-
-	          {
-	            isInHookUserCodeInDev = false;
-	          }
-
-	          update = update.next;
-	        } while (update !== null);
-
-	        workInProgressHook.memoizedState = newState;
-	        return [newState, dispatch];
-	      }
-	    }
-
-	    return [workInProgressHook.memoizedState, dispatch];
-	  } else {
-	    {
-	      isInHookUserCodeInDev = true;
-	    }
-
-	    var initialState;
-
-	    if (reducer === basicStateReducer) {
-	      // Special case for `useState`.
-	      initialState = typeof initialArg === 'function' ? initialArg() : initialArg;
-	    } else {
-	      initialState = init !== undefined ? init(initialArg) : initialArg;
-	    }
-
-	    {
-	      isInHookUserCodeInDev = false;
-	    }
-
-	    workInProgressHook.memoizedState = initialState;
-
-	    var _queue = workInProgressHook.queue = {
-	      last: null,
-	      dispatch: null
-	    };
-
-	    var _dispatch = _queue.dispatch = dispatchAction.bind(null, currentlyRenderingComponent, _queue);
-
-	    return [workInProgressHook.memoizedState, _dispatch];
-	  }
-	}
-
-	function useMemo(nextCreate, deps) {
-	  currentlyRenderingComponent = resolveCurrentlyRenderingComponent();
-	  workInProgressHook = createWorkInProgressHook();
-	  var nextDeps = deps === undefined ? null : deps;
-
-	  if (workInProgressHook !== null) {
-	    var prevState = workInProgressHook.memoizedState;
-
-	    if (prevState !== null) {
-	      if (nextDeps !== null) {
-	        var prevDeps = prevState[1];
-
-	        if (areHookInputsEqual(nextDeps, prevDeps)) {
-	          return prevState[0];
-	        }
-	      }
-	    }
-	  }
-
-	  {
-	    isInHookUserCodeInDev = true;
-	  }
-
-	  var nextValue = nextCreate();
-
-	  {
-	    isInHookUserCodeInDev = false;
-	  }
-
-	  workInProgressHook.memoizedState = [nextValue, nextDeps];
-	  return nextValue;
-	}
-
-	function useRef(initialValue) {
-	  currentlyRenderingComponent = resolveCurrentlyRenderingComponent();
-	  workInProgressHook = createWorkInProgressHook();
-	  var previousRef = workInProgressHook.memoizedState;
-
-	  if (previousRef === null) {
-	    var ref = {
-	      current: initialValue
-	    };
-
-	    {
-	      Object.seal(ref);
-	    }
-
-	    workInProgressHook.memoizedState = ref;
-	    return ref;
-	  } else {
-	    return previousRef;
-	  }
-	}
-
-	function useLayoutEffect(create, inputs) {
-	  {
-	    currentHookNameInDev = 'useLayoutEffect';
-
-	    error('useLayoutEffect does nothing on the server, because its effect cannot ' + "be encoded into the server renderer's output format. This will lead " + 'to a mismatch between the initial, non-hydrated UI and the intended ' + 'UI. To avoid this, useLayoutEffect should only be used in ' + 'components that render exclusively on the client. ' + 'See https://reactjs.org/link/uselayouteffect-ssr for common fixes.');
-	  }
-	}
-
-	function dispatchAction(componentIdentity, queue, action) {
-	  if (!(numberOfReRenders < RE_RENDER_LIMIT)) {
-	    {
-	      throw Error( "Too many re-renders. React limits the number of renders to prevent an infinite loop." );
-	    }
-	  }
-
-	  if (componentIdentity === currentlyRenderingComponent) {
-	    // This is a render phase update. Stash it in a lazily-created map of
-	    // queue -> linked list of updates. After this render pass, we'll restart
-	    // and apply the stashed updates on top of the work-in-progress hook.
-	    didScheduleRenderPhaseUpdate = true;
-	    var update = {
-	      action: action,
-	      next: null
-	    };
-
-	    if (renderPhaseUpdates === null) {
-	      renderPhaseUpdates = new Map();
-	    }
-
-	    var firstRenderPhaseUpdate = renderPhaseUpdates.get(queue);
-
-	    if (firstRenderPhaseUpdate === undefined) {
-	      renderPhaseUpdates.set(queue, update);
-	    } else {
-	      // Append the update to the end of the list.
-	      var lastRenderPhaseUpdate = firstRenderPhaseUpdate;
-
-	      while (lastRenderPhaseUpdate.next !== null) {
-	        lastRenderPhaseUpdate = lastRenderPhaseUpdate.next;
-	      }
-
-	      lastRenderPhaseUpdate.next = update;
-	    }
-	  }
-	}
-
-	function useCallback(callback, deps) {
-	  return useMemo(function () {
-	    return callback;
-	  }, deps);
-	} // TODO Decide on how to implement this hook for server rendering.
-	// If a mutation occurs during render, consider triggering a Suspense boundary
-	// and falling back to client rendering.
-
-	function useMutableSource(source, getSnapshot, subscribe) {
-	  resolveCurrentlyRenderingComponent();
-	  return getSnapshot(source._source);
-	}
-
-	function useDeferredValue(value) {
-	  resolveCurrentlyRenderingComponent();
-	  return value;
-	}
-
-	function useTransition() {
-	  resolveCurrentlyRenderingComponent();
-
-	  var startTransition = function (callback) {
-	    callback();
-	  };
-
-	  return [startTransition, false];
-	}
-
-	function useOpaqueIdentifier() {
-	  return (currentPartialRenderer.identifierPrefix || '') + 'R:' + (currentPartialRenderer.uniqueID++).toString(36);
-	}
-
-	function noop() {}
-
-	var currentPartialRenderer = null;
-	function setCurrentPartialRenderer(renderer) {
-	  currentPartialRenderer = renderer;
-	}
-	var Dispatcher = {
-	  readContext: readContext,
-	  useContext: useContext,
-	  useMemo: useMemo,
-	  useReducer: useReducer,
-	  useRef: useRef,
-	  useState: useState,
-	  useLayoutEffect: useLayoutEffect,
-	  useCallback: useCallback,
-	  // useImperativeHandle is not run in the server environment
-	  useImperativeHandle: noop,
-	  // Effects are not run in the server environment.
-	  useEffect: noop,
-	  // Debugging effect
-	  useDebugValue: noop,
-	  useDeferredValue: useDeferredValue,
-	  useTransition: useTransition,
-	  useOpaqueIdentifier: useOpaqueIdentifier,
-	  // Subscriptions are not setup in a server environment.
-	  useMutableSource: useMutableSource
-	};
-
-	var HTML_NAMESPACE = 'http://www.w3.org/1999/xhtml';
-	var MATH_NAMESPACE = 'http://www.w3.org/1998/Math/MathML';
-	var SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
-	var Namespaces = {
-	  html: HTML_NAMESPACE,
-	  mathml: MATH_NAMESPACE,
-	  svg: SVG_NAMESPACE
-	}; // Assumes there is no parent namespace.
-
-	function getIntrinsicNamespace(type) {
-	  switch (type) {
-	    case 'svg':
-	      return SVG_NAMESPACE;
-
-	    case 'math':
-	      return MATH_NAMESPACE;
-
-	    default:
-	      return HTML_NAMESPACE;
-	  }
-	}
-	function getChildNamespace(parentNamespace, type) {
-	  if (parentNamespace == null || parentNamespace === HTML_NAMESPACE) {
-	    // No (or default) parent namespace: potential entry point.
-	    return getIntrinsicNamespace(type);
-	  }
-
-	  if (parentNamespace === SVG_NAMESPACE && type === 'foreignObject') {
-	    // We're leaving SVG.
-	    return HTML_NAMESPACE;
-	  } // By default, pass namespace below.
-
-
-	  return parentNamespace;
-	}
-
-	var hasReadOnlyValue = {
-	  button: true,
-	  checkbox: true,
-	  image: true,
-	  hidden: true,
-	  radio: true,
-	  reset: true,
-	  submit: true
-	};
-	function checkControlledValueProps(tagName, props) {
-	  {
-	    if (!(hasReadOnlyValue[props.type] || props.onChange || props.onInput || props.readOnly || props.disabled || props.value == null)) {
-	      error('You provided a `value` prop to a form field without an ' + '`onChange` handler. This will render a read-only field. If ' + 'the field should be mutable use `defaultValue`. Otherwise, ' + 'set either `onChange` or `readOnly`.');
-	    }
-
-	    if (!(props.onChange || props.readOnly || props.disabled || props.checked == null)) {
-	      error('You provided a `checked` prop to a form field without an ' + '`onChange` handler. This will render a read-only field. If ' + 'the field should be mutable use `defaultChecked`. Otherwise, ' + 'set either `onChange` or `readOnly`.');
-	    }
-	  }
-	}
-
-	// For HTML, certain tags should omit their close tag. We keep a list for
-	// those special-case tags.
-	var omittedCloseTags = {
-	  area: true,
-	  base: true,
-	  br: true,
-	  col: true,
-	  embed: true,
-	  hr: true,
-	  img: true,
-	  input: true,
-	  keygen: true,
-	  link: true,
-	  meta: true,
-	  param: true,
-	  source: true,
-	  track: true,
-	  wbr: true // NOTE: menuitem's close tag should be omitted, but that causes problems.
-
-	};
-
-	// `omittedCloseTags` except that `menuitem` should still have its closing tag.
-
-	var voidElementTags = _assign({
-	  menuitem: true
-	}, omittedCloseTags);
-
-	var HTML = '__html';
-
-	function assertValidProps(tag, props) {
-	  if (!props) {
-	    return;
-	  } // Note the use of `==` which checks for null or undefined.
-
-
-	  if (voidElementTags[tag]) {
-	    if (!(props.children == null && props.dangerouslySetInnerHTML == null)) {
-	      {
-	        throw Error( tag + " is a void element tag and must neither have `children` nor use `dangerouslySetInnerHTML`." );
-	      }
-	    }
-	  }
-
-	  if (props.dangerouslySetInnerHTML != null) {
-	    if (!(props.children == null)) {
-	      {
-	        throw Error( "Can only set one of `children` or `props.dangerouslySetInnerHTML`." );
-	      }
-	    }
-
-	    if (!(typeof props.dangerouslySetInnerHTML === 'object' && HTML in props.dangerouslySetInnerHTML)) {
-	      {
-	        throw Error( "`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. Please visit https://reactjs.org/link/dangerously-set-inner-html for more information." );
-	      }
-	    }
-	  }
-
-	  {
-	    if (!props.suppressContentEditableWarning && props.contentEditable && props.children != null) {
-	      error('A component is `contentEditable` and contains `children` managed by ' + 'React. It is now your responsibility to guarantee that none of ' + 'those nodes are unexpectedly modified or duplicated. This is ' + 'probably not intentional.');
-	    }
-	  }
-
-	  if (!(props.style == null || typeof props.style === 'object')) {
-	    {
-	      throw Error( "The `style` prop expects a mapping from style properties to values, not a string. For example, style={{marginRight: spacing + 'em'}} when using JSX." );
-	    }
-	  }
-	}
-
 	/**
 	 * CSS properties which accept numbers but are not in units of "px".
 	 */
 	var isUnitlessNumber = {
 	  animationIterationCount: true,
+	  aspectRatio: true,
 	  borderImageOutset: true,
 	  borderImageSlice: true,
 	  borderImageWidth: true,
@@ -7021,57 +5756,25 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  });
 	});
 
-	/**
-	 * Convert a value into the proper css writable value. The style name `name`
-	 * should be logical (no hyphens), as specified
-	 * in `CSSProperty.isUnitlessNumber`.
-	 *
-	 * @param {string} name CSS property name such as `topMargin`.
-	 * @param {*} value CSS property value such as `10px`.
-	 * @return {string} Normalized style value with dimensions applied.
-	 */
+	var hasReadOnlyValue = {
+	  button: true,
+	  checkbox: true,
+	  image: true,
+	  hidden: true,
+	  radio: true,
+	  reset: true,
+	  submit: true
+	};
+	function checkControlledValueProps(tagName, props) {
+	  {
+	    if (!(hasReadOnlyValue[props.type] || props.onChange || props.onInput || props.readOnly || props.disabled || props.value == null)) {
+	      error('You provided a `value` prop to a form field without an ' + '`onChange` handler. This will render a read-only field. If ' + 'the field should be mutable use `defaultValue`. Otherwise, ' + 'set either `onChange` or `readOnly`.');
+	    }
 
-	function dangerousStyleValue(name, value, isCustomProperty) {
-	  // Note that we've removed escapeTextForBrowser() calls here since the
-	  // whole string will be escaped when the attribute is injected into
-	  // the markup. If you provide unsafe user data here they can inject
-	  // arbitrary CSS which may be problematic (I couldn't repro this):
-	  // https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
-	  // http://www.thespanner.co.uk/2007/11/26/ultimate-xss-css-injection/
-	  // This is not an XSS hole but instead a potential CSS injection issue
-	  // which has lead to a greater discussion about how we're going to
-	  // trust URLs moving forward. See #2115901
-	  var isEmpty = value == null || typeof value === 'boolean' || value === '';
-
-	  if (isEmpty) {
-	    return '';
+	    if (!(props.onChange || props.readOnly || props.disabled || props.checked == null)) {
+	      error('You provided a `checked` prop to a form field without an ' + '`onChange` handler. This will render a read-only field. If ' + 'the field should be mutable use `defaultChecked`. Otherwise, ' + 'set either `onChange` or `readOnly`.');
+	    }
 	  }
-
-	  if (!isCustomProperty && typeof value === 'number' && value !== 0 && !(isUnitlessNumber.hasOwnProperty(name) && isUnitlessNumber[name])) {
-	    return value + 'px'; // Presumes implicit 'px' suffix for unitless numbers
-	  }
-
-	  return ('' + value).trim();
-	}
-
-	var uppercasePattern = /([A-Z])/g;
-	var msPattern = /^ms-/;
-	/**
-	 * Hyphenates a camelcased CSS property name, for example:
-	 *
-	 *   > hyphenateStyleName('backgroundColor')
-	 *   < "background-color"
-	 *   > hyphenateStyleName('MozTransition')
-	 *   < "-moz-transition"
-	 *   > hyphenateStyleName('msTransition')
-	 *   < "-ms-transition"
-	 *
-	 * As Modernizr suggests (http://modernizr.com/docs/#prefixed), an `ms` prefix
-	 * is converted to `-ms-`.
-	 */
-
-	function hyphenateStyleName(name) {
-	  return name.replace(uppercasePattern, '-$1').toLowerCase().replace(msPattern, '-ms-');
 	}
 
 	function isCustomComponent(tagName, props) {
@@ -7099,103 +5802,10 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  }
 	}
 
-	var warnValidStyle = function () {};
-
-	{
-	  // 'msTransform' is correct, but the other prefixes should be capitalized
-	  var badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/;
-	  var msPattern$1 = /^-ms-/;
-	  var hyphenPattern = /-(.)/g; // style values shouldn't contain a semicolon
-
-	  var badStyleValueWithSemicolonPattern = /;\s*$/;
-	  var warnedStyleNames = {};
-	  var warnedStyleValues = {};
-	  var warnedForNaNValue = false;
-	  var warnedForInfinityValue = false;
-
-	  var camelize = function (string) {
-	    return string.replace(hyphenPattern, function (_, character) {
-	      return character.toUpperCase();
-	    });
-	  };
-
-	  var warnHyphenatedStyleName = function (name) {
-	    if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
-	      return;
-	    }
-
-	    warnedStyleNames[name] = true;
-
-	    error('Unsupported style property %s. Did you mean %s?', name, // As Andi Smith suggests
-	    // (http://www.andismith.com/blog/2012/02/modernizr-prefixed/), an `-ms` prefix
-	    // is converted to lowercase `ms`.
-	    camelize(name.replace(msPattern$1, 'ms-')));
-	  };
-
-	  var warnBadVendoredStyleName = function (name) {
-	    if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
-	      return;
-	    }
-
-	    warnedStyleNames[name] = true;
-
-	    error('Unsupported vendor-prefixed style property %s. Did you mean %s?', name, name.charAt(0).toUpperCase() + name.slice(1));
-	  };
-
-	  var warnStyleValueWithSemicolon = function (name, value) {
-	    if (warnedStyleValues.hasOwnProperty(value) && warnedStyleValues[value]) {
-	      return;
-	    }
-
-	    warnedStyleValues[value] = true;
-
-	    error("Style property values shouldn't contain a semicolon. " + 'Try "%s: %s" instead.', name, value.replace(badStyleValueWithSemicolonPattern, ''));
-	  };
-
-	  var warnStyleValueIsNaN = function (name, value) {
-	    if (warnedForNaNValue) {
-	      return;
-	    }
-
-	    warnedForNaNValue = true;
-
-	    error('`NaN` is an invalid value for the `%s` css style property.', name);
-	  };
-
-	  var warnStyleValueIsInfinity = function (name, value) {
-	    if (warnedForInfinityValue) {
-	      return;
-	    }
-
-	    warnedForInfinityValue = true;
-
-	    error('`Infinity` is an invalid value for the `%s` css style property.', name);
-	  };
-
-	  warnValidStyle = function (name, value) {
-	    if (name.indexOf('-') > -1) {
-	      warnHyphenatedStyleName(name);
-	    } else if (badVendoredStyleNamePattern.test(name)) {
-	      warnBadVendoredStyleName(name);
-	    } else if (badStyleValueWithSemicolonPattern.test(value)) {
-	      warnStyleValueWithSemicolon(name, value);
-	    }
-
-	    if (typeof value === 'number') {
-	      if (isNaN(value)) {
-	        warnStyleValueIsNaN(name, value);
-	      } else if (!isFinite(value)) {
-	        warnStyleValueIsInfinity(name, value);
-	      }
-	    }
-	  };
-	}
-
-	var warnValidStyle$1 = warnValidStyle;
-
 	var ariaProperties = {
 	  'aria-current': 0,
 	  // state
+	  'aria-description': 0,
 	  'aria-details': 0,
 	  'aria-disabled': 0,
 	  // state
@@ -7255,11 +5865,10 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	var warnedProperties = {};
 	var rARIA = new RegExp('^(aria)-[' + ATTRIBUTE_NAME_CHAR + ']*$');
 	var rARIACamel = new RegExp('^(aria)[A-Z][' + ATTRIBUTE_NAME_CHAR + ']*$');
-	var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
 
 	function validateProperty(tagName, name) {
 	  {
-	    if (hasOwnProperty$1.call(warnedProperties, name) && warnedProperties[name]) {
+	    if (hasOwnProperty.call(warnedProperties, name) && warnedProperties[name]) {
 	      return true;
 	    }
 
@@ -7432,6 +6041,8 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  'http-equiv': 'httpEquiv',
 	  icon: 'icon',
 	  id: 'id',
+	  imagesizes: 'imageSizes',
+	  imagesrcset: 'imageSrcSet',
 	  innerhtml: 'innerHTML',
 	  inputmode: 'inputMode',
 	  integrity: 'integrity',
@@ -7853,14 +6464,13 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 
 	{
 	  var warnedProperties$1 = {};
-	  var _hasOwnProperty = Object.prototype.hasOwnProperty;
 	  var EVENT_NAME_REGEX = /^on./;
 	  var INVALID_EVENT_NAME_REGEX = /^on[^A-Z]/;
 	  var rARIA$1 = new RegExp('^(aria)-[' + ATTRIBUTE_NAME_CHAR + ']*$');
 	  var rARIACamel$1 = new RegExp('^(aria)[A-Z][' + ATTRIBUTE_NAME_CHAR + ']*$');
 
 	  validateProperty$1 = function (tagName, name, value, eventRegistry) {
-	    if (_hasOwnProperty.call(warnedProperties$1, name) && warnedProperties$1[name]) {
+	    if (hasOwnProperty.call(warnedProperties$1, name) && warnedProperties$1[name]) {
 	      return true;
 	    }
 
@@ -8030,247 +6640,725 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  warnUnknownProperties(type, props, eventRegistry);
 	}
 
-	var toArray = React.Children.toArray; // This is only used in DEV.
-	// Each entry is `this.stack` from a currently executing renderer instance.
-	// (There may be more than one because ReactDOMServer is reentrant).
-	// Each stack is an array of frames which may contain nested stacks of elements.
-
-	var currentDebugStacks = [];
-	var ReactCurrentDispatcher$1 = ReactSharedInternals.ReactCurrentDispatcher;
-	var ReactDebugCurrentFrame$1;
-	var prevGetCurrentStackImpl = null;
-
-	var getCurrentServerStackImpl = function () {
-	  return '';
-	};
-
-	var describeStackFrame = function (element) {
-	  return '';
-	};
-
-	var validatePropertiesInDevelopment = function (type, props) {};
-
-	var pushCurrentDebugStack = function (stack) {};
-
-	var pushElementToDebugStack = function (element) {};
-
-	var popCurrentDebugStack = function () {};
-
-	var hasWarnedAboutUsingContextAsConsumer = false;
+	var warnValidStyle = function () {};
 
 	{
-	  ReactDebugCurrentFrame$1 = ReactSharedInternals.ReactDebugCurrentFrame;
+	  // 'msTransform' is correct, but the other prefixes should be capitalized
+	  var badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/;
+	  var msPattern = /^-ms-/;
+	  var hyphenPattern = /-(.)/g; // style values shouldn't contain a semicolon
 
-	  validatePropertiesInDevelopment = function (type, props) {
-	    validateProperties(type, props);
-	    validateProperties$1(type, props);
-	    validateProperties$2(type, props, null);
+	  var badStyleValueWithSemicolonPattern = /;\s*$/;
+	  var warnedStyleNames = {};
+	  var warnedStyleValues = {};
+	  var warnedForNaNValue = false;
+	  var warnedForInfinityValue = false;
+
+	  var camelize = function (string) {
+	    return string.replace(hyphenPattern, function (_, character) {
+	      return character.toUpperCase();
+	    });
 	  };
 
-	  describeStackFrame = function (element) {
-	    return describeUnknownElementTypeFrameInDEV(element.type, element._source, null);
+	  var warnHyphenatedStyleName = function (name) {
+	    if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
+	      return;
+	    }
+
+	    warnedStyleNames[name] = true;
+
+	    error('Unsupported style property %s. Did you mean %s?', name, // As Andi Smith suggests
+	    // (http://www.andismith.com/blog/2012/02/modernizr-prefixed/), an `-ms` prefix
+	    // is converted to lowercase `ms`.
+	    camelize(name.replace(msPattern, 'ms-')));
 	  };
 
-	  pushCurrentDebugStack = function (stack) {
-	    currentDebugStacks.push(stack);
+	  var warnBadVendoredStyleName = function (name) {
+	    if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
+	      return;
+	    }
 
-	    if (currentDebugStacks.length === 1) {
-	      // We are entering a server renderer.
-	      // Remember the previous (e.g. client) global stack implementation.
-	      prevGetCurrentStackImpl = ReactDebugCurrentFrame$1.getCurrentStack;
-	      ReactDebugCurrentFrame$1.getCurrentStack = getCurrentServerStackImpl;
+	    warnedStyleNames[name] = true;
+
+	    error('Unsupported vendor-prefixed style property %s. Did you mean %s?', name, name.charAt(0).toUpperCase() + name.slice(1));
+	  };
+
+	  var warnStyleValueWithSemicolon = function (name, value) {
+	    if (warnedStyleValues.hasOwnProperty(value) && warnedStyleValues[value]) {
+	      return;
+	    }
+
+	    warnedStyleValues[value] = true;
+
+	    error("Style property values shouldn't contain a semicolon. " + 'Try "%s: %s" instead.', name, value.replace(badStyleValueWithSemicolonPattern, ''));
+	  };
+
+	  var warnStyleValueIsNaN = function (name, value) {
+	    if (warnedForNaNValue) {
+	      return;
+	    }
+
+	    warnedForNaNValue = true;
+
+	    error('`NaN` is an invalid value for the `%s` css style property.', name);
+	  };
+
+	  var warnStyleValueIsInfinity = function (name, value) {
+	    if (warnedForInfinityValue) {
+	      return;
+	    }
+
+	    warnedForInfinityValue = true;
+
+	    error('`Infinity` is an invalid value for the `%s` css style property.', name);
+	  };
+
+	  warnValidStyle = function (name, value) {
+	    if (name.indexOf('-') > -1) {
+	      warnHyphenatedStyleName(name);
+	    } else if (badVendoredStyleNamePattern.test(name)) {
+	      warnBadVendoredStyleName(name);
+	    } else if (badStyleValueWithSemicolonPattern.test(value)) {
+	      warnStyleValueWithSemicolon(name, value);
+	    }
+
+	    if (typeof value === 'number') {
+	      if (isNaN(value)) {
+	        warnStyleValueIsNaN(name, value);
+	      } else if (!isFinite(value)) {
+	        warnStyleValueIsInfinity(name, value);
+	      }
 	    }
 	  };
+	}
 
-	  pushElementToDebugStack = function (element) {
-	    // For the innermost executing ReactDOMServer call,
-	    var stack = currentDebugStacks[currentDebugStacks.length - 1]; // Take the innermost executing frame (e.g. <Foo>),
+	var warnValidStyle$1 = warnValidStyle;
 
-	    var frame = stack[stack.length - 1]; // and record that it has one more element associated with it.
+	// code copied and modified from escape-html
+	var matchHtmlRegExp = /["'&<>]/;
+	/**
+	 * Escapes special characters and HTML entities in a given html string.
+	 *
+	 * @param  {string} string HTML string to escape for later insertion
+	 * @return {string}
+	 * @public
+	 */
 
-	    frame.debugElementStack.push(element); // We only need this because we tail-optimize single-element
-	    // children and directly handle them in an inner loop instead of
-	    // creating separate frames for them.
-	  };
+	function escapeHtml(string) {
+	  {
+	    checkHtmlStringCoercion(string);
+	  }
 
-	  popCurrentDebugStack = function () {
-	    currentDebugStacks.pop();
+	  var str = '' + string;
+	  var match = matchHtmlRegExp.exec(str);
 
-	    if (currentDebugStacks.length === 0) {
-	      // We are exiting the server renderer.
-	      // Restore the previous (e.g. client) global stack implementation.
-	      ReactDebugCurrentFrame$1.getCurrentStack = prevGetCurrentStackImpl;
-	      prevGetCurrentStackImpl = null;
+	  if (!match) {
+	    return str;
+	  }
+
+	  var escape;
+	  var html = '';
+	  var index;
+	  var lastIndex = 0;
+
+	  for (index = match.index; index < str.length; index++) {
+	    switch (str.charCodeAt(index)) {
+	      case 34:
+	        // "
+	        escape = '&quot;';
+	        break;
+
+	      case 38:
+	        // &
+	        escape = '&amp;';
+	        break;
+
+	      case 39:
+	        // '
+	        escape = '&#x27;'; // modified from escape-html; used to be '&#39'
+
+	        break;
+
+	      case 60:
+	        // <
+	        escape = '&lt;';
+	        break;
+
+	      case 62:
+	        // >
+	        escape = '&gt;';
+	        break;
+
+	      default:
+	        continue;
 	    }
+
+	    if (lastIndex !== index) {
+	      html += str.substring(lastIndex, index);
+	    }
+
+	    lastIndex = index + 1;
+	    html += escape;
+	  }
+
+	  return lastIndex !== index ? html + str.substring(lastIndex, index) : html;
+	} // end code copied and modified from escape-html
+
+	/**
+	 * Escapes text to prevent scripting attacks.
+	 *
+	 * @param {*} text Text value to escape.
+	 * @return {string} An escaped string.
+	 */
+
+
+	function escapeTextForBrowser(text) {
+	  if (typeof text === 'boolean' || typeof text === 'number') {
+	    // this shortcircuit helps perf for types that we know will never have
+	    // special characters, especially given that this function is used often
+	    // for numeric dom ids.
+	    return '' + text;
+	  }
+
+	  return escapeHtml(text);
+	}
+
+	var uppercasePattern = /([A-Z])/g;
+	var msPattern$1 = /^ms-/;
+	/**
+	 * Hyphenates a camelcased CSS property name, for example:
+	 *
+	 *   > hyphenateStyleName('backgroundColor')
+	 *   < "background-color"
+	 *   > hyphenateStyleName('MozTransition')
+	 *   < "-moz-transition"
+	 *   > hyphenateStyleName('msTransition')
+	 *   < "-ms-transition"
+	 *
+	 * As Modernizr suggests (http://modernizr.com/docs/#prefixed), an `ms` prefix
+	 * is converted to `-ms-`.
+	 */
+
+	function hyphenateStyleName(name) {
+	  return name.replace(uppercasePattern, '-$1').toLowerCase().replace(msPattern$1, '-ms-');
+	}
+
+	// and any newline or tab are filtered out as if they're not part of the URL.
+	// https://url.spec.whatwg.org/#url-parsing
+	// Tab or newline are defined as \r\n\t:
+	// https://infra.spec.whatwg.org/#ascii-tab-or-newline
+	// A C0 control is a code point in the range \u0000 NULL to \u001F
+	// INFORMATION SEPARATOR ONE, inclusive:
+	// https://infra.spec.whatwg.org/#c0-control-or-space
+
+	/* eslint-disable max-len */
+
+	var isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*\:/i;
+	var didWarn = false;
+
+	function sanitizeURL(url) {
+	  {
+	    if (!didWarn && isJavaScriptProtocol.test(url)) {
+	      didWarn = true;
+
+	      error('A future version of React will block javascript: URLs as a security precaution. ' + 'Use event handlers instead if you can. If you need to generate unsafe HTML try ' + 'using dangerouslySetInnerHTML instead. React was passed %s.', JSON.stringify(url));
+	    }
+	  }
+	}
+
+	var isArrayImpl = Array.isArray; // eslint-disable-next-line no-redeclare
+
+	function isArray(a) {
+	  return isArrayImpl(a);
+	}
+
+	var startInlineScript = stringToPrecomputedChunk('<script>');
+	var endInlineScript = stringToPrecomputedChunk('</script>');
+	var startScriptSrc = stringToPrecomputedChunk('<script src="');
+	var startModuleSrc = stringToPrecomputedChunk('<script type="module" src="');
+	var endAsyncScript = stringToPrecomputedChunk('" async=""></script>');
+	/**
+	 * This escaping function is designed to work with bootstrapScriptContent only.
+	 * because we know we are escaping the entire script. We can avoid for instance
+	 * escaping html comment string sequences that are valid javascript as well because
+	 * if there are no sebsequent <script sequences the html parser will never enter
+	 * script data double escaped state (see: https://www.w3.org/TR/html53/syntax.html#script-data-double-escaped-state)
+	 *
+	 * While untrusted script content should be made safe before using this api it will
+	 * ensure that the script cannot be early terminated or never terminated state
+	 */
+
+	function escapeBootstrapScriptContent(scriptText) {
+	  {
+	    checkHtmlStringCoercion(scriptText);
+	  }
+
+	  return ('' + scriptText).replace(scriptRegex, scriptReplacer);
+	}
+
+	var scriptRegex = /(<\/|<)(s)(cript)/gi;
+
+	var scriptReplacer = function (match, prefix, s, suffix) {
+	  return "" + prefix + (s === 's' ? "\\u0073" : "\\u0053") + suffix;
+	}; // Allows us to keep track of what we've already written so we can refer back to it.
+
+
+	function createResponseState(identifierPrefix, nonce, bootstrapScriptContent, bootstrapScripts, bootstrapModules) {
+	  var idPrefix = identifierPrefix === undefined ? '' : identifierPrefix;
+	  var inlineScriptWithNonce = nonce === undefined ? startInlineScript : stringToPrecomputedChunk('<script nonce="' + escapeTextForBrowser(nonce) + '">');
+	  var bootstrapChunks = [];
+
+	  if (bootstrapScriptContent !== undefined) {
+	    bootstrapChunks.push(inlineScriptWithNonce, stringToChunk(escapeBootstrapScriptContent(bootstrapScriptContent)), endInlineScript);
+	  }
+
+	  if (bootstrapScripts !== undefined) {
+	    for (var i = 0; i < bootstrapScripts.length; i++) {
+	      bootstrapChunks.push(startScriptSrc, stringToChunk(escapeTextForBrowser(bootstrapScripts[i])), endAsyncScript);
+	    }
+	  }
+
+	  if (bootstrapModules !== undefined) {
+	    for (var _i = 0; _i < bootstrapModules.length; _i++) {
+	      bootstrapChunks.push(startModuleSrc, stringToChunk(escapeTextForBrowser(bootstrapModules[_i])), endAsyncScript);
+	    }
+	  }
+
+	  return {
+	    bootstrapChunks: bootstrapChunks,
+	    startInlineScript: inlineScriptWithNonce,
+	    placeholderPrefix: stringToPrecomputedChunk(idPrefix + 'P:'),
+	    segmentPrefix: stringToPrecomputedChunk(idPrefix + 'S:'),
+	    boundaryPrefix: idPrefix + 'B:',
+	    idPrefix: idPrefix,
+	    nextSuspenseID: 0,
+	    sentCompleteSegmentFunction: false,
+	    sentCompleteBoundaryFunction: false,
+	    sentClientRenderFunction: false
 	  };
+	} // Constants for the insertion mode we're currently writing in. We don't encode all HTML5 insertion
+	// modes. We only include the variants as they matter for the sake of our purposes.
+	// We don't actually provide the namespace therefore we use constants instead of the string.
 
-	  getCurrentServerStackImpl = function () {
-	    if (currentDebugStacks.length === 0) {
-	      // Nothing is currently rendering.
-	      return '';
-	    } // ReactDOMServer is reentrant so there may be multiple calls at the same time.
-	    // Take the frames from the innermost call which is the last in the array.
+	var ROOT_HTML_MODE = 0; // Used for the root most element tag.
+
+	var HTML_MODE = 1;
+	var SVG_MODE = 2;
+	var MATHML_MODE = 3;
+	var HTML_TABLE_MODE = 4;
+	var HTML_TABLE_BODY_MODE = 5;
+	var HTML_TABLE_ROW_MODE = 6;
+	var HTML_COLGROUP_MODE = 7; // We have a greater than HTML_TABLE_MODE check elsewhere. If you add more cases here, make sure it
+	// still makes sense
+
+	function createFormatContext(insertionMode, selectedValue) {
+	  return {
+	    insertionMode: insertionMode,
+	    selectedValue: selectedValue
+	  };
+	}
+	function getChildFormatContext(parentContext, type, props) {
+	  switch (type) {
+	    case 'select':
+	      return createFormatContext(HTML_MODE, props.value != null ? props.value : props.defaultValue);
+
+	    case 'svg':
+	      return createFormatContext(SVG_MODE, null);
+
+	    case 'math':
+	      return createFormatContext(MATHML_MODE, null);
+
+	    case 'foreignObject':
+	      return createFormatContext(HTML_MODE, null);
+	    // Table parents are special in that their children can only be created at all if they're
+	    // wrapped in a table parent. So we need to encode that we're entering this mode.
+
+	    case 'table':
+	      return createFormatContext(HTML_TABLE_MODE, null);
+
+	    case 'thead':
+	    case 'tbody':
+	    case 'tfoot':
+	      return createFormatContext(HTML_TABLE_BODY_MODE, null);
+
+	    case 'colgroup':
+	      return createFormatContext(HTML_COLGROUP_MODE, null);
+
+	    case 'tr':
+	      return createFormatContext(HTML_TABLE_ROW_MODE, null);
+	  }
+
+	  if (parentContext.insertionMode >= HTML_TABLE_MODE) {
+	    // Whatever tag this was, it wasn't a table parent or other special parent, so we must have
+	    // entered plain HTML again.
+	    return createFormatContext(HTML_MODE, null);
+	  }
+
+	  if (parentContext.insertionMode === ROOT_HTML_MODE) {
+	    // We've emitted the root and is now in plain HTML mode.
+	    return createFormatContext(HTML_MODE, null);
+	  }
+
+	  return parentContext;
+	}
+	var UNINITIALIZED_SUSPENSE_BOUNDARY_ID = null;
+	function assignSuspenseBoundaryID(responseState) {
+	  var generatedID = responseState.nextSuspenseID++;
+	  return stringToPrecomputedChunk(responseState.boundaryPrefix + generatedID.toString(16));
+	}
+	function makeId(responseState, treeId, localId) {
+	  var idPrefix = responseState.idPrefix;
+	  var id = ':' + idPrefix + 'R' + treeId; // Unless this is the first id at this level, append a number at the end
+	  // that represents the position of this useId hook among all the useId
+	  // hooks for this fiber.
+
+	  if (localId > 0) {
+	    id += 'H' + localId.toString(32);
+	  }
+
+	  return id + ':';
+	}
+
+	function encodeHTMLTextNode(text) {
+	  return escapeTextForBrowser(text);
+	}
+
+	var textSeparator = stringToPrecomputedChunk('<!-- -->');
+	function pushTextInstance(target, text, responseState, textEmbedded) {
+	  if (text === '') {
+	    // Empty text doesn't have a DOM node representation and the hydration is aware of this.
+	    return textEmbedded;
+	  }
+
+	  if (textEmbedded) {
+	    target.push(textSeparator);
+	  }
+
+	  target.push(stringToChunk(encodeHTMLTextNode(text)));
+	  return true;
+	} // Called when Fizz is done with a Segment. Currently the only purpose is to conditionally
+	// emit a text separator when we don't know for sure it is safe to omit
+
+	function pushSegmentFinale(target, responseState, lastPushedText, textEmbedded) {
+	  if (lastPushedText && textEmbedded) {
+	    target.push(textSeparator);
+	  }
+	}
+	var styleNameCache = new Map();
+
+	function processStyleName(styleName) {
+	  var chunk = styleNameCache.get(styleName);
+
+	  if (chunk !== undefined) {
+	    return chunk;
+	  }
+
+	  var result = stringToPrecomputedChunk(escapeTextForBrowser(hyphenateStyleName(styleName)));
+	  styleNameCache.set(styleName, result);
+	  return result;
+	}
+
+	var styleAttributeStart = stringToPrecomputedChunk(' style="');
+	var styleAssign = stringToPrecomputedChunk(':');
+	var styleSeparator = stringToPrecomputedChunk(';');
+
+	function pushStyle(target, responseState, style) {
+	  if (typeof style !== 'object') {
+	    throw new Error('The `style` prop expects a mapping from style properties to values, ' + "not a string. For example, style={{marginRight: spacing + 'em'}} when " + 'using JSX.');
+	  }
+
+	  var isFirst = true;
+
+	  for (var styleName in style) {
+	    if (!hasOwnProperty.call(style, styleName)) {
+	      continue;
+	    } // If you provide unsafe user data here they can inject arbitrary CSS
+	    // which may be problematic (I couldn't repro this):
+	    // https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
+	    // http://www.thespanner.co.uk/2007/11/26/ultimate-xss-css-injection/
+	    // This is not an XSS hole but instead a potential CSS injection issue
+	    // which has lead to a greater discussion about how we're going to
+	    // trust URLs moving forward. See #2115901
 
 
-	    var frames = currentDebugStacks[currentDebugStacks.length - 1];
-	    var stack = ''; // Go through every frame in the stack from the innermost one.
+	    var styleValue = style[styleName];
 
-	    for (var i = frames.length - 1; i >= 0; i--) {
-	      var frame = frames[i]; // Every frame might have more than one debug element stack entry associated with it.
-	      // This is because single-child nesting doesn't create materialized frames.
-	      // Instead it would push them through `pushElementToDebugStack()`.
+	    if (styleValue == null || typeof styleValue === 'boolean' || styleValue === '') {
+	      // TODO: We used to set empty string as a style with an empty value. Does that ever make sense?
+	      continue;
+	    }
 
-	      var debugElementStack = frame.debugElementStack;
+	    var nameChunk = void 0;
+	    var valueChunk = void 0;
+	    var isCustomProperty = styleName.indexOf('--') === 0;
 
-	      for (var ii = debugElementStack.length - 1; ii >= 0; ii--) {
-	        stack += describeStackFrame(debugElementStack[ii]);
+	    if (isCustomProperty) {
+	      nameChunk = stringToChunk(escapeTextForBrowser(styleName));
+
+	      {
+	        checkCSSPropertyStringCoercion(styleValue, styleName);
+	      }
+
+	      valueChunk = stringToChunk(escapeTextForBrowser(('' + styleValue).trim()));
+	    } else {
+	      {
+	        warnValidStyle$1(styleName, styleValue);
+	      }
+
+	      nameChunk = processStyleName(styleName);
+
+	      if (typeof styleValue === 'number') {
+	        if (styleValue !== 0 && !hasOwnProperty.call(isUnitlessNumber, styleName)) {
+	          valueChunk = stringToChunk(styleValue + 'px'); // Presumes implicit 'px' suffix for unitless numbers
+	        } else {
+	          valueChunk = stringToChunk('' + styleValue);
+	        }
+	      } else {
+	        {
+	          checkCSSPropertyStringCoercion(styleValue, styleName);
+	        }
+
+	        valueChunk = stringToChunk(escapeTextForBrowser(('' + styleValue).trim()));
 	      }
 	    }
 
-	    return stack;
-	  };
+	    if (isFirst) {
+	      isFirst = false; // If it's first, we don't need any separators prefixed.
+
+	      target.push(styleAttributeStart, nameChunk, styleAssign, valueChunk);
+	    } else {
+	      target.push(styleSeparator, nameChunk, styleAssign, valueChunk);
+	    }
+	  }
+
+	  if (!isFirst) {
+	    target.push(attributeEnd);
+	  }
 	}
+
+	var attributeSeparator = stringToPrecomputedChunk(' ');
+	var attributeAssign = stringToPrecomputedChunk('="');
+	var attributeEnd = stringToPrecomputedChunk('"');
+	var attributeEmptyString = stringToPrecomputedChunk('=""');
+
+	function pushAttribute(target, responseState, name, value) {
+	  switch (name) {
+	    case 'style':
+	      {
+	        pushStyle(target, responseState, value);
+	        return;
+	      }
+
+	    case 'defaultValue':
+	    case 'defaultChecked': // These shouldn't be set as attributes on generic HTML elements.
+
+	    case 'innerHTML': // Must use dangerouslySetInnerHTML instead.
+
+	    case 'suppressContentEditableWarning':
+	    case 'suppressHydrationWarning':
+	      // Ignored. These are built-in to React on the client.
+	      return;
+	  }
+
+	  if ( // shouldIgnoreAttribute
+	  // We have already filtered out null/undefined and reserved words.
+	  name.length > 2 && (name[0] === 'o' || name[0] === 'O') && (name[1] === 'n' || name[1] === 'N')) {
+	    return;
+	  }
+
+	  var propertyInfo = getPropertyInfo(name);
+
+	  if (propertyInfo !== null) {
+	    // shouldRemoveAttribute
+	    switch (typeof value) {
+	      case 'function': // $FlowIssue symbol is perfectly valid here
+
+	      case 'symbol':
+	        // eslint-disable-line
+	        return;
+
+	      case 'boolean':
+	        {
+	          if (!propertyInfo.acceptsBooleans) {
+	            return;
+	          }
+	        }
+	    }
+
+	    var attributeName = propertyInfo.attributeName;
+	    var attributeNameChunk = stringToChunk(attributeName); // TODO: If it's known we can cache the chunk.
+
+	    switch (propertyInfo.type) {
+	      case BOOLEAN:
+	        if (value) {
+	          target.push(attributeSeparator, attributeNameChunk, attributeEmptyString);
+	        }
+
+	        return;
+
+	      case OVERLOADED_BOOLEAN:
+	        if (value === true) {
+	          target.push(attributeSeparator, attributeNameChunk, attributeEmptyString);
+	        } else if (value === false) ; else {
+	          target.push(attributeSeparator, attributeNameChunk, attributeAssign, stringToChunk(escapeTextForBrowser(value)), attributeEnd);
+	        }
+
+	        return;
+
+	      case NUMERIC:
+	        if (!isNaN(value)) {
+	          target.push(attributeSeparator, attributeNameChunk, attributeAssign, stringToChunk(escapeTextForBrowser(value)), attributeEnd);
+	        }
+
+	        break;
+
+	      case POSITIVE_NUMERIC:
+	        if (!isNaN(value) && value >= 1) {
+	          target.push(attributeSeparator, attributeNameChunk, attributeAssign, stringToChunk(escapeTextForBrowser(value)), attributeEnd);
+	        }
+
+	        break;
+
+	      default:
+	        if (propertyInfo.sanitizeURL) {
+	          {
+	            checkAttributeStringCoercion(value, attributeName);
+	          }
+
+	          value = '' + value;
+	          sanitizeURL(value);
+	        }
+
+	        target.push(attributeSeparator, attributeNameChunk, attributeAssign, stringToChunk(escapeTextForBrowser(value)), attributeEnd);
+	    }
+	  } else if (isAttributeNameSafe(name)) {
+	    // shouldRemoveAttribute
+	    switch (typeof value) {
+	      case 'function': // $FlowIssue symbol is perfectly valid here
+
+	      case 'symbol':
+	        // eslint-disable-line
+	        return;
+
+	      case 'boolean':
+	        {
+	          var prefix = name.toLowerCase().slice(0, 5);
+
+	          if (prefix !== 'data-' && prefix !== 'aria-') {
+	            return;
+	          }
+	        }
+	    }
+
+	    target.push(attributeSeparator, stringToChunk(name), attributeAssign, stringToChunk(escapeTextForBrowser(value)), attributeEnd);
+	  }
+	}
+
+	var endOfStartTag = stringToPrecomputedChunk('>');
+	var endOfStartTagSelfClosing = stringToPrecomputedChunk('/>');
+
+	function pushInnerHTML(target, innerHTML, children) {
+	  if (innerHTML != null) {
+	    if (children != null) {
+	      throw new Error('Can only set one of `children` or `props.dangerouslySetInnerHTML`.');
+	    }
+
+	    if (typeof innerHTML !== 'object' || !('__html' in innerHTML)) {
+	      throw new Error('`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. ' + 'Please visit https://reactjs.org/link/dangerously-set-inner-html ' + 'for more information.');
+	    }
+
+	    var html = innerHTML.__html;
+
+	    if (html !== null && html !== undefined) {
+	      {
+	        checkHtmlStringCoercion(html);
+	      }
+
+	      target.push(stringToChunk('' + html));
+	    }
+	  }
+	} // TODO: Move these to ResponseState so that we warn for every request.
+	// It would help debugging in stateful servers (e.g. service worker).
+
 
 	var didWarnDefaultInputValue = false;
 	var didWarnDefaultChecked = false;
 	var didWarnDefaultSelectValue = false;
 	var didWarnDefaultTextareaValue = false;
 	var didWarnInvalidOptionChildren = false;
-	var didWarnAboutNoopUpdateForComponent = {};
-	var didWarnAboutBadClass = {};
-	var didWarnAboutModulePatternComponent = {};
-	var didWarnAboutDeprecatedWillMount = {};
-	var didWarnAboutUndefinedDerivedState = {};
-	var didWarnAboutUninitializedState = {};
-	var valuePropNames = ['value', 'defaultValue'];
-	var newlineEatingTags = {
-	  listing: true,
-	  pre: true,
-	  textarea: true
-	}; // We accept any tag to be rendered but since this gets injected into arbitrary
-	// HTML, we want to make sure that it's a safe tag.
-	// http://www.w3.org/TR/REC-xml/#NT-Name
+	var didWarnInvalidOptionInnerHTML = false;
+	var didWarnSelectedSetOnOption = false;
 
-	var VALID_TAG_REGEX = /^[a-zA-Z][a-zA-Z:_\.\-\d]*$/; // Simplified subset
-
-	var validatedTagCache = {};
-
-	function validateDangerousTag(tag) {
-	  if (!validatedTagCache.hasOwnProperty(tag)) {
-	    if (!VALID_TAG_REGEX.test(tag)) {
-	      {
-	        throw Error( "Invalid tag: " + tag );
-	      }
-	    }
-
-	    validatedTagCache[tag] = true;
-	  }
-	}
-
-	var styleNameCache = {};
-
-	var processStyleName = function (styleName) {
-	  if (styleNameCache.hasOwnProperty(styleName)) {
-	    return styleNameCache[styleName];
-	  }
-
-	  var result = hyphenateStyleName(styleName);
-	  styleNameCache[styleName] = result;
-	  return result;
-	};
-
-	function createMarkupForStyles(styles) {
-	  var serialized = '';
-	  var delimiter = '';
-
-	  for (var styleName in styles) {
-	    if (!styles.hasOwnProperty(styleName)) {
-	      continue;
-	    }
-
-	    var isCustomProperty = styleName.indexOf('--') === 0;
-	    var styleValue = styles[styleName];
-
-	    {
-	      if (!isCustomProperty) {
-	        warnValidStyle$1(styleName, styleValue);
-	      }
-	    }
-
-	    if (styleValue != null) {
-	      serialized += delimiter + (isCustomProperty ? styleName : processStyleName(styleName)) + ':';
-	      serialized += dangerousStyleValue(styleName, styleValue, isCustomProperty);
-	      delimiter = ';';
-	    }
-	  }
-
-	  return serialized || null;
-	}
-
-	function warnNoop(publicInstance, callerName) {
+	function checkSelectProp(props, propName) {
 	  {
-	    var _constructor = publicInstance.constructor;
-	    var componentName = _constructor && getComponentName(_constructor) || 'ReactClass';
-	    var warningKey = componentName + '.' + callerName;
+	    var value = props[propName];
 
-	    if (didWarnAboutNoopUpdateForComponent[warningKey]) {
-	      return;
+	    if (value != null) {
+	      var array = isArray(value);
+
+	      if (props.multiple && !array) {
+	        error('The `%s` prop supplied to <select> must be an array if ' + '`multiple` is true.', propName);
+	      } else if (!props.multiple && array) {
+	        error('The `%s` prop supplied to <select> must be a scalar ' + 'value if `multiple` is false.', propName);
+	      }
 	    }
-
-	    error('%s(...): Can only update a mounting component. ' + 'This usually means you called %s() outside componentWillMount() on the server. ' + 'This is a no-op.\n\nPlease check the code for the %s component.', callerName, callerName, componentName);
-
-	    didWarnAboutNoopUpdateForComponent[warningKey] = true;
 	  }
 	}
 
-	function shouldConstruct$1(Component) {
-	  return Component.prototype && Component.prototype.isReactComponent;
-	}
+	function pushStartSelect(target, props, responseState) {
+	  {
+	    checkControlledValueProps('select', props);
+	    checkSelectProp(props, 'value');
+	    checkSelectProp(props, 'defaultValue');
 
-	function getNonChildrenInnerMarkup(props) {
-	  var innerHTML = props.dangerouslySetInnerHTML;
+	    if (props.value !== undefined && props.defaultValue !== undefined && !didWarnDefaultSelectValue) {
+	      error('Select elements must be either controlled or uncontrolled ' + '(specify either the value prop, or the defaultValue prop, but not ' + 'both). Decide between using a controlled or uncontrolled select ' + 'element and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components');
 
-	  if (innerHTML != null) {
-	    if (innerHTML.__html != null) {
-	      return innerHTML.__html;
-	    }
-	  } else {
-	    var content = props.children;
-
-	    if (typeof content === 'string' || typeof content === 'number') {
-	      return escapeTextForBrowser(content);
+	      didWarnDefaultSelectValue = true;
 	    }
 	  }
 
-	  return null;
-	}
+	  target.push(startChunkForTag('select'));
+	  var children = null;
+	  var innerHTML = null;
 
-	function flattenTopLevelChildren(children) {
-	  if (!React.isValidElement(children)) {
-	    return toArray(children);
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          // TODO: This doesn't really make sense for select since it can't use the controlled
+	          // value in the innerHTML.
+	          innerHTML = propValue;
+	          break;
+
+	        case 'defaultValue':
+	        case 'value':
+	          // These are set on the Context instead and applied to the nested options.
+	          break;
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
 	  }
 
-	  var element = children;
-
-	  if (element.type !== REACT_FRAGMENT_TYPE) {
-	    return [element];
-	  }
-
-	  var fragmentChildren = element.props.children;
-
-	  if (!React.isValidElement(fragmentChildren)) {
-	    return toArray(fragmentChildren);
-	  }
-
-	  var fragmentChildElement = fragmentChildren;
-	  return [fragmentChildElement];
+	  target.push(endOfStartTag);
+	  pushInnerHTML(target, innerHTML, children);
+	  return children;
 	}
 
 	function flattenOptionChildren(children) {
-	  if (children === undefined || children === null) {
-	    return children;
-	  }
-
 	  var content = ''; // Flatten children and warn if they aren't strings or numbers;
 	  // invalid types are ignored.
 
@@ -8285,1134 +7373,4848 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	      if (!didWarnInvalidOptionChildren && typeof child !== 'string' && typeof child !== 'number') {
 	        didWarnInvalidOptionChildren = true;
 
-	        error('Only strings and numbers are supported as <option> children.');
+	        error('Cannot infer the option value of complex children. ' + 'Pass a `value` prop or use a plain string as children to <option>.');
 	      }
 	    }
 	  });
 	  return content;
 	}
 
-	var hasOwnProperty$2 = Object.prototype.hasOwnProperty;
-	var STYLE = 'style';
-	var RESERVED_PROPS = {
-	  children: null,
-	  dangerouslySetInnerHTML: null,
-	  suppressContentEditableWarning: null,
-	  suppressHydrationWarning: null
-	};
+	var selectedMarkerAttribute = stringToPrecomputedChunk(' selected=""');
 
-	function createOpenTagMarkup(tagVerbatim, tagLowercase, props, namespace, makeStaticMarkup, isRootElement) {
-	  var ret = '<' + tagVerbatim;
-	  var isCustomComponent$1 = isCustomComponent(tagLowercase, props);
+	function pushStartOption(target, props, responseState, formatContext) {
+	  var selectedValue = formatContext.selectedValue;
+	  target.push(startChunkForTag('option'));
+	  var children = null;
+	  var value = null;
+	  var selected = null;
+	  var innerHTML = null;
 
 	  for (var propKey in props) {
-	    if (!hasOwnProperty$2.call(props, propKey)) {
-	      continue;
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'selected':
+	          // ignore
+	          selected = propValue;
+
+	          {
+	            // TODO: Remove support for `selected` in <option>.
+	            if (!didWarnSelectedSetOnOption) {
+	              error('Use the `defaultValue` or `value` props on <select> instead of ' + 'setting `selected` on <option>.');
+
+	              didWarnSelectedSetOnOption = true;
+	            }
+	          }
+
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          innerHTML = propValue;
+	          break;
+	        // eslint-disable-next-line-no-fallthrough
+
+	        case 'value':
+	          value = propValue;
+	        // We intentionally fallthrough to also set the attribute on the node.
+	        // eslint-disable-next-line-no-fallthrough
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  if (selectedValue != null) {
+	    var stringValue;
+
+	    if (value !== null) {
+	      {
+	        checkAttributeStringCoercion(value, 'value');
+	      }
+
+	      stringValue = '' + value;
+	    } else {
+	      {
+	        if (innerHTML !== null) {
+	          if (!didWarnInvalidOptionInnerHTML) {
+	            didWarnInvalidOptionInnerHTML = true;
+
+	            error('Pass a `value` prop if you set dangerouslyInnerHTML so React knows ' + 'which value should be selected.');
+	          }
+	        }
+	      }
+
+	      stringValue = flattenOptionChildren(children);
 	    }
 
-	    var propValue = props[propKey];
+	    if (isArray(selectedValue)) {
+	      // multiple
+	      for (var i = 0; i < selectedValue.length; i++) {
+	        {
+	          checkAttributeStringCoercion(selectedValue[i], 'value');
+	        }
 
-	    if (propValue == null) {
-	      continue;
-	    }
+	        var v = '' + selectedValue[i];
 
-	    if (propKey === STYLE) {
-	      propValue = createMarkupForStyles(propValue);
-	    }
-
-	    var markup = null;
-
-	    if (isCustomComponent$1) {
-	      if (!RESERVED_PROPS.hasOwnProperty(propKey)) {
-	        markup = createMarkupForCustomAttribute(propKey, propValue);
+	        if (v === stringValue) {
+	          target.push(selectedMarkerAttribute);
+	          break;
+	        }
 	      }
 	    } else {
-	      markup = createMarkupForProperty(propKey, propValue);
-	    }
-
-	    if (markup) {
-	      ret += ' ' + markup;
-	    }
-	  } // For static pages, no need to put React ID and checksum. Saves lots of
-	  // bytes.
-
-
-	  if (makeStaticMarkup) {
-	    return ret;
-	  }
-
-	  if (isRootElement) {
-	    ret += ' ' + createMarkupForRoot();
-	  }
-
-	  return ret;
-	}
-
-	function validateRenderResult(child, type) {
-	  if (child === undefined) {
-	    {
 	      {
-	        throw Error( (getComponentName(type) || 'Component') + "(...): Nothing was returned from render. This usually means a return statement is missing. Or, to render nothing, return null." );
+	        checkAttributeStringCoercion(selectedValue, 'select.value');
+	      }
+
+	      if ('' + selectedValue === stringValue) {
+	        target.push(selectedMarkerAttribute);
+	      }
+	    }
+	  } else if (selected) {
+	    target.push(selectedMarkerAttribute);
+	  }
+
+	  target.push(endOfStartTag);
+	  pushInnerHTML(target, innerHTML, children);
+	  return children;
+	}
+
+	function pushInput(target, props, responseState) {
+	  {
+	    checkControlledValueProps('input', props);
+
+	    if (props.checked !== undefined && props.defaultChecked !== undefined && !didWarnDefaultChecked) {
+	      error('%s contains an input of type %s with both checked and defaultChecked props. ' + 'Input elements must be either controlled or uncontrolled ' + '(specify either the checked prop, or the defaultChecked prop, but not ' + 'both). Decide between using a controlled or uncontrolled input ' + 'element and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components', 'A component', props.type);
+
+	      didWarnDefaultChecked = true;
+	    }
+
+	    if (props.value !== undefined && props.defaultValue !== undefined && !didWarnDefaultInputValue) {
+	      error('%s contains an input of type %s with both value and defaultValue props. ' + 'Input elements must be either controlled or uncontrolled ' + '(specify either the value prop, or the defaultValue prop, but not ' + 'both). Decide between using a controlled or uncontrolled input ' + 'element and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components', 'A component', props.type);
+
+	      didWarnDefaultInputValue = true;
+	    }
+	  }
+
+	  target.push(startChunkForTag('input'));
+	  var value = null;
+	  var defaultValue = null;
+	  var checked = null;
+	  var defaultChecked = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	        case 'dangerouslySetInnerHTML':
+	          throw new Error('input' + " is a self-closing tag and must neither have `children` nor " + 'use `dangerouslySetInnerHTML`.');
+	        // eslint-disable-next-line-no-fallthrough
+
+	        case 'defaultChecked':
+	          defaultChecked = propValue;
+	          break;
+
+	        case 'defaultValue':
+	          defaultValue = propValue;
+	          break;
+
+	        case 'checked':
+	          checked = propValue;
+	          break;
+
+	        case 'value':
+	          value = propValue;
+	          break;
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  if (checked !== null) {
+	    pushAttribute(target, responseState, 'checked', checked);
+	  } else if (defaultChecked !== null) {
+	    pushAttribute(target, responseState, 'checked', defaultChecked);
+	  }
+
+	  if (value !== null) {
+	    pushAttribute(target, responseState, 'value', value);
+	  } else if (defaultValue !== null) {
+	    pushAttribute(target, responseState, 'value', defaultValue);
+	  }
+
+	  target.push(endOfStartTagSelfClosing);
+	  return null;
+	}
+
+	function pushStartTextArea(target, props, responseState) {
+	  {
+	    checkControlledValueProps('textarea', props);
+
+	    if (props.value !== undefined && props.defaultValue !== undefined && !didWarnDefaultTextareaValue) {
+	      error('Textarea elements must be either controlled or uncontrolled ' + '(specify either the value prop, or the defaultValue prop, but not ' + 'both). Decide between using a controlled or uncontrolled textarea ' + 'and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components');
+
+	      didWarnDefaultTextareaValue = true;
+	    }
+	  }
+
+	  target.push(startChunkForTag('textarea'));
+	  var value = null;
+	  var defaultValue = null;
+	  var children = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'value':
+	          value = propValue;
+	          break;
+
+	        case 'defaultValue':
+	          defaultValue = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          throw new Error('`dangerouslySetInnerHTML` does not make sense on <textarea>.');
+	        // eslint-disable-next-line-no-fallthrough
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  if (value === null && defaultValue !== null) {
+	    value = defaultValue;
+	  }
+
+	  target.push(endOfStartTag); // TODO (yungsters): Remove support for children content in <textarea>.
+
+	  if (children != null) {
+	    {
+	      error('Use the `defaultValue` or `value` props instead of setting ' + 'children on <textarea>.');
+	    }
+
+	    if (value != null) {
+	      throw new Error('If you supply `defaultValue` on a <textarea>, do not pass children.');
+	    }
+
+	    if (isArray(children)) {
+	      if (children.length > 1) {
+	        throw new Error('<textarea> can only have at most one child.');
+	      } // TODO: remove the coercion and the DEV check below because it will
+	      // always be overwritten by the coercion several lines below it. #22309
+
+
+	      {
+	        checkHtmlStringCoercion(children[0]);
+	      }
+
+	      value = '' + children[0];
+	    }
+
+	    {
+	      checkHtmlStringCoercion(children);
+	    }
+
+	    value = '' + children;
+	  }
+
+	  if (typeof value === 'string' && value[0] === '\n') {
+	    // text/html ignores the first character in these tags if it's a newline
+	    // Prefer to break application/xml over text/html (for now) by adding
+	    // a newline specifically to get eaten by the parser. (Alternately for
+	    // textareas, replacing "^\n" with "\r\n" doesn't get eaten, and the first
+	    // \r is normalized out by HTMLTextAreaElement#value.)
+	    // See: <http://www.w3.org/TR/html-polyglot/#newlines-in-textarea-and-pre>
+	    // See: <http://www.w3.org/TR/html5/syntax.html#element-restrictions>
+	    // See: <http://www.w3.org/TR/html5/syntax.html#newlines>
+	    // See: Parsing of "textarea" "listing" and "pre" elements
+	    //  from <http://www.w3.org/TR/html5/syntax.html#parsing-main-inbody>
+	    target.push(leadingNewline);
+	  } // ToString and push directly instead of recurse over children.
+	  // We don't really support complex children in the value anyway.
+	  // This also currently avoids a trailing comment node which breaks textarea.
+
+
+	  if (value !== null) {
+	    {
+	      checkAttributeStringCoercion(value, 'value');
+	    }
+
+	    target.push(stringToChunk(encodeHTMLTextNode('' + value)));
+	  }
+
+	  return null;
+	}
+
+	function pushSelfClosing(target, props, tag, responseState) {
+	  target.push(startChunkForTag(tag));
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	        case 'dangerouslySetInnerHTML':
+	          throw new Error(tag + " is a self-closing tag and must neither have `children` nor " + 'use `dangerouslySetInnerHTML`.');
+	        // eslint-disable-next-line-no-fallthrough
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTagSelfClosing);
+	  return null;
+	}
+
+	function pushStartMenuItem(target, props, responseState) {
+	  target.push(startChunkForTag('menuitem'));
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	        case 'dangerouslySetInnerHTML':
+	          throw new Error('menuitems cannot have `children` nor `dangerouslySetInnerHTML`.');
+	        // eslint-disable-next-line-no-fallthrough
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTag);
+	  return null;
+	}
+
+	function pushStartTitle(target, props, responseState) {
+	  target.push(startChunkForTag('title'));
+	  var children = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          throw new Error('`dangerouslySetInnerHTML` does not make sense on <title>.');
+	        // eslint-disable-next-line-no-fallthrough
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTag);
+
+	  {
+	    var child = Array.isArray(children) && children.length < 2 ? children[0] || null : children;
+
+	    if (Array.isArray(children) && children.length > 1) {
+	      error('A title element received an array with more than 1 element as children. ' + 'In browsers title Elements can only have Text Nodes as children. If ' + 'the children being rendered output more than a single text node in aggregate the browser ' + 'will display markup and comments as text in the title and hydration will likely fail and ' + 'fall back to client rendering');
+	    } else if (child != null && child.$$typeof != null) {
+	      error('A title element received a React element for children. ' + 'In the browser title Elements can only have Text Nodes as children. If ' + 'the children being rendered output more than a single text node in aggregate the browser ' + 'will display markup and comments as text in the title and hydration will likely fail and ' + 'fall back to client rendering');
+	    } else if (child != null && typeof child !== 'string' && typeof child !== 'number') {
+	      error('A title element received a value that was not a string or number for children. ' + 'In the browser title Elements can only have Text Nodes as children. If ' + 'the children being rendered output more than a single text node in aggregate the browser ' + 'will display markup and comments as text in the title and hydration will likely fail and ' + 'fall back to client rendering');
+	    }
+	  }
+
+	  return children;
+	}
+
+	function pushStartGenericElement(target, props, tag, responseState) {
+	  target.push(startChunkForTag(tag));
+	  var children = null;
+	  var innerHTML = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          innerHTML = propValue;
+	          break;
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTag);
+	  pushInnerHTML(target, innerHTML, children);
+
+	  if (typeof children === 'string') {
+	    // Special case children as a string to avoid the unnecessary comment.
+	    // TODO: Remove this special case after the general optimization is in place.
+	    target.push(stringToChunk(encodeHTMLTextNode(children)));
+	    return null;
+	  }
+
+	  return children;
+	}
+
+	function pushStartCustomElement(target, props, tag, responseState) {
+	  target.push(startChunkForTag(tag));
+	  var children = null;
+	  var innerHTML = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          innerHTML = propValue;
+	          break;
+
+	        case 'style':
+	          pushStyle(target, responseState, propValue);
+	          break;
+
+	        case 'suppressContentEditableWarning':
+	        case 'suppressHydrationWarning':
+	          // Ignored. These are built-in to React on the client.
+	          break;
+
+	        default:
+	          if (isAttributeNameSafe(propKey) && typeof propValue !== 'function' && typeof propValue !== 'symbol') {
+	            target.push(attributeSeparator, stringToChunk(propKey), attributeAssign, stringToChunk(escapeTextForBrowser(propValue)), attributeEnd);
+	          }
+
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTag);
+	  pushInnerHTML(target, innerHTML, children);
+	  return children;
+	}
+
+	var leadingNewline = stringToPrecomputedChunk('\n');
+
+	function pushStartPreformattedElement(target, props, tag, responseState) {
+	  target.push(startChunkForTag(tag));
+	  var children = null;
+	  var innerHTML = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          innerHTML = propValue;
+	          break;
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTag); // text/html ignores the first character in these tags if it's a newline
+	  // Prefer to break application/xml over text/html (for now) by adding
+	  // a newline specifically to get eaten by the parser. (Alternately for
+	  // textareas, replacing "^\n" with "\r\n" doesn't get eaten, and the first
+	  // \r is normalized out by HTMLTextAreaElement#value.)
+	  // See: <http://www.w3.org/TR/html-polyglot/#newlines-in-textarea-and-pre>
+	  // See: <http://www.w3.org/TR/html5/syntax.html#element-restrictions>
+	  // See: <http://www.w3.org/TR/html5/syntax.html#newlines>
+	  // See: Parsing of "textarea" "listing" and "pre" elements
+	  //  from <http://www.w3.org/TR/html5/syntax.html#parsing-main-inbody>
+	  // TODO: This doesn't deal with the case where the child is an array
+	  // or component that returns a string.
+
+	  if (innerHTML != null) {
+	    if (children != null) {
+	      throw new Error('Can only set one of `children` or `props.dangerouslySetInnerHTML`.');
+	    }
+
+	    if (typeof innerHTML !== 'object' || !('__html' in innerHTML)) {
+	      throw new Error('`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. ' + 'Please visit https://reactjs.org/link/dangerously-set-inner-html ' + 'for more information.');
+	    }
+
+	    var html = innerHTML.__html;
+
+	    if (html !== null && html !== undefined) {
+	      if (typeof html === 'string' && html.length > 0 && html[0] === '\n') {
+	        target.push(leadingNewline, stringToChunk(html));
+	      } else {
+	        {
+	          checkHtmlStringCoercion(html);
+	        }
+
+	        target.push(stringToChunk('' + html));
+	      }
+	    }
+	  }
+
+	  if (typeof children === 'string' && children[0] === '\n') {
+	    target.push(leadingNewline);
+	  }
+
+	  return children;
+	} // We accept any tag to be rendered but since this gets injected into arbitrary
+	// HTML, we want to make sure that it's a safe tag.
+	// http://www.w3.org/TR/REC-xml/#NT-Name
+
+
+	var VALID_TAG_REGEX = /^[a-zA-Z][a-zA-Z:_\.\-\d]*$/; // Simplified subset
+
+	var validatedTagCache = new Map();
+
+	function startChunkForTag(tag) {
+	  var tagStartChunk = validatedTagCache.get(tag);
+
+	  if (tagStartChunk === undefined) {
+	    if (!VALID_TAG_REGEX.test(tag)) {
+	      throw new Error("Invalid tag: " + tag);
+	    }
+
+	    tagStartChunk = stringToPrecomputedChunk('<' + tag);
+	    validatedTagCache.set(tag, tagStartChunk);
+	  }
+
+	  return tagStartChunk;
+	}
+
+	var DOCTYPE = stringToPrecomputedChunk('<!DOCTYPE html>');
+	function pushStartInstance(target, type, props, responseState, formatContext) {
+	  {
+	    validateProperties(type, props);
+	    validateProperties$1(type, props);
+	    validateProperties$2(type, props, null);
+
+	    if (!props.suppressContentEditableWarning && props.contentEditable && props.children != null) {
+	      error('A component is `contentEditable` and contains `children` managed by ' + 'React. It is now your responsibility to guarantee that none of ' + 'those nodes are unexpectedly modified or duplicated. This is ' + 'probably not intentional.');
+	    }
+
+	    if (formatContext.insertionMode !== SVG_MODE && formatContext.insertionMode !== MATHML_MODE) {
+	      if (type.indexOf('-') === -1 && typeof props.is !== 'string' && type.toLowerCase() !== type) {
+	        error('<%s /> is using incorrect casing. ' + 'Use PascalCase for React components, ' + 'or lowercase for HTML elements.', type);
+	      }
+	    }
+	  }
+
+	  switch (type) {
+	    // Special tags
+	    case 'select':
+	      return pushStartSelect(target, props, responseState);
+
+	    case 'option':
+	      return pushStartOption(target, props, responseState, formatContext);
+
+	    case 'textarea':
+	      return pushStartTextArea(target, props, responseState);
+
+	    case 'input':
+	      return pushInput(target, props, responseState);
+
+	    case 'menuitem':
+	      return pushStartMenuItem(target, props, responseState);
+
+	    case 'title':
+	      return pushStartTitle(target, props, responseState);
+	    // Newline eating tags
+
+	    case 'listing':
+	    case 'pre':
+	      {
+	        return pushStartPreformattedElement(target, props, type, responseState);
+	      }
+	    // Omitted close tags
+
+	    case 'area':
+	    case 'base':
+	    case 'br':
+	    case 'col':
+	    case 'embed':
+	    case 'hr':
+	    case 'img':
+	    case 'keygen':
+	    case 'link':
+	    case 'meta':
+	    case 'param':
+	    case 'source':
+	    case 'track':
+	    case 'wbr':
+	      {
+	        return pushSelfClosing(target, props, type, responseState);
+	      }
+	    // These are reserved SVG and MathML elements, that are never custom elements.
+	    // https://w3c.github.io/webcomponents/spec/custom/#custom-elements-core-concepts
+
+	    case 'annotation-xml':
+	    case 'color-profile':
+	    case 'font-face':
+	    case 'font-face-src':
+	    case 'font-face-uri':
+	    case 'font-face-format':
+	    case 'font-face-name':
+	    case 'missing-glyph':
+	      {
+	        return pushStartGenericElement(target, props, type, responseState);
+	      }
+
+	    case 'html':
+	      {
+	        if (formatContext.insertionMode === ROOT_HTML_MODE) {
+	          // If we're rendering the html tag and we're at the root (i.e. not in foreignObject)
+	          // then we also emit the DOCTYPE as part of the root content as a convenience for
+	          // rendering the whole document.
+	          target.push(DOCTYPE);
+	        }
+
+	        return pushStartGenericElement(target, props, type, responseState);
+	      }
+
+	    default:
+	      {
+	        if (type.indexOf('-') === -1 && typeof props.is !== 'string') {
+	          // Generic element
+	          return pushStartGenericElement(target, props, type, responseState);
+	        } else {
+	          // Custom element
+	          return pushStartCustomElement(target, props, type, responseState);
+	        }
+	      }
+	  }
+	}
+	var endTag1 = stringToPrecomputedChunk('</');
+	var endTag2 = stringToPrecomputedChunk('>');
+	function pushEndInstance(target, type, props) {
+	  switch (type) {
+	    // Omitted close tags
+	    // TODO: Instead of repeating this switch we could try to pass a flag from above.
+	    // That would require returning a tuple. Which might be ok if it gets inlined.
+	    case 'area':
+	    case 'base':
+	    case 'br':
+	    case 'col':
+	    case 'embed':
+	    case 'hr':
+	    case 'img':
+	    case 'input':
+	    case 'keygen':
+	    case 'link':
+	    case 'meta':
+	    case 'param':
+	    case 'source':
+	    case 'track':
+	    case 'wbr':
+	      {
+	        // No close tag needed.
+	        break;
+	      }
+
+	    default:
+	      {
+	        target.push(endTag1, stringToChunk(type), endTag2);
+	      }
+	  }
+	}
+	function writeCompletedRoot(destination, responseState) {
+	  var bootstrapChunks = responseState.bootstrapChunks;
+	  var i = 0;
+
+	  for (; i < bootstrapChunks.length - 1; i++) {
+	    writeChunk(destination, bootstrapChunks[i]);
+	  }
+
+	  if (i < bootstrapChunks.length) {
+	    return writeChunkAndReturn(destination, bootstrapChunks[i]);
+	  }
+
+	  return true;
+	} // Structural Nodes
+	// A placeholder is a node inside a hidden partial tree that can be filled in later, but before
+	// display. It's never visible to users. We use the template tag because it can be used in every
+	// type of parent. <script> tags also work in every other tag except <colgroup>.
+
+	var placeholder1 = stringToPrecomputedChunk('<template id="');
+	var placeholder2 = stringToPrecomputedChunk('"></template>');
+	function writePlaceholder(destination, responseState, id) {
+	  writeChunk(destination, placeholder1);
+	  writeChunk(destination, responseState.placeholderPrefix);
+	  var formattedID = stringToChunk(id.toString(16));
+	  writeChunk(destination, formattedID);
+	  return writeChunkAndReturn(destination, placeholder2);
+	} // Suspense boundaries are encoded as comments.
+
+	var startCompletedSuspenseBoundary = stringToPrecomputedChunk('<!--$-->');
+	var startPendingSuspenseBoundary1 = stringToPrecomputedChunk('<!--$?--><template id="');
+	var startPendingSuspenseBoundary2 = stringToPrecomputedChunk('"></template>');
+	var startClientRenderedSuspenseBoundary = stringToPrecomputedChunk('<!--$!-->');
+	var endSuspenseBoundary = stringToPrecomputedChunk('<!--/$-->');
+	var clientRenderedSuspenseBoundaryError1 = stringToPrecomputedChunk('<template');
+	var clientRenderedSuspenseBoundaryErrorAttrInterstitial = stringToPrecomputedChunk('"');
+	var clientRenderedSuspenseBoundaryError1A = stringToPrecomputedChunk(' data-dgst="');
+	var clientRenderedSuspenseBoundaryError1B = stringToPrecomputedChunk(' data-msg="');
+	var clientRenderedSuspenseBoundaryError1C = stringToPrecomputedChunk(' data-stck="');
+	var clientRenderedSuspenseBoundaryError2 = stringToPrecomputedChunk('></template>');
+	function writeStartCompletedSuspenseBoundary(destination, responseState) {
+	  return writeChunkAndReturn(destination, startCompletedSuspenseBoundary);
+	}
+	function writeStartPendingSuspenseBoundary(destination, responseState, id) {
+	  writeChunk(destination, startPendingSuspenseBoundary1);
+
+	  if (id === null) {
+	    throw new Error('An ID must have been assigned before we can complete the boundary.');
+	  }
+
+	  writeChunk(destination, id);
+	  return writeChunkAndReturn(destination, startPendingSuspenseBoundary2);
+	}
+	function writeStartClientRenderedSuspenseBoundary(destination, responseState, errorDigest, errorMesssage, errorComponentStack) {
+	  var result;
+	  result = writeChunkAndReturn(destination, startClientRenderedSuspenseBoundary);
+	  writeChunk(destination, clientRenderedSuspenseBoundaryError1);
+
+	  if (errorDigest) {
+	    writeChunk(destination, clientRenderedSuspenseBoundaryError1A);
+	    writeChunk(destination, stringToChunk(escapeTextForBrowser(errorDigest)));
+	    writeChunk(destination, clientRenderedSuspenseBoundaryErrorAttrInterstitial);
+	  }
+
+	  {
+	    if (errorMesssage) {
+	      writeChunk(destination, clientRenderedSuspenseBoundaryError1B);
+	      writeChunk(destination, stringToChunk(escapeTextForBrowser(errorMesssage)));
+	      writeChunk(destination, clientRenderedSuspenseBoundaryErrorAttrInterstitial);
+	    }
+
+	    if (errorComponentStack) {
+	      writeChunk(destination, clientRenderedSuspenseBoundaryError1C);
+	      writeChunk(destination, stringToChunk(escapeTextForBrowser(errorComponentStack)));
+	      writeChunk(destination, clientRenderedSuspenseBoundaryErrorAttrInterstitial);
+	    }
+	  }
+
+	  result = writeChunkAndReturn(destination, clientRenderedSuspenseBoundaryError2);
+	  return result;
+	}
+	function writeEndCompletedSuspenseBoundary(destination, responseState) {
+	  return writeChunkAndReturn(destination, endSuspenseBoundary);
+	}
+	function writeEndPendingSuspenseBoundary(destination, responseState) {
+	  return writeChunkAndReturn(destination, endSuspenseBoundary);
+	}
+	function writeEndClientRenderedSuspenseBoundary(destination, responseState) {
+	  return writeChunkAndReturn(destination, endSuspenseBoundary);
+	}
+	var startSegmentHTML = stringToPrecomputedChunk('<div hidden id="');
+	var startSegmentHTML2 = stringToPrecomputedChunk('">');
+	var endSegmentHTML = stringToPrecomputedChunk('</div>');
+	var startSegmentSVG = stringToPrecomputedChunk('<svg aria-hidden="true" style="display:none" id="');
+	var startSegmentSVG2 = stringToPrecomputedChunk('">');
+	var endSegmentSVG = stringToPrecomputedChunk('</svg>');
+	var startSegmentMathML = stringToPrecomputedChunk('<math aria-hidden="true" style="display:none" id="');
+	var startSegmentMathML2 = stringToPrecomputedChunk('">');
+	var endSegmentMathML = stringToPrecomputedChunk('</math>');
+	var startSegmentTable = stringToPrecomputedChunk('<table hidden id="');
+	var startSegmentTable2 = stringToPrecomputedChunk('">');
+	var endSegmentTable = stringToPrecomputedChunk('</table>');
+	var startSegmentTableBody = stringToPrecomputedChunk('<table hidden><tbody id="');
+	var startSegmentTableBody2 = stringToPrecomputedChunk('">');
+	var endSegmentTableBody = stringToPrecomputedChunk('</tbody></table>');
+	var startSegmentTableRow = stringToPrecomputedChunk('<table hidden><tr id="');
+	var startSegmentTableRow2 = stringToPrecomputedChunk('">');
+	var endSegmentTableRow = stringToPrecomputedChunk('</tr></table>');
+	var startSegmentColGroup = stringToPrecomputedChunk('<table hidden><colgroup id="');
+	var startSegmentColGroup2 = stringToPrecomputedChunk('">');
+	var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
+	function writeStartSegment(destination, responseState, formatContext, id) {
+	  switch (formatContext.insertionMode) {
+	    case ROOT_HTML_MODE:
+	    case HTML_MODE:
+	      {
+	        writeChunk(destination, startSegmentHTML);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentHTML2);
+	      }
+
+	    case SVG_MODE:
+	      {
+	        writeChunk(destination, startSegmentSVG);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentSVG2);
+	      }
+
+	    case MATHML_MODE:
+	      {
+	        writeChunk(destination, startSegmentMathML);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentMathML2);
+	      }
+
+	    case HTML_TABLE_MODE:
+	      {
+	        writeChunk(destination, startSegmentTable);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentTable2);
+	      }
+	    // TODO: For the rest of these, there will be extra wrapper nodes that never
+	    // get deleted from the document. We need to delete the table too as part
+	    // of the injected scripts. They are invisible though so it's not too terrible
+	    // and it's kind of an edge case to suspend in a table. Totally supported though.
+
+	    case HTML_TABLE_BODY_MODE:
+	      {
+	        writeChunk(destination, startSegmentTableBody);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentTableBody2);
+	      }
+
+	    case HTML_TABLE_ROW_MODE:
+	      {
+	        writeChunk(destination, startSegmentTableRow);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentTableRow2);
+	      }
+
+	    case HTML_COLGROUP_MODE:
+	      {
+	        writeChunk(destination, startSegmentColGroup);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentColGroup2);
+	      }
+
+	    default:
+	      {
+	        throw new Error('Unknown insertion mode. This is a bug in React.');
+	      }
+	  }
+	}
+	function writeEndSegment(destination, formatContext) {
+	  switch (formatContext.insertionMode) {
+	    case ROOT_HTML_MODE:
+	    case HTML_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentHTML);
+	      }
+
+	    case SVG_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentSVG);
+	      }
+
+	    case MATHML_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentMathML);
+	      }
+
+	    case HTML_TABLE_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentTable);
+	      }
+
+	    case HTML_TABLE_BODY_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentTableBody);
+	      }
+
+	    case HTML_TABLE_ROW_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentTableRow);
+	      }
+
+	    case HTML_COLGROUP_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentColGroup);
+	      }
+
+	    default:
+	      {
+	        throw new Error('Unknown insertion mode. This is a bug in React.');
+	      }
+	  }
+	} // Instruction Set
+	// The following code is the source scripts that we then minify and inline below,
+	// with renamed function names that we hope don't collide:
+	// const COMMENT_NODE = 8;
+	// const SUSPENSE_START_DATA = '$';
+	// const SUSPENSE_END_DATA = '/$';
+	// const SUSPENSE_PENDING_START_DATA = '$?';
+	// const SUSPENSE_FALLBACK_START_DATA = '$!';
+	//
+	// function clientRenderBoundary(suspenseBoundaryID, errorDigest, errorMsg, errorComponentStack) {
+	//   // Find the fallback's first element.
+	//   const suspenseIdNode = document.getElementById(suspenseBoundaryID);
+	//   if (!suspenseIdNode) {
+	//     // The user must have already navigated away from this tree.
+	//     // E.g. because the parent was hydrated.
+	//     return;
+	//   }
+	//   // Find the boundary around the fallback. This is always the previous node.
+	//   const suspenseNode = suspenseIdNode.previousSibling;
+	//   // Tag it to be client rendered.
+	//   suspenseNode.data = SUSPENSE_FALLBACK_START_DATA;
+	//   // assign error metadata to first sibling
+	//   let dataset = suspenseIdNode.dataset;
+	//   if (errorDigest) dataset.dgst = errorDigest;
+	//   if (errorMsg) dataset.msg = errorMsg;
+	//   if (errorComponentStack) dataset.stck = errorComponentStack;
+	//   // Tell React to retry it if the parent already hydrated.
+	//   if (suspenseNode._reactRetry) {
+	//     suspenseNode._reactRetry();
+	//   }
+	// }
+	//
+	// function completeBoundary(suspenseBoundaryID, contentID) {
+	//   // Find the fallback's first element.
+	//   const suspenseIdNode = document.getElementById(suspenseBoundaryID);
+	//   const contentNode = document.getElementById(contentID);
+	//   // We'll detach the content node so that regardless of what happens next we don't leave in the tree.
+	//   // This might also help by not causing recalcing each time we move a child from here to the target.
+	//   contentNode.parentNode.removeChild(contentNode);
+	//   if (!suspenseIdNode) {
+	//     // The user must have already navigated away from this tree.
+	//     // E.g. because the parent was hydrated. That's fine there's nothing to do
+	//     // but we have to make sure that we already deleted the container node.
+	//     return;
+	//   }
+	//   // Find the boundary around the fallback. This is always the previous node.
+	//   const suspenseNode = suspenseIdNode.previousSibling;
+	//
+	//   // Clear all the existing children. This is complicated because
+	//   // there can be embedded Suspense boundaries in the fallback.
+	//   // This is similar to clearSuspenseBoundary in ReactDOMHostConfig.
+	//   // TODO: We could avoid this if we never emitted suspense boundaries in fallback trees.
+	//   // They never hydrate anyway. However, currently we support incrementally loading the fallback.
+	//   const parentInstance = suspenseNode.parentNode;
+	//   let node = suspenseNode.nextSibling;
+	//   let depth = 0;
+	//   do {
+	//     if (node && node.nodeType === COMMENT_NODE) {
+	//       const data = node.data;
+	//       if (data === SUSPENSE_END_DATA) {
+	//         if (depth === 0) {
+	//           break;
+	//         } else {
+	//           depth--;
+	//         }
+	//       } else if (
+	//         data === SUSPENSE_START_DATA ||
+	//         data === SUSPENSE_PENDING_START_DATA ||
+	//         data === SUSPENSE_FALLBACK_START_DATA
+	//       ) {
+	//         depth++;
+	//       }
+	//     }
+	//
+	//     const nextNode = node.nextSibling;
+	//     parentInstance.removeChild(node);
+	//     node = nextNode;
+	//   } while (node);
+	//
+	//   const endOfBoundary = node;
+	//
+	//   // Insert all the children from the contentNode between the start and end of suspense boundary.
+	//   while (contentNode.firstChild) {
+	//     parentInstance.insertBefore(contentNode.firstChild, endOfBoundary);
+	//   }
+	//   suspenseNode.data = SUSPENSE_START_DATA;
+	//   if (suspenseNode._reactRetry) {
+	//     suspenseNode._reactRetry();
+	//   }
+	// }
+	//
+	// function completeSegment(containerID, placeholderID) {
+	//   const segmentContainer = document.getElementById(containerID);
+	//   const placeholderNode = document.getElementById(placeholderID);
+	//   // We always expect both nodes to exist here because, while we might
+	//   // have navigated away from the main tree, we still expect the detached
+	//   // tree to exist.
+	//   segmentContainer.parentNode.removeChild(segmentContainer);
+	//   while (segmentContainer.firstChild) {
+	//     placeholderNode.parentNode.insertBefore(
+	//       segmentContainer.firstChild,
+	//       placeholderNode,
+	//     );
+	//   }
+	//   placeholderNode.parentNode.removeChild(placeholderNode);
+	// }
+
+	var completeSegmentFunction = 'function $RS(a,b){a=document.getElementById(a);b=document.getElementById(b);for(a.parentNode.removeChild(a);a.firstChild;)b.parentNode.insertBefore(a.firstChild,b);b.parentNode.removeChild(b)}';
+	var completeBoundaryFunction = 'function $RC(a,b){a=document.getElementById(a);b=document.getElementById(b);b.parentNode.removeChild(b);if(a){a=a.previousSibling;var f=a.parentNode,c=a.nextSibling,e=0;do{if(c&&8===c.nodeType){var d=c.data;if("/$"===d)if(0===e)break;else e--;else"$"!==d&&"$?"!==d&&"$!"!==d||e++}d=c.nextSibling;f.removeChild(c);c=d}while(c);for(;b.firstChild;)f.insertBefore(b.firstChild,c);a.data="$";a._reactRetry&&a._reactRetry()}}';
+	var clientRenderFunction = 'function $RX(b,c,d,e){var a=document.getElementById(b);a&&(b=a.previousSibling,b.data="$!",a=a.dataset,c&&(a.dgst=c),d&&(a.msg=d),e&&(a.stck=e),b._reactRetry&&b._reactRetry())}';
+	var completeSegmentScript1Full = stringToPrecomputedChunk(completeSegmentFunction + ';$RS("');
+	var completeSegmentScript1Partial = stringToPrecomputedChunk('$RS("');
+	var completeSegmentScript2 = stringToPrecomputedChunk('","');
+	var completeSegmentScript3 = stringToPrecomputedChunk('")</script>');
+	function writeCompletedSegmentInstruction(destination, responseState, contentSegmentID) {
+	  writeChunk(destination, responseState.startInlineScript);
+
+	  if (!responseState.sentCompleteSegmentFunction) {
+	    // The first time we write this, we'll need to include the full implementation.
+	    responseState.sentCompleteSegmentFunction = true;
+	    writeChunk(destination, completeSegmentScript1Full);
+	  } else {
+	    // Future calls can just reuse the same function.
+	    writeChunk(destination, completeSegmentScript1Partial);
+	  }
+
+	  writeChunk(destination, responseState.segmentPrefix);
+	  var formattedID = stringToChunk(contentSegmentID.toString(16));
+	  writeChunk(destination, formattedID);
+	  writeChunk(destination, completeSegmentScript2);
+	  writeChunk(destination, responseState.placeholderPrefix);
+	  writeChunk(destination, formattedID);
+	  return writeChunkAndReturn(destination, completeSegmentScript3);
+	}
+	var completeBoundaryScript1Full = stringToPrecomputedChunk(completeBoundaryFunction + ';$RC("');
+	var completeBoundaryScript1Partial = stringToPrecomputedChunk('$RC("');
+	var completeBoundaryScript2 = stringToPrecomputedChunk('","');
+	var completeBoundaryScript3 = stringToPrecomputedChunk('")</script>');
+	function writeCompletedBoundaryInstruction(destination, responseState, boundaryID, contentSegmentID) {
+	  writeChunk(destination, responseState.startInlineScript);
+
+	  if (!responseState.sentCompleteBoundaryFunction) {
+	    // The first time we write this, we'll need to include the full implementation.
+	    responseState.sentCompleteBoundaryFunction = true;
+	    writeChunk(destination, completeBoundaryScript1Full);
+	  } else {
+	    // Future calls can just reuse the same function.
+	    writeChunk(destination, completeBoundaryScript1Partial);
+	  }
+
+	  if (boundaryID === null) {
+	    throw new Error('An ID must have been assigned before we can complete the boundary.');
+	  }
+
+	  var formattedContentID = stringToChunk(contentSegmentID.toString(16));
+	  writeChunk(destination, boundaryID);
+	  writeChunk(destination, completeBoundaryScript2);
+	  writeChunk(destination, responseState.segmentPrefix);
+	  writeChunk(destination, formattedContentID);
+	  return writeChunkAndReturn(destination, completeBoundaryScript3);
+	}
+	var clientRenderScript1Full = stringToPrecomputedChunk(clientRenderFunction + ';$RX("');
+	var clientRenderScript1Partial = stringToPrecomputedChunk('$RX("');
+	var clientRenderScript1A = stringToPrecomputedChunk('"');
+	var clientRenderScript2 = stringToPrecomputedChunk(')</script>');
+	var clientRenderErrorScriptArgInterstitial = stringToPrecomputedChunk(',');
+	function writeClientRenderBoundaryInstruction(destination, responseState, boundaryID, errorDigest, errorMessage, errorComponentStack) {
+	  writeChunk(destination, responseState.startInlineScript);
+
+	  if (!responseState.sentClientRenderFunction) {
+	    // The first time we write this, we'll need to include the full implementation.
+	    responseState.sentClientRenderFunction = true;
+	    writeChunk(destination, clientRenderScript1Full);
+	  } else {
+	    // Future calls can just reuse the same function.
+	    writeChunk(destination, clientRenderScript1Partial);
+	  }
+
+	  if (boundaryID === null) {
+	    throw new Error('An ID must have been assigned before we can complete the boundary.');
+	  }
+
+	  writeChunk(destination, boundaryID);
+	  writeChunk(destination, clientRenderScript1A);
+
+	  if (errorDigest || errorMessage || errorComponentStack) {
+	    writeChunk(destination, clientRenderErrorScriptArgInterstitial);
+	    writeChunk(destination, stringToChunk(escapeJSStringsForInstructionScripts(errorDigest || '')));
+	  }
+
+	  if (errorMessage || errorComponentStack) {
+	    writeChunk(destination, clientRenderErrorScriptArgInterstitial);
+	    writeChunk(destination, stringToChunk(escapeJSStringsForInstructionScripts(errorMessage || '')));
+	  }
+
+	  if (errorComponentStack) {
+	    writeChunk(destination, clientRenderErrorScriptArgInterstitial);
+	    writeChunk(destination, stringToChunk(escapeJSStringsForInstructionScripts(errorComponentStack)));
+	  }
+
+	  return writeChunkAndReturn(destination, clientRenderScript2);
+	}
+	var regexForJSStringsInScripts = /[<\u2028\u2029]/g;
+
+	function escapeJSStringsForInstructionScripts(input) {
+	  var escaped = JSON.stringify(input);
+	  return escaped.replace(regexForJSStringsInScripts, function (match) {
+	    switch (match) {
+	      // santizing breaking out of strings and script tags
+	      case '<':
+	        return "\\u003c";
+
+	      case "\u2028":
+	        return "\\u2028";
+
+	      case "\u2029":
+	        return "\\u2029";
+
+	      default:
+	        {
+	          // eslint-disable-next-line react-internal/prod-error-codes
+	          throw new Error('escapeJSStringsForInstructionScripts encountered a match it does not know how to replace. this means the match regex and the replacement characters are no longer in sync. This is a bug in React');
+	        }
+	    }
+	  });
+	}
+
+	function createResponseState$1(generateStaticMarkup, identifierPrefix) {
+	  var responseState = createResponseState(identifierPrefix, undefined);
+	  return {
+	    // Keep this in sync with ReactDOMServerFormatConfig
+	    bootstrapChunks: responseState.bootstrapChunks,
+	    startInlineScript: responseState.startInlineScript,
+	    placeholderPrefix: responseState.placeholderPrefix,
+	    segmentPrefix: responseState.segmentPrefix,
+	    boundaryPrefix: responseState.boundaryPrefix,
+	    idPrefix: responseState.idPrefix,
+	    nextSuspenseID: responseState.nextSuspenseID,
+	    sentCompleteSegmentFunction: responseState.sentCompleteSegmentFunction,
+	    sentCompleteBoundaryFunction: responseState.sentCompleteBoundaryFunction,
+	    sentClientRenderFunction: responseState.sentClientRenderFunction,
+	    // This is an extra field for the legacy renderer
+	    generateStaticMarkup: generateStaticMarkup
+	  };
+	}
+	function createRootFormatContext() {
+	  return {
+	    insertionMode: HTML_MODE,
+	    // We skip the root mode because we don't want to emit the DOCTYPE in legacy mode.
+	    selectedValue: null
+	  };
+	}
+	function pushTextInstance$1(target, text, responseState, textEmbedded) {
+	  if (responseState.generateStaticMarkup) {
+	    target.push(stringToChunk(escapeTextForBrowser(text)));
+	    return false;
+	  } else {
+	    return pushTextInstance(target, text, responseState, textEmbedded);
+	  }
+	}
+	function pushSegmentFinale$1(target, responseState, lastPushedText, textEmbedded) {
+	  if (responseState.generateStaticMarkup) {
+	    return;
+	  } else {
+	    return pushSegmentFinale(target, responseState, lastPushedText, textEmbedded);
+	  }
+	}
+	function writeStartCompletedSuspenseBoundary$1(destination, responseState) {
+	  if (responseState.generateStaticMarkup) {
+	    // A completed boundary is done and doesn't need a representation in the HTML
+	    // if we're not going to be hydrating it.
+	    return true;
+	  }
+
+	  return writeStartCompletedSuspenseBoundary(destination);
+	}
+	function writeStartClientRenderedSuspenseBoundary$1(destination, responseState, // flushing these error arguments are not currently supported in this legacy streaming format.
+	errorDigest, errorMessage, errorComponentStack) {
+	  if (responseState.generateStaticMarkup) {
+	    // A client rendered boundary is done and doesn't need a representation in the HTML
+	    // since we'll never hydrate it. This is arguably an error in static generation.
+	    return true;
+	  }
+
+	  return writeStartClientRenderedSuspenseBoundary(destination, responseState, errorDigest, errorMessage, errorComponentStack);
+	}
+	function writeEndCompletedSuspenseBoundary$1(destination, responseState) {
+	  if (responseState.generateStaticMarkup) {
+	    return true;
+	  }
+
+	  return writeEndCompletedSuspenseBoundary(destination);
+	}
+	function writeEndClientRenderedSuspenseBoundary$1(destination, responseState) {
+	  if (responseState.generateStaticMarkup) {
+	    return true;
+	  }
+
+	  return writeEndClientRenderedSuspenseBoundary(destination);
+	}
+
+	var assign = Object.assign;
+
+	// ATTENTION
+	// When adding new symbols to this file,
+	// Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
+	// The Symbol used to tag the ReactElement-like types.
+	var REACT_ELEMENT_TYPE = Symbol.for('react.element');
+	var REACT_PORTAL_TYPE = Symbol.for('react.portal');
+	var REACT_FRAGMENT_TYPE = Symbol.for('react.fragment');
+	var REACT_STRICT_MODE_TYPE = Symbol.for('react.strict_mode');
+	var REACT_PROFILER_TYPE = Symbol.for('react.profiler');
+	var REACT_PROVIDER_TYPE = Symbol.for('react.provider');
+	var REACT_CONTEXT_TYPE = Symbol.for('react.context');
+	var REACT_FORWARD_REF_TYPE = Symbol.for('react.forward_ref');
+	var REACT_SUSPENSE_TYPE = Symbol.for('react.suspense');
+	var REACT_SUSPENSE_LIST_TYPE = Symbol.for('react.suspense_list');
+	var REACT_MEMO_TYPE = Symbol.for('react.memo');
+	var REACT_LAZY_TYPE = Symbol.for('react.lazy');
+	var REACT_SCOPE_TYPE = Symbol.for('react.scope');
+	var REACT_DEBUG_TRACING_MODE_TYPE = Symbol.for('react.debug_trace_mode');
+	var REACT_LEGACY_HIDDEN_TYPE = Symbol.for('react.legacy_hidden');
+	var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED = Symbol.for('react.default_value');
+	var MAYBE_ITERATOR_SYMBOL = Symbol.iterator;
+	var FAUX_ITERATOR_SYMBOL = '@@iterator';
+	function getIteratorFn(maybeIterable) {
+	  if (maybeIterable === null || typeof maybeIterable !== 'object') {
+	    return null;
+	  }
+
+	  var maybeIterator = MAYBE_ITERATOR_SYMBOL && maybeIterable[MAYBE_ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL];
+
+	  if (typeof maybeIterator === 'function') {
+	    return maybeIterator;
+	  }
+
+	  return null;
+	}
+
+	function getWrappedName(outerType, innerType, wrapperName) {
+	  var displayName = outerType.displayName;
+
+	  if (displayName) {
+	    return displayName;
+	  }
+
+	  var functionName = innerType.displayName || innerType.name || '';
+	  return functionName !== '' ? wrapperName + "(" + functionName + ")" : wrapperName;
+	} // Keep in sync with react-reconciler/getComponentNameFromFiber
+
+
+	function getContextName(type) {
+	  return type.displayName || 'Context';
+	} // Note that the reconciler package should generally prefer to use getComponentNameFromFiber() instead.
+
+
+	function getComponentNameFromType(type) {
+	  if (type == null) {
+	    // Host root, text node or just invalid type.
+	    return null;
+	  }
+
+	  {
+	    if (typeof type.tag === 'number') {
+	      error('Received an unexpected object in getComponentNameFromType(). ' + 'This is likely a bug in React. Please file an issue.');
+	    }
+	  }
+
+	  if (typeof type === 'function') {
+	    return type.displayName || type.name || null;
+	  }
+
+	  if (typeof type === 'string') {
+	    return type;
+	  }
+
+	  switch (type) {
+	    case REACT_FRAGMENT_TYPE:
+	      return 'Fragment';
+
+	    case REACT_PORTAL_TYPE:
+	      return 'Portal';
+
+	    case REACT_PROFILER_TYPE:
+	      return 'Profiler';
+
+	    case REACT_STRICT_MODE_TYPE:
+	      return 'StrictMode';
+
+	    case REACT_SUSPENSE_TYPE:
+	      return 'Suspense';
+
+	    case REACT_SUSPENSE_LIST_TYPE:
+	      return 'SuspenseList';
+
+	  }
+
+	  if (typeof type === 'object') {
+	    switch (type.$$typeof) {
+	      case REACT_CONTEXT_TYPE:
+	        var context = type;
+	        return getContextName(context) + '.Consumer';
+
+	      case REACT_PROVIDER_TYPE:
+	        var provider = type;
+	        return getContextName(provider._context) + '.Provider';
+
+	      case REACT_FORWARD_REF_TYPE:
+	        return getWrappedName(type, type.render, 'ForwardRef');
+
+	      case REACT_MEMO_TYPE:
+	        var outerName = type.displayName || null;
+
+	        if (outerName !== null) {
+	          return outerName;
+	        }
+
+	        return getComponentNameFromType(type.type) || 'Memo';
+
+	      case REACT_LAZY_TYPE:
+	        {
+	          var lazyComponent = type;
+	          var payload = lazyComponent._payload;
+	          var init = lazyComponent._init;
+
+	          try {
+	            return getComponentNameFromType(init(payload));
+	          } catch (x) {
+	            return null;
+	          }
+	        }
+
+	      // eslint-disable-next-line no-fallthrough
+	    }
+	  }
+
+	  return null;
+	}
+
+	// Helpers to patch console.logs to avoid logging during side-effect free
+	// replaying on render function. This currently only patches the object
+	// lazily which won't cover if the log function was extracted eagerly.
+	// We could also eagerly patch the method.
+	var disabledDepth = 0;
+	var prevLog;
+	var prevInfo;
+	var prevWarn;
+	var prevError;
+	var prevGroup;
+	var prevGroupCollapsed;
+	var prevGroupEnd;
+
+	function disabledLog() {}
+
+	disabledLog.__reactDisabledLog = true;
+	function disableLogs() {
+	  {
+	    if (disabledDepth === 0) {
+	      /* eslint-disable react-internal/no-production-logging */
+	      prevLog = console.log;
+	      prevInfo = console.info;
+	      prevWarn = console.warn;
+	      prevError = console.error;
+	      prevGroup = console.group;
+	      prevGroupCollapsed = console.groupCollapsed;
+	      prevGroupEnd = console.groupEnd; // https://github.com/facebook/react/issues/19099
+
+	      var props = {
+	        configurable: true,
+	        enumerable: true,
+	        value: disabledLog,
+	        writable: true
+	      }; // $FlowFixMe Flow thinks console is immutable.
+
+	      Object.defineProperties(console, {
+	        info: props,
+	        log: props,
+	        warn: props,
+	        error: props,
+	        group: props,
+	        groupCollapsed: props,
+	        groupEnd: props
+	      });
+	      /* eslint-enable react-internal/no-production-logging */
+	    }
+
+	    disabledDepth++;
+	  }
+	}
+	function reenableLogs() {
+	  {
+	    disabledDepth--;
+
+	    if (disabledDepth === 0) {
+	      /* eslint-disable react-internal/no-production-logging */
+	      var props = {
+	        configurable: true,
+	        enumerable: true,
+	        writable: true
+	      }; // $FlowFixMe Flow thinks console is immutable.
+
+	      Object.defineProperties(console, {
+	        log: assign({}, props, {
+	          value: prevLog
+	        }),
+	        info: assign({}, props, {
+	          value: prevInfo
+	        }),
+	        warn: assign({}, props, {
+	          value: prevWarn
+	        }),
+	        error: assign({}, props, {
+	          value: prevError
+	        }),
+	        group: assign({}, props, {
+	          value: prevGroup
+	        }),
+	        groupCollapsed: assign({}, props, {
+	          value: prevGroupCollapsed
+	        }),
+	        groupEnd: assign({}, props, {
+	          value: prevGroupEnd
+	        })
+	      });
+	      /* eslint-enable react-internal/no-production-logging */
+	    }
+
+	    if (disabledDepth < 0) {
+	      error('disabledDepth fell below zero. ' + 'This is a bug in React. Please file an issue.');
+	    }
+	  }
+	}
+
+	var ReactCurrentDispatcher = ReactSharedInternals.ReactCurrentDispatcher;
+	var prefix;
+	function describeBuiltInComponentFrame(name, source, ownerFn) {
+	  {
+	    if (prefix === undefined) {
+	      // Extract the VM specific prefix used by each line.
+	      try {
+	        throw Error();
+	      } catch (x) {
+	        var match = x.stack.trim().match(/\n( *(at )?)/);
+	        prefix = match && match[1] || '';
+	      }
+	    } // We use the prefix to ensure our stacks line up with native stack frames.
+
+
+	    return '\n' + prefix + name;
+	  }
+	}
+	var reentry = false;
+	var componentFrameCache;
+
+	{
+	  var PossiblyWeakMap = typeof WeakMap === 'function' ? WeakMap : Map;
+	  componentFrameCache = new PossiblyWeakMap();
+	}
+
+	function describeNativeComponentFrame(fn, construct) {
+	  // If something asked for a stack inside a fake render, it should get ignored.
+	  if ( !fn || reentry) {
+	    return '';
+	  }
+
+	  {
+	    var frame = componentFrameCache.get(fn);
+
+	    if (frame !== undefined) {
+	      return frame;
+	    }
+	  }
+
+	  var control;
+	  reentry = true;
+	  var previousPrepareStackTrace = Error.prepareStackTrace; // $FlowFixMe It does accept undefined.
+
+	  Error.prepareStackTrace = undefined;
+	  var previousDispatcher;
+
+	  {
+	    previousDispatcher = ReactCurrentDispatcher.current; // Set the dispatcher in DEV because this might be call in the render function
+	    // for warnings.
+
+	    ReactCurrentDispatcher.current = null;
+	    disableLogs();
+	  }
+
+	  try {
+	    // This should throw.
+	    if (construct) {
+	      // Something should be setting the props in the constructor.
+	      var Fake = function () {
+	        throw Error();
+	      }; // $FlowFixMe
+
+
+	      Object.defineProperty(Fake.prototype, 'props', {
+	        set: function () {
+	          // We use a throwing setter instead of frozen or non-writable props
+	          // because that won't throw in a non-strict mode function.
+	          throw Error();
+	        }
+	      });
+
+	      if (typeof Reflect === 'object' && Reflect.construct) {
+	        // We construct a different control for this case to include any extra
+	        // frames added by the construct call.
+	        try {
+	          Reflect.construct(Fake, []);
+	        } catch (x) {
+	          control = x;
+	        }
+
+	        Reflect.construct(fn, [], Fake);
+	      } else {
+	        try {
+	          Fake.call();
+	        } catch (x) {
+	          control = x;
+	        }
+
+	        fn.call(Fake.prototype);
+	      }
+	    } else {
+	      try {
+	        throw Error();
+	      } catch (x) {
+	        control = x;
+	      }
+
+	      fn();
+	    }
+	  } catch (sample) {
+	    // This is inlined manually because closure doesn't do it for us.
+	    if (sample && control && typeof sample.stack === 'string') {
+	      // This extracts the first frame from the sample that isn't also in the control.
+	      // Skipping one frame that we assume is the frame that calls the two.
+	      var sampleLines = sample.stack.split('\n');
+	      var controlLines = control.stack.split('\n');
+	      var s = sampleLines.length - 1;
+	      var c = controlLines.length - 1;
+
+	      while (s >= 1 && c >= 0 && sampleLines[s] !== controlLines[c]) {
+	        // We expect at least one stack frame to be shared.
+	        // Typically this will be the root most one. However, stack frames may be
+	        // cut off due to maximum stack limits. In this case, one maybe cut off
+	        // earlier than the other. We assume that the sample is longer or the same
+	        // and there for cut off earlier. So we should find the root most frame in
+	        // the sample somewhere in the control.
+	        c--;
+	      }
+
+	      for (; s >= 1 && c >= 0; s--, c--) {
+	        // Next we find the first one that isn't the same which should be the
+	        // frame that called our sample function and the control.
+	        if (sampleLines[s] !== controlLines[c]) {
+	          // In V8, the first line is describing the message but other VMs don't.
+	          // If we're about to return the first line, and the control is also on the same
+	          // line, that's a pretty good indicator that our sample threw at same line as
+	          // the control. I.e. before we entered the sample frame. So we ignore this result.
+	          // This can happen if you passed a class to function component, or non-function.
+	          if (s !== 1 || c !== 1) {
+	            do {
+	              s--;
+	              c--; // We may still have similar intermediate frames from the construct call.
+	              // The next one that isn't the same should be our match though.
+
+	              if (c < 0 || sampleLines[s] !== controlLines[c]) {
+	                // V8 adds a "new" prefix for native classes. Let's remove it to make it prettier.
+	                var _frame = '\n' + sampleLines[s].replace(' at new ', ' at '); // If our component frame is labeled "<anonymous>"
+	                // but we have a user-provided "displayName"
+	                // splice it in to make the stack more readable.
+
+
+	                if (fn.displayName && _frame.includes('<anonymous>')) {
+	                  _frame = _frame.replace('<anonymous>', fn.displayName);
+	                }
+
+	                {
+	                  if (typeof fn === 'function') {
+	                    componentFrameCache.set(fn, _frame);
+	                  }
+	                } // Return the line we found.
+
+
+	                return _frame;
+	              }
+	            } while (s >= 1 && c >= 0);
+	          }
+
+	          break;
+	        }
+	      }
+	    }
+	  } finally {
+	    reentry = false;
+
+	    {
+	      ReactCurrentDispatcher.current = previousDispatcher;
+	      reenableLogs();
+	    }
+
+	    Error.prepareStackTrace = previousPrepareStackTrace;
+	  } // Fallback to just using the name if we couldn't make it throw.
+
+
+	  var name = fn ? fn.displayName || fn.name : '';
+	  var syntheticFrame = name ? describeBuiltInComponentFrame(name) : '';
+
+	  {
+	    if (typeof fn === 'function') {
+	      componentFrameCache.set(fn, syntheticFrame);
+	    }
+	  }
+
+	  return syntheticFrame;
+	}
+
+	function describeClassComponentFrame(ctor, source, ownerFn) {
+	  {
+	    return describeNativeComponentFrame(ctor, true);
+	  }
+	}
+	function describeFunctionComponentFrame(fn, source, ownerFn) {
+	  {
+	    return describeNativeComponentFrame(fn, false);
+	  }
+	}
+
+	function shouldConstruct(Component) {
+	  var prototype = Component.prototype;
+	  return !!(prototype && prototype.isReactComponent);
+	}
+
+	function describeUnknownElementTypeFrameInDEV(type, source, ownerFn) {
+
+	  if (type == null) {
+	    return '';
+	  }
+
+	  if (typeof type === 'function') {
+	    {
+	      return describeNativeComponentFrame(type, shouldConstruct(type));
+	    }
+	  }
+
+	  if (typeof type === 'string') {
+	    return describeBuiltInComponentFrame(type);
+	  }
+
+	  switch (type) {
+	    case REACT_SUSPENSE_TYPE:
+	      return describeBuiltInComponentFrame('Suspense');
+
+	    case REACT_SUSPENSE_LIST_TYPE:
+	      return describeBuiltInComponentFrame('SuspenseList');
+	  }
+
+	  if (typeof type === 'object') {
+	    switch (type.$$typeof) {
+	      case REACT_FORWARD_REF_TYPE:
+	        return describeFunctionComponentFrame(type.render);
+
+	      case REACT_MEMO_TYPE:
+	        // Memo may contain any component type so we recursively resolve it.
+	        return describeUnknownElementTypeFrameInDEV(type.type, source, ownerFn);
+
+	      case REACT_LAZY_TYPE:
+	        {
+	          var lazyComponent = type;
+	          var payload = lazyComponent._payload;
+	          var init = lazyComponent._init;
+
+	          try {
+	            // Lazy may contain any component type so we recursively resolve it.
+	            return describeUnknownElementTypeFrameInDEV(init(payload), source, ownerFn);
+	          } catch (x) {}
+	        }
+	    }
+	  }
+
+	  return '';
+	}
+
+	var loggedTypeFailures = {};
+	var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
+
+	function setCurrentlyValidatingElement(element) {
+	  {
+	    if (element) {
+	      var owner = element._owner;
+	      var stack = describeUnknownElementTypeFrameInDEV(element.type, element._source, owner ? owner.type : null);
+	      ReactDebugCurrentFrame.setExtraStackFrame(stack);
+	    } else {
+	      ReactDebugCurrentFrame.setExtraStackFrame(null);
+	    }
+	  }
+	}
+
+	function checkPropTypes(typeSpecs, values, location, componentName, element) {
+	  {
+	    // $FlowFixMe This is okay but Flow doesn't know it.
+	    var has = Function.call.bind(hasOwnProperty);
+
+	    for (var typeSpecName in typeSpecs) {
+	      if (has(typeSpecs, typeSpecName)) {
+	        var error$1 = void 0; // Prop type validation may throw. In case they do, we don't want to
+	        // fail the render phase where it didn't fail before. So we log it.
+	        // After these have been cleaned up, we'll let them throw.
+
+	        try {
+	          // This is intentionally an invariant that gets caught. It's the same
+	          // behavior as without this statement except with a better message.
+	          if (typeof typeSpecs[typeSpecName] !== 'function') {
+	            // eslint-disable-next-line react-internal/prod-error-codes
+	            var err = Error((componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' + 'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.' + 'This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.');
+	            err.name = 'Invariant Violation';
+	            throw err;
+	          }
+
+	          error$1 = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED');
+	        } catch (ex) {
+	          error$1 = ex;
+	        }
+
+	        if (error$1 && !(error$1 instanceof Error)) {
+	          setCurrentlyValidatingElement(element);
+
+	          error('%s: type specification of %s' + ' `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error$1);
+
+	          setCurrentlyValidatingElement(null);
+	        }
+
+	        if (error$1 instanceof Error && !(error$1.message in loggedTypeFailures)) {
+	          // Only monitor this failure once because there tends to be a lot of the
+	          // same error.
+	          loggedTypeFailures[error$1.message] = true;
+	          setCurrentlyValidatingElement(element);
+
+	          error('Failed %s type: %s', location, error$1.message);
+
+	          setCurrentlyValidatingElement(null);
+	        }
 	      }
 	    }
 	  }
 	}
 
-	function resolve(child, context, threadID) {
-	  while (React.isValidElement(child)) {
-	    // Safe because we just checked it's an element.
-	    var element = child;
-	    var Component = element.type;
+	var warnedAboutMissingGetChildContext;
+
+	{
+	  warnedAboutMissingGetChildContext = {};
+	}
+
+	var emptyContextObject = {};
+
+	{
+	  Object.freeze(emptyContextObject);
+	}
+
+	function getMaskedContext(type, unmaskedContext) {
+	  {
+	    var contextTypes = type.contextTypes;
+
+	    if (!contextTypes) {
+	      return emptyContextObject;
+	    }
+
+	    var context = {};
+
+	    for (var key in contextTypes) {
+	      context[key] = unmaskedContext[key];
+	    }
 
 	    {
-	      pushElementToDebugStack(element);
+	      var name = getComponentNameFromType(type) || 'Unknown';
+	      checkPropTypes(contextTypes, context, 'context', name);
 	    }
 
-	    if (typeof Component !== 'function') {
-	      break;
-	    }
+	    return context;
+	  }
+	}
+	function processChildContext(instance, type, parentContext, childContextTypes) {
+	  {
+	    // TODO (bvaughn) Replace this behavior with an invariant() in the future.
+	    // It has only been added in Fiber to match the (unintentional) behavior in Stack.
+	    if (typeof instance.getChildContext !== 'function') {
+	      {
+	        var componentName = getComponentNameFromType(type) || 'Unknown';
 
-	    processChild(element, Component);
-	  } // Extra closure so queue and replace can be captured properly
+	        if (!warnedAboutMissingGetChildContext[componentName]) {
+	          warnedAboutMissingGetChildContext[componentName] = true;
 
-
-	  function processChild(element, Component) {
-	    var isClass = shouldConstruct$1(Component);
-	    var publicContext = processContext(Component, context, threadID, isClass);
-	    var queue = [];
-	    var replace = false;
-	    var updater = {
-	      isMounted: function (publicInstance) {
-	        return false;
-	      },
-	      enqueueForceUpdate: function (publicInstance) {
-	        if (queue === null) {
-	          warnNoop(publicInstance, 'forceUpdate');
-	          return null;
+	          error('%s.childContextTypes is specified but there is no getChildContext() method ' + 'on the instance. You can either define getChildContext() on %s or remove ' + 'childContextTypes from it.', componentName, componentName);
 	        }
-	      },
-	      enqueueReplaceState: function (publicInstance, completeState) {
-	        replace = true;
-	        queue = [completeState];
-	      },
-	      enqueueSetState: function (publicInstance, currentPartialState) {
-	        if (queue === null) {
-	          warnNoop(publicInstance, 'setState');
-	          return null;
-	        }
-
-	        queue.push(currentPartialState);
 	      }
-	    };
-	    var inst;
 
-	    if (isClass) {
-	      inst = new Component(element.props, publicContext, updater);
+	      return parentContext;
+	    }
 
-	      if (typeof Component.getDerivedStateFromProps === 'function') {
-	        {
-	          if (inst.state === null || inst.state === undefined) {
-	            var componentName = getComponentName(Component) || 'Unknown';
+	    var childContext = instance.getChildContext();
 
-	            if (!didWarnAboutUninitializedState[componentName]) {
-	              error('`%s` uses `getDerivedStateFromProps` but its initial state is ' + '%s. This is not recommended. Instead, define the initial state by ' + 'assigning an object to `this.state` in the constructor of `%s`. ' + 'This ensures that `getDerivedStateFromProps` arguments have a consistent shape.', componentName, inst.state === null ? 'null' : 'undefined', componentName);
+	    for (var contextKey in childContext) {
+	      if (!(contextKey in childContextTypes)) {
+	        throw new Error((getComponentNameFromType(type) || 'Unknown') + ".getChildContext(): key \"" + contextKey + "\" is not defined in childContextTypes.");
+	      }
+	    }
 
-	              didWarnAboutUninitializedState[componentName] = true;
-	            }
-	          }
+	    {
+	      var name = getComponentNameFromType(type) || 'Unknown';
+	      checkPropTypes(childContextTypes, childContext, 'child context', name);
+	    }
+
+	    return assign({}, parentContext, childContext);
+	  }
+	}
+
+	var rendererSigil;
+
+	{
+	  // Use this to detect multiple renderers using the same context
+	  rendererSigil = {};
+	} // Used to store the parent path of all context overrides in a shared linked list.
+	// Forming a reverse tree.
+
+
+	var rootContextSnapshot = null; // We assume that this runtime owns the "current" field on all ReactContext instances.
+	// This global (actually thread local) state represents what state all those "current",
+	// fields are currently in.
+
+	var currentActiveSnapshot = null;
+
+	function popNode(prev) {
+	  {
+	    prev.context._currentValue2 = prev.parentValue;
+	  }
+	}
+
+	function pushNode(next) {
+	  {
+	    next.context._currentValue2 = next.value;
+	  }
+	}
+
+	function popToNearestCommonAncestor(prev, next) {
+	  if (prev === next) ; else {
+	    popNode(prev);
+	    var parentPrev = prev.parent;
+	    var parentNext = next.parent;
+
+	    if (parentPrev === null) {
+	      if (parentNext !== null) {
+	        throw new Error('The stacks must reach the root at the same time. This is a bug in React.');
+	      }
+	    } else {
+	      if (parentNext === null) {
+	        throw new Error('The stacks must reach the root at the same time. This is a bug in React.');
+	      }
+
+	      popToNearestCommonAncestor(parentPrev, parentNext);
+	    } // On the way back, we push the new ones that weren't common.
+
+
+	    pushNode(next);
+	  }
+	}
+
+	function popAllPrevious(prev) {
+	  popNode(prev);
+	  var parentPrev = prev.parent;
+
+	  if (parentPrev !== null) {
+	    popAllPrevious(parentPrev);
+	  }
+	}
+
+	function pushAllNext(next) {
+	  var parentNext = next.parent;
+
+	  if (parentNext !== null) {
+	    pushAllNext(parentNext);
+	  }
+
+	  pushNode(next);
+	}
+
+	function popPreviousToCommonLevel(prev, next) {
+	  popNode(prev);
+	  var parentPrev = prev.parent;
+
+	  if (parentPrev === null) {
+	    throw new Error('The depth must equal at least at zero before reaching the root. This is a bug in React.');
+	  }
+
+	  if (parentPrev.depth === next.depth) {
+	    // We found the same level. Now we just need to find a shared ancestor.
+	    popToNearestCommonAncestor(parentPrev, next);
+	  } else {
+	    // We must still be deeper.
+	    popPreviousToCommonLevel(parentPrev, next);
+	  }
+	}
+
+	function popNextToCommonLevel(prev, next) {
+	  var parentNext = next.parent;
+
+	  if (parentNext === null) {
+	    throw new Error('The depth must equal at least at zero before reaching the root. This is a bug in React.');
+	  }
+
+	  if (prev.depth === parentNext.depth) {
+	    // We found the same level. Now we just need to find a shared ancestor.
+	    popToNearestCommonAncestor(prev, parentNext);
+	  } else {
+	    // We must still be deeper.
+	    popNextToCommonLevel(prev, parentNext);
+	  }
+
+	  pushNode(next);
+	} // Perform context switching to the new snapshot.
+	// To make it cheap to read many contexts, while not suspending, we make the switch eagerly by
+	// updating all the context's current values. That way reads, always just read the current value.
+	// At the cost of updating contexts even if they're never read by this subtree.
+
+
+	function switchContext(newSnapshot) {
+	  // The basic algorithm we need to do is to pop back any contexts that are no longer on the stack.
+	  // We also need to update any new contexts that are now on the stack with the deepest value.
+	  // The easiest way to update new contexts is to just reapply them in reverse order from the
+	  // perspective of the backpointers. To avoid allocating a lot when switching, we use the stack
+	  // for that. Therefore this algorithm is recursive.
+	  // 1) First we pop which ever snapshot tree was deepest. Popping old contexts as we go.
+	  // 2) Then we find the nearest common ancestor from there. Popping old contexts as we go.
+	  // 3) Then we reapply new contexts on the way back up the stack.
+	  var prev = currentActiveSnapshot;
+	  var next = newSnapshot;
+
+	  if (prev !== next) {
+	    if (prev === null) {
+	      // $FlowFixMe: This has to be non-null since it's not equal to prev.
+	      pushAllNext(next);
+	    } else if (next === null) {
+	      popAllPrevious(prev);
+	    } else if (prev.depth === next.depth) {
+	      popToNearestCommonAncestor(prev, next);
+	    } else if (prev.depth > next.depth) {
+	      popPreviousToCommonLevel(prev, next);
+	    } else {
+	      popNextToCommonLevel(prev, next);
+	    }
+
+	    currentActiveSnapshot = next;
+	  }
+	}
+	function pushProvider(context, nextValue) {
+	  var prevValue;
+
+	  {
+	    prevValue = context._currentValue2;
+	    context._currentValue2 = nextValue;
+
+	    {
+	      if (context._currentRenderer2 !== undefined && context._currentRenderer2 !== null && context._currentRenderer2 !== rendererSigil) {
+	        error('Detected multiple renderers concurrently rendering the ' + 'same context provider. This is currently unsupported.');
+	      }
+
+	      context._currentRenderer2 = rendererSigil;
+	    }
+	  }
+
+	  var prevNode = currentActiveSnapshot;
+	  var newNode = {
+	    parent: prevNode,
+	    depth: prevNode === null ? 0 : prevNode.depth + 1,
+	    context: context,
+	    parentValue: prevValue,
+	    value: nextValue
+	  };
+	  currentActiveSnapshot = newNode;
+	  return newNode;
+	}
+	function popProvider(context) {
+	  var prevSnapshot = currentActiveSnapshot;
+
+	  if (prevSnapshot === null) {
+	    throw new Error('Tried to pop a Context at the root of the app. This is a bug in React.');
+	  }
+
+	  {
+	    if (prevSnapshot.context !== context) {
+	      error('The parent context is not the expected context. This is probably a bug in React.');
+	    }
+	  }
+
+	  {
+	    var _value = prevSnapshot.parentValue;
+
+	    if (_value === REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED) {
+	      prevSnapshot.context._currentValue2 = prevSnapshot.context._defaultValue;
+	    } else {
+	      prevSnapshot.context._currentValue2 = _value;
+	    }
+
+	    {
+	      if (context._currentRenderer2 !== undefined && context._currentRenderer2 !== null && context._currentRenderer2 !== rendererSigil) {
+	        error('Detected multiple renderers concurrently rendering the ' + 'same context provider. This is currently unsupported.');
+	      }
+
+	      context._currentRenderer2 = rendererSigil;
+	    }
+	  }
+
+	  return currentActiveSnapshot = prevSnapshot.parent;
+	}
+	function getActiveContext() {
+	  return currentActiveSnapshot;
+	}
+	function readContext(context) {
+	  var value =  context._currentValue2;
+	  return value;
+	}
+
+	/**
+	 * `ReactInstanceMap` maintains a mapping from a public facing stateful
+	 * instance (key) and the internal representation (value). This allows public
+	 * methods to accept the user facing instance as an argument and map them back
+	 * to internal methods.
+	 *
+	 * Note that this module is currently shared and assumed to be stateless.
+	 * If this becomes an actual Map, that will break.
+	 */
+	function get(key) {
+	  return key._reactInternals;
+	}
+	function set(key, value) {
+	  key._reactInternals = value;
+	}
+
+	var didWarnAboutNoopUpdateForComponent = {};
+	var didWarnAboutDeprecatedWillMount = {};
+	var didWarnAboutUninitializedState;
+	var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
+	var didWarnAboutLegacyLifecyclesAndDerivedState;
+	var didWarnAboutUndefinedDerivedState;
+	var warnOnUndefinedDerivedState;
+	var warnOnInvalidCallback;
+	var didWarnAboutDirectlyAssigningPropsToState;
+	var didWarnAboutContextTypeAndContextTypes;
+	var didWarnAboutInvalidateContextType;
+
+	{
+	  didWarnAboutUninitializedState = new Set();
+	  didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate = new Set();
+	  didWarnAboutLegacyLifecyclesAndDerivedState = new Set();
+	  didWarnAboutDirectlyAssigningPropsToState = new Set();
+	  didWarnAboutUndefinedDerivedState = new Set();
+	  didWarnAboutContextTypeAndContextTypes = new Set();
+	  didWarnAboutInvalidateContextType = new Set();
+	  var didWarnOnInvalidCallback = new Set();
+
+	  warnOnInvalidCallback = function (callback, callerName) {
+	    if (callback === null || typeof callback === 'function') {
+	      return;
+	    }
+
+	    var key = callerName + '_' + callback;
+
+	    if (!didWarnOnInvalidCallback.has(key)) {
+	      didWarnOnInvalidCallback.add(key);
+
+	      error('%s(...): Expected the last optional `callback` argument to be a ' + 'function. Instead received: %s.', callerName, callback);
+	    }
+	  };
+
+	  warnOnUndefinedDerivedState = function (type, partialState) {
+	    if (partialState === undefined) {
+	      var componentName = getComponentNameFromType(type) || 'Component';
+
+	      if (!didWarnAboutUndefinedDerivedState.has(componentName)) {
+	        didWarnAboutUndefinedDerivedState.add(componentName);
+
+	        error('%s.getDerivedStateFromProps(): A valid state object (or null) must be returned. ' + 'You have returned undefined.', componentName);
+	      }
+	    }
+	  };
+	}
+
+	function warnNoop(publicInstance, callerName) {
+	  {
+	    var _constructor = publicInstance.constructor;
+	    var componentName = _constructor && getComponentNameFromType(_constructor) || 'ReactClass';
+	    var warningKey = componentName + '.' + callerName;
+
+	    if (didWarnAboutNoopUpdateForComponent[warningKey]) {
+	      return;
+	    }
+
+	    error('%s(...): Can only update a mounting component. ' + 'This usually means you called %s() outside componentWillMount() on the server. ' + 'This is a no-op.\n\nPlease check the code for the %s component.', callerName, callerName, componentName);
+
+	    didWarnAboutNoopUpdateForComponent[warningKey] = true;
+	  }
+	}
+
+	var classComponentUpdater = {
+	  isMounted: function (inst) {
+	    return false;
+	  },
+	  enqueueSetState: function (inst, payload, callback) {
+	    var internals = get(inst);
+
+	    if (internals.queue === null) {
+	      warnNoop(inst, 'setState');
+	    } else {
+	      internals.queue.push(payload);
+
+	      {
+	        if (callback !== undefined && callback !== null) {
+	          warnOnInvalidCallback(callback, 'setState');
+	        }
+	      }
+	    }
+	  },
+	  enqueueReplaceState: function (inst, payload, callback) {
+	    var internals = get(inst);
+	    internals.replace = true;
+	    internals.queue = [payload];
+
+	    {
+	      if (callback !== undefined && callback !== null) {
+	        warnOnInvalidCallback(callback, 'setState');
+	      }
+	    }
+	  },
+	  enqueueForceUpdate: function (inst, callback) {
+	    var internals = get(inst);
+
+	    if (internals.queue === null) {
+	      warnNoop(inst, 'forceUpdate');
+	    } else {
+	      {
+	        if (callback !== undefined && callback !== null) {
+	          warnOnInvalidCallback(callback, 'setState');
+	        }
+	      }
+	    }
+	  }
+	};
+
+	function applyDerivedStateFromProps(instance, ctor, getDerivedStateFromProps, prevState, nextProps) {
+	  var partialState = getDerivedStateFromProps(nextProps, prevState);
+
+	  {
+	    warnOnUndefinedDerivedState(ctor, partialState);
+	  } // Merge the partial state and the previous state.
+
+
+	  var newState = partialState === null || partialState === undefined ? prevState : assign({}, prevState, partialState);
+	  return newState;
+	}
+
+	function constructClassInstance(ctor, props, maskedLegacyContext) {
+	  var context = emptyContextObject;
+	  var contextType = ctor.contextType;
+
+	  {
+	    if ('contextType' in ctor) {
+	      var isValid = // Allow null for conditional declaration
+	      contextType === null || contextType !== undefined && contextType.$$typeof === REACT_CONTEXT_TYPE && contextType._context === undefined; // Not a <Context.Consumer>
+
+	      if (!isValid && !didWarnAboutInvalidateContextType.has(ctor)) {
+	        didWarnAboutInvalidateContextType.add(ctor);
+	        var addendum = '';
+
+	        if (contextType === undefined) {
+	          addendum = ' However, it is set to undefined. ' + 'This can be caused by a typo or by mixing up named and default imports. ' + 'This can also happen due to a circular dependency, so ' + 'try moving the createContext() call to a separate file.';
+	        } else if (typeof contextType !== 'object') {
+	          addendum = ' However, it is set to a ' + typeof contextType + '.';
+	        } else if (contextType.$$typeof === REACT_PROVIDER_TYPE) {
+	          addendum = ' Did you accidentally pass the Context.Provider instead?';
+	        } else if (contextType._context !== undefined) {
+	          // <Context.Consumer>
+	          addendum = ' Did you accidentally pass the Context.Consumer instead?';
+	        } else {
+	          addendum = ' However, it is set to an object with keys {' + Object.keys(contextType).join(', ') + '}.';
 	        }
 
-	        var partialState = Component.getDerivedStateFromProps.call(null, element.props, inst.state);
+	        error('%s defines an invalid contextType. ' + 'contextType should point to the Context object returned by React.createContext().%s', getComponentNameFromType(ctor) || 'Component', addendum);
+	      }
+	    }
+	  }
 
-	        {
-	          if (partialState === undefined) {
-	            var _componentName = getComponentName(Component) || 'Unknown';
+	  if (typeof contextType === 'object' && contextType !== null) {
+	    context = readContext(contextType);
+	  } else {
+	    context = maskedLegacyContext;
+	  }
 
-	            if (!didWarnAboutUndefinedDerivedState[_componentName]) {
-	              error('%s.getDerivedStateFromProps(): A valid state object (or null) must be returned. ' + 'You have returned undefined.', _componentName);
+	  var instance = new ctor(props, context);
 
-	              didWarnAboutUndefinedDerivedState[_componentName] = true;
-	            }
-	          }
+	  {
+	    if (typeof ctor.getDerivedStateFromProps === 'function' && (instance.state === null || instance.state === undefined)) {
+	      var componentName = getComponentNameFromType(ctor) || 'Component';
+
+	      if (!didWarnAboutUninitializedState.has(componentName)) {
+	        didWarnAboutUninitializedState.add(componentName);
+
+	        error('`%s` uses `getDerivedStateFromProps` but its initial state is ' + '%s. This is not recommended. Instead, define the initial state by ' + 'assigning an object to `this.state` in the constructor of `%s`. ' + 'This ensures that `getDerivedStateFromProps` arguments have a consistent shape.', componentName, instance.state === null ? 'null' : 'undefined', componentName);
+	      }
+	    } // If new component APIs are defined, "unsafe" lifecycles won't be called.
+	    // Warn about these lifecycles if they are present.
+	    // Don't warn about react-lifecycles-compat polyfilled methods though.
+
+
+	    if (typeof ctor.getDerivedStateFromProps === 'function' || typeof instance.getSnapshotBeforeUpdate === 'function') {
+	      var foundWillMountName = null;
+	      var foundWillReceivePropsName = null;
+	      var foundWillUpdateName = null;
+
+	      if (typeof instance.componentWillMount === 'function' && instance.componentWillMount.__suppressDeprecationWarning !== true) {
+	        foundWillMountName = 'componentWillMount';
+	      } else if (typeof instance.UNSAFE_componentWillMount === 'function') {
+	        foundWillMountName = 'UNSAFE_componentWillMount';
+	      }
+
+	      if (typeof instance.componentWillReceiveProps === 'function' && instance.componentWillReceiveProps.__suppressDeprecationWarning !== true) {
+	        foundWillReceivePropsName = 'componentWillReceiveProps';
+	      } else if (typeof instance.UNSAFE_componentWillReceiveProps === 'function') {
+	        foundWillReceivePropsName = 'UNSAFE_componentWillReceiveProps';
+	      }
+
+	      if (typeof instance.componentWillUpdate === 'function' && instance.componentWillUpdate.__suppressDeprecationWarning !== true) {
+	        foundWillUpdateName = 'componentWillUpdate';
+	      } else if (typeof instance.UNSAFE_componentWillUpdate === 'function') {
+	        foundWillUpdateName = 'UNSAFE_componentWillUpdate';
+	      }
+
+	      if (foundWillMountName !== null || foundWillReceivePropsName !== null || foundWillUpdateName !== null) {
+	        var _componentName = getComponentNameFromType(ctor) || 'Component';
+
+	        var newApiName = typeof ctor.getDerivedStateFromProps === 'function' ? 'getDerivedStateFromProps()' : 'getSnapshotBeforeUpdate()';
+
+	        if (!didWarnAboutLegacyLifecyclesAndDerivedState.has(_componentName)) {
+	          didWarnAboutLegacyLifecyclesAndDerivedState.add(_componentName);
+
+	          error('Unsafe legacy lifecycles will not be called for components using new component APIs.\n\n' + '%s uses %s but also contains the following legacy lifecycles:%s%s%s\n\n' + 'The above lifecycles should be removed. Learn more about this warning here:\n' + 'https://reactjs.org/link/unsafe-component-lifecycles', _componentName, newApiName, foundWillMountName !== null ? "\n  " + foundWillMountName : '', foundWillReceivePropsName !== null ? "\n  " + foundWillReceivePropsName : '', foundWillUpdateName !== null ? "\n  " + foundWillUpdateName : '');
 	        }
+	      }
+	    }
+	  }
+
+	  return instance;
+	}
+
+	function checkClassInstance(instance, ctor, newProps) {
+	  {
+	    var name = getComponentNameFromType(ctor) || 'Component';
+	    var renderPresent = instance.render;
+
+	    if (!renderPresent) {
+	      if (ctor.prototype && typeof ctor.prototype.render === 'function') {
+	        error('%s(...): No `render` method found on the returned component ' + 'instance: did you accidentally return an object from the constructor?', name);
+	      } else {
+	        error('%s(...): No `render` method found on the returned component ' + 'instance: you may have forgotten to define `render`.', name);
+	      }
+	    }
+
+	    if (instance.getInitialState && !instance.getInitialState.isReactClassApproved && !instance.state) {
+	      error('getInitialState was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Did you mean to define a state property instead?', name);
+	    }
+
+	    if (instance.getDefaultProps && !instance.getDefaultProps.isReactClassApproved) {
+	      error('getDefaultProps was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Use a static property to define defaultProps instead.', name);
+	    }
+
+	    if (instance.propTypes) {
+	      error('propTypes was defined as an instance property on %s. Use a static ' + 'property to define propTypes instead.', name);
+	    }
+
+	    if (instance.contextType) {
+	      error('contextType was defined as an instance property on %s. Use a static ' + 'property to define contextType instead.', name);
+	    }
+
+	    {
+	      if (instance.contextTypes) {
+	        error('contextTypes was defined as an instance property on %s. Use a static ' + 'property to define contextTypes instead.', name);
+	      }
+
+	      if (ctor.contextType && ctor.contextTypes && !didWarnAboutContextTypeAndContextTypes.has(ctor)) {
+	        didWarnAboutContextTypeAndContextTypes.add(ctor);
+
+	        error('%s declares both contextTypes and contextType static properties. ' + 'The legacy contextTypes property will be ignored.', name);
+	      }
+	    }
+
+	    if (typeof instance.componentShouldUpdate === 'function') {
+	      error('%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', name);
+	    }
+
+	    if (ctor.prototype && ctor.prototype.isPureReactComponent && typeof instance.shouldComponentUpdate !== 'undefined') {
+	      error('%s has a method called shouldComponentUpdate(). ' + 'shouldComponentUpdate should not be used when extending React.PureComponent. ' + 'Please extend React.Component if shouldComponentUpdate is used.', getComponentNameFromType(ctor) || 'A pure component');
+	    }
+
+	    if (typeof instance.componentDidUnmount === 'function') {
+	      error('%s has a method called ' + 'componentDidUnmount(). But there is no such lifecycle method. ' + 'Did you mean componentWillUnmount()?', name);
+	    }
+
+	    if (typeof instance.componentDidReceiveProps === 'function') {
+	      error('%s has a method called ' + 'componentDidReceiveProps(). But there is no such lifecycle method. ' + 'If you meant to update the state in response to changing props, ' + 'use componentWillReceiveProps(). If you meant to fetch data or ' + 'run side-effects or mutations after React has updated the UI, use componentDidUpdate().', name);
+	    }
+
+	    if (typeof instance.componentWillRecieveProps === 'function') {
+	      error('%s has a method called ' + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?', name);
+	    }
+
+	    if (typeof instance.UNSAFE_componentWillRecieveProps === 'function') {
+	      error('%s has a method called ' + 'UNSAFE_componentWillRecieveProps(). Did you mean UNSAFE_componentWillReceiveProps()?', name);
+	    }
+
+	    var hasMutatedProps = instance.props !== newProps;
+
+	    if (instance.props !== undefined && hasMutatedProps) {
+	      error('%s(...): When calling super() in `%s`, make sure to pass ' + "up the same props that your component's constructor was passed.", name, name);
+	    }
+
+	    if (instance.defaultProps) {
+	      error('Setting defaultProps as an instance property on %s is not supported and will be ignored.' + ' Instead, define defaultProps as a static property on %s.', name, name);
+	    }
+
+	    if (typeof instance.getSnapshotBeforeUpdate === 'function' && typeof instance.componentDidUpdate !== 'function' && !didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate.has(ctor)) {
+	      didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate.add(ctor);
+
+	      error('%s: getSnapshotBeforeUpdate() should be used with componentDidUpdate(). ' + 'This component defines getSnapshotBeforeUpdate() only.', getComponentNameFromType(ctor));
+	    }
+
+	    if (typeof instance.getDerivedStateFromProps === 'function') {
+	      error('%s: getDerivedStateFromProps() is defined as an instance method ' + 'and will be ignored. Instead, declare it as a static method.', name);
+	    }
+
+	    if (typeof instance.getDerivedStateFromError === 'function') {
+	      error('%s: getDerivedStateFromError() is defined as an instance method ' + 'and will be ignored. Instead, declare it as a static method.', name);
+	    }
+
+	    if (typeof ctor.getSnapshotBeforeUpdate === 'function') {
+	      error('%s: getSnapshotBeforeUpdate() is defined as a static method ' + 'and will be ignored. Instead, declare it as an instance method.', name);
+	    }
+
+	    var _state = instance.state;
+
+	    if (_state && (typeof _state !== 'object' || isArray(_state))) {
+	      error('%s.state: must be set to an object or null', name);
+	    }
+
+	    if (typeof instance.getChildContext === 'function' && typeof ctor.childContextTypes !== 'object') {
+	      error('%s.getChildContext(): childContextTypes must be defined in order to ' + 'use getChildContext().', name);
+	    }
+	  }
+	}
+
+	function callComponentWillMount(type, instance) {
+	  var oldState = instance.state;
+
+	  if (typeof instance.componentWillMount === 'function') {
+	    {
+	      if ( instance.componentWillMount.__suppressDeprecationWarning !== true) {
+	        var componentName = getComponentNameFromType(type) || 'Unknown';
+
+	        if (!didWarnAboutDeprecatedWillMount[componentName]) {
+	          warn( // keep this warning in sync with ReactStrictModeWarning.js
+	          'componentWillMount has been renamed, and is not recommended for use. ' + 'See https://reactjs.org/link/unsafe-component-lifecycles for details.\n\n' + '* Move code from componentWillMount to componentDidMount (preferred in most cases) ' + 'or the constructor.\n' + '\nPlease update the following components: %s', componentName);
+
+	          didWarnAboutDeprecatedWillMount[componentName] = true;
+	        }
+	      }
+	    }
+
+	    instance.componentWillMount();
+	  }
+
+	  if (typeof instance.UNSAFE_componentWillMount === 'function') {
+	    instance.UNSAFE_componentWillMount();
+	  }
+
+	  if (oldState !== instance.state) {
+	    {
+	      error('%s.componentWillMount(): Assigning directly to this.state is ' + "deprecated (except inside a component's " + 'constructor). Use setState instead.', getComponentNameFromType(type) || 'Component');
+	    }
+
+	    classComponentUpdater.enqueueReplaceState(instance, instance.state, null);
+	  }
+	}
+
+	function processUpdateQueue(internalInstance, inst, props, maskedLegacyContext) {
+	  if (internalInstance.queue !== null && internalInstance.queue.length > 0) {
+	    var oldQueue = internalInstance.queue;
+	    var oldReplace = internalInstance.replace;
+	    internalInstance.queue = null;
+	    internalInstance.replace = false;
+
+	    if (oldReplace && oldQueue.length === 1) {
+	      inst.state = oldQueue[0];
+	    } else {
+	      var nextState = oldReplace ? oldQueue[0] : inst.state;
+	      var dontMutate = true;
+
+	      for (var i = oldReplace ? 1 : 0; i < oldQueue.length; i++) {
+	        var partial = oldQueue[i];
+	        var partialState = typeof partial === 'function' ? partial.call(inst, nextState, props, maskedLegacyContext) : partial;
 
 	        if (partialState != null) {
-	          inst.state = _assign({}, inst.state, partialState);
+	          if (dontMutate) {
+	            dontMutate = false;
+	            nextState = assign({}, nextState, partialState);
+	          } else {
+	            assign(nextState, partialState);
+	          }
+	        }
+	      }
+
+	      inst.state = nextState;
+	    }
+	  } else {
+	    internalInstance.queue = null;
+	  }
+	} // Invokes the mount life-cycles on a previously never rendered instance.
+
+
+	function mountClassInstance(instance, ctor, newProps, maskedLegacyContext) {
+	  {
+	    checkClassInstance(instance, ctor, newProps);
+	  }
+
+	  var initialState = instance.state !== undefined ? instance.state : null;
+	  instance.updater = classComponentUpdater;
+	  instance.props = newProps;
+	  instance.state = initialState; // We don't bother initializing the refs object on the server, since we're not going to resolve them anyway.
+	  // The internal instance will be used to manage updates that happen during this mount.
+
+	  var internalInstance = {
+	    queue: [],
+	    replace: false
+	  };
+	  set(instance, internalInstance);
+	  var contextType = ctor.contextType;
+
+	  if (typeof contextType === 'object' && contextType !== null) {
+	    instance.context = readContext(contextType);
+	  } else {
+	    instance.context = maskedLegacyContext;
+	  }
+
+	  {
+	    if (instance.state === newProps) {
+	      var componentName = getComponentNameFromType(ctor) || 'Component';
+
+	      if (!didWarnAboutDirectlyAssigningPropsToState.has(componentName)) {
+	        didWarnAboutDirectlyAssigningPropsToState.add(componentName);
+
+	        error('%s: It is not recommended to assign props directly to state ' + "because updates to props won't be reflected in state. " + 'In most cases, it is better to use props directly.', componentName);
+	      }
+	    }
+	  }
+
+	  var getDerivedStateFromProps = ctor.getDerivedStateFromProps;
+
+	  if (typeof getDerivedStateFromProps === 'function') {
+	    instance.state = applyDerivedStateFromProps(instance, ctor, getDerivedStateFromProps, initialState, newProps);
+	  } // In order to support react-lifecycles-compat polyfilled components,
+	  // Unsafe lifecycles should not be invoked for components using the new APIs.
+
+
+	  if (typeof ctor.getDerivedStateFromProps !== 'function' && typeof instance.getSnapshotBeforeUpdate !== 'function' && (typeof instance.UNSAFE_componentWillMount === 'function' || typeof instance.componentWillMount === 'function')) {
+	    callComponentWillMount(ctor, instance); // If we had additional state updates during this life-cycle, let's
+	    // process them now.
+
+	    processUpdateQueue(internalInstance, instance, newProps, maskedLegacyContext);
+	  }
+	}
+
+	// Ids are base 32 strings whose binary representation corresponds to the
+	// position of a node in a tree.
+	// Every time the tree forks into multiple children, we add additional bits to
+	// the left of the sequence that represent the position of the child within the
+	// current level of children.
+	//
+	//      00101       00010001011010101
+	//      ╰─┬─╯       ╰───────┬───────╯
+	//   Fork 5 of 20       Parent id
+	//
+	// The leading 0s are important. In the above example, you only need 3 bits to
+	// represent slot 5. However, you need 5 bits to represent all the forks at
+	// the current level, so we must account for the empty bits at the end.
+	//
+	// For this same reason, slots are 1-indexed instead of 0-indexed. Otherwise,
+	// the zeroth id at a level would be indistinguishable from its parent.
+	//
+	// If a node has only one child, and does not materialize an id (i.e. does not
+	// contain a useId hook), then we don't need to allocate any space in the
+	// sequence. It's treated as a transparent indirection. For example, these two
+	// trees produce the same ids:
+	//
+	// <>                          <>
+	//   <Indirection>               <A />
+	//     <A />                     <B />
+	//   </Indirection>            </>
+	//   <B />
+	// </>
+	//
+	// However, we cannot skip any node that materializes an id. Otherwise, a parent
+	// id that does not fork would be indistinguishable from its child id. For
+	// example, this tree does not fork, but the parent and child must have
+	// different ids.
+	//
+	// <Parent>
+	//   <Child />
+	// </Parent>
+	//
+	// To handle this scenario, every time we materialize an id, we allocate a
+	// new level with a single slot. You can think of this as a fork with only one
+	// prong, or an array of children with length 1.
+	//
+	// It's possible for the size of the sequence to exceed 32 bits, the max
+	// size for bitwise operations. When this happens, we make more room by
+	// converting the right part of the id to a string and storing it in an overflow
+	// variable. We use a base 32 string representation, because 32 is the largest
+	// power of 2 that is supported by toString(). We want the base to be large so
+	// that the resulting ids are compact, and we want the base to be a power of 2
+	// because every log2(base) bits corresponds to a single character, i.e. every
+	// log2(32) = 5 bits. That means we can lop bits off the end 5 at a time without
+	// affecting the final result.
+	var emptyTreeContext = {
+	  id: 1,
+	  overflow: ''
+	};
+	function getTreeId(context) {
+	  var overflow = context.overflow;
+	  var idWithLeadingBit = context.id;
+	  var id = idWithLeadingBit & ~getLeadingBit(idWithLeadingBit);
+	  return id.toString(32) + overflow;
+	}
+	function pushTreeContext(baseContext, totalChildren, index) {
+	  var baseIdWithLeadingBit = baseContext.id;
+	  var baseOverflow = baseContext.overflow; // The leftmost 1 marks the end of the sequence, non-inclusive. It's not part
+	  // of the id; we use it to account for leading 0s.
+
+	  var baseLength = getBitLength(baseIdWithLeadingBit) - 1;
+	  var baseId = baseIdWithLeadingBit & ~(1 << baseLength);
+	  var slot = index + 1;
+	  var length = getBitLength(totalChildren) + baseLength; // 30 is the max length we can store without overflowing, taking into
+	  // consideration the leading 1 we use to mark the end of the sequence.
+
+	  if (length > 30) {
+	    // We overflowed the bitwise-safe range. Fall back to slower algorithm.
+	    // This branch assumes the length of the base id is greater than 5; it won't
+	    // work for smaller ids, because you need 5 bits per character.
+	    //
+	    // We encode the id in multiple steps: first the base id, then the
+	    // remaining digits.
+	    //
+	    // Each 5 bit sequence corresponds to a single base 32 character. So for
+	    // example, if the current id is 23 bits long, we can convert 20 of those
+	    // bits into a string of 4 characters, with 3 bits left over.
+	    //
+	    // First calculate how many bits in the base id represent a complete
+	    // sequence of characters.
+	    var numberOfOverflowBits = baseLength - baseLength % 5; // Then create a bitmask that selects only those bits.
+
+	    var newOverflowBits = (1 << numberOfOverflowBits) - 1; // Select the bits, and convert them to a base 32 string.
+
+	    var newOverflow = (baseId & newOverflowBits).toString(32); // Now we can remove those bits from the base id.
+
+	    var restOfBaseId = baseId >> numberOfOverflowBits;
+	    var restOfBaseLength = baseLength - numberOfOverflowBits; // Finally, encode the rest of the bits using the normal algorithm. Because
+	    // we made more room, this time it won't overflow.
+
+	    var restOfLength = getBitLength(totalChildren) + restOfBaseLength;
+	    var restOfNewBits = slot << restOfBaseLength;
+	    var id = restOfNewBits | restOfBaseId;
+	    var overflow = newOverflow + baseOverflow;
+	    return {
+	      id: 1 << restOfLength | id,
+	      overflow: overflow
+	    };
+	  } else {
+	    // Normal path
+	    var newBits = slot << baseLength;
+
+	    var _id = newBits | baseId;
+
+	    var _overflow = baseOverflow;
+	    return {
+	      id: 1 << length | _id,
+	      overflow: _overflow
+	    };
+	  }
+	}
+
+	function getBitLength(number) {
+	  return 32 - clz32(number);
+	}
+
+	function getLeadingBit(id) {
+	  return 1 << getBitLength(id) - 1;
+	} // TODO: Math.clz32 is supported in Node 12+. Maybe we can drop the fallback.
+
+
+	var clz32 = Math.clz32 ? Math.clz32 : clz32Fallback; // Count leading zeros.
+	// Based on:
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/clz32
+
+	var log = Math.log;
+	var LN2 = Math.LN2;
+
+	function clz32Fallback(x) {
+	  var asUint = x >>> 0;
+
+	  if (asUint === 0) {
+	    return 32;
+	  }
+
+	  return 31 - (log(asUint) / LN2 | 0) | 0;
+	}
+
+	/**
+	 * inlined Object.is polyfill to avoid requiring consumers ship their own
+	 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+	 */
+	function is(x, y) {
+	  return x === y && (x !== 0 || 1 / x === 1 / y) || x !== x && y !== y // eslint-disable-line no-self-compare
+	  ;
+	}
+
+	var objectIs = typeof Object.is === 'function' ? Object.is : is;
+
+	var currentlyRenderingComponent = null;
+	var currentlyRenderingTask = null;
+	var firstWorkInProgressHook = null;
+	var workInProgressHook = null; // Whether the work-in-progress hook is a re-rendered hook
+
+	var isReRender = false; // Whether an update was scheduled during the currently executing render pass.
+
+	var didScheduleRenderPhaseUpdate = false; // Counts the number of useId hooks in this component
+
+	var localIdCounter = 0; // Lazily created map of render-phase updates
+
+	var renderPhaseUpdates = null; // Counter to prevent infinite loops.
+
+	var numberOfReRenders = 0;
+	var RE_RENDER_LIMIT = 25;
+	var isInHookUserCodeInDev = false; // In DEV, this is the name of the currently executing primitive hook
+
+	var currentHookNameInDev;
+
+	function resolveCurrentlyRenderingComponent() {
+	  if (currentlyRenderingComponent === null) {
+	    throw new Error('Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for' + ' one of the following reasons:\n' + '1. You might have mismatching versions of React and the renderer (such as React DOM)\n' + '2. You might be breaking the Rules of Hooks\n' + '3. You might have more than one copy of React in the same app\n' + 'See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.');
+	  }
+
+	  {
+	    if (isInHookUserCodeInDev) {
+	      error('Do not call Hooks inside useEffect(...), useMemo(...), or other built-in Hooks. ' + 'You can only call Hooks at the top level of your React function. ' + 'For more information, see ' + 'https://reactjs.org/link/rules-of-hooks');
+	    }
+	  }
+
+	  return currentlyRenderingComponent;
+	}
+
+	function areHookInputsEqual(nextDeps, prevDeps) {
+	  if (prevDeps === null) {
+	    {
+	      error('%s received a final argument during this render, but not during ' + 'the previous render. Even though the final argument is optional, ' + 'its type cannot change between renders.', currentHookNameInDev);
+	    }
+
+	    return false;
+	  }
+
+	  {
+	    // Don't bother comparing lengths in prod because these arrays should be
+	    // passed inline.
+	    if (nextDeps.length !== prevDeps.length) {
+	      error('The final argument passed to %s changed size between renders. The ' + 'order and size of this array must remain constant.\n\n' + 'Previous: %s\n' + 'Incoming: %s', currentHookNameInDev, "[" + nextDeps.join(', ') + "]", "[" + prevDeps.join(', ') + "]");
+	    }
+	  }
+
+	  for (var i = 0; i < prevDeps.length && i < nextDeps.length; i++) {
+	    if (objectIs(nextDeps[i], prevDeps[i])) {
+	      continue;
+	    }
+
+	    return false;
+	  }
+
+	  return true;
+	}
+
+	function createHook() {
+	  if (numberOfReRenders > 0) {
+	    throw new Error('Rendered more hooks than during the previous render');
+	  }
+
+	  return {
+	    memoizedState: null,
+	    queue: null,
+	    next: null
+	  };
+	}
+
+	function createWorkInProgressHook() {
+	  if (workInProgressHook === null) {
+	    // This is the first hook in the list
+	    if (firstWorkInProgressHook === null) {
+	      isReRender = false;
+	      firstWorkInProgressHook = workInProgressHook = createHook();
+	    } else {
+	      // There's already a work-in-progress. Reuse it.
+	      isReRender = true;
+	      workInProgressHook = firstWorkInProgressHook;
+	    }
+	  } else {
+	    if (workInProgressHook.next === null) {
+	      isReRender = false; // Append to the end of the list
+
+	      workInProgressHook = workInProgressHook.next = createHook();
+	    } else {
+	      // There's already a work-in-progress. Reuse it.
+	      isReRender = true;
+	      workInProgressHook = workInProgressHook.next;
+	    }
+	  }
+
+	  return workInProgressHook;
+	}
+
+	function prepareToUseHooks(task, componentIdentity) {
+	  currentlyRenderingComponent = componentIdentity;
+	  currentlyRenderingTask = task;
+
+	  {
+	    isInHookUserCodeInDev = false;
+	  } // The following should have already been reset
+	  // didScheduleRenderPhaseUpdate = false;
+	  // localIdCounter = 0;
+	  // firstWorkInProgressHook = null;
+	  // numberOfReRenders = 0;
+	  // renderPhaseUpdates = null;
+	  // workInProgressHook = null;
+
+
+	  localIdCounter = 0;
+	}
+	function finishHooks(Component, props, children, refOrContext) {
+	  // This must be called after every function component to prevent hooks from
+	  // being used in classes.
+	  while (didScheduleRenderPhaseUpdate) {
+	    // Updates were scheduled during the render phase. They are stored in
+	    // the `renderPhaseUpdates` map. Call the component again, reusing the
+	    // work-in-progress hooks and applying the additional updates on top. Keep
+	    // restarting until no more updates are scheduled.
+	    didScheduleRenderPhaseUpdate = false;
+	    localIdCounter = 0;
+	    numberOfReRenders += 1; // Start over from the beginning of the list
+
+	    workInProgressHook = null;
+	    children = Component(props, refOrContext);
+	  }
+
+	  resetHooksState();
+	  return children;
+	}
+	function checkDidRenderIdHook() {
+	  // This should be called immediately after every finishHooks call.
+	  // Conceptually, it's part of the return value of finishHooks; it's only a
+	  // separate function to avoid using an array tuple.
+	  var didRenderIdHook = localIdCounter !== 0;
+	  return didRenderIdHook;
+	} // Reset the internal hooks state if an error occurs while rendering a component
+
+	function resetHooksState() {
+	  {
+	    isInHookUserCodeInDev = false;
+	  }
+
+	  currentlyRenderingComponent = null;
+	  currentlyRenderingTask = null;
+	  didScheduleRenderPhaseUpdate = false;
+	  firstWorkInProgressHook = null;
+	  numberOfReRenders = 0;
+	  renderPhaseUpdates = null;
+	  workInProgressHook = null;
+	}
+
+	function readContext$1(context) {
+	  {
+	    if (isInHookUserCodeInDev) {
+	      error('Context can only be read while React is rendering. ' + 'In classes, you can read it in the render method or getDerivedStateFromProps. ' + 'In function components, you can read it directly in the function body, but not ' + 'inside Hooks like useReducer() or useMemo().');
+	    }
+	  }
+
+	  return readContext(context);
+	}
+
+	function useContext(context) {
+	  {
+	    currentHookNameInDev = 'useContext';
+	  }
+
+	  resolveCurrentlyRenderingComponent();
+	  return readContext(context);
+	}
+
+	function basicStateReducer(state, action) {
+	  // $FlowFixMe: Flow doesn't like mixed types
+	  return typeof action === 'function' ? action(state) : action;
+	}
+
+	function useState(initialState) {
+	  {
+	    currentHookNameInDev = 'useState';
+	  }
+
+	  return useReducer(basicStateReducer, // useReducer has a special case to support lazy useState initializers
+	  initialState);
+	}
+	function useReducer(reducer, initialArg, init) {
+	  {
+	    if (reducer !== basicStateReducer) {
+	      currentHookNameInDev = 'useReducer';
+	    }
+	  }
+
+	  currentlyRenderingComponent = resolveCurrentlyRenderingComponent();
+	  workInProgressHook = createWorkInProgressHook();
+
+	  if (isReRender) {
+	    // This is a re-render. Apply the new render phase updates to the previous
+	    // current hook.
+	    var queue = workInProgressHook.queue;
+	    var dispatch = queue.dispatch;
+
+	    if (renderPhaseUpdates !== null) {
+	      // Render phase updates are stored in a map of queue -> linked list
+	      var firstRenderPhaseUpdate = renderPhaseUpdates.get(queue);
+
+	      if (firstRenderPhaseUpdate !== undefined) {
+	        renderPhaseUpdates.delete(queue);
+	        var newState = workInProgressHook.memoizedState;
+	        var update = firstRenderPhaseUpdate;
+
+	        do {
+	          // Process this render phase update. We don't have to check the
+	          // priority because it will always be the same as the current
+	          // render's.
+	          var action = update.action;
+
+	          {
+	            isInHookUserCodeInDev = true;
+	          }
+
+	          newState = reducer(newState, action);
+
+	          {
+	            isInHookUserCodeInDev = false;
+	          }
+
+	          update = update.next;
+	        } while (update !== null);
+
+	        workInProgressHook.memoizedState = newState;
+	        return [newState, dispatch];
+	      }
+	    }
+
+	    return [workInProgressHook.memoizedState, dispatch];
+	  } else {
+	    {
+	      isInHookUserCodeInDev = true;
+	    }
+
+	    var initialState;
+
+	    if (reducer === basicStateReducer) {
+	      // Special case for `useState`.
+	      initialState = typeof initialArg === 'function' ? initialArg() : initialArg;
+	    } else {
+	      initialState = init !== undefined ? init(initialArg) : initialArg;
+	    }
+
+	    {
+	      isInHookUserCodeInDev = false;
+	    }
+
+	    workInProgressHook.memoizedState = initialState;
+
+	    var _queue = workInProgressHook.queue = {
+	      last: null,
+	      dispatch: null
+	    };
+
+	    var _dispatch = _queue.dispatch = dispatchAction.bind(null, currentlyRenderingComponent, _queue);
+
+	    return [workInProgressHook.memoizedState, _dispatch];
+	  }
+	}
+
+	function useMemo(nextCreate, deps) {
+	  currentlyRenderingComponent = resolveCurrentlyRenderingComponent();
+	  workInProgressHook = createWorkInProgressHook();
+	  var nextDeps = deps === undefined ? null : deps;
+
+	  if (workInProgressHook !== null) {
+	    var prevState = workInProgressHook.memoizedState;
+
+	    if (prevState !== null) {
+	      if (nextDeps !== null) {
+	        var prevDeps = prevState[1];
+
+	        if (areHookInputsEqual(nextDeps, prevDeps)) {
+	          return prevState[0];
+	        }
+	      }
+	    }
+	  }
+
+	  {
+	    isInHookUserCodeInDev = true;
+	  }
+
+	  var nextValue = nextCreate();
+
+	  {
+	    isInHookUserCodeInDev = false;
+	  }
+
+	  workInProgressHook.memoizedState = [nextValue, nextDeps];
+	  return nextValue;
+	}
+
+	function useRef(initialValue) {
+	  currentlyRenderingComponent = resolveCurrentlyRenderingComponent();
+	  workInProgressHook = createWorkInProgressHook();
+	  var previousRef = workInProgressHook.memoizedState;
+
+	  if (previousRef === null) {
+	    var ref = {
+	      current: initialValue
+	    };
+
+	    {
+	      Object.seal(ref);
+	    }
+
+	    workInProgressHook.memoizedState = ref;
+	    return ref;
+	  } else {
+	    return previousRef;
+	  }
+	}
+
+	function useLayoutEffect(create, inputs) {
+	  {
+	    currentHookNameInDev = 'useLayoutEffect';
+
+	    error('useLayoutEffect does nothing on the server, because its effect cannot ' + "be encoded into the server renderer's output format. This will lead " + 'to a mismatch between the initial, non-hydrated UI and the intended ' + 'UI. To avoid this, useLayoutEffect should only be used in ' + 'components that render exclusively on the client. ' + 'See https://reactjs.org/link/uselayouteffect-ssr for common fixes.');
+	  }
+	}
+
+	function dispatchAction(componentIdentity, queue, action) {
+	  if (numberOfReRenders >= RE_RENDER_LIMIT) {
+	    throw new Error('Too many re-renders. React limits the number of renders to prevent ' + 'an infinite loop.');
+	  }
+
+	  if (componentIdentity === currentlyRenderingComponent) {
+	    // This is a render phase update. Stash it in a lazily-created map of
+	    // queue -> linked list of updates. After this render pass, we'll restart
+	    // and apply the stashed updates on top of the work-in-progress hook.
+	    didScheduleRenderPhaseUpdate = true;
+	    var update = {
+	      action: action,
+	      next: null
+	    };
+
+	    if (renderPhaseUpdates === null) {
+	      renderPhaseUpdates = new Map();
+	    }
+
+	    var firstRenderPhaseUpdate = renderPhaseUpdates.get(queue);
+
+	    if (firstRenderPhaseUpdate === undefined) {
+	      renderPhaseUpdates.set(queue, update);
+	    } else {
+	      // Append the update to the end of the list.
+	      var lastRenderPhaseUpdate = firstRenderPhaseUpdate;
+
+	      while (lastRenderPhaseUpdate.next !== null) {
+	        lastRenderPhaseUpdate = lastRenderPhaseUpdate.next;
+	      }
+
+	      lastRenderPhaseUpdate.next = update;
+	    }
+	  }
+	}
+
+	function useCallback(callback, deps) {
+	  return useMemo(function () {
+	    return callback;
+	  }, deps);
+	} // TODO Decide on how to implement this hook for server rendering.
+	// If a mutation occurs during render, consider triggering a Suspense boundary
+	// and falling back to client rendering.
+
+	function useMutableSource(source, getSnapshot, subscribe) {
+	  resolveCurrentlyRenderingComponent();
+	  return getSnapshot(source._source);
+	}
+
+	function useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot) {
+	  if (getServerSnapshot === undefined) {
+	    throw new Error('Missing getServerSnapshot, which is required for ' + 'server-rendered content. Will revert to client rendering.');
+	  }
+
+	  return getServerSnapshot();
+	}
+
+	function useDeferredValue(value) {
+	  resolveCurrentlyRenderingComponent();
+	  return value;
+	}
+
+	function unsupportedStartTransition() {
+	  throw new Error('startTransition cannot be called during server rendering.');
+	}
+
+	function useTransition() {
+	  resolveCurrentlyRenderingComponent();
+	  return [false, unsupportedStartTransition];
+	}
+
+	function useId() {
+	  var task = currentlyRenderingTask;
+	  var treeId = getTreeId(task.treeContext);
+	  var responseState = currentResponseState;
+
+	  if (responseState === null) {
+	    throw new Error('Invalid hook call. Hooks can only be called inside of the body of a function component.');
+	  }
+
+	  var localId = localIdCounter++;
+	  return makeId(responseState, treeId, localId);
+	}
+
+	function noop() {}
+
+	var Dispatcher = {
+	  readContext: readContext$1,
+	  useContext: useContext,
+	  useMemo: useMemo,
+	  useReducer: useReducer,
+	  useRef: useRef,
+	  useState: useState,
+	  useInsertionEffect: noop,
+	  useLayoutEffect: useLayoutEffect,
+	  useCallback: useCallback,
+	  // useImperativeHandle is not run in the server environment
+	  useImperativeHandle: noop,
+	  // Effects are not run in the server environment.
+	  useEffect: noop,
+	  // Debugging effect
+	  useDebugValue: noop,
+	  useDeferredValue: useDeferredValue,
+	  useTransition: useTransition,
+	  useId: useId,
+	  // Subscriptions are not setup in a server environment.
+	  useMutableSource: useMutableSource,
+	  useSyncExternalStore: useSyncExternalStore
+	};
+
+	var currentResponseState = null;
+	function setCurrentResponseState(responseState) {
+	  currentResponseState = responseState;
+	}
+
+	function getStackByComponentStackNode(componentStack) {
+	  try {
+	    var info = '';
+	    var node = componentStack;
+
+	    do {
+	      switch (node.tag) {
+	        case 0:
+	          info += describeBuiltInComponentFrame(node.type, null, null);
+	          break;
+
+	        case 1:
+	          info += describeFunctionComponentFrame(node.type, null, null);
+	          break;
+
+	        case 2:
+	          info += describeClassComponentFrame(node.type, null, null);
+	          break;
+	      }
+
+	      node = node.parent;
+	    } while (node);
+
+	    return info;
+	  } catch (x) {
+	    return '\nError generating stack: ' + x.message + '\n' + x.stack;
+	  }
+	}
+
+	var ReactCurrentDispatcher$1 = ReactSharedInternals.ReactCurrentDispatcher;
+	var ReactDebugCurrentFrame$1 = ReactSharedInternals.ReactDebugCurrentFrame;
+	var PENDING = 0;
+	var COMPLETED = 1;
+	var FLUSHED = 2;
+	var ABORTED = 3;
+	var ERRORED = 4;
+	var OPEN = 0;
+	var CLOSING = 1;
+	var CLOSED = 2;
+	// This is a default heuristic for how to split up the HTML content into progressive
+	// loading. Our goal is to be able to display additional new content about every 500ms.
+	// Faster than that is unnecessary and should be throttled on the client. It also
+	// adds unnecessary overhead to do more splits. We don't know if it's a higher or lower
+	// end device but higher end suffer less from the overhead than lower end does from
+	// not getting small enough pieces. We error on the side of low end.
+	// We base this on low end 3G speeds which is about 500kbits per second. We assume
+	// that there can be a reasonable drop off from max bandwidth which leaves you with
+	// as little as 80%. We can receive half of that each 500ms - at best. In practice,
+	// a little bandwidth is lost to processing and contention - e.g. CSS and images that
+	// are downloaded along with the main content. So we estimate about half of that to be
+	// the lower end throughput. In other words, we expect that you can at least show
+	// about 12.5kb of content per 500ms. Not counting starting latency for the first
+	// paint.
+	// 500 * 1024 / 8 * .8 * 0.5 / 2
+	var DEFAULT_PROGRESSIVE_CHUNK_SIZE = 12800;
+
+	function defaultErrorHandler(error) {
+	  console['error'](error); // Don't transform to our wrapper
+
+	  return null;
+	}
+
+	function noop$1() {}
+
+	function createRequest(children, responseState, rootFormatContext, progressiveChunkSize, onError, onAllReady, onShellReady, onShellError, onFatalError) {
+	  var pingedTasks = [];
+	  var abortSet = new Set();
+	  var request = {
+	    destination: null,
+	    responseState: responseState,
+	    progressiveChunkSize: progressiveChunkSize === undefined ? DEFAULT_PROGRESSIVE_CHUNK_SIZE : progressiveChunkSize,
+	    status: OPEN,
+	    fatalError: null,
+	    nextSegmentId: 0,
+	    allPendingTasks: 0,
+	    pendingRootTasks: 0,
+	    completedRootSegment: null,
+	    abortableTasks: abortSet,
+	    pingedTasks: pingedTasks,
+	    clientRenderedBoundaries: [],
+	    completedBoundaries: [],
+	    partialBoundaries: [],
+	    onError: onError === undefined ? defaultErrorHandler : onError,
+	    onAllReady: onAllReady === undefined ? noop$1 : onAllReady,
+	    onShellReady: onShellReady === undefined ? noop$1 : onShellReady,
+	    onShellError: onShellError === undefined ? noop$1 : onShellError,
+	    onFatalError: onFatalError === undefined ? noop$1 : onFatalError
+	  }; // This segment represents the root fallback.
+
+	  var rootSegment = createPendingSegment(request, 0, null, rootFormatContext, // Root segments are never embedded in Text on either edge
+	  false, false); // There is no parent so conceptually, we're unblocked to flush this segment.
+
+	  rootSegment.parentFlushed = true;
+	  var rootTask = createTask(request, children, null, rootSegment, abortSet, emptyContextObject, rootContextSnapshot, emptyTreeContext);
+	  pingedTasks.push(rootTask);
+	  return request;
+	}
+
+	function pingTask(request, task) {
+	  var pingedTasks = request.pingedTasks;
+	  pingedTasks.push(task);
+
+	  if (pingedTasks.length === 1) {
+	    scheduleWork(function () {
+	      return performWork(request);
+	    });
+	  }
+	}
+
+	function createSuspenseBoundary(request, fallbackAbortableTasks) {
+	  return {
+	    id: UNINITIALIZED_SUSPENSE_BOUNDARY_ID,
+	    rootSegmentID: -1,
+	    parentFlushed: false,
+	    pendingTasks: 0,
+	    forceClientRender: false,
+	    completedSegments: [],
+	    byteSize: 0,
+	    fallbackAbortableTasks: fallbackAbortableTasks,
+	    errorDigest: null
+	  };
+	}
+
+	function createTask(request, node, blockedBoundary, blockedSegment, abortSet, legacyContext, context, treeContext) {
+	  request.allPendingTasks++;
+
+	  if (blockedBoundary === null) {
+	    request.pendingRootTasks++;
+	  } else {
+	    blockedBoundary.pendingTasks++;
+	  }
+
+	  var task = {
+	    node: node,
+	    ping: function () {
+	      return pingTask(request, task);
+	    },
+	    blockedBoundary: blockedBoundary,
+	    blockedSegment: blockedSegment,
+	    abortSet: abortSet,
+	    legacyContext: legacyContext,
+	    context: context,
+	    treeContext: treeContext
+	  };
+
+	  {
+	    task.componentStack = null;
+	  }
+
+	  abortSet.add(task);
+	  return task;
+	}
+
+	function createPendingSegment(request, index, boundary, formatContext, lastPushedText, textEmbedded) {
+	  return {
+	    status: PENDING,
+	    id: -1,
+	    // lazily assigned later
+	    index: index,
+	    parentFlushed: false,
+	    chunks: [],
+	    children: [],
+	    formatContext: formatContext,
+	    boundary: boundary,
+	    lastPushedText: lastPushedText,
+	    textEmbedded: textEmbedded
+	  };
+	} // DEV-only global reference to the currently executing task
+
+
+	var currentTaskInDEV = null;
+
+	function getCurrentStackInDEV() {
+	  {
+	    if (currentTaskInDEV === null || currentTaskInDEV.componentStack === null) {
+	      return '';
+	    }
+
+	    return getStackByComponentStackNode(currentTaskInDEV.componentStack);
+	  }
+	}
+
+	function pushBuiltInComponentStackInDEV(task, type) {
+	  {
+	    task.componentStack = {
+	      tag: 0,
+	      parent: task.componentStack,
+	      type: type
+	    };
+	  }
+	}
+
+	function pushFunctionComponentStackInDEV(task, type) {
+	  {
+	    task.componentStack = {
+	      tag: 1,
+	      parent: task.componentStack,
+	      type: type
+	    };
+	  }
+	}
+
+	function pushClassComponentStackInDEV(task, type) {
+	  {
+	    task.componentStack = {
+	      tag: 2,
+	      parent: task.componentStack,
+	      type: type
+	    };
+	  }
+	}
+
+	function popComponentStackInDEV(task) {
+	  {
+	    if (task.componentStack === null) {
+	      error('Unexpectedly popped too many stack frames. This is a bug in React.');
+	    } else {
+	      task.componentStack = task.componentStack.parent;
+	    }
+	  }
+	} // stash the component stack of an unwinding error until it is processed
+
+
+	var lastBoundaryErrorComponentStackDev = null;
+
+	function captureBoundaryErrorDetailsDev(boundary, error) {
+	  {
+	    var errorMessage;
+
+	    if (typeof error === 'string') {
+	      errorMessage = error;
+	    } else if (error && typeof error.message === 'string') {
+	      errorMessage = error.message;
+	    } else {
+	      // eslint-disable-next-line react-internal/safe-string-coercion
+	      errorMessage = String(error);
+	    }
+
+	    var errorComponentStack = lastBoundaryErrorComponentStackDev || getCurrentStackInDEV();
+	    lastBoundaryErrorComponentStackDev = null;
+	    boundary.errorMessage = errorMessage;
+	    boundary.errorComponentStack = errorComponentStack;
+	  }
+	}
+
+	function logRecoverableError(request, error) {
+	  // If this callback errors, we intentionally let that error bubble up to become a fatal error
+	  // so that someone fixes the error reporting instead of hiding it.
+	  var errorDigest = request.onError(error);
+
+	  if (errorDigest != null && typeof errorDigest !== 'string') {
+	    // eslint-disable-next-line react-internal/prod-error-codes
+	    throw new Error("onError returned something with a type other than \"string\". onError should return a string and may return null or undefined but must not return anything else. It received something of type \"" + typeof errorDigest + "\" instead");
+	  }
+
+	  return errorDigest;
+	}
+
+	function fatalError(request, error) {
+	  // This is called outside error handling code such as if the root errors outside
+	  // a suspense boundary or if the root suspense boundary's fallback errors.
+	  // It's also called if React itself or its host configs errors.
+	  var onShellError = request.onShellError;
+	  onShellError(error);
+	  var onFatalError = request.onFatalError;
+	  onFatalError(error);
+
+	  if (request.destination !== null) {
+	    request.status = CLOSED;
+	    closeWithError(request.destination, error);
+	  } else {
+	    request.status = CLOSING;
+	    request.fatalError = error;
+	  }
+	}
+
+	function renderSuspenseBoundary(request, task, props) {
+	  pushBuiltInComponentStackInDEV(task, 'Suspense');
+	  var parentBoundary = task.blockedBoundary;
+	  var parentSegment = task.blockedSegment; // Each time we enter a suspense boundary, we split out into a new segment for
+	  // the fallback so that we can later replace that segment with the content.
+	  // This also lets us split out the main content even if it doesn't suspend,
+	  // in case it ends up generating a large subtree of content.
+
+	  var fallback = props.fallback;
+	  var content = props.children;
+	  var fallbackAbortSet = new Set();
+	  var newBoundary = createSuspenseBoundary(request, fallbackAbortSet);
+	  var insertionIndex = parentSegment.chunks.length; // The children of the boundary segment is actually the fallback.
+
+	  var boundarySegment = createPendingSegment(request, insertionIndex, newBoundary, parentSegment.formatContext, // boundaries never require text embedding at their edges because comment nodes bound them
+	  false, false);
+	  parentSegment.children.push(boundarySegment); // The parentSegment has a child Segment at this index so we reset the lastPushedText marker on the parent
+
+	  parentSegment.lastPushedText = false; // This segment is the actual child content. We can start rendering that immediately.
+
+	  var contentRootSegment = createPendingSegment(request, 0, null, parentSegment.formatContext, // boundaries never require text embedding at their edges because comment nodes bound them
+	  false, false); // We mark the root segment as having its parent flushed. It's not really flushed but there is
+	  // no parent segment so there's nothing to wait on.
+
+	  contentRootSegment.parentFlushed = true; // Currently this is running synchronously. We could instead schedule this to pingedTasks.
+	  // I suspect that there might be some efficiency benefits from not creating the suspended task
+	  // and instead just using the stack if possible.
+	  // TODO: Call this directly instead of messing with saving and restoring contexts.
+	  // We can reuse the current context and task to render the content immediately without
+	  // context switching. We just need to temporarily switch which boundary and which segment
+	  // we're writing to. If something suspends, it'll spawn new suspended task with that context.
+
+	  task.blockedBoundary = newBoundary;
+	  task.blockedSegment = contentRootSegment;
+
+	  try {
+	    // We use the safe form because we don't handle suspending here. Only error handling.
+	    renderNode(request, task, content);
+	    pushSegmentFinale$1(contentRootSegment.chunks, request.responseState, contentRootSegment.lastPushedText, contentRootSegment.textEmbedded);
+	    contentRootSegment.status = COMPLETED;
+	    queueCompletedSegment(newBoundary, contentRootSegment);
+
+	    if (newBoundary.pendingTasks === 0) {
+	      // This must have been the last segment we were waiting on. This boundary is now complete.
+	      // Therefore we won't need the fallback. We early return so that we don't have to create
+	      // the fallback.
+	      popComponentStackInDEV(task);
+	      return;
+	    }
+	  } catch (error) {
+	    contentRootSegment.status = ERRORED;
+	    newBoundary.forceClientRender = true;
+	    newBoundary.errorDigest = logRecoverableError(request, error);
+
+	    {
+	      captureBoundaryErrorDetailsDev(newBoundary, error);
+	    } // We don't need to decrement any task numbers because we didn't spawn any new task.
+	    // We don't need to schedule any task because we know the parent has written yet.
+	    // We do need to fallthrough to create the fallback though.
+
+	  } finally {
+	    task.blockedBoundary = parentBoundary;
+	    task.blockedSegment = parentSegment;
+	  } // We create suspended task for the fallback because we don't want to actually work
+	  // on it yet in case we finish the main content, so we queue for later.
+
+
+	  var suspendedFallbackTask = createTask(request, fallback, parentBoundary, boundarySegment, fallbackAbortSet, task.legacyContext, task.context, task.treeContext);
+
+	  {
+	    suspendedFallbackTask.componentStack = task.componentStack;
+	  } // TODO: This should be queued at a separate lower priority queue so that we only work
+	  // on preparing fallbacks if we don't have any more main content to task on.
+
+
+	  request.pingedTasks.push(suspendedFallbackTask);
+	  popComponentStackInDEV(task);
+	}
+
+	function renderHostElement(request, task, type, props) {
+	  pushBuiltInComponentStackInDEV(task, type);
+	  var segment = task.blockedSegment;
+	  var children = pushStartInstance(segment.chunks, type, props, request.responseState, segment.formatContext);
+	  segment.lastPushedText = false;
+	  var prevContext = segment.formatContext;
+	  segment.formatContext = getChildFormatContext(prevContext, type, props); // We use the non-destructive form because if something suspends, we still
+	  // need to pop back up and finish this subtree of HTML.
+
+	  renderNode(request, task, children); // We expect that errors will fatal the whole task and that we don't need
+	  // the correct context. Therefore this is not in a finally.
+
+	  segment.formatContext = prevContext;
+	  pushEndInstance(segment.chunks, type);
+	  segment.lastPushedText = false;
+	  popComponentStackInDEV(task);
+	}
+
+	function shouldConstruct$1(Component) {
+	  return Component.prototype && Component.prototype.isReactComponent;
+	}
+
+	function renderWithHooks(request, task, Component, props, secondArg) {
+	  var componentIdentity = {};
+	  prepareToUseHooks(task, componentIdentity);
+	  var result = Component(props, secondArg);
+	  return finishHooks(Component, props, result, secondArg);
+	}
+
+	function finishClassComponent(request, task, instance, Component, props) {
+	  var nextChildren = instance.render();
+
+	  {
+	    if (instance.props !== props) {
+	      if (!didWarnAboutReassigningProps) {
+	        error('It looks like %s is reassigning its own `this.props` while rendering. ' + 'This is not supported and can lead to confusing bugs.', getComponentNameFromType(Component) || 'a component');
+	      }
+
+	      didWarnAboutReassigningProps = true;
+	    }
+	  }
+
+	  {
+	    var childContextTypes = Component.childContextTypes;
+
+	    if (childContextTypes !== null && childContextTypes !== undefined) {
+	      var previousContext = task.legacyContext;
+	      var mergedContext = processChildContext(instance, Component, previousContext, childContextTypes);
+	      task.legacyContext = mergedContext;
+	      renderNodeDestructive(request, task, nextChildren);
+	      task.legacyContext = previousContext;
+	      return;
+	    }
+	  }
+
+	  renderNodeDestructive(request, task, nextChildren);
+	}
+
+	function renderClassComponent(request, task, Component, props) {
+	  pushClassComponentStackInDEV(task, Component);
+	  var maskedContext =  getMaskedContext(Component, task.legacyContext) ;
+	  var instance = constructClassInstance(Component, props, maskedContext);
+	  mountClassInstance(instance, Component, props, maskedContext);
+	  finishClassComponent(request, task, instance, Component, props);
+	  popComponentStackInDEV(task);
+	}
+
+	var didWarnAboutBadClass = {};
+	var didWarnAboutModulePatternComponent = {};
+	var didWarnAboutContextTypeOnFunctionComponent = {};
+	var didWarnAboutGetDerivedStateOnFunctionComponent = {};
+	var didWarnAboutReassigningProps = false;
+	var didWarnAboutGenerators = false;
+	var didWarnAboutMaps = false;
+	var hasWarnedAboutUsingContextAsConsumer = false; // This would typically be a function component but we still support module pattern
+	// components for some reason.
+
+	function renderIndeterminateComponent(request, task, Component, props) {
+	  var legacyContext;
+
+	  {
+	    legacyContext = getMaskedContext(Component, task.legacyContext);
+	  }
+
+	  pushFunctionComponentStackInDEV(task, Component);
+
+	  {
+	    if (Component.prototype && typeof Component.prototype.render === 'function') {
+	      var componentName = getComponentNameFromType(Component) || 'Unknown';
+
+	      if (!didWarnAboutBadClass[componentName]) {
+	        error("The <%s /> component appears to have a render method, but doesn't extend React.Component. " + 'This is likely to cause errors. Change %s to extend React.Component instead.', componentName, componentName);
+
+	        didWarnAboutBadClass[componentName] = true;
+	      }
+	    }
+	  }
+
+	  var value = renderWithHooks(request, task, Component, props, legacyContext);
+	  var hasId = checkDidRenderIdHook();
+
+	  {
+	    // Support for module components is deprecated and is removed behind a flag.
+	    // Whether or not it would crash later, we want to show a good message in DEV first.
+	    if (typeof value === 'object' && value !== null && typeof value.render === 'function' && value.$$typeof === undefined) {
+	      var _componentName = getComponentNameFromType(Component) || 'Unknown';
+
+	      if (!didWarnAboutModulePatternComponent[_componentName]) {
+	        error('The <%s /> component appears to be a function component that returns a class instance. ' + 'Change %s to a class that extends React.Component instead. ' + "If you can't use a class try assigning the prototype on the function as a workaround. " + "`%s.prototype = React.Component.prototype`. Don't use an arrow function since it " + 'cannot be called with `new` by React.', _componentName, _componentName, _componentName);
+
+	        didWarnAboutModulePatternComponent[_componentName] = true;
+	      }
+	    }
+	  }
+
+	  if ( // Run these checks in production only if the flag is off.
+	  // Eventually we'll delete this branch altogether.
+	   typeof value === 'object' && value !== null && typeof value.render === 'function' && value.$$typeof === undefined) {
+	    {
+	      var _componentName2 = getComponentNameFromType(Component) || 'Unknown';
+
+	      if (!didWarnAboutModulePatternComponent[_componentName2]) {
+	        error('The <%s /> component appears to be a function component that returns a class instance. ' + 'Change %s to a class that extends React.Component instead. ' + "If you can't use a class try assigning the prototype on the function as a workaround. " + "`%s.prototype = React.Component.prototype`. Don't use an arrow function since it " + 'cannot be called with `new` by React.', _componentName2, _componentName2, _componentName2);
+
+	        didWarnAboutModulePatternComponent[_componentName2] = true;
+	      }
+	    }
+
+	    mountClassInstance(value, Component, props, legacyContext);
+	    finishClassComponent(request, task, value, Component, props);
+	  } else {
+
+	    {
+	      validateFunctionComponentInDev(Component);
+	    } // We're now successfully past this task, and we don't have to pop back to
+	    // the previous task every again, so we can use the destructive recursive form.
+
+
+	    if (hasId) {
+	      // This component materialized an id. We treat this as its own level, with
+	      // a single "child" slot.
+	      var prevTreeContext = task.treeContext;
+	      var totalChildren = 1;
+	      var index = 0;
+	      task.treeContext = pushTreeContext(prevTreeContext, totalChildren, index);
+
+	      try {
+	        renderNodeDestructive(request, task, value);
+	      } finally {
+	        task.treeContext = prevTreeContext;
+	      }
+	    } else {
+	      renderNodeDestructive(request, task, value);
+	    }
+	  }
+
+	  popComponentStackInDEV(task);
+	}
+
+	function validateFunctionComponentInDev(Component) {
+	  {
+	    if (Component) {
+	      if (Component.childContextTypes) {
+	        error('%s(...): childContextTypes cannot be defined on a function component.', Component.displayName || Component.name || 'Component');
+	      }
+	    }
+
+	    if (typeof Component.getDerivedStateFromProps === 'function') {
+	      var _componentName3 = getComponentNameFromType(Component) || 'Unknown';
+
+	      if (!didWarnAboutGetDerivedStateOnFunctionComponent[_componentName3]) {
+	        error('%s: Function components do not support getDerivedStateFromProps.', _componentName3);
+
+	        didWarnAboutGetDerivedStateOnFunctionComponent[_componentName3] = true;
+	      }
+	    }
+
+	    if (typeof Component.contextType === 'object' && Component.contextType !== null) {
+	      var _componentName4 = getComponentNameFromType(Component) || 'Unknown';
+
+	      if (!didWarnAboutContextTypeOnFunctionComponent[_componentName4]) {
+	        error('%s: Function components do not support contextType.', _componentName4);
+
+	        didWarnAboutContextTypeOnFunctionComponent[_componentName4] = true;
+	      }
+	    }
+	  }
+	}
+
+	function resolveDefaultProps(Component, baseProps) {
+	  if (Component && Component.defaultProps) {
+	    // Resolve default props. Taken from ReactElement
+	    var props = assign({}, baseProps);
+	    var defaultProps = Component.defaultProps;
+
+	    for (var propName in defaultProps) {
+	      if (props[propName] === undefined) {
+	        props[propName] = defaultProps[propName];
+	      }
+	    }
+
+	    return props;
+	  }
+
+	  return baseProps;
+	}
+
+	function renderForwardRef(request, task, type, props, ref) {
+	  pushFunctionComponentStackInDEV(task, type.render);
+	  var children = renderWithHooks(request, task, type.render, props, ref);
+	  var hasId = checkDidRenderIdHook();
+
+	  if (hasId) {
+	    // This component materialized an id. We treat this as its own level, with
+	    // a single "child" slot.
+	    var prevTreeContext = task.treeContext;
+	    var totalChildren = 1;
+	    var index = 0;
+	    task.treeContext = pushTreeContext(prevTreeContext, totalChildren, index);
+
+	    try {
+	      renderNodeDestructive(request, task, children);
+	    } finally {
+	      task.treeContext = prevTreeContext;
+	    }
+	  } else {
+	    renderNodeDestructive(request, task, children);
+	  }
+
+	  popComponentStackInDEV(task);
+	}
+
+	function renderMemo(request, task, type, props, ref) {
+	  var innerType = type.type;
+	  var resolvedProps = resolveDefaultProps(innerType, props);
+	  renderElement(request, task, innerType, resolvedProps, ref);
+	}
+
+	function renderContextConsumer(request, task, context, props) {
+	  // The logic below for Context differs depending on PROD or DEV mode. In
+	  // DEV mode, we create a separate object for Context.Consumer that acts
+	  // like a proxy to Context. This proxy object adds unnecessary code in PROD
+	  // so we use the old behaviour (Context.Consumer references Context) to
+	  // reduce size and overhead. The separate object references context via
+	  // a property called "_context", which also gives us the ability to check
+	  // in DEV mode if this property exists or not and warn if it does not.
+	  {
+	    if (context._context === undefined) {
+	      // This may be because it's a Context (rather than a Consumer).
+	      // Or it may be because it's older React where they're the same thing.
+	      // We only want to warn if we're sure it's a new React.
+	      if (context !== context.Consumer) {
+	        if (!hasWarnedAboutUsingContextAsConsumer) {
+	          hasWarnedAboutUsingContextAsConsumer = true;
+
+	          error('Rendering <Context> directly is not supported and will be removed in ' + 'a future major release. Did you mean to render <Context.Consumer> instead?');
 	        }
 	      }
 	    } else {
+	      context = context._context;
+	    }
+	  }
+
+	  var render = props.children;
+
+	  {
+	    if (typeof render !== 'function') {
+	      error('A context consumer was rendered with multiple children, or a child ' + "that isn't a function. A context consumer expects a single child " + 'that is a function. If you did pass a function, make sure there ' + 'is no trailing or leading whitespace around it.');
+	    }
+	  }
+
+	  var newValue = readContext(context);
+	  var newChildren = render(newValue);
+	  renderNodeDestructive(request, task, newChildren);
+	}
+
+	function renderContextProvider(request, task, type, props) {
+	  var context = type._context;
+	  var value = props.value;
+	  var children = props.children;
+	  var prevSnapshot;
+
+	  {
+	    prevSnapshot = task.context;
+	  }
+
+	  task.context = pushProvider(context, value);
+	  renderNodeDestructive(request, task, children);
+	  task.context = popProvider(context);
+
+	  {
+	    if (prevSnapshot !== task.context) {
+	      error('Popping the context provider did not return back to the original snapshot. This is a bug in React.');
+	    }
+	  }
+	}
+
+	function renderLazyComponent(request, task, lazyComponent, props, ref) {
+	  pushBuiltInComponentStackInDEV(task, 'Lazy');
+	  var payload = lazyComponent._payload;
+	  var init = lazyComponent._init;
+	  var Component = init(payload);
+	  var resolvedProps = resolveDefaultProps(Component, props);
+	  renderElement(request, task, Component, resolvedProps, ref);
+	  popComponentStackInDEV(task);
+	}
+
+	function renderElement(request, task, type, props, ref) {
+	  if (typeof type === 'function') {
+	    if (shouldConstruct$1(type)) {
+	      renderClassComponent(request, task, type, props);
+	      return;
+	    } else {
+	      renderIndeterminateComponent(request, task, type, props);
+	      return;
+	    }
+	  }
+
+	  if (typeof type === 'string') {
+	    renderHostElement(request, task, type, props);
+	    return;
+	  }
+
+	  switch (type) {
+	    // TODO: LegacyHidden acts the same as a fragment. This only works
+	    // because we currently assume that every instance of LegacyHidden is
+	    // accompanied by a host component wrapper. In the hidden mode, the host
+	    // component is given a `hidden` attribute, which ensures that the
+	    // initial HTML is not visible. To support the use of LegacyHidden as a
+	    // true fragment, without an extra DOM node, we would have to hide the
+	    // initial HTML in some other way.
+	    // TODO: Add REACT_OFFSCREEN_TYPE here too with the same capability.
+	    case REACT_LEGACY_HIDDEN_TYPE:
+	    case REACT_DEBUG_TRACING_MODE_TYPE:
+	    case REACT_STRICT_MODE_TYPE:
+	    case REACT_PROFILER_TYPE:
+	    case REACT_FRAGMENT_TYPE:
 	      {
-	        if (Component.prototype && typeof Component.prototype.render === 'function') {
-	          var _componentName2 = getComponentName(Component) || 'Unknown';
-
-	          if (!didWarnAboutBadClass[_componentName2]) {
-	            error("The <%s /> component appears to have a render method, but doesn't extend React.Component. " + 'This is likely to cause errors. Change %s to extend React.Component instead.', _componentName2, _componentName2);
-
-	            didWarnAboutBadClass[_componentName2] = true;
-	          }
-	        }
+	        renderNodeDestructive(request, task, props.children);
+	        return;
 	      }
 
-	      var componentIdentity = {};
-	      prepareToUseHooks(componentIdentity);
-	      inst = Component(element.props, publicContext, updater);
-	      inst = finishHooks(Component, element.props, inst, publicContext);
-
+	    case REACT_SUSPENSE_LIST_TYPE:
 	      {
-	        // Support for module components is deprecated and is removed behind a flag.
-	        // Whether or not it would crash later, we want to show a good message in DEV first.
-	        if (inst != null && inst.render != null) {
-	          var _componentName3 = getComponentName(Component) || 'Unknown';
+	        pushBuiltInComponentStackInDEV(task, 'SuspenseList'); // TODO: SuspenseList should control the boundaries.
 
-	          if (!didWarnAboutModulePatternComponent[_componentName3]) {
-	            error('The <%s /> component appears to be a function component that returns a class instance. ' + 'Change %s to a class that extends React.Component instead. ' + "If you can't use a class try assigning the prototype on the function as a workaround. " + "`%s.prototype = React.Component.prototype`. Don't use an arrow function since it " + 'cannot be called with `new` by React.', _componentName3, _componentName3, _componentName3);
+	        renderNodeDestructive(request, task, props.children);
+	        popComponentStackInDEV(task);
+	        return;
+	      }
 
-	            didWarnAboutModulePatternComponent[_componentName3] = true;
-	          }
+	    case REACT_SCOPE_TYPE:
+	      {
+
+	        throw new Error('ReactDOMServer does not yet support scope components.');
+	      }
+	    // eslint-disable-next-line-no-fallthrough
+
+	    case REACT_SUSPENSE_TYPE:
+	      {
+	        {
+	          renderSuspenseBoundary(request, task, props);
 	        }
-	      } // If the flag is on, everything is assumed to be a function component.
-	      // Otherwise, we also do the unfortunate dynamic checks.
+
+	        return;
+	      }
+	  }
+
+	  if (typeof type === 'object' && type !== null) {
+	    switch (type.$$typeof) {
+	      case REACT_FORWARD_REF_TYPE:
+	        {
+	          renderForwardRef(request, task, type, props, ref);
+	          return;
+	        }
+
+	      case REACT_MEMO_TYPE:
+	        {
+	          renderMemo(request, task, type, props, ref);
+	          return;
+	        }
+
+	      case REACT_PROVIDER_TYPE:
+	        {
+	          renderContextProvider(request, task, type, props);
+	          return;
+	        }
+
+	      case REACT_CONTEXT_TYPE:
+	        {
+	          renderContextConsumer(request, task, type, props);
+	          return;
+	        }
+
+	      case REACT_LAZY_TYPE:
+	        {
+	          renderLazyComponent(request, task, type, props);
+	          return;
+	        }
+	    }
+	  }
+
+	  var info = '';
+
+	  {
+	    if (type === undefined || typeof type === 'object' && type !== null && Object.keys(type).length === 0) {
+	      info += ' You likely forgot to export your component from the file ' + "it's defined in, or you might have mixed up default and " + 'named imports.';
+	    }
+	  }
+
+	  throw new Error('Element type is invalid: expected a string (for built-in ' + 'components) or a class/function (for composite components) ' + ("but got: " + (type == null ? type : typeof type) + "." + info));
+	}
+
+	function validateIterable(iterable, iteratorFn) {
+	  {
+	    // We don't support rendering Generators because it's a mutation.
+	    // See https://github.com/facebook/react/issues/12995
+	    if (typeof Symbol === 'function' && // $FlowFixMe Flow doesn't know about toStringTag
+	    iterable[Symbol.toStringTag] === 'Generator') {
+	      if (!didWarnAboutGenerators) {
+	        error('Using Generators as children is unsupported and will likely yield ' + 'unexpected results because enumerating a generator mutates it. ' + 'You may convert it to an array with `Array.from()` or the ' + '`[...spread]` operator before rendering. Keep in mind ' + 'you might need to polyfill these features for older browsers.');
+	      }
+
+	      didWarnAboutGenerators = true;
+	    } // Warn about using Maps as children
 
 
-	      if ( inst == null || inst.render == null) {
-	        child = inst;
-	        validateRenderResult(child, Component);
+	    if (iterable.entries === iteratorFn) {
+	      if (!didWarnAboutMaps) {
+	        error('Using Maps as children is not supported. ' + 'Use an array of keyed ReactElements instead.');
+	      }
+
+	      didWarnAboutMaps = true;
+	    }
+	  }
+	}
+
+	function renderNodeDestructive(request, task, node) {
+	  {
+	    // In Dev we wrap renderNodeDestructiveImpl in a try / catch so we can capture
+	    // a component stack at the right place in the tree. We don't do this in renderNode
+	    // becuase it is not called at every layer of the tree and we may lose frames
+	    try {
+	      return renderNodeDestructiveImpl(request, task, node);
+	    } catch (x) {
+	      if (typeof x === 'object' && x !== null && typeof x.then === 'function') ; else {
+	        // This is an error, stash the component stack if it is null.
+	        lastBoundaryErrorComponentStackDev = lastBoundaryErrorComponentStackDev !== null ? lastBoundaryErrorComponentStackDev : getCurrentStackInDEV();
+	      } // rethrow so normal suspense logic can handle thrown value accordingly
+
+
+	      throw x;
+	    }
+	  }
+	} // This function by it self renders a node and consumes the task by mutating it
+	// to update the current execution state.
+
+
+	function renderNodeDestructiveImpl(request, task, node) {
+	  // Stash the node we're working on. We'll pick up from this task in case
+	  // something suspends.
+	  task.node = node; // Handle object types
+
+	  if (typeof node === 'object' && node !== null) {
+	    switch (node.$$typeof) {
+	      case REACT_ELEMENT_TYPE:
+	        {
+	          var element = node;
+	          var type = element.type;
+	          var props = element.props;
+	          var ref = element.ref;
+	          renderElement(request, task, type, props, ref);
+	          return;
+	        }
+
+	      case REACT_PORTAL_TYPE:
+	        throw new Error('Portals are not currently supported by the server renderer. ' + 'Render them conditionally so that they only appear on the client render.');
+	      // eslint-disable-next-line-no-fallthrough
+
+	      case REACT_LAZY_TYPE:
+	        {
+	          var lazyNode = node;
+	          var payload = lazyNode._payload;
+	          var init = lazyNode._init;
+	          var resolvedNode;
+
+	          {
+	            try {
+	              resolvedNode = init(payload);
+	            } catch (x) {
+	              if (typeof x === 'object' && x !== null && typeof x.then === 'function') {
+	                // this Lazy initializer is suspending. push a temporary frame onto the stack so it can be
+	                // popped off in spawnNewSuspendedTask. This aligns stack behavior between Lazy in element position
+	                // vs Component position. We do not want the frame for Errors so we exclusively do this in
+	                // the wakeable branch
+	                pushBuiltInComponentStackInDEV(task, 'Lazy');
+	              }
+
+	              throw x;
+	            }
+	          }
+
+	          renderNodeDestructive(request, task, resolvedNode);
+	          return;
+	        }
+	    }
+
+	    if (isArray(node)) {
+	      renderChildrenArray(request, task, node);
+	      return;
+	    }
+
+	    var iteratorFn = getIteratorFn(node);
+
+	    if (iteratorFn) {
+	      {
+	        validateIterable(node, iteratorFn);
+	      }
+
+	      var iterator = iteratorFn.call(node);
+
+	      if (iterator) {
+	        // We need to know how many total children are in this set, so that we
+	        // can allocate enough id slots to acommodate them. So we must exhaust
+	        // the iterator before we start recursively rendering the children.
+	        // TODO: This is not great but I think it's inherent to the id
+	        // generation algorithm.
+	        var step = iterator.next(); // If there are not entries, we need to push an empty so we start by checking that.
+
+	        if (!step.done) {
+	          var children = [];
+
+	          do {
+	            children.push(step.value);
+	            step = iterator.next();
+	          } while (!step.done);
+
+	          renderChildrenArray(request, task, children);
+	          return;
+	        }
+
 	        return;
 	      }
 	    }
 
-	    inst.props = element.props;
-	    inst.context = publicContext;
-	    inst.updater = updater;
-	    var initialState = inst.state;
-
-	    if (initialState === undefined) {
-	      inst.state = initialState = null;
-	    }
-
-	    if (typeof inst.UNSAFE_componentWillMount === 'function' || typeof inst.componentWillMount === 'function') {
-	      if (typeof inst.componentWillMount === 'function') {
-	        {
-	          if ( inst.componentWillMount.__suppressDeprecationWarning !== true) {
-	            var _componentName4 = getComponentName(Component) || 'Unknown';
-
-	            if (!didWarnAboutDeprecatedWillMount[_componentName4]) {
-	              warn( // keep this warning in sync with ReactStrictModeWarning.js
-	              'componentWillMount has been renamed, and is not recommended for use. ' + 'See https://reactjs.org/link/unsafe-component-lifecycles for details.\n\n' + '* Move code from componentWillMount to componentDidMount (preferred in most cases) ' + 'or the constructor.\n' + '\nPlease update the following components: %s', _componentName4);
-
-	              didWarnAboutDeprecatedWillMount[_componentName4] = true;
-	            }
-	          }
-	        } // In order to support react-lifecycles-compat polyfilled components,
-	        // Unsafe lifecycles should not be invoked for any component with the new gDSFP.
-
-
-	        if (typeof Component.getDerivedStateFromProps !== 'function') {
-	          inst.componentWillMount();
-	        }
-	      }
-
-	      if (typeof inst.UNSAFE_componentWillMount === 'function' && typeof Component.getDerivedStateFromProps !== 'function') {
-	        // In order to support react-lifecycles-compat polyfilled components,
-	        // Unsafe lifecycles should not be invoked for any component with the new gDSFP.
-	        inst.UNSAFE_componentWillMount();
-	      }
-
-	      if (queue.length) {
-	        var oldQueue = queue;
-	        var oldReplace = replace;
-	        queue = null;
-	        replace = false;
-
-	        if (oldReplace && oldQueue.length === 1) {
-	          inst.state = oldQueue[0];
-	        } else {
-	          var nextState = oldReplace ? oldQueue[0] : inst.state;
-	          var dontMutate = true;
-
-	          for (var i = oldReplace ? 1 : 0; i < oldQueue.length; i++) {
-	            var partial = oldQueue[i];
-
-	            var _partialState = typeof partial === 'function' ? partial.call(inst, nextState, element.props, publicContext) : partial;
-
-	            if (_partialState != null) {
-	              if (dontMutate) {
-	                dontMutate = false;
-	                nextState = _assign({}, nextState, _partialState);
-	              } else {
-	                _assign(nextState, _partialState);
-	              }
-	            }
-	          }
-
-	          inst.state = nextState;
-	        }
-	      } else {
-	        queue = null;
-	      }
-	    }
-
-	    child = inst.render();
-
-	    {
-	      if (child === undefined && inst.render._isMockFunction) {
-	        // This is probably bad practice. Consider warning here and
-	        // deprecating this convenience.
-	        child = null;
-	      }
-	    }
-
-	    validateRenderResult(child, Component);
-	    var childContext;
-
-	    {
-	      if (typeof inst.getChildContext === 'function') {
-	        var _childContextTypes = Component.childContextTypes;
-
-	        if (typeof _childContextTypes === 'object') {
-	          childContext = inst.getChildContext();
-
-	          for (var contextKey in childContext) {
-	            if (!(contextKey in _childContextTypes)) {
-	              {
-	                throw Error( (getComponentName(Component) || 'Unknown') + ".getChildContext(): key \"" + contextKey + "\" is not defined in childContextTypes." );
-	              }
-	            }
-	          }
-	        } else {
-	          {
-	            error('%s.getChildContext(): childContextTypes must be defined in order to ' + 'use getChildContext().', getComponentName(Component) || 'Unknown');
-	          }
-	        }
-	      }
-
-	      if (childContext) {
-	        context = _assign({}, context, childContext);
-	      }
-	    }
+	    var childString = Object.prototype.toString.call(node);
+	    throw new Error("Objects are not valid as a React child (found: " + (childString === '[object Object]' ? 'object with keys {' + Object.keys(node).join(', ') + '}' : childString) + "). " + 'If you meant to render a collection of children, use an array ' + 'instead.');
 	  }
 
-	  return {
-	    child: child,
-	    context: context
-	  };
+	  if (typeof node === 'string') {
+	    var segment = task.blockedSegment;
+	    segment.lastPushedText = pushTextInstance$1(task.blockedSegment.chunks, node, request.responseState, segment.lastPushedText);
+	    return;
+	  }
+
+	  if (typeof node === 'number') {
+	    var _segment = task.blockedSegment;
+	    _segment.lastPushedText = pushTextInstance$1(task.blockedSegment.chunks, '' + node, request.responseState, _segment.lastPushedText);
+	    return;
+	  }
+
+	  {
+	    if (typeof node === 'function') {
+	      error('Functions are not valid as a React child. This may happen if ' + 'you return a Component instead of <Component /> from render. ' + 'Or maybe you meant to call this function rather than return it.');
+	    }
+	  }
 	}
 
-	var ReactDOMServerRenderer = /*#__PURE__*/function () {
-	  // TODO: type this more strictly:
-	  // DEV-only
-	  function ReactDOMServerRenderer(children, makeStaticMarkup, options) {
-	    var flatChildren = flattenTopLevelChildren(children);
-	    var topFrame = {
-	      type: null,
-	      // Assume all trees start in the HTML namespace (not totally true, but
-	      // this is what we did historically)
-	      domNamespace: Namespaces.html,
-	      children: flatChildren,
-	      childIndex: 0,
-	      context: emptyObject,
-	      footer: ''
-	    };
+	function renderChildrenArray(request, task, children) {
+	  var totalChildren = children.length;
 
-	    {
-	      topFrame.debugElementStack = [];
-	    }
-
-	    this.threadID = allocThreadID();
-	    this.stack = [topFrame];
-	    this.exhausted = false;
-	    this.currentSelectValue = null;
-	    this.previousWasTextNode = false;
-	    this.makeStaticMarkup = makeStaticMarkup;
-	    this.suspenseDepth = 0; // Context (new API)
-
-	    this.contextIndex = -1;
-	    this.contextStack = [];
-	    this.contextValueStack = []; // useOpaqueIdentifier ID
-
-	    this.uniqueID = 0;
-	    this.identifierPrefix = options && options.identifierPrefix || '';
-
-	    {
-	      this.contextProviderStack = [];
-	    }
-	  }
-
-	  var _proto = ReactDOMServerRenderer.prototype;
-
-	  _proto.destroy = function destroy() {
-	    if (!this.exhausted) {
-	      this.exhausted = true;
-	      this.clearProviders();
-	      freeThreadID(this.threadID);
-	    }
-	  }
-	  /**
-	   * Note: We use just two stacks regardless of how many context providers you have.
-	   * Providers are always popped in the reverse order to how they were pushed
-	   * so we always know on the way down which provider you'll encounter next on the way up.
-	   * On the way down, we push the current provider, and its context value *before*
-	   * we mutated it, onto the stacks. Therefore, on the way up, we always know which
-	   * provider needs to be "restored" to which value.
-	   * https://github.com/facebook/react/pull/12985#issuecomment-396301248
-	   */
-	  ;
-
-	  _proto.pushProvider = function pushProvider(provider) {
-	    var index = ++this.contextIndex;
-	    var context = provider.type._context;
-	    var threadID = this.threadID;
-	    validateContextBounds(context, threadID);
-	    var previousValue = context[threadID]; // Remember which value to restore this context to on our way up.
-
-	    this.contextStack[index] = context;
-	    this.contextValueStack[index] = previousValue;
-
-	    {
-	      // Only used for push/pop mismatch warnings.
-	      this.contextProviderStack[index] = provider;
-	    } // Mutate the current value.
-
-
-	    context[threadID] = provider.props.value;
-	  };
-
-	  _proto.popProvider = function popProvider(provider) {
-	    var index = this.contextIndex;
-
-	    {
-	      if (index < 0 || provider !== this.contextProviderStack[index]) {
-	        error('Unexpected pop.');
-	      }
-	    }
-
-	    var context = this.contextStack[index];
-	    var previousValue = this.contextValueStack[index]; // "Hide" these null assignments from Flow by using `any`
-	    // because conceptually they are deletions--as long as we
-	    // promise to never access values beyond `this.contextIndex`.
-
-	    this.contextStack[index] = null;
-	    this.contextValueStack[index] = null;
-
-	    {
-	      this.contextProviderStack[index] = null;
-	    }
-
-	    this.contextIndex--; // Restore to the previous value we stored as we were walking down.
-	    // We've already verified that this context has been expanded to accommodate
-	    // this thread id, so we don't need to do it again.
-
-	    context[this.threadID] = previousValue;
-	  };
-
-	  _proto.clearProviders = function clearProviders() {
-	    // Restore any remaining providers on the stack to previous values
-	    for (var index = this.contextIndex; index >= 0; index--) {
-	      var context = this.contextStack[index];
-	      var previousValue = this.contextValueStack[index];
-	      context[this.threadID] = previousValue;
-	    }
-	  };
-
-	  _proto.read = function read(bytes) {
-	    if (this.exhausted) {
-	      return null;
-	    }
-
-	    var prevPartialRenderer = currentPartialRenderer;
-	    setCurrentPartialRenderer(this);
-	    var prevDispatcher = ReactCurrentDispatcher$1.current;
-	    ReactCurrentDispatcher$1.current = Dispatcher;
+	  for (var i = 0; i < totalChildren; i++) {
+	    var prevTreeContext = task.treeContext;
+	    task.treeContext = pushTreeContext(prevTreeContext, totalChildren, i);
 
 	    try {
-	      // Markup generated within <Suspense> ends up buffered until we know
-	      // nothing in that boundary suspended
-	      var out = [''];
-	      var suspended = false;
-
-	      while (out[0].length < bytes) {
-	        if (this.stack.length === 0) {
-	          this.exhausted = true;
-	          freeThreadID(this.threadID);
-	          break;
-	        }
-
-	        var frame = this.stack[this.stack.length - 1];
-
-	        if (suspended || frame.childIndex >= frame.children.length) {
-	          var footer = frame.footer;
-
-	          if (footer !== '') {
-	            this.previousWasTextNode = false;
-	          }
-
-	          this.stack.pop();
-
-	          if (frame.type === 'select') {
-	            this.currentSelectValue = null;
-	          } else if (frame.type != null && frame.type.type != null && frame.type.type.$$typeof === REACT_PROVIDER_TYPE) {
-	            var provider = frame.type;
-	            this.popProvider(provider);
-	          } else if (frame.type === REACT_SUSPENSE_TYPE) {
-	            this.suspenseDepth--;
-	            var buffered = out.pop();
-
-	            if (suspended) {
-	              suspended = false; // If rendering was suspended at this boundary, render the fallbackFrame
-
-	              var fallbackFrame = frame.fallbackFrame;
-
-	              if (!fallbackFrame) {
-	                {
-	                  throw Error(true ? "ReactDOMServer did not find an internal fallback frame for Suspense. This is a bug in React. Please file an issue." : formatProdErrorMessage(303));
-	                }
-	              }
-
-	              this.stack.push(fallbackFrame);
-	              out[this.suspenseDepth] += '<!--$!-->'; // Skip flushing output since we're switching to the fallback
-
-	              continue;
-	            } else {
-	              out[this.suspenseDepth] += buffered;
-	            }
-	          } // Flush output
-
-
-	          out[this.suspenseDepth] += footer;
-	          continue;
-	        }
-
-	        var child = frame.children[frame.childIndex++];
-	        var outBuffer = '';
-
-	        if (true) {
-	          pushCurrentDebugStack(this.stack); // We're starting work on this frame, so reset its inner stack.
-
-	          frame.debugElementStack.length = 0;
-	        }
-
-	        try {
-	          outBuffer += this.render(child, frame.context, frame.domNamespace);
-	        } catch (err) {
-	          if (err != null && typeof err.then === 'function') {
-	            if (enableSuspenseServerRenderer) ; else {
-	              if (!false) {
-	                {
-	                  throw Error(true ? "ReactDOMServer does not yet support Suspense." : formatProdErrorMessage(294));
-	                }
-	              }
-	            }
-	          } else {
-	            throw err;
-	          }
-	        } finally {
-	          if (true) {
-	            popCurrentDebugStack();
-	          }
-	        }
-
-	        if (out.length <= this.suspenseDepth) {
-	          out.push('');
-	        }
-
-	        out[this.suspenseDepth] += outBuffer;
-	      }
-
-	      return out[0];
+	      // We need to use the non-destructive form so that we can safely pop back
+	      // up and render the sibling if something suspends.
+	      renderNode(request, task, children[i]);
 	    } finally {
-	      ReactCurrentDispatcher$1.current = prevDispatcher;
-	      setCurrentPartialRenderer(prevPartialRenderer);
-	      resetHooksState();
+	      task.treeContext = prevTreeContext;
 	    }
-	  };
-
-	  _proto.render = function render(child, context, parentNamespace) {
-	    if (typeof child === 'string' || typeof child === 'number') {
-	      var text = '' + child;
-
-	      if (text === '') {
-	        return '';
-	      }
-
-	      if (this.makeStaticMarkup) {
-	        return escapeTextForBrowser(text);
-	      }
-
-	      if (this.previousWasTextNode) {
-	        return '<!-- -->' + escapeTextForBrowser(text);
-	      }
-
-	      this.previousWasTextNode = true;
-	      return escapeTextForBrowser(text);
-	    } else {
-	      var nextChild;
-
-	      var _resolve = resolve(child, context, this.threadID);
-
-	      nextChild = _resolve.child;
-	      context = _resolve.context;
-
-	      if (nextChild === null || nextChild === false) {
-	        return '';
-	      } else if (!React.isValidElement(nextChild)) {
-	        if (nextChild != null && nextChild.$$typeof != null) {
-	          // Catch unexpected special types early.
-	          var $$typeof = nextChild.$$typeof;
-
-	          if (!($$typeof !== REACT_PORTAL_TYPE)) {
-	            {
-	              throw Error( "Portals are not currently supported by the server renderer. Render them conditionally so that they only appear on the client render." );
-	            }
-	          } // Catch-all to prevent an infinite loop if React.Children.toArray() supports some new type.
-
-
-	          {
-	            {
-	              throw Error( "Unknown element-like object type: " + $$typeof.toString() + ". This is likely a bug in React. Please file an issue." );
-	            }
-	          }
-	        }
-
-	        var nextChildren = toArray(nextChild);
-	        var frame = {
-	          type: null,
-	          domNamespace: parentNamespace,
-	          children: nextChildren,
-	          childIndex: 0,
-	          context: context,
-	          footer: ''
-	        };
-
-	        {
-	          frame.debugElementStack = [];
-	        }
-
-	        this.stack.push(frame);
-	        return '';
-	      } // Safe because we just checked it's an element.
-
-
-	      var nextElement = nextChild;
-	      var elementType = nextElement.type;
-
-	      if (typeof elementType === 'string') {
-	        return this.renderDOM(nextElement, context, parentNamespace);
-	      }
-
-	      switch (elementType) {
-	        // TODO: LegacyHidden acts the same as a fragment. This only works
-	        // because we currently assume that every instance of LegacyHidden is
-	        // accompanied by a host component wrapper. In the hidden mode, the host
-	        // component is given a `hidden` attribute, which ensures that the
-	        // initial HTML is not visible. To support the use of LegacyHidden as a
-	        // true fragment, without an extra DOM node, we would have to hide the
-	        // initial HTML in some other way.
-	        case REACT_LEGACY_HIDDEN_TYPE:
-	        case REACT_DEBUG_TRACING_MODE_TYPE:
-	        case REACT_STRICT_MODE_TYPE:
-	        case REACT_PROFILER_TYPE:
-	        case REACT_SUSPENSE_LIST_TYPE:
-	        case REACT_FRAGMENT_TYPE:
-	          {
-	            var _nextChildren = toArray(nextChild.props.children);
-
-	            var _frame = {
-	              type: null,
-	              domNamespace: parentNamespace,
-	              children: _nextChildren,
-	              childIndex: 0,
-	              context: context,
-	              footer: ''
-	            };
-
-	            {
-	              _frame.debugElementStack = [];
-	            }
-
-	            this.stack.push(_frame);
-	            return '';
-	          }
-
-	        case REACT_SUSPENSE_TYPE:
-	          {
-	            {
-	              {
-	                {
-	                  throw Error( "ReactDOMServer does not yet support Suspense." );
-	                }
-	              }
-	            }
-	          }
-	        // eslint-disable-next-line-no-fallthrough
-
-	        case REACT_SCOPE_TYPE:
-	          {
-
-	            {
-	              {
-	                throw Error( "ReactDOMServer does not yet support scope components." );
-	              }
-	            }
-	          }
-	      }
-
-	      if (typeof elementType === 'object' && elementType !== null) {
-	        switch (elementType.$$typeof) {
-	          case REACT_FORWARD_REF_TYPE:
-	            {
-	              var element = nextChild;
-
-	              var _nextChildren5;
-
-	              var componentIdentity = {};
-	              prepareToUseHooks(componentIdentity);
-	              _nextChildren5 = elementType.render(element.props, element.ref);
-	              _nextChildren5 = finishHooks(elementType.render, element.props, _nextChildren5, element.ref);
-	              _nextChildren5 = toArray(_nextChildren5);
-	              var _frame5 = {
-	                type: null,
-	                domNamespace: parentNamespace,
-	                children: _nextChildren5,
-	                childIndex: 0,
-	                context: context,
-	                footer: ''
-	              };
-
-	              {
-	                _frame5.debugElementStack = [];
-	              }
-
-	              this.stack.push(_frame5);
-	              return '';
-	            }
-
-	          case REACT_MEMO_TYPE:
-	            {
-	              var _element = nextChild;
-	              var _nextChildren6 = [React.createElement(elementType.type, _assign({
-	                ref: _element.ref
-	              }, _element.props))];
-	              var _frame6 = {
-	                type: null,
-	                domNamespace: parentNamespace,
-	                children: _nextChildren6,
-	                childIndex: 0,
-	                context: context,
-	                footer: ''
-	              };
-
-	              {
-	                _frame6.debugElementStack = [];
-	              }
-
-	              this.stack.push(_frame6);
-	              return '';
-	            }
-
-	          case REACT_PROVIDER_TYPE:
-	            {
-	              var provider = nextChild;
-	              var nextProps = provider.props;
-
-	              var _nextChildren7 = toArray(nextProps.children);
-
-	              var _frame7 = {
-	                type: provider,
-	                domNamespace: parentNamespace,
-	                children: _nextChildren7,
-	                childIndex: 0,
-	                context: context,
-	                footer: ''
-	              };
-
-	              {
-	                _frame7.debugElementStack = [];
-	              }
-
-	              this.pushProvider(provider);
-	              this.stack.push(_frame7);
-	              return '';
-	            }
-
-	          case REACT_CONTEXT_TYPE:
-	            {
-	              var reactContext = nextChild.type; // The logic below for Context differs depending on PROD or DEV mode. In
-	              // DEV mode, we create a separate object for Context.Consumer that acts
-	              // like a proxy to Context. This proxy object adds unnecessary code in PROD
-	              // so we use the old behaviour (Context.Consumer references Context) to
-	              // reduce size and overhead. The separate object references context via
-	              // a property called "_context", which also gives us the ability to check
-	              // in DEV mode if this property exists or not and warn if it does not.
-
-	              {
-	                if (reactContext._context === undefined) {
-	                  // This may be because it's a Context (rather than a Consumer).
-	                  // Or it may be because it's older React where they're the same thing.
-	                  // We only want to warn if we're sure it's a new React.
-	                  if (reactContext !== reactContext.Consumer) {
-	                    if (!hasWarnedAboutUsingContextAsConsumer) {
-	                      hasWarnedAboutUsingContextAsConsumer = true;
-
-	                      error('Rendering <Context> directly is not supported and will be removed in ' + 'a future major release. Did you mean to render <Context.Consumer> instead?');
-	                    }
-	                  }
-	                } else {
-	                  reactContext = reactContext._context;
-	                }
-	              }
-
-	              var _nextProps = nextChild.props;
-	              var threadID = this.threadID;
-	              validateContextBounds(reactContext, threadID);
-	              var nextValue = reactContext[threadID];
-
-	              var _nextChildren8 = toArray(_nextProps.children(nextValue));
-
-	              var _frame8 = {
-	                type: nextChild,
-	                domNamespace: parentNamespace,
-	                children: _nextChildren8,
-	                childIndex: 0,
-	                context: context,
-	                footer: ''
-	              };
-
-	              {
-	                _frame8.debugElementStack = [];
-	              }
-
-	              this.stack.push(_frame8);
-	              return '';
-	            }
-	          // eslint-disable-next-line-no-fallthrough
-
-	          case REACT_FUNDAMENTAL_TYPE:
-	            {
-
-	              {
-	                {
-	                  throw Error( "ReactDOMServer does not yet support the fundamental API." );
-	                }
-	              }
-	            }
-	          // eslint-disable-next-line-no-fallthrough
-
-	          case REACT_LAZY_TYPE:
-	            {
-	              var _element2 = nextChild;
-	              var lazyComponent = nextChild.type; // Attempt to initialize lazy component regardless of whether the
-	              // suspense server-side renderer is enabled so synchronously
-	              // resolved constructors are supported.
-
-	              var payload = lazyComponent._payload;
-	              var init = lazyComponent._init;
-	              var result = init(payload);
-	              var _nextChildren10 = [React.createElement(result, _assign({
-	                ref: _element2.ref
-	              }, _element2.props))];
-	              var _frame10 = {
-	                type: null,
-	                domNamespace: parentNamespace,
-	                children: _nextChildren10,
-	                childIndex: 0,
-	                context: context,
-	                footer: ''
-	              };
-
-	              {
-	                _frame10.debugElementStack = [];
-	              }
-
-	              this.stack.push(_frame10);
-	              return '';
-	            }
-	        }
-	      }
-
-	      var info = '';
-
-	      {
-	        var owner = nextElement._owner;
-
-	        if (elementType === undefined || typeof elementType === 'object' && elementType !== null && Object.keys(elementType).length === 0) {
-	          info += ' You likely forgot to export your component from the file ' + "it's defined in, or you might have mixed up default and " + 'named imports.';
-	        }
-
-	        var ownerName = owner ? getComponentName(owner) : null;
-
-	        if (ownerName) {
-	          info += '\n\nCheck the render method of `' + ownerName + '`.';
-	        }
-	      }
-
-	      {
-	        {
-	          throw Error( "Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: " + (elementType == null ? elementType : typeof elementType) + "." + info );
-	        }
-	      }
-	    }
-	  };
-
-	  _proto.renderDOM = function renderDOM(element, context, parentNamespace) {
-	    var tag = element.type.toLowerCase();
-	    var namespace = parentNamespace;
-
-	    if (parentNamespace === Namespaces.html) {
-	      namespace = getIntrinsicNamespace(tag);
-	    }
-
-	    {
-	      if (namespace === Namespaces.html) {
-	        // Should this check be gated by parent namespace? Not sure we want to
-	        // allow <SVG> or <mATH>.
-	        if (tag !== element.type) {
-	          error('<%s /> is using incorrect casing. ' + 'Use PascalCase for React components, ' + 'or lowercase for HTML elements.', element.type);
-	        }
-	      }
-	    }
-
-	    validateDangerousTag(tag);
-	    var props = element.props;
-
-	    if (tag === 'input') {
-	      {
-	        checkControlledValueProps('input', props);
-
-	        if (props.checked !== undefined && props.defaultChecked !== undefined && !didWarnDefaultChecked) {
-	          error('%s contains an input of type %s with both checked and defaultChecked props. ' + 'Input elements must be either controlled or uncontrolled ' + '(specify either the checked prop, or the defaultChecked prop, but not ' + 'both). Decide between using a controlled or uncontrolled input ' + 'element and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components', 'A component', props.type);
-
-	          didWarnDefaultChecked = true;
-	        }
-
-	        if (props.value !== undefined && props.defaultValue !== undefined && !didWarnDefaultInputValue) {
-	          error('%s contains an input of type %s with both value and defaultValue props. ' + 'Input elements must be either controlled or uncontrolled ' + '(specify either the value prop, or the defaultValue prop, but not ' + 'both). Decide between using a controlled or uncontrolled input ' + 'element and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components', 'A component', props.type);
-
-	          didWarnDefaultInputValue = true;
-	        }
-	      }
-
-	      props = _assign({
-	        type: undefined
-	      }, props, {
-	        defaultChecked: undefined,
-	        defaultValue: undefined,
-	        value: props.value != null ? props.value : props.defaultValue,
-	        checked: props.checked != null ? props.checked : props.defaultChecked
-	      });
-	    } else if (tag === 'textarea') {
-	      {
-	        checkControlledValueProps('textarea', props);
-
-	        if (props.value !== undefined && props.defaultValue !== undefined && !didWarnDefaultTextareaValue) {
-	          error('Textarea elements must be either controlled or uncontrolled ' + '(specify either the value prop, or the defaultValue prop, but not ' + 'both). Decide between using a controlled or uncontrolled textarea ' + 'and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components');
-
-	          didWarnDefaultTextareaValue = true;
-	        }
-	      }
-
-	      var initialValue = props.value;
-
-	      if (initialValue == null) {
-	        var defaultValue = props.defaultValue; // TODO (yungsters): Remove support for children content in <textarea>.
-
-	        var textareaChildren = props.children;
-
-	        if (textareaChildren != null) {
-	          {
-	            error('Use the `defaultValue` or `value` props instead of setting ' + 'children on <textarea>.');
-	          }
-
-	          if (!(defaultValue == null)) {
-	            {
-	              throw Error( "If you supply `defaultValue` on a <textarea>, do not pass children." );
-	            }
-	          }
-
-	          if (Array.isArray(textareaChildren)) {
-	            if (!(textareaChildren.length <= 1)) {
-	              {
-	                throw Error( "<textarea> can only have at most one child." );
-	              }
-	            }
-
-	            textareaChildren = textareaChildren[0];
-	          }
-
-	          defaultValue = '' + textareaChildren;
-	        }
-
-	        if (defaultValue == null) {
-	          defaultValue = '';
-	        }
-
-	        initialValue = defaultValue;
-	      }
-
-	      props = _assign({}, props, {
-	        value: undefined,
-	        children: '' + initialValue
-	      });
-	    } else if (tag === 'select') {
-	      {
-	        checkControlledValueProps('select', props);
-
-	        for (var i = 0; i < valuePropNames.length; i++) {
-	          var propName = valuePropNames[i];
-
-	          if (props[propName] == null) {
-	            continue;
-	          }
-
-	          var isArray = Array.isArray(props[propName]);
-
-	          if (props.multiple && !isArray) {
-	            error('The `%s` prop supplied to <select> must be an array if ' + '`multiple` is true.', propName);
-	          } else if (!props.multiple && isArray) {
-	            error('The `%s` prop supplied to <select> must be a scalar ' + 'value if `multiple` is false.', propName);
-	          }
-	        }
-
-	        if (props.value !== undefined && props.defaultValue !== undefined && !didWarnDefaultSelectValue) {
-	          error('Select elements must be either controlled or uncontrolled ' + '(specify either the value prop, or the defaultValue prop, but not ' + 'both). Decide between using a controlled or uncontrolled select ' + 'element and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components');
-
-	          didWarnDefaultSelectValue = true;
-	        }
-	      }
-
-	      this.currentSelectValue = props.value != null ? props.value : props.defaultValue;
-	      props = _assign({}, props, {
-	        value: undefined
-	      });
-	    } else if (tag === 'option') {
-	      var selected = null;
-	      var selectValue = this.currentSelectValue;
-	      var optionChildren = flattenOptionChildren(props.children);
-
-	      if (selectValue != null) {
-	        var value;
-
-	        if (props.value != null) {
-	          value = props.value + '';
-	        } else {
-	          value = optionChildren;
-	        }
-
-	        selected = false;
-
-	        if (Array.isArray(selectValue)) {
-	          // multiple
-	          for (var j = 0; j < selectValue.length; j++) {
-	            if ('' + selectValue[j] === value) {
-	              selected = true;
-	              break;
-	            }
-	          }
-	        } else {
-	          selected = '' + selectValue === value;
-	        }
-
-	        props = _assign({
-	          selected: undefined,
-	          children: undefined
-	        }, props, {
-	          selected: selected,
-	          children: optionChildren
-	        });
-	      }
-	    }
-
-	    {
-	      validatePropertiesInDevelopment(tag, props);
-	    }
-
-	    assertValidProps(tag, props);
-	    var out = createOpenTagMarkup(element.type, tag, props, namespace, this.makeStaticMarkup, this.stack.length === 1);
-	    var footer = '';
-
-	    if (omittedCloseTags.hasOwnProperty(tag)) {
-	      out += '/>';
-	    } else {
-	      out += '>';
-	      footer = '</' + element.type + '>';
-	    }
-
-	    var children;
-	    var innerMarkup = getNonChildrenInnerMarkup(props);
-
-	    if (innerMarkup != null) {
-	      children = [];
-
-	      if (newlineEatingTags.hasOwnProperty(tag) && innerMarkup.charAt(0) === '\n') {
-	        // text/html ignores the first character in these tags if it's a newline
-	        // Prefer to break application/xml over text/html (for now) by adding
-	        // a newline specifically to get eaten by the parser. (Alternately for
-	        // textareas, replacing "^\n" with "\r\n" doesn't get eaten, and the first
-	        // \r is normalized out by HTMLTextAreaElement#value.)
-	        // See: <http://www.w3.org/TR/html-polyglot/#newlines-in-textarea-and-pre>
-	        // See: <http://www.w3.org/TR/html5/syntax.html#element-restrictions>
-	        // See: <http://www.w3.org/TR/html5/syntax.html#newlines>
-	        // See: Parsing of "textarea" "listing" and "pre" elements
-	        //  from <http://www.w3.org/TR/html5/syntax.html#parsing-main-inbody>
-	        out += '\n';
-	      }
-
-	      out += innerMarkup;
-	    } else {
-	      children = toArray(props.children);
-	    }
-
-	    var frame = {
-	      domNamespace: getChildNamespace(parentNamespace, element.type),
-	      type: tag,
-	      children: children,
-	      childIndex: 0,
-	      context: context,
-	      footer: footer
-	    };
-
-	    {
-	      frame.debugElementStack = [];
-	    }
-
-	    this.stack.push(frame);
-	    this.previousWasTextNode = false;
-	    return out;
-	  };
-
-	  return ReactDOMServerRenderer;
-	}();
-
-	/**
-	 * Render a ReactElement to its initial HTML. This should only be used on the
-	 * server.
-	 * See https://reactjs.org/docs/react-dom-server.html#rendertostring
-	 */
-
-	function renderToString(element, options) {
-	  var renderer = new ReactDOMServerRenderer(element, false, options);
-
-	  try {
-	    var markup = renderer.read(Infinity);
-	    return markup;
-	  } finally {
-	    renderer.destroy();
 	  }
 	}
-	/**
-	 * Similar to renderToString, except this doesn't create extra DOM attributes
-	 * such as data-react-id that React uses internally.
-	 * See https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup
-	 */
 
-	function renderToStaticMarkup(element, options) {
-	  var renderer = new ReactDOMServerRenderer(element, true, options);
+	function spawnNewSuspendedTask(request, task, x) {
+	  // Something suspended, we'll need to create a new segment and resolve it later.
+	  var segment = task.blockedSegment;
+	  var insertionIndex = segment.chunks.length;
+	  var newSegment = createPendingSegment(request, insertionIndex, null, segment.formatContext, // Adopt the parent segment's leading text embed
+	  segment.lastPushedText, // Assume we are text embedded at the trailing edge
+	  true);
+	  segment.children.push(newSegment); // Reset lastPushedText for current Segment since the new Segment "consumed" it
+
+	  segment.lastPushedText = false;
+	  var newTask = createTask(request, task.node, task.blockedBoundary, newSegment, task.abortSet, task.legacyContext, task.context, task.treeContext);
+
+	  {
+	    if (task.componentStack !== null) {
+	      // We pop one task off the stack because the node that suspended will be tried again,
+	      // which will add it back onto the stack.
+	      newTask.componentStack = task.componentStack.parent;
+	    }
+	  }
+
+	  var ping = newTask.ping;
+	  x.then(ping, ping);
+	} // This is a non-destructive form of rendering a node. If it suspends it spawns
+	// a new task and restores the context of this task to what it was before.
+
+
+	function renderNode(request, task, node) {
+	  // TODO: Store segment.children.length here and reset it in case something
+	  // suspended partially through writing something.
+	  // Snapshot the current context in case something throws to interrupt the
+	  // process.
+	  var previousFormatContext = task.blockedSegment.formatContext;
+	  var previousLegacyContext = task.legacyContext;
+	  var previousContext = task.context;
+	  var previousComponentStack = null;
+
+	  {
+	    previousComponentStack = task.componentStack;
+	  }
 
 	  try {
-	    var markup = renderer.read(Infinity);
-	    return markup;
-	  } finally {
-	    renderer.destroy();
+	    return renderNodeDestructive(request, task, node);
+	  } catch (x) {
+	    resetHooksState();
+
+	    if (typeof x === 'object' && x !== null && typeof x.then === 'function') {
+	      spawnNewSuspendedTask(request, task, x); // Restore the context. We assume that this will be restored by the inner
+	      // functions in case nothing throws so we don't use "finally" here.
+
+	      task.blockedSegment.formatContext = previousFormatContext;
+	      task.legacyContext = previousLegacyContext;
+	      task.context = previousContext; // Restore all active ReactContexts to what they were before.
+
+	      switchContext(previousContext);
+
+	      {
+	        task.componentStack = previousComponentStack;
+	      }
+
+	      return;
+	    } else {
+	      // Restore the context. We assume that this will be restored by the inner
+	      // functions in case nothing throws so we don't use "finally" here.
+	      task.blockedSegment.formatContext = previousFormatContext;
+	      task.legacyContext = previousLegacyContext;
+	      task.context = previousContext; // Restore all active ReactContexts to what they were before.
+
+	      switchContext(previousContext);
+
+	      {
+	        task.componentStack = previousComponentStack;
+	      } // We assume that we don't need the correct context.
+	      // Let's terminate the rest of the tree and don't render any siblings.
+
+
+	      throw x;
+	    }
 	  }
+	}
+
+	function erroredTask(request, boundary, segment, error) {
+	  // Report the error to a global handler.
+	  var errorDigest = logRecoverableError(request, error);
+
+	  if (boundary === null) {
+	    fatalError(request, error);
+	  } else {
+	    boundary.pendingTasks--;
+
+	    if (!boundary.forceClientRender) {
+	      boundary.forceClientRender = true;
+	      boundary.errorDigest = errorDigest;
+
+	      {
+	        captureBoundaryErrorDetailsDev(boundary, error);
+	      } // Regardless of what happens next, this boundary won't be displayed,
+	      // so we can flush it, if the parent already flushed.
+
+
+	      if (boundary.parentFlushed) {
+	        // We don't have a preference where in the queue this goes since it's likely
+	        // to error on the client anyway. However, intentionally client-rendered
+	        // boundaries should be flushed earlier so that they can start on the client.
+	        // We reuse the same queue for errors.
+	        request.clientRenderedBoundaries.push(boundary);
+	      }
+	    }
+	  }
+
+	  request.allPendingTasks--;
+
+	  if (request.allPendingTasks === 0) {
+	    var onAllReady = request.onAllReady;
+	    onAllReady();
+	  }
+	}
+
+	function abortTaskSoft(task) {
+	  // This aborts task without aborting the parent boundary that it blocks.
+	  // It's used for when we didn't need this task to complete the tree.
+	  // If task was needed, then it should use abortTask instead.
+	  var request = this;
+	  var boundary = task.blockedBoundary;
+	  var segment = task.blockedSegment;
+	  segment.status = ABORTED;
+	  finishedTask(request, boundary, segment);
+	}
+
+	function abortTask(task, request, reason) {
+	  // This aborts the task and aborts the parent that it blocks, putting it into
+	  // client rendered mode.
+	  var boundary = task.blockedBoundary;
+	  var segment = task.blockedSegment;
+	  segment.status = ABORTED;
+
+	  if (boundary === null) {
+	    request.allPendingTasks--; // We didn't complete the root so we have nothing to show. We can close
+	    // the request;
+
+	    if (request.status !== CLOSED) {
+	      request.status = CLOSED;
+
+	      if (request.destination !== null) {
+	        close(request.destination);
+	      }
+	    }
+	  } else {
+	    boundary.pendingTasks--;
+
+	    if (!boundary.forceClientRender) {
+	      boundary.forceClientRender = true;
+
+	      var _error = reason === undefined ? new Error('The render was aborted by the server without a reason.') : reason;
+
+	      boundary.errorDigest = request.onError(_error);
+
+	      {
+	        var errorPrefix = 'The server did not finish this Suspense boundary: ';
+
+	        if (_error && typeof _error.message === 'string') {
+	          _error = errorPrefix + _error.message;
+	        } else {
+	          // eslint-disable-next-line react-internal/safe-string-coercion
+	          _error = errorPrefix + String(_error);
+	        }
+
+	        var previousTaskInDev = currentTaskInDEV;
+	        currentTaskInDEV = task;
+
+	        try {
+	          captureBoundaryErrorDetailsDev(boundary, _error);
+	        } finally {
+	          currentTaskInDEV = previousTaskInDev;
+	        }
+	      }
+
+	      if (boundary.parentFlushed) {
+	        request.clientRenderedBoundaries.push(boundary);
+	      }
+	    } // If this boundary was still pending then we haven't already cancelled its fallbacks.
+	    // We'll need to abort the fallbacks, which will also error that parent boundary.
+
+
+	    boundary.fallbackAbortableTasks.forEach(function (fallbackTask) {
+	      return abortTask(fallbackTask, request, reason);
+	    });
+	    boundary.fallbackAbortableTasks.clear();
+	    request.allPendingTasks--;
+
+	    if (request.allPendingTasks === 0) {
+	      var onAllReady = request.onAllReady;
+	      onAllReady();
+	    }
+	  }
+	}
+
+	function queueCompletedSegment(boundary, segment) {
+	  if (segment.chunks.length === 0 && segment.children.length === 1 && segment.children[0].boundary === null) {
+	    // This is an empty segment. There's nothing to write, so we can instead transfer the ID
+	    // to the child. That way any existing references point to the child.
+	    var childSegment = segment.children[0];
+	    childSegment.id = segment.id;
+	    childSegment.parentFlushed = true;
+
+	    if (childSegment.status === COMPLETED) {
+	      queueCompletedSegment(boundary, childSegment);
+	    }
+	  } else {
+	    var completedSegments = boundary.completedSegments;
+	    completedSegments.push(segment);
+	  }
+	}
+
+	function finishedTask(request, boundary, segment) {
+	  if (boundary === null) {
+	    if (segment.parentFlushed) {
+	      if (request.completedRootSegment !== null) {
+	        throw new Error('There can only be one root segment. This is a bug in React.');
+	      }
+
+	      request.completedRootSegment = segment;
+	    }
+
+	    request.pendingRootTasks--;
+
+	    if (request.pendingRootTasks === 0) {
+	      // We have completed the shell so the shell can't error anymore.
+	      request.onShellError = noop$1;
+	      var onShellReady = request.onShellReady;
+	      onShellReady();
+	    }
+	  } else {
+	    boundary.pendingTasks--;
+
+	    if (boundary.forceClientRender) ; else if (boundary.pendingTasks === 0) {
+	      // This must have been the last segment we were waiting on. This boundary is now complete.
+	      if (segment.parentFlushed) {
+	        // Our parent segment already flushed, so we need to schedule this segment to be emitted.
+	        // If it is a segment that was aborted, we'll write other content instead so we don't need
+	        // to emit it.
+	        if (segment.status === COMPLETED) {
+	          queueCompletedSegment(boundary, segment);
+	        }
+	      }
+
+	      if (boundary.parentFlushed) {
+	        // The segment might be part of a segment that didn't flush yet, but if the boundary's
+	        // parent flushed, we need to schedule the boundary to be emitted.
+	        request.completedBoundaries.push(boundary);
+	      } // We can now cancel any pending task on the fallback since we won't need to show it anymore.
+	      // This needs to happen after we read the parentFlushed flags because aborting can finish
+	      // work which can trigger user code, which can start flushing, which can change those flags.
+
+
+	      boundary.fallbackAbortableTasks.forEach(abortTaskSoft, request);
+	      boundary.fallbackAbortableTasks.clear();
+	    } else {
+	      if (segment.parentFlushed) {
+	        // Our parent already flushed, so we need to schedule this segment to be emitted.
+	        // If it is a segment that was aborted, we'll write other content instead so we don't need
+	        // to emit it.
+	        if (segment.status === COMPLETED) {
+	          queueCompletedSegment(boundary, segment);
+	          var completedSegments = boundary.completedSegments;
+
+	          if (completedSegments.length === 1) {
+	            // This is the first time since we last flushed that we completed anything.
+	            // We can schedule this boundary to emit its partially completed segments early
+	            // in case the parent has already been flushed.
+	            if (boundary.parentFlushed) {
+	              request.partialBoundaries.push(boundary);
+	            }
+	          }
+	        }
+	      }
+	    }
+	  }
+
+	  request.allPendingTasks--;
+
+	  if (request.allPendingTasks === 0) {
+	    // This needs to be called at the very end so that we can synchronously write the result
+	    // in the callback if needed.
+	    var onAllReady = request.onAllReady;
+	    onAllReady();
+	  }
+	}
+
+	function retryTask(request, task) {
+	  var segment = task.blockedSegment;
+
+	  if (segment.status !== PENDING) {
+	    // We completed this by other means before we had a chance to retry it.
+	    return;
+	  } // We restore the context to what it was when we suspended.
+	  // We don't restore it after we leave because it's likely that we'll end up
+	  // needing a very similar context soon again.
+
+
+	  switchContext(task.context);
+	  var prevTaskInDEV = null;
+
+	  {
+	    prevTaskInDEV = currentTaskInDEV;
+	    currentTaskInDEV = task;
+	  }
+
+	  try {
+	    // We call the destructive form that mutates this task. That way if something
+	    // suspends again, we can reuse the same task instead of spawning a new one.
+	    renderNodeDestructive(request, task, task.node);
+	    pushSegmentFinale$1(segment.chunks, request.responseState, segment.lastPushedText, segment.textEmbedded);
+	    task.abortSet.delete(task);
+	    segment.status = COMPLETED;
+	    finishedTask(request, task.blockedBoundary, segment);
+	  } catch (x) {
+	    resetHooksState();
+
+	    if (typeof x === 'object' && x !== null && typeof x.then === 'function') {
+	      // Something suspended again, let's pick it back up later.
+	      var ping = task.ping;
+	      x.then(ping, ping);
+	    } else {
+	      task.abortSet.delete(task);
+	      segment.status = ERRORED;
+	      erroredTask(request, task.blockedBoundary, segment, x);
+	    }
+	  } finally {
+	    {
+	      currentTaskInDEV = prevTaskInDEV;
+	    }
+	  }
+	}
+
+	function performWork(request) {
+	  if (request.status === CLOSED) {
+	    return;
+	  }
+
+	  var prevContext = getActiveContext();
+	  var prevDispatcher = ReactCurrentDispatcher$1.current;
+	  ReactCurrentDispatcher$1.current = Dispatcher;
+	  var prevGetCurrentStackImpl;
+
+	  {
+	    prevGetCurrentStackImpl = ReactDebugCurrentFrame$1.getCurrentStack;
+	    ReactDebugCurrentFrame$1.getCurrentStack = getCurrentStackInDEV;
+	  }
+
+	  var prevResponseState = currentResponseState;
+	  setCurrentResponseState(request.responseState);
+
+	  try {
+	    var pingedTasks = request.pingedTasks;
+	    var i;
+
+	    for (i = 0; i < pingedTasks.length; i++) {
+	      var task = pingedTasks[i];
+	      retryTask(request, task);
+	    }
+
+	    pingedTasks.splice(0, i);
+
+	    if (request.destination !== null) {
+	      flushCompletedQueues(request, request.destination);
+	    }
+	  } catch (error) {
+	    logRecoverableError(request, error);
+	    fatalError(request, error);
+	  } finally {
+	    setCurrentResponseState(prevResponseState);
+	    ReactCurrentDispatcher$1.current = prevDispatcher;
+
+	    {
+	      ReactDebugCurrentFrame$1.getCurrentStack = prevGetCurrentStackImpl;
+	    }
+
+	    if (prevDispatcher === Dispatcher) {
+	      // This means that we were in a reentrant work loop. This could happen
+	      // in a renderer that supports synchronous work like renderToString,
+	      // when it's called from within another renderer.
+	      // Normally we don't bother switching the contexts to their root/default
+	      // values when leaving because we'll likely need the same or similar
+	      // context again. However, when we're inside a synchronous loop like this
+	      // we'll to restore the context to what it was before returning.
+	      switchContext(prevContext);
+	    }
+	  }
+	}
+
+	function flushSubtree(request, destination, segment) {
+	  segment.parentFlushed = true;
+
+	  switch (segment.status) {
+	    case PENDING:
+	      {
+	        // We're emitting a placeholder for this segment to be filled in later.
+	        // Therefore we'll need to assign it an ID - to refer to it by.
+	        var segmentID = segment.id = request.nextSegmentId++; // When this segment finally completes it won't be embedded in text since it will flush separately
+
+	        segment.lastPushedText = false;
+	        segment.textEmbedded = false;
+	        return writePlaceholder(destination, request.responseState, segmentID);
+	      }
+
+	    case COMPLETED:
+	      {
+	        segment.status = FLUSHED;
+	        var r = true;
+	        var chunks = segment.chunks;
+	        var chunkIdx = 0;
+	        var children = segment.children;
+
+	        for (var childIdx = 0; childIdx < children.length; childIdx++) {
+	          var nextChild = children[childIdx]; // Write all the chunks up until the next child.
+
+	          for (; chunkIdx < nextChild.index; chunkIdx++) {
+	            writeChunk(destination, chunks[chunkIdx]);
+	          }
+
+	          r = flushSegment(request, destination, nextChild);
+	        } // Finally just write all the remaining chunks
+
+
+	        for (; chunkIdx < chunks.length - 1; chunkIdx++) {
+	          writeChunk(destination, chunks[chunkIdx]);
+	        }
+
+	        if (chunkIdx < chunks.length) {
+	          r = writeChunkAndReturn(destination, chunks[chunkIdx]);
+	        }
+
+	        return r;
+	      }
+
+	    default:
+	      {
+	        throw new Error('Aborted, errored or already flushed boundaries should not be flushed again. This is a bug in React.');
+	      }
+	  }
+	}
+
+	function flushSegment(request, destination, segment) {
+	  var boundary = segment.boundary;
+
+	  if (boundary === null) {
+	    // Not a suspense boundary.
+	    return flushSubtree(request, destination, segment);
+	  }
+
+	  boundary.parentFlushed = true; // This segment is a Suspense boundary. We need to decide whether to
+	  // emit the content or the fallback now.
+
+	  if (boundary.forceClientRender) {
+	    // Emit a client rendered suspense boundary wrapper.
+	    // We never queue the inner boundary so we'll never emit its content or partial segments.
+	    writeStartClientRenderedSuspenseBoundary$1(destination, request.responseState, boundary.errorDigest, boundary.errorMessage, boundary.errorComponentStack); // Flush the fallback.
+
+	    flushSubtree(request, destination, segment);
+	    return writeEndClientRenderedSuspenseBoundary$1(destination, request.responseState);
+	  } else if (boundary.pendingTasks > 0) {
+	    // This boundary is still loading. Emit a pending suspense boundary wrapper.
+	    // Assign an ID to refer to the future content by.
+	    boundary.rootSegmentID = request.nextSegmentId++;
+
+	    if (boundary.completedSegments.length > 0) {
+	      // If this is at least partially complete, we can queue it to be partially emitted early.
+	      request.partialBoundaries.push(boundary);
+	    } /// This is the first time we should have referenced this ID.
+
+
+	    var id = boundary.id = assignSuspenseBoundaryID(request.responseState);
+	    writeStartPendingSuspenseBoundary(destination, request.responseState, id); // Flush the fallback.
+
+	    flushSubtree(request, destination, segment);
+	    return writeEndPendingSuspenseBoundary(destination, request.responseState);
+	  } else if (boundary.byteSize > request.progressiveChunkSize) {
+	    // This boundary is large and will be emitted separately so that we can progressively show
+	    // other content. We add it to the queue during the flush because we have to ensure that
+	    // the parent flushes first so that there's something to inject it into.
+	    // We also have to make sure that it's emitted into the queue in a deterministic slot.
+	    // I.e. we can't insert it here when it completes.
+	    // Assign an ID to refer to the future content by.
+	    boundary.rootSegmentID = request.nextSegmentId++;
+	    request.completedBoundaries.push(boundary); // Emit a pending rendered suspense boundary wrapper.
+
+	    writeStartPendingSuspenseBoundary(destination, request.responseState, boundary.id); // Flush the fallback.
+
+	    flushSubtree(request, destination, segment);
+	    return writeEndPendingSuspenseBoundary(destination, request.responseState);
+	  } else {
+	    // We can inline this boundary's content as a complete boundary.
+	    writeStartCompletedSuspenseBoundary$1(destination, request.responseState);
+	    var completedSegments = boundary.completedSegments;
+
+	    if (completedSegments.length !== 1) {
+	      throw new Error('A previously unvisited boundary must have exactly one root segment. This is a bug in React.');
+	    }
+
+	    var contentSegment = completedSegments[0];
+	    flushSegment(request, destination, contentSegment);
+	    return writeEndCompletedSuspenseBoundary$1(destination, request.responseState);
+	  }
+	}
+
+	function flushClientRenderedBoundary(request, destination, boundary) {
+	  return writeClientRenderBoundaryInstruction(destination, request.responseState, boundary.id, boundary.errorDigest, boundary.errorMessage, boundary.errorComponentStack);
+	}
+
+	function flushSegmentContainer(request, destination, segment) {
+	  writeStartSegment(destination, request.responseState, segment.formatContext, segment.id);
+	  flushSegment(request, destination, segment);
+	  return writeEndSegment(destination, segment.formatContext);
+	}
+
+	function flushCompletedBoundary(request, destination, boundary) {
+	  var completedSegments = boundary.completedSegments;
+	  var i = 0;
+
+	  for (; i < completedSegments.length; i++) {
+	    var segment = completedSegments[i];
+	    flushPartiallyCompletedSegment(request, destination, boundary, segment);
+	  }
+
+	  completedSegments.length = 0;
+	  return writeCompletedBoundaryInstruction(destination, request.responseState, boundary.id, boundary.rootSegmentID);
+	}
+
+	function flushPartialBoundary(request, destination, boundary) {
+	  var completedSegments = boundary.completedSegments;
+	  var i = 0;
+
+	  for (; i < completedSegments.length; i++) {
+	    var segment = completedSegments[i];
+
+	    if (!flushPartiallyCompletedSegment(request, destination, boundary, segment)) {
+	      i++;
+	      completedSegments.splice(0, i); // Only write as much as the buffer wants. Something higher priority
+	      // might want to write later.
+
+	      return false;
+	    }
+	  }
+
+	  completedSegments.splice(0, i);
+	  return true;
+	}
+
+	function flushPartiallyCompletedSegment(request, destination, boundary, segment) {
+	  if (segment.status === FLUSHED) {
+	    // We've already flushed this inline.
+	    return true;
+	  }
+
+	  var segmentID = segment.id;
+
+	  if (segmentID === -1) {
+	    // This segment wasn't previously referred to. This happens at the root of
+	    // a boundary. We make kind of a leap here and assume this is the root.
+	    var rootSegmentID = segment.id = boundary.rootSegmentID;
+
+	    if (rootSegmentID === -1) {
+	      throw new Error('A root segment ID must have been assigned by now. This is a bug in React.');
+	    }
+
+	    return flushSegmentContainer(request, destination, segment);
+	  } else {
+	    flushSegmentContainer(request, destination, segment);
+	    return writeCompletedSegmentInstruction(destination, request.responseState, segmentID);
+	  }
+	}
+
+	function flushCompletedQueues(request, destination) {
+
+	  try {
+	    // The structure of this is to go through each queue one by one and write
+	    // until the sink tells us to stop. When we should stop, we still finish writing
+	    // that item fully and then yield. At that point we remove the already completed
+	    // items up until the point we completed them.
+	    // TODO: Emit preloading.
+	    // TODO: It's kind of unfortunate to keep checking this array after we've already
+	    // emitted the root.
+	    var completedRootSegment = request.completedRootSegment;
+
+	    if (completedRootSegment !== null && request.pendingRootTasks === 0) {
+	      flushSegment(request, destination, completedRootSegment);
+	      request.completedRootSegment = null;
+	      writeCompletedRoot(destination, request.responseState);
+	    } // We emit client rendering instructions for already emitted boundaries first.
+	    // This is so that we can signal to the client to start client rendering them as
+	    // soon as possible.
+
+
+	    var clientRenderedBoundaries = request.clientRenderedBoundaries;
+	    var i;
+
+	    for (i = 0; i < clientRenderedBoundaries.length; i++) {
+	      var boundary = clientRenderedBoundaries[i];
+
+	      if (!flushClientRenderedBoundary(request, destination, boundary)) {
+	        request.destination = null;
+	        i++;
+	        clientRenderedBoundaries.splice(0, i);
+	        return;
+	      }
+	    }
+
+	    clientRenderedBoundaries.splice(0, i); // Next we emit any complete boundaries. It's better to favor boundaries
+	    // that are completely done since we can actually show them, than it is to emit
+	    // any individual segments from a partially complete boundary.
+
+	    var completedBoundaries = request.completedBoundaries;
+
+	    for (i = 0; i < completedBoundaries.length; i++) {
+	      var _boundary = completedBoundaries[i];
+
+	      if (!flushCompletedBoundary(request, destination, _boundary)) {
+	        request.destination = null;
+	        i++;
+	        completedBoundaries.splice(0, i);
+	        return;
+	      }
+	    }
+
+	    completedBoundaries.splice(0, i); // Allow anything written so far to flush to the underlying sink before
+	    // we continue with lower priorities.
+
+	    completeWriting(destination);
+	    beginWriting(destination); // TODO: Here we'll emit data used by hydration.
+	    // Next we emit any segments of any boundaries that are partially complete
+	    // but not deeply complete.
+
+	    var partialBoundaries = request.partialBoundaries;
+
+	    for (i = 0; i < partialBoundaries.length; i++) {
+	      var _boundary2 = partialBoundaries[i];
+
+	      if (!flushPartialBoundary(request, destination, _boundary2)) {
+	        request.destination = null;
+	        i++;
+	        partialBoundaries.splice(0, i);
+	        return;
+	      }
+	    }
+
+	    partialBoundaries.splice(0, i); // Next we check the completed boundaries again. This may have had
+	    // boundaries added to it in case they were too larged to be inlined.
+	    // New ones might be added in this loop.
+
+	    var largeBoundaries = request.completedBoundaries;
+
+	    for (i = 0; i < largeBoundaries.length; i++) {
+	      var _boundary3 = largeBoundaries[i];
+
+	      if (!flushCompletedBoundary(request, destination, _boundary3)) {
+	        request.destination = null;
+	        i++;
+	        largeBoundaries.splice(0, i);
+	        return;
+	      }
+	    }
+
+	    largeBoundaries.splice(0, i);
+	  } finally {
+
+	    if (request.allPendingTasks === 0 && request.pingedTasks.length === 0 && request.clientRenderedBoundaries.length === 0 && request.completedBoundaries.length === 0 // We don't need to check any partially completed segments because
+	    // either they have pending task or they're complete.
+	    ) {
+	        {
+	          if (request.abortableTasks.size !== 0) {
+	            error('There was still abortable task at the root when we closed. This is a bug in React.');
+	          }
+	        } // We're done.
+
+
+	        close(destination);
+	      }
+	  }
+	}
+
+	function startWork(request) {
+	  scheduleWork(function () {
+	    return performWork(request);
+	  });
+	}
+	function startFlowing(request, destination) {
+	  if (request.status === CLOSING) {
+	    request.status = CLOSED;
+	    closeWithError(destination, request.fatalError);
+	    return;
+	  }
+
+	  if (request.status === CLOSED) {
+	    return;
+	  }
+
+	  if (request.destination !== null) {
+	    // We're already flowing.
+	    return;
+	  }
+
+	  request.destination = destination;
+
+	  try {
+	    flushCompletedQueues(request, destination);
+	  } catch (error) {
+	    logRecoverableError(request, error);
+	    fatalError(request, error);
+	  }
+	} // This is called to early terminate a request. It puts all pending boundaries in client rendered state.
+
+	function abort(request, reason) {
+	  try {
+	    var abortableTasks = request.abortableTasks;
+	    abortableTasks.forEach(function (task) {
+	      return abortTask(task, request, reason);
+	    });
+	    abortableTasks.clear();
+
+	    if (request.destination !== null) {
+	      flushCompletedQueues(request, request.destination);
+	    }
+	  } catch (error) {
+	    logRecoverableError(request, error);
+	    fatalError(request, error);
+	  }
+	}
+
+	function onError() {// Non-fatal errors are ignored.
+	}
+
+	function renderToStringImpl(children, options, generateStaticMarkup, abortReason) {
+	  var didFatal = false;
+	  var fatalError = null;
+	  var result = '';
+	  var destination = {
+	    push: function (chunk) {
+	      if (chunk !== null) {
+	        result += chunk;
+	      }
+
+	      return true;
+	    },
+	    destroy: function (error) {
+	      didFatal = true;
+	      fatalError = error;
+	    }
+	  };
+	  var readyToStream = false;
+
+	  function onShellReady() {
+	    readyToStream = true;
+	  }
+
+	  var request = createRequest(children, createResponseState$1(generateStaticMarkup, options ? options.identifierPrefix : undefined), createRootFormatContext(), Infinity, onError, undefined, onShellReady, undefined, undefined);
+	  startWork(request); // If anything suspended and is still pending, we'll abort it before writing.
+	  // That way we write only client-rendered boundaries from the start.
+
+	  abort(request, abortReason);
+	  startFlowing(request, destination);
+
+	  if (didFatal) {
+	    throw fatalError;
+	  }
+
+	  if (!readyToStream) {
+	    // Note: This error message is the one we use on the client. It doesn't
+	    // really make sense here. But this is the legacy server renderer, anyway.
+	    // We're going to delete it soon.
+	    throw new Error('A component suspended while responding to synchronous input. This ' + 'will cause the UI to be replaced with a loading indicator. To fix, ' + 'updates that suspend should be wrapped with startTransition.');
+	  }
+
+	  return result;
 	}
 
 	function _inheritsLoose(subClass, superClass) {
@@ -9424,68 +12226,7155 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	var ReactMarkupReadableStream = /*#__PURE__*/function (_Readable) {
 	  _inheritsLoose(ReactMarkupReadableStream, _Readable);
 
-	  function ReactMarkupReadableStream(element, makeStaticMarkup, options) {
+	  function ReactMarkupReadableStream() {
 	    var _this;
 
 	    // Calls the stream.Readable(options) constructor. Consider exposing built-in
 	    // features like highWaterMark in the future.
 	    _this = _Readable.call(this, {}) || this;
-	    _this.partialRenderer = new ReactDOMServerRenderer(element, makeStaticMarkup, options);
+	    _this.request = null;
+	    _this.startedFlowing = false;
 	    return _this;
 	  }
 
 	  var _proto = ReactMarkupReadableStream.prototype;
 
 	  _proto._destroy = function _destroy(err, callback) {
-	    this.partialRenderer.destroy();
+	    abort(this.request); // $FlowFixMe: The type definition for the callback should allow undefined and null.
+
 	    callback(err);
 	  };
 
 	  _proto._read = function _read(size) {
-	    try {
-	      this.push(this.partialRenderer.read(size));
-	    } catch (err) {
-	      this.destroy(err);
+	    if (this.startedFlowing) {
+	      startFlowing(this.request, this);
 	    }
 	  };
 
 	  return ReactMarkupReadableStream;
 	}(stream.Readable);
+
+	function onError$1() {// Non-fatal errors are ignored.
+	}
+
+	function renderToNodeStreamImpl(children, options, generateStaticMarkup) {
+	  function onAllReady() {
+	    // We wait until everything has loaded before starting to write.
+	    // That way we only end up with fully resolved HTML even if we suspend.
+	    destination.startedFlowing = true;
+	    startFlowing(request, destination);
+	  }
+
+	  var destination = new ReactMarkupReadableStream();
+	  var request = createRequest(children, createResponseState$1(false, options ? options.identifierPrefix : undefined), createRootFormatContext(), Infinity, onError$1, onAllReady, undefined, undefined);
+	  destination.request = request;
+	  startWork(request);
+	  return destination;
+	}
+
+	function renderToNodeStream(children, options) {
+	  {
+	    error('renderToNodeStream is deprecated. Use renderToPipeableStream instead.');
+	  }
+
+	  return renderToNodeStreamImpl(children, options);
+	}
+
+	function renderToStaticNodeStream(children, options) {
+	  return renderToNodeStreamImpl(children, options);
+	}
+
+	function renderToString(children, options) {
+	  return renderToStringImpl(children, options, false, 'The server used "renderToString" which does not support Suspense. If you intended for this Suspense boundary to render the fallback content on the server consider throwing an Error somewhere within the Suspense boundary. If you intended to have the server wait for the suspended component please switch to "renderToPipeableStream" which supports Suspense on the server');
+	}
+
+	function renderToStaticMarkup(children, options) {
+	  return renderToStringImpl(children, options, true, 'The server used "renderToStaticMarkup" which does not support Suspense. If you intended to have the server wait for the suspended component please switch to "renderToPipeableStream" which supports Suspense on the server');
+	}
+
+	reactDomServerLegacy_node_development.renderToNodeStream = renderToNodeStream;
+	reactDomServerLegacy_node_development.renderToStaticMarkup = renderToStaticMarkup;
+	reactDomServerLegacy_node_development.renderToStaticNodeStream = renderToStaticNodeStream;
+	reactDomServerLegacy_node_development.renderToString = renderToString;
+	reactDomServerLegacy_node_development.version = ReactVersion;
+	  })();
+	}
+
+	var reactDomServer_node_development = {};
+
+	var require$$1 = /*@__PURE__*/getAugmentedNamespace(util$1);
+
 	/**
-	 * Render a ReactElement to its initial HTML. This should only be used on the
-	 * server.
-	 * See https://reactjs.org/docs/react-dom-server.html#rendertonodestream
+	 * @license React
+	 * react-dom-server.node.development.js
+	 *
+	 * Copyright (c) Facebook, Inc. and its affiliates.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 */
+
+	{
+	  (function() {
+
+	var React = React__default["default"];
+	var util = require$$1;
+
+	var ReactVersion = '18.2.0';
+
+	var ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+
+	// by calls to these methods by a Babel plugin.
+	//
+	// In PROD (or in packages without access to React internals),
+	// they are left as they are instead.
+
+	function warn(format) {
+	  {
+	    {
+	      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        args[_key - 1] = arguments[_key];
+	      }
+
+	      printWarning('warn', format, args);
+	    }
+	  }
+	}
+	function error(format) {
+	  {
+	    {
+	      for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	        args[_key2 - 1] = arguments[_key2];
+	      }
+
+	      printWarning('error', format, args);
+	    }
+	  }
+	}
+
+	function printWarning(level, format, args) {
+	  // When changing this logic, you might want to also
+	  // update consoleWithStackDev.www.js as well.
+	  {
+	    var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
+	    var stack = ReactDebugCurrentFrame.getStackAddendum();
+
+	    if (stack !== '') {
+	      format += '%s';
+	      args = args.concat([stack]);
+	    } // eslint-disable-next-line react-internal/safe-string-coercion
+
+
+	    var argsWithFormat = args.map(function (item) {
+	      return String(item);
+	    }); // Careful: RN currently depends on this prefix
+
+	    argsWithFormat.unshift('Warning: ' + format); // We intentionally don't use spread (or .apply) directly because it
+	    // breaks IE9: https://github.com/facebook/react/issues/13610
+	    // eslint-disable-next-line react-internal/no-production-logging
+
+	    Function.prototype.apply.call(console[level], console, argsWithFormat);
+	  }
+	}
+
+	function scheduleWork(callback) {
+	  setImmediate(callback);
+	}
+	function flushBuffered(destination) {
+	  // If we don't have any more data to send right now.
+	  // Flush whatever is in the buffer to the wire.
+	  if (typeof destination.flush === 'function') {
+	    // By convention the Zlib streams provide a flush function for this purpose.
+	    // For Express, compression middleware adds this method.
+	    destination.flush();
+	  }
+	}
+	var VIEW_SIZE = 2048;
+	var currentView = null;
+	var writtenBytes = 0;
+	var destinationHasCapacity = true;
+	function beginWriting(destination) {
+	  currentView = new Uint8Array(VIEW_SIZE);
+	  writtenBytes = 0;
+	  destinationHasCapacity = true;
+	}
+
+	function writeStringChunk(destination, stringChunk) {
+	  if (stringChunk.length === 0) {
+	    return;
+	  } // maximum possible view needed to encode entire string
+
+
+	  if (stringChunk.length * 3 > VIEW_SIZE) {
+	    if (writtenBytes > 0) {
+	      writeToDestination(destination, currentView.subarray(0, writtenBytes));
+	      currentView = new Uint8Array(VIEW_SIZE);
+	      writtenBytes = 0;
+	    }
+
+	    writeToDestination(destination, textEncoder.encode(stringChunk));
+	    return;
+	  }
+
+	  var target = currentView;
+
+	  if (writtenBytes > 0) {
+	    target = currentView.subarray(writtenBytes);
+	  }
+
+	  var _textEncoder$encodeIn = textEncoder.encodeInto(stringChunk, target),
+	      read = _textEncoder$encodeIn.read,
+	      written = _textEncoder$encodeIn.written;
+
+	  writtenBytes += written;
+
+	  if (read < stringChunk.length) {
+	    writeToDestination(destination, currentView);
+	    currentView = new Uint8Array(VIEW_SIZE);
+	    writtenBytes = textEncoder.encodeInto(stringChunk.slice(read), currentView).written;
+	  }
+
+	  if (writtenBytes === VIEW_SIZE) {
+	    writeToDestination(destination, currentView);
+	    currentView = new Uint8Array(VIEW_SIZE);
+	    writtenBytes = 0;
+	  }
+	}
+
+	function writeViewChunk(destination, chunk) {
+	  if (chunk.byteLength === 0) {
+	    return;
+	  }
+
+	  if (chunk.byteLength > VIEW_SIZE) {
+	    // this chunk may overflow a single view which implies it was not
+	    // one that is cached by the streaming renderer. We will enqueu
+	    // it directly and expect it is not re-used
+	    if (writtenBytes > 0) {
+	      writeToDestination(destination, currentView.subarray(0, writtenBytes));
+	      currentView = new Uint8Array(VIEW_SIZE);
+	      writtenBytes = 0;
+	    }
+
+	    writeToDestination(destination, chunk);
+	    return;
+	  }
+
+	  var bytesToWrite = chunk;
+	  var allowableBytes = currentView.length - writtenBytes;
+
+	  if (allowableBytes < bytesToWrite.byteLength) {
+	    // this chunk would overflow the current view. We enqueue a full view
+	    // and start a new view with the remaining chunk
+	    if (allowableBytes === 0) {
+	      // the current view is already full, send it
+	      writeToDestination(destination, currentView);
+	    } else {
+	      // fill up the current view and apply the remaining chunk bytes
+	      // to a new view.
+	      currentView.set(bytesToWrite.subarray(0, allowableBytes), writtenBytes);
+	      writtenBytes += allowableBytes;
+	      writeToDestination(destination, currentView);
+	      bytesToWrite = bytesToWrite.subarray(allowableBytes);
+	    }
+
+	    currentView = new Uint8Array(VIEW_SIZE);
+	    writtenBytes = 0;
+	  }
+
+	  currentView.set(bytesToWrite, writtenBytes);
+	  writtenBytes += bytesToWrite.byteLength;
+
+	  if (writtenBytes === VIEW_SIZE) {
+	    writeToDestination(destination, currentView);
+	    currentView = new Uint8Array(VIEW_SIZE);
+	    writtenBytes = 0;
+	  }
+	}
+
+	function writeChunk(destination, chunk) {
+	  if (typeof chunk === 'string') {
+	    writeStringChunk(destination, chunk);
+	  } else {
+	    writeViewChunk(destination, chunk);
+	  }
+	}
+
+	function writeToDestination(destination, view) {
+	  var currentHasCapacity = destination.write(view);
+	  destinationHasCapacity = destinationHasCapacity && currentHasCapacity;
+	}
+
+	function writeChunkAndReturn(destination, chunk) {
+	  writeChunk(destination, chunk);
+	  return destinationHasCapacity;
+	}
+	function completeWriting(destination) {
+	  if (currentView && writtenBytes > 0) {
+	    destination.write(currentView.subarray(0, writtenBytes));
+	  }
+
+	  currentView = null;
+	  writtenBytes = 0;
+	  destinationHasCapacity = true;
+	}
+	function close(destination) {
+	  destination.end();
+	}
+	var textEncoder = new util.TextEncoder();
+	function stringToChunk(content) {
+	  return content;
+	}
+	function stringToPrecomputedChunk(content) {
+	  return textEncoder.encode(content);
+	}
+	function closeWithError(destination, error) {
+	  // $FlowFixMe: This is an Error object or the destination accepts other types.
+	  destination.destroy(error);
+	}
+
+	/*
+	 * The `'' + value` pattern (used in in perf-sensitive code) throws for Symbol
+	 * and Temporal.* types. See https://github.com/facebook/react/pull/22064.
+	 *
+	 * The functions in this module will throw an easier-to-understand,
+	 * easier-to-debug exception with a clear errors message message explaining the
+	 * problem. (Instead of a confusing exception thrown inside the implementation
+	 * of the `value` object).
+	 */
+	// $FlowFixMe only called in DEV, so void return is not possible.
+	function typeName(value) {
+	  {
+	    // toStringTag is needed for namespaced types like Temporal.Instant
+	    var hasToStringTag = typeof Symbol === 'function' && Symbol.toStringTag;
+	    var type = hasToStringTag && value[Symbol.toStringTag] || value.constructor.name || 'Object';
+	    return type;
+	  }
+	} // $FlowFixMe only called in DEV, so void return is not possible.
+
+
+	function willCoercionThrow(value) {
+	  {
+	    try {
+	      testStringCoercion(value);
+	      return false;
+	    } catch (e) {
+	      return true;
+	    }
+	  }
+	}
+
+	function testStringCoercion(value) {
+	  // If you ended up here by following an exception call stack, here's what's
+	  // happened: you supplied an object or symbol value to React (as a prop, key,
+	  // DOM attribute, CSS property, string ref, etc.) and when React tried to
+	  // coerce it to a string using `'' + value`, an exception was thrown.
+	  //
+	  // The most common types that will cause this exception are `Symbol` instances
+	  // and Temporal objects like `Temporal.Instant`. But any object that has a
+	  // `valueOf` or `[Symbol.toPrimitive]` method that throws will also cause this
+	  // exception. (Library authors do this to prevent users from using built-in
+	  // numeric operators like `+` or comparison operators like `>=` because custom
+	  // methods are needed to perform accurate arithmetic or comparison.)
+	  //
+	  // To fix the problem, coerce this object or symbol value to a string before
+	  // passing it to React. The most reliable way is usually `String(value)`.
+	  //
+	  // To find which value is throwing, check the browser or debugger console.
+	  // Before this exception was thrown, there should be `console.error` output
+	  // that shows the type (Symbol, Temporal.PlainDate, etc.) that caused the
+	  // problem and how that type was used: key, atrribute, input value prop, etc.
+	  // In most cases, this console output also shows the component and its
+	  // ancestor components where the exception happened.
+	  //
+	  // eslint-disable-next-line react-internal/safe-string-coercion
+	  return '' + value;
+	}
+
+	function checkAttributeStringCoercion(value, attributeName) {
+	  {
+	    if (willCoercionThrow(value)) {
+	      error('The provided `%s` attribute is an unsupported type %s.' + ' This value must be coerced to a string before before using it here.', attributeName, typeName(value));
+
+	      return testStringCoercion(value); // throw (to help callers find troubleshooting comments)
+	    }
+	  }
+	}
+	function checkCSSPropertyStringCoercion(value, propName) {
+	  {
+	    if (willCoercionThrow(value)) {
+	      error('The provided `%s` CSS property is an unsupported type %s.' + ' This value must be coerced to a string before before using it here.', propName, typeName(value));
+
+	      return testStringCoercion(value); // throw (to help callers find troubleshooting comments)
+	    }
+	  }
+	}
+	function checkHtmlStringCoercion(value) {
+	  {
+	    if (willCoercionThrow(value)) {
+	      error('The provided HTML markup uses a value of unsupported type %s.' + ' This value must be coerced to a string before before using it here.', typeName(value));
+
+	      return testStringCoercion(value); // throw (to help callers find troubleshooting comments)
+	    }
+	  }
+	}
+
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+	// A reserved attribute.
+	// It is handled by React separately and shouldn't be written to the DOM.
+	var RESERVED = 0; // A simple string attribute.
+	// Attributes that aren't in the filter are presumed to have this type.
+
+	var STRING = 1; // A string attribute that accepts booleans in React. In HTML, these are called
+	// "enumerated" attributes with "true" and "false" as possible values.
+	// When true, it should be set to a "true" string.
+	// When false, it should be set to a "false" string.
+
+	var BOOLEANISH_STRING = 2; // A real boolean attribute.
+	// When true, it should be present (set either to an empty string or its name).
+	// When false, it should be omitted.
+
+	var BOOLEAN = 3; // An attribute that can be used as a flag as well as with a value.
+	// When true, it should be present (set either to an empty string or its name).
+	// When false, it should be omitted.
+	// For any other value, should be present with that value.
+
+	var OVERLOADED_BOOLEAN = 4; // An attribute that must be numeric or parse as a numeric.
+	// When falsy, it should be removed.
+
+	var NUMERIC = 5; // An attribute that must be positive numeric or parse as a positive numeric.
+	// When falsy, it should be removed.
+
+	var POSITIVE_NUMERIC = 6;
+
+	/* eslint-disable max-len */
+	var ATTRIBUTE_NAME_START_CHAR = ":A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD";
+	/* eslint-enable max-len */
+
+	var ATTRIBUTE_NAME_CHAR = ATTRIBUTE_NAME_START_CHAR + "\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040";
+	var VALID_ATTRIBUTE_NAME_REGEX = new RegExp('^[' + ATTRIBUTE_NAME_START_CHAR + '][' + ATTRIBUTE_NAME_CHAR + ']*$');
+	var illegalAttributeNameCache = {};
+	var validatedAttributeNameCache = {};
+	function isAttributeNameSafe(attributeName) {
+	  if (hasOwnProperty.call(validatedAttributeNameCache, attributeName)) {
+	    return true;
+	  }
+
+	  if (hasOwnProperty.call(illegalAttributeNameCache, attributeName)) {
+	    return false;
+	  }
+
+	  if (VALID_ATTRIBUTE_NAME_REGEX.test(attributeName)) {
+	    validatedAttributeNameCache[attributeName] = true;
+	    return true;
+	  }
+
+	  illegalAttributeNameCache[attributeName] = true;
+
+	  {
+	    error('Invalid attribute name: `%s`', attributeName);
+	  }
+
+	  return false;
+	}
+	function shouldRemoveAttributeWithWarning(name, value, propertyInfo, isCustomComponentTag) {
+	  if (propertyInfo !== null && propertyInfo.type === RESERVED) {
+	    return false;
+	  }
+
+	  switch (typeof value) {
+	    case 'function': // $FlowIssue symbol is perfectly valid here
+
+	    case 'symbol':
+	      // eslint-disable-line
+	      return true;
+
+	    case 'boolean':
+	      {
+	        if (isCustomComponentTag) {
+	          return false;
+	        }
+
+	        if (propertyInfo !== null) {
+	          return !propertyInfo.acceptsBooleans;
+	        } else {
+	          var prefix = name.toLowerCase().slice(0, 5);
+	          return prefix !== 'data-' && prefix !== 'aria-';
+	        }
+	      }
+
+	    default:
+	      return false;
+	  }
+	}
+	function getPropertyInfo(name) {
+	  return properties.hasOwnProperty(name) ? properties[name] : null;
+	}
+
+	function PropertyInfoRecord(name, type, mustUseProperty, attributeName, attributeNamespace, sanitizeURL, removeEmptyString) {
+	  this.acceptsBooleans = type === BOOLEANISH_STRING || type === BOOLEAN || type === OVERLOADED_BOOLEAN;
+	  this.attributeName = attributeName;
+	  this.attributeNamespace = attributeNamespace;
+	  this.mustUseProperty = mustUseProperty;
+	  this.propertyName = name;
+	  this.type = type;
+	  this.sanitizeURL = sanitizeURL;
+	  this.removeEmptyString = removeEmptyString;
+	} // When adding attributes to this list, be sure to also add them to
+	// the `possibleStandardNames` module to ensure casing and incorrect
+	// name warnings.
+
+
+	var properties = {}; // These props are reserved by React. They shouldn't be written to the DOM.
+
+	var reservedProps = ['children', 'dangerouslySetInnerHTML', // TODO: This prevents the assignment of defaultValue to regular
+	// elements (not just inputs). Now that ReactDOMInput assigns to the
+	// defaultValue property -- do we need this?
+	'defaultValue', 'defaultChecked', 'innerHTML', 'suppressContentEditableWarning', 'suppressHydrationWarning', 'style'];
+
+	reservedProps.forEach(function (name) {
+	  properties[name] = new PropertyInfoRecord(name, RESERVED, false, // mustUseProperty
+	  name, // attributeName
+	  null, // attributeNamespace
+	  false, // sanitizeURL
+	  false);
+	}); // A few React string attributes have a different name.
+	// This is a mapping from React prop names to the attribute names.
+
+	[['acceptCharset', 'accept-charset'], ['className', 'class'], ['htmlFor', 'for'], ['httpEquiv', 'http-equiv']].forEach(function (_ref) {
+	  var name = _ref[0],
+	      attributeName = _ref[1];
+	  properties[name] = new PropertyInfoRecord(name, STRING, false, // mustUseProperty
+	  attributeName, // attributeName
+	  null, // attributeNamespace
+	  false, // sanitizeURL
+	  false);
+	}); // These are "enumerated" HTML attributes that accept "true" and "false".
+	// In React, we let users pass `true` and `false` even though technically
+	// these aren't boolean attributes (they are coerced to strings).
+
+	['contentEditable', 'draggable', 'spellCheck', 'value'].forEach(function (name) {
+	  properties[name] = new PropertyInfoRecord(name, BOOLEANISH_STRING, false, // mustUseProperty
+	  name.toLowerCase(), // attributeName
+	  null, // attributeNamespace
+	  false, // sanitizeURL
+	  false);
+	}); // These are "enumerated" SVG attributes that accept "true" and "false".
+	// In React, we let users pass `true` and `false` even though technically
+	// these aren't boolean attributes (they are coerced to strings).
+	// Since these are SVG attributes, their attribute names are case-sensitive.
+
+	['autoReverse', 'externalResourcesRequired', 'focusable', 'preserveAlpha'].forEach(function (name) {
+	  properties[name] = new PropertyInfoRecord(name, BOOLEANISH_STRING, false, // mustUseProperty
+	  name, // attributeName
+	  null, // attributeNamespace
+	  false, // sanitizeURL
+	  false);
+	}); // These are HTML boolean attributes.
+
+	['allowFullScreen', 'async', // Note: there is a special case that prevents it from being written to the DOM
+	// on the client side because the browsers are inconsistent. Instead we call focus().
+	'autoFocus', 'autoPlay', 'controls', 'default', 'defer', 'disabled', 'disablePictureInPicture', 'disableRemotePlayback', 'formNoValidate', 'hidden', 'loop', 'noModule', 'noValidate', 'open', 'playsInline', 'readOnly', 'required', 'reversed', 'scoped', 'seamless', // Microdata
+	'itemScope'].forEach(function (name) {
+	  properties[name] = new PropertyInfoRecord(name, BOOLEAN, false, // mustUseProperty
+	  name.toLowerCase(), // attributeName
+	  null, // attributeNamespace
+	  false, // sanitizeURL
+	  false);
+	}); // These are the few React props that we set as DOM properties
+	// rather than attributes. These are all booleans.
+
+	['checked', // Note: `option.selected` is not updated if `select.multiple` is
+	// disabled with `removeAttribute`. We have special logic for handling this.
+	'multiple', 'muted', 'selected' // NOTE: if you add a camelCased prop to this list,
+	// you'll need to set attributeName to name.toLowerCase()
+	// instead in the assignment below.
+	].forEach(function (name) {
+	  properties[name] = new PropertyInfoRecord(name, BOOLEAN, true, // mustUseProperty
+	  name, // attributeName
+	  null, // attributeNamespace
+	  false, // sanitizeURL
+	  false);
+	}); // These are HTML attributes that are "overloaded booleans": they behave like
+	// booleans, but can also accept a string value.
+
+	['capture', 'download' // NOTE: if you add a camelCased prop to this list,
+	// you'll need to set attributeName to name.toLowerCase()
+	// instead in the assignment below.
+	].forEach(function (name) {
+	  properties[name] = new PropertyInfoRecord(name, OVERLOADED_BOOLEAN, false, // mustUseProperty
+	  name, // attributeName
+	  null, // attributeNamespace
+	  false, // sanitizeURL
+	  false);
+	}); // These are HTML attributes that must be positive numbers.
+
+	['cols', 'rows', 'size', 'span' // NOTE: if you add a camelCased prop to this list,
+	// you'll need to set attributeName to name.toLowerCase()
+	// instead in the assignment below.
+	].forEach(function (name) {
+	  properties[name] = new PropertyInfoRecord(name, POSITIVE_NUMERIC, false, // mustUseProperty
+	  name, // attributeName
+	  null, // attributeNamespace
+	  false, // sanitizeURL
+	  false);
+	}); // These are HTML attributes that must be numbers.
+
+	['rowSpan', 'start'].forEach(function (name) {
+	  properties[name] = new PropertyInfoRecord(name, NUMERIC, false, // mustUseProperty
+	  name.toLowerCase(), // attributeName
+	  null, // attributeNamespace
+	  false, // sanitizeURL
+	  false);
+	});
+	var CAMELIZE = /[\-\:]([a-z])/g;
+
+	var capitalize = function (token) {
+	  return token[1].toUpperCase();
+	}; // This is a list of all SVG attributes that need special casing, namespacing,
+	// or boolean value assignment. Regular attributes that just accept strings
+	// and have the same names are omitted, just like in the HTML attribute filter.
+	// Some of these attributes can be hard to find. This list was created by
+	// scraping the MDN documentation.
+
+
+	['accent-height', 'alignment-baseline', 'arabic-form', 'baseline-shift', 'cap-height', 'clip-path', 'clip-rule', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'dominant-baseline', 'enable-background', 'fill-opacity', 'fill-rule', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'glyph-name', 'glyph-orientation-horizontal', 'glyph-orientation-vertical', 'horiz-adv-x', 'horiz-origin-x', 'image-rendering', 'letter-spacing', 'lighting-color', 'marker-end', 'marker-mid', 'marker-start', 'overline-position', 'overline-thickness', 'paint-order', 'panose-1', 'pointer-events', 'rendering-intent', 'shape-rendering', 'stop-color', 'stop-opacity', 'strikethrough-position', 'strikethrough-thickness', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke-width', 'text-anchor', 'text-decoration', 'text-rendering', 'underline-position', 'underline-thickness', 'unicode-bidi', 'unicode-range', 'units-per-em', 'v-alphabetic', 'v-hanging', 'v-ideographic', 'v-mathematical', 'vector-effect', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'word-spacing', 'writing-mode', 'xmlns:xlink', 'x-height' // NOTE: if you add a camelCased prop to this list,
+	// you'll need to set attributeName to name.toLowerCase()
+	// instead in the assignment below.
+	].forEach(function (attributeName) {
+	  var name = attributeName.replace(CAMELIZE, capitalize);
+	  properties[name] = new PropertyInfoRecord(name, STRING, false, // mustUseProperty
+	  attributeName, null, // attributeNamespace
+	  false, // sanitizeURL
+	  false);
+	}); // String SVG attributes with the xlink namespace.
+
+	['xlink:actuate', 'xlink:arcrole', 'xlink:role', 'xlink:show', 'xlink:title', 'xlink:type' // NOTE: if you add a camelCased prop to this list,
+	// you'll need to set attributeName to name.toLowerCase()
+	// instead in the assignment below.
+	].forEach(function (attributeName) {
+	  var name = attributeName.replace(CAMELIZE, capitalize);
+	  properties[name] = new PropertyInfoRecord(name, STRING, false, // mustUseProperty
+	  attributeName, 'http://www.w3.org/1999/xlink', false, // sanitizeURL
+	  false);
+	}); // String SVG attributes with the xml namespace.
+
+	['xml:base', 'xml:lang', 'xml:space' // NOTE: if you add a camelCased prop to this list,
+	// you'll need to set attributeName to name.toLowerCase()
+	// instead in the assignment below.
+	].forEach(function (attributeName) {
+	  var name = attributeName.replace(CAMELIZE, capitalize);
+	  properties[name] = new PropertyInfoRecord(name, STRING, false, // mustUseProperty
+	  attributeName, 'http://www.w3.org/XML/1998/namespace', false, // sanitizeURL
+	  false);
+	}); // These attribute exists both in HTML and SVG.
+	// The attribute name is case-sensitive in SVG so we can't just use
+	// the React name like we do for attributes that exist only in HTML.
+
+	['tabIndex', 'crossOrigin'].forEach(function (attributeName) {
+	  properties[attributeName] = new PropertyInfoRecord(attributeName, STRING, false, // mustUseProperty
+	  attributeName.toLowerCase(), // attributeName
+	  null, // attributeNamespace
+	  false, // sanitizeURL
+	  false);
+	}); // These attributes accept URLs. These must not allow javascript: URLS.
+	// These will also need to accept Trusted Types object in the future.
+
+	var xlinkHref = 'xlinkHref';
+	properties[xlinkHref] = new PropertyInfoRecord('xlinkHref', STRING, false, // mustUseProperty
+	'xlink:href', 'http://www.w3.org/1999/xlink', true, // sanitizeURL
+	false);
+	['src', 'href', 'action', 'formAction'].forEach(function (attributeName) {
+	  properties[attributeName] = new PropertyInfoRecord(attributeName, STRING, false, // mustUseProperty
+	  attributeName.toLowerCase(), // attributeName
+	  null, // attributeNamespace
+	  true, // sanitizeURL
+	  true);
+	});
+
+	/**
+	 * CSS properties which accept numbers but are not in units of "px".
+	 */
+	var isUnitlessNumber = {
+	  animationIterationCount: true,
+	  aspectRatio: true,
+	  borderImageOutset: true,
+	  borderImageSlice: true,
+	  borderImageWidth: true,
+	  boxFlex: true,
+	  boxFlexGroup: true,
+	  boxOrdinalGroup: true,
+	  columnCount: true,
+	  columns: true,
+	  flex: true,
+	  flexGrow: true,
+	  flexPositive: true,
+	  flexShrink: true,
+	  flexNegative: true,
+	  flexOrder: true,
+	  gridArea: true,
+	  gridRow: true,
+	  gridRowEnd: true,
+	  gridRowSpan: true,
+	  gridRowStart: true,
+	  gridColumn: true,
+	  gridColumnEnd: true,
+	  gridColumnSpan: true,
+	  gridColumnStart: true,
+	  fontWeight: true,
+	  lineClamp: true,
+	  lineHeight: true,
+	  opacity: true,
+	  order: true,
+	  orphans: true,
+	  tabSize: true,
+	  widows: true,
+	  zIndex: true,
+	  zoom: true,
+	  // SVG-related properties
+	  fillOpacity: true,
+	  floodOpacity: true,
+	  stopOpacity: true,
+	  strokeDasharray: true,
+	  strokeDashoffset: true,
+	  strokeMiterlimit: true,
+	  strokeOpacity: true,
+	  strokeWidth: true
+	};
+	/**
+	 * @param {string} prefix vendor-specific prefix, eg: Webkit
+	 * @param {string} key style name, eg: transitionDuration
+	 * @return {string} style name prefixed with `prefix`, properly camelCased, eg:
+	 * WebkitTransitionDuration
+	 */
+
+	function prefixKey(prefix, key) {
+	  return prefix + key.charAt(0).toUpperCase() + key.substring(1);
+	}
+	/**
+	 * Support style names that may come passed in prefixed by adding permutations
+	 * of vendor prefixes.
 	 */
 
 
-	function renderToNodeStream(element, options) {
-	  return new ReactMarkupReadableStream(element, false, options);
+	var prefixes = ['Webkit', 'ms', 'Moz', 'O']; // Using Object.keys here, or else the vanilla for-in loop makes IE8 go into an
+	// infinite loop, because it iterates over the newly added props too.
+
+	Object.keys(isUnitlessNumber).forEach(function (prop) {
+	  prefixes.forEach(function (prefix) {
+	    isUnitlessNumber[prefixKey(prefix, prop)] = isUnitlessNumber[prop];
+	  });
+	});
+
+	var hasReadOnlyValue = {
+	  button: true,
+	  checkbox: true,
+	  image: true,
+	  hidden: true,
+	  radio: true,
+	  reset: true,
+	  submit: true
+	};
+	function checkControlledValueProps(tagName, props) {
+	  {
+	    if (!(hasReadOnlyValue[props.type] || props.onChange || props.onInput || props.readOnly || props.disabled || props.value == null)) {
+	      error('You provided a `value` prop to a form field without an ' + '`onChange` handler. This will render a read-only field. If ' + 'the field should be mutable use `defaultValue`. Otherwise, ' + 'set either `onChange` or `readOnly`.');
+	    }
+
+	    if (!(props.onChange || props.readOnly || props.disabled || props.checked == null)) {
+	      error('You provided a `checked` prop to a form field without an ' + '`onChange` handler. This will render a read-only field. If ' + 'the field should be mutable use `defaultChecked`. Otherwise, ' + 'set either `onChange` or `readOnly`.');
+	    }
+	  }
 	}
+
+	function isCustomComponent(tagName, props) {
+	  if (tagName.indexOf('-') === -1) {
+	    return typeof props.is === 'string';
+	  }
+
+	  switch (tagName) {
+	    // These are reserved SVG and MathML elements.
+	    // We don't mind this list too much because we expect it to never grow.
+	    // The alternative is to track the namespace in a few places which is convoluted.
+	    // https://w3c.github.io/webcomponents/spec/custom/#custom-elements-core-concepts
+	    case 'annotation-xml':
+	    case 'color-profile':
+	    case 'font-face':
+	    case 'font-face-src':
+	    case 'font-face-uri':
+	    case 'font-face-format':
+	    case 'font-face-name':
+	    case 'missing-glyph':
+	      return false;
+
+	    default:
+	      return true;
+	  }
+	}
+
+	var ariaProperties = {
+	  'aria-current': 0,
+	  // state
+	  'aria-description': 0,
+	  'aria-details': 0,
+	  'aria-disabled': 0,
+	  // state
+	  'aria-hidden': 0,
+	  // state
+	  'aria-invalid': 0,
+	  // state
+	  'aria-keyshortcuts': 0,
+	  'aria-label': 0,
+	  'aria-roledescription': 0,
+	  // Widget Attributes
+	  'aria-autocomplete': 0,
+	  'aria-checked': 0,
+	  'aria-expanded': 0,
+	  'aria-haspopup': 0,
+	  'aria-level': 0,
+	  'aria-modal': 0,
+	  'aria-multiline': 0,
+	  'aria-multiselectable': 0,
+	  'aria-orientation': 0,
+	  'aria-placeholder': 0,
+	  'aria-pressed': 0,
+	  'aria-readonly': 0,
+	  'aria-required': 0,
+	  'aria-selected': 0,
+	  'aria-sort': 0,
+	  'aria-valuemax': 0,
+	  'aria-valuemin': 0,
+	  'aria-valuenow': 0,
+	  'aria-valuetext': 0,
+	  // Live Region Attributes
+	  'aria-atomic': 0,
+	  'aria-busy': 0,
+	  'aria-live': 0,
+	  'aria-relevant': 0,
+	  // Drag-and-Drop Attributes
+	  'aria-dropeffect': 0,
+	  'aria-grabbed': 0,
+	  // Relationship Attributes
+	  'aria-activedescendant': 0,
+	  'aria-colcount': 0,
+	  'aria-colindex': 0,
+	  'aria-colspan': 0,
+	  'aria-controls': 0,
+	  'aria-describedby': 0,
+	  'aria-errormessage': 0,
+	  'aria-flowto': 0,
+	  'aria-labelledby': 0,
+	  'aria-owns': 0,
+	  'aria-posinset': 0,
+	  'aria-rowcount': 0,
+	  'aria-rowindex': 0,
+	  'aria-rowspan': 0,
+	  'aria-setsize': 0
+	};
+
+	var warnedProperties = {};
+	var rARIA = new RegExp('^(aria)-[' + ATTRIBUTE_NAME_CHAR + ']*$');
+	var rARIACamel = new RegExp('^(aria)[A-Z][' + ATTRIBUTE_NAME_CHAR + ']*$');
+
+	function validateProperty(tagName, name) {
+	  {
+	    if (hasOwnProperty.call(warnedProperties, name) && warnedProperties[name]) {
+	      return true;
+	    }
+
+	    if (rARIACamel.test(name)) {
+	      var ariaName = 'aria-' + name.slice(4).toLowerCase();
+	      var correctName = ariaProperties.hasOwnProperty(ariaName) ? ariaName : null; // If this is an aria-* attribute, but is not listed in the known DOM
+	      // DOM properties, then it is an invalid aria-* attribute.
+
+	      if (correctName == null) {
+	        error('Invalid ARIA attribute `%s`. ARIA attributes follow the pattern aria-* and must be lowercase.', name);
+
+	        warnedProperties[name] = true;
+	        return true;
+	      } // aria-* attributes should be lowercase; suggest the lowercase version.
+
+
+	      if (name !== correctName) {
+	        error('Invalid ARIA attribute `%s`. Did you mean `%s`?', name, correctName);
+
+	        warnedProperties[name] = true;
+	        return true;
+	      }
+	    }
+
+	    if (rARIA.test(name)) {
+	      var lowerCasedName = name.toLowerCase();
+	      var standardName = ariaProperties.hasOwnProperty(lowerCasedName) ? lowerCasedName : null; // If this is an aria-* attribute, but is not listed in the known DOM
+	      // DOM properties, then it is an invalid aria-* attribute.
+
+	      if (standardName == null) {
+	        warnedProperties[name] = true;
+	        return false;
+	      } // aria-* attributes should be lowercase; suggest the lowercase version.
+
+
+	      if (name !== standardName) {
+	        error('Unknown ARIA attribute `%s`. Did you mean `%s`?', name, standardName);
+
+	        warnedProperties[name] = true;
+	        return true;
+	      }
+	    }
+	  }
+
+	  return true;
+	}
+
+	function warnInvalidARIAProps(type, props) {
+	  {
+	    var invalidProps = [];
+
+	    for (var key in props) {
+	      var isValid = validateProperty(type, key);
+
+	      if (!isValid) {
+	        invalidProps.push(key);
+	      }
+	    }
+
+	    var unknownPropString = invalidProps.map(function (prop) {
+	      return '`' + prop + '`';
+	    }).join(', ');
+
+	    if (invalidProps.length === 1) {
+	      error('Invalid aria prop %s on <%s> tag. ' + 'For details, see https://reactjs.org/link/invalid-aria-props', unknownPropString, type);
+	    } else if (invalidProps.length > 1) {
+	      error('Invalid aria props %s on <%s> tag. ' + 'For details, see https://reactjs.org/link/invalid-aria-props', unknownPropString, type);
+	    }
+	  }
+	}
+
+	function validateProperties(type, props) {
+	  if (isCustomComponent(type, props)) {
+	    return;
+	  }
+
+	  warnInvalidARIAProps(type, props);
+	}
+
+	var didWarnValueNull = false;
+	function validateProperties$1(type, props) {
+	  {
+	    if (type !== 'input' && type !== 'textarea' && type !== 'select') {
+	      return;
+	    }
+
+	    if (props != null && props.value === null && !didWarnValueNull) {
+	      didWarnValueNull = true;
+
+	      if (type === 'select' && props.multiple) {
+	        error('`value` prop on `%s` should not be null. ' + 'Consider using an empty array when `multiple` is set to `true` ' + 'to clear the component or `undefined` for uncontrolled components.', type);
+	      } else {
+	        error('`value` prop on `%s` should not be null. ' + 'Consider using an empty string to clear the component or `undefined` ' + 'for uncontrolled components.', type);
+	      }
+	    }
+	  }
+	}
+
+	// When adding attributes to the HTML or SVG allowed attribute list, be sure to
+	// also add them to this module to ensure casing and incorrect name
+	// warnings.
+	var possibleStandardNames = {
+	  // HTML
+	  accept: 'accept',
+	  acceptcharset: 'acceptCharset',
+	  'accept-charset': 'acceptCharset',
+	  accesskey: 'accessKey',
+	  action: 'action',
+	  allowfullscreen: 'allowFullScreen',
+	  alt: 'alt',
+	  as: 'as',
+	  async: 'async',
+	  autocapitalize: 'autoCapitalize',
+	  autocomplete: 'autoComplete',
+	  autocorrect: 'autoCorrect',
+	  autofocus: 'autoFocus',
+	  autoplay: 'autoPlay',
+	  autosave: 'autoSave',
+	  capture: 'capture',
+	  cellpadding: 'cellPadding',
+	  cellspacing: 'cellSpacing',
+	  challenge: 'challenge',
+	  charset: 'charSet',
+	  checked: 'checked',
+	  children: 'children',
+	  cite: 'cite',
+	  class: 'className',
+	  classid: 'classID',
+	  classname: 'className',
+	  cols: 'cols',
+	  colspan: 'colSpan',
+	  content: 'content',
+	  contenteditable: 'contentEditable',
+	  contextmenu: 'contextMenu',
+	  controls: 'controls',
+	  controlslist: 'controlsList',
+	  coords: 'coords',
+	  crossorigin: 'crossOrigin',
+	  dangerouslysetinnerhtml: 'dangerouslySetInnerHTML',
+	  data: 'data',
+	  datetime: 'dateTime',
+	  default: 'default',
+	  defaultchecked: 'defaultChecked',
+	  defaultvalue: 'defaultValue',
+	  defer: 'defer',
+	  dir: 'dir',
+	  disabled: 'disabled',
+	  disablepictureinpicture: 'disablePictureInPicture',
+	  disableremoteplayback: 'disableRemotePlayback',
+	  download: 'download',
+	  draggable: 'draggable',
+	  enctype: 'encType',
+	  enterkeyhint: 'enterKeyHint',
+	  for: 'htmlFor',
+	  form: 'form',
+	  formmethod: 'formMethod',
+	  formaction: 'formAction',
+	  formenctype: 'formEncType',
+	  formnovalidate: 'formNoValidate',
+	  formtarget: 'formTarget',
+	  frameborder: 'frameBorder',
+	  headers: 'headers',
+	  height: 'height',
+	  hidden: 'hidden',
+	  high: 'high',
+	  href: 'href',
+	  hreflang: 'hrefLang',
+	  htmlfor: 'htmlFor',
+	  httpequiv: 'httpEquiv',
+	  'http-equiv': 'httpEquiv',
+	  icon: 'icon',
+	  id: 'id',
+	  imagesizes: 'imageSizes',
+	  imagesrcset: 'imageSrcSet',
+	  innerhtml: 'innerHTML',
+	  inputmode: 'inputMode',
+	  integrity: 'integrity',
+	  is: 'is',
+	  itemid: 'itemID',
+	  itemprop: 'itemProp',
+	  itemref: 'itemRef',
+	  itemscope: 'itemScope',
+	  itemtype: 'itemType',
+	  keyparams: 'keyParams',
+	  keytype: 'keyType',
+	  kind: 'kind',
+	  label: 'label',
+	  lang: 'lang',
+	  list: 'list',
+	  loop: 'loop',
+	  low: 'low',
+	  manifest: 'manifest',
+	  marginwidth: 'marginWidth',
+	  marginheight: 'marginHeight',
+	  max: 'max',
+	  maxlength: 'maxLength',
+	  media: 'media',
+	  mediagroup: 'mediaGroup',
+	  method: 'method',
+	  min: 'min',
+	  minlength: 'minLength',
+	  multiple: 'multiple',
+	  muted: 'muted',
+	  name: 'name',
+	  nomodule: 'noModule',
+	  nonce: 'nonce',
+	  novalidate: 'noValidate',
+	  open: 'open',
+	  optimum: 'optimum',
+	  pattern: 'pattern',
+	  placeholder: 'placeholder',
+	  playsinline: 'playsInline',
+	  poster: 'poster',
+	  preload: 'preload',
+	  profile: 'profile',
+	  radiogroup: 'radioGroup',
+	  readonly: 'readOnly',
+	  referrerpolicy: 'referrerPolicy',
+	  rel: 'rel',
+	  required: 'required',
+	  reversed: 'reversed',
+	  role: 'role',
+	  rows: 'rows',
+	  rowspan: 'rowSpan',
+	  sandbox: 'sandbox',
+	  scope: 'scope',
+	  scoped: 'scoped',
+	  scrolling: 'scrolling',
+	  seamless: 'seamless',
+	  selected: 'selected',
+	  shape: 'shape',
+	  size: 'size',
+	  sizes: 'sizes',
+	  span: 'span',
+	  spellcheck: 'spellCheck',
+	  src: 'src',
+	  srcdoc: 'srcDoc',
+	  srclang: 'srcLang',
+	  srcset: 'srcSet',
+	  start: 'start',
+	  step: 'step',
+	  style: 'style',
+	  summary: 'summary',
+	  tabindex: 'tabIndex',
+	  target: 'target',
+	  title: 'title',
+	  type: 'type',
+	  usemap: 'useMap',
+	  value: 'value',
+	  width: 'width',
+	  wmode: 'wmode',
+	  wrap: 'wrap',
+	  // SVG
+	  about: 'about',
+	  accentheight: 'accentHeight',
+	  'accent-height': 'accentHeight',
+	  accumulate: 'accumulate',
+	  additive: 'additive',
+	  alignmentbaseline: 'alignmentBaseline',
+	  'alignment-baseline': 'alignmentBaseline',
+	  allowreorder: 'allowReorder',
+	  alphabetic: 'alphabetic',
+	  amplitude: 'amplitude',
+	  arabicform: 'arabicForm',
+	  'arabic-form': 'arabicForm',
+	  ascent: 'ascent',
+	  attributename: 'attributeName',
+	  attributetype: 'attributeType',
+	  autoreverse: 'autoReverse',
+	  azimuth: 'azimuth',
+	  basefrequency: 'baseFrequency',
+	  baselineshift: 'baselineShift',
+	  'baseline-shift': 'baselineShift',
+	  baseprofile: 'baseProfile',
+	  bbox: 'bbox',
+	  begin: 'begin',
+	  bias: 'bias',
+	  by: 'by',
+	  calcmode: 'calcMode',
+	  capheight: 'capHeight',
+	  'cap-height': 'capHeight',
+	  clip: 'clip',
+	  clippath: 'clipPath',
+	  'clip-path': 'clipPath',
+	  clippathunits: 'clipPathUnits',
+	  cliprule: 'clipRule',
+	  'clip-rule': 'clipRule',
+	  color: 'color',
+	  colorinterpolation: 'colorInterpolation',
+	  'color-interpolation': 'colorInterpolation',
+	  colorinterpolationfilters: 'colorInterpolationFilters',
+	  'color-interpolation-filters': 'colorInterpolationFilters',
+	  colorprofile: 'colorProfile',
+	  'color-profile': 'colorProfile',
+	  colorrendering: 'colorRendering',
+	  'color-rendering': 'colorRendering',
+	  contentscripttype: 'contentScriptType',
+	  contentstyletype: 'contentStyleType',
+	  cursor: 'cursor',
+	  cx: 'cx',
+	  cy: 'cy',
+	  d: 'd',
+	  datatype: 'datatype',
+	  decelerate: 'decelerate',
+	  descent: 'descent',
+	  diffuseconstant: 'diffuseConstant',
+	  direction: 'direction',
+	  display: 'display',
+	  divisor: 'divisor',
+	  dominantbaseline: 'dominantBaseline',
+	  'dominant-baseline': 'dominantBaseline',
+	  dur: 'dur',
+	  dx: 'dx',
+	  dy: 'dy',
+	  edgemode: 'edgeMode',
+	  elevation: 'elevation',
+	  enablebackground: 'enableBackground',
+	  'enable-background': 'enableBackground',
+	  end: 'end',
+	  exponent: 'exponent',
+	  externalresourcesrequired: 'externalResourcesRequired',
+	  fill: 'fill',
+	  fillopacity: 'fillOpacity',
+	  'fill-opacity': 'fillOpacity',
+	  fillrule: 'fillRule',
+	  'fill-rule': 'fillRule',
+	  filter: 'filter',
+	  filterres: 'filterRes',
+	  filterunits: 'filterUnits',
+	  floodopacity: 'floodOpacity',
+	  'flood-opacity': 'floodOpacity',
+	  floodcolor: 'floodColor',
+	  'flood-color': 'floodColor',
+	  focusable: 'focusable',
+	  fontfamily: 'fontFamily',
+	  'font-family': 'fontFamily',
+	  fontsize: 'fontSize',
+	  'font-size': 'fontSize',
+	  fontsizeadjust: 'fontSizeAdjust',
+	  'font-size-adjust': 'fontSizeAdjust',
+	  fontstretch: 'fontStretch',
+	  'font-stretch': 'fontStretch',
+	  fontstyle: 'fontStyle',
+	  'font-style': 'fontStyle',
+	  fontvariant: 'fontVariant',
+	  'font-variant': 'fontVariant',
+	  fontweight: 'fontWeight',
+	  'font-weight': 'fontWeight',
+	  format: 'format',
+	  from: 'from',
+	  fx: 'fx',
+	  fy: 'fy',
+	  g1: 'g1',
+	  g2: 'g2',
+	  glyphname: 'glyphName',
+	  'glyph-name': 'glyphName',
+	  glyphorientationhorizontal: 'glyphOrientationHorizontal',
+	  'glyph-orientation-horizontal': 'glyphOrientationHorizontal',
+	  glyphorientationvertical: 'glyphOrientationVertical',
+	  'glyph-orientation-vertical': 'glyphOrientationVertical',
+	  glyphref: 'glyphRef',
+	  gradienttransform: 'gradientTransform',
+	  gradientunits: 'gradientUnits',
+	  hanging: 'hanging',
+	  horizadvx: 'horizAdvX',
+	  'horiz-adv-x': 'horizAdvX',
+	  horizoriginx: 'horizOriginX',
+	  'horiz-origin-x': 'horizOriginX',
+	  ideographic: 'ideographic',
+	  imagerendering: 'imageRendering',
+	  'image-rendering': 'imageRendering',
+	  in2: 'in2',
+	  in: 'in',
+	  inlist: 'inlist',
+	  intercept: 'intercept',
+	  k1: 'k1',
+	  k2: 'k2',
+	  k3: 'k3',
+	  k4: 'k4',
+	  k: 'k',
+	  kernelmatrix: 'kernelMatrix',
+	  kernelunitlength: 'kernelUnitLength',
+	  kerning: 'kerning',
+	  keypoints: 'keyPoints',
+	  keysplines: 'keySplines',
+	  keytimes: 'keyTimes',
+	  lengthadjust: 'lengthAdjust',
+	  letterspacing: 'letterSpacing',
+	  'letter-spacing': 'letterSpacing',
+	  lightingcolor: 'lightingColor',
+	  'lighting-color': 'lightingColor',
+	  limitingconeangle: 'limitingConeAngle',
+	  local: 'local',
+	  markerend: 'markerEnd',
+	  'marker-end': 'markerEnd',
+	  markerheight: 'markerHeight',
+	  markermid: 'markerMid',
+	  'marker-mid': 'markerMid',
+	  markerstart: 'markerStart',
+	  'marker-start': 'markerStart',
+	  markerunits: 'markerUnits',
+	  markerwidth: 'markerWidth',
+	  mask: 'mask',
+	  maskcontentunits: 'maskContentUnits',
+	  maskunits: 'maskUnits',
+	  mathematical: 'mathematical',
+	  mode: 'mode',
+	  numoctaves: 'numOctaves',
+	  offset: 'offset',
+	  opacity: 'opacity',
+	  operator: 'operator',
+	  order: 'order',
+	  orient: 'orient',
+	  orientation: 'orientation',
+	  origin: 'origin',
+	  overflow: 'overflow',
+	  overlineposition: 'overlinePosition',
+	  'overline-position': 'overlinePosition',
+	  overlinethickness: 'overlineThickness',
+	  'overline-thickness': 'overlineThickness',
+	  paintorder: 'paintOrder',
+	  'paint-order': 'paintOrder',
+	  panose1: 'panose1',
+	  'panose-1': 'panose1',
+	  pathlength: 'pathLength',
+	  patterncontentunits: 'patternContentUnits',
+	  patterntransform: 'patternTransform',
+	  patternunits: 'patternUnits',
+	  pointerevents: 'pointerEvents',
+	  'pointer-events': 'pointerEvents',
+	  points: 'points',
+	  pointsatx: 'pointsAtX',
+	  pointsaty: 'pointsAtY',
+	  pointsatz: 'pointsAtZ',
+	  prefix: 'prefix',
+	  preservealpha: 'preserveAlpha',
+	  preserveaspectratio: 'preserveAspectRatio',
+	  primitiveunits: 'primitiveUnits',
+	  property: 'property',
+	  r: 'r',
+	  radius: 'radius',
+	  refx: 'refX',
+	  refy: 'refY',
+	  renderingintent: 'renderingIntent',
+	  'rendering-intent': 'renderingIntent',
+	  repeatcount: 'repeatCount',
+	  repeatdur: 'repeatDur',
+	  requiredextensions: 'requiredExtensions',
+	  requiredfeatures: 'requiredFeatures',
+	  resource: 'resource',
+	  restart: 'restart',
+	  result: 'result',
+	  results: 'results',
+	  rotate: 'rotate',
+	  rx: 'rx',
+	  ry: 'ry',
+	  scale: 'scale',
+	  security: 'security',
+	  seed: 'seed',
+	  shaperendering: 'shapeRendering',
+	  'shape-rendering': 'shapeRendering',
+	  slope: 'slope',
+	  spacing: 'spacing',
+	  specularconstant: 'specularConstant',
+	  specularexponent: 'specularExponent',
+	  speed: 'speed',
+	  spreadmethod: 'spreadMethod',
+	  startoffset: 'startOffset',
+	  stddeviation: 'stdDeviation',
+	  stemh: 'stemh',
+	  stemv: 'stemv',
+	  stitchtiles: 'stitchTiles',
+	  stopcolor: 'stopColor',
+	  'stop-color': 'stopColor',
+	  stopopacity: 'stopOpacity',
+	  'stop-opacity': 'stopOpacity',
+	  strikethroughposition: 'strikethroughPosition',
+	  'strikethrough-position': 'strikethroughPosition',
+	  strikethroughthickness: 'strikethroughThickness',
+	  'strikethrough-thickness': 'strikethroughThickness',
+	  string: 'string',
+	  stroke: 'stroke',
+	  strokedasharray: 'strokeDasharray',
+	  'stroke-dasharray': 'strokeDasharray',
+	  strokedashoffset: 'strokeDashoffset',
+	  'stroke-dashoffset': 'strokeDashoffset',
+	  strokelinecap: 'strokeLinecap',
+	  'stroke-linecap': 'strokeLinecap',
+	  strokelinejoin: 'strokeLinejoin',
+	  'stroke-linejoin': 'strokeLinejoin',
+	  strokemiterlimit: 'strokeMiterlimit',
+	  'stroke-miterlimit': 'strokeMiterlimit',
+	  strokewidth: 'strokeWidth',
+	  'stroke-width': 'strokeWidth',
+	  strokeopacity: 'strokeOpacity',
+	  'stroke-opacity': 'strokeOpacity',
+	  suppresscontenteditablewarning: 'suppressContentEditableWarning',
+	  suppresshydrationwarning: 'suppressHydrationWarning',
+	  surfacescale: 'surfaceScale',
+	  systemlanguage: 'systemLanguage',
+	  tablevalues: 'tableValues',
+	  targetx: 'targetX',
+	  targety: 'targetY',
+	  textanchor: 'textAnchor',
+	  'text-anchor': 'textAnchor',
+	  textdecoration: 'textDecoration',
+	  'text-decoration': 'textDecoration',
+	  textlength: 'textLength',
+	  textrendering: 'textRendering',
+	  'text-rendering': 'textRendering',
+	  to: 'to',
+	  transform: 'transform',
+	  typeof: 'typeof',
+	  u1: 'u1',
+	  u2: 'u2',
+	  underlineposition: 'underlinePosition',
+	  'underline-position': 'underlinePosition',
+	  underlinethickness: 'underlineThickness',
+	  'underline-thickness': 'underlineThickness',
+	  unicode: 'unicode',
+	  unicodebidi: 'unicodeBidi',
+	  'unicode-bidi': 'unicodeBidi',
+	  unicoderange: 'unicodeRange',
+	  'unicode-range': 'unicodeRange',
+	  unitsperem: 'unitsPerEm',
+	  'units-per-em': 'unitsPerEm',
+	  unselectable: 'unselectable',
+	  valphabetic: 'vAlphabetic',
+	  'v-alphabetic': 'vAlphabetic',
+	  values: 'values',
+	  vectoreffect: 'vectorEffect',
+	  'vector-effect': 'vectorEffect',
+	  version: 'version',
+	  vertadvy: 'vertAdvY',
+	  'vert-adv-y': 'vertAdvY',
+	  vertoriginx: 'vertOriginX',
+	  'vert-origin-x': 'vertOriginX',
+	  vertoriginy: 'vertOriginY',
+	  'vert-origin-y': 'vertOriginY',
+	  vhanging: 'vHanging',
+	  'v-hanging': 'vHanging',
+	  videographic: 'vIdeographic',
+	  'v-ideographic': 'vIdeographic',
+	  viewbox: 'viewBox',
+	  viewtarget: 'viewTarget',
+	  visibility: 'visibility',
+	  vmathematical: 'vMathematical',
+	  'v-mathematical': 'vMathematical',
+	  vocab: 'vocab',
+	  widths: 'widths',
+	  wordspacing: 'wordSpacing',
+	  'word-spacing': 'wordSpacing',
+	  writingmode: 'writingMode',
+	  'writing-mode': 'writingMode',
+	  x1: 'x1',
+	  x2: 'x2',
+	  x: 'x',
+	  xchannelselector: 'xChannelSelector',
+	  xheight: 'xHeight',
+	  'x-height': 'xHeight',
+	  xlinkactuate: 'xlinkActuate',
+	  'xlink:actuate': 'xlinkActuate',
+	  xlinkarcrole: 'xlinkArcrole',
+	  'xlink:arcrole': 'xlinkArcrole',
+	  xlinkhref: 'xlinkHref',
+	  'xlink:href': 'xlinkHref',
+	  xlinkrole: 'xlinkRole',
+	  'xlink:role': 'xlinkRole',
+	  xlinkshow: 'xlinkShow',
+	  'xlink:show': 'xlinkShow',
+	  xlinktitle: 'xlinkTitle',
+	  'xlink:title': 'xlinkTitle',
+	  xlinktype: 'xlinkType',
+	  'xlink:type': 'xlinkType',
+	  xmlbase: 'xmlBase',
+	  'xml:base': 'xmlBase',
+	  xmllang: 'xmlLang',
+	  'xml:lang': 'xmlLang',
+	  xmlns: 'xmlns',
+	  'xml:space': 'xmlSpace',
+	  xmlnsxlink: 'xmlnsXlink',
+	  'xmlns:xlink': 'xmlnsXlink',
+	  xmlspace: 'xmlSpace',
+	  y1: 'y1',
+	  y2: 'y2',
+	  y: 'y',
+	  ychannelselector: 'yChannelSelector',
+	  z: 'z',
+	  zoomandpan: 'zoomAndPan'
+	};
+
+	var validateProperty$1 = function () {};
+
+	{
+	  var warnedProperties$1 = {};
+	  var EVENT_NAME_REGEX = /^on./;
+	  var INVALID_EVENT_NAME_REGEX = /^on[^A-Z]/;
+	  var rARIA$1 = new RegExp('^(aria)-[' + ATTRIBUTE_NAME_CHAR + ']*$');
+	  var rARIACamel$1 = new RegExp('^(aria)[A-Z][' + ATTRIBUTE_NAME_CHAR + ']*$');
+
+	  validateProperty$1 = function (tagName, name, value, eventRegistry) {
+	    if (hasOwnProperty.call(warnedProperties$1, name) && warnedProperties$1[name]) {
+	      return true;
+	    }
+
+	    var lowerCasedName = name.toLowerCase();
+
+	    if (lowerCasedName === 'onfocusin' || lowerCasedName === 'onfocusout') {
+	      error('React uses onFocus and onBlur instead of onFocusIn and onFocusOut. ' + 'All React events are normalized to bubble, so onFocusIn and onFocusOut ' + 'are not needed/supported by React.');
+
+	      warnedProperties$1[name] = true;
+	      return true;
+	    } // We can't rely on the event system being injected on the server.
+
+
+	    if (eventRegistry != null) {
+	      var registrationNameDependencies = eventRegistry.registrationNameDependencies,
+	          possibleRegistrationNames = eventRegistry.possibleRegistrationNames;
+
+	      if (registrationNameDependencies.hasOwnProperty(name)) {
+	        return true;
+	      }
+
+	      var registrationName = possibleRegistrationNames.hasOwnProperty(lowerCasedName) ? possibleRegistrationNames[lowerCasedName] : null;
+
+	      if (registrationName != null) {
+	        error('Invalid event handler property `%s`. Did you mean `%s`?', name, registrationName);
+
+	        warnedProperties$1[name] = true;
+	        return true;
+	      }
+
+	      if (EVENT_NAME_REGEX.test(name)) {
+	        error('Unknown event handler property `%s`. It will be ignored.', name);
+
+	        warnedProperties$1[name] = true;
+	        return true;
+	      }
+	    } else if (EVENT_NAME_REGEX.test(name)) {
+	      // If no event plugins have been injected, we are in a server environment.
+	      // So we can't tell if the event name is correct for sure, but we can filter
+	      // out known bad ones like `onclick`. We can't suggest a specific replacement though.
+	      if (INVALID_EVENT_NAME_REGEX.test(name)) {
+	        error('Invalid event handler property `%s`. ' + 'React events use the camelCase naming convention, for example `onClick`.', name);
+	      }
+
+	      warnedProperties$1[name] = true;
+	      return true;
+	    } // Let the ARIA attribute hook validate ARIA attributes
+
+
+	    if (rARIA$1.test(name) || rARIACamel$1.test(name)) {
+	      return true;
+	    }
+
+	    if (lowerCasedName === 'innerhtml') {
+	      error('Directly setting property `innerHTML` is not permitted. ' + 'For more information, lookup documentation on `dangerouslySetInnerHTML`.');
+
+	      warnedProperties$1[name] = true;
+	      return true;
+	    }
+
+	    if (lowerCasedName === 'aria') {
+	      error('The `aria` attribute is reserved for future use in React. ' + 'Pass individual `aria-` attributes instead.');
+
+	      warnedProperties$1[name] = true;
+	      return true;
+	    }
+
+	    if (lowerCasedName === 'is' && value !== null && value !== undefined && typeof value !== 'string') {
+	      error('Received a `%s` for a string attribute `is`. If this is expected, cast ' + 'the value to a string.', typeof value);
+
+	      warnedProperties$1[name] = true;
+	      return true;
+	    }
+
+	    if (typeof value === 'number' && isNaN(value)) {
+	      error('Received NaN for the `%s` attribute. If this is expected, cast ' + 'the value to a string.', name);
+
+	      warnedProperties$1[name] = true;
+	      return true;
+	    }
+
+	    var propertyInfo = getPropertyInfo(name);
+	    var isReserved = propertyInfo !== null && propertyInfo.type === RESERVED; // Known attributes should match the casing specified in the property config.
+
+	    if (possibleStandardNames.hasOwnProperty(lowerCasedName)) {
+	      var standardName = possibleStandardNames[lowerCasedName];
+
+	      if (standardName !== name) {
+	        error('Invalid DOM property `%s`. Did you mean `%s`?', name, standardName);
+
+	        warnedProperties$1[name] = true;
+	        return true;
+	      }
+	    } else if (!isReserved && name !== lowerCasedName) {
+	      // Unknown attributes should have lowercase casing since that's how they
+	      // will be cased anyway with server rendering.
+	      error('React does not recognize the `%s` prop on a DOM element. If you ' + 'intentionally want it to appear in the DOM as a custom ' + 'attribute, spell it as lowercase `%s` instead. ' + 'If you accidentally passed it from a parent component, remove ' + 'it from the DOM element.', name, lowerCasedName);
+
+	      warnedProperties$1[name] = true;
+	      return true;
+	    }
+
+	    if (typeof value === 'boolean' && shouldRemoveAttributeWithWarning(name, value, propertyInfo, false)) {
+	      if (value) {
+	        error('Received `%s` for a non-boolean attribute `%s`.\n\n' + 'If you want to write it to the DOM, pass a string instead: ' + '%s="%s" or %s={value.toString()}.', value, name, name, value, name);
+	      } else {
+	        error('Received `%s` for a non-boolean attribute `%s`.\n\n' + 'If you want to write it to the DOM, pass a string instead: ' + '%s="%s" or %s={value.toString()}.\n\n' + 'If you used to conditionally omit it with %s={condition && value}, ' + 'pass %s={condition ? value : undefined} instead.', value, name, name, value, name, name, name);
+	      }
+
+	      warnedProperties$1[name] = true;
+	      return true;
+	    } // Now that we've validated casing, do not validate
+	    // data types for reserved props
+
+
+	    if (isReserved) {
+	      return true;
+	    } // Warn when a known attribute is a bad type
+
+
+	    if (shouldRemoveAttributeWithWarning(name, value, propertyInfo, false)) {
+	      warnedProperties$1[name] = true;
+	      return false;
+	    } // Warn when passing the strings 'false' or 'true' into a boolean prop
+
+
+	    if ((value === 'false' || value === 'true') && propertyInfo !== null && propertyInfo.type === BOOLEAN) {
+	      error('Received the string `%s` for the boolean attribute `%s`. ' + '%s ' + 'Did you mean %s={%s}?', value, name, value === 'false' ? 'The browser will interpret it as a truthy value.' : 'Although this works, it will not work as expected if you pass the string "false".', name, value);
+
+	      warnedProperties$1[name] = true;
+	      return true;
+	    }
+
+	    return true;
+	  };
+	}
+
+	var warnUnknownProperties = function (type, props, eventRegistry) {
+	  {
+	    var unknownProps = [];
+
+	    for (var key in props) {
+	      var isValid = validateProperty$1(type, key, props[key], eventRegistry);
+
+	      if (!isValid) {
+	        unknownProps.push(key);
+	      }
+	    }
+
+	    var unknownPropString = unknownProps.map(function (prop) {
+	      return '`' + prop + '`';
+	    }).join(', ');
+
+	    if (unknownProps.length === 1) {
+	      error('Invalid value for prop %s on <%s> tag. Either remove it from the element, ' + 'or pass a string or number value to keep it in the DOM. ' + 'For details, see https://reactjs.org/link/attribute-behavior ', unknownPropString, type);
+	    } else if (unknownProps.length > 1) {
+	      error('Invalid values for props %s on <%s> tag. Either remove them from the element, ' + 'or pass a string or number value to keep them in the DOM. ' + 'For details, see https://reactjs.org/link/attribute-behavior ', unknownPropString, type);
+	    }
+	  }
+	};
+
+	function validateProperties$2(type, props, eventRegistry) {
+	  if (isCustomComponent(type, props)) {
+	    return;
+	  }
+
+	  warnUnknownProperties(type, props, eventRegistry);
+	}
+
+	var warnValidStyle = function () {};
+
+	{
+	  // 'msTransform' is correct, but the other prefixes should be capitalized
+	  var badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/;
+	  var msPattern = /^-ms-/;
+	  var hyphenPattern = /-(.)/g; // style values shouldn't contain a semicolon
+
+	  var badStyleValueWithSemicolonPattern = /;\s*$/;
+	  var warnedStyleNames = {};
+	  var warnedStyleValues = {};
+	  var warnedForNaNValue = false;
+	  var warnedForInfinityValue = false;
+
+	  var camelize = function (string) {
+	    return string.replace(hyphenPattern, function (_, character) {
+	      return character.toUpperCase();
+	    });
+	  };
+
+	  var warnHyphenatedStyleName = function (name) {
+	    if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
+	      return;
+	    }
+
+	    warnedStyleNames[name] = true;
+
+	    error('Unsupported style property %s. Did you mean %s?', name, // As Andi Smith suggests
+	    // (http://www.andismith.com/blog/2012/02/modernizr-prefixed/), an `-ms` prefix
+	    // is converted to lowercase `ms`.
+	    camelize(name.replace(msPattern, 'ms-')));
+	  };
+
+	  var warnBadVendoredStyleName = function (name) {
+	    if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
+	      return;
+	    }
+
+	    warnedStyleNames[name] = true;
+
+	    error('Unsupported vendor-prefixed style property %s. Did you mean %s?', name, name.charAt(0).toUpperCase() + name.slice(1));
+	  };
+
+	  var warnStyleValueWithSemicolon = function (name, value) {
+	    if (warnedStyleValues.hasOwnProperty(value) && warnedStyleValues[value]) {
+	      return;
+	    }
+
+	    warnedStyleValues[value] = true;
+
+	    error("Style property values shouldn't contain a semicolon. " + 'Try "%s: %s" instead.', name, value.replace(badStyleValueWithSemicolonPattern, ''));
+	  };
+
+	  var warnStyleValueIsNaN = function (name, value) {
+	    if (warnedForNaNValue) {
+	      return;
+	    }
+
+	    warnedForNaNValue = true;
+
+	    error('`NaN` is an invalid value for the `%s` css style property.', name);
+	  };
+
+	  var warnStyleValueIsInfinity = function (name, value) {
+	    if (warnedForInfinityValue) {
+	      return;
+	    }
+
+	    warnedForInfinityValue = true;
+
+	    error('`Infinity` is an invalid value for the `%s` css style property.', name);
+	  };
+
+	  warnValidStyle = function (name, value) {
+	    if (name.indexOf('-') > -1) {
+	      warnHyphenatedStyleName(name);
+	    } else if (badVendoredStyleNamePattern.test(name)) {
+	      warnBadVendoredStyleName(name);
+	    } else if (badStyleValueWithSemicolonPattern.test(value)) {
+	      warnStyleValueWithSemicolon(name, value);
+	    }
+
+	    if (typeof value === 'number') {
+	      if (isNaN(value)) {
+	        warnStyleValueIsNaN(name, value);
+	      } else if (!isFinite(value)) {
+	        warnStyleValueIsInfinity(name, value);
+	      }
+	    }
+	  };
+	}
+
+	var warnValidStyle$1 = warnValidStyle;
+
+	// code copied and modified from escape-html
+	var matchHtmlRegExp = /["'&<>]/;
 	/**
-	 * Similar to renderToNodeStream, except this doesn't create extra DOM attributes
-	 * such as data-react-id that React uses internally.
-	 * See https://reactjs.org/docs/react-dom-server.html#rendertostaticnodestream
+	 * Escapes special characters and HTML entities in a given html string.
+	 *
+	 * @param  {string} string HTML string to escape for later insertion
+	 * @return {string}
+	 * @public
 	 */
 
-	function renderToStaticNodeStream(element, options) {
-	  return new ReactMarkupReadableStream(element, true, options);
+	function escapeHtml(string) {
+	  {
+	    checkHtmlStringCoercion(string);
+	  }
+
+	  var str = '' + string;
+	  var match = matchHtmlRegExp.exec(str);
+
+	  if (!match) {
+	    return str;
+	  }
+
+	  var escape;
+	  var html = '';
+	  var index;
+	  var lastIndex = 0;
+
+	  for (index = match.index; index < str.length; index++) {
+	    switch (str.charCodeAt(index)) {
+	      case 34:
+	        // "
+	        escape = '&quot;';
+	        break;
+
+	      case 38:
+	        // &
+	        escape = '&amp;';
+	        break;
+
+	      case 39:
+	        // '
+	        escape = '&#x27;'; // modified from escape-html; used to be '&#39'
+
+	        break;
+
+	      case 60:
+	        // <
+	        escape = '&lt;';
+	        break;
+
+	      case 62:
+	        // >
+	        escape = '&gt;';
+	        break;
+
+	      default:
+	        continue;
+	    }
+
+	    if (lastIndex !== index) {
+	      html += str.substring(lastIndex, index);
+	    }
+
+	    lastIndex = index + 1;
+	    html += escape;
+	  }
+
+	  return lastIndex !== index ? html + str.substring(lastIndex, index) : html;
+	} // end code copied and modified from escape-html
+
+	/**
+	 * Escapes text to prevent scripting attacks.
+	 *
+	 * @param {*} text Text value to escape.
+	 * @return {string} An escaped string.
+	 */
+
+
+	function escapeTextForBrowser(text) {
+	  if (typeof text === 'boolean' || typeof text === 'number') {
+	    // this shortcircuit helps perf for types that we know will never have
+	    // special characters, especially given that this function is used often
+	    // for numeric dom ids.
+	    return '' + text;
+	  }
+
+	  return escapeHtml(text);
 	}
 
-	reactDomServer_node_development.renderToNodeStream = renderToNodeStream;
-	reactDomServer_node_development.renderToStaticMarkup = renderToStaticMarkup;
-	reactDomServer_node_development.renderToStaticNodeStream = renderToStaticNodeStream;
-	reactDomServer_node_development.renderToString = renderToString;
+	var uppercasePattern = /([A-Z])/g;
+	var msPattern$1 = /^ms-/;
+	/**
+	 * Hyphenates a camelcased CSS property name, for example:
+	 *
+	 *   > hyphenateStyleName('backgroundColor')
+	 *   < "background-color"
+	 *   > hyphenateStyleName('MozTransition')
+	 *   < "-moz-transition"
+	 *   > hyphenateStyleName('msTransition')
+	 *   < "-ms-transition"
+	 *
+	 * As Modernizr suggests (http://modernizr.com/docs/#prefixed), an `ms` prefix
+	 * is converted to `-ms-`.
+	 */
+
+	function hyphenateStyleName(name) {
+	  return name.replace(uppercasePattern, '-$1').toLowerCase().replace(msPattern$1, '-ms-');
+	}
+
+	// and any newline or tab are filtered out as if they're not part of the URL.
+	// https://url.spec.whatwg.org/#url-parsing
+	// Tab or newline are defined as \r\n\t:
+	// https://infra.spec.whatwg.org/#ascii-tab-or-newline
+	// A C0 control is a code point in the range \u0000 NULL to \u001F
+	// INFORMATION SEPARATOR ONE, inclusive:
+	// https://infra.spec.whatwg.org/#c0-control-or-space
+
+	/* eslint-disable max-len */
+
+	var isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*\:/i;
+	var didWarn = false;
+
+	function sanitizeURL(url) {
+	  {
+	    if (!didWarn && isJavaScriptProtocol.test(url)) {
+	      didWarn = true;
+
+	      error('A future version of React will block javascript: URLs as a security precaution. ' + 'Use event handlers instead if you can. If you need to generate unsafe HTML try ' + 'using dangerouslySetInnerHTML instead. React was passed %s.', JSON.stringify(url));
+	    }
+	  }
+	}
+
+	var isArrayImpl = Array.isArray; // eslint-disable-next-line no-redeclare
+
+	function isArray(a) {
+	  return isArrayImpl(a);
+	}
+
+	var startInlineScript = stringToPrecomputedChunk('<script>');
+	var endInlineScript = stringToPrecomputedChunk('</script>');
+	var startScriptSrc = stringToPrecomputedChunk('<script src="');
+	var startModuleSrc = stringToPrecomputedChunk('<script type="module" src="');
+	var endAsyncScript = stringToPrecomputedChunk('" async=""></script>');
+	/**
+	 * This escaping function is designed to work with bootstrapScriptContent only.
+	 * because we know we are escaping the entire script. We can avoid for instance
+	 * escaping html comment string sequences that are valid javascript as well because
+	 * if there are no sebsequent <script sequences the html parser will never enter
+	 * script data double escaped state (see: https://www.w3.org/TR/html53/syntax.html#script-data-double-escaped-state)
+	 *
+	 * While untrusted script content should be made safe before using this api it will
+	 * ensure that the script cannot be early terminated or never terminated state
+	 */
+
+	function escapeBootstrapScriptContent(scriptText) {
+	  {
+	    checkHtmlStringCoercion(scriptText);
+	  }
+
+	  return ('' + scriptText).replace(scriptRegex, scriptReplacer);
+	}
+
+	var scriptRegex = /(<\/|<)(s)(cript)/gi;
+
+	var scriptReplacer = function (match, prefix, s, suffix) {
+	  return "" + prefix + (s === 's' ? "\\u0073" : "\\u0053") + suffix;
+	}; // Allows us to keep track of what we've already written so we can refer back to it.
+
+
+	function createResponseState(identifierPrefix, nonce, bootstrapScriptContent, bootstrapScripts, bootstrapModules) {
+	  var idPrefix = identifierPrefix === undefined ? '' : identifierPrefix;
+	  var inlineScriptWithNonce = nonce === undefined ? startInlineScript : stringToPrecomputedChunk('<script nonce="' + escapeTextForBrowser(nonce) + '">');
+	  var bootstrapChunks = [];
+
+	  if (bootstrapScriptContent !== undefined) {
+	    bootstrapChunks.push(inlineScriptWithNonce, stringToChunk(escapeBootstrapScriptContent(bootstrapScriptContent)), endInlineScript);
+	  }
+
+	  if (bootstrapScripts !== undefined) {
+	    for (var i = 0; i < bootstrapScripts.length; i++) {
+	      bootstrapChunks.push(startScriptSrc, stringToChunk(escapeTextForBrowser(bootstrapScripts[i])), endAsyncScript);
+	    }
+	  }
+
+	  if (bootstrapModules !== undefined) {
+	    for (var _i = 0; _i < bootstrapModules.length; _i++) {
+	      bootstrapChunks.push(startModuleSrc, stringToChunk(escapeTextForBrowser(bootstrapModules[_i])), endAsyncScript);
+	    }
+	  }
+
+	  return {
+	    bootstrapChunks: bootstrapChunks,
+	    startInlineScript: inlineScriptWithNonce,
+	    placeholderPrefix: stringToPrecomputedChunk(idPrefix + 'P:'),
+	    segmentPrefix: stringToPrecomputedChunk(idPrefix + 'S:'),
+	    boundaryPrefix: idPrefix + 'B:',
+	    idPrefix: idPrefix,
+	    nextSuspenseID: 0,
+	    sentCompleteSegmentFunction: false,
+	    sentCompleteBoundaryFunction: false,
+	    sentClientRenderFunction: false
+	  };
+	} // Constants for the insertion mode we're currently writing in. We don't encode all HTML5 insertion
+	// modes. We only include the variants as they matter for the sake of our purposes.
+	// We don't actually provide the namespace therefore we use constants instead of the string.
+
+	var ROOT_HTML_MODE = 0; // Used for the root most element tag.
+
+	var HTML_MODE = 1;
+	var SVG_MODE = 2;
+	var MATHML_MODE = 3;
+	var HTML_TABLE_MODE = 4;
+	var HTML_TABLE_BODY_MODE = 5;
+	var HTML_TABLE_ROW_MODE = 6;
+	var HTML_COLGROUP_MODE = 7; // We have a greater than HTML_TABLE_MODE check elsewhere. If you add more cases here, make sure it
+	// still makes sense
+
+	function createFormatContext(insertionMode, selectedValue) {
+	  return {
+	    insertionMode: insertionMode,
+	    selectedValue: selectedValue
+	  };
+	}
+
+	function createRootFormatContext(namespaceURI) {
+	  var insertionMode = namespaceURI === 'http://www.w3.org/2000/svg' ? SVG_MODE : namespaceURI === 'http://www.w3.org/1998/Math/MathML' ? MATHML_MODE : ROOT_HTML_MODE;
+	  return createFormatContext(insertionMode, null);
+	}
+	function getChildFormatContext(parentContext, type, props) {
+	  switch (type) {
+	    case 'select':
+	      return createFormatContext(HTML_MODE, props.value != null ? props.value : props.defaultValue);
+
+	    case 'svg':
+	      return createFormatContext(SVG_MODE, null);
+
+	    case 'math':
+	      return createFormatContext(MATHML_MODE, null);
+
+	    case 'foreignObject':
+	      return createFormatContext(HTML_MODE, null);
+	    // Table parents are special in that their children can only be created at all if they're
+	    // wrapped in a table parent. So we need to encode that we're entering this mode.
+
+	    case 'table':
+	      return createFormatContext(HTML_TABLE_MODE, null);
+
+	    case 'thead':
+	    case 'tbody':
+	    case 'tfoot':
+	      return createFormatContext(HTML_TABLE_BODY_MODE, null);
+
+	    case 'colgroup':
+	      return createFormatContext(HTML_COLGROUP_MODE, null);
+
+	    case 'tr':
+	      return createFormatContext(HTML_TABLE_ROW_MODE, null);
+	  }
+
+	  if (parentContext.insertionMode >= HTML_TABLE_MODE) {
+	    // Whatever tag this was, it wasn't a table parent or other special parent, so we must have
+	    // entered plain HTML again.
+	    return createFormatContext(HTML_MODE, null);
+	  }
+
+	  if (parentContext.insertionMode === ROOT_HTML_MODE) {
+	    // We've emitted the root and is now in plain HTML mode.
+	    return createFormatContext(HTML_MODE, null);
+	  }
+
+	  return parentContext;
+	}
+	var UNINITIALIZED_SUSPENSE_BOUNDARY_ID = null;
+	function assignSuspenseBoundaryID(responseState) {
+	  var generatedID = responseState.nextSuspenseID++;
+	  return stringToPrecomputedChunk(responseState.boundaryPrefix + generatedID.toString(16));
+	}
+	function makeId(responseState, treeId, localId) {
+	  var idPrefix = responseState.idPrefix;
+	  var id = ':' + idPrefix + 'R' + treeId; // Unless this is the first id at this level, append a number at the end
+	  // that represents the position of this useId hook among all the useId
+	  // hooks for this fiber.
+
+	  if (localId > 0) {
+	    id += 'H' + localId.toString(32);
+	  }
+
+	  return id + ':';
+	}
+
+	function encodeHTMLTextNode(text) {
+	  return escapeTextForBrowser(text);
+	}
+
+	var textSeparator = stringToPrecomputedChunk('<!-- -->');
+	function pushTextInstance(target, text, responseState, textEmbedded) {
+	  if (text === '') {
+	    // Empty text doesn't have a DOM node representation and the hydration is aware of this.
+	    return textEmbedded;
+	  }
+
+	  if (textEmbedded) {
+	    target.push(textSeparator);
+	  }
+
+	  target.push(stringToChunk(encodeHTMLTextNode(text)));
+	  return true;
+	} // Called when Fizz is done with a Segment. Currently the only purpose is to conditionally
+	// emit a text separator when we don't know for sure it is safe to omit
+
+	function pushSegmentFinale(target, responseState, lastPushedText, textEmbedded) {
+	  if (lastPushedText && textEmbedded) {
+	    target.push(textSeparator);
+	  }
+	}
+	var styleNameCache = new Map();
+
+	function processStyleName(styleName) {
+	  var chunk = styleNameCache.get(styleName);
+
+	  if (chunk !== undefined) {
+	    return chunk;
+	  }
+
+	  var result = stringToPrecomputedChunk(escapeTextForBrowser(hyphenateStyleName(styleName)));
+	  styleNameCache.set(styleName, result);
+	  return result;
+	}
+
+	var styleAttributeStart = stringToPrecomputedChunk(' style="');
+	var styleAssign = stringToPrecomputedChunk(':');
+	var styleSeparator = stringToPrecomputedChunk(';');
+
+	function pushStyle(target, responseState, style) {
+	  if (typeof style !== 'object') {
+	    throw new Error('The `style` prop expects a mapping from style properties to values, ' + "not a string. For example, style={{marginRight: spacing + 'em'}} when " + 'using JSX.');
+	  }
+
+	  var isFirst = true;
+
+	  for (var styleName in style) {
+	    if (!hasOwnProperty.call(style, styleName)) {
+	      continue;
+	    } // If you provide unsafe user data here they can inject arbitrary CSS
+	    // which may be problematic (I couldn't repro this):
+	    // https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
+	    // http://www.thespanner.co.uk/2007/11/26/ultimate-xss-css-injection/
+	    // This is not an XSS hole but instead a potential CSS injection issue
+	    // which has lead to a greater discussion about how we're going to
+	    // trust URLs moving forward. See #2115901
+
+
+	    var styleValue = style[styleName];
+
+	    if (styleValue == null || typeof styleValue === 'boolean' || styleValue === '') {
+	      // TODO: We used to set empty string as a style with an empty value. Does that ever make sense?
+	      continue;
+	    }
+
+	    var nameChunk = void 0;
+	    var valueChunk = void 0;
+	    var isCustomProperty = styleName.indexOf('--') === 0;
+
+	    if (isCustomProperty) {
+	      nameChunk = stringToChunk(escapeTextForBrowser(styleName));
+
+	      {
+	        checkCSSPropertyStringCoercion(styleValue, styleName);
+	      }
+
+	      valueChunk = stringToChunk(escapeTextForBrowser(('' + styleValue).trim()));
+	    } else {
+	      {
+	        warnValidStyle$1(styleName, styleValue);
+	      }
+
+	      nameChunk = processStyleName(styleName);
+
+	      if (typeof styleValue === 'number') {
+	        if (styleValue !== 0 && !hasOwnProperty.call(isUnitlessNumber, styleName)) {
+	          valueChunk = stringToChunk(styleValue + 'px'); // Presumes implicit 'px' suffix for unitless numbers
+	        } else {
+	          valueChunk = stringToChunk('' + styleValue);
+	        }
+	      } else {
+	        {
+	          checkCSSPropertyStringCoercion(styleValue, styleName);
+	        }
+
+	        valueChunk = stringToChunk(escapeTextForBrowser(('' + styleValue).trim()));
+	      }
+	    }
+
+	    if (isFirst) {
+	      isFirst = false; // If it's first, we don't need any separators prefixed.
+
+	      target.push(styleAttributeStart, nameChunk, styleAssign, valueChunk);
+	    } else {
+	      target.push(styleSeparator, nameChunk, styleAssign, valueChunk);
+	    }
+	  }
+
+	  if (!isFirst) {
+	    target.push(attributeEnd);
+	  }
+	}
+
+	var attributeSeparator = stringToPrecomputedChunk(' ');
+	var attributeAssign = stringToPrecomputedChunk('="');
+	var attributeEnd = stringToPrecomputedChunk('"');
+	var attributeEmptyString = stringToPrecomputedChunk('=""');
+
+	function pushAttribute(target, responseState, name, value) {
+	  switch (name) {
+	    case 'style':
+	      {
+	        pushStyle(target, responseState, value);
+	        return;
+	      }
+
+	    case 'defaultValue':
+	    case 'defaultChecked': // These shouldn't be set as attributes on generic HTML elements.
+
+	    case 'innerHTML': // Must use dangerouslySetInnerHTML instead.
+
+	    case 'suppressContentEditableWarning':
+	    case 'suppressHydrationWarning':
+	      // Ignored. These are built-in to React on the client.
+	      return;
+	  }
+
+	  if ( // shouldIgnoreAttribute
+	  // We have already filtered out null/undefined and reserved words.
+	  name.length > 2 && (name[0] === 'o' || name[0] === 'O') && (name[1] === 'n' || name[1] === 'N')) {
+	    return;
+	  }
+
+	  var propertyInfo = getPropertyInfo(name);
+
+	  if (propertyInfo !== null) {
+	    // shouldRemoveAttribute
+	    switch (typeof value) {
+	      case 'function': // $FlowIssue symbol is perfectly valid here
+
+	      case 'symbol':
+	        // eslint-disable-line
+	        return;
+
+	      case 'boolean':
+	        {
+	          if (!propertyInfo.acceptsBooleans) {
+	            return;
+	          }
+	        }
+	    }
+
+	    var attributeName = propertyInfo.attributeName;
+	    var attributeNameChunk = stringToChunk(attributeName); // TODO: If it's known we can cache the chunk.
+
+	    switch (propertyInfo.type) {
+	      case BOOLEAN:
+	        if (value) {
+	          target.push(attributeSeparator, attributeNameChunk, attributeEmptyString);
+	        }
+
+	        return;
+
+	      case OVERLOADED_BOOLEAN:
+	        if (value === true) {
+	          target.push(attributeSeparator, attributeNameChunk, attributeEmptyString);
+	        } else if (value === false) ; else {
+	          target.push(attributeSeparator, attributeNameChunk, attributeAssign, stringToChunk(escapeTextForBrowser(value)), attributeEnd);
+	        }
+
+	        return;
+
+	      case NUMERIC:
+	        if (!isNaN(value)) {
+	          target.push(attributeSeparator, attributeNameChunk, attributeAssign, stringToChunk(escapeTextForBrowser(value)), attributeEnd);
+	        }
+
+	        break;
+
+	      case POSITIVE_NUMERIC:
+	        if (!isNaN(value) && value >= 1) {
+	          target.push(attributeSeparator, attributeNameChunk, attributeAssign, stringToChunk(escapeTextForBrowser(value)), attributeEnd);
+	        }
+
+	        break;
+
+	      default:
+	        if (propertyInfo.sanitizeURL) {
+	          {
+	            checkAttributeStringCoercion(value, attributeName);
+	          }
+
+	          value = '' + value;
+	          sanitizeURL(value);
+	        }
+
+	        target.push(attributeSeparator, attributeNameChunk, attributeAssign, stringToChunk(escapeTextForBrowser(value)), attributeEnd);
+	    }
+	  } else if (isAttributeNameSafe(name)) {
+	    // shouldRemoveAttribute
+	    switch (typeof value) {
+	      case 'function': // $FlowIssue symbol is perfectly valid here
+
+	      case 'symbol':
+	        // eslint-disable-line
+	        return;
+
+	      case 'boolean':
+	        {
+	          var prefix = name.toLowerCase().slice(0, 5);
+
+	          if (prefix !== 'data-' && prefix !== 'aria-') {
+	            return;
+	          }
+	        }
+	    }
+
+	    target.push(attributeSeparator, stringToChunk(name), attributeAssign, stringToChunk(escapeTextForBrowser(value)), attributeEnd);
+	  }
+	}
+
+	var endOfStartTag = stringToPrecomputedChunk('>');
+	var endOfStartTagSelfClosing = stringToPrecomputedChunk('/>');
+
+	function pushInnerHTML(target, innerHTML, children) {
+	  if (innerHTML != null) {
+	    if (children != null) {
+	      throw new Error('Can only set one of `children` or `props.dangerouslySetInnerHTML`.');
+	    }
+
+	    if (typeof innerHTML !== 'object' || !('__html' in innerHTML)) {
+	      throw new Error('`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. ' + 'Please visit https://reactjs.org/link/dangerously-set-inner-html ' + 'for more information.');
+	    }
+
+	    var html = innerHTML.__html;
+
+	    if (html !== null && html !== undefined) {
+	      {
+	        checkHtmlStringCoercion(html);
+	      }
+
+	      target.push(stringToChunk('' + html));
+	    }
+	  }
+	} // TODO: Move these to ResponseState so that we warn for every request.
+	// It would help debugging in stateful servers (e.g. service worker).
+
+
+	var didWarnDefaultInputValue = false;
+	var didWarnDefaultChecked = false;
+	var didWarnDefaultSelectValue = false;
+	var didWarnDefaultTextareaValue = false;
+	var didWarnInvalidOptionChildren = false;
+	var didWarnInvalidOptionInnerHTML = false;
+	var didWarnSelectedSetOnOption = false;
+
+	function checkSelectProp(props, propName) {
+	  {
+	    var value = props[propName];
+
+	    if (value != null) {
+	      var array = isArray(value);
+
+	      if (props.multiple && !array) {
+	        error('The `%s` prop supplied to <select> must be an array if ' + '`multiple` is true.', propName);
+	      } else if (!props.multiple && array) {
+	        error('The `%s` prop supplied to <select> must be a scalar ' + 'value if `multiple` is false.', propName);
+	      }
+	    }
+	  }
+	}
+
+	function pushStartSelect(target, props, responseState) {
+	  {
+	    checkControlledValueProps('select', props);
+	    checkSelectProp(props, 'value');
+	    checkSelectProp(props, 'defaultValue');
+
+	    if (props.value !== undefined && props.defaultValue !== undefined && !didWarnDefaultSelectValue) {
+	      error('Select elements must be either controlled or uncontrolled ' + '(specify either the value prop, or the defaultValue prop, but not ' + 'both). Decide between using a controlled or uncontrolled select ' + 'element and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components');
+
+	      didWarnDefaultSelectValue = true;
+	    }
+	  }
+
+	  target.push(startChunkForTag('select'));
+	  var children = null;
+	  var innerHTML = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          // TODO: This doesn't really make sense for select since it can't use the controlled
+	          // value in the innerHTML.
+	          innerHTML = propValue;
+	          break;
+
+	        case 'defaultValue':
+	        case 'value':
+	          // These are set on the Context instead and applied to the nested options.
+	          break;
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTag);
+	  pushInnerHTML(target, innerHTML, children);
+	  return children;
+	}
+
+	function flattenOptionChildren(children) {
+	  var content = ''; // Flatten children and warn if they aren't strings or numbers;
+	  // invalid types are ignored.
+
+	  React.Children.forEach(children, function (child) {
+	    if (child == null) {
+	      return;
+	    }
+
+	    content += child;
+
+	    {
+	      if (!didWarnInvalidOptionChildren && typeof child !== 'string' && typeof child !== 'number') {
+	        didWarnInvalidOptionChildren = true;
+
+	        error('Cannot infer the option value of complex children. ' + 'Pass a `value` prop or use a plain string as children to <option>.');
+	      }
+	    }
+	  });
+	  return content;
+	}
+
+	var selectedMarkerAttribute = stringToPrecomputedChunk(' selected=""');
+
+	function pushStartOption(target, props, responseState, formatContext) {
+	  var selectedValue = formatContext.selectedValue;
+	  target.push(startChunkForTag('option'));
+	  var children = null;
+	  var value = null;
+	  var selected = null;
+	  var innerHTML = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'selected':
+	          // ignore
+	          selected = propValue;
+
+	          {
+	            // TODO: Remove support for `selected` in <option>.
+	            if (!didWarnSelectedSetOnOption) {
+	              error('Use the `defaultValue` or `value` props on <select> instead of ' + 'setting `selected` on <option>.');
+
+	              didWarnSelectedSetOnOption = true;
+	            }
+	          }
+
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          innerHTML = propValue;
+	          break;
+	        // eslint-disable-next-line-no-fallthrough
+
+	        case 'value':
+	          value = propValue;
+	        // We intentionally fallthrough to also set the attribute on the node.
+	        // eslint-disable-next-line-no-fallthrough
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  if (selectedValue != null) {
+	    var stringValue;
+
+	    if (value !== null) {
+	      {
+	        checkAttributeStringCoercion(value, 'value');
+	      }
+
+	      stringValue = '' + value;
+	    } else {
+	      {
+	        if (innerHTML !== null) {
+	          if (!didWarnInvalidOptionInnerHTML) {
+	            didWarnInvalidOptionInnerHTML = true;
+
+	            error('Pass a `value` prop if you set dangerouslyInnerHTML so React knows ' + 'which value should be selected.');
+	          }
+	        }
+	      }
+
+	      stringValue = flattenOptionChildren(children);
+	    }
+
+	    if (isArray(selectedValue)) {
+	      // multiple
+	      for (var i = 0; i < selectedValue.length; i++) {
+	        {
+	          checkAttributeStringCoercion(selectedValue[i], 'value');
+	        }
+
+	        var v = '' + selectedValue[i];
+
+	        if (v === stringValue) {
+	          target.push(selectedMarkerAttribute);
+	          break;
+	        }
+	      }
+	    } else {
+	      {
+	        checkAttributeStringCoercion(selectedValue, 'select.value');
+	      }
+
+	      if ('' + selectedValue === stringValue) {
+	        target.push(selectedMarkerAttribute);
+	      }
+	    }
+	  } else if (selected) {
+	    target.push(selectedMarkerAttribute);
+	  }
+
+	  target.push(endOfStartTag);
+	  pushInnerHTML(target, innerHTML, children);
+	  return children;
+	}
+
+	function pushInput(target, props, responseState) {
+	  {
+	    checkControlledValueProps('input', props);
+
+	    if (props.checked !== undefined && props.defaultChecked !== undefined && !didWarnDefaultChecked) {
+	      error('%s contains an input of type %s with both checked and defaultChecked props. ' + 'Input elements must be either controlled or uncontrolled ' + '(specify either the checked prop, or the defaultChecked prop, but not ' + 'both). Decide between using a controlled or uncontrolled input ' + 'element and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components', 'A component', props.type);
+
+	      didWarnDefaultChecked = true;
+	    }
+
+	    if (props.value !== undefined && props.defaultValue !== undefined && !didWarnDefaultInputValue) {
+	      error('%s contains an input of type %s with both value and defaultValue props. ' + 'Input elements must be either controlled or uncontrolled ' + '(specify either the value prop, or the defaultValue prop, but not ' + 'both). Decide between using a controlled or uncontrolled input ' + 'element and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components', 'A component', props.type);
+
+	      didWarnDefaultInputValue = true;
+	    }
+	  }
+
+	  target.push(startChunkForTag('input'));
+	  var value = null;
+	  var defaultValue = null;
+	  var checked = null;
+	  var defaultChecked = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	        case 'dangerouslySetInnerHTML':
+	          throw new Error('input' + " is a self-closing tag and must neither have `children` nor " + 'use `dangerouslySetInnerHTML`.');
+	        // eslint-disable-next-line-no-fallthrough
+
+	        case 'defaultChecked':
+	          defaultChecked = propValue;
+	          break;
+
+	        case 'defaultValue':
+	          defaultValue = propValue;
+	          break;
+
+	        case 'checked':
+	          checked = propValue;
+	          break;
+
+	        case 'value':
+	          value = propValue;
+	          break;
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  if (checked !== null) {
+	    pushAttribute(target, responseState, 'checked', checked);
+	  } else if (defaultChecked !== null) {
+	    pushAttribute(target, responseState, 'checked', defaultChecked);
+	  }
+
+	  if (value !== null) {
+	    pushAttribute(target, responseState, 'value', value);
+	  } else if (defaultValue !== null) {
+	    pushAttribute(target, responseState, 'value', defaultValue);
+	  }
+
+	  target.push(endOfStartTagSelfClosing);
+	  return null;
+	}
+
+	function pushStartTextArea(target, props, responseState) {
+	  {
+	    checkControlledValueProps('textarea', props);
+
+	    if (props.value !== undefined && props.defaultValue !== undefined && !didWarnDefaultTextareaValue) {
+	      error('Textarea elements must be either controlled or uncontrolled ' + '(specify either the value prop, or the defaultValue prop, but not ' + 'both). Decide between using a controlled or uncontrolled textarea ' + 'and remove one of these props. More info: ' + 'https://reactjs.org/link/controlled-components');
+
+	      didWarnDefaultTextareaValue = true;
+	    }
+	  }
+
+	  target.push(startChunkForTag('textarea'));
+	  var value = null;
+	  var defaultValue = null;
+	  var children = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'value':
+	          value = propValue;
+	          break;
+
+	        case 'defaultValue':
+	          defaultValue = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          throw new Error('`dangerouslySetInnerHTML` does not make sense on <textarea>.');
+	        // eslint-disable-next-line-no-fallthrough
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  if (value === null && defaultValue !== null) {
+	    value = defaultValue;
+	  }
+
+	  target.push(endOfStartTag); // TODO (yungsters): Remove support for children content in <textarea>.
+
+	  if (children != null) {
+	    {
+	      error('Use the `defaultValue` or `value` props instead of setting ' + 'children on <textarea>.');
+	    }
+
+	    if (value != null) {
+	      throw new Error('If you supply `defaultValue` on a <textarea>, do not pass children.');
+	    }
+
+	    if (isArray(children)) {
+	      if (children.length > 1) {
+	        throw new Error('<textarea> can only have at most one child.');
+	      } // TODO: remove the coercion and the DEV check below because it will
+	      // always be overwritten by the coercion several lines below it. #22309
+
+
+	      {
+	        checkHtmlStringCoercion(children[0]);
+	      }
+
+	      value = '' + children[0];
+	    }
+
+	    {
+	      checkHtmlStringCoercion(children);
+	    }
+
+	    value = '' + children;
+	  }
+
+	  if (typeof value === 'string' && value[0] === '\n') {
+	    // text/html ignores the first character in these tags if it's a newline
+	    // Prefer to break application/xml over text/html (for now) by adding
+	    // a newline specifically to get eaten by the parser. (Alternately for
+	    // textareas, replacing "^\n" with "\r\n" doesn't get eaten, and the first
+	    // \r is normalized out by HTMLTextAreaElement#value.)
+	    // See: <http://www.w3.org/TR/html-polyglot/#newlines-in-textarea-and-pre>
+	    // See: <http://www.w3.org/TR/html5/syntax.html#element-restrictions>
+	    // See: <http://www.w3.org/TR/html5/syntax.html#newlines>
+	    // See: Parsing of "textarea" "listing" and "pre" elements
+	    //  from <http://www.w3.org/TR/html5/syntax.html#parsing-main-inbody>
+	    target.push(leadingNewline);
+	  } // ToString and push directly instead of recurse over children.
+	  // We don't really support complex children in the value anyway.
+	  // This also currently avoids a trailing comment node which breaks textarea.
+
+
+	  if (value !== null) {
+	    {
+	      checkAttributeStringCoercion(value, 'value');
+	    }
+
+	    target.push(stringToChunk(encodeHTMLTextNode('' + value)));
+	  }
+
+	  return null;
+	}
+
+	function pushSelfClosing(target, props, tag, responseState) {
+	  target.push(startChunkForTag(tag));
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	        case 'dangerouslySetInnerHTML':
+	          throw new Error(tag + " is a self-closing tag and must neither have `children` nor " + 'use `dangerouslySetInnerHTML`.');
+	        // eslint-disable-next-line-no-fallthrough
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTagSelfClosing);
+	  return null;
+	}
+
+	function pushStartMenuItem(target, props, responseState) {
+	  target.push(startChunkForTag('menuitem'));
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	        case 'dangerouslySetInnerHTML':
+	          throw new Error('menuitems cannot have `children` nor `dangerouslySetInnerHTML`.');
+	        // eslint-disable-next-line-no-fallthrough
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTag);
+	  return null;
+	}
+
+	function pushStartTitle(target, props, responseState) {
+	  target.push(startChunkForTag('title'));
+	  var children = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          throw new Error('`dangerouslySetInnerHTML` does not make sense on <title>.');
+	        // eslint-disable-next-line-no-fallthrough
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTag);
+
+	  {
+	    var child = Array.isArray(children) && children.length < 2 ? children[0] || null : children;
+
+	    if (Array.isArray(children) && children.length > 1) {
+	      error('A title element received an array with more than 1 element as children. ' + 'In browsers title Elements can only have Text Nodes as children. If ' + 'the children being rendered output more than a single text node in aggregate the browser ' + 'will display markup and comments as text in the title and hydration will likely fail and ' + 'fall back to client rendering');
+	    } else if (child != null && child.$$typeof != null) {
+	      error('A title element received a React element for children. ' + 'In the browser title Elements can only have Text Nodes as children. If ' + 'the children being rendered output more than a single text node in aggregate the browser ' + 'will display markup and comments as text in the title and hydration will likely fail and ' + 'fall back to client rendering');
+	    } else if (child != null && typeof child !== 'string' && typeof child !== 'number') {
+	      error('A title element received a value that was not a string or number for children. ' + 'In the browser title Elements can only have Text Nodes as children. If ' + 'the children being rendered output more than a single text node in aggregate the browser ' + 'will display markup and comments as text in the title and hydration will likely fail and ' + 'fall back to client rendering');
+	    }
+	  }
+
+	  return children;
+	}
+
+	function pushStartGenericElement(target, props, tag, responseState) {
+	  target.push(startChunkForTag(tag));
+	  var children = null;
+	  var innerHTML = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          innerHTML = propValue;
+	          break;
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTag);
+	  pushInnerHTML(target, innerHTML, children);
+
+	  if (typeof children === 'string') {
+	    // Special case children as a string to avoid the unnecessary comment.
+	    // TODO: Remove this special case after the general optimization is in place.
+	    target.push(stringToChunk(encodeHTMLTextNode(children)));
+	    return null;
+	  }
+
+	  return children;
+	}
+
+	function pushStartCustomElement(target, props, tag, responseState) {
+	  target.push(startChunkForTag(tag));
+	  var children = null;
+	  var innerHTML = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          innerHTML = propValue;
+	          break;
+
+	        case 'style':
+	          pushStyle(target, responseState, propValue);
+	          break;
+
+	        case 'suppressContentEditableWarning':
+	        case 'suppressHydrationWarning':
+	          // Ignored. These are built-in to React on the client.
+	          break;
+
+	        default:
+	          if (isAttributeNameSafe(propKey) && typeof propValue !== 'function' && typeof propValue !== 'symbol') {
+	            target.push(attributeSeparator, stringToChunk(propKey), attributeAssign, stringToChunk(escapeTextForBrowser(propValue)), attributeEnd);
+	          }
+
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTag);
+	  pushInnerHTML(target, innerHTML, children);
+	  return children;
+	}
+
+	var leadingNewline = stringToPrecomputedChunk('\n');
+
+	function pushStartPreformattedElement(target, props, tag, responseState) {
+	  target.push(startChunkForTag(tag));
+	  var children = null;
+	  var innerHTML = null;
+
+	  for (var propKey in props) {
+	    if (hasOwnProperty.call(props, propKey)) {
+	      var propValue = props[propKey];
+
+	      if (propValue == null) {
+	        continue;
+	      }
+
+	      switch (propKey) {
+	        case 'children':
+	          children = propValue;
+	          break;
+
+	        case 'dangerouslySetInnerHTML':
+	          innerHTML = propValue;
+	          break;
+
+	        default:
+	          pushAttribute(target, responseState, propKey, propValue);
+	          break;
+	      }
+	    }
+	  }
+
+	  target.push(endOfStartTag); // text/html ignores the first character in these tags if it's a newline
+	  // Prefer to break application/xml over text/html (for now) by adding
+	  // a newline specifically to get eaten by the parser. (Alternately for
+	  // textareas, replacing "^\n" with "\r\n" doesn't get eaten, and the first
+	  // \r is normalized out by HTMLTextAreaElement#value.)
+	  // See: <http://www.w3.org/TR/html-polyglot/#newlines-in-textarea-and-pre>
+	  // See: <http://www.w3.org/TR/html5/syntax.html#element-restrictions>
+	  // See: <http://www.w3.org/TR/html5/syntax.html#newlines>
+	  // See: Parsing of "textarea" "listing" and "pre" elements
+	  //  from <http://www.w3.org/TR/html5/syntax.html#parsing-main-inbody>
+	  // TODO: This doesn't deal with the case where the child is an array
+	  // or component that returns a string.
+
+	  if (innerHTML != null) {
+	    if (children != null) {
+	      throw new Error('Can only set one of `children` or `props.dangerouslySetInnerHTML`.');
+	    }
+
+	    if (typeof innerHTML !== 'object' || !('__html' in innerHTML)) {
+	      throw new Error('`props.dangerouslySetInnerHTML` must be in the form `{__html: ...}`. ' + 'Please visit https://reactjs.org/link/dangerously-set-inner-html ' + 'for more information.');
+	    }
+
+	    var html = innerHTML.__html;
+
+	    if (html !== null && html !== undefined) {
+	      if (typeof html === 'string' && html.length > 0 && html[0] === '\n') {
+	        target.push(leadingNewline, stringToChunk(html));
+	      } else {
+	        {
+	          checkHtmlStringCoercion(html);
+	        }
+
+	        target.push(stringToChunk('' + html));
+	      }
+	    }
+	  }
+
+	  if (typeof children === 'string' && children[0] === '\n') {
+	    target.push(leadingNewline);
+	  }
+
+	  return children;
+	} // We accept any tag to be rendered but since this gets injected into arbitrary
+	// HTML, we want to make sure that it's a safe tag.
+	// http://www.w3.org/TR/REC-xml/#NT-Name
+
+
+	var VALID_TAG_REGEX = /^[a-zA-Z][a-zA-Z:_\.\-\d]*$/; // Simplified subset
+
+	var validatedTagCache = new Map();
+
+	function startChunkForTag(tag) {
+	  var tagStartChunk = validatedTagCache.get(tag);
+
+	  if (tagStartChunk === undefined) {
+	    if (!VALID_TAG_REGEX.test(tag)) {
+	      throw new Error("Invalid tag: " + tag);
+	    }
+
+	    tagStartChunk = stringToPrecomputedChunk('<' + tag);
+	    validatedTagCache.set(tag, tagStartChunk);
+	  }
+
+	  return tagStartChunk;
+	}
+
+	var DOCTYPE = stringToPrecomputedChunk('<!DOCTYPE html>');
+	function pushStartInstance(target, type, props, responseState, formatContext) {
+	  {
+	    validateProperties(type, props);
+	    validateProperties$1(type, props);
+	    validateProperties$2(type, props, null);
+
+	    if (!props.suppressContentEditableWarning && props.contentEditable && props.children != null) {
+	      error('A component is `contentEditable` and contains `children` managed by ' + 'React. It is now your responsibility to guarantee that none of ' + 'those nodes are unexpectedly modified or duplicated. This is ' + 'probably not intentional.');
+	    }
+
+	    if (formatContext.insertionMode !== SVG_MODE && formatContext.insertionMode !== MATHML_MODE) {
+	      if (type.indexOf('-') === -1 && typeof props.is !== 'string' && type.toLowerCase() !== type) {
+	        error('<%s /> is using incorrect casing. ' + 'Use PascalCase for React components, ' + 'or lowercase for HTML elements.', type);
+	      }
+	    }
+	  }
+
+	  switch (type) {
+	    // Special tags
+	    case 'select':
+	      return pushStartSelect(target, props, responseState);
+
+	    case 'option':
+	      return pushStartOption(target, props, responseState, formatContext);
+
+	    case 'textarea':
+	      return pushStartTextArea(target, props, responseState);
+
+	    case 'input':
+	      return pushInput(target, props, responseState);
+
+	    case 'menuitem':
+	      return pushStartMenuItem(target, props, responseState);
+
+	    case 'title':
+	      return pushStartTitle(target, props, responseState);
+	    // Newline eating tags
+
+	    case 'listing':
+	    case 'pre':
+	      {
+	        return pushStartPreformattedElement(target, props, type, responseState);
+	      }
+	    // Omitted close tags
+
+	    case 'area':
+	    case 'base':
+	    case 'br':
+	    case 'col':
+	    case 'embed':
+	    case 'hr':
+	    case 'img':
+	    case 'keygen':
+	    case 'link':
+	    case 'meta':
+	    case 'param':
+	    case 'source':
+	    case 'track':
+	    case 'wbr':
+	      {
+	        return pushSelfClosing(target, props, type, responseState);
+	      }
+	    // These are reserved SVG and MathML elements, that are never custom elements.
+	    // https://w3c.github.io/webcomponents/spec/custom/#custom-elements-core-concepts
+
+	    case 'annotation-xml':
+	    case 'color-profile':
+	    case 'font-face':
+	    case 'font-face-src':
+	    case 'font-face-uri':
+	    case 'font-face-format':
+	    case 'font-face-name':
+	    case 'missing-glyph':
+	      {
+	        return pushStartGenericElement(target, props, type, responseState);
+	      }
+
+	    case 'html':
+	      {
+	        if (formatContext.insertionMode === ROOT_HTML_MODE) {
+	          // If we're rendering the html tag and we're at the root (i.e. not in foreignObject)
+	          // then we also emit the DOCTYPE as part of the root content as a convenience for
+	          // rendering the whole document.
+	          target.push(DOCTYPE);
+	        }
+
+	        return pushStartGenericElement(target, props, type, responseState);
+	      }
+
+	    default:
+	      {
+	        if (type.indexOf('-') === -1 && typeof props.is !== 'string') {
+	          // Generic element
+	          return pushStartGenericElement(target, props, type, responseState);
+	        } else {
+	          // Custom element
+	          return pushStartCustomElement(target, props, type, responseState);
+	        }
+	      }
+	  }
+	}
+	var endTag1 = stringToPrecomputedChunk('</');
+	var endTag2 = stringToPrecomputedChunk('>');
+	function pushEndInstance(target, type, props) {
+	  switch (type) {
+	    // Omitted close tags
+	    // TODO: Instead of repeating this switch we could try to pass a flag from above.
+	    // That would require returning a tuple. Which might be ok if it gets inlined.
+	    case 'area':
+	    case 'base':
+	    case 'br':
+	    case 'col':
+	    case 'embed':
+	    case 'hr':
+	    case 'img':
+	    case 'input':
+	    case 'keygen':
+	    case 'link':
+	    case 'meta':
+	    case 'param':
+	    case 'source':
+	    case 'track':
+	    case 'wbr':
+	      {
+	        // No close tag needed.
+	        break;
+	      }
+
+	    default:
+	      {
+	        target.push(endTag1, stringToChunk(type), endTag2);
+	      }
+	  }
+	}
+	function writeCompletedRoot(destination, responseState) {
+	  var bootstrapChunks = responseState.bootstrapChunks;
+	  var i = 0;
+
+	  for (; i < bootstrapChunks.length - 1; i++) {
+	    writeChunk(destination, bootstrapChunks[i]);
+	  }
+
+	  if (i < bootstrapChunks.length) {
+	    return writeChunkAndReturn(destination, bootstrapChunks[i]);
+	  }
+
+	  return true;
+	} // Structural Nodes
+	// A placeholder is a node inside a hidden partial tree that can be filled in later, but before
+	// display. It's never visible to users. We use the template tag because it can be used in every
+	// type of parent. <script> tags also work in every other tag except <colgroup>.
+
+	var placeholder1 = stringToPrecomputedChunk('<template id="');
+	var placeholder2 = stringToPrecomputedChunk('"></template>');
+	function writePlaceholder(destination, responseState, id) {
+	  writeChunk(destination, placeholder1);
+	  writeChunk(destination, responseState.placeholderPrefix);
+	  var formattedID = stringToChunk(id.toString(16));
+	  writeChunk(destination, formattedID);
+	  return writeChunkAndReturn(destination, placeholder2);
+	} // Suspense boundaries are encoded as comments.
+
+	var startCompletedSuspenseBoundary = stringToPrecomputedChunk('<!--$-->');
+	var startPendingSuspenseBoundary1 = stringToPrecomputedChunk('<!--$?--><template id="');
+	var startPendingSuspenseBoundary2 = stringToPrecomputedChunk('"></template>');
+	var startClientRenderedSuspenseBoundary = stringToPrecomputedChunk('<!--$!-->');
+	var endSuspenseBoundary = stringToPrecomputedChunk('<!--/$-->');
+	var clientRenderedSuspenseBoundaryError1 = stringToPrecomputedChunk('<template');
+	var clientRenderedSuspenseBoundaryErrorAttrInterstitial = stringToPrecomputedChunk('"');
+	var clientRenderedSuspenseBoundaryError1A = stringToPrecomputedChunk(' data-dgst="');
+	var clientRenderedSuspenseBoundaryError1B = stringToPrecomputedChunk(' data-msg="');
+	var clientRenderedSuspenseBoundaryError1C = stringToPrecomputedChunk(' data-stck="');
+	var clientRenderedSuspenseBoundaryError2 = stringToPrecomputedChunk('></template>');
+	function writeStartCompletedSuspenseBoundary(destination, responseState) {
+	  return writeChunkAndReturn(destination, startCompletedSuspenseBoundary);
+	}
+	function writeStartPendingSuspenseBoundary(destination, responseState, id) {
+	  writeChunk(destination, startPendingSuspenseBoundary1);
+
+	  if (id === null) {
+	    throw new Error('An ID must have been assigned before we can complete the boundary.');
+	  }
+
+	  writeChunk(destination, id);
+	  return writeChunkAndReturn(destination, startPendingSuspenseBoundary2);
+	}
+	function writeStartClientRenderedSuspenseBoundary(destination, responseState, errorDigest, errorMesssage, errorComponentStack) {
+	  var result;
+	  result = writeChunkAndReturn(destination, startClientRenderedSuspenseBoundary);
+	  writeChunk(destination, clientRenderedSuspenseBoundaryError1);
+
+	  if (errorDigest) {
+	    writeChunk(destination, clientRenderedSuspenseBoundaryError1A);
+	    writeChunk(destination, stringToChunk(escapeTextForBrowser(errorDigest)));
+	    writeChunk(destination, clientRenderedSuspenseBoundaryErrorAttrInterstitial);
+	  }
+
+	  {
+	    if (errorMesssage) {
+	      writeChunk(destination, clientRenderedSuspenseBoundaryError1B);
+	      writeChunk(destination, stringToChunk(escapeTextForBrowser(errorMesssage)));
+	      writeChunk(destination, clientRenderedSuspenseBoundaryErrorAttrInterstitial);
+	    }
+
+	    if (errorComponentStack) {
+	      writeChunk(destination, clientRenderedSuspenseBoundaryError1C);
+	      writeChunk(destination, stringToChunk(escapeTextForBrowser(errorComponentStack)));
+	      writeChunk(destination, clientRenderedSuspenseBoundaryErrorAttrInterstitial);
+	    }
+	  }
+
+	  result = writeChunkAndReturn(destination, clientRenderedSuspenseBoundaryError2);
+	  return result;
+	}
+	function writeEndCompletedSuspenseBoundary(destination, responseState) {
+	  return writeChunkAndReturn(destination, endSuspenseBoundary);
+	}
+	function writeEndPendingSuspenseBoundary(destination, responseState) {
+	  return writeChunkAndReturn(destination, endSuspenseBoundary);
+	}
+	function writeEndClientRenderedSuspenseBoundary(destination, responseState) {
+	  return writeChunkAndReturn(destination, endSuspenseBoundary);
+	}
+	var startSegmentHTML = stringToPrecomputedChunk('<div hidden id="');
+	var startSegmentHTML2 = stringToPrecomputedChunk('">');
+	var endSegmentHTML = stringToPrecomputedChunk('</div>');
+	var startSegmentSVG = stringToPrecomputedChunk('<svg aria-hidden="true" style="display:none" id="');
+	var startSegmentSVG2 = stringToPrecomputedChunk('">');
+	var endSegmentSVG = stringToPrecomputedChunk('</svg>');
+	var startSegmentMathML = stringToPrecomputedChunk('<math aria-hidden="true" style="display:none" id="');
+	var startSegmentMathML2 = stringToPrecomputedChunk('">');
+	var endSegmentMathML = stringToPrecomputedChunk('</math>');
+	var startSegmentTable = stringToPrecomputedChunk('<table hidden id="');
+	var startSegmentTable2 = stringToPrecomputedChunk('">');
+	var endSegmentTable = stringToPrecomputedChunk('</table>');
+	var startSegmentTableBody = stringToPrecomputedChunk('<table hidden><tbody id="');
+	var startSegmentTableBody2 = stringToPrecomputedChunk('">');
+	var endSegmentTableBody = stringToPrecomputedChunk('</tbody></table>');
+	var startSegmentTableRow = stringToPrecomputedChunk('<table hidden><tr id="');
+	var startSegmentTableRow2 = stringToPrecomputedChunk('">');
+	var endSegmentTableRow = stringToPrecomputedChunk('</tr></table>');
+	var startSegmentColGroup = stringToPrecomputedChunk('<table hidden><colgroup id="');
+	var startSegmentColGroup2 = stringToPrecomputedChunk('">');
+	var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
+	function writeStartSegment(destination, responseState, formatContext, id) {
+	  switch (formatContext.insertionMode) {
+	    case ROOT_HTML_MODE:
+	    case HTML_MODE:
+	      {
+	        writeChunk(destination, startSegmentHTML);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentHTML2);
+	      }
+
+	    case SVG_MODE:
+	      {
+	        writeChunk(destination, startSegmentSVG);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentSVG2);
+	      }
+
+	    case MATHML_MODE:
+	      {
+	        writeChunk(destination, startSegmentMathML);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentMathML2);
+	      }
+
+	    case HTML_TABLE_MODE:
+	      {
+	        writeChunk(destination, startSegmentTable);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentTable2);
+	      }
+	    // TODO: For the rest of these, there will be extra wrapper nodes that never
+	    // get deleted from the document. We need to delete the table too as part
+	    // of the injected scripts. They are invisible though so it's not too terrible
+	    // and it's kind of an edge case to suspend in a table. Totally supported though.
+
+	    case HTML_TABLE_BODY_MODE:
+	      {
+	        writeChunk(destination, startSegmentTableBody);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentTableBody2);
+	      }
+
+	    case HTML_TABLE_ROW_MODE:
+	      {
+	        writeChunk(destination, startSegmentTableRow);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentTableRow2);
+	      }
+
+	    case HTML_COLGROUP_MODE:
+	      {
+	        writeChunk(destination, startSegmentColGroup);
+	        writeChunk(destination, responseState.segmentPrefix);
+	        writeChunk(destination, stringToChunk(id.toString(16)));
+	        return writeChunkAndReturn(destination, startSegmentColGroup2);
+	      }
+
+	    default:
+	      {
+	        throw new Error('Unknown insertion mode. This is a bug in React.');
+	      }
+	  }
+	}
+	function writeEndSegment(destination, formatContext) {
+	  switch (formatContext.insertionMode) {
+	    case ROOT_HTML_MODE:
+	    case HTML_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentHTML);
+	      }
+
+	    case SVG_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentSVG);
+	      }
+
+	    case MATHML_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentMathML);
+	      }
+
+	    case HTML_TABLE_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentTable);
+	      }
+
+	    case HTML_TABLE_BODY_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentTableBody);
+	      }
+
+	    case HTML_TABLE_ROW_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentTableRow);
+	      }
+
+	    case HTML_COLGROUP_MODE:
+	      {
+	        return writeChunkAndReturn(destination, endSegmentColGroup);
+	      }
+
+	    default:
+	      {
+	        throw new Error('Unknown insertion mode. This is a bug in React.');
+	      }
+	  }
+	} // Instruction Set
+	// The following code is the source scripts that we then minify and inline below,
+	// with renamed function names that we hope don't collide:
+	// const COMMENT_NODE = 8;
+	// const SUSPENSE_START_DATA = '$';
+	// const SUSPENSE_END_DATA = '/$';
+	// const SUSPENSE_PENDING_START_DATA = '$?';
+	// const SUSPENSE_FALLBACK_START_DATA = '$!';
+	//
+	// function clientRenderBoundary(suspenseBoundaryID, errorDigest, errorMsg, errorComponentStack) {
+	//   // Find the fallback's first element.
+	//   const suspenseIdNode = document.getElementById(suspenseBoundaryID);
+	//   if (!suspenseIdNode) {
+	//     // The user must have already navigated away from this tree.
+	//     // E.g. because the parent was hydrated.
+	//     return;
+	//   }
+	//   // Find the boundary around the fallback. This is always the previous node.
+	//   const suspenseNode = suspenseIdNode.previousSibling;
+	//   // Tag it to be client rendered.
+	//   suspenseNode.data = SUSPENSE_FALLBACK_START_DATA;
+	//   // assign error metadata to first sibling
+	//   let dataset = suspenseIdNode.dataset;
+	//   if (errorDigest) dataset.dgst = errorDigest;
+	//   if (errorMsg) dataset.msg = errorMsg;
+	//   if (errorComponentStack) dataset.stck = errorComponentStack;
+	//   // Tell React to retry it if the parent already hydrated.
+	//   if (suspenseNode._reactRetry) {
+	//     suspenseNode._reactRetry();
+	//   }
+	// }
+	//
+	// function completeBoundary(suspenseBoundaryID, contentID) {
+	//   // Find the fallback's first element.
+	//   const suspenseIdNode = document.getElementById(suspenseBoundaryID);
+	//   const contentNode = document.getElementById(contentID);
+	//   // We'll detach the content node so that regardless of what happens next we don't leave in the tree.
+	//   // This might also help by not causing recalcing each time we move a child from here to the target.
+	//   contentNode.parentNode.removeChild(contentNode);
+	//   if (!suspenseIdNode) {
+	//     // The user must have already navigated away from this tree.
+	//     // E.g. because the parent was hydrated. That's fine there's nothing to do
+	//     // but we have to make sure that we already deleted the container node.
+	//     return;
+	//   }
+	//   // Find the boundary around the fallback. This is always the previous node.
+	//   const suspenseNode = suspenseIdNode.previousSibling;
+	//
+	//   // Clear all the existing children. This is complicated because
+	//   // there can be embedded Suspense boundaries in the fallback.
+	//   // This is similar to clearSuspenseBoundary in ReactDOMHostConfig.
+	//   // TODO: We could avoid this if we never emitted suspense boundaries in fallback trees.
+	//   // They never hydrate anyway. However, currently we support incrementally loading the fallback.
+	//   const parentInstance = suspenseNode.parentNode;
+	//   let node = suspenseNode.nextSibling;
+	//   let depth = 0;
+	//   do {
+	//     if (node && node.nodeType === COMMENT_NODE) {
+	//       const data = node.data;
+	//       if (data === SUSPENSE_END_DATA) {
+	//         if (depth === 0) {
+	//           break;
+	//         } else {
+	//           depth--;
+	//         }
+	//       } else if (
+	//         data === SUSPENSE_START_DATA ||
+	//         data === SUSPENSE_PENDING_START_DATA ||
+	//         data === SUSPENSE_FALLBACK_START_DATA
+	//       ) {
+	//         depth++;
+	//       }
+	//     }
+	//
+	//     const nextNode = node.nextSibling;
+	//     parentInstance.removeChild(node);
+	//     node = nextNode;
+	//   } while (node);
+	//
+	//   const endOfBoundary = node;
+	//
+	//   // Insert all the children from the contentNode between the start and end of suspense boundary.
+	//   while (contentNode.firstChild) {
+	//     parentInstance.insertBefore(contentNode.firstChild, endOfBoundary);
+	//   }
+	//   suspenseNode.data = SUSPENSE_START_DATA;
+	//   if (suspenseNode._reactRetry) {
+	//     suspenseNode._reactRetry();
+	//   }
+	// }
+	//
+	// function completeSegment(containerID, placeholderID) {
+	//   const segmentContainer = document.getElementById(containerID);
+	//   const placeholderNode = document.getElementById(placeholderID);
+	//   // We always expect both nodes to exist here because, while we might
+	//   // have navigated away from the main tree, we still expect the detached
+	//   // tree to exist.
+	//   segmentContainer.parentNode.removeChild(segmentContainer);
+	//   while (segmentContainer.firstChild) {
+	//     placeholderNode.parentNode.insertBefore(
+	//       segmentContainer.firstChild,
+	//       placeholderNode,
+	//     );
+	//   }
+	//   placeholderNode.parentNode.removeChild(placeholderNode);
+	// }
+
+	var completeSegmentFunction = 'function $RS(a,b){a=document.getElementById(a);b=document.getElementById(b);for(a.parentNode.removeChild(a);a.firstChild;)b.parentNode.insertBefore(a.firstChild,b);b.parentNode.removeChild(b)}';
+	var completeBoundaryFunction = 'function $RC(a,b){a=document.getElementById(a);b=document.getElementById(b);b.parentNode.removeChild(b);if(a){a=a.previousSibling;var f=a.parentNode,c=a.nextSibling,e=0;do{if(c&&8===c.nodeType){var d=c.data;if("/$"===d)if(0===e)break;else e--;else"$"!==d&&"$?"!==d&&"$!"!==d||e++}d=c.nextSibling;f.removeChild(c);c=d}while(c);for(;b.firstChild;)f.insertBefore(b.firstChild,c);a.data="$";a._reactRetry&&a._reactRetry()}}';
+	var clientRenderFunction = 'function $RX(b,c,d,e){var a=document.getElementById(b);a&&(b=a.previousSibling,b.data="$!",a=a.dataset,c&&(a.dgst=c),d&&(a.msg=d),e&&(a.stck=e),b._reactRetry&&b._reactRetry())}';
+	var completeSegmentScript1Full = stringToPrecomputedChunk(completeSegmentFunction + ';$RS("');
+	var completeSegmentScript1Partial = stringToPrecomputedChunk('$RS("');
+	var completeSegmentScript2 = stringToPrecomputedChunk('","');
+	var completeSegmentScript3 = stringToPrecomputedChunk('")</script>');
+	function writeCompletedSegmentInstruction(destination, responseState, contentSegmentID) {
+	  writeChunk(destination, responseState.startInlineScript);
+
+	  if (!responseState.sentCompleteSegmentFunction) {
+	    // The first time we write this, we'll need to include the full implementation.
+	    responseState.sentCompleteSegmentFunction = true;
+	    writeChunk(destination, completeSegmentScript1Full);
+	  } else {
+	    // Future calls can just reuse the same function.
+	    writeChunk(destination, completeSegmentScript1Partial);
+	  }
+
+	  writeChunk(destination, responseState.segmentPrefix);
+	  var formattedID = stringToChunk(contentSegmentID.toString(16));
+	  writeChunk(destination, formattedID);
+	  writeChunk(destination, completeSegmentScript2);
+	  writeChunk(destination, responseState.placeholderPrefix);
+	  writeChunk(destination, formattedID);
+	  return writeChunkAndReturn(destination, completeSegmentScript3);
+	}
+	var completeBoundaryScript1Full = stringToPrecomputedChunk(completeBoundaryFunction + ';$RC("');
+	var completeBoundaryScript1Partial = stringToPrecomputedChunk('$RC("');
+	var completeBoundaryScript2 = stringToPrecomputedChunk('","');
+	var completeBoundaryScript3 = stringToPrecomputedChunk('")</script>');
+	function writeCompletedBoundaryInstruction(destination, responseState, boundaryID, contentSegmentID) {
+	  writeChunk(destination, responseState.startInlineScript);
+
+	  if (!responseState.sentCompleteBoundaryFunction) {
+	    // The first time we write this, we'll need to include the full implementation.
+	    responseState.sentCompleteBoundaryFunction = true;
+	    writeChunk(destination, completeBoundaryScript1Full);
+	  } else {
+	    // Future calls can just reuse the same function.
+	    writeChunk(destination, completeBoundaryScript1Partial);
+	  }
+
+	  if (boundaryID === null) {
+	    throw new Error('An ID must have been assigned before we can complete the boundary.');
+	  }
+
+	  var formattedContentID = stringToChunk(contentSegmentID.toString(16));
+	  writeChunk(destination, boundaryID);
+	  writeChunk(destination, completeBoundaryScript2);
+	  writeChunk(destination, responseState.segmentPrefix);
+	  writeChunk(destination, formattedContentID);
+	  return writeChunkAndReturn(destination, completeBoundaryScript3);
+	}
+	var clientRenderScript1Full = stringToPrecomputedChunk(clientRenderFunction + ';$RX("');
+	var clientRenderScript1Partial = stringToPrecomputedChunk('$RX("');
+	var clientRenderScript1A = stringToPrecomputedChunk('"');
+	var clientRenderScript2 = stringToPrecomputedChunk(')</script>');
+	var clientRenderErrorScriptArgInterstitial = stringToPrecomputedChunk(',');
+	function writeClientRenderBoundaryInstruction(destination, responseState, boundaryID, errorDigest, errorMessage, errorComponentStack) {
+	  writeChunk(destination, responseState.startInlineScript);
+
+	  if (!responseState.sentClientRenderFunction) {
+	    // The first time we write this, we'll need to include the full implementation.
+	    responseState.sentClientRenderFunction = true;
+	    writeChunk(destination, clientRenderScript1Full);
+	  } else {
+	    // Future calls can just reuse the same function.
+	    writeChunk(destination, clientRenderScript1Partial);
+	  }
+
+	  if (boundaryID === null) {
+	    throw new Error('An ID must have been assigned before we can complete the boundary.');
+	  }
+
+	  writeChunk(destination, boundaryID);
+	  writeChunk(destination, clientRenderScript1A);
+
+	  if (errorDigest || errorMessage || errorComponentStack) {
+	    writeChunk(destination, clientRenderErrorScriptArgInterstitial);
+	    writeChunk(destination, stringToChunk(escapeJSStringsForInstructionScripts(errorDigest || '')));
+	  }
+
+	  if (errorMessage || errorComponentStack) {
+	    writeChunk(destination, clientRenderErrorScriptArgInterstitial);
+	    writeChunk(destination, stringToChunk(escapeJSStringsForInstructionScripts(errorMessage || '')));
+	  }
+
+	  if (errorComponentStack) {
+	    writeChunk(destination, clientRenderErrorScriptArgInterstitial);
+	    writeChunk(destination, stringToChunk(escapeJSStringsForInstructionScripts(errorComponentStack)));
+	  }
+
+	  return writeChunkAndReturn(destination, clientRenderScript2);
+	}
+	var regexForJSStringsInScripts = /[<\u2028\u2029]/g;
+
+	function escapeJSStringsForInstructionScripts(input) {
+	  var escaped = JSON.stringify(input);
+	  return escaped.replace(regexForJSStringsInScripts, function (match) {
+	    switch (match) {
+	      // santizing breaking out of strings and script tags
+	      case '<':
+	        return "\\u003c";
+
+	      case "\u2028":
+	        return "\\u2028";
+
+	      case "\u2029":
+	        return "\\u2029";
+
+	      default:
+	        {
+	          // eslint-disable-next-line react-internal/prod-error-codes
+	          throw new Error('escapeJSStringsForInstructionScripts encountered a match it does not know how to replace. this means the match regex and the replacement characters are no longer in sync. This is a bug in React');
+	        }
+	    }
+	  });
+	}
+
+	var assign = Object.assign;
+
+	// ATTENTION
+	// When adding new symbols to this file,
+	// Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
+	// The Symbol used to tag the ReactElement-like types.
+	var REACT_ELEMENT_TYPE = Symbol.for('react.element');
+	var REACT_PORTAL_TYPE = Symbol.for('react.portal');
+	var REACT_FRAGMENT_TYPE = Symbol.for('react.fragment');
+	var REACT_STRICT_MODE_TYPE = Symbol.for('react.strict_mode');
+	var REACT_PROFILER_TYPE = Symbol.for('react.profiler');
+	var REACT_PROVIDER_TYPE = Symbol.for('react.provider');
+	var REACT_CONTEXT_TYPE = Symbol.for('react.context');
+	var REACT_FORWARD_REF_TYPE = Symbol.for('react.forward_ref');
+	var REACT_SUSPENSE_TYPE = Symbol.for('react.suspense');
+	var REACT_SUSPENSE_LIST_TYPE = Symbol.for('react.suspense_list');
+	var REACT_MEMO_TYPE = Symbol.for('react.memo');
+	var REACT_LAZY_TYPE = Symbol.for('react.lazy');
+	var REACT_SCOPE_TYPE = Symbol.for('react.scope');
+	var REACT_DEBUG_TRACING_MODE_TYPE = Symbol.for('react.debug_trace_mode');
+	var REACT_LEGACY_HIDDEN_TYPE = Symbol.for('react.legacy_hidden');
+	var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED = Symbol.for('react.default_value');
+	var MAYBE_ITERATOR_SYMBOL = Symbol.iterator;
+	var FAUX_ITERATOR_SYMBOL = '@@iterator';
+	function getIteratorFn(maybeIterable) {
+	  if (maybeIterable === null || typeof maybeIterable !== 'object') {
+	    return null;
+	  }
+
+	  var maybeIterator = MAYBE_ITERATOR_SYMBOL && maybeIterable[MAYBE_ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL];
+
+	  if (typeof maybeIterator === 'function') {
+	    return maybeIterator;
+	  }
+
+	  return null;
+	}
+
+	function getWrappedName(outerType, innerType, wrapperName) {
+	  var displayName = outerType.displayName;
+
+	  if (displayName) {
+	    return displayName;
+	  }
+
+	  var functionName = innerType.displayName || innerType.name || '';
+	  return functionName !== '' ? wrapperName + "(" + functionName + ")" : wrapperName;
+	} // Keep in sync with react-reconciler/getComponentNameFromFiber
+
+
+	function getContextName(type) {
+	  return type.displayName || 'Context';
+	} // Note that the reconciler package should generally prefer to use getComponentNameFromFiber() instead.
+
+
+	function getComponentNameFromType(type) {
+	  if (type == null) {
+	    // Host root, text node or just invalid type.
+	    return null;
+	  }
+
+	  {
+	    if (typeof type.tag === 'number') {
+	      error('Received an unexpected object in getComponentNameFromType(). ' + 'This is likely a bug in React. Please file an issue.');
+	    }
+	  }
+
+	  if (typeof type === 'function') {
+	    return type.displayName || type.name || null;
+	  }
+
+	  if (typeof type === 'string') {
+	    return type;
+	  }
+
+	  switch (type) {
+	    case REACT_FRAGMENT_TYPE:
+	      return 'Fragment';
+
+	    case REACT_PORTAL_TYPE:
+	      return 'Portal';
+
+	    case REACT_PROFILER_TYPE:
+	      return 'Profiler';
+
+	    case REACT_STRICT_MODE_TYPE:
+	      return 'StrictMode';
+
+	    case REACT_SUSPENSE_TYPE:
+	      return 'Suspense';
+
+	    case REACT_SUSPENSE_LIST_TYPE:
+	      return 'SuspenseList';
+
+	  }
+
+	  if (typeof type === 'object') {
+	    switch (type.$$typeof) {
+	      case REACT_CONTEXT_TYPE:
+	        var context = type;
+	        return getContextName(context) + '.Consumer';
+
+	      case REACT_PROVIDER_TYPE:
+	        var provider = type;
+	        return getContextName(provider._context) + '.Provider';
+
+	      case REACT_FORWARD_REF_TYPE:
+	        return getWrappedName(type, type.render, 'ForwardRef');
+
+	      case REACT_MEMO_TYPE:
+	        var outerName = type.displayName || null;
+
+	        if (outerName !== null) {
+	          return outerName;
+	        }
+
+	        return getComponentNameFromType(type.type) || 'Memo';
+
+	      case REACT_LAZY_TYPE:
+	        {
+	          var lazyComponent = type;
+	          var payload = lazyComponent._payload;
+	          var init = lazyComponent._init;
+
+	          try {
+	            return getComponentNameFromType(init(payload));
+	          } catch (x) {
+	            return null;
+	          }
+	        }
+
+	      // eslint-disable-next-line no-fallthrough
+	    }
+	  }
+
+	  return null;
+	}
+
+	// Helpers to patch console.logs to avoid logging during side-effect free
+	// replaying on render function. This currently only patches the object
+	// lazily which won't cover if the log function was extracted eagerly.
+	// We could also eagerly patch the method.
+	var disabledDepth = 0;
+	var prevLog;
+	var prevInfo;
+	var prevWarn;
+	var prevError;
+	var prevGroup;
+	var prevGroupCollapsed;
+	var prevGroupEnd;
+
+	function disabledLog() {}
+
+	disabledLog.__reactDisabledLog = true;
+	function disableLogs() {
+	  {
+	    if (disabledDepth === 0) {
+	      /* eslint-disable react-internal/no-production-logging */
+	      prevLog = console.log;
+	      prevInfo = console.info;
+	      prevWarn = console.warn;
+	      prevError = console.error;
+	      prevGroup = console.group;
+	      prevGroupCollapsed = console.groupCollapsed;
+	      prevGroupEnd = console.groupEnd; // https://github.com/facebook/react/issues/19099
+
+	      var props = {
+	        configurable: true,
+	        enumerable: true,
+	        value: disabledLog,
+	        writable: true
+	      }; // $FlowFixMe Flow thinks console is immutable.
+
+	      Object.defineProperties(console, {
+	        info: props,
+	        log: props,
+	        warn: props,
+	        error: props,
+	        group: props,
+	        groupCollapsed: props,
+	        groupEnd: props
+	      });
+	      /* eslint-enable react-internal/no-production-logging */
+	    }
+
+	    disabledDepth++;
+	  }
+	}
+	function reenableLogs() {
+	  {
+	    disabledDepth--;
+
+	    if (disabledDepth === 0) {
+	      /* eslint-disable react-internal/no-production-logging */
+	      var props = {
+	        configurable: true,
+	        enumerable: true,
+	        writable: true
+	      }; // $FlowFixMe Flow thinks console is immutable.
+
+	      Object.defineProperties(console, {
+	        log: assign({}, props, {
+	          value: prevLog
+	        }),
+	        info: assign({}, props, {
+	          value: prevInfo
+	        }),
+	        warn: assign({}, props, {
+	          value: prevWarn
+	        }),
+	        error: assign({}, props, {
+	          value: prevError
+	        }),
+	        group: assign({}, props, {
+	          value: prevGroup
+	        }),
+	        groupCollapsed: assign({}, props, {
+	          value: prevGroupCollapsed
+	        }),
+	        groupEnd: assign({}, props, {
+	          value: prevGroupEnd
+	        })
+	      });
+	      /* eslint-enable react-internal/no-production-logging */
+	    }
+
+	    if (disabledDepth < 0) {
+	      error('disabledDepth fell below zero. ' + 'This is a bug in React. Please file an issue.');
+	    }
+	  }
+	}
+
+	var ReactCurrentDispatcher = ReactSharedInternals.ReactCurrentDispatcher;
+	var prefix;
+	function describeBuiltInComponentFrame(name, source, ownerFn) {
+	  {
+	    if (prefix === undefined) {
+	      // Extract the VM specific prefix used by each line.
+	      try {
+	        throw Error();
+	      } catch (x) {
+	        var match = x.stack.trim().match(/\n( *(at )?)/);
+	        prefix = match && match[1] || '';
+	      }
+	    } // We use the prefix to ensure our stacks line up with native stack frames.
+
+
+	    return '\n' + prefix + name;
+	  }
+	}
+	var reentry = false;
+	var componentFrameCache;
+
+	{
+	  var PossiblyWeakMap = typeof WeakMap === 'function' ? WeakMap : Map;
+	  componentFrameCache = new PossiblyWeakMap();
+	}
+
+	function describeNativeComponentFrame(fn, construct) {
+	  // If something asked for a stack inside a fake render, it should get ignored.
+	  if ( !fn || reentry) {
+	    return '';
+	  }
+
+	  {
+	    var frame = componentFrameCache.get(fn);
+
+	    if (frame !== undefined) {
+	      return frame;
+	    }
+	  }
+
+	  var control;
+	  reentry = true;
+	  var previousPrepareStackTrace = Error.prepareStackTrace; // $FlowFixMe It does accept undefined.
+
+	  Error.prepareStackTrace = undefined;
+	  var previousDispatcher;
+
+	  {
+	    previousDispatcher = ReactCurrentDispatcher.current; // Set the dispatcher in DEV because this might be call in the render function
+	    // for warnings.
+
+	    ReactCurrentDispatcher.current = null;
+	    disableLogs();
+	  }
+
+	  try {
+	    // This should throw.
+	    if (construct) {
+	      // Something should be setting the props in the constructor.
+	      var Fake = function () {
+	        throw Error();
+	      }; // $FlowFixMe
+
+
+	      Object.defineProperty(Fake.prototype, 'props', {
+	        set: function () {
+	          // We use a throwing setter instead of frozen or non-writable props
+	          // because that won't throw in a non-strict mode function.
+	          throw Error();
+	        }
+	      });
+
+	      if (typeof Reflect === 'object' && Reflect.construct) {
+	        // We construct a different control for this case to include any extra
+	        // frames added by the construct call.
+	        try {
+	          Reflect.construct(Fake, []);
+	        } catch (x) {
+	          control = x;
+	        }
+
+	        Reflect.construct(fn, [], Fake);
+	      } else {
+	        try {
+	          Fake.call();
+	        } catch (x) {
+	          control = x;
+	        }
+
+	        fn.call(Fake.prototype);
+	      }
+	    } else {
+	      try {
+	        throw Error();
+	      } catch (x) {
+	        control = x;
+	      }
+
+	      fn();
+	    }
+	  } catch (sample) {
+	    // This is inlined manually because closure doesn't do it for us.
+	    if (sample && control && typeof sample.stack === 'string') {
+	      // This extracts the first frame from the sample that isn't also in the control.
+	      // Skipping one frame that we assume is the frame that calls the two.
+	      var sampleLines = sample.stack.split('\n');
+	      var controlLines = control.stack.split('\n');
+	      var s = sampleLines.length - 1;
+	      var c = controlLines.length - 1;
+
+	      while (s >= 1 && c >= 0 && sampleLines[s] !== controlLines[c]) {
+	        // We expect at least one stack frame to be shared.
+	        // Typically this will be the root most one. However, stack frames may be
+	        // cut off due to maximum stack limits. In this case, one maybe cut off
+	        // earlier than the other. We assume that the sample is longer or the same
+	        // and there for cut off earlier. So we should find the root most frame in
+	        // the sample somewhere in the control.
+	        c--;
+	      }
+
+	      for (; s >= 1 && c >= 0; s--, c--) {
+	        // Next we find the first one that isn't the same which should be the
+	        // frame that called our sample function and the control.
+	        if (sampleLines[s] !== controlLines[c]) {
+	          // In V8, the first line is describing the message but other VMs don't.
+	          // If we're about to return the first line, and the control is also on the same
+	          // line, that's a pretty good indicator that our sample threw at same line as
+	          // the control. I.e. before we entered the sample frame. So we ignore this result.
+	          // This can happen if you passed a class to function component, or non-function.
+	          if (s !== 1 || c !== 1) {
+	            do {
+	              s--;
+	              c--; // We may still have similar intermediate frames from the construct call.
+	              // The next one that isn't the same should be our match though.
+
+	              if (c < 0 || sampleLines[s] !== controlLines[c]) {
+	                // V8 adds a "new" prefix for native classes. Let's remove it to make it prettier.
+	                var _frame = '\n' + sampleLines[s].replace(' at new ', ' at '); // If our component frame is labeled "<anonymous>"
+	                // but we have a user-provided "displayName"
+	                // splice it in to make the stack more readable.
+
+
+	                if (fn.displayName && _frame.includes('<anonymous>')) {
+	                  _frame = _frame.replace('<anonymous>', fn.displayName);
+	                }
+
+	                {
+	                  if (typeof fn === 'function') {
+	                    componentFrameCache.set(fn, _frame);
+	                  }
+	                } // Return the line we found.
+
+
+	                return _frame;
+	              }
+	            } while (s >= 1 && c >= 0);
+	          }
+
+	          break;
+	        }
+	      }
+	    }
+	  } finally {
+	    reentry = false;
+
+	    {
+	      ReactCurrentDispatcher.current = previousDispatcher;
+	      reenableLogs();
+	    }
+
+	    Error.prepareStackTrace = previousPrepareStackTrace;
+	  } // Fallback to just using the name if we couldn't make it throw.
+
+
+	  var name = fn ? fn.displayName || fn.name : '';
+	  var syntheticFrame = name ? describeBuiltInComponentFrame(name) : '';
+
+	  {
+	    if (typeof fn === 'function') {
+	      componentFrameCache.set(fn, syntheticFrame);
+	    }
+	  }
+
+	  return syntheticFrame;
+	}
+
+	function describeClassComponentFrame(ctor, source, ownerFn) {
+	  {
+	    return describeNativeComponentFrame(ctor, true);
+	  }
+	}
+	function describeFunctionComponentFrame(fn, source, ownerFn) {
+	  {
+	    return describeNativeComponentFrame(fn, false);
+	  }
+	}
+
+	function shouldConstruct(Component) {
+	  var prototype = Component.prototype;
+	  return !!(prototype && prototype.isReactComponent);
+	}
+
+	function describeUnknownElementTypeFrameInDEV(type, source, ownerFn) {
+
+	  if (type == null) {
+	    return '';
+	  }
+
+	  if (typeof type === 'function') {
+	    {
+	      return describeNativeComponentFrame(type, shouldConstruct(type));
+	    }
+	  }
+
+	  if (typeof type === 'string') {
+	    return describeBuiltInComponentFrame(type);
+	  }
+
+	  switch (type) {
+	    case REACT_SUSPENSE_TYPE:
+	      return describeBuiltInComponentFrame('Suspense');
+
+	    case REACT_SUSPENSE_LIST_TYPE:
+	      return describeBuiltInComponentFrame('SuspenseList');
+	  }
+
+	  if (typeof type === 'object') {
+	    switch (type.$$typeof) {
+	      case REACT_FORWARD_REF_TYPE:
+	        return describeFunctionComponentFrame(type.render);
+
+	      case REACT_MEMO_TYPE:
+	        // Memo may contain any component type so we recursively resolve it.
+	        return describeUnknownElementTypeFrameInDEV(type.type, source, ownerFn);
+
+	      case REACT_LAZY_TYPE:
+	        {
+	          var lazyComponent = type;
+	          var payload = lazyComponent._payload;
+	          var init = lazyComponent._init;
+
+	          try {
+	            // Lazy may contain any component type so we recursively resolve it.
+	            return describeUnknownElementTypeFrameInDEV(init(payload), source, ownerFn);
+	          } catch (x) {}
+	        }
+	    }
+	  }
+
+	  return '';
+	}
+
+	var loggedTypeFailures = {};
+	var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
+
+	function setCurrentlyValidatingElement(element) {
+	  {
+	    if (element) {
+	      var owner = element._owner;
+	      var stack = describeUnknownElementTypeFrameInDEV(element.type, element._source, owner ? owner.type : null);
+	      ReactDebugCurrentFrame.setExtraStackFrame(stack);
+	    } else {
+	      ReactDebugCurrentFrame.setExtraStackFrame(null);
+	    }
+	  }
+	}
+
+	function checkPropTypes(typeSpecs, values, location, componentName, element) {
+	  {
+	    // $FlowFixMe This is okay but Flow doesn't know it.
+	    var has = Function.call.bind(hasOwnProperty);
+
+	    for (var typeSpecName in typeSpecs) {
+	      if (has(typeSpecs, typeSpecName)) {
+	        var error$1 = void 0; // Prop type validation may throw. In case they do, we don't want to
+	        // fail the render phase where it didn't fail before. So we log it.
+	        // After these have been cleaned up, we'll let them throw.
+
+	        try {
+	          // This is intentionally an invariant that gets caught. It's the same
+	          // behavior as without this statement except with a better message.
+	          if (typeof typeSpecs[typeSpecName] !== 'function') {
+	            // eslint-disable-next-line react-internal/prod-error-codes
+	            var err = Error((componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' + 'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.' + 'This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.');
+	            err.name = 'Invariant Violation';
+	            throw err;
+	          }
+
+	          error$1 = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED');
+	        } catch (ex) {
+	          error$1 = ex;
+	        }
+
+	        if (error$1 && !(error$1 instanceof Error)) {
+	          setCurrentlyValidatingElement(element);
+
+	          error('%s: type specification of %s' + ' `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error$1);
+
+	          setCurrentlyValidatingElement(null);
+	        }
+
+	        if (error$1 instanceof Error && !(error$1.message in loggedTypeFailures)) {
+	          // Only monitor this failure once because there tends to be a lot of the
+	          // same error.
+	          loggedTypeFailures[error$1.message] = true;
+	          setCurrentlyValidatingElement(element);
+
+	          error('Failed %s type: %s', location, error$1.message);
+
+	          setCurrentlyValidatingElement(null);
+	        }
+	      }
+	    }
+	  }
+	}
+
+	var warnedAboutMissingGetChildContext;
+
+	{
+	  warnedAboutMissingGetChildContext = {};
+	}
+
+	var emptyContextObject = {};
+
+	{
+	  Object.freeze(emptyContextObject);
+	}
+
+	function getMaskedContext(type, unmaskedContext) {
+	  {
+	    var contextTypes = type.contextTypes;
+
+	    if (!contextTypes) {
+	      return emptyContextObject;
+	    }
+
+	    var context = {};
+
+	    for (var key in contextTypes) {
+	      context[key] = unmaskedContext[key];
+	    }
+
+	    {
+	      var name = getComponentNameFromType(type) || 'Unknown';
+	      checkPropTypes(contextTypes, context, 'context', name);
+	    }
+
+	    return context;
+	  }
+	}
+	function processChildContext(instance, type, parentContext, childContextTypes) {
+	  {
+	    // TODO (bvaughn) Replace this behavior with an invariant() in the future.
+	    // It has only been added in Fiber to match the (unintentional) behavior in Stack.
+	    if (typeof instance.getChildContext !== 'function') {
+	      {
+	        var componentName = getComponentNameFromType(type) || 'Unknown';
+
+	        if (!warnedAboutMissingGetChildContext[componentName]) {
+	          warnedAboutMissingGetChildContext[componentName] = true;
+
+	          error('%s.childContextTypes is specified but there is no getChildContext() method ' + 'on the instance. You can either define getChildContext() on %s or remove ' + 'childContextTypes from it.', componentName, componentName);
+	        }
+	      }
+
+	      return parentContext;
+	    }
+
+	    var childContext = instance.getChildContext();
+
+	    for (var contextKey in childContext) {
+	      if (!(contextKey in childContextTypes)) {
+	        throw new Error((getComponentNameFromType(type) || 'Unknown') + ".getChildContext(): key \"" + contextKey + "\" is not defined in childContextTypes.");
+	      }
+	    }
+
+	    {
+	      var name = getComponentNameFromType(type) || 'Unknown';
+	      checkPropTypes(childContextTypes, childContext, 'child context', name);
+	    }
+
+	    return assign({}, parentContext, childContext);
+	  }
+	}
+
+	var rendererSigil;
+
+	{
+	  // Use this to detect multiple renderers using the same context
+	  rendererSigil = {};
+	} // Used to store the parent path of all context overrides in a shared linked list.
+	// Forming a reverse tree.
+
+
+	var rootContextSnapshot = null; // We assume that this runtime owns the "current" field on all ReactContext instances.
+	// This global (actually thread local) state represents what state all those "current",
+	// fields are currently in.
+
+	var currentActiveSnapshot = null;
+
+	function popNode(prev) {
+	  {
+	    prev.context._currentValue = prev.parentValue;
+	  }
+	}
+
+	function pushNode(next) {
+	  {
+	    next.context._currentValue = next.value;
+	  }
+	}
+
+	function popToNearestCommonAncestor(prev, next) {
+	  if (prev === next) ; else {
+	    popNode(prev);
+	    var parentPrev = prev.parent;
+	    var parentNext = next.parent;
+
+	    if (parentPrev === null) {
+	      if (parentNext !== null) {
+	        throw new Error('The stacks must reach the root at the same time. This is a bug in React.');
+	      }
+	    } else {
+	      if (parentNext === null) {
+	        throw new Error('The stacks must reach the root at the same time. This is a bug in React.');
+	      }
+
+	      popToNearestCommonAncestor(parentPrev, parentNext);
+	    } // On the way back, we push the new ones that weren't common.
+
+
+	    pushNode(next);
+	  }
+	}
+
+	function popAllPrevious(prev) {
+	  popNode(prev);
+	  var parentPrev = prev.parent;
+
+	  if (parentPrev !== null) {
+	    popAllPrevious(parentPrev);
+	  }
+	}
+
+	function pushAllNext(next) {
+	  var parentNext = next.parent;
+
+	  if (parentNext !== null) {
+	    pushAllNext(parentNext);
+	  }
+
+	  pushNode(next);
+	}
+
+	function popPreviousToCommonLevel(prev, next) {
+	  popNode(prev);
+	  var parentPrev = prev.parent;
+
+	  if (parentPrev === null) {
+	    throw new Error('The depth must equal at least at zero before reaching the root. This is a bug in React.');
+	  }
+
+	  if (parentPrev.depth === next.depth) {
+	    // We found the same level. Now we just need to find a shared ancestor.
+	    popToNearestCommonAncestor(parentPrev, next);
+	  } else {
+	    // We must still be deeper.
+	    popPreviousToCommonLevel(parentPrev, next);
+	  }
+	}
+
+	function popNextToCommonLevel(prev, next) {
+	  var parentNext = next.parent;
+
+	  if (parentNext === null) {
+	    throw new Error('The depth must equal at least at zero before reaching the root. This is a bug in React.');
+	  }
+
+	  if (prev.depth === parentNext.depth) {
+	    // We found the same level. Now we just need to find a shared ancestor.
+	    popToNearestCommonAncestor(prev, parentNext);
+	  } else {
+	    // We must still be deeper.
+	    popNextToCommonLevel(prev, parentNext);
+	  }
+
+	  pushNode(next);
+	} // Perform context switching to the new snapshot.
+	// To make it cheap to read many contexts, while not suspending, we make the switch eagerly by
+	// updating all the context's current values. That way reads, always just read the current value.
+	// At the cost of updating contexts even if they're never read by this subtree.
+
+
+	function switchContext(newSnapshot) {
+	  // The basic algorithm we need to do is to pop back any contexts that are no longer on the stack.
+	  // We also need to update any new contexts that are now on the stack with the deepest value.
+	  // The easiest way to update new contexts is to just reapply them in reverse order from the
+	  // perspective of the backpointers. To avoid allocating a lot when switching, we use the stack
+	  // for that. Therefore this algorithm is recursive.
+	  // 1) First we pop which ever snapshot tree was deepest. Popping old contexts as we go.
+	  // 2) Then we find the nearest common ancestor from there. Popping old contexts as we go.
+	  // 3) Then we reapply new contexts on the way back up the stack.
+	  var prev = currentActiveSnapshot;
+	  var next = newSnapshot;
+
+	  if (prev !== next) {
+	    if (prev === null) {
+	      // $FlowFixMe: This has to be non-null since it's not equal to prev.
+	      pushAllNext(next);
+	    } else if (next === null) {
+	      popAllPrevious(prev);
+	    } else if (prev.depth === next.depth) {
+	      popToNearestCommonAncestor(prev, next);
+	    } else if (prev.depth > next.depth) {
+	      popPreviousToCommonLevel(prev, next);
+	    } else {
+	      popNextToCommonLevel(prev, next);
+	    }
+
+	    currentActiveSnapshot = next;
+	  }
+	}
+	function pushProvider(context, nextValue) {
+	  var prevValue;
+
+	  {
+	    prevValue = context._currentValue;
+	    context._currentValue = nextValue;
+
+	    {
+	      if (context._currentRenderer !== undefined && context._currentRenderer !== null && context._currentRenderer !== rendererSigil) {
+	        error('Detected multiple renderers concurrently rendering the ' + 'same context provider. This is currently unsupported.');
+	      }
+
+	      context._currentRenderer = rendererSigil;
+	    }
+	  }
+
+	  var prevNode = currentActiveSnapshot;
+	  var newNode = {
+	    parent: prevNode,
+	    depth: prevNode === null ? 0 : prevNode.depth + 1,
+	    context: context,
+	    parentValue: prevValue,
+	    value: nextValue
+	  };
+	  currentActiveSnapshot = newNode;
+	  return newNode;
+	}
+	function popProvider(context) {
+	  var prevSnapshot = currentActiveSnapshot;
+
+	  if (prevSnapshot === null) {
+	    throw new Error('Tried to pop a Context at the root of the app. This is a bug in React.');
+	  }
+
+	  {
+	    if (prevSnapshot.context !== context) {
+	      error('The parent context is not the expected context. This is probably a bug in React.');
+	    }
+	  }
+
+	  {
+	    var value = prevSnapshot.parentValue;
+
+	    if (value === REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED) {
+	      prevSnapshot.context._currentValue = prevSnapshot.context._defaultValue;
+	    } else {
+	      prevSnapshot.context._currentValue = value;
+	    }
+
+	    {
+	      if (context._currentRenderer !== undefined && context._currentRenderer !== null && context._currentRenderer !== rendererSigil) {
+	        error('Detected multiple renderers concurrently rendering the ' + 'same context provider. This is currently unsupported.');
+	      }
+
+	      context._currentRenderer = rendererSigil;
+	    }
+	  }
+
+	  return currentActiveSnapshot = prevSnapshot.parent;
+	}
+	function getActiveContext() {
+	  return currentActiveSnapshot;
+	}
+	function readContext(context) {
+	  var value =  context._currentValue ;
+	  return value;
+	}
+
+	/**
+	 * `ReactInstanceMap` maintains a mapping from a public facing stateful
+	 * instance (key) and the internal representation (value). This allows public
+	 * methods to accept the user facing instance as an argument and map them back
+	 * to internal methods.
+	 *
+	 * Note that this module is currently shared and assumed to be stateless.
+	 * If this becomes an actual Map, that will break.
+	 */
+	function get(key) {
+	  return key._reactInternals;
+	}
+	function set(key, value) {
+	  key._reactInternals = value;
+	}
+
+	var didWarnAboutNoopUpdateForComponent = {};
+	var didWarnAboutDeprecatedWillMount = {};
+	var didWarnAboutUninitializedState;
+	var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
+	var didWarnAboutLegacyLifecyclesAndDerivedState;
+	var didWarnAboutUndefinedDerivedState;
+	var warnOnUndefinedDerivedState;
+	var warnOnInvalidCallback;
+	var didWarnAboutDirectlyAssigningPropsToState;
+	var didWarnAboutContextTypeAndContextTypes;
+	var didWarnAboutInvalidateContextType;
+
+	{
+	  didWarnAboutUninitializedState = new Set();
+	  didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate = new Set();
+	  didWarnAboutLegacyLifecyclesAndDerivedState = new Set();
+	  didWarnAboutDirectlyAssigningPropsToState = new Set();
+	  didWarnAboutUndefinedDerivedState = new Set();
+	  didWarnAboutContextTypeAndContextTypes = new Set();
+	  didWarnAboutInvalidateContextType = new Set();
+	  var didWarnOnInvalidCallback = new Set();
+
+	  warnOnInvalidCallback = function (callback, callerName) {
+	    if (callback === null || typeof callback === 'function') {
+	      return;
+	    }
+
+	    var key = callerName + '_' + callback;
+
+	    if (!didWarnOnInvalidCallback.has(key)) {
+	      didWarnOnInvalidCallback.add(key);
+
+	      error('%s(...): Expected the last optional `callback` argument to be a ' + 'function. Instead received: %s.', callerName, callback);
+	    }
+	  };
+
+	  warnOnUndefinedDerivedState = function (type, partialState) {
+	    if (partialState === undefined) {
+	      var componentName = getComponentNameFromType(type) || 'Component';
+
+	      if (!didWarnAboutUndefinedDerivedState.has(componentName)) {
+	        didWarnAboutUndefinedDerivedState.add(componentName);
+
+	        error('%s.getDerivedStateFromProps(): A valid state object (or null) must be returned. ' + 'You have returned undefined.', componentName);
+	      }
+	    }
+	  };
+	}
+
+	function warnNoop(publicInstance, callerName) {
+	  {
+	    var _constructor = publicInstance.constructor;
+	    var componentName = _constructor && getComponentNameFromType(_constructor) || 'ReactClass';
+	    var warningKey = componentName + '.' + callerName;
+
+	    if (didWarnAboutNoopUpdateForComponent[warningKey]) {
+	      return;
+	    }
+
+	    error('%s(...): Can only update a mounting component. ' + 'This usually means you called %s() outside componentWillMount() on the server. ' + 'This is a no-op.\n\nPlease check the code for the %s component.', callerName, callerName, componentName);
+
+	    didWarnAboutNoopUpdateForComponent[warningKey] = true;
+	  }
+	}
+
+	var classComponentUpdater = {
+	  isMounted: function (inst) {
+	    return false;
+	  },
+	  enqueueSetState: function (inst, payload, callback) {
+	    var internals = get(inst);
+
+	    if (internals.queue === null) {
+	      warnNoop(inst, 'setState');
+	    } else {
+	      internals.queue.push(payload);
+
+	      {
+	        if (callback !== undefined && callback !== null) {
+	          warnOnInvalidCallback(callback, 'setState');
+	        }
+	      }
+	    }
+	  },
+	  enqueueReplaceState: function (inst, payload, callback) {
+	    var internals = get(inst);
+	    internals.replace = true;
+	    internals.queue = [payload];
+
+	    {
+	      if (callback !== undefined && callback !== null) {
+	        warnOnInvalidCallback(callback, 'setState');
+	      }
+	    }
+	  },
+	  enqueueForceUpdate: function (inst, callback) {
+	    var internals = get(inst);
+
+	    if (internals.queue === null) {
+	      warnNoop(inst, 'forceUpdate');
+	    } else {
+	      {
+	        if (callback !== undefined && callback !== null) {
+	          warnOnInvalidCallback(callback, 'setState');
+	        }
+	      }
+	    }
+	  }
+	};
+
+	function applyDerivedStateFromProps(instance, ctor, getDerivedStateFromProps, prevState, nextProps) {
+	  var partialState = getDerivedStateFromProps(nextProps, prevState);
+
+	  {
+	    warnOnUndefinedDerivedState(ctor, partialState);
+	  } // Merge the partial state and the previous state.
+
+
+	  var newState = partialState === null || partialState === undefined ? prevState : assign({}, prevState, partialState);
+	  return newState;
+	}
+
+	function constructClassInstance(ctor, props, maskedLegacyContext) {
+	  var context = emptyContextObject;
+	  var contextType = ctor.contextType;
+
+	  {
+	    if ('contextType' in ctor) {
+	      var isValid = // Allow null for conditional declaration
+	      contextType === null || contextType !== undefined && contextType.$$typeof === REACT_CONTEXT_TYPE && contextType._context === undefined; // Not a <Context.Consumer>
+
+	      if (!isValid && !didWarnAboutInvalidateContextType.has(ctor)) {
+	        didWarnAboutInvalidateContextType.add(ctor);
+	        var addendum = '';
+
+	        if (contextType === undefined) {
+	          addendum = ' However, it is set to undefined. ' + 'This can be caused by a typo or by mixing up named and default imports. ' + 'This can also happen due to a circular dependency, so ' + 'try moving the createContext() call to a separate file.';
+	        } else if (typeof contextType !== 'object') {
+	          addendum = ' However, it is set to a ' + typeof contextType + '.';
+	        } else if (contextType.$$typeof === REACT_PROVIDER_TYPE) {
+	          addendum = ' Did you accidentally pass the Context.Provider instead?';
+	        } else if (contextType._context !== undefined) {
+	          // <Context.Consumer>
+	          addendum = ' Did you accidentally pass the Context.Consumer instead?';
+	        } else {
+	          addendum = ' However, it is set to an object with keys {' + Object.keys(contextType).join(', ') + '}.';
+	        }
+
+	        error('%s defines an invalid contextType. ' + 'contextType should point to the Context object returned by React.createContext().%s', getComponentNameFromType(ctor) || 'Component', addendum);
+	      }
+	    }
+	  }
+
+	  if (typeof contextType === 'object' && contextType !== null) {
+	    context = readContext(contextType);
+	  } else {
+	    context = maskedLegacyContext;
+	  }
+
+	  var instance = new ctor(props, context);
+
+	  {
+	    if (typeof ctor.getDerivedStateFromProps === 'function' && (instance.state === null || instance.state === undefined)) {
+	      var componentName = getComponentNameFromType(ctor) || 'Component';
+
+	      if (!didWarnAboutUninitializedState.has(componentName)) {
+	        didWarnAboutUninitializedState.add(componentName);
+
+	        error('`%s` uses `getDerivedStateFromProps` but its initial state is ' + '%s. This is not recommended. Instead, define the initial state by ' + 'assigning an object to `this.state` in the constructor of `%s`. ' + 'This ensures that `getDerivedStateFromProps` arguments have a consistent shape.', componentName, instance.state === null ? 'null' : 'undefined', componentName);
+	      }
+	    } // If new component APIs are defined, "unsafe" lifecycles won't be called.
+	    // Warn about these lifecycles if they are present.
+	    // Don't warn about react-lifecycles-compat polyfilled methods though.
+
+
+	    if (typeof ctor.getDerivedStateFromProps === 'function' || typeof instance.getSnapshotBeforeUpdate === 'function') {
+	      var foundWillMountName = null;
+	      var foundWillReceivePropsName = null;
+	      var foundWillUpdateName = null;
+
+	      if (typeof instance.componentWillMount === 'function' && instance.componentWillMount.__suppressDeprecationWarning !== true) {
+	        foundWillMountName = 'componentWillMount';
+	      } else if (typeof instance.UNSAFE_componentWillMount === 'function') {
+	        foundWillMountName = 'UNSAFE_componentWillMount';
+	      }
+
+	      if (typeof instance.componentWillReceiveProps === 'function' && instance.componentWillReceiveProps.__suppressDeprecationWarning !== true) {
+	        foundWillReceivePropsName = 'componentWillReceiveProps';
+	      } else if (typeof instance.UNSAFE_componentWillReceiveProps === 'function') {
+	        foundWillReceivePropsName = 'UNSAFE_componentWillReceiveProps';
+	      }
+
+	      if (typeof instance.componentWillUpdate === 'function' && instance.componentWillUpdate.__suppressDeprecationWarning !== true) {
+	        foundWillUpdateName = 'componentWillUpdate';
+	      } else if (typeof instance.UNSAFE_componentWillUpdate === 'function') {
+	        foundWillUpdateName = 'UNSAFE_componentWillUpdate';
+	      }
+
+	      if (foundWillMountName !== null || foundWillReceivePropsName !== null || foundWillUpdateName !== null) {
+	        var _componentName = getComponentNameFromType(ctor) || 'Component';
+
+	        var newApiName = typeof ctor.getDerivedStateFromProps === 'function' ? 'getDerivedStateFromProps()' : 'getSnapshotBeforeUpdate()';
+
+	        if (!didWarnAboutLegacyLifecyclesAndDerivedState.has(_componentName)) {
+	          didWarnAboutLegacyLifecyclesAndDerivedState.add(_componentName);
+
+	          error('Unsafe legacy lifecycles will not be called for components using new component APIs.\n\n' + '%s uses %s but also contains the following legacy lifecycles:%s%s%s\n\n' + 'The above lifecycles should be removed. Learn more about this warning here:\n' + 'https://reactjs.org/link/unsafe-component-lifecycles', _componentName, newApiName, foundWillMountName !== null ? "\n  " + foundWillMountName : '', foundWillReceivePropsName !== null ? "\n  " + foundWillReceivePropsName : '', foundWillUpdateName !== null ? "\n  " + foundWillUpdateName : '');
+	        }
+	      }
+	    }
+	  }
+
+	  return instance;
+	}
+
+	function checkClassInstance(instance, ctor, newProps) {
+	  {
+	    var name = getComponentNameFromType(ctor) || 'Component';
+	    var renderPresent = instance.render;
+
+	    if (!renderPresent) {
+	      if (ctor.prototype && typeof ctor.prototype.render === 'function') {
+	        error('%s(...): No `render` method found on the returned component ' + 'instance: did you accidentally return an object from the constructor?', name);
+	      } else {
+	        error('%s(...): No `render` method found on the returned component ' + 'instance: you may have forgotten to define `render`.', name);
+	      }
+	    }
+
+	    if (instance.getInitialState && !instance.getInitialState.isReactClassApproved && !instance.state) {
+	      error('getInitialState was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Did you mean to define a state property instead?', name);
+	    }
+
+	    if (instance.getDefaultProps && !instance.getDefaultProps.isReactClassApproved) {
+	      error('getDefaultProps was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Use a static property to define defaultProps instead.', name);
+	    }
+
+	    if (instance.propTypes) {
+	      error('propTypes was defined as an instance property on %s. Use a static ' + 'property to define propTypes instead.', name);
+	    }
+
+	    if (instance.contextType) {
+	      error('contextType was defined as an instance property on %s. Use a static ' + 'property to define contextType instead.', name);
+	    }
+
+	    {
+	      if (instance.contextTypes) {
+	        error('contextTypes was defined as an instance property on %s. Use a static ' + 'property to define contextTypes instead.', name);
+	      }
+
+	      if (ctor.contextType && ctor.contextTypes && !didWarnAboutContextTypeAndContextTypes.has(ctor)) {
+	        didWarnAboutContextTypeAndContextTypes.add(ctor);
+
+	        error('%s declares both contextTypes and contextType static properties. ' + 'The legacy contextTypes property will be ignored.', name);
+	      }
+	    }
+
+	    if (typeof instance.componentShouldUpdate === 'function') {
+	      error('%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', name);
+	    }
+
+	    if (ctor.prototype && ctor.prototype.isPureReactComponent && typeof instance.shouldComponentUpdate !== 'undefined') {
+	      error('%s has a method called shouldComponentUpdate(). ' + 'shouldComponentUpdate should not be used when extending React.PureComponent. ' + 'Please extend React.Component if shouldComponentUpdate is used.', getComponentNameFromType(ctor) || 'A pure component');
+	    }
+
+	    if (typeof instance.componentDidUnmount === 'function') {
+	      error('%s has a method called ' + 'componentDidUnmount(). But there is no such lifecycle method. ' + 'Did you mean componentWillUnmount()?', name);
+	    }
+
+	    if (typeof instance.componentDidReceiveProps === 'function') {
+	      error('%s has a method called ' + 'componentDidReceiveProps(). But there is no such lifecycle method. ' + 'If you meant to update the state in response to changing props, ' + 'use componentWillReceiveProps(). If you meant to fetch data or ' + 'run side-effects or mutations after React has updated the UI, use componentDidUpdate().', name);
+	    }
+
+	    if (typeof instance.componentWillRecieveProps === 'function') {
+	      error('%s has a method called ' + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?', name);
+	    }
+
+	    if (typeof instance.UNSAFE_componentWillRecieveProps === 'function') {
+	      error('%s has a method called ' + 'UNSAFE_componentWillRecieveProps(). Did you mean UNSAFE_componentWillReceiveProps()?', name);
+	    }
+
+	    var hasMutatedProps = instance.props !== newProps;
+
+	    if (instance.props !== undefined && hasMutatedProps) {
+	      error('%s(...): When calling super() in `%s`, make sure to pass ' + "up the same props that your component's constructor was passed.", name, name);
+	    }
+
+	    if (instance.defaultProps) {
+	      error('Setting defaultProps as an instance property on %s is not supported and will be ignored.' + ' Instead, define defaultProps as a static property on %s.', name, name);
+	    }
+
+	    if (typeof instance.getSnapshotBeforeUpdate === 'function' && typeof instance.componentDidUpdate !== 'function' && !didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate.has(ctor)) {
+	      didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate.add(ctor);
+
+	      error('%s: getSnapshotBeforeUpdate() should be used with componentDidUpdate(). ' + 'This component defines getSnapshotBeforeUpdate() only.', getComponentNameFromType(ctor));
+	    }
+
+	    if (typeof instance.getDerivedStateFromProps === 'function') {
+	      error('%s: getDerivedStateFromProps() is defined as an instance method ' + 'and will be ignored. Instead, declare it as a static method.', name);
+	    }
+
+	    if (typeof instance.getDerivedStateFromError === 'function') {
+	      error('%s: getDerivedStateFromError() is defined as an instance method ' + 'and will be ignored. Instead, declare it as a static method.', name);
+	    }
+
+	    if (typeof ctor.getSnapshotBeforeUpdate === 'function') {
+	      error('%s: getSnapshotBeforeUpdate() is defined as a static method ' + 'and will be ignored. Instead, declare it as an instance method.', name);
+	    }
+
+	    var _state = instance.state;
+
+	    if (_state && (typeof _state !== 'object' || isArray(_state))) {
+	      error('%s.state: must be set to an object or null', name);
+	    }
+
+	    if (typeof instance.getChildContext === 'function' && typeof ctor.childContextTypes !== 'object') {
+	      error('%s.getChildContext(): childContextTypes must be defined in order to ' + 'use getChildContext().', name);
+	    }
+	  }
+	}
+
+	function callComponentWillMount(type, instance) {
+	  var oldState = instance.state;
+
+	  if (typeof instance.componentWillMount === 'function') {
+	    {
+	      if ( instance.componentWillMount.__suppressDeprecationWarning !== true) {
+	        var componentName = getComponentNameFromType(type) || 'Unknown';
+
+	        if (!didWarnAboutDeprecatedWillMount[componentName]) {
+	          warn( // keep this warning in sync with ReactStrictModeWarning.js
+	          'componentWillMount has been renamed, and is not recommended for use. ' + 'See https://reactjs.org/link/unsafe-component-lifecycles for details.\n\n' + '* Move code from componentWillMount to componentDidMount (preferred in most cases) ' + 'or the constructor.\n' + '\nPlease update the following components: %s', componentName);
+
+	          didWarnAboutDeprecatedWillMount[componentName] = true;
+	        }
+	      }
+	    }
+
+	    instance.componentWillMount();
+	  }
+
+	  if (typeof instance.UNSAFE_componentWillMount === 'function') {
+	    instance.UNSAFE_componentWillMount();
+	  }
+
+	  if (oldState !== instance.state) {
+	    {
+	      error('%s.componentWillMount(): Assigning directly to this.state is ' + "deprecated (except inside a component's " + 'constructor). Use setState instead.', getComponentNameFromType(type) || 'Component');
+	    }
+
+	    classComponentUpdater.enqueueReplaceState(instance, instance.state, null);
+	  }
+	}
+
+	function processUpdateQueue(internalInstance, inst, props, maskedLegacyContext) {
+	  if (internalInstance.queue !== null && internalInstance.queue.length > 0) {
+	    var oldQueue = internalInstance.queue;
+	    var oldReplace = internalInstance.replace;
+	    internalInstance.queue = null;
+	    internalInstance.replace = false;
+
+	    if (oldReplace && oldQueue.length === 1) {
+	      inst.state = oldQueue[0];
+	    } else {
+	      var nextState = oldReplace ? oldQueue[0] : inst.state;
+	      var dontMutate = true;
+
+	      for (var i = oldReplace ? 1 : 0; i < oldQueue.length; i++) {
+	        var partial = oldQueue[i];
+	        var partialState = typeof partial === 'function' ? partial.call(inst, nextState, props, maskedLegacyContext) : partial;
+
+	        if (partialState != null) {
+	          if (dontMutate) {
+	            dontMutate = false;
+	            nextState = assign({}, nextState, partialState);
+	          } else {
+	            assign(nextState, partialState);
+	          }
+	        }
+	      }
+
+	      inst.state = nextState;
+	    }
+	  } else {
+	    internalInstance.queue = null;
+	  }
+	} // Invokes the mount life-cycles on a previously never rendered instance.
+
+
+	function mountClassInstance(instance, ctor, newProps, maskedLegacyContext) {
+	  {
+	    checkClassInstance(instance, ctor, newProps);
+	  }
+
+	  var initialState = instance.state !== undefined ? instance.state : null;
+	  instance.updater = classComponentUpdater;
+	  instance.props = newProps;
+	  instance.state = initialState; // We don't bother initializing the refs object on the server, since we're not going to resolve them anyway.
+	  // The internal instance will be used to manage updates that happen during this mount.
+
+	  var internalInstance = {
+	    queue: [],
+	    replace: false
+	  };
+	  set(instance, internalInstance);
+	  var contextType = ctor.contextType;
+
+	  if (typeof contextType === 'object' && contextType !== null) {
+	    instance.context = readContext(contextType);
+	  } else {
+	    instance.context = maskedLegacyContext;
+	  }
+
+	  {
+	    if (instance.state === newProps) {
+	      var componentName = getComponentNameFromType(ctor) || 'Component';
+
+	      if (!didWarnAboutDirectlyAssigningPropsToState.has(componentName)) {
+	        didWarnAboutDirectlyAssigningPropsToState.add(componentName);
+
+	        error('%s: It is not recommended to assign props directly to state ' + "because updates to props won't be reflected in state. " + 'In most cases, it is better to use props directly.', componentName);
+	      }
+	    }
+	  }
+
+	  var getDerivedStateFromProps = ctor.getDerivedStateFromProps;
+
+	  if (typeof getDerivedStateFromProps === 'function') {
+	    instance.state = applyDerivedStateFromProps(instance, ctor, getDerivedStateFromProps, initialState, newProps);
+	  } // In order to support react-lifecycles-compat polyfilled components,
+	  // Unsafe lifecycles should not be invoked for components using the new APIs.
+
+
+	  if (typeof ctor.getDerivedStateFromProps !== 'function' && typeof instance.getSnapshotBeforeUpdate !== 'function' && (typeof instance.UNSAFE_componentWillMount === 'function' || typeof instance.componentWillMount === 'function')) {
+	    callComponentWillMount(ctor, instance); // If we had additional state updates during this life-cycle, let's
+	    // process them now.
+
+	    processUpdateQueue(internalInstance, instance, newProps, maskedLegacyContext);
+	  }
+	}
+
+	// Ids are base 32 strings whose binary representation corresponds to the
+	// position of a node in a tree.
+	// Every time the tree forks into multiple children, we add additional bits to
+	// the left of the sequence that represent the position of the child within the
+	// current level of children.
+	//
+	//      00101       00010001011010101
+	//      ╰─┬─╯       ╰───────┬───────╯
+	//   Fork 5 of 20       Parent id
+	//
+	// The leading 0s are important. In the above example, you only need 3 bits to
+	// represent slot 5. However, you need 5 bits to represent all the forks at
+	// the current level, so we must account for the empty bits at the end.
+	//
+	// For this same reason, slots are 1-indexed instead of 0-indexed. Otherwise,
+	// the zeroth id at a level would be indistinguishable from its parent.
+	//
+	// If a node has only one child, and does not materialize an id (i.e. does not
+	// contain a useId hook), then we don't need to allocate any space in the
+	// sequence. It's treated as a transparent indirection. For example, these two
+	// trees produce the same ids:
+	//
+	// <>                          <>
+	//   <Indirection>               <A />
+	//     <A />                     <B />
+	//   </Indirection>            </>
+	//   <B />
+	// </>
+	//
+	// However, we cannot skip any node that materializes an id. Otherwise, a parent
+	// id that does not fork would be indistinguishable from its child id. For
+	// example, this tree does not fork, but the parent and child must have
+	// different ids.
+	//
+	// <Parent>
+	//   <Child />
+	// </Parent>
+	//
+	// To handle this scenario, every time we materialize an id, we allocate a
+	// new level with a single slot. You can think of this as a fork with only one
+	// prong, or an array of children with length 1.
+	//
+	// It's possible for the size of the sequence to exceed 32 bits, the max
+	// size for bitwise operations. When this happens, we make more room by
+	// converting the right part of the id to a string and storing it in an overflow
+	// variable. We use a base 32 string representation, because 32 is the largest
+	// power of 2 that is supported by toString(). We want the base to be large so
+	// that the resulting ids are compact, and we want the base to be a power of 2
+	// because every log2(base) bits corresponds to a single character, i.e. every
+	// log2(32) = 5 bits. That means we can lop bits off the end 5 at a time without
+	// affecting the final result.
+	var emptyTreeContext = {
+	  id: 1,
+	  overflow: ''
+	};
+	function getTreeId(context) {
+	  var overflow = context.overflow;
+	  var idWithLeadingBit = context.id;
+	  var id = idWithLeadingBit & ~getLeadingBit(idWithLeadingBit);
+	  return id.toString(32) + overflow;
+	}
+	function pushTreeContext(baseContext, totalChildren, index) {
+	  var baseIdWithLeadingBit = baseContext.id;
+	  var baseOverflow = baseContext.overflow; // The leftmost 1 marks the end of the sequence, non-inclusive. It's not part
+	  // of the id; we use it to account for leading 0s.
+
+	  var baseLength = getBitLength(baseIdWithLeadingBit) - 1;
+	  var baseId = baseIdWithLeadingBit & ~(1 << baseLength);
+	  var slot = index + 1;
+	  var length = getBitLength(totalChildren) + baseLength; // 30 is the max length we can store without overflowing, taking into
+	  // consideration the leading 1 we use to mark the end of the sequence.
+
+	  if (length > 30) {
+	    // We overflowed the bitwise-safe range. Fall back to slower algorithm.
+	    // This branch assumes the length of the base id is greater than 5; it won't
+	    // work for smaller ids, because you need 5 bits per character.
+	    //
+	    // We encode the id in multiple steps: first the base id, then the
+	    // remaining digits.
+	    //
+	    // Each 5 bit sequence corresponds to a single base 32 character. So for
+	    // example, if the current id is 23 bits long, we can convert 20 of those
+	    // bits into a string of 4 characters, with 3 bits left over.
+	    //
+	    // First calculate how many bits in the base id represent a complete
+	    // sequence of characters.
+	    var numberOfOverflowBits = baseLength - baseLength % 5; // Then create a bitmask that selects only those bits.
+
+	    var newOverflowBits = (1 << numberOfOverflowBits) - 1; // Select the bits, and convert them to a base 32 string.
+
+	    var newOverflow = (baseId & newOverflowBits).toString(32); // Now we can remove those bits from the base id.
+
+	    var restOfBaseId = baseId >> numberOfOverflowBits;
+	    var restOfBaseLength = baseLength - numberOfOverflowBits; // Finally, encode the rest of the bits using the normal algorithm. Because
+	    // we made more room, this time it won't overflow.
+
+	    var restOfLength = getBitLength(totalChildren) + restOfBaseLength;
+	    var restOfNewBits = slot << restOfBaseLength;
+	    var id = restOfNewBits | restOfBaseId;
+	    var overflow = newOverflow + baseOverflow;
+	    return {
+	      id: 1 << restOfLength | id,
+	      overflow: overflow
+	    };
+	  } else {
+	    // Normal path
+	    var newBits = slot << baseLength;
+
+	    var _id = newBits | baseId;
+
+	    var _overflow = baseOverflow;
+	    return {
+	      id: 1 << length | _id,
+	      overflow: _overflow
+	    };
+	  }
+	}
+
+	function getBitLength(number) {
+	  return 32 - clz32(number);
+	}
+
+	function getLeadingBit(id) {
+	  return 1 << getBitLength(id) - 1;
+	} // TODO: Math.clz32 is supported in Node 12+. Maybe we can drop the fallback.
+
+
+	var clz32 = Math.clz32 ? Math.clz32 : clz32Fallback; // Count leading zeros.
+	// Based on:
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/clz32
+
+	var log = Math.log;
+	var LN2 = Math.LN2;
+
+	function clz32Fallback(x) {
+	  var asUint = x >>> 0;
+
+	  if (asUint === 0) {
+	    return 32;
+	  }
+
+	  return 31 - (log(asUint) / LN2 | 0) | 0;
+	}
+
+	/**
+	 * inlined Object.is polyfill to avoid requiring consumers ship their own
+	 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+	 */
+	function is(x, y) {
+	  return x === y && (x !== 0 || 1 / x === 1 / y) || x !== x && y !== y // eslint-disable-line no-self-compare
+	  ;
+	}
+
+	var objectIs = typeof Object.is === 'function' ? Object.is : is;
+
+	var currentlyRenderingComponent = null;
+	var currentlyRenderingTask = null;
+	var firstWorkInProgressHook = null;
+	var workInProgressHook = null; // Whether the work-in-progress hook is a re-rendered hook
+
+	var isReRender = false; // Whether an update was scheduled during the currently executing render pass.
+
+	var didScheduleRenderPhaseUpdate = false; // Counts the number of useId hooks in this component
+
+	var localIdCounter = 0; // Lazily created map of render-phase updates
+
+	var renderPhaseUpdates = null; // Counter to prevent infinite loops.
+
+	var numberOfReRenders = 0;
+	var RE_RENDER_LIMIT = 25;
+	var isInHookUserCodeInDev = false; // In DEV, this is the name of the currently executing primitive hook
+
+	var currentHookNameInDev;
+
+	function resolveCurrentlyRenderingComponent() {
+	  if (currentlyRenderingComponent === null) {
+	    throw new Error('Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for' + ' one of the following reasons:\n' + '1. You might have mismatching versions of React and the renderer (such as React DOM)\n' + '2. You might be breaking the Rules of Hooks\n' + '3. You might have more than one copy of React in the same app\n' + 'See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.');
+	  }
+
+	  {
+	    if (isInHookUserCodeInDev) {
+	      error('Do not call Hooks inside useEffect(...), useMemo(...), or other built-in Hooks. ' + 'You can only call Hooks at the top level of your React function. ' + 'For more information, see ' + 'https://reactjs.org/link/rules-of-hooks');
+	    }
+	  }
+
+	  return currentlyRenderingComponent;
+	}
+
+	function areHookInputsEqual(nextDeps, prevDeps) {
+	  if (prevDeps === null) {
+	    {
+	      error('%s received a final argument during this render, but not during ' + 'the previous render. Even though the final argument is optional, ' + 'its type cannot change between renders.', currentHookNameInDev);
+	    }
+
+	    return false;
+	  }
+
+	  {
+	    // Don't bother comparing lengths in prod because these arrays should be
+	    // passed inline.
+	    if (nextDeps.length !== prevDeps.length) {
+	      error('The final argument passed to %s changed size between renders. The ' + 'order and size of this array must remain constant.\n\n' + 'Previous: %s\n' + 'Incoming: %s', currentHookNameInDev, "[" + nextDeps.join(', ') + "]", "[" + prevDeps.join(', ') + "]");
+	    }
+	  }
+
+	  for (var i = 0; i < prevDeps.length && i < nextDeps.length; i++) {
+	    if (objectIs(nextDeps[i], prevDeps[i])) {
+	      continue;
+	    }
+
+	    return false;
+	  }
+
+	  return true;
+	}
+
+	function createHook() {
+	  if (numberOfReRenders > 0) {
+	    throw new Error('Rendered more hooks than during the previous render');
+	  }
+
+	  return {
+	    memoizedState: null,
+	    queue: null,
+	    next: null
+	  };
+	}
+
+	function createWorkInProgressHook() {
+	  if (workInProgressHook === null) {
+	    // This is the first hook in the list
+	    if (firstWorkInProgressHook === null) {
+	      isReRender = false;
+	      firstWorkInProgressHook = workInProgressHook = createHook();
+	    } else {
+	      // There's already a work-in-progress. Reuse it.
+	      isReRender = true;
+	      workInProgressHook = firstWorkInProgressHook;
+	    }
+	  } else {
+	    if (workInProgressHook.next === null) {
+	      isReRender = false; // Append to the end of the list
+
+	      workInProgressHook = workInProgressHook.next = createHook();
+	    } else {
+	      // There's already a work-in-progress. Reuse it.
+	      isReRender = true;
+	      workInProgressHook = workInProgressHook.next;
+	    }
+	  }
+
+	  return workInProgressHook;
+	}
+
+	function prepareToUseHooks(task, componentIdentity) {
+	  currentlyRenderingComponent = componentIdentity;
+	  currentlyRenderingTask = task;
+
+	  {
+	    isInHookUserCodeInDev = false;
+	  } // The following should have already been reset
+	  // didScheduleRenderPhaseUpdate = false;
+	  // localIdCounter = 0;
+	  // firstWorkInProgressHook = null;
+	  // numberOfReRenders = 0;
+	  // renderPhaseUpdates = null;
+	  // workInProgressHook = null;
+
+
+	  localIdCounter = 0;
+	}
+	function finishHooks(Component, props, children, refOrContext) {
+	  // This must be called after every function component to prevent hooks from
+	  // being used in classes.
+	  while (didScheduleRenderPhaseUpdate) {
+	    // Updates were scheduled during the render phase. They are stored in
+	    // the `renderPhaseUpdates` map. Call the component again, reusing the
+	    // work-in-progress hooks and applying the additional updates on top. Keep
+	    // restarting until no more updates are scheduled.
+	    didScheduleRenderPhaseUpdate = false;
+	    localIdCounter = 0;
+	    numberOfReRenders += 1; // Start over from the beginning of the list
+
+	    workInProgressHook = null;
+	    children = Component(props, refOrContext);
+	  }
+
+	  resetHooksState();
+	  return children;
+	}
+	function checkDidRenderIdHook() {
+	  // This should be called immediately after every finishHooks call.
+	  // Conceptually, it's part of the return value of finishHooks; it's only a
+	  // separate function to avoid using an array tuple.
+	  var didRenderIdHook = localIdCounter !== 0;
+	  return didRenderIdHook;
+	} // Reset the internal hooks state if an error occurs while rendering a component
+
+	function resetHooksState() {
+	  {
+	    isInHookUserCodeInDev = false;
+	  }
+
+	  currentlyRenderingComponent = null;
+	  currentlyRenderingTask = null;
+	  didScheduleRenderPhaseUpdate = false;
+	  firstWorkInProgressHook = null;
+	  numberOfReRenders = 0;
+	  renderPhaseUpdates = null;
+	  workInProgressHook = null;
+	}
+
+	function readContext$1(context) {
+	  {
+	    if (isInHookUserCodeInDev) {
+	      error('Context can only be read while React is rendering. ' + 'In classes, you can read it in the render method or getDerivedStateFromProps. ' + 'In function components, you can read it directly in the function body, but not ' + 'inside Hooks like useReducer() or useMemo().');
+	    }
+	  }
+
+	  return readContext(context);
+	}
+
+	function useContext(context) {
+	  {
+	    currentHookNameInDev = 'useContext';
+	  }
+
+	  resolveCurrentlyRenderingComponent();
+	  return readContext(context);
+	}
+
+	function basicStateReducer(state, action) {
+	  // $FlowFixMe: Flow doesn't like mixed types
+	  return typeof action === 'function' ? action(state) : action;
+	}
+
+	function useState(initialState) {
+	  {
+	    currentHookNameInDev = 'useState';
+	  }
+
+	  return useReducer(basicStateReducer, // useReducer has a special case to support lazy useState initializers
+	  initialState);
+	}
+	function useReducer(reducer, initialArg, init) {
+	  {
+	    if (reducer !== basicStateReducer) {
+	      currentHookNameInDev = 'useReducer';
+	    }
+	  }
+
+	  currentlyRenderingComponent = resolveCurrentlyRenderingComponent();
+	  workInProgressHook = createWorkInProgressHook();
+
+	  if (isReRender) {
+	    // This is a re-render. Apply the new render phase updates to the previous
+	    // current hook.
+	    var queue = workInProgressHook.queue;
+	    var dispatch = queue.dispatch;
+
+	    if (renderPhaseUpdates !== null) {
+	      // Render phase updates are stored in a map of queue -> linked list
+	      var firstRenderPhaseUpdate = renderPhaseUpdates.get(queue);
+
+	      if (firstRenderPhaseUpdate !== undefined) {
+	        renderPhaseUpdates.delete(queue);
+	        var newState = workInProgressHook.memoizedState;
+	        var update = firstRenderPhaseUpdate;
+
+	        do {
+	          // Process this render phase update. We don't have to check the
+	          // priority because it will always be the same as the current
+	          // render's.
+	          var action = update.action;
+
+	          {
+	            isInHookUserCodeInDev = true;
+	          }
+
+	          newState = reducer(newState, action);
+
+	          {
+	            isInHookUserCodeInDev = false;
+	          }
+
+	          update = update.next;
+	        } while (update !== null);
+
+	        workInProgressHook.memoizedState = newState;
+	        return [newState, dispatch];
+	      }
+	    }
+
+	    return [workInProgressHook.memoizedState, dispatch];
+	  } else {
+	    {
+	      isInHookUserCodeInDev = true;
+	    }
+
+	    var initialState;
+
+	    if (reducer === basicStateReducer) {
+	      // Special case for `useState`.
+	      initialState = typeof initialArg === 'function' ? initialArg() : initialArg;
+	    } else {
+	      initialState = init !== undefined ? init(initialArg) : initialArg;
+	    }
+
+	    {
+	      isInHookUserCodeInDev = false;
+	    }
+
+	    workInProgressHook.memoizedState = initialState;
+
+	    var _queue = workInProgressHook.queue = {
+	      last: null,
+	      dispatch: null
+	    };
+
+	    var _dispatch = _queue.dispatch = dispatchAction.bind(null, currentlyRenderingComponent, _queue);
+
+	    return [workInProgressHook.memoizedState, _dispatch];
+	  }
+	}
+
+	function useMemo(nextCreate, deps) {
+	  currentlyRenderingComponent = resolveCurrentlyRenderingComponent();
+	  workInProgressHook = createWorkInProgressHook();
+	  var nextDeps = deps === undefined ? null : deps;
+
+	  if (workInProgressHook !== null) {
+	    var prevState = workInProgressHook.memoizedState;
+
+	    if (prevState !== null) {
+	      if (nextDeps !== null) {
+	        var prevDeps = prevState[1];
+
+	        if (areHookInputsEqual(nextDeps, prevDeps)) {
+	          return prevState[0];
+	        }
+	      }
+	    }
+	  }
+
+	  {
+	    isInHookUserCodeInDev = true;
+	  }
+
+	  var nextValue = nextCreate();
+
+	  {
+	    isInHookUserCodeInDev = false;
+	  }
+
+	  workInProgressHook.memoizedState = [nextValue, nextDeps];
+	  return nextValue;
+	}
+
+	function useRef(initialValue) {
+	  currentlyRenderingComponent = resolveCurrentlyRenderingComponent();
+	  workInProgressHook = createWorkInProgressHook();
+	  var previousRef = workInProgressHook.memoizedState;
+
+	  if (previousRef === null) {
+	    var ref = {
+	      current: initialValue
+	    };
+
+	    {
+	      Object.seal(ref);
+	    }
+
+	    workInProgressHook.memoizedState = ref;
+	    return ref;
+	  } else {
+	    return previousRef;
+	  }
+	}
+
+	function useLayoutEffect(create, inputs) {
+	  {
+	    currentHookNameInDev = 'useLayoutEffect';
+
+	    error('useLayoutEffect does nothing on the server, because its effect cannot ' + "be encoded into the server renderer's output format. This will lead " + 'to a mismatch between the initial, non-hydrated UI and the intended ' + 'UI. To avoid this, useLayoutEffect should only be used in ' + 'components that render exclusively on the client. ' + 'See https://reactjs.org/link/uselayouteffect-ssr for common fixes.');
+	  }
+	}
+
+	function dispatchAction(componentIdentity, queue, action) {
+	  if (numberOfReRenders >= RE_RENDER_LIMIT) {
+	    throw new Error('Too many re-renders. React limits the number of renders to prevent ' + 'an infinite loop.');
+	  }
+
+	  if (componentIdentity === currentlyRenderingComponent) {
+	    // This is a render phase update. Stash it in a lazily-created map of
+	    // queue -> linked list of updates. After this render pass, we'll restart
+	    // and apply the stashed updates on top of the work-in-progress hook.
+	    didScheduleRenderPhaseUpdate = true;
+	    var update = {
+	      action: action,
+	      next: null
+	    };
+
+	    if (renderPhaseUpdates === null) {
+	      renderPhaseUpdates = new Map();
+	    }
+
+	    var firstRenderPhaseUpdate = renderPhaseUpdates.get(queue);
+
+	    if (firstRenderPhaseUpdate === undefined) {
+	      renderPhaseUpdates.set(queue, update);
+	    } else {
+	      // Append the update to the end of the list.
+	      var lastRenderPhaseUpdate = firstRenderPhaseUpdate;
+
+	      while (lastRenderPhaseUpdate.next !== null) {
+	        lastRenderPhaseUpdate = lastRenderPhaseUpdate.next;
+	      }
+
+	      lastRenderPhaseUpdate.next = update;
+	    }
+	  }
+	}
+
+	function useCallback(callback, deps) {
+	  return useMemo(function () {
+	    return callback;
+	  }, deps);
+	} // TODO Decide on how to implement this hook for server rendering.
+	// If a mutation occurs during render, consider triggering a Suspense boundary
+	// and falling back to client rendering.
+
+	function useMutableSource(source, getSnapshot, subscribe) {
+	  resolveCurrentlyRenderingComponent();
+	  return getSnapshot(source._source);
+	}
+
+	function useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot) {
+	  if (getServerSnapshot === undefined) {
+	    throw new Error('Missing getServerSnapshot, which is required for ' + 'server-rendered content. Will revert to client rendering.');
+	  }
+
+	  return getServerSnapshot();
+	}
+
+	function useDeferredValue(value) {
+	  resolveCurrentlyRenderingComponent();
+	  return value;
+	}
+
+	function unsupportedStartTransition() {
+	  throw new Error('startTransition cannot be called during server rendering.');
+	}
+
+	function useTransition() {
+	  resolveCurrentlyRenderingComponent();
+	  return [false, unsupportedStartTransition];
+	}
+
+	function useId() {
+	  var task = currentlyRenderingTask;
+	  var treeId = getTreeId(task.treeContext);
+	  var responseState = currentResponseState;
+
+	  if (responseState === null) {
+	    throw new Error('Invalid hook call. Hooks can only be called inside of the body of a function component.');
+	  }
+
+	  var localId = localIdCounter++;
+	  return makeId(responseState, treeId, localId);
+	}
+
+	function noop() {}
+
+	var Dispatcher = {
+	  readContext: readContext$1,
+	  useContext: useContext,
+	  useMemo: useMemo,
+	  useReducer: useReducer,
+	  useRef: useRef,
+	  useState: useState,
+	  useInsertionEffect: noop,
+	  useLayoutEffect: useLayoutEffect,
+	  useCallback: useCallback,
+	  // useImperativeHandle is not run in the server environment
+	  useImperativeHandle: noop,
+	  // Effects are not run in the server environment.
+	  useEffect: noop,
+	  // Debugging effect
+	  useDebugValue: noop,
+	  useDeferredValue: useDeferredValue,
+	  useTransition: useTransition,
+	  useId: useId,
+	  // Subscriptions are not setup in a server environment.
+	  useMutableSource: useMutableSource,
+	  useSyncExternalStore: useSyncExternalStore
+	};
+
+	var currentResponseState = null;
+	function setCurrentResponseState(responseState) {
+	  currentResponseState = responseState;
+	}
+
+	function getStackByComponentStackNode(componentStack) {
+	  try {
+	    var info = '';
+	    var node = componentStack;
+
+	    do {
+	      switch (node.tag) {
+	        case 0:
+	          info += describeBuiltInComponentFrame(node.type, null, null);
+	          break;
+
+	        case 1:
+	          info += describeFunctionComponentFrame(node.type, null, null);
+	          break;
+
+	        case 2:
+	          info += describeClassComponentFrame(node.type, null, null);
+	          break;
+	      }
+
+	      node = node.parent;
+	    } while (node);
+
+	    return info;
+	  } catch (x) {
+	    return '\nError generating stack: ' + x.message + '\n' + x.stack;
+	  }
+	}
+
+	var ReactCurrentDispatcher$1 = ReactSharedInternals.ReactCurrentDispatcher;
+	var ReactDebugCurrentFrame$1 = ReactSharedInternals.ReactDebugCurrentFrame;
+	var PENDING = 0;
+	var COMPLETED = 1;
+	var FLUSHED = 2;
+	var ABORTED = 3;
+	var ERRORED = 4;
+	var OPEN = 0;
+	var CLOSING = 1;
+	var CLOSED = 2;
+	// This is a default heuristic for how to split up the HTML content into progressive
+	// loading. Our goal is to be able to display additional new content about every 500ms.
+	// Faster than that is unnecessary and should be throttled on the client. It also
+	// adds unnecessary overhead to do more splits. We don't know if it's a higher or lower
+	// end device but higher end suffer less from the overhead than lower end does from
+	// not getting small enough pieces. We error on the side of low end.
+	// We base this on low end 3G speeds which is about 500kbits per second. We assume
+	// that there can be a reasonable drop off from max bandwidth which leaves you with
+	// as little as 80%. We can receive half of that each 500ms - at best. In practice,
+	// a little bandwidth is lost to processing and contention - e.g. CSS and images that
+	// are downloaded along with the main content. So we estimate about half of that to be
+	// the lower end throughput. In other words, we expect that you can at least show
+	// about 12.5kb of content per 500ms. Not counting starting latency for the first
+	// paint.
+	// 500 * 1024 / 8 * .8 * 0.5 / 2
+	var DEFAULT_PROGRESSIVE_CHUNK_SIZE = 12800;
+
+	function defaultErrorHandler(error) {
+	  console['error'](error); // Don't transform to our wrapper
+
+	  return null;
+	}
+
+	function noop$1() {}
+
+	function createRequest(children, responseState, rootFormatContext, progressiveChunkSize, onError, onAllReady, onShellReady, onShellError, onFatalError) {
+	  var pingedTasks = [];
+	  var abortSet = new Set();
+	  var request = {
+	    destination: null,
+	    responseState: responseState,
+	    progressiveChunkSize: progressiveChunkSize === undefined ? DEFAULT_PROGRESSIVE_CHUNK_SIZE : progressiveChunkSize,
+	    status: OPEN,
+	    fatalError: null,
+	    nextSegmentId: 0,
+	    allPendingTasks: 0,
+	    pendingRootTasks: 0,
+	    completedRootSegment: null,
+	    abortableTasks: abortSet,
+	    pingedTasks: pingedTasks,
+	    clientRenderedBoundaries: [],
+	    completedBoundaries: [],
+	    partialBoundaries: [],
+	    onError: onError === undefined ? defaultErrorHandler : onError,
+	    onAllReady: onAllReady === undefined ? noop$1 : onAllReady,
+	    onShellReady: onShellReady === undefined ? noop$1 : onShellReady,
+	    onShellError: onShellError === undefined ? noop$1 : onShellError,
+	    onFatalError: onFatalError === undefined ? noop$1 : onFatalError
+	  }; // This segment represents the root fallback.
+
+	  var rootSegment = createPendingSegment(request, 0, null, rootFormatContext, // Root segments are never embedded in Text on either edge
+	  false, false); // There is no parent so conceptually, we're unblocked to flush this segment.
+
+	  rootSegment.parentFlushed = true;
+	  var rootTask = createTask(request, children, null, rootSegment, abortSet, emptyContextObject, rootContextSnapshot, emptyTreeContext);
+	  pingedTasks.push(rootTask);
+	  return request;
+	}
+
+	function pingTask(request, task) {
+	  var pingedTasks = request.pingedTasks;
+	  pingedTasks.push(task);
+
+	  if (pingedTasks.length === 1) {
+	    scheduleWork(function () {
+	      return performWork(request);
+	    });
+	  }
+	}
+
+	function createSuspenseBoundary(request, fallbackAbortableTasks) {
+	  return {
+	    id: UNINITIALIZED_SUSPENSE_BOUNDARY_ID,
+	    rootSegmentID: -1,
+	    parentFlushed: false,
+	    pendingTasks: 0,
+	    forceClientRender: false,
+	    completedSegments: [],
+	    byteSize: 0,
+	    fallbackAbortableTasks: fallbackAbortableTasks,
+	    errorDigest: null
+	  };
+	}
+
+	function createTask(request, node, blockedBoundary, blockedSegment, abortSet, legacyContext, context, treeContext) {
+	  request.allPendingTasks++;
+
+	  if (blockedBoundary === null) {
+	    request.pendingRootTasks++;
+	  } else {
+	    blockedBoundary.pendingTasks++;
+	  }
+
+	  var task = {
+	    node: node,
+	    ping: function () {
+	      return pingTask(request, task);
+	    },
+	    blockedBoundary: blockedBoundary,
+	    blockedSegment: blockedSegment,
+	    abortSet: abortSet,
+	    legacyContext: legacyContext,
+	    context: context,
+	    treeContext: treeContext
+	  };
+
+	  {
+	    task.componentStack = null;
+	  }
+
+	  abortSet.add(task);
+	  return task;
+	}
+
+	function createPendingSegment(request, index, boundary, formatContext, lastPushedText, textEmbedded) {
+	  return {
+	    status: PENDING,
+	    id: -1,
+	    // lazily assigned later
+	    index: index,
+	    parentFlushed: false,
+	    chunks: [],
+	    children: [],
+	    formatContext: formatContext,
+	    boundary: boundary,
+	    lastPushedText: lastPushedText,
+	    textEmbedded: textEmbedded
+	  };
+	} // DEV-only global reference to the currently executing task
+
+
+	var currentTaskInDEV = null;
+
+	function getCurrentStackInDEV() {
+	  {
+	    if (currentTaskInDEV === null || currentTaskInDEV.componentStack === null) {
+	      return '';
+	    }
+
+	    return getStackByComponentStackNode(currentTaskInDEV.componentStack);
+	  }
+	}
+
+	function pushBuiltInComponentStackInDEV(task, type) {
+	  {
+	    task.componentStack = {
+	      tag: 0,
+	      parent: task.componentStack,
+	      type: type
+	    };
+	  }
+	}
+
+	function pushFunctionComponentStackInDEV(task, type) {
+	  {
+	    task.componentStack = {
+	      tag: 1,
+	      parent: task.componentStack,
+	      type: type
+	    };
+	  }
+	}
+
+	function pushClassComponentStackInDEV(task, type) {
+	  {
+	    task.componentStack = {
+	      tag: 2,
+	      parent: task.componentStack,
+	      type: type
+	    };
+	  }
+	}
+
+	function popComponentStackInDEV(task) {
+	  {
+	    if (task.componentStack === null) {
+	      error('Unexpectedly popped too many stack frames. This is a bug in React.');
+	    } else {
+	      task.componentStack = task.componentStack.parent;
+	    }
+	  }
+	} // stash the component stack of an unwinding error until it is processed
+
+
+	var lastBoundaryErrorComponentStackDev = null;
+
+	function captureBoundaryErrorDetailsDev(boundary, error) {
+	  {
+	    var errorMessage;
+
+	    if (typeof error === 'string') {
+	      errorMessage = error;
+	    } else if (error && typeof error.message === 'string') {
+	      errorMessage = error.message;
+	    } else {
+	      // eslint-disable-next-line react-internal/safe-string-coercion
+	      errorMessage = String(error);
+	    }
+
+	    var errorComponentStack = lastBoundaryErrorComponentStackDev || getCurrentStackInDEV();
+	    lastBoundaryErrorComponentStackDev = null;
+	    boundary.errorMessage = errorMessage;
+	    boundary.errorComponentStack = errorComponentStack;
+	  }
+	}
+
+	function logRecoverableError(request, error) {
+	  // If this callback errors, we intentionally let that error bubble up to become a fatal error
+	  // so that someone fixes the error reporting instead of hiding it.
+	  var errorDigest = request.onError(error);
+
+	  if (errorDigest != null && typeof errorDigest !== 'string') {
+	    // eslint-disable-next-line react-internal/prod-error-codes
+	    throw new Error("onError returned something with a type other than \"string\". onError should return a string and may return null or undefined but must not return anything else. It received something of type \"" + typeof errorDigest + "\" instead");
+	  }
+
+	  return errorDigest;
+	}
+
+	function fatalError(request, error) {
+	  // This is called outside error handling code such as if the root errors outside
+	  // a suspense boundary or if the root suspense boundary's fallback errors.
+	  // It's also called if React itself or its host configs errors.
+	  var onShellError = request.onShellError;
+	  onShellError(error);
+	  var onFatalError = request.onFatalError;
+	  onFatalError(error);
+
+	  if (request.destination !== null) {
+	    request.status = CLOSED;
+	    closeWithError(request.destination, error);
+	  } else {
+	    request.status = CLOSING;
+	    request.fatalError = error;
+	  }
+	}
+
+	function renderSuspenseBoundary(request, task, props) {
+	  pushBuiltInComponentStackInDEV(task, 'Suspense');
+	  var parentBoundary = task.blockedBoundary;
+	  var parentSegment = task.blockedSegment; // Each time we enter a suspense boundary, we split out into a new segment for
+	  // the fallback so that we can later replace that segment with the content.
+	  // This also lets us split out the main content even if it doesn't suspend,
+	  // in case it ends up generating a large subtree of content.
+
+	  var fallback = props.fallback;
+	  var content = props.children;
+	  var fallbackAbortSet = new Set();
+	  var newBoundary = createSuspenseBoundary(request, fallbackAbortSet);
+	  var insertionIndex = parentSegment.chunks.length; // The children of the boundary segment is actually the fallback.
+
+	  var boundarySegment = createPendingSegment(request, insertionIndex, newBoundary, parentSegment.formatContext, // boundaries never require text embedding at their edges because comment nodes bound them
+	  false, false);
+	  parentSegment.children.push(boundarySegment); // The parentSegment has a child Segment at this index so we reset the lastPushedText marker on the parent
+
+	  parentSegment.lastPushedText = false; // This segment is the actual child content. We can start rendering that immediately.
+
+	  var contentRootSegment = createPendingSegment(request, 0, null, parentSegment.formatContext, // boundaries never require text embedding at their edges because comment nodes bound them
+	  false, false); // We mark the root segment as having its parent flushed. It's not really flushed but there is
+	  // no parent segment so there's nothing to wait on.
+
+	  contentRootSegment.parentFlushed = true; // Currently this is running synchronously. We could instead schedule this to pingedTasks.
+	  // I suspect that there might be some efficiency benefits from not creating the suspended task
+	  // and instead just using the stack if possible.
+	  // TODO: Call this directly instead of messing with saving and restoring contexts.
+	  // We can reuse the current context and task to render the content immediately without
+	  // context switching. We just need to temporarily switch which boundary and which segment
+	  // we're writing to. If something suspends, it'll spawn new suspended task with that context.
+
+	  task.blockedBoundary = newBoundary;
+	  task.blockedSegment = contentRootSegment;
+
+	  try {
+	    // We use the safe form because we don't handle suspending here. Only error handling.
+	    renderNode(request, task, content);
+	    pushSegmentFinale(contentRootSegment.chunks, request.responseState, contentRootSegment.lastPushedText, contentRootSegment.textEmbedded);
+	    contentRootSegment.status = COMPLETED;
+	    queueCompletedSegment(newBoundary, contentRootSegment);
+
+	    if (newBoundary.pendingTasks === 0) {
+	      // This must have been the last segment we were waiting on. This boundary is now complete.
+	      // Therefore we won't need the fallback. We early return so that we don't have to create
+	      // the fallback.
+	      popComponentStackInDEV(task);
+	      return;
+	    }
+	  } catch (error) {
+	    contentRootSegment.status = ERRORED;
+	    newBoundary.forceClientRender = true;
+	    newBoundary.errorDigest = logRecoverableError(request, error);
+
+	    {
+	      captureBoundaryErrorDetailsDev(newBoundary, error);
+	    } // We don't need to decrement any task numbers because we didn't spawn any new task.
+	    // We don't need to schedule any task because we know the parent has written yet.
+	    // We do need to fallthrough to create the fallback though.
+
+	  } finally {
+	    task.blockedBoundary = parentBoundary;
+	    task.blockedSegment = parentSegment;
+	  } // We create suspended task for the fallback because we don't want to actually work
+	  // on it yet in case we finish the main content, so we queue for later.
+
+
+	  var suspendedFallbackTask = createTask(request, fallback, parentBoundary, boundarySegment, fallbackAbortSet, task.legacyContext, task.context, task.treeContext);
+
+	  {
+	    suspendedFallbackTask.componentStack = task.componentStack;
+	  } // TODO: This should be queued at a separate lower priority queue so that we only work
+	  // on preparing fallbacks if we don't have any more main content to task on.
+
+
+	  request.pingedTasks.push(suspendedFallbackTask);
+	  popComponentStackInDEV(task);
+	}
+
+	function renderHostElement(request, task, type, props) {
+	  pushBuiltInComponentStackInDEV(task, type);
+	  var segment = task.blockedSegment;
+	  var children = pushStartInstance(segment.chunks, type, props, request.responseState, segment.formatContext);
+	  segment.lastPushedText = false;
+	  var prevContext = segment.formatContext;
+	  segment.formatContext = getChildFormatContext(prevContext, type, props); // We use the non-destructive form because if something suspends, we still
+	  // need to pop back up and finish this subtree of HTML.
+
+	  renderNode(request, task, children); // We expect that errors will fatal the whole task and that we don't need
+	  // the correct context. Therefore this is not in a finally.
+
+	  segment.formatContext = prevContext;
+	  pushEndInstance(segment.chunks, type);
+	  segment.lastPushedText = false;
+	  popComponentStackInDEV(task);
+	}
+
+	function shouldConstruct$1(Component) {
+	  return Component.prototype && Component.prototype.isReactComponent;
+	}
+
+	function renderWithHooks(request, task, Component, props, secondArg) {
+	  var componentIdentity = {};
+	  prepareToUseHooks(task, componentIdentity);
+	  var result = Component(props, secondArg);
+	  return finishHooks(Component, props, result, secondArg);
+	}
+
+	function finishClassComponent(request, task, instance, Component, props) {
+	  var nextChildren = instance.render();
+
+	  {
+	    if (instance.props !== props) {
+	      if (!didWarnAboutReassigningProps) {
+	        error('It looks like %s is reassigning its own `this.props` while rendering. ' + 'This is not supported and can lead to confusing bugs.', getComponentNameFromType(Component) || 'a component');
+	      }
+
+	      didWarnAboutReassigningProps = true;
+	    }
+	  }
+
+	  {
+	    var childContextTypes = Component.childContextTypes;
+
+	    if (childContextTypes !== null && childContextTypes !== undefined) {
+	      var previousContext = task.legacyContext;
+	      var mergedContext = processChildContext(instance, Component, previousContext, childContextTypes);
+	      task.legacyContext = mergedContext;
+	      renderNodeDestructive(request, task, nextChildren);
+	      task.legacyContext = previousContext;
+	      return;
+	    }
+	  }
+
+	  renderNodeDestructive(request, task, nextChildren);
+	}
+
+	function renderClassComponent(request, task, Component, props) {
+	  pushClassComponentStackInDEV(task, Component);
+	  var maskedContext =  getMaskedContext(Component, task.legacyContext) ;
+	  var instance = constructClassInstance(Component, props, maskedContext);
+	  mountClassInstance(instance, Component, props, maskedContext);
+	  finishClassComponent(request, task, instance, Component, props);
+	  popComponentStackInDEV(task);
+	}
+
+	var didWarnAboutBadClass = {};
+	var didWarnAboutModulePatternComponent = {};
+	var didWarnAboutContextTypeOnFunctionComponent = {};
+	var didWarnAboutGetDerivedStateOnFunctionComponent = {};
+	var didWarnAboutReassigningProps = false;
+	var didWarnAboutGenerators = false;
+	var didWarnAboutMaps = false;
+	var hasWarnedAboutUsingContextAsConsumer = false; // This would typically be a function component but we still support module pattern
+	// components for some reason.
+
+	function renderIndeterminateComponent(request, task, Component, props) {
+	  var legacyContext;
+
+	  {
+	    legacyContext = getMaskedContext(Component, task.legacyContext);
+	  }
+
+	  pushFunctionComponentStackInDEV(task, Component);
+
+	  {
+	    if (Component.prototype && typeof Component.prototype.render === 'function') {
+	      var componentName = getComponentNameFromType(Component) || 'Unknown';
+
+	      if (!didWarnAboutBadClass[componentName]) {
+	        error("The <%s /> component appears to have a render method, but doesn't extend React.Component. " + 'This is likely to cause errors. Change %s to extend React.Component instead.', componentName, componentName);
+
+	        didWarnAboutBadClass[componentName] = true;
+	      }
+	    }
+	  }
+
+	  var value = renderWithHooks(request, task, Component, props, legacyContext);
+	  var hasId = checkDidRenderIdHook();
+
+	  {
+	    // Support for module components is deprecated and is removed behind a flag.
+	    // Whether or not it would crash later, we want to show a good message in DEV first.
+	    if (typeof value === 'object' && value !== null && typeof value.render === 'function' && value.$$typeof === undefined) {
+	      var _componentName = getComponentNameFromType(Component) || 'Unknown';
+
+	      if (!didWarnAboutModulePatternComponent[_componentName]) {
+	        error('The <%s /> component appears to be a function component that returns a class instance. ' + 'Change %s to a class that extends React.Component instead. ' + "If you can't use a class try assigning the prototype on the function as a workaround. " + "`%s.prototype = React.Component.prototype`. Don't use an arrow function since it " + 'cannot be called with `new` by React.', _componentName, _componentName, _componentName);
+
+	        didWarnAboutModulePatternComponent[_componentName] = true;
+	      }
+	    }
+	  }
+
+	  if ( // Run these checks in production only if the flag is off.
+	  // Eventually we'll delete this branch altogether.
+	   typeof value === 'object' && value !== null && typeof value.render === 'function' && value.$$typeof === undefined) {
+	    {
+	      var _componentName2 = getComponentNameFromType(Component) || 'Unknown';
+
+	      if (!didWarnAboutModulePatternComponent[_componentName2]) {
+	        error('The <%s /> component appears to be a function component that returns a class instance. ' + 'Change %s to a class that extends React.Component instead. ' + "If you can't use a class try assigning the prototype on the function as a workaround. " + "`%s.prototype = React.Component.prototype`. Don't use an arrow function since it " + 'cannot be called with `new` by React.', _componentName2, _componentName2, _componentName2);
+
+	        didWarnAboutModulePatternComponent[_componentName2] = true;
+	      }
+	    }
+
+	    mountClassInstance(value, Component, props, legacyContext);
+	    finishClassComponent(request, task, value, Component, props);
+	  } else {
+
+	    {
+	      validateFunctionComponentInDev(Component);
+	    } // We're now successfully past this task, and we don't have to pop back to
+	    // the previous task every again, so we can use the destructive recursive form.
+
+
+	    if (hasId) {
+	      // This component materialized an id. We treat this as its own level, with
+	      // a single "child" slot.
+	      var prevTreeContext = task.treeContext;
+	      var totalChildren = 1;
+	      var index = 0;
+	      task.treeContext = pushTreeContext(prevTreeContext, totalChildren, index);
+
+	      try {
+	        renderNodeDestructive(request, task, value);
+	      } finally {
+	        task.treeContext = prevTreeContext;
+	      }
+	    } else {
+	      renderNodeDestructive(request, task, value);
+	    }
+	  }
+
+	  popComponentStackInDEV(task);
+	}
+
+	function validateFunctionComponentInDev(Component) {
+	  {
+	    if (Component) {
+	      if (Component.childContextTypes) {
+	        error('%s(...): childContextTypes cannot be defined on a function component.', Component.displayName || Component.name || 'Component');
+	      }
+	    }
+
+	    if (typeof Component.getDerivedStateFromProps === 'function') {
+	      var _componentName3 = getComponentNameFromType(Component) || 'Unknown';
+
+	      if (!didWarnAboutGetDerivedStateOnFunctionComponent[_componentName3]) {
+	        error('%s: Function components do not support getDerivedStateFromProps.', _componentName3);
+
+	        didWarnAboutGetDerivedStateOnFunctionComponent[_componentName3] = true;
+	      }
+	    }
+
+	    if (typeof Component.contextType === 'object' && Component.contextType !== null) {
+	      var _componentName4 = getComponentNameFromType(Component) || 'Unknown';
+
+	      if (!didWarnAboutContextTypeOnFunctionComponent[_componentName4]) {
+	        error('%s: Function components do not support contextType.', _componentName4);
+
+	        didWarnAboutContextTypeOnFunctionComponent[_componentName4] = true;
+	      }
+	    }
+	  }
+	}
+
+	function resolveDefaultProps(Component, baseProps) {
+	  if (Component && Component.defaultProps) {
+	    // Resolve default props. Taken from ReactElement
+	    var props = assign({}, baseProps);
+	    var defaultProps = Component.defaultProps;
+
+	    for (var propName in defaultProps) {
+	      if (props[propName] === undefined) {
+	        props[propName] = defaultProps[propName];
+	      }
+	    }
+
+	    return props;
+	  }
+
+	  return baseProps;
+	}
+
+	function renderForwardRef(request, task, type, props, ref) {
+	  pushFunctionComponentStackInDEV(task, type.render);
+	  var children = renderWithHooks(request, task, type.render, props, ref);
+	  var hasId = checkDidRenderIdHook();
+
+	  if (hasId) {
+	    // This component materialized an id. We treat this as its own level, with
+	    // a single "child" slot.
+	    var prevTreeContext = task.treeContext;
+	    var totalChildren = 1;
+	    var index = 0;
+	    task.treeContext = pushTreeContext(prevTreeContext, totalChildren, index);
+
+	    try {
+	      renderNodeDestructive(request, task, children);
+	    } finally {
+	      task.treeContext = prevTreeContext;
+	    }
+	  } else {
+	    renderNodeDestructive(request, task, children);
+	  }
+
+	  popComponentStackInDEV(task);
+	}
+
+	function renderMemo(request, task, type, props, ref) {
+	  var innerType = type.type;
+	  var resolvedProps = resolveDefaultProps(innerType, props);
+	  renderElement(request, task, innerType, resolvedProps, ref);
+	}
+
+	function renderContextConsumer(request, task, context, props) {
+	  // The logic below for Context differs depending on PROD or DEV mode. In
+	  // DEV mode, we create a separate object for Context.Consumer that acts
+	  // like a proxy to Context. This proxy object adds unnecessary code in PROD
+	  // so we use the old behaviour (Context.Consumer references Context) to
+	  // reduce size and overhead. The separate object references context via
+	  // a property called "_context", which also gives us the ability to check
+	  // in DEV mode if this property exists or not and warn if it does not.
+	  {
+	    if (context._context === undefined) {
+	      // This may be because it's a Context (rather than a Consumer).
+	      // Or it may be because it's older React where they're the same thing.
+	      // We only want to warn if we're sure it's a new React.
+	      if (context !== context.Consumer) {
+	        if (!hasWarnedAboutUsingContextAsConsumer) {
+	          hasWarnedAboutUsingContextAsConsumer = true;
+
+	          error('Rendering <Context> directly is not supported and will be removed in ' + 'a future major release. Did you mean to render <Context.Consumer> instead?');
+	        }
+	      }
+	    } else {
+	      context = context._context;
+	    }
+	  }
+
+	  var render = props.children;
+
+	  {
+	    if (typeof render !== 'function') {
+	      error('A context consumer was rendered with multiple children, or a child ' + "that isn't a function. A context consumer expects a single child " + 'that is a function. If you did pass a function, make sure there ' + 'is no trailing or leading whitespace around it.');
+	    }
+	  }
+
+	  var newValue = readContext(context);
+	  var newChildren = render(newValue);
+	  renderNodeDestructive(request, task, newChildren);
+	}
+
+	function renderContextProvider(request, task, type, props) {
+	  var context = type._context;
+	  var value = props.value;
+	  var children = props.children;
+	  var prevSnapshot;
+
+	  {
+	    prevSnapshot = task.context;
+	  }
+
+	  task.context = pushProvider(context, value);
+	  renderNodeDestructive(request, task, children);
+	  task.context = popProvider(context);
+
+	  {
+	    if (prevSnapshot !== task.context) {
+	      error('Popping the context provider did not return back to the original snapshot. This is a bug in React.');
+	    }
+	  }
+	}
+
+	function renderLazyComponent(request, task, lazyComponent, props, ref) {
+	  pushBuiltInComponentStackInDEV(task, 'Lazy');
+	  var payload = lazyComponent._payload;
+	  var init = lazyComponent._init;
+	  var Component = init(payload);
+	  var resolvedProps = resolveDefaultProps(Component, props);
+	  renderElement(request, task, Component, resolvedProps, ref);
+	  popComponentStackInDEV(task);
+	}
+
+	function renderElement(request, task, type, props, ref) {
+	  if (typeof type === 'function') {
+	    if (shouldConstruct$1(type)) {
+	      renderClassComponent(request, task, type, props);
+	      return;
+	    } else {
+	      renderIndeterminateComponent(request, task, type, props);
+	      return;
+	    }
+	  }
+
+	  if (typeof type === 'string') {
+	    renderHostElement(request, task, type, props);
+	    return;
+	  }
+
+	  switch (type) {
+	    // TODO: LegacyHidden acts the same as a fragment. This only works
+	    // because we currently assume that every instance of LegacyHidden is
+	    // accompanied by a host component wrapper. In the hidden mode, the host
+	    // component is given a `hidden` attribute, which ensures that the
+	    // initial HTML is not visible. To support the use of LegacyHidden as a
+	    // true fragment, without an extra DOM node, we would have to hide the
+	    // initial HTML in some other way.
+	    // TODO: Add REACT_OFFSCREEN_TYPE here too with the same capability.
+	    case REACT_LEGACY_HIDDEN_TYPE:
+	    case REACT_DEBUG_TRACING_MODE_TYPE:
+	    case REACT_STRICT_MODE_TYPE:
+	    case REACT_PROFILER_TYPE:
+	    case REACT_FRAGMENT_TYPE:
+	      {
+	        renderNodeDestructive(request, task, props.children);
+	        return;
+	      }
+
+	    case REACT_SUSPENSE_LIST_TYPE:
+	      {
+	        pushBuiltInComponentStackInDEV(task, 'SuspenseList'); // TODO: SuspenseList should control the boundaries.
+
+	        renderNodeDestructive(request, task, props.children);
+	        popComponentStackInDEV(task);
+	        return;
+	      }
+
+	    case REACT_SCOPE_TYPE:
+	      {
+
+	        throw new Error('ReactDOMServer does not yet support scope components.');
+	      }
+	    // eslint-disable-next-line-no-fallthrough
+
+	    case REACT_SUSPENSE_TYPE:
+	      {
+	        {
+	          renderSuspenseBoundary(request, task, props);
+	        }
+
+	        return;
+	      }
+	  }
+
+	  if (typeof type === 'object' && type !== null) {
+	    switch (type.$$typeof) {
+	      case REACT_FORWARD_REF_TYPE:
+	        {
+	          renderForwardRef(request, task, type, props, ref);
+	          return;
+	        }
+
+	      case REACT_MEMO_TYPE:
+	        {
+	          renderMemo(request, task, type, props, ref);
+	          return;
+	        }
+
+	      case REACT_PROVIDER_TYPE:
+	        {
+	          renderContextProvider(request, task, type, props);
+	          return;
+	        }
+
+	      case REACT_CONTEXT_TYPE:
+	        {
+	          renderContextConsumer(request, task, type, props);
+	          return;
+	        }
+
+	      case REACT_LAZY_TYPE:
+	        {
+	          renderLazyComponent(request, task, type, props);
+	          return;
+	        }
+	    }
+	  }
+
+	  var info = '';
+
+	  {
+	    if (type === undefined || typeof type === 'object' && type !== null && Object.keys(type).length === 0) {
+	      info += ' You likely forgot to export your component from the file ' + "it's defined in, or you might have mixed up default and " + 'named imports.';
+	    }
+	  }
+
+	  throw new Error('Element type is invalid: expected a string (for built-in ' + 'components) or a class/function (for composite components) ' + ("but got: " + (type == null ? type : typeof type) + "." + info));
+	}
+
+	function validateIterable(iterable, iteratorFn) {
+	  {
+	    // We don't support rendering Generators because it's a mutation.
+	    // See https://github.com/facebook/react/issues/12995
+	    if (typeof Symbol === 'function' && // $FlowFixMe Flow doesn't know about toStringTag
+	    iterable[Symbol.toStringTag] === 'Generator') {
+	      if (!didWarnAboutGenerators) {
+	        error('Using Generators as children is unsupported and will likely yield ' + 'unexpected results because enumerating a generator mutates it. ' + 'You may convert it to an array with `Array.from()` or the ' + '`[...spread]` operator before rendering. Keep in mind ' + 'you might need to polyfill these features for older browsers.');
+	      }
+
+	      didWarnAboutGenerators = true;
+	    } // Warn about using Maps as children
+
+
+	    if (iterable.entries === iteratorFn) {
+	      if (!didWarnAboutMaps) {
+	        error('Using Maps as children is not supported. ' + 'Use an array of keyed ReactElements instead.');
+	      }
+
+	      didWarnAboutMaps = true;
+	    }
+	  }
+	}
+
+	function renderNodeDestructive(request, task, node) {
+	  {
+	    // In Dev we wrap renderNodeDestructiveImpl in a try / catch so we can capture
+	    // a component stack at the right place in the tree. We don't do this in renderNode
+	    // becuase it is not called at every layer of the tree and we may lose frames
+	    try {
+	      return renderNodeDestructiveImpl(request, task, node);
+	    } catch (x) {
+	      if (typeof x === 'object' && x !== null && typeof x.then === 'function') ; else {
+	        // This is an error, stash the component stack if it is null.
+	        lastBoundaryErrorComponentStackDev = lastBoundaryErrorComponentStackDev !== null ? lastBoundaryErrorComponentStackDev : getCurrentStackInDEV();
+	      } // rethrow so normal suspense logic can handle thrown value accordingly
+
+
+	      throw x;
+	    }
+	  }
+	} // This function by it self renders a node and consumes the task by mutating it
+	// to update the current execution state.
+
+
+	function renderNodeDestructiveImpl(request, task, node) {
+	  // Stash the node we're working on. We'll pick up from this task in case
+	  // something suspends.
+	  task.node = node; // Handle object types
+
+	  if (typeof node === 'object' && node !== null) {
+	    switch (node.$$typeof) {
+	      case REACT_ELEMENT_TYPE:
+	        {
+	          var element = node;
+	          var type = element.type;
+	          var props = element.props;
+	          var ref = element.ref;
+	          renderElement(request, task, type, props, ref);
+	          return;
+	        }
+
+	      case REACT_PORTAL_TYPE:
+	        throw new Error('Portals are not currently supported by the server renderer. ' + 'Render them conditionally so that they only appear on the client render.');
+	      // eslint-disable-next-line-no-fallthrough
+
+	      case REACT_LAZY_TYPE:
+	        {
+	          var lazyNode = node;
+	          var payload = lazyNode._payload;
+	          var init = lazyNode._init;
+	          var resolvedNode;
+
+	          {
+	            try {
+	              resolvedNode = init(payload);
+	            } catch (x) {
+	              if (typeof x === 'object' && x !== null && typeof x.then === 'function') {
+	                // this Lazy initializer is suspending. push a temporary frame onto the stack so it can be
+	                // popped off in spawnNewSuspendedTask. This aligns stack behavior between Lazy in element position
+	                // vs Component position. We do not want the frame for Errors so we exclusively do this in
+	                // the wakeable branch
+	                pushBuiltInComponentStackInDEV(task, 'Lazy');
+	              }
+
+	              throw x;
+	            }
+	          }
+
+	          renderNodeDestructive(request, task, resolvedNode);
+	          return;
+	        }
+	    }
+
+	    if (isArray(node)) {
+	      renderChildrenArray(request, task, node);
+	      return;
+	    }
+
+	    var iteratorFn = getIteratorFn(node);
+
+	    if (iteratorFn) {
+	      {
+	        validateIterable(node, iteratorFn);
+	      }
+
+	      var iterator = iteratorFn.call(node);
+
+	      if (iterator) {
+	        // We need to know how many total children are in this set, so that we
+	        // can allocate enough id slots to acommodate them. So we must exhaust
+	        // the iterator before we start recursively rendering the children.
+	        // TODO: This is not great but I think it's inherent to the id
+	        // generation algorithm.
+	        var step = iterator.next(); // If there are not entries, we need to push an empty so we start by checking that.
+
+	        if (!step.done) {
+	          var children = [];
+
+	          do {
+	            children.push(step.value);
+	            step = iterator.next();
+	          } while (!step.done);
+
+	          renderChildrenArray(request, task, children);
+	          return;
+	        }
+
+	        return;
+	      }
+	    }
+
+	    var childString = Object.prototype.toString.call(node);
+	    throw new Error("Objects are not valid as a React child (found: " + (childString === '[object Object]' ? 'object with keys {' + Object.keys(node).join(', ') + '}' : childString) + "). " + 'If you meant to render a collection of children, use an array ' + 'instead.');
+	  }
+
+	  if (typeof node === 'string') {
+	    var segment = task.blockedSegment;
+	    segment.lastPushedText = pushTextInstance(task.blockedSegment.chunks, node, request.responseState, segment.lastPushedText);
+	    return;
+	  }
+
+	  if (typeof node === 'number') {
+	    var _segment = task.blockedSegment;
+	    _segment.lastPushedText = pushTextInstance(task.blockedSegment.chunks, '' + node, request.responseState, _segment.lastPushedText);
+	    return;
+	  }
+
+	  {
+	    if (typeof node === 'function') {
+	      error('Functions are not valid as a React child. This may happen if ' + 'you return a Component instead of <Component /> from render. ' + 'Or maybe you meant to call this function rather than return it.');
+	    }
+	  }
+	}
+
+	function renderChildrenArray(request, task, children) {
+	  var totalChildren = children.length;
+
+	  for (var i = 0; i < totalChildren; i++) {
+	    var prevTreeContext = task.treeContext;
+	    task.treeContext = pushTreeContext(prevTreeContext, totalChildren, i);
+
+	    try {
+	      // We need to use the non-destructive form so that we can safely pop back
+	      // up and render the sibling if something suspends.
+	      renderNode(request, task, children[i]);
+	    } finally {
+	      task.treeContext = prevTreeContext;
+	    }
+	  }
+	}
+
+	function spawnNewSuspendedTask(request, task, x) {
+	  // Something suspended, we'll need to create a new segment and resolve it later.
+	  var segment = task.blockedSegment;
+	  var insertionIndex = segment.chunks.length;
+	  var newSegment = createPendingSegment(request, insertionIndex, null, segment.formatContext, // Adopt the parent segment's leading text embed
+	  segment.lastPushedText, // Assume we are text embedded at the trailing edge
+	  true);
+	  segment.children.push(newSegment); // Reset lastPushedText for current Segment since the new Segment "consumed" it
+
+	  segment.lastPushedText = false;
+	  var newTask = createTask(request, task.node, task.blockedBoundary, newSegment, task.abortSet, task.legacyContext, task.context, task.treeContext);
+
+	  {
+	    if (task.componentStack !== null) {
+	      // We pop one task off the stack because the node that suspended will be tried again,
+	      // which will add it back onto the stack.
+	      newTask.componentStack = task.componentStack.parent;
+	    }
+	  }
+
+	  var ping = newTask.ping;
+	  x.then(ping, ping);
+	} // This is a non-destructive form of rendering a node. If it suspends it spawns
+	// a new task and restores the context of this task to what it was before.
+
+
+	function renderNode(request, task, node) {
+	  // TODO: Store segment.children.length here and reset it in case something
+	  // suspended partially through writing something.
+	  // Snapshot the current context in case something throws to interrupt the
+	  // process.
+	  var previousFormatContext = task.blockedSegment.formatContext;
+	  var previousLegacyContext = task.legacyContext;
+	  var previousContext = task.context;
+	  var previousComponentStack = null;
+
+	  {
+	    previousComponentStack = task.componentStack;
+	  }
+
+	  try {
+	    return renderNodeDestructive(request, task, node);
+	  } catch (x) {
+	    resetHooksState();
+
+	    if (typeof x === 'object' && x !== null && typeof x.then === 'function') {
+	      spawnNewSuspendedTask(request, task, x); // Restore the context. We assume that this will be restored by the inner
+	      // functions in case nothing throws so we don't use "finally" here.
+
+	      task.blockedSegment.formatContext = previousFormatContext;
+	      task.legacyContext = previousLegacyContext;
+	      task.context = previousContext; // Restore all active ReactContexts to what they were before.
+
+	      switchContext(previousContext);
+
+	      {
+	        task.componentStack = previousComponentStack;
+	      }
+
+	      return;
+	    } else {
+	      // Restore the context. We assume that this will be restored by the inner
+	      // functions in case nothing throws so we don't use "finally" here.
+	      task.blockedSegment.formatContext = previousFormatContext;
+	      task.legacyContext = previousLegacyContext;
+	      task.context = previousContext; // Restore all active ReactContexts to what they were before.
+
+	      switchContext(previousContext);
+
+	      {
+	        task.componentStack = previousComponentStack;
+	      } // We assume that we don't need the correct context.
+	      // Let's terminate the rest of the tree and don't render any siblings.
+
+
+	      throw x;
+	    }
+	  }
+	}
+
+	function erroredTask(request, boundary, segment, error) {
+	  // Report the error to a global handler.
+	  var errorDigest = logRecoverableError(request, error);
+
+	  if (boundary === null) {
+	    fatalError(request, error);
+	  } else {
+	    boundary.pendingTasks--;
+
+	    if (!boundary.forceClientRender) {
+	      boundary.forceClientRender = true;
+	      boundary.errorDigest = errorDigest;
+
+	      {
+	        captureBoundaryErrorDetailsDev(boundary, error);
+	      } // Regardless of what happens next, this boundary won't be displayed,
+	      // so we can flush it, if the parent already flushed.
+
+
+	      if (boundary.parentFlushed) {
+	        // We don't have a preference where in the queue this goes since it's likely
+	        // to error on the client anyway. However, intentionally client-rendered
+	        // boundaries should be flushed earlier so that they can start on the client.
+	        // We reuse the same queue for errors.
+	        request.clientRenderedBoundaries.push(boundary);
+	      }
+	    }
+	  }
+
+	  request.allPendingTasks--;
+
+	  if (request.allPendingTasks === 0) {
+	    var onAllReady = request.onAllReady;
+	    onAllReady();
+	  }
+	}
+
+	function abortTaskSoft(task) {
+	  // This aborts task without aborting the parent boundary that it blocks.
+	  // It's used for when we didn't need this task to complete the tree.
+	  // If task was needed, then it should use abortTask instead.
+	  var request = this;
+	  var boundary = task.blockedBoundary;
+	  var segment = task.blockedSegment;
+	  segment.status = ABORTED;
+	  finishedTask(request, boundary, segment);
+	}
+
+	function abortTask(task, request, reason) {
+	  // This aborts the task and aborts the parent that it blocks, putting it into
+	  // client rendered mode.
+	  var boundary = task.blockedBoundary;
+	  var segment = task.blockedSegment;
+	  segment.status = ABORTED;
+
+	  if (boundary === null) {
+	    request.allPendingTasks--; // We didn't complete the root so we have nothing to show. We can close
+	    // the request;
+
+	    if (request.status !== CLOSED) {
+	      request.status = CLOSED;
+
+	      if (request.destination !== null) {
+	        close(request.destination);
+	      }
+	    }
+	  } else {
+	    boundary.pendingTasks--;
+
+	    if (!boundary.forceClientRender) {
+	      boundary.forceClientRender = true;
+
+	      var _error = reason === undefined ? new Error('The render was aborted by the server without a reason.') : reason;
+
+	      boundary.errorDigest = request.onError(_error);
+
+	      {
+	        var errorPrefix = 'The server did not finish this Suspense boundary: ';
+
+	        if (_error && typeof _error.message === 'string') {
+	          _error = errorPrefix + _error.message;
+	        } else {
+	          // eslint-disable-next-line react-internal/safe-string-coercion
+	          _error = errorPrefix + String(_error);
+	        }
+
+	        var previousTaskInDev = currentTaskInDEV;
+	        currentTaskInDEV = task;
+
+	        try {
+	          captureBoundaryErrorDetailsDev(boundary, _error);
+	        } finally {
+	          currentTaskInDEV = previousTaskInDev;
+	        }
+	      }
+
+	      if (boundary.parentFlushed) {
+	        request.clientRenderedBoundaries.push(boundary);
+	      }
+	    } // If this boundary was still pending then we haven't already cancelled its fallbacks.
+	    // We'll need to abort the fallbacks, which will also error that parent boundary.
+
+
+	    boundary.fallbackAbortableTasks.forEach(function (fallbackTask) {
+	      return abortTask(fallbackTask, request, reason);
+	    });
+	    boundary.fallbackAbortableTasks.clear();
+	    request.allPendingTasks--;
+
+	    if (request.allPendingTasks === 0) {
+	      var onAllReady = request.onAllReady;
+	      onAllReady();
+	    }
+	  }
+	}
+
+	function queueCompletedSegment(boundary, segment) {
+	  if (segment.chunks.length === 0 && segment.children.length === 1 && segment.children[0].boundary === null) {
+	    // This is an empty segment. There's nothing to write, so we can instead transfer the ID
+	    // to the child. That way any existing references point to the child.
+	    var childSegment = segment.children[0];
+	    childSegment.id = segment.id;
+	    childSegment.parentFlushed = true;
+
+	    if (childSegment.status === COMPLETED) {
+	      queueCompletedSegment(boundary, childSegment);
+	    }
+	  } else {
+	    var completedSegments = boundary.completedSegments;
+	    completedSegments.push(segment);
+	  }
+	}
+
+	function finishedTask(request, boundary, segment) {
+	  if (boundary === null) {
+	    if (segment.parentFlushed) {
+	      if (request.completedRootSegment !== null) {
+	        throw new Error('There can only be one root segment. This is a bug in React.');
+	      }
+
+	      request.completedRootSegment = segment;
+	    }
+
+	    request.pendingRootTasks--;
+
+	    if (request.pendingRootTasks === 0) {
+	      // We have completed the shell so the shell can't error anymore.
+	      request.onShellError = noop$1;
+	      var onShellReady = request.onShellReady;
+	      onShellReady();
+	    }
+	  } else {
+	    boundary.pendingTasks--;
+
+	    if (boundary.forceClientRender) ; else if (boundary.pendingTasks === 0) {
+	      // This must have been the last segment we were waiting on. This boundary is now complete.
+	      if (segment.parentFlushed) {
+	        // Our parent segment already flushed, so we need to schedule this segment to be emitted.
+	        // If it is a segment that was aborted, we'll write other content instead so we don't need
+	        // to emit it.
+	        if (segment.status === COMPLETED) {
+	          queueCompletedSegment(boundary, segment);
+	        }
+	      }
+
+	      if (boundary.parentFlushed) {
+	        // The segment might be part of a segment that didn't flush yet, but if the boundary's
+	        // parent flushed, we need to schedule the boundary to be emitted.
+	        request.completedBoundaries.push(boundary);
+	      } // We can now cancel any pending task on the fallback since we won't need to show it anymore.
+	      // This needs to happen after we read the parentFlushed flags because aborting can finish
+	      // work which can trigger user code, which can start flushing, which can change those flags.
+
+
+	      boundary.fallbackAbortableTasks.forEach(abortTaskSoft, request);
+	      boundary.fallbackAbortableTasks.clear();
+	    } else {
+	      if (segment.parentFlushed) {
+	        // Our parent already flushed, so we need to schedule this segment to be emitted.
+	        // If it is a segment that was aborted, we'll write other content instead so we don't need
+	        // to emit it.
+	        if (segment.status === COMPLETED) {
+	          queueCompletedSegment(boundary, segment);
+	          var completedSegments = boundary.completedSegments;
+
+	          if (completedSegments.length === 1) {
+	            // This is the first time since we last flushed that we completed anything.
+	            // We can schedule this boundary to emit its partially completed segments early
+	            // in case the parent has already been flushed.
+	            if (boundary.parentFlushed) {
+	              request.partialBoundaries.push(boundary);
+	            }
+	          }
+	        }
+	      }
+	    }
+	  }
+
+	  request.allPendingTasks--;
+
+	  if (request.allPendingTasks === 0) {
+	    // This needs to be called at the very end so that we can synchronously write the result
+	    // in the callback if needed.
+	    var onAllReady = request.onAllReady;
+	    onAllReady();
+	  }
+	}
+
+	function retryTask(request, task) {
+	  var segment = task.blockedSegment;
+
+	  if (segment.status !== PENDING) {
+	    // We completed this by other means before we had a chance to retry it.
+	    return;
+	  } // We restore the context to what it was when we suspended.
+	  // We don't restore it after we leave because it's likely that we'll end up
+	  // needing a very similar context soon again.
+
+
+	  switchContext(task.context);
+	  var prevTaskInDEV = null;
+
+	  {
+	    prevTaskInDEV = currentTaskInDEV;
+	    currentTaskInDEV = task;
+	  }
+
+	  try {
+	    // We call the destructive form that mutates this task. That way if something
+	    // suspends again, we can reuse the same task instead of spawning a new one.
+	    renderNodeDestructive(request, task, task.node);
+	    pushSegmentFinale(segment.chunks, request.responseState, segment.lastPushedText, segment.textEmbedded);
+	    task.abortSet.delete(task);
+	    segment.status = COMPLETED;
+	    finishedTask(request, task.blockedBoundary, segment);
+	  } catch (x) {
+	    resetHooksState();
+
+	    if (typeof x === 'object' && x !== null && typeof x.then === 'function') {
+	      // Something suspended again, let's pick it back up later.
+	      var ping = task.ping;
+	      x.then(ping, ping);
+	    } else {
+	      task.abortSet.delete(task);
+	      segment.status = ERRORED;
+	      erroredTask(request, task.blockedBoundary, segment, x);
+	    }
+	  } finally {
+	    {
+	      currentTaskInDEV = prevTaskInDEV;
+	    }
+	  }
+	}
+
+	function performWork(request) {
+	  if (request.status === CLOSED) {
+	    return;
+	  }
+
+	  var prevContext = getActiveContext();
+	  var prevDispatcher = ReactCurrentDispatcher$1.current;
+	  ReactCurrentDispatcher$1.current = Dispatcher;
+	  var prevGetCurrentStackImpl;
+
+	  {
+	    prevGetCurrentStackImpl = ReactDebugCurrentFrame$1.getCurrentStack;
+	    ReactDebugCurrentFrame$1.getCurrentStack = getCurrentStackInDEV;
+	  }
+
+	  var prevResponseState = currentResponseState;
+	  setCurrentResponseState(request.responseState);
+
+	  try {
+	    var pingedTasks = request.pingedTasks;
+	    var i;
+
+	    for (i = 0; i < pingedTasks.length; i++) {
+	      var task = pingedTasks[i];
+	      retryTask(request, task);
+	    }
+
+	    pingedTasks.splice(0, i);
+
+	    if (request.destination !== null) {
+	      flushCompletedQueues(request, request.destination);
+	    }
+	  } catch (error) {
+	    logRecoverableError(request, error);
+	    fatalError(request, error);
+	  } finally {
+	    setCurrentResponseState(prevResponseState);
+	    ReactCurrentDispatcher$1.current = prevDispatcher;
+
+	    {
+	      ReactDebugCurrentFrame$1.getCurrentStack = prevGetCurrentStackImpl;
+	    }
+
+	    if (prevDispatcher === Dispatcher) {
+	      // This means that we were in a reentrant work loop. This could happen
+	      // in a renderer that supports synchronous work like renderToString,
+	      // when it's called from within another renderer.
+	      // Normally we don't bother switching the contexts to their root/default
+	      // values when leaving because we'll likely need the same or similar
+	      // context again. However, when we're inside a synchronous loop like this
+	      // we'll to restore the context to what it was before returning.
+	      switchContext(prevContext);
+	    }
+	  }
+	}
+
+	function flushSubtree(request, destination, segment) {
+	  segment.parentFlushed = true;
+
+	  switch (segment.status) {
+	    case PENDING:
+	      {
+	        // We're emitting a placeholder for this segment to be filled in later.
+	        // Therefore we'll need to assign it an ID - to refer to it by.
+	        var segmentID = segment.id = request.nextSegmentId++; // When this segment finally completes it won't be embedded in text since it will flush separately
+
+	        segment.lastPushedText = false;
+	        segment.textEmbedded = false;
+	        return writePlaceholder(destination, request.responseState, segmentID);
+	      }
+
+	    case COMPLETED:
+	      {
+	        segment.status = FLUSHED;
+	        var r = true;
+	        var chunks = segment.chunks;
+	        var chunkIdx = 0;
+	        var children = segment.children;
+
+	        for (var childIdx = 0; childIdx < children.length; childIdx++) {
+	          var nextChild = children[childIdx]; // Write all the chunks up until the next child.
+
+	          for (; chunkIdx < nextChild.index; chunkIdx++) {
+	            writeChunk(destination, chunks[chunkIdx]);
+	          }
+
+	          r = flushSegment(request, destination, nextChild);
+	        } // Finally just write all the remaining chunks
+
+
+	        for (; chunkIdx < chunks.length - 1; chunkIdx++) {
+	          writeChunk(destination, chunks[chunkIdx]);
+	        }
+
+	        if (chunkIdx < chunks.length) {
+	          r = writeChunkAndReturn(destination, chunks[chunkIdx]);
+	        }
+
+	        return r;
+	      }
+
+	    default:
+	      {
+	        throw new Error('Aborted, errored or already flushed boundaries should not be flushed again. This is a bug in React.');
+	      }
+	  }
+	}
+
+	function flushSegment(request, destination, segment) {
+	  var boundary = segment.boundary;
+
+	  if (boundary === null) {
+	    // Not a suspense boundary.
+	    return flushSubtree(request, destination, segment);
+	  }
+
+	  boundary.parentFlushed = true; // This segment is a Suspense boundary. We need to decide whether to
+	  // emit the content or the fallback now.
+
+	  if (boundary.forceClientRender) {
+	    // Emit a client rendered suspense boundary wrapper.
+	    // We never queue the inner boundary so we'll never emit its content or partial segments.
+	    writeStartClientRenderedSuspenseBoundary(destination, request.responseState, boundary.errorDigest, boundary.errorMessage, boundary.errorComponentStack); // Flush the fallback.
+
+	    flushSubtree(request, destination, segment);
+	    return writeEndClientRenderedSuspenseBoundary(destination, request.responseState);
+	  } else if (boundary.pendingTasks > 0) {
+	    // This boundary is still loading. Emit a pending suspense boundary wrapper.
+	    // Assign an ID to refer to the future content by.
+	    boundary.rootSegmentID = request.nextSegmentId++;
+
+	    if (boundary.completedSegments.length > 0) {
+	      // If this is at least partially complete, we can queue it to be partially emitted early.
+	      request.partialBoundaries.push(boundary);
+	    } /// This is the first time we should have referenced this ID.
+
+
+	    var id = boundary.id = assignSuspenseBoundaryID(request.responseState);
+	    writeStartPendingSuspenseBoundary(destination, request.responseState, id); // Flush the fallback.
+
+	    flushSubtree(request, destination, segment);
+	    return writeEndPendingSuspenseBoundary(destination, request.responseState);
+	  } else if (boundary.byteSize > request.progressiveChunkSize) {
+	    // This boundary is large and will be emitted separately so that we can progressively show
+	    // other content. We add it to the queue during the flush because we have to ensure that
+	    // the parent flushes first so that there's something to inject it into.
+	    // We also have to make sure that it's emitted into the queue in a deterministic slot.
+	    // I.e. we can't insert it here when it completes.
+	    // Assign an ID to refer to the future content by.
+	    boundary.rootSegmentID = request.nextSegmentId++;
+	    request.completedBoundaries.push(boundary); // Emit a pending rendered suspense boundary wrapper.
+
+	    writeStartPendingSuspenseBoundary(destination, request.responseState, boundary.id); // Flush the fallback.
+
+	    flushSubtree(request, destination, segment);
+	    return writeEndPendingSuspenseBoundary(destination, request.responseState);
+	  } else {
+	    // We can inline this boundary's content as a complete boundary.
+	    writeStartCompletedSuspenseBoundary(destination, request.responseState);
+	    var completedSegments = boundary.completedSegments;
+
+	    if (completedSegments.length !== 1) {
+	      throw new Error('A previously unvisited boundary must have exactly one root segment. This is a bug in React.');
+	    }
+
+	    var contentSegment = completedSegments[0];
+	    flushSegment(request, destination, contentSegment);
+	    return writeEndCompletedSuspenseBoundary(destination, request.responseState);
+	  }
+	}
+
+	function flushClientRenderedBoundary(request, destination, boundary) {
+	  return writeClientRenderBoundaryInstruction(destination, request.responseState, boundary.id, boundary.errorDigest, boundary.errorMessage, boundary.errorComponentStack);
+	}
+
+	function flushSegmentContainer(request, destination, segment) {
+	  writeStartSegment(destination, request.responseState, segment.formatContext, segment.id);
+	  flushSegment(request, destination, segment);
+	  return writeEndSegment(destination, segment.formatContext);
+	}
+
+	function flushCompletedBoundary(request, destination, boundary) {
+	  var completedSegments = boundary.completedSegments;
+	  var i = 0;
+
+	  for (; i < completedSegments.length; i++) {
+	    var segment = completedSegments[i];
+	    flushPartiallyCompletedSegment(request, destination, boundary, segment);
+	  }
+
+	  completedSegments.length = 0;
+	  return writeCompletedBoundaryInstruction(destination, request.responseState, boundary.id, boundary.rootSegmentID);
+	}
+
+	function flushPartialBoundary(request, destination, boundary) {
+	  var completedSegments = boundary.completedSegments;
+	  var i = 0;
+
+	  for (; i < completedSegments.length; i++) {
+	    var segment = completedSegments[i];
+
+	    if (!flushPartiallyCompletedSegment(request, destination, boundary, segment)) {
+	      i++;
+	      completedSegments.splice(0, i); // Only write as much as the buffer wants. Something higher priority
+	      // might want to write later.
+
+	      return false;
+	    }
+	  }
+
+	  completedSegments.splice(0, i);
+	  return true;
+	}
+
+	function flushPartiallyCompletedSegment(request, destination, boundary, segment) {
+	  if (segment.status === FLUSHED) {
+	    // We've already flushed this inline.
+	    return true;
+	  }
+
+	  var segmentID = segment.id;
+
+	  if (segmentID === -1) {
+	    // This segment wasn't previously referred to. This happens at the root of
+	    // a boundary. We make kind of a leap here and assume this is the root.
+	    var rootSegmentID = segment.id = boundary.rootSegmentID;
+
+	    if (rootSegmentID === -1) {
+	      throw new Error('A root segment ID must have been assigned by now. This is a bug in React.');
+	    }
+
+	    return flushSegmentContainer(request, destination, segment);
+	  } else {
+	    flushSegmentContainer(request, destination, segment);
+	    return writeCompletedSegmentInstruction(destination, request.responseState, segmentID);
+	  }
+	}
+
+	function flushCompletedQueues(request, destination) {
+	  beginWriting();
+
+	  try {
+	    // The structure of this is to go through each queue one by one and write
+	    // until the sink tells us to stop. When we should stop, we still finish writing
+	    // that item fully and then yield. At that point we remove the already completed
+	    // items up until the point we completed them.
+	    // TODO: Emit preloading.
+	    // TODO: It's kind of unfortunate to keep checking this array after we've already
+	    // emitted the root.
+	    var completedRootSegment = request.completedRootSegment;
+
+	    if (completedRootSegment !== null && request.pendingRootTasks === 0) {
+	      flushSegment(request, destination, completedRootSegment);
+	      request.completedRootSegment = null;
+	      writeCompletedRoot(destination, request.responseState);
+	    } // We emit client rendering instructions for already emitted boundaries first.
+	    // This is so that we can signal to the client to start client rendering them as
+	    // soon as possible.
+
+
+	    var clientRenderedBoundaries = request.clientRenderedBoundaries;
+	    var i;
+
+	    for (i = 0; i < clientRenderedBoundaries.length; i++) {
+	      var boundary = clientRenderedBoundaries[i];
+
+	      if (!flushClientRenderedBoundary(request, destination, boundary)) {
+	        request.destination = null;
+	        i++;
+	        clientRenderedBoundaries.splice(0, i);
+	        return;
+	      }
+	    }
+
+	    clientRenderedBoundaries.splice(0, i); // Next we emit any complete boundaries. It's better to favor boundaries
+	    // that are completely done since we can actually show them, than it is to emit
+	    // any individual segments from a partially complete boundary.
+
+	    var completedBoundaries = request.completedBoundaries;
+
+	    for (i = 0; i < completedBoundaries.length; i++) {
+	      var _boundary = completedBoundaries[i];
+
+	      if (!flushCompletedBoundary(request, destination, _boundary)) {
+	        request.destination = null;
+	        i++;
+	        completedBoundaries.splice(0, i);
+	        return;
+	      }
+	    }
+
+	    completedBoundaries.splice(0, i); // Allow anything written so far to flush to the underlying sink before
+	    // we continue with lower priorities.
+
+	    completeWriting(destination);
+	    beginWriting(destination); // TODO: Here we'll emit data used by hydration.
+	    // Next we emit any segments of any boundaries that are partially complete
+	    // but not deeply complete.
+
+	    var partialBoundaries = request.partialBoundaries;
+
+	    for (i = 0; i < partialBoundaries.length; i++) {
+	      var _boundary2 = partialBoundaries[i];
+
+	      if (!flushPartialBoundary(request, destination, _boundary2)) {
+	        request.destination = null;
+	        i++;
+	        partialBoundaries.splice(0, i);
+	        return;
+	      }
+	    }
+
+	    partialBoundaries.splice(0, i); // Next we check the completed boundaries again. This may have had
+	    // boundaries added to it in case they were too larged to be inlined.
+	    // New ones might be added in this loop.
+
+	    var largeBoundaries = request.completedBoundaries;
+
+	    for (i = 0; i < largeBoundaries.length; i++) {
+	      var _boundary3 = largeBoundaries[i];
+
+	      if (!flushCompletedBoundary(request, destination, _boundary3)) {
+	        request.destination = null;
+	        i++;
+	        largeBoundaries.splice(0, i);
+	        return;
+	      }
+	    }
+
+	    largeBoundaries.splice(0, i);
+	  } finally {
+	    completeWriting(destination);
+	    flushBuffered(destination);
+
+	    if (request.allPendingTasks === 0 && request.pingedTasks.length === 0 && request.clientRenderedBoundaries.length === 0 && request.completedBoundaries.length === 0 // We don't need to check any partially completed segments because
+	    // either they have pending task or they're complete.
+	    ) {
+	        {
+	          if (request.abortableTasks.size !== 0) {
+	            error('There was still abortable task at the root when we closed. This is a bug in React.');
+	          }
+	        } // We're done.
+
+
+	        close(destination);
+	      }
+	  }
+	}
+
+	function startWork(request) {
+	  scheduleWork(function () {
+	    return performWork(request);
+	  });
+	}
+	function startFlowing(request, destination) {
+	  if (request.status === CLOSING) {
+	    request.status = CLOSED;
+	    closeWithError(destination, request.fatalError);
+	    return;
+	  }
+
+	  if (request.status === CLOSED) {
+	    return;
+	  }
+
+	  if (request.destination !== null) {
+	    // We're already flowing.
+	    return;
+	  }
+
+	  request.destination = destination;
+
+	  try {
+	    flushCompletedQueues(request, destination);
+	  } catch (error) {
+	    logRecoverableError(request, error);
+	    fatalError(request, error);
+	  }
+	} // This is called to early terminate a request. It puts all pending boundaries in client rendered state.
+
+	function abort(request, reason) {
+	  try {
+	    var abortableTasks = request.abortableTasks;
+	    abortableTasks.forEach(function (task) {
+	      return abortTask(task, request, reason);
+	    });
+	    abortableTasks.clear();
+
+	    if (request.destination !== null) {
+	      flushCompletedQueues(request, request.destination);
+	    }
+	  } catch (error) {
+	    logRecoverableError(request, error);
+	    fatalError(request, error);
+	  }
+	}
+
+	function createDrainHandler(destination, request) {
+	  return function () {
+	    return startFlowing(request, destination);
+	  };
+	}
+
+	function createAbortHandler(request, reason) {
+	  return function () {
+	    return abort(request, reason);
+	  };
+	}
+
+	function createRequestImpl(children, options) {
+	  return createRequest(children, createResponseState(options ? options.identifierPrefix : undefined, options ? options.nonce : undefined, options ? options.bootstrapScriptContent : undefined, options ? options.bootstrapScripts : undefined, options ? options.bootstrapModules : undefined), createRootFormatContext(options ? options.namespaceURI : undefined), options ? options.progressiveChunkSize : undefined, options ? options.onError : undefined, options ? options.onAllReady : undefined, options ? options.onShellReady : undefined, options ? options.onShellError : undefined, undefined);
+	}
+
+	function renderToPipeableStream(children, options) {
+	  var request = createRequestImpl(children, options);
+	  var hasStartedFlowing = false;
+	  startWork(request);
+	  return {
+	    pipe: function (destination) {
+	      if (hasStartedFlowing) {
+	        throw new Error('React currently only supports piping to one writable stream.');
+	      }
+
+	      hasStartedFlowing = true;
+	      startFlowing(request, destination);
+	      destination.on('drain', createDrainHandler(destination, request));
+	      destination.on('error', createAbortHandler(request, // eslint-disable-next-line react-internal/prod-error-codes
+	      new Error('The destination stream errored while writing data.')));
+	      destination.on('close', createAbortHandler(request, // eslint-disable-next-line react-internal/prod-error-codes
+	      new Error('The destination stream closed early.')));
+	      return destination;
+	    },
+	    abort: function (reason) {
+	      abort(request, reason);
+	    }
+	  };
+	}
+
+	reactDomServer_node_development.renderToPipeableStream = renderToPipeableStream;
 	reactDomServer_node_development.version = ReactVersion;
 	  })();
 	}
 
+	var l$1, s$2;
 	{
-	  server_node.exports = reactDomServer_node_development;
+	  l$1 = reactDomServerLegacy_node_development;
+	  s$2 = reactDomServer_node_development;
 	}
 
-	var server = server_node.exports;
+	server_node.version = l$1.version;
+	server_node.renderToString = l$1.renderToString;
+	server_node.renderToStaticMarkup = l$1.renderToStaticMarkup;
+	server_node.renderToNodeStream = l$1.renderToNodeStream;
+	server_node.renderToStaticNodeStream = l$1.renderToStaticNodeStream;
+	server_node.renderToPipeableStream = s$2.renderToPipeableStream;
 
-	/*! *****************************************************************************
+	/******************************************************************************
 	Copyright (c) Microsoft Corporation.
 
 	Permission to use, copy, modify, and/or distribute this software for any
@@ -9703,7 +19592,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 
 	var isCheckBoxInput = (element) => element.type === 'checkbox';
 
-	var isDateObject = (data) => data instanceof Date;
+	var isDateObject = (value) => value instanceof Date;
 
 	var isNullOrUndefined = (value) => value == null;
 
@@ -9719,28 +19608,29 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        : event.target.value
 	    : event;
 
-	var getNodeParentName = (name) => name.substring(0, name.search(/.\d/)) || name;
+	var getNodeParentName = (name) => name.substring(0, name.search(/\.\d+(\.|$)/)) || name;
 
-	var isNameInFieldArray = (names, name) => [...names].some((current) => getNodeParentName(name) === current);
+	var isNameInFieldArray = (names, name) => names.has(getNodeParentName(name));
 
-	var compact = (value) => (value || []).filter(Boolean);
+	var compact = (value) => Array.isArray(value) ? value.filter(Boolean) : [];
 
 	var isUndefined$1 = (val) => val === undefined;
 
 	var get = (obj, path, defaultValue) => {
-	    if (isObject(obj) && path) {
-	        const result = compact(path.split(/[,[\].]+?/)).reduce((result, key) => (isNullOrUndefined(result) ? result : result[key]), obj);
-	        return isUndefined$1(result) || result === obj
-	            ? isUndefined$1(obj[path])
-	                ? defaultValue
-	                : obj[path]
-	            : result;
+	    if (!path || !isObject(obj)) {
+	        return defaultValue;
 	    }
-	    return undefined;
+	    const result = compact(path.split(/[,[\].]+?/)).reduce((result, key) => isNullOrUndefined(result) ? result : result[key], obj);
+	    return isUndefined$1(result) || result === obj
+	        ? isUndefined$1(obj[path])
+	            ? defaultValue
+	            : obj[path]
+	        : result;
 	};
 
 	const EVENTS = {
 	    BLUR: 'blur',
+	    FOCUS_OUT: 'focusout',
 	    CHANGE: 'change',
 	};
 	const VALIDATION_MODE = {
@@ -9760,32 +19650,51 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    validate: 'validate',
 	};
 
-	var omit = (source, key) => {
-	    const copy = Object.assign({}, source);
-	    delete copy[key];
-	    return copy;
-	};
-
 	const HookFormContext = React__default["default"].createContext(null);
+	/**
+	 * This custom hook allows you to access the form context. useFormContext is intended to be used in deeply nested structures, where it would become inconvenient to pass the context as a prop. To be used with {@link FormProvider}.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/useformcontext) • [Demo](https://codesandbox.io/s/react-hook-form-v7-form-context-ytudi)
+	 *
+	 * @returns return all useForm methods
+	 *
+	 * @example
+	 * ```tsx
+	 * function App() {
+	 *   const methods = useForm();
+	 *   const onSubmit = data => console.log(data);
+	 *
+	 *   return (
+	 *     <FormProvider {...methods} >
+	 *       <form onSubmit={methods.handleSubmit(onSubmit)}>
+	 *         <NestedInput />
+	 *         <input type="submit" />
+	 *       </form>
+	 *     </FormProvider>
+	 *   );
+	 * }
+	 *
+	 *  function NestedInput() {
+	 *   const { register } = useFormContext(); // retrieve all hook methods
+	 *   return <input {...register("test")} />;
+	 * }
+	 * ```
+	 */
 	const useFormContext = () => React__default["default"].useContext(HookFormContext);
 
 	var getProxyFormState = (formState, _proxyFormState, localProxyFormState, isRoot = true) => {
-	    function createGetter(prop) {
-	        return () => {
-	            if (prop in formState) {
-	                if (_proxyFormState[prop] !== VALIDATION_MODE.all) {
-	                    _proxyFormState[prop] = !isRoot || VALIDATION_MODE.all;
-	                }
-	                localProxyFormState && (localProxyFormState[prop] = true);
-	                return formState[prop];
-	            }
-	            return undefined;
-	        };
-	    }
 	    const result = {};
 	    for (const key in formState) {
 	        Object.defineProperty(result, key, {
-	            get: createGetter(key),
+	            get: () => {
+	                const _key = key;
+	                if (_proxyFormState[_key] !== VALIDATION_MODE.all) {
+	                    _proxyFormState[_key] = !isRoot || VALIDATION_MODE.all;
+	                }
+	                localProxyFormState && (localProxyFormState[_key] = true);
+	                return formState[_key];
+	            },
 	        });
 	    }
 	    return result;
@@ -9794,7 +19703,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	var isEmptyObject = (value) => isObject(value) && !Object.keys(value).length;
 
 	var shouldRenderFormState = (formStateData, _proxyFormState, isRoot) => {
-	    const formState = omit(formStateData, 'name');
+	    const { name, ...formState } = formStateData;
 	    return (isEmptyObject(formState) ||
 	        Object.keys(formState).length >= Object.keys(_proxyFormState).length ||
 	        Object.keys(formState).find((key) => _proxyFormState[key] ===
@@ -9829,6 +19738,36 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    }, [props.disabled]);
 	}
 
+	/**
+	 * This custom hook allows you to subscribe to each form state, and isolate the re-render at the custom hook level. It has its scope in terms of form state subscription, so it would not affect other useFormState and useForm. Using this hook can reduce the re-render impact on large and complex form application.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/useformstate) • [Demo](https://codesandbox.io/s/useformstate-75xly)
+	 *
+	 * @param props - include options on specify fields to subscribe. {@link UseFormStateReturn}
+	 *
+	 * @example
+	 * ```tsx
+	 * function App() {
+	 *   const { register, handleSubmit, control } = useForm({
+	 *     defaultValues: {
+	 *     firstName: "firstName"
+	 *   }});
+	 *   const { dirtyFields } = useFormState({
+	 *     control
+	 *   });
+	 *   const onSubmit = (data) => console.log(data);
+	 *
+	 *   return (
+	 *     <form onSubmit={handleSubmit(onSubmit)}>
+	 *       <input {...register("firstName")} placeholder="First Name" />
+	 *       {dirtyFields.firstName && <p>Field is dirty.</p>}
+	 *       <input type="submit" />
+	 *     </form>
+	 *   );
+	 * }
+	 * ```
+	 */
 	function useFormState(props) {
 	    const methods = useFormContext();
 	    const { control = methods.control, disabled, name, exact } = props || {};
@@ -9842,14 +19781,26 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        errors: false,
 	    });
 	    const _name = React__default["default"].useRef(name);
+	    const _mounted = React__default["default"].useRef(true);
 	    _name.current = name;
+	    const callback = React__default["default"].useCallback((value) => _mounted.current &&
+	        shouldSubscribeByName(_name.current, value.name, exact) &&
+	        shouldRenderFormState(value, _localProxyFormState.current) &&
+	        updateFormState({
+	            ...control._formState,
+	            ...value,
+	        }), [control, exact]);
 	    useSubscribe({
 	        disabled,
-	        callback: (value) => shouldSubscribeByName(_name.current, value.name, exact) &&
-	            shouldRenderFormState(value, _localProxyFormState.current) &&
-	            updateFormState(Object.assign(Object.assign({}, control._formState), value)),
+	        callback,
 	        subject: control._subjects.state,
 	    });
+	    React__default["default"].useEffect(() => {
+	        _mounted.current = true;
+	        return () => {
+	            _mounted.current = false;
+	        };
+	    }, []);
 	    return getProxyFormState(formState, control._proxyFormState, _localProxyFormState.current, false);
 	}
 
@@ -9880,26 +19831,44 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    return false;
 	};
 
+	/**
+	 * Custom hook to subscribe to field change and isolate re-rendering at the component level.
+	 *
+	 * @remarks
+	 *
+	 * [API](https://react-hook-form.com/api/usewatch) • [Demo](https://codesandbox.io/s/react-hook-form-v7-ts-usewatch-h9i5e)
+	 *
+	 * @example
+	 * ```tsx
+	 * const { watch } = useForm();
+	 * const values = useWatch({
+	 *   name: "fieldName"
+	 *   control,
+	 * })
+	 * ```
+	 */
 	function useWatch(props) {
 	    const methods = useFormContext();
 	    const { control = methods.control, name, defaultValue, disabled, exact, } = props || {};
 	    const _name = React__default["default"].useRef(name);
 	    _name.current = name;
-	    useSubscribe({
-	        disabled,
-	        subject: control._subjects.watch,
-	        callback: (formState) => {
-	            if (shouldSubscribeByName(_name.current, formState.name, exact)) {
-	                const fieldValues = generateWatchOutput(_name.current, control._names, formState.values || control._formValues);
-	                updateValue(isUndefined$1(_name.current) ||
-	                    (isObject(fieldValues) && !objectHasFunction(fieldValues))
-	                    ? Object.assign({}, fieldValues) : Array.isArray(fieldValues)
+	    const callback = React__default["default"].useCallback((formState) => {
+	        if (shouldSubscribeByName(_name.current, formState.name, exact)) {
+	            const fieldValues = generateWatchOutput(_name.current, control._names, formState.values || control._formValues);
+	            updateValue(isUndefined$1(_name.current) ||
+	                (isObject(fieldValues) && !objectHasFunction(fieldValues))
+	                ? { ...fieldValues }
+	                : Array.isArray(fieldValues)
 	                    ? [...fieldValues]
 	                    : isUndefined$1(fieldValues)
 	                        ? defaultValue
 	                        : fieldValues);
-	            }
-	        },
+	        }
+	    }, [control, exact, defaultValue]);
+	    useSubscribe({
+	        disabled,
+	        subject: control._subjects.watch,
+	        callback,
 	    });
 	    const [value, updateValue] = React__default["default"].useState(isUndefined$1(defaultValue)
 	        ? control._getWatch(name)
@@ -9910,6 +19879,30 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    return value;
 	}
 
+	/**
+	 * Custom hook to work with controlled component, this function provide you with both form and field level state. Re-render is isolated at the hook level.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/usecontroller) • [Demo](https://codesandbox.io/s/usecontroller-0o8px)
+	 *
+	 * @param props - the path name to the form field value, and validation rules.
+	 *
+	 * @returns field properties, field and form state. {@link UseControllerReturn}
+	 *
+	 * @example
+	 * ```tsx
+	 * function Input(props) {
+	 *   const { field, fieldState, formState } = useController(props);
+	 *   return (
+	 *     <div>
+	 *       <input {...field} placeholder={props.name} />
+	 *       <p>{fieldState.isTouched && "Touched"}</p>
+	 *       <p>{formState.isSubmitted ? "submitted" : ""}</p>
+	 *     </div>
+	 *   );
+	 * }
+	 * ```
+	 */
 	function useController(props) {
 	    const methods = useFormContext();
 	    const { name, control = methods.control, shouldUnregister } = props;
@@ -9918,15 +19911,16 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        control,
 	        name,
 	        defaultValue: get(control._formValues, name, get(control._defaultValues, name, props.defaultValue)),
-	        exact: !isArrayField,
+	        exact: true,
 	    });
 	    const formState = useFormState({
 	        control,
 	        name,
 	    });
-	    const _name = React__default["default"].useRef(name);
-	    _name.current = name;
-	    const registerProps = control.register(name, Object.assign(Object.assign({}, props.rules), { value }));
+	    const _registerProps = React__default["default"].useRef(control.register(name, {
+	        ...props.rules,
+	        value,
+	    }));
 	    React__default["default"].useEffect(() => {
 	        const updateMounted = (name, value) => {
 	            const field = get(control._fields, name);
@@ -9937,36 +19931,36 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        updateMounted(name, true);
 	        return () => {
 	            const _shouldUnregisterField = control._options.shouldUnregister || shouldUnregister;
-	            isArrayField
+	            (isArrayField
 	                ? _shouldUnregisterField && !control._stateFlags.action
-	                : _shouldUnregisterField
-	                    ? control.unregister(name)
-	                    : updateMounted(name, false);
+	                : _shouldUnregisterField)
+	                ? control.unregister(name)
+	                : updateMounted(name, false);
 	        };
 	    }, [name, control, isArrayField, shouldUnregister]);
 	    return {
 	        field: {
-	            onChange: (event) => {
-	                registerProps.onChange({
+	            name,
+	            value,
+	            onChange: React__default["default"].useCallback((event) => {
+	                _registerProps.current.onChange({
 	                    target: {
 	                        value: getEventValue(event),
 	                        name: name,
 	                    },
 	                    type: EVENTS.CHANGE,
 	                });
-	            },
-	            onBlur: () => {
-	                registerProps.onBlur({
+	            }, [name]),
+	            onBlur: React__default["default"].useCallback(() => {
+	                _registerProps.current.onBlur({
 	                    target: {
 	                        value: get(control._formValues, name),
 	                        name: name,
 	                    },
 	                    type: EVENTS.BLUR,
 	                });
-	            },
-	            name,
-	            value,
-	            ref: (elm) => {
+	            }, [name, control]),
+	            ref: React__default["default"].useCallback((elm) => {
 	                const field = get(control._fields, name);
 	                if (elm && field && elm.focus) {
 	                    field._f.ref = {
@@ -9975,22 +19969,79 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                        reportValidity: () => elm.reportValidity(),
 	                    };
 	                }
-	            },
+	            }, [name, control._fields]),
 	        },
 	        formState,
-	        fieldState: {
-	            invalid: !!get(formState.errors, name),
-	            isDirty: !!get(formState.dirtyFields, name),
-	            isTouched: !!get(formState.touchedFields, name),
-	            error: get(formState.errors, name),
-	        },
+	        fieldState: Object.defineProperties({}, {
+	            invalid: {
+	                get: () => !!get(formState.errors, name),
+	            },
+	            isDirty: {
+	                get: () => !!get(formState.dirtyFields, name),
+	            },
+	            isTouched: {
+	                get: () => !!get(formState.touchedFields, name),
+	            },
+	            error: {
+	                get: () => get(formState.errors, name),
+	            },
+	        }),
 	    };
 	}
 
+	/**
+	 * Component based on `useController` hook to work with controlled component.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/usecontroller/controller) • [Demo](https://codesandbox.io/s/react-hook-form-v6-controller-ts-jwyzw) • [Video](https://www.youtube.com/watch?v=N2UNk_UCVyA)
+	 *
+	 * @param props - the path name to the form field value, and validation rules.
+	 *
+	 * @returns provide field handler functions, field and form state.
+	 *
+	 * @example
+	 * ```tsx
+	 * function App() {
+	 *   const { control } = useForm<FormValues>({
+	 *     defaultValues: {
+	 *       test: ""
+	 *     }
+	 *   });
+	 *
+	 *   return (
+	 *     <form>
+	 *       <Controller
+	 *         control={control}
+	 *         name="test"
+	 *         render={({ field: { onChange, onBlur, value, ref }, formState, fieldState }) => (
+	 *           <>
+	 *             <input
+	 *               onChange={onChange} // send value to hook form
+	 *               onBlur={onBlur} // notify when input is touched
+	 *               value={value} // return updated value
+	 *               ref={ref} // set ref for focus management
+	 *             />
+	 *             <p>{formState.isSubmitted ? "submitted" : ""}</p>
+	 *             <p>{fieldState.isTouched ? "touched" : ""}</p>
+	 *           </>
+	 *         )}
+	 *       />
+	 *     </form>
+	 *   );
+	 * }
+	 * ```
+	 */
 	const Controller = (props) => props.render(useController(props));
 
 	var appendErrors = (name, validateAllFieldCriteria, errors, type, message) => validateAllFieldCriteria
-	    ? Object.assign(Object.assign({}, errors[name]), { types: Object.assign(Object.assign({}, (errors[name] && errors[name].types ? errors[name].types : {})), { [type]: message || true }) }) : {};
+	    ? {
+	        ...errors[name],
+	        types: {
+	            ...(errors[name] && errors[name].types ? errors[name].types : {}),
+	            [type]: message || true,
+	        },
+	    }
+	    : {};
 
 	var isKey = (value) => /^\w*$/.test(value);
 
@@ -10023,8 +20074,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    for (const key of fieldsNames || Object.keys(fields)) {
 	        const field = get(fields, key);
 	        if (field) {
-	            const _f = field._f;
-	            const current = omit(field, '_f');
+	            const { _f, ...currentField } = field;
 	            if (_f && callback(_f.name)) {
 	                if (_f.ref.focus && isUndefined$1(_f.ref.focus())) {
 	                    break;
@@ -10034,11 +20084,19 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                    break;
 	                }
 	            }
-	            else if (isObject(current)) {
-	                focusFieldBy(current, callback);
+	            else if (isObject(currentField)) {
+	                focusFieldBy(currentField, callback);
 	            }
 	        }
 	    }
+	};
+
+	var generateId = () => {
+	    const d = typeof performance === 'undefined' ? Date.now() : performance.now() * 1000;
+	    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+	        const r = (Math.random() * 16 + d) % 16 | 0;
+	        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+	    });
 	};
 
 	var getFocusFieldName = (name, index, options = {}) => options.shouldFocus || isUndefined$1(options.shouldFocus)
@@ -10052,24 +20110,13 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        [..._names.watch].some((watchName) => name.startsWith(watchName) &&
 	            /^\.\w+/.test(name.slice(watchName.length))));
 
-	var mapCurrentIds = (values, _fieldIds, keyName) => values.map((value, index) => {
-	    const output = _fieldIds.current[index];
-	    return Object.assign(Object.assign({}, value), (output ? { [keyName]: output[keyName] } : {}));
-	});
-
-	var generateId = () => {
-	    const d = typeof performance === 'undefined' ? Date.now() : performance.now() * 1000;
-	    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-	        const r = (Math.random() * 16 + d) % 16 | 0;
-	        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
-	    });
-	};
-
-	var mapIds = (values = [], keyName) => values.map((value) => (Object.assign(Object.assign({}, (value[keyName] ? {} : { [keyName]: generateId() })), value)));
-
 	function append(data, value) {
-	    return [...convertToArrayPayload(data), ...convertToArrayPayload(value)];
+	    return [...data, ...convertToArrayPayload(value)];
 	}
+
+	var isWeb = typeof window !== 'undefined' &&
+	    typeof window.HTMLElement !== 'undefined' &&
+	    typeof document !== 'undefined';
 
 	function cloneObject(data) {
 	    let copy;
@@ -10080,7 +20127,8 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    else if (data instanceof Set) {
 	        copy = new Set(data);
 	    }
-	    else if (isArray || isObject(data)) {
+	    else if (!(isWeb && (data instanceof Blob || data instanceof FileList)) &&
+	        (isArray || isObject(data))) {
 	        copy = isArray ? [] : {};
 	        for (const key in data) {
 	            if (isFunction(data[key])) {
@@ -10107,17 +20155,15 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	}
 
 	var moveArrayAt = (data, from, to) => {
-	    if (Array.isArray(data)) {
-	        if (isUndefined$1(data[to])) {
-	            data[to] = undefined;
-	        }
-	        data.splice(to, 0, data.splice(from, 1)[0]);
-	        return data;
+	    if (!Array.isArray(data)) {
+	        return [];
 	    }
-	    return [];
+	    if (isUndefined$1(data[to])) {
+	        data[to] = undefined;
+	    }
+	    data.splice(to, 0, data.splice(from, 1)[0]);
+	    return data;
 	};
-
-	var omitKeys = (fields, keyName) => fields.map((field = {}) => omit(field, keyName));
 
 	function prepend(data, value) {
 	    return [...convertToArrayPayload(value), ...convertToArrayPayload(data)];
@@ -10140,108 +20186,195 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    data[indexA] = [data[indexB], (data[indexB] = data[indexA])][0];
 	};
 
+	function baseGet(object, updatePath) {
+	    const length = updatePath.slice(0, -1).length;
+	    let index = 0;
+	    while (index < length) {
+	        object = isUndefined$1(object) ? index++ : object[updatePath[index++]];
+	    }
+	    return object;
+	}
+	function unset(object, path) {
+	    const updatePath = isKey(path) ? [path] : stringToPath(path);
+	    const childObject = updatePath.length == 1 ? object : baseGet(object, updatePath);
+	    const key = updatePath[updatePath.length - 1];
+	    let previousObjRef;
+	    if (childObject) {
+	        delete childObject[key];
+	    }
+	    for (let k = 0; k < updatePath.slice(0, -1).length; k++) {
+	        let index = -1;
+	        let objectRef;
+	        const currentPaths = updatePath.slice(0, -(k + 1));
+	        const currentPathsLength = currentPaths.length - 1;
+	        if (k > 0) {
+	            previousObjRef = object;
+	        }
+	        while (++index < currentPaths.length) {
+	            const item = currentPaths[index];
+	            objectRef = objectRef ? objectRef[item] : object[item];
+	            if (currentPathsLength === index &&
+	                ((isObject(objectRef) && isEmptyObject(objectRef)) ||
+	                    (Array.isArray(objectRef) &&
+	                        !objectRef.filter((data) => !isUndefined$1(data)).length))) {
+	                previousObjRef ? delete previousObjRef[item] : delete object[item];
+	            }
+	            previousObjRef = objectRef;
+	        }
+	    }
+	    return object;
+	}
+
 	var updateAt = (fieldValues, index, value) => {
 	    fieldValues[index] = value;
 	    return fieldValues;
 	};
 
-	const useFieldArray = (props) => {
+	/**
+	 * A custom hook that exposes convenient methods to perform operations with a list of dynamic inputs that need to be appended, updated, removed etc.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/usefieldarray) • [Demo](https://codesandbox.io/s/react-hook-form-usefieldarray-ssugn)
+	 *
+	 * @param props - useFieldArray props
+	 *
+	 * @returns methods - functions to manipulate with the Field Arrays (dynamic inputs) {@link UseFieldArrayReturn}
+	 *
+	 * @example
+	 * ```tsx
+	 * function App() {
+	 *   const { register, control, handleSubmit, reset, trigger, setError } = useForm({
+	 *     defaultValues: {
+	 *       test: []
+	 *     }
+	 *   });
+	 *   const { fields, append } = useFieldArray({
+	 *     control,
+	 *     name: "test"
+	 *   });
+	 *
+	 *   return (
+	 *     <form onSubmit={handleSubmit(data => console.log(data))}>
+	 *       {fields.map((item, index) => (
+	 *          <input key={item.id} {...register(`test.${index}.firstName`)}  />
+	 *       ))}
+	 *       <button type="button" onClick={() => append({ firstName: "bill" })}>
+	 *         append
+	 *       </button>
+	 *       <input type="submit" />
+	 *     </form>
+	 *   );
+	 * }
+	 * ```
+	 */
+	function useFieldArray(props) {
 	    const methods = useFormContext();
 	    const { control = methods.control, name, keyName = 'id', shouldUnregister, } = props;
-	    const [fields, setFields] = React__default["default"].useState(mapIds(control._getFieldArray(name), keyName));
+	    const [fields, setFields] = React__default["default"].useState(control._getFieldArray(name));
+	    const ids = React__default["default"].useRef(control._getFieldArray(name).map(generateId));
 	    const _fieldIds = React__default["default"].useRef(fields);
 	    const _name = React__default["default"].useRef(name);
 	    const _actioned = React__default["default"].useRef(false);
 	    _name.current = name;
 	    _fieldIds.current = fields;
 	    control._names.array.add(name);
+	    const callback = React__default["default"].useCallback(({ values, name: fieldArrayName }) => {
+	        if (fieldArrayName === _name.current || !fieldArrayName) {
+	            const fieldValues = get(values, _name.current, []);
+	            setFields(fieldValues);
+	            ids.current = fieldValues.map(generateId);
+	        }
+	    }, []);
 	    useSubscribe({
-	        callback: ({ values, name: fieldArrayName }) => {
-	            if (fieldArrayName === _name.current || !fieldArrayName) {
-	                setFields(mapIds(get(values, _name.current), keyName));
-	            }
-	        },
+	        callback,
 	        subject: control._subjects.array,
 	    });
-	    const updateValues = React__default["default"].useCallback((updatedFieldArrayValuesWithKey) => {
-	        const updatedFieldArrayValues = omitKeys(updatedFieldArrayValuesWithKey, keyName);
+	    const updateValues = React__default["default"].useCallback((updatedFieldArrayValues) => {
 	        _actioned.current = true;
-	        set(control._formValues, name, updatedFieldArrayValues);
-	        return updatedFieldArrayValues;
-	    }, [control, name, keyName]);
+	        control._updateFieldArray(name, updatedFieldArrayValues);
+	    }, [control, name]);
 	    const append$1 = (value, options) => {
 	        const appendValue = convertToArrayPayload(cloneObject(value));
-	        const updatedFieldArrayValuesWithKey = append(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), mapIds(appendValue, keyName));
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-	        control._names.focus = getFocusFieldName(name, fieldArrayValues.length - 1, options);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, append, {
+	        const updatedFieldArrayValues = append(control._getFieldArray(name), appendValue);
+	        control._names.focus = getFocusFieldName(name, updatedFieldArrayValues.length - 1, options);
+	        ids.current = append(ids.current, appendValue.map(generateId));
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, append, {
 	            argA: fillEmptyArray(value),
-	        }, fieldArrayValues);
+	        });
 	    };
 	    const prepend$1 = (value, options) => {
-	        const updatedFieldArrayValuesWithKey = prepend(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), mapIds(convertToArrayPayload(cloneObject(value)), keyName));
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+	        const prependValue = convertToArrayPayload(cloneObject(value));
+	        const updatedFieldArrayValues = prepend(control._getFieldArray(name), prependValue);
 	        control._names.focus = getFocusFieldName(name, 0, options);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, prepend, {
+	        ids.current = prepend(ids.current, prependValue.map(generateId));
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, prepend, {
 	            argA: fillEmptyArray(value),
-	        }, fieldArrayValues);
+	        });
 	    };
 	    const remove = (index) => {
-	        const updatedFieldArrayValuesWithKey = removeArrayAt(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), index);
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, removeArrayAt, {
+	        const updatedFieldArrayValues = removeArrayAt(control._getFieldArray(name), index);
+	        ids.current = removeArrayAt(ids.current, index);
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, removeArrayAt, {
 	            argA: index,
-	        }, fieldArrayValues);
+	        });
 	    };
 	    const insert$1 = (index, value, options) => {
-	        const updatedFieldArrayValuesWithKey = insert(mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName), index, mapIds(convertToArrayPayload(cloneObject(value)), keyName));
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
+	        const insertValue = convertToArrayPayload(cloneObject(value));
+	        const updatedFieldArrayValues = insert(control._getFieldArray(name), index, insertValue);
 	        control._names.focus = getFocusFieldName(name, index, options);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, insert, {
+	        ids.current = insert(ids.current, index, insertValue.map(generateId));
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, insert, {
 	            argA: index,
 	            argB: fillEmptyArray(value),
-	        }, fieldArrayValues);
+	        });
 	    };
 	    const swap = (indexA, indexB) => {
-	        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
-	        swapArrayAt(updatedFieldArrayValuesWithKey, indexA, indexB);
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, swapArrayAt, {
+	        const updatedFieldArrayValues = control._getFieldArray(name);
+	        swapArrayAt(updatedFieldArrayValues, indexA, indexB);
+	        swapArrayAt(ids.current, indexA, indexB);
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, swapArrayAt, {
 	            argA: indexA,
 	            argB: indexB,
-	        }, fieldArrayValues, false);
+	        }, false);
 	    };
 	    const move = (from, to) => {
-	        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
-	        moveArrayAt(updatedFieldArrayValuesWithKey, from, to);
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, moveArrayAt, {
+	        const updatedFieldArrayValues = control._getFieldArray(name);
+	        moveArrayAt(updatedFieldArrayValues, from, to);
+	        moveArrayAt(ids.current, from, to);
+	        updateValues(updatedFieldArrayValues);
+	        setFields(updatedFieldArrayValues);
+	        control._updateFieldArray(name, updatedFieldArrayValues, moveArrayAt, {
 	            argA: from,
 	            argB: to,
-	        }, fieldArrayValues, false);
+	        }, false);
 	    };
 	    const update = (index, value) => {
-	        const updatedFieldArrayValuesWithKey = mapCurrentIds(control._getFieldArray(name), _fieldIds, keyName);
-	        const updatedFieldArrayValues = updateAt(updatedFieldArrayValuesWithKey, index, value);
-	        _fieldIds.current = mapIds(updatedFieldArrayValues, keyName);
-	        const fieldArrayValues = updateValues(_fieldIds.current);
-	        setFields(_fieldIds.current);
-	        control._updateFieldArray(name, updateAt, {
+	        const updateValue = cloneObject(value);
+	        const updatedFieldArrayValues = updateAt(control._getFieldArray(name), index, updateValue);
+	        ids.current = [...updatedFieldArrayValues].map((item, i) => !item || i === index ? generateId() : ids.current[i]);
+	        updateValues(updatedFieldArrayValues);
+	        setFields([...updatedFieldArrayValues]);
+	        control._updateFieldArray(name, updatedFieldArrayValues, updateAt, {
 	            argA: index,
-	            argB: value,
-	        }, fieldArrayValues, true, false, false);
+	            argB: updateValue,
+	        }, true, false);
 	    };
 	    const replace = (value) => {
-	        const updatedFieldArrayValuesWithKey = mapIds(convertToArrayPayload(value), keyName);
-	        const fieldArrayValues = updateValues(updatedFieldArrayValuesWithKey);
-	        setFields(updatedFieldArrayValuesWithKey);
-	        control._updateFieldArray(name, () => updatedFieldArrayValuesWithKey, {}, fieldArrayValues, true, false, false);
+	        const updatedFieldArrayValues = convertToArrayPayload(cloneObject(value));
+	        ids.current = updatedFieldArrayValues.map(generateId);
+	        updateValues([...updatedFieldArrayValues]);
+	        setFields([...updatedFieldArrayValues]);
+	        control._updateFieldArray(name, [...updatedFieldArrayValues], (data) => data, {}, true, false);
 	    };
 	    React__default["default"].useEffect(() => {
 	        control._stateFlags.action = false;
@@ -10249,8 +20382,11 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        if (_actioned.current) {
 	            control._executeSchema([name]).then((result) => {
 	                const error = get(result.errors, name);
-	                if (error && error.type && !get(control._formState.errors, name)) {
-	                    set(control._formState.errors, name, error);
+	                const existingError = get(control._formState.errors, name);
+	                if (existingError ? !error && existingError.type : error && error.type) {
+	                    error
+	                        ? set(control._formState.errors, name, error)
+	                        : unset(control._formState.errors, name);
 	                    control._subjects.state.next({
 	                        errors: control._formState.errors,
 	                    });
@@ -10265,27 +20401,29 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            focusFieldBy(control._fields, (key) => key.startsWith(control._names.focus));
 	        control._names.focus = '';
 	        control._proxyFormState.isValid && control._updateValid();
-	    }, [fields, name, control, keyName]);
+	    }, [fields, name, control]);
 	    React__default["default"].useEffect(() => {
-	        !get(control._formValues, name) && set(control._formValues, name, []);
+	        !get(control._formValues, name) && control._updateFieldArray(name);
 	        return () => {
-	            if (control._options.shouldUnregister || shouldUnregister) {
+	            (control._options.shouldUnregister || shouldUnregister) &&
 	                control.unregister(name);
-	            }
 	        };
 	    }, [name, control, keyName, shouldUnregister]);
 	    return {
-	        swap: React__default["default"].useCallback(swap, [updateValues, name, control, keyName]),
-	        move: React__default["default"].useCallback(move, [updateValues, name, control, keyName]),
-	        prepend: React__default["default"].useCallback(prepend$1, [updateValues, name, control, keyName]),
-	        append: React__default["default"].useCallback(append$1, [updateValues, name, control, keyName]),
-	        remove: React__default["default"].useCallback(remove, [updateValues, name, control, keyName]),
-	        insert: React__default["default"].useCallback(insert$1, [updateValues, name, control, keyName]),
-	        update: React__default["default"].useCallback(update, [updateValues, name, control, keyName]),
-	        replace: React__default["default"].useCallback(replace, [updateValues, name, control, keyName]),
-	        fields: fields,
+	        swap: React__default["default"].useCallback(swap, [updateValues, name, control]),
+	        move: React__default["default"].useCallback(move, [updateValues, name, control]),
+	        prepend: React__default["default"].useCallback(prepend$1, [updateValues, name, control]),
+	        append: React__default["default"].useCallback(append$1, [updateValues, name, control]),
+	        remove: React__default["default"].useCallback(remove, [updateValues, name, control]),
+	        insert: React__default["default"].useCallback(insert$1, [updateValues, name, control]),
+	        update: React__default["default"].useCallback(update, [updateValues, name, control]),
+	        replace: React__default["default"].useCallback(replace, [updateValues, name, control]),
+	        fields: React__default["default"].useMemo(() => fields.map((field, index) => ({
+	            ...field,
+	            [keyName]: ids.current[index] || generateId(),
+	        })), [fields, keyName]),
 	    };
-	};
+	}
 
 	function createSubject() {
 	    let _observers = [];
@@ -10360,7 +20498,11 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 
 	var isFileInput = (element) => element.type === 'file';
 
-	var isHTMLElement = (value) => value instanceof HTMLElement;
+	var isHTMLElement = (value) => {
+	    const owner = value ? value.ownerDocument : 0;
+	    const ElementClass = owner && owner.defaultView ? owner.defaultView.HTMLElement : HTMLElement;
+	    return value instanceof ElementClass;
+	};
 
 	var isMultipleSelect = (element) => element.type === `select-multiple`;
 
@@ -10368,50 +20510,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 
 	var isRadioOrCheckbox = (ref) => isRadioInput(ref) || isCheckBoxInput(ref);
 
-	var isWeb = typeof window !== 'undefined' &&
-	    typeof window.HTMLElement !== 'undefined' &&
-	    typeof document !== 'undefined';
-
-	var live = (ref) => isHTMLElement(ref) && document.contains(ref);
-
-	function baseGet(object, updatePath) {
-	    const length = updatePath.slice(0, -1).length;
-	    let index = 0;
-	    while (index < length) {
-	        object = isUndefined$1(object) ? index++ : object[updatePath[index++]];
-	    }
-	    return object;
-	}
-	function unset(object, path) {
-	    const updatePath = isKey(path) ? [path] : stringToPath(path);
-	    const childObject = updatePath.length == 1 ? object : baseGet(object, updatePath);
-	    const key = updatePath[updatePath.length - 1];
-	    let previousObjRef;
-	    if (childObject) {
-	        delete childObject[key];
-	    }
-	    for (let k = 0; k < updatePath.slice(0, -1).length; k++) {
-	        let index = -1;
-	        let objectRef;
-	        const currentPaths = updatePath.slice(0, -(k + 1));
-	        const currentPathsLength = currentPaths.length - 1;
-	        if (k > 0) {
-	            previousObjRef = object;
-	        }
-	        while (++index < currentPaths.length) {
-	            const item = currentPaths[index];
-	            objectRef = objectRef ? objectRef[item] : object[item];
-	            if (currentPathsLength === index &&
-	                ((isObject(objectRef) && isEmptyObject(objectRef)) ||
-	                    (Array.isArray(objectRef) &&
-	                        !objectRef.filter((data) => (isObject(data) && !isEmptyObject(data)) || isBoolean(data)).length))) {
-	                previousObjRef ? delete previousObjRef[item] : delete object[item];
-	            }
-	            previousObjRef = objectRef;
-	        }
-	    }
-	    return object;
-	}
+	var live = (ref) => isHTMLElement(ref) && ref.isConnected;
 
 	function markFieldsDirty(data, fields = {}) {
 	    const isParentNodeArray = Array.isArray(data);
@@ -10439,7 +20538,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                    isPrimitive(dirtyFieldsFromValues[key])) {
 	                    dirtyFieldsFromValues[key] = Array.isArray(data[key])
 	                        ? markFieldsDirty(data[key], [])
-	                        : Object.assign({}, markFieldsDirty(data[key]));
+	                        : { ...markFieldsDirty(data[key]) };
 	                }
 	                else {
 	                    getDirtyFieldsFromDefaultValues(data[key], isNullOrUndefined(formValues) ? {} : formValues[key], dirtyFieldsFromValues[key]);
@@ -10482,7 +20581,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	var getFieldValueAs = (value, { valueAsNumber, valueAsDate, setValueAs }) => isUndefined$1(value)
 	    ? value
 	    : valueAsNumber
-	        ? value === ''
+	        ? value === '' || isNullOrUndefined(value)
 	            ? NaN
 	            : +value
 	        : valueAsDate && isString$1(value)
@@ -10649,8 +20748,12 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    const appendErrorsCurry = appendErrors.bind(null, name, validateAllFieldCriteria, error);
 	    const getMinMaxMessage = (exceedMax, maxLengthMessage, minLengthMessage, maxType = INPUT_VALIDATION_RULES.maxLength, minType = INPUT_VALIDATION_RULES.minLength) => {
 	        const message = exceedMax ? maxLengthMessage : minLengthMessage;
-	        error[name] = Object.assign({ type: exceedMax ? maxType : minType, message,
-	            ref }, appendErrorsCurry(exceedMax ? maxType : minType, message));
+	        error[name] = {
+	            type: exceedMax ? maxType : minType,
+	            message,
+	            ref,
+	            ...appendErrorsCurry(exceedMax ? maxType : minType, message),
+	        };
 	    };
 	    if (required &&
 	        ((!isRadioOrCheckbox && (isEmpty || isNullOrUndefined(inputValue))) ||
@@ -10661,7 +20764,12 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            ? { value: !!required, message: required }
 	            : getValueAndMessage(required);
 	        if (value) {
-	            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.required, message, ref: inputRef }, appendErrorsCurry(INPUT_VALIDATION_RULES.required, message));
+	            error[name] = {
+	                type: INPUT_VALIDATION_RULES.required,
+	                message,
+	                ref: inputRef,
+	                ...appendErrorsCurry(INPUT_VALIDATION_RULES.required, message),
+	            };
 	            if (!validateAllFieldCriteria) {
 	                setCustomValidity(message);
 	                return error;
@@ -10673,9 +20781,8 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        let exceedMin;
 	        const maxOutput = getValueAndMessage(max);
 	        const minOutput = getValueAndMessage(min);
-	        if (!isNaN(inputValue)) {
-	            const valueNumber = ref.valueAsNumber ||
-	                parseFloat(inputValue);
+	        if (!isNullOrUndefined(inputValue) && !isNaN(inputValue)) {
+	            const valueNumber = ref.valueAsNumber || +inputValue;
 	            if (!isNullOrUndefined(maxOutput.value)) {
 	                exceedMax = valueNumber > maxOutput.value;
 	            }
@@ -10718,8 +20825,12 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    if (pattern && !isEmpty && isString$1(inputValue)) {
 	        const { value: patternValue, message } = getValueAndMessage(pattern);
 	        if (isRegex(patternValue) && !inputValue.match(patternValue)) {
-	            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.pattern, message,
-	                ref }, appendErrorsCurry(INPUT_VALIDATION_RULES.pattern, message));
+	            error[name] = {
+	                type: INPUT_VALIDATION_RULES.pattern,
+	                message,
+	                ref,
+	                ...appendErrorsCurry(INPUT_VALIDATION_RULES.pattern, message),
+	            };
 	            if (!validateAllFieldCriteria) {
 	                setCustomValidity(message);
 	                return error;
@@ -10731,7 +20842,10 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            const result = await validate(inputValue);
 	            const validateError = getValidateError(result, inputRef);
 	            if (validateError) {
-	                error[name] = Object.assign(Object.assign({}, validateError), appendErrorsCurry(INPUT_VALIDATION_RULES.validate, validateError.message));
+	                error[name] = {
+	                    ...validateError,
+	                    ...appendErrorsCurry(INPUT_VALIDATION_RULES.validate, validateError.message),
+	                };
 	                if (!validateAllFieldCriteria) {
 	                    setCustomValidity(validateError.message);
 	                    return error;
@@ -10746,7 +20860,10 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                }
 	                const validateError = getValidateError(await validate[key](inputValue), inputRef, key);
 	                if (validateError) {
-	                    validationResult = Object.assign(Object.assign({}, validateError), appendErrorsCurry(key, validateError.message));
+	                    validationResult = {
+	                        ...validateError,
+	                        ...appendErrorsCurry(key, validateError.message),
+	                    };
 	                    setCustomValidity(validateError.message);
 	                    if (validateAllFieldCriteria) {
 	                        error[name] = validationResult;
@@ -10754,7 +20871,10 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                }
 	            }
 	            if (!isEmptyObject(validationResult)) {
-	                error[name] = Object.assign({ ref: inputRef }, validationResult);
+	                error[name] = {
+	                    ref: inputRef,
+	                    ...validationResult,
+	                };
 	                if (!validateAllFieldCriteria) {
 	                    return error;
 	                }
@@ -10771,7 +20891,10 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    shouldFocusError: true,
 	};
 	function createFormControl(props = {}) {
-	    let _options = Object.assign(Object.assign({}, defaultOptions), props);
+	    let _options = {
+	        ...defaultOptions,
+	        ...props,
+	    };
 	    let _formState = {
 	        isDirty: false,
 	        isValidating: false,
@@ -10785,7 +20908,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        errors: {},
 	    };
 	    let _fields = {};
-	    let _defaultValues = _options.defaultValues || {};
+	    let _defaultValues = cloneObject(_options.defaultValues) || {};
 	    let _formValues = _options.shouldUnregister
 	        ? {}
 	        : cloneObject(_defaultValues);
@@ -10819,9 +20942,9 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    const validationModeBeforeSubmit = getValidationModes(_options.mode);
 	    const validationModeAfterSubmit = getValidationModes(_options.reValidateMode);
 	    const shouldDisplayAllAssociatedErrors = _options.criteriaMode === VALIDATION_MODE.all;
-	    const debounce = (callback, wait) => (...args) => {
+	    const debounce = (callback) => (wait) => {
 	        clearTimeout(timer);
-	        timer = window.setTimeout(() => callback(...args), wait);
+	        timer = window.setTimeout(callback, wait);
 	    };
 	    const _updateValid = async (shouldSkipRender) => {
 	        let isValid = false;
@@ -10838,50 +20961,59 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        }
 	        return isValid;
 	    };
-	    const _updateFieldArray = (name, method, args, values = [], shouldSetValues = true, shouldSetFields = true, shouldSetError = true) => {
-	        _stateFlags.action = true;
-	        if (shouldSetFields && get(_fields, name)) {
-	            const fieldValues = method(get(_fields, name), args.argA, args.argB);
-	            shouldSetValues && set(_fields, name, fieldValues);
+	    const _updateFieldArray = (name, values = [], method, args, shouldSetValues = true, shouldUpdateFieldsAndState = true) => {
+	        if (args && method) {
+	            _stateFlags.action = true;
+	            if (shouldUpdateFieldsAndState && Array.isArray(get(_fields, name))) {
+	                const fieldValues = method(get(_fields, name), args.argA, args.argB);
+	                shouldSetValues && set(_fields, name, fieldValues);
+	            }
+	            if (_proxyFormState.errors &&
+	                shouldUpdateFieldsAndState &&
+	                Array.isArray(get(_formState.errors, name))) {
+	                const errors = method(get(_formState.errors, name), args.argA, args.argB);
+	                shouldSetValues && set(_formState.errors, name, errors);
+	                unsetEmptyArray(_formState.errors, name);
+	            }
+	            if (_proxyFormState.touchedFields &&
+	                shouldUpdateFieldsAndState &&
+	                Array.isArray(get(_formState.touchedFields, name))) {
+	                const touchedFields = method(get(_formState.touchedFields, name), args.argA, args.argB);
+	                shouldSetValues && set(_formState.touchedFields, name, touchedFields);
+	            }
+	            if (_proxyFormState.dirtyFields) {
+	                _formState.dirtyFields = getDirtyFields(_defaultValues, _formValues);
+	            }
+	            _subjects.state.next({
+	                isDirty: _getDirty(name, values),
+	                dirtyFields: _formState.dirtyFields,
+	                errors: _formState.errors,
+	                isValid: _formState.isValid,
+	            });
 	        }
-	        if (shouldSetError && Array.isArray(get(_formState.errors, name))) {
-	            const errors = method(get(_formState.errors, name), args.argA, args.argB);
-	            shouldSetValues && set(_formState.errors, name, errors);
-	            unsetEmptyArray(_formState.errors, name);
+	        else {
+	            set(_formValues, name, values);
 	        }
-	        if (_proxyFormState.touchedFields && get(_formState.touchedFields, name)) {
-	            const touchedFields = method(get(_formState.touchedFields, name), args.argA, args.argB);
-	            shouldSetValues &&
-	                set(_formState.touchedFields, name, touchedFields);
-	            unsetEmptyArray(_formState.touchedFields, name);
-	        }
-	        if (_proxyFormState.dirtyFields || _proxyFormState.isDirty) {
-	            _formState.dirtyFields = getDirtyFields(_defaultValues, _formValues);
-	        }
+	    };
+	    const updateErrors = (name, error) => {
+	        set(_formState.errors, name, error);
 	        _subjects.state.next({
-	            isDirty: _getDirty(name, values),
-	            dirtyFields: _formState.dirtyFields,
 	            errors: _formState.errors,
-	            isValid: _formState.isValid,
 	        });
 	    };
-	    const updateErrors = (name, error) => (set(_formState.errors, name, error),
-	        _subjects.state.next({
-	            errors: _formState.errors,
-	        }));
-	    const updateValidAndValue = (name, shouldSkipSetValueAs, ref) => {
+	    const updateValidAndValue = (name, shouldSkipSetValueAs, value, ref) => {
 	        const field = get(_fields, name);
 	        if (field) {
-	            const defaultValue = get(_formValues, name, get(_defaultValues, name));
+	            const defaultValue = get(_formValues, name, isUndefined$1(value) ? get(_defaultValues, name) : value);
 	            isUndefined$1(defaultValue) ||
 	                (ref && ref.defaultChecked) ||
 	                shouldSkipSetValueAs
 	                ? set(_formValues, name, shouldSkipSetValueAs ? defaultValue : getFieldValue(field._f))
 	                : setFieldValue(name, defaultValue);
+	            _stateFlags.mount && _updateValid();
 	        }
-	        _stateFlags.mount && _updateValid();
 	    };
-	    const updateTouchAndDirty = (name, fieldValue, isCurrentTouched, shouldRender = true) => {
+	    const updateTouchAndDirty = (name, fieldValue, isBlurEvent, shouldDirty, shouldRender) => {
 	        let isFieldDirty = false;
 	        const output = {
 	            name,
@@ -10892,7 +21024,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            _formState.isDirty = output.isDirty = _getDirty();
 	            isFieldDirty = isPreviousFormDirty !== output.isDirty;
 	        }
-	        if (_proxyFormState.dirtyFields && !isCurrentTouched) {
+	        if (_proxyFormState.dirtyFields && (!isBlurEvent || shouldDirty)) {
 	            const isPreviousFieldDirty = get(_formState.dirtyFields, name);
 	            const isCurrentFieldPristine = deepEqual(get(_defaultValues, name), fieldValue);
 	            isCurrentFieldPristine
@@ -10903,41 +21035,49 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                isFieldDirty ||
 	                    isPreviousFieldDirty !== get(_formState.dirtyFields, name);
 	        }
-	        if (isCurrentTouched && !isPreviousFieldTouched) {
-	            set(_formState.touchedFields, name, isCurrentTouched);
+	        if (isBlurEvent && !isPreviousFieldTouched) {
+	            set(_formState.touchedFields, name, isBlurEvent);
 	            output.touchedFields = _formState.touchedFields;
 	            isFieldDirty =
 	                isFieldDirty ||
 	                    (_proxyFormState.touchedFields &&
-	                        isPreviousFieldTouched !== isCurrentTouched);
+	                        isPreviousFieldTouched !== isBlurEvent);
 	        }
 	        isFieldDirty && shouldRender && _subjects.state.next(output);
 	        return isFieldDirty ? output : {};
 	    };
-	    const shouldRenderByError = async (shouldSkipRender, name, isValid, error, fieldState) => {
+	    const shouldRenderByError = async (name, isValid, error, fieldState) => {
 	        const previousFieldError = get(_formState.errors, name);
 	        const shouldUpdateValid = _proxyFormState.isValid && _formState.isValid !== isValid;
 	        if (props.delayError && error) {
-	            delayErrorCallback =
-	                delayErrorCallback || debounce(updateErrors, props.delayError);
-	            delayErrorCallback(name, error);
+	            delayErrorCallback = debounce(() => updateErrors(name, error));
+	            delayErrorCallback(props.delayError);
 	        }
 	        else {
 	            clearTimeout(timer);
+	            delayErrorCallback = null;
 	            error
 	                ? set(_formState.errors, name, error)
 	                : unset(_formState.errors, name);
 	        }
-	        if (((error ? !deepEqual(previousFieldError, error) : previousFieldError) ||
+	        if ((error ? !deepEqual(previousFieldError, error) : previousFieldError) ||
 	            !isEmptyObject(fieldState) ||
-	            shouldUpdateValid) &&
-	            !shouldSkipRender) {
-	            const updatedFormState = Object.assign(Object.assign(Object.assign({}, fieldState), (shouldUpdateValid ? { isValid } : {})), { errors: _formState.errors, name });
-	            _formState = Object.assign(Object.assign({}, _formState), updatedFormState);
+	            shouldUpdateValid) {
+	            const updatedFormState = {
+	                ...fieldState,
+	                ...(shouldUpdateValid ? { isValid } : {}),
+	                errors: _formState.errors,
+	                name,
+	            };
+	            _formState = {
+	                ..._formState,
+	                ...updatedFormState,
+	            };
 	            _subjects.state.next(updatedFormState);
 	        }
 	        validateFields[name]--;
-	        if (_proxyFormState.isValidating && !validateFields[name]) {
+	        if (_proxyFormState.isValidating &&
+	            !Object.values(validateFields).some((v) => v)) {
 	            _subjects.state.next({
 	                isValidating: false,
 	            });
@@ -10945,7 +21085,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        }
 	    };
 	    const _executeSchema = async (name) => _options.resolver
-	        ? await _options.resolver(Object.assign({}, _formValues), _options.context, getResolverOptions(name || _names.mount, _fields, _options.criteriaMode, _options.shouldUseNativeValidation))
+	        ? await _options.resolver({ ..._formValues }, _options.context, getResolverOptions(name || _names.mount, _fields, _options.criteriaMode, _options.shouldUseNativeValidation))
 	        : {};
 	    const executeSchemaAndUpdateState = async (names) => {
 	        const { errors } = await _executeSchema();
@@ -10968,8 +21108,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        for (const name in fields) {
 	            const field = fields[name];
 	            if (field) {
-	                const fieldReference = field._f;
-	                const fieldValue = omit(field, '_f');
+	                const { _f: fieldReference, ...fieldValue } = field;
 	                if (fieldReference) {
 	                    const fieldError = await validateField(field, get(_formValues, fieldReference.name), shouldDisplayAllAssociatedErrors, _options.shouldUseNativeValidation);
 	                    if (fieldError[fieldReference.name]) {
@@ -11004,13 +21143,15 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    const _getDirty = (name, data) => (name && data && set(_formValues, name, data),
 	        !deepEqual(getValues(), _defaultValues));
 	    const _getWatch = (names, defaultValue, isGlobal) => {
-	        const fieldValues = Object.assign({}, (_stateFlags.mount
-	            ? _formValues
-	            : isUndefined$1(defaultValue)
-	                ? _defaultValues
-	                : isString$1(names)
-	                    ? { [names]: defaultValue }
-	                    : defaultValue));
+	        const fieldValues = {
+	            ...(_stateFlags.mount
+	                ? _formValues
+	                : isUndefined$1(defaultValue)
+	                    ? _defaultValues
+	                    : isString$1(names)
+	                        ? { [names]: defaultValue }
+	                        : defaultValue),
+	        };
 	        return generateWatchOutput(names, _names, fieldValues, isGlobal);
 	    };
 	    const _getFieldArray = (name) => compact(get(_stateFlags.mount ? _formValues : _defaultValues, name, props.shouldUnregister ? get(_defaultValues, name, []) : []));
@@ -11032,16 +21173,21 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                else if (fieldReference.refs) {
 	                    if (isCheckBoxInput(fieldReference.ref)) {
 	                        fieldReference.refs.length > 1
-	                            ? fieldReference.refs.forEach((checkboxRef) => (checkboxRef.checked = Array.isArray(fieldValue)
-	                                ? !!fieldValue.find((data) => data === checkboxRef.value)
-	                                : fieldValue === checkboxRef.value))
-	                            : (fieldReference.refs[0].checked = !!fieldValue);
+	                            ? fieldReference.refs.forEach((checkboxRef) => !checkboxRef.disabled &&
+	                                (checkboxRef.checked = Array.isArray(fieldValue)
+	                                    ? !!fieldValue.find((data) => data === checkboxRef.value)
+	                                    : fieldValue === checkboxRef.value))
+	                            : fieldReference.refs[0] &&
+	                                (fieldReference.refs[0].checked = !!fieldValue);
 	                    }
 	                    else {
 	                        fieldReference.refs.forEach((radioRef) => (radioRef.checked = radioRef.value === fieldValue));
 	                    }
 	                }
-	                else if (!isFileInput(fieldReference.ref)) {
+	                else if (isFileInput(fieldReference.ref)) {
+	                    fieldReference.ref.value = '';
+	                }
+	                else {
 	                    fieldReference.ref.value = fieldValue;
 	                    if (!fieldReference.ref.type) {
 	                        _subjects.watch.next({
@@ -11052,7 +21198,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            }
 	        }
 	        (options.shouldDirty || options.shouldTouch) &&
-	            updateTouchAndDirty(name, fieldValue, options.shouldTouch);
+	            updateTouchAndDirty(name, fieldValue, options.shouldTouch, options.shouldDirty, true);
 	        options.shouldValidate && trigger(name);
 	    };
 	    const setValues = (name, value, options) => {
@@ -11071,7 +21217,8 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    const setValue = (name, value, options = {}) => {
 	        const field = get(_fields, name);
 	        const isFieldArray = _names.array.has(name);
-	        set(_formValues, name, value);
+	        const cloneValue = cloneObject(value);
+	        set(_formValues, name, cloneValue);
 	        if (isFieldArray) {
 	            _subjects.array.next({
 	                name,
@@ -11083,14 +21230,14 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                _subjects.state.next({
 	                    name,
 	                    dirtyFields: _formState.dirtyFields,
-	                    isDirty: _getDirty(name, value),
+	                    isDirty: _getDirty(name, cloneValue),
 	                });
 	            }
 	        }
 	        else {
-	            field && !field._f && !isNullOrUndefined(value)
-	                ? setValues(name, value, options)
-	                : setFieldValue(name, value, options);
+	            field && !field._f && !isNullOrUndefined(cloneValue)
+	                ? setValues(name, cloneValue, options)
+	                : setFieldValue(name, cloneValue, options);
 	        }
 	        isWatched(name, _names) && _subjects.state.next({});
 	        _subjects.watch.next({
@@ -11107,20 +21254,21 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            const fieldValue = target.type
 	                ? getFieldValue(field._f)
 	                : getEventValue(event);
-	            const isBlurEvent = event.type === EVENTS.BLUR;
+	            const isBlurEvent = event.type === EVENTS.BLUR || event.type === EVENTS.FOCUS_OUT;
 	            const shouldSkipValidation = (!hasValidation(field._f) &&
 	                !_options.resolver &&
 	                !get(_formState.errors, name) &&
 	                !field._f.deps) ||
 	                skipValidation(isBlurEvent, get(_formState.touchedFields, name), _formState.isSubmitted, validationModeAfterSubmit, validationModeBeforeSubmit);
 	            const watched = isWatched(name, _names, isBlurEvent);
+	            set(_formValues, name, fieldValue);
 	            if (isBlurEvent) {
 	                field._f.onBlur && field._f.onBlur(event);
+	                delayErrorCallback && delayErrorCallback(0);
 	            }
 	            else if (field._f.onChange) {
 	                field._f.onChange(event);
 	            }
-	            set(_formValues, name, fieldValue);
 	            const fieldState = updateTouchAndDirty(name, fieldValue, isBlurEvent, false);
 	            const shouldRender = !isEmptyObject(fieldState) || watched;
 	            !isBlurEvent &&
@@ -11130,14 +21278,13 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                });
 	            if (shouldSkipValidation) {
 	                return (shouldRender &&
-	                    _subjects.state.next(Object.assign({ name }, (watched ? {} : fieldState))));
+	                    _subjects.state.next({ name, ...(watched ? {} : fieldState) }));
 	            }
 	            !isBlurEvent && watched && _subjects.state.next({});
 	            validateFields[name] = validateFields[name] ? +1 : 1;
-	            _proxyFormState.isValidating &&
-	                _subjects.state.next({
-	                    isValidating: true,
-	                });
+	            _subjects.state.next({
+	                isValidating: true,
+	            });
 	            if (_options.resolver) {
 	                const { errors } = await _executeSchema([name]);
 	                const previousErrorLookupResult = schemaErrorLookup(_formState.errors, _fields, name);
@@ -11150,8 +21297,9 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                error = (await validateField(field, get(_formValues, name), shouldDisplayAllAssociatedErrors, _options.shouldUseNativeValidation))[name];
 	                isValid = await _updateValid(true);
 	            }
-	            field._f.deps && trigger(field._f.deps);
-	            shouldRenderByError(false, name, isValid, error, fieldState);
+	            field._f.deps &&
+	                trigger(field._f.deps);
+	            shouldRenderByError(name, isValid, error, fieldState);
 	        }
 	    };
 	    const trigger = async (name, options = {}) => {
@@ -11178,35 +21326,51 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        else {
 	            validationResult = isValid = await executeBuildInValidation(_fields);
 	        }
-	        _subjects.state.next(Object.assign(Object.assign(Object.assign({}, (!isString$1(name) ||
-	            (_proxyFormState.isValid && isValid !== _formState.isValid)
-	            ? {}
-	            : { name })), (_options.resolver ? { isValid } : {})), { errors: _formState.errors, isValidating: false }));
+	        _subjects.state.next({
+	            ...(!isString$1(name) ||
+	                (_proxyFormState.isValid && isValid !== _formState.isValid)
+	                ? {}
+	                : { name }),
+	            ...(_options.resolver ? { isValid } : {}),
+	            errors: _formState.errors,
+	            isValidating: false,
+	        });
 	        options.shouldFocus &&
 	            !validationResult &&
 	            focusFieldBy(_fields, (key) => get(_formState.errors, key), name ? fieldNames : _names.mount);
 	        return validationResult;
 	    };
 	    const getValues = (fieldNames) => {
-	        const values = Object.assign(Object.assign({}, _defaultValues), (_stateFlags.mount ? _formValues : {}));
+	        const values = {
+	            ..._defaultValues,
+	            ...(_stateFlags.mount ? _formValues : {}),
+	        };
 	        return isUndefined$1(fieldNames)
 	            ? values
 	            : isString$1(fieldNames)
 	                ? get(values, fieldNames)
 	                : fieldNames.map((name) => get(values, name));
 	    };
+	    const getFieldState = (name, formState) => ({
+	        invalid: !!get((formState || _formState).errors, name),
+	        isDirty: !!get((formState || _formState).dirtyFields, name),
+	        isTouched: !!get((formState || _formState).touchedFields, name),
+	        error: get((formState || _formState).errors, name),
+	    });
 	    const clearErrors = (name) => {
 	        name
 	            ? convertToArrayPayload(name).forEach((inputName) => unset(_formState.errors, inputName))
 	            : (_formState.errors = {});
 	        _subjects.state.next({
 	            errors: _formState.errors,
-	            isValid: true,
 	        });
 	    };
 	    const setError = (name, error, options) => {
 	        const ref = (get(_fields, name, { _f: {} })._f || {}).ref;
-	        set(_formState.errors, name, Object.assign(Object.assign({}, error), { ref }));
+	        set(_formState.errors, name, {
+	            ...error,
+	            ref,
+	        });
 	        _subjects.state.next({
 	            name,
 	            errors: _formState.errors,
@@ -11237,35 +21401,46 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            }
 	        }
 	        _subjects.watch.next({});
-	        _subjects.state.next(Object.assign(Object.assign({}, _formState), (!options.keepDirty ? {} : { isDirty: _getDirty() })));
+	        _subjects.state.next({
+	            ..._formState,
+	            ...(!options.keepDirty ? {} : { isDirty: _getDirty() }),
+	        });
 	        !options.keepIsValid && _updateValid();
 	    };
 	    const register = (name, options = {}) => {
 	        let field = get(_fields, name);
+	        const disabledIsDefined = isBoolean(options.disabled);
 	        set(_fields, name, {
-	            _f: Object.assign(Object.assign(Object.assign({}, (field && field._f ? field._f : { ref: { name } })), { name, mount: true }), options),
+	            _f: {
+	                ...(field && field._f ? field._f : { ref: { name } }),
+	                name,
+	                mount: true,
+	                ...options,
+	            },
 	        });
 	        _names.mount.add(name);
-	        !isUndefined$1(options.value) &&
-	            !options.disabled &&
-	            set(_formValues, name, get(_formValues, name, options.value));
 	        field
-	            ? isBoolean(options.disabled) &&
+	            ? disabledIsDefined &&
 	                set(_formValues, name, options.disabled
 	                    ? undefined
 	                    : get(_formValues, name, getFieldValue(field._f)))
-	            : updateValidAndValue(name, true);
-	        return Object.assign(Object.assign(Object.assign({}, (isBoolean(options.disabled) ? { disabled: options.disabled } : {})), (_options.shouldUseNativeValidation
-	            ? {
-	                required: !!options.required,
-	                min: getRuleValue(options.min),
-	                max: getRuleValue(options.max),
-	                minLength: getRuleValue(options.minLength),
-	                maxLength: getRuleValue(options.maxLength),
-	                pattern: getRuleValue(options.pattern),
-	            }
-	            : {})), { name,
-	            onChange, onBlur: onChange, ref: (ref) => {
+	            : updateValidAndValue(name, true, options.value);
+	        return {
+	            ...(disabledIsDefined ? { disabled: options.disabled } : {}),
+	            ...(_options.shouldUseNativeValidation
+	                ? {
+	                    required: !!options.required,
+	                    min: getRuleValue(options.min),
+	                    max: getRuleValue(options.max),
+	                    minLength: getRuleValue(options.minLength),
+	                    maxLength: getRuleValue(options.maxLength),
+	                    pattern: getRuleValue(options.pattern),
+	                }
+	                : {}),
+	            name,
+	            onChange,
+	            onBlur: onChange,
+	            ref: (ref) => {
 	                if (ref) {
 	                    register(name, options);
 	                    field = get(_fields, name);
@@ -11275,16 +21450,30 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                            : ref
 	                        : ref;
 	                    const radioOrCheckbox = isRadioOrCheckbox(fieldRef);
-	                    if (fieldRef === field._f.ref ||
-	                        (radioOrCheckbox &&
-	                            compact(field._f.refs).find((option) => option === fieldRef))) {
+	                    const refs = field._f.refs || [];
+	                    if (radioOrCheckbox
+	                        ? refs.find((option) => option === fieldRef)
+	                        : fieldRef === field._f.ref) {
 	                        return;
 	                    }
 	                    set(_fields, name, {
-	                        _f: radioOrCheckbox
-	                            ? Object.assign(Object.assign({}, field._f), { refs: [...compact(field._f.refs).filter(live), fieldRef], ref: { type: fieldRef.type, name } }) : Object.assign(Object.assign({}, field._f), { ref: fieldRef }),
+	                        _f: {
+	                            ...field._f,
+	                            ...(radioOrCheckbox
+	                                ? {
+	                                    refs: [
+	                                        ...refs.filter(live),
+	                                        fieldRef,
+	                                        ...(!!Array.isArray(get(_defaultValues, name))
+	                                            ? [{}]
+	                                            : []),
+	                                    ],
+	                                    ref: { type: fieldRef.type, name },
+	                                }
+	                                : { ref: fieldRef }),
+	                        },
 	                    });
-	                    updateValidAndValue(name, false, fieldRef);
+	                    updateValidAndValue(name, false, undefined, fieldRef);
 	                }
 	                else {
 	                    field = get(_fields, name, {});
@@ -11295,7 +21484,8 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                        !(isNameInFieldArray(_names.array, name) && _stateFlags.action) &&
 	                        _names.unMount.add(name);
 	                }
-	            } });
+	            },
+	        };
 	    };
 	    const handleSubmit = (onValid, onInvalid) => async (e) => {
 	        if (e) {
@@ -11303,9 +21493,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            e.persist && e.persist();
 	        }
 	        let hasNoPromiseError = true;
-	        let fieldValues = _options.shouldUnregister
-	            ? cloneObject(_formValues)
-	            : Object.assign({}, _formValues);
+	        let fieldValues = cloneObject(_formValues);
 	        _subjects.state.next({
 	            isSubmitting: true,
 	        });
@@ -11318,8 +21506,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            else {
 	                await executeBuildInValidation(_fields);
 	            }
-	            if (isEmptyObject(_formState.errors) &&
-	                Object.keys(_formState.errors).every((name) => get(fieldValues, name))) {
+	            if (isEmptyObject(_formState.errors)) {
 	                _subjects.state.next({
 	                    errors: {},
 	                    isSubmitting: true,
@@ -11327,7 +21514,9 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                await onValid(fieldValues, e);
 	            }
 	            else {
-	                onInvalid && (await onInvalid(_formState.errors, e));
+	                if (onInvalid) {
+	                    await onInvalid({ ..._formState.errors }, e);
+	                }
 	                _options.shouldFocusError &&
 	                    focusFieldBy(_fields, (key) => get(_formState.errors, key), _names.mount);
 	            }
@@ -11348,27 +21537,29 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        }
 	    };
 	    const resetField = (name, options = {}) => {
-	        if (isUndefined$1(options.defaultValue)) {
-	            setValue(name, get(_defaultValues, name));
+	        if (get(_fields, name)) {
+	            if (isUndefined$1(options.defaultValue)) {
+	                setValue(name, get(_defaultValues, name));
+	            }
+	            else {
+	                setValue(name, options.defaultValue);
+	                set(_defaultValues, name, options.defaultValue);
+	            }
+	            if (!options.keepTouched) {
+	                unset(_formState.touchedFields, name);
+	            }
+	            if (!options.keepDirty) {
+	                unset(_formState.dirtyFields, name);
+	                _formState.isDirty = options.defaultValue
+	                    ? _getDirty(name, get(_defaultValues, name))
+	                    : _getDirty();
+	            }
+	            if (!options.keepError) {
+	                unset(_formState.errors, name);
+	                _proxyFormState.isValid && _updateValid();
+	            }
+	            _subjects.state.next({ ..._formState });
 	        }
-	        else {
-	            setValue(name, options.defaultValue);
-	            set(_defaultValues, name, options.defaultValue);
-	        }
-	        if (!options.keepTouched) {
-	            unset(_formState.touchedFields, name);
-	        }
-	        if (!options.keepDirty) {
-	            unset(_formState.dirtyFields, name);
-	            _formState.isDirty = options.defaultValue
-	                ? _getDirty(name, get(_defaultValues, name))
-	                : _getDirty();
-	        }
-	        if (!options.keepError) {
-	            unset(_formState.errors, name);
-	            _proxyFormState.isValid && _updateValid();
-	        }
-	        _subjects.state.next(Object.assign({}, _formState));
 	    };
 	    const reset = (formValues, keepStateOptions = {}) => {
 	        const updatedValues = formValues || _defaultValues;
@@ -11380,28 +21571,37 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            _defaultValues = updatedValues;
 	        }
 	        if (!keepStateOptions.keepValues) {
-	            if (isWeb && isUndefined$1(formValues)) {
-	                for (const name of _names.mount) {
-	                    const field = get(_fields, name);
-	                    if (field && field._f) {
-	                        const fieldReference = Array.isArray(field._f.refs)
-	                            ? field._f.refs[0]
-	                            : field._f.ref;
-	                        try {
-	                            isHTMLElement(fieldReference) &&
-	                                fieldReference.closest('form').reset();
-	                            break;
+	            if (keepStateOptions.keepDirtyValues) {
+	                for (const fieldName of _names.mount) {
+	                    get(_formState.dirtyFields, fieldName)
+	                        ? set(values, fieldName, get(_formValues, fieldName))
+	                        : setValue(fieldName, get(values, fieldName));
+	                }
+	            }
+	            else {
+	                if (isWeb && isUndefined$1(formValues)) {
+	                    for (const name of _names.mount) {
+	                        const field = get(_fields, name);
+	                        if (field && field._f) {
+	                            const fieldReference = Array.isArray(field._f.refs)
+	                                ? field._f.refs[0]
+	                                : field._f.ref;
+	                            try {
+	                                isHTMLElement(fieldReference) &&
+	                                    fieldReference.closest('form').reset();
+	                                break;
+	                            }
+	                            catch (_a) { }
 	                        }
-	                        catch (_a) { }
 	                    }
 	                }
+	                _fields = {};
 	            }
 	            _formValues = props.shouldUnregister
 	                ? keepStateOptions.keepDefaultValues
 	                    ? cloneObject(_defaultValues)
 	                    : {}
 	                : cloneUpdatedValues;
-	            _fields = {};
 	            _subjects.array.next({
 	                values,
 	            });
@@ -11424,19 +21624,18 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            submitCount: keepStateOptions.keepSubmitCount
 	                ? _formState.submitCount
 	                : 0,
-	            isDirty: keepStateOptions.keepDirty
+	            isDirty: keepStateOptions.keepDirty || keepStateOptions.keepDirtyValues
 	                ? _formState.isDirty
-	                : keepStateOptions.keepDefaultValues
-	                    ? !deepEqual(formValues, _defaultValues)
-	                    : false,
+	                : !!(keepStateOptions.keepDefaultValues &&
+	                    !deepEqual(formValues, _defaultValues)),
 	            isSubmitted: keepStateOptions.keepIsSubmitted
 	                ? _formState.isSubmitted
 	                : false,
-	            dirtyFields: keepStateOptions.keepDirty
+	            dirtyFields: keepStateOptions.keepDirty || keepStateOptions.keepDirtyValues
 	                ? _formState.dirtyFields
-	                : (keepStateOptions.keepDefaultValues && formValues
-	                    ? Object.entries(formValues).reduce((previous, [key, value]) => (Object.assign(Object.assign({}, previous), { [key]: value !== get(_defaultValues, key) })), {})
-	                    : {}),
+	                : keepStateOptions.keepDefaultValues && formValues
+	                    ? getDirtyFields(_defaultValues, formValues)
+	                    : {},
 	            touchedFields: keepStateOptions.keepTouched
 	                ? _formState.touchedFields
 	                : {},
@@ -11447,14 +21646,16 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            isSubmitSuccessful: false,
 	        });
 	    };
-	    const setFocus = (name) => {
+	    const setFocus = (name, options = {}) => {
 	        const field = get(_fields, name)._f;
-	        (field.ref.focus ? field.ref : field.refs[0]).focus();
+	        const fieldRef = field.refs ? field.refs[0] : field.ref;
+	        options.shouldSelect ? fieldRef.select() : fieldRef.focus();
 	    };
 	    return {
 	        control: {
 	            register,
 	            unregister,
+	            getFieldState,
 	            _executeSchema,
 	            _getWatch,
 	            _getDirty,
@@ -11467,14 +21668,8 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            get _fields() {
 	                return _fields;
 	            },
-	            set _fields(value) {
-	                _fields = value;
-	            },
 	            get _formValues() {
 	                return _formValues;
-	            },
-	            set _formValues(value) {
-	                _formValues = value;
 	            },
 	            get _stateFlags() {
 	                return _stateFlags;
@@ -11484,9 +21679,6 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            },
 	            get _defaultValues() {
 	                return _defaultValues;
-	            },
-	            set _defaultValues(value) {
-	                _defaultValues = value;
 	            },
 	            get _names() {
 	                return _names;
@@ -11504,7 +21696,10 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	                return _options;
 	            },
 	            set _options(value) {
-	                _options = Object.assign(Object.assign({}, _options), value);
+	                _options = {
+	                    ..._options,
+	                    ...value,
+	                };
 	            },
 	        },
 	        trigger,
@@ -11519,9 +21714,39 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        unregister,
 	        setError,
 	        setFocus,
+	        getFieldState,
 	    };
 	}
 
+	/**
+	 * Custom hook to mange the entire form.
+	 *
+	 * @remarks
+	 * [API](https://react-hook-form.com/api/useform) • [Demo](https://codesandbox.io/s/react-hook-form-get-started-ts-5ksmm) • [Video](https://www.youtube.com/watch?v=RkXv4AXXC_4)
+	 *
+	 * @param props - form configuration and validation parameters.
+	 *
+	 * @returns methods - individual functions to manage the form state. {@link UseFormReturn}
+	 *
+	 * @example
+	 * ```tsx
+	 * function App() {
+	 *   const { register, handleSubmit, watch, formState: { errors } } = useForm();
+	 *   const onSubmit = data => console.log(data);
+	 *
+	 *   console.log(watch("example"));
+	 *
+	 *   return (
+	 *     <form onSubmit={handleSubmit(onSubmit)}>
+	 *       <input defaultValue="test" {...register("example")} />
+	 *       <input {...register("exampleRequired", { required: true })} />
+	 *       {errors.exampleRequired && <span>This field is required</span>}
+	 *       <input type="submit" />
+	 *     </form>
+	 *   );
+	 * }
+	 * ```
+	 */
 	function useForm(props = {}) {
 	    const _formControl = React__default["default"].useRef();
 	    const [formState, updateFormState] = React__default["default"].useState({
@@ -11540,17 +21765,24 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	        _formControl.current.control._options = props;
 	    }
 	    else {
-	        _formControl.current = Object.assign(Object.assign({}, createFormControl(props)), { formState });
+	        _formControl.current = {
+	            ...createFormControl(props),
+	            formState,
+	        };
 	    }
 	    const control = _formControl.current.control;
+	    const callback = React__default["default"].useCallback((value) => {
+	        if (shouldRenderFormState(value, control._proxyFormState, true)) {
+	            control._formState = {
+	                ...control._formState,
+	                ...value,
+	            };
+	            updateFormState({ ...control._formState });
+	        }
+	    }, [control]);
 	    useSubscribe({
 	        subject: control._subjects.state,
-	        callback: (value) => {
-	            if (shouldRenderFormState(value, control._proxyFormState, true)) {
-	                control._formState = Object.assign(Object.assign({}, control._formState), value);
-	                updateFormState(Object.assign({}, control._formState));
-	            }
-	        },
+	        callback,
 	    });
 	    React__default["default"].useEffect(() => {
 	        if (!control._stateFlags.mount) {
@@ -11573,1048 +21805,1048 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 
 	(function (module, exports) {
 
-	/**
-	 * Copyright (c) 2015-present, Facebook, Inc.
-	 *
-	 * This source code is licensed under the MIT license found in the
-	 * LICENSE file in the root directory of this source tree.
-	 */
+		/**
+		 * Copyright (c) 2015-present, Facebook, Inc.
+		 *
+		 * This source code is licensed under the MIT license found in the
+		 * LICENSE file in the root directory of this source tree.
+		 */
 
-	(function(f) {
-	  {
-	    module.exports = f(React__default["default"]);
-	    /* global define */
-	  }
-	})(function(React) {
-	  /**
-	   * Create a factory that creates HTML tag elements.
-	   */
-	  function createDOMFactory(type) {
-	    var factory = React.createElement.bind(null, type);
-	    // Expose the type on the factory and the prototype so that it can be
-	    // easily accessed on elements. E.g. `<Foo />.type === Foo`.
-	    // This should not be named `constructor` since this may not be the function
-	    // that created the element, and it may not even be a constructor.
-	    factory.type = type;
-	    return factory;
-	  }
-	  /**
-	   * Creates a mapping from supported HTML tags to `ReactDOMComponent` classes.
-	   */
-	  var ReactDOMFactories = {
-	    a: createDOMFactory('a'),
-	    abbr: createDOMFactory('abbr'),
-	    address: createDOMFactory('address'),
-	    area: createDOMFactory('area'),
-	    article: createDOMFactory('article'),
-	    aside: createDOMFactory('aside'),
-	    audio: createDOMFactory('audio'),
-	    b: createDOMFactory('b'),
-	    base: createDOMFactory('base'),
-	    bdi: createDOMFactory('bdi'),
-	    bdo: createDOMFactory('bdo'),
-	    big: createDOMFactory('big'),
-	    blockquote: createDOMFactory('blockquote'),
-	    body: createDOMFactory('body'),
-	    br: createDOMFactory('br'),
-	    button: createDOMFactory('button'),
-	    canvas: createDOMFactory('canvas'),
-	    caption: createDOMFactory('caption'),
-	    cite: createDOMFactory('cite'),
-	    code: createDOMFactory('code'),
-	    col: createDOMFactory('col'),
-	    colgroup: createDOMFactory('colgroup'),
-	    data: createDOMFactory('data'),
-	    datalist: createDOMFactory('datalist'),
-	    dd: createDOMFactory('dd'),
-	    del: createDOMFactory('del'),
-	    details: createDOMFactory('details'),
-	    dfn: createDOMFactory('dfn'),
-	    dialog: createDOMFactory('dialog'),
-	    div: createDOMFactory('div'),
-	    dl: createDOMFactory('dl'),
-	    dt: createDOMFactory('dt'),
-	    em: createDOMFactory('em'),
-	    embed: createDOMFactory('embed'),
-	    fieldset: createDOMFactory('fieldset'),
-	    figcaption: createDOMFactory('figcaption'),
-	    figure: createDOMFactory('figure'),
-	    footer: createDOMFactory('footer'),
-	    form: createDOMFactory('form'),
-	    h1: createDOMFactory('h1'),
-	    h2: createDOMFactory('h2'),
-	    h3: createDOMFactory('h3'),
-	    h4: createDOMFactory('h4'),
-	    h5: createDOMFactory('h5'),
-	    h6: createDOMFactory('h6'),
-	    head: createDOMFactory('head'),
-	    header: createDOMFactory('header'),
-	    hgroup: createDOMFactory('hgroup'),
-	    hr: createDOMFactory('hr'),
-	    html: createDOMFactory('html'),
-	    i: createDOMFactory('i'),
-	    iframe: createDOMFactory('iframe'),
-	    img: createDOMFactory('img'),
-	    input: createDOMFactory('input'),
-	    ins: createDOMFactory('ins'),
-	    kbd: createDOMFactory('kbd'),
-	    keygen: createDOMFactory('keygen'),
-	    label: createDOMFactory('label'),
-	    legend: createDOMFactory('legend'),
-	    li: createDOMFactory('li'),
-	    link: createDOMFactory('link'),
-	    main: createDOMFactory('main'),
-	    map: createDOMFactory('map'),
-	    mark: createDOMFactory('mark'),
-	    menu: createDOMFactory('menu'),
-	    menuitem: createDOMFactory('menuitem'),
-	    meta: createDOMFactory('meta'),
-	    meter: createDOMFactory('meter'),
-	    nav: createDOMFactory('nav'),
-	    noscript: createDOMFactory('noscript'),
-	    object: createDOMFactory('object'),
-	    ol: createDOMFactory('ol'),
-	    optgroup: createDOMFactory('optgroup'),
-	    option: createDOMFactory('option'),
-	    output: createDOMFactory('output'),
-	    p: createDOMFactory('p'),
-	    param: createDOMFactory('param'),
-	    picture: createDOMFactory('picture'),
-	    pre: createDOMFactory('pre'),
-	    progress: createDOMFactory('progress'),
-	    q: createDOMFactory('q'),
-	    rp: createDOMFactory('rp'),
-	    rt: createDOMFactory('rt'),
-	    ruby: createDOMFactory('ruby'),
-	    s: createDOMFactory('s'),
-	    samp: createDOMFactory('samp'),
-	    script: createDOMFactory('script'),
-	    section: createDOMFactory('section'),
-	    select: createDOMFactory('select'),
-	    small: createDOMFactory('small'),
-	    source: createDOMFactory('source'),
-	    span: createDOMFactory('span'),
-	    strong: createDOMFactory('strong'),
-	    style: createDOMFactory('style'),
-	    sub: createDOMFactory('sub'),
-	    summary: createDOMFactory('summary'),
-	    sup: createDOMFactory('sup'),
-	    table: createDOMFactory('table'),
-	    tbody: createDOMFactory('tbody'),
-	    td: createDOMFactory('td'),
-	    textarea: createDOMFactory('textarea'),
-	    tfoot: createDOMFactory('tfoot'),
-	    th: createDOMFactory('th'),
-	    thead: createDOMFactory('thead'),
-	    time: createDOMFactory('time'),
-	    title: createDOMFactory('title'),
-	    tr: createDOMFactory('tr'),
-	    track: createDOMFactory('track'),
-	    u: createDOMFactory('u'),
-	    ul: createDOMFactory('ul'),
-	    var: createDOMFactory('var'),
-	    video: createDOMFactory('video'),
-	    wbr: createDOMFactory('wbr'),
+		(function(f) {
+		  {
+		    module.exports = f(React__default["default"]);
+		    /* global define */
+		  }
+		})(function(React) {
+		  /**
+		   * Create a factory that creates HTML tag elements.
+		   */
+		  function createDOMFactory(type) {
+		    var factory = React.createElement.bind(null, type);
+		    // Expose the type on the factory and the prototype so that it can be
+		    // easily accessed on elements. E.g. `<Foo />.type === Foo`.
+		    // This should not be named `constructor` since this may not be the function
+		    // that created the element, and it may not even be a constructor.
+		    factory.type = type;
+		    return factory;
+		  }
+		  /**
+		   * Creates a mapping from supported HTML tags to `ReactDOMComponent` classes.
+		   */
+		  var ReactDOMFactories = {
+		    a: createDOMFactory('a'),
+		    abbr: createDOMFactory('abbr'),
+		    address: createDOMFactory('address'),
+		    area: createDOMFactory('area'),
+		    article: createDOMFactory('article'),
+		    aside: createDOMFactory('aside'),
+		    audio: createDOMFactory('audio'),
+		    b: createDOMFactory('b'),
+		    base: createDOMFactory('base'),
+		    bdi: createDOMFactory('bdi'),
+		    bdo: createDOMFactory('bdo'),
+		    big: createDOMFactory('big'),
+		    blockquote: createDOMFactory('blockquote'),
+		    body: createDOMFactory('body'),
+		    br: createDOMFactory('br'),
+		    button: createDOMFactory('button'),
+		    canvas: createDOMFactory('canvas'),
+		    caption: createDOMFactory('caption'),
+		    cite: createDOMFactory('cite'),
+		    code: createDOMFactory('code'),
+		    col: createDOMFactory('col'),
+		    colgroup: createDOMFactory('colgroup'),
+		    data: createDOMFactory('data'),
+		    datalist: createDOMFactory('datalist'),
+		    dd: createDOMFactory('dd'),
+		    del: createDOMFactory('del'),
+		    details: createDOMFactory('details'),
+		    dfn: createDOMFactory('dfn'),
+		    dialog: createDOMFactory('dialog'),
+		    div: createDOMFactory('div'),
+		    dl: createDOMFactory('dl'),
+		    dt: createDOMFactory('dt'),
+		    em: createDOMFactory('em'),
+		    embed: createDOMFactory('embed'),
+		    fieldset: createDOMFactory('fieldset'),
+		    figcaption: createDOMFactory('figcaption'),
+		    figure: createDOMFactory('figure'),
+		    footer: createDOMFactory('footer'),
+		    form: createDOMFactory('form'),
+		    h1: createDOMFactory('h1'),
+		    h2: createDOMFactory('h2'),
+		    h3: createDOMFactory('h3'),
+		    h4: createDOMFactory('h4'),
+		    h5: createDOMFactory('h5'),
+		    h6: createDOMFactory('h6'),
+		    head: createDOMFactory('head'),
+		    header: createDOMFactory('header'),
+		    hgroup: createDOMFactory('hgroup'),
+		    hr: createDOMFactory('hr'),
+		    html: createDOMFactory('html'),
+		    i: createDOMFactory('i'),
+		    iframe: createDOMFactory('iframe'),
+		    img: createDOMFactory('img'),
+		    input: createDOMFactory('input'),
+		    ins: createDOMFactory('ins'),
+		    kbd: createDOMFactory('kbd'),
+		    keygen: createDOMFactory('keygen'),
+		    label: createDOMFactory('label'),
+		    legend: createDOMFactory('legend'),
+		    li: createDOMFactory('li'),
+		    link: createDOMFactory('link'),
+		    main: createDOMFactory('main'),
+		    map: createDOMFactory('map'),
+		    mark: createDOMFactory('mark'),
+		    menu: createDOMFactory('menu'),
+		    menuitem: createDOMFactory('menuitem'),
+		    meta: createDOMFactory('meta'),
+		    meter: createDOMFactory('meter'),
+		    nav: createDOMFactory('nav'),
+		    noscript: createDOMFactory('noscript'),
+		    object: createDOMFactory('object'),
+		    ol: createDOMFactory('ol'),
+		    optgroup: createDOMFactory('optgroup'),
+		    option: createDOMFactory('option'),
+		    output: createDOMFactory('output'),
+		    p: createDOMFactory('p'),
+		    param: createDOMFactory('param'),
+		    picture: createDOMFactory('picture'),
+		    pre: createDOMFactory('pre'),
+		    progress: createDOMFactory('progress'),
+		    q: createDOMFactory('q'),
+		    rp: createDOMFactory('rp'),
+		    rt: createDOMFactory('rt'),
+		    ruby: createDOMFactory('ruby'),
+		    s: createDOMFactory('s'),
+		    samp: createDOMFactory('samp'),
+		    script: createDOMFactory('script'),
+		    section: createDOMFactory('section'),
+		    select: createDOMFactory('select'),
+		    small: createDOMFactory('small'),
+		    source: createDOMFactory('source'),
+		    span: createDOMFactory('span'),
+		    strong: createDOMFactory('strong'),
+		    style: createDOMFactory('style'),
+		    sub: createDOMFactory('sub'),
+		    summary: createDOMFactory('summary'),
+		    sup: createDOMFactory('sup'),
+		    table: createDOMFactory('table'),
+		    tbody: createDOMFactory('tbody'),
+		    td: createDOMFactory('td'),
+		    textarea: createDOMFactory('textarea'),
+		    tfoot: createDOMFactory('tfoot'),
+		    th: createDOMFactory('th'),
+		    thead: createDOMFactory('thead'),
+		    time: createDOMFactory('time'),
+		    title: createDOMFactory('title'),
+		    tr: createDOMFactory('tr'),
+		    track: createDOMFactory('track'),
+		    u: createDOMFactory('u'),
+		    ul: createDOMFactory('ul'),
+		    var: createDOMFactory('var'),
+		    video: createDOMFactory('video'),
+		    wbr: createDOMFactory('wbr'),
 
-	    // SVG
-	    circle: createDOMFactory('circle'),
-	    clipPath: createDOMFactory('clipPath'),
-	    defs: createDOMFactory('defs'),
-	    ellipse: createDOMFactory('ellipse'),
-	    g: createDOMFactory('g'),
-	    image: createDOMFactory('image'),
-	    line: createDOMFactory('line'),
-	    linearGradient: createDOMFactory('linearGradient'),
-	    mask: createDOMFactory('mask'),
-	    path: createDOMFactory('path'),
-	    pattern: createDOMFactory('pattern'),
-	    polygon: createDOMFactory('polygon'),
-	    polyline: createDOMFactory('polyline'),
-	    radialGradient: createDOMFactory('radialGradient'),
-	    rect: createDOMFactory('rect'),
-	    stop: createDOMFactory('stop'),
-	    svg: createDOMFactory('svg'),
-	    text: createDOMFactory('text'),
-	    tspan: createDOMFactory('tspan'),
-	  };
+		    // SVG
+		    circle: createDOMFactory('circle'),
+		    clipPath: createDOMFactory('clipPath'),
+		    defs: createDOMFactory('defs'),
+		    ellipse: createDOMFactory('ellipse'),
+		    g: createDOMFactory('g'),
+		    image: createDOMFactory('image'),
+		    line: createDOMFactory('line'),
+		    linearGradient: createDOMFactory('linearGradient'),
+		    mask: createDOMFactory('mask'),
+		    path: createDOMFactory('path'),
+		    pattern: createDOMFactory('pattern'),
+		    polygon: createDOMFactory('polygon'),
+		    polyline: createDOMFactory('polyline'),
+		    radialGradient: createDOMFactory('radialGradient'),
+		    rect: createDOMFactory('rect'),
+		    stop: createDOMFactory('stop'),
+		    svg: createDOMFactory('svg'),
+		    text: createDOMFactory('text'),
+		    tspan: createDOMFactory('tspan'),
+		  };
 
-	  // due to wrapper and conditionals at the top, this will either become
-	  // `module.exports ReactDOMFactories` if that is available,
-	  // otherwise it will be defined via `define(['react'], ReactDOMFactories)`
-	  // if that is available,
-	  // otherwise it will be defined as global variable.
-	  return ReactDOMFactories;
-	});
-	}(reactDomFactories));
+		  // due to wrapper and conditionals at the top, this will either become
+		  // `module.exports ReactDOMFactories` if that is available,
+		  // otherwise it will be defined via `define(['react'], ReactDOMFactories)`
+		  // if that is available,
+		  // otherwise it will be defined as global variable.
+		  return ReactDOMFactories;
+		});
+	} (reactDomFactories));
 
 	var ReactDOMElements = reactDomFactories.exports;
 
 	var uaParser = {exports: {}};
 
 	(function (module, exports) {
-	/////////////////////////////////////////////////////////////////////////////////
-	/* UAParser.js v1.0.2
-	   Copyright © 2012-2021 Faisal Salman <f@faisalman.com>
-	   MIT License *//*
-	   Detect Browser, Engine, OS, CPU, and Device type/model from User-Agent data.
-	   Supports browser & node.js environment. 
-	   Demo   : https://faisalman.github.io/ua-parser-js
-	   Source : https://github.com/faisalman/ua-parser-js */
-	/////////////////////////////////////////////////////////////////////////////////
-
-	(function (window, undefined$1) {
-
-	    //////////////
-	    // Constants
-	    /////////////
-
-
-	    var LIBVERSION  = '1.0.2',
-	        EMPTY       = '',
-	        UNKNOWN     = '?',
-	        FUNC_TYPE   = 'function',
-	        UNDEF_TYPE  = 'undefined',
-	        OBJ_TYPE    = 'object',
-	        STR_TYPE    = 'string',
-	        MAJOR       = 'major',
-	        MODEL       = 'model',
-	        NAME        = 'name',
-	        TYPE        = 'type',
-	        VENDOR      = 'vendor',
-	        VERSION     = 'version',
-	        ARCHITECTURE= 'architecture',
-	        CONSOLE     = 'console',
-	        MOBILE      = 'mobile',
-	        TABLET      = 'tablet',
-	        SMARTTV     = 'smarttv',
-	        WEARABLE    = 'wearable',
-	        EMBEDDED    = 'embedded',
-	        UA_MAX_LENGTH = 255;
-
-	    var AMAZON  = 'Amazon',
-	        APPLE   = 'Apple',
-	        ASUS    = 'ASUS',
-	        BLACKBERRY = 'BlackBerry',
-	        BROWSER = 'Browser',
-	        CHROME  = 'Chrome',
-	        EDGE    = 'Edge',
-	        FIREFOX = 'Firefox',
-	        GOOGLE  = 'Google',
-	        HUAWEI  = 'Huawei',
-	        LG      = 'LG',
-	        MICROSOFT = 'Microsoft',
-	        MOTOROLA  = 'Motorola',
-	        OPERA   = 'Opera',
-	        SAMSUNG = 'Samsung',
-	        SONY    = 'Sony',
-	        XIAOMI  = 'Xiaomi',
-	        ZEBRA   = 'Zebra',
-	        FACEBOOK   = 'Facebook';
-
-	    ///////////
-	    // Helper
-	    //////////
-
-	    var extend = function (regexes, extensions) {
-	            var mergedRegexes = {};
-	            for (var i in regexes) {
-	                if (extensions[i] && extensions[i].length % 2 === 0) {
-	                    mergedRegexes[i] = extensions[i].concat(regexes[i]);
-	                } else {
-	                    mergedRegexes[i] = regexes[i];
-	                }
-	            }
-	            return mergedRegexes;
-	        },
-	        enumerize = function (arr) {
-	            var enums = {};
-	            for (var i=0; i<arr.length; i++) {
-	                enums[arr[i].toUpperCase()] = arr[i];
-	            }
-	            return enums;
-	        },
-	        has = function (str1, str2) {
-	            return typeof str1 === STR_TYPE ? lowerize(str2).indexOf(lowerize(str1)) !== -1 : false;
-	        },
-	        lowerize = function (str) {
-	            return str.toLowerCase();
-	        },
-	        majorize = function (version) {
-	            return typeof(version) === STR_TYPE ? version.replace(/[^\d\.]/g, EMPTY).split('.')[0] : undefined$1;
-	        },
-	        trim = function (str, len) {
-	            if (typeof(str) === STR_TYPE) {
-	                str = str.replace(/^\s\s*/, EMPTY).replace(/\s\s*$/, EMPTY);
-	                return typeof(len) === UNDEF_TYPE ? str : str.substring(0, UA_MAX_LENGTH);
-	            }
-	    };
-
-	    ///////////////
-	    // Map helper
-	    //////////////
-
-	    var rgxMapper = function (ua, arrays) {
-
-	            var i = 0, j, k, p, q, matches, match;
-
-	            // loop through all regexes maps
-	            while (i < arrays.length && !matches) {
-
-	                var regex = arrays[i],       // even sequence (0,2,4,..)
-	                    props = arrays[i + 1];   // odd sequence (1,3,5,..)
-	                j = k = 0;
-
-	                // try matching uastring with regexes
-	                while (j < regex.length && !matches) {
-
-	                    matches = regex[j++].exec(ua);
-
-	                    if (!!matches) {
-	                        for (p = 0; p < props.length; p++) {
-	                            match = matches[++k];
-	                            q = props[p];
-	                            // check if given property is actually array
-	                            if (typeof q === OBJ_TYPE && q.length > 0) {
-	                                if (q.length === 2) {
-	                                    if (typeof q[1] == FUNC_TYPE) {
-	                                        // assign modified match
-	                                        this[q[0]] = q[1].call(this, match);
-	                                    } else {
-	                                        // assign given value, ignore regex match
-	                                        this[q[0]] = q[1];
-	                                    }
-	                                } else if (q.length === 3) {
-	                                    // check whether function or regex
-	                                    if (typeof q[1] === FUNC_TYPE && !(q[1].exec && q[1].test)) {
-	                                        // call function (usually string mapper)
-	                                        this[q[0]] = match ? q[1].call(this, match, q[2]) : undefined$1;
-	                                    } else {
-	                                        // sanitize match using given regex
-	                                        this[q[0]] = match ? match.replace(q[1], q[2]) : undefined$1;
-	                                    }
-	                                } else if (q.length === 4) {
-	                                        this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined$1;
-	                                }
-	                            } else {
-	                                this[q] = match ? match : undefined$1;
-	                            }
-	                        }
-	                    }
-	                }
-	                i += 2;
-	            }
-	        },
-
-	        strMapper = function (str, map) {
-
-	            for (var i in map) {
-	                // check if current value is array
-	                if (typeof map[i] === OBJ_TYPE && map[i].length > 0) {
-	                    for (var j = 0; j < map[i].length; j++) {
-	                        if (has(map[i][j], str)) {
-	                            return (i === UNKNOWN) ? undefined$1 : i;
-	                        }
-	                    }
-	                } else if (has(map[i], str)) {
-	                    return (i === UNKNOWN) ? undefined$1 : i;
-	                }
-	            }
-	            return str;
-	    };
-
-	    ///////////////
-	    // String map
-	    //////////////
-
-	    // Safari < 3.0
-	    var oldSafariMap = {
-	            '1.0'   : '/8',
-	            '1.2'   : '/1',
-	            '1.3'   : '/3',
-	            '2.0'   : '/412',
-	            '2.0.2' : '/416',
-	            '2.0.3' : '/417',
-	            '2.0.4' : '/419',
-	            '?'     : '/'
-	        },
-	        windowsVersionMap = {
-	            'ME'        : '4.90',
-	            'NT 3.11'   : 'NT3.51',
-	            'NT 4.0'    : 'NT4.0',
-	            '2000'      : 'NT 5.0',
-	            'XP'        : ['NT 5.1', 'NT 5.2'],
-	            'Vista'     : 'NT 6.0',
-	            '7'         : 'NT 6.1',
-	            '8'         : 'NT 6.2',
-	            '8.1'       : 'NT 6.3',
-	            '10'        : ['NT 6.4', 'NT 10.0'],
-	            'RT'        : 'ARM'
-	    };
-
-	    //////////////
-	    // Regex map
-	    /////////////
-
-	    var regexes = {
-
-	        browser : [[
-
-	            /\b(?:crmo|crios)\/([\w\.]+)/i                                      // Chrome for Android/iOS
-	            ], [VERSION, [NAME, 'Chrome']], [
-	            /edg(?:e|ios|a)?\/([\w\.]+)/i                                       // Microsoft Edge
-	            ], [VERSION, [NAME, 'Edge']], [
-
-	            // Presto based
-	            /(opera mini)\/([-\w\.]+)/i,                                        // Opera Mini
-	            /(opera [mobiletab]{3,6})\b.+version\/([-\w\.]+)/i,                 // Opera Mobi/Tablet
-	            /(opera)(?:.+version\/|[\/ ]+)([\w\.]+)/i                           // Opera
-	            ], [NAME, VERSION], [
-	            /opios[\/ ]+([\w\.]+)/i                                             // Opera mini on iphone >= 8.0
-	            ], [VERSION, [NAME, OPERA+' Mini']], [
-	            /\bopr\/([\w\.]+)/i                                                 // Opera Webkit
-	            ], [VERSION, [NAME, OPERA]], [
-
-	            // Mixed
-	            /(kindle)\/([\w\.]+)/i,                                             // Kindle
-	            /(lunascape|maxthon|netfront|jasmine|blazer)[\/ ]?([\w\.]*)/i,      // Lunascape/Maxthon/Netfront/Jasmine/Blazer
-	            // Trident based
-	            /(avant |iemobile|slim)(?:browser)?[\/ ]?([\w\.]*)/i,               // Avant/IEMobile/SlimBrowser
-	            /(ba?idubrowser)[\/ ]?([\w\.]+)/i,                                  // Baidu Browser
-	            /(?:ms|\()(ie) ([\w\.]+)/i,                                         // Internet Explorer
-
-	            // Webkit/KHTML based                                               // Flock/RockMelt/Midori/Epiphany/Silk/Skyfire/Bolt/Iron/Iridium/PhantomJS/Bowser/QupZilla/Falkon
-	            /(flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon|rekonq|puffin|brave|whale|qqbrowserlite|qq)\/([-\w\.]+)/i,
-	                                                                                // Rekonq/Puffin/Brave/Whale/QQBrowserLite/QQ, aka ShouQ
-	            /(weibo)__([\d\.]+)/i                                               // Weibo
-	            ], [NAME, VERSION], [
-	            /(?:\buc? ?browser|(?:juc.+)ucweb)[\/ ]?([\w\.]+)/i                 // UCBrowser
-	            ], [VERSION, [NAME, 'UC'+BROWSER]], [
-	            /\bqbcore\/([\w\.]+)/i                                              // WeChat Desktop for Windows Built-in Browser
-	            ], [VERSION, [NAME, 'WeChat(Win) Desktop']], [
-	            /micromessenger\/([\w\.]+)/i                                        // WeChat
-	            ], [VERSION, [NAME, 'WeChat']], [
-	            /konqueror\/([\w\.]+)/i                                             // Konqueror
-	            ], [VERSION, [NAME, 'Konqueror']], [
-	            /trident.+rv[: ]([\w\.]{1,9})\b.+like gecko/i                       // IE11
-	            ], [VERSION, [NAME, 'IE']], [
-	            /yabrowser\/([\w\.]+)/i                                             // Yandex
-	            ], [VERSION, [NAME, 'Yandex']], [
-	            /(avast|avg)\/([\w\.]+)/i                                           // Avast/AVG Secure Browser
-	            ], [[NAME, /(.+)/, '$1 Secure '+BROWSER], VERSION], [
-	            /\bfocus\/([\w\.]+)/i                                               // Firefox Focus
-	            ], [VERSION, [NAME, FIREFOX+' Focus']], [
-	            /\bopt\/([\w\.]+)/i                                                 // Opera Touch
-	            ], [VERSION, [NAME, OPERA+' Touch']], [
-	            /coc_coc\w+\/([\w\.]+)/i                                            // Coc Coc Browser
-	            ], [VERSION, [NAME, 'Coc Coc']], [
-	            /dolfin\/([\w\.]+)/i                                                // Dolphin
-	            ], [VERSION, [NAME, 'Dolphin']], [
-	            /coast\/([\w\.]+)/i                                                 // Opera Coast
-	            ], [VERSION, [NAME, OPERA+' Coast']], [
-	            /miuibrowser\/([\w\.]+)/i                                           // MIUI Browser
-	            ], [VERSION, [NAME, 'MIUI '+BROWSER]], [
-	            /fxios\/([-\w\.]+)/i                                                // Firefox for iOS
-	            ], [VERSION, [NAME, FIREFOX]], [
-	            /\bqihu|(qi?ho?o?|360)browser/i                                     // 360
-	            ], [[NAME, '360 '+BROWSER]], [
-	            /(oculus|samsung|sailfish)browser\/([\w\.]+)/i
-	            ], [[NAME, /(.+)/, '$1 '+BROWSER], VERSION], [                      // Oculus/Samsung/Sailfish Browser
-	            /(comodo_dragon)\/([\w\.]+)/i                                       // Comodo Dragon
-	            ], [[NAME, /_/g, ' '], VERSION], [
-	            /(electron)\/([\w\.]+) safari/i,                                    // Electron-based App
-	            /(tesla)(?: qtcarbrowser|\/(20\d\d\.[-\w\.]+))/i,                   // Tesla
-	            /m?(qqbrowser|baiduboxapp|2345Explorer)[\/ ]?([\w\.]+)/i            // QQBrowser/Baidu App/2345 Browser
-	            ], [NAME, VERSION], [
-	            /(metasr)[\/ ]?([\w\.]+)/i,                                         // SouGouBrowser
-	            /(lbbrowser)/i                                                      // LieBao Browser
-	            ], [NAME], [
-
-	            // WebView
-	            /((?:fban\/fbios|fb_iab\/fb4a)(?!.+fbav)|;fbav\/([\w\.]+);)/i       // Facebook App for iOS & Android
-	            ], [[NAME, FACEBOOK], VERSION], [
-	            /safari (line)\/([\w\.]+)/i,                                        // Line App for iOS
-	            /\b(line)\/([\w\.]+)\/iab/i,                                        // Line App for Android
-	            /(chromium|instagram)[\/ ]([-\w\.]+)/i                              // Chromium/Instagram
-	            ], [NAME, VERSION], [
-	            /\bgsa\/([\w\.]+) .*safari\//i                                      // Google Search Appliance on iOS
-	            ], [VERSION, [NAME, 'GSA']], [
-
-	            /headlesschrome(?:\/([\w\.]+)| )/i                                  // Chrome Headless
-	            ], [VERSION, [NAME, CHROME+' Headless']], [
-
-	            / wv\).+(chrome)\/([\w\.]+)/i                                       // Chrome WebView
-	            ], [[NAME, CHROME+' WebView'], VERSION], [
-
-	            /droid.+ version\/([\w\.]+)\b.+(?:mobile safari|safari)/i           // Android Browser
-	            ], [VERSION, [NAME, 'Android '+BROWSER]], [
-
-	            /(chrome|omniweb|arora|[tizenoka]{5} ?browser)\/v?([\w\.]+)/i       // Chrome/OmniWeb/Arora/Tizen/Nokia
-	            ], [NAME, VERSION], [
-
-	            /version\/([\w\.]+) .*mobile\/\w+ (safari)/i                        // Mobile Safari
-	            ], [VERSION, [NAME, 'Mobile Safari']], [
-	            /version\/([\w\.]+) .*(mobile ?safari|safari)/i                     // Safari & Safari Mobile
-	            ], [VERSION, NAME], [
-	            /webkit.+?(mobile ?safari|safari)(\/[\w\.]+)/i                      // Safari < 3.0
-	            ], [NAME, [VERSION, strMapper, oldSafariMap]], [
-
-	            /(webkit|khtml)\/([\w\.]+)/i
-	            ], [NAME, VERSION], [
-
-	            // Gecko based
-	            /(navigator|netscape\d?)\/([-\w\.]+)/i                              // Netscape
-	            ], [[NAME, 'Netscape'], VERSION], [
-	            /mobile vr; rv:([\w\.]+)\).+firefox/i                               // Firefox Reality
-	            ], [VERSION, [NAME, FIREFOX+' Reality']], [
-	            /ekiohf.+(flow)\/([\w\.]+)/i,                                       // Flow
-	            /(swiftfox)/i,                                                      // Swiftfox
-	            /(icedragon|iceweasel|camino|chimera|fennec|maemo browser|minimo|conkeror|klar)[\/ ]?([\w\.\+]+)/i,
-	                                                                                // IceDragon/Iceweasel/Camino/Chimera/Fennec/Maemo/Minimo/Conkeror/Klar
-	            /(seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([-\w\.]+)$/i,
-	                                                                                // Firefox/SeaMonkey/K-Meleon/IceCat/IceApe/Firebird/Phoenix
-	            /(firefox)\/([\w\.]+)/i,                                            // Other Firefox-based
-	            /(mozilla)\/([\w\.]+) .+rv\:.+gecko\/\d+/i,                         // Mozilla
-
-	            // Other
-	            /(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir|obigo|mosaic|(?:go|ice|up)[\. ]?browser)[-\/ ]?v?([\w\.]+)/i,
-	                                                                                // Polaris/Lynx/Dillo/iCab/Doris/Amaya/w3m/NetSurf/Sleipnir/Obigo/Mosaic/Go/ICE/UP.Browser
-	            /(links) \(([\w\.]+)/i                                              // Links
-	            ], [NAME, VERSION]
-	        ],
-
-	        cpu : [[
-
-	            /(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i                     // AMD64 (x64)
-	            ], [[ARCHITECTURE, 'amd64']], [
-
-	            /(ia32(?=;))/i                                                      // IA32 (quicktime)
-	            ], [[ARCHITECTURE, lowerize]], [
-
-	            /((?:i[346]|x)86)[;\)]/i                                            // IA32 (x86)
-	            ], [[ARCHITECTURE, 'ia32']], [
-
-	            /\b(aarch64|arm(v?8e?l?|_?64))\b/i                                 // ARM64
-	            ], [[ARCHITECTURE, 'arm64']], [
-
-	            /\b(arm(?:v[67])?ht?n?[fl]p?)\b/i                                   // ARMHF
-	            ], [[ARCHITECTURE, 'armhf']], [
-
-	            // PocketPC mistakenly identified as PowerPC
-	            /windows (ce|mobile); ppc;/i
-	            ], [[ARCHITECTURE, 'arm']], [
-
-	            /((?:ppc|powerpc)(?:64)?)(?: mac|;|\))/i                            // PowerPC
-	            ], [[ARCHITECTURE, /ower/, EMPTY, lowerize]], [
-
-	            /(sun4\w)[;\)]/i                                                    // SPARC
-	            ], [[ARCHITECTURE, 'sparc']], [
-
-	            /((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i
-	                                                                                // IA64, 68K, ARM/64, AVR/32, IRIX/64, MIPS/64, SPARC/64, PA-RISC
-	            ], [[ARCHITECTURE, lowerize]]
-	        ],
-
-	        device : [[
-
-	            //////////////////////////
-	            // MOBILES & TABLETS
-	            // Ordered by popularity
-	            /////////////////////////
-
-	            // Samsung
-	            /\b(sch-i[89]0\d|shw-m380s|sm-[pt]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus 10)/i
-	            ], [MODEL, [VENDOR, SAMSUNG], [TYPE, TABLET]], [
-	            /\b((?:s[cgp]h|gt|sm)-\w+|galaxy nexus)/i,
-	            /samsung[- ]([-\w]+)/i,
-	            /sec-(sgh\w+)/i
-	            ], [MODEL, [VENDOR, SAMSUNG], [TYPE, MOBILE]], [
-
-	            // Apple
-	            /\((ip(?:hone|od)[\w ]*);/i                                         // iPod/iPhone
-	            ], [MODEL, [VENDOR, APPLE], [TYPE, MOBILE]], [
-	            /\((ipad);[-\w\),; ]+apple/i,                                       // iPad
-	            /applecoremedia\/[\w\.]+ \((ipad)/i,
-	            /\b(ipad)\d\d?,\d\d?[;\]].+ios/i
-	            ], [MODEL, [VENDOR, APPLE], [TYPE, TABLET]], [
-
-	            // Huawei
-	            /\b((?:ag[rs][23]?|bah2?|sht?|btv)-a?[lw]\d{2})\b(?!.+d\/s)/i
-	            ], [MODEL, [VENDOR, HUAWEI], [TYPE, TABLET]], [
-	            /(?:huawei|honor)([-\w ]+)[;\)]/i,
-	            /\b(nexus 6p|\w{2,4}-[atu]?[ln][01259x][012359][an]?)\b(?!.+d\/s)/i
-	            ], [MODEL, [VENDOR, HUAWEI], [TYPE, MOBILE]], [
-
-	            // Xiaomi
-	            /\b(poco[\w ]+)(?: bui|\))/i,                                       // Xiaomi POCO
-	            /\b; (\w+) build\/hm\1/i,                                           // Xiaomi Hongmi 'numeric' models
-	            /\b(hm[-_ ]?note?[_ ]?(?:\d\w)?) bui/i,                             // Xiaomi Hongmi
-	            /\b(redmi[\-_ ]?(?:note|k)?[\w_ ]+)(?: bui|\))/i,                   // Xiaomi Redmi
-	            /\b(mi[-_ ]?(?:a\d|one|one[_ ]plus|note lte|max)?[_ ]?(?:\d?\w?)[_ ]?(?:plus|se|lite)?)(?: bui|\))/i // Xiaomi Mi
-	            ], [[MODEL, /_/g, ' '], [VENDOR, XIAOMI], [TYPE, MOBILE]], [
-	            /\b(mi[-_ ]?(?:pad)(?:[\w_ ]+))(?: bui|\))/i                        // Mi Pad tablets
-	            ],[[MODEL, /_/g, ' '], [VENDOR, XIAOMI], [TYPE, TABLET]], [
-
-	            // OPPO
-	            /; (\w+) bui.+ oppo/i,
-	            /\b(cph[12]\d{3}|p(?:af|c[al]|d\w|e[ar])[mt]\d0|x9007|a101op)\b/i
-	            ], [MODEL, [VENDOR, 'OPPO'], [TYPE, MOBILE]], [
-
-	            // Vivo
-	            /vivo (\w+)(?: bui|\))/i,
-	            /\b(v[12]\d{3}\w?[at])(?: bui|;)/i
-	            ], [MODEL, [VENDOR, 'Vivo'], [TYPE, MOBILE]], [
-
-	            // Realme
-	            /\b(rmx[12]\d{3})(?: bui|;|\))/i
-	            ], [MODEL, [VENDOR, 'Realme'], [TYPE, MOBILE]], [
-
-	            // Motorola
-	            /\b(milestone|droid(?:[2-4x]| (?:bionic|x2|pro|razr))?:?( 4g)?)\b[\w ]+build\//i,
-	            /\bmot(?:orola)?[- ](\w*)/i,
-	            /((?:moto[\w\(\) ]+|xt\d{3,4}|nexus 6)(?= bui|\)))/i
-	            ], [MODEL, [VENDOR, MOTOROLA], [TYPE, MOBILE]], [
-	            /\b(mz60\d|xoom[2 ]{0,2}) build\//i
-	            ], [MODEL, [VENDOR, MOTOROLA], [TYPE, TABLET]], [
-
-	            // LG
-	            /((?=lg)?[vl]k\-?\d{3}) bui| 3\.[-\w; ]{10}lg?-([06cv9]{3,4})/i
-	            ], [MODEL, [VENDOR, LG], [TYPE, TABLET]], [
-	            /(lm(?:-?f100[nv]?|-[\w\.]+)(?= bui|\))|nexus [45])/i,
-	            /\blg[-e;\/ ]+((?!browser|netcast|android tv)\w+)/i,
-	            /\blg-?([\d\w]+) bui/i
-	            ], [MODEL, [VENDOR, LG], [TYPE, MOBILE]], [
-
-	            // Lenovo
-	            /(ideatab[-\w ]+)/i,
-	            /lenovo ?(s[56]000[-\w]+|tab(?:[\w ]+)|yt[-\d\w]{6}|tb[-\d\w]{6})/i
-	            ], [MODEL, [VENDOR, 'Lenovo'], [TYPE, TABLET]], [
-
-	            // Nokia
-	            /(?:maemo|nokia).*(n900|lumia \d+)/i,
-	            /nokia[-_ ]?([-\w\.]*)/i
-	            ], [[MODEL, /_/g, ' '], [VENDOR, 'Nokia'], [TYPE, MOBILE]], [
-
-	            // Google
-	            /(pixel c)\b/i                                                      // Google Pixel C
-	            ], [MODEL, [VENDOR, GOOGLE], [TYPE, TABLET]], [
-	            /droid.+; (pixel[\daxl ]{0,6})(?: bui|\))/i                         // Google Pixel
-	            ], [MODEL, [VENDOR, GOOGLE], [TYPE, MOBILE]], [
-
-	            // Sony
-	            /droid.+ ([c-g]\d{4}|so[-gl]\w+|xq-a\w[4-7][12])(?= bui|\).+chrome\/(?![1-6]{0,1}\d\.))/i
-	            ], [MODEL, [VENDOR, SONY], [TYPE, MOBILE]], [
-	            /sony tablet [ps]/i,
-	            /\b(?:sony)?sgp\w+(?: bui|\))/i
-	            ], [[MODEL, 'Xperia Tablet'], [VENDOR, SONY], [TYPE, TABLET]], [
-
-	            // OnePlus
-	            / (kb2005|in20[12]5|be20[12][59])\b/i,
-	            /(?:one)?(?:plus)? (a\d0\d\d)(?: b|\))/i
-	            ], [MODEL, [VENDOR, 'OnePlus'], [TYPE, MOBILE]], [
-
-	            // Amazon
-	            /(alexa)webm/i,
-	            /(kf[a-z]{2}wi)( bui|\))/i,                                         // Kindle Fire without Silk
-	            /(kf[a-z]+)( bui|\)).+silk\//i                                      // Kindle Fire HD
-	            ], [MODEL, [VENDOR, AMAZON], [TYPE, TABLET]], [
-	            /((?:sd|kf)[0349hijorstuw]+)( bui|\)).+silk\//i                     // Fire Phone
-	            ], [[MODEL, /(.+)/g, 'Fire Phone $1'], [VENDOR, AMAZON], [TYPE, MOBILE]], [
-
-	            // BlackBerry
-	            /(playbook);[-\w\),; ]+(rim)/i                                      // BlackBerry PlayBook
-	            ], [MODEL, VENDOR, [TYPE, TABLET]], [
-	            /\b((?:bb[a-f]|st[hv])100-\d)/i,
-	            /\(bb10; (\w+)/i                                                    // BlackBerry 10
-	            ], [MODEL, [VENDOR, BLACKBERRY], [TYPE, MOBILE]], [
-
-	            // Asus
-	            /(?:\b|asus_)(transfo[prime ]{4,10} \w+|eeepc|slider \w+|nexus 7|padfone|p00[cj])/i
-	            ], [MODEL, [VENDOR, ASUS], [TYPE, TABLET]], [
-	            / (z[bes]6[027][012][km][ls]|zenfone \d\w?)\b/i
-	            ], [MODEL, [VENDOR, ASUS], [TYPE, MOBILE]], [
-
-	            // HTC
-	            /(nexus 9)/i                                                        // HTC Nexus 9
-	            ], [MODEL, [VENDOR, 'HTC'], [TYPE, TABLET]], [
-	            /(htc)[-;_ ]{1,2}([\w ]+(?=\)| bui)|\w+)/i,                         // HTC
-
-	            // ZTE
-	            /(zte)[- ]([\w ]+?)(?: bui|\/|\))/i,
-	            /(alcatel|geeksphone|nexian|panasonic|sony)[-_ ]?([-\w]*)/i         // Alcatel/GeeksPhone/Nexian/Panasonic/Sony
-	            ], [VENDOR, [MODEL, /_/g, ' '], [TYPE, MOBILE]], [
-
-	            // Acer
-	            /droid.+; ([ab][1-7]-?[0178a]\d\d?)/i
-	            ], [MODEL, [VENDOR, 'Acer'], [TYPE, TABLET]], [
-
-	            // Meizu
-	            /droid.+; (m[1-5] note) bui/i,
-	            /\bmz-([-\w]{2,})/i
-	            ], [MODEL, [VENDOR, 'Meizu'], [TYPE, MOBILE]], [
-
-	            // Sharp
-	            /\b(sh-?[altvz]?\d\d[a-ekm]?)/i
-	            ], [MODEL, [VENDOR, 'Sharp'], [TYPE, MOBILE]], [
-
-	            // MIXED
-	            /(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[-_ ]?([-\w]*)/i,
-	                                                                                // BlackBerry/BenQ/Palm/Sony-Ericsson/Acer/Asus/Dell/Meizu/Motorola/Polytron
-	            /(hp) ([\w ]+\w)/i,                                                 // HP iPAQ
-	            /(asus)-?(\w+)/i,                                                   // Asus
-	            /(microsoft); (lumia[\w ]+)/i,                                      // Microsoft Lumia
-	            /(lenovo)[-_ ]?([-\w]+)/i,                                          // Lenovo
-	            /(jolla)/i,                                                         // Jolla
-	            /(oppo) ?([\w ]+) bui/i                                             // OPPO
-	            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
-
-	            /(archos) (gamepad2?)/i,                                            // Archos
-	            /(hp).+(touchpad(?!.+tablet)|tablet)/i,                             // HP TouchPad
-	            /(kindle)\/([\w\.]+)/i,                                             // Kindle
-	            /(nook)[\w ]+build\/(\w+)/i,                                        // Nook
-	            /(dell) (strea[kpr\d ]*[\dko])/i,                                   // Dell Streak
-	            /(le[- ]+pan)[- ]+(\w{1,9}) bui/i,                                  // Le Pan Tablets
-	            /(trinity)[- ]*(t\d{3}) bui/i,                                      // Trinity Tablets
-	            /(gigaset)[- ]+(q\w{1,9}) bui/i,                                    // Gigaset Tablets
-	            /(vodafone) ([\w ]+)(?:\)| bui)/i                                   // Vodafone
-	            ], [VENDOR, MODEL, [TYPE, TABLET]], [
-
-	            /(surface duo)/i                                                    // Surface Duo
-	            ], [MODEL, [VENDOR, MICROSOFT], [TYPE, TABLET]], [
-	            /droid [\d\.]+; (fp\du?)(?: b|\))/i                                 // Fairphone
-	            ], [MODEL, [VENDOR, 'Fairphone'], [TYPE, MOBILE]], [
-	            /(u304aa)/i                                                         // AT&T
-	            ], [MODEL, [VENDOR, 'AT&T'], [TYPE, MOBILE]], [
-	            /\bsie-(\w*)/i                                                      // Siemens
-	            ], [MODEL, [VENDOR, 'Siemens'], [TYPE, MOBILE]], [
-	            /\b(rct\w+) b/i                                                     // RCA Tablets
-	            ], [MODEL, [VENDOR, 'RCA'], [TYPE, TABLET]], [
-	            /\b(venue[\d ]{2,7}) b/i                                            // Dell Venue Tablets
-	            ], [MODEL, [VENDOR, 'Dell'], [TYPE, TABLET]], [
-	            /\b(q(?:mv|ta)\w+) b/i                                              // Verizon Tablet
-	            ], [MODEL, [VENDOR, 'Verizon'], [TYPE, TABLET]], [
-	            /\b(?:barnes[& ]+noble |bn[rt])([\w\+ ]*) b/i                       // Barnes & Noble Tablet
-	            ], [MODEL, [VENDOR, 'Barnes & Noble'], [TYPE, TABLET]], [
-	            /\b(tm\d{3}\w+) b/i
-	            ], [MODEL, [VENDOR, 'NuVision'], [TYPE, TABLET]], [
-	            /\b(k88) b/i                                                        // ZTE K Series Tablet
-	            ], [MODEL, [VENDOR, 'ZTE'], [TYPE, TABLET]], [
-	            /\b(nx\d{3}j) b/i                                                   // ZTE Nubia
-	            ], [MODEL, [VENDOR, 'ZTE'], [TYPE, MOBILE]], [
-	            /\b(gen\d{3}) b.+49h/i                                              // Swiss GEN Mobile
-	            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, MOBILE]], [
-	            /\b(zur\d{3}) b/i                                                   // Swiss ZUR Tablet
-	            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, TABLET]], [
-	            /\b((zeki)?tb.*\b) b/i                                              // Zeki Tablets
-	            ], [MODEL, [VENDOR, 'Zeki'], [TYPE, TABLET]], [
-	            /\b([yr]\d{2}) b/i,
-	            /\b(dragon[- ]+touch |dt)(\w{5}) b/i                                // Dragon Touch Tablet
-	            ], [[VENDOR, 'Dragon Touch'], MODEL, [TYPE, TABLET]], [
-	            /\b(ns-?\w{0,9}) b/i                                                // Insignia Tablets
-	            ], [MODEL, [VENDOR, 'Insignia'], [TYPE, TABLET]], [
-	            /\b((nxa|next)-?\w{0,9}) b/i                                        // NextBook Tablets
-	            ], [MODEL, [VENDOR, 'NextBook'], [TYPE, TABLET]], [
-	            /\b(xtreme\_)?(v(1[045]|2[015]|[3469]0|7[05])) b/i                  // Voice Xtreme Phones
-	            ], [[VENDOR, 'Voice'], MODEL, [TYPE, MOBILE]], [
-	            /\b(lvtel\-)?(v1[12]) b/i                                           // LvTel Phones
-	            ], [[VENDOR, 'LvTel'], MODEL, [TYPE, MOBILE]], [
-	            /\b(ph-1) /i                                                        // Essential PH-1
-	            ], [MODEL, [VENDOR, 'Essential'], [TYPE, MOBILE]], [
-	            /\b(v(100md|700na|7011|917g).*\b) b/i                               // Envizen Tablets
-	            ], [MODEL, [VENDOR, 'Envizen'], [TYPE, TABLET]], [
-	            /\b(trio[-\w\. ]+) b/i                                              // MachSpeed Tablets
-	            ], [MODEL, [VENDOR, 'MachSpeed'], [TYPE, TABLET]], [
-	            /\btu_(1491) b/i                                                    // Rotor Tablets
-	            ], [MODEL, [VENDOR, 'Rotor'], [TYPE, TABLET]], [
-	            /(shield[\w ]+) b/i                                                 // Nvidia Shield Tablets
-	            ], [MODEL, [VENDOR, 'Nvidia'], [TYPE, TABLET]], [
-	            /(sprint) (\w+)/i                                                   // Sprint Phones
-	            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
-	            /(kin\.[onetw]{3})/i                                                // Microsoft Kin
-	            ], [[MODEL, /\./g, ' '], [VENDOR, MICROSOFT], [TYPE, MOBILE]], [
-	            /droid.+; (cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i             // Zebra
-	            ], [MODEL, [VENDOR, ZEBRA], [TYPE, TABLET]], [
-	            /droid.+; (ec30|ps20|tc[2-8]\d[kx])\)/i
-	            ], [MODEL, [VENDOR, ZEBRA], [TYPE, MOBILE]], [
-
-	            ///////////////////
-	            // CONSOLES
-	            ///////////////////
-
-	            /(ouya)/i,                                                          // Ouya
-	            /(nintendo) ([wids3utch]+)/i                                        // Nintendo
-	            ], [VENDOR, MODEL, [TYPE, CONSOLE]], [
-	            /droid.+; (shield) bui/i                                            // Nvidia
-	            ], [MODEL, [VENDOR, 'Nvidia'], [TYPE, CONSOLE]], [
-	            /(playstation [345portablevi]+)/i                                   // Playstation
-	            ], [MODEL, [VENDOR, SONY], [TYPE, CONSOLE]], [
-	            /\b(xbox(?: one)?(?!; xbox))[\); ]/i                                // Microsoft Xbox
-	            ], [MODEL, [VENDOR, MICROSOFT], [TYPE, CONSOLE]], [
-
-	            ///////////////////
-	            // SMARTTVS
-	            ///////////////////
-
-	            /smart-tv.+(samsung)/i                                              // Samsung
-	            ], [VENDOR, [TYPE, SMARTTV]], [
-	            /hbbtv.+maple;(\d+)/i
-	            ], [[MODEL, /^/, 'SmartTV'], [VENDOR, SAMSUNG], [TYPE, SMARTTV]], [
-	            /(nux; netcast.+smarttv|lg (netcast\.tv-201\d|android tv))/i        // LG SmartTV
-	            ], [[VENDOR, LG], [TYPE, SMARTTV]], [
-	            /(apple) ?tv/i                                                      // Apple TV
-	            ], [VENDOR, [MODEL, APPLE+' TV'], [TYPE, SMARTTV]], [
-	            /crkey/i                                                            // Google Chromecast
-	            ], [[MODEL, CHROME+'cast'], [VENDOR, GOOGLE], [TYPE, SMARTTV]], [
-	            /droid.+aft(\w)( bui|\))/i                                          // Fire TV
-	            ], [MODEL, [VENDOR, AMAZON], [TYPE, SMARTTV]], [
-	            /\(dtv[\);].+(aquos)/i                                              // Sharp
-	            ], [MODEL, [VENDOR, 'Sharp'], [TYPE, SMARTTV]], [
-	            /\b(roku)[\dx]*[\)\/]((?:dvp-)?[\d\.]*)/i,                          // Roku
-	            /hbbtv\/\d+\.\d+\.\d+ +\([\w ]*; *(\w[^;]*);([^;]*)/i               // HbbTV devices
-	            ], [[VENDOR, trim], [MODEL, trim], [TYPE, SMARTTV]], [
-	            /\b(android tv|smart[- ]?tv|opera tv|tv; rv:)\b/i                   // SmartTV from Unidentified Vendors
-	            ], [[TYPE, SMARTTV]], [
-
-	            ///////////////////
-	            // WEARABLES
-	            ///////////////////
-
-	            /((pebble))app/i                                                    // Pebble
-	            ], [VENDOR, MODEL, [TYPE, WEARABLE]], [
-	            /droid.+; (glass) \d/i                                              // Google Glass
-	            ], [MODEL, [VENDOR, GOOGLE], [TYPE, WEARABLE]], [
-	            /droid.+; (wt63?0{2,3})\)/i
-	            ], [MODEL, [VENDOR, ZEBRA], [TYPE, WEARABLE]], [
-	            /(quest( 2)?)/i                                                     // Oculus Quest
-	            ], [MODEL, [VENDOR, FACEBOOK], [TYPE, WEARABLE]], [
-
-	            ///////////////////
-	            // EMBEDDED
-	            ///////////////////
-
-	            /(tesla)(?: qtcarbrowser|\/[-\w\.]+)/i                              // Tesla
-	            ], [VENDOR, [TYPE, EMBEDDED]], [
-
-	            ////////////////////
-	            // MIXED (GENERIC)
-	            ///////////////////
-
-	            /droid .+?; ([^;]+?)(?: bui|\) applew).+? mobile safari/i           // Android Phones from Unidentified Vendors
-	            ], [MODEL, [TYPE, MOBILE]], [
-	            /droid .+?; ([^;]+?)(?: bui|\) applew).+?(?! mobile) safari/i       // Android Tablets from Unidentified Vendors
-	            ], [MODEL, [TYPE, TABLET]], [
-	            /\b((tablet|tab)[;\/]|focus\/\d(?!.+mobile))/i                      // Unidentifiable Tablet
-	            ], [[TYPE, TABLET]], [
-	            /(phone|mobile(?:[;\/]| safari)|pda(?=.+windows ce))/i              // Unidentifiable Mobile
-	            ], [[TYPE, MOBILE]], [
-	            /(android[-\w\. ]{0,9});.+buil/i                                    // Generic Android Device
-	            ], [MODEL, [VENDOR, 'Generic']]
-	        ],
-
-	        engine : [[
-
-	            /windows.+ edge\/([\w\.]+)/i                                       // EdgeHTML
-	            ], [VERSION, [NAME, EDGE+'HTML']], [
-
-	            /webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i                         // Blink
-	            ], [VERSION, [NAME, 'Blink']], [
-
-	            /(presto)\/([\w\.]+)/i,                                             // Presto
-	            /(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i, // WebKit/Trident/NetFront/NetSurf/Amaya/Lynx/w3m/Goanna
-	            /ekioh(flow)\/([\w\.]+)/i,                                          // Flow
-	            /(khtml|tasman|links)[\/ ]\(?([\w\.]+)/i,                           // KHTML/Tasman/Links
-	            /(icab)[\/ ]([23]\.[\d\.]+)/i                                       // iCab
-	            ], [NAME, VERSION], [
-
-	            /rv\:([\w\.]{1,9})\b.+(gecko)/i                                     // Gecko
-	            ], [VERSION, NAME]
-	        ],
-
-	        os : [[
-
-	            // Windows
-	            /microsoft (windows) (vista|xp)/i                                   // Windows (iTunes)
-	            ], [NAME, VERSION], [
-	            /(windows) nt 6\.2; (arm)/i,                                        // Windows RT
-	            /(windows (?:phone(?: os)?|mobile))[\/ ]?([\d\.\w ]*)/i,            // Windows Phone
-	            /(windows)[\/ ]?([ntce\d\. ]+\w)(?!.+xbox)/i
-	            ], [NAME, [VERSION, strMapper, windowsVersionMap]], [
-	            /(win(?=3|9|n)|win 9x )([nt\d\.]+)/i
-	            ], [[NAME, 'Windows'], [VERSION, strMapper, windowsVersionMap]], [
-
-	            // iOS/macOS
-	            /ip[honead]{2,4}\b(?:.*os ([\w]+) like mac|; opera)/i,              // iOS
-	            /cfnetwork\/.+darwin/i
-	            ], [[VERSION, /_/g, '.'], [NAME, 'iOS']], [
-	            /(mac os x) ?([\w\. ]*)/i,
-	            /(macintosh|mac_powerpc\b)(?!.+haiku)/i                             // Mac OS
-	            ], [[NAME, 'Mac OS'], [VERSION, /_/g, '.']], [
-
-	            // Mobile OSes
-	            /droid ([\w\.]+)\b.+(android[- ]x86)/i                              // Android-x86
-	            ], [VERSION, NAME], [                                               // Android/WebOS/QNX/Bada/RIM/Maemo/MeeGo/Sailfish OS
-	            /(android|webos|qnx|bada|rim tablet os|maemo|meego|sailfish)[-\/ ]?([\w\.]*)/i,
-	            /(blackberry)\w*\/([\w\.]*)/i,                                      // Blackberry
-	            /(tizen|kaios)[\/ ]([\w\.]+)/i,                                     // Tizen/KaiOS
-	            /\((series40);/i                                                    // Series 40
-	            ], [NAME, VERSION], [
-	            /\(bb(10);/i                                                        // BlackBerry 10
-	            ], [VERSION, [NAME, BLACKBERRY]], [
-	            /(?:symbian ?os|symbos|s60(?=;)|series60)[-\/ ]?([\w\.]*)/i         // Symbian
-	            ], [VERSION, [NAME, 'Symbian']], [
-	            /mozilla\/[\d\.]+ \((?:mobile|tablet|tv|mobile; [\w ]+); rv:.+ gecko\/([\w\.]+)/i // Firefox OS
-	            ], [VERSION, [NAME, FIREFOX+' OS']], [
-	            /web0s;.+rt(tv)/i,
-	            /\b(?:hp)?wos(?:browser)?\/([\w\.]+)/i                              // WebOS
-	            ], [VERSION, [NAME, 'webOS']], [
-
-	            // Google Chromecast
-	            /crkey\/([\d\.]+)/i                                                 // Google Chromecast
-	            ], [VERSION, [NAME, CHROME+'cast']], [
-	            /(cros) [\w]+ ([\w\.]+\w)/i                                         // Chromium OS
-	            ], [[NAME, 'Chromium OS'], VERSION],[
-
-	            // Console
-	            /(nintendo|playstation) ([wids345portablevuch]+)/i,                 // Nintendo/Playstation
-	            /(xbox); +xbox ([^\);]+)/i,                                         // Microsoft Xbox (360, One, X, S, Series X, Series S)
-
-	            // Other
-	            /\b(joli|palm)\b ?(?:os)?\/?([\w\.]*)/i,                            // Joli/Palm
-	            /(mint)[\/\(\) ]?(\w*)/i,                                           // Mint
-	            /(mageia|vectorlinux)[; ]/i,                                        // Mageia/VectorLinux
-	            /([kxln]?ubuntu|debian|suse|opensuse|gentoo|arch(?= linux)|slackware|fedora|mandriva|centos|pclinuxos|red ?hat|zenwalk|linpus|raspbian|plan 9|minix|risc os|contiki|deepin|manjaro|elementary os|sabayon|linspire)(?: gnu\/linux)?(?: enterprise)?(?:[- ]linux)?(?:-gnu)?[-\/ ]?(?!chrom|package)([-\w\.]*)/i,
-	                                                                                // Ubuntu/Debian/SUSE/Gentoo/Arch/Slackware/Fedora/Mandriva/CentOS/PCLinuxOS/RedHat/Zenwalk/Linpus/Raspbian/Plan9/Minix/RISCOS/Contiki/Deepin/Manjaro/elementary/Sabayon/Linspire
-	            /(hurd|linux) ?([\w\.]*)/i,                                         // Hurd/Linux
-	            /(gnu) ?([\w\.]*)/i,                                                // GNU
-	            /\b([-frentopcghs]{0,5}bsd|dragonfly)[\/ ]?(?!amd|[ix346]{1,2}86)([\w\.]*)/i, // FreeBSD/NetBSD/OpenBSD/PC-BSD/GhostBSD/DragonFly
-	            /(haiku) (\w+)/i                                                    // Haiku
-	            ], [NAME, VERSION], [
-	            /(sunos) ?([\w\.\d]*)/i                                             // Solaris
-	            ], [[NAME, 'Solaris'], VERSION], [
-	            /((?:open)?solaris)[-\/ ]?([\w\.]*)/i,                              // Solaris
-	            /(aix) ((\d)(?=\.|\)| )[\w\.])*/i,                                  // AIX
-	            /\b(beos|os\/2|amigaos|morphos|openvms|fuchsia|hp-ux)/i,            // BeOS/OS2/AmigaOS/MorphOS/OpenVMS/Fuchsia/HP-UX
-	            /(unix) ?([\w\.]*)/i                                                // UNIX
-	            ], [NAME, VERSION]
-	        ]
-	    };
-
-	    /////////////////
-	    // Constructor
-	    ////////////////
-
-	    var UAParser = function (ua, extensions) {
-
-	        if (typeof ua === OBJ_TYPE) {
-	            extensions = ua;
-	            ua = undefined$1;
-	        }
-
-	        if (!(this instanceof UAParser)) {
-	            return new UAParser(ua, extensions).getResult();
-	        }
-
-	        var _ua = ua || ((typeof window !== UNDEF_TYPE && window.navigator && window.navigator.userAgent) ? window.navigator.userAgent : EMPTY);
-	        var _rgxmap = extensions ? extend(regexes, extensions) : regexes;
-
-	        this.getBrowser = function () {
-	            var _browser = {};
-	            _browser[NAME] = undefined$1;
-	            _browser[VERSION] = undefined$1;
-	            rgxMapper.call(_browser, _ua, _rgxmap.browser);
-	            _browser.major = majorize(_browser.version);
-	            return _browser;
-	        };
-	        this.getCPU = function () {
-	            var _cpu = {};
-	            _cpu[ARCHITECTURE] = undefined$1;
-	            rgxMapper.call(_cpu, _ua, _rgxmap.cpu);
-	            return _cpu;
-	        };
-	        this.getDevice = function () {
-	            var _device = {};
-	            _device[VENDOR] = undefined$1;
-	            _device[MODEL] = undefined$1;
-	            _device[TYPE] = undefined$1;
-	            rgxMapper.call(_device, _ua, _rgxmap.device);
-	            return _device;
-	        };
-	        this.getEngine = function () {
-	            var _engine = {};
-	            _engine[NAME] = undefined$1;
-	            _engine[VERSION] = undefined$1;
-	            rgxMapper.call(_engine, _ua, _rgxmap.engine);
-	            return _engine;
-	        };
-	        this.getOS = function () {
-	            var _os = {};
-	            _os[NAME] = undefined$1;
-	            _os[VERSION] = undefined$1;
-	            rgxMapper.call(_os, _ua, _rgxmap.os);
-	            return _os;
-	        };
-	        this.getResult = function () {
-	            return {
-	                ua      : this.getUA(),
-	                browser : this.getBrowser(),
-	                engine  : this.getEngine(),
-	                os      : this.getOS(),
-	                device  : this.getDevice(),
-	                cpu     : this.getCPU()
-	            };
-	        };
-	        this.getUA = function () {
-	            return _ua;
-	        };
-	        this.setUA = function (ua) {
-	            _ua = (typeof ua === STR_TYPE && ua.length > UA_MAX_LENGTH) ? trim(ua, UA_MAX_LENGTH) : ua;
-	            return this;
-	        };
-	        this.setUA(_ua);
-	        return this;
-	    };
-
-	    UAParser.VERSION = LIBVERSION;
-	    UAParser.BROWSER =  enumerize([NAME, VERSION, MAJOR]);
-	    UAParser.CPU = enumerize([ARCHITECTURE]);
-	    UAParser.DEVICE = enumerize([MODEL, VENDOR, TYPE, CONSOLE, MOBILE, SMARTTV, TABLET, WEARABLE, EMBEDDED]);
-	    UAParser.ENGINE = UAParser.OS = enumerize([NAME, VERSION]);
-
-	    ///////////
-	    // Export
-	    //////////
-
-	    // check js environment
-	    {
-	        // nodejs env
-	        if (module.exports) {
-	            exports = module.exports = UAParser;
-	        }
-	        exports.UAParser = UAParser;
-	    }
-
-	    // jQuery/Zepto specific (optional)
-	    // Note:
-	    //   In AMD env the global scope should be kept clean, but jQuery is an exception.
-	    //   jQuery always exports to global scope, unless jQuery.noConflict(true) is used,
-	    //   and we should catch that.
-	    var $ = typeof window !== UNDEF_TYPE && (window.jQuery || window.Zepto);
-	    if ($ && !$.ua) {
-	        var parser = new UAParser();
-	        $.ua = parser.getResult();
-	        $.ua.get = function () {
-	            return parser.getUA();
-	        };
-	        $.ua.set = function (ua) {
-	            parser.setUA(ua);
-	            var result = parser.getResult();
-	            for (var prop in result) {
-	                $.ua[prop] = result[prop];
-	            }
-	        };
-	    }
-
-	})(typeof window === 'object' ? window : commonjsGlobal);
-	}(uaParser, uaParser.exports));
+		/////////////////////////////////////////////////////////////////////////////////
+		/* UAParser.js v1.0.2
+		   Copyright © 2012-2021 Faisal Salman <f@faisalman.com>
+		   MIT License *//*
+		   Detect Browser, Engine, OS, CPU, and Device type/model from User-Agent data.
+		   Supports browser & node.js environment. 
+		   Demo   : https://faisalman.github.io/ua-parser-js
+		   Source : https://github.com/faisalman/ua-parser-js */
+		/////////////////////////////////////////////////////////////////////////////////
+
+		(function (window, undefined$1) {
+
+		    //////////////
+		    // Constants
+		    /////////////
+
+
+		    var LIBVERSION  = '1.0.2',
+		        EMPTY       = '',
+		        UNKNOWN     = '?',
+		        FUNC_TYPE   = 'function',
+		        UNDEF_TYPE  = 'undefined',
+		        OBJ_TYPE    = 'object',
+		        STR_TYPE    = 'string',
+		        MAJOR       = 'major',
+		        MODEL       = 'model',
+		        NAME        = 'name',
+		        TYPE        = 'type',
+		        VENDOR      = 'vendor',
+		        VERSION     = 'version',
+		        ARCHITECTURE= 'architecture',
+		        CONSOLE     = 'console',
+		        MOBILE      = 'mobile',
+		        TABLET      = 'tablet',
+		        SMARTTV     = 'smarttv',
+		        WEARABLE    = 'wearable',
+		        EMBEDDED    = 'embedded',
+		        UA_MAX_LENGTH = 255;
+
+		    var AMAZON  = 'Amazon',
+		        APPLE   = 'Apple',
+		        ASUS    = 'ASUS',
+		        BLACKBERRY = 'BlackBerry',
+		        BROWSER = 'Browser',
+		        CHROME  = 'Chrome',
+		        EDGE    = 'Edge',
+		        FIREFOX = 'Firefox',
+		        GOOGLE  = 'Google',
+		        HUAWEI  = 'Huawei',
+		        LG      = 'LG',
+		        MICROSOFT = 'Microsoft',
+		        MOTOROLA  = 'Motorola',
+		        OPERA   = 'Opera',
+		        SAMSUNG = 'Samsung',
+		        SONY    = 'Sony',
+		        XIAOMI  = 'Xiaomi',
+		        ZEBRA   = 'Zebra',
+		        FACEBOOK   = 'Facebook';
+
+		    ///////////
+		    // Helper
+		    //////////
+
+		    var extend = function (regexes, extensions) {
+		            var mergedRegexes = {};
+		            for (var i in regexes) {
+		                if (extensions[i] && extensions[i].length % 2 === 0) {
+		                    mergedRegexes[i] = extensions[i].concat(regexes[i]);
+		                } else {
+		                    mergedRegexes[i] = regexes[i];
+		                }
+		            }
+		            return mergedRegexes;
+		        },
+		        enumerize = function (arr) {
+		            var enums = {};
+		            for (var i=0; i<arr.length; i++) {
+		                enums[arr[i].toUpperCase()] = arr[i];
+		            }
+		            return enums;
+		        },
+		        has = function (str1, str2) {
+		            return typeof str1 === STR_TYPE ? lowerize(str2).indexOf(lowerize(str1)) !== -1 : false;
+		        },
+		        lowerize = function (str) {
+		            return str.toLowerCase();
+		        },
+		        majorize = function (version) {
+		            return typeof(version) === STR_TYPE ? version.replace(/[^\d\.]/g, EMPTY).split('.')[0] : undefined$1;
+		        },
+		        trim = function (str, len) {
+		            if (typeof(str) === STR_TYPE) {
+		                str = str.replace(/^\s\s*/, EMPTY).replace(/\s\s*$/, EMPTY);
+		                return typeof(len) === UNDEF_TYPE ? str : str.substring(0, UA_MAX_LENGTH);
+		            }
+		    };
+
+		    ///////////////
+		    // Map helper
+		    //////////////
+
+		    var rgxMapper = function (ua, arrays) {
+
+		            var i = 0, j, k, p, q, matches, match;
+
+		            // loop through all regexes maps
+		            while (i < arrays.length && !matches) {
+
+		                var regex = arrays[i],       // even sequence (0,2,4,..)
+		                    props = arrays[i + 1];   // odd sequence (1,3,5,..)
+		                j = k = 0;
+
+		                // try matching uastring with regexes
+		                while (j < regex.length && !matches) {
+
+		                    matches = regex[j++].exec(ua);
+
+		                    if (!!matches) {
+		                        for (p = 0; p < props.length; p++) {
+		                            match = matches[++k];
+		                            q = props[p];
+		                            // check if given property is actually array
+		                            if (typeof q === OBJ_TYPE && q.length > 0) {
+		                                if (q.length === 2) {
+		                                    if (typeof q[1] == FUNC_TYPE) {
+		                                        // assign modified match
+		                                        this[q[0]] = q[1].call(this, match);
+		                                    } else {
+		                                        // assign given value, ignore regex match
+		                                        this[q[0]] = q[1];
+		                                    }
+		                                } else if (q.length === 3) {
+		                                    // check whether function or regex
+		                                    if (typeof q[1] === FUNC_TYPE && !(q[1].exec && q[1].test)) {
+		                                        // call function (usually string mapper)
+		                                        this[q[0]] = match ? q[1].call(this, match, q[2]) : undefined$1;
+		                                    } else {
+		                                        // sanitize match using given regex
+		                                        this[q[0]] = match ? match.replace(q[1], q[2]) : undefined$1;
+		                                    }
+		                                } else if (q.length === 4) {
+		                                        this[q[0]] = match ? q[3].call(this, match.replace(q[1], q[2])) : undefined$1;
+		                                }
+		                            } else {
+		                                this[q] = match ? match : undefined$1;
+		                            }
+		                        }
+		                    }
+		                }
+		                i += 2;
+		            }
+		        },
+
+		        strMapper = function (str, map) {
+
+		            for (var i in map) {
+		                // check if current value is array
+		                if (typeof map[i] === OBJ_TYPE && map[i].length > 0) {
+		                    for (var j = 0; j < map[i].length; j++) {
+		                        if (has(map[i][j], str)) {
+		                            return (i === UNKNOWN) ? undefined$1 : i;
+		                        }
+		                    }
+		                } else if (has(map[i], str)) {
+		                    return (i === UNKNOWN) ? undefined$1 : i;
+		                }
+		            }
+		            return str;
+		    };
+
+		    ///////////////
+		    // String map
+		    //////////////
+
+		    // Safari < 3.0
+		    var oldSafariMap = {
+		            '1.0'   : '/8',
+		            '1.2'   : '/1',
+		            '1.3'   : '/3',
+		            '2.0'   : '/412',
+		            '2.0.2' : '/416',
+		            '2.0.3' : '/417',
+		            '2.0.4' : '/419',
+		            '?'     : '/'
+		        },
+		        windowsVersionMap = {
+		            'ME'        : '4.90',
+		            'NT 3.11'   : 'NT3.51',
+		            'NT 4.0'    : 'NT4.0',
+		            '2000'      : 'NT 5.0',
+		            'XP'        : ['NT 5.1', 'NT 5.2'],
+		            'Vista'     : 'NT 6.0',
+		            '7'         : 'NT 6.1',
+		            '8'         : 'NT 6.2',
+		            '8.1'       : 'NT 6.3',
+		            '10'        : ['NT 6.4', 'NT 10.0'],
+		            'RT'        : 'ARM'
+		    };
+
+		    //////////////
+		    // Regex map
+		    /////////////
+
+		    var regexes = {
+
+		        browser : [[
+
+		            /\b(?:crmo|crios)\/([\w\.]+)/i                                      // Chrome for Android/iOS
+		            ], [VERSION, [NAME, 'Chrome']], [
+		            /edg(?:e|ios|a)?\/([\w\.]+)/i                                       // Microsoft Edge
+		            ], [VERSION, [NAME, 'Edge']], [
+
+		            // Presto based
+		            /(opera mini)\/([-\w\.]+)/i,                                        // Opera Mini
+		            /(opera [mobiletab]{3,6})\b.+version\/([-\w\.]+)/i,                 // Opera Mobi/Tablet
+		            /(opera)(?:.+version\/|[\/ ]+)([\w\.]+)/i                           // Opera
+		            ], [NAME, VERSION], [
+		            /opios[\/ ]+([\w\.]+)/i                                             // Opera mini on iphone >= 8.0
+		            ], [VERSION, [NAME, OPERA+' Mini']], [
+		            /\bopr\/([\w\.]+)/i                                                 // Opera Webkit
+		            ], [VERSION, [NAME, OPERA]], [
+
+		            // Mixed
+		            /(kindle)\/([\w\.]+)/i,                                             // Kindle
+		            /(lunascape|maxthon|netfront|jasmine|blazer)[\/ ]?([\w\.]*)/i,      // Lunascape/Maxthon/Netfront/Jasmine/Blazer
+		            // Trident based
+		            /(avant |iemobile|slim)(?:browser)?[\/ ]?([\w\.]*)/i,               // Avant/IEMobile/SlimBrowser
+		            /(ba?idubrowser)[\/ ]?([\w\.]+)/i,                                  // Baidu Browser
+		            /(?:ms|\()(ie) ([\w\.]+)/i,                                         // Internet Explorer
+
+		            // Webkit/KHTML based                                               // Flock/RockMelt/Midori/Epiphany/Silk/Skyfire/Bolt/Iron/Iridium/PhantomJS/Bowser/QupZilla/Falkon
+		            /(flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon|rekonq|puffin|brave|whale|qqbrowserlite|qq)\/([-\w\.]+)/i,
+		                                                                                // Rekonq/Puffin/Brave/Whale/QQBrowserLite/QQ, aka ShouQ
+		            /(weibo)__([\d\.]+)/i                                               // Weibo
+		            ], [NAME, VERSION], [
+		            /(?:\buc? ?browser|(?:juc.+)ucweb)[\/ ]?([\w\.]+)/i                 // UCBrowser
+		            ], [VERSION, [NAME, 'UC'+BROWSER]], [
+		            /\bqbcore\/([\w\.]+)/i                                              // WeChat Desktop for Windows Built-in Browser
+		            ], [VERSION, [NAME, 'WeChat(Win) Desktop']], [
+		            /micromessenger\/([\w\.]+)/i                                        // WeChat
+		            ], [VERSION, [NAME, 'WeChat']], [
+		            /konqueror\/([\w\.]+)/i                                             // Konqueror
+		            ], [VERSION, [NAME, 'Konqueror']], [
+		            /trident.+rv[: ]([\w\.]{1,9})\b.+like gecko/i                       // IE11
+		            ], [VERSION, [NAME, 'IE']], [
+		            /yabrowser\/([\w\.]+)/i                                             // Yandex
+		            ], [VERSION, [NAME, 'Yandex']], [
+		            /(avast|avg)\/([\w\.]+)/i                                           // Avast/AVG Secure Browser
+		            ], [[NAME, /(.+)/, '$1 Secure '+BROWSER], VERSION], [
+		            /\bfocus\/([\w\.]+)/i                                               // Firefox Focus
+		            ], [VERSION, [NAME, FIREFOX+' Focus']], [
+		            /\bopt\/([\w\.]+)/i                                                 // Opera Touch
+		            ], [VERSION, [NAME, OPERA+' Touch']], [
+		            /coc_coc\w+\/([\w\.]+)/i                                            // Coc Coc Browser
+		            ], [VERSION, [NAME, 'Coc Coc']], [
+		            /dolfin\/([\w\.]+)/i                                                // Dolphin
+		            ], [VERSION, [NAME, 'Dolphin']], [
+		            /coast\/([\w\.]+)/i                                                 // Opera Coast
+		            ], [VERSION, [NAME, OPERA+' Coast']], [
+		            /miuibrowser\/([\w\.]+)/i                                           // MIUI Browser
+		            ], [VERSION, [NAME, 'MIUI '+BROWSER]], [
+		            /fxios\/([-\w\.]+)/i                                                // Firefox for iOS
+		            ], [VERSION, [NAME, FIREFOX]], [
+		            /\bqihu|(qi?ho?o?|360)browser/i                                     // 360
+		            ], [[NAME, '360 '+BROWSER]], [
+		            /(oculus|samsung|sailfish)browser\/([\w\.]+)/i
+		            ], [[NAME, /(.+)/, '$1 '+BROWSER], VERSION], [                      // Oculus/Samsung/Sailfish Browser
+		            /(comodo_dragon)\/([\w\.]+)/i                                       // Comodo Dragon
+		            ], [[NAME, /_/g, ' '], VERSION], [
+		            /(electron)\/([\w\.]+) safari/i,                                    // Electron-based App
+		            /(tesla)(?: qtcarbrowser|\/(20\d\d\.[-\w\.]+))/i,                   // Tesla
+		            /m?(qqbrowser|baiduboxapp|2345Explorer)[\/ ]?([\w\.]+)/i            // QQBrowser/Baidu App/2345 Browser
+		            ], [NAME, VERSION], [
+		            /(metasr)[\/ ]?([\w\.]+)/i,                                         // SouGouBrowser
+		            /(lbbrowser)/i                                                      // LieBao Browser
+		            ], [NAME], [
+
+		            // WebView
+		            /((?:fban\/fbios|fb_iab\/fb4a)(?!.+fbav)|;fbav\/([\w\.]+);)/i       // Facebook App for iOS & Android
+		            ], [[NAME, FACEBOOK], VERSION], [
+		            /safari (line)\/([\w\.]+)/i,                                        // Line App for iOS
+		            /\b(line)\/([\w\.]+)\/iab/i,                                        // Line App for Android
+		            /(chromium|instagram)[\/ ]([-\w\.]+)/i                              // Chromium/Instagram
+		            ], [NAME, VERSION], [
+		            /\bgsa\/([\w\.]+) .*safari\//i                                      // Google Search Appliance on iOS
+		            ], [VERSION, [NAME, 'GSA']], [
+
+		            /headlesschrome(?:\/([\w\.]+)| )/i                                  // Chrome Headless
+		            ], [VERSION, [NAME, CHROME+' Headless']], [
+
+		            / wv\).+(chrome)\/([\w\.]+)/i                                       // Chrome WebView
+		            ], [[NAME, CHROME+' WebView'], VERSION], [
+
+		            /droid.+ version\/([\w\.]+)\b.+(?:mobile safari|safari)/i           // Android Browser
+		            ], [VERSION, [NAME, 'Android '+BROWSER]], [
+
+		            /(chrome|omniweb|arora|[tizenoka]{5} ?browser)\/v?([\w\.]+)/i       // Chrome/OmniWeb/Arora/Tizen/Nokia
+		            ], [NAME, VERSION], [
+
+		            /version\/([\w\.]+) .*mobile\/\w+ (safari)/i                        // Mobile Safari
+		            ], [VERSION, [NAME, 'Mobile Safari']], [
+		            /version\/([\w\.]+) .*(mobile ?safari|safari)/i                     // Safari & Safari Mobile
+		            ], [VERSION, NAME], [
+		            /webkit.+?(mobile ?safari|safari)(\/[\w\.]+)/i                      // Safari < 3.0
+		            ], [NAME, [VERSION, strMapper, oldSafariMap]], [
+
+		            /(webkit|khtml)\/([\w\.]+)/i
+		            ], [NAME, VERSION], [
+
+		            // Gecko based
+		            /(navigator|netscape\d?)\/([-\w\.]+)/i                              // Netscape
+		            ], [[NAME, 'Netscape'], VERSION], [
+		            /mobile vr; rv:([\w\.]+)\).+firefox/i                               // Firefox Reality
+		            ], [VERSION, [NAME, FIREFOX+' Reality']], [
+		            /ekiohf.+(flow)\/([\w\.]+)/i,                                       // Flow
+		            /(swiftfox)/i,                                                      // Swiftfox
+		            /(icedragon|iceweasel|camino|chimera|fennec|maemo browser|minimo|conkeror|klar)[\/ ]?([\w\.\+]+)/i,
+		                                                                                // IceDragon/Iceweasel/Camino/Chimera/Fennec/Maemo/Minimo/Conkeror/Klar
+		            /(seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([-\w\.]+)$/i,
+		                                                                                // Firefox/SeaMonkey/K-Meleon/IceCat/IceApe/Firebird/Phoenix
+		            /(firefox)\/([\w\.]+)/i,                                            // Other Firefox-based
+		            /(mozilla)\/([\w\.]+) .+rv\:.+gecko\/\d+/i,                         // Mozilla
+
+		            // Other
+		            /(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir|obigo|mosaic|(?:go|ice|up)[\. ]?browser)[-\/ ]?v?([\w\.]+)/i,
+		                                                                                // Polaris/Lynx/Dillo/iCab/Doris/Amaya/w3m/NetSurf/Sleipnir/Obigo/Mosaic/Go/ICE/UP.Browser
+		            /(links) \(([\w\.]+)/i                                              // Links
+		            ], [NAME, VERSION]
+		        ],
+
+		        cpu : [[
+
+		            /(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i                     // AMD64 (x64)
+		            ], [[ARCHITECTURE, 'amd64']], [
+
+		            /(ia32(?=;))/i                                                      // IA32 (quicktime)
+		            ], [[ARCHITECTURE, lowerize]], [
+
+		            /((?:i[346]|x)86)[;\)]/i                                            // IA32 (x86)
+		            ], [[ARCHITECTURE, 'ia32']], [
+
+		            /\b(aarch64|arm(v?8e?l?|_?64))\b/i                                 // ARM64
+		            ], [[ARCHITECTURE, 'arm64']], [
+
+		            /\b(arm(?:v[67])?ht?n?[fl]p?)\b/i                                   // ARMHF
+		            ], [[ARCHITECTURE, 'armhf']], [
+
+		            // PocketPC mistakenly identified as PowerPC
+		            /windows (ce|mobile); ppc;/i
+		            ], [[ARCHITECTURE, 'arm']], [
+
+		            /((?:ppc|powerpc)(?:64)?)(?: mac|;|\))/i                            // PowerPC
+		            ], [[ARCHITECTURE, /ower/, EMPTY, lowerize]], [
+
+		            /(sun4\w)[;\)]/i                                                    // SPARC
+		            ], [[ARCHITECTURE, 'sparc']], [
+
+		            /((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i
+		                                                                                // IA64, 68K, ARM/64, AVR/32, IRIX/64, MIPS/64, SPARC/64, PA-RISC
+		            ], [[ARCHITECTURE, lowerize]]
+		        ],
+
+		        device : [[
+
+		            //////////////////////////
+		            // MOBILES & TABLETS
+		            // Ordered by popularity
+		            /////////////////////////
+
+		            // Samsung
+		            /\b(sch-i[89]0\d|shw-m380s|sm-[pt]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus 10)/i
+		            ], [MODEL, [VENDOR, SAMSUNG], [TYPE, TABLET]], [
+		            /\b((?:s[cgp]h|gt|sm)-\w+|galaxy nexus)/i,
+		            /samsung[- ]([-\w]+)/i,
+		            /sec-(sgh\w+)/i
+		            ], [MODEL, [VENDOR, SAMSUNG], [TYPE, MOBILE]], [
+
+		            // Apple
+		            /\((ip(?:hone|od)[\w ]*);/i                                         // iPod/iPhone
+		            ], [MODEL, [VENDOR, APPLE], [TYPE, MOBILE]], [
+		            /\((ipad);[-\w\),; ]+apple/i,                                       // iPad
+		            /applecoremedia\/[\w\.]+ \((ipad)/i,
+		            /\b(ipad)\d\d?,\d\d?[;\]].+ios/i
+		            ], [MODEL, [VENDOR, APPLE], [TYPE, TABLET]], [
+
+		            // Huawei
+		            /\b((?:ag[rs][23]?|bah2?|sht?|btv)-a?[lw]\d{2})\b(?!.+d\/s)/i
+		            ], [MODEL, [VENDOR, HUAWEI], [TYPE, TABLET]], [
+		            /(?:huawei|honor)([-\w ]+)[;\)]/i,
+		            /\b(nexus 6p|\w{2,4}-[atu]?[ln][01259x][012359][an]?)\b(?!.+d\/s)/i
+		            ], [MODEL, [VENDOR, HUAWEI], [TYPE, MOBILE]], [
+
+		            // Xiaomi
+		            /\b(poco[\w ]+)(?: bui|\))/i,                                       // Xiaomi POCO
+		            /\b; (\w+) build\/hm\1/i,                                           // Xiaomi Hongmi 'numeric' models
+		            /\b(hm[-_ ]?note?[_ ]?(?:\d\w)?) bui/i,                             // Xiaomi Hongmi
+		            /\b(redmi[\-_ ]?(?:note|k)?[\w_ ]+)(?: bui|\))/i,                   // Xiaomi Redmi
+		            /\b(mi[-_ ]?(?:a\d|one|one[_ ]plus|note lte|max)?[_ ]?(?:\d?\w?)[_ ]?(?:plus|se|lite)?)(?: bui|\))/i // Xiaomi Mi
+		            ], [[MODEL, /_/g, ' '], [VENDOR, XIAOMI], [TYPE, MOBILE]], [
+		            /\b(mi[-_ ]?(?:pad)(?:[\w_ ]+))(?: bui|\))/i                        // Mi Pad tablets
+		            ],[[MODEL, /_/g, ' '], [VENDOR, XIAOMI], [TYPE, TABLET]], [
+
+		            // OPPO
+		            /; (\w+) bui.+ oppo/i,
+		            /\b(cph[12]\d{3}|p(?:af|c[al]|d\w|e[ar])[mt]\d0|x9007|a101op)\b/i
+		            ], [MODEL, [VENDOR, 'OPPO'], [TYPE, MOBILE]], [
+
+		            // Vivo
+		            /vivo (\w+)(?: bui|\))/i,
+		            /\b(v[12]\d{3}\w?[at])(?: bui|;)/i
+		            ], [MODEL, [VENDOR, 'Vivo'], [TYPE, MOBILE]], [
+
+		            // Realme
+		            /\b(rmx[12]\d{3})(?: bui|;|\))/i
+		            ], [MODEL, [VENDOR, 'Realme'], [TYPE, MOBILE]], [
+
+		            // Motorola
+		            /\b(milestone|droid(?:[2-4x]| (?:bionic|x2|pro|razr))?:?( 4g)?)\b[\w ]+build\//i,
+		            /\bmot(?:orola)?[- ](\w*)/i,
+		            /((?:moto[\w\(\) ]+|xt\d{3,4}|nexus 6)(?= bui|\)))/i
+		            ], [MODEL, [VENDOR, MOTOROLA], [TYPE, MOBILE]], [
+		            /\b(mz60\d|xoom[2 ]{0,2}) build\//i
+		            ], [MODEL, [VENDOR, MOTOROLA], [TYPE, TABLET]], [
+
+		            // LG
+		            /((?=lg)?[vl]k\-?\d{3}) bui| 3\.[-\w; ]{10}lg?-([06cv9]{3,4})/i
+		            ], [MODEL, [VENDOR, LG], [TYPE, TABLET]], [
+		            /(lm(?:-?f100[nv]?|-[\w\.]+)(?= bui|\))|nexus [45])/i,
+		            /\blg[-e;\/ ]+((?!browser|netcast|android tv)\w+)/i,
+		            /\blg-?([\d\w]+) bui/i
+		            ], [MODEL, [VENDOR, LG], [TYPE, MOBILE]], [
+
+		            // Lenovo
+		            /(ideatab[-\w ]+)/i,
+		            /lenovo ?(s[56]000[-\w]+|tab(?:[\w ]+)|yt[-\d\w]{6}|tb[-\d\w]{6})/i
+		            ], [MODEL, [VENDOR, 'Lenovo'], [TYPE, TABLET]], [
+
+		            // Nokia
+		            /(?:maemo|nokia).*(n900|lumia \d+)/i,
+		            /nokia[-_ ]?([-\w\.]*)/i
+		            ], [[MODEL, /_/g, ' '], [VENDOR, 'Nokia'], [TYPE, MOBILE]], [
+
+		            // Google
+		            /(pixel c)\b/i                                                      // Google Pixel C
+		            ], [MODEL, [VENDOR, GOOGLE], [TYPE, TABLET]], [
+		            /droid.+; (pixel[\daxl ]{0,6})(?: bui|\))/i                         // Google Pixel
+		            ], [MODEL, [VENDOR, GOOGLE], [TYPE, MOBILE]], [
+
+		            // Sony
+		            /droid.+ ([c-g]\d{4}|so[-gl]\w+|xq-a\w[4-7][12])(?= bui|\).+chrome\/(?![1-6]{0,1}\d\.))/i
+		            ], [MODEL, [VENDOR, SONY], [TYPE, MOBILE]], [
+		            /sony tablet [ps]/i,
+		            /\b(?:sony)?sgp\w+(?: bui|\))/i
+		            ], [[MODEL, 'Xperia Tablet'], [VENDOR, SONY], [TYPE, TABLET]], [
+
+		            // OnePlus
+		            / (kb2005|in20[12]5|be20[12][59])\b/i,
+		            /(?:one)?(?:plus)? (a\d0\d\d)(?: b|\))/i
+		            ], [MODEL, [VENDOR, 'OnePlus'], [TYPE, MOBILE]], [
+
+		            // Amazon
+		            /(alexa)webm/i,
+		            /(kf[a-z]{2}wi)( bui|\))/i,                                         // Kindle Fire without Silk
+		            /(kf[a-z]+)( bui|\)).+silk\//i                                      // Kindle Fire HD
+		            ], [MODEL, [VENDOR, AMAZON], [TYPE, TABLET]], [
+		            /((?:sd|kf)[0349hijorstuw]+)( bui|\)).+silk\//i                     // Fire Phone
+		            ], [[MODEL, /(.+)/g, 'Fire Phone $1'], [VENDOR, AMAZON], [TYPE, MOBILE]], [
+
+		            // BlackBerry
+		            /(playbook);[-\w\),; ]+(rim)/i                                      // BlackBerry PlayBook
+		            ], [MODEL, VENDOR, [TYPE, TABLET]], [
+		            /\b((?:bb[a-f]|st[hv])100-\d)/i,
+		            /\(bb10; (\w+)/i                                                    // BlackBerry 10
+		            ], [MODEL, [VENDOR, BLACKBERRY], [TYPE, MOBILE]], [
+
+		            // Asus
+		            /(?:\b|asus_)(transfo[prime ]{4,10} \w+|eeepc|slider \w+|nexus 7|padfone|p00[cj])/i
+		            ], [MODEL, [VENDOR, ASUS], [TYPE, TABLET]], [
+		            / (z[bes]6[027][012][km][ls]|zenfone \d\w?)\b/i
+		            ], [MODEL, [VENDOR, ASUS], [TYPE, MOBILE]], [
+
+		            // HTC
+		            /(nexus 9)/i                                                        // HTC Nexus 9
+		            ], [MODEL, [VENDOR, 'HTC'], [TYPE, TABLET]], [
+		            /(htc)[-;_ ]{1,2}([\w ]+(?=\)| bui)|\w+)/i,                         // HTC
+
+		            // ZTE
+		            /(zte)[- ]([\w ]+?)(?: bui|\/|\))/i,
+		            /(alcatel|geeksphone|nexian|panasonic|sony)[-_ ]?([-\w]*)/i         // Alcatel/GeeksPhone/Nexian/Panasonic/Sony
+		            ], [VENDOR, [MODEL, /_/g, ' '], [TYPE, MOBILE]], [
+
+		            // Acer
+		            /droid.+; ([ab][1-7]-?[0178a]\d\d?)/i
+		            ], [MODEL, [VENDOR, 'Acer'], [TYPE, TABLET]], [
+
+		            // Meizu
+		            /droid.+; (m[1-5] note) bui/i,
+		            /\bmz-([-\w]{2,})/i
+		            ], [MODEL, [VENDOR, 'Meizu'], [TYPE, MOBILE]], [
+
+		            // Sharp
+		            /\b(sh-?[altvz]?\d\d[a-ekm]?)/i
+		            ], [MODEL, [VENDOR, 'Sharp'], [TYPE, MOBILE]], [
+
+		            // MIXED
+		            /(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[-_ ]?([-\w]*)/i,
+		                                                                                // BlackBerry/BenQ/Palm/Sony-Ericsson/Acer/Asus/Dell/Meizu/Motorola/Polytron
+		            /(hp) ([\w ]+\w)/i,                                                 // HP iPAQ
+		            /(asus)-?(\w+)/i,                                                   // Asus
+		            /(microsoft); (lumia[\w ]+)/i,                                      // Microsoft Lumia
+		            /(lenovo)[-_ ]?([-\w]+)/i,                                          // Lenovo
+		            /(jolla)/i,                                                         // Jolla
+		            /(oppo) ?([\w ]+) bui/i                                             // OPPO
+		            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
+
+		            /(archos) (gamepad2?)/i,                                            // Archos
+		            /(hp).+(touchpad(?!.+tablet)|tablet)/i,                             // HP TouchPad
+		            /(kindle)\/([\w\.]+)/i,                                             // Kindle
+		            /(nook)[\w ]+build\/(\w+)/i,                                        // Nook
+		            /(dell) (strea[kpr\d ]*[\dko])/i,                                   // Dell Streak
+		            /(le[- ]+pan)[- ]+(\w{1,9}) bui/i,                                  // Le Pan Tablets
+		            /(trinity)[- ]*(t\d{3}) bui/i,                                      // Trinity Tablets
+		            /(gigaset)[- ]+(q\w{1,9}) bui/i,                                    // Gigaset Tablets
+		            /(vodafone) ([\w ]+)(?:\)| bui)/i                                   // Vodafone
+		            ], [VENDOR, MODEL, [TYPE, TABLET]], [
+
+		            /(surface duo)/i                                                    // Surface Duo
+		            ], [MODEL, [VENDOR, MICROSOFT], [TYPE, TABLET]], [
+		            /droid [\d\.]+; (fp\du?)(?: b|\))/i                                 // Fairphone
+		            ], [MODEL, [VENDOR, 'Fairphone'], [TYPE, MOBILE]], [
+		            /(u304aa)/i                                                         // AT&T
+		            ], [MODEL, [VENDOR, 'AT&T'], [TYPE, MOBILE]], [
+		            /\bsie-(\w*)/i                                                      // Siemens
+		            ], [MODEL, [VENDOR, 'Siemens'], [TYPE, MOBILE]], [
+		            /\b(rct\w+) b/i                                                     // RCA Tablets
+		            ], [MODEL, [VENDOR, 'RCA'], [TYPE, TABLET]], [
+		            /\b(venue[\d ]{2,7}) b/i                                            // Dell Venue Tablets
+		            ], [MODEL, [VENDOR, 'Dell'], [TYPE, TABLET]], [
+		            /\b(q(?:mv|ta)\w+) b/i                                              // Verizon Tablet
+		            ], [MODEL, [VENDOR, 'Verizon'], [TYPE, TABLET]], [
+		            /\b(?:barnes[& ]+noble |bn[rt])([\w\+ ]*) b/i                       // Barnes & Noble Tablet
+		            ], [MODEL, [VENDOR, 'Barnes & Noble'], [TYPE, TABLET]], [
+		            /\b(tm\d{3}\w+) b/i
+		            ], [MODEL, [VENDOR, 'NuVision'], [TYPE, TABLET]], [
+		            /\b(k88) b/i                                                        // ZTE K Series Tablet
+		            ], [MODEL, [VENDOR, 'ZTE'], [TYPE, TABLET]], [
+		            /\b(nx\d{3}j) b/i                                                   // ZTE Nubia
+		            ], [MODEL, [VENDOR, 'ZTE'], [TYPE, MOBILE]], [
+		            /\b(gen\d{3}) b.+49h/i                                              // Swiss GEN Mobile
+		            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, MOBILE]], [
+		            /\b(zur\d{3}) b/i                                                   // Swiss ZUR Tablet
+		            ], [MODEL, [VENDOR, 'Swiss'], [TYPE, TABLET]], [
+		            /\b((zeki)?tb.*\b) b/i                                              // Zeki Tablets
+		            ], [MODEL, [VENDOR, 'Zeki'], [TYPE, TABLET]], [
+		            /\b([yr]\d{2}) b/i,
+		            /\b(dragon[- ]+touch |dt)(\w{5}) b/i                                // Dragon Touch Tablet
+		            ], [[VENDOR, 'Dragon Touch'], MODEL, [TYPE, TABLET]], [
+		            /\b(ns-?\w{0,9}) b/i                                                // Insignia Tablets
+		            ], [MODEL, [VENDOR, 'Insignia'], [TYPE, TABLET]], [
+		            /\b((nxa|next)-?\w{0,9}) b/i                                        // NextBook Tablets
+		            ], [MODEL, [VENDOR, 'NextBook'], [TYPE, TABLET]], [
+		            /\b(xtreme\_)?(v(1[045]|2[015]|[3469]0|7[05])) b/i                  // Voice Xtreme Phones
+		            ], [[VENDOR, 'Voice'], MODEL, [TYPE, MOBILE]], [
+		            /\b(lvtel\-)?(v1[12]) b/i                                           // LvTel Phones
+		            ], [[VENDOR, 'LvTel'], MODEL, [TYPE, MOBILE]], [
+		            /\b(ph-1) /i                                                        // Essential PH-1
+		            ], [MODEL, [VENDOR, 'Essential'], [TYPE, MOBILE]], [
+		            /\b(v(100md|700na|7011|917g).*\b) b/i                               // Envizen Tablets
+		            ], [MODEL, [VENDOR, 'Envizen'], [TYPE, TABLET]], [
+		            /\b(trio[-\w\. ]+) b/i                                              // MachSpeed Tablets
+		            ], [MODEL, [VENDOR, 'MachSpeed'], [TYPE, TABLET]], [
+		            /\btu_(1491) b/i                                                    // Rotor Tablets
+		            ], [MODEL, [VENDOR, 'Rotor'], [TYPE, TABLET]], [
+		            /(shield[\w ]+) b/i                                                 // Nvidia Shield Tablets
+		            ], [MODEL, [VENDOR, 'Nvidia'], [TYPE, TABLET]], [
+		            /(sprint) (\w+)/i                                                   // Sprint Phones
+		            ], [VENDOR, MODEL, [TYPE, MOBILE]], [
+		            /(kin\.[onetw]{3})/i                                                // Microsoft Kin
+		            ], [[MODEL, /\./g, ' '], [VENDOR, MICROSOFT], [TYPE, MOBILE]], [
+		            /droid.+; (cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i             // Zebra
+		            ], [MODEL, [VENDOR, ZEBRA], [TYPE, TABLET]], [
+		            /droid.+; (ec30|ps20|tc[2-8]\d[kx])\)/i
+		            ], [MODEL, [VENDOR, ZEBRA], [TYPE, MOBILE]], [
+
+		            ///////////////////
+		            // CONSOLES
+		            ///////////////////
+
+		            /(ouya)/i,                                                          // Ouya
+		            /(nintendo) ([wids3utch]+)/i                                        // Nintendo
+		            ], [VENDOR, MODEL, [TYPE, CONSOLE]], [
+		            /droid.+; (shield) bui/i                                            // Nvidia
+		            ], [MODEL, [VENDOR, 'Nvidia'], [TYPE, CONSOLE]], [
+		            /(playstation [345portablevi]+)/i                                   // Playstation
+		            ], [MODEL, [VENDOR, SONY], [TYPE, CONSOLE]], [
+		            /\b(xbox(?: one)?(?!; xbox))[\); ]/i                                // Microsoft Xbox
+		            ], [MODEL, [VENDOR, MICROSOFT], [TYPE, CONSOLE]], [
+
+		            ///////////////////
+		            // SMARTTVS
+		            ///////////////////
+
+		            /smart-tv.+(samsung)/i                                              // Samsung
+		            ], [VENDOR, [TYPE, SMARTTV]], [
+		            /hbbtv.+maple;(\d+)/i
+		            ], [[MODEL, /^/, 'SmartTV'], [VENDOR, SAMSUNG], [TYPE, SMARTTV]], [
+		            /(nux; netcast.+smarttv|lg (netcast\.tv-201\d|android tv))/i        // LG SmartTV
+		            ], [[VENDOR, LG], [TYPE, SMARTTV]], [
+		            /(apple) ?tv/i                                                      // Apple TV
+		            ], [VENDOR, [MODEL, APPLE+' TV'], [TYPE, SMARTTV]], [
+		            /crkey/i                                                            // Google Chromecast
+		            ], [[MODEL, CHROME+'cast'], [VENDOR, GOOGLE], [TYPE, SMARTTV]], [
+		            /droid.+aft(\w)( bui|\))/i                                          // Fire TV
+		            ], [MODEL, [VENDOR, AMAZON], [TYPE, SMARTTV]], [
+		            /\(dtv[\);].+(aquos)/i                                              // Sharp
+		            ], [MODEL, [VENDOR, 'Sharp'], [TYPE, SMARTTV]], [
+		            /\b(roku)[\dx]*[\)\/]((?:dvp-)?[\d\.]*)/i,                          // Roku
+		            /hbbtv\/\d+\.\d+\.\d+ +\([\w ]*; *(\w[^;]*);([^;]*)/i               // HbbTV devices
+		            ], [[VENDOR, trim], [MODEL, trim], [TYPE, SMARTTV]], [
+		            /\b(android tv|smart[- ]?tv|opera tv|tv; rv:)\b/i                   // SmartTV from Unidentified Vendors
+		            ], [[TYPE, SMARTTV]], [
+
+		            ///////////////////
+		            // WEARABLES
+		            ///////////////////
+
+		            /((pebble))app/i                                                    // Pebble
+		            ], [VENDOR, MODEL, [TYPE, WEARABLE]], [
+		            /droid.+; (glass) \d/i                                              // Google Glass
+		            ], [MODEL, [VENDOR, GOOGLE], [TYPE, WEARABLE]], [
+		            /droid.+; (wt63?0{2,3})\)/i
+		            ], [MODEL, [VENDOR, ZEBRA], [TYPE, WEARABLE]], [
+		            /(quest( 2)?)/i                                                     // Oculus Quest
+		            ], [MODEL, [VENDOR, FACEBOOK], [TYPE, WEARABLE]], [
+
+		            ///////////////////
+		            // EMBEDDED
+		            ///////////////////
+
+		            /(tesla)(?: qtcarbrowser|\/[-\w\.]+)/i                              // Tesla
+		            ], [VENDOR, [TYPE, EMBEDDED]], [
+
+		            ////////////////////
+		            // MIXED (GENERIC)
+		            ///////////////////
+
+		            /droid .+?; ([^;]+?)(?: bui|\) applew).+? mobile safari/i           // Android Phones from Unidentified Vendors
+		            ], [MODEL, [TYPE, MOBILE]], [
+		            /droid .+?; ([^;]+?)(?: bui|\) applew).+?(?! mobile) safari/i       // Android Tablets from Unidentified Vendors
+		            ], [MODEL, [TYPE, TABLET]], [
+		            /\b((tablet|tab)[;\/]|focus\/\d(?!.+mobile))/i                      // Unidentifiable Tablet
+		            ], [[TYPE, TABLET]], [
+		            /(phone|mobile(?:[;\/]| safari)|pda(?=.+windows ce))/i              // Unidentifiable Mobile
+		            ], [[TYPE, MOBILE]], [
+		            /(android[-\w\. ]{0,9});.+buil/i                                    // Generic Android Device
+		            ], [MODEL, [VENDOR, 'Generic']]
+		        ],
+
+		        engine : [[
+
+		            /windows.+ edge\/([\w\.]+)/i                                       // EdgeHTML
+		            ], [VERSION, [NAME, EDGE+'HTML']], [
+
+		            /webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i                         // Blink
+		            ], [VERSION, [NAME, 'Blink']], [
+
+		            /(presto)\/([\w\.]+)/i,                                             // Presto
+		            /(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i, // WebKit/Trident/NetFront/NetSurf/Amaya/Lynx/w3m/Goanna
+		            /ekioh(flow)\/([\w\.]+)/i,                                          // Flow
+		            /(khtml|tasman|links)[\/ ]\(?([\w\.]+)/i,                           // KHTML/Tasman/Links
+		            /(icab)[\/ ]([23]\.[\d\.]+)/i                                       // iCab
+		            ], [NAME, VERSION], [
+
+		            /rv\:([\w\.]{1,9})\b.+(gecko)/i                                     // Gecko
+		            ], [VERSION, NAME]
+		        ],
+
+		        os : [[
+
+		            // Windows
+		            /microsoft (windows) (vista|xp)/i                                   // Windows (iTunes)
+		            ], [NAME, VERSION], [
+		            /(windows) nt 6\.2; (arm)/i,                                        // Windows RT
+		            /(windows (?:phone(?: os)?|mobile))[\/ ]?([\d\.\w ]*)/i,            // Windows Phone
+		            /(windows)[\/ ]?([ntce\d\. ]+\w)(?!.+xbox)/i
+		            ], [NAME, [VERSION, strMapper, windowsVersionMap]], [
+		            /(win(?=3|9|n)|win 9x )([nt\d\.]+)/i
+		            ], [[NAME, 'Windows'], [VERSION, strMapper, windowsVersionMap]], [
+
+		            // iOS/macOS
+		            /ip[honead]{2,4}\b(?:.*os ([\w]+) like mac|; opera)/i,              // iOS
+		            /cfnetwork\/.+darwin/i
+		            ], [[VERSION, /_/g, '.'], [NAME, 'iOS']], [
+		            /(mac os x) ?([\w\. ]*)/i,
+		            /(macintosh|mac_powerpc\b)(?!.+haiku)/i                             // Mac OS
+		            ], [[NAME, 'Mac OS'], [VERSION, /_/g, '.']], [
+
+		            // Mobile OSes
+		            /droid ([\w\.]+)\b.+(android[- ]x86)/i                              // Android-x86
+		            ], [VERSION, NAME], [                                               // Android/WebOS/QNX/Bada/RIM/Maemo/MeeGo/Sailfish OS
+		            /(android|webos|qnx|bada|rim tablet os|maemo|meego|sailfish)[-\/ ]?([\w\.]*)/i,
+		            /(blackberry)\w*\/([\w\.]*)/i,                                      // Blackberry
+		            /(tizen|kaios)[\/ ]([\w\.]+)/i,                                     // Tizen/KaiOS
+		            /\((series40);/i                                                    // Series 40
+		            ], [NAME, VERSION], [
+		            /\(bb(10);/i                                                        // BlackBerry 10
+		            ], [VERSION, [NAME, BLACKBERRY]], [
+		            /(?:symbian ?os|symbos|s60(?=;)|series60)[-\/ ]?([\w\.]*)/i         // Symbian
+		            ], [VERSION, [NAME, 'Symbian']], [
+		            /mozilla\/[\d\.]+ \((?:mobile|tablet|tv|mobile; [\w ]+); rv:.+ gecko\/([\w\.]+)/i // Firefox OS
+		            ], [VERSION, [NAME, FIREFOX+' OS']], [
+		            /web0s;.+rt(tv)/i,
+		            /\b(?:hp)?wos(?:browser)?\/([\w\.]+)/i                              // WebOS
+		            ], [VERSION, [NAME, 'webOS']], [
+
+		            // Google Chromecast
+		            /crkey\/([\d\.]+)/i                                                 // Google Chromecast
+		            ], [VERSION, [NAME, CHROME+'cast']], [
+		            /(cros) [\w]+ ([\w\.]+\w)/i                                         // Chromium OS
+		            ], [[NAME, 'Chromium OS'], VERSION],[
+
+		            // Console
+		            /(nintendo|playstation) ([wids345portablevuch]+)/i,                 // Nintendo/Playstation
+		            /(xbox); +xbox ([^\);]+)/i,                                         // Microsoft Xbox (360, One, X, S, Series X, Series S)
+
+		            // Other
+		            /\b(joli|palm)\b ?(?:os)?\/?([\w\.]*)/i,                            // Joli/Palm
+		            /(mint)[\/\(\) ]?(\w*)/i,                                           // Mint
+		            /(mageia|vectorlinux)[; ]/i,                                        // Mageia/VectorLinux
+		            /([kxln]?ubuntu|debian|suse|opensuse|gentoo|arch(?= linux)|slackware|fedora|mandriva|centos|pclinuxos|red ?hat|zenwalk|linpus|raspbian|plan 9|minix|risc os|contiki|deepin|manjaro|elementary os|sabayon|linspire)(?: gnu\/linux)?(?: enterprise)?(?:[- ]linux)?(?:-gnu)?[-\/ ]?(?!chrom|package)([-\w\.]*)/i,
+		                                                                                // Ubuntu/Debian/SUSE/Gentoo/Arch/Slackware/Fedora/Mandriva/CentOS/PCLinuxOS/RedHat/Zenwalk/Linpus/Raspbian/Plan9/Minix/RISCOS/Contiki/Deepin/Manjaro/elementary/Sabayon/Linspire
+		            /(hurd|linux) ?([\w\.]*)/i,                                         // Hurd/Linux
+		            /(gnu) ?([\w\.]*)/i,                                                // GNU
+		            /\b([-frentopcghs]{0,5}bsd|dragonfly)[\/ ]?(?!amd|[ix346]{1,2}86)([\w\.]*)/i, // FreeBSD/NetBSD/OpenBSD/PC-BSD/GhostBSD/DragonFly
+		            /(haiku) (\w+)/i                                                    // Haiku
+		            ], [NAME, VERSION], [
+		            /(sunos) ?([\w\.\d]*)/i                                             // Solaris
+		            ], [[NAME, 'Solaris'], VERSION], [
+		            /((?:open)?solaris)[-\/ ]?([\w\.]*)/i,                              // Solaris
+		            /(aix) ((\d)(?=\.|\)| )[\w\.])*/i,                                  // AIX
+		            /\b(beos|os\/2|amigaos|morphos|openvms|fuchsia|hp-ux)/i,            // BeOS/OS2/AmigaOS/MorphOS/OpenVMS/Fuchsia/HP-UX
+		            /(unix) ?([\w\.]*)/i                                                // UNIX
+		            ], [NAME, VERSION]
+		        ]
+		    };
+
+		    /////////////////
+		    // Constructor
+		    ////////////////
+
+		    var UAParser = function (ua, extensions) {
+
+		        if (typeof ua === OBJ_TYPE) {
+		            extensions = ua;
+		            ua = undefined$1;
+		        }
+
+		        if (!(this instanceof UAParser)) {
+		            return new UAParser(ua, extensions).getResult();
+		        }
+
+		        var _ua = ua || ((typeof window !== UNDEF_TYPE && window.navigator && window.navigator.userAgent) ? window.navigator.userAgent : EMPTY);
+		        var _rgxmap = extensions ? extend(regexes, extensions) : regexes;
+
+		        this.getBrowser = function () {
+		            var _browser = {};
+		            _browser[NAME] = undefined$1;
+		            _browser[VERSION] = undefined$1;
+		            rgxMapper.call(_browser, _ua, _rgxmap.browser);
+		            _browser.major = majorize(_browser.version);
+		            return _browser;
+		        };
+		        this.getCPU = function () {
+		            var _cpu = {};
+		            _cpu[ARCHITECTURE] = undefined$1;
+		            rgxMapper.call(_cpu, _ua, _rgxmap.cpu);
+		            return _cpu;
+		        };
+		        this.getDevice = function () {
+		            var _device = {};
+		            _device[VENDOR] = undefined$1;
+		            _device[MODEL] = undefined$1;
+		            _device[TYPE] = undefined$1;
+		            rgxMapper.call(_device, _ua, _rgxmap.device);
+		            return _device;
+		        };
+		        this.getEngine = function () {
+		            var _engine = {};
+		            _engine[NAME] = undefined$1;
+		            _engine[VERSION] = undefined$1;
+		            rgxMapper.call(_engine, _ua, _rgxmap.engine);
+		            return _engine;
+		        };
+		        this.getOS = function () {
+		            var _os = {};
+		            _os[NAME] = undefined$1;
+		            _os[VERSION] = undefined$1;
+		            rgxMapper.call(_os, _ua, _rgxmap.os);
+		            return _os;
+		        };
+		        this.getResult = function () {
+		            return {
+		                ua      : this.getUA(),
+		                browser : this.getBrowser(),
+		                engine  : this.getEngine(),
+		                os      : this.getOS(),
+		                device  : this.getDevice(),
+		                cpu     : this.getCPU()
+		            };
+		        };
+		        this.getUA = function () {
+		            return _ua;
+		        };
+		        this.setUA = function (ua) {
+		            _ua = (typeof ua === STR_TYPE && ua.length > UA_MAX_LENGTH) ? trim(ua, UA_MAX_LENGTH) : ua;
+		            return this;
+		        };
+		        this.setUA(_ua);
+		        return this;
+		    };
+
+		    UAParser.VERSION = LIBVERSION;
+		    UAParser.BROWSER =  enumerize([NAME, VERSION, MAJOR]);
+		    UAParser.CPU = enumerize([ARCHITECTURE]);
+		    UAParser.DEVICE = enumerize([MODEL, VENDOR, TYPE, CONSOLE, MOBILE, SMARTTV, TABLET, WEARABLE, EMBEDDED]);
+		    UAParser.ENGINE = UAParser.OS = enumerize([NAME, VERSION]);
+
+		    ///////////
+		    // Export
+		    //////////
+
+		    // check js environment
+		    {
+		        // nodejs env
+		        if (module.exports) {
+		            exports = module.exports = UAParser;
+		        }
+		        exports.UAParser = UAParser;
+		    }
+
+		    // jQuery/Zepto specific (optional)
+		    // Note:
+		    //   In AMD env the global scope should be kept clean, but jQuery is an exception.
+		    //   jQuery always exports to global scope, unless jQuery.noConflict(true) is used,
+		    //   and we should catch that.
+		    var $ = typeof window !== UNDEF_TYPE && (window.jQuery || window.Zepto);
+		    if ($ && !$.ua) {
+		        var parser = new UAParser();
+		        $.ua = parser.getResult();
+		        $.ua.get = function () {
+		            return parser.getUA();
+		        };
+		        $.ua.set = function (ua) {
+		            parser.setUA(ua);
+		            var result = parser.getResult();
+		            for (var prop in result) {
+		                $.ua[prop] = result[prop];
+		            }
+		        };
+		    }
+
+		})(typeof window === 'object' ? window : commonjsGlobal);
+	} (uaParser, uaParser.exports));
 
 	var UAParser = uaParser.exports;
 
@@ -12994,13 +23226,12 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    }
 	    if (jsonx.__dangerouslyInsertComponents) {
 	        Object.keys(jsonx.__dangerouslyInsertComponents).forEach(insertedComponents => {
-	            var _a;
 	            try {
 	                if (jsonx.__dangerouslyInsertComponents)
 	                    validateJSONX(jsonx.__dangerouslyInsertComponents[insertedComponents]);
 	            }
 	            catch (e) {
-	                errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${(_a = e) === null || _a === void 0 ? void 0 : _a.toString()}`));
+	                errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${e === null || e === void 0 ? void 0 : e.toString()}`));
 	            }
 	        });
 	    }
@@ -13193,6 +23424,95 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 		getSimplifiedJSONX: getSimplifiedJSONX,
 		fetchJSON: fetchJSON
 	});
+
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
+	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+	var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	function shouldUseNative() {
+		try {
+			if (!Object.assign) {
+				return false;
+			}
+
+			// Detect buggy property enumeration order in older V8 versions.
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+			test1[5] = 'de';
+			if (Object.getOwnPropertyNames(test1)[0] === '5') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test2 = {};
+			for (var i = 0; i < 10; i++) {
+				test2['_' + String.fromCharCode(i)] = i;
+			}
+			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+				return test2[n];
+			});
+			if (order2.join('') !== '0123456789') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test3 = {};
+			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+				test3[letter] = letter;
+			});
+			if (Object.keys(Object.assign({}, test3)).join('') !==
+					'abcdefghijklmnopqrst') {
+				return false;
+			}
+
+			return true;
+		} catch (err) {
+			// We don't expect any of the above to throw, but better to be safe.
+			return false;
+		}
+	}
+
+	var objectAssign = shouldUseNative() ? Object.assign : function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty$1.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
 
 	/**
 	 * Copyright (c) 2013-present, Facebook, Inc.
@@ -15661,1006 +25981,1006 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	 */
 
 	(function (module) {
-	(function (global, factory) {
-	    if (module.exports) {
-	        module.exports = factory();
-	    } else {
-	        (typeof global!=="undefined" ? global : window).numeral = factory();
-	    }
-	}(commonjsGlobal, function () {
-	    /************************************
-	        Variables
-	    ************************************/
-
-	    var numeral,
-	        _,
-	        VERSION = '2.0.6',
-	        formats = {},
-	        locales = {},
-	        defaults = {
-	            currentLocale: 'en',
-	            zeroFormat: null,
-	            nullFormat: null,
-	            defaultFormat: '0,0',
-	            scalePercentBy100: true
-	        },
-	        options = {
-	            currentLocale: defaults.currentLocale,
-	            zeroFormat: defaults.zeroFormat,
-	            nullFormat: defaults.nullFormat,
-	            defaultFormat: defaults.defaultFormat,
-	            scalePercentBy100: defaults.scalePercentBy100
-	        };
-
-
-	    /************************************
-	        Constructors
-	    ************************************/
-
-	    // Numeral prototype object
-	    function Numeral(input, number) {
-	        this._input = input;
-
-	        this._value = number;
-	    }
-
-	    numeral = function(input) {
-	        var value,
-	            kind,
-	            unformatFunction,
-	            regexp;
-
-	        if (numeral.isNumeral(input)) {
-	            value = input.value();
-	        } else if (input === 0 || typeof input === 'undefined') {
-	            value = 0;
-	        } else if (input === null || _.isNaN(input)) {
-	            value = null;
-	        } else if (typeof input === 'string') {
-	            if (options.zeroFormat && input === options.zeroFormat) {
-	                value = 0;
-	            } else if (options.nullFormat && input === options.nullFormat || !input.replace(/[^0-9]+/g, '').length) {
-	                value = null;
-	            } else {
-	                for (kind in formats) {
-	                    regexp = typeof formats[kind].regexps.unformat === 'function' ? formats[kind].regexps.unformat() : formats[kind].regexps.unformat;
-
-	                    if (regexp && input.match(regexp)) {
-	                        unformatFunction = formats[kind].unformat;
-
-	                        break;
-	                    }
-	                }
-
-	                unformatFunction = unformatFunction || numeral._.stringToNumber;
-
-	                value = unformatFunction(input);
-	            }
-	        } else {
-	            value = Number(input)|| null;
-	        }
-
-	        return new Numeral(input, value);
-	    };
-
-	    // version number
-	    numeral.version = VERSION;
-
-	    // compare numeral object
-	    numeral.isNumeral = function(obj) {
-	        return obj instanceof Numeral;
-	    };
-
-	    // helper functions
-	    numeral._ = _ = {
-	        // formats numbers separators, decimals places, signs, abbreviations
-	        numberToFormat: function(value, format, roundingFunction) {
-	            var locale = locales[numeral.options.currentLocale],
-	                negP = false,
-	                optDec = false,
-	                leadingCount = 0,
-	                abbr = '',
-	                trillion = 1000000000000,
-	                billion = 1000000000,
-	                million = 1000000,
-	                thousand = 1000,
-	                decimal = '',
-	                neg = false,
-	                abbrForce, // force abbreviation
-	                abs,
-	                int,
-	                precision,
-	                signed,
-	                thousands,
-	                output;
-
-	            // make sure we never format a null value
-	            value = value || 0;
-
-	            abs = Math.abs(value);
-
-	            // see if we should use parentheses for negative number or if we should prefix with a sign
-	            // if both are present we default to parentheses
-	            if (numeral._.includes(format, '(')) {
-	                negP = true;
-	                format = format.replace(/[\(|\)]/g, '');
-	            } else if (numeral._.includes(format, '+') || numeral._.includes(format, '-')) {
-	                signed = numeral._.includes(format, '+') ? format.indexOf('+') : value < 0 ? format.indexOf('-') : -1;
-	                format = format.replace(/[\+|\-]/g, '');
-	            }
-
-	            // see if abbreviation is wanted
-	            if (numeral._.includes(format, 'a')) {
-	                abbrForce = format.match(/a(k|m|b|t)?/);
-
-	                abbrForce = abbrForce ? abbrForce[1] : false;
-
-	                // check for space before abbreviation
-	                if (numeral._.includes(format, ' a')) {
-	                    abbr = ' ';
-	                }
-
-	                format = format.replace(new RegExp(abbr + 'a[kmbt]?'), '');
-
-	                if (abs >= trillion && !abbrForce || abbrForce === 't') {
-	                    // trillion
-	                    abbr += locale.abbreviations.trillion;
-	                    value = value / trillion;
-	                } else if (abs < trillion && abs >= billion && !abbrForce || abbrForce === 'b') {
-	                    // billion
-	                    abbr += locale.abbreviations.billion;
-	                    value = value / billion;
-	                } else if (abs < billion && abs >= million && !abbrForce || abbrForce === 'm') {
-	                    // million
-	                    abbr += locale.abbreviations.million;
-	                    value = value / million;
-	                } else if (abs < million && abs >= thousand && !abbrForce || abbrForce === 'k') {
-	                    // thousand
-	                    abbr += locale.abbreviations.thousand;
-	                    value = value / thousand;
-	                }
-	            }
-
-	            // check for optional decimals
-	            if (numeral._.includes(format, '[.]')) {
-	                optDec = true;
-	                format = format.replace('[.]', '.');
-	            }
-
-	            // break number and format
-	            int = value.toString().split('.')[0];
-	            precision = format.split('.')[1];
-	            thousands = format.indexOf(',');
-	            leadingCount = (format.split('.')[0].split(',')[0].match(/0/g) || []).length;
-
-	            if (precision) {
-	                if (numeral._.includes(precision, '[')) {
-	                    precision = precision.replace(']', '');
-	                    precision = precision.split('[');
-	                    decimal = numeral._.toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
-	                } else {
-	                    decimal = numeral._.toFixed(value, precision.length, roundingFunction);
-	                }
-
-	                int = decimal.split('.')[0];
-
-	                if (numeral._.includes(decimal, '.')) {
-	                    decimal = locale.delimiters.decimal + decimal.split('.')[1];
-	                } else {
-	                    decimal = '';
-	                }
-
-	                if (optDec && Number(decimal.slice(1)) === 0) {
-	                    decimal = '';
-	                }
-	            } else {
-	                int = numeral._.toFixed(value, 0, roundingFunction);
-	            }
-
-	            // check abbreviation again after rounding
-	            if (abbr && !abbrForce && Number(int) >= 1000 && abbr !== locale.abbreviations.trillion) {
-	                int = String(Number(int) / 1000);
-
-	                switch (abbr) {
-	                    case locale.abbreviations.thousand:
-	                        abbr = locale.abbreviations.million;
-	                        break;
-	                    case locale.abbreviations.million:
-	                        abbr = locale.abbreviations.billion;
-	                        break;
-	                    case locale.abbreviations.billion:
-	                        abbr = locale.abbreviations.trillion;
-	                        break;
-	                }
-	            }
-
-
-	            // format number
-	            if (numeral._.includes(int, '-')) {
-	                int = int.slice(1);
-	                neg = true;
-	            }
-
-	            if (int.length < leadingCount) {
-	                for (var i = leadingCount - int.length; i > 0; i--) {
-	                    int = '0' + int;
-	                }
-	            }
-
-	            if (thousands > -1) {
-	                int = int.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + locale.delimiters.thousands);
-	            }
-
-	            if (format.indexOf('.') === 0) {
-	                int = '';
-	            }
-
-	            output = int + decimal + (abbr ? abbr : '');
-
-	            if (negP) {
-	                output = (negP && neg ? '(' : '') + output + (negP && neg ? ')' : '');
-	            } else {
-	                if (signed >= 0) {
-	                    output = signed === 0 ? (neg ? '-' : '+') + output : output + (neg ? '-' : '+');
-	                } else if (neg) {
-	                    output = '-' + output;
-	                }
-	            }
-
-	            return output;
-	        },
-	        // unformats numbers separators, decimals places, signs, abbreviations
-	        stringToNumber: function(string) {
-	            var locale = locales[options.currentLocale],
-	                stringOriginal = string,
-	                abbreviations = {
-	                    thousand: 3,
-	                    million: 6,
-	                    billion: 9,
-	                    trillion: 12
-	                },
-	                abbreviation,
-	                value,
-	                regexp;
-
-	            if (options.zeroFormat && string === options.zeroFormat) {
-	                value = 0;
-	            } else if (options.nullFormat && string === options.nullFormat || !string.replace(/[^0-9]+/g, '').length) {
-	                value = null;
-	            } else {
-	                value = 1;
-
-	                if (locale.delimiters.decimal !== '.') {
-	                    string = string.replace(/\./g, '').replace(locale.delimiters.decimal, '.');
-	                }
-
-	                for (abbreviation in abbreviations) {
-	                    regexp = new RegExp('[^a-zA-Z]' + locale.abbreviations[abbreviation] + '(?:\\)|(\\' + locale.currency.symbol + ')?(?:\\))?)?$');
-
-	                    if (stringOriginal.match(regexp)) {
-	                        value *= Math.pow(10, abbreviations[abbreviation]);
-	                        break;
-	                    }
-	                }
-
-	                // check for negative number
-	                value *= (string.split('-').length + Math.min(string.split('(').length - 1, string.split(')').length - 1)) % 2 ? 1 : -1;
-
-	                // remove non numbers
-	                string = string.replace(/[^0-9\.]+/g, '');
-
-	                value *= Number(string);
-	            }
-
-	            return value;
-	        },
-	        isNaN: function(value) {
-	            return typeof value === 'number' && isNaN(value);
-	        },
-	        includes: function(string, search) {
-	            return string.indexOf(search) !== -1;
-	        },
-	        insert: function(string, subString, start) {
-	            return string.slice(0, start) + subString + string.slice(start);
-	        },
-	        reduce: function(array, callback /*, initialValue*/) {
-	            if (this === null) {
-	                throw new TypeError('Array.prototype.reduce called on null or undefined');
-	            }
-
-	            if (typeof callback !== 'function') {
-	                throw new TypeError(callback + ' is not a function');
-	            }
-
-	            var t = Object(array),
-	                len = t.length >>> 0,
-	                k = 0,
-	                value;
-
-	            if (arguments.length === 3) {
-	                value = arguments[2];
-	            } else {
-	                while (k < len && !(k in t)) {
-	                    k++;
-	                }
-
-	                if (k >= len) {
-	                    throw new TypeError('Reduce of empty array with no initial value');
-	                }
-
-	                value = t[k++];
-	            }
-	            for (; k < len; k++) {
-	                if (k in t) {
-	                    value = callback(value, t[k], k, t);
-	                }
-	            }
-	            return value;
-	        },
-	        /**
-	         * Computes the multiplier necessary to make x >= 1,
-	         * effectively eliminating miscalculations caused by
-	         * finite precision.
-	         */
-	        multiplier: function (x) {
-	            var parts = x.toString().split('.');
-
-	            return parts.length < 2 ? 1 : Math.pow(10, parts[1].length);
-	        },
-	        /**
-	         * Given a variable number of arguments, returns the maximum
-	         * multiplier that must be used to normalize an operation involving
-	         * all of them.
-	         */
-	        correctionFactor: function () {
-	            var args = Array.prototype.slice.call(arguments);
-
-	            return args.reduce(function(accum, next) {
-	                var mn = _.multiplier(next);
-	                return accum > mn ? accum : mn;
-	            }, 1);
-	        },
-	        /**
-	         * Implementation of toFixed() that treats floats more like decimals
-	         *
-	         * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
-	         * problems for accounting- and finance-related software.
-	         */
-	        toFixed: function(value, maxDecimals, roundingFunction, optionals) {
-	            var splitValue = value.toString().split('.'),
-	                minDecimals = maxDecimals - (optionals || 0),
-	                boundedPrecision,
-	                optionalsRegExp,
-	                power,
-	                output;
-
-	            // Use the smallest precision value possible to avoid errors from floating point representation
-	            if (splitValue.length === 2) {
-	              boundedPrecision = Math.min(Math.max(splitValue[1].length, minDecimals), maxDecimals);
-	            } else {
-	              boundedPrecision = minDecimals;
-	            }
-
-	            power = Math.pow(10, boundedPrecision);
-
-	            // Multiply up by precision, round accurately, then divide and use native toFixed():
-	            output = (roundingFunction(value + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
-
-	            if (optionals > maxDecimals - boundedPrecision) {
-	                optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
-	                output = output.replace(optionalsRegExp, '');
-	            }
-
-	            return output;
-	        }
-	    };
-
-	    // avaliable options
-	    numeral.options = options;
-
-	    // avaliable formats
-	    numeral.formats = formats;
-
-	    // avaliable formats
-	    numeral.locales = locales;
-
-	    // This function sets the current locale.  If
-	    // no arguments are passed in, it will simply return the current global
-	    // locale key.
-	    numeral.locale = function(key) {
-	        if (key) {
-	            options.currentLocale = key.toLowerCase();
-	        }
-
-	        return options.currentLocale;
-	    };
-
-	    // This function provides access to the loaded locale data.  If
-	    // no arguments are passed in, it will simply return the current
-	    // global locale object.
-	    numeral.localeData = function(key) {
-	        if (!key) {
-	            return locales[options.currentLocale];
-	        }
-
-	        key = key.toLowerCase();
-
-	        if (!locales[key]) {
-	            throw new Error('Unknown locale : ' + key);
-	        }
-
-	        return locales[key];
-	    };
-
-	    numeral.reset = function() {
-	        for (var property in defaults) {
-	            options[property] = defaults[property];
-	        }
-	    };
-
-	    numeral.zeroFormat = function(format) {
-	        options.zeroFormat = typeof(format) === 'string' ? format : null;
-	    };
-
-	    numeral.nullFormat = function (format) {
-	        options.nullFormat = typeof(format) === 'string' ? format : null;
-	    };
-
-	    numeral.defaultFormat = function(format) {
-	        options.defaultFormat = typeof(format) === 'string' ? format : '0.0';
-	    };
-
-	    numeral.register = function(type, name, format) {
-	        name = name.toLowerCase();
-
-	        if (this[type + 's'][name]) {
-	            throw new TypeError(name + ' ' + type + ' already registered.');
-	        }
-
-	        this[type + 's'][name] = format;
-
-	        return format;
-	    };
-
-
-	    numeral.validate = function(val, culture) {
-	        var _decimalSep,
-	            _thousandSep,
-	            _currSymbol,
-	            _valArray,
-	            _abbrObj,
-	            _thousandRegEx,
-	            localeData,
-	            temp;
-
-	        //coerce val to string
-	        if (typeof val !== 'string') {
-	            val += '';
-
-	            if (console.warn) {
-	                console.warn('Numeral.js: Value is not string. It has been co-erced to: ', val);
-	            }
-	        }
-
-	        //trim whitespaces from either sides
-	        val = val.trim();
-
-	        //if val is just digits return true
-	        if (!!val.match(/^\d+$/)) {
-	            return true;
-	        }
-
-	        //if val is empty return false
-	        if (val === '') {
-	            return false;
-	        }
-
-	        //get the decimal and thousands separator from numeral.localeData
-	        try {
-	            //check if the culture is understood by numeral. if not, default it to current locale
-	            localeData = numeral.localeData(culture);
-	        } catch (e) {
-	            localeData = numeral.localeData(numeral.locale());
-	        }
-
-	        //setup the delimiters and currency symbol based on culture/locale
-	        _currSymbol = localeData.currency.symbol;
-	        _abbrObj = localeData.abbreviations;
-	        _decimalSep = localeData.delimiters.decimal;
-	        if (localeData.delimiters.thousands === '.') {
-	            _thousandSep = '\\.';
-	        } else {
-	            _thousandSep = localeData.delimiters.thousands;
-	        }
-
-	        // validating currency symbol
-	        temp = val.match(/^[^\d]+/);
-	        if (temp !== null) {
-	            val = val.substr(1);
-	            if (temp[0] !== _currSymbol) {
-	                return false;
-	            }
-	        }
-
-	        //validating abbreviation symbol
-	        temp = val.match(/[^\d]+$/);
-	        if (temp !== null) {
-	            val = val.slice(0, -1);
-	            if (temp[0] !== _abbrObj.thousand && temp[0] !== _abbrObj.million && temp[0] !== _abbrObj.billion && temp[0] !== _abbrObj.trillion) {
-	                return false;
-	            }
-	        }
-
-	        _thousandRegEx = new RegExp(_thousandSep + '{2}');
-
-	        if (!val.match(/[^\d.,]/g)) {
-	            _valArray = val.split(_decimalSep);
-	            if (_valArray.length > 2) {
-	                return false;
-	            } else {
-	                if (_valArray.length < 2) {
-	                    return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx));
-	                } else {
-	                    if (_valArray[0].length === 1) {
-	                        return ( !! _valArray[0].match(/^\d+$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
-	                    } else {
-	                        return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
-	                    }
-	                }
-	            }
-	        }
-
-	        return false;
-	    };
-
-
-	    /************************************
-	        Numeral Prototype
-	    ************************************/
-
-	    numeral.fn = Numeral.prototype = {
-	        clone: function() {
-	            return numeral(this);
-	        },
-	        format: function(inputString, roundingFunction) {
-	            var value = this._value,
-	                format = inputString || options.defaultFormat,
-	                kind,
-	                output,
-	                formatFunction;
-
-	            // make sure we have a roundingFunction
-	            roundingFunction = roundingFunction || Math.round;
-
-	            // format based on value
-	            if (value === 0 && options.zeroFormat !== null) {
-	                output = options.zeroFormat;
-	            } else if (value === null && options.nullFormat !== null) {
-	                output = options.nullFormat;
-	            } else {
-	                for (kind in formats) {
-	                    if (format.match(formats[kind].regexps.format)) {
-	                        formatFunction = formats[kind].format;
-
-	                        break;
-	                    }
-	                }
-
-	                formatFunction = formatFunction || numeral._.numberToFormat;
-
-	                output = formatFunction(value, format, roundingFunction);
-	            }
-
-	            return output;
-	        },
-	        value: function() {
-	            return this._value;
-	        },
-	        input: function() {
-	            return this._input;
-	        },
-	        set: function(value) {
-	            this._value = Number(value);
-
-	            return this;
-	        },
-	        add: function(value) {
-	            var corrFactor = _.correctionFactor.call(null, this._value, value);
-
-	            function cback(accum, curr, currI, O) {
-	                return accum + Math.round(corrFactor * curr);
-	            }
-
-	            this._value = _.reduce([this._value, value], cback, 0) / corrFactor;
-
-	            return this;
-	        },
-	        subtract: function(value) {
-	            var corrFactor = _.correctionFactor.call(null, this._value, value);
-
-	            function cback(accum, curr, currI, O) {
-	                return accum - Math.round(corrFactor * curr);
-	            }
-
-	            this._value = _.reduce([value], cback, Math.round(this._value * corrFactor)) / corrFactor;
-
-	            return this;
-	        },
-	        multiply: function(value) {
-	            function cback(accum, curr, currI, O) {
-	                var corrFactor = _.correctionFactor(accum, curr);
-	                return Math.round(accum * corrFactor) * Math.round(curr * corrFactor) / Math.round(corrFactor * corrFactor);
-	            }
-
-	            this._value = _.reduce([this._value, value], cback, 1);
-
-	            return this;
-	        },
-	        divide: function(value) {
-	            function cback(accum, curr, currI, O) {
-	                var corrFactor = _.correctionFactor(accum, curr);
-	                return Math.round(accum * corrFactor) / Math.round(curr * corrFactor);
-	            }
-
-	            this._value = _.reduce([this._value, value], cback);
-
-	            return this;
-	        },
-	        difference: function(value) {
-	            return Math.abs(numeral(this._value).subtract(value).value());
-	        }
-	    };
-
-	    /************************************
-	        Default Locale && Format
-	    ************************************/
-
-	    numeral.register('locale', 'en', {
-	        delimiters: {
-	            thousands: ',',
-	            decimal: '.'
-	        },
-	        abbreviations: {
-	            thousand: 'k',
-	            million: 'm',
-	            billion: 'b',
-	            trillion: 't'
-	        },
-	        ordinal: function(number) {
-	            var b = number % 10;
-	            return (~~(number % 100 / 10) === 1) ? 'th' :
-	                (b === 1) ? 'st' :
-	                (b === 2) ? 'nd' :
-	                (b === 3) ? 'rd' : 'th';
-	        },
-	        currency: {
-	            symbol: '$'
-	        }
-	    });
-
-	    
-
-	(function() {
-	        numeral.register('format', 'bps', {
-	            regexps: {
-	                format: /(BPS)/,
-	                unformat: /(BPS)/
-	            },
-	            format: function(value, format, roundingFunction) {
-	                var space = numeral._.includes(format, ' BPS') ? ' ' : '',
-	                    output;
-
-	                value = value * 10000;
-
-	                // check for space before BPS
-	                format = format.replace(/\s?BPS/, '');
-
-	                output = numeral._.numberToFormat(value, format, roundingFunction);
-
-	                if (numeral._.includes(output, ')')) {
-	                    output = output.split('');
-
-	                    output.splice(-1, 0, space + 'BPS');
-
-	                    output = output.join('');
-	                } else {
-	                    output = output + space + 'BPS';
-	                }
-
-	                return output;
-	            },
-	            unformat: function(string) {
-	                return +(numeral._.stringToNumber(string) * 0.0001).toFixed(15);
-	            }
-	        });
-	})();
-
-
-	(function() {
-	        var decimal = {
-	            base: 1000,
-	            suffixes: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-	        },
-	        binary = {
-	            base: 1024,
-	            suffixes: ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
-	        };
-
-	    var allSuffixes =  decimal.suffixes.concat(binary.suffixes.filter(function (item) {
-	            return decimal.suffixes.indexOf(item) < 0;
-	        }));
-	        var unformatRegex = allSuffixes.join('|');
-	        // Allow support for BPS (http://www.investopedia.com/terms/b/basispoint.asp)
-	        unformatRegex = '(' + unformatRegex.replace('B', 'B(?!PS)') + ')';
-
-	    numeral.register('format', 'bytes', {
-	        regexps: {
-	            format: /([0\s]i?b)/,
-	            unformat: new RegExp(unformatRegex)
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var output,
-	                bytes = numeral._.includes(format, 'ib') ? binary : decimal,
-	                suffix = numeral._.includes(format, ' b') || numeral._.includes(format, ' ib') ? ' ' : '',
-	                power,
-	                min,
-	                max;
-
-	            // check for space before
-	            format = format.replace(/\s?i?b/, '');
-
-	            for (power = 0; power <= bytes.suffixes.length; power++) {
-	                min = Math.pow(bytes.base, power);
-	                max = Math.pow(bytes.base, power + 1);
-
-	                if (value === null || value === 0 || value >= min && value < max) {
-	                    suffix += bytes.suffixes[power];
-
-	                    if (min > 0) {
-	                        value = value / min;
-	                    }
-
-	                    break;
-	                }
-	            }
-
-	            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-	            return output + suffix;
-	        },
-	        unformat: function(string) {
-	            var value = numeral._.stringToNumber(string),
-	                power,
-	                bytesMultiplier;
-
-	            if (value) {
-	                for (power = decimal.suffixes.length - 1; power >= 0; power--) {
-	                    if (numeral._.includes(string, decimal.suffixes[power])) {
-	                        bytesMultiplier = Math.pow(decimal.base, power);
-
-	                        break;
-	                    }
-
-	                    if (numeral._.includes(string, binary.suffixes[power])) {
-	                        bytesMultiplier = Math.pow(binary.base, power);
-
-	                        break;
-	                    }
-	                }
-
-	                value *= (bytesMultiplier || 1);
-	            }
-
-	            return value;
-	        }
-	    });
-	})();
-
-
-	(function() {
-	        numeral.register('format', 'currency', {
-	        regexps: {
-	            format: /(\$)/
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var locale = numeral.locales[numeral.options.currentLocale],
-	                symbols = {
-	                    before: format.match(/^([\+|\-|\(|\s|\$]*)/)[0],
-	                    after: format.match(/([\+|\-|\)|\s|\$]*)$/)[0]
-	                },
-	                output,
-	                symbol,
-	                i;
-
-	            // strip format of spaces and $
-	            format = format.replace(/\s?\$\s?/, '');
-
-	            // format the number
-	            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-	            // update the before and after based on value
-	            if (value >= 0) {
-	                symbols.before = symbols.before.replace(/[\-\(]/, '');
-	                symbols.after = symbols.after.replace(/[\-\)]/, '');
-	            } else if (value < 0 && (!numeral._.includes(symbols.before, '-') && !numeral._.includes(symbols.before, '('))) {
-	                symbols.before = '-' + symbols.before;
-	            }
-
-	            // loop through each before symbol
-	            for (i = 0; i < symbols.before.length; i++) {
-	                symbol = symbols.before[i];
-
-	                switch (symbol) {
-	                    case '$':
-	                        output = numeral._.insert(output, locale.currency.symbol, i);
-	                        break;
-	                    case ' ':
-	                        output = numeral._.insert(output, ' ', i + locale.currency.symbol.length - 1);
-	                        break;
-	                }
-	            }
-
-	            // loop through each after symbol
-	            for (i = symbols.after.length - 1; i >= 0; i--) {
-	                symbol = symbols.after[i];
-
-	                switch (symbol) {
-	                    case '$':
-	                        output = i === symbols.after.length - 1 ? output + locale.currency.symbol : numeral._.insert(output, locale.currency.symbol, -(symbols.after.length - (1 + i)));
-	                        break;
-	                    case ' ':
-	                        output = i === symbols.after.length - 1 ? output + ' ' : numeral._.insert(output, ' ', -(symbols.after.length - (1 + i) + locale.currency.symbol.length - 1));
-	                        break;
-	                }
-	            }
-
-
-	            return output;
-	        }
-	    });
-	})();
-
-
-	(function() {
-	        numeral.register('format', 'exponential', {
-	        regexps: {
-	            format: /(e\+|e-)/,
-	            unformat: /(e\+|e-)/
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var output,
-	                exponential = typeof value === 'number' && !numeral._.isNaN(value) ? value.toExponential() : '0e+0',
-	                parts = exponential.split('e');
-
-	            format = format.replace(/e[\+|\-]{1}0/, '');
-
-	            output = numeral._.numberToFormat(Number(parts[0]), format, roundingFunction);
-
-	            return output + 'e' + parts[1];
-	        },
-	        unformat: function(string) {
-	            var parts = numeral._.includes(string, 'e+') ? string.split('e+') : string.split('e-'),
-	                value = Number(parts[0]),
-	                power = Number(parts[1]);
-
-	            power = numeral._.includes(string, 'e-') ? power *= -1 : power;
-
-	            function cback(accum, curr, currI, O) {
-	                var corrFactor = numeral._.correctionFactor(accum, curr),
-	                    num = (accum * corrFactor) * (curr * corrFactor) / (corrFactor * corrFactor);
-	                return num;
-	            }
-
-	            return numeral._.reduce([value, Math.pow(10, power)], cback, 1);
-	        }
-	    });
-	})();
-
-
-	(function() {
-	        numeral.register('format', 'ordinal', {
-	        regexps: {
-	            format: /(o)/
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var locale = numeral.locales[numeral.options.currentLocale],
-	                output,
-	                ordinal = numeral._.includes(format, ' o') ? ' ' : '';
-
-	            // check for space before
-	            format = format.replace(/\s?o/, '');
-
-	            ordinal += locale.ordinal(value);
-
-	            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-	            return output + ordinal;
-	        }
-	    });
-	})();
-
-
-	(function() {
-	        numeral.register('format', 'percentage', {
-	        regexps: {
-	            format: /(%)/,
-	            unformat: /(%)/
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var space = numeral._.includes(format, ' %') ? ' ' : '',
-	                output;
-
-	            if (numeral.options.scalePercentBy100) {
-	                value = value * 100;
-	            }
-
-	            // check for space before %
-	            format = format.replace(/\s?\%/, '');
-
-	            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-	            if (numeral._.includes(output, ')')) {
-	                output = output.split('');
-
-	                output.splice(-1, 0, space + '%');
-
-	                output = output.join('');
-	            } else {
-	                output = output + space + '%';
-	            }
-
-	            return output;
-	        },
-	        unformat: function(string) {
-	            var number = numeral._.stringToNumber(string);
-	            if (numeral.options.scalePercentBy100) {
-	                return number * 0.01;
-	            }
-	            return number;
-	        }
-	    });
-	})();
-
-
-	(function() {
-	        numeral.register('format', 'time', {
-	        regexps: {
-	            format: /(:)/,
-	            unformat: /(:)/
-	        },
-	        format: function(value, format, roundingFunction) {
-	            var hours = Math.floor(value / 60 / 60),
-	                minutes = Math.floor((value - (hours * 60 * 60)) / 60),
-	                seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
-
-	            return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
-	        },
-	        unformat: function(string) {
-	            var timeArray = string.split(':'),
-	                seconds = 0;
-
-	            // turn hours and minutes into seconds and add them all up
-	            if (timeArray.length === 3) {
-	                // hours
-	                seconds = seconds + (Number(timeArray[0]) * 60 * 60);
-	                // minutes
-	                seconds = seconds + (Number(timeArray[1]) * 60);
-	                // seconds
-	                seconds = seconds + Number(timeArray[2]);
-	            } else if (timeArray.length === 2) {
-	                // minutes
-	                seconds = seconds + (Number(timeArray[0]) * 60);
-	                // seconds
-	                seconds = seconds + Number(timeArray[1]);
-	            }
-	            return Number(seconds);
-	        }
-	    });
-	})();
-
-	return numeral;
-	}));
-	}(numeral$1));
+		(function (global, factory) {
+		    if (module.exports) {
+		        module.exports = factory();
+		    } else {
+		        (typeof global!=="undefined" ? global : window).numeral = factory();
+		    }
+		}(commonjsGlobal, function () {
+		    /************************************
+		        Variables
+		    ************************************/
+
+		    var numeral,
+		        _,
+		        VERSION = '2.0.6',
+		        formats = {},
+		        locales = {},
+		        defaults = {
+		            currentLocale: 'en',
+		            zeroFormat: null,
+		            nullFormat: null,
+		            defaultFormat: '0,0',
+		            scalePercentBy100: true
+		        },
+		        options = {
+		            currentLocale: defaults.currentLocale,
+		            zeroFormat: defaults.zeroFormat,
+		            nullFormat: defaults.nullFormat,
+		            defaultFormat: defaults.defaultFormat,
+		            scalePercentBy100: defaults.scalePercentBy100
+		        };
+
+
+		    /************************************
+		        Constructors
+		    ************************************/
+
+		    // Numeral prototype object
+		    function Numeral(input, number) {
+		        this._input = input;
+
+		        this._value = number;
+		    }
+
+		    numeral = function(input) {
+		        var value,
+		            kind,
+		            unformatFunction,
+		            regexp;
+
+		        if (numeral.isNumeral(input)) {
+		            value = input.value();
+		        } else if (input === 0 || typeof input === 'undefined') {
+		            value = 0;
+		        } else if (input === null || _.isNaN(input)) {
+		            value = null;
+		        } else if (typeof input === 'string') {
+		            if (options.zeroFormat && input === options.zeroFormat) {
+		                value = 0;
+		            } else if (options.nullFormat && input === options.nullFormat || !input.replace(/[^0-9]+/g, '').length) {
+		                value = null;
+		            } else {
+		                for (kind in formats) {
+		                    regexp = typeof formats[kind].regexps.unformat === 'function' ? formats[kind].regexps.unformat() : formats[kind].regexps.unformat;
+
+		                    if (regexp && input.match(regexp)) {
+		                        unformatFunction = formats[kind].unformat;
+
+		                        break;
+		                    }
+		                }
+
+		                unformatFunction = unformatFunction || numeral._.stringToNumber;
+
+		                value = unformatFunction(input);
+		            }
+		        } else {
+		            value = Number(input)|| null;
+		        }
+
+		        return new Numeral(input, value);
+		    };
+
+		    // version number
+		    numeral.version = VERSION;
+
+		    // compare numeral object
+		    numeral.isNumeral = function(obj) {
+		        return obj instanceof Numeral;
+		    };
+
+		    // helper functions
+		    numeral._ = _ = {
+		        // formats numbers separators, decimals places, signs, abbreviations
+		        numberToFormat: function(value, format, roundingFunction) {
+		            var locale = locales[numeral.options.currentLocale],
+		                negP = false,
+		                optDec = false,
+		                leadingCount = 0,
+		                abbr = '',
+		                trillion = 1000000000000,
+		                billion = 1000000000,
+		                million = 1000000,
+		                thousand = 1000,
+		                decimal = '',
+		                neg = false,
+		                abbrForce, // force abbreviation
+		                abs,
+		                int,
+		                precision,
+		                signed,
+		                thousands,
+		                output;
+
+		            // make sure we never format a null value
+		            value = value || 0;
+
+		            abs = Math.abs(value);
+
+		            // see if we should use parentheses for negative number or if we should prefix with a sign
+		            // if both are present we default to parentheses
+		            if (numeral._.includes(format, '(')) {
+		                negP = true;
+		                format = format.replace(/[\(|\)]/g, '');
+		            } else if (numeral._.includes(format, '+') || numeral._.includes(format, '-')) {
+		                signed = numeral._.includes(format, '+') ? format.indexOf('+') : value < 0 ? format.indexOf('-') : -1;
+		                format = format.replace(/[\+|\-]/g, '');
+		            }
+
+		            // see if abbreviation is wanted
+		            if (numeral._.includes(format, 'a')) {
+		                abbrForce = format.match(/a(k|m|b|t)?/);
+
+		                abbrForce = abbrForce ? abbrForce[1] : false;
+
+		                // check for space before abbreviation
+		                if (numeral._.includes(format, ' a')) {
+		                    abbr = ' ';
+		                }
+
+		                format = format.replace(new RegExp(abbr + 'a[kmbt]?'), '');
+
+		                if (abs >= trillion && !abbrForce || abbrForce === 't') {
+		                    // trillion
+		                    abbr += locale.abbreviations.trillion;
+		                    value = value / trillion;
+		                } else if (abs < trillion && abs >= billion && !abbrForce || abbrForce === 'b') {
+		                    // billion
+		                    abbr += locale.abbreviations.billion;
+		                    value = value / billion;
+		                } else if (abs < billion && abs >= million && !abbrForce || abbrForce === 'm') {
+		                    // million
+		                    abbr += locale.abbreviations.million;
+		                    value = value / million;
+		                } else if (abs < million && abs >= thousand && !abbrForce || abbrForce === 'k') {
+		                    // thousand
+		                    abbr += locale.abbreviations.thousand;
+		                    value = value / thousand;
+		                }
+		            }
+
+		            // check for optional decimals
+		            if (numeral._.includes(format, '[.]')) {
+		                optDec = true;
+		                format = format.replace('[.]', '.');
+		            }
+
+		            // break number and format
+		            int = value.toString().split('.')[0];
+		            precision = format.split('.')[1];
+		            thousands = format.indexOf(',');
+		            leadingCount = (format.split('.')[0].split(',')[0].match(/0/g) || []).length;
+
+		            if (precision) {
+		                if (numeral._.includes(precision, '[')) {
+		                    precision = precision.replace(']', '');
+		                    precision = precision.split('[');
+		                    decimal = numeral._.toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
+		                } else {
+		                    decimal = numeral._.toFixed(value, precision.length, roundingFunction);
+		                }
+
+		                int = decimal.split('.')[0];
+
+		                if (numeral._.includes(decimal, '.')) {
+		                    decimal = locale.delimiters.decimal + decimal.split('.')[1];
+		                } else {
+		                    decimal = '';
+		                }
+
+		                if (optDec && Number(decimal.slice(1)) === 0) {
+		                    decimal = '';
+		                }
+		            } else {
+		                int = numeral._.toFixed(value, 0, roundingFunction);
+		            }
+
+		            // check abbreviation again after rounding
+		            if (abbr && !abbrForce && Number(int) >= 1000 && abbr !== locale.abbreviations.trillion) {
+		                int = String(Number(int) / 1000);
+
+		                switch (abbr) {
+		                    case locale.abbreviations.thousand:
+		                        abbr = locale.abbreviations.million;
+		                        break;
+		                    case locale.abbreviations.million:
+		                        abbr = locale.abbreviations.billion;
+		                        break;
+		                    case locale.abbreviations.billion:
+		                        abbr = locale.abbreviations.trillion;
+		                        break;
+		                }
+		            }
+
+
+		            // format number
+		            if (numeral._.includes(int, '-')) {
+		                int = int.slice(1);
+		                neg = true;
+		            }
+
+		            if (int.length < leadingCount) {
+		                for (var i = leadingCount - int.length; i > 0; i--) {
+		                    int = '0' + int;
+		                }
+		            }
+
+		            if (thousands > -1) {
+		                int = int.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + locale.delimiters.thousands);
+		            }
+
+		            if (format.indexOf('.') === 0) {
+		                int = '';
+		            }
+
+		            output = int + decimal + (abbr ? abbr : '');
+
+		            if (negP) {
+		                output = (negP && neg ? '(' : '') + output + (negP && neg ? ')' : '');
+		            } else {
+		                if (signed >= 0) {
+		                    output = signed === 0 ? (neg ? '-' : '+') + output : output + (neg ? '-' : '+');
+		                } else if (neg) {
+		                    output = '-' + output;
+		                }
+		            }
+
+		            return output;
+		        },
+		        // unformats numbers separators, decimals places, signs, abbreviations
+		        stringToNumber: function(string) {
+		            var locale = locales[options.currentLocale],
+		                stringOriginal = string,
+		                abbreviations = {
+		                    thousand: 3,
+		                    million: 6,
+		                    billion: 9,
+		                    trillion: 12
+		                },
+		                abbreviation,
+		                value,
+		                regexp;
+
+		            if (options.zeroFormat && string === options.zeroFormat) {
+		                value = 0;
+		            } else if (options.nullFormat && string === options.nullFormat || !string.replace(/[^0-9]+/g, '').length) {
+		                value = null;
+		            } else {
+		                value = 1;
+
+		                if (locale.delimiters.decimal !== '.') {
+		                    string = string.replace(/\./g, '').replace(locale.delimiters.decimal, '.');
+		                }
+
+		                for (abbreviation in abbreviations) {
+		                    regexp = new RegExp('[^a-zA-Z]' + locale.abbreviations[abbreviation] + '(?:\\)|(\\' + locale.currency.symbol + ')?(?:\\))?)?$');
+
+		                    if (stringOriginal.match(regexp)) {
+		                        value *= Math.pow(10, abbreviations[abbreviation]);
+		                        break;
+		                    }
+		                }
+
+		                // check for negative number
+		                value *= (string.split('-').length + Math.min(string.split('(').length - 1, string.split(')').length - 1)) % 2 ? 1 : -1;
+
+		                // remove non numbers
+		                string = string.replace(/[^0-9\.]+/g, '');
+
+		                value *= Number(string);
+		            }
+
+		            return value;
+		        },
+		        isNaN: function(value) {
+		            return typeof value === 'number' && isNaN(value);
+		        },
+		        includes: function(string, search) {
+		            return string.indexOf(search) !== -1;
+		        },
+		        insert: function(string, subString, start) {
+		            return string.slice(0, start) + subString + string.slice(start);
+		        },
+		        reduce: function(array, callback /*, initialValue*/) {
+		            if (this === null) {
+		                throw new TypeError('Array.prototype.reduce called on null or undefined');
+		            }
+
+		            if (typeof callback !== 'function') {
+		                throw new TypeError(callback + ' is not a function');
+		            }
+
+		            var t = Object(array),
+		                len = t.length >>> 0,
+		                k = 0,
+		                value;
+
+		            if (arguments.length === 3) {
+		                value = arguments[2];
+		            } else {
+		                while (k < len && !(k in t)) {
+		                    k++;
+		                }
+
+		                if (k >= len) {
+		                    throw new TypeError('Reduce of empty array with no initial value');
+		                }
+
+		                value = t[k++];
+		            }
+		            for (; k < len; k++) {
+		                if (k in t) {
+		                    value = callback(value, t[k], k, t);
+		                }
+		            }
+		            return value;
+		        },
+		        /**
+		         * Computes the multiplier necessary to make x >= 1,
+		         * effectively eliminating miscalculations caused by
+		         * finite precision.
+		         */
+		        multiplier: function (x) {
+		            var parts = x.toString().split('.');
+
+		            return parts.length < 2 ? 1 : Math.pow(10, parts[1].length);
+		        },
+		        /**
+		         * Given a variable number of arguments, returns the maximum
+		         * multiplier that must be used to normalize an operation involving
+		         * all of them.
+		         */
+		        correctionFactor: function () {
+		            var args = Array.prototype.slice.call(arguments);
+
+		            return args.reduce(function(accum, next) {
+		                var mn = _.multiplier(next);
+		                return accum > mn ? accum : mn;
+		            }, 1);
+		        },
+		        /**
+		         * Implementation of toFixed() that treats floats more like decimals
+		         *
+		         * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
+		         * problems for accounting- and finance-related software.
+		         */
+		        toFixed: function(value, maxDecimals, roundingFunction, optionals) {
+		            var splitValue = value.toString().split('.'),
+		                minDecimals = maxDecimals - (optionals || 0),
+		                boundedPrecision,
+		                optionalsRegExp,
+		                power,
+		                output;
+
+		            // Use the smallest precision value possible to avoid errors from floating point representation
+		            if (splitValue.length === 2) {
+		              boundedPrecision = Math.min(Math.max(splitValue[1].length, minDecimals), maxDecimals);
+		            } else {
+		              boundedPrecision = minDecimals;
+		            }
+
+		            power = Math.pow(10, boundedPrecision);
+
+		            // Multiply up by precision, round accurately, then divide and use native toFixed():
+		            output = (roundingFunction(value + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
+
+		            if (optionals > maxDecimals - boundedPrecision) {
+		                optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
+		                output = output.replace(optionalsRegExp, '');
+		            }
+
+		            return output;
+		        }
+		    };
+
+		    // avaliable options
+		    numeral.options = options;
+
+		    // avaliable formats
+		    numeral.formats = formats;
+
+		    // avaliable formats
+		    numeral.locales = locales;
+
+		    // This function sets the current locale.  If
+		    // no arguments are passed in, it will simply return the current global
+		    // locale key.
+		    numeral.locale = function(key) {
+		        if (key) {
+		            options.currentLocale = key.toLowerCase();
+		        }
+
+		        return options.currentLocale;
+		    };
+
+		    // This function provides access to the loaded locale data.  If
+		    // no arguments are passed in, it will simply return the current
+		    // global locale object.
+		    numeral.localeData = function(key) {
+		        if (!key) {
+		            return locales[options.currentLocale];
+		        }
+
+		        key = key.toLowerCase();
+
+		        if (!locales[key]) {
+		            throw new Error('Unknown locale : ' + key);
+		        }
+
+		        return locales[key];
+		    };
+
+		    numeral.reset = function() {
+		        for (var property in defaults) {
+		            options[property] = defaults[property];
+		        }
+		    };
+
+		    numeral.zeroFormat = function(format) {
+		        options.zeroFormat = typeof(format) === 'string' ? format : null;
+		    };
+
+		    numeral.nullFormat = function (format) {
+		        options.nullFormat = typeof(format) === 'string' ? format : null;
+		    };
+
+		    numeral.defaultFormat = function(format) {
+		        options.defaultFormat = typeof(format) === 'string' ? format : '0.0';
+		    };
+
+		    numeral.register = function(type, name, format) {
+		        name = name.toLowerCase();
+
+		        if (this[type + 's'][name]) {
+		            throw new TypeError(name + ' ' + type + ' already registered.');
+		        }
+
+		        this[type + 's'][name] = format;
+
+		        return format;
+		    };
+
+
+		    numeral.validate = function(val, culture) {
+		        var _decimalSep,
+		            _thousandSep,
+		            _currSymbol,
+		            _valArray,
+		            _abbrObj,
+		            _thousandRegEx,
+		            localeData,
+		            temp;
+
+		        //coerce val to string
+		        if (typeof val !== 'string') {
+		            val += '';
+
+		            if (console.warn) {
+		                console.warn('Numeral.js: Value is not string. It has been co-erced to: ', val);
+		            }
+		        }
+
+		        //trim whitespaces from either sides
+		        val = val.trim();
+
+		        //if val is just digits return true
+		        if (!!val.match(/^\d+$/)) {
+		            return true;
+		        }
+
+		        //if val is empty return false
+		        if (val === '') {
+		            return false;
+		        }
+
+		        //get the decimal and thousands separator from numeral.localeData
+		        try {
+		            //check if the culture is understood by numeral. if not, default it to current locale
+		            localeData = numeral.localeData(culture);
+		        } catch (e) {
+		            localeData = numeral.localeData(numeral.locale());
+		        }
+
+		        //setup the delimiters and currency symbol based on culture/locale
+		        _currSymbol = localeData.currency.symbol;
+		        _abbrObj = localeData.abbreviations;
+		        _decimalSep = localeData.delimiters.decimal;
+		        if (localeData.delimiters.thousands === '.') {
+		            _thousandSep = '\\.';
+		        } else {
+		            _thousandSep = localeData.delimiters.thousands;
+		        }
+
+		        // validating currency symbol
+		        temp = val.match(/^[^\d]+/);
+		        if (temp !== null) {
+		            val = val.substr(1);
+		            if (temp[0] !== _currSymbol) {
+		                return false;
+		            }
+		        }
+
+		        //validating abbreviation symbol
+		        temp = val.match(/[^\d]+$/);
+		        if (temp !== null) {
+		            val = val.slice(0, -1);
+		            if (temp[0] !== _abbrObj.thousand && temp[0] !== _abbrObj.million && temp[0] !== _abbrObj.billion && temp[0] !== _abbrObj.trillion) {
+		                return false;
+		            }
+		        }
+
+		        _thousandRegEx = new RegExp(_thousandSep + '{2}');
+
+		        if (!val.match(/[^\d.,]/g)) {
+		            _valArray = val.split(_decimalSep);
+		            if (_valArray.length > 2) {
+		                return false;
+		            } else {
+		                if (_valArray.length < 2) {
+		                    return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx));
+		                } else {
+		                    if (_valArray[0].length === 1) {
+		                        return ( !! _valArray[0].match(/^\d+$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
+		                    } else {
+		                        return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
+		                    }
+		                }
+		            }
+		        }
+
+		        return false;
+		    };
+
+
+		    /************************************
+		        Numeral Prototype
+		    ************************************/
+
+		    numeral.fn = Numeral.prototype = {
+		        clone: function() {
+		            return numeral(this);
+		        },
+		        format: function(inputString, roundingFunction) {
+		            var value = this._value,
+		                format = inputString || options.defaultFormat,
+		                kind,
+		                output,
+		                formatFunction;
+
+		            // make sure we have a roundingFunction
+		            roundingFunction = roundingFunction || Math.round;
+
+		            // format based on value
+		            if (value === 0 && options.zeroFormat !== null) {
+		                output = options.zeroFormat;
+		            } else if (value === null && options.nullFormat !== null) {
+		                output = options.nullFormat;
+		            } else {
+		                for (kind in formats) {
+		                    if (format.match(formats[kind].regexps.format)) {
+		                        formatFunction = formats[kind].format;
+
+		                        break;
+		                    }
+		                }
+
+		                formatFunction = formatFunction || numeral._.numberToFormat;
+
+		                output = formatFunction(value, format, roundingFunction);
+		            }
+
+		            return output;
+		        },
+		        value: function() {
+		            return this._value;
+		        },
+		        input: function() {
+		            return this._input;
+		        },
+		        set: function(value) {
+		            this._value = Number(value);
+
+		            return this;
+		        },
+		        add: function(value) {
+		            var corrFactor = _.correctionFactor.call(null, this._value, value);
+
+		            function cback(accum, curr, currI, O) {
+		                return accum + Math.round(corrFactor * curr);
+		            }
+
+		            this._value = _.reduce([this._value, value], cback, 0) / corrFactor;
+
+		            return this;
+		        },
+		        subtract: function(value) {
+		            var corrFactor = _.correctionFactor.call(null, this._value, value);
+
+		            function cback(accum, curr, currI, O) {
+		                return accum - Math.round(corrFactor * curr);
+		            }
+
+		            this._value = _.reduce([value], cback, Math.round(this._value * corrFactor)) / corrFactor;
+
+		            return this;
+		        },
+		        multiply: function(value) {
+		            function cback(accum, curr, currI, O) {
+		                var corrFactor = _.correctionFactor(accum, curr);
+		                return Math.round(accum * corrFactor) * Math.round(curr * corrFactor) / Math.round(corrFactor * corrFactor);
+		            }
+
+		            this._value = _.reduce([this._value, value], cback, 1);
+
+		            return this;
+		        },
+		        divide: function(value) {
+		            function cback(accum, curr, currI, O) {
+		                var corrFactor = _.correctionFactor(accum, curr);
+		                return Math.round(accum * corrFactor) / Math.round(curr * corrFactor);
+		            }
+
+		            this._value = _.reduce([this._value, value], cback);
+
+		            return this;
+		        },
+		        difference: function(value) {
+		            return Math.abs(numeral(this._value).subtract(value).value());
+		        }
+		    };
+
+		    /************************************
+		        Default Locale && Format
+		    ************************************/
+
+		    numeral.register('locale', 'en', {
+		        delimiters: {
+		            thousands: ',',
+		            decimal: '.'
+		        },
+		        abbreviations: {
+		            thousand: 'k',
+		            million: 'm',
+		            billion: 'b',
+		            trillion: 't'
+		        },
+		        ordinal: function(number) {
+		            var b = number % 10;
+		            return (~~(number % 100 / 10) === 1) ? 'th' :
+		                (b === 1) ? 'st' :
+		                (b === 2) ? 'nd' :
+		                (b === 3) ? 'rd' : 'th';
+		        },
+		        currency: {
+		            symbol: '$'
+		        }
+		    });
+
+		    
+
+		(function() {
+		        numeral.register('format', 'bps', {
+		            regexps: {
+		                format: /(BPS)/,
+		                unformat: /(BPS)/
+		            },
+		            format: function(value, format, roundingFunction) {
+		                var space = numeral._.includes(format, ' BPS') ? ' ' : '',
+		                    output;
+
+		                value = value * 10000;
+
+		                // check for space before BPS
+		                format = format.replace(/\s?BPS/, '');
+
+		                output = numeral._.numberToFormat(value, format, roundingFunction);
+
+		                if (numeral._.includes(output, ')')) {
+		                    output = output.split('');
+
+		                    output.splice(-1, 0, space + 'BPS');
+
+		                    output = output.join('');
+		                } else {
+		                    output = output + space + 'BPS';
+		                }
+
+		                return output;
+		            },
+		            unformat: function(string) {
+		                return +(numeral._.stringToNumber(string) * 0.0001).toFixed(15);
+		            }
+		        });
+		})();
+
+
+		(function() {
+		        var decimal = {
+		            base: 1000,
+		            suffixes: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+		        },
+		        binary = {
+		            base: 1024,
+		            suffixes: ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+		        };
+
+		    var allSuffixes =  decimal.suffixes.concat(binary.suffixes.filter(function (item) {
+		            return decimal.suffixes.indexOf(item) < 0;
+		        }));
+		        var unformatRegex = allSuffixes.join('|');
+		        // Allow support for BPS (http://www.investopedia.com/terms/b/basispoint.asp)
+		        unformatRegex = '(' + unformatRegex.replace('B', 'B(?!PS)') + ')';
+
+		    numeral.register('format', 'bytes', {
+		        regexps: {
+		            format: /([0\s]i?b)/,
+		            unformat: new RegExp(unformatRegex)
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var output,
+		                bytes = numeral._.includes(format, 'ib') ? binary : decimal,
+		                suffix = numeral._.includes(format, ' b') || numeral._.includes(format, ' ib') ? ' ' : '',
+		                power,
+		                min,
+		                max;
+
+		            // check for space before
+		            format = format.replace(/\s?i?b/, '');
+
+		            for (power = 0; power <= bytes.suffixes.length; power++) {
+		                min = Math.pow(bytes.base, power);
+		                max = Math.pow(bytes.base, power + 1);
+
+		                if (value === null || value === 0 || value >= min && value < max) {
+		                    suffix += bytes.suffixes[power];
+
+		                    if (min > 0) {
+		                        value = value / min;
+		                    }
+
+		                    break;
+		                }
+		            }
+
+		            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+		            return output + suffix;
+		        },
+		        unformat: function(string) {
+		            var value = numeral._.stringToNumber(string),
+		                power,
+		                bytesMultiplier;
+
+		            if (value) {
+		                for (power = decimal.suffixes.length - 1; power >= 0; power--) {
+		                    if (numeral._.includes(string, decimal.suffixes[power])) {
+		                        bytesMultiplier = Math.pow(decimal.base, power);
+
+		                        break;
+		                    }
+
+		                    if (numeral._.includes(string, binary.suffixes[power])) {
+		                        bytesMultiplier = Math.pow(binary.base, power);
+
+		                        break;
+		                    }
+		                }
+
+		                value *= (bytesMultiplier || 1);
+		            }
+
+		            return value;
+		        }
+		    });
+		})();
+
+
+		(function() {
+		        numeral.register('format', 'currency', {
+		        regexps: {
+		            format: /(\$)/
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var locale = numeral.locales[numeral.options.currentLocale],
+		                symbols = {
+		                    before: format.match(/^([\+|\-|\(|\s|\$]*)/)[0],
+		                    after: format.match(/([\+|\-|\)|\s|\$]*)$/)[0]
+		                },
+		                output,
+		                symbol,
+		                i;
+
+		            // strip format of spaces and $
+		            format = format.replace(/\s?\$\s?/, '');
+
+		            // format the number
+		            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+		            // update the before and after based on value
+		            if (value >= 0) {
+		                symbols.before = symbols.before.replace(/[\-\(]/, '');
+		                symbols.after = symbols.after.replace(/[\-\)]/, '');
+		            } else if (value < 0 && (!numeral._.includes(symbols.before, '-') && !numeral._.includes(symbols.before, '('))) {
+		                symbols.before = '-' + symbols.before;
+		            }
+
+		            // loop through each before symbol
+		            for (i = 0; i < symbols.before.length; i++) {
+		                symbol = symbols.before[i];
+
+		                switch (symbol) {
+		                    case '$':
+		                        output = numeral._.insert(output, locale.currency.symbol, i);
+		                        break;
+		                    case ' ':
+		                        output = numeral._.insert(output, ' ', i + locale.currency.symbol.length - 1);
+		                        break;
+		                }
+		            }
+
+		            // loop through each after symbol
+		            for (i = symbols.after.length - 1; i >= 0; i--) {
+		                symbol = symbols.after[i];
+
+		                switch (symbol) {
+		                    case '$':
+		                        output = i === symbols.after.length - 1 ? output + locale.currency.symbol : numeral._.insert(output, locale.currency.symbol, -(symbols.after.length - (1 + i)));
+		                        break;
+		                    case ' ':
+		                        output = i === symbols.after.length - 1 ? output + ' ' : numeral._.insert(output, ' ', -(symbols.after.length - (1 + i) + locale.currency.symbol.length - 1));
+		                        break;
+		                }
+		            }
+
+
+		            return output;
+		        }
+		    });
+		})();
+
+
+		(function() {
+		        numeral.register('format', 'exponential', {
+		        regexps: {
+		            format: /(e\+|e-)/,
+		            unformat: /(e\+|e-)/
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var output,
+		                exponential = typeof value === 'number' && !numeral._.isNaN(value) ? value.toExponential() : '0e+0',
+		                parts = exponential.split('e');
+
+		            format = format.replace(/e[\+|\-]{1}0/, '');
+
+		            output = numeral._.numberToFormat(Number(parts[0]), format, roundingFunction);
+
+		            return output + 'e' + parts[1];
+		        },
+		        unformat: function(string) {
+		            var parts = numeral._.includes(string, 'e+') ? string.split('e+') : string.split('e-'),
+		                value = Number(parts[0]),
+		                power = Number(parts[1]);
+
+		            power = numeral._.includes(string, 'e-') ? power *= -1 : power;
+
+		            function cback(accum, curr, currI, O) {
+		                var corrFactor = numeral._.correctionFactor(accum, curr),
+		                    num = (accum * corrFactor) * (curr * corrFactor) / (corrFactor * corrFactor);
+		                return num;
+		            }
+
+		            return numeral._.reduce([value, Math.pow(10, power)], cback, 1);
+		        }
+		    });
+		})();
+
+
+		(function() {
+		        numeral.register('format', 'ordinal', {
+		        regexps: {
+		            format: /(o)/
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var locale = numeral.locales[numeral.options.currentLocale],
+		                output,
+		                ordinal = numeral._.includes(format, ' o') ? ' ' : '';
+
+		            // check for space before
+		            format = format.replace(/\s?o/, '');
+
+		            ordinal += locale.ordinal(value);
+
+		            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+		            return output + ordinal;
+		        }
+		    });
+		})();
+
+
+		(function() {
+		        numeral.register('format', 'percentage', {
+		        regexps: {
+		            format: /(%)/,
+		            unformat: /(%)/
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var space = numeral._.includes(format, ' %') ? ' ' : '',
+		                output;
+
+		            if (numeral.options.scalePercentBy100) {
+		                value = value * 100;
+		            }
+
+		            // check for space before %
+		            format = format.replace(/\s?\%/, '');
+
+		            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+		            if (numeral._.includes(output, ')')) {
+		                output = output.split('');
+
+		                output.splice(-1, 0, space + '%');
+
+		                output = output.join('');
+		            } else {
+		                output = output + space + '%';
+		            }
+
+		            return output;
+		        },
+		        unformat: function(string) {
+		            var number = numeral._.stringToNumber(string);
+		            if (numeral.options.scalePercentBy100) {
+		                return number * 0.01;
+		            }
+		            return number;
+		        }
+		    });
+		})();
+
+
+		(function() {
+		        numeral.register('format', 'time', {
+		        regexps: {
+		            format: /(:)/,
+		            unformat: /(:)/
+		        },
+		        format: function(value, format, roundingFunction) {
+		            var hours = Math.floor(value / 60 / 60),
+		                minutes = Math.floor((value - (hours * 60 * 60)) / 60),
+		                seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
+
+		            return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
+		        },
+		        unformat: function(string) {
+		            var timeArray = string.split(':'),
+		                seconds = 0;
+
+		            // turn hours and minutes into seconds and add them all up
+		            if (timeArray.length === 3) {
+		                // hours
+		                seconds = seconds + (Number(timeArray[0]) * 60 * 60);
+		                // minutes
+		                seconds = seconds + (Number(timeArray[1]) * 60);
+		                // seconds
+		                seconds = seconds + Number(timeArray[2]);
+		            } else if (timeArray.length === 2) {
+		                // minutes
+		                seconds = seconds + (Number(timeArray[0]) * 60);
+		                // seconds
+		                seconds = seconds + Number(timeArray[1]);
+		            }
+		            return Number(seconds);
+		        }
+		    });
+		})();
+
+		return numeral;
+		}));
+	} (numeral$1));
 
 	var numeral = numeral$1.exports;
 
@@ -17172,7 +27492,8 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  return pick(obj, ["hour", "minute", "second", "millisecond"]);
 	}
 
-	const ianaRegex = /[A-Za-z_+-]{1,256}(:?\/[A-Za-z0-9_+-]{1,256}(\/[A-Za-z0-9_+-]{1,256})?)?/;
+	const ianaRegex =
+	  /[A-Za-z_+-]{1,256}(?::?\/[A-Za-z0-9_+-]{1,256}(?:\/[A-Za-z0-9_+-]{1,256})?)?/;
 
 	/**
 	 * @private
@@ -17694,6 +28015,8 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	            return "hour";
 	          case "d":
 	            return "day";
+	          case "w":
+	            return "week";
 	          case "M":
 	            return "month";
 	          case "y":
@@ -17755,6 +28078,10 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	   */
 	  get name() {
 	    throw new ZoneIsAbstractError();
+	  }
+
+	  get ianaName() {
+	    return this.name;
 	  }
 
 	  /**
@@ -17880,8 +28207,6 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  }
 	}
 
-	const matchingRegex = RegExp(`^${ianaRegex.source}$`);
-
 	let dtfCache = {};
 	function makeDTF(zone) {
 	  if (!dtfCache[zone]) {
@@ -17894,6 +28219,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	      hour: "2-digit",
 	      minute: "2-digit",
 	      second: "2-digit",
+	      era: "short",
 	    });
 	  }
 	  return dtfCache[zone];
@@ -17903,26 +28229,29 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  year: 0,
 	  month: 1,
 	  day: 2,
-	  hour: 3,
-	  minute: 4,
-	  second: 5,
+	  era: 3,
+	  hour: 4,
+	  minute: 5,
+	  second: 6,
 	};
 
 	function hackyOffset(dtf, date) {
 	  const formatted = dtf.format(date).replace(/\u200E/g, ""),
-	    parsed = /(\d+)\/(\d+)\/(\d+),? (\d+):(\d+):(\d+)/.exec(formatted),
-	    [, fMonth, fDay, fYear, fHour, fMinute, fSecond] = parsed;
-	  return [fYear, fMonth, fDay, fHour, fMinute, fSecond];
+	    parsed = /(\d+)\/(\d+)\/(\d+) (AD|BC),? (\d+):(\d+):(\d+)/.exec(formatted),
+	    [, fMonth, fDay, fYear, fadOrBc, fHour, fMinute, fSecond] = parsed;
+	  return [fYear, fMonth, fDay, fadOrBc, fHour, fMinute, fSecond];
 	}
 
 	function partsOffset(dtf, date) {
-	  const formatted = dtf.formatToParts(date),
-	    filled = [];
+	  const formatted = dtf.formatToParts(date);
+	  const filled = [];
 	  for (let i = 0; i < formatted.length; i++) {
-	    const { type, value } = formatted[i],
-	      pos = typeToPos[type];
+	    const { type, value } = formatted[i];
+	    const pos = typeToPos[type];
 
-	    if (!isUndefined(pos)) {
+	    if (type === "era") {
+	      filled[pos] = value;
+	    } else if (!isUndefined(pos)) {
 	      filled[pos] = parseInt(value, 10);
 	    }
 	  }
@@ -17959,12 +28288,12 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	   * Returns whether the provided string is a valid specifier. This only checks the string's format, not that the specifier identifies a known zone; see isValidZone for that.
 	   * @param {string} s - The string to check validity on
 	   * @example IANAZone.isValidSpecifier("America/New_York") //=> true
-	   * @example IANAZone.isValidSpecifier("Fantasia/Castle") //=> true
 	   * @example IANAZone.isValidSpecifier("Sport~~blorp") //=> false
+	   * @deprecated This method returns false for some valid IANA names. Use isValidZone instead.
 	   * @return {boolean}
 	   */
 	  static isValidSpecifier(s) {
-	    return !!(s && s.match(matchingRegex));
+	    return this.isValidZone(s);
 	  }
 
 	  /**
@@ -18026,10 +28355,14 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 
 	    if (isNaN(date)) return NaN;
 
-	    const dtf = makeDTF(this.name),
-	      [year, month, day, hour, minute, second] = dtf.formatToParts
-	        ? partsOffset(dtf, date)
-	        : hackyOffset(dtf, date);
+	    const dtf = makeDTF(this.name);
+	    let [year, month, day, adOrBc, hour, minute, second] = dtf.formatToParts
+	      ? partsOffset(dtf, date)
+	      : hackyOffset(dtf, date);
+
+	    if (adOrBc === "BC") {
+	      year = -Math.abs(year) + 1;
+	    }
 
 	    // because we're using hour12 and https://bugs.chromium.org/p/chromium/issues/detail?id=1025564&can=2&q=%2224%3A00%22%20datetimeformat
 	    const adjustedHour = hour === 24 ? 0 : hour;
@@ -18120,6 +28453,14 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  /** @override **/
 	  get name() {
 	    return this.fixed === 0 ? "UTC" : `UTC${formatOffset(this.fixed, "narrow")}`;
+	  }
+
+	  get ianaName() {
+	    if (this.fixed === 0) {
+	      return "Etc/UTC";
+	    } else {
+	      return `Etc/GMT${formatOffset(-this.fixed, "narrow")}`;
+	    }
 	  }
 
 	  /** @override **/
@@ -18218,8 +28559,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    const lowered = input.toLowerCase();
 	    if (lowered === "local" || lowered === "system") return defaultZone;
 	    else if (lowered === "utc" || lowered === "gmt") return FixedOffsetZone.utcInstance;
-	    else if (IANAZone.isValidSpecifier(lowered)) return IANAZone.create(input);
-	    else return FixedOffsetZone.parseSpecifier(lowered) || new InvalidZone(input);
+	    else return FixedOffsetZone.parseSpecifier(lowered) || IANAZone.create(input);
 	  } else if (isNumber(input)) {
 	    return FixedOffsetZone.instance(input);
 	  } else if (typeof input === "object" && input.offset && typeof input.offset === "number") {
@@ -18827,7 +29167,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	      .reduce(
 	        ([mergedVals, mergedZone, cursor], ex) => {
 	          const [val, zone, next] = ex(m, cursor);
-	          return [{ ...mergedVals, ...val }, mergedZone || zone, next];
+	          return [{ ...mergedVals, ...val }, zone || mergedZone, next];
 	        },
 	        [{}, null, 1]
 	      )
@@ -18861,20 +29201,21 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	}
 
 	// ISO and SQL parsing
-	const offsetRegex = /(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/,
-	  isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,30}))?)?)?/,
-	  isoTimeRegex = RegExp(`${isoTimeBaseRegex.source}${offsetRegex.source}?`),
-	  isoTimeExtensionRegex = RegExp(`(?:T${isoTimeRegex.source})?`),
-	  isoYmdRegex = /([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/,
-	  isoWeekRegex = /(\d{4})-?W(\d\d)(?:-?(\d))?/,
-	  isoOrdinalRegex = /(\d{4})-?(\d{3})/,
-	  extractISOWeekData = simpleParse("weekYear", "weekNumber", "weekDay"),
-	  extractISOOrdinalData = simpleParse("year", "ordinal"),
-	  sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/, // dumbed-down version of the ISO one
-	  sqlTimeRegex = RegExp(
-	    `${isoTimeBaseRegex.source} ?(?:${offsetRegex.source}|(${ianaRegex.source}))?`
-	  ),
-	  sqlTimeExtensionRegex = RegExp(`(?: ${sqlTimeRegex.source})?`);
+	const offsetRegex = /(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/;
+	const isoExtendedZone = `(?:${offsetRegex.source}?(?:\\[(${ianaRegex.source})\\])?)?`;
+	const isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,30}))?)?)?/;
+	const isoTimeRegex = RegExp(`${isoTimeBaseRegex.source}${isoExtendedZone}`);
+	const isoTimeExtensionRegex = RegExp(`(?:T${isoTimeRegex.source})?`);
+	const isoYmdRegex = /([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/;
+	const isoWeekRegex = /(\d{4})-?W(\d\d)(?:-?(\d))?/;
+	const isoOrdinalRegex = /(\d{4})-?(\d{3})/;
+	const extractISOWeekData = simpleParse("weekYear", "weekNumber", "weekDay");
+	const extractISOOrdinalData = simpleParse("year", "ordinal");
+	const sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/; // dumbed-down version of the ISO one
+	const sqlTimeRegex = RegExp(
+	  `${isoTimeBaseRegex.source} ?(?:${offsetRegex.source}|(${ianaRegex.source}))?`
+	);
+	const sqlTimeExtensionRegex = RegExp(`(?: ${sqlTimeRegex.source})?`);
 
 	function int(match, pos, fallback) {
 	  const m = match[pos];
@@ -19052,21 +29393,28 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	const extractISOYmdTimeAndOffset = combineExtractors(
 	  extractISOYmd,
 	  extractISOTime,
-	  extractISOOffset
+	  extractISOOffset,
+	  extractIANAZone
 	);
 	const extractISOWeekTimeAndOffset = combineExtractors(
 	  extractISOWeekData,
 	  extractISOTime,
-	  extractISOOffset
+	  extractISOOffset,
+	  extractIANAZone
 	);
 	const extractISOOrdinalDateAndTime = combineExtractors(
 	  extractISOOrdinalData,
 	  extractISOTime,
-	  extractISOOffset
+	  extractISOOffset,
+	  extractIANAZone
 	);
-	const extractISOTimeAndOffset = combineExtractors(extractISOTime, extractISOOffset);
+	const extractISOTimeAndOffset = combineExtractors(
+	  extractISOTime,
+	  extractISOOffset,
+	  extractIANAZone
+	);
 
-	/**
+	/*
 	 * @private
 	 */
 
@@ -19106,12 +29454,6 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	const sqlYmdWithTimeExtensionRegex = combineRegexes(sqlYmdRegex, sqlTimeExtensionRegex);
 	const sqlTimeCombinedRegex = combineRegexes(sqlTimeRegex);
 
-	const extractISOYmdTimeOffsetAndIANAZone = combineExtractors(
-	  extractISOYmd,
-	  extractISOTime,
-	  extractISOOffset,
-	  extractIANAZone
-	);
 	const extractISOTimeOffsetAndIANAZone = combineExtractors(
 	  extractISOTime,
 	  extractISOOffset,
@@ -19121,7 +29463,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	function parseSQL(s) {
 	  return parse(
 	    s,
-	    [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeOffsetAndIANAZone],
+	    [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeAndOffset],
 	    [sqlTimeCombinedRegex, extractISOTimeOffsetAndIANAZone]
 	  );
 	}
@@ -19513,6 +29855,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	   * * `m` for minutes
 	   * * `h` for hours
 	   * * `d` for days
+	   * * `w` for weeks
 	   * * `M` for months
 	   * * `y` for years
 	   * Notes:
@@ -19538,8 +29881,9 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  }
 
 	  /**
-	   * Returns a string representation of a Duration with all units included
-	   * To modify its behavior use the `listStyle` and any Intl.NumberFormat option, though `unitDisplay` is especially relevant. See {@link Intl.NumberFormat}.
+	   * Returns a string representation of a Duration with all units included.
+	   * To modify its behavior use the `listStyle` and any Intl.NumberFormat option, though `unitDisplay` is especially relevant.
+	   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 	   * @param opts - On option object to override the formatting. Accepts the same keys as the options parameter of the native `Int.NumberFormat` constructor, as well as `listStyle`.
 	   * @example
 	   * ```js
@@ -19878,7 +30222,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    if (!this.isValid) return this;
 	    const negated = {};
 	    for (const k of Object.keys(this.values)) {
-	      negated[k] = -this.values[k];
+	      negated[k] = this.values[k] === 0 ? 0 : -this.values[k];
 	    }
 	    return clone$1(this, { values: negated }, true);
 	  }
@@ -20633,7 +30977,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	   * @return {boolean}
 	   */
 	  static isValidIANAZone(zone) {
-	    return IANAZone.isValidSpecifier(zone) && IANAZone.isValidZone(zone);
+	    return IANAZone.isValidZone(zone);
 	  }
 
 	  /**
@@ -20932,7 +31276,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	}
 
 	const NBSP = String.fromCharCode(160);
-	const spaceOrNBSP = `( |${NBSP})`;
+	const spaceOrNBSP = `[ ${NBSP}]`;
 	const spaceOrNBSPRegExp = new RegExp(spaceOrNBSP, "g");
 
 	function fixListRegex(s) {
@@ -21362,7 +31706,14 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	}
 
 	function dayOfWeek(year, month, day) {
-	  const js = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+	  const d = new Date(Date.UTC(year, month - 1, day));
+
+	  if (year < 100 && year >= 0) {
+	    d.setUTCFullYear(d.getUTCFullYear() - 1900);
+	  }
+
+	  const js = d.getUTCDay();
+
 	  return js === 0 ? 7 : js;
 	}
 
@@ -21659,7 +32010,14 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  return c;
 	}
 
-	function toISOTime(o, extended, suppressSeconds, suppressMilliseconds, includeOffset) {
+	function toISOTime(
+	  o,
+	  extended,
+	  suppressSeconds,
+	  suppressMilliseconds,
+	  includeOffset,
+	  extendedZone
+	) {
 	  let c = padStart(o.c.hour);
 	  if (extended) {
 	    c += ":";
@@ -21681,7 +32039,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  }
 
 	  if (includeOffset) {
-	    if (o.isOffsetFixed && o.offset === 0) {
+	    if (o.isOffsetFixed && o.offset === 0 && !extendedZone) {
 	      c += "Z";
 	    } else if (o.o < 0) {
 	      c += "-";
@@ -21694,6 +32052,10 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	      c += ":";
 	      c += padStart(Math.trunc(o.o % 60));
 	    }
+	  }
+
+	  if (extendedZone) {
+	    c += "[" + o.zone.ianaName + "]";
 	  }
 	  return c;
 	}
@@ -21769,10 +32131,6 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 
 	  return normalized;
 	}
-
-	// this is a dumbed down version of fromObject() that runs about 60% faster
-	// but doesn't do any validation, makes a bunch of assumptions about what units
-	// are present, and so on.
 
 	// this is a dumbed down version of fromObject() that runs about 60% faster
 	// but doesn't do any validation, makes a bunch of assumptions about what units
@@ -22353,7 +32711,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  }
 
 	  /**
-	   * Check if an object is a DateTime. Works across context boundaries
+	   * Check if an object is an instance of DateTime. Works across context boundaries
 	   * @param {object} o
 	   * @return {boolean}
 	   */
@@ -22654,7 +33012,8 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	      return false;
 	    } else {
 	      return (
-	        this.offset > this.set({ month: 1 }).offset || this.offset > this.set({ month: 5 }).offset
+	        this.offset > this.set({ month: 1, day: 1 }).offset ||
+	        this.offset > this.set({ month: 5 }).offset
 	      );
 	    }
 	  }
@@ -23007,6 +33366,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	   * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
 	   * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
 	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @param {boolean} [opts.extendedZone=true] - add the time zone format extension
 	   * @param {string} [opts.format='extended'] - choose between the basic and extended format
 	   * @example DateTime.utc(1983, 5, 25).toISO() //=> '1982-05-25T00:00:00.000Z'
 	   * @example DateTime.now().toISO() //=> '2017-04-22T20:47:05.335-04:00'
@@ -23019,6 +33379,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    suppressSeconds = false,
 	    suppressMilliseconds = false,
 	    includeOffset = true,
+	    extendedZone = false,
 	  } = {}) {
 	    if (!this.isValid) {
 	      return null;
@@ -23028,7 +33389,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 
 	    let c = toISODate(this, ext);
 	    c += "T";
-	    c += toISOTime(this, ext, suppressSeconds, suppressMilliseconds, includeOffset);
+	    c += toISOTime(this, ext, suppressSeconds, suppressMilliseconds, includeOffset, extendedZone);
 	    return c;
 	  }
 
@@ -23063,6 +33424,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	   * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
 	   * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
 	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @param {boolean} [opts.extendedZone=true] - add the time zone format extension
 	   * @param {boolean} [opts.includePrefix=false] - include the `T` prefix
 	   * @param {string} [opts.format='extended'] - choose between the basic and extended format
 	   * @example DateTime.utc().set({ hour: 7, minute: 34 }).toISOTime() //=> '07:34:19.361Z'
@@ -23076,6 +33438,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    suppressSeconds = false,
 	    includeOffset = true,
 	    includePrefix = false,
+	    extendedZone = false,
 	    format = "extended",
 	  } = {}) {
 	    if (!this.isValid) {
@@ -23085,7 +33448,14 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    let c = includePrefix ? "T" : "";
 	    return (
 	      c +
-	      toISOTime(this, format === "extended", suppressSeconds, suppressMilliseconds, includeOffset)
+	      toISOTime(
+	        this,
+	        format === "extended",
+	        suppressSeconds,
+	        suppressMilliseconds,
+	        includeOffset,
+	        extendedZone
+	      )
 	    );
 	  }
 
@@ -23128,17 +33498,20 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	   * @param {Object} opts - options
 	   * @param {boolean} [opts.includeZone=false] - include the zone, such as 'America/New_York'. Overrides includeOffset.
 	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @param {boolean} [opts.includeOffsetSpace=true] - include the space between the time and the offset, such as '05:15:16.345 -04:00'
 	   * @example DateTime.utc().toSQL() //=> '05:15:16.345'
 	   * @example DateTime.now().toSQL() //=> '05:15:16.345 -04:00'
 	   * @example DateTime.now().toSQL({ includeOffset: false }) //=> '05:15:16.345'
 	   * @example DateTime.now().toSQL({ includeZone: false }) //=> '05:15:16.345 America/New_York'
 	   * @return {string}
 	   */
-	  toSQLTime({ includeOffset = true, includeZone = false } = {}) {
+	  toSQLTime({ includeOffset = true, includeZone = false, includeOffsetSpace = true } = {}) {
 	    let fmt = "HH:mm:ss.SSS";
 
 	    if (includeZone || includeOffset) {
-	      fmt += " ";
+	      if (includeOffsetSpace) {
+	        fmt += " ";
+	      }
 	      if (includeZone) {
 	        fmt += "z";
 	      } else if (includeOffset) {
@@ -23154,6 +33527,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	   * @param {Object} opts - options
 	   * @param {boolean} [opts.includeZone=false] - include the zone, such as 'America/New_York'. Overrides includeOffset.
 	   * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
+	   * @param {boolean} [opts.includeOffsetSpace=true] - include the space between the time and the offset, such as '05:15:16.345 -04:00'
 	   * @example DateTime.utc(2014, 7, 13).toSQL() //=> '2014-07-13 00:00:00.000 Z'
 	   * @example DateTime.local(2014, 7, 13).toSQL() //=> '2014-07-13 00:00:00.000 -04:00'
 	   * @example DateTime.local(2014, 7, 13).toSQL({ includeOffset: false }) //=> '2014-07-13 00:00:00.000'
@@ -23198,6 +33572,14 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	   */
 	  toSeconds() {
 	    return this.isValid ? this.ts / 1000 : NaN;
+	  }
+
+	  /**
+	   * Returns the epoch seconds (as a whole number) of this DateTime.
+	   * @return {number}
+	   */
+	  toUnixInteger() {
+	    return this.isValid ? Math.floor(this.ts / 1000) : NaN;
 	  }
 
 	  /**
@@ -23638,7 +34020,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	  }
 	}
 
-	const VERSION = "2.3.0";
+	const VERSION = "2.4.0";
 
 	var luxon = /*#__PURE__*/Object.freeze({
 		__proto__: null,
@@ -24028,7 +34410,7 @@ var jsonx = (function (exports, React$1, ReactDOM) {
 	    }
 	    else if (typeof window !== "undefined" &&
 	        typeof window.XMLHttpRequest === "function" &&
-	        (!fs.readFileSync )) {
+	        (!fs.readFileSync || type === 'fetch')) {
 	        const jsFile = fetchJSONSync(template);
 	        const jsonxModule = scopedEval$1(`(${jsFile})`);
 	        templateCache.set(template, jsonxModule);
@@ -24207,8 +34589,8 @@ ${jsonxRenderedString}`;
 	function outputHTML(config = { jsonx: { component: "" } }) {
 	    const { jsonx, resources, type, props, children } = config;
 	    return this && this.useJSON
-	        ? server.renderToString(getReactElementFromJSON.call(this || {}, { type: (type || jsonx.type || jsonx.component || 'Fragment'), props: props || jsonx.props, children: children || jsonx.children }))
-	        : server.renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
+	        ? server_node.renderToString(getReactElementFromJSON.call(this || {}, { type: (type || jsonx.type || jsonx.component || 'Fragment'), props: props || jsonx.props, children: children || jsonx.children }))
+	        : server_node.renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
 	}
 	/**
 	 * Use React.createElement and JSONX JSON to create React elements

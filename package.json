@@ -15,6 +15,7 @@
     "test": "jest --coverage",
     "doc": "tsc && typedoc && sitedown manual/ -b docs/manual",
     "compile": "tsc",
+    "esbuild": "node esbuild.config.js",
     "build": "tsc && rollup -c && typedoc && sitedown manual/ -b docs/manual",
     "coverage": "coveralls"
   },
@@ -80,6 +81,9 @@
     "chai": "4.3.6",
     "chai-as-promised": "7.1.1",
     "coveralls": "3.1.1",
+    "esbuild": "^0.14.47",
+    "esbuild-node-builtins": "^0.1.0",
+    "esbuild-plugin-globals": "^0.1.1",
     "express": "^4.18.1",
     "husky": "8.0.1",
     "install": "0.13.0",

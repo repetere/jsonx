@@ -1,6 +1,7 @@
 // import React, { createElement, } from 'react';
 import React from "react";
 import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 import ReactDOMServer from "react-dom/server";
 import * as defs from "./types/jsonx/index";
 
@@ -54,7 +55,10 @@ export function jsonxRender(
   );
   if (!JSONXReactElement) throw ReferenceError("Invalid React Element");
   else if (!RenderDOM) throw ReferenceError("Invalid Render DOM Element");
-  Render(JSONXReactElement, RenderDOM);
+  if(!portal){
+    const root = createRoot(RenderDOM)
+    root.render(JSONXReactElement)
+  } else Render(JSONXReactElement, RenderDOM);
 }
 
 /**
