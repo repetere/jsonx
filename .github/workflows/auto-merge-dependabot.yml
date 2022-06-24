@@ -42,7 +42,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm i jest typescript esbuild typedoc sitedown -g
-          npm ci
+          npm i
       - name: Test coverage
         run: |
           jest --coverage --runInBand --ci --no-cache
