@@ -1,16 +1,7 @@
 import * as JSONX from "./index";
-import mochaJSDOM from "jsdom-global";
-import chai from "chai";
-import sinon from "sinon";
-import React from "react";
-import ReactTestUtils from "react-dom/test-utils"; // ES6
-import ReactDOM from "react-dom";
-import ReactDOMElements from "react-dom-factories";
-import { expect as expectCHAI } from "chai";
 import { JSDOM } from "jsdom";
 import numeral from "numeral";
 import * as luxon from "luxon";
-chai.use(require("sinon-chai"));
 // import 'mocha-sinon';
 
 const _jsonxChildren = JSONX._jsonxChildren;
@@ -92,29 +83,27 @@ describe("jsonx", function() {
       const JSONXChildrenPTag = getChildrenProperty({
         jsonx: sampleJSONX.children[0]
       });
-      expectCHAI(JSONXChildren).to.be.an("array");
-      expectCHAI(JSONXChildren.length).to.eql(sampleJSONX.children.length);
-      expectCHAI(JSONXChildrenPTag).to.be.a("string");
-      expectCHAI(JSONXChildrenPTag).to.eql(sampleJSONX.children[0].children);
-      expectCHAI(
+      expect(Array.isArray(JSONXChildren)).toBeTruthy()
+      expect(JSONXChildren.length).toBe(sampleJSONX.children.length);
+      expect(typeof JSONXChildrenPTag).toBe("string");
+      expect(JSONXChildrenPTag).toBe(sampleJSONX.children[0].children);
+      expect(
         getChildrenProperty({
           jsonx: {
             props: { _children: {} },
             children: "hello"
           }
         })
-      ).to.eql("hello");
-      expectCHAI(
+      ).toBe("hello");
+      expect(
         getChildrenProperty({
           jsonx: {}
         })
-      ).to.eql(null);
-      expectCHAI(getChildrenProperty({ props: { children: [1, 2, 3] } })).to.be.an(
-        "array"
-      );
-      expectCHAI(
+      ).toBeNull();
+      expect(Array.isArray(getChildrenProperty({ props: { children: [1, 2, 3] } }))).toBeTruthy();
+      expect(
         getChildrenProperty({ jsonx: { props: { children: "hello" } } })
-      ).to.eql("hello");
+      ).toBe("hello");
     });
     it("should get the children from jsonx.props._children property", () => {
       const testJSONX = {
@@ -158,12 +147,12 @@ describe("jsonx", function() {
       const JSONXChildren = getChildrenProperty({ jsonx: testJSONX });
       const JSONXChildren2 = getChildrenProperty({ jsonx: testJSONX2 });
       const JSONXChildren3 = getChildrenProperty({ jsonx: testJSONX3 });
-      expectCHAI(JSONXChildren).to.be.a("string");
-      expectCHAI(JSONXChildren).to.eql(testJSONX.props._children);
-      expectCHAI(JSONXChildren2).to.be.an("array");
-      expectCHAI(JSONXChildren2.length).to.eql(testJSONX2.props._children.length);
-      expectCHAI(JSONXChildren3).to.be.a("string");
-      expectCHAI(JSONXChildren3).to.eql(testJSONX3.props._children);
+      expect(typeof JSONXChildren).toBe("string");
+      expect(JSONXChildren).toBe(testJSONX.props._children);
+      expect(Array.isArray(JSONXChildren2)).toBeTruthy();
+      expect(JSONXChildren2.length).toBe(testJSONX2.props._children.length);
+      expect(typeof JSONXChildren3).toBe("string");
+      expect(JSONXChildren3).toBe(testJSONX3.props._children);
     });
     it("should get the children from jsonx.props.children property", () => {
       const testJSONX = {
@@ -213,13 +202,13 @@ describe("jsonx", function() {
       const JSONXChildren2 = getChildrenProperty({ jsonx: testJSONX2 });
       const JSONXChildren3 = getChildrenProperty({ jsonx: testJSONX3 });
       const JSONXChildren4 = getChildrenProperty({ jsonx: testJSONX4 });
-      expectCHAI(JSONXChildren).to.be.a("string");
-      expectCHAI(JSONXChildren).to.eql(testJSONX.props.children);
-      expectCHAI(JSONXChildren2).to.be.an("array");
-      expectCHAI(JSONXChildren2.length).to.eql(testJSONX2.props.children.length);
-      expectCHAI(JSONXChildren3).to.be.a("array");
-      expectCHAI(JSONXChildren3).to.eql(testJSONX3.children);
-      expectCHAI(JSONXChildren4).to.be.a("function");
+      expect(typeof JSONXChildren).toBe("string");
+      expect(JSONXChildren).toBe(testJSONX.props.children);
+      expect(Array.isArray(JSONXChildren2)).toBeTruthy()
+      expect(JSONXChildren2.length).toBe(testJSONX2.props.children.length);
+      expect(Array.isArray(JSONXChildren3)).toBeTruthy()
+      expect(JSONXChildren3).toBe(testJSONX3.children);
+      expect(typeof JSONXChildren4).toBe("function");
     });
   });
   describe("getChildrenProps", () => {
@@ -233,7 +222,7 @@ describe("jsonx", function() {
         childjsonx,
         renderIndex
       });
-      expectCHAI(childProps).to.eq(childjsonx);
+      expect(childProps).toBe(childjsonx);
     });
     it("should pass props except for styles", () => {
       const renderIndex = 1;
@@ -250,18 +239,18 @@ describe("jsonx", function() {
         renderIndex
       });
       //@ts-ignore
-      expectCHAI(childProps_span.props.title).to.eq(passableJSONX.props.title);
+      expect(childProps_span.props.title).toBe(passableJSONX.props.title);
       //@ts-ignore
-      expectCHAI(childProps_p.props.title).to.eq(passableJSONX.props.title);
+      expect(childProps_p.props.title).toBe(passableJSONX.props.title);
       //@ts-ignore
-      expectCHAI(childProps_p.props.style.color).to.eq(
+      expect(childProps_p.props.style.color).toBe(
         //@ts-ignore
         passableJSONX.children[1].props.style.color
       );
       //@ts-ignore
-      expectCHAI(childProps_p.props.key).to.not.eq(renderIndex);
+      expect(childProps_p.props.key === renderIndex).toBeFalsy()
       //@ts-ignore
-      expectCHAI(childProps_span.props.key).to.not.eq(renderIndex);
+      expect(childProps_span.props.key === renderIndex).toBeFalsy();
     });
     it('should only pass selected props',()=>{
       const renderIndex = 1;
@@ -299,7 +288,7 @@ describe("jsonx", function() {
         renderIndex
       });
       //@ts-ignore
-      expectCHAI(childProps_span.props).to.eql({ value: 302, size: 2 })      
+      expect(childProps_span.props).toMatchObject({ value: 302, size: 2 })      
     })
   });
   describe("getJSONXChildren", () => {
@@ -336,21 +325,21 @@ describe("jsonx", function() {
       );
       //@ts-ignore
       JSONXChildren.forEach(ReactiveJSON => {
-        expectCHAI(ReactiveJSON).to.be.an("object");
-        expectCHAI(ReactiveJSON).to.haveOwnProperty("$$typeof");
-        expectCHAI(ReactiveJSON).to.haveOwnProperty("type");
-        expectCHAI(ReactiveJSON).to.haveOwnProperty("key");
-        expectCHAI(ReactiveJSON).to.haveOwnProperty("ref");
-        expectCHAI(ReactiveJSON).to.haveOwnProperty("props");
+        expect(typeof ReactiveJSON).toBe("object");
+        expect(ReactiveJSON).toHaveProperty("$$typeof");
+        expect(ReactiveJSON).toHaveProperty("type");
+        expect(ReactiveJSON).toHaveProperty("key");
+        expect(ReactiveJSON).toHaveProperty("ref");
+        expect(ReactiveJSON).toHaveProperty("props");
       });
     });
     it("should return null on error", () => {
       //@ts-ignore
-      expectCHAI(getJSONXChildren.call({}, { logError: () => {} })).to.eql(null);
+      expect(getJSONXChildren.call({}, { logError: () => {} })).toBeNull();
     });
     it("should stringify children", () => {
       const obj = { some: "data", to: "stringify" };
-      expectCHAI(
+      expect(
         getJSONXChildren.call(
           {},
           {
@@ -362,9 +351,9 @@ describe("jsonx", function() {
             }
           }
         )
-      ).to.eql(JSON.stringify(obj, null, 2));
+      ).toBe(JSON.stringify(obj, null, 2));
       //normal stringify
-      expectCHAI(
+      expect(
         //@ts-ignore
         getJSONXChildren(
           {
@@ -376,12 +365,12 @@ describe("jsonx", function() {
             }
           }
         )
-      ).to.eql(JSON.stringify(obj, null, 2));
+      ).toBe(JSON.stringify(obj, null, 2));
     });
     it("should toString children", () => {
       const obj = { some: "data", to: "stringify" };
       const testDate = new Date();
-      expectCHAI(
+      expect(
         getJSONXChildren.call(
           {},
           {
@@ -393,8 +382,8 @@ describe("jsonx", function() {
             }
           }
         )
-      ).to.eql(obj.toString());
-      expectCHAI(
+      ).toBe(obj.toString());
+      expect(
         getJSONXChildren.call(
           {},
           {
@@ -406,7 +395,7 @@ describe("jsonx", function() {
             }
           }
         )
-      ).to.eql(testDate.toString());
+      ).toBe(testDate.toString());
     });
     it("should convert children to numeral formatted string", () => {
       const numeralValue = 1500.23;
@@ -414,7 +403,7 @@ describe("jsonx", function() {
       const numeralFormattedString = numeral(numeralValue).format(
         numeralFormat
       );
-      expectCHAI(
+      expect(
         //@ts-ignore
         getJSONXChildren.call(
           {},
@@ -426,14 +415,14 @@ describe("jsonx", function() {
             }
           }
         )
-      ).to.eql(numeralFormattedString);
+      ).toBe(numeralFormattedString);
     });
     it("should convert children date object to luxon formatted string", () => {
       const testLuxonFormat = luxon.DateTime.fromJSDate(testDate).toFormat(
         luxonFormat
       );
       // console.log({ testDate, testDateISO, luxonFormat, testLuxonFormat });
-      expectCHAI(
+      expect(
         getJSONXChildren.call(
           {},
           {
@@ -443,13 +432,13 @@ describe("jsonx", function() {
             }
           }
         )
-      ).to.eql(testLuxonFormat);
+      ).toBe(testLuxonFormat);
     });
     it("should convert children iso string to luxon formatted string", () => {
       const testLuxonFormat = luxon.DateTime.fromISO(testDateISO).toFormat(
         luxonFormat
       );
-      expectCHAI(
+      expect(
         getJSONXChildren.call(
           {},
           {
@@ -459,7 +448,7 @@ describe("jsonx", function() {
             }
           }
         )
-      ).to.eql(testLuxonFormat);
+      ).toBe(testLuxonFormat);
     });
     it("should import templates into children", () => {
       const importedTemplate = JSONX._jsonxChildren.getJSONXChildren.call(
@@ -472,12 +461,12 @@ describe("jsonx", function() {
           }
         }
       );
-      expectCHAI(_jsonxChildren.templateCache).to.be.lengthOf(1);
-      expectCHAI(importedTemplate).to.be.an("array");
+      expect(_jsonxChildren.templateCache.size).toBe(1);
+      expect(Array.isArray(importedTemplate)).toBeTruthy();
       //@ts-ignore
-      expectCHAI(importedTemplate[0].type).to.eql("div");
+      expect(importedTemplate[0].type).toBe("div");
       //@ts-ignore
-      expectCHAI(importedTemplate[0].children).to.eql("from external template");
+      expect(importedTemplate[0].children).toBe("from external template");
     });
   });
   describe('fetchJSONSync', () => {

@@ -25,6 +25,7 @@ describe('End to End HTML Tests', function(){
       expect(initialPageData.titleText).toBe('JSONX TEST')
       expect(parseInt(initialPageData.inputValue)).toBe(0)
 
+
       await page.$eval('#buttonCount',(el:any)=>el.click())
       await page.$eval('#buttonCount',(el:any)=>el.click())
       await page.$eval('#buttonCount',(el:any)=>el.click())
@@ -36,7 +37,7 @@ describe('End to End HTML Tests', function(){
       // console.log({initialPageData,modifiedPageData})
       expect(parseInt(modifiedPageData.inputValue)).toBe(3)
       // await page.screenshot({ path: 'example.png' });
-    },10000)
+    },30000)
   })
   describe('Dynamic Component Test',()=>{
     it('should render the page', async()=>{
@@ -52,7 +53,7 @@ describe('End to End HTML Tests', function(){
       const resolvedContentData = await page.$eval('#fetchedP',(el:any)=>el.innerText)
       expect(resolvedContentTitle).toBe('Fetched Data')
       expect(resolvedContentData).toBe('some mock data')
-    },10000)
+    },30000)
   })
   describe('Basic Component Test',()=>{
     it('should render the page', async()=>{
@@ -89,7 +90,7 @@ describe('End to End HTML Tests', function(){
         email: 'bluebill1049@example.comadding from jest'
       })
       // expect(resolvedContentData).toBe('some mock data')
-    },10000)
+    },30000)
   })
   describe('Advanced Form Test',()=>{
     it('should render the page', async()=>{
@@ -141,7 +142,7 @@ describe('End to End HTML Tests', function(){
         ]
       })
       
-    },10000)
+    },30000)
   })
   describe('Custom Components Sytanx Test',()=>{
     it('should render the page', async()=>{
@@ -151,13 +152,12 @@ describe('End to End HTML Tests', function(){
       const pageTitle = await page.$eval('title',(el:any)=>el.innerText)
       // const initialFormData = await page.$eval('#advanedFormResults',(el:any)=>el.innerText)
       expect(pageTitle).toBe('CUSTOM COMPONENTS INLINE TEST')
-      
       const mainContent = await page.$eval('main',(el:any)=>el.innerHTML)
       // console.log({mainContent})
       expect(mainContent.includes('gen custom')).toBe(true)
       expect(mainContent.includes('My Custom React Component Status')).toBe(true)
       expect(mainContent.includes('<div testprop="should be passed"><span testprop="should be passed">from func</span></div>')).toBe(true)
-    },10000)
+    },30000)
   })
   describe('Simple Sytanx Test',()=>{
     it('should render the page', async()=>{
@@ -173,6 +173,6 @@ describe('End to End HTML Tests', function(){
       const mainContent = await page.$eval('main',(el:any)=>el.innerHTML)
       expect(mainContent.includes('<li>first</li>')).toBe(true)
       expect(mainContent.includes('<p title="this is a passed Title">mixed usage with regular syntax</p>')).toBe(true)
-    },10000)
+    },30000)
   })
 })
