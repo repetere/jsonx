@@ -1,5 +1,6 @@
 import { ReactElementLike } from "prop-types";
 import * as defs from "./types/jsonx/index";
+import { ReactFragment, ReactNode } from "react";
 export declare const templateCache: Map<any, any>;
 /**
  * returns a valid jsonx.children property
@@ -74,4 +75,4 @@ export declare function clearTemplateCache(): void;
  * @property {function} [this.logError=console.error] - error logging function
  * @property {string[]} [this.boundedComponents=[]] - list of components that require a bound this context (usefult for redux router)
  */
-export declare function getJSONXChildren(this: defs.Context, options?: defs.Config): string | null | undefined | Array<ReactElementLike> | Array<defs.JSONReactElement>;
+export declare function getJSONXChildren(this: defs.Context, options?: defs.Config): string | null | undefined | Array<ReactElementLike> | Array<defs.JSONReactElement> | ReactNode | ReactFragment;

@@ -1,13 +1,9 @@
 import * as jsonx from './index';
 // import mochaJSDOM from 'jsdom-global';
 import path from 'path';
-import chai from 'chai';
-import sinon from 'sinon';
 import React, { ReactElement } from 'react';
 import ReactTestUtils from 'react-dom/test-utils'; // ES6
 import ReactDOM from 'react-dom';
-import ReactDOMElements from 'react-dom-factories';
-import { expect as expectCHAI, } from 'chai';
 import { JSDOM, } from 'jsdom';
 // chai.use(require('sinon-chai'));
 // import 'mocha-sinon';
@@ -212,13 +208,13 @@ describe('jsonx', function () {
     // it('should return useGlobalHook', () => {
     //   const ugh = jsonx.__getUseGlobalHook();
     //   console.log({ ugh });
-    //   expectCHAI(jsonx.__getUseGlobalHook()).to.be.a('function');
+    //   expectsCHAI(jsonx.__getUseGlobalHook()).to.be.a('function');
     // });
     it('should return React', () => {
-      expectCHAI(jsonx.__getReact()).to.eql(React);
+      expect(jsonx.__getReact()).toBe(React);
     });
     it('should return ReactDOM', () => {
-      expectCHAI(jsonx.__getReactDOM()).to.eql(ReactDOM);
+      expect(jsonx.__getReactDOM()).toBe(ReactDOM);
     });
   });
   it('should generate complex components',()=>{
@@ -290,40 +286,40 @@ describe('jsonx', function () {
       const ReactiveJSON = jsonx.getReactElementFromJSONX(sampleJSONX);
       //@ts-ignore
       const ReactiveSimpleJSON = jsonx.getReactElementFromJSONX(simpleJSONX);
-      expectCHAI(ReactTestUtils.isElement(ReactiveJSON));
-      expectCHAI(ReactTestUtils.isElement(ReactiveSimpleJSON));
-      expectCHAI(ReactiveJSON).to.be.an('object');
-      expectCHAI(ReactiveJSON).to.haveOwnProperty('$$typeof');
-      expectCHAI(ReactiveJSON).to.haveOwnProperty('type');
-      expectCHAI(ReactiveJSON).to.haveOwnProperty('key');
-      expectCHAI(ReactiveJSON).to.haveOwnProperty('ref');
-      expectCHAI(ReactiveJSON).to.haveOwnProperty('props');
+      expect(ReactTestUtils.isElement(ReactiveJSON)).toBeTruthy();
+      expect(ReactTestUtils.isElement(ReactiveSimpleJSON)).toBeTruthy();
+      expect(typeof ReactiveJSON).toBe('object');
+      expect(ReactiveJSON).toHaveProperty('$$typeof');
+      expect(ReactiveJSON).toHaveProperty('type');
+      expect(ReactiveJSON).toHaveProperty('key');
+      expect(ReactiveJSON).toHaveProperty('ref');
+      expect(ReactiveJSON).toHaveProperty('props');
     });
     it('should handle errors with empty components', () => {
       //@ts-ignore
       const emptySpanComponent = jsonx.getReactElementFromJSONX({});
       const emptySpanComponentDebugged = jsonx.getReactElementFromJSONX.call({ debug: true, }, {}, {});
-      expectCHAI(emptySpanComponent).to.be.an('object');
-      expectCHAI(emptySpanComponentDebugged).to.be.an('object');
+      expect(typeof emptySpanComponent).toBe('object');
+      expect(typeof emptySpanComponentDebugged).toBe('object');
       //@ts-ignore
-      expectCHAI(emptySpanComponentDebugged.props.children).to.eql('Error: Missing Component Object');
+      expect(emptySpanComponentDebugged.props.children).toBe('Error: Missing Component Object');
     });
     it('should throw an error with invalid components', () => {
-      const loggerSpy = sinon.spy();
-      expectCHAI(jsonx.getReactElementFromJSONX.bind({}, { component: 'somethingInvalid', })).to.throw('Invalid React Component (somethingInvalid)');
+      const loggerSpy = jest.fn()// sinon.spy();
+      expect(jsonx.getReactElementFromJSONX.bind({}, { component: 'somethingInvalid', })).toThrow('Invalid React Component (somethingInvalid)');
       try {
         jsonx.getReactElementFromJSONX.call({ debug: true, logError: loggerSpy, }, { component: 'somethingInvalid', }, {});
       } catch (e) {
-        expectCHAI(loggerSpy.called).to.be.true;
-        expectCHAI(e).to.be.an('error');
+        expect(loggerSpy).toBeCalled()
+        expect(e).toBeInstanceOf(Error);
       }
     });
     it('should return testing output', () => {
       const ReactiveJSON = jsonx.getReactElementFromJSONX.call({}, { ...sampleJSONX, test: true });
-      expectCHAI(ReactiveJSON).to.be.a('string');
-      expectCHAI(ReactiveJSON).to.include('element');
-      expectCHAI(ReactiveJSON).to.include('props');
-      expectCHAI(ReactiveJSON).to.include('children');
+      expect(typeof ReactiveJSON).toBe('string');
+      expect(ReactiveJSON).toContain('element');
+      expect(ReactiveJSON).toContain('props');
+      expect(ReactiveJSON).toContain('children');
     });
   });
   describe('getReactElementFromJSON', () => {
@@ -332,14 +328,14 @@ describe('jsonx', function () {
       const ReactiveJSON = jsonx.getReactElementFromJSON(sampleJSONXJSON);
       //@ts-ignore
       const ReactiveSimpleJSON = jsonx.getReactElementFromJSON(simpleJSONXJSON);
-      expectCHAI(ReactTestUtils.isElement(ReactiveJSON)).to.be.true;
-      expectCHAI(ReactTestUtils.isElement(ReactiveSimpleJSON)).to.be.true;
-      expectCHAI(ReactiveJSON).to.be.an('object');
-      expectCHAI(ReactiveJSON).to.haveOwnProperty('$$typeof');
-      expectCHAI(ReactiveJSON).to.haveOwnProperty('type');
-      expectCHAI(ReactiveJSON).to.haveOwnProperty('key');
-      expectCHAI(ReactiveJSON).to.haveOwnProperty('ref');
-      expectCHAI(ReactiveJSON).to.haveOwnProperty('props');
+      expect(ReactTestUtils.isElement(ReactiveJSON)).toBeTruthy;
+      expect(ReactTestUtils.isElement(ReactiveSimpleJSON)).toBeTruthy;
+      expect(typeof ReactiveJSON).toBe('object');
+      expect(ReactiveJSON).toHaveProperty('$$typeof');
+      expect(ReactiveJSON).toHaveProperty('type');
+      expect(ReactiveJSON).toHaveProperty('key');
+      expect(ReactiveJSON).toHaveProperty('ref');
+      expect(ReactiveJSON).toHaveProperty('props');
     });
   });
   describe('compile', () => { 
@@ -362,9 +358,9 @@ describe('jsonx', function () {
       const testDOM = ReactTestUtils.renderIntoDocument(ReactiveJSON());
       // console.log({testDOM});
       //@ts-ignore
-      expectCHAI(ReactTestUtils.isDOMComponent(testDOM)).to.be.true;
-      expectCHAI(ReactiveJSON).to.be.a('function');
-      // expectCHAI(ReactTestUtils.isCompositeComponent(ReactiveJSON)).to.be.true;
+      expect(ReactTestUtils.isDOMComponent(testDOM)).toBeTruthy()
+      expect(typeof ReactiveJSON).toBe('function');
+      // expectsCHAI(ReactTestUtils.isCompositeComponent(ReactiveJSON)).to.be.true;
     });
   });
   describe('outputJSON', () => { 
@@ -372,16 +368,16 @@ describe('jsonx', function () {
       const compiledJSON = jsonx.outputJSON(simpleDiv);
       const compiledJSONXJSON = jsonx.getReactElementFromJSONX.call({ returnJSON: true, }, simpleDiv);
       //@ts-ignore
-      expectCHAI(compiledJSON.children).to.eql(compiledJSONXJSON.children);
+      expect(compiledJSON.children).toBe(compiledJSONXJSON.children);
       //@ts-ignore
-      expectCHAI(compiledJSON.type).to.eql(compiledJSONXJSON.type);
+      expect(compiledJSON.type).toBe(compiledJSONXJSON.type);
     });
   });
   describe('outputJSX', () => {
     it('should compile to JSX String', () => {
       //@ts-ignore
       const JSXString = jsonx.outputJSX(simpleDiv);
-      expectCHAI(JSXString).to.include('title="test">hello</div>');
+      expect(JSXString).toContain('title="test">hello</div>');
       // console.log({ JSXString,  });
     });
   });
@@ -393,15 +389,15 @@ describe('jsonx', function () {
       const JSXString = jsonx.jsonToJSX(simpleDivJSON);
       //@ts-ignore
       const complexJSXString = jsonx.jsonToJSX(complexDivJSON);
-      expectCHAI(JSXString).to.include('title="test">hello</div>');
-      expectCHAI(complexJSXString).to.be.a('string');
+      expect(JSXString).toContain('title="test">hello</div>');
+      expect(typeof complexJSXString).toBe('string');
       // console.log({ JSXString, complexJSXString, });
       // console.log(complexJSXString);
     });
   });
   describe('outputHTML', () => {
     it('should be an alias for jsonxHTMLString', () => {
-      expectCHAI(jsonx.outputHTML).to.eql(jsonx.jsonxHTMLString);
+      expect(jsonx.outputHTML).toBe(jsonx.jsonxHTMLString);
     });
   });
   describe('jsonxHTMLString', () => {
@@ -410,9 +406,9 @@ describe('jsonx', function () {
       const jsonxString = jsonx.jsonxHTMLString({ jsonx: sampleJSONX, });
       const dom = new JSDOM(`<!DOCTYPE html><body>${jsonxString}</body>`);
 
-      expectCHAI(jsonxString).to.be.a('string');
-      expectCHAI(dom.window.document.body.querySelector('p').innerHTML).to.eql('hello world');
-      expectCHAI(dom.window.document.body.querySelector('p').style.color).to.eql('red');
+      expect( typeof jsonxString).toBe('string');
+      expect(dom.window.document.body.querySelector('p').innerHTML).toBe('hello world');
+      expect(dom.window.document.body.querySelector('p').style.color).toBe('red');
     });
   });
   describe('__express', () => {
@@ -432,9 +428,9 @@ describe('jsonx', function () {
         ((err, renderedString) => {
           const dom = new JSDOM(renderedString);
           if (renderedString) {
-            expectCHAI(dom.window.document.querySelector('#generatedJSONX').getAttribute('title')).to.eql(spantext);
-            expectCHAI(err).to.be.null;
-            expectCHAI(renderedString).to.be.a('String');
+            expect(dom.window.document.querySelector('#generatedJSONX').getAttribute('title')).toBe(spantext);
+            expect(err).toBe(null);
+            expect(typeof renderedString).toBe('string');
           }
           done(err);
         })
@@ -442,11 +438,11 @@ describe('jsonx', function () {
     });
     it('it should handle errors', (done) => {
       //@ts-ignore
-      expectCHAI(jsonx.__express.bind()).to.throw;
+      expect(typeof jsonx.__express.bind()).toBe('function');
       //@ts-ignore
       jsonx.__express(null,null, (err,template) => {
-        expectCHAI(err).to.eql(null);
-        expectCHAI(template).to.eql('<!DOCTYPE html>\n');
+        expect(err).toBe(null);
+        expect(template).toBe('<!DOCTYPE html>\n');
         done();
       })
     });
@@ -459,12 +455,17 @@ describe('jsonx', function () {
       const containerDiv = document.createElement('div');
       containerDiv.setAttribute('id', 'reactContainer');
       document.body.appendChild(containerDiv);
-      //@ts-ignore
-      jsonx.jsonxRender({ jsonx: sampleJSONX, querySelector:'#reactContainer', });
-      //@ts-ignore
-      expectCHAI(document.body.querySelector('p').innerHTML).to.eql('hello world');
-      //@ts-ignore
-      expectCHAI(document.body.querySelector('p').style.color).to.eql('red');
+      try{
+        //@ts-ignore
+        jsonx.jsonxRender.call({},{ jsonx: sampleJSONX, DOM:containerDiv, });
+        //@ts-ignore
+        // expect(document.body.querySelector('p').innerHTML).toBe('hello world');
+        // //@ts-ignore
+        // expect(document.body.querySelector('p').style.color).toBe('red');
+      } catch(e){
+        expect(e).toBeNull()
+      }
+      // console.log('document.body.outerHTML',document.body.outerHTML)
     });    
     // afterAll(function () {
     //   // this.jsdom();

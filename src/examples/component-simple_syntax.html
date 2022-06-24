@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>SIMPLE SYNTAX TEST</title>
-    <script type="text/javascript" src="../../dist/index.umd.js"></script>
+    <script type="text/javascript" src="../../dist/index.web.min.js"></script>
   </head>
   <body>
     <div id="root"></div>
@@ -12,7 +12,7 @@
         main:{
           debug:true,
           props:{
-            key:1
+            key:121
           },
           children:[
             {
@@ -22,7 +22,8 @@
                   style:{
                     fontWeight:'bold',
                     color:'blue'
-                  }
+                  },
+                  key:434343
                 },
                 windowprops:{
                   children:['document','title']
@@ -33,11 +34,15 @@
               div:{
                 props:{
                   title:'this is a passed Title',
+                  key:121234343
                 },
                 passprops:true,
                 children:[
-                  { p:'super short'},
-                  { ul:[{li:'first'},{li:'second'}]},
+                  { p:{childre:'super short',props:{key:90293}}},
+                  { ul:{
+                    props:{key:1212},
+                    children:[{li:{children:'first',props:{key:442}}},{li:{children:'second',props:{key:121}}}]}
+                    },
                   {
                     p:{
                       props:{

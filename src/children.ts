@@ -6,6 +6,7 @@ import { getReactElementFromJSONX } from "./index";
 import { ReactComponentLike, ReactElementLike } from "prop-types";
 
 import * as defs from "./types/jsonx/index";
+import { ReactFragment, ReactNode } from "react";
 const scopedEval = eval;
 export const templateCache = new Map();
 
@@ -197,7 +198,7 @@ export function clearTemplateCache(): void {
 export function getJSONXChildren(
   this: defs.Context,
   options: defs.Config = { jsonx: {} }
-): string | null | undefined | Array<ReactElementLike>| Array<defs.JSONReactElement> {
+): string | null | undefined | Array<ReactElementLike>| Array<defs.JSONReactElement> | ReactNode | ReactFragment{
   // eslint-disable-next-line
   const { jsonx, resources, renderIndex, logError = console.error } = options;
   try {

@@ -26,7 +26,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -41,8 +41,8 @@ jobs:
             ${{ runner.os }}-
       - name: Install dependencies
         run: |
-          npm i jest typescript rollup typedoc sitedown -g
-          npm ci
+          npm i jest typescript esbuild typedoc sitedown -g
+          npm i
       - name: Test coverage
         run: |
           jest --coverage --runInBand --ci --no-cache
