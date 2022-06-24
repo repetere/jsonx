@@ -1,5 +1,5 @@
 // import React, { createElement, } from 'react';
-import React from "react";
+import React, { ReactNode } from "react";
 import ReactDOM from "react-dom";
 import { createRoot } from 'react-dom/client';
 import ReactDOMServer from "react-dom/server";
@@ -45,7 +45,6 @@ export function jsonxRender(
   config: defs.RenderConfig = { jsonx: { component: "" }, querySelector: "" }
 ): void {
   const { jsonx, resources, querySelector, DOM, portal } = config;
-  const Render = portal ? ReactDOM.createPortal : ReactDOM.render;
   const RenderDOM: HTMLElement | null =
     DOM || document.querySelector(querySelector);
   const JSONXReactElement: any = getReactElementFromJSONX.call(
@@ -55,10 +54,11 @@ export function jsonxRender(
   );
   if (!JSONXReactElement) throw ReferenceError("Invalid React Element");
   else if (!RenderDOM) throw ReferenceError("Invalid Render DOM Element");
-  if(!portal){
-    const root = createRoot(RenderDOM)
-    root.render(JSONXReactElement)
-  } else Render(JSONXReactElement, RenderDOM);
+  if(portal) ReactDOM.createPortal(JSONXReactElement, RenderDOM);
+  else {
+    const root = createRoot(RenderDOM);
+    root.render(JSONXReactElement);
+  }
 }
 
 /**
@@ -113,7 +113,6 @@ export function getReactElementFromJSONX(
   resources = {}
 ): ReactElementLike | JSONReactElement | null |string|undefined{
   // eslint-disable-next-line
-  
   const {
     customComponents,
     debug = false,
@@ -192,7 +191,7 @@ export function getReactElementFromJSONX(
         props,
         resources,
         renderIndex
-      });
+      }) as ReactNode[];
       //@ts -ignore
       if (returnJSON) return { type: element as string, props, children };
       else if (jsonx.test) return JSON.stringify({ element, props, children }, null, 2);
