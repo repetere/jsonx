@@ -63,7 +63,7 @@
     "@types/luxon": "3.0.0",
     "@types/memory-cache": "0.2.2",
     "@types/numeral": "2.0.2",
-    "@types/react": "18.0.15",
+    "@types/react": "18.0.17",
     "@types/react-dom": "18.0.6",
     "@types/react-dom-factories": "1.0.2",
     "@types/supertest": "^2.0.12",
