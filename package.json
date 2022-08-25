@@ -77,7 +77,7 @@
     "husky": "8.0.1",
     "install": "0.13.0",
     "jest": "^28.1.2",
-    "jest-environment-jsdom": "^28.1.2",
+    "jest-environment-jsdom": "^29.0.0",
     "jsdom": "20.0.0",
     "jsdom-global": "3.0.2",
     "lodash-es": "4.17.21",
