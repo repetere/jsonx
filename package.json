@@ -100,7 +100,7 @@
   "dependencies": {
     "@hookform/error-message": "^2.0.0",
     "create-react-class": "^15.7.0",
-    "luxon": "3.0.1",
+    "luxon": "3.0.2",
     "memory-cache": "0.2.0",
     "numeral": "2.0.6",
     "react-dom-factories": "1.0.2",
