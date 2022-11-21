@@ -46,7 +46,7 @@
   },
   "homepage": "https://github.com/repetere/jsonx#readme",
   "devDependencies": {
-    "@commitlint/cli": "17.2.0",
+    "@commitlint/cli": "17.3.0",
     "@commitlint/config-conventional": "17.2.0",
     "@crokita/rollup-plugin-node-builtins": "^2.1.3",
     "@repetere/esdoc-inject-gtm-plugin": "0.1.0",
