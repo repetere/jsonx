@@ -74,7 +74,7 @@
     "esbuild-node-builtins": "^0.1.0",
     "esbuild-plugin-globals": "^0.1.1",
     "express": "^4.18.1",
-    "husky": "8.0.2",
+    "husky": "8.0.3",
     "install": "0.13.0",
     "jest": "^28.1.2",
     "jest-environment-jsdom": "^29.0.0",
