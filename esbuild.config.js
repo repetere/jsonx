@@ -123,7 +123,7 @@ void async function main(){
       sourcemap:false,
       platform:'node',
       plugins: serverPlugins,
-      outfile:'dist/index.cjs.js'
+      outfile:'dist/index.cjs'
     });
     const esmBuild = await esbuild.build({
       watch,
