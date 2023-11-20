@@ -2,7 +2,7 @@
   "name": "jsonx",
   "version": "2.0.0",
   "description": "React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks",
-  "main": "dist/index.cjs.js",
+  "main": "dist/index.cjs",
   "module": "build/index.js",
   "esm": "dist/index.esm.js",
   "browser": "dist/index.web.js",
@@ -96,6 +96,10 @@
     "tslint-config-prettier": "1.18.0",
     "typedoc": "^0.24.1",
     "typescript": "4.8.4"
+  },
+  "peerDependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.0",
