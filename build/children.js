@@ -1,3 +1,5 @@
+// @spec JSONX-CHILDREN-001 JSONX-CHILDREN-002 JSONX-CHILDREN-003 JSONX-CHILDREN-004 JSONX-CHILDREN-005 JSONX-CHILDREN-006 JSONX-CHILDREN-007 JSONX-CHILDREN-008 JSONX-CHILDREN-009 JSONX-CHILDREN-010
+// @intent docs/intent/children-templates/children-templates-specs.md
 import numeral from "numeral";
 import * as luxon from "luxon";
 import fs from "fs";

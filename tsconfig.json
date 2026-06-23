@@ -34,9 +34,8 @@
   ],
   "typedocOptions":{
     "out":"docs",
-    "includes":"manual",
     "entryPoints": ["src/index.ts"],
-    "media": "./manual/media",
+    "cleanOutputDir": false,
     "hideGenerator":true
   }
 }

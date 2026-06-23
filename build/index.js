@@ -1,3 +1,5 @@
+// @spec JSONX-CORE-001 JSONX-CORE-002 JSONX-CORE-003 JSONX-CORE-004 JSONX-CORE-005 JSONX-CORE-006 JSONX-CORE-007 JSONX-CORE-008 JSONX-CORE-009 JSONX-CORE-010 JSONX-CORE-011 JSONX-CORE-012
+// @intent docs/intent/core-rendering/core-rendering-specs.md
 // import React, { createElement, } from 'react';
 import React from "react";
 import ReactDOM from "react-dom";

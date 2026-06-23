@@ -1,3 +1,5 @@
+// @spec JSONX-DIST-004
+// @intent docs/intent/distribution-types/distribution-types-specs.md
 export * from './main';
 // export * from './children';
 // export * from './components';

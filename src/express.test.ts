@@ -1,3 +1,5 @@
+// @spec JSONX-EXPRESS-001 JSONX-EXPRESS-002 JSONX-EXPRESS-003 JSONX-EXPRESS-004 JSONX-EXPRESS-005 JSONX-EXPRESS-006 JSONX-EXPRESS-007 JSONX-EXPRESS-008 JSONX-EXPRESS-009
+// @intent docs/intent/express-rendering/express-rendering-specs.md
 import * as jsonx from './index';
 import supertest from 'supertest';
 import express from 'express';

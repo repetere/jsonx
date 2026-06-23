@@ -1,4 +1,6 @@
-import UAParser from "ua-parser-js";
+// @spec JSONX-PROPS-001 JSONX-PROPS-002 JSONX-PROPS-003 JSONX-PROPS-008
+// @intent docs/intent/prop-resolution/prop-resolution-specs.md
+import { UAParser } from "ua-parser-js";
 var global = typeof global !== "undefined"
     ? global
     : typeof globalThis !== "undefined"

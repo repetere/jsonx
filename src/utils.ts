@@ -1,4 +1,6 @@
-import UAParser from "ua-parser-js";
+// @spec JSONX-PROPS-001 JSONX-PROPS-002 JSONX-PROPS-003 JSONX-PROPS-008
+// @intent docs/intent/prop-resolution/prop-resolution-specs.md
+import { UAParser } from "ua-parser-js";
 import * as defs from "./types/jsonx/index";
 
 declare global {

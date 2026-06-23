@@ -1,3 +1,5 @@
+// @spec JSONX-PROPS-001 JSONX-PROPS-002 JSONX-PROPS-003 JSONX-PROPS-004 JSONX-PROPS-005 JSONX-PROPS-006 JSONX-PROPS-007 JSONX-PROPS-008 JSONX-PROPS-009 JSONX-PROPS-010
+// @intent docs/intent/prop-resolution/prop-resolution-specs.md
 import * as jsonx from './index';
 import * as _jsonxProps from './props';
 import { getComputedProps, } from './props';

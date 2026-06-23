@@ -1,4 +1,3 @@
-"use strict";
 var __defProp = Object.defineProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -66,7 +65,7 @@ __export(utils_exports, {
   validSimpleJSONXSyntax: () => validSimpleJSONXSyntax,
   validateJSONX: () => validateJSONX
 });
-import UAParser from "ua-parser-js";
+import { UAParser } from "ua-parser-js";
 var global2 = typeof global2 !== "undefined" ? global2 : typeof globalThis !== "undefined" ? globalThis : {};
 function displayComponent(options = {}) {
   const { jsonx = {}, props } = options;
@@ -139,8 +138,7 @@ function getAdvancedBinding() {
     } else if (typeof globalThis !== "undefined" && globalThis.window) {
       window2 = globalThis.window;
     }
-    if (!window2 || !window2.navigator)
-      return false;
+    if (!window2 || !window2.navigator) return false;
   }
   try {
     if (window2 && window2.navigator && window2.navigator.userAgent && typeof window2.navigator.userAgent === "string") {
@@ -151,7 +149,7 @@ function getAdvancedBinding() {
       const parser = new UAParser();
       parser.setUA(uastring);
       const parseUserAgent = parser.getResult();
-      if ((parseUserAgent.browser.name === "Chrome" || parseUserAgent.browser.name === "Chrome WebView") && parseUserAgent.os.name === "Android" && parseInt(parseUserAgent.browser.version, 10) < 50) {
+      if ((parseUserAgent.browser.name === "Chrome" || parseUserAgent.browser.name === "Chrome WebView" || parseUserAgent.browser.name === "Mobile Chrome") && parseUserAgent.os.name === "Android" && parseInt(parseUserAgent.browser.version, 10) < 50) {
         return false;
       }
       if (parseUserAgent.browser.name === "Android Browser") {
@@ -167,11 +165,9 @@ function getAdvancedBinding() {
 }
 function traverse(paths = {}, data = {}) {
   let keys = Object.keys(paths);
-  if (!keys.length)
-    return paths;
+  if (!keys.length) return paths;
   return keys.reduce((result, key) => {
-    if (typeof paths[key] === "string")
-      result[key] = data[paths[key]];
+    if (typeof paths[key] === "string") result[key] = data[paths[key]];
     else if (Array.isArray(paths[key])) {
       let _path = Object.assign([], paths[key]);
       let value = data;
@@ -181,7 +177,9 @@ function traverse(paths = {}, data = {}) {
       }
       result[key] = _path.length ? void 0 : value;
     } else
-      throw new TypeError("dynamic property paths must be a string or an array of strings or numeric indexes");
+      throw new TypeError(
+        "dynamic property paths must be a string or an array of strings or numeric indexes"
+      );
     return result;
   }, {});
 }
@@ -235,18 +233,34 @@ function validateJSONX(jsonx = {}, returnAllErrors = false) {
   }
   if (jsonx.props) {
     if (typeof jsonx.props !== "object" || Array.isArray(jsonx.props)) {
-      errors.push(TypeError("[0002] " + jsonx.component + ": props must be an Object / valid React props"));
+      errors.push(
+        TypeError(
+          "[0002] " + jsonx.component + ": props must be an Object / valid React props"
+        )
+      );
     }
     if (jsonx.props.children && (typeof jsonx.props.children !== "string" || !Array.isArray(jsonx.props.children))) {
-      errors.push(TypeError("[0003] " + jsonx.component + ": props.children must be an array of JSONX JSON objects or a string"));
+      errors.push(
+        TypeError(
+          "[0003] " + jsonx.component + ": props.children must be an array of JSONX JSON objects or a string"
+        )
+      );
     }
     if (jsonx.props._children && (typeof jsonx.props._children !== "string" || !Array.isArray(jsonx.props._children))) {
-      errors.push(TypeError("[0004] " + jsonx.component + ": props._children must be an array of JSONX JSON objects or a string"));
+      errors.push(
+        TypeError(
+          "[0004] " + jsonx.component + ": props._children must be an array of JSONX JSON objects or a string"
+        )
+      );
     }
   }
   if (jsonx.children) {
     if (typeof jsonx.children !== "string" && !Array.isArray(jsonx.children)) {
-      errors.push(TypeError("[0005] " + jsonx.component + ": children must be an array of JSONX JSON objects or a string"));
+      errors.push(
+        TypeError(
+          "[0005] " + jsonx.component + ": children must be an array of JSONX JSON objects or a string"
+        )
+      );
     }
     if (Array.isArray(jsonx.children)) {
       const childrenErrors = jsonx.children.filter((c) => typeof c === "object").map((c) => validateJSONX(c, returnAllErrors));
@@ -261,12 +275,22 @@ function validateJSONX(jsonx = {}, returnAllErrors = false) {
       }
       Object.keys(jsonxDynamicProps).forEach((resolvedDynamicProp) => {
         if (!Array.isArray(jsonxDynamicProps[resolvedDynamicProp])) {
-          errors.push(TypeError(`[0007] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
+          errors.push(
+            TypeError(
+              `[0007] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`
+            )
+          );
         }
         if (Array.isArray(jsonxDynamicProps[resolvedDynamicProp])) {
-          const allStringArray = jsonxDynamicProps[resolvedDynamicProp].filter((propArrayItem) => typeof propArrayItem === "string");
+          const allStringArray = jsonxDynamicProps[resolvedDynamicProp].filter(
+            (propArrayItem) => typeof propArrayItem === "string"
+          );
           if (allStringArray.length !== jsonxDynamicProps[resolvedDynamicProp].length) {
-            errors.push(TypeError(`[0008] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`));
+            errors.push(
+              TypeError(
+                `[0008] jsonx.${dynamicprop}.${resolvedDynamicProp} must be an array of strings`
+              )
+            );
           }
         }
       });
@@ -276,14 +300,20 @@ function validateJSONX(jsonx = {}, returnAllErrors = false) {
   const boundEvalProps = jsonx.__dangerouslyBindEvalProps;
   if (evalProps || boundEvalProps) {
     if (evalProps && typeof evalProps !== "object" || boundEvalProps && typeof boundEvalProps !== "object") {
-      errors.push(TypeError("[0009] __dangerouslyEvalProps must be an object of strings to convert to valid javascript"));
+      errors.push(
+        TypeError(
+          "[0009] __dangerouslyEvalProps must be an object of strings to convert to valid javascript"
+        )
+      );
     }
     evalPropNames.filter((evalProp) => jsonx[evalProp]).forEach((eProps) => {
       const evProp = jsonx[eProps];
       const scopedEval3 = eval;
       Object.keys(evProp).forEach((propToEval) => {
         if (typeof evProp[propToEval] !== "string") {
-          errors.push(TypeError(`[0010] jsonx.${eProps}.${evProp} must be a string`));
+          errors.push(
+            TypeError(`[0010] jsonx.${eProps}.${evProp} must be a string`)
+          );
         }
         try {
           if (eProps === "__dangerouslyBindEvalProps") {
@@ -299,14 +329,22 @@ function validateJSONX(jsonx = {}, returnAllErrors = false) {
     });
   }
   if (jsonx.__dangerouslyInsertComponents) {
-    Object.keys(jsonx.__dangerouslyInsertComponents).forEach((insertedComponents) => {
-      try {
-        if (jsonx.__dangerouslyInsertComponents)
-          validateJSONX(jsonx.__dangerouslyInsertComponents[insertedComponents]);
-      } catch (e) {
-        errors.push(TypeError(`[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${e?.toString()}`));
+    Object.keys(jsonx.__dangerouslyInsertComponents).forEach(
+      (insertedComponents) => {
+        try {
+          if (jsonx.__dangerouslyInsertComponents)
+            validateJSONX(
+              jsonx.__dangerouslyInsertComponents[insertedComponents]
+            );
+        } catch (e) {
+          errors.push(
+            TypeError(
+              `[0011] jsonx.__dangerouslyInsertComponents.${insertedComponents} must be a valid JSONX JSON Object: ${e?.toString()}`
+            )
+          );
+        }
       }
-    });
+    );
   }
   if (jsonx.__functionProps) {
     if (typeof jsonx.__functionProps !== "object") {
@@ -314,21 +352,33 @@ function validateJSONX(jsonx = {}, returnAllErrors = false) {
     } else {
       Object.keys(jsonx.__functionProps).forEach((fProp) => {
         if (jsonx.__functionProps && jsonx.__functionProps[fProp] && (typeof jsonx.__functionProps[fProp] !== "string" || jsonx.__functionProps[fProp].indexOf("func:") === -1)) {
-          errors.push(ReferenceError(`[0013] jsonx.__functionProps.${fProp} must reference a function (i.e. func:this.props.logoutUser())`));
+          errors.push(
+            ReferenceError(
+              `[0013] jsonx.__functionProps.${fProp} must reference a function (i.e. func:this.props.logoutUser())`
+            )
+          );
         }
       });
     }
   }
   if (jsonx.__windowComponentProps && (typeof jsonx.__windowComponentProps !== "object" || Array.isArray(jsonx.__windowComponentProps))) {
-    errors.push(TypeError("[0013] jsonx.__windowComponentProps  must be an object"));
+    errors.push(
+      TypeError("[0013] jsonx.__windowComponentProps  must be an object")
+    );
   }
   if (jsonx.__windowComponents) {
     if (typeof jsonx.__windowComponents !== "object") {
-      errors.push(TypeError("[0014] jsonx.__windowComponents must be an object"));
+      errors.push(
+        TypeError("[0014] jsonx.__windowComponents must be an object")
+      );
     }
     Object.keys(jsonx.__windowComponents).forEach((cProp) => {
       if (typeof jsonx.__windowComponents[cProp] !== "string" || jsonx.__windowComponents[cProp].indexOf("func:") === -1) {
-        errors.push(ReferenceError(`[0015] jsonx.__windowComponents.${cProp} must reference a window element on window.__jsonx_custom_elements (i.e. func:window.__jsonx_custom_elements.bootstrapModal)`));
+        errors.push(
+          ReferenceError(
+            `[0015] jsonx.__windowComponents.${cProp} must reference a window element on window.__jsonx_custom_elements (i.e. func:window.__jsonx_custom_elements.bootstrapModal)`
+          )
+        );
       }
     });
   }
@@ -337,13 +387,25 @@ function validateJSONX(jsonx = {}, returnAllErrors = false) {
   }
   if (jsonx.comparisonprops) {
     if (!Array.isArray(jsonx.comparisonprops)) {
-      errors.push(TypeError("[0017] jsonx.comparisonprops  must be an array or comparisons"));
+      errors.push(
+        TypeError(
+          "[0017] jsonx.comparisonprops  must be an array or comparisons"
+        )
+      );
     } else {
       jsonx.comparisonprops.forEach((c) => {
         if (typeof c !== "object") {
-          errors.push(TypeError("[0018] jsonx.comparisonprops  must be an array or comparisons objects"));
+          errors.push(
+            TypeError(
+              "[0018] jsonx.comparisonprops  must be an array or comparisons objects"
+            )
+          );
         } else if (typeof c.left === "undefined") {
-          errors.push(TypeError("[0019] jsonx.comparisonprops  must be have a left comparison value"));
+          errors.push(
+            TypeError(
+              "[0019] jsonx.comparisonprops  must be have a left comparison value"
+            )
+          );
         }
       });
     }
@@ -351,10 +413,11 @@ function validateJSONX(jsonx = {}, returnAllErrors = false) {
   if (typeof jsonx.passprops !== "undefined" && typeof jsonx.passprops !== "boolean") {
     errors.push(TypeError("[0020] jsonx.passprops  must be boolean"));
   }
-  const invalidKeys = Object.keys(jsonx).filter((key) => validKeys.indexOf(key) === -1);
+  const invalidKeys = Object.keys(jsonx).filter(
+    (key) => validKeys.indexOf(key) === -1
+  );
   if (errors.length) {
-    if (returnAllErrors)
-      return errors;
+    if (returnAllErrors) return errors;
     throw errors[0];
   }
   return invalidKeys.length ? `Warning: Invalid Keys [${invalidKeys.join()}]` : true;
@@ -368,8 +431,7 @@ function validSimpleJSONXSyntax(simpleJSONX = {}) {
   }
 }
 function simpleJSONXSyntax(simpleJSONX = {}) {
-  if (simpleJSONX.component)
-    return simpleJSONX;
+  if (simpleJSONX.component) return simpleJSONX;
   const component = Object.keys(simpleJSONX)[0];
   try {
     const children = typeof simpleJSONX[component] === "string" || Array.isArray(simpleJSONX[component]) ? simpleJSONX[component] : simpleJSONX[component] && simpleJSONX[component].children && Array.isArray(simpleJSONX[component].children) ? simpleJSONX[component].children.map(simpleJSONXSyntax) : simpleJSONX[component].children;
@@ -382,8 +444,7 @@ function simpleJSONXSyntax(simpleJSONX = {}) {
 }
 function getSimplifiedJSONX(jsonx = {}) {
   try {
-    if (!jsonx.component)
-      return jsonx;
+    if (!jsonx.component) return jsonx;
     const componentName = jsonx.component;
     jsonx.children = Array.isArray(jsonx.children) ? jsonx.children.filter((child) => child).map(getSimplifiedJSONX) : jsonx.children;
     delete jsonx.component;
@@ -409,16 +470,26 @@ var cache = new memoryCache.Cache();
 var ReactHookForm = { ErrorMessage, Controller };
 var generatedCustomComponents = /* @__PURE__ */ new Map();
 var advancedBinding = getAdvancedBinding();
-var componentMap = Object.assign({ Fragment, Suspense }, ReactDOMElements, typeof window === "object" && window ? window.__jsonx_custom_elements : {});
+var componentMap = Object.assign(
+  { Fragment, Suspense },
+  ReactDOMElements,
+  typeof window === "object" && window ? window.__jsonx_custom_elements : {}
+);
 function getBoundedComponents(options = {}) {
   const { reactComponents, boundedComponents = [] } = options;
   if (typeof options.advancedBinding === "boolean" && options.advancedBinding || typeof options.advancedBinding === "undefined" && advancedBinding) {
-    return Object.assign({}, reactComponents, boundedComponents.reduce((result, componentName) => {
-      result[componentName] = reactComponents[componentName].bind(this);
-      return result;
-    }, {}));
-  } else
-    return reactComponents;
+    return Object.assign(
+      {},
+      reactComponents,
+      boundedComponents.reduce(
+        (result, componentName) => {
+          result[componentName] = reactComponents[componentName].bind(this);
+          return result;
+        },
+        {}
+      )
+    );
+  } else return reactComponents;
 }
 function getComponentFromLibrary(options = { jsonx: {} }) {
   const { componentLibraries = {}, jsonx = {} } = options;
@@ -454,14 +525,12 @@ function getComponentFromMap(options = {}) {
       throw new ReferenceError(`Invalid React Component (${jsonx.component})`);
     }
   } catch (e) {
-    if (debug)
-      logError(e, e.stack ? e.stack : "no stack");
+    if (debug) logError(e, e.stack ? e.stack : "no stack");
     throw e;
   }
 }
 function getFunctionFromEval(options = {}) {
-  if (typeof options === "function")
-    return options;
+  if (typeof options === "function") return options;
   const { body = "", args = [], name } = options;
   const argus = [].concat(args);
   argus.push(body);
@@ -473,11 +542,14 @@ function getFunctionFromEval(options = {}) {
 }
 function getReactClassComponent(reactComponent = {}, options = {}) {
   if (options.lazy) {
-    return lazy(() => options.lazy(reactComponent, Object.assign({}, options, { lazy: false })).then((lazyComponent) => {
-      return {
-        default: getReactClassComponent(...lazyComponent)
-      };
-    }));
+    return lazy(
+      () => options.lazy(reactComponent, Object.assign({}, options, { lazy: false })).then((lazyComponent) => {
+        return {
+          //@ts-ignore
+          default: getReactClassComponent(...lazyComponent)
+        };
+      })
+    );
   }
   const context = this || {};
   const {
@@ -488,20 +560,34 @@ function getReactClassComponent(reactComponent = {}, options = {}) {
     disableRenderIndexKey = true
   } = options;
   const rjc = {
+    //mounting
     getDefaultProps: {
       body: "return {};"
     },
+    // (unsupported) getDerivedStateFromProps: undefined, // {body:'return null;', args:['props','state',]}
     getInitialState: {
       body: "return {};"
     },
     componentDidMount: void 0,
     UNSAFE_componentWillMount: void 0,
+    //updating
+    // (unsupported) getDerivedStateFromProps
     shouldComponentUpdate: void 0,
+    // {body:'return true;', args:['nextProps','nextState',]}
     getSnapshotBeforeUpdate: void 0,
+    // {body:'return snapshot;', args:['prevProps', 'prevState)',]}
     componentDidUpdate: void 0,
+    // {body:'', args:['prevProps', 'prevState','snapshot')',]}
     UNSAFE_componentWillUpdate: void 0,
+    // {body:';', args:['nextProps','nextState',]}
     UNSAFE_componentWillReceiveProps: void 0,
+    // {body:';', args:['nextProps',]}
+    //unmounting
     componentWillUnmount: void 0,
+    //error handling
+    // (unsupported) componentDidCatch:undefined, // { body:'return ;', args:['error','info'] }
+    // (unsupported) getDerivedStateFromError: undefined, // {body:' return { hasError:true}', args:['error')',]}
+    //body
     ...reactComponent
   };
   const rjcKeys = Object.keys(rjc);
@@ -509,10 +595,8 @@ function getReactClassComponent(reactComponent = {}, options = {}) {
     throw new ReferenceError("React components require a render method");
   }
   const classOptions = rjcKeys.reduce((result, val) => {
-    if (!rjc[val])
-      return result;
-    if (typeof rjc[val] === "function")
-      rjc[val] = { body: rjc[val] };
+    if (!rjc[val]) return result;
+    if (typeof rjc[val] === "function") rjc[val] = { body: rjc[val] };
     const args = rjc[val].arguments;
     const body = rjc[val].body;
     if (!body) {
@@ -520,7 +604,9 @@ function getReactClassComponent(reactComponent = {}, options = {}) {
       throw new SyntaxError(`Function(${val}) requires a function body`);
     }
     if (args && !Array.isArray(args) && args.length && args.length && args.filter((arg) => typeof arg === "string").length) {
-      throw new TypeError(`Function(${val}) arguments must be an array or variable names`);
+      throw new TypeError(
+        `Function(${val}) arguments must be an array or variable names`
+      );
     }
     if (val === "render") {
       result[val] = function() {
@@ -528,11 +614,27 @@ function getReactClassComponent(reactComponent = {}, options = {}) {
           body.props = Object.assign({}, body.props, this.props);
         if (options.passstate && this.state)
           body.props = Object.assign({}, body.props, this.state);
-        return getReactElementFromJSONX.call(Object.assign({}, context, bindContext ? this : { props: {} }, { disableRenderIndexKey }, {
-          props: use_getState && this && this.props ? Object.assign({}, this.props, {
-            getState: () => this.state
-          }) : this.props
-        }), body, resources);
+        return getReactElementFromJSONX.call(
+          Object.assign(
+            {},
+            context,
+            bindContext ? this : { props: {} },
+            { disableRenderIndexKey },
+            {
+              props: use_getState && this && this.props ? (
+                //@ts-ignore
+                Object.assign({}, this.props, {
+                  getState: () => this.state
+                })
+              ) : (
+                //@ts-ignore
+                this.props
+              )
+            }
+          ),
+          body,
+          resources
+        );
       };
     } else {
       result[val] = typeof body === "function" ? body : getFunctionFromEval({
@@ -555,6 +657,7 @@ function FormComponent(props = {}) {
   function FormComponentFunction(componentProps) {
     const {
       hookFormOptions = {},
+      // formComponent = { component: "div", children: "empty form" },
       onSubmit,
       formWrapperComponent,
       formKey,
@@ -609,6 +712,7 @@ function DynamicComponent(props = {}) {
       useCache = true,
       cacheTimeout = 60 * 60 * 5,
       loadingJSONX = { component: "div", children: "...Loading" },
+      //@ts-ignore
       loadingErrorJSONX = {
         component: "div",
         children: [
@@ -640,14 +744,20 @@ function DynamicComponent(props = {}) {
     const transformer = useMemo(() => getFunctionFromEval(transformFunction), [
       transformFunction
     ]);
-    const timeoutFunction = useMemo(() => getFunctionFromEval(cacheTimeoutFunction), [cacheTimeoutFunction]);
+    const timeoutFunction = useMemo(
+      () => getFunctionFromEval(cacheTimeoutFunction),
+      [cacheTimeoutFunction]
+    );
     const renderJSONX = useMemo(() => getReactElementFromJSONX.bind(context), [
       context
     ]);
     const loadingComponent = useMemo(() => renderJSONX(loadingJSONX), [
       loadingJSONX
     ]);
-    const loadingError = useMemo(() => renderJSONX(loadingErrorJSONX, { error: state.error }), [loadingErrorJSONX, state.error]);
+    const loadingError = useMemo(
+      () => renderJSONX(loadingErrorJSONX, { error: state.error }),
+      [loadingErrorJSONX, state.error]
+    );
     useEffect(() => {
       async function getData() {
         try {
@@ -658,34 +768,31 @@ function DynamicComponent(props = {}) {
             let fetchedData;
             if (fetchFunction) {
               fetchedData = await fetchFunction(fetchURL, fetchOptions);
-            } else
-              fetchedData = await fetchJSON(fetchURL, fetchOptions);
+            } else fetchedData = await fetchJSON(fetchURL, fetchOptions);
             transformedData = await transformer(fetchedData);
             if (useCache)
               cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
           }
-          setState((prevState) => Object.assign({}, prevState, {
-            hasLoaded: true,
-            hasError: false,
-            resources: { DynamicComponentData: transformedData }
-          }));
+          setState(
+            (prevState) => Object.assign({}, prevState, {
+              hasLoaded: true,
+              hasError: false,
+              resources: { DynamicComponentData: transformedData }
+            })
+          );
         } catch (e) {
-          if (context.debug)
-            console.warn(e);
+          if (context.debug) console.warn(e);
           setState({ hasError: true, error: e });
         }
       }
-      if (fetchURL)
-        getData();
+      if (fetchURL) getData();
     }, [fetchURL, fetchOptions]);
-    if (!fetchURL)
-      return null;
+    if (!fetchURL) return null;
     else if (state.hasError) {
       return loadingError;
     } else if (state.hasLoaded === false) {
       return loadingComponent;
-    } else
-      return renderJSONX(jsonx, state.resources);
+    } else return renderJSONX(jsonx, state.resources);
   }
   if (props.name) {
     Object.defineProperty(DynamicComponentFunction, "name", {
@@ -696,11 +803,18 @@ function DynamicComponent(props = {}) {
 }
 function getReactFunctionComponent(reactComponent = {}, functionBody = "", options = {}) {
   if (options.lazy) {
-    return lazy(() => options.lazy(reactComponent, functionBody, Object.assign({}, options, { lazy: false })).then((lazyComponent) => {
-      return {
-        default: getReactFunctionComponent(...lazyComponent)
-      };
-    }));
+    return lazy(
+      () => options.lazy(
+        reactComponent,
+        functionBody,
+        Object.assign({}, options, { lazy: false })
+      ).then((lazyComponent) => {
+        return {
+          //@ts-ignore
+          default: getReactFunctionComponent(...lazyComponent)
+        };
+      })
+    );
   }
   if (typeof options === "undefined" || typeof options.bind === "undefined")
     options.bind = true;
@@ -729,7 +843,27 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = "", optio
   ];
   if (typeof functionBody === "function")
     functionBody = functionBody.toString();
-  const functionComponent = Function("React", "useState", "useEffect", "useContext", "useReducer", "useCallback", "useMemo", "useRef", "useImperativeHandle", "useLayoutEffect", "useDebugValue", "getReactElementFromJSONX", "reactComponent", "resources", "props", "useForm", "useController", "useFieldArray", "useWatch", `
+  const functionComponent = Function(
+    "React",
+    "useState",
+    "useEffect",
+    "useContext",
+    "useReducer",
+    "useCallback",
+    "useMemo",
+    "useRef",
+    "useImperativeHandle",
+    "useLayoutEffect",
+    "useDebugValue",
+    "getReactElementFromJSONX",
+    "reactComponent",
+    "resources",
+    "props",
+    "useForm",
+    "useController",
+    "useFieldArray",
+    "useWatch",
+    `
     'use strict';
     const self = this || {};
 
@@ -753,7 +887,8 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = "", optio
         else throw e
       }
     }
-  `);
+  `
+  );
   if (options.name) {
     Object.defineProperty(functionComponent, "name", {
       value: options.name
@@ -763,9 +898,11 @@ function getReactFunctionComponent(reactComponent = {}, functionBody = "", optio
 }
 function getFunctionBody(func) {
   const functionString = func.toString();
-  if (functionString.includes("return") === false)
-    throw new EvalError("JSONX Function Components can not use implicit returns");
-  return functionString.substring(functionString.indexOf("{") + 1, functionString.lastIndexOf("}"));
+  if (functionString.includes("return") === false) throw new EvalError("JSONX Function Components can not use implicit returns");
+  return functionString.substring(
+    functionString.indexOf("{") + 1,
+    functionString.lastIndexOf("}")
+  );
 }
 function makeFunctionComponent(func, options) {
   const scopedEval3 = eval;
@@ -784,7 +921,12 @@ function getCustomFunctionComponent(customComponent) {
   if (functionComponent) {
     return makeFunctionComponent.call(this, functionComponent, options);
   } else {
-    return getReactFunctionComponent.call(this, jsonxComponent, functionBody, options);
+    return getReactFunctionComponent.call(
+      this,
+      jsonxComponent,
+      functionBody,
+      options
+    );
   }
 }
 function getCustomComponentsCacheKey(customComponents) {
@@ -792,8 +934,7 @@ function getCustomComponentsCacheKey(customComponents) {
 }
 function getReactLibrariesAndComponents(customComponents) {
   const customComponentsCacheKey = getCustomComponentsCacheKey(customComponents);
-  if (generatedCustomComponents.has(customComponentsCacheKey))
-    return generatedCustomComponents.get(customComponentsCacheKey);
+  if (generatedCustomComponents.has(customComponentsCacheKey)) return generatedCustomComponents.get(customComponentsCacheKey);
   const cxt = {
     componentLibraries: {},
     reactComponents: {},
@@ -806,36 +947,44 @@ function getReactLibrariesAndComponents(customComponents) {
       const { type, name, jsonx, options, functionBody, functionComponent, jsonxComponent } = customComponent;
       if (type === "library") {
         if (jsonx) {
-          customComponentLibraries[name] = Object.keys(jsonx).reduce((result, prop) => {
-            const libraryComponent = jsonx[prop];
-            const {
-              type: type2,
-              name: name2,
-              jsonxComponent: jsonxComponent2,
-              options: options2,
-              functionBody: functionBody2
-            } = libraryComponent;
-            if (type2 === "component") {
-              result[name2] = getReactClassComponent.call(this, jsonxComponent2, options2);
-            } else {
-              result[name2] = getCustomFunctionComponent.call(this, { options: options2, functionBody: functionBody2, functionComponent, jsonxComponent: jsonxComponent2 });
-            }
-            return result;
-          }, {});
-        } else
-          customComponentLibraries[name] = window[name];
+          customComponentLibraries[name] = Object.keys(jsonx).reduce(
+            (result, prop) => {
+              const libraryComponent = jsonx[prop];
+              const {
+                type: type2,
+                name: name2,
+                jsonxComponent: jsonxComponent2,
+                options: options2,
+                functionBody: functionBody2
+              } = libraryComponent;
+              if (type2 === "component") {
+                result[name2] = getReactClassComponent.call(
+                  this,
+                  jsonxComponent2,
+                  options2
+                );
+              } else {
+                result[name2] = getCustomFunctionComponent.call(this, { options: options2, functionBody: functionBody2, functionComponent, jsonxComponent: jsonxComponent2 });
+              }
+              return result;
+            },
+            {}
+          );
+        } else customComponentLibraries[name] = window[name];
         cxt.componentLibraries[name] = customComponentLibraries[name];
       } else if (type === "component") {
         if (jsonx) {
-          customReactComponents[name] = getReactClassComponent.call(this, jsonx, options);
-        } else
-          customReactComponents[name] = window[name];
+          customReactComponents[name] = getReactClassComponent.call(
+            this,
+            jsonx,
+            options
+          );
+        } else customReactComponents[name] = window[name];
         cxt.reactComponents[name] = customReactComponents[name];
       } else if (type === "function") {
         if (functionComponent || functionBody) {
           customReactComponents[name] = getCustomFunctionComponent.call(this, { options, functionBody, functionComponent, jsonxComponent: jsonx });
-        } else
-          customReactComponents[name] = window[name];
+        } else customReactComponents[name] = window[name];
         cxt.reactComponents[name] = customReactComponents[name];
       }
     });
@@ -875,10 +1024,7 @@ var ARGUMENT_NAMES = /([^\s,]+)/g;
 function getParamNames(func) {
   var fnStr = func.toString().replace(STRIP_COMMENTS, "");
   var result = fnStr.slice(fnStr.indexOf("(") + 1, fnStr.indexOf(")")).match(ARGUMENT_NAMES);
-  if (result === null) {
-    result = [];
-  }
-  return result;
+  return result === null ? [] : Array.from(result);
 }
 function getJSONXProps(options = {}) {
   let { jsonx = {}, propName = "asyncprops", traverseObject = {} } = options;
@@ -889,7 +1035,9 @@ function getChildrenComponents(options = {}) {
   if (Array.isArray(allProps.__spread) === false) {
     if (this && this.debug || jsonx.debug) {
       return {
-        children: new Error("Using __spreadComponent requires an array prop '__spread'").toString()
+        children: new Error(
+          "Using __spreadComponent requires an array prop '__spread'"
+        ).toString()
       };
     } else {
       return { children: void 0 };
@@ -919,8 +1067,7 @@ function boundArgsReducer(jsonx = {}) {
       val = this.props[arg];
     else if (jsonx.props && typeof jsonx.props[arg] !== "undefined")
       val = jsonx.props[arg];
-    if (typeof val !== "undefined")
-      args.push(val);
+    if (typeof val !== "undefined") args.push(val);
     return args.filter((a) => typeof a !== "undefined");
   };
 }
@@ -933,29 +1080,31 @@ function getEvalProps(options = { jsonx: {} }) {
     try {
       evVal = typeof evVal === "function" ? jsonx.__dangerouslyEvalAllProps : scopedEval3(jsonx.__dangerouslyEvalAllProps);
     } catch (e) {
-      if (this.debug || jsonx.debug)
-        evVal = function() {
-          return { error: e };
-        };
+      if (this.debug || jsonx.debug) evVal = function() {
+        return { error: e };
+      };
     }
     evAllProps = typeof evVal === "function" ? evVal.call(this, { jsonx }) : evVal;
   }
-  const evProps = Object.keys(jsonx.__dangerouslyEvalProps || {}).reduce((eprops, epropName) => {
-    let evVal;
-    let evValString;
-    try {
-      evVal = scopedEval3(jsonx.__dangerouslyEvalProps[epropName]);
-      evValString = evVal.toString();
-    } catch (e) {
-      if (this.debug || jsonx.debug)
-        evVal = e;
-    }
-    eprops[epropName] = typeof evVal === "function" ? evVal.call(this, { jsonx }) : evVal;
-    if (this.exposeEval)
-      eprops[`__eval_${epropName}`] = evValString;
-    return eprops;
-  }, {});
-  const evBindProps = Object.keys(jsonx.__dangerouslyBindEvalProps || {}).reduce((eprops, epropName) => {
+  const evProps = Object.keys(jsonx.__dangerouslyEvalProps || {}).reduce(
+    (eprops, epropName) => {
+      let evVal;
+      let evValString;
+      try {
+        evVal = scopedEval3(jsonx.__dangerouslyEvalProps[epropName]);
+        evValString = evVal.toString();
+      } catch (e) {
+        if (this.debug || jsonx.debug) evVal = e;
+      }
+      eprops[epropName] = typeof evVal === "function" ? evVal.call(this, { jsonx }) : evVal;
+      if (this.exposeEval) eprops[`__eval_${epropName}`] = evValString;
+      return eprops;
+    },
+    {}
+  );
+  const evBindProps = Object.keys(
+    jsonx.__dangerouslyBindEvalProps || {}
+  ).reduce((eprops, epropName) => {
     let evVal;
     let evValString;
     try {
@@ -965,83 +1114,109 @@ function getEvalProps(options = { jsonx: {} }) {
       if (typeof functionBody === "function") {
         functionDefinition = functionBody;
       } else if (jsonx.__dangerouslyBindEvalProps) {
-        functionDefinition = scopedEval3(jsonx.__dangerouslyBindEvalProps[epropName]);
+        functionDefinition = scopedEval3(
+          jsonx.__dangerouslyBindEvalProps[epropName]
+        );
         evValString = functionDefinition.toString();
       }
       if (jsonx.__functionargs && jsonx.__functionargs[epropName]) {
-        args = [this].concat(jsonx.__functionargs[epropName].reduce(boundArgsReducer.call(this, jsonx), []));
+        args = [this].concat(
+          jsonx.__functionargs[epropName].reduce(
+            boundArgsReducer.call(this, jsonx),
+            []
+          )
+        );
       } else if (jsonx.__functionparams === false) {
         args = [this];
       } else {
         const functionDefArgs = getParamNames(functionDefinition);
-        args = [this].concat(functionDefArgs.reduce(boundArgsReducer.call(this, jsonx), []));
+        args = [this].concat(
+          functionDefArgs.reduce(boundArgsReducer.call(this, jsonx), [])
+        );
       }
       evVal = functionDefinition.bind(...args);
     } catch (e) {
-      if (this.debug || jsonx.debug)
-        evVal = e;
+      if (this.debug || jsonx.debug) evVal = e;
     }
     eprops[epropName] = evVal;
-    if (this.exposeEval)
-      eprops[`__eval_${epropName}`] = evValString;
+    if (this.exposeEval) eprops[`__eval_${epropName}`] = evValString;
     return eprops;
   }, {});
   return Object.assign({}, evProps, evBindProps, evAllProps);
 }
 function getComponentProps(options = { jsonx: {} }) {
   const { jsonx, resources } = options;
-  return Object.keys(jsonx.__dangerouslyInsertComponents).reduce((cprops, cpropName) => {
-    let componentVal;
-    try {
-      if (jsonx.__dangerouslyInsertComponents) {
-        componentVal = getRenderedJSON.call(this, jsonx.__dangerouslyInsertComponents[cpropName], resources);
+  return Object.keys(jsonx.__dangerouslyInsertComponents).reduce(
+    (cprops, cpropName) => {
+      let componentVal;
+      try {
+        if (jsonx.__dangerouslyInsertComponents) {
+          componentVal = getRenderedJSON.call(
+            this,
+            jsonx.__dangerouslyInsertComponents[cpropName],
+            resources
+          );
+        }
+      } catch (e) {
+        if (this.debug || jsonx.debug) componentVal = e;
       }
-    } catch (e) {
-      if (this.debug || jsonx.debug)
-        componentVal = e;
-    }
-    cprops[cpropName] = componentVal;
-    return cprops;
-  }, {});
+      cprops[cpropName] = componentVal;
+      return cprops;
+    },
+    {}
+  );
 }
 function getReactComponents(options) {
   const { jsonx, resources } = options;
-  const functionComponents = !jsonx.__dangerouslyInsertFunctionComponents ? {} : Object.keys(jsonx.__dangerouslyInsertFunctionComponents).reduce((cprops, cpropName) => {
-    let componentVal;
-    try {
-      const args = jsonx.__dangerouslyInsertFunctionComponents && jsonx.__dangerouslyInsertFunctionComponents[cpropName];
-      if (args) {
-        args.options = Object.assign({}, args.options, { resources });
-        if (args.function) {
-          const newComponent = makeFunctionComponent.call(this, args.function, args.options);
-          componentVal = args?.invoke ? newComponent(jsonx.props) : newComponent;
-        } else {
-          const newComponent = getReactFunctionComponent.call(this, args.reactComponent, args.functionBody, args.options);
-          componentVal = args?.invoke ? newComponent(jsonx.props) : newComponent;
+  const functionComponents = !jsonx.__dangerouslyInsertFunctionComponents ? {} : Object.keys(jsonx.__dangerouslyInsertFunctionComponents).reduce(
+    (cprops, cpropName) => {
+      let componentVal;
+      try {
+        const args = jsonx.__dangerouslyInsertFunctionComponents && jsonx.__dangerouslyInsertFunctionComponents[cpropName];
+        if (args) {
+          args.options = Object.assign({}, args.options, { resources });
+          if (args.function) {
+            const newComponent = makeFunctionComponent.call(this, args.function, args.options);
+            componentVal = args?.invoke ? newComponent(jsonx.props) : newComponent;
+          } else {
+            const newComponent = getReactFunctionComponent.call(
+              this,
+              args.reactComponent,
+              args.functionBody,
+              args.options
+            );
+            componentVal = args?.invoke ? newComponent(jsonx.props) : newComponent;
+          }
         }
+      } catch (e) {
+        if (this.debug || jsonx.debug) componentVal = e;
       }
-    } catch (e) {
-      if (this.debug || jsonx.debug)
-        componentVal = e;
-    }
-    cprops[cpropName] = cpropName === "_children" ? [componentVal] : componentVal;
-    return cprops;
-  }, {});
-  const classComponents = !jsonx.__dangerouslyInsertClassComponents ? {} : Object.keys(jsonx.__dangerouslyInsertClassComponents).reduce((cprops, cpropName) => {
-    let componentVal;
-    try {
-      const args = jsonx.__dangerouslyInsertClassComponents && jsonx.__dangerouslyInsertClassComponents[cpropName];
-      if (args) {
-        args.options = Object.assign({}, args.options, { resources });
-        componentVal = getReactClassComponent.call(this, args.reactComponent, args.options);
+      cprops[cpropName] = cpropName === "_children" ? [componentVal] : componentVal;
+      return cprops;
+    },
+    {}
+  );
+  const classComponents = !jsonx.__dangerouslyInsertClassComponents ? {} : Object.keys(jsonx.__dangerouslyInsertClassComponents).reduce(
+    (cprops, cpropName) => {
+      let componentVal;
+      try {
+        const args = jsonx.__dangerouslyInsertClassComponents && jsonx.__dangerouslyInsertClassComponents[cpropName];
+        if (args) {
+          args.options = Object.assign({}, args.options, { resources });
+          componentVal = getReactClassComponent.call(
+            this,
+            args.reactComponent,
+            args.options
+          );
+        }
+      } catch (e) {
+        if (this.debug || jsonx.debug) componentVal = e;
       }
-    } catch (e) {
-      if (this.debug || jsonx.debug)
-        componentVal = e;
-    }
-    cprops[cpropName] = cpropName === "_children" ? [componentVal] : componentVal;
-    return cprops;
-  }, {});
+      cprops[cpropName] = cpropName === "_children" ? [componentVal] : componentVal;
+      return cprops;
+    },
+    {}
+  );
   return Object.assign({}, functionComponents, classComponents);
 }
 function getReactComponentProps(options = { jsonx: {} }) {
@@ -1049,40 +1224,44 @@ function getReactComponentProps(options = { jsonx: {} }) {
   const customComponents = this && this.reactComponents ? this.reactComponents : {};
   const customLibraries = this && this.componentLibraries ? this.componentLibraries : {};
   if (jsonx.__dangerouslyInsertJSONXComponents && Object.keys(jsonx.__dangerouslyInsertJSONXComponents).length) {
-    return Object.keys(jsonx.__dangerouslyInsertJSONXComponents).reduce((cprops, cpropName) => {
-      let componentVal;
-      try {
-        componentVal = getComponentFromMap({
-          jsonx: jsonx.__dangerouslyInsertJSONXComponents && jsonx.__dangerouslyInsertJSONXComponents[cpropName],
-          reactComponents: customComponents,
-          componentLibraries: customLibraries
-        });
-      } catch (e) {
-        if (this.debug || jsonx.debug)
-          componentVal = e;
-      }
-      cprops[cpropName] = componentVal;
-      return cprops;
-    }, {});
+    return Object.keys(jsonx.__dangerouslyInsertJSONXComponents).reduce(
+      (cprops, cpropName) => {
+        let componentVal;
+        try {
+          componentVal = getComponentFromMap({
+            jsonx: jsonx.__dangerouslyInsertJSONXComponents && jsonx.__dangerouslyInsertJSONXComponents[cpropName],
+            reactComponents: customComponents,
+            componentLibraries: customLibraries
+          });
+        } catch (e) {
+          if (this.debug || jsonx.debug) componentVal = e;
+        }
+        cprops[cpropName] = componentVal;
+        return cprops;
+      },
+      {}
+    );
   } else if (jsonx.__dangerouslyInsertReactComponents && Object.keys(jsonx.__dangerouslyInsertReactComponents).length) {
-    return Object.keys(jsonx.__dangerouslyInsertReactComponents).reduce((cprops, cpropName) => {
-      let componentVal;
-      try {
-        componentVal = getComponentFromMap({
-          jsonx: {
-            component: jsonx.__dangerouslyInsertReactComponents && jsonx.__dangerouslyInsertReactComponents[cpropName],
-            props: jsonx.__dangerouslyInsertComponentProps ? jsonx.__dangerouslyInsertComponentProps[cpropName] : {}
-          },
-          reactComponents: customComponents,
-          componentLibraries: customLibraries
-        });
-      } catch (e) {
-        if (this.debug || jsonx.debug)
-          componentVal = e;
-      }
-      cprops[cpropName] = componentVal;
-      return cprops;
-    }, {});
+    return Object.keys(jsonx.__dangerouslyInsertReactComponents).reduce(
+      (cprops, cpropName) => {
+        let componentVal;
+        try {
+          componentVal = getComponentFromMap({
+            jsonx: {
+              component: jsonx.__dangerouslyInsertReactComponents && jsonx.__dangerouslyInsertReactComponents[cpropName],
+              props: jsonx.__dangerouslyInsertComponentProps ? jsonx.__dangerouslyInsertComponentProps[cpropName] : {}
+            },
+            reactComponents: customComponents,
+            componentLibraries: customLibraries
+          });
+        } catch (e) {
+          if (this.debug || jsonx.debug) componentVal = e;
+        }
+        cprops[cpropName] = componentVal;
+        return cprops;
+      },
+      {}
+    );
   }
 }
 function getFunctionFromProps(options = { jsonx: {}, propBody: "" }) {
@@ -1094,8 +1273,7 @@ function getFunctionFromProps(options = { jsonx: {}, propBody: "" }) {
   } = options;
   const { logError = console.error, debug } = this;
   let windowObject = {};
-  if (this.window)
-    windowObject = this.window;
+  if (this.window) windowObject = this.window;
   else if (typeof global !== "undefined" && global.window)
     windowObject = global.window;
   try {
@@ -1105,18 +1283,28 @@ function getFunctionFromProps(options = { jsonx: {}, propBody: "" }) {
     if (propFunc.includes("func:inline")) {
       let InlineFunction;
       if (jsonx.__functionargs) {
-        const args = [].concat(jsonx.__functionargs[functionProperty]);
+        const args = [].concat(
+          jsonx.__functionargs[functionProperty]
+        );
         args.push(propBody);
         InlineFunction = Function.prototype.constructor.apply({}, args);
       } else {
-        InlineFunction = Function("param1", "param2", '"use strict";' + propBody);
+        InlineFunction = Function(
+          "param1",
+          "param2",
+          '"use strict";' + propBody
+        );
       }
       const [propFuncName, funcName] = propFunc.split(".");
       Object.defineProperty(InlineFunction, "name", {
         value: funcName
       });
       if (jsonx.__functionargs) {
-        const boundArgs = [this].concat(jsonx.__functionargs[functionProperty].map((arg) => jsonx.props[arg]));
+        const boundArgs = [this].concat(
+          jsonx.__functionargs[functionProperty].map(
+            (arg) => jsonx.props[arg]
+          )
+        );
         return InlineFunction.bind(...boundArgs);
       } else {
         return InlineFunction.bind(this);
@@ -1152,8 +1340,7 @@ function getFunctionFromProps(options = { jsonx: {}, propBody: "" }) {
   } catch (e) {
     if (this.debug) {
       logError(e);
-      if (jsonx && jsonx.debug)
-        return e;
+      if (jsonx && jsonx.debug) return e;
     }
     return function() {
     };
@@ -1187,7 +1374,11 @@ function getWindowComponents(options = { jsonx: {} }) {
     if (typeof windowComponents[key] === "string" && windowComponents[key].indexOf(windowFuncPrefix) !== -1 && typeof window2.__jsonx_custom_elements[windowKEY] === "function") {
       const windowComponentElement = window2.__jsonx_custom_elements[windowKEY];
       const windowComponentProps = allProps["__windowComponentProps"] ? allProps["__windowComponentProps"] : this.props;
-      allProps[key] = React2.createElement(windowComponentElement, windowComponentProps, null);
+      allProps[key] = React2.createElement(
+        windowComponentElement,
+        windowComponentProps,
+        null
+      );
     }
   });
   return allProps;
@@ -1205,12 +1396,18 @@ function getComputedProps(options = {}) {
     componentLibraries = {}
   } = options;
   try {
-    const componentThisProp = jsonx.thisprops ? Object.assign({
-      __jsonx: {
-        _component: jsonx,
-        _resources: resources
-      }
-    }, this.props, jsonx.props, useReduxState && !jsonx.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && jsonx.component && !componentLibraries[jsonx.component] ? this.props && this.props.getState ? this.props.getState() : {} : {}) : void 0;
+    const componentThisProp = jsonx.thisprops ? Object.assign(
+      {
+        __jsonx: {
+          _component: jsonx,
+          _resources: resources
+        }
+      },
+      this.props,
+      jsonx.props,
+      //@ts-ignore
+      useReduxState && !jsonx.ignoreReduxProps && ignoreReduxPropsInComponentLibraries && jsonx.component && !componentLibraries[jsonx.component] ? this.props && this.props.getState ? this.props.getState() : {} : {}
+    ) : void 0;
     const windowTraverse = typeof window !== "undefined" ? window : {};
     const asyncprops = jsonx.asyncprops ? getJSONXProps({
       jsonx,
@@ -1260,17 +1457,49 @@ function getComputedProps(options = {}) {
     const insertedReactComponents = jsonx.__dangerouslyInsertReactComponents || jsonx.__dangerouslyInsertJSONXComponents ? getReactComponentProps.call(this, { jsonx, debug }) : {};
     const insertedComputedComponents = jsonx.__dangerouslyInsertFunctionComponents || jsonx.__dangerouslyInsertClassComponents ? getReactComponents.call(this, { jsonx, debug }) : {};
     const evalAllProps = jsonx.__dangerouslyEvalAllProps ? getEvalProps.call(this, { jsonx }) : {};
-    const allProps = Object.assign({}, this.disableRenderIndexKey || disableRenderIndexKey ? {} : { key: renderIndex2 }, jsonx.props, thisprops, thisstate, thiscontext, resourceprops, asyncprops, windowprops, evalProps, insertedComponents, insertedReactComponents, insertedComputedComponents);
-    const computedProps = Object.assign({}, allProps, jsonx.__functionProps ? getFunctionProps.call(this, { allProps, jsonx }) : {}, jsonx.__windowComponents ? getWindowComponents.call(this, { allProps, jsonx }) : {}, jsonx.__spreadComponent ? getChildrenComponents.call(this, { allProps, jsonx }) : {}, evalAllProps);
+    const allProps = Object.assign(
+      {},
+      this.disableRenderIndexKey || disableRenderIndexKey ? {} : { key: renderIndex2 },
+      jsonx.props,
+      thisprops,
+      thisstate,
+      thiscontext,
+      resourceprops,
+      asyncprops,
+      windowprops,
+      evalProps,
+      insertedComponents,
+      insertedReactComponents,
+      insertedComputedComponents
+    );
+    const computedProps = Object.assign(
+      {},
+      allProps,
+      jsonx.__functionProps ? getFunctionProps.call(this, { allProps, jsonx }) : {},
+      jsonx.__windowComponents ? getWindowComponents.call(this, { allProps, jsonx }) : {},
+      jsonx.__spreadComponent ? getChildrenComponents.call(this, { allProps, jsonx }) : {},
+      evalAllProps
+    );
     if (jsonx.useremoveprops && Array.isArray(jsonx.useremoveprops)) {
       for (const prop of jsonx.useremoveprops) {
         computedProps[prop] = void 0;
         delete computedProps[prop];
       }
     }
-    if (jsonx.debug)
-      console.debug({ jsonx, computedProps });
-    return jsonx.useincludeprops && Array.isArray(jsonx.useincludeprops) ? jsonx.useincludeprops.concat(["key"], Object.keys(thisprops), Object.keys(thisstate), Object.keys(thiscontext), Object.keys(resourceprops), Object.keys(asyncprops), Object.keys(windowprops), Object.keys(evalProps), Object.keys(insertedComponents), Object.keys(insertedReactComponents), Object.keys(insertedComputedComponents)).reduce((includedProps, prop) => {
+    if (jsonx.debug) console.debug({ jsonx, computedProps });
+    return jsonx.useincludeprops && Array.isArray(jsonx.useincludeprops) ? jsonx.useincludeprops.concat(
+      ["key"],
+      Object.keys(thisprops),
+      Object.keys(thisstate),
+      Object.keys(thiscontext),
+      Object.keys(resourceprops),
+      Object.keys(asyncprops),
+      Object.keys(windowprops),
+      Object.keys(evalProps),
+      Object.keys(insertedComponents),
+      Object.keys(insertedReactComponents),
+      Object.keys(insertedComputedComponents)
+    ).reduce((includedProps, prop) => {
       includedProps[prop] = computedProps[prop];
       return includedProps;
     }, {}) : computedProps;
@@ -1321,16 +1550,25 @@ function getChildrenProps(options = {}) {
   const props = options.props || jsonx.props || {};
   if (jsonx.passprops && childjsonx && typeof childjsonx === "object") {
     const passedChildJsonx = Object.assign({}, childjsonx, {
-      props: Object.assign({}, Array.isArray(jsonx.passprops) ? jsonx.passprops.reduce((passedProps, prop) => {
-        passedProps[prop] = props[prop];
-        return passedProps;
-      }, {}) : props, childjsonx.thisprops && childjsonx.thisprops.style || childjsonx.asyncprops && childjsonx.asyncprops.style || childjsonx.windowprops && childjsonx.windowprops.style ? {} : {}, childjsonx.props, typeof this !== "undefined" || this && this.disableRenderIndexKey ? {} : {
-        key: typeof renderIndex2 !== "undefined" ? renderIndex2 + Math.random() : Math.random()
-      })
+      props: Object.assign(
+        {},
+        Array.isArray(jsonx.passprops) ? jsonx.passprops.reduce((passedProps, prop) => {
+          passedProps[prop] = props[prop];
+          return passedProps;
+        }, {}) : props,
+        childjsonx.thisprops && childjsonx.thisprops.style || // this is to make sure when you bind props, if you've defined props in a dynamic property, to not use bind props to  remove passing down styles
+        childjsonx.asyncprops && childjsonx.asyncprops.style || childjsonx.windowprops && childjsonx.windowprops.style ? {} : {
+          // style: {}
+        },
+        childjsonx.props,
+        //@ts-ignore
+        typeof this !== "undefined" || this && this.disableRenderIndexKey ? {} : {
+          key: typeof renderIndex2 !== "undefined" ? renderIndex2 + Math.random() : Math.random()
+        }
+      )
     });
     return passedChildJsonx;
-  } else
-    return childjsonx;
+  } else return childjsonx;
 }
 function fetchJSONSync(path3, options) {
   try {
@@ -1349,8 +1587,7 @@ function fetchJSONSync(path3, options) {
     request.send(config.body ? JSON.stringify(config.body) : void 0);
     if (request.status !== 200) {
       throw new Error(request.responseText);
-    } else
-      return request.responseText;
+    } else return request.responseText;
   } catch (e) {
     throw e;
   }
@@ -1380,15 +1617,13 @@ function getJSONXChildren(options = { jsonx: {} }) {
   try {
     const context = this || {};
     const props = options && options.props ? options.props : jsonx && jsonx.props ? jsonx.props : {};
-    if (!jsonx)
-      return null;
+    if (!jsonx) return null;
     jsonx.children = getChildrenProperty({ jsonx, props });
     props._children = void 0;
     delete props._children;
     if (jsonx.___template)
       jsonx.children = [getChildrenTemplate(jsonx.___template)];
-    else if (typeof jsonx.children === "undefined" || jsonx.children === null)
-      return void 0;
+    else if (typeof jsonx.children === "undefined" || jsonx.children === null) return void 0;
     else if (jsonx.children && jsonx.___stringifyChildren && Array.isArray(jsonx.___stringifyChildren)) {
       const args = [jsonx.children, ...jsonx.___stringifyChildren];
       jsonx.children = JSON.stringify.apply(null, args);
@@ -1399,14 +1634,21 @@ function getJSONXChildren(options = { jsonx: {} }) {
     else if (jsonx.children && jsonx.___toNumeral)
       jsonx.children = numeral(jsonx.children).format(jsonx.___toNumeral);
     else if (jsonx.children && jsonx.___JSDatetoLuxonString)
-      jsonx.children = luxon.DateTime.fromJSDate(jsonx.children).toFormat(jsonx.___JSDatetoLuxonString);
+      jsonx.children = luxon.DateTime.fromJSDate(
+        jsonx.children
+      ).toFormat(jsonx.___JSDatetoLuxonString);
     else if (jsonx.children && jsonx.___ISOtoLuxonString)
       jsonx.children = luxon.DateTime.fromISO(jsonx.children, {
         zone: jsonx.___FromLuxonTimeZone
       }).toFormat(jsonx.___ISOtoLuxonString);
-    if (typeof jsonx.children === "string")
-      return jsonx.children;
-    const children = jsonx.children && Array.isArray(jsonx.children) ? jsonx.children.map((childjsonx) => getReactElementFromJSONX.call(context, getChildrenProps.call(this, { jsonx, childjsonx, props, renderIndex: renderIndex2 }), resources)).filter((child) => child !== null) : jsonx.children;
+    if (typeof jsonx.children === "string") return jsonx.children;
+    const children = jsonx.children && Array.isArray(jsonx.children) ? jsonx.children.map(
+      (childjsonx) => getReactElementFromJSONX.call(
+        context,
+        getChildrenProps.call(this, { jsonx, childjsonx, props, renderIndex: renderIndex2 }),
+        resources
+      )
+    ).filter((child) => child !== null) : jsonx.children;
     return children;
   } catch (e) {
     this && this.debug && logError(e, e.stack ? e.stack : "no stack");
@@ -1442,15 +1684,11 @@ function __express(filePath, options, callback) {
     });
     const template = `${options?.__DOCTYPE || "<!DOCTYPE html>"}
 ${jsonxRenderedString}`;
-    if (typeof callback === "function")
-      callback(null, template);
-    else
-      return template;
+    if (typeof callback === "function") callback(null, template);
+    else return template;
   } catch (e) {
-    if (typeof callback === "function")
-      callback(e);
-    else
-      throw e;
+    if (typeof callback === "function") callback(e);
+    else throw e;
   }
 }
 
@@ -1472,13 +1710,14 @@ var renderIndex = 0;
 function jsonxRender(config = { jsonx: { component: "" }, querySelector: "" }) {
   const { jsonx, resources, querySelector, DOM, portal } = config;
   const RenderDOM = DOM || document.querySelector(querySelector);
-  const JSONXReactElement = getReactElementFromJSONX.call(this || {}, jsonx, resources);
-  if (!JSONXReactElement)
-    throw ReferenceError("Invalid React Element");
-  else if (!RenderDOM)
-    throw ReferenceError("Invalid Render DOM Element");
-  if (portal)
-    ReactDOM.createPortal(JSONXReactElement, RenderDOM);
+  const JSONXReactElement = getReactElementFromJSONX.call(
+    this || {},
+    jsonx,
+    resources
+  );
+  if (!JSONXReactElement) throw ReferenceError("Invalid React Element");
+  else if (!RenderDOM) throw ReferenceError("Invalid Render DOM Element");
+  if (portal) ReactDOM.createPortal(JSONXReactElement, RenderDOM);
   else {
     const root = createRoot(RenderDOM);
     root.render(JSONXReactElement);
@@ -1486,7 +1725,15 @@ function jsonxRender(config = { jsonx: { component: "" }, querySelector: "" }) {
 }
 function outputHTML(config = { jsonx: { component: "" } }) {
   const { jsonx, resources, type, props, children } = config;
-  return this && this.useJSON ? ReactDOMServer.renderToString(getReactElementFromJSON.call(this || {}, { type: type || jsonx.type || jsonx.component || "Fragment", props: props || jsonx.props, children: children || jsonx.children })) : ReactDOMServer.renderToString(getReactElementFromJSONX.call(this || {}, jsonx, resources));
+  return this && this.useJSON ? ReactDOMServer.renderToString(
+    getReactElementFromJSON.call(this || {}, { type: type || jsonx.type || jsonx.component || "Fragment", props: props || jsonx.props, children: children || jsonx.children })
+  ) : ReactDOMServer.renderToString(
+    getReactElementFromJSONX.call(
+      this || {},
+      jsonx,
+      resources
+    )
+  );
 }
 function getReactElementFromJSONX(jsonx, resources = {}) {
   const {
@@ -1501,17 +1748,24 @@ function getReactElementFromJSONX(jsonx, resources = {}) {
     componentLibraries = {}
   } = this || {};
   componentLibraries.ReactHookForm = ReactHookForm2;
-  if (!jsonx)
-    return null;
-  if (jsonx.type)
-    jsonx.component = jsonx.type;
+  if (!jsonx) return null;
+  if (jsonx.type) jsonx.component = jsonx.type;
   if (!jsonx.component && validSimpleJSONXSyntax2(jsonx)) {
     jsonx = simpleJSONXSyntax2(jsonx);
   }
   if (!jsonx || !jsonx.component)
-    return createElement("span", {}, debug ? "Error: Missing Component Object" : "");
+    return createElement(
+      "span",
+      {},
+      debug ? "Error: Missing Component Object" : ""
+    );
   try {
-    let components = Object.assign({ DynamicComponent: DynamicComponent2.bind(this) }, { FormComponent: FormComponent2.bind(this) }, componentMap2, this?.reactComponents);
+    let components = Object.assign(
+      { DynamicComponent: DynamicComponent2.bind(this) },
+      { FormComponent: FormComponent2.bind(this) },
+      componentMap2,
+      this?.reactComponents
+    );
     let reactComponents = boundedComponents.length ? getBoundedComponents2.call(this, {
       boundedComponents,
       reactComponents: components
@@ -1525,8 +1779,7 @@ function getReactElementFromJSONX(jsonx, resources = {}) {
       componentLibraries = { ...componentLibraries, ...customComponentLibraries };
       reactComponents = { ...reactComponents, ...customReactComponents };
     }
-    if (disableRenderIndexKey === false)
-      renderIndex++;
+    if (disableRenderIndexKey === false) renderIndex++;
     const element = getComponentFromMap2.call(this, {
       jsonx,
       reactComponents,
@@ -1557,12 +1810,9 @@ function getReactElementFromJSONX(jsonx, resources = {}) {
         resources,
         renderIndex
       });
-      if (returnJSON)
-        return { type: element, props, children };
-      else if (jsonx.test)
-        return JSON.stringify({ element, props, children }, null, 2);
-      else
-        return createElement(element, props, children);
+      if (returnJSON) return { type: element, props, children };
+      else if (jsonx.test) return JSON.stringify({ element, props, children }, null, 2);
+      else return createElement(element, props, children);
     } else {
       return null;
     }
@@ -1582,11 +1832,19 @@ function getReactElementFromJSON({
   props,
   children
 }) {
-  return createElement(type, props, children && Array.isArray(children) ? children.map(getReactElementFromJSON) : children);
+  return createElement(
+    type,
+    props,
+    children && Array.isArray(children) ? children.map(getReactElementFromJSON) : children
+  );
 }
 function compile(jsonx, resources = {}) {
   const context = Object.assign({}, this, { returnJSON: true });
-  const json = getReactElementFromJSONX.call(context, jsonx, resources);
+  const json = getReactElementFromJSONX.call(
+    context,
+    jsonx,
+    resources
+  );
   const func = function compiledJSONX(props) {
     json.props = Object.assign({}, json.props, props);
     return getReactElementFromJSON(json);
@@ -1596,12 +1854,20 @@ function compile(jsonx, resources = {}) {
 }
 function outputJSX(jsonx, resources = {}) {
   const context = Object.assign({}, this, { returnJSON: true });
-  const json = getReactElementFromJSONX.call(context, jsonx, resources);
+  const json = getReactElementFromJSONX.call(
+    context,
+    jsonx,
+    resources
+  );
   return jsonToJSX(json);
 }
 function outputJSON(jsonx, resources = {}) {
   const context = Object.assign({}, this, { returnJSON: true });
-  return getReactElementFromJSONX.call(context, jsonx, resources);
+  return getReactElementFromJSONX.call(
+    context,
+    jsonx,
+    resources
+  );
 }
 var jsonxHTMLString = outputHTML;
 function jsonToJSX(json) {
@@ -1624,7 +1890,7 @@ var _jsonxComponents = components_exports;
 var _jsonxProps = props_exports;
 var _jsonxUtils = utils_exports;
 var _jsonxHelpers = { numeral: numeral2, luxon: luxon2 };
-var src_default = getReactElementFromJSONX;
+var index_default = getReactElementFromJSONX;
 export {
   __express,
   __getReact,
@@ -1635,7 +1901,7 @@ export {
   _jsonxProps,
   _jsonxUtils,
   compile,
-  src_default as default,
+  index_default as default,
   getReactElement,
   getReactElementFromJSON,
   getReactElementFromJSONX,

@@ -1,16 +1,17 @@
+// @spec JSONX-CORE-001 JSONX-CORE-002 JSONX-CORE-003 JSONX-CORE-004 JSONX-CORE-005 JSONX-CORE-006 JSONX-CORE-007 JSONX-CORE-008 JSONX-CORE-009 JSONX-CORE-010 JSONX-CORE-011 JSONX-CORE-012
+// @intent docs/intent/core-rendering/core-rendering-specs.md
 import * as jsonx from './index';
 // import mochaJSDOM from 'jsdom-global';
 import path from 'path';
 import React, { ReactElement } from 'react';
 import ReactTestUtils from 'react-dom/test-utils'; // ES6
 import ReactDOM from 'react-dom';
-import { JSDOM, } from 'jsdom';
 // chai.use(require('sinon-chai'));
 // import 'mocha-sinon';
 
 // import useGlobalHook from 'use-global-hook';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import * as defs from "./types/jsonx/index";
 
 
@@ -310,7 +311,7 @@ describe('jsonx', function () {
       try {
         jsonx.getReactElementFromJSONX.call({ debug: true, logError: loggerSpy, }, { component: 'somethingInvalid', }, {});
       } catch (e) {
-        expect(loggerSpy).toBeCalled()
+        expect(loggerSpy).toHaveBeenCalled()
         expect(e).toBeInstanceOf(Error);
       }
     });
@@ -340,17 +341,12 @@ describe('jsonx', function () {
   });
   describe('compile', () => { 
     it('should convert JSONX to React Element', () => {
-      const dom = new JSDOM(`<!DOCTYPE html>
-      <body>
-        <div id="root"/>
-      </body>`);
+      document.body.innerHTML = '<div id="root"></div>';
       // global.document = dom.window.document;
       // global.document.createElement = React.createElement;
       // console.log('dom.window',dom.window)
       //@ts-ignore
-      global.window = dom.window;
       global.window.React = React;
-      global.document = global.window.document;
       // console.log("dom.window.document.querySelector('#root')",dom.window.document.querySelector('#root'));
       //@ts-ignore
       const ReactiveJSON = jsonx.compile(sampleJSONXJSON);
@@ -404,11 +400,12 @@ describe('jsonx', function () {
     it('should return an HTML string', () => {
       //@ts-ignore
       const jsonxString = jsonx.jsonxHTMLString({ jsonx: sampleJSONX, });
-      const dom = new JSDOM(`<!DOCTYPE html><body>${jsonxString}</body>`);
+      document.body.innerHTML = jsonxString;
+      const generatedParagraph = document.body.querySelector('p') as HTMLParagraphElement;
 
       expect( typeof jsonxString).toBe('string');
-      expect(dom.window.document.body.querySelector('p').innerHTML).toBe('hello world');
-      expect(dom.window.document.body.querySelector('p').style.color).toBe('red');
+      expect(generatedParagraph.innerHTML).toBe('hello world');
+      expect(generatedParagraph.style.color).toBe('red');
     });
   });
   describe('__express', () => {
@@ -426,9 +423,9 @@ describe('jsonx', function () {
         },
         //@ts-ignore
         ((err, renderedString) => {
-          const dom = new JSDOM(renderedString);
+          const dom = new window.DOMParser().parseFromString(renderedString, 'text/html');
           if (renderedString) {
-            expect(dom.window.document.querySelector('#generatedJSONX').getAttribute('title')).toBe(spantext);
+            expect(dom.querySelector('#generatedJSONX').getAttribute('title')).toBe(spantext);
             expect(err).toBe(null);
             expect(typeof renderedString).toBe('string');
           }

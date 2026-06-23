@@ -1,14 +1,10 @@
+// @spec JSONX-DIST-001 JSONX-DIST-002 JSONX-DIST-003 JSONX-DIST-005 JSONX-DIST-006 JSONX-DIST-007 JSONX-DIST-008
+// @intent docs/intent/distribution-types/distribution-types-specs.md
 import esbuild from "esbuild";
 import { nodeBuiltIns } from "esbuild-node-builtins";
 import GlobalsPlugin from "esbuild-plugin-globals";
 
-const watch = (process.argv.includes('-w') || process.argv.includes('-watch'))
-  ? {
-    onRebuild(error,result){
-      console.log('rebuilt',{error,result});
-    }
-  }
-  : false;
+const shouldWatch = process.argv.includes('-w') || process.argv.includes('-watch');
 const globalName = 'jsonx';
 const entryPoints = ['src/index.ts'];
 const webPlugins = [nodeBuiltIns()];
@@ -35,12 +31,19 @@ const serverExternals = [
   'ua-parser-js',
 ];
 
+async function runBuild(options) {
+  if (!shouldWatch) return esbuild.build(options);
+
+  const context = await esbuild.context(options);
+  await context.watch();
+  return { outfile: options.outfile, watch: true };
+}
+
 
 
 void async function main(){
   try {
-    const browserMinifiedBuild = await esbuild.build({
-      watch,
+    const browserMinifiedBuild = await runBuild({
       format:'iife',
       globalName,
       entryPoints,
@@ -51,8 +54,7 @@ void async function main(){
       plugins: webPlugins,
       outfile:'dist/index.web.min.js'
     });
-    const browserBuild = await esbuild.build({
-      watch,
+    const browserBuild = await runBuild({
       format:'iife',
       globalName,
       entryPoints,
@@ -63,8 +65,7 @@ void async function main(){
       plugins: webPlugins,
       outfile:'dist/index.web.js'
     });
-    const browserCoreBuild = await esbuild.build({
-      watch,
+    const browserCoreBuild = await runBuild({
       format:'iife',
       globalName,
       entryPoints,
@@ -75,8 +76,7 @@ void async function main(){
       plugins: webCorePlugins,
       outfile:'dist/index.web.core.js'
     });
-    const browserCoreMinifiedBuild = await esbuild.build({
-      watch,
+    const browserCoreMinifiedBuild = await runBuild({
       format:'iife',
       globalName,
       entryPoints,
@@ -87,8 +87,7 @@ void async function main(){
       plugins: webCorePlugins,
       outfile:'dist/index.web.core-min.js'
     });
-    const browserCoreLegacyBuild = await esbuild.build({
-      watch,
+    const browserCoreLegacyBuild = await runBuild({
       format:'iife',
       globalName,
       entryPoints,
@@ -99,8 +98,7 @@ void async function main(){
       plugins: webCorePlugins,
       outfile:'dist/index.web.core-legacy-min.js'
     });
-    const browserCoreLegacyMinifiedBuild = await esbuild.build({
-      watch,
+    const browserCoreLegacyMinifiedBuild = await runBuild({
       format:'iife',
       globalName,
       entryPoints,
@@ -112,8 +110,7 @@ void async function main(){
       outfile:'dist/index.web.core-legacy-min.js'
     });
 
-    const cjsBuild = await esbuild.build({
-      watch,
+    const cjsBuild = await runBuild({
       format:'cjs',
       globalName,
       entryPoints,
@@ -125,8 +122,7 @@ void async function main(){
       plugins: serverPlugins,
       outfile:'dist/index.cjs'
     });
-    const esmBuild = await esbuild.build({
-      watch,
+    const esmBuild = await runBuild({
       format:'esm',
       globalName,
       entryPoints,
@@ -151,5 +147,6 @@ void async function main(){
     });
   } catch(e){
     console.error(e);
+    process.exitCode = 1;
   }
 }();
