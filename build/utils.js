@@ -164,7 +164,8 @@ export function getAdvancedBinding() {
             const parseUserAgent = parser.getResult();
             // console.log({ parseUserAgent, });
             if ((parseUserAgent.browser.name === "Chrome" ||
-                parseUserAgent.browser.name === "Chrome WebView") &&
+                parseUserAgent.browser.name === "Chrome WebView" ||
+                parseUserAgent.browser.name === "Mobile Chrome") &&
                 parseUserAgent.os.name === "Android" &&
                 parseInt(parseUserAgent.browser.version, 10) < 50) {
                 return false;

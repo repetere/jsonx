@@ -23,7 +23,7 @@ export declare const ARGUMENT_NAMES: RegExp;
  * @param {Function} func
  * @todo write tests
  */
-export declare function getParamNames(func: defs.functionParam): RegExpMatchArray;
+export declare function getParamNames(func: defs.functionParam): string[];
 /**
  * It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
  * @param {Object} [traverseObject={}] - the object that contains values of propName

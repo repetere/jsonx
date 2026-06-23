@@ -1,11 +1,11 @@
 import { jsonx } from "./jsonx";
-export declare type functionParam = (...params: any[]) => any;
-export declare type dynamicFunctionParams = {
+export type functionParam = (...params: any[]) => any;
+export type dynamicFunctionParams = {
     jsonx?: jsonx;
     propName?: string;
     traverseObject?: any;
 };
-export declare type dynamicComponentProps = {
+export type dynamicComponentProps = {
     propName?: string;
     traverseObject?: any;
     useCache?: boolean;
@@ -20,7 +20,7 @@ export declare type dynamicComponentProps = {
     fetchOptions?: any;
     fetchFunction?: functionParam;
 };
-export declare type formComponentProps = {
+export type formComponentProps = {
     name?: string;
     hookFormOptions?: any;
     onSubmit?: functionParam;

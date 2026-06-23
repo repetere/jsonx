@@ -3,6 +3,6 @@ export interface globalThisWindow {
         [index: string]: any;
     };
 }
-export declare type traversePaths = {
+export type traversePaths = {
     [index: string]: string[];
 };

@@ -580,7 +580,7 @@ describe('jsonx props', function () {
       expect(typeof defaultFunc).toBe('function');
       // EXPECTsChai(func.toString()).to.eq(emptyFunction.toString());
       // EXPECTsChai(defaultFunc.toString()).to.eq(emptyFunction.toString());
-      expect(logError).toBeCalled()
+      expect(logError).toHaveBeenCalled()
     });
     it('should return a library function like this.props.reduxRouter.push', () => {
       const logError = jest.fn();
@@ -600,7 +600,7 @@ describe('jsonx props', function () {
       });
       expect(typeof func).toBe('function');
       expect(func()).toBe('pushed');
-      expect(logError).not.toBeCalled()
+      expect(logError).not.toHaveBeenCalled()
     });
     it('should return a function on this.props like this.props.onClick', () => {
       const logError = jest.fn();
@@ -617,7 +617,7 @@ describe('jsonx props', function () {
       });
       expect(typeof func).toBe('function');
       expect(func()).toBe('clicked');
-      expect(logError).not.toBeCalled()
+      expect(logError).not.toHaveBeenCalled()
     });
     it('should return a window function like window.print or window.localStorage.getItem', () => {
       const logError = jest.fn();
@@ -644,7 +644,7 @@ describe('jsonx props', function () {
       expect(typeof funcDeep).toBe('function');
       expect(func()).toBe('printed');
       expect(funcDeep()).toBe('gotItem');
-      expect(logError).not.toBeCalled();
+      expect(logError).not.toHaveBeenCalled();
     });
     it('should generate inline functions',()=>{
       const jsonx = {
