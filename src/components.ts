@@ -1,3 +1,5 @@
+// @spec JSONX-COMP-001 JSONX-COMP-002 JSONX-COMP-003 JSONX-COMP-004 JSONX-COMP-005 JSONX-COMP-006 JSONX-COMP-007 JSONX-COMP-008 JSONX-COMP-009 JSONX-COMP-010 JSONX-COMP-011 JSONX-COMP-012
+// @intent docs/intent/component-factories/component-factories-specs.md
 import React, {
   useState,
   useEffect,

@@ -1,3 +1,5 @@
+// @spec JSONX-COMP-001 JSONX-COMP-002 JSONX-COMP-003 JSONX-COMP-004 JSONX-COMP-005 JSONX-COMP-006 JSONX-COMP-007 JSONX-COMP-008 JSONX-COMP-009 JSONX-COMP-010 JSONX-COMP-011 JSONX-COMP-012
+// @intent docs/intent/component-factories/component-factories-specs.md
 import * as jsonx from './index';
 import * as _jsonxComponents from './components';
 import {getCustomComponentsCacheKey, getCustomFunctionComponent, getReactLibrariesAndComponents} from './components';
@@ -259,7 +261,7 @@ describe('jsonx components', function () {
 
       const JSONXPropCheck = jsonx.getRenderedJSON.call(customThis, sampleCustomElementJSONX);
 
-      expect(bindSpy).toBeCalled();
+      expect(bindSpy).toHaveBeenCalled();
       //@ts-ignore
       expect(JSONXPropCheck.props.title).toBe(customThis.props.extraname);
       //@ts-ignore
@@ -320,7 +322,7 @@ describe('jsonx components', function () {
         _jsonxComponents.getComponentFromMap({ debug: true, logError, jsonx:false, });
       } catch (e) {
         expect(e).toBeInstanceOf(Error)
-        expect(logError).toBeCalled()
+        expect(logError).toHaveBeenCalled()
       }
     });
   });
@@ -796,7 +798,7 @@ describe('jsonx components', function () {
       const {container:containerFuncDef} =render(<FuncDef />)
       expect(containerFuncString.innerHTML).toMatch('<span>gen custom def</span>')
       expect(containerFuncDef.innerHTML).toMatch('<span>gen custom</span>')
-      expect(console.log).toBeCalledWith('called generated function')
+      expect(console.log).toHaveBeenCalledWith('called generated function')
       console.log=originalConsoleLog
     })
   });

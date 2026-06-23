@@ -1,3 +1,5 @@
+// @spec JSONX-PROPS-008
+// @intent docs/intent/prop-resolution/prop-resolution-specs.md
 import * as _jsonxUtils from './utils';
 
 const sampleJSONX = {

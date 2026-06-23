@@ -9,15 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
+          cache: npm
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           cache-name: cache-node-modules
         with:
@@ -30,11 +31,10 @@ jobs:
             ${{ runner.os }}-
       - name: Install dependencies
         run: |
-          npm i jest typescript esbuild typedoc sitedown -g
-          npm i
+          npm ci
       - name: Test coverage
         run: |
-          jest --coverage --runInBand --ci --no-cache
+          npm test -- --runInBand --ci --no-cache
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:
