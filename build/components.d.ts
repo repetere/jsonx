@@ -17,10 +17,8 @@ declare global {
     }
 }
 export declare const ReactHookForm: {
-    ErrorMessage: <TFieldErrors extends {
-        [x: string]: any;
-    }, TAs extends React.ComponentType<any> | React.ReactElement<any, string | React.JSXElementConstructor<any>> | keyof JSX.IntrinsicElements | undefined = undefined>({ as, errors, name, message, render, ...rest }: import("@hookform/error-message").Props<TFieldErrors, TAs>) => React.ReactElement<any, string | React.JSXElementConstructor<any>> | null;
-    Controller: <TFieldValues extends import("react-hook-form").FieldValues = import("react-hook-form").FieldValues, TName extends import("react-hook-form").Path<TFieldValues> = import("react-hook-form").Path<TFieldValues>>(props: import("react-hook-form").ControllerProps<TFieldValues, TName>) => React.ReactElement<any, string | React.JSXElementConstructor<any>>;
+    ErrorMessage: <TFieldErrors extends import("react-hook-form").DeepMap<import("react-hook-form").FieldValues, import("react-hook-form").FieldError>, TAs extends React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ComponentType<any> | keyof JSX.IntrinsicElements | undefined = undefined>({ as, errors, name, message, render, ...rest }: import("@hookform/error-message").Props<TFieldErrors, TAs>) => React.ReactElement<any, string | React.JSXElementConstructor<any>> | null;
+    Controller: <TFieldValues extends import("react-hook-form").FieldValues = import("react-hook-form").FieldValues, TName extends import("react-hook-form").FieldPath<TFieldValues> = import("react-hook-form").FieldPath<TFieldValues>, TTransformedValues = TFieldValues>(props: import("react-hook-form").ControllerProps<TFieldValues, TName, TTransformedValues>) => import("react").ReactElement<unknown, string | import("react").JSXElementConstructor<any>>;
 };
 export declare const generatedCustomComponents: Map<string, defs.jsonx["jsonxComponents"] | Map<string, defs.jsonx["jsonxComponents"]>>;
 export declare let advancedBinding: boolean;

@@ -1,10 +1,9 @@
-/// <reference types="react" />
-export declare type callbackFunc = (...args: any[]) => any;
+export type callbackFunc = (...args: any[]) => any;
 export interface jsonxChildren {
     /** Standard Prop: children argument for React.createElement */
     children?: jsonx[] | string | Date | null;
 }
-export declare type createFunctionComponentArgs = {
+export type createFunctionComponentArgs = {
     reactComponent?: jsonx;
     function?: callbackFunc;
     functionBody?: string;
@@ -143,11 +142,11 @@ export interface simpleJsonxElementProperties extends simpleJsonxChildren, jsonx
 export interface simpleJsonx {
     [index: string]: simpleJsonxElementProperties;
 }
-export declare type jsonxCompare = {
+export type jsonxCompare = {
     left?: any;
     right?: any;
 };
-export declare type jsonxComparison = {
+export type jsonxComparison = {
     left: any;
     operation: "eq" | "==" | "dneq" | "!=" | "!" | "dnseq" | "!==" | "seq" | "===" | "lt" | "<" | "lte" | "<=" | "gt" | ">" | "gte" | ">=" | "dne" | "undefined" | "null" | "!null" | "!undefined" | "exists";
     right?: any;
@@ -155,8 +154,8 @@ export declare type jsonxComparison = {
 export interface jsonxResourceProps {
     [index: string]: any;
 }
-export declare type genericComponent = React.FunctionComponent | React.PureComponent | React.Component | React.ReactElement | callbackFunc;
-export declare type jsonxComponent = {
+export type genericComponent = React.FunctionComponent | React.PureComponent | React.Component | React.ReactElement | callbackFunc;
+export type jsonxComponent = {
     [index: string]: genericComponent;
 };
 export interface jsonxLibrary {
@@ -168,7 +167,7 @@ export interface jsonxDefinitionLibrary {
 export interface jsonxComponentLibraries {
     [index: string]: jsonxLibrary;
 }
-export declare type jsonxCustomComponent = {
+export type jsonxCustomComponent = {
     type: 'component' | 'function' | 'library';
     name: string;
     jsonx?: jsonxDefinitionLibrary | jsonx;
@@ -177,7 +176,7 @@ export declare type jsonxCustomComponent = {
     functionBody?: (string);
     functionComponent?: ((props?: any) => any);
 };
-export declare type jsonxLibrariesAndComponents = {
+export type jsonxLibrariesAndComponents = {
     customComponentLibraries: jsonxComponentLibraries;
     customReactComponents: jsonxComponent;
 };

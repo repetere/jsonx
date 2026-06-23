@@ -57,7 +57,7 @@ describe('express', function(){
       await supertest(expressApp).get('/')
         .expect(200)
         .then(res=>{
-          expect(console.log).toBeCalledWith('rendered page')
+          expect(console.log).toHaveBeenCalledWith('rendered page')
           expect(res.text).toMatch('Hello JSONX World!')
         });
     })

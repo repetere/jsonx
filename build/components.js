@@ -191,11 +191,11 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
         UNSAFE_componentWillMount: undefined,
         //updating
         // (unsupported) getDerivedStateFromProps 
-        shouldComponentUpdate: undefined,
-        getSnapshotBeforeUpdate: undefined,
-        componentDidUpdate: undefined,
-        UNSAFE_componentWillUpdate: undefined,
-        UNSAFE_componentWillReceiveProps: undefined,
+        shouldComponentUpdate: undefined, // {body:'return true;', args:['nextProps','nextState',]}
+        getSnapshotBeforeUpdate: undefined, // {body:'return snapshot;', args:['prevProps', 'prevState)',]}
+        componentDidUpdate: undefined, // {body:'', args:['prevProps', 'prevState','snapshot')',]}
+        UNSAFE_componentWillUpdate: undefined, // {body:';', args:['nextProps','nextState',]}
+        UNSAFE_componentWillReceiveProps: undefined, // {body:';', args:['nextProps',]}
         //unmounting
         componentWillUnmount: undefined,
         //error handling

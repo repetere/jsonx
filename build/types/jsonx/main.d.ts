@@ -1,5 +1,5 @@
 import { jsonx } from "./jsonx";
-export declare type JSONReactElement = {
+export type JSONReactElement = {
     type: string;
     props?: any;
     children?: null | string | JSONReactElement[] | any;
@@ -23,7 +23,7 @@ export interface Context {
 export interface JSONContext extends Context {
     returnJSON: true;
 }
-export declare type Config = {
+export type Config = {
     jsonx: jsonx;
     resources?: any;
     debug?: boolean;
@@ -31,16 +31,16 @@ export declare type Config = {
     props?: any;
     logError?: (...params: any[]) => any;
 };
-export declare type RenderConfig = Config & {
+export type RenderConfig = Config & {
     querySelector: string;
     options?: any;
     DOM?: HTMLElement;
     portal?: boolean;
 };
-export declare type OutputHTMLContext = {
+export type OutputHTMLContext = {
     useJSON?: boolean;
 } & Context;
-export declare type OutputHTMLConfig = {
+export type OutputHTMLConfig = {
     type?: string;
     props?: any;
     children?: null | string | JSONReactElement[];

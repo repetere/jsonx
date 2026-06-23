@@ -37,15 +37,12 @@ export const ARGUMENT_NAMES = /([^\s,]+)/g;
  * @param {Function} func
  * @todo write tests
  */
-export function getParamNames(func: defs.functionParam) {
+export function getParamNames(func: defs.functionParam): string[] {
   var fnStr = func.toString().replace(STRIP_COMMENTS, "");
   var result = fnStr
     .slice(fnStr.indexOf("(") + 1, fnStr.indexOf(")"))
     .match(ARGUMENT_NAMES);
-  if (result === null) {
-    result = [];
-  }
-  return result;
+  return result === null ? [] : Array.from(result);
 }
 
 /**

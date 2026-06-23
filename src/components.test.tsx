@@ -7,7 +7,7 @@ import ReactDOMServer from "react-dom/server";
 import * as defs from "./types/jsonx/index";
 
 import { render, fireEvent, waitFor, screen } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 
 // import useGlobalHook from 'use-global-hook';
 // Enzyme.configure({ adapter: new Adapter() });

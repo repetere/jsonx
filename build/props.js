@@ -20,10 +20,7 @@ export function getParamNames(func) {
     var result = fnStr
         .slice(fnStr.indexOf("(") + 1, fnStr.indexOf(")"))
         .match(ARGUMENT_NAMES);
-    if (result === null) {
-        result = [];
-    }
-    return result;
+    return result === null ? [] : Array.from(result);
 }
 /**
  * It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
