@@ -4,7 +4,6 @@ import * as jsonx from './index';
 // import mochaJSDOM from 'jsdom-global';
 import path from 'path';
 import React, { ReactElement } from 'react';
-import ReactTestUtils from 'react-dom/test-utils'; // ES6
 import ReactDOM from 'react-dom';
 // chai.use(require('sinon-chai'));
 // import 'mocha-sinon';
@@ -287,8 +286,8 @@ describe('jsonx', function () {
       const ReactiveJSON = jsonx.getReactElementFromJSONX(sampleJSONX);
       //@ts-ignore
       const ReactiveSimpleJSON = jsonx.getReactElementFromJSONX(simpleJSONX);
-      expect(ReactTestUtils.isElement(ReactiveJSON)).toBeTruthy();
-      expect(ReactTestUtils.isElement(ReactiveSimpleJSON)).toBeTruthy();
+      expect(React.isValidElement(ReactiveJSON)).toBeTruthy();
+      expect(React.isValidElement(ReactiveSimpleJSON)).toBeTruthy();
       expect(typeof ReactiveJSON).toBe('object');
       expect(ReactiveJSON).toHaveProperty('$$typeof');
       expect(ReactiveJSON).toHaveProperty('type');
@@ -329,8 +328,8 @@ describe('jsonx', function () {
       const ReactiveJSON = jsonx.getReactElementFromJSON(sampleJSONXJSON);
       //@ts-ignore
       const ReactiveSimpleJSON = jsonx.getReactElementFromJSON(simpleJSONXJSON);
-      expect(ReactTestUtils.isElement(ReactiveJSON)).toBeTruthy;
-      expect(ReactTestUtils.isElement(ReactiveSimpleJSON)).toBeTruthy;
+      expect(React.isValidElement(ReactiveJSON)).toBeTruthy();
+      expect(React.isValidElement(ReactiveSimpleJSON)).toBeTruthy();
       expect(typeof ReactiveJSON).toBe('object');
       expect(ReactiveJSON).toHaveProperty('$$typeof');
       expect(ReactiveJSON).toHaveProperty('type');
@@ -351,10 +350,8 @@ describe('jsonx', function () {
       //@ts-ignore
       const ReactiveJSON = jsonx.compile(sampleJSONXJSON);
       //@ts-ignore
-      const testDOM = ReactTestUtils.renderIntoDocument(ReactiveJSON());
-      // console.log({testDOM});
-      //@ts-ignore
-      expect(ReactTestUtils.isDOMComponent(testDOM)).toBeTruthy()
+      const { container } = render(ReactiveJSON());
+      expect(container.firstElementChild).not.toBeNull();
       expect(typeof ReactiveJSON).toBe('function');
       // expectsCHAI(ReactTestUtils.isCompositeComponent(ReactiveJSON)).to.be.true;
     });
