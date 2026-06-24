@@ -1,3 +1,11 @@
+## [2.0.1](https://github.com/repetere/jsonx/compare/v2.0.0...v2.0.1) (2026-06-24)
+
+
+### Bug Fixes
+
+* restore jsonx release workflow compatibility ([dc3bfcc](https://github.com/repetere/jsonx/commit/dc3bfcc1bc1f842143558a27551b5f133d52f246))
+* support React 19 dependency updates ([bdc8ba7](https://github.com/repetere/jsonx/commit/bdc8ba77b6b95c494860808a6782ba0ddada03ef))
+
 # [2.0.0](https://github.com/repetere/jsonx/compare/v1.12.0...v2.0.0) (2022-06-24)
 
 # [1.12.0](https://github.com/repetere/jsonx/compare/v1.11.0...v1.12.0) (2022-06-24)
