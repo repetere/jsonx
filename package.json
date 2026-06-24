@@ -12,6 +12,7 @@
     "dev": "node esbuild.config.js -w",
     "benchmark": "node -r esm  benchmark/main_bmrk.js",
     "test": "jest --coverage",
+    "lid:check": "node scripts/lid-check.mjs",
     "doc": "tsc && typedoc && sitedown manual/ -b docs/manual",
     "compile": "tsc",
     "esbuild": "node esbuild.config.js",

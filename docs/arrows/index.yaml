@@ -1,0 +1,48 @@
+version: 1
+project: jsonx
+mode: full
+status: AUDITED
+generated_from: brownfield-source-map
+segments:
+  - id: core-rendering
+    status: AUDITED
+    design: docs/intent/core-rendering/core-rendering-design.md
+    specs: docs/intent/core-rendering/core-rendering-specs.md
+    arrow: docs/arrows/core-rendering.md
+    code: [src/index.ts]
+    tests: [src/index.test.tsx, src/html.test.ts]
+  - id: component-factories
+    status: AUDITED
+    design: docs/intent/component-factories/component-factories-design.md
+    specs: docs/intent/component-factories/component-factories-specs.md
+    arrow: docs/arrows/component-factories.md
+    code: [src/components.ts]
+    tests: [src/components.test.tsx, src/html.test.ts]
+  - id: prop-resolution
+    status: AUDITED
+    design: docs/intent/prop-resolution/prop-resolution-design.md
+    specs: docs/intent/prop-resolution/prop-resolution-specs.md
+    arrow: docs/arrows/prop-resolution.md
+    code: [src/props.ts, src/utils.ts]
+    tests: [src/props.test.ts, src/util.test.ts]
+  - id: children-templates
+    status: AUDITED
+    design: docs/intent/children-templates/children-templates-design.md
+    specs: docs/intent/children-templates/children-templates-specs.md
+    arrow: docs/arrows/children-templates.md
+    code: [src/children.ts]
+    tests: [src/children.test.ts]
+  - id: express-rendering
+    status: AUDITED
+    design: docs/intent/express-rendering/express-rendering-design.md
+    specs: docs/intent/express-rendering/express-rendering-specs.md
+    arrow: docs/arrows/express-rendering.md
+    code: [src/express.ts]
+    tests: [src/express.test.ts, src/index.test.tsx]
+  - id: distribution-types
+    status: AUDITED
+    design: docs/intent/distribution-types/distribution-types-design.md
+    specs: docs/intent/distribution-types/distribution-types-specs.md
+    arrow: docs/arrows/distribution-types.md
+    code: [esbuild.config.js, src/types/jsonx/index.ts, src/types/jsonx/jsonx.ts, src/types/jsonx/main.ts, src/types/jsonx/props.ts, src/types/jsonx/utils.ts]
+    tests: [npm run compile, npm run build]
