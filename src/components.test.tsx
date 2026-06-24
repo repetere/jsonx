@@ -4,7 +4,6 @@ import * as jsonx from './index';
 import * as _jsonxComponents from './components';
 import {getCustomComponentsCacheKey, getCustomFunctionComponent, getReactLibrariesAndComponents} from './components';
 import React, { Component, JSXElementConstructor, ReactComponentElement, ReactElement, ReactInstance } from 'react';
-import ReactTestUtils,{isElement} from 'react-dom/test-utils'; // ES6
 import ReactDOMServer from "react-dom/server";
 import * as defs from "./types/jsonx/index";
 
@@ -445,7 +444,7 @@ describe('jsonx components', function () {
       // console.log({MyCustomComponentClass});
       expect(typeof MyCustomComponent).toBe('function');
       expect(typeof MyCustomComponentClass).toBe('function');
-      expect(ReactTestUtils.isElement(MyCustomComponent)).toBeFalsy();
+      expect(React.isValidElement(MyCustomComponent)).toBeFalsy();
       // expectsCHAI(ReactTestUtils.isCompositeComponent(MyCustomComponentClass())).to.be.true;
     });
     it('should allow for functions as object props', () => {
@@ -709,10 +708,11 @@ describe('jsonx components', function () {
       //@ts-ignore
       const m = React.createElement(myDynamicFunction,{},undefined)
       //@ts-ignore
-      const r = ReactDOMServer.renderToString(myDynamicFunction,{title:'called prop'},undefined)
+      const r = ReactDOMServer.renderToString(m)
       // console.log({r},r)
       // console.log({m},m)
       expect(m.type).toBe(myDynamicFunction)
+      expect(r).toContain('...Loading')
       // console.log('myDynamicFunction',myDynamicFunction,{myDynamicFunction})
     })
   });
@@ -779,7 +779,7 @@ describe('jsonx components', function () {
     const getReactContext = _jsonxComponents.getReactContext;
     it('should return a React Context Object', () => {
       const context = getReactContext({ some: 'c', });
-      expect(ReactTestUtils.isElement(context)).toBeFalsy();
+      expect(React.isValidElement(context)).toBeFalsy();
       expect(typeof context).toBe('object');
       // expectsCHAI(context).to.be.an.instanceOf(React.createContext);
     });

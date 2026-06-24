@@ -540,6 +540,15 @@ function getFunctionFromEval(options = {}) {
   }
   return evalFunction;
 }
+function createReactComponentFactory(reactComponentClass) {
+  const reactFactory = function jsonxReactComponentFactory(props, ...children) {
+    return React.createElement(reactComponentClass, props, ...children);
+  };
+  Object.defineProperty(reactFactory, "type", {
+    value: reactComponentClass
+  });
+  return reactFactory;
+}
 function getReactClassComponent(reactComponent = {}, options = {}) {
   if (options.lazy) {
     return lazy(
@@ -650,7 +659,7 @@ function getReactClassComponent(reactComponent = {}, options = {}) {
       value: options.name
     });
   }
-  const reactClass = returnFactory ? React.createFactory(reactComponentClass) : reactComponentClass;
+  const reactClass = returnFactory ? createReactComponentFactory(reactComponentClass) : reactComponentClass;
   return reactClass;
 }
 function FormComponent(props = {}) {

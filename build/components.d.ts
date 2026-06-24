@@ -86,7 +86,7 @@ export declare function getComponentFromMap(options?: {
 export declare function getFunctionFromEval(options?: any): any;
 /**
  * Returns a new React Component
- 
+
  * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class
  * @param {Object} [options.resources={}] - asyncprops for component
  * @param {String} [options.name ] - Component name

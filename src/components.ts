@@ -231,9 +231,22 @@ export function getFunctionFromEval(options: any = {}) {
   return evalFunction;
 }
 
+function createReactComponentFactory(reactComponentClass: any) {
+  const reactFactory = function jsonxReactComponentFactory(
+    props: any,
+    ...children: any[]
+  ) {
+    return React.createElement(reactComponentClass, props, ...children);
+  };
+  Object.defineProperty(reactFactory, "type", {
+    value: reactComponentClass
+  });
+  return reactFactory;
+}
+
 /**
  * Returns a new React Component
- 
+
  * @param {Boolean} [options.returnFactory=true] - returns a React component if true otherwise returns Component Class 
  * @param {Object} [options.resources={}] - asyncprops for component
  * @param {String} [options.name ] - Component name
@@ -381,7 +394,7 @@ export function getReactClassComponent(
     });
   }
   const reactClass = returnFactory
-    ? React.createFactory(reactComponentClass)
+    ? createReactComponentFactory(reactComponentClass)
     : reactComponentClass;
   return reactClass;
 }
