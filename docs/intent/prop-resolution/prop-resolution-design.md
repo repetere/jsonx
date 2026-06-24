@@ -49,4 +49,4 @@ JSONX-PROPS-001 through JSONX-PROPS-010
 |------|------|--------|
 | PROPS-DD-001 | Keep traversal permissive for missing paths. | Accepted |
 | PROPS-DD-002 | Treat validation as optional, not a render precondition. | Accepted |
-| OQ-001 | Align `passprops` validation with child rendering array support, or keep stricter validation documented. | Backlog |
+| OQ-001 | `passprops` validation accepts boolean values or arrays of string prop names to match child rendering support. | Resolved |

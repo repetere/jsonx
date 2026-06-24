@@ -535,9 +535,13 @@ export function validateJSONX(
   }
   if (
     typeof jsonx.passprops !== "undefined" &&
-    typeof jsonx.passprops !== "boolean"
+    typeof jsonx.passprops !== "boolean" &&
+    (
+      !Array.isArray(jsonx.passprops) ||
+      jsonx.passprops.some((prop: any) => typeof prop !== "string")
+    )
   ) {
-    errors.push(TypeError("[0020] jsonx.passprops  must be boolean"));
+    errors.push(TypeError("[0020] jsonx.passprops  must be boolean or an array of strings"));
   }
   const invalidKeys = Object.keys(jsonx).filter(
     key => validKeys.indexOf(key) === -1

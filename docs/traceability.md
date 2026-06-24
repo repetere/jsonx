@@ -31,8 +31,8 @@ Total defined specs: 61
 | Specs are derived from code and tests. | All | Maintainer intent may differ from observed behavior. | Accepted as brownfield intent in `docs/lid-audit-decisions.md`; behavior changes remain backlog. |
 | Tests cite specs only at file header level. | All tested segments | Individual test cases are not mapped one-to-one to specs. | Add per-test spec comments during future test edits. |
 | Distribution specs use build commands as tests. | Distribution Types | No dedicated test asserts each emitted artifact. | Add a build-output verification script if distribution drift becomes a release risk. |
-| Duplicate legacy bundle output path appears in esbuild config. | Distribution Types | Non-minified legacy output may be overwritten. | Decide whether this is intended before marking the segment `AUDITED`. |
-| `passprops` implementation accepts string arrays, while validation currently checks for boolean. | Prop Resolution and Children Templates | Validation may reject behavior the renderer supports. | Decide whether to update validation or keep validation stricter than rendering. |
+| Duplicate legacy bundle output path appears in esbuild config. | Distribution Types | Non-minified legacy output may be overwritten. | Decide whether this is intended before changing distribution behavior or release checks. |
+| Template cache keys do not include load type. | Children Templates | Fetch and file loading can share the same cache key string. | Decide whether to include load type in cache keys before changing template behavior. |
 
 ## Follow-Up Records
 

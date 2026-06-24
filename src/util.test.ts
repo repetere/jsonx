@@ -711,21 +711,35 @@ describe('jsonx utils', function () {
       expect(evalError2[ 0 ]).toBeInstanceOf(Error);
       expect(validTest).toBeTruthy();
     });
-    it('should validate passprops is boolean', () => {
+    it('should validate passprops is boolean or an array of prop names', () => {
       const jsonxObj = {
         component: 'myComponent',
         passprops: 'should be an obj',
+      };
+      const jsonxObjInvalidArray = {
+        component: 'myComponent',
+        passprops: ['value', 2],
       };
       const jsonxObjValid = {
         component: 'myComponent',
         passprops: true,
       };
+      const jsonxObjValidArray = {
+        component: 'myComponent',
+        passprops: ['value', 'size'],
+      };
       //@ts-ignore
       const evalError = validateJSONX(jsonxObj, true);
+      //@ts-ignore
+      const evalErrorArray = validateJSONX(jsonxObjInvalidArray, true);
       const validTest = validateJSONX(jsonxObjValid);
+      const validArrayTest = validateJSONX(jsonxObjValidArray);
       //@ts-ignore
       expect(evalError[ 0 ]).toBeInstanceOf(Error);
+      //@ts-ignore
+      expect(evalErrorArray[ 0 ]).toBeInstanceOf(Error);
       expect(validTest).toBeTruthy();
+      expect(validArrayTest).toBeTruthy();
     });
   });
   describe('validSimpleJSONXSyntax', () => {
