@@ -24,7 +24,7 @@ JSONX-COMP-001 through JSONX-COMP-012
 | `getFunctionFromEval(options)` | Create a callable function from a body and args. | JSONX-COMP-007 |
 | `getReactClassComponent(reactComponent, options)` | Create class-style React components from JSONX lifecycle definitions. | JSONX-COMP-008 |
 | `getReactFunctionComponent(reactComponent, functionBody, options)` | Create function components with hooks and JSONX rendering access. | JSONX-COMP-009 |
-| `DynamicComponent(props)` | Fetch, cache, transform, and render data-backed JSONX. | JSONX-COMP-010 |
+| `DynamicComponent(props)` | Fetch, cache by URL and fetch options, transform, and render data-backed JSONX. | JSONX-COMP-010 |
 | `FormComponent(props)` | Render JSONX inside react-hook-form context. | JSONX-COMP-011 |
 | `getReactLibrariesAndComponents(customComponents)` | Generate and cache custom components or libraries. | JSONX-COMP-012 |
 
@@ -39,6 +39,7 @@ JSONX-COMP-001 through JSONX-COMP-012
 | Function body is missing | Throw `SyntaxError`. | JSONX-COMP-008 |
 | Dynamic component lacks `fetchURL` | Return `null`. | JSONX-COMP-010 |
 | Dynamic fetch fails | Render configured error JSONX. | JSONX-COMP-010 |
+| Same dynamic fetch URL uses different fetch options | Keep separate cache entries. | JSONX-COMP-010 |
 
 ## Decisions and Backlog
 
@@ -46,4 +47,4 @@ JSONX-COMP-001 through JSONX-COMP-012
 |------|------|--------|
 | COMP-DD-001 | Keep string-generated components because tests cover them. | Accepted |
 | COMP-DD-002 | Cache custom components by concatenated component names. | Accepted |
-| OQ-001 | Consider including fetch options in dynamic component cache keys. | Backlog |
+| OQ-001 | Include fetch options in dynamic component cache keys. | Resolved |

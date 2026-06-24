@@ -6,8 +6,8 @@ Design: `docs/intent/distribution-types/distribution-types-design.md`
 
 Specs: `docs/intent/distribution-types/distribution-types-specs.md`
 
-Code: `esbuild.config.js`, `src/types/jsonx/index.ts`, `src/types/jsonx/*.ts`
+Code: `esbuild.config.js`, `scripts/check-build-artifacts.mjs`, `src/types/jsonx/index.ts`, `src/types/jsonx/*.ts`
 
-Tests: `npm run compile`, `npm run build`
+Tests: `npm run compile`, `npm run build`, `npm run build:check`
 
-Spec IDs: JSONX-DIST-001 through JSONX-DIST-008
+Spec IDs: JSONX-DIST-001 through JSONX-DIST-009

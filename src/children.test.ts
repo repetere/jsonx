@@ -545,6 +545,9 @@ describe("jsonx", function() {
   });
   describe('getChildrenTemplate',()=>{
     const {getChildrenTemplate,templateCache,clearTemplateCache} = _jsonxChildren;
+    beforeEach(()=>{
+      clearTemplateCache();
+    });
     it('should fetch json templates via ajax',()=>{
       const xhrMockClass = () => ({
         open            : jest.fn(),
@@ -563,6 +566,31 @@ describe("jsonx", function() {
       //@ts-ignore
       const response = getChildrenTemplate('/mock-endpoint','fetch')
       expect(response).toMatchObject({ some: 'data' })
+    })
+    // @spec JSONX-CHILDREN-008
+    it('should keep fetch and file template cache entries separate',()=>{
+      const templatePath = './src/mock/simple_template.jxm.json';
+      const xhrMockClass = () => ({
+        open            : jest.fn(),
+        send            : jest.fn(),
+        setRequestHeader: jest.fn(),
+        status: 200,
+        responseText: '{"component":"span","children":"from fetch"}',
+        DONE: 1,
+        HEADERS_RECEIVED: 1,
+        LOADING: 1,
+        OPENED: 1,
+        UNSENT: 1,
+      });
+      //@ts-ignore
+      window.XMLHttpRequest = jest.fn().mockImplementation(xhrMockClass)
+      //@ts-ignore
+      const fetchedTemplate = getChildrenTemplate(templatePath,'fetch')
+      //@ts-ignore
+      const fileTemplate = getChildrenTemplate(templatePath,'file')
+      expect(fetchedTemplate).toMatchObject({ component: 'span', children: 'from fetch' })
+      expect(fileTemplate).toMatchObject({ component: 'div', children: 'from external template' })
+      expect(templateCache.size).toBe(2)
     })
     it('should handle no input',()=>{
       //@ts-ignore

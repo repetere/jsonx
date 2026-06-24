@@ -17,6 +17,7 @@
     "compile": "tsc",
     "esbuild": "node esbuild.config.js",
     "build": "tsc && node esbuild.config.js && typedoc && sitedown manual/ -b docs/manual",
+    "build:check": "node scripts/check-build-artifacts.mjs",
     "coverage": "coveralls"
   },
   "repository": {

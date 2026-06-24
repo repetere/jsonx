@@ -43,8 +43,9 @@ function unique(values) {
 
 function collectAnnotatedFiles() {
   const sourceFiles = walk("src", file => /\.(ts|tsx|js|jsx|mjs|cjs)$/.test(file));
+  const scriptFiles = walk("scripts", file => /\.(js|mjs|cjs)$/.test(file));
   const rootFiles = ["esbuild.config.js"].filter(exists);
-  return [...sourceFiles, ...rootFiles].filter(file => {
+  return [...sourceFiles, ...scriptFiles, ...rootFiles].filter(file => {
     const text = read(file);
     return text.includes("@intent") || text.includes("@spec");
   });
@@ -208,12 +209,33 @@ function checkStyle() {
   return { files: files.length, findings };
 }
 
+function checkEsbuildOutfiles() {
+  const configPath = "esbuild.config.js";
+  if (!exists(configPath)) return { outfiles: 0, duplicates: 0 };
+
+  const text = read(configPath);
+  const outfiles = [...text.matchAll(/outfile:\s*['"]([^'"]+)['"]/g)].map(match => match[1]);
+  const counts = new Map();
+
+  for (const outfile of outfiles) {
+    counts.set(outfile, (counts.get(outfile) || 0) + 1);
+  }
+
+  const duplicates = [...counts.entries()].filter(([, count]) => count > 1);
+  for (const [outfile, count] of duplicates) {
+    errors.push(`Duplicate esbuild outfile appears ${count} times: ${outfile}`);
+  }
+
+  return { outfiles: outfiles.length, duplicates: duplicates.length };
+}
+
 const annotatedFiles = collectAnnotatedFiles();
 const intentCount = checkIntentPaths(annotatedFiles);
 const specSummary = checkSpecIds(annotatedFiles);
 const pairSummary = checkDesignSpecPairs();
 const arrowSummary = checkArrowIndex();
 const styleSummary = checkStyle();
+const esbuildSummary = checkEsbuildOutfiles();
 
 console.log("LID check summary");
 console.log(`annotated_files=${annotatedFiles.length}`);
@@ -225,6 +247,8 @@ console.log(`orphan_spec_ids=${specSummary.orphans}`);
 console.log(`design_files=${pairSummary.designs}`);
 console.log(`spec_files=${pairSummary.specs}`);
 console.log(`arrow_refs=${arrowSummary.checked}`);
+console.log(`esbuild_outfiles=${esbuildSummary.outfiles}`);
+console.log(`duplicate_esbuild_outfiles=${esbuildSummary.duplicates}`);
 console.log(`style_files=${styleSummary.files}`);
 console.log(`style_findings=${styleSummary.findings}`);
 
@@ -240,4 +264,3 @@ if (errors.length) {
 }
 
 console.log("\nLID check passed");
-

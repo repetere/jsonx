@@ -73,6 +73,7 @@ __export(components_exports, {
   getComponentFromMap: () => getComponentFromMap,
   getCustomComponentsCacheKey: () => getCustomComponentsCacheKey,
   getCustomFunctionComponent: () => getCustomFunctionComponent,
+  getDynamicComponentCacheKey: () => getDynamicComponentCacheKey,
   getFunctionBody: () => getFunctionBody,
   getFunctionFromEval: () => getFunctionFromEval,
   getReactClassComponent: () => getReactClassComponent,
@@ -444,8 +445,8 @@ function validateJSONX(jsonx = {}, returnAllErrors = false) {
       });
     }
   }
-  if (typeof jsonx.passprops !== "undefined" && typeof jsonx.passprops !== "boolean") {
-    errors.push(TypeError("[0020] jsonx.passprops  must be boolean"));
+  if (typeof jsonx.passprops !== "undefined" && typeof jsonx.passprops !== "boolean" && (!Array.isArray(jsonx.passprops) || jsonx.passprops.some((prop) => typeof prop !== "string"))) {
+    errors.push(TypeError("[0020] jsonx.passprops  must be boolean or an array of strings"));
   }
   const invalidKeys = Object.keys(jsonx).filter(
     (key) => validKeys.indexOf(key) === -1
@@ -504,6 +505,28 @@ var cache = new memoryCache.Cache();
 var ReactHookForm = { ErrorMessage: import_error_message.ErrorMessage, Controller: import_react_hook_form.Controller };
 var generatedCustomComponents = /* @__PURE__ */ new Map();
 var advancedBinding = getAdvancedBinding();
+function stringifyDynamicComponentFetchOptions(fetchOptions) {
+  const seen = /* @__PURE__ */ new WeakSet();
+  const normalize = (value) => {
+    if (typeof value === "function") return value.toString();
+    if (!value || typeof value !== "object") return value;
+    if (seen.has(value)) return "[Circular]";
+    seen.add(value);
+    if (Array.isArray(value)) return value.map(normalize);
+    return Object.keys(value).sort().reduce((normalized, key) => {
+      normalized[key] = normalize(value[key]);
+      return normalized;
+    }, {});
+  };
+  try {
+    return JSON.stringify(normalize(fetchOptions));
+  } catch (e) {
+    return String(fetchOptions);
+  }
+}
+function getDynamicComponentCacheKey(fetchURL, fetchOptions) {
+  return `${String(fetchURL)}:${stringifyDynamicComponentFetchOptions(fetchOptions)}`;
+}
 var componentMap = Object.assign(
   { Fragment: import_react.Fragment, Suspense: import_react.Suspense },
   import_react_dom_factories.default,
@@ -791,6 +814,10 @@ function DynamicComponent(props = {}) {
       () => getFunctionFromEval(cacheTimeoutFunction),
       [cacheTimeoutFunction]
     );
+    const cacheKey = (0, import_react.useMemo)(
+      () => getDynamicComponentCacheKey(fetchURL, fetchOptions),
+      [fetchURL, fetchOptions]
+    );
     const renderJSONX = (0, import_react.useMemo)(() => getReactElementFromJSONX.bind(context), [
       context
     ]);
@@ -805,8 +832,8 @@ function DynamicComponent(props = {}) {
       async function getData() {
         try {
           let transformedData;
-          if (useCache && cache.get(fetchURL)) {
-            transformedData = cache.get(fetchURL);
+          if (useCache && cache.get(cacheKey)) {
+            transformedData = cache.get(cacheKey);
           } else {
             let fetchedData;
             if (fetchFunction) {
@@ -814,7 +841,7 @@ function DynamicComponent(props = {}) {
             } else fetchedData = await fetchJSON(fetchURL, fetchOptions);
             transformedData = await transformer(fetchedData);
             if (useCache)
-              cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
+              cache.put(cacheKey, transformedData, cacheTimeout, timeoutFunction);
           }
           setState(
             (prevState) => Object.assign({}, prevState, {
@@ -829,7 +856,7 @@ function DynamicComponent(props = {}) {
         }
       }
       if (fetchURL) getData();
-    }, [fetchURL, fetchOptions]);
+    }, [fetchURL, fetchOptions, cacheKey]);
     if (!fetchURL) return null;
     else if (state.hasError) {
       return loadingError;
@@ -1635,19 +1662,30 @@ function fetchJSONSync(path3, options) {
     throw e;
   }
 }
+function getTemplateLoadType(template, type) {
+  if (typeof window !== "undefined" && typeof window.XMLHttpRequest === "function" && (!import_fs.default.readFileSync || type === "fetch")) return "fetch";
+  if (typeof template === "string" || type === "file") return "file";
+  return null;
+}
+function getTemplateCacheKey(template, type) {
+  return `${type}:${String(template)}`;
+}
 function getChildrenTemplate(template, type) {
-  const cachedTemplate = templateCache.get(template);
+  const loadType = getTemplateLoadType(template, type);
+  if (!loadType) return null;
+  const cacheKey = getTemplateCacheKey(template, loadType);
+  const cachedTemplate = templateCache.get(cacheKey);
   if (cachedTemplate) {
     return cachedTemplate;
-  } else if (typeof window !== "undefined" && typeof window.XMLHttpRequest === "function" && (!import_fs.default.readFileSync || type === "fetch")) {
+  } else if (loadType === "fetch") {
     const jsFile = fetchJSONSync(template);
     const jsonxModule = scopedEval(`(${jsFile})`);
-    templateCache.set(template, jsonxModule);
+    templateCache.set(cacheKey, jsonxModule);
     return jsonxModule;
-  } else if (typeof template === "string" || type === "file") {
+  } else if (loadType === "file") {
     const jsFile = import_fs.default.readFileSync(import_path.default.resolve(template)).toString();
     const jsonxModule = scopedEval(`(${jsFile})`);
-    templateCache.set(template, jsonxModule);
+    templateCache.set(cacheKey, jsonxModule);
     return jsonxModule;
   }
   return null;

@@ -22,6 +22,7 @@ export declare const ReactHookForm: {
 };
 export declare const generatedCustomComponents: Map<string, defs.jsonx["jsonxComponents"] | Map<string, defs.jsonx["jsonxComponents"]>>;
 export declare let advancedBinding: boolean;
+export declare function getDynamicComponentCacheKey(fetchURL: any, fetchOptions?: any): string;
 /**
  * object of all react components available for JSONX
  

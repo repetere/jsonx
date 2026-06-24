@@ -44,5 +44,5 @@ segments:
     design: docs/intent/distribution-types/distribution-types-design.md
     specs: docs/intent/distribution-types/distribution-types-specs.md
     arrow: docs/arrows/distribution-types.md
-    code: [esbuild.config.js, src/types/jsonx/index.ts, src/types/jsonx/jsonx.ts, src/types/jsonx/main.ts, src/types/jsonx/props.ts, src/types/jsonx/utils.ts]
-    tests: [npm run compile, npm run build]
+    code: [esbuild.config.js, scripts/check-build-artifacts.mjs, src/types/jsonx/index.ts, src/types/jsonx/jsonx.ts, src/types/jsonx/main.ts, src/types/jsonx/props.ts, src/types/jsonx/utils.ts]
+    tests: [npm run compile, npm run build, npm run build:check]
