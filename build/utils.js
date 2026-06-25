@@ -439,8 +439,10 @@ export function validateJSONX(jsonx = {}, returnAllErrors = false) {
         }
     }
     if (typeof jsonx.passprops !== "undefined" &&
-        typeof jsonx.passprops !== "boolean") {
-        errors.push(TypeError("[0020] jsonx.passprops  must be boolean"));
+        typeof jsonx.passprops !== "boolean" &&
+        (!Array.isArray(jsonx.passprops) ||
+            jsonx.passprops.some((prop) => typeof prop !== "string"))) {
+        errors.push(TypeError("[0020] jsonx.passprops  must be boolean or an array of strings"));
     }
     const invalidKeys = Object.keys(jsonx).filter(key => validKeys.indexOf(key) === -1);
     if (errors.length) {

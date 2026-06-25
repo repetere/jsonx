@@ -96,7 +96,7 @@ void async function main(){
       sourcemap:true,
       target:['es6'],
       plugins: webCorePlugins,
-      outfile:'dist/index.web.core-legacy-min.js'
+      outfile:'dist/index.web.core-legacy.js'
     });
     const browserCoreLegacyMinifiedBuild = await runBuild({
       format:'iife',

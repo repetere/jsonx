@@ -2,7 +2,7 @@
 // @intent docs/intent/component-factories/component-factories-specs.md
 import * as jsonx from './index';
 import * as _jsonxComponents from './components';
-import {getCustomComponentsCacheKey, getCustomFunctionComponent, getReactLibrariesAndComponents} from './components';
+import {getCustomComponentsCacheKey, getCustomFunctionComponent, getDynamicComponentCacheKey, getReactLibrariesAndComponents} from './components';
 import React, { Component, JSXElementConstructor, ReactComponentElement, ReactElement, ReactInstance } from 'react';
 import ReactDOMServer from "react-dom/server";
 import * as defs from "./types/jsonx/index";
@@ -656,7 +656,15 @@ describe('jsonx components', function () {
   });
   describe('DynamicComponent', () => {
     const DynamicComponent = _jsonxComponents.DynamicComponent;
-    it('should react a React Function Component', () => { 
+    // @spec JSONX-COMP-010
+    it('should include fetch options in cache keys',()=>{
+      const getCacheKey = getDynamicComponentCacheKey;
+      expect(getCacheKey('/mock-endpoint',{ method:'GET', headers:{ accept:'application/json' } }))
+        .toBe(getCacheKey('/mock-endpoint',{ headers:{ accept:'application/json' }, method:'GET' }));
+      expect(getCacheKey('/mock-endpoint',{ method:'GET' }))
+        .not.toBe(getCacheKey('/mock-endpoint',{ method:'POST' }));
+    });
+    it('should react a React Function Component', () => {
       // //@ts-ignore
       const MyDynamicComponent = DynamicComponent.call( {disableRenderIndexKey:false},{ name:'MyDynamicComponent', }) as any
       // //@ts-ignore

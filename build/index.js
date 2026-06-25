@@ -37,10 +37,11 @@ export function jsonxRender(config = { jsonx: { component: "" }, querySelector: 
     else if (!RenderDOM)
         throw ReferenceError("Invalid Render DOM Element");
     if (portal)
-        ReactDOM.createPortal(JSONXReactElement, RenderDOM);
+        return ReactDOM.createPortal(JSONXReactElement, RenderDOM);
     else {
         const root = createRoot(RenderDOM);
         root.render(JSONXReactElement);
+        return root;
     }
 }
 /**

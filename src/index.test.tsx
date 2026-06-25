@@ -451,7 +451,10 @@ describe('jsonx', function () {
       document.body.appendChild(containerDiv);
       try{
         //@ts-ignore
-        jsonx.jsonxRender.call({},{ jsonx: sampleJSONX, DOM:containerDiv, });
+        const root:any = jsonx.jsonxRender.call({},{ jsonx: sampleJSONX, DOM:containerDiv, });
+        expect(root).toHaveProperty('render');
+        expect(root).toHaveProperty('unmount');
+        root.unmount();
         //@ts-ignore
         // expect(document.body.querySelector('p').innerHTML).toBe('hello world');
         // //@ts-ignore

@@ -160,24 +160,42 @@ export function fetchJSONSync(path: string, options?: any ) {
   }
 }
 
+type TemplateLoadType = "fetch" | "file";
+
+function getTemplateLoadType(template: string | any, type?: TemplateLoadType): TemplateLoadType | null {
+  if (
+    typeof window !== "undefined" &&
+    typeof window.XMLHttpRequest === "function" &&
+    (!fs.readFileSync || type === "fetch")
+  ) return "fetch";
+
+  if (typeof template === "string" || type === "file") return "file";
+
+  return null;
+}
+
+function getTemplateCacheKey(template: string | any, type: TemplateLoadType): string {
+  return `${type}:${String(template)}`;
+}
+
 export function getChildrenTemplate(template: string | any,type?:'fetch'|'file') {
-  const cachedTemplate = templateCache.get(template);
+  const loadType = getTemplateLoadType(template, type);
+  if (!loadType) return null;
+
+  const cacheKey = getTemplateCacheKey(template, loadType);
+  const cachedTemplate = templateCache.get(cacheKey);
   if (cachedTemplate) {
     return cachedTemplate;
   }
-  else if (
-    typeof window !== "undefined" &&
-    typeof window.XMLHttpRequest === "function" &&
-    (!fs.readFileSync||type==='fetch')
-  ) {
+  else if (loadType === "fetch") {
     const jsFile = fetchJSONSync(template);
     const jsonxModule = scopedEval(`(${jsFile})`);
-    templateCache.set(template, jsonxModule);
+    templateCache.set(cacheKey, jsonxModule);
     return jsonxModule;
-  } else if (typeof template === "string"||type==='file') {
+  } else if (loadType === "file") {
     const jsFile = fs.readFileSync(path.resolve(template)).toString();
     const jsonxModule = scopedEval(`(${jsFile})`);
-    templateCache.set(template, jsonxModule);
+    templateCache.set(cacheKey, jsonxModule);
     return jsonxModule;
   }
   return null;

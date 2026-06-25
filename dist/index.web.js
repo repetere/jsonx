@@ -38551,6 +38551,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
     getComponentFromMap: () => getComponentFromMap,
     getCustomComponentsCacheKey: () => getCustomComponentsCacheKey,
     getCustomFunctionComponent: () => getCustomFunctionComponent,
+    getDynamicComponentCacheKey: () => getDynamicComponentCacheKey,
     getFunctionBody: () => getFunctionBody,
     getFunctionFromEval: () => getFunctionFromEval,
     getReactClassComponent: () => getReactClassComponent,
@@ -41592,7 +41593,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
       [NAME, [TYPE, INAPP]],
       [
         /(zalo(?:app)?)[\/\sa-z]*([\w\.-]+)/i
-        // Zalo
+        // Zalo 
       ],
       [[NAME, /(.+)/, "Zalo"], VERSION, [TYPE, INAPP]],
       [
@@ -43282,8 +43283,8 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
         });
       }
     }
-    if (typeof jsonx.passprops !== "undefined" && typeof jsonx.passprops !== "boolean") {
-      errors.push(TypeError("[0020] jsonx.passprops  must be boolean"));
+    if (typeof jsonx.passprops !== "undefined" && typeof jsonx.passprops !== "boolean" && (!Array.isArray(jsonx.passprops) || jsonx.passprops.some((prop) => typeof prop !== "string"))) {
+      errors.push(TypeError("[0020] jsonx.passprops  must be boolean or an array of strings"));
     }
     const invalidKeys = Object.keys(jsonx).filter(
       (key) => validKeys.indexOf(key) === -1
@@ -43342,6 +43343,28 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
   var ReactHookForm = { ErrorMessage: s, Controller };
   var generatedCustomComponents = /* @__PURE__ */ new Map();
   var advancedBinding = getAdvancedBinding();
+  function stringifyDynamicComponentFetchOptions(fetchOptions) {
+    const seen = /* @__PURE__ */ new WeakSet();
+    const normalize = (value) => {
+      if (typeof value === "function") return value.toString();
+      if (!value || typeof value !== "object") return value;
+      if (seen.has(value)) return "[Circular]";
+      seen.add(value);
+      if (Array.isArray(value)) return value.map(normalize);
+      return Object.keys(value).sort().reduce((normalized, key) => {
+        normalized[key] = normalize(value[key]);
+        return normalized;
+      }, {});
+    };
+    try {
+      return JSON.stringify(normalize(fetchOptions));
+    } catch (e2) {
+      return String(fetchOptions);
+    }
+  }
+  function getDynamicComponentCacheKey(fetchURL, fetchOptions) {
+    return `${String(fetchURL)}:${stringifyDynamicComponentFetchOptions(fetchOptions)}`;
+  }
   var componentMap = Object.assign(
     { Fragment: import_react2.Fragment, Suspense: import_react2.Suspense },
     import_react_dom_factories.default,
@@ -43629,6 +43652,10 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
         () => getFunctionFromEval(cacheTimeoutFunction),
         [cacheTimeoutFunction]
       );
+      const cacheKey = (0, import_react2.useMemo)(
+        () => getDynamicComponentCacheKey(fetchURL, fetchOptions),
+        [fetchURL, fetchOptions]
+      );
       const renderJSONX = (0, import_react2.useMemo)(() => getReactElementFromJSONX.bind(context), [
         context
       ]);
@@ -43643,8 +43670,8 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
         async function getData() {
           try {
             let transformedData;
-            if (useCache && cache.get(fetchURL)) {
-              transformedData = cache.get(fetchURL);
+            if (useCache && cache.get(cacheKey)) {
+              transformedData = cache.get(cacheKey);
             } else {
               let fetchedData;
               if (fetchFunction) {
@@ -43652,7 +43679,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
               } else fetchedData = await fetchJSON(fetchURL, fetchOptions);
               transformedData = await transformer(fetchedData);
               if (useCache)
-                cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
+                cache.put(cacheKey, transformedData, cacheTimeout, timeoutFunction);
             }
             setState(
               (prevState) => Object.assign({}, prevState, {
@@ -43667,7 +43694,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
           }
         }
         if (fetchURL) getData();
-      }, [fetchURL, fetchOptions]);
+      }, [fetchURL, fetchOptions, cacheKey]);
       if (!fetchURL) return null;
       else if (state.hasError) {
         return loadingError;
@@ -50997,19 +51024,30 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
       throw e2;
     }
   }
+  function getTemplateLoadType(template, type) {
+    if (typeof window !== "undefined" && typeof window.XMLHttpRequest === "function" && (!import_fs.default.readFileSync || type === "fetch")) return "fetch";
+    if (typeof template === "string" || type === "file") return "file";
+    return null;
+  }
+  function getTemplateCacheKey(template, type) {
+    return `${type}:${String(template)}`;
+  }
   function getChildrenTemplate(template, type) {
-    const cachedTemplate = templateCache.get(template);
+    const loadType = getTemplateLoadType(template, type);
+    if (!loadType) return null;
+    const cacheKey = getTemplateCacheKey(template, loadType);
+    const cachedTemplate = templateCache.get(cacheKey);
     if (cachedTemplate) {
       return cachedTemplate;
-    } else if (typeof window !== "undefined" && typeof window.XMLHttpRequest === "function" && (!import_fs.default.readFileSync || type === "fetch")) {
+    } else if (loadType === "fetch") {
       const jsFile = fetchJSONSync(template);
       const jsonxModule = scopedEval(`(${jsFile})`);
-      templateCache.set(template, jsonxModule);
+      templateCache.set(cacheKey, jsonxModule);
       return jsonxModule;
-    } else if (typeof template === "string" || type === "file") {
+    } else if (loadType === "file") {
       const jsFile = import_fs.default.readFileSync(import_path.default.resolve(template)).toString();
       const jsonxModule = scopedEval(`(${jsFile})`);
-      templateCache.set(template, jsonxModule);
+      templateCache.set(cacheKey, jsonxModule);
       return jsonxModule;
     }
     return null;
@@ -51081,7 +51119,12 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
       delete resources.__boundConfig;
       delete resources.__DOCTYPE;
       delete resources.__jsonx;
-      const context = Object.assign({ disableRenderIndexKey: false }, options == null ? void 0 : options.__boundConfig);
+      delete resources.__useJSON;
+      const context = Object.assign(
+        { disableRenderIndexKey: false },
+        options == null ? void 0 : options.__boundConfig,
+        (options == null ? void 0 : options.__useJSON) ? { useJSON: true } : {}
+      );
       const jsonxRenderedString = outputHTML.call(context, {
         jsonx: jsonxModule,
         resources
@@ -51121,10 +51164,11 @@ ${jsonxRenderedString}`;
     );
     if (!JSONXReactElement) throw ReferenceError("Invalid React Element");
     else if (!RenderDOM) throw ReferenceError("Invalid Render DOM Element");
-    if (portal) import_react_dom.default.createPortal(JSONXReactElement, RenderDOM);
+    if (portal) return import_react_dom.default.createPortal(JSONXReactElement, RenderDOM);
     else {
       const root = (0, import_client.createRoot)(RenderDOM);
       root.render(JSONXReactElement);
+      return root;
     }
   }
   function outputHTML(config = { jsonx: { component: "" } }) {

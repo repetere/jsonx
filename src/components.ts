@@ -60,6 +60,38 @@ export const generatedCustomComponents:Map< string, defs.jsonx["jsonxComponents"
 
 //@ts-ignore
 export let advancedBinding = getAdvancedBinding();
+
+function stringifyDynamicComponentFetchOptions(fetchOptions: any): string {
+  const seen = new WeakSet();
+
+  const normalize = (value: any): any => {
+    if (typeof value === "function") return value.toString();
+    if (!value || typeof value !== "object") return value;
+    if (seen.has(value)) return "[Circular]";
+
+    seen.add(value);
+
+    if (Array.isArray(value)) return value.map(normalize);
+
+    return Object.keys(value)
+      .sort()
+      .reduce((normalized: any, key) => {
+        normalized[key] = normalize(value[key]);
+        return normalized;
+      }, {});
+  };
+
+  try {
+    return JSON.stringify(normalize(fetchOptions));
+  } catch (e) {
+    return String(fetchOptions);
+  }
+}
+
+export function getDynamicComponentCacheKey(fetchURL: any, fetchOptions?: any): string {
+  return `${String(fetchURL)}:${stringifyDynamicComponentFetchOptions(fetchOptions)}`;
+}
+
 // require;
 /**
  * object of all react components available for JSONX
@@ -304,7 +336,7 @@ export function getReactClassComponent(
     UNSAFE_componentWillMount: undefined,
     
     //updating
-    // (unsupported) getDerivedStateFromProps 
+    // (unsupported) getDerivedStateFromProps
     shouldComponentUpdate: undefined, // {body:'return true;', args:['nextProps','nextState',]}
     getSnapshotBeforeUpdate: undefined, // {body:'return snapshot;', args:['prevProps', 'prevState)',]}
     componentDidUpdate: undefined, // {body:'', args:['prevProps', 'prevState','snapshot')',]}
@@ -511,6 +543,10 @@ export function DynamicComponent(
       () => getFunctionFromEval(cacheTimeoutFunction),
       [cacheTimeoutFunction]
     );
+    const cacheKey = useMemo(
+      () => getDynamicComponentCacheKey(fetchURL, fetchOptions),
+      [fetchURL, fetchOptions]
+    );
     const renderJSONX = useMemo(() => getReactElementFromJSONX.bind(context), [
       context
     ]);
@@ -527,8 +563,8 @@ export function DynamicComponent(
         try {
           //@ts-ignore
           let transformedData: unknown;
-          if (useCache && cache.get(fetchURL)) {
-            transformedData = cache.get(fetchURL);
+          if (useCache && cache.get(cacheKey)) {
+            transformedData = cache.get(cacheKey);
           } else {
             let fetchedData;
             if (fetchFunction) {
@@ -536,7 +572,7 @@ export function DynamicComponent(
             } else fetchedData = await fetchJSON(fetchURL, fetchOptions);
             transformedData = await transformer(fetchedData);
             if (useCache)
-              cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
+              cache.put(cacheKey, transformedData, cacheTimeout, timeoutFunction);
           }
           //@ts-ignore
           setState(prevState =>
@@ -553,7 +589,7 @@ export function DynamicComponent(
         }
       }
       if (fetchURL) getData();
-    }, [fetchURL, fetchOptions]);
+    }, [fetchURL, fetchOptions, cacheKey]);
     if (!fetchURL) return null;
     else if (state.hasError) {
       return loadingError;

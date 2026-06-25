@@ -1,9 +1,9 @@
 // @spec JSONX-CORE-001 JSONX-CORE-002 JSONX-CORE-003 JSONX-CORE-004 JSONX-CORE-005 JSONX-CORE-006 JSONX-CORE-007 JSONX-CORE-008 JSONX-CORE-009 JSONX-CORE-010 JSONX-CORE-011 JSONX-CORE-012
 // @intent docs/intent/core-rendering/core-rendering-specs.md
 // import React, { createElement, } from 'react';
-import React, { ReactNode } from "react";
+import React, { ReactNode, ReactPortal } from "react";
 import ReactDOM from "react-dom";
-import { createRoot } from 'react-dom/client';
+import { createRoot, Root } from 'react-dom/client';
 import ReactDOMServer from "react-dom/server";
 import * as defs from "./types/jsonx/index";
 
@@ -45,7 +45,7 @@ export let renderIndex = 0;
 export function jsonxRender(
   this: defs.Context,
   config: defs.RenderConfig = { jsonx: { component: "" }, querySelector: "" }
-): void {
+): Root | ReactPortal {
   const { jsonx, resources, querySelector, DOM, portal } = config;
   const RenderDOM: HTMLElement | null =
     DOM || document.querySelector(querySelector);
@@ -56,10 +56,11 @@ export function jsonxRender(
   );
   if (!JSONXReactElement) throw ReferenceError("Invalid React Element");
   else if (!RenderDOM) throw ReferenceError("Invalid Render DOM Element");
-  if(portal) ReactDOM.createPortal(JSONXReactElement, RenderDOM);
+  if(portal) return ReactDOM.createPortal(JSONXReactElement, RenderDOM);
   else {
     const root = createRoot(RenderDOM);
     root.render(JSONXReactElement);
+    return root;
   }
 }
 

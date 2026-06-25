@@ -20,6 +20,35 @@ export const generatedCustomComponents = new Map();
 // }
 //@ts-ignore
 export let advancedBinding = getAdvancedBinding();
+function stringifyDynamicComponentFetchOptions(fetchOptions) {
+    const seen = new WeakSet();
+    const normalize = (value) => {
+        if (typeof value === "function")
+            return value.toString();
+        if (!value || typeof value !== "object")
+            return value;
+        if (seen.has(value))
+            return "[Circular]";
+        seen.add(value);
+        if (Array.isArray(value))
+            return value.map(normalize);
+        return Object.keys(value)
+            .sort()
+            .reduce((normalized, key) => {
+            normalized[key] = normalize(value[key]);
+            return normalized;
+        }, {});
+    };
+    try {
+        return JSON.stringify(normalize(fetchOptions));
+    }
+    catch (e) {
+        return String(fetchOptions);
+    }
+}
+export function getDynamicComponentCacheKey(fetchURL, fetchOptions) {
+    return `${String(fetchURL)}:${stringifyDynamicComponentFetchOptions(fetchOptions)}`;
+}
 // require;
 /**
  * object of all react components available for JSONX
@@ -201,7 +230,7 @@ export function getReactClassComponent(reactComponent = {}, options = {}) {
         componentDidMount: undefined,
         UNSAFE_componentWillMount: undefined,
         //updating
-        // (unsupported) getDerivedStateFromProps 
+        // (unsupported) getDerivedStateFromProps
         shouldComponentUpdate: undefined, // {body:'return true;', args:['nextProps','nextState',]}
         getSnapshotBeforeUpdate: undefined, // {body:'return snapshot;', args:['prevProps', 'prevState)',]}
         componentDidUpdate: undefined, // {body:'', args:['prevProps', 'prevState','snapshot')',]}
@@ -367,6 +396,7 @@ export function DynamicComponent(props = {}) {
             transformFunction
         ]);
         const timeoutFunction = useMemo(() => getFunctionFromEval(cacheTimeoutFunction), [cacheTimeoutFunction]);
+        const cacheKey = useMemo(() => getDynamicComponentCacheKey(fetchURL, fetchOptions), [fetchURL, fetchOptions]);
         const renderJSONX = useMemo(() => getReactElementFromJSONX.bind(context), [
             context
         ]);
@@ -379,8 +409,8 @@ export function DynamicComponent(props = {}) {
                 try {
                     //@ts-ignore
                     let transformedData;
-                    if (useCache && cache.get(fetchURL)) {
-                        transformedData = cache.get(fetchURL);
+                    if (useCache && cache.get(cacheKey)) {
+                        transformedData = cache.get(cacheKey);
                     }
                     else {
                         let fetchedData;
@@ -391,7 +421,7 @@ export function DynamicComponent(props = {}) {
                             fetchedData = await fetchJSON(fetchURL, fetchOptions);
                         transformedData = await transformer(fetchedData);
                         if (useCache)
-                            cache.put(fetchURL, transformedData, cacheTimeout, timeoutFunction);
+                            cache.put(cacheKey, transformedData, cacheTimeout, timeoutFunction);
                     }
                     //@ts-ignore
                     setState(prevState => Object.assign({}, prevState, {
@@ -409,7 +439,7 @@ export function DynamicComponent(props = {}) {
             }
             if (fetchURL)
                 getData();
-        }, [fetchURL, fetchOptions]);
+        }, [fetchURL, fetchOptions, cacheKey]);
         if (!fetchURL)
             return null;
         else if (state.hasError) {
