@@ -16,7 +16,11 @@
 
 # Getting Started
 
-JSONX is a library that creates React Elements, JSX, and HTML from JSON. JSONX works by converting JSON Objects that follow the JXM spec into the arguments passed into [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component (which is passed as the `type` argument)
+JSONX is a React rendering library that lets you define React UI as JSON, then render it as React elements, HTML, JSX text, or browser DOM output.
+
+JSONX gives you a JSON-based rendering layer for React. A JSONX object describes the component, props, children, templates, and resource bindings. The library resolves that structure into React output for browser rendering, server-side HTML rendering, Express views, or generated component flows.
+
+JSONX works by converting JSON objects that follow the JXM spec into the arguments passed into [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component, which is passed as the `type` argument.
 
 ```ts
 // React Create Element Example
@@ -38,15 +42,21 @@ JSONX.getReactElement(JXM) => React.createElement('div', { title: 'jsonx', }, 'h
 
 ## Usages
 
-JSONX is great for:
-- Composing UIs programmatically
-- Using existing React Component Libraries to compose UIs
-- Using React components with transpilers
-- Creating simple components with JSON
-- Rendering components in existing React Applications
+JSONX is useful for:
+- UI stored in files, APIs, databases, or configuration.
+- Server-rendered React views.
+- Dynamic component rendering.
+- View management systems that need React views as data.
+- Systems where React views need to be generated, serialized, audited, or moved between services.
+- Using existing React component libraries from JSON definitions.
 
-JSONX is not great for:
-- building extremely complicated components (although it can be done)
+JSONX is not:
+- A replacement for React.
+- A design system.
+- A tool for running untrusted UI definitions.
+- Just a JSON-to-HTML converter.
+
+For complex hand-authored application screens, JSX may still be the simpler choice. JSONX is a better fit when the view definition needs to be data.
 
 ## Example
 <table style="border:0; width:100%">

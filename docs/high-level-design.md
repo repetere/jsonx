@@ -6,6 +6,8 @@ Scope: full repository runtime and package surface
 
 Source basis: existing TypeScript source, tests, package metadata, and current spec annotations.
 
+JSONX is a React rendering library that lets callers define React UI as JSON and render it as React elements, HTML, JSX text, browser DOM output, Express views, or generated component flows. It is a JSON-based rendering layer for React, not a replacement for React or a design system.
+
 ## Design Goals
 
 | Priority | Goal | Rationale |

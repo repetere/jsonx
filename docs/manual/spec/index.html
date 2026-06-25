@@ -30,7 +30,8 @@
 </ul>
 <hr>
 <h1>Full JXM (JSONX Markup) JSON Spec</h1>
-<p>A JXM JSON Object is valid JSON Object that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+<p>JXM is the JSON structure JSONX uses to describe React UI as data. A JXM object describes a component, its props, its children, and optional JSONX-specific behavior such as templates, resource bindings, display rules, formatting, and generated components.</p>
+<p>JXM objects map to the arguments passed to <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component, which is passed as the <code>type</code> argument.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(
   type,
   [props],
