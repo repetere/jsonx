@@ -17,11 +17,10 @@ Design: `docs/intent/core-rendering/core-rendering-design.md`
 | JSONX-CORE-009 | P0 | When a caller requests HTML output, JSONX shall render the JSONX or JSON IR input through `ReactDOMServer.renderToString`. |
 | JSONX-CORE-010 | P0 | When a caller requests JSON output or provides JSON IR, JSONX shall preserve `type`, `props`, and recursively rendered `children` in the intermediate representation. |
 | JSONX-CORE-011 | P1 | When a caller requests JSX output or compiles JSONX, JSONX shall use JSON IR to produce JSX text or a React function component. |
-| JSONX-CORE-012 | P0 | When a caller renders into the DOM, JSONX shall require a valid React element and target DOM node before using ReactDOM portal or `createRoot` rendering. |
+| JSONX-CORE-012 | P0 | When a caller renders into the DOM, JSONX shall require a valid React element and target DOM node before using ReactDOM portal or `createRoot` rendering, and shall return the created React root or portal value for caller cleanup. |
 
 ## Trace Links
 
 Code: `src/index.ts`
 
 Tests: `src/index.test.tsx`, `src/html.test.ts`
-

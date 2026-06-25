@@ -23,7 +23,7 @@ JSONX-CORE-001 through JSONX-CORE-012
 | `outputJSON(jsonx, resources)` | Return JSON IR. | JSONX-CORE-010 |
 | `outputJSX(jsonx, resources)` and `jsonToJSX(json)` | Return JSX text. | JSONX-CORE-011 |
 | `compile(jsonx, resources)` | Return a compiled React function component. | JSONX-CORE-011 |
-| `jsonxRender(config)` | Render into a DOM node or portal target. | JSONX-CORE-012 |
+| `jsonxRender(config)` | Render into a DOM node or portal target and return the created root or portal value. | JSONX-CORE-012 |
 | `getReactElementFromJSON(options)` | Convert JSON IR into a React element. | JSONX-CORE-010 |
 | `__getReact()` and `__getReactDOM()` | Expose React modules. | JSONX-CORE-001, JSONX-CORE-012 |
 
@@ -42,6 +42,7 @@ The pipeline normalizes input, resolves the component through component factorie
 | `jsonx.test` is true | Return formatted diagnostic JSON. | JSONX-CORE-008 |
 | Display comparison fails | Return `null`. | JSONX-CORE-006 |
 | DOM target is invalid | Throw a `ReferenceError`. | JSONX-CORE-012 |
+| DOM rendering succeeds | Return the React root so callers can call `unmount()`. | JSONX-CORE-012 |
 
 ## Decisions and Backlog
 
@@ -49,4 +50,4 @@ The pipeline normalizes input, resolves the component through component factorie
 |------|------|--------|
 | CORE-DD-001 | Keep `this` as the configuration carrier. | Accepted |
 | CORE-DD-002 | Keep mutable normalization of `jsonx.type` and `jsonx.children`. | Accepted |
-| OQ-001 | Consider returning the React root from `jsonxRender` for caller cleanup. | Backlog |
+| OQ-001 | Return the React root from `jsonxRender` for caller cleanup. | Resolved |

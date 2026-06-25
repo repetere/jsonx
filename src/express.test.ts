@@ -1,4 +1,4 @@
-// @spec JSONX-EXPRESS-001 JSONX-EXPRESS-002 JSONX-EXPRESS-003 JSONX-EXPRESS-004 JSONX-EXPRESS-005 JSONX-EXPRESS-006 JSONX-EXPRESS-007 JSONX-EXPRESS-008 JSONX-EXPRESS-009
+// @spec JSONX-EXPRESS-001 JSONX-EXPRESS-002 JSONX-EXPRESS-003 JSONX-EXPRESS-004 JSONX-EXPRESS-005 JSONX-EXPRESS-006 JSONX-EXPRESS-007 JSONX-EXPRESS-008 JSONX-EXPRESS-009 JSONX-EXPRESS-010
 // @intent docs/intent/express-rendering/express-rendering-specs.md
 import * as jsonx from './index';
 import supertest from 'supertest';
@@ -19,6 +19,18 @@ describe('express', function(){
     it('should render from a jsm object', ()=>{
       const template:string = jsonx.__express(undefined,{__jsonx:{div:"hello world!"}}) as string
       expect(template.includes('hello world')).toBe(true)
+    })
+    // @spec JSONX-EXPRESS-010
+    it('should render direct JSON IR only when explicitly enabled', ()=>{
+      const template:string = jsonx.__express(undefined,{
+        __useJSON:true,
+        __jsonx:{
+          type:'section',
+          props:{ id:'direct-json' },
+          children:'direct JSON'
+        }
+      }) as string
+      expect(template).toContain('<section id="direct-json">direct JSON</section>')
     })
     it('should return html string with a callback', (done)=>{
       jsonx.__express(undefined, {__jsonx:{div:"hello world!"}}, (err:Error,template:string)=>{

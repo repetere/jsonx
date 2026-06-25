@@ -10,4 +10,4 @@ Code: `src/express.ts`
 
 Tests: `src/express.test.ts`, `src/index.test.tsx`
 
-Spec IDs: JSONX-EXPRESS-001 through JSONX-EXPRESS-009
+Spec IDs: JSONX-EXPRESS-001 through JSONX-EXPRESS-010

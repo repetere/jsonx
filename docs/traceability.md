@@ -12,10 +12,10 @@ This report maps current LID annotations to the brownfield intent docs.
 | Component Factories | 12 | Yes | Yes | Yes | AUDITED |
 | Prop Resolution | 10 | Yes | Yes | Yes | AUDITED |
 | Children Templates | 10 | Yes | Yes | Yes | AUDITED |
-| Express Rendering | 9 | Yes | Yes | Yes | AUDITED |
+| Express Rendering | 10 | Yes | Yes | Yes | AUDITED |
 | Distribution Types | 9 | Yes | Yes | Build command and artifact-check based | AUDITED |
 
-Total defined specs: 62
+Total defined specs: 63
 
 ## Deterministic Checks Expected
 

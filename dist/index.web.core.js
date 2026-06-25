@@ -49892,7 +49892,12 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
       delete resources.__boundConfig;
       delete resources.__DOCTYPE;
       delete resources.__jsonx;
-      const context = Object.assign({ disableRenderIndexKey: false }, options == null ? void 0 : options.__boundConfig);
+      delete resources.__useJSON;
+      const context = Object.assign(
+        { disableRenderIndexKey: false },
+        options == null ? void 0 : options.__boundConfig,
+        (options == null ? void 0 : options.__useJSON) ? { useJSON: true } : {}
+      );
       const jsonxRenderedString = outputHTML.call(context, {
         jsonx: jsonxModule,
         resources
@@ -49932,10 +49937,11 @@ ${jsonxRenderedString}`;
     );
     if (!JSONXReactElement) throw ReferenceError("Invalid React Element");
     else if (!RenderDOM) throw ReferenceError("Invalid Render DOM Element");
-    if (portal) import_react_dom.default.createPortal(JSONXReactElement, RenderDOM);
+    if (portal) return import_react_dom.default.createPortal(JSONXReactElement, RenderDOM);
     else {
       const root = (0, import_client.createRoot)(RenderDOM);
       root.render(JSONXReactElement);
+      return root;
     }
   }
   function outputHTML(config = { jsonx: { component: "" } }) {

@@ -1724,7 +1724,12 @@ function __express(filePath, options, callback) {
     delete resources.__boundConfig;
     delete resources.__DOCTYPE;
     delete resources.__jsonx;
-    const context = Object.assign({ disableRenderIndexKey: false }, options?.__boundConfig);
+    delete resources.__useJSON;
+    const context = Object.assign(
+      { disableRenderIndexKey: false },
+      options?.__boundConfig,
+      options?.__useJSON ? { useJSON: true } : {}
+    );
     const jsonxRenderedString = outputHTML.call(context, {
       jsonx: jsonxModule,
       resources
@@ -1764,10 +1769,11 @@ function jsonxRender(config = { jsonx: { component: "" }, querySelector: "" }) {
   );
   if (!JSONXReactElement) throw ReferenceError("Invalid React Element");
   else if (!RenderDOM) throw ReferenceError("Invalid Render DOM Element");
-  if (portal) ReactDOM.createPortal(JSONXReactElement, RenderDOM);
+  if (portal) return ReactDOM.createPortal(JSONXReactElement, RenderDOM);
   else {
     const root = createRoot(RenderDOM);
     root.render(JSONXReactElement);
+    return root;
   }
 }
 function outputHTML(config = { jsonx: { component: "" } }) {

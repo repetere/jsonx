@@ -15,10 +15,10 @@ Design: `docs/intent/express-rendering/express-rendering-design.md`
 | JSONX-EXPRESS-007 | P0 | When rendering succeeds, the system shall prepend the configured doctype or `<!DOCTYPE html>` when no doctype is configured. |
 | JSONX-EXPRESS-008 | P0 | When a callback is provided, the system shall call it with `(null, template)` on success and with the error on failure; when no callback is provided, the system shall return the template or throw the error. |
 | JSONX-EXPRESS-009 | P1 | When registered as an Express view engine, the system shall render JSONX views into HTTP responses using Express locals as JSONX resources. |
+| JSONX-EXPRESS-010 | P1 | When `options.__useJSON` is true, the system shall render the provided module as direct React JSON IR without changing the default JSONX file rendering path. |
 
 ## Trace Links
 
 Code: `src/express.ts`, `src/index.ts`
 
 Tests: `src/express.test.ts`, `src/index.test.tsx`
-

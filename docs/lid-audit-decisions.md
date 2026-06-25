@@ -18,14 +18,16 @@ This file tracks the brownfield decisions used to move arrow segments from `MAPP
 | AD-008 | Children Templates | Resolve template cache-key collisions by load type. | Completed | Template cache entries now include the effective load type and template path, so fetch and file loads for the same string do not overwrite each other. |
 | AD-009 | Component Factories | Resolve dynamic component cache-key collisions by fetch options. | Completed | Dynamic component cache keys now include both `fetchURL` and a deterministic representation of `fetchOptions`. |
 | AD-010 | Distribution Types | Add artifact-level build checks as a release gate. | Completed | `npm run build:check` verifies expected generated artifacts and configured package entrypoints after the build runs. |
+| AD-011 | Core Rendering | Return the React root from `jsonxRender`. | Completed | DOM callers can now clean up React 18 roots by calling `unmount()` on the returned root. |
+| AD-012 | Express Rendering | Add explicit direct JSON IR opt-in. | Completed | Express keeps the JSONX default path and renders direct JSON IR only when `options.__useJSON` is true. |
 
 ## Audit Outcomes
 
 | Segment | Previous Status | Current Status | Remaining Work |
 |---------|-----------------|----------------|----------------|
-| Core Rendering | MAPPED | AUDITED | `jsonxRender` root-return question is backlog. |
+| Core Rendering | MAPPED | AUDITED | No root-return blocker remains. |
 | Component Factories | MAPPED | AUDITED | No dynamic cache-key blocker remains. |
 | Prop Resolution | MAPPED | AUDITED | No validation blocker remains. |
 | Children Templates | MAPPED | AUDITED | No cache-key blocker remains. |
-| Express Rendering | MAPPED | AUDITED | Direct JSON IR rendering path remains disabled unless restored later. |
+| Express Rendering | MAPPED | AUDITED | No direct JSON IR blocker remains. |
 | Distribution Types | MAPPED | AUDITED | No distribution release-gate blocker remains. |

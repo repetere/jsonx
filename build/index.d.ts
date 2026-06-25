@@ -1,5 +1,6 @@
-import React from "react";
+import React, { ReactPortal } from "react";
 import ReactDOM from "react-dom";
+import { Root } from 'react-dom/client';
 import * as defs from "./types/jsonx/index";
 import * as jsonxComponents from "./components";
 import * as jsonxProps from "./props";
@@ -21,7 +22,7 @@ export declare let renderIndex: number;
  * @param {string} config.querySelector - selector for document.querySelector
  * @property {object} this - options for getReactElementFromJSONX
  */
-export declare function jsonxRender(this: defs.Context, config?: defs.RenderConfig): void;
+export declare function jsonxRender(this: defs.Context, config?: defs.RenderConfig): Root | ReactPortal;
 /**
  * Use ReactDOMServer.renderToString to render html from JSONX
  * @example

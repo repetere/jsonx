@@ -1,4 +1,4 @@
-// @spec JSONX-EXPRESS-001 JSONX-EXPRESS-002 JSONX-EXPRESS-003 JSONX-EXPRESS-004 JSONX-EXPRESS-005 JSONX-EXPRESS-006 JSONX-EXPRESS-007 JSONX-EXPRESS-008 JSONX-EXPRESS-009
+// @spec JSONX-EXPRESS-001 JSONX-EXPRESS-002 JSONX-EXPRESS-003 JSONX-EXPRESS-004 JSONX-EXPRESS-005 JSONX-EXPRESS-006 JSONX-EXPRESS-007 JSONX-EXPRESS-008 JSONX-EXPRESS-009 JSONX-EXPRESS-010
 // @intent docs/intent/express-rendering/express-rendering-specs.md
 import { outputHTML } from "./";
 import path from "path";
@@ -14,6 +14,7 @@ const scopedEval = eval;
  * @param {object} options - property used for express view {locals}
  * @param {object} options.__boundConfig - property used to bind this object for JSONX, can be used to add custom components
  * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
+ * @param {boolean} options.__useJSON - opt-in flag for direct React JSON IR rendering
  * @param {*} callback
  */
 export function __express(filePath?: string, options?: any, callback?: any) {
@@ -31,8 +32,12 @@ export function __express(filePath?: string, options?: any, callback?: any) {
     delete resources.__boundConfig;
     delete resources.__DOCTYPE;
     delete resources.__jsonx;
-    const context = Object.assign({disableRenderIndexKey:false}, options?.__boundConfig);
-    // if (isJSON) context.useJSON = true;
+    delete resources.__useJSON;
+    const context = Object.assign(
+      { disableRenderIndexKey: false },
+      options?.__boundConfig,
+      options?.__useJSON ? { useJSON: true } : {}
+    );
     const jsonxRenderedString = outputHTML.call(context, {
       jsonx: jsonxModule,
       resources

@@ -7,6 +7,7 @@
  * @param {object} options - property used for express view {locals}
  * @param {object} options.__boundConfig - property used to bind this object for JSONX, can be used to add custom components
  * @param {string} [options.__DOCTYPE="<!DOCTYPE html>"] - html doctype string
+ * @param {boolean} options.__useJSON - opt-in flag for direct React JSON IR rendering
  * @param {*} callback
  */
 export declare function __express(filePath?: string, options?: any, callback?: any): string | undefined;
