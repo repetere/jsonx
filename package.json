@@ -1,6 +1,6 @@
 {
   "name": "jsonx",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "React JSON Syntax - Construct React elements, JSX and HTML with JSON without transpilers. JSONX supports React Function and Class Components, React Lazy and Suspense Components, and full support for React Hooks",
   "main": "dist/index.cjs",
   "module": "build/index.js",

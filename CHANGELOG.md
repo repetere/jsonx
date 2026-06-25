@@ -1,3 +1,16 @@
+# [2.1.0](https://github.com/repetere/jsonx/compare/v2.0.1...v2.1.0) (2026-06-25)
+
+
+### Bug Fixes
+
+* align passprops validation with child rendering ([f7466a9](https://github.com/repetere/jsonx/commit/f7466a9b7ad3ce3a624b43aa4e7e9d6ff8cd1962))
+* resolve remaining LID cache and distribution gaps ([a922130](https://github.com/repetere/jsonx/commit/a922130016813db38c6cee0612867cf2ef9ed2a0))
+
+
+### Features
+
+* expose render cleanup and JSON IR opt-in ([a3209fe](https://github.com/repetere/jsonx/commit/a3209fe6fd18ba492088f76fe4818a3cd7391389))
+
 ## [2.0.1](https://github.com/repetere/jsonx/compare/v2.0.0...v2.0.1) (2026-06-24)
 
 
