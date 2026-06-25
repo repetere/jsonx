@@ -1,80 +1,79 @@
 <!DOCTYPE html><html lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>External Libraries and Components</title>
-  <link rel="stylesheet" href="https://unpkg.com/style.css">
-  <style type="text/css">
-    .markdown-body {
-      max-width: 46em;
-      margin: 2em auto;
-      padding: 0 1em;
-      overflow: hidden;
-      word-wrap: break-word;
-    }
-  </style>
-</head>
-<body>
-  <main class="markdown-body"><link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
-<hr>
-<h3>JSONX Manual</h3>
-<ul>
-<li><a href="https://repetere.github.io/jsonx/">Home</a></li>
-<li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
-<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
-<li><a href="../samples/index.html">Samples</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
-<li><a href="../../index.html">Full API Docs</a></li>
-</ul>
-<hr>
-<h1>External Libraries and Components</h1>
-<p>JSONX natively supports any components from React-DOM, but for most real applications you are using either a large open-source component library (e.g. react-bootstrap, ant.design, material UI, etc) or any 3rd-party react components (like react-autocomplete). To use custom 3rd-party components or libraries they need to be assigned to JSONX’s <code>this</code> parameter.</p>
-<h2>Using custom Component Libraries</h2>
-<p>Using a component library is as simple as assigning the Library to the <code>this.componentLibraries</code> property, and referencing the flattened component name as the component value in your JXM JSON Object.</p>
-<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">'jsonx'</span>;
-<span class="hljs-keyword">import</span> { * <span class="hljs-keyword">as</span> <span class="hljs-title class_">ReactBootstrap</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-bootstrap'</span>; <span class="hljs-comment">//or in the browser reference the UMD: &lt;script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin /&gt;</span>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>External Libraries And Custom Components</title>
+    <link rel="stylesheet" href="../../assets/site.css">
+    <link rel="stylesheet" href="../assets/manual.css">
+    <script src="../../assets/analytics.js" defer=""></script>
+  </head>
+  <body class="manual-page">
+    <header class="manual-header">
+      <a class="manual-brand" href="../../" aria-label="JSONX home">
+        <span class="manual-brand-mark">{}</span>
+        <span>JSONX</span>
+      </a>
+      <nav class="manual-top-nav" aria-label="Documentation">
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../using-advanced-props/">Advanced Props</a>
+        <a href="../using-external-and-custom-components/">Custom Components</a>
+        <a href="../spec/">JXM Spec</a>
+        <a href="../samples/">Samples</a>
+        <a href="../../modules.html">API Docs</a>
+      </nav>
+    </header>
+    <div class="manual-shell">
+      <aside class="manual-sidebar" aria-label="Manual navigation">
+        <nav>
+          <a href="../../">Home</a>
+          <a href="../getting-started/">Getting Started</a>
+          <a href="../using-advanced-props/">Using Advanced Props</a>
+          <a href="../using-external-and-custom-components/">External and Custom Components</a>
+          <a href="../creating-react-components-and-component-libraries/">Creating React Components and Component Libraries</a>
+          <a href="../spec/">JSONX and JXM Spec</a>
+          <a href="../samples/">Samples</a>
+          <a href="../roadmap/">Roadmap</a>
+          <a href="../../modules.html">Full API Docs</a>
+        </nav>
+      </aside>
+      <main class="manual-main">
+        <article class="markdown-body manual-content"><h1><a id="external-libraries-and-custom-components" class="anchor" href="#external-libraries-and-custom-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>External Libraries And Custom Components</h1>
+<p>JSONX can render DOM elements by default. For application UI, you usually need custom React components or a component library. Register those components through the context passed to JSONX methods.</p>
+<p>Use <code>reactComponents</code> for individual components. Use <code>componentLibraries</code> for grouped libraries that should be referenced by namespace.</p>
+<h2><a id="component-libraries" class="anchor" href="#component-libraries" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Component Libraries</h2>
+<p>Assign a library object to <code>componentLibraries</code>, then reference components with a dotted path.</p>
+<pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">"jsonx"</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> <span class="hljs-title class_">ReactBootstrap</span> <span class="hljs-keyword">from</span> <span class="hljs-string">"react-bootstrap"</span>;
 
 <span class="hljs-keyword">const</span> getReactElement = jsonx.<span class="hljs-property">getReactElement</span>.<span class="hljs-title function_">bind</span>({
-  <span class="hljs-attr">componentLibraries</span>:{
+  <span class="hljs-attr">componentLibraries</span>: {
     <span class="hljs-title class_">ReactBootstrap</span>,
-  }
+  },
 });
 
-<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
-  <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Container'</span>, 
-  <span class="hljs-attr">children</span>:[
+<span class="hljs-keyword">const</span> view = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">"ReactBootstrap.Container"</span>,
+  <span class="hljs-attr">children</span>: [
     {
-      <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Row'</span>, 
-      <span class="hljs-attr">children</span>:[
+      <span class="hljs-attr">component</span>: <span class="hljs-string">"ReactBootstrap.Row"</span>,
+      <span class="hljs-attr">children</span>: [
         {
-          <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Col'</span>,
-          <span class="hljs-attr">children</span>:[
+          <span class="hljs-attr">component</span>: <span class="hljs-string">"ReactBootstrap.Col"</span>,
+          <span class="hljs-attr">children</span>: [
             {
-              <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Alert'</span>,
-              <span class="hljs-attr">props</span>:{ <span class="hljs-attr">variant</span>:<span class="hljs-string">'primary'</span> },
-              <span class="hljs-attr">children</span>: <span class="hljs-string">'This is a Bootstrap Alert'</span>
-            }
-          ]
+              <span class="hljs-attr">component</span>: <span class="hljs-string">"ReactBootstrap.Alert"</span>,
+              <span class="hljs-attr">props</span>: { <span class="hljs-attr">variant</span>: <span class="hljs-string">"primary"</span> },
+              <span class="hljs-attr">children</span>: <span class="hljs-string">"This is a Bootstrap alert"</span>,
+            },
+          ],
         },
-        {
-          <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Col'</span>,
-          <span class="hljs-attr">children</span>:[
-            {
-              <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Spinner'</span>,
-              <span class="hljs-attr">props</span>:{ <span class="hljs-attr">animation</span>:<span class="hljs-string">'border'</span>, <span class="hljs-attr">role</span>:<span class="hljs-string">'status'</span> },
-            }
-          ]
-        }
-      ], 
-    }
-  ], 
-}
+      ],
+    },
+  ],
+};
 
-<span class="hljs-keyword">const</span> myReactElements = <span class="hljs-title function_">getReactElement</span>(<span class="hljs-variable constant_">JXM</span>);
+<span class="hljs-keyword">const</span> element = <span class="hljs-title function_">getReactElement</span>(view);
 </code></pre>
-<h3>Example React Bootstrap</h3>
+<h3><a id="react-bootstrap-example" class="anchor" href="#react-bootstrap-example" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>React Bootstrap Example</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gctmsojp/22/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -83,38 +82,40 @@
 </td>
   </tr>
 </tbody></table>
-<h2>Using Custom Components</h2>
-<p>If you’re only adding single components or using your components you can add them to JSONX’s component my individually. The difference between a Custom Component and a Custom Library is <code>this.reactComponents</code> expects each property value to be a react component and <code>this.componentLibraries</code> expects each property value to reference an object that has values that are React Components.</p>
-<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
-<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">'jsonx'</span>;
-<span class="hljs-keyword">import</span> { <span class="hljs-title class_">Calendar</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">'rc-calendar'</span>;
-<span class="hljs-keyword">const</span> jsonxRender = jsonx.<span class="hljs-property">jsonxRender</span>.<span class="hljs-title function_">bind</span>({ 
-  <span class="hljs-attr">reactComponents</span>:{
-    <span class="hljs-title class_">ReactCalendar</span>: <span class="hljs-title class_">Calendar</span>,
-  }
-});
+<h2><a id="custom-components" class="anchor" href="#custom-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Custom Components</h2>
+<p>Use <code>reactComponents</code> when you want to register a small set of named components directly.</p>
+<pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">"jsonx"</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactCalendar</span> <span class="hljs-keyword">from</span> <span class="hljs-string">"react-calendar"</span>;
 
-<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
-  <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>, 
-  <span class="hljs-attr">children</span>:[
+<span class="hljs-keyword">const</span> view = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">"main"</span>,
+  <span class="hljs-attr">children</span>: [
     {
-      <span class="hljs-attr">component</span>:<span class="hljs-string">'h1'</span>, 
-      <span class="hljs-attr">children</span>:<span class="hljs-string">'React Calendar demo'</span>,
+      <span class="hljs-attr">component</span>: <span class="hljs-string">"h1"</span>,
+      <span class="hljs-attr">children</span>: <span class="hljs-string">"React Calendar demo"</span>,
     },
     {
-      <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactCalendar'</span>,
-      <span class="hljs-attr">props</span>:{
+      <span class="hljs-attr">component</span>: <span class="hljs-string">"ReactCalendar"</span>,
+      <span class="hljs-attr">props</span>: {
+        <span class="hljs-attr">value</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(),
       },
-    }
-  ], 
+    },
+  ],
 };
 
-<span class="hljs-title function_">jsonxRender</span>({
-  <span class="hljs-attr">jsonx</span>:<span class="hljs-variable constant_">JXM</span>, 
-  <span class="hljs-attr">querySelector</span>:<span class="hljs-string">'#main'</span>,
-});
+jsonx.<span class="hljs-property">jsonxRender</span>.<span class="hljs-title function_">call</span>(
+  {
+    <span class="hljs-attr">reactComponents</span>: {
+      <span class="hljs-title class_">ReactCalendar</span>,
+    },
+  },
+  {
+    <span class="hljs-attr">jsonx</span>: view,
+    <span class="hljs-attr">querySelector</span>: <span class="hljs-string">"#main"</span>,
+  },
+);
 </code></pre>
-<h3>Example React Calendar</h3>
+<h3><a id="react-calendar-example" class="anchor" href="#react-calendar-example" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>React Calendar Example</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/Lqwe3f59/5/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -123,21 +124,38 @@
 </td>
   </tr>
 </tbody></table>
-<hr>
-<h2>Next: <a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></h2>
-<h3>JSONX Manual</h3>
-<ul>
-<li><a href="https://repetere.github.io/jsonx/">Home</a></li>
-<li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
-<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
-<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
-<li><a href="../samples/index.html">Samples</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
-<li><a href="../../index.html">Full API Docs</a></li>
-</ul>
-</main>
+<h2><a id="choosing-a-registration-path" class="anchor" href="#choosing-a-registration-path" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Choosing A Registration Path</h2>
+<table>
+<thead>
+<tr>
+<th>Use case</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One or a few local components</td>
+<td><code>reactComponents</code></td>
+</tr>
+<tr>
+<td>A third-party component package</td>
+<td><code>componentLibraries</code></td>
+</tr>
+<tr>
+<td>Component names grouped by namespace</td>
+<td><code>componentLibraries</code></td>
+</tr>
+<tr>
+<td>Components generated from JSONX definitions</td>
+<td><code>customComponents</code></td>
+</tr>
+</tbody>
+</table>
+<h2><a id="next" class="anchor" href="#next" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Next</h2>
+<p>Read <a href="../creating-react-components-and-component-libraries/">Creating React Components and Component Libraries</a> if you need JSONX to generate function, class, dynamic, or form components.</p>
+</article>
+      </main>
+    </div>
 
 
 </body></html>

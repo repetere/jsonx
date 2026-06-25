@@ -1,30 +1,13 @@
-<link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+# Using Advanced Props
 
----
+Advanced props let JSONX definitions read dynamic data, format output, render conditionally, and generate component props. Use them when a static JSONX object is not enough.
 
-### JSONX Manual
+- Reference stateful properties dynamically.
+- Format children before rendering.
+- Insert JSONX templates.
+- Create function or component props when the input is trusted.
 
-- [Home](https://repetere.github.io/jsonx/)
-- [Getting Started](../getting-started/index.html)
-- [Using Advanced Props](../using-advanced-props/index.html)
-- [External and Custom Components](../using-external-and-custom-components/index.html)
-- [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
-- [JSONX & JXM Spec](../spec/index.html)
-- [Samples](../samples/index.html)
-- [Roadmap](../roadmap/index.html)
-- [Full API Docs](../../index.html)
-
----
-
-# Using advanced props
-
-JSONX was created so you can create react elements and components with JSON. Advanced props allow for your components to interact with dynamic data for example:
-
-- referencing stateful properties dynamically
-- formatting the output of props
-- inserting templates into your JXM Objects
-
-There are five kinds of Advanced Props (Traverse, Evaluation, Format, Display and Utility props):
+There are six groups of advanced props:
 
 -  [1. Traverse Props](#traverse-props) - used to traverse data passed into elements or other dynamic/stateful data and assign values as props
     - [1.1 resourceprops/asyncprops](#traverse-asyncprops) - assign dynamic data to props
@@ -32,19 +15,19 @@ There are five kinds of Advanced Props (Traverse, Evaluation, Format, Display an
     - [1.3 thisstate](#traverse-thisstate) - assign stateful data to props
     - [1.4 thiscontext](#traverse-thiscontext) - assign data bound to `this` to props
     - [1.5 thisprops](#traverse-thisprops) - re-assign prop values
--  [2. Evaluation Props](#evaluation-props) - used to create function properties or component properties and assign values as props
+-  [2. Evaluation Props](#evaluation-props) - used to create function properties or component properties and assign values as props. Treat these as trusted-input features.
     - [2.1 \_\_dangerouslyEvalProps](#evaluation-dangerouslyevalprops) - evaluate strings as props
     - [2.2 \_\_dangerouslyBindEvalProps](#evaluation-dangerouslybindevalprops) - evaluate strings to generate props that are functions bound to `this`
     - [2.3 \_\_dangerouslyEvalAllProps](#evaluation-dangerouslyevalallprops) - evaluate all props from a string
     - [2.4 \_\_dangerouslyInsertFunctionComponents](#evaluation-dangerouslyinsertfunctioncomponents) - use JSONX to generate a function component as a prop
     - [2.5 \_\_dangerouslyInsertClassComponents](#evaluation-dangerouslyinsertclasscomponents) - use JSONX to generate a class component as a prop
-    - [2.6 \_\_dangerouslyInsertComponents](#evaluation-dangerouslyinsertcomponents) - assign React Elements to props using JSONX
-    - [2.7 \_\_dangerouslyInsertReactComponents](#evaluation-dangerouslyinsertreactcomponents) - assign React Elements to props
-    - [2.8 \_\_dangerouslyInsertJSONXComponents](#evaluation-dangerouslyinsertjsonxcomponents) - assign React Elements to props
+    - [2.6 \_\_dangerouslyInsertComponents](#evaluation-dangerouslyinsertcomponents) - assign React elements to props using JSONX
+    - [2.7 \_\_dangerouslyInsertReactComponents](#evaluation-dangerouslyinsertreactcomponents) - assign React elements to props
+    - [2.8 \_\_dangerouslyInsertJSONXComponents](#evaluation-dangerouslyinsertjsonxcomponents) - assign React elements to props
     - [2.9 \_children](#evaluation-children) - dynamically override the `children` prop
     - [2.10 \_\_functionProps (legacy)](#evaluation-functionprops) - the old way to assign functions to props
     - [2.11 \_\_windowComponents ](#evaluation-windowcomponents ) - assign window components to props
-    - [2.12 \_\_windowComponentProps](#evaluation-windowcomponentprops) - assign props of window components assign to props
+    - [2.12 \_\_windowComponentProps](#evaluation-windowcomponentprops) - assign props from window components
     - [2.13 \_\_spreadComponent](#evaluation-spreadcomponent) - component mapped over `__spread` data
     - [2.14 \_\_spread](#evaluation-spread) - data used to generate props from an array (e.g. if you have a list)
 -  [3. Format Props](#format-props) - used to format children props, for example, converting number formats or formatting dates
@@ -62,16 +45,18 @@ There are five kinds of Advanced Props (Traverse, Evaluation, Format, Display an
 -  [5. Display Props](#display-props) - used to decide whether or not to render elements
     - [5.1 comparisonprops](#display-comparisonprops) - conditionally render elements based on prop values
     - [5.2 comparisonorprops](#display-comparisonorprops) - conditionally render elements flag to use 'or' logic instead of 'and' logic
--  [6. Applied Props](#applied-props) - used to modify other jsonx properties
-    - [6.1 useformregister](#applied-useformregister) - A flag to insert react hook form register on jsonx component
+-  [6. Applied Props](#applied-props) - used to modify other JSONX properties
+    - [6.1 useformregister](#applied-useformregister) - insert React Hook Form registration on a JSONX component
     - [6.2 useremoveprops](#applied-useremoveprops) - remove props from component, usually used with passprops
     - [6.3 useincludeprops](#applied-useincludeprops) - include only defined props, usually used with passprops
+
+Do not run untrusted JSONX definitions with evaluation props enabled.
 
 ## <a name="traverse-props">1. Traverse Props </a>
 
 _([resourceprops/asyncprops](#traverse-asyncprops), [windowprops](#traverse-windowprops), [thisprops](#traverse-thisprops), [thisstate](#traverse-thisstate), [thiscontext](#traverse-thiscontext))_
 
-Traverse Props are used to assign props values from different objects. For example, if you wanted to set the alt text of an image tag from the URL of the window. Because JXM objects are derived from JSON it's impossible to get the dynamic value `window.location.href` and assign it to the alt prop without using advanced props.
+Traverse props assign prop values from other objects. For example, you might want an image `alt` prop to use the current browser URL. Because JXM objects are derived from JSON, `window.location.href` cannot be read directly inside the static `props` object.
 
 ```JavaScript
 //assume window.location.href = http://example.com
@@ -85,7 +70,7 @@ const JXM = {
 };
 ```
 
-Attempting to access `window.location.href` is where traverse props are useful. Conceptually you are traversing the `window` property and assign the `href` property from `window.location` to the `JXM.props.alt` property.
+This is where traverse props are useful. The path reads `window.location.href` and assigns that value to `JXM.props.alt`.
 
 Traversing the `window` object is possible by using the `window props` traverse prop. The other traverse props are:
 
@@ -96,7 +81,7 @@ Traversing the `window` object is possible by using the `window props` traverse 
 - <a name="traverse-thisstate">thisstate</a> - traverse properties on `this.state`
 - <a name="traverse-thiscontext">thiscontext</a> - traverse properties on `this`
 
-To properly reference `window.location.href` the following JXM Object would work
+To reference `window.location.href`, use this JXM object:
 
 ```JavaScript
 const JXM = {
@@ -110,15 +95,15 @@ const JXM = {
 }
 ```
 
-Traverse props assign properties to `JXM.props` object by defining what property you want to set on `JXM.props` as the traverse prop property name and passing an array to the property value you want. So for a window's location (`window.location.href`), the property value is accessed by an array to the href `['location', 'href']` where you omit the transverse object from the array path.
+Traverse props assign values to `JXM.props`. The traverse prop key is the prop you want to set. The value is the path to read from the source object. For `window.location.href`, the path is `["location", "href"]`; the source object itself is not included in the path.
 
 Some sample use cases are:
 
-- Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncprops).
-- Thisprops transverses anything bound to `this.props`, a good example would be if you're storing and passing a user object on `this.props.username`, pulling the username would be where you would use thisprops.
-- Thisstate transverses anything bound to `this.state`, for example, if you're updating the state of a component based on user input from a text field `this.state.value`, pulling the value would be where you would use thisstate.
-- Thiscontext transverses anything bound to `this`, a good example is if you're using JSONX programmatically and you want to bind functionality to the render methods.
-- And like the previous example windowprops transverse anything on the global window object, like the current page location `window.location.href`.
+- `resourceprops` traverses the resources object passed to JSONX methods. `asyncprops` is an alias.
+- `thisprops` traverses `this.props`.
+- `thisstate` traverses `this.state`.
+- `thiscontext` traverses the current `this` context.
+- `windowprops` traverses the global `window` object.
 
 ```javascript
 // programmatic example
@@ -170,7 +155,7 @@ async function main() {
   //render something silly
   jsonx.jsonxRender(JXM, asyncUserData);
   /*
-  Renders this JXM Object:
+  Renders this JXM object:
   JXM = {
     component: 'div',
     props: {
@@ -216,11 +201,11 @@ main();
 
 _([\_\_dangerouslyEvalProps](#evaluation-dangerouslyevalprops), [\_\_dangerouslyBindEvalProps](#evaluation-dangerouslybindevalprops), [\_\_dangerouslyEvalAllProps](#evaluation-dangerouslyevalallprops), [\_\_dangerouslyInsertFunctionComponents](#evaluation-dangerouslyinsertfunctioncomponents), [\_\_dangerouslyInsertClassComponents](#evaluation-dangerouslyinsertclasscomponents), [\_\_dangerouslyInsertComponents](#evaluation-dangerouslyinsertcomponents), [\_\_dangerouslyInsertReactComponents](#evaluation-dangerouslyinsertreactcomponents), [\_\_dangerouslyInsertJSONXComponents](#evaluation-dangerouslyinsertjsonxcomponents), [\_children](#evaluation-children), [\_\_functionProps (legacy)](#evaluation-functionprops), [\_\_windowComponents ](#evaluation-windowcomponents), [\_\_windowComponentProps](#evaluation-windowcomponentprops), [\_\_spreadComponent](#evaluation-spreadcomponent), [\_\_spread](#evaluation-spread))_
 
-Evaluation Props are properties that are computed and resolve values onto the `JXM.props` property. They are helpful because, to interact with dynamic data and stateful information, they provide a way to describe declaratively how to assign properties onto the `JXM.props` property.
+Evaluation props compute values and merge them onto `JXM.props`. They are useful when JSONX needs to describe how dynamic data, state, or functions become props. Use these only with trusted JSONX input.
 
 ### <a name="evaluation-children">\_children</a>
 
-The `_children` evaluation property is used to override the value of `JXM.children` and is usually only used when you want to dynamically set the value of the `children` property from an advanced property.
+The `_children` evaluation property overrides `JXM.children`. Use it when an advanced prop should provide the rendered children.
 
 ```javascript
 //current URL: http://example.com
@@ -233,18 +218,18 @@ const JXMWindowLocation = {
 // computes: { component:'p', children:'http://example.com', }
 ```
 
-### <a name="evaluation-dangerouslyevalprops">\_\_dangerouslyEvalProps</a>, <a name="evaluation-dangerouslybindevalprops">\_\_dangerouslyBindEvalProps</a> ,and <a name="evaluation-dangerouslyevalallprops">\_\_dangerouslyEvalAllProps</a>
+### <a name="evaluation-dangerouslyevalprops">\_\_dangerouslyEvalProps</a>, <a name="evaluation-dangerouslybindevalprops">\_\_dangerouslyBindEvalProps</a>, and <a name="evaluation-dangerouslyevalallprops">\_\_dangerouslyEvalAllProps</a>
 
-The evaluation properties `__dangerouslyEvalProps`, `__dangerouslyBindEvalProps` and `__dangerouslyEvalAllProps` are properties used to evaluate strings and set the value the property value on a JXM Object.
+The evaluation properties `__dangerouslyEvalProps`, `__dangerouslyBindEvalProps`, and `__dangerouslyEvalAllProps` evaluate strings or functions and assign the result to a JXM object.
 
-`__dangerouslyEvalAllProps` will evaluate a string as a function and assign the returned value of the function to the `props` property of a JXM object.
-_Note: If passing the value as a string, remember this value has to be an expression, so either a `(({jsonx})=>({}))` or `(function({jsonx}){})`. There is one parameter passed into the function, it's the current value of the JXM Object on the jsonx property_
+`__dangerouslyEvalAllProps` evaluates a string as a function and assigns the return value to `props`.
+_Note: When the value is a string, it must be an expression such as `(({ jsonx }) => ({}))` or `(function({ jsonx }) { return {}; })`. JSONX passes the current JXM object through the `jsonx` property._
 
-`__dangerouslyEvalProps` is used to evaluate the string value and assign it to the JXM.props value, the string must be a valid javascript expression _(Tip, if evaluating an object remember to wrap it ({some:'obj', }) )_. If `__dangerouslyEvalProps` is a function, it will assign the value of the function called with one parameter `{jsonx}`.
+`__dangerouslyEvalProps` evaluates each string value and assigns the result to `JXM.props`. The string must be a valid JavaScript expression. If you evaluate an object literal, wrap it in parentheses: `({ some: "obj" })`. If `__dangerouslyEvalProps` is a function, JSONX calls it with `{ jsonx }`.
 
-`__dangerouslyBindEvalProps` is used to assign functions to JXM object props values. This is usually for _onClick_ and _onChange_ functions. Each property of `__dangerouslyBindEvalProps` has to be a function because it attempts to assign the value as a function with `this` bound to it.
+`__dangerouslyBindEvalProps` assigns functions to JXM prop values. This is usually for _onClick_ and _onChange_ handlers. Each value must resolve to a function because JSONX binds the function to the current `this` context.
 
-These functions exist because there are instances where JSONX is delivered via JSON and JavaScript functions are not valid JSON values. Evaluation props are typically used sparingly when JXM is sent server-side. In practice, there are many ways to pass functions as values (especially if they are bound to JSONX, then you can always reference functions by access properties off of `this` by using `thiscontext`).
+These props exist for cases where JSONX is delivered as JSON and JavaScript functions cannot be included directly. Use them sparingly. In many cases, it is better to register functions in code and reference them through `thiscontext` or another traverse prop.
 
 ### Example Evaluation Props
 
@@ -259,7 +244,7 @@ These functions exist because there are instances where JSONX is delivered via J
 
 ### <a name="evaluation-spreadcomponent">\_\_spreadComponent</a> and <a name="evaluation-spread">\_\_spread</a>
 
-The `__spreadComponent` advanced prop is a component that maps over the `JXM.__spread` prop. Typically `__spreadComponent` used to render the same a component mapped to data from an array. Each element of the `JXM.__spread` array is passed into the child `__spreadComponent` as `JXM.__item` . `JXM.__spread` is usually set using a traverse prop to assign the property.
+`__spreadComponent` maps one JSONX component over the data in `JXM.__spread`. Each item in the `JXM.__spread` array is passed into the child component as `JXM.__item`. `JXM.__spread` is usually assigned with a traverse prop.
 
 ```typescript
 const JXM = {
@@ -286,8 +271,8 @@ const JXM = {
       _children:['__item','name']
     }
   },
-}; 
-/* => { 
+};
+/* => {
   component:'ul', children: [
     {
       component:'li', children:'bob smith',
@@ -298,7 +283,7 @@ const JXM = {
     {
       component:'li', children:'billy bob',
     }
-  ] 
+  ]
 };*/
 ```
 
@@ -313,11 +298,11 @@ const JXM = {
   </tr>
 </table>
 
-### <a name="evaluation-dangerouslyinsertfunctioncomponents">\_\_dangerouslyInsertFunctionComponents</a>, <a name="evaluation-dangerouslyinsertclasscomponents">\_\_dangerouslyInsertClassComponents</a>, <a name="evaluation-dangerouslyinsertcomponents">\_\_dangerouslyInsertComponents</a>, <a name="evaluation-dangerouslyinsertreactcomponents">\_\_dangerouslyInsertReactComponents</a>, <a name="evaluation-dangerouslyinsertjsonxcomponents">\_\_dangerouslyInsertJSONXComponents</a>, <a name="evaluation-windowcomponents">\_\_windowComponents</a>, <a name="evaluation-windowcomponentprops">\_\_windowComponentProps</a>,
+### <a name="evaluation-dangerouslyinsertfunctioncomponents">\_\_dangerouslyInsertFunctionComponents</a>, <a name="evaluation-dangerouslyinsertclasscomponents">\_\_dangerouslyInsertClassComponents</a>, <a name="evaluation-dangerouslyinsertcomponents">\_\_dangerouslyInsertComponents</a>, <a name="evaluation-dangerouslyinsertreactcomponents">\_\_dangerouslyInsertReactComponents</a>, <a name="evaluation-dangerouslyinsertjsonxcomponents">\_\_dangerouslyInsertJSONXComponents</a>, <a name="evaluation-windowcomponents">\_\_windowComponents</a>, and <a name="evaluation-windowcomponentprops">\_\_windowComponentProps</a>
 
-The component evaluation props all assign React Elements to props. This pattern is very common in charting libraries when you need to customize labels. Typically you would assign a custom component to a prop and the component you are using would insert the customized component appropriately.
+Component evaluation props assign React elements or components to props. This pattern is common in charting libraries, where a chart accepts a custom label, tick, or tooltip component as a prop.
 
-The most common pattern is a Function component as a prop. Using function components or class components as props require understanding how to create components with JSONX. Read [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html) for more information.
+The most common pattern is a function component passed as a prop. Passing function or class components through JSONX requires the generated component helpers. Read [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/) for more information.
 
 ### Example Evaluation Props
 
@@ -330,16 +315,15 @@ The most common pattern is a Function component as a prop. Using function compon
   </tr>
 </table>
 
-
 ### <a name="evaluation-functionprops">\_\_functionProps</a> (legacy)
 
-The evaluation prop `__functionProps` is another way to assign a function value to a property in `JXM.props`. There are two ways of using `__functionProps`, one way for predefined functions and another way for dynamic functions. Using `__functionProps` may be deprecated in the future.
+The evaluation prop `__functionProps` is a legacy way to assign functions to `JXM.props`. Prefer the newer evaluation props for new work.
 
 #### predefined functions (legacy)
 
-`__functionProps` can assign values from functions that exist on `this.props` (e.g. using something like react-router and accessing this.props.reduxRouter.push) or functions that exist on the `window` object (like window.console.log).
+`__functionProps` can assign functions that exist on `this.props`, such as `this.props.reduxRouter.push`, or functions that exist on `window`, such as `window.console.log`.
 
-Properties are assigned by using the value of the function by access the property as a string, prefixed with "func:". Function props merge onto `jsonx.props` after evaluating each function string.
+Properties are assigned by reading a function path from a string prefixed with `func:`. Function props merge onto `jsonx.props` after each function string resolves.
 
 ```javascript
 const JXM = {
@@ -357,7 +341,7 @@ const JXM = {
 
 #### inline functions (legacy)
 
-`__functionProps` can also generate functions from a string in a much less elegant way than using `__dangerouslyEvalProps` or `__dangerouslyBindEvalProps`. It's very cumbersome but you define the string of the function body `JXM.__inline[name-of-func]` and reference the function on `__functionProps` by prefixing the function with `func:inline` (e.g. `JXM.__functionProps[func:inline[name-of-function]]`). You can also use the `__functionargs` advanced props to bind `JXM.prop` properties to parameters of the inline function.
+`__functionProps` can also generate functions from strings. This legacy approach is more cumbersome than `__dangerouslyEvalProps` or `__dangerouslyBindEvalProps`. Define the function body at `JXM.__inline[name]`, then reference it from `__functionProps` with `func:inline.name`. Use `__functionargs` to bind `JXM.props` values to inline function arguments.
 
 ```javascript
 const JXM = {
@@ -392,9 +376,9 @@ const JXM = {
 
 ## <a name="format-props">3. Format Props </a>
 
-_([___stringifyChildren](#format-stringifychildren), [___toStringChildren](#format-tostringchildren), [___toNumeral](#format-tonumeral), [____JSDatetoLuxonString](#format-jsdatetoluxonstring), [___ISOtoLuxonString](#format-isotoluxonstring), [___FromLuxonTimeZone](#format-fromluxontimezone))_
+_([___stringifyChildren](#format-stringifychildren), [___toStringChildren](#format-tostringchildren), [___toNumeral](#format-tonumeral), [___JSDatetoLuxonString](#format-jsdatetoluxonstring), [___ISOtoLuxonString](#format-isotoluxonstring), [___FromLuxonTimeZone](#format-fromluxontimezone))_
 
-Format Props are properties that are used to convert JXM.children values to strings. Format Props are used because the `children` parameter of `React.createElement` can only be a string or an array of React Elements.
+Format props convert `JXM.children` values to strings. They are useful when raw values need display formatting before React receives them as children.
 
 ### <a name="format-stringifychildren">\_\_\_stringifyChildren</a>
 
@@ -446,7 +430,7 @@ const JXM = {
 
 ### <a name="format-isotoluxonstring">\_\_\_ISOtoLuxonString</a> & <a name="format-fromluxontimezone">\_\_\_FromLuxonTimeZone</a>
 
-The `___ISOtoLuxonString` format property converts the `JXM.children` property to a string by calling `Luxon.DateTime.fromISO(JXM.children).toFormat(JXM.___ISOtoLuxonString)`. You can set the timezone of the ISO string by using the `___FromLuxonTimeZone` format Prop. See luxon formatting options from the [luxon formatting docs](https://moment.github.io/luxon/docs/manual/formatting.html).
+The `___ISOtoLuxonString` format property converts the `JXM.children` property to a string by calling `Luxon.DateTime.fromISO(JXM.children).toFormat(JXM.___ISOtoLuxonString)`. Set the time zone with the `___FromLuxonTimeZone` format prop. See Luxon formatting options in the [Luxon formatting docs](https://moment.github.io/luxon/docs/manual/formatting.html).
 
 ```typescript
 const JXM_NY = {
@@ -481,10 +465,10 @@ const JXM_LA = {
 
 _([__template](#utility-template), [passprops](#utility-passprops), [debug](#utility-debug), [test](#utility-test))_
 
-Utility props generally do not mutate `JXM.props` but are used to augment the expected behavior of JSONX.
+Utility props support rendering behavior without directly becoming regular React props.
 
 ### <a name="utility-debug">debug</a>
-The debug flag outputs the value of the `JXM` object where `JXM.debug === true` and the value of all of the computed advanced props as well.
+The `debug` flag logs the `JXM` object and computed advanced props when `JXM.debug === true`.
 
 ```typescript
 const JXM = {
@@ -497,7 +481,7 @@ const JXM = {
 };
 
 //outputs to console:
-/* { 
+/* {
   jsonx: {
     component: "div",
     children: "Debug JXM Data",
@@ -512,7 +496,7 @@ const JXM = {
 }*/
 ```
 ### <a name="utility-test">test</a>
-The test flag outputs the value of the `JXM` object where `JXM.test === true` as a string.
+The `test` flag outputs the calculated render data as a string when `JXM.test === true`.
 
 ```typescript
 const JXM = {
@@ -522,7 +506,7 @@ const JXM = {
 };
 
 //outputs as a string component:
-/* { 
+/* {
   element: "div",
   children: "Debug JXM Data",
   test: true
@@ -530,7 +514,7 @@ const JXM = {
 ```
 
 ### <a name="utility-passprops">passprops</a>
-The passprops flag passess the props from the parent `JXM` object to each `JXM.children` JXM Object except for the `JXM.props.style` property.
+The `passprops` flag passes props from the parent `JXM` object to each child JXM object except `JXM.props.style`.
 
 ```typescript
 const JXM = {
@@ -580,7 +564,7 @@ const JXM = {
 */
 ```
 
-You can also pass a select number of props by specifying which props to pass 
+You can pass only selected props by listing the prop names.
 ```javascript
 const JXM = {
   component: 'div',
@@ -627,7 +611,7 @@ const JXM = {
 ```
 
 ### <a name="utility-template">___template</a>
-The `___template` advanced prop (should really only be used server-side but works in the browser too) will load JXM objects from an external file (or URL client side - note in the browser this is a synchronous request).
+The `___template` advanced prop loads JXM objects from an external file. It is mainly useful on the server. It can also load a URL in the browser, but that browser request is synchronous.
 
 ```typescript
 
@@ -636,7 +620,7 @@ const JXM = {
   ___template:'path/to/some/jxm/json/file'
 }
 // path/to/some/jxm/json/file = { component: "section", children: "from external template"}
-/* computes: 
+/* computes:
 {
   component:'div',
   children:[{ component: "section", children: "from external template"}]
@@ -662,13 +646,13 @@ const JXM = {
 
 _([comparisonprops](#display-comparisonprops), [comparisonorprops](#display-comparisonorprops))_
 
-Display Props are properties that are used to determine if a React Element rendered from a JXM Object should be rendered. Display props enable conditional logic based on the value of props to determine if an element should be shown.
+Display props determine whether a React element rendered from a JXM object should be shown. They add conditional rendering based on prop values.
 
 ### [comparisonprops](#display-comparisonprops) and [comparisonorprops](#display-comparisonorprops)
 
-The display prop `comparisionprops` is used to conditionally show elements if all of the comparisons are truthy. `comparisonprops` works by comparing an array of left and right side values, if they are all true, the component is rendered. If `JXM.comparisonorprops` is set to true then only one condition needs to be true to render the component.
+The display prop `comparisonprops` conditionally renders elements when comparisons pass. By default, every comparison must be true. If `JXM.comparisonorprops` is true, only one comparison needs to be true.
 
-The comparison values can either be literal values or the value can be a reference to any `JXM.props` value. References to values in `JXM.props` are accessed in the same way you would use traverse props, where the prop being traversed is `JXM.props`.
+Comparison values can be literal values or references to `JXM.props` values. References use the same path-array format as traverse props, with `JXM.props` as the source object.
 
 ```javascript
 //and conditions
@@ -759,16 +743,15 @@ switch (opscompares.operation) {
 </table>
 
 ---
-## <a name="applied-props">6. applied Props</a>
+## <a name="applied-props">6. Applied Props</a>
 
 _([useformregister](#applied-useformregister), [useremoveprops](#applied-useremoveprops), [useincludeprops](#applied-useincludeprops))_
 
+Applied props are helper properties that modify other JSONX properties.
 
-Applied Props are properties that are helper properties that are used modify other jsonx properties.
+### [useformregister](#applied-useformregister)
 
-### [useformregister](#applied-useformregister) 
-
-The applied prop `useformregister` is a prop that passes a React Hook Form register to a component. It is a short cut for having to added the reference to the form reference manually.
+The applied prop `useformregister` passes a React Hook Form register function to a component. It avoids manually wiring the form reference.
 
 ```javascript
 jsonx = {
@@ -790,9 +773,9 @@ jsonx = {
   },
 };
 ```
-### [useremoveprops](#applied-useremoveprops) 
+### [useremoveprops](#applied-useremoveprops)
 
-The applied prop `useremoveprops` is a prop that removes a list of props from the JXM Object. It is usually used in conjunction with passprops when you want to remove extra passed props.
+The applied prop `useremoveprops` removes a list of props from the JXM object. It is usually used with `passprops` when child components should not receive every parent prop.
 
 ```javascript
 jsonx = {
@@ -814,9 +797,9 @@ jsonx = {
 };
 ```
 
-### [useincludeprops](#applied-useincludeprops) 
+### [useincludeprops](#applied-useincludeprops)
 
-The applied prop `useincludeprops` is a prop that removes all props from the JXM Object except for a list specified props. It is usually used in conjunction with passprops when you want to remove extra passed props.
+The applied prop `useincludeprops` removes all props from the JXM object except the listed props. It is usually used with `passprops` when a child component should receive only a small prop set.
 
 ```javascript
 jsonx = {
@@ -840,17 +823,4 @@ jsonx = {
 ```
 ---
 
-## Next: [External and Custom Components](../using-external-and-custom-components/index.html)
-
-
-### JSONX Manual
-
-- [Home](https://repetere.github.io/jsonx/)
-- [Getting Started](../getting-started/index.html)
-- [Using Advanced Props](../using-advanced-props/index.html)
-- [External and Custom Components](../using-external-and-custom-components/index.html)
-- [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
-- [JSONX & JXM Spec](../spec/index.html)
-- [Samples](../samples/index.html)
-- [Roadmap](../roadmap/index.html)
-- [Full API Docs](../../index.html)
+## Next: [External And Custom Components](../using-external-and-custom-components/)

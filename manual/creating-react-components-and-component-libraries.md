@@ -1,39 +1,23 @@
-<link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+# Creating React Components And Component Libraries
 
----
-### JSONX Manual
- - [Home](https://repetere.github.io/jsonx/)
- - [Getting Started](../getting-started/index.html)
- - [Using Advanced Props](../using-advanced-props/index.html)
- - [External and Custom Components](../using-external-and-custom-components/index.html)
- - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
- - [JSONX & JXM Spec](../spec/index.html)
- - [Samples](../samples/index.html)
- - [Roadmap](../roadmap/index.html)
- - [Full API Docs](../../index.html)
----
+JSONX can generate function, class, dynamic, and form components from JSONX definitions. Use this when component definitions need to be data. For most application code, bundling components normally and registering them through `reactComponents` or `componentLibraries` is simpler and faster.
 
-
-# Creating new components
-
-"With great power comes great responsibility". Just because you can create new Class and Function components with JSONX it doesn't mean you should. Typically, components should be bundled as UMDs and imported as Custom/External components to optimize performance.
-
--  [1. Function Components](#function-component) - Use `jsonx._jsonxComponents.getReactFunctionComponent` and JXM to create React Function Components with JSON. Because JSONX can uses React under the hood, all React features are available (e.g. Hooks, Lazy and Suspense). 
--  [2. Class Components](#class-component) - Use `jsonx._jsonxComponents.getReactClassComponent` and JXM to create React Class Components with JSON
--  [3. Dynamic Components](#dynamic-component) - Use `jsonx._jsonxComponents.DynamicComponent` is a special component that renders components after fetching data.
--  [4. Form Components](#form-component) - Use `jsonx._jsonxComponents.FormComponent` is a special component that create forms with react-hook-form.
+-  [1. Function Components](#function-component) - Use `jsonx._jsonxComponents.getReactFunctionComponent` and JXM to create React function components with JSON.
+-  [2. Class Components](#class-component) - Use `jsonx._jsonxComponents.getReactClassComponent` and JXM to create React class components with JSON.
+-  [3. Dynamic Components](#dynamic-component) - Use `jsonx._jsonxComponents.DynamicComponent` to fetch data and render a JSONX component after the data resolves.
+-  [4. Form Components](#form-component) - Use `jsonx._jsonxComponents.FormComponent` to create forms with React Hook Form.
 
 ## <a name="function-component">1. Function Components </a>
 
-There are two ways to create function components, either using `jsonx._jsonxComponents.getReactFunctionComponent` or `jsonx._jsonxComponents.makeFunctionComponent`. `makeFunctionComponent` is a shortcut to using `getReactFunctionComponent`. The difference in component creation with `makeFunctionComponent` is you can just call that function by passing a regular JavaScript function and underneath the hood, that function will be decomposed into the arguments to the `getReactFunctionComponent` function.
+There are two ways to create function components: `jsonx._jsonxComponents.getReactFunctionComponent` and `jsonx._jsonxComponents.makeFunctionComponent`. `makeFunctionComponent` is a shortcut for passing a regular JavaScript function. JSONX reads that function and converts it into the arguments used by `getReactFunctionComponent`.
 
 ```TypeScript
 function myComponent(){
-  const [count,setCount] = useState() // you can use any react function inside your function
-  const exposeprops = {count,setCount}; // you have to define what props you want passed to your rendered component
-  return {// you need to return JSONX JSON
+  const [count,setCount] = useState() // you can use any React hook inside your function
+  const exposeprops = {count,setCount}; // define what props should be available to the rendered component
+  return {// return JSONX JSON
     component:'div',
-    passprops:true, //set to true so you can pass 'count' and 'setCount' to child elements 
+    passprops:true, //set to true so you can pass 'count' and 'setCount' to child elements
     children: [
       { component:'span', children:'Clicked Count' },
       {
@@ -54,11 +38,10 @@ function myComponent(){
   }
 }
 
-jsonx._jsonxComponents.makeFunctionComponent(myComponent) // return React Function Component
+jsonx._jsonxComponents.makeFunctionComponent(myComponent) // returns a React function component
 ```
 
-
-JSONX exposes the `jsonx._jsonxComponents.getReactFunctionComponent` function that can you can use to create React Function Components. 
+JSONX exposes `jsonx._jsonxComponents.getReactFunctionComponent` for creating React function components.
 
 ```typescript
 export function getReactFunctionComponent(
@@ -69,10 +52,9 @@ export function getReactFunctionComponent(
 ```
 
 `getReactFunctionComponent` takes three arguments:
-  1. `reactComponent` which contains the JXM JSON for rendering the Function Component.
-  2. `functionBody` which is a string for the Function component (if you are using hooks or want to expose props from inside of your components, assign the props you want to make available to an `exposeprops` variable)
-  3. `options` used to customize `getReactFunctionComponent`.
-
+  1. `reactComponent`, which contains the JXM JSON for rendering the function component.
+  2. `functionBody`, which is a string body for the function component. If you use hooks or need to expose values from inside the component, assign those values to an `exposeprops` variable.
+  3. `options`, which customize `getReactFunctionComponent`.
 
 ```typescript
 const hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
@@ -131,7 +113,7 @@ const hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
 ---
 ## <a name="class-component">2. Class Components </a>
 
-JSONX exposes the `jsonx._jsonxComponents.getReactClassComponent` function that can you can use to create React Class Components. `getReactClassComponent` uses `createReactClass` underneath the hood. You can read more about using `createReactClass` in the React docs section about ["React Without ES6"](https://reactjs.org/docs/react-without-es6.html).
+JSONX exposes `jsonx._jsonxComponents.getReactClassComponent` for creating React class components. `getReactClassComponent` uses `createReactClass`.
 
 ```typescript
 export function getReactClassComponent(
@@ -140,9 +122,9 @@ export function getReactClassComponent(
 ): ReactComponentLike
 ```
 
-`getReactClassComponent` takes two arguments `reactComponent` which contains the arguments passed to `createReactClass` and an `options` argument.
+`getReactClassComponent` takes two arguments: `reactComponent`, which contains the arguments passed to `createReactClass`, and `options`.
 
-The only required function in the `reactComponent` parameter object is a render function, the body of the function has to be valid JXM JSON. Each property in the object has two properties a `body` property whose value is the function body and an `arguments` property which defines the parameters for the function.
+The only required function in the `reactComponent` object is `render`. The render body must be valid JXM JSON. Other lifecycle or helper methods use a `body` value for the function body and an `arguments` array for the function parameters.
 
 ```javascript
 const reactComponent = {
@@ -184,7 +166,7 @@ const reactComponent = {
   // Prop change functions
   //
   componentWillReceiveProps: {
-    body:'console.log("will recieve props",{nextProps}); return true;',
+    body:'console.log("will receive props",{nextProps}); return true;',
     arguments:['nextProps']
   },
   //
@@ -223,15 +205,14 @@ const JXM = {
   }
 };
 const boundConfig = {
-  debug:true, 
+  debug:true,
   reactComponents:{
     MyCustomComponent,
   }
 };
 
-
 jsonx.jsonxRender.call(boundConfig, {
-  jsonx: JXM, 
+  jsonx: JXM,
   querySelector:'#main', });
 ```
 
@@ -243,7 +224,6 @@ Console output after mounting
 "this.state"
 {status: "not-loaded", name: "jsonx test", customNumber: 1}
 ```
-
 
 ### Example Class Components
 
@@ -258,15 +238,13 @@ Console output after mounting
 
 ---
 
-
 ## <a name="dynamic-component">3. Dynamic Components </a>
 
+JSONX has a helper component called `DynamicComponent`. Use it when a JSONX component needs to fetch data before rendering.
 
-JSONX has a helper component called `DynamicComponent`. Using `DynamicComponent` allows you to create components that load data and render asynchronously. 
+The common use case is a dashboard or page where sections load data independently. `DynamicComponent` handles this without requiring Suspense or lazy loading.
 
-The typical use case is if you have some kind of dashboard or components that are independently loading data, Dynamic Components are a convenient way to handle dynamic components without Suspense and Lazy Components (they use hooks under the hood). 
-
-Once the data is fetched, the `jsonx` object passed is rendered and the resolved data is available as  `resourceprops.DynamicComponentData`.
+After the data is fetched, JSONX renders the `jsonx` object passed in `props`. The resolved data is available as `resourceprops.DynamicComponentData`.
 
 ```typescript
 const JXM = {
@@ -288,16 +266,14 @@ const JXM = {
 
 ```typescript
 const dynamicComponent = jsonx.getReactElementFromJSONX({
-  {
-    component:'DynamicComponent',
-    props:{
-      fetchURL:'/path/to/some/data'
-      jsonx:{
-        component:'p',
-        children:'loaded data',
-      }
+  component:'DynamicComponent',
+  props:{
+    fetchURL:'/path/to/some/data',
+    jsonx:{
+      component:'p',
+      children:'loaded data',
     }
-  },
+  }
 });
 ```
 
@@ -315,14 +291,13 @@ const dynamicComponent = jsonx.getReactElementFromJSONX({
 
 ## <a name="form-component">4. Form Components </a>
 
+JSONX has a helper component called `FormComponent`. `FormComponent` creates forms with [React Hook Form](https://react-hook-form.com/) without requiring another form wrapper.
 
-JSONX has a helper component called `FormComponent`. Using `FormComponent` allows you to create forms with [react-hook-form](https://react-hook-form.com/) without needed to add external form libraries.
+Form components work by creating a function component that uses the `useForm` hook. You can customize `useForm` with schema validation through Yup or other supported `useForm` options.
 
-Form components work by creating a Function Component that uses the `useForm` hook. You can customize `useForm` by adding schema validations via `Yup` or any of the other optional arguments on [useForm](https://react-hook-form.com/api#useForm).
+Pass the form fields through the `formComponent` JXM property. By default, `FormComponent` wraps the fields with `form onSubmit={handleSubmit(props.onSubmit)}`. Replace that wrapper with `formWrapperComponent` when you need custom form markup.
 
-The actual form elements are passed through the formComponent JXM property. By Default FormComponents are wrapped with `form onSubmit={handleSubmit(props.onSubmit)}` but the default wrapper can be overwritten with the `formWrapperComponent`.
-
-FormComponents will add an additional reactComponentLibrary called `ReactHookForm` with the `Controller` and `ErrorMessage` components included. All of the methods returned from the `useForm` hook are bound to the function context on the `this.reactHookForm` property. This is useful when you need to customize and pass registers, errors and other react-hook-form functionality into your JXM JSON Object.
+`FormComponent` adds a `ReactHookForm` component library with `Controller` and `ErrorMessage`. Methods returned from the `useForm` hook are bound to `this.reactHookForm`. Use that context when JSONX needs access to registration, errors, or other React Hook Form behavior.
 
 ```typescript
 const JXM = {
@@ -337,18 +312,16 @@ const JXM = {
 ```
 
 ```typescript
-const dynamicComponent = jsonx.getReactElementFromJSONX({
-  {
-    component:'FormComponent',
-    props:{
-      onSubmit: (data) => { console.log({ submitData: data }) },
-      formComponent:{
-        component: "input",
-        props: { type: "text", name: "username", placeholder: "username" },
-        thiscontext:{ ref:['reactHookForm','register'] },
-      },
-    }
-  },
+const formComponent = jsonx.getReactElementFromJSONX({
+  component:'FormComponent',
+  props:{
+    onSubmit: (data) => { console.log({ submitData: data }) },
+    formComponent:{
+      component: "input",
+      props: { type: "text", name: "username", placeholder: "username" },
+      thiscontext:{ ref:['reactHookForm','register'] },
+    },
+  }
 });
 ```
 
@@ -365,15 +338,4 @@ const dynamicComponent = jsonx.getReactElementFromJSONX({
 
 ---
 
-## [JSONX & JXM Spec](../spec/index.html)
-
-### JSONX Manual
- - [Home](https://repetere.github.io/jsonx/)
- - [Getting Started](../getting-started/index.html)
- - [Using Advanced Props](../using-advanced-props/index.html)
- - [External and Custom Components](../using-external-and-custom-components/index.html)
- - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
- - [JSONX & JXM Spec](../spec/index.html)
- - [Samples](../samples/index.html)
- - [Roadmap](../roadmap/index.html)
- - [Full API Docs](../../index.html)
+## [JSONX And JXM Spec](../spec/)

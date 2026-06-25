@@ -8,7 +8,7 @@
 
 JSONX gives you a JSON-based rendering layer for React. A JSONX object describes the component, props, children, templates, and resource bindings. The library resolves that structure into React output for browser rendering, server-side HTML rendering, Express views, or generated component flows.
 
-JSONX is not a replacement for React, a design system, or just a JSON-to-HTML tool. It is useful when React views need to be generated, serialized, audited, stored in files, returned from APIs, or moved through a system as data.
+JSONX is not a replacement for React or a design system. HTML rendering is one output path. It is useful when React views need to be generated, serialized, audited, stored in files, returned from APIs, or moved through a system as data.
 
 ### Data-Driven React
 
@@ -25,25 +25,19 @@ JSONX supports DOM components, custom component maps, component libraries, funct
 ## Installation
 
 ```sh
-$ npm i jsonx
+$ npm i jsonx react react-dom
 ```
 
-### [Full Documentation](https://repetere.github.io/jsonx/)
+### Documentation
 
-
-<link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
-
----
-### JSONX Manual
- - [Getting Started](https://repetere.github.io/jsonx/manual/getting-started/index.html)
- - [Using Advanced Props](https://repetere.github.io/jsonx/manual/using-advanced-props/index.html)
- - [External and Custom Components](https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html)
- - [Creating React Components and Component Libraries](https://repetere.github.io/jsonx/manual/creating-react-components-and-component-libraries/index.html)
- - [JSONX & JXM Spec](https://repetere.github.io/jsonx/manual/spec/index.html)
- - [Samples](https://repetere.github.io/jsonx/manual/samples/index.html)
- - [Roadmap](https://repetere.github.io/jsonx/manual/roadmap/index.html)
- - [Full API Docs](https://repetere.github.io/jsonx/)
----
+- [Getting Started](https://jsonx.net/manual/getting-started/)
+- [Using Advanced Props](https://jsonx.net/manual/using-advanced-props/)
+- [External and Custom Components](https://jsonx.net/manual/using-external-and-custom-components/)
+- [Creating React Components and Component Libraries](https://jsonx.net/manual/creating-react-components-and-component-libraries/)
+- [JSONX And JXM Spec](https://jsonx.net/manual/spec/)
+- [Samples](https://jsonx.net/manual/samples/)
+- [Roadmap](https://jsonx.net/manual/roadmap/)
+- [Full API Docs](https://jsonx.net/modules.html)
 
 ### Basic Usage
 ```javascript
@@ -61,7 +55,7 @@ jsonx.getReactElement(example_JXM_JSON); // => JSX Equivalent: <p style={{color:
 jsonx.outputHTML({ jsonx: example_JXM_JSON, }); // => '<p style="color:blue;">hello world</p>'
 
 //Generating JSX strings
-jsonx.outputJSX({ jsonx: example_JXM_JSON, }); // => '<p style={{color:blue,}}>hello world</p>'
+jsonx.outputJSX(example_JXM_JSON); // => '<p style={{color:blue,}}>hello world</p>'
 
 //Rendering HTML Dom with React
 jsonx.jsonxRender({ jsonx: example_JXM_JSON, querySelector:'#myApp', });
@@ -80,7 +74,7 @@ const simpleJXM_JSON = {
   }
 }
 
-//or if you have an element with no props, simply use {type:children}
+//or if you have an element with no props, use {type:children}
 const superSimpleJXM = {
   ul:[
     {li:'first!'},
@@ -92,7 +86,7 @@ const superSimpleJXM = {
 
 ### JXM JSON Spec
 
-JSONX works by using JXM JSON to create React elements. JXM JSON objects are valid JSON objects that describe React component structure in data form. The properties for JSONX JSON map to the arguments passed to [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component, which is passed as the `type` argument.
+JSONX works by using JXM JSON to create React elements. JXM JSON objects are valid JSON objects that describe React component structure in data form. The properties for JSONX JSON map to the arguments passed to [React.createElement](https://react.dev/reference/react/createElement). The only required property is the component, which is passed as the `type` argument.
 
 ```javascript
 React.createElement(
@@ -102,8 +96,7 @@ React.createElement(
 )
 ```
 
-You can pass React component libraries for additional components, or your own custom components (see [External and Custom Components](https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html)
- and [Using Advanced Props](https://repetere.github.io/jsonx/manual/using-advanced-props/index.html) for more details).
+You can pass React component libraries for additional components, or your own custom components. See [External and Custom Components](https://jsonx.net/manual/using-external-and-custom-components/) and [Using Advanced Props](https://jsonx.net/manual/using-advanced-props/) for more details.
 
 
 ### Development
@@ -122,7 +115,7 @@ $ npm run doc
 
 ### Notes
 
-Check out [https://repetere.github.io/jsonx/](https://repetere.github.io/jsonx/) for the full jsonx Documentation
+Read the full JSONX documentation at [https://jsonx.net/](https://jsonx.net/).
 
 ### Testing
 

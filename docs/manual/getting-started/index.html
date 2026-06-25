@@ -1,122 +1,209 @@
 <!DOCTYPE html><html lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Getting Started</title>
-  <link rel="stylesheet" href="https://unpkg.com/style.css">
-  <style type="text/css">
-    .markdown-body {
-      max-width: 46em;
-      margin: 2em auto;
-      padding: 0 1em;
-      overflow: hidden;
-      word-wrap: break-word;
-    }
-  </style>
-</head>
-<body>
-  <main class="markdown-body"><link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
-<!-- <script src="https://unpkg.com/highlight.js@9.18.1/lib/highlight.js"> </script> -->
-<hr>
-<h3>JSONX Manual</h3>
-<ul>
-<li><a href="https://repetere.github.io/jsonx/">Home</a></li>
-<li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
-<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
-<li><a href="../samples/index.html">Samples</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
-<li><a href="../../index.html">Full API Docs</a></li>
-</ul>
-<hr>
-<h1>Getting Started</h1>
-<p>JSONX is a React rendering library that lets you define React UI as JSON, then render it as React elements, HTML, JSX text, or browser DOM output.</p>
-<p>JSONX gives you a JSON-based rendering layer for React. A JSONX object describes the component, props, children, templates, and resource bindings. The library resolves that structure into React output for browser rendering, server-side HTML rendering, Express views, or generated component flows.</p>
-<p>JSONX works by converting JSON objects that follow the JXM spec into the arguments passed into <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component, which is passed as the <code>type</code> argument.</p>
-<pre><code class="hljs language-ts"><span class="hljs-comment">// React Create Element Example</span>
-<span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(
-  <span class="hljs-keyword">type</span>,
-  [props],
-  [...children]
-)
-
-<span class="hljs-comment">// Basic JXM</span>
-<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = { <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>, <span class="hljs-attr">props</span>: { <span class="hljs-attr">title</span>:<span class="hljs-string">'jsonx'</span>, }, <span class="hljs-attr">children</span>:<span class="hljs-string">'hello'</span>, };
-
-<span class="hljs-comment">// JSONX.getReactElement returns a react element </span>
-<span class="hljs-title class_">JSON</span>X.<span class="hljs-title function_">getReactElement</span>(<span class="hljs-variable constant_">JXM</span>) =&gt; <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">'div'</span>, { <span class="hljs-attr">title</span>: <span class="hljs-string">'jsonx'</span>, }, <span class="hljs-string">'hello'</span>);
-
-<span class="hljs-comment">// eqivalent to JSX </span>
-<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">title</span>=<span class="hljs-string">"jsonx"</span>&gt;</span>hello<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span> 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Getting Started</title>
+    <link rel="stylesheet" href="../../assets/site.css">
+    <link rel="stylesheet" href="../assets/manual.css">
+    <script src="../../assets/analytics.js" defer=""></script>
+  </head>
+  <body class="manual-page">
+    <header class="manual-header">
+      <a class="manual-brand" href="../../" aria-label="JSONX home">
+        <span class="manual-brand-mark">{}</span>
+        <span>JSONX</span>
+      </a>
+      <nav class="manual-top-nav" aria-label="Documentation">
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../using-advanced-props/">Advanced Props</a>
+        <a href="../using-external-and-custom-components/">Custom Components</a>
+        <a href="../spec/">JXM Spec</a>
+        <a href="../samples/">Samples</a>
+        <a href="../../modules.html">API Docs</a>
+      </nav>
+    </header>
+    <div class="manual-shell">
+      <aside class="manual-sidebar" aria-label="Manual navigation">
+        <nav>
+          <a href="../../">Home</a>
+          <a href="../getting-started/">Getting Started</a>
+          <a href="../using-advanced-props/">Using Advanced Props</a>
+          <a href="../using-external-and-custom-components/">External and Custom Components</a>
+          <a href="../creating-react-components-and-component-libraries/">Creating React Components and Component Libraries</a>
+          <a href="../spec/">JSONX and JXM Spec</a>
+          <a href="../samples/">Samples</a>
+          <a href="../roadmap/">Roadmap</a>
+          <a href="../../modules.html">Full API Docs</a>
+        </nav>
+      </aside>
+      <main class="manual-main">
+        <article class="markdown-body manual-content"><h1><a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Getting Started</h1>
+<p>JSONX lets React views move through a system as data. You define the view as JSON, then render it as a React element, HTML string, JSX string, browser DOM output, or Express view.</p>
+<p>Use JSX for hand-authored screens. Use JSONX when the view definition needs to be stored, generated, audited, returned from an API, or passed between services.</p>
+<h2><a id="install" class="anchor" href="#install" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install</h2>
+<pre><code class="hljs language-sh">npm i jsonx react react-dom
 </code></pre>
-<h2>Usages</h2>
-<p>JSONX is useful for:</p>
-<ul>
-<li>UI stored in files, APIs, databases, or configuration.</li>
-<li>Server-rendered React views.</li>
-<li>Dynamic component rendering.</li>
-<li>View management systems that need React views as data.</li>
-<li>Systems where React views need to be generated, serialized, audited, or moved between services.</li>
-<li>Using existing React component libraries from JSON definitions.</li>
-</ul>
-<p>JSONX is not:</p>
-<ul>
-<li>A replacement for React.</li>
-<li>A design system.</li>
-<li>A tool for running untrusted UI definitions.</li>
-<li>Just a JSON-to-HTML converter.</li>
-</ul>
-<p>For complex hand-authored application screens, JSX may still be the simpler choice. JSONX is a better fit when the view definition needs to be data.</p>
-<h2>Example</h2>
-<table style="border:0; width:100%">
-  <tbody><tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-</td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-</td>
-  </tr>
-</tbody></table>
-<h2>Customizing JSONX</h2>
-<p>The JSONX library has a couple of customization options. The library can be customized by setting the configuration on the <code>this</code> property of JSONX methods. The configuration options are:</p>
-<pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">JSON</span>XConfiguration = {
-  <span class="hljs-attr">debug</span>: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span>; <span class="hljs-comment">// used to debug component rendering errors, and will send exceptions to the logError function</span>
-  <span class="hljs-attr">logError</span>: <span class="hljs-function">(<span class="hljs-params">...args: <span class="hljs-built_in">any</span>[]</span>) =&gt;</span> <span class="hljs-built_in">any</span> = <span class="hljs-variable language_">console</span>.<span class="hljs-property">error</span>; <span class="hljs-comment">// default(console.error) by default will log errors to console.error but you can define any custom error logging function</span>
-  <span class="hljs-attr">returnJSON</span>: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span>; <span class="hljs-comment">// used to return a JSON object instead of React Components</span>
-  <span class="hljs-attr">disableRenderIndexKey</span>: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">true</span>; <span class="hljs-comment">// used to disable auto assign props.key</span>
-  <span class="hljs-attr">boundedComponents</span>: jsonx[]; <span class="hljs-comment">// array of components to bind "this" to</span>
-  <span class="hljs-attr">componentLibraries</span>: { 
-    [<span class="hljs-attr">index</span>: libraryName <span class="hljs-keyword">as</span> <span class="hljs-built_in">string</span>]: {
-      [<span class="hljs-attr">index</span>: componentName <span class="hljs-keyword">as</span> <span class="hljs-built_in">string</span>]: <span class="hljs-title class_">ReactComponentLike</span>;
-    } 
-  }; <span class="hljs-comment">// object of custom react components in component library</span>
-  <span class="hljs-attr">reactComponents</span>: { [<span class="hljs-attr">index</span>: componentName <span class="hljs-keyword">as</span> <span class="hljs-built_in">string</span>]: <span class="hljs-title class_">ReactComponentLike</span> } <span class="hljs-comment">// custom react components</span>
-}
+<p>JSONX expects React and ReactDOM to be available as peer dependencies. The package supports React 18 and React 19.</p>
+<h2><a id="create-a-view" class="anchor" href="#create-a-view" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Create A View</h2>
+<p>A JSONX object maps to the arguments passed to <code>React.createElement</code>. The only required field is <code>component</code>, which becomes the React element type.</p>
+<pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">"jsonx"</span>;
 
+<span class="hljs-keyword">const</span> view = {
+  <span class="hljs-attr">component</span>: <span class="hljs-string">"p"</span>,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">style</span>: { <span class="hljs-attr">color</span>: <span class="hljs-string">"blue"</span> },
+    <span class="hljs-attr">title</span>: <span class="hljs-string">"jsonx"</span>,
+  },
+  <span class="hljs-attr">children</span>: <span class="hljs-string">"hello world"</span>,
+};
 
-<span class="hljs-comment">//e.g</span>
+<span class="hljs-keyword">const</span> element = jsonx.<span class="hljs-title function_">getReactElement</span>(view);
+</code></pre>
+<p>That view is equivalent to this JSX:</p>
+<pre><code class="hljs language-tsx">&lt;p style={{ <span class="hljs-attr">color</span>: <span class="hljs-string">"blue"</span> }} title=<span class="hljs-string">"jsonx"</span>&gt;
+  hello world
+&lt;/p&gt;
+</code></pre>
+<h2><a id="render-output" class="anchor" href="#render-output" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Render Output</h2>
+<p>The same JSONX object can be rendered in several formats.</p>
+<pre><code class="hljs language-ts">jsonx.<span class="hljs-title function_">getReactElement</span>(view);
+jsonx.<span class="hljs-title function_">outputHTML</span>({ <span class="hljs-attr">jsonx</span>: view });
+jsonx.<span class="hljs-title function_">outputJSX</span>(view);
+jsonx.<span class="hljs-title function_">outputJSON</span>(view);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Use it when you need</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getReactElement</code></td>
+<td>A React element created from JSONX.</td>
+</tr>
+<tr>
+<td><code>outputHTML</code></td>
+<td>A server-rendered HTML string.</td>
+</tr>
+<tr>
+<td><code>outputJSX</code></td>
+<td>A JSX string for inspection, export, or debugging.</td>
+</tr>
+<tr>
+<td><code>outputJSON</code></td>
+<td>The resolved React element shape: <code>{ type, props, children }</code>.</td>
+</tr>
+<tr>
+<td><code>jsonxRender</code></td>
+<td>Browser rendering into a DOM node or portal.</td>
+</tr>
+<tr>
+<td><code>compile</code></td>
+<td>A React function component generated from JSONX.</td>
+</tr>
+<tr>
+<td><code>renderFile</code> or <code>__express</code></td>
+<td>Express-compatible view rendering from JSONX files.</td>
+</tr>
+</tbody>
+</table>
+<h2><a id="simple-syntax" class="anchor" href="#simple-syntax" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Simple Syntax</h2>
+<p>JSONX also supports a shorter object shape where the key is the component name.</p>
+<pre><code class="hljs language-ts"><span class="hljs-keyword">const</span> simpleView = {
+  <span class="hljs-attr">section</span>: {
+    <span class="hljs-attr">props</span>: { <span class="hljs-attr">className</span>: <span class="hljs-string">"intro"</span> },
+    <span class="hljs-attr">children</span>: [
+      { <span class="hljs-attr">h1</span>: <span class="hljs-string">"JSONX"</span> },
+      { <span class="hljs-attr">p</span>: <span class="hljs-string">"React UI defined as data."</span> },
+    ],
+  },
+};
 
-jsonx.<span class="hljs-property">getReactElementFromJSONX</span>.<span class="hljs-title function_">call</span>(
-  { <span class="hljs-attr">debug</span>:<span class="hljs-literal">true</span>, <span class="hljs-attr">reactComponents</span>:{<span class="hljs-title class_">ReactModal</span>}, <span class="hljs-attr">componentLibraries</span>:{ <span class="hljs-title class_">ReactBootstrap</span>, <span class="hljs-title class_">Antd</span>, } }, <span class="hljs-comment">//custom options bound to 'this' </span>
+jsonx.<span class="hljs-title function_">getReactElement</span>(simpleView);
+</code></pre>
+<p>Use the full form when you need explicit <code>component</code>, <code>props</code>, or advanced JSONX behavior. Use simple syntax when the structure is small and readable.</p>
+<h2><a id="custom-components" class="anchor" href="#custom-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Custom Components</h2>
+<p>Pass custom React components through <code>reactComponents</code> or grouped component libraries through <code>componentLibraries</code>.</p>
+<pre><code class="hljs language-ts">jsonx.<span class="hljs-property">getReactElement</span>.<span class="hljs-title function_">call</span>(
   {
-    <span class="hljs-attr">component</span>:<span class="hljs-string">'ReactBootstrap.Container'</span>, <span class="hljs-attr">children</span>:<span class="hljs-string">'hello world'</span>
-  });
+    <span class="hljs-attr">reactComponents</span>: { <span class="hljs-title class_">Hero</span> },
+    <span class="hljs-attr">componentLibraries</span>: { <span class="hljs-title class_">DesignSystem</span> },
+  },
+  {
+    <span class="hljs-attr">component</span>: <span class="hljs-string">"DesignSystem.Button"</span>,
+    <span class="hljs-attr">props</span>: { <span class="hljs-attr">variant</span>: <span class="hljs-string">"primary"</span> },
+    <span class="hljs-attr">children</span>: <span class="hljs-string">"Start"</span>,
+  },
+);
 </code></pre>
-<h2>Next: <a href="../using-advanced-props/index.html">Using Advanced Props</a></h2>
-<hr>
-<h3>JSONX Manual</h3>
+<h2><a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuration</h2>
+<p>JSONX methods read configuration from the <code>this</code> context passed with <code>.call</code>.</p>
+<pre><code class="hljs language-ts">jsonx.<span class="hljs-property">getReactElement</span>.<span class="hljs-title function_">call</span>(
+  {
+    <span class="hljs-attr">debug</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">logError</span>: <span class="hljs-variable language_">console</span>.<span class="hljs-property">error</span>,
+    <span class="hljs-attr">returnJSON</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">disableRenderIndexKey</span>: <span class="hljs-literal">true</span>,
+  },
+  view,
+);
+</code></pre>
+<p>Common options:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>debug</code></td>
+<td>Log render failures and return more diagnostic output.</td>
+</tr>
+<tr>
+<td><code>logError</code></td>
+<td>Replace the default error logger.</td>
+</tr>
+<tr>
+<td><code>returnJSON</code></td>
+<td>Return <code>{ type, props, children }</code> instead of a React element.</td>
+</tr>
+<tr>
+<td><code>disableRenderIndexKey</code></td>
+<td>Disable automatic index-based <code>key</code> assignment.</td>
+</tr>
+<tr>
+<td><code>boundedComponents</code></td>
+<td>Bind selected components to the current context.</td>
+</tr>
+<tr>
+<td><code>reactComponents</code></td>
+<td>Register custom components by name.</td>
+</tr>
+<tr>
+<td><code>componentLibraries</code></td>
+<td>Register grouped component libraries by namespace.</td>
+</tr>
+<tr>
+<td><code>customComponents</code></td>
+<td>Generate components from JSONX component definitions.</td>
+</tr>
+</tbody>
+</table>
+<h2><a id="trusted-input" class="anchor" href="#trusted-input" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Trusted Input</h2>
+<p>JSONX can evaluate strings and create functions through advanced props such as <code>__dangerouslyEvalProps</code>, <code>__dangerouslyBindEvalProps</code>, and <code>__dangerouslyEvalAllProps</code>. Treat those paths as trusted-caller features. Do not run untrusted JSONX definitions with evaluation enabled.</p>
+<p>For safer runtime validation, use <code>jsonx._jsonxUtils.validateJSONX</code> before rendering user-authored or external JSONX.</p>
+<h2><a id="next" class="anchor" href="#next" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Next</h2>
 <ul>
-<li><a href="https://repetere.github.io/jsonx/">Home</a></li>
-<li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
-<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
-<li><a href="../samples/index.html">Samples</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
-<li><a href="../../index.html">Full API Docs</a></li>
+<li>Read <a href="../using-advanced-props/">Using Advanced Props</a> for data binding, templates, display rules, and format props.</li>
+<li>Read <a href="../using-external-and-custom-components/">External and Custom Components</a> for component maps and libraries.</li>
+<li>Read the <a href="../spec/">JSONX and JXM Spec</a> for the full object shape.</li>
 </ul>
-</main>
+</article>
+      </main>
+    </div>
 
 
 </body></html>

@@ -1,51 +1,62 @@
 <!DOCTYPE html><html lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Roadmap</title>
-  <link rel="stylesheet" href="https://unpkg.com/style.css">
-  <style type="text/css">
-    .markdown-body {
-      max-width: 46em;
-      margin: 2em auto;
-      padding: 0 1em;
-      overflow: hidden;
-      word-wrap: break-word;
-    }
-  </style>
-</head>
-<body>
-  <main class="markdown-body"><link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
-<hr>
-<h3>JSONX Manual</h3>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Roadmap</title>
+    <link rel="stylesheet" href="../../assets/site.css">
+    <link rel="stylesheet" href="../assets/manual.css">
+    <script src="../../assets/analytics.js" defer=""></script>
+  </head>
+  <body class="manual-page">
+    <header class="manual-header">
+      <a class="manual-brand" href="../../" aria-label="JSONX home">
+        <span class="manual-brand-mark">{}</span>
+        <span>JSONX</span>
+      </a>
+      <nav class="manual-top-nav" aria-label="Documentation">
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../using-advanced-props/">Advanced Props</a>
+        <a href="../using-external-and-custom-components/">Custom Components</a>
+        <a href="../spec/">JXM Spec</a>
+        <a href="../samples/">Samples</a>
+        <a href="../../modules.html">API Docs</a>
+      </nav>
+    </header>
+    <div class="manual-shell">
+      <aside class="manual-sidebar" aria-label="Manual navigation">
+        <nav>
+          <a href="../../">Home</a>
+          <a href="../getting-started/">Getting Started</a>
+          <a href="../using-advanced-props/">Using Advanced Props</a>
+          <a href="../using-external-and-custom-components/">External and Custom Components</a>
+          <a href="../creating-react-components-and-component-libraries/">Creating React Components and Component Libraries</a>
+          <a href="../spec/">JSONX and JXM Spec</a>
+          <a href="../samples/">Samples</a>
+          <a href="../roadmap/">Roadmap</a>
+          <a href="../../modules.html">Full API Docs</a>
+        </nav>
+      </aside>
+      <main class="manual-main">
+        <article class="markdown-body manual-content"><h1><a id="roadmap" class="anchor" href="#roadmap" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Roadmap</h1>
+<p>The current priority is documentation quality and API clarity. JSONX already has broad rendering support, but the manual should make the main paths easier to learn and separate stable usage from legacy or trusted-caller behavior.</p>
+<h2><a id="documentation-work" class="anchor" href="#documentation-work" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Documentation Work</h2>
 <ul>
-<li><a href="https://repetere.github.io/jsonx/">Home</a></li>
-<li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
-<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
-<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
-<li><a href="../samples/index.html">Samples</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
-<li><a href="../../index.html">Full API Docs</a></li>
+<li>Keep the manual source in <code>manual/</code> and generated HTML in <code>docs/manual/</code>.</li>
+<li>Move shared navigation and page chrome into the manual layout instead of repeating it in every markdown file.</li>
+<li>Keep examples small enough to read inline before linking to JSFiddle.</li>
+<li>Link to <code>jsonx.net</code> as the canonical site.</li>
 </ul>
-<hr>
-<h1>Roadmap</h1>
-<p>More info coming soon!</p>
-<hr>
-<h2><a href="../../index.html">Full API Docs</a></h2>
-<h3>JSONX Manual</h3>
+<h2><a id="api-clarity" class="anchor" href="#api-clarity" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>API Clarity</h2>
 <ul>
-<li><a href="https://repetere.github.io/jsonx/">Home</a></li>
-<li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
-<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
-<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
-<li><a href="../samples/index.html">Samples</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
-<li><a href="../../index.html">Full API Docs</a></li>
+<li>Keep <code>getReactElement</code>, <code>outputHTML</code>, <code>outputJSX</code>, <code>outputJSON</code>, <code>jsonxRender</code>, <code>compile</code>, and <code>renderFile</code> documented as the primary entry points.</li>
+<li>Label legacy features such as <code>__functionProps</code>.</li>
+<li>Label eval-style features as trusted-input features.</li>
+<li>Keep TypeDoc output available for low-level helper APIs.</li>
 </ul>
-</main>
+<h2><a id="next" class="anchor" href="#next" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Next</h2>
+<p>Read the <a href="../../modules.html">Full API Docs</a> for exported functions and types.</p>
+</article>
+      </main>
+    </div>
 
 
 </body></html>

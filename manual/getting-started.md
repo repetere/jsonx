@@ -1,111 +1,140 @@
-<link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
-<!-- <script src="https://unpkg.com/highlight.js@9.18.1/lib/highlight.js"> </script> -->
-
----
-### JSONX Manual
- - [Home](https://repetere.github.io/jsonx/)
- - [Getting Started](../getting-started/index.html)
- - [Using Advanced Props](../using-advanced-props/index.html)
- - [External and Custom Components](../using-external-and-custom-components/index.html)
- - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
- - [JSONX & JXM Spec](../spec/index.html)
- - [Samples](../samples/index.html)
- - [Roadmap](../roadmap/index.html)
- - [Full API Docs](../../index.html)
----
-
 # Getting Started
 
-JSONX is a React rendering library that lets you define React UI as JSON, then render it as React elements, HTML, JSX text, or browser DOM output.
+JSONX lets React views move through a system as data. You define the view as JSON, then render it as a React element, HTML string, JSX string, browser DOM output, or Express view.
 
-JSONX gives you a JSON-based rendering layer for React. A JSONX object describes the component, props, children, templates, and resource bindings. The library resolves that structure into React output for browser rendering, server-side HTML rendering, Express views, or generated component flows.
+Use JSX for hand-authored screens. Use JSONX when the view definition needs to be stored, generated, audited, returned from an API, or passed between services.
 
-JSONX works by converting JSON objects that follow the JXM spec into the arguments passed into [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component, which is passed as the `type` argument.
+## Install
+
+```sh
+npm i jsonx react react-dom
+```
+
+JSONX expects React and ReactDOM to be available as peer dependencies. The package supports React 18 and React 19.
+
+## Create A View
+
+A JSONX object maps to the arguments passed to `React.createElement`. The only required field is `component`, which becomes the React element type.
 
 ```ts
-// React Create Element Example
-React.createElement(
-  type,
-  [props],
-  [...children]
-)
+import * as jsonx from "jsonx";
 
-// Basic JXM
-const JXM = { component:'div', props: { title:'jsonx', }, children:'hello', };
+const view = {
+  component: "p",
+  props: {
+    style: { color: "blue" },
+    title: "jsonx",
+  },
+  children: "hello world",
+};
 
-// JSONX.getReactElement returns a react element 
-JSONX.getReactElement(JXM) => React.createElement('div', { title: 'jsonx', }, 'hello');
-
-// eqivalent to JSX 
-<div title="jsonx">hello</div> 
+const element = jsonx.getReactElement(view);
 ```
 
-## Usages
+That view is equivalent to this JSX:
 
-JSONX is useful for:
-- UI stored in files, APIs, databases, or configuration.
-- Server-rendered React views.
-- Dynamic component rendering.
-- View management systems that need React views as data.
-- Systems where React views need to be generated, serialized, audited, or moved between services.
-- Using existing React component libraries from JSON definitions.
+```tsx
+<p style={{ color: "blue" }} title="jsonx">
+  hello world
+</p>
+```
 
-JSONX is not:
-- A replacement for React.
-- A design system.
-- A tool for running untrusted UI definitions.
-- Just a JSON-to-HTML converter.
+## Render Output
 
-For complex hand-authored application screens, JSX may still be the simpler choice. JSONX is a better fit when the view definition needs to be data.
+The same JSONX object can be rendered in several formats.
 
-## Example
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-</td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ka7ghypd/18/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-</td>
-  </tr>
-</table>
+```ts
+jsonx.getReactElement(view);
+jsonx.outputHTML({ jsonx: view });
+jsonx.outputJSX(view);
+jsonx.outputJSON(view);
+```
 
-## Customizing JSONX
+| API | Use it when you need |
+| --- | --- |
+| `getReactElement` | A React element created from JSONX. |
+| `outputHTML` | A server-rendered HTML string. |
+| `outputJSX` | A JSX string for inspection, export, or debugging. |
+| `outputJSON` | The resolved React element shape: `{ type, props, children }`. |
+| `jsonxRender` | Browser rendering into a DOM node or portal. |
+| `compile` | A React function component generated from JSONX. |
+| `renderFile` or `__express` | Express-compatible view rendering from JSONX files. |
 
-The JSONX library has a couple of customization options. The library can be customized by setting the configuration on the `this` property of JSONX methods. The configuration options are:
-```typescript
-type JSONXConfiguration = {
-  debug: boolean = false; // used to debug component rendering errors, and will send exceptions to the logError function
-  logError: (...args: any[]) => any = console.error; // default(console.error) by default will log errors to console.error but you can define any custom error logging function
-  returnJSON: boolean = false; // used to return a JSON object instead of React Components
-  disableRenderIndexKey: boolean = true; // used to disable auto assign props.key
-  boundedComponents: jsonx[]; // array of components to bind "this" to
-  componentLibraries: { 
-    [index: libraryName as string]: {
-      [index: componentName as string]: ReactComponentLike;
-    } 
-  }; // object of custom react components in component library
-  reactComponents: { [index: componentName as string]: ReactComponentLike } // custom react components
-}
+## Simple Syntax
 
+JSONX also supports a shorter object shape where the key is the component name.
 
-//e.g
+```ts
+const simpleView = {
+  section: {
+    props: { className: "intro" },
+    children: [
+      { h1: "JSONX" },
+      { p: "React UI defined as data." },
+    ],
+  },
+};
 
-jsonx.getReactElementFromJSONX.call(
-  { debug:true, reactComponents:{ReactModal}, componentLibraries:{ ReactBootstrap, Antd, } }, //custom options bound to 'this' 
+jsonx.getReactElement(simpleView);
+```
+
+Use the full form when you need explicit `component`, `props`, or advanced JSONX behavior. Use simple syntax when the structure is small and readable.
+
+## Custom Components
+
+Pass custom React components through `reactComponents` or grouped component libraries through `componentLibraries`.
+
+```ts
+jsonx.getReactElement.call(
   {
-    component:'ReactBootstrap.Container', children:'hello world'
-  });
+    reactComponents: { Hero },
+    componentLibraries: { DesignSystem },
+  },
+  {
+    component: "DesignSystem.Button",
+    props: { variant: "primary" },
+    children: "Start",
+  },
+);
 ```
- 
-## Next: [Using Advanced Props](../using-advanced-props/index.html)
 
----
-### JSONX Manual
- - [Home](https://repetere.github.io/jsonx/)
- - [Getting Started](../getting-started/index.html)
- - [Using Advanced Props](../using-advanced-props/index.html)
- - [External and Custom Components](../using-external-and-custom-components/index.html)
- - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
- - [JSONX & JXM Spec](../spec/index.html)
- - [Samples](../samples/index.html)
- - [Roadmap](../roadmap/index.html)
- - [Full API Docs](../../index.html)
+## Configuration
+
+JSONX methods read configuration from the `this` context passed with `.call`.
+
+```ts
+jsonx.getReactElement.call(
+  {
+    debug: true,
+    logError: console.error,
+    returnJSON: false,
+    disableRenderIndexKey: true,
+  },
+  view,
+);
+```
+
+Common options:
+
+| Option | Purpose |
+| --- | --- |
+| `debug` | Log render failures and return more diagnostic output. |
+| `logError` | Replace the default error logger. |
+| `returnJSON` | Return `{ type, props, children }` instead of a React element. |
+| `disableRenderIndexKey` | Disable automatic index-based `key` assignment. |
+| `boundedComponents` | Bind selected components to the current context. |
+| `reactComponents` | Register custom components by name. |
+| `componentLibraries` | Register grouped component libraries by namespace. |
+| `customComponents` | Generate components from JSONX component definitions. |
+
+## Trusted Input
+
+JSONX can evaluate strings and create functions through advanced props such as `__dangerouslyEvalProps`, `__dangerouslyBindEvalProps`, and `__dangerouslyEvalAllProps`. Treat those paths as trusted-caller features. Do not run untrusted JSONX definitions with evaluation enabled.
+
+For safer runtime validation, use `jsonx._jsonxUtils.validateJSONX` before rendering user-authored or external JSONX.
+
+## Next
+
+- Read [Using Advanced Props](../using-advanced-props/) for data binding, templates, display rules, and format props.
+- Read [External and Custom Components](../using-external-and-custom-components/) for component maps and libraries.
+- Read the [JSONX and JXM Spec](../spec/) for the full object shape.

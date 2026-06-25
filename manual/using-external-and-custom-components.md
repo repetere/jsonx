@@ -1,71 +1,49 @@
-<link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+# External Libraries And Custom Components
 
----
-### JSONX Manual
- - [Home](https://repetere.github.io/jsonx/)
- - [Getting Started](../getting-started/index.html)
- - [Using Advanced Props](../using-advanced-props/index.html)
- - [External and Custom Components](../using-external-and-custom-components/index.html)
- - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
- - [JSONX & JXM Spec](../spec/index.html)
- - [Samples](../samples/index.html)
- - [Roadmap](../roadmap/index.html)
- - [Full API Docs](../../index.html)
----
+JSONX can render DOM elements by default. For application UI, you usually need custom React components or a component library. Register those components through the context passed to JSONX methods.
 
+Use `reactComponents` for individual components. Use `componentLibraries` for grouped libraries that should be referenced by namespace.
 
-# External Libraries and Components
+## Component Libraries
 
-JSONX natively supports any components from React-DOM, but for most real applications you are using either a large open-source component library (e.g. react-bootstrap, ant.design, material UI, etc) or any 3rd-party react components (like react-autocomplete). To use custom 3rd-party components or libraries they need to be assigned to JSONX's `this` parameter.
+Assign a library object to `componentLibraries`, then reference components with a dotted path.
 
-## Using custom Component Libraries
-
-Using a component library is as simple as assigning the Library to the `this.componentLibraries` property, and referencing the flattened component name as the component value in your JXM JSON Object.
-
-```javascript
-import * as jsonx from 'jsonx';
-import { * as ReactBootstrap } from 'react-bootstrap'; //or in the browser reference the UMD: <script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin />
+```ts
+import * as jsonx from "jsonx";
+import * as ReactBootstrap from "react-bootstrap";
 
 const getReactElement = jsonx.getReactElement.bind({
-  componentLibraries:{
+  componentLibraries: {
     ReactBootstrap,
-  }
+  },
 });
 
-const JXM = {
-  component:'ReactBootstrap.Container', 
-  children:[
+const view = {
+  component: "ReactBootstrap.Container",
+  children: [
     {
-      component:'ReactBootstrap.Row', 
-      children:[
+      component: "ReactBootstrap.Row",
+      children: [
         {
-          component:'ReactBootstrap.Col',
-          children:[
+          component: "ReactBootstrap.Col",
+          children: [
             {
-              component:'ReactBootstrap.Alert',
-              props:{ variant:'primary' },
-              children: 'This is a Bootstrap Alert'
-            }
-          ]
+              component: "ReactBootstrap.Alert",
+              props: { variant: "primary" },
+              children: "This is a Bootstrap alert",
+            },
+          ],
         },
-        {
-          component:'ReactBootstrap.Col',
-          children:[
-            {
-              component:'ReactBootstrap.Spinner',
-              props:{ animation:'border', role:'status' },
-            }
-          ]
-        }
-      ], 
-    }
-  ], 
-}
+      ],
+    },
+  ],
+};
 
-const myReactElements = getReactElement(JXM);
+const element = getReactElement(view);
 ```
 
-### Example React Bootstrap
+### React Bootstrap Example
+
 <table style="border:0; width:100%">
   <tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gctmsojp/22/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
@@ -75,41 +53,45 @@ const myReactElements = getReactElement(JXM);
   </tr>
 </table>
 
-## Using Custom Components
+## Custom Components
 
-If you're only adding single components or using your components you can add them to JSONX's component my individually. The difference between a Custom Component and a Custom Library is `this.reactComponents` expects each property value to be a react component and `this.componentLibraries` expects each property value to reference an object that has values that are React Components.
+Use `reactComponents` when you want to register a small set of named components directly.
 
-```javascript
-import React from 'react';
-import * as jsonx from 'jsonx';
-import { Calendar } from 'rc-calendar';
-const jsonxRender = jsonx.jsonxRender.bind({ 
-  reactComponents:{
-    ReactCalendar: Calendar,
-  }
-});
+```ts
+import * as jsonx from "jsonx";
+import ReactCalendar from "react-calendar";
 
-const JXM = {
-  component:'div', 
-  children:[
+const view = {
+  component: "main",
+  children: [
     {
-      component:'h1', 
-      children:'React Calendar demo',
+      component: "h1",
+      children: "React Calendar demo",
     },
     {
-      component:'ReactCalendar',
-      props:{
+      component: "ReactCalendar",
+      props: {
+        value: new Date(),
       },
-    }
-  ], 
+    },
+  ],
 };
 
-jsonxRender({
-  jsonx:JXM, 
-  querySelector:'#main',
-});
+jsonx.jsonxRender.call(
+  {
+    reactComponents: {
+      ReactCalendar,
+    },
+  },
+  {
+    jsonx: view,
+    querySelector: "#main",
+  },
+);
 ```
-### Example React Calendar
+
+### React Calendar Example
+
 <table style="border:0; width:100%">
   <tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/Lqwe3f59/5/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
@@ -119,18 +101,15 @@ jsonxRender({
   </tr>
 </table>
 
----
+## Choosing A Registration Path
 
-## Next: [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
+| Use case | Use |
+| --- | --- |
+| One or a few local components | `reactComponents` |
+| A third-party component package | `componentLibraries` |
+| Component names grouped by namespace | `componentLibraries` |
+| Components generated from JSONX definitions | `customComponents` |
 
-### JSONX Manual
- - [Home](https://repetere.github.io/jsonx/)
- - [Getting Started](../getting-started/index.html)
- - [External and Custom Components](../using-external-and-custom-components/index.html)
- - [Using Advanced Props](../using-advanced-props/index.html)
- - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
- - [JSONX & JXM Spec](../spec/index.html)
- - [Samples](../samples/index.html)
- - [Roadmap](../roadmap/index.html)
- - [Full API Docs](../../index.html)
+## Next
 
+Read [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/) if you need JSONX to generate function, class, dynamic, or form components.

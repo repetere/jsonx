@@ -1,42 +1,50 @@
 <!DOCTYPE html><html lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Using advanced props</title>
-  <link rel="stylesheet" href="https://unpkg.com/style.css">
-  <style type="text/css">
-    .markdown-body {
-      max-width: 46em;
-      margin: 2em auto;
-      padding: 0 1em;
-      overflow: hidden;
-      word-wrap: break-word;
-    }
-  </style>
-</head>
-<body>
-  <main class="markdown-body"><link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
-<hr>
-<h3>JSONX Manual</h3>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Using Advanced Props</title>
+    <link rel="stylesheet" href="../../assets/site.css">
+    <link rel="stylesheet" href="../assets/manual.css">
+    <script src="../../assets/analytics.js" defer=""></script>
+  </head>
+  <body class="manual-page">
+    <header class="manual-header">
+      <a class="manual-brand" href="../../" aria-label="JSONX home">
+        <span class="manual-brand-mark">{}</span>
+        <span>JSONX</span>
+      </a>
+      <nav class="manual-top-nav" aria-label="Documentation">
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../using-advanced-props/">Advanced Props</a>
+        <a href="../using-external-and-custom-components/">Custom Components</a>
+        <a href="../spec/">JXM Spec</a>
+        <a href="../samples/">Samples</a>
+        <a href="../../modules.html">API Docs</a>
+      </nav>
+    </header>
+    <div class="manual-shell">
+      <aside class="manual-sidebar" aria-label="Manual navigation">
+        <nav>
+          <a href="../../">Home</a>
+          <a href="../getting-started/">Getting Started</a>
+          <a href="../using-advanced-props/">Using Advanced Props</a>
+          <a href="../using-external-and-custom-components/">External and Custom Components</a>
+          <a href="../creating-react-components-and-component-libraries/">Creating React Components and Component Libraries</a>
+          <a href="../spec/">JSONX and JXM Spec</a>
+          <a href="../samples/">Samples</a>
+          <a href="../roadmap/">Roadmap</a>
+          <a href="../../modules.html">Full API Docs</a>
+        </nav>
+      </aside>
+      <main class="manual-main">
+        <article class="markdown-body manual-content"><h1><a id="using-advanced-props" class="anchor" href="#using-advanced-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Using Advanced Props</h1>
+<p>Advanced props let JSONX definitions read dynamic data, format output, render conditionally, and generate component props. Use them when a static JSONX object is not enough.</p>
 <ul>
-<li><a href="https://repetere.github.io/jsonx/">Home</a></li>
-<li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
-<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
-<li><a href="../samples/index.html">Samples</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
-<li><a href="../../index.html">Full API Docs</a></li>
+<li>Reference stateful properties dynamically.</li>
+<li>Format children before rendering.</li>
+<li>Insert JSONX templates.</li>
+<li>Create function or component props when the input is trusted.</li>
 </ul>
-<hr>
-<h1>Using advanced props</h1>
-<p>JSONX was created so you can create react elements and components with JSON. Advanced props allow for your components to interact with dynamic data for example:</p>
-<ul>
-<li>referencing stateful properties dynamically</li>
-<li>formatting the output of props</li>
-<li>inserting templates into your JXM Objects</li>
-</ul>
-<p>There are five kinds of Advanced Props (Traverse, Evaluation, Format, Display and Utility props):</p>
+<p>There are six groups of advanced props:</p>
 <ul>
 <li><a href="#traverse-props">1. Traverse Props</a> - used to traverse data passed into elements or other dynamic/stateful data and assign values as props
 <ul>
@@ -47,20 +55,20 @@
 <li><a href="#traverse-thisprops">1.5 thisprops</a> - re-assign prop values</li>
 </ul>
 </li>
-<li><a href="#evaluation-props">2. Evaluation Props</a> - used to create function properties or component properties and assign values as props
+<li><a href="#evaluation-props">2. Evaluation Props</a> - used to create function properties or component properties and assign values as props. Treat these as trusted-input features.
 <ul>
 <li><a href="#evaluation-dangerouslyevalprops">2.1 __dangerouslyEvalProps</a> - evaluate strings as props</li>
 <li><a href="#evaluation-dangerouslybindevalprops">2.2 __dangerouslyBindEvalProps</a> - evaluate strings to generate props that are functions bound to <code>this</code></li>
 <li><a href="#evaluation-dangerouslyevalallprops">2.3 __dangerouslyEvalAllProps</a> - evaluate all props from a string</li>
 <li><a href="#evaluation-dangerouslyinsertfunctioncomponents">2.4 __dangerouslyInsertFunctionComponents</a> - use JSONX to generate a function component as a prop</li>
 <li><a href="#evaluation-dangerouslyinsertclasscomponents">2.5 __dangerouslyInsertClassComponents</a> - use JSONX to generate a class component as a prop</li>
-<li><a href="#evaluation-dangerouslyinsertcomponents">2.6 __dangerouslyInsertComponents</a> - assign React Elements to props using JSONX</li>
-<li><a href="#evaluation-dangerouslyinsertreactcomponents">2.7 __dangerouslyInsertReactComponents</a> - assign React Elements to props</li>
-<li><a href="#evaluation-dangerouslyinsertjsonxcomponents">2.8 __dangerouslyInsertJSONXComponents</a> - assign React Elements to props</li>
+<li><a href="#evaluation-dangerouslyinsertcomponents">2.6 __dangerouslyInsertComponents</a> - assign React elements to props using JSONX</li>
+<li><a href="#evaluation-dangerouslyinsertreactcomponents">2.7 __dangerouslyInsertReactComponents</a> - assign React elements to props</li>
+<li><a href="#evaluation-dangerouslyinsertjsonxcomponents">2.8 __dangerouslyInsertJSONXComponents</a> - assign React elements to props</li>
 <li><a href="#evaluation-children">2.9 _children</a> - dynamically override the <code>children</code> prop</li>
 <li><a href="#evaluation-functionprops">2.10 __functionProps (legacy)</a> - the old way to assign functions to props</li>
 <li><a href="#evaluation-windowcomponents">2.11 __windowComponents </a> - assign window components to props</li>
-<li><a href="#evaluation-windowcomponentprops">2.12 __windowComponentProps</a> - assign props of window components assign to props</li>
+<li><a href="#evaluation-windowcomponentprops">2.12 __windowComponentProps</a> - assign props from window components</li>
 <li><a href="#evaluation-spreadcomponent">2.13 __spreadComponent</a> - component mapped over <code>__spread</code> data</li>
 <li><a href="#evaluation-spread">2.14 __spread</a> - data used to generate props from an array (e.g. if you have a list)</li>
 </ul>
@@ -89,17 +97,18 @@
 <li><a href="#display-comparisonorprops">5.2 comparisonorprops</a> - conditionally render elements flag to use ‘or’ logic instead of ‘and’ logic</li>
 </ul>
 </li>
-<li><a href="#applied-props">6. Applied Props</a> - used to modify other jsonx properties
+<li><a href="#applied-props">6. Applied Props</a> - used to modify other JSONX properties
 <ul>
-<li><a href="#applied-useformregister">6.1 useformregister</a> - A flag to insert react hook form register on jsonx component</li>
+<li><a href="#applied-useformregister">6.1 useformregister</a> - insert React Hook Form registration on a JSONX component</li>
 <li><a href="#applied-useremoveprops">6.2 useremoveprops</a> - remove props from component, usually used with passprops</li>
 <li><a href="#applied-useincludeprops">6.3 useincludeprops</a> - include only defined props, usually used with passprops</li>
 </ul>
 </li>
 </ul>
-<h2><a name="traverse-props">1. Traverse Props </a></h2>
+<p>Do not run untrusted JSONX definitions with evaluation props enabled.</p>
+<h2><a id="1-traverse-props" class="anchor" href="#1-traverse-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="traverse-props">1. Traverse Props </a></h2>
 <p><em>(<a href="#traverse-asyncprops">resourceprops/asyncprops</a>, <a href="#traverse-windowprops">windowprops</a>, <a href="#traverse-thisprops">thisprops</a>, <a href="#traverse-thisstate">thisstate</a>, <a href="#traverse-thiscontext">thiscontext</a>)</em></p>
-<p>Traverse Props are used to assign props values from different objects. For example, if you wanted to set the alt text of an image tag from the URL of the window. Because JXM objects are derived from JSON it’s impossible to get the dynamic value <code>window.location.href</code> and assign it to the alt prop without using advanced props.</p>
+<p>Traverse props assign prop values from other objects. For example, you might want an image <code>alt</code> prop to use the current browser URL. Because JXM objects are derived from JSON, <code>window.location.href</code> cannot be read directly inside the static <code>props</code> object.</p>
 <pre><code class="hljs language-JavaScript"><span class="hljs-comment">//assume window.location.href = http://example.com</span>
 
 <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
@@ -110,7 +119,7 @@
   }
 };
 </code></pre>
-<p>Attempting to access <code>window.location.href</code> is where traverse props are useful. Conceptually you are traversing the <code>window</code> property and assign the <code>href</code> property from <code>window.location</code> to the <code>JXM.props.alt</code> property.</p>
+<p>This is where traverse props are useful. The path reads <code>window.location.href</code> and assigns that value to <code>JXM.props.alt</code>.</p>
 <p>Traversing the <code>window</code> object is possible by using the <code>window props</code> traverse prop. The other traverse props are:</p>
 <ul>
 <li><a name="traverse-resourceprops">resourceprops</a> - traverse asynchronous properties passed to components when using JSONX programmatically</li>
@@ -120,7 +129,7 @@
 <li><a name="traverse-thisstate">thisstate</a> - traverse properties on <code>this.state</code></li>
 <li><a name="traverse-thiscontext">thiscontext</a> - traverse properties on <code>this</code></li>
 </ul>
-<p>To properly reference <code>window.location.href</code> the following JXM Object would work</p>
+<p>To reference <code>window.location.href</code>, use this JXM object:</p>
 <pre><code class="hljs language-JavaScript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
  <span class="hljs-attr">component</span>:<span class="hljs-string">'img'</span>,
  <span class="hljs-attr">props</span>:{
@@ -131,14 +140,14 @@
  }
 }
 </code></pre>
-<p>Traverse props assign properties to <code>JXM.props</code> object by defining what property you want to set on <code>JXM.props</code> as the traverse prop property name and passing an array to the property value you want. So for a window’s location (<code>window.location.href</code>), the property value is accessed by an array to the href <code>['location', 'href']</code> where you omit the transverse object from the array path.</p>
+<p>Traverse props assign values to <code>JXM.props</code>. The traverse prop key is the prop you want to set. The value is the path to read from the source object. For <code>window.location.href</code>, the path is <code>["location", "href"]</code>; the source object itself is not included in the path.</p>
 <p>Some sample use cases are:</p>
 <ul>
-<li>Resourceprops transverse an object that is manually passed (usually as a result of an asynchronous fetch all - hence the name asyncprops).</li>
-<li>Thisprops transverses anything bound to <code>this.props</code>, a good example would be if you’re storing and passing a user object on <code>this.props.username</code>, pulling the username would be where you would use thisprops.</li>
-<li>Thisstate transverses anything bound to <code>this.state</code>, for example, if you’re updating the state of a component based on user input from a text field <code>this.state.value</code>, pulling the value would be where you would use thisstate.</li>
-<li>Thiscontext transverses anything bound to <code>this</code>, a good example is if you’re using JSONX programmatically and you want to bind functionality to the render methods.</li>
-<li>And like the previous example windowprops transverse anything on the global window object, like the current page location <code>window.location.href</code>.</li>
+<li><code>resourceprops</code> traverses the resources object passed to JSONX methods. <code>asyncprops</code> is an alias.</li>
+<li><code>thisprops</code> traverses <code>this.props</code>.</li>
+<li><code>thisstate</code> traverses <code>this.state</code>.</li>
+<li><code>thiscontext</code> traverses the current <code>this</code> context.</li>
+<li><code>windowprops</code> traverses the global <code>window</code> object.</li>
 </ul>
 <pre><code class="hljs language-javascript"><span class="hljs-comment">// programmatic example</span>
 <span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> jsonx <span class="hljs-keyword">from</span> <span class="hljs-string">"jsonx"</span>;
@@ -189,7 +198,7 @@
   <span class="hljs-comment">//render something silly</span>
   jsonx.<span class="hljs-title function_">jsonxRender</span>(<span class="hljs-variable constant_">JXM</span>, asyncUserData);
   <span class="hljs-comment">/*
-  Renders this JXM Object:
+  Renders this JXM object:
   JXM = {
     component: 'div',
     props: {
@@ -217,7 +226,7 @@
 
 <span class="hljs-title function_">main</span>();
 </code></pre>
-<h3>Example Traverse Props</h3>
+<h3><a id="example-traverse-props" class="anchor" href="#example-traverse-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Traverse Props</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -227,11 +236,11 @@
   </tr>
 </tbody></table>
 <hr>
-<h2><a name="evaluation-props">2. Evaluation Props </a></h2>
+<h2><a id="2-evaluation-props" class="anchor" href="#2-evaluation-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="evaluation-props">2. Evaluation Props </a></h2>
 <p><em>(<a href="#evaluation-dangerouslyevalprops">__dangerouslyEvalProps</a>, <a href="#evaluation-dangerouslybindevalprops">__dangerouslyBindEvalProps</a>, <a href="#evaluation-dangerouslyevalallprops">__dangerouslyEvalAllProps</a>, <a href="#evaluation-dangerouslyinsertfunctioncomponents">__dangerouslyInsertFunctionComponents</a>, <a href="#evaluation-dangerouslyinsertclasscomponents">__dangerouslyInsertClassComponents</a>, <a href="#evaluation-dangerouslyinsertcomponents">__dangerouslyInsertComponents</a>, <a href="#evaluation-dangerouslyinsertreactcomponents">__dangerouslyInsertReactComponents</a>, <a href="#evaluation-dangerouslyinsertjsonxcomponents">__dangerouslyInsertJSONXComponents</a>, <a href="#evaluation-children">_children</a>, <a href="#evaluation-functionprops">__functionProps (legacy)</a>, <a href="#evaluation-windowcomponents">__windowComponents </a>, <a href="#evaluation-windowcomponentprops">__windowComponentProps</a>, <a href="#evaluation-spreadcomponent">__spreadComponent</a>, <a href="#evaluation-spread">__spread</a>)</em></p>
-<p>Evaluation Props are properties that are computed and resolve values onto the <code>JXM.props</code> property. They are helpful because, to interact with dynamic data and stateful information, they provide a way to describe declaratively how to assign properties onto the <code>JXM.props</code> property.</p>
-<h3><a name="evaluation-children">_children</a></h3>
-<p>The <code>_children</code> evaluation property is used to override the value of <code>JXM.children</code> and is usually only used when you want to dynamically set the value of the <code>children</code> property from an advanced property.</p>
+<p>Evaluation props compute values and merge them onto <code>JXM.props</code>. They are useful when JSONX needs to describe how dynamic data, state, or functions become props. Use these only with trusted JSONX input.</p>
+<h3><a id="_children" class="anchor" href="#_children" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="evaluation-children">_children</a></h3>
+<p>The <code>_children</code> evaluation property overrides <code>JXM.children</code>. Use it when an advanced prop should provide the rendered children.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-comment">//current URL: http://example.com</span>
 <span class="hljs-keyword">const</span> <span class="hljs-title class_">JXMWindowLocation</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"p"</span>,
@@ -241,14 +250,14 @@
 };
 <span class="hljs-comment">// computes: { component:'p', children:'http://example.com', }</span>
 </code></pre>
-<h3><a name="evaluation-dangerouslyevalprops">__dangerouslyEvalProps</a>, <a name="evaluation-dangerouslybindevalprops">__dangerouslyBindEvalProps</a> ,and <a name="evaluation-dangerouslyevalallprops">__dangerouslyEvalAllProps</a></h3>
-<p>The evaluation properties <code>__dangerouslyEvalProps</code>, <code>__dangerouslyBindEvalProps</code> and <code>__dangerouslyEvalAllProps</code> are properties used to evaluate strings and set the value the property value on a JXM Object.</p>
-<p><code>__dangerouslyEvalAllProps</code> will evaluate a string as a function and assign the returned value of the function to the <code>props</code> property of a JXM object.
-<em>Note: If passing the value as a string, remember this value has to be an expression, so either a <code>(({jsonx})=&gt;({}))</code> or <code>(function({jsonx}){})</code>. There is one parameter passed into the function, it’s the current value of the JXM Object on the jsonx property</em></p>
-<p><code>__dangerouslyEvalProps</code> is used to evaluate the string value and assign it to the JXM.props value, the string must be a valid javascript expression <em>(Tip, if evaluating an object remember to wrap it ({some:‘obj’, }) )</em>. If <code>__dangerouslyEvalProps</code> is a function, it will assign the value of the function called with one parameter <code>{jsonx}</code>.</p>
-<p><code>__dangerouslyBindEvalProps</code> is used to assign functions to JXM object props values. This is usually for <em>onClick</em> and <em>onChange</em> functions. Each property of <code>__dangerouslyBindEvalProps</code> has to be a function because it attempts to assign the value as a function with <code>this</code> bound to it.</p>
-<p>These functions exist because there are instances where JSONX is delivered via JSON and JavaScript functions are not valid JSON values. Evaluation props are typically used sparingly when JXM is sent server-side. In practice, there are many ways to pass functions as values (especially if they are bound to JSONX, then you can always reference functions by access properties off of <code>this</code> by using <code>thiscontext</code>).</p>
-<h3>Example Evaluation Props</h3>
+<h3><a id="__dangerouslyevalprops--__dangerouslybindevalprops--and-__dangerouslyevalallprops" class="anchor" href="#__dangerouslyevalprops--__dangerouslybindevalprops--and-__dangerouslyevalallprops" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="evaluation-dangerouslyevalprops">__dangerouslyEvalProps</a>, <a name="evaluation-dangerouslybindevalprops">__dangerouslyBindEvalProps</a>, and <a name="evaluation-dangerouslyevalallprops">__dangerouslyEvalAllProps</a></h3>
+<p>The evaluation properties <code>__dangerouslyEvalProps</code>, <code>__dangerouslyBindEvalProps</code>, and <code>__dangerouslyEvalAllProps</code> evaluate strings or functions and assign the result to a JXM object.</p>
+<p><code>__dangerouslyEvalAllProps</code> evaluates a string as a function and assigns the return value to <code>props</code>.
+<em>Note: When the value is a string, it must be an expression such as <code>(({ jsonx }) =&gt; ({}))</code> or <code>(function({ jsonx }) { return {}; })</code>. JSONX passes the current JXM object through the <code>jsonx</code> property.</em></p>
+<p><code>__dangerouslyEvalProps</code> evaluates each string value and assigns the result to <code>JXM.props</code>. The string must be a valid JavaScript expression. If you evaluate an object literal, wrap it in parentheses: <code>({ some: "obj" })</code>. If <code>__dangerouslyEvalProps</code> is a function, JSONX calls it with <code>{ jsonx }</code>.</p>
+<p><code>__dangerouslyBindEvalProps</code> assigns functions to JXM prop values. This is usually for <em>onClick</em> and <em>onChange</em> handlers. Each value must resolve to a function because JSONX binds the function to the current <code>this</code> context.</p>
+<p>These props exist for cases where JSONX is delivered as JSON and JavaScript functions cannot be included directly. Use them sparingly. In many cases, it is better to register functions in code and reference them through <code>thiscontext</code> or another traverse prop.</p>
+<h3><a id="example-evaluation-props" class="anchor" href="#example-evaluation-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Evaluation Props</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/n704z65x/7/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -257,8 +266,8 @@
     </td>
   </tr>
 </tbody></table>
-<h3><a name="evaluation-spreadcomponent">__spreadComponent</a> and <a name="evaluation-spread">__spread</a></h3>
-<p>The <code>__spreadComponent</code> advanced prop is a component that maps over the <code>JXM.__spread</code> prop. Typically <code>__spreadComponent</code> used to render the same a component mapped to data from an array. Each element of the <code>JXM.__spread</code> array is passed into the child <code>__spreadComponent</code> as <code>JXM.__item</code> . <code>JXM.__spread</code> is usually set using a traverse prop to assign the property.</p>
+<h3><a id="__spreadcomponent-and-__spread" class="anchor" href="#__spreadcomponent-and-__spread" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="evaluation-spreadcomponent">__spreadComponent</a> and <a name="evaluation-spread">__spread</a></h3>
+<p><code>__spreadComponent</code> maps one JSONX component over the data in <code>JXM.__spread</code>. Each item in the <code>JXM.__spread</code> array is passed into the child component as <code>JXM.__item</code>. <code>JXM.__spread</code> is usually assigned with a traverse prop.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">'ul'</span>,
   <span class="hljs-attr">props</span>:{
@@ -283,8 +292,8 @@
       <span class="hljs-attr">_children</span>:[<span class="hljs-string">'__item'</span>,<span class="hljs-string">'name'</span>]
     }
   },
-}; 
-<span class="hljs-comment">/* =&gt; { 
+};
+<span class="hljs-comment">/* =&gt; {
   component:'ul', children: [
     {
       component:'li', children:'bob smith',
@@ -295,10 +304,10 @@
     {
       component:'li', children:'billy bob',
     }
-  ] 
+  ]
 };*/</span>
 </code></pre>
-<h3>Example Evaluation Props</h3>
+<h3><a id="example-evaluation-props-1" class="anchor" href="#example-evaluation-props-1" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Evaluation Props</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/e5au6td1/2/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -307,10 +316,10 @@
     </td>
   </tr>
 </tbody></table>
-<h3><a name="evaluation-dangerouslyinsertfunctioncomponents">__dangerouslyInsertFunctionComponents</a>, <a name="evaluation-dangerouslyinsertclasscomponents">__dangerouslyInsertClassComponents</a>, <a name="evaluation-dangerouslyinsertcomponents">__dangerouslyInsertComponents</a>, <a name="evaluation-dangerouslyinsertreactcomponents">__dangerouslyInsertReactComponents</a>, <a name="evaluation-dangerouslyinsertjsonxcomponents">__dangerouslyInsertJSONXComponents</a>, <a name="evaluation-windowcomponents">__windowComponents</a>, <a name="evaluation-windowcomponentprops">__windowComponentProps</a>,</h3>
-<p>The component evaluation props all assign React Elements to props. This pattern is very common in charting libraries when you need to customize labels. Typically you would assign a custom component to a prop and the component you are using would insert the customized component appropriately.</p>
-<p>The most common pattern is a Function component as a prop. Using function components or class components as props require understanding how to create components with JSONX. Read <a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a> for more information.</p>
-<h3>Example Evaluation Props</h3>
+<h3><a id="__dangerouslyinsertfunctioncomponents--__dangerouslyinsertclasscomponents--__dangerouslyinsertcomponents--__dangerouslyinsertreactcomponents--__dangerouslyinsertjsonxcomponents--__windowcomponents--and-__windowcomponentprops" class="anchor" href="#__dangerouslyinsertfunctioncomponents--__dangerouslyinsertclasscomponents--__dangerouslyinsertcomponents--__dangerouslyinsertreactcomponents--__dangerouslyinsertjsonxcomponents--__windowcomponents--and-__windowcomponentprops" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="evaluation-dangerouslyinsertfunctioncomponents">__dangerouslyInsertFunctionComponents</a>, <a name="evaluation-dangerouslyinsertclasscomponents">__dangerouslyInsertClassComponents</a>, <a name="evaluation-dangerouslyinsertcomponents">__dangerouslyInsertComponents</a>, <a name="evaluation-dangerouslyinsertreactcomponents">__dangerouslyInsertReactComponents</a>, <a name="evaluation-dangerouslyinsertjsonxcomponents">__dangerouslyInsertJSONXComponents</a>, <a name="evaluation-windowcomponents">__windowComponents</a>, and <a name="evaluation-windowcomponentprops">__windowComponentProps</a></h3>
+<p>Component evaluation props assign React elements or components to props. This pattern is common in charting libraries, where a chart accepts a custom label, tick, or tooltip component as a prop.</p>
+<p>The most common pattern is a function component passed as a prop. Passing function or class components through JSONX requires the generated component helpers. Read <a href="../creating-react-components-and-component-libraries/">Creating React Components and Component Libraries</a> for more information.</p>
+<h3><a id="example-evaluation-props-2" class="anchor" href="#example-evaluation-props-2" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Evaluation Props</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/soec2z5w/13/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -319,11 +328,11 @@
     </td>
   </tr>
 </tbody></table>
-<h3><a name="evaluation-functionprops">__functionProps</a> (legacy)</h3>
-<p>The evaluation prop <code>__functionProps</code> is another way to assign a function value to a property in <code>JXM.props</code>. There are two ways of using <code>__functionProps</code>, one way for predefined functions and another way for dynamic functions. Using <code>__functionProps</code> may be deprecated in the future.</p>
-<h4>predefined functions (legacy)</h4>
-<p><code>__functionProps</code> can assign values from functions that exist on <code>this.props</code> (e.g. using something like react-router and accessing this.props.reduxRouter.push) or functions that exist on the <code>window</code> object (like window.console.log).</p>
-<p>Properties are assigned by using the value of the function by access the property as a string, prefixed with “func:”. Function props merge onto <code>jsonx.props</code> after evaluating each function string.</p>
+<h3><a id="__functionprops-legacy" class="anchor" href="#__functionprops-legacy" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="evaluation-functionprops">__functionProps</a> (legacy)</h3>
+<p>The evaluation prop <code>__functionProps</code> is a legacy way to assign functions to <code>JXM.props</code>. Prefer the newer evaluation props for new work.</p>
+<h4><a id="predefined-functions-legacy" class="anchor" href="#predefined-functions-legacy" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>predefined functions (legacy)</h4>
+<p><code>__functionProps</code> can assign functions that exist on <code>this.props</code>, such as <code>this.props.reduxRouter.push</code>, or functions that exist on <code>window</code>, such as <code>window.console.log</code>.</p>
+<p>Properties are assigned by reading a function path from a string prefixed with <code>func:</code>. Function props merge onto <code>jsonx.props</code> after each function string resolves.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"button"</span>,
   <span class="hljs-attr">props</span>: {
@@ -336,8 +345,8 @@
   }
 };
 </code></pre>
-<h4>inline functions (legacy)</h4>
-<p><code>__functionProps</code> can also generate functions from a string in a much less elegant way than using <code>__dangerouslyEvalProps</code> or <code>__dangerouslyBindEvalProps</code>. It’s very cumbersome but you define the string of the function body <code>JXM.__inline[name-of-func]</code> and reference the function on <code>__functionProps</code> by prefixing the function with <code>func:inline</code> (e.g. <code>JXM.__functionProps[func:inline[name-of-function]]</code>). You can also use the <code>__functionargs</code> advanced props to bind <code>JXM.prop</code> properties to parameters of the inline function.</p>
+<h4><a id="inline-functions-legacy" class="anchor" href="#inline-functions-legacy" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>inline functions (legacy)</h4>
+<p><code>__functionProps</code> can also generate functions from strings. This legacy approach is more cumbersome than <code>__dangerouslyEvalProps</code> or <code>__dangerouslyBindEvalProps</code>. Define the function body at <code>JXM.__inline[name]</code>, then reference it from <code>__functionProps</code> with <code>func:inline.name</code>. Use <code>__functionargs</code> to bind <code>JXM.props</code> values to inline function arguments.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"button"</span>,
   <span class="hljs-attr">props</span>: {
@@ -354,7 +363,7 @@
   }
 };
 </code></pre>
-<h3>Example Evaluation Props __functionProps</h3>
+<h3><a id="example-evaluation-props-__functionprops" class="anchor" href="#example-evaluation-props-__functionprops" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Evaluation Props __functionProps</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/34ngdzyh/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -364,10 +373,10 @@
   </tr>
 </tbody></table>
 <hr>
-<h2><a name="format-props">3. Format Props </a></h2>
-<p><em>(<a href="#format-stringifychildren">___stringifyChildren</a>, <a href="#format-tostringchildren">___toStringChildren</a>, <a href="#format-tonumeral">___toNumeral</a>, <a href="#format-jsdatetoluxonstring">____JSDatetoLuxonString</a>, <a href="#format-isotoluxonstring">___ISOtoLuxonString</a>, <a href="#format-fromluxontimezone">___FromLuxonTimeZone</a>)</em></p>
-<p>Format Props are properties that are used to convert JXM.children values to strings. Format Props are used because the <code>children</code> parameter of <code>React.createElement</code> can only be a string or an array of React Elements.</p>
-<h3><a name="format-stringifychildren">___stringifyChildren</a></h3>
+<h2><a id="3-format-props" class="anchor" href="#3-format-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="format-props">3. Format Props </a></h2>
+<p><em>(<a href="#format-stringifychildren">___stringifyChildren</a>, <a href="#format-tostringchildren">___toStringChildren</a>, <a href="#format-tonumeral">___toNumeral</a>, <a href="#format-jsdatetoluxonstring">___JSDatetoLuxonString</a>, <a href="#format-isotoluxonstring">___ISOtoLuxonString</a>, <a href="#format-fromluxontimezone">___FromLuxonTimeZone</a>)</em></p>
+<p>Format props convert <code>JXM.children</code> values to strings. They are useful when raw values need display formatting before React receives them as children.</p>
+<h3><a id="___stringifychildren" class="anchor" href="#___stringifychildren" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="format-stringifychildren">___stringifyChildren</a></h3>
 <p>The <code>___stringifyChildren</code> format property converts the <code>JXM.children</code> property to a string by using <code>JSON.stringify</code>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"div"</span>,
@@ -375,7 +384,7 @@
   <span class="hljs-attr">___stringifyChildren</span>: <span class="hljs-literal">true</span>
 }; <span class="hljs-comment">// =&gt; { component:'div', children: '{"some-non-string":"data"}' };</span>
 </code></pre>
-<h3><a name="format-tostringchildren">___toStringChildren</a></h3>
+<h3><a id="___tostringchildren" class="anchor" href="#___tostringchildren" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="format-tostringchildren">___toStringChildren</a></h3>
 <p>The <code>___toStringChildren</code> format property converts the <code>JXM.children</code> property to a string by calling <code>toString()</code>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"div"</span>,
@@ -383,7 +392,7 @@
   <span class="hljs-attr">___toStringChildren</span>: <span class="hljs-literal">true</span>
 }; <span class="hljs-comment">// =&gt; { component:'div', children: '1,2,3,4' };</span>
 </code></pre>
-<h3><a name="format-tonumeral">___toNumeral</a></h3>
+<h3><a id="___tonumeral" class="anchor" href="#___tonumeral" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="format-tonumeral">___toNumeral</a></h3>
 <p>The <code>___toNumeral</code> format property converts the <code>JXM.children</code> property to a string by calling <code>numeral(JXM.children).format(JXM.___toNumeral)</code>. See numeral formatting options on <a href="http://numeraljs.com/">numeraljs.com</a>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"div"</span>,
@@ -391,7 +400,7 @@
   <span class="hljs-attr">___toNumeral</span>: <span class="hljs-string">"0,0.00"</span>
 }; <span class="hljs-comment">// =&gt; { component:'div', children: '15,204.39' };</span>
 </code></pre>
-<h3><a name="format-jsdatetoluxonstring">___JSDatetoLuxonString</a></h3>
+<h3><a id="___jsdatetoluxonstring" class="anchor" href="#___jsdatetoluxonstring" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="format-jsdatetoluxonstring">___JSDatetoLuxonString</a></h3>
 <p>The <code>___JSDatetoLuxonString</code> format property converts the <code>JXM.children</code> property to a string by calling <code>Luxon.DateTime.fromJSDate(JXM.children).toFormat(JXM.___JSDatetoLuxonString)</code>. See luxon formatting options from the <a href="https://moment.github.io/luxon/docs/manual/formatting.html">luxon formatting docs</a>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"div"</span>,
@@ -399,8 +408,8 @@
   <span class="hljs-attr">___JSDatetoLuxonString</span>: <span class="hljs-string">"LLL d, yyyy"</span>
 }; <span class="hljs-comment">// =&gt; { component:'div', children: 'Mar 3, 2020' };</span>
 </code></pre>
-<h3><a name="format-isotoluxonstring">___ISOtoLuxonString</a> &amp; <a name="format-fromluxontimezone">___FromLuxonTimeZone</a></h3>
-<p>The <code>___ISOtoLuxonString</code> format property converts the <code>JXM.children</code> property to a string by calling <code>Luxon.DateTime.fromISO(JXM.children).toFormat(JXM.___ISOtoLuxonString)</code>. You can set the timezone of the ISO string by using the <code>___FromLuxonTimeZone</code> format Prop. See luxon formatting options from the <a href="https://moment.github.io/luxon/docs/manual/formatting.html">luxon formatting docs</a>.</p>
+<h3><a id="___isotoluxonstring--___fromluxontimezone" class="anchor" href="#___isotoluxonstring--___fromluxontimezone" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="format-isotoluxonstring">___ISOtoLuxonString</a> &amp; <a name="format-fromluxontimezone">___FromLuxonTimeZone</a></h3>
+<p>The <code>___ISOtoLuxonString</code> format property converts the <code>JXM.children</code> property to a string by calling <code>Luxon.DateTime.fromISO(JXM.children).toFormat(JXM.___ISOtoLuxonString)</code>. Set the time zone with the <code>___FromLuxonTimeZone</code> format prop. See Luxon formatting options in the <a href="https://moment.github.io/luxon/docs/manual/formatting.html">Luxon formatting docs</a>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM_NY</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"div"</span>,
   <span class="hljs-attr">children</span>: <span class="hljs-string">"2020-03-03T14:30:00.000Z"</span>,
@@ -415,7 +424,7 @@
   <span class="hljs-attr">___FromLuxonTimeZone</span>: <span class="hljs-string">"America/Los_Angeles"</span>
 }; <span class="hljs-comment">// =&gt; { component:'div', children: 'Mar 3, 2020, 6:30 AM' };</span>
 </code></pre>
-<h3>Example Format Props</h3>
+<h3><a id="example-format-props" class="anchor" href="#example-format-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Format Props</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/5ypaotu6/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -425,11 +434,11 @@
   </tr>
 </tbody></table>
 <hr>
-<h2><a name="utility-props">4. Utility Props</a></h2>
+<h2><a id="4-utility-props" class="anchor" href="#4-utility-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="utility-props">4. Utility Props</a></h2>
 <p><em>(<a href="#utility-template">__template</a>, <a href="#utility-passprops">passprops</a>, <a href="#utility-debug">debug</a>, <a href="#utility-test">test</a>)</em></p>
-<p>Utility props generally do not mutate <code>JXM.props</code> but are used to augment the expected behavior of JSONX.</p>
-<h3><a name="utility-debug">debug</a></h3>
-<p>The debug flag outputs the value of the <code>JXM</code> object where <code>JXM.debug === true</code> and the value of all of the computed advanced props as well.</p>
+<p>Utility props support rendering behavior without directly becoming regular React props.</p>
+<h3><a id="debug" class="anchor" href="#debug" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="utility-debug">debug</a></h3>
+<p>The <code>debug</code> flag logs the <code>JXM</code> object and computed advanced props when <code>JXM.debug === true</code>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
     <span class="hljs-attr">component</span>: <span class="hljs-string">'div'</span>,
     <span class="hljs-attr">children</span>: <span class="hljs-string">'Debug JXM Data'</span>,
@@ -440,7 +449,7 @@
 };
 
 <span class="hljs-comment">//outputs to console:</span>
-<span class="hljs-comment">/* { 
+<span class="hljs-comment">/* {
   jsonx: {
     component: "div",
     children: "Debug JXM Data",
@@ -454,8 +463,8 @@
   }
 }*/</span>
 </code></pre>
-<h3><a name="utility-test">test</a></h3>
-<p>The test flag outputs the value of the <code>JXM</code> object where <code>JXM.test === true</code> as a string.</p>
+<h3><a id="test" class="anchor" href="#test" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="utility-test">test</a></h3>
+<p>The <code>test</code> flag outputs the calculated render data as a string when <code>JXM.test === true</code>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
     <span class="hljs-attr">component</span>: <span class="hljs-string">'div'</span>,
     <span class="hljs-attr">children</span>: <span class="hljs-string">'Test JXM Data'</span>,
@@ -463,14 +472,14 @@
 };
 
 <span class="hljs-comment">//outputs as a string component:</span>
-<span class="hljs-comment">/* { 
+<span class="hljs-comment">/* {
   element: "div",
   children: "Debug JXM Data",
   test: true
 }*/</span>
 </code></pre>
-<h3><a name="utility-passprops">passprops</a></h3>
-<p>The passprops flag passess the props from the parent <code>JXM</code> object to each <code>JXM.children</code> JXM Object except for the <code>JXM.props.style</code> property.</p>
+<h3><a id="passprops" class="anchor" href="#passprops" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="utility-passprops">passprops</a></h3>
+<p>The <code>passprops</code> flag passes props from the parent <code>JXM</code> object to each child JXM object except <code>JXM.props.style</code>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">'div'</span>,
   <span class="hljs-attr">props</span>:{
@@ -517,7 +526,7 @@ const JXM = {
 };
 */</span>
 </code></pre>
-<p>You can also pass a select number of props by specifying which props to pass</p>
+<p>You can pass only selected props by listing the prop names.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">'div'</span>,
   <span class="hljs-attr">props</span>:{
@@ -561,15 +570,15 @@ const JXM = {
 };
 */</span>
 </code></pre>
-<h3><a name="utility-template">___template</a></h3>
-<p>The <code>___template</code> advanced prop (should really only be used server-side but works in the browser too) will load JXM objects from an external file (or URL client side - note in the browser this is a synchronous request).</p>
+<h3><a id="___template" class="anchor" href="#___template" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="utility-template">___template</a></h3>
+<p>The <code>___template</code> advanced prop loads JXM objects from an external file. It is mainly useful on the server. It can also load a URL in the browser, but that browser request is synchronous.</p>
 <pre><code class="hljs language-typescript">
 <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>,
   <span class="hljs-attr">___template</span>:<span class="hljs-string">'path/to/some/jxm/json/file'</span>
 }
 <span class="hljs-comment">// path/to/some/jxm/json/file = { component: "section", children: "from external template"}</span>
-<span class="hljs-comment">/* computes: 
+<span class="hljs-comment">/* computes:
 {
   component:'div',
   children:[{ component: "section", children: "from external template"}]
@@ -577,7 +586,7 @@ const JXM = {
 */</span>
 
 </code></pre>
-<h3>Example Utility Props</h3>
+<h3><a id="example-utility-props" class="anchor" href="#example-utility-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Utility Props</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gbeatwp2/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -587,12 +596,12 @@ const JXM = {
   </tr>
 </tbody></table>
 <hr>
-<h2><a name="display-props">5. Display Props</a></h2>
+<h2><a id="5-display-props" class="anchor" href="#5-display-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="display-props">5. Display Props</a></h2>
 <p><em>(<a href="#display-comparisonprops">comparisonprops</a>, <a href="#display-comparisonorprops">comparisonorprops</a>)</em></p>
-<p>Display Props are properties that are used to determine if a React Element rendered from a JXM Object should be rendered. Display props enable conditional logic based on the value of props to determine if an element should be shown.</p>
-<h3><a href="#display-comparisonprops">comparisonprops</a> and <a href="#display-comparisonorprops">comparisonorprops</a></h3>
-<p>The display prop <code>comparisionprops</code> is used to conditionally show elements if all of the comparisons are truthy. <code>comparisonprops</code> works by comparing an array of left and right side values, if they are all true, the component is rendered. If <code>JXM.comparisonorprops</code> is set to true then only one condition needs to be true to render the component.</p>
-<p>The comparison values can either be literal values or the value can be a reference to any <code>JXM.props</code> value. References to values in <code>JXM.props</code> are accessed in the same way you would use traverse props, where the prop being traversed is <code>JXM.props</code>.</p>
+<p>Display props determine whether a React element rendered from a JXM object should be shown. They add conditional rendering based on prop values.</p>
+<h3><a id="comparisonprops-and-comparisonorprops" class="anchor" href="#comparisonprops-and-comparisonorprops" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a href="#display-comparisonprops">comparisonprops</a> and <a href="#display-comparisonorprops">comparisonorprops</a></h3>
+<p>The display prop <code>comparisonprops</code> conditionally renders elements when comparisons pass. By default, every comparison must be true. If <code>JXM.comparisonorprops</code> is true, only one comparison needs to be true.</p>
+<p>Comparison values can be literal values or references to <code>JXM.props</code> values. References use the same path-array format as traverse props, with <code>JXM.props</code> as the source object.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-comment">//and conditions</span>
 jsonx = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"div"</span>,
@@ -668,7 +677,7 @@ jsonx = {
     <span class="hljs-keyword">return</span> opscompares.<span class="hljs-property">left</span> !== <span class="hljs-literal">undefined</span> &amp;&amp; opscompares.<span class="hljs-property">left</span> !== <span class="hljs-literal">null</span>;
 }
 </code></pre>
-<h3>Example Display Props</h3>
+<h3><a id="example-display-props" class="anchor" href="#example-display-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Display Props</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/jn7L54x1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -678,11 +687,11 @@ jsonx = {
   </tr>
 </tbody></table>
 <hr>
-<h2><a name="applied-props">6. applied Props</a></h2>
+<h2><a id="6-applied-props" class="anchor" href="#6-applied-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="applied-props">6. Applied Props</a></h2>
 <p><em>(<a href="#applied-useformregister">useformregister</a>, <a href="#applied-useremoveprops">useremoveprops</a>, <a href="#applied-useincludeprops">useincludeprops</a>)</em></p>
-<p>Applied Props are properties that are helper properties that are used modify other jsonx properties.</p>
-<h3><a href="#applied-useformregister">useformregister</a></h3>
-<p>The applied prop <code>useformregister</code> is a prop that passes a React Hook Form register to a component. It is a short cut for having to added the reference to the form reference manually.</p>
+<p>Applied props are helper properties that modify other JSONX properties.</p>
+<h3><a id="useformregister" class="anchor" href="#useformregister" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a href="#applied-useformregister">useformregister</a></h3>
+<p>The applied prop <code>useformregister</code> passes a React Hook Form register function to a component. It avoids manually wiring the form reference.</p>
 <pre><code class="hljs language-javascript">jsonx = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
   <span class="hljs-attr">props</span>:{
@@ -702,8 +711,8 @@ jsonx = {
   },
 };
 </code></pre>
-<h3><a href="#applied-useremoveprops">useremoveprops</a></h3>
-<p>The applied prop <code>useremoveprops</code> is a prop that removes a list of props from the JXM Object. It is usually used in conjunction with passprops when you want to remove extra passed props.</p>
+<h3><a id="useremoveprops" class="anchor" href="#useremoveprops" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a href="#applied-useremoveprops">useremoveprops</a></h3>
+<p>The applied prop <code>useremoveprops</code> removes a list of props from the JXM object. It is usually used with <code>passprops</code> when child components should not receive every parent prop.</p>
 <pre><code class="hljs language-javascript">jsonx = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
   <span class="hljs-attr">props</span>:{
@@ -722,8 +731,8 @@ jsonx = {
   },
 };
 </code></pre>
-<h3><a href="#applied-useincludeprops">useincludeprops</a></h3>
-<p>The applied prop <code>useincludeprops</code> is a prop that removes all props from the JXM Object except for a list specified props. It is usually used in conjunction with passprops when you want to remove extra passed props.</p>
+<h3><a id="useincludeprops" class="anchor" href="#useincludeprops" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a href="#applied-useincludeprops">useincludeprops</a></h3>
+<p>The applied prop <code>useincludeprops</code> removes all props from the JXM object except the listed props. It is usually used with <code>passprops</code> when a child component should receive only a small prop set.</p>
 <pre><code class="hljs language-javascript">jsonx = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
   <span class="hljs-attr">props</span>:{
@@ -744,20 +753,10 @@ jsonx = {
 };
 </code></pre>
 <hr>
-<h2>Next: <a href="../using-external-and-custom-components/index.html">External and Custom Components</a></h2>
-<h3>JSONX Manual</h3>
-<ul>
-<li><a href="https://repetere.github.io/jsonx/">Home</a></li>
-<li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
-<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
-<li><a href="../samples/index.html">Samples</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
-<li><a href="../../index.html">Full API Docs</a></li>
-</ul>
-</main>
+<h2><a id="next-external-and-custom-components" class="anchor" href="#next-external-and-custom-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Next: <a href="../using-external-and-custom-components/">External And Custom Components</a></h2>
+</article>
+      </main>
+    </div>
 
 
 </body></html>

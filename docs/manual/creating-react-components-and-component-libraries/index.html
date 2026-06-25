@@ -1,50 +1,57 @@
 <!DOCTYPE html><html lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Creating new components</title>
-  <link rel="stylesheet" href="https://unpkg.com/style.css">
-  <style type="text/css">
-    .markdown-body {
-      max-width: 46em;
-      margin: 2em auto;
-      padding: 0 1em;
-      overflow: hidden;
-      word-wrap: break-word;
-    }
-  </style>
-</head>
-<body>
-  <main class="markdown-body"><link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
-<hr>
-<h3>JSONX Manual</h3>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Creating React Components And Component Libraries</title>
+    <link rel="stylesheet" href="../../assets/site.css">
+    <link rel="stylesheet" href="../assets/manual.css">
+    <script src="../../assets/analytics.js" defer=""></script>
+  </head>
+  <body class="manual-page">
+    <header class="manual-header">
+      <a class="manual-brand" href="../../" aria-label="JSONX home">
+        <span class="manual-brand-mark">{}</span>
+        <span>JSONX</span>
+      </a>
+      <nav class="manual-top-nav" aria-label="Documentation">
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../using-advanced-props/">Advanced Props</a>
+        <a href="../using-external-and-custom-components/">Custom Components</a>
+        <a href="../spec/">JXM Spec</a>
+        <a href="../samples/">Samples</a>
+        <a href="../../modules.html">API Docs</a>
+      </nav>
+    </header>
+    <div class="manual-shell">
+      <aside class="manual-sidebar" aria-label="Manual navigation">
+        <nav>
+          <a href="../../">Home</a>
+          <a href="../getting-started/">Getting Started</a>
+          <a href="../using-advanced-props/">Using Advanced Props</a>
+          <a href="../using-external-and-custom-components/">External and Custom Components</a>
+          <a href="../creating-react-components-and-component-libraries/">Creating React Components and Component Libraries</a>
+          <a href="../spec/">JSONX and JXM Spec</a>
+          <a href="../samples/">Samples</a>
+          <a href="../roadmap/">Roadmap</a>
+          <a href="../../modules.html">Full API Docs</a>
+        </nav>
+      </aside>
+      <main class="manual-main">
+        <article class="markdown-body manual-content"><h1><a id="creating-react-components-and-component-libraries" class="anchor" href="#creating-react-components-and-component-libraries" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Creating React Components And Component Libraries</h1>
+<p>JSONX can generate function, class, dynamic, and form components from JSONX definitions. Use this when component definitions need to be data. For most application code, bundling components normally and registering them through <code>reactComponents</code> or <code>componentLibraries</code> is simpler and faster.</p>
 <ul>
-<li><a href="https://repetere.github.io/jsonx/">Home</a></li>
-<li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
-<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
-<li><a href="../samples/index.html">Samples</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
-<li><a href="../../index.html">Full API Docs</a></li>
+<li><a href="#function-component">1. Function Components</a> - Use <code>jsonx._jsonxComponents.getReactFunctionComponent</code> and JXM to create React function components with JSON.</li>
+<li><a href="#class-component">2. Class Components</a> - Use <code>jsonx._jsonxComponents.getReactClassComponent</code> and JXM to create React class components with JSON.</li>
+<li><a href="#dynamic-component">3. Dynamic Components</a> - Use <code>jsonx._jsonxComponents.DynamicComponent</code> to fetch data and render a JSONX component after the data resolves.</li>
+<li><a href="#form-component">4. Form Components</a> - Use <code>jsonx._jsonxComponents.FormComponent</code> to create forms with React Hook Form.</li>
 </ul>
-<hr>
-<h1>Creating new components</h1>
-<p>“With great power comes great responsibility”. Just because you can create new Class and Function components with JSONX it doesn’t mean you should. Typically, components should be bundled as UMDs and imported as Custom/External components to optimize performance.</p>
-<ul>
-<li><a href="#function-component">1. Function Components</a> - Use <code>jsonx._jsonxComponents.getReactFunctionComponent</code> and JXM to create React Function Components with JSON. Because JSONX can uses React under the hood, all React features are available (e.g. Hooks, Lazy and Suspense).</li>
-<li><a href="#class-component">2. Class Components</a> - Use <code>jsonx._jsonxComponents.getReactClassComponent</code> and JXM to create React Class Components with JSON</li>
-<li><a href="#dynamic-component">3. Dynamic Components</a> - Use <code>jsonx._jsonxComponents.DynamicComponent</code> is a special component that renders components after fetching data.</li>
-<li><a href="#form-component">4. Form Components</a> - Use <code>jsonx._jsonxComponents.FormComponent</code> is a special component that create forms with react-hook-form.</li>
-</ul>
-<h2><a name="function-component">1. Function Components </a></h2>
-<p>There are two ways to create function components, either using <code>jsonx._jsonxComponents.getReactFunctionComponent</code> or <code>jsonx._jsonxComponents.makeFunctionComponent</code>. <code>makeFunctionComponent</code> is a shortcut to using <code>getReactFunctionComponent</code>. The difference in component creation with <code>makeFunctionComponent</code> is you can just call that function by passing a regular JavaScript function and underneath the hood, that function will be decomposed into the arguments to the <code>getReactFunctionComponent</code> function.</p>
+<h2><a id="1-function-components" class="anchor" href="#1-function-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="function-component">1. Function Components </a></h2>
+<p>There are two ways to create function components: <code>jsonx._jsonxComponents.getReactFunctionComponent</code> and <code>jsonx._jsonxComponents.makeFunctionComponent</code>. <code>makeFunctionComponent</code> is a shortcut for passing a regular JavaScript function. JSONX reads that function and converts it into the arguments used by <code>getReactFunctionComponent</code>.</p>
 <pre><code class="hljs language-TypeScript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">myComponent</span>(<span class="hljs-params"></span>){
-  <span class="hljs-keyword">const</span> [count,setCount] = <span class="hljs-title function_">useState</span>() <span class="hljs-comment">// you can use any react function inside your function</span>
-  <span class="hljs-keyword">const</span> exposeprops = {count,setCount}; <span class="hljs-comment">// you have to define what props you want passed to your rendered component</span>
-  <span class="hljs-keyword">return</span> {<span class="hljs-comment">// you need to return JSONX JSON</span>
+  <span class="hljs-keyword">const</span> [count,setCount] = <span class="hljs-title function_">useState</span>() <span class="hljs-comment">// you can use any React hook inside your function</span>
+  <span class="hljs-keyword">const</span> exposeprops = {count,setCount}; <span class="hljs-comment">// define what props should be available to the rendered component</span>
+  <span class="hljs-keyword">return</span> {<span class="hljs-comment">// return JSONX JSON</span>
     <span class="hljs-attr">component</span>:<span class="hljs-string">'div'</span>,
-    <span class="hljs-attr">passprops</span>:<span class="hljs-literal">true</span>, <span class="hljs-comment">//set to true so you can pass 'count' and 'setCount' to child elements </span>
+    <span class="hljs-attr">passprops</span>:<span class="hljs-literal">true</span>, <span class="hljs-comment">//set to true so you can pass 'count' and 'setCount' to child elements</span>
     <span class="hljs-attr">children</span>: [
       { <span class="hljs-attr">component</span>:<span class="hljs-string">'span'</span>, <span class="hljs-attr">children</span>:<span class="hljs-string">'Clicked Count'</span> },
       {
@@ -65,9 +72,9 @@
   }
 }
 
-jsonx.<span class="hljs-property">_jsonxComponents</span>.<span class="hljs-title function_">makeFunctionComponent</span>(myComponent) <span class="hljs-comment">// return React Function Component</span>
+jsonx.<span class="hljs-property">_jsonxComponents</span>.<span class="hljs-title function_">makeFunctionComponent</span>(myComponent) <span class="hljs-comment">// returns a React function component</span>
 </code></pre>
-<p>JSONX exposes the <code>jsonx._jsonxComponents.getReactFunctionComponent</code> function that can you can use to create React Function Components.</p>
+<p>JSONX exposes <code>jsonx._jsonxComponents.getReactFunctionComponent</code> for creating React function components.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getReactFunctionComponent</span>(<span class="hljs-params">
   reactComponent: JXM_JSON,
   functionBody: <span class="hljs-built_in">string</span>,
@@ -76,9 +83,9 @@ jsonx.<span class="hljs-property">_jsonxComponents</span>.<span class="hljs-titl
 </code></pre>
 <p><code>getReactFunctionComponent</code> takes three arguments:</p>
 <ol>
-<li><code>reactComponent</code> which contains the JXM JSON for rendering the Function Component.</li>
-<li><code>functionBody</code> which is a string for the Function component (if you are using hooks or want to expose props from inside of your components, assign the props you want to make available to an <code>exposeprops</code> variable)</li>
-<li><code>options</code> used to customize <code>getReactFunctionComponent</code>.</li>
+<li><code>reactComponent</code>, which contains the JXM JSON for rendering the function component.</li>
+<li><code>functionBody</code>, which is a string body for the function component. If you use hooks or need to expose values from inside the component, assign those values to an <code>exposeprops</code> variable.</li>
+<li><code>options</code>, which customize <code>getReactFunctionComponent</code>.</li>
 </ol>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> hookFunctionComponent = jsonx.<span class="hljs-property">_jsonxComponents</span>.<span class="hljs-title function_">getReactFunctionComponent</span>(
   <span class="hljs-comment">//reactComponent</span>
@@ -121,7 +128,7 @@ jsonx.<span class="hljs-property">_jsonxComponents</span>.<span class="hljs-titl
     <span class="hljs-attr">name</span>:<span class="hljs-string">'hookFunctionComponent'</span>,
   });
 </code></pre>
-<h3>Example Function Components</h3>
+<h3><a id="example-function-components" class="anchor" href="#example-function-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Function Components</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -131,15 +138,15 @@ jsonx.<span class="hljs-property">_jsonxComponents</span>.<span class="hljs-titl
   </tr>
 </tbody></table>
 <hr>
-<h2><a name="class-component">2. Class Components </a></h2>
-<p>JSONX exposes the <code>jsonx._jsonxComponents.getReactClassComponent</code> function that can you can use to create React Class Components. <code>getReactClassComponent</code> uses <code>createReactClass</code> underneath the hood. You can read more about using <code>createReactClass</code> in the React docs section about <a href="https://reactjs.org/docs/react-without-es6.html">“React Without ES6”</a>.</p>
+<h2><a id="2-class-components" class="anchor" href="#2-class-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="class-component">2. Class Components </a></h2>
+<p>JSONX exposes <code>jsonx._jsonxComponents.getReactClassComponent</code> for creating React class components. <code>getReactClassComponent</code> uses <code>createReactClass</code>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getReactClassComponent</span>(<span class="hljs-params">
   reactComponent = {},
   options = {},
 </span>): <span class="hljs-title class_">ReactComponentLike</span>
 </code></pre>
-<p><code>getReactClassComponent</code> takes two arguments <code>reactComponent</code> which contains the arguments passed to <code>createReactClass</code> and an <code>options</code> argument.</p>
-<p>The only required function in the <code>reactComponent</code> parameter object is a render function, the body of the function has to be valid JXM JSON. Each property in the object has two properties a <code>body</code> property whose value is the function body and an <code>arguments</code> property which defines the parameters for the function.</p>
+<p><code>getReactClassComponent</code> takes two arguments: <code>reactComponent</code>, which contains the arguments passed to <code>createReactClass</code>, and <code>options</code>.</p>
+<p>The only required function in the <code>reactComponent</code> object is <code>render</code>. The render body must be valid JXM JSON. Other lifecycle or helper methods use a <code>body</code> value for the function body and an <code>arguments</code> array for the function parameters.</p>
 <pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> reactComponent = {
   <span class="hljs-comment">//</span>
   <span class="hljs-comment">// Initialization function</span>
@@ -179,7 +186,7 @@ jsonx.<span class="hljs-property">_jsonxComponents</span>.<span class="hljs-titl
   <span class="hljs-comment">// Prop change functions</span>
   <span class="hljs-comment">//</span>
   <span class="hljs-attr">componentWillReceiveProps</span>: {
-    <span class="hljs-attr">body</span>:<span class="hljs-string">'console.log("will recieve props",{nextProps}); return true;'</span>,
+    <span class="hljs-attr">body</span>:<span class="hljs-string">'console.log("will receive props",{nextProps}); return true;'</span>,
     <span class="hljs-attr">arguments</span>:[<span class="hljs-string">'nextProps'</span>]
   },
   <span class="hljs-comment">//</span>
@@ -218,15 +225,14 @@ jsonx.<span class="hljs-property">_jsonxComponents</span>.<span class="hljs-titl
   }
 };
 <span class="hljs-keyword">const</span> boundConfig = {
-  <span class="hljs-attr">debug</span>:<span class="hljs-literal">true</span>, 
+  <span class="hljs-attr">debug</span>:<span class="hljs-literal">true</span>,
   <span class="hljs-attr">reactComponents</span>:{
     <span class="hljs-title class_">MyCustomComponent</span>,
   }
 };
 
-
 jsonx.<span class="hljs-property">jsonxRender</span>.<span class="hljs-title function_">call</span>(boundConfig, {
-  <span class="hljs-attr">jsonx</span>: <span class="hljs-variable constant_">JXM</span>, 
+  <span class="hljs-attr">jsonx</span>: <span class="hljs-variable constant_">JXM</span>,
   <span class="hljs-attr">querySelector</span>:<span class="hljs-string">'#main'</span>, });
 </code></pre>
 <p>Console output after mounting</p>
@@ -236,7 +242,7 @@ jsonx.<span class="hljs-property">jsonxRender</span>.<span class="hljs-title fun
 <span class="hljs-string">"this.state"</span>
 {<span class="hljs-attr">status</span>: <span class="hljs-string">"not-loaded"</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">"jsonx test"</span>, <span class="hljs-attr">customNumber</span>: <span class="hljs-number">1</span>}
 </code></pre>
-<h3>Example Class Components</h3>
+<h3><a id="example-class-components" class="anchor" href="#example-class-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Class Components</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ck3oye01/7/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -246,10 +252,10 @@ jsonx.<span class="hljs-property">jsonxRender</span>.<span class="hljs-title fun
   </tr>
 </tbody></table>
 <hr>
-<h2><a name="dynamic-component">3. Dynamic Components </a></h2>
-<p>JSONX has a helper component called <code>DynamicComponent</code>. Using <code>DynamicComponent</code> allows you to create components that load data and render asynchronously.</p>
-<p>The typical use case is if you have some kind of dashboard or components that are independently loading data, Dynamic Components are a convenient way to handle dynamic components without Suspense and Lazy Components (they use hooks under the hood).</p>
-<p>Once the data is fetched, the <code>jsonx</code> object passed is rendered and the resolved data is available as  <code>resourceprops.DynamicComponentData</code>.</p>
+<h2><a id="3-dynamic-components" class="anchor" href="#3-dynamic-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="dynamic-component">3. Dynamic Components </a></h2>
+<p>JSONX has a helper component called <code>DynamicComponent</code>. Use it when a JSONX component needs to fetch data before rendering.</p>
+<p>The common use case is a dashboard or page where sections load data independently. <code>DynamicComponent</code> handles this without requiring Suspense or lazy loading.</p>
+<p>After the data is fetched, JSONX renders the <code>jsonx</code> object passed in <code>props</code>. The resolved data is available as <code>resourceprops.DynamicComponentData</code>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">'DynamicComponent'</span>,
   <span class="hljs-attr">props</span>: {
@@ -267,19 +273,17 @@ jsonx.<span class="hljs-property">jsonxRender</span>.<span class="hljs-title fun
 };
 </code></pre>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> dynamicComponent = jsonx.<span class="hljs-title function_">getReactElementFromJSONX</span>({
-  {
-    <span class="hljs-attr">component</span>:<span class="hljs-string">'DynamicComponent'</span>,
-    <span class="hljs-attr">props</span>:{
-      <span class="hljs-attr">fetchURL</span>:<span class="hljs-string">'/path/to/some/data'</span>
-      <span class="hljs-attr">jsonx</span>:{
-        <span class="hljs-attr">component</span>:<span class="hljs-string">'p'</span>,
-        <span class="hljs-attr">children</span>:<span class="hljs-string">'loaded data'</span>,
-      }
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'DynamicComponent'</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">fetchURL</span>:<span class="hljs-string">'/path/to/some/data'</span>,
+    <span class="hljs-attr">jsonx</span>:{
+      <span class="hljs-attr">component</span>:<span class="hljs-string">'p'</span>,
+      <span class="hljs-attr">children</span>:<span class="hljs-string">'loaded data'</span>,
     }
-  },
+  }
 });
 </code></pre>
-<h3>Example Dynamic Components</h3>
+<h3><a id="example-dynamic-components" class="anchor" href="#example-dynamic-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Dynamic Components</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/cjm1yshz/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -289,11 +293,11 @@ jsonx.<span class="hljs-property">jsonxRender</span>.<span class="hljs-title fun
   </tr>
 </tbody></table>
 ---
-<h2><a name="form-component">4. Form Components </a></h2>
-<p>JSONX has a helper component called <code>FormComponent</code>. Using <code>FormComponent</code> allows you to create forms with <a href="https://react-hook-form.com/">react-hook-form</a> without needed to add external form libraries.</p>
-<p>Form components work by creating a Function Component that uses the <code>useForm</code> hook. You can customize <code>useForm</code> by adding schema validations via <code>Yup</code> or any of the other optional arguments on <a href="https://react-hook-form.com/api#useForm">useForm</a>.</p>
-<p>The actual form elements are passed through the formComponent JXM property. By Default FormComponents are wrapped with <code>form onSubmit={handleSubmit(props.onSubmit)}</code> but the default wrapper can be overwritten with the <code>formWrapperComponent</code>.</p>
-<p>FormComponents will add an additional reactComponentLibrary called <code>ReactHookForm</code> with the <code>Controller</code> and <code>ErrorMessage</code> components included. All of the methods returned from the <code>useForm</code> hook are bound to the function context on the <code>this.reactHookForm</code> property. This is useful when you need to customize and pass registers, errors and other react-hook-form functionality into your JXM JSON Object.</p>
+<h2><a id="4-form-components" class="anchor" href="#4-form-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="form-component">4. Form Components </a></h2>
+<p>JSONX has a helper component called <code>FormComponent</code>. <code>FormComponent</code> creates forms with <a href="https://react-hook-form.com/">React Hook Form</a> without requiring another form wrapper.</p>
+<p>Form components work by creating a function component that uses the <code>useForm</code> hook. You can customize <code>useForm</code> with schema validation through Yup or other supported <code>useForm</code> options.</p>
+<p>Pass the form fields through the <code>formComponent</code> JXM property. By default, <code>FormComponent</code> wraps the fields with <code>form onSubmit={handleSubmit(props.onSubmit)}</code>. Replace that wrapper with <code>formWrapperComponent</code> when you need custom form markup.</p>
+<p><code>FormComponent</code> adds a <code>ReactHookForm</code> component library with <code>Controller</code> and <code>ErrorMessage</code>. Methods returned from the <code>useForm</code> hook are bound to <code>this.reactHookForm</code>. Use that context when JSONX needs access to registration, errors, or other React Hook Form behavior.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
   <span class="hljs-attr">component</span>: <span class="hljs-string">'FormComponent'</span>,
   <span class="hljs-attr">props</span>: {
@@ -304,21 +308,19 @@ jsonx.<span class="hljs-property">jsonxRender</span>.<span class="hljs-title fun
   }
 };
 </code></pre>
-<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> dynamicComponent = jsonx.<span class="hljs-title function_">getReactElementFromJSONX</span>({
-  {
-    <span class="hljs-attr">component</span>:<span class="hljs-string">'FormComponent'</span>,
-    <span class="hljs-attr">props</span>:{
-      <span class="hljs-attr">onSubmit</span>: <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> { <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>({ <span class="hljs-attr">submitData</span>: data }) },
-      <span class="hljs-attr">formComponent</span>:{
-        <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
-        <span class="hljs-attr">props</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">"text"</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">"username"</span>, <span class="hljs-attr">placeholder</span>: <span class="hljs-string">"username"</span> },
-        <span class="hljs-attr">thiscontext</span>:{ <span class="hljs-attr">ref</span>:[<span class="hljs-string">'reactHookForm'</span>,<span class="hljs-string">'register'</span>] },
-      },
-    }
-  },
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> formComponent = jsonx.<span class="hljs-title function_">getReactElementFromJSONX</span>({
+  <span class="hljs-attr">component</span>:<span class="hljs-string">'FormComponent'</span>,
+  <span class="hljs-attr">props</span>:{
+    <span class="hljs-attr">onSubmit</span>: <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> { <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>({ <span class="hljs-attr">submitData</span>: data }) },
+    <span class="hljs-attr">formComponent</span>:{
+      <span class="hljs-attr">component</span>: <span class="hljs-string">"input"</span>,
+      <span class="hljs-attr">props</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">"text"</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">"username"</span>, <span class="hljs-attr">placeholder</span>: <span class="hljs-string">"username"</span> },
+      <span class="hljs-attr">thiscontext</span>:{ <span class="hljs-attr">ref</span>:[<span class="hljs-string">'reactHookForm'</span>,<span class="hljs-string">'register'</span>] },
+    },
+  }
 });
 </code></pre>
-<h3>Example Form Components</h3>
+<h3><a id="example-form-components" class="anchor" href="#example-form-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Form Components</h3>
 <table style="border:0; width:100%">
   <tbody><tr>
     <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/18/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
@@ -328,20 +330,10 @@ jsonx.<span class="hljs-property">jsonxRender</span>.<span class="hljs-title fun
   </tr>
 </tbody></table>
 <hr>
-<h2><a href="../spec/index.html">JSONX &amp; JXM Spec</a></h2>
-<h3>JSONX Manual</h3>
-<ul>
-<li><a href="https://repetere.github.io/jsonx/">Home</a></li>
-<li><a href="../getting-started/index.html">Getting Started</a></li>
-<li><a href="../using-advanced-props/index.html">Using Advanced Props</a></li>
-<li><a href="../using-external-and-custom-components/index.html">External and Custom Components</a></li>
-<li><a href="../creating-react-components-and-component-libraries/index.html">Creating React Components and Component Libraries</a></li>
-<li><a href="../spec/index.html">JSONX &amp; JXM Spec</a></li>
-<li><a href="../samples/index.html">Samples</a></li>
-<li><a href="../roadmap/index.html">Roadmap</a></li>
-<li><a href="../../index.html">Full API Docs</a></li>
-</ul>
-</main>
+<h2><a id="jsonx-and-jxm-spec" class="anchor" href="#jsonx-and-jxm-spec" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a href="../spec/">JSONX And JXM Spec</a></h2>
+</article>
+      </main>
+    </div>
 
 
 </body></html>

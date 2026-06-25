@@ -1,189 +1,152 @@
-<link id="viewx-style-style-0" rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@9.18.1/styles/darkula.css">
+# JXM JSON Spec
 
----
-### JSONX Manual
- - [Home](https://repetere.github.io/jsonx/)
- - [Getting Started](../getting-started/index.html)
- - [Using Advanced Props](../using-advanced-props/index.html)
- - [External and Custom Components](../using-external-and-custom-components/index.html)
- - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
- - [JSONX & JXM Spec](../spec/index.html)
- - [Samples](../samples/index.html)
- - [Roadmap](../roadmap/index.html)
- - [Full API Docs](../../index.html)
+JXM is the JSON shape JSONX uses to describe React UI as data. A JXM object describes a component, its props, its children, and optional JSONX-specific behavior such as resource bindings, templates, display rules, formatting, and generated components.
 
----
+JXM maps to the arguments passed to [`React.createElement`](https://react.dev/reference/react/createElement). The only required field is `component`, or its alias `type`.
 
-# Full JXM (JSONX Markup) JSON Spec
-
-JXM is the JSON structure JSONX uses to describe React UI as data. A JXM object describes a component, its props, its children, and optional JSONX-specific behavior such as templates, resource bindings, display rules, formatting, and generated components.
-
-JXM objects map to the arguments passed to [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component, which is passed as the `type` argument.
-
-```javascript
-React.createElement(
-  type,
-  [props],
-  [...children]
-)
+```ts
+React.createElement(type, props, ...children);
 ```
 
-The full [type definition](../../interfaces/_types_jsonx_jsonx_.jsonx.html) is also available.
-```typescript
-jxm = {
-  //standard properties
-  component:String, // Any React DOM element, or custom component div,p, Boomer.Hero, MaterialUI.Button, myCustomComponent (can also use the property 'type' instead of 'component')
-  props:Object, // Standard React component properties
-  children:Array|String, // Any String or Array of valid JSONX JSON objects
+The source type lives in [`src/types/jsonx/jsonx.ts`](https://github.com/repetere/jsonx/blob/main/src/types/jsonx/jsonx.ts). The generated API reference is available in the [Full API Docs](../../modules.html).
 
+## Core Fields
 
-  //traverse properties
-  resourceprops:Object, // An object from async resources to merge onto jsonx.props once fully resolved
-  asyncprops:Object, // An object from async resources to merge onto jsonx.props once fully resolved (alias for resourceprops)
-  thisprops:Object, // An object to merge onto jsonx.props from properties already bound to this.props
-  thisstate:Object, // An object to merge onto jsonx.props from properties already bound to this.state
-  thiscontext:Object, // An object to merge onto jsonx.props from properties already bound to this
-  windowprops:Object, // An object to merge onto jsonx.props from the window object
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `component` | `string` | React DOM element, custom component name, or component-library path such as `ReactBootstrap.Button`. |
+| `type` | `string` | Alias for `component`. |
+| `props` | `object` | Props passed to the React element. |
+| `children` | `string`, `array`, `Date`, or `null` | Children passed to the React element. |
 
-
-  //evaluation properties
-  __dangerouslyEvalProps:Object, // An object of evaluated JavaScript strings, used as inline functions onto jsonx.props, if the prop is a function it will be called bound to 'this' and the returned value will be assigned
-  __dangerouslyBindEvalProps:Object, // An object of evaluated JavaScript functions that are bound to this, used as inline functions onto jsonx.props
-  __dangerouslyEvalAllProps:Object, // evaluate strings to generate props that are functions bound to `this`
-  __functionProps:Object, // An object of parsed function strings(func:this.props.onClick, func:window.localStorage.getItem),merged onto jsonx.props
-  __dangerouslyInsertJSONXComponents:Object, // An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
-  __dangerouslyInsertComponents:Object, // An object that turns each JSONX JSON value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
-  __dangerouslyInsertReactComponents:Object, // An object that returns the react element from either ReactDOM, reactComponents or componentLibraries.
-  __dangerouslyInsertFunctionComponents:Object, // An object that returns the react function component.
-  __dangerouslyInsertClassComponents:Object, // An object that returns the react class component.
-  __spreadComponent:Object, // A JSONX element that is mapped on any array prop called  __spread
-  __windowComponents:Object, // An object of components merged onto jsonx.props from window.__jsonx_custom_elements
-  __windowComponentProps:Object, // Returns a resolved object that has React Components pulled from window.
-  _children: Object, // any value assigned to _children will be set as the react element children property. This is typically used when you want to override what's passed as the children JXM property with a dynamic value later.
-
-  //format properties
-  ___FromLuxonTimeZone:String, // format date values as strings assigned to `children` prop using Luxon
-  ___ISOtoLuxonString:String, //converts the children prop to from an ISO String to a Luxon formatted DateTime String 
-  ___JSDatetoLuxonString:String, //converts the children prop to from JavaScript Date to a Luxon formatted DateTime String 
-  ___stringifyChildren:String, //converts the children prop to a string using JSON.stringify 
-  ___toNumeral:String, //converts numbers to numeral formatted numbers
-  ___toStringChildren:String, //converts the children prop to a string using toString()
-
-  
-  //utility properties
-  debug:Boolean, // A flag to output the calculated JXM props in the console
-  test:Boolean, // A flag to output the calculated JXM as a string component
-  passprops:Boolean|[String], // A flag to pass parent properties to children JSONX objects (except for the style property)
-  ___template:String, //imports JXM from a file path into the children property 
-  
-  //display properties
-  comparisonprops:[Object], // An array of Objects used to conditionally display the current jsonx.component
-  comparisonorprops:Boolean, // A flag to use an or condition instead of and conditions between comparisions
-  
-  //Applied properties
-  useformregister:Boolean, // A flag to insert react hook form register on component (short hand for  thiscontext: { ref:['reactHookForm','register'] })
-  useremoveprops:[String], // remove props from component, usually used with passprops
-  useincludeprops:[String], // Applied Prop: includes only defined props, usually used with passprops 
-}
+```ts
+const view = {
+  component: "section",
+  props: { className: "intro" },
+  children: [
+    { component: "h1", children: "JSONX" },
+    { component: "p", children: "React UI defined as data." },
+  ],
+};
 ```
 
+## Traverse Fields
+
+Traverse fields read values from a source object and merge them into `props`.
+
+| Field | Source |
+| --- | --- |
+| `resourceprops` | The `resources` object passed to render methods. |
+| `asyncprops` | Alias for `resourceprops`. |
+| `thisprops` | `this.props`. |
+| `thisstate` | `this.state`. |
+| `thiscontext` | The bound `this` context. |
+| `windowprops` | The global `window` object. |
+
+```ts
+const view = {
+  component: "a",
+  resourceprops: {
+    href: ["profile", "url"],
+  },
+  children: "Profile",
+};
+
+jsonx.getReactElement(view, {
+  profile: { url: "/users/123" },
+});
+```
+
+## Evaluation Fields
+
+These fields create functions, evaluated props, or React elements from JSONX definitions. Treat them as trusted-input features. Do not run untrusted JSONX definitions with evaluation enabled.
+
+| Field | Purpose |
+| --- | --- |
+| `_children` | Overrides `children` after dynamic values resolve. |
+| `__dangerouslyEvalProps` | Evaluates strings or functions and merges the returned values into `props`. |
+| `__dangerouslyBindEvalProps` | Evaluates functions and binds them to the current context. |
+| `__dangerouslyEvalAllProps` | Evaluates a string or function to replace the full `props` object. |
+| `__dangerouslyInsertComponents` | Inserts React elements created from JSONX objects into props. |
+| `__dangerouslyInsertReactComponents` | Inserts React components resolved from ReactDOM, `reactComponents`, or `componentLibraries`. |
+| `__dangerouslyInsertJSONXComponents` | Inserts JSONX-backed components into props. |
+| `__dangerouslyInsertFunctionComponents` | Creates function components as prop values. |
+| `__dangerouslyInsertClassComponents` | Creates class components as prop values. |
+| `__windowComponents` | Reads components from `window.__jsonx_custom_elements`. |
+| `__windowComponentProps` | Reads component props from window-backed components. |
+| `__spread` | Array of data used to generate children from `__spreadComponent`. |
+| `__spreadComponent` | JSONX template mapped over `__spread`. |
+| `__functionProps` | Legacy function-string prop resolution. |
+| `__functionargs` | Legacy function argument binding for `__functionProps`. |
+| `__inline` | Legacy inline function definition for `__functionProps`. |
+
+## Format Fields
+
+Format fields convert `children` values before rendering.
+
+| Field | Purpose |
+| --- | --- |
+| `___stringifyChildren` | Converts `children` with `JSON.stringify`. |
+| `___toStringChildren` | Converts `children` with `.toString()`. |
+| `___toNumeral` | Formats numeric children with Numeral.js. |
+| `___FromLuxonTimeZone` | Sets the time zone for Luxon formatting. |
+| `___ISOtoLuxonString` | Formats ISO date strings with Luxon. |
+| `___JSDatetoLuxonString` | Formats JavaScript `Date` values with Luxon. |
+
+## Utility And Display Fields
+
+| Field | Purpose |
+| --- | --- |
+| `___template` | Loads a JSONX template from an external file or URL. |
+| `passprops` | Passes parent props into child JSONX objects. |
+| `debug` | Logs calculated props and rendering errors. |
+| `test` | Returns calculated render data as a string. |
+| `comparisonprops` | Conditionally renders a component when comparisons match. |
+| `comparisonorprops` | Uses OR logic instead of AND logic for comparisons. |
+
+## Applied Fields
+
+| Field | Purpose |
+| --- | --- |
+| `useformregister` | Adds React Hook Form registration to a component. |
+| `useremoveprops` | Removes named props before rendering. |
+| `useincludeprops` | Keeps only named props before rendering. |
 
 ## Simple JSONX Syntax
 
-If you want to save time, you can use the property name as the component/type and use the object value to define the rest of the JXM properties for a cleaner simple syntax
+Simple syntax lets the component name become the object key.
 
-```javascript
-//shorthand simple jsonx
-{
+```ts
+const simpleView = {
   ul: {
-    props:{
-      className:'list-class',
-    },
-    children:[
-      {
-        li: {
-          children:'first bullet',
-        },
-      },
-      {
-        li: {
-          children:'second bullet',
-        },
-      },
-      {
-        li:'third bullet',
-      },
-    ]
-  }
-}
+    props: { className: "list" },
+    children: [
+      { li: "first bullet" },
+      { li: "second bullet" },
+      { li: "third bullet" },
+    ],
+  },
+};
 ```
 
+## Primary API
 
-### JSONX Imperative API / Module
+| API | Purpose |
+| --- | --- |
+| `getReactElement`, `getRenderedJSON`, `getReactElementFromJSONX` | Create React elements from JSONX. |
+| `getReactElementFromJSON` | Create React elements from resolved `{ type, props, children }` JSON. |
+| `jsonxRender` | Render JSONX into a browser DOM node or portal. |
+| `outputHTML`, `jsonxHTMLString` | Render JSONX to an HTML string. |
+| `outputJSX` | Render JSONX to a JSX string. |
+| `outputJSON` | Render JSONX to resolved JSON. |
+| `compile` | Create a React function component from JSONX. |
+| `jsonToJSX` | Convert resolved JSON to JSX text. |
+| `renderFile`, `__express` | Render Express-compatible JSONX views. |
+| `_jsonxChildren` | Child resolution helpers. |
+| `_jsonxComponents` | Component lookup and generated component helpers. |
+| `_jsonxProps` | Prop resolution helpers. |
+| `_jsonxUtils` | Validation, display, traversal, and simple syntax helpers. |
 
-```javascript
-"jsonx" : {
-  getReactElement: [Function: getReactElement], {aliases:[getRenderedJSON,getReactElementFromJSONX]} //Use React.createElement and JSONX JSON to create React elements
-  getReactElementFromJSON: [Function: getReactElementFromJSON], // Use compiledJSON object {type,props,children} to create React elements
-  jsonxRender: [Function: getRenderedJSON], //Use JSONX without any configuration to render JSONX JSON to HTML and insert JSONX into querySelector using ReactDOM.render
-  outputHTML: [Function: outputHTML], //Use ReactDOMServer.renderToString to render html from JSONX
-  outputJSX: [Function: outputJSX], //Generate valid JSX from JSONX
-  outputJSON: [Function: outputJSON], //Generate computed static values from JSONX into JSON
-  compile: [Function: compile], //Generate React Function Component from JSONX
+## Next
 
-  jsonToJSX: [Function: jsonToJSX], //Converts JSON to JSX
-  __express: [Function: __express], //render express views with JSONX
-  __getReact: [Function: __getReact], //Expose reference to React
-  __getReactDOM: [Function: __getReactDOM], //Expose reference to ReactDOM
-  __getUseGlobalHook: [Function: __getUseGlobalHook], //Expose reference to useGlobalHook
-
-
-  _jsonxChildren: {
-    getChildrenProperty: [Function: getChildrenProperty], // returns a valid jsonx.children property
-    getChildrenProps: [Function: getChildrenProps], // Used to pass properties down to child components if passprops is set to true
-    getJSONXChildren: [Function: getJSONXChildren], // returns React Child Elements via JSONX
-  },
-  _jsonxComponents: {
-    componentMap: {}, // object of all react components available for JSONX
-    getBoundedComponents: [Function: getBoundedComponents], // getBoundedComponents returns reactComponents with certain elements that have this bounded to select components in the boundedComponents list
-    getComponentFromLibrary: [Function: getComponentFromLibrary], // returns a react component from a component library (like material-ui, or semantic-ui)
-    getComponentFromMap: [Function: getComponentFromMap], // returns a react element from jsonx.component
-    getReactClassComponent: [Function: getReactClassComponent], // returns a react class component and support lifecycle functions, lazy and suspense components
-    getReactFunctionComponent: [Function: getReactFunctionComponent], // returns a react function component and support lifecycle functions, hooks, lazy and suspense components
-    FormComponent: [Function: FormComponent], // returns a helper react function component that allows you to create forms with [react-hook-form](https://react-hook-form.com/) without needed to add external form libraries
-    DynamicComponent: [Function: DynamicComponent], // returns a helper react function component that allows you to create components that load data and render asynchronously. 
-  },
-  _jsonxProps: {
-    getJSONXProps: [Function: getJSONXProps], // It uses traverse on a traverseObject to returns a resolved object on propName. So if you're making an ajax call and want to pass properties into a component, you can assign them using asyncprops and reference object properties by an array of property paths
-    getEvalProps: [Function: getEvalProps], //Used to evalute javascript and set those variables as props. getEvalProps evaluates __dangerouslyEvalProps and __dangerouslyBindEvalProps properties with eval, this is used when component properties are functions, __dangerouslyBindEvalProps is used when those functions require that this is bound to the function. For __dangerouslyBindEvalProps it must resolve an expression, so functions should be wrapped in (). I.e. (function f(x){ return this.minimum+x;})
-    getComponentProps: [Function: getComponentProps], // Resolves jsonx.__dangerouslyInsertComponents into an object that turns each value into a React components. This is typically used in a library like Recharts where you pass custom components for chart ticks or plot points.
-    getReactComponentProps: [Function: getReactComponentProps], // Resolves jsonx.__dangerouslyInsertReactComponents into an object that turns each value into a the React component from reactComponents, componentLibraries or ReactDOM.
-    getFunctionFromProps: [Function: getFunctionFromProps], // Takes a function string and returns a function on either this.props or window.
-    getFunctionProps: [Function: getFunctionProps], // Returns a resolved object from function strings that has functions pulled from jsonx.__functionProps
-    getWindowComponents: [Function: getWindowComponents], // Returns a resolved object that has React Components pulled from window.__jsonx_custom_elements
-    getComputedProps: [Function: getComputedProps], // Returns computed properties for React Components and any property that's prefixed with __ is a computedProperty
-  },
-  _jsonxUtils: {
-    validateJSONX: [Function: validateJSONX], //Validates JSONX JSON Syntax
-    displayComponent: [Function displayComponent], // Used to evaluate whether or not to render a component
-    traverse: [Function traverse], //take an object of array paths to traverse and resolve
-    getAdvancedBinding: [Function: getAdvancedBinding], // Use to test if can bind components this context for react-redux-router
-  },
-}
-```
-
----
-
-## [Samples](../samples/index.html)
-
-### JSONX Manual
- - [Home](https://repetere.github.io/jsonx/)
- - [Getting Started](../getting-started/index.html)
- - [Using Advanced Props](../using-advanced-props/index.html)
- - [External and Custom Components](../using-external-and-custom-components/index.html)
- - [Creating React Components and Component Libraries](../creating-react-components-and-component-libraries/index.html)
- - [JSONX & JXM Spec](../spec/index.html)
- - [Samples](../samples/index.html)
- - [Roadmap](../roadmap/index.html)
- - [Full API Docs](../../index.html)
-
+Read [Samples](../samples/) for browser examples.
