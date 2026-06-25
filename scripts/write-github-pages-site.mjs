@@ -6,7 +6,9 @@ const sourceRoot = path.join(root, "site");
 const docsRoot = path.join(root, "docs");
 
 const files = [
+  ["CNAME", "CNAME"],
   ["index.html", "index.html"],
+  ["assets/analytics.js", "assets/analytics.js"],
   ["assets/favicon.svg", "assets/favicon.svg"],
   ["assets/site.css", "assets/site.css"],
   ["assets/site.js", "assets/site.js"],
