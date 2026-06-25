@@ -13,10 +13,10 @@
     "benchmark": "node -r esm  benchmark/main_bmrk.js",
     "test": "jest --coverage",
     "lid:check": "node scripts/lid-check.mjs",
-    "doc": "tsc && typedoc && sitedown manual/ -b docs/manual",
+    "doc": "tsc && typedoc && sitedown manual/ -b docs/manual && node scripts/write-github-pages-site.mjs",
     "compile": "tsc",
     "esbuild": "node esbuild.config.js",
-    "build": "tsc && node esbuild.config.js && typedoc && sitedown manual/ -b docs/manual",
+    "build": "tsc && node esbuild.config.js && typedoc && sitedown manual/ -b docs/manual && node scripts/write-github-pages-site.mjs",
     "build:check": "node scripts/check-build-artifacts.mjs",
     "coverage": "coveralls"
   },
@@ -46,7 +46,7 @@
   "bugs": {
     "url": "https://github.com/repetere/jsonx/issues"
   },
-  "homepage": "https://github.com/repetere/jsonx#readme",
+  "homepage": "https://repetere.github.io/jsonx/",
   "devDependencies": {
     "@commitlint/cli": "^21.1.0",
     "@commitlint/config-conventional": "21.1.0",
