@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="JSONX">
+  <rect width="64" height="64" rx="12" fill="#06111f" />
+  <path d="M18 20c-4 0-6 2-6 6v2c0 2-1 3-3 4 2 1 3 2 3 4v2c0 4 2 6 6 6" fill="none" stroke="#f2a51a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M46 20c4 0 6 2 6 6v2c0 2 1 3 3 4-2 1-3 2-3 4v2c0 4-2 6-6 6" fill="none" stroke="#f2a51a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M25 24l14 16M39 24L25 40" fill="none" stroke="#0f9b96" stroke-width="5" stroke-linecap="round" />
+</svg>

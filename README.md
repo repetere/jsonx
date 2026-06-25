@@ -4,20 +4,23 @@
 
 ## Description
 
-**JSONX** is a module that creates React Elements, JSX and HTML from JSON.
+**JSONX** is a React rendering library that lets you define React UI as JSON, then render it as React elements, HTML, JSX text, or browser DOM output.
 
-### Declarative
+JSONX gives you a JSON-based rendering layer for React. A JSONX object describes the component, props, children, templates, and resource bindings. The library resolves that structure into React output for browser rendering, server-side HTML rendering, Express views, or generated component flows.
 
-The JSONX web module comes with batteries included so you can use JSONX in the browser without transpilers or any additional setup/configuration. The JSONX UMD is ideal for JAMstack Applications.
+JSONX is not a replacement for React, a design system, or just a JSON-to-HTML tool. It is useful when React views need to be generated, serialized, audited, stored in files, returned from APIs, or moved through a system as data.
 
-### Embeddable
+### Data-Driven React
 
-JSONX can also be used in existing react applications if you want to dynamically create elements with JSON. This works great for many scenarios when you want to manage your application views and components in a view management system or if you want to dynamically create React elements without using JSX.
+JSONX works in existing React applications when you need to create elements from data instead of JSX source code. This is helpful for view management systems, configuration-driven UI, server-rendered views, and applications that need to inspect or persist UI definitions.
 
-### Fully Featured
+### Browser and Server Output
 
-JSONX supports all of Reacts features including Functional (with Hooks), Class-based, Suspense and Lazy components. JSONX supports JSON objects that implement the JXM (JSONX Markup) Spec.
+JSONX can produce React elements, HTML strings, JSX strings, JSON intermediate representation, browser DOM output, and Express view output. The browser bundles can run without a transpiler when the page already has the needed runtime dependencies.
 
+### Component Support
+
+JSONX supports DOM components, custom component maps, component libraries, function components with hooks, class components, Suspense, Lazy components, dynamic data-backed components, and JSON objects that implement the JXM (JSONX Markup) spec.
 
 ## Installation
 
@@ -44,7 +47,7 @@ $ npm i jsonx
 
 ### Basic Usage
 ```javascript
-import { * as jsonx } from 'jsonx';
+import * as jsonx from 'jsonx';
 const example_JXM_JSON = {
   component:'p',
   props:{ style:{ color:'blue' } },
@@ -89,7 +92,7 @@ const superSimpleJXM = {
 
 ### JXM JSON Spec
 
-JSONX works by using JXM JSON to create react elements. JXM JSON Objects are valid JSON Objects that more or less mimics JSX in JSON notation with a couple of special properties. The properties for JSONX JSON are the arguments passed to [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component (which is passed as the `type` argument)
+JSONX works by using JXM JSON to create React elements. JXM JSON objects are valid JSON objects that describe React component structure in data form. The properties for JSONX JSON map to the arguments passed to [React.createElement](https://reactjs.org/docs/react-api.html#createelement). The only required property is the component, which is passed as the `type` argument.
 
 ```javascript
 React.createElement(
@@ -99,7 +102,7 @@ React.createElement(
 )
 ```
 
-You can pass React component libraries for additional components, or you own custom components (see [External and Custom Components](https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html)
+You can pass React component libraries for additional components, or your own custom components (see [External and Custom Components](https://repetere.github.io/jsonx/manual/using-external-and-custom-components/index.html)
  and [Using Advanced Props](https://repetere.github.io/jsonx/manual/using-advanced-props/index.html) for more details).
 
 

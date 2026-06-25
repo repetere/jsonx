@@ -31,7 +31,9 @@
 </ul>
 <hr>
 <h1>Getting Started</h1>
-<p>JSONX is a library that creates React Elements, JSX, and HTML from JSON. JSONX works by converting JSON Objects that follow the JXM spec into the arguments passed into <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component (which is passed as the <code>type</code> argument)</p>
+<p>JSONX is a React rendering library that lets you define React UI as JSON, then render it as React elements, HTML, JSX text, or browser DOM output.</p>
+<p>JSONX gives you a JSON-based rendering layer for React. A JSONX object describes the component, props, children, templates, and resource bindings. The library resolves that structure into React output for browser rendering, server-side HTML rendering, Express views, or generated component flows.</p>
+<p>JSONX works by converting JSON objects that follow the JXM spec into the arguments passed into <a href="https://reactjs.org/docs/react-api.html#createelement">React.createElement</a>. The only required property is the component, which is passed as the <code>type</code> argument.</p>
 <pre><code class="hljs language-ts"><span class="hljs-comment">// React Create Element Example</span>
 <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(
   <span class="hljs-keyword">type</span>,
@@ -49,18 +51,23 @@
 <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">title</span>=<span class="hljs-string">"jsonx"</span>&gt;</span>hello<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span> 
 </code></pre>
 <h2>Usages</h2>
-<p>JSONX is great for:</p>
+<p>JSONX is useful for:</p>
 <ul>
-<li>Composing UIs programmatically</li>
-<li>Using existing React Component Libraries to compose UIs</li>
-<li>Using React components with transpilers</li>
-<li>Creating simple components with JSON</li>
-<li>Rendering components in existing React Applications</li>
+<li>UI stored in files, APIs, databases, or configuration.</li>
+<li>Server-rendered React views.</li>
+<li>Dynamic component rendering.</li>
+<li>View management systems that need React views as data.</li>
+<li>Systems where React views need to be generated, serialized, audited, or moved between services.</li>
+<li>Using existing React component libraries from JSON definitions.</li>
 </ul>
-<p>JSONX is not great for:</p>
+<p>JSONX is not:</p>
 <ul>
-<li>building extremely complicated components (although it can be done)</li>
+<li>A replacement for React.</li>
+<li>A design system.</li>
+<li>A tool for running untrusted UI definitions.</li>
+<li>Just a JSON-to-HTML converter.</li>
 </ul>
+<p>For complex hand-authored application screens, JSX may still be the simpler choice. JSONX is a better fit when the view definition needs to be data.</p>
 <h2>Example</h2>
 <table style="border:0; width:100%">
   <tbody><tr>
