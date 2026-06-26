@@ -20,7 +20,7 @@
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="#why-jsonx">Why JSONX</a>
         <a href="#workflow">Workflow</a>
-        <a href="manual/getting-started/index.html">Docs</a>
+        <a class="nav-docs" href="manual/getting-started/index.html">Docs</a>
         <a href="https://github.com/repetere/jsonx">GitHub</a>
       </nav>
     </header>
@@ -30,18 +30,37 @@
         <div class="hero-copy">
           <h1 id="hero-title">React views, defined as JSON.</h1>
           <p>
-            Build React elements, HTML, JSX text, and Express views from
-            serializable UI definitions.
+            Define a React view as serializable JXM, then render it as a React
+            element, HTML string, JSX text, browser DOM output, or an Express
+            view.
           </p>
           <div class="hero-actions">
             <a class="button button-primary" href="manual/getting-started/index.html">Get started</a>
             <a class="button button-secondary" href="modules.html">View API docs</a>
           </div>
+          <div class="hero-command" aria-label="Install command">
+            <span>Install</span>
+            <code>npm i jsonx react react-dom</code>
+          </div>
+          <dl class="hero-facts" aria-label="Package details">
+            <div>
+              <dt>React</dt>
+              <dd>18 and 19 peer support</dd>
+            </div>
+            <div>
+              <dt>Output</dt>
+              <dd>React, HTML, JSX, Express</dd>
+            </div>
+            <div>
+              <dt>License</dt>
+              <dd>MIT</dd>
+            </div>
+          </dl>
         </div>
 
         <div class="hero-demo" aria-label="JSONX input and rendered output example">
           <div class="demo-panel code-panel">
-            <div class="panel-title">JSON input</div>
+            <div class="panel-title">JXM definition</div>
             <pre><code>{
   "component": "section",
   "props": {
@@ -65,7 +84,7 @@
             </svg>
           </div>
           <div class="demo-panel render-panel">
-            <div class="panel-title">React output</div>
+            <div class="panel-title">Rendered React view</div>
             <div class="render-card">
               <h2>Hello, JSONX</h2>
               <p>Defined in JSON, rendered as React.</p>
@@ -78,7 +97,7 @@
       <section class="workflow-section" id="workflow" aria-labelledby="workflow-title">
         <div class="section-heading">
           <h2 id="workflow-title">One definition. Multiple outputs.</h2>
-          <p>Describe UI once, then render it where the system needs it.</p>
+          <p>Describe UI once, then render it where the system needs the view.</p>
         </div>
 
         <div class="workflow-rail" aria-label="JSONX rendering workflow">
@@ -86,7 +105,8 @@
             <div class="node-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M8 4H6a2 2 0 0 0-2 2v3a3 3 0 0 1-2 3 3 3 0 0 1 2 3v3a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v3a3 3 0 0 0 2 3 3 3 0 0 0-2 3v3a2 2 0 0 1-2 2h-2" /></svg>
             </div>
-            <h3>JXM JSON</h3>
+            <h3>Define JXM</h3>
+            <p>Keep the view model serializable.</p>
             <pre><code>{
   "component": "div",
   "children": "JSONX"
@@ -97,7 +117,8 @@
             <div class="node-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M12 4v5M6 15h12M6 20h12M6 15v5M18 15v5M9 9h6v6H9z" /></svg>
             </div>
-            <h3>Component map</h3>
+            <h3>Map components</h3>
+            <p>Point JSON element names at React components.</p>
             <pre><code>div: Box
 h1: Heading
 p: Text</code></pre>
@@ -107,7 +128,8 @@ p: Text</code></pre>
             <div class="node-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1A2 2 0 0 1 4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.3 7A2 2 0 0 1 7.1 4.2l.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1A2 2 0 0 1 19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.1a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1Z" /></svg>
             </div>
-            <h3>Renderer</h3>
+            <h3>Render output</h3>
+            <p>Choose the output for the runtime.</p>
             <pre><code>render(jxm, map)</code></pre>
           </article>
 
@@ -115,7 +137,8 @@ p: Text</code></pre>
             <div class="node-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M12 2c1.9 0 3.6 4.5 3.6 10S13.9 22 12 22 8.4 17.5 8.4 12 10.1 2 12 2Zm0 0c-1.9 0-6.5 2.7-9.3 7.5C0 14.3.1 19.6 2 20.7c1.6.9 6.3-1.7 10-6.3 3.7 4.6 8.4 7.2 10 6.3 1.9-1.1 2-6.4-.7-11.2C18.5 4.7 13.9 2 12 2Zm0 12.4c-3.7 4.6-8.4 7.2-10 6.3-1.9-1.1-2-6.4.7-11.2C5.5 4.7 10.1 2 12 2c1.9 0 6.5 2.7 9.3 7.5 2.7 4.8 2.6 10.1.7 11.2-1.6.9-6.3-1.7-10-6.3ZM12 13.4a1.4 1.4 0 1 0 0-2.8 1.4 1.4 0 0 0 0 2.8Z" /></svg>
             </div>
-            <h3>React element</h3>
+            <h3>Use the result</h3>
+            <p>Return React, HTML, JSX, or Express output.</p>
             <pre><code>&lt;Box&gt;JSONX&lt;/Box&gt;</code></pre>
           </article>
         </div>
@@ -146,7 +169,7 @@ p: Text</code></pre>
             </div>
             <div>
               <h3>Configuration-driven UI</h3>
-              <p>Store view definitions.</p>
+              <p>Store view definitions in configuration, an API response, or a database record.</p>
             </div>
           </article>
           <article class="capability-row">
@@ -155,7 +178,7 @@ p: Text</code></pre>
             </div>
             <div>
               <h3>Server output</h3>
-              <p>Render HTML strings.</p>
+              <p>Render HTML strings or Express views from the same JXM object.</p>
             </div>
           </article>
           <article class="capability-row">
@@ -164,7 +187,7 @@ p: Text</code></pre>
             </div>
             <div>
               <h3>Component libraries</h3>
-              <p>Map custom components.</p>
+              <p>Map application components without changing the stored view shape.</p>
             </div>
           </article>
           <article class="capability-row">
@@ -173,7 +196,7 @@ p: Text</code></pre>
             </div>
             <div>
               <h3>JXM spec</h3>
-              <p>Use a documented JSON shape.</p>
+              <p>Use a documented JSON shape for teams that need a durable contract.</p>
             </div>
           </article>
         </div>
@@ -192,9 +215,9 @@ p: Text</code></pre>
           <div class="terminal-card" aria-label="Install command">
             <div class="terminal-header">
               <span></span><span></span><span></span>
-              <button class="copy-button" type="button" data-copy="npm i jsonx">Copy</button>
+              <button class="copy-button" type="button" data-copy="npm i jsonx react react-dom">Copy</button>
             </div>
-            <pre><code><span class="prompt">&gt;</span> npm i jsonx</code></pre>
+            <pre><code><span class="prompt">&gt;</span> npm i jsonx react react-dom</code></pre>
           </div>
 
           <div class="doc-actions" aria-label="Documentation links">
