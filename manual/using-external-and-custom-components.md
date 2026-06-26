@@ -42,16 +42,11 @@ const view = {
 const element = getReactElement(view);
 ```
 
-### React Bootstrap Example
+### Component Library Example
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gctmsojp/22/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-</td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gctmsojp/22/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-</td>
-  </tr>
-</table>
+The live example uses an in-page `DemoKit` library so the manual does not depend on a third-party CDN. Replace `DemoKit` with `ReactBootstrap` in application code.
+
+<div class="jsonx-simulator" data-example="component-library"></div>
 
 ## Custom Components
 
@@ -90,16 +85,11 @@ jsonx.jsonxRender.call(
 );
 ```
 
-### React Calendar Example
+### Custom Component Example
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/Lqwe3f59/5/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-</td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/Lqwe3f59/5/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-</td>
-  </tr>
-</table>
+The live example uses a small local component so the manual runs without the React Calendar package.
+
+<div class="jsonx-simulator" data-example="custom-component"></div>
 
 ## Choosing A Registration Path
 

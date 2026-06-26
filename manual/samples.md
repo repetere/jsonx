@@ -1,21 +1,22 @@
 # Samples
 
-These examples show JSONX in the browser with the same concepts covered in the manual.
+These examples run in the manual. Edit the JavaScript on the left side of each simulator to see JSONX render the output on the right.
 
-1. [Getting Started Basic Example](https://jsfiddle.net/yawetse/ka7ghypd/6/)
-2. [Advanced Props: Traverse Props](https://jsfiddle.net/yawetse/pz845dk9/4/)
-3. [Advanced Props: `__dangerouslyEvalProps`](https://jsfiddle.net/yawetse/n704z65x/7/)
-4. [Advanced Props: `__spreadComponent`](https://jsfiddle.net/yawetse/e5au6td1/2/)
-5. [Advanced Props: `__functionProps` legacy example](https://jsfiddle.net/yawetse/34ngdzyh/3/)
-6. [Advanced Props: Format Props](https://jsfiddle.net/yawetse/5ypaotu6/3/)
-7. [Advanced Props: Display Props](https://jsfiddle.net/yawetse/jn7L54x1/4/)
-8. [Advanced Props: Utility Props](https://jsfiddle.net/yawetse/gbeatwp2/3/)
-9. [Custom Library: React Bootstrap](https://jsfiddle.net/yawetse/gctmsojp/22/)
-10. [Custom Component: React Calendar](https://jsfiddle.net/yawetse/Lqwe3f59/5/)
-11. [Create Components: Function, Class, Lazy, and Suspense](https://jsfiddle.net/yawetse/ck3oye01/7/)
-12. [Create Components: Function Components With Hooks](https://jsfiddle.net/yawetse/a4pmLyd1/4/)
-13. [Create Components: Dynamic Components](https://jsfiddle.net/yawetse/cjm1yshz/3/)
-14. [Create Components: Form Components](https://jsfiddle.net/yawetse/3guho256/18/)
+1. [Getting Started Basic Example](../getting-started/#jsonx-simulator-getting-started-basic)
+2. [Advanced Props: Traverse Props](../using-advanced-props/#jsonx-simulator-traverse-props)
+3. [Advanced Props: `__dangerouslyEvalProps`](../using-advanced-props/#jsonx-simulator-evaluation-props)
+4. [Advanced Props: `__spreadComponent`](../using-advanced-props/#jsonx-simulator-spread-component)
+5. [Advanced Props: Component Evaluation Props](../using-advanced-props/#jsonx-simulator-component-evaluation-props)
+6. [Advanced Props: `__functionProps` legacy example](../using-advanced-props/#jsonx-simulator-function-props-legacy)
+7. [Advanced Props: Format Props](../using-advanced-props/#jsonx-simulator-format-props)
+8. [Advanced Props: Utility Props](../using-advanced-props/#jsonx-simulator-utility-props)
+9. [Advanced Props: Display Props](../using-advanced-props/#jsonx-simulator-display-props)
+10. [Component Library Example](../using-external-and-custom-components/#jsonx-simulator-component-library)
+11. [Custom Component Example](../using-external-and-custom-components/#jsonx-simulator-custom-component)
+12. [Create Components: Function Components With Hooks](../creating-react-components-and-component-libraries/#jsonx-simulator-function-component)
+13. [Create Components: Class Components](../creating-react-components-and-component-libraries/#jsonx-simulator-class-component)
+14. [Create Components: Dynamic Components](../creating-react-components-and-component-libraries/#jsonx-simulator-dynamic-component)
+15. [Create Components: Form Components](../creating-react-components-and-component-libraries/#jsonx-simulator-form-component)
 
 ## Where To Go Next
 

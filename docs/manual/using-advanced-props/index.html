@@ -2,10 +2,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Using Advanced Props</title>
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../../assets/site.css">
     <link rel="stylesheet" href="../assets/highlight-github-dark.css">
     <link rel="stylesheet" href="../assets/manual.css">
     <script src="../../assets/analytics.js" defer=""></script>
+    <script src="../assets/jsonx-web.js" defer=""></script>
+    <script src="../assets/jsonx-simulator.js" defer=""></script>
   </head>
   <body class="manual-page">
     <header class="manual-header">
@@ -228,14 +231,7 @@
 <span class="hljs-title function_">main</span>();
 </code></pre>
 <h3><a id="example-traverse-props" class="anchor" href="#example-traverse-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Traverse Props</h3>
-<table style="border:0; width:100%">
-  <tbody><tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-  </tr>
-</tbody></table>
+<div class="jsonx-simulator" data-example="traverse-props"></div>
 <hr>
 <h2><a id="2-evaluation-props" class="anchor" href="#2-evaluation-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="evaluation-props">2. Evaluation Props </a></h2>
 <p><em>(<a href="#evaluation-dangerouslyevalprops">__dangerouslyEvalProps</a>, <a href="#evaluation-dangerouslybindevalprops">__dangerouslyBindEvalProps</a>, <a href="#evaluation-dangerouslyevalallprops">__dangerouslyEvalAllProps</a>, <a href="#evaluation-dangerouslyinsertfunctioncomponents">__dangerouslyInsertFunctionComponents</a>, <a href="#evaluation-dangerouslyinsertclasscomponents">__dangerouslyInsertClassComponents</a>, <a href="#evaluation-dangerouslyinsertcomponents">__dangerouslyInsertComponents</a>, <a href="#evaluation-dangerouslyinsertreactcomponents">__dangerouslyInsertReactComponents</a>, <a href="#evaluation-dangerouslyinsertjsonxcomponents">__dangerouslyInsertJSONXComponents</a>, <a href="#evaluation-children">_children</a>, <a href="#evaluation-functionprops">__functionProps (legacy)</a>, <a href="#evaluation-windowcomponents">__windowComponents </a>, <a href="#evaluation-windowcomponentprops">__windowComponentProps</a>, <a href="#evaluation-spreadcomponent">__spreadComponent</a>, <a href="#evaluation-spread">__spread</a>)</em></p>
@@ -259,14 +255,7 @@
 <p><code>__dangerouslyBindEvalProps</code> assigns functions to JXM prop values. This is usually for <em>onClick</em> and <em>onChange</em> handlers. Each value must resolve to a function because JSONX binds the function to the current <code>this</code> context.</p>
 <p>These props exist for cases where JSONX is delivered as JSON and JavaScript functions cannot be included directly. Use them sparingly. In many cases, it is better to register functions in code and reference them through <code>thiscontext</code> or another traverse prop.</p>
 <h3><a id="example-evaluation-props" class="anchor" href="#example-evaluation-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Evaluation Props</h3>
-<table style="border:0; width:100%">
-  <tbody><tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/n704z65x/7/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/n704z65x/7/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-  </tr>
-</tbody></table>
+<div class="jsonx-simulator" data-example="evaluation-props"></div>
 <h3><a id="__spreadcomponent-and-__spread" class="anchor" href="#__spreadcomponent-and-__spread" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="evaluation-spreadcomponent">__spreadComponent</a> and <a name="evaluation-spread">__spread</a></h3>
 <p><code>__spreadComponent</code> maps one JSONX component over the data in <code>JXM.__spread</code>. Each item in the <code>JXM.__spread</code> array is passed into the child component as <code>JXM.__item</code>. <code>JXM.__spread</code> is usually assigned with a traverse prop.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JXM</span> = {
@@ -309,26 +298,12 @@
 };*/</span>
 </code></pre>
 <h3><a id="example-evaluation-props-1" class="anchor" href="#example-evaluation-props-1" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Evaluation Props</h3>
-<table style="border:0; width:100%">
-  <tbody><tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/e5au6td1/2/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/e5au6td1/2/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-  </tr>
-</tbody></table>
+<div class="jsonx-simulator" data-example="spread-component"></div>
 <h3><a id="__dangerouslyinsertfunctioncomponents--__dangerouslyinsertclasscomponents--__dangerouslyinsertcomponents--__dangerouslyinsertreactcomponents--__dangerouslyinsertjsonxcomponents--__windowcomponents--and-__windowcomponentprops" class="anchor" href="#__dangerouslyinsertfunctioncomponents--__dangerouslyinsertclasscomponents--__dangerouslyinsertcomponents--__dangerouslyinsertreactcomponents--__dangerouslyinsertjsonxcomponents--__windowcomponents--and-__windowcomponentprops" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="evaluation-dangerouslyinsertfunctioncomponents">__dangerouslyInsertFunctionComponents</a>, <a name="evaluation-dangerouslyinsertclasscomponents">__dangerouslyInsertClassComponents</a>, <a name="evaluation-dangerouslyinsertcomponents">__dangerouslyInsertComponents</a>, <a name="evaluation-dangerouslyinsertreactcomponents">__dangerouslyInsertReactComponents</a>, <a name="evaluation-dangerouslyinsertjsonxcomponents">__dangerouslyInsertJSONXComponents</a>, <a name="evaluation-windowcomponents">__windowComponents</a>, and <a name="evaluation-windowcomponentprops">__windowComponentProps</a></h3>
 <p>Component evaluation props assign React elements or components to props. This pattern is common in charting libraries, where a chart accepts a custom label, tick, or tooltip component as a prop.</p>
 <p>The most common pattern is a function component passed as a prop. Passing function or class components through JSONX requires the generated component helpers. Read <a href="../creating-react-components-and-component-libraries/">Creating React Components and Component Libraries</a> for more information.</p>
 <h3><a id="example-evaluation-props-2" class="anchor" href="#example-evaluation-props-2" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Evaluation Props</h3>
-<table style="border:0; width:100%">
-  <tbody><tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/soec2z5w/13/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/soec2z5w/13/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-  </tr>
-</tbody></table>
+<div class="jsonx-simulator" data-example="component-evaluation-props"></div>
 <h3><a id="__functionprops-legacy" class="anchor" href="#__functionprops-legacy" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="evaluation-functionprops">__functionProps</a> (legacy)</h3>
 <p>The evaluation prop <code>__functionProps</code> is a legacy way to assign functions to <code>JXM.props</code>. Prefer the newer evaluation props for new work.</p>
 <h4><a id="predefined-functions-legacy" class="anchor" href="#predefined-functions-legacy" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>predefined functions (legacy)</h4>
@@ -365,14 +340,7 @@
 };
 </code></pre>
 <h3><a id="example-evaluation-props-__functionprops" class="anchor" href="#example-evaluation-props-__functionprops" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Evaluation Props __functionProps</h3>
-<table style="border:0; width:100%">
-  <tbody><tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/34ngdzyh/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/34ngdzyh/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-  </tr>
-</tbody></table>
+<div class="jsonx-simulator" data-example="function-props-legacy"></div>
 <hr>
 <h2><a id="3-format-props" class="anchor" href="#3-format-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="format-props">3. Format Props </a></h2>
 <p><em>(<a href="#format-stringifychildren">___stringifyChildren</a>, <a href="#format-tostringchildren">___toStringChildren</a>, <a href="#format-tonumeral">___toNumeral</a>, <a href="#format-jsdatetoluxonstring">___JSDatetoLuxonString</a>, <a href="#format-isotoluxonstring">___ISOtoLuxonString</a>, <a href="#format-fromluxontimezone">___FromLuxonTimeZone</a>)</em></p>
@@ -426,14 +394,7 @@
 }; <span class="hljs-comment">// =&gt; { component:'div', children: 'Mar 3, 2020, 6:30 AM' };</span>
 </code></pre>
 <h3><a id="example-format-props" class="anchor" href="#example-format-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Format Props</h3>
-<table style="border:0; width:100%">
-  <tbody><tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/5ypaotu6/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/5ypaotu6/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-  </tr>
-</tbody></table>
+<div class="jsonx-simulator" data-example="format-props"></div>
 <hr>
 <h2><a id="4-utility-props" class="anchor" href="#4-utility-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="utility-props">4. Utility Props</a></h2>
 <p><em>(<a href="#utility-template">__template</a>, <a href="#utility-passprops">passprops</a>, <a href="#utility-debug">debug</a>, <a href="#utility-test">test</a>)</em></p>
@@ -588,14 +549,7 @@ const JXM = {
 
 </code></pre>
 <h3><a id="example-utility-props" class="anchor" href="#example-utility-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Utility Props</h3>
-<table style="border:0; width:100%">
-  <tbody><tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gbeatwp2/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gbeatwp2/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-  </tr>
-</tbody></table>
+<div class="jsonx-simulator" data-example="utility-props"></div>
 <hr>
 <h2><a id="5-display-props" class="anchor" href="#5-display-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="display-props">5. Display Props</a></h2>
 <p><em>(<a href="#display-comparisonprops">comparisonprops</a>, <a href="#display-comparisonorprops">comparisonorprops</a>)</em></p>
@@ -679,14 +633,7 @@ jsonx = {
 }
 </code></pre>
 <h3><a id="example-display-props" class="anchor" href="#example-display-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Display Props</h3>
-<table style="border:0; width:100%">
-  <tbody><tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/jn7L54x1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/jn7L54x1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
-    </td>
-  </tr>
-</tbody></table>
+<div class="jsonx-simulator" data-example="display-props"></div>
 <hr>
 <h2><a id="6-applied-props" class="anchor" href="#6-applied-props" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="applied-props">6. Applied Props</a></h2>
 <p><em>(<a href="#applied-useformregister">useformregister</a>, <a href="#applied-useremoveprops">useremoveprops</a>, <a href="#applied-useincludeprops">useincludeprops</a>)</em></p>

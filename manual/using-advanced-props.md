@@ -186,14 +186,7 @@ main();
 
 ### Example Traverse Props
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/pz845dk9/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="traverse-props"></div>
 
 ---
 
@@ -233,14 +226,7 @@ These props exist for cases where JSONX is delivered as JSON and JavaScript func
 
 ### Example Evaluation Props
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/n704z65x/7/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/n704z65x/7/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="evaluation-props"></div>
 
 ### <a name="evaluation-spreadcomponent">\_\_spreadComponent</a> and <a name="evaluation-spread">\_\_spread</a>
 
@@ -289,14 +275,7 @@ const JXM = {
 
 ### Example Evaluation Props
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/e5au6td1/2/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/e5au6td1/2/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="spread-component"></div>
 
 ### <a name="evaluation-dangerouslyinsertfunctioncomponents">\_\_dangerouslyInsertFunctionComponents</a>, <a name="evaluation-dangerouslyinsertclasscomponents">\_\_dangerouslyInsertClassComponents</a>, <a name="evaluation-dangerouslyinsertcomponents">\_\_dangerouslyInsertComponents</a>, <a name="evaluation-dangerouslyinsertreactcomponents">\_\_dangerouslyInsertReactComponents</a>, <a name="evaluation-dangerouslyinsertjsonxcomponents">\_\_dangerouslyInsertJSONXComponents</a>, <a name="evaluation-windowcomponents">\_\_windowComponents</a>, and <a name="evaluation-windowcomponentprops">\_\_windowComponentProps</a>
 
@@ -306,14 +285,7 @@ The most common pattern is a function component passed as a prop. Passing functi
 
 ### Example Evaluation Props
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/soec2z5w/13/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/soec2z5w/13/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="component-evaluation-props"></div>
 
 ### <a name="evaluation-functionprops">\_\_functionProps</a> (legacy)
 
@@ -363,14 +335,7 @@ const JXM = {
 
 ### Example Evaluation Props \_\_functionProps
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/34ngdzyh/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/34ngdzyh/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="function-props-legacy"></div>
 
 ---
 
@@ -450,14 +415,7 @@ const JXM_LA = {
 
 ### Example Format Props
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/5ypaotu6/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/5ypaotu6/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="format-props"></div>
 
 ---
 
@@ -631,14 +589,7 @@ const JXM = {
 
 ### Example Utility Props
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gbeatwp2/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/gbeatwp2/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="utility-props"></div>
 
 ---
 
@@ -733,14 +684,7 @@ switch (opscompares.operation) {
 
 ### Example Display Props
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/jn7L54x1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/jn7L54x1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="display-props"></div>
 
 ---
 ## <a name="applied-props">6. Applied Props</a>

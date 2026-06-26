@@ -39,6 +39,10 @@ That view is equivalent to this JSX:
 </p>
 ```
 
+### Try It In The Browser
+
+<div class="jsonx-simulator" data-example="getting-started-basic"></div>
+
 ## Render Output
 
 The same JSONX object can be rendered in several formats.

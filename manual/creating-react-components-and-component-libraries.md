@@ -101,14 +101,7 @@ const hookFunctionComponent = jsonx._jsonxComponents.getReactFunctionComponent(
 
 ### Example Function Components
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/a4pmLyd1/4/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="function-component"></div>
 
 ---
 ## <a name="class-component">2. Class Components </a>
@@ -227,14 +220,7 @@ Console output after mounting
 
 ### Example Class Components
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ck3oye01/7/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/ck3oye01/7/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="class-component"></div>
 
 ---
 
@@ -244,49 +230,47 @@ JSONX has a helper component called `DynamicComponent`. Use it when a JSONX comp
 
 The common use case is a dashboard or page where sections load data independently. `DynamicComponent` handles this without requiring Suspense or lazy loading.
 
-After the data is fetched, JSONX renders the `jsonx` object passed in `props`. The resolved data is available as `resourceprops.DynamicComponentData`.
+Create a dynamic component with `jsonx._jsonxComponents.DynamicComponent.call`, then register the returned component through `reactComponents`. After the data is fetched, JSONX renders the `jsonx` object passed in the options. The resolved data is available as `resourceprops.DynamicComponentData`.
 
 ```typescript
-const JXM = {
-  component: 'DynamicComponent',
-  props: {
-    useCache: boolean;
-    cacheTimeout: number;//milliseconds
-    loadingJSONX: jsonx;
-    loadingErrorJSONX: jsonx;
-    cacheTimeoutFunction: () => void,
-    jsonx: jsonx;
-    transformFunction: (data: any) => any,
-    fetchURL: string;
-    fetchOptions: any;
-    fetchFunction: (fetchURL: string, fetchOptions: any)=>Promise,
-  }
+type DynamicOptions = {
+  useCache?: boolean;
+  cacheTimeout?: number; // milliseconds
+  loadingJSONX?: jsonx;
+  loadingErrorJSONX?: jsonx;
+  cacheTimeoutFunction?: () => void;
+  jsonx: jsonx;
+  transformFunction?: (data: any) => any;
+  fetchURL: string;
+  fetchOptions?: any;
+  fetchFunction?: (fetchURL: string, fetchOptions?: any) => Promise<any>;
 };
 ```
 
 ```typescript
-const dynamicComponent = jsonx.getReactElementFromJSONX({
-  component:'DynamicComponent',
-  props:{
-    fetchURL:'/path/to/some/data',
-    jsonx:{
-      component:'p',
-      children:'loaded data',
-    }
-  }
+const LoadedStatus = jsonx._jsonxComponents.DynamicComponent.call({}, {
+  name: "LoadedStatus",
+  fetchURL: "/path/to/some/data",
+  jsonx: {
+    component: "p",
+    resourceprops: {
+      _children: ["DynamicComponentData", "result"],
+    },
+  },
 });
+
+jsonx.jsonxRender.call(
+  { reactComponents: { LoadedStatus } },
+  {
+    jsonx: { component: "LoadedStatus" },
+    querySelector: "#main",
+  },
+);
 ```
 
 ### Example Dynamic Components
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/cjm1yshz/3/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/cjm1yshz/3/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="dynamic-component"></div>
 ---
 
 ## <a name="form-component">4. Form Components </a>
@@ -295,46 +279,41 @@ JSONX has a helper component called `FormComponent`. `FormComponent` creates for
 
 Form components work by creating a function component that uses the `useForm` hook. You can customize `useForm` with schema validation through Yup or other supported `useForm` options.
 
-Pass the form fields through the `formComponent` JXM property. By default, `FormComponent` wraps the fields with `form onSubmit={handleSubmit(props.onSubmit)}`. Replace that wrapper with `formWrapperComponent` when you need custom form markup.
+Create a form component with `jsonx._jsonxComponents.FormComponent.call`, then register the returned component through `reactComponents`. Pass the form fields through the `formComponent` JXM property. By default, `FormComponent` wraps the fields with `form onSubmit={handleSubmit(props.onSubmit)}`. Replace that wrapper with `formWrapperComponent` when you need custom form markup.
 
 `FormComponent` adds a `ReactHookForm` component library with `Controller` and `ErrorMessage`. Methods returned from the `useForm` hook are bound to `this.reactHookForm`. Use that context when JSONX needs access to registration, errors, or other React Hook Form behavior.
 
 ```typescript
-const JXM = {
-  component: 'FormComponent',
-  props: {
-    hookFormOptions: {},// settings for react-hook-form's useForm hook
-    formComponent: jsonx,
-    onSubmit:(formdata: any) => any,
-    formWrapperComponent: jsonx,
-  }
+type FormOptions = {
+  hookFormOptions?: Record<string, unknown>; // settings for react-hook-form's useForm hook
+  formComponent: jsonx;
+  onSubmit?: (formdata: any) => any;
+  formWrapperComponent?: jsonx;
 };
 ```
 
 ```typescript
-const formComponent = jsonx.getReactElementFromJSONX({
-  component:'FormComponent',
-  props:{
-    onSubmit: (data) => { console.log({ submitData: data }) },
-    formComponent:{
-      component: "input",
-      props: { type: "text", name: "username", placeholder: "username" },
-      thiscontext:{ ref:['reactHookForm','register'] },
-    },
-  }
+const EmailForm = jsonx._jsonxComponents.FormComponent.call({}, {
+  name: "EmailForm",
+  onSubmit: (data) => {
+    console.log({ submitData: data });
+  },
+  formComponent: {
+    component: "input",
+    props: { type: "text", name: "username", placeholder: "username" },
+    useformregister: true,
+  },
 });
+
+const formComponent = jsonx.getReactElement.call(
+  { reactComponents: { EmailForm } },
+  { component: "EmailForm" },
+);
 ```
 
 ### Example Form Components
 
-<table style="border:0; width:100%">
-  <tr>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/18/embedded/js,html/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-    <td style="padding:0"><iframe width="100%" height="300" src="https://jsfiddle.net/yawetse/3guho256/18/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
-    </td>
-  </tr>
-</table>
+<div class="jsonx-simulator" data-example="form-component"></div>
 
 ---
 

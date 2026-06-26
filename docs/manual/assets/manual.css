@@ -8,6 +8,8 @@
   --manual-accent: #147a68;
   --manual-code-bg: #111917;
   --manual-code-text: #e8f1ec;
+  --manual-error: #9b1c1c;
+  --manual-error-bg: #fff1f1;
 }
 
 * {
@@ -196,10 +198,162 @@
   color: var(--manual-text);
 }
 
-.manual-content iframe {
-  max-width: 100%;
+.jsonx-simulator {
+  display: grid;
+  gap: 12px;
+  margin: 24px 0 32px;
   border: 1px solid var(--manual-border);
   border-radius: 8px;
+  background: #fbfcfa;
+  overflow: hidden;
+}
+
+.jsonx-simulator__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--manual-border);
+  background: #eef4f1;
+}
+
+.jsonx-simulator__title {
+  margin: 0;
+  color: var(--manual-text);
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.jsonx-simulator__status {
+  margin-left: auto;
+  border: 1px solid #b9c7c1;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--manual-muted);
+  padding: 3px 8px;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.jsonx-simulator__status[data-status="ready"] {
+  border-color: #a6cabf;
+  color: #0f5f51;
+}
+
+.jsonx-simulator__status[data-status="pending"] {
+  color: #645c13;
+}
+
+.jsonx-simulator__status[data-status="error"] {
+  border-color: #efb5b5;
+  background: var(--manual-error-bg);
+  color: var(--manual-error);
+}
+
+.jsonx-simulator__reset {
+  border: 1px solid #b9c7c1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--manual-text);
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.jsonx-simulator__reset:hover {
+  border-color: var(--manual-accent);
+  color: var(--manual-accent);
+}
+
+.jsonx-simulator__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 420px;
+}
+
+.jsonx-simulator__pane {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+}
+
+.jsonx-simulator__pane + .jsonx-simulator__pane {
+  border-left: 1px solid var(--manual-border);
+}
+
+.jsonx-simulator__label {
+  border-bottom: 1px solid var(--manual-border);
+  background: #f7f7f4;
+  color: var(--manual-muted);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.jsonx-simulator__editor {
+  width: 100%;
+  min-width: 0;
+  min-height: 390px;
+  resize: vertical;
+  border: 0;
+  outline: none;
+  background: var(--manual-code-bg);
+  color: var(--manual-code-text);
+  padding: 16px;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  tab-size: 2;
+}
+
+.jsonx-simulator__editor:focus {
+  box-shadow: inset 0 0 0 2px rgba(20, 122, 104, 0.45);
+}
+
+.jsonx-simulator__output {
+  min-width: 0;
+  min-height: 390px;
+  padding: 16px;
+  background: #ffffff;
+  color: var(--manual-text);
+  overflow: auto;
+}
+
+.jsonx-simulator__render-root {
+  min-width: 0;
+}
+
+.jsonx-simulator__output h2,
+.jsonx-simulator__output h3,
+.jsonx-simulator__output p,
+.jsonx-simulator__output ul,
+.jsonx-simulator__output pre {
+  margin-top: 0;
+}
+
+.jsonx-simulator__output input,
+.jsonx-simulator__output button {
+  max-width: 100%;
+}
+
+.jsonx-simulator__output label {
+  display: grid;
+  gap: 6px;
+}
+
+.jsonx-simulator__error {
+  margin: 0;
+  border: 1px solid #efb5b5;
+  border-radius: 6px;
+  background: var(--manual-error-bg);
+  color: var(--manual-error);
+  white-space: pre-wrap;
 }
 
 @media (max-width: 880px) {
@@ -230,5 +384,28 @@
 
   .manual-content h1 {
     font-size: 1.8rem;
+  }
+
+  .jsonx-simulator__header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .jsonx-simulator__status {
+    margin-left: 0;
+  }
+
+  .jsonx-simulator__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jsonx-simulator__pane + .jsonx-simulator__pane {
+    border-top: 1px solid var(--manual-border);
+    border-left: 0;
+  }
+
+  .jsonx-simulator__editor,
+  .jsonx-simulator__output {
+    min-height: 320px;
   }
 }
