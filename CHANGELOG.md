@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/repetere/jsonx/compare/v2.1.0...v2.1.1) (2026-06-26)
+
+
+### Bug Fixes
+
+* clear dependency audit alerts ([0cc410c](https://github.com/repetere/jsonx/commit/0cc410c823e296b5b9cddf31414090c345bb7b5f))
+
 # [2.1.0](https://github.com/repetere/jsonx/compare/v2.0.1...v2.1.0) (2026-06-25)
 
 
