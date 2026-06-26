@@ -1,13 +1,52 @@
 // @spec JSONX-DIST-001 JSONX-DIST-002 JSONX-DIST-003 JSONX-DIST-005 JSONX-DIST-006 JSONX-DIST-007 JSONX-DIST-008
 // @intent docs/intent/distribution-types/distribution-types-specs.md
 import esbuild from "esbuild";
-import { nodeBuiltIns } from "esbuild-node-builtins";
 import GlobalsPlugin from "esbuild-plugin-globals";
 
 const shouldWatch = process.argv.includes('-w') || process.argv.includes('-watch');
 const globalName = 'jsonx';
 const entryPoints = ['src/index.ts'];
-const webPlugins = [nodeBuiltIns()];
+function browserNodeFallbackPlugin() {
+  return {
+    name: 'browser-node-fallbacks',
+    setup(build) {
+      build.onResolve({ filter: /^(fs|path)$/ }, args => ({
+        path: args.path,
+        namespace: 'browser-node-fallbacks',
+      }));
+
+      build.onLoad({ filter: /^fs$/, namespace: 'browser-node-fallbacks' }, () => ({
+        loader: 'js',
+        contents: `
+          const fs = {};
+          export default fs;
+          export const readFileSync = undefined;
+        `,
+      }));
+
+      build.onLoad({ filter: /^path$/, namespace: 'browser-node-fallbacks' }, () => ({
+        loader: 'js',
+        contents: `
+          export function resolve(...parts) {
+            return parts.filter(Boolean).map(String).join('/').replace(/[/]+/g, '/');
+          }
+
+          export function extname(filePath = '') {
+            const value = String(filePath);
+            const slashIndex = Math.max(value.lastIndexOf('/'), value.lastIndexOf('\\\\'));
+            const basename = value.slice(slashIndex + 1);
+            const dotIndex = basename.lastIndexOf('.');
+            return dotIndex <= 0 ? '' : basename.slice(dotIndex);
+          }
+
+          const path = { resolve, extname };
+          export default path;
+        `,
+      }));
+    },
+  };
+}
+const webPlugins = [browserNodeFallbackPlugin()];
 const webCorePlugins = webPlugins.concat([
   GlobalsPlugin({
     react: "React",

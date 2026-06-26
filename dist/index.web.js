@@ -459,21 +459,21 @@ var jsonx = (() => {
           );
           actScopeDepth = prevActScopeDepth;
         }
-        function recursivelyFlushAsyncActWork(returnValue, resolve, reject) {
+        function recursivelyFlushAsyncActWork(returnValue, resolve2, reject) {
           var queue = ReactSharedInternals.actQueue;
           if (null !== queue)
             if (0 !== queue.length)
               try {
                 flushActQueue(queue);
                 enqueueTask(function() {
-                  return recursivelyFlushAsyncActWork(returnValue, resolve, reject);
+                  return recursivelyFlushAsyncActWork(returnValue, resolve2, reject);
                 });
                 return;
               } catch (error) {
                 ReactSharedInternals.thrownErrors.push(error);
               }
             else ReactSharedInternals.actQueue = null;
-          0 < ReactSharedInternals.thrownErrors.length ? (queue = aggregateErrors(ReactSharedInternals.thrownErrors), ReactSharedInternals.thrownErrors.length = 0, reject(queue)) : resolve(returnValue);
+          0 < ReactSharedInternals.thrownErrors.length ? (queue = aggregateErrors(ReactSharedInternals.thrownErrors), ReactSharedInternals.thrownErrors.length = 0, reject(queue)) : resolve2(returnValue);
         }
         function flushActQueue(queue) {
           if (!isFlushing) {
@@ -660,7 +660,7 @@ var jsonx = (() => {
               ));
             });
             return {
-              then: function(resolve, reject) {
+              then: function(resolve2, reject) {
                 didAwaitActCall = true;
                 thenable.then(
                   function(returnValue) {
@@ -670,7 +670,7 @@ var jsonx = (() => {
                         flushActQueue(queue), enqueueTask(function() {
                           return recursivelyFlushAsyncActWork(
                             returnValue,
-                            resolve,
+                            resolve2,
                             reject
                           );
                         });
@@ -684,7 +684,7 @@ var jsonx = (() => {
                         ReactSharedInternals.thrownErrors.length = 0;
                         reject(_thrownError);
                       }
-                    } else resolve(returnValue);
+                    } else resolve2(returnValue);
                   },
                   function(error) {
                     popActScope(prevActQueue, prevActScopeDepth);
@@ -706,15 +706,15 @@ var jsonx = (() => {
           if (0 < ReactSharedInternals.thrownErrors.length)
             throw callback = aggregateErrors(ReactSharedInternals.thrownErrors), ReactSharedInternals.thrownErrors.length = 0, callback;
           return {
-            then: function(resolve, reject) {
+            then: function(resolve2, reject) {
               didAwaitActCall = true;
               0 === prevActScopeDepth ? (ReactSharedInternals.actQueue = queue, enqueueTask(function() {
                 return recursivelyFlushAsyncActWork(
                   returnValue$jscomp$0,
-                  resolve,
+                  resolve2,
                   reject
                 );
-              })) : resolve(returnValue$jscomp$0);
+              })) : resolve2(returnValue$jscomp$0);
             }
           };
         };
@@ -1557,10 +1557,10 @@ var jsonx = (() => {
             fiber = fiber.next, id--;
           return fiber;
         }
-        function copyWithSetImpl(obj, path3, index, value) {
-          if (index >= path3.length) return value;
-          var key = path3[index], updated = isArrayImpl(obj) ? obj.slice() : assign({}, obj);
-          updated[key] = copyWithSetImpl(obj[key], path3, index + 1, value);
+        function copyWithSetImpl(obj, path2, index, value) {
+          if (index >= path2.length) return value;
+          var key = path2[index], updated = isArrayImpl(obj) ? obj.slice() : assign({}, obj);
+          updated[key] = copyWithSetImpl(obj[key], path2, index + 1, value);
           return updated;
         }
         function copyWithRename(obj, oldPath, newPath) {
@@ -1587,11 +1587,11 @@ var jsonx = (() => {
           );
           return updated;
         }
-        function copyWithDeleteImpl(obj, path3, index) {
-          var key = path3[index], updated = isArrayImpl(obj) ? obj.slice() : assign({}, obj);
-          if (index + 1 === path3.length)
+        function copyWithDeleteImpl(obj, path2, index) {
+          var key = path2[index], updated = isArrayImpl(obj) ? obj.slice() : assign({}, obj);
+          if (index + 1 === path2.length)
             return isArrayImpl(updated) ? updated.splice(key, 1) : delete updated[key], updated;
-          updated[key] = copyWithDeleteImpl(obj[key], path3, index + 1);
+          updated[key] = copyWithDeleteImpl(obj[key], path2, index + 1);
           return updated;
         }
         function shouldSuspendImpl() {
@@ -5661,8 +5661,8 @@ var jsonx = (() => {
             currentEntangledActionThenable = {
               status: "pending",
               value: void 0,
-              then: function(resolve) {
-                entangledListeners.push(resolve);
+              then: function(resolve2) {
+                entangledListeners.push(resolve2);
               }
             };
           }
@@ -5685,8 +5685,8 @@ var jsonx = (() => {
             status: "pending",
             value: null,
             reason: null,
-            then: function(resolve) {
-              listeners.push(resolve);
+            then: function(resolve2) {
+              listeners.push(resolve2);
             }
           };
           thenable.then(
@@ -17640,8 +17640,8 @@ var jsonx = (() => {
                 _instance = (hoistableRoot.ownerDocument || hoistableRoot).createElement("link");
                 markNodeAsHoistable(_instance);
                 var linkInstance = _instance;
-                linkInstance._p = new Promise(function(resolve, reject) {
-                  linkInstance.onload = resolve;
+                linkInstance._p = new Promise(function(resolve2, reject) {
+                  linkInstance.onload = resolve2;
                   linkInstance.onerror = reject;
                 });
                 setInitialProperties(_instance, "link", instance);
@@ -17821,8 +17821,8 @@ var jsonx = (() => {
               instance = instance.createElement("link");
               markNodeAsHoistable(instance);
               var linkInstance = instance;
-              linkInstance._p = new Promise(function(resolve, reject) {
-                linkInstance.onload = resolve;
+              linkInstance._p = new Promise(function(resolve2, reject) {
+                linkInstance.onload = resolve2;
                 linkInstance.onerror = reject;
               });
               setInitialProperties(instance, "link", props);
@@ -18467,8 +18467,8 @@ var jsonx = (() => {
           function handleNavigate(event) {
             event.canIntercept && "react-transition" === event.info && event.intercept({
               handler: function() {
-                return new Promise(function(resolve) {
-                  return pendingResolve = resolve;
+                return new Promise(function(resolve2) {
+                  return pendingResolve = resolve2;
                 });
               },
               focusReset: "manual",
@@ -21177,8 +21177,8 @@ var jsonx = (() => {
                   var link = resource = ownerDocument.createElement("link");
                   markNodeAsHoistable(link);
                   setInitialProperties(link, "link", href);
-                  link._p = new Promise(function(resolve, reject) {
-                    link.onload = resolve;
+                  link._p = new Promise(function(resolve2, reject) {
+                    link.onload = resolve2;
                     link.onerror = reject;
                   });
                   link.addEventListener("load", function() {
@@ -21226,29 +21226,29 @@ var jsonx = (() => {
         }, badgeFormat = "%c%s%c", badgeStyle = "background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px", resetStyle = "", pad = " ", bind = Function.prototype.bind;
         var didWarnAboutNestedUpdates = false;
         var overrideHookState = null, overrideHookStateDeletePath = null, overrideHookStateRenamePath = null, overrideProps = null, overridePropsDeletePath = null, overridePropsRenamePath = null, scheduleUpdate = null, scheduleRetry = null, setErrorHandler = null, setSuspenseHandler = null;
-        overrideHookState = function(fiber, id, path3, value) {
+        overrideHookState = function(fiber, id, path2, value) {
           id = findHook(fiber, id);
-          null !== id && (path3 = copyWithSetImpl(id.memoizedState, path3, 0, value), id.memoizedState = path3, id.baseState = path3, fiber.memoizedProps = assign({}, fiber.memoizedProps), path3 = enqueueConcurrentRenderForLane(fiber, 2), null !== path3 && scheduleUpdateOnFiber(path3, fiber, 2));
+          null !== id && (path2 = copyWithSetImpl(id.memoizedState, path2, 0, value), id.memoizedState = path2, id.baseState = path2, fiber.memoizedProps = assign({}, fiber.memoizedProps), path2 = enqueueConcurrentRenderForLane(fiber, 2), null !== path2 && scheduleUpdateOnFiber(path2, fiber, 2));
         };
-        overrideHookStateDeletePath = function(fiber, id, path3) {
+        overrideHookStateDeletePath = function(fiber, id, path2) {
           id = findHook(fiber, id);
-          null !== id && (path3 = copyWithDeleteImpl(id.memoizedState, path3, 0), id.memoizedState = path3, id.baseState = path3, fiber.memoizedProps = assign({}, fiber.memoizedProps), path3 = enqueueConcurrentRenderForLane(fiber, 2), null !== path3 && scheduleUpdateOnFiber(path3, fiber, 2));
+          null !== id && (path2 = copyWithDeleteImpl(id.memoizedState, path2, 0), id.memoizedState = path2, id.baseState = path2, fiber.memoizedProps = assign({}, fiber.memoizedProps), path2 = enqueueConcurrentRenderForLane(fiber, 2), null !== path2 && scheduleUpdateOnFiber(path2, fiber, 2));
         };
         overrideHookStateRenamePath = function(fiber, id, oldPath, newPath) {
           id = findHook(fiber, id);
           null !== id && (oldPath = copyWithRename(id.memoizedState, oldPath, newPath), id.memoizedState = oldPath, id.baseState = oldPath, fiber.memoizedProps = assign({}, fiber.memoizedProps), oldPath = enqueueConcurrentRenderForLane(fiber, 2), null !== oldPath && scheduleUpdateOnFiber(oldPath, fiber, 2));
         };
-        overrideProps = function(fiber, path3, value) {
-          fiber.pendingProps = copyWithSetImpl(fiber.memoizedProps, path3, 0, value);
+        overrideProps = function(fiber, path2, value) {
+          fiber.pendingProps = copyWithSetImpl(fiber.memoizedProps, path2, 0, value);
           fiber.alternate && (fiber.alternate.pendingProps = fiber.pendingProps);
-          path3 = enqueueConcurrentRenderForLane(fiber, 2);
-          null !== path3 && scheduleUpdateOnFiber(path3, fiber, 2);
+          path2 = enqueueConcurrentRenderForLane(fiber, 2);
+          null !== path2 && scheduleUpdateOnFiber(path2, fiber, 2);
         };
-        overridePropsDeletePath = function(fiber, path3) {
-          fiber.pendingProps = copyWithDeleteImpl(fiber.memoizedProps, path3, 0);
+        overridePropsDeletePath = function(fiber, path2) {
+          fiber.pendingProps = copyWithDeleteImpl(fiber.memoizedProps, path2, 0);
           fiber.alternate && (fiber.alternate.pendingProps = fiber.pendingProps);
-          path3 = enqueueConcurrentRenderForLane(fiber, 2);
-          null !== path3 && scheduleUpdateOnFiber(path3, fiber, 2);
+          path2 = enqueueConcurrentRenderForLane(fiber, 2);
+          null !== path2 && scheduleUpdateOnFiber(path2, fiber, 2);
         };
         overridePropsRenamePath = function(fiber, oldPath, newPath) {
           fiber.pendingProps = copyWithRename(
@@ -36007,7 +36007,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
         ensureCorrectIsomorphicReactVersion();
         ensureCorrectIsomorphicReactVersion();
         exports.prerender = function(children, options) {
-          return new Promise(function(resolve, reject) {
+          return new Promise(function(resolve2, reject) {
             var onHeaders = options ? options.onHeaders : void 0, onHeadersImpl;
             onHeaders && (onHeadersImpl = function(headersDescriptor) {
               onHeaders(new Headers(headersDescriptor));
@@ -36050,7 +36050,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
                   postponed: getPostponedState(request),
                   prelude: stream
                 };
-                resolve(stream);
+                resolve2(stream);
               },
               void 0,
               void 0,
@@ -36072,7 +36072,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
           });
         };
         exports.renderToReadableStream = function(children, options) {
-          return new Promise(function(resolve, reject) {
+          return new Promise(function(resolve2, reject) {
             var onFatalError, onAllReady, allReady = new Promise(function(res, rej) {
               onAllReady = res;
               onFatalError = rej;
@@ -36116,7 +36116,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
                   { highWaterMark: 0 }
                 );
                 stream.allReady = allReady;
-                resolve(stream);
+                resolve2(stream);
               },
               function(error) {
                 allReady.catch(function() {
@@ -36142,7 +36142,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
           });
         };
         exports.resume = function(children, postponedState, options) {
-          return new Promise(function(resolve, reject) {
+          return new Promise(function(resolve2, reject) {
             var onFatalError, onAllReady, allReady = new Promise(function(res, rej) {
               onAllReady = res;
               onFatalError = rej;
@@ -36174,7 +36174,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
                   { highWaterMark: 0 }
                 );
                 stream.allReady = allReady;
-                resolve(stream);
+                resolve2(stream);
               },
               function(error) {
                 allReady.catch(function() {
@@ -36199,7 +36199,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
           });
         };
         exports.resumeAndPrerender = function(children, postponedState, options) {
-          return new Promise(function(resolve, reject) {
+          return new Promise(function(resolve2, reject) {
             var request = resumeAndPrerenderRequest(
               children,
               postponedState,
@@ -36227,7 +36227,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
                   { highWaterMark: 0 }
                 );
                 stream = { postponed: getPostponedState(request), prelude: stream };
-                resolve(stream);
+                resolve2(stream);
               },
               void 0,
               void 0,
@@ -38091,421 +38091,6 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
     }
   });
 
-  // node_modules/esbuild-node-builtins/lib/noop.js
-  var require_noop = __commonJS({
-    "node_modules/esbuild-node-builtins/lib/noop.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-    }
-  });
-
-  // node_modules/path-browserify/index.js
-  var require_path_browserify = __commonJS({
-    "node_modules/path-browserify/index.js"(exports, module) {
-      "use strict";
-      function assertPath(path3) {
-        if (typeof path3 !== "string") {
-          throw new TypeError("Path must be a string. Received " + JSON.stringify(path3));
-        }
-      }
-      function normalizeStringPosix(path3, allowAboveRoot) {
-        var res = "";
-        var lastSegmentLength = 0;
-        var lastSlash = -1;
-        var dots = 0;
-        var code;
-        for (var i = 0; i <= path3.length; ++i) {
-          if (i < path3.length)
-            code = path3.charCodeAt(i);
-          else if (code === 47)
-            break;
-          else
-            code = 47;
-          if (code === 47) {
-            if (lastSlash === i - 1 || dots === 1) {
-            } else if (lastSlash !== i - 1 && dots === 2) {
-              if (res.length < 2 || lastSegmentLength !== 2 || res.charCodeAt(res.length - 1) !== 46 || res.charCodeAt(res.length - 2) !== 46) {
-                if (res.length > 2) {
-                  var lastSlashIndex = res.lastIndexOf("/");
-                  if (lastSlashIndex !== res.length - 1) {
-                    if (lastSlashIndex === -1) {
-                      res = "";
-                      lastSegmentLength = 0;
-                    } else {
-                      res = res.slice(0, lastSlashIndex);
-                      lastSegmentLength = res.length - 1 - res.lastIndexOf("/");
-                    }
-                    lastSlash = i;
-                    dots = 0;
-                    continue;
-                  }
-                } else if (res.length === 2 || res.length === 1) {
-                  res = "";
-                  lastSegmentLength = 0;
-                  lastSlash = i;
-                  dots = 0;
-                  continue;
-                }
-              }
-              if (allowAboveRoot) {
-                if (res.length > 0)
-                  res += "/..";
-                else
-                  res = "..";
-                lastSegmentLength = 2;
-              }
-            } else {
-              if (res.length > 0)
-                res += "/" + path3.slice(lastSlash + 1, i);
-              else
-                res = path3.slice(lastSlash + 1, i);
-              lastSegmentLength = i - lastSlash - 1;
-            }
-            lastSlash = i;
-            dots = 0;
-          } else if (code === 46 && dots !== -1) {
-            ++dots;
-          } else {
-            dots = -1;
-          }
-        }
-        return res;
-      }
-      function _format(sep, pathObject) {
-        var dir = pathObject.dir || pathObject.root;
-        var base = pathObject.base || (pathObject.name || "") + (pathObject.ext || "");
-        if (!dir) {
-          return base;
-        }
-        if (dir === pathObject.root) {
-          return dir + base;
-        }
-        return dir + sep + base;
-      }
-      var posix = {
-        // path.resolve([from ...], to)
-        resolve: function resolve() {
-          var resolvedPath = "";
-          var resolvedAbsolute = false;
-          var cwd;
-          for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-            var path3;
-            if (i >= 0)
-              path3 = arguments[i];
-            else {
-              if (cwd === void 0)
-                cwd = process.cwd();
-              path3 = cwd;
-            }
-            assertPath(path3);
-            if (path3.length === 0) {
-              continue;
-            }
-            resolvedPath = path3 + "/" + resolvedPath;
-            resolvedAbsolute = path3.charCodeAt(0) === 47;
-          }
-          resolvedPath = normalizeStringPosix(resolvedPath, !resolvedAbsolute);
-          if (resolvedAbsolute) {
-            if (resolvedPath.length > 0)
-              return "/" + resolvedPath;
-            else
-              return "/";
-          } else if (resolvedPath.length > 0) {
-            return resolvedPath;
-          } else {
-            return ".";
-          }
-        },
-        normalize: function normalize(path3) {
-          assertPath(path3);
-          if (path3.length === 0) return ".";
-          var isAbsolute = path3.charCodeAt(0) === 47;
-          var trailingSeparator = path3.charCodeAt(path3.length - 1) === 47;
-          path3 = normalizeStringPosix(path3, !isAbsolute);
-          if (path3.length === 0 && !isAbsolute) path3 = ".";
-          if (path3.length > 0 && trailingSeparator) path3 += "/";
-          if (isAbsolute) return "/" + path3;
-          return path3;
-        },
-        isAbsolute: function isAbsolute(path3) {
-          assertPath(path3);
-          return path3.length > 0 && path3.charCodeAt(0) === 47;
-        },
-        join: function join() {
-          if (arguments.length === 0)
-            return ".";
-          var joined;
-          for (var i = 0; i < arguments.length; ++i) {
-            var arg = arguments[i];
-            assertPath(arg);
-            if (arg.length > 0) {
-              if (joined === void 0)
-                joined = arg;
-              else
-                joined += "/" + arg;
-            }
-          }
-          if (joined === void 0)
-            return ".";
-          return posix.normalize(joined);
-        },
-        relative: function relative(from, to) {
-          assertPath(from);
-          assertPath(to);
-          if (from === to) return "";
-          from = posix.resolve(from);
-          to = posix.resolve(to);
-          if (from === to) return "";
-          var fromStart = 1;
-          for (; fromStart < from.length; ++fromStart) {
-            if (from.charCodeAt(fromStart) !== 47)
-              break;
-          }
-          var fromEnd = from.length;
-          var fromLen = fromEnd - fromStart;
-          var toStart = 1;
-          for (; toStart < to.length; ++toStart) {
-            if (to.charCodeAt(toStart) !== 47)
-              break;
-          }
-          var toEnd = to.length;
-          var toLen = toEnd - toStart;
-          var length = fromLen < toLen ? fromLen : toLen;
-          var lastCommonSep = -1;
-          var i = 0;
-          for (; i <= length; ++i) {
-            if (i === length) {
-              if (toLen > length) {
-                if (to.charCodeAt(toStart + i) === 47) {
-                  return to.slice(toStart + i + 1);
-                } else if (i === 0) {
-                  return to.slice(toStart + i);
-                }
-              } else if (fromLen > length) {
-                if (from.charCodeAt(fromStart + i) === 47) {
-                  lastCommonSep = i;
-                } else if (i === 0) {
-                  lastCommonSep = 0;
-                }
-              }
-              break;
-            }
-            var fromCode = from.charCodeAt(fromStart + i);
-            var toCode = to.charCodeAt(toStart + i);
-            if (fromCode !== toCode)
-              break;
-            else if (fromCode === 47)
-              lastCommonSep = i;
-          }
-          var out = "";
-          for (i = fromStart + lastCommonSep + 1; i <= fromEnd; ++i) {
-            if (i === fromEnd || from.charCodeAt(i) === 47) {
-              if (out.length === 0)
-                out += "..";
-              else
-                out += "/..";
-            }
-          }
-          if (out.length > 0)
-            return out + to.slice(toStart + lastCommonSep);
-          else {
-            toStart += lastCommonSep;
-            if (to.charCodeAt(toStart) === 47)
-              ++toStart;
-            return to.slice(toStart);
-          }
-        },
-        _makeLong: function _makeLong(path3) {
-          return path3;
-        },
-        dirname: function dirname(path3) {
-          assertPath(path3);
-          if (path3.length === 0) return ".";
-          var code = path3.charCodeAt(0);
-          var hasRoot = code === 47;
-          var end = -1;
-          var matchedSlash = true;
-          for (var i = path3.length - 1; i >= 1; --i) {
-            code = path3.charCodeAt(i);
-            if (code === 47) {
-              if (!matchedSlash) {
-                end = i;
-                break;
-              }
-            } else {
-              matchedSlash = false;
-            }
-          }
-          if (end === -1) return hasRoot ? "/" : ".";
-          if (hasRoot && end === 1) return "//";
-          return path3.slice(0, end);
-        },
-        basename: function basename(path3, ext) {
-          if (ext !== void 0 && typeof ext !== "string") throw new TypeError('"ext" argument must be a string');
-          assertPath(path3);
-          var start = 0;
-          var end = -1;
-          var matchedSlash = true;
-          var i;
-          if (ext !== void 0 && ext.length > 0 && ext.length <= path3.length) {
-            if (ext.length === path3.length && ext === path3) return "";
-            var extIdx = ext.length - 1;
-            var firstNonSlashEnd = -1;
-            for (i = path3.length - 1; i >= 0; --i) {
-              var code = path3.charCodeAt(i);
-              if (code === 47) {
-                if (!matchedSlash) {
-                  start = i + 1;
-                  break;
-                }
-              } else {
-                if (firstNonSlashEnd === -1) {
-                  matchedSlash = false;
-                  firstNonSlashEnd = i + 1;
-                }
-                if (extIdx >= 0) {
-                  if (code === ext.charCodeAt(extIdx)) {
-                    if (--extIdx === -1) {
-                      end = i;
-                    }
-                  } else {
-                    extIdx = -1;
-                    end = firstNonSlashEnd;
-                  }
-                }
-              }
-            }
-            if (start === end) end = firstNonSlashEnd;
-            else if (end === -1) end = path3.length;
-            return path3.slice(start, end);
-          } else {
-            for (i = path3.length - 1; i >= 0; --i) {
-              if (path3.charCodeAt(i) === 47) {
-                if (!matchedSlash) {
-                  start = i + 1;
-                  break;
-                }
-              } else if (end === -1) {
-                matchedSlash = false;
-                end = i + 1;
-              }
-            }
-            if (end === -1) return "";
-            return path3.slice(start, end);
-          }
-        },
-        extname: function extname(path3) {
-          assertPath(path3);
-          var startDot = -1;
-          var startPart = 0;
-          var end = -1;
-          var matchedSlash = true;
-          var preDotState = 0;
-          for (var i = path3.length - 1; i >= 0; --i) {
-            var code = path3.charCodeAt(i);
-            if (code === 47) {
-              if (!matchedSlash) {
-                startPart = i + 1;
-                break;
-              }
-              continue;
-            }
-            if (end === -1) {
-              matchedSlash = false;
-              end = i + 1;
-            }
-            if (code === 46) {
-              if (startDot === -1)
-                startDot = i;
-              else if (preDotState !== 1)
-                preDotState = 1;
-            } else if (startDot !== -1) {
-              preDotState = -1;
-            }
-          }
-          if (startDot === -1 || end === -1 || // We saw a non-dot character immediately before the dot
-          preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
-          preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
-            return "";
-          }
-          return path3.slice(startDot, end);
-        },
-        format: function format(pathObject) {
-          if (pathObject === null || typeof pathObject !== "object") {
-            throw new TypeError('The "pathObject" argument must be of type Object. Received type ' + typeof pathObject);
-          }
-          return _format("/", pathObject);
-        },
-        parse: function parse2(path3) {
-          assertPath(path3);
-          var ret = { root: "", dir: "", base: "", ext: "", name: "" };
-          if (path3.length === 0) return ret;
-          var code = path3.charCodeAt(0);
-          var isAbsolute = code === 47;
-          var start;
-          if (isAbsolute) {
-            ret.root = "/";
-            start = 1;
-          } else {
-            start = 0;
-          }
-          var startDot = -1;
-          var startPart = 0;
-          var end = -1;
-          var matchedSlash = true;
-          var i = path3.length - 1;
-          var preDotState = 0;
-          for (; i >= start; --i) {
-            code = path3.charCodeAt(i);
-            if (code === 47) {
-              if (!matchedSlash) {
-                startPart = i + 1;
-                break;
-              }
-              continue;
-            }
-            if (end === -1) {
-              matchedSlash = false;
-              end = i + 1;
-            }
-            if (code === 46) {
-              if (startDot === -1) startDot = i;
-              else if (preDotState !== 1) preDotState = 1;
-            } else if (startDot !== -1) {
-              preDotState = -1;
-            }
-          }
-          if (startDot === -1 || end === -1 || // We saw a non-dot character immediately before the dot
-          preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
-          preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
-            if (end !== -1) {
-              if (startPart === 0 && isAbsolute) ret.base = ret.name = path3.slice(1, end);
-              else ret.base = ret.name = path3.slice(startPart, end);
-            }
-          } else {
-            if (startPart === 0 && isAbsolute) {
-              ret.name = path3.slice(1, startDot);
-              ret.base = path3.slice(1, end);
-            } else {
-              ret.name = path3.slice(startPart, startDot);
-              ret.base = path3.slice(startPart, end);
-            }
-            ret.ext = path3.slice(startDot, end);
-          }
-          if (startPart > 0) ret.dir = path3.slice(0, startPart - 1);
-          else if (isAbsolute) ret.dir = "/";
-          return ret;
-        },
-        sep: "/",
-        delimiter: ":",
-        win32: null,
-        posix: null
-      };
-      posix.posix = posix;
-      module.exports = posix;
-    }
-  });
-
   // src/index.ts
   var index_exports = {};
   __export(index_exports, {
@@ -38628,24 +38213,24 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
   var isUndefined = (val) => val === void 0;
   var FIELD_PATH_RE = /[.[\]'"]/;
   var stringToPath = (input) => input.split(FIELD_PATH_RE).filter(Boolean);
-  var get = (object, path3, defaultValue) => {
-    if (!path3 || !isObject(object)) {
+  var get = (object, path2, defaultValue) => {
+    if (!path2 || !isObject(object)) {
       return defaultValue;
     }
-    const paths = isKey(path3) ? [path3] : stringToPath(path3);
+    const paths = isKey(path2) ? [path2] : stringToPath(path2);
     if (paths.some((key) => PROTOTYPE_KEYWORDS.includes(key))) {
       return defaultValue;
     }
     const result = paths.reduce((result2, key) => {
       return isNullOrUndefined(result2) ? void 0 : result2[key];
     }, object);
-    return isUndefined(result) || result === object ? isUndefined(object[path3]) ? defaultValue : object[path3] : result;
+    return isUndefined(result) || result === object ? isUndefined(object[path2]) ? defaultValue : object[path2] : result;
   };
   var isBoolean = (value) => typeof value === "boolean";
   var isFunction = (value) => typeof value === "function";
-  var set = (object, path3, value) => {
+  var set = (object, path2, value) => {
     let index = -1;
-    const tempPath = isKey(path3) ? [path3] : stringToPath(path3);
+    const tempPath = isKey(path2) ? [path2] : stringToPath(path2);
     const length = tempPath.length;
     const lastIndex = length - 1;
     while (++index < length) {
@@ -39063,12 +38648,12 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
     }
     return true;
   }
-  function unset(object, path3) {
-    if (isString(path3) && Object.prototype.hasOwnProperty.call(object, path3)) {
-      delete object[path3];
+  function unset(object, path2) {
+    if (isString(path2) && Object.prototype.hasOwnProperty.call(object, path2)) {
+      delete object[path2];
       return object;
     }
-    const paths = Array.isArray(path3) ? path3 : isKey(path3) ? [path3] : stringToPath(path3);
+    const paths = Array.isArray(path2) ? path2 : isKey(path2) ? [path2] : stringToPath(path2);
     const childObject = paths.length === 1 ? object : baseGet(object, paths);
     const index = paths.length - 1;
     const key = paths[index];
@@ -43328,9 +42913,9 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
       throw e2;
     }
   }
-  async function fetchJSON(path3 = "", options = {}) {
+  async function fetchJSON(path2 = "", options = {}) {
     try {
-      const response = await fetch(path3, options);
+      const response = await fetch(path2, options);
       return await response.json();
     } catch (e2) {
       throw e2;
@@ -50953,9 +50538,25 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
   }
   var VERSION2 = "3.7.2";
 
+  // browser-node-fallbacks:fs
+  var fs = {};
+  var fs_default = fs;
+
+  // browser-node-fallbacks:path
+  function resolve(...parts) {
+    return parts.filter(Boolean).map(String).join("/").replace(/[/]+/g, "/");
+  }
+  function extname(filePath = "") {
+    const value = String(filePath);
+    const slashIndex = Math.max(value.lastIndexOf("/"), value.lastIndexOf("\\"));
+    const basename = value.slice(slashIndex + 1);
+    const dotIndex = basename.lastIndexOf(".");
+    return dotIndex <= 0 ? "" : basename.slice(dotIndex);
+  }
+  var path = { resolve, extname };
+  var path_default = path;
+
   // src/children.ts
-  var import_fs = __toESM(require_noop(), 1);
-  var import_path = __toESM(require_path_browserify(), 1);
   var scopedEval = eval;
   var templateCache = /* @__PURE__ */ new Map();
   function getChildrenProperty(options = {}) {
@@ -51002,7 +50603,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
       return passedChildJsonx;
     } else return childjsonx;
   }
-  function fetchJSONSync(path3, options) {
+  function fetchJSONSync(path2, options) {
     try {
       const config = {
         method: "GET",
@@ -51010,7 +50611,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
         ...options
       };
       const request = new XMLHttpRequest();
-      request.open(config && config.method || "GET", path3, false);
+      request.open(config && config.method || "GET", path2, false);
       if (config.headers) {
         Object.keys(config.headers).forEach((header) => {
           request.setRequestHeader(header, config.headers[header]);
@@ -51025,7 +50626,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
     }
   }
   function getTemplateLoadType(template, type) {
-    if (typeof window !== "undefined" && typeof window.XMLHttpRequest === "function" && (!import_fs.default.readFileSync || type === "fetch")) return "fetch";
+    if (typeof window !== "undefined" && typeof window.XMLHttpRequest === "function" && (!fs_default.readFileSync || type === "fetch")) return "fetch";
     if (typeof template === "string" || type === "file") return "file";
     return null;
   }
@@ -51045,7 +50646,7 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
       templateCache.set(cacheKey, jsonxModule);
       return jsonxModule;
     } else if (loadType === "file") {
-      const jsFile = import_fs.default.readFileSync(import_path.default.resolve(template)).toString();
+      const jsFile = fs_default.readFileSync(path_default.resolve(template)).toString();
       const jsonxModule = scopedEval(`(${jsFile})`);
       templateCache.set(cacheKey, jsonxModule);
       return jsonxModule;
@@ -51103,16 +50704,14 @@ performance.now();setTimeout(w,2300>q&&2E3<q?2300-q:500)})])},types:[]});z.ready
   var import_numeral2 = __toESM(require_numeral(), 1);
 
   // src/express.ts
-  var import_path2 = __toESM(require_path_browserify(), 1);
-  var import_fs2 = __toESM(require_noop(), 1);
   var scopedEval2 = eval;
   function __express(filePath, options, callback) {
     try {
       let jsonxModule = options == null ? void 0 : options.__jsonx;
       let isJSON = false;
       if (filePath) {
-        isJSON = [".json", ".jsonx"].includes(import_path2.default.extname(filePath));
-        const jsFile = import_fs2.default.readFileSync(filePath).toString();
+        isJSON = [".json", ".jsonx"].includes(path_default.extname(filePath));
+        const jsFile = fs_default.readFileSync(filePath).toString();
         jsonxModule = isJSON ? scopedEval2(`(${jsFile})`) : scopedEval2(jsFile);
       }
       const resources = Object.assign({}, options);
