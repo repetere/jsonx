@@ -294,7 +294,7 @@ h1 {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   display: grid;
-  grid-template-columns: 1.08fr 56px 0.9fr;
+  grid-template-columns: 1.08fr 72px 0.9fr;
   min-height: 520px;
   overflow: hidden;
   position: relative;
@@ -344,6 +344,8 @@ code {
   display: flex;
   justify-content: center;
   position: relative;
+  transform: translateY(28px);
+  z-index: 1;
 }
 
 .flow-button::before {
@@ -821,7 +823,7 @@ svg {
   }
 
   .hero-demo {
-    grid-template-columns: 1fr 54px 0.9fr;
+    grid-template-columns: 1fr 70px 0.9fr;
   }
 
   .workflow-rail {
