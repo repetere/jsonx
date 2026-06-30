@@ -1,0 +1,30 @@
+[
+  {
+    "name": "jsonx-generative-ui",
+    "purpose": "Generate the right constrained JSONX/JXM interface payload for a user prompt.",
+    "example": "Use jsonx-generative-ui to turn \u201cCreate a support triage screen for a refund request\u201d into a safe DemoShell payload.",
+    "version": "0.1.0",
+    "updated": "2026-06-29"
+  },
+  {
+    "name": "jsonx-component-registry",
+    "purpose": "Design or audit the allowed component registry for generated UI.",
+    "example": "Use jsonx-component-registry to review whether MetricRow props are safe.",
+    "version": "0.1.0",
+    "updated": "2026-06-29"
+  },
+  {
+    "name": "jsonx-demo-builder",
+    "purpose": "Build a local prompt-to-JSONX demo using the repo site conventions.",
+    "example": "Use jsonx-demo-builder to add a fixture prompt and rendered demo panel.",
+    "version": "0.1.0",
+    "updated": "2026-06-29"
+  },
+  {
+    "name": "jsonx-safety-review",
+    "purpose": "Review JSONX payload validation, blocked props, and action mapping.",
+    "example": "Use jsonx-safety-review to check a public demo for dangerous JSONX features.",
+    "version": "0.1.0",
+    "updated": "2026-06-29"
+  }
+]
