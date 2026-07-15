@@ -1,10 +1,10 @@
 [
   {
     "name": "jsonx-generative-ui",
-    "purpose": "Generate the right constrained JSONX/JXM interface payload for a user prompt.",
-    "example": "Use jsonx-generative-ui to turn \u201cCreate a support triage screen for a refund request\u201d into a safe DemoShell payload.",
+    "purpose": "Decide when UI is warranted, then generate a safe JSONX/JXM payload or IDE handoff file.",
+    "example": "Use jsonx-generative-ui to ask whether a study user wants a quiz UI, then write .jsonx/ui/practice-quiz.json.",
     "version": "0.1.0",
-    "updated": "2026-06-29"
+    "updated": "2026-06-30"
   },
   {
     "name": "jsonx-component-registry",

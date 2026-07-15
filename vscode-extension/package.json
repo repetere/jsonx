@@ -1,0 +1,71 @@
+{
+  "name": "jsonx-generative-ui",
+  "displayName": "JSONX Generative UI",
+  "description": "Render safe JSONX generative UI payloads produced by Codex, Claude, or terminal agents.",
+  "version": "0.1.0",
+  "publisher": "repetere",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "workspaceContains:**/.jsonx/ui/*.json",
+    "onCommand:jsonxGenerativeUi.openLatest",
+    "onCommand:jsonxGenerativeUi.openFile",
+    "onCommand:jsonxGenerativeUi.createQuizExample",
+    "onCommand:jsonxGenerativeUi.createPollExample"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "jsonxGenerativeUi.openLatest",
+        "title": "JSONX: Open Latest Generated UI"
+      },
+      {
+        "command": "jsonxGenerativeUi.openFile",
+        "title": "JSONX: Open Generated UI From File"
+      },
+      {
+        "command": "jsonxGenerativeUi.createQuizExample",
+        "title": "JSONX: Create Quiz UI Example"
+      },
+      {
+        "command": "jsonxGenerativeUi.createPollExample",
+        "title": "JSONX: Create Slider Poll UI Example"
+      }
+    ],
+    "configuration": {
+      "title": "JSONX Generative UI",
+      "properties": {
+        "jsonxGenerativeUi.autoOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open or refresh the JSONX generated UI panel when files are written under .jsonx/ui."
+        }
+      }
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "jsonxGenerativeUi.openLatest"
+        },
+        {
+          "command": "jsonxGenerativeUi.openFile"
+        },
+        {
+          "command": "jsonxGenerativeUi.createQuizExample"
+        },
+        {
+          "command": "jsonxGenerativeUi.createPollExample"
+        }
+      ]
+    }
+  }
+}

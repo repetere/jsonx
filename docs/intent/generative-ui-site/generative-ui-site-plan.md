@@ -2,7 +2,7 @@
 
 Status: implementation seed
 
-Last updated: 2026-06-29
+Last updated: 2026-06-30
 
 ## Goal
 
@@ -20,7 +20,19 @@ Direct provider API calls from the browser should remain experimental and off by
 
 ## Safe generated-output profile
 
-Allowed output is limited to known demo components, approved props, plain text children, arrays of child components, and named local actions. The public demo blocks dangerous JSONX features, unknown components, unknown props, inline event handlers, raw HTML injection, arbitrary CSS, and external URLs unless explicitly allowlisted.
+Allowed output is limited to known demo components, approved props, plain text children, arrays of child components, quiz questions, slider polls, choice lists, and named local actions. The public demo and IDE extension block dangerous JSONX features, unknown components, unknown props, inline event handlers, raw HTML injection, arbitrary CSS, and external URLs unless explicitly allowlisted.
+
+## Agent and IDE contract
+
+The generative UI skill should not always emit UI. It should answer normally when text is enough, generate JSONX when the user asks for UI, and ask a short confirmation when an interactive control would help but was not requested. Examples include asking a homework or tutoring user whether they want a multiple-choice quiz UI, or asking a polled user whether they want a slider UI for numeric input.
+
+When Codex, Claude Code, or another agent is connected to VS Code and can write workspace files, the handoff path is:
+
+```text
+.jsonx/ui/<short-purpose>.json
+```
+
+The file uses the `jsonx.generative-ui.v1` envelope with a renderable `payload` object. The VS Code extension validates the payload before rendering it in a webview.
 
 ## First public implementation
 
@@ -28,4 +40,5 @@ Allowed output is limited to known demo components, approved props, plain text c
 - Add a client-side demo script under `site/assets/generative-ui-demo.js`.
 - Add skills under `skills/codex/` and `skills/claude/`.
 - Add `skills/index.json` so the site can render download/install cards.
+- Add a VS Code extension under `vscode-extension/` that watches `.jsonx/ui/*.json` and renders validated JSONX UI in an IDE webview.
 - Use the existing build path to copy site files into `docs/`.
