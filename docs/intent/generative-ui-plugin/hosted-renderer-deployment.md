@@ -44,6 +44,7 @@ Then deploy with the Netlify connector command for site id `210939ba-0ffe-4c5d-8
 ## Open Submission Work
 
 - Connect `https://jsonx-renderer-app.netlify.app/mcp` in ChatGPT developer mode.
-- Capture screenshots and hosted test prompt responses from ChatGPT.
+- Capture live hosted test prompt responses from ChatGPT developer mode.
 - Add the approved app ID to `plugins/jsonx-generative-ui-plugin/.app.json` only after the app exists.
-- Run Claude Code plugin validation before marketplace submission.
+- Run authenticated Claude Code smoke prompts for both split Claude Code plugins before marketplace submission.
+- Record policy review and marketplace receipts with `docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs`.

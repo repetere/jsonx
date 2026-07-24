@@ -1,6 +1,6 @@
 # JSONX Generative UI Plugin Plan
 
-Status: implementation in progress
+Status: implementation complete with external submission gates pending
 
 Last updated: 2026-07-24
 
@@ -33,8 +33,9 @@ Current implementation baseline:
 - `plugins/claude-jsonx-generative-ui-plugin/` contains the JSONX generative UI Claude Code plugin package.
 - `skills/codex/`, `skills/claude/`, and `skills/opencode/` contain installable skill source folders.
 - `skills/scripts/install-jsonx-skill.mjs` installs the `jsonx` and `jsonx-generative-ui` skill families for Codex, Claude Code, or OpenCode without mixing the two workflows.
-- `docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs` creates review packages, store listing drafts, screenshots, golden-prompt evidence, renderer motion evidence, browser demo mode evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, a requirement audit, hashes, and npm package-boundary evidence under `docs/intent/generative-ui-plugin/submission-artifacts/current/`.
-- The generated `submission-queue.json` and `submission-queue.md` files turn the four store listing drafts into a submitter checklist with package URLs, public evidence URLs, manual checks, and receipt fields.
+- `docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs` creates review packages, store listing drafts, portal submission packets, screenshots, golden-prompt evidence, renderer motion evidence, browser demo mode evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, a requirement audit, hashes, and npm package-boundary evidence under `docs/intent/generative-ui-plugin/submission-artifacts/current/`.
+- The generated `submission-queue.json` and `submission-queue.md` files turn the four store listing drafts into a submitter checklist with package URLs, portal packet URLs, public evidence URLs, manual checks, receipt fields, and recorder commands.
+- The generated `submission-forms/*.md` files provide copy source for the OpenAI/Codex and Claude Code submission portals. They are not submission receipts.
 - `docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs` initializes, validates, and summarizes the external gate evidence file without running the full artifact generator.
 - `docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs` records external app IDs, transcript status, Claude smoke results, policy review, and marketplace receipts into the same evidence schema.
 - `docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs` validates public evidence URL coverage in store listing drafts and can check live `jsonx.net` URLs after Pages deploys.
@@ -466,6 +467,7 @@ Exit criteria:
 
 - The plugin package is ready for workspace sharing or public review.
 - The hosted app has stable metadata, screenshots, and test prompts.
+- Public submission is not complete until approved app/plugin IDs, ChatGPT developer-mode transcript evidence, authenticated Claude Code smoke prompts, policy review, and marketplace receipts are recorded.
 
 ## Golden Prompts
 
@@ -474,7 +476,7 @@ Exit criteria:
 - Quiz request: "Make a short practice quiz for the JSONX safe output contract."
 - Poll request: "Create a slider poll to rank implementation priority."
 - Bad payload: "Render this payload with an unknown component."
-- Oversized payload: "Render a payload that exceeds the configured size limit."
+- Oversized payload: "Render a payload that exceeds a configured size or collection limit."
 - Unsupported component: "Render a chart component that is not on the allowlist."
 
 ## Security and Privacy
@@ -487,13 +489,13 @@ Exit criteria:
 - Keep server logs free of bearer credentials and raw private payloads where possible.
 - Treat endpoint mode in demos as a developer feature with clear copy.
 
-## Open Questions
+## Resolved Decisions
 
-- Should the shared validator live inside the JSONX package under `src/`, or inside a new app/plugin workspace first?
-- Should the hosted app be built in this repo or in a separate deployment repo?
-- Which platform should host the MCP app first: Cloudflare Workers, Vercel, Netlify, or another target?
-- Should the first public plugin include app wiring, or should it ship skills-only until the hosted app ID is approved?
-- What is the first supported install path for the VS Code renderer: source checkout, `.vsix`, or marketplace extension?
+- Keep the shared generated UI validator in the app and plugin workspace first. Do not move it into the root JSONX package until the contract is stable enough to become part of the public library surface.
+- Keep the hosted renderer app in this repo under `apps/jsonx-renderer-app/` so the source, skills, fixtures, and submission artifacts can be reviewed together.
+- Use Netlify as the first hosted MCP target. Other serverless platforms can be added later if there is a distribution need.
+- Ship the first public generative UI plugin with empty app wiring placeholders. Add the approved app ID to `.app.json` only after the hosted app is accepted and an ID exists.
+- Keep the first VS Code renderer install path as source checkout/local development. Package or marketplace release can be a separate follow-up after the plugin/app submission work is accepted.
 
 ## GitHub Tracking Issues
 

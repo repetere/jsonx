@@ -10,6 +10,13 @@ const args = process.argv.slice(2);
 
 const surfaces = ["codex", "claude", "opencode"];
 const splitSkills = ["jsonx", "jsonx-generative-ui"];
+const invalidFixtures = [
+  "bad-unknown-component",
+  "bad-blocked-prop",
+  "bad-event-handler",
+  "bad-motion-profile",
+  "bad-oversized",
+];
 const externalGateNames = ["appIds", "chatgptDeveloperMode", "claudeSmoke", "marketplaceSubmission"];
 const blockedNpmPrefixes = ["apps/", "plugins/", "skills/", ".agents/", ".claude/", ".opencode/", "docs/intent/", "docs/skills/", "vscode-extension/", ".github/"];
 const blockedNpmTerms = [
@@ -164,6 +171,9 @@ as external-gated unless --strict-external is set.
     (externalGateSource.chatgptDeveloperMode?.promptsRun || []).map((prompt) => prompt.id),
   );
   const goldenPromptIds = (goldenPromptEvidence.cases || []).map((prompt) => prompt.id);
+  const invalidFixtureFilesPresent = (
+    await Promise.all(invalidFixtures.map((fixture) => fileExists(`plugins/jsonx-generative-ui-plugin/fixtures/${fixture}.json`)))
+  ).every(Boolean);
 
   const requirements = [
     makeRequirement({
@@ -253,12 +263,17 @@ as external-gated unless --strict-external is set.
         "apps/jsonx-renderer-app/src/jsonx-validator.mjs",
         "plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py",
         "plugins/jsonx-generative-ui-plugin/fixtures/",
+        ...invalidFixtures.map((name) => `plugins/jsonx-generative-ui-plugin/fixtures/${name}.json`),
         manifest.goldenPromptEvidence?.path,
       ].filter(Boolean),
       checks: {
         appValidatorPresent: await fileExists("apps/jsonx-renderer-app/src/jsonx-validator.mjs"),
         pluginValidatorPresent: await fileExists("plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py"),
         fixtureCountCovered: manifest.goldenPromptEvidence?.caseCount >= 9,
+        invalidFixtureFilesPresent,
+        invalidFixturesCovered:
+          Array.isArray(manifest.fixtureValidation?.invalidFixtures) &&
+          invalidFixtures.every((name) => manifest.fixtureValidation.invalidFixtures.includes(name)),
         browserDemoUsesContract: manifest.browserDemoEvidence?.checks?.fixtureModeRendered === true && manifest.browserDemoEvidence?.checks?.pasteModeRendered === true,
         hostedMcpUsesContract: manifest.hostedMcpEvidence?.checks?.validPayloadRendered === true && manifest.hostedMcpEvidence?.checks?.invalidPayloadRejected === true,
       },

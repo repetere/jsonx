@@ -40,6 +40,13 @@ const validFixtures = [
   "slider-poll",
   "motion-subtle",
 ];
+const invalidFixtures = [
+  "bad-unknown-component",
+  "bad-blocked-prop",
+  "bad-event-handler",
+  "bad-motion-profile",
+  "bad-oversized",
+];
 const motionProfiles = ["none", "subtle-enter", "state-change-highlight", "morph-list-to-detail"];
 const chatgptPromptIds = [
   "direct-ui-request",
@@ -1785,28 +1792,11 @@ async function buildGoldenPromptEvidence() {
         "motion-subtle",
         "bad-unknown-component",
         "bad-motion-profile",
+        "bad-oversized",
       ].map(async (name) => [name, await readJson(fixturePath(name))]),
     ),
   );
 
-  const oversizedInput = {
-    purpose: "Reject oversized generated UI payload.",
-    payload: {
-      component: "DemoShell",
-      props: {
-        title: "Oversized Payload",
-        summary: "This generated payload should fail the size limit.",
-      },
-      children: [
-        {
-          component: "TextBlock",
-          props: {
-            text: "x".repeat(70000),
-          },
-        },
-      ],
-    },
-  };
   const unsafeFieldInput = {
     purpose: "Reject unsafe generated UI fields.",
     payload: {
@@ -1860,10 +1850,10 @@ async function buildGoldenPromptEvidence() {
     },
     {
       id: "oversized-payload-request",
-      prompt: "Render a payload that exceeds the configured size limit.",
+      prompt: "Render a payload that exceeds a configured size or collection limit.",
       expectedToolCall: true,
       expectedOutcome: "validation-error",
-      input: oversizedInput,
+      input: renderInputFromFixture(fixtures["bad-oversized"]),
     },
     {
       id: "unsupported-component-request",
@@ -2705,6 +2695,9 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
     manifest.npmBoundary.excludedPrefixes?.includes("plugins/") &&
     manifest.npmBoundary.excludedPrefixes?.includes("skills/") &&
     manifest.npmBoundary.excludedTerms?.includes("gsap");
+  const invalidFixturesCovered =
+    Array.isArray(manifest.fixtureValidation?.invalidFixtures) &&
+    invalidFixtures.every((name) => manifest.fixtureValidation.invalidFixtures.includes(name));
   const appIdGateOk = gateProved(externalGateEvidence, "appIds");
   const chatgptTranscriptGateOk = gateProved(externalGateEvidence, "chatgptDeveloperMode");
   const claudeSmokeGateOk = gateProved(externalGateEvidence, "claudeSmoke");
@@ -2802,18 +2795,20 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
     {
       id: "REQ-GENERATIVE-UI-CONTRACT",
       requirement: "Use one jsonx.generative-ui.v1 contract and allowlist across fixtures, app, plugin, browser demo, and local handoff.",
-      status: manifest.goldenPromptEvidence?.caseCount >= 9 && hostedMcpOk && browserDemoOk ? "proved" : "incomplete",
+      status: manifest.goldenPromptEvidence?.caseCount >= 9 && invalidFixturesCovered && hostedMcpOk && browserDemoOk ? "proved" : "incomplete",
       githubIssue: "#1110",
       evidence: [
         "apps/jsonx-renderer-app/src/jsonx-validator.mjs",
         "plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py",
         "plugins/jsonx-generative-ui-plugin/fixtures/",
+        ...(manifest.fixtureValidation?.invalidFixtures || []).map((name) => `plugins/jsonx-generative-ui-plugin/fixtures/${name}.json`),
         manifest.goldenPromptEvidence?.path,
         manifest.browserDemoEvidence?.path,
         manifest.hostedMcpEvidence?.path,
       ].filter(Boolean),
       checks: {
         goldenPromptCases: manifest.goldenPromptEvidence?.caseCount,
+        invalidFixturesCovered,
         hostedMcpOk,
         browserDemoOk,
       },
@@ -3145,7 +3140,7 @@ async function main() {
   run("plugin package validation", "node", ["plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs"]);
   run("renderer app check", "npm", ["run", "check"], { cwd: path.join(repoRoot, "apps", "jsonx-renderer-app") });
   run(
-    "valid fixture validation",
+    "valid and invalid fixture validation",
     "python3",
     [
       "plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py",
@@ -3314,6 +3309,10 @@ async function main() {
       openCodeVersion: openCodeSkillEvidence.openCodeVersion,
     },
     npmBoundary,
+    fixtureValidation: {
+      validFixtures,
+      invalidFixtures,
+    },
     validation: [
       "node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs",
       "npm run check from apps/jsonx-renderer-app",

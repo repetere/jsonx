@@ -99,6 +99,7 @@ for (const fixture of [
   "bad-blocked-prop",
   "bad-event-handler",
   "bad-motion-profile",
+  "bad-oversized",
 ]) {
   assertFile(`plugins/jsonx-generative-ui-plugin/fixtures/${fixture}.json`);
 }
