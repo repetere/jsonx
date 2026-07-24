@@ -54,6 +54,7 @@ const chatgptPromptIds = [
 const chatgptPromptIdSet = new Set(chatgptPromptIds);
 const promptStatusValues = ["pending", "passed", "failed", "blocked"];
 const promptStatusSet = new Set(promptStatusValues);
+const externalCliTimeoutMs = Number(process.env.JSONX_EXTERNAL_CLI_TIMEOUT_MS || 120000);
 
 const installerSurfaces = ["codex", "claude", "opencode"];
 const installerSkills = ["jsonx", "jsonx-generative-ui", "all"];
@@ -84,6 +85,7 @@ const submissionQueueTargets = {
   "openai-jsonx-plugin-submission.json": {
     id: "openai-core-jsonx",
     submitterLabel: "OpenAI/Codex core JSONX plugin",
+    marketplaceTarget: "openai-core",
     receiptCheck: "openAiCoreSubmissionRecorded",
     receiptFields: [
       "marketplaceSubmissions.openaiCore.submitted",
@@ -97,6 +99,7 @@ const submissionQueueTargets = {
   "openai-generative-ui-plugin-submission.json": {
     id: "openai-generative-ui",
     submitterLabel: "OpenAI/Codex generative UI app-plus-skills plugin",
+    marketplaceTarget: "openai-generative-ui",
     receiptCheck: "openAiGenerativeUiSubmissionRecorded",
     receiptFields: [
       "marketplaceSubmissions.openaiGenerativeUi.submitted",
@@ -110,6 +113,7 @@ const submissionQueueTargets = {
   "claude-code-jsonx-submission.json": {
     id: "claude-core-jsonx",
     submitterLabel: "Claude Code core JSONX plugin",
+    marketplaceTarget: "claude-core",
     receiptCheck: "claudeCoreSubmissionRecorded",
     receiptFields: [
       "marketplaceSubmissions.claudeCore.submitted",
@@ -123,6 +127,7 @@ const submissionQueueTargets = {
   "claude-code-generative-ui-submission.json": {
     id: "claude-generative-ui",
     submitterLabel: "Claude Code generative UI plugin",
+    marketplaceTarget: "claude-generative-ui",
     receiptCheck: "claudeGenerativeUiSubmissionRecorded",
     receiptFields: [
       "marketplaceSubmissions.claudeGenerativeUi.submitted",
@@ -172,6 +177,7 @@ function run(label, command, args, options = {}) {
     cwd: options.cwd || repoRoot,
     encoding: "utf8",
     stdio: options.capture ? "pipe" : "inherit",
+    timeout: options.timeoutMs,
     env: {
       ...process.env,
       PATH: `${process.env.HOME}/.nvm/versions/node/v22.21.1/bin:${process.env.PATH}`,
@@ -181,6 +187,8 @@ function run(label, command, args, options = {}) {
 
   if (result.status !== 0) {
     const message = [`${label} failed with exit code ${result.status}`];
+    if (result.signal) message.push(`signal: ${result.signal}`);
+    if (result.error) message.push(result.error.message);
     if (result.stdout) message.push(result.stdout.trim());
     if (result.stderr) message.push(result.stderr.trim());
     throw new Error(message.filter(Boolean).join("\n"));
@@ -492,6 +500,45 @@ function allChecksTrue(checks = {}) {
 
 function assertEvidence(condition, message) {
   if (!condition) throw new Error(`Submission evidence failed: ${message}`);
+}
+
+function errorTimedOut(error) {
+  return /ETIMEDOUT|SIGTERM/.test(error?.message || "");
+}
+
+async function readPriorCommittedArtifact(filePath) {
+  if (await fileExists(filePath)) {
+    return { data: await readJson(filePath), source: evidenceSourcePath(filePath) };
+  }
+  const repoRelative = path.relative(repoRoot, filePath);
+  if (repoRelative.startsWith("..") || path.isAbsolute(repoRelative)) return null;
+  const result = spawnSync("git", ["show", `HEAD:${repoRelative}`], {
+    cwd: repoRoot,
+    encoding: "utf8",
+    stdio: "pipe",
+  });
+  if (result.status !== 0) return null;
+  return { data: JSON.parse(result.stdout), source: `HEAD:${repoRelative}` };
+}
+
+async function reusePriorExternalCliEvidence({ artifactFileName, source, error, expectedChecks }) {
+  if (!errorTimedOut(error)) return null;
+  const priorPath = path.join(artifactRoot, artifactFileName);
+  const priorArtifact = await readPriorCommittedArtifact(priorPath);
+  if (!priorArtifact) return null;
+  const prior = priorArtifact.data;
+  if (prior.skipped === true) return null;
+  const checks = prior.checks || {};
+  if (!expectedChecks.every((key) => checks[key] === true)) return null;
+  return {
+    ...prior,
+    generatedAt: new Date().toISOString(),
+    note: `${prior.note || source} Previous successful evidence was reused because the current external CLI probe timed out.`,
+    reusedPreviousEvidence: true,
+    previousGeneratedAt: prior.generatedAt,
+    priorArtifact: priorArtifact.source,
+    reuseReason: error.message,
+  };
 }
 
 async function fetchWithTimeout(url, options = {}) {
@@ -862,11 +909,12 @@ async function buildCodexInstallEvidence({ skip }) {
   ];
   const env = { CODEX_HOME: tempHome };
   const steps = [];
+  const codexRunOptions = { capture: true, env, timeoutMs: externalCliTimeoutMs };
 
   console.log("capturing isolated Codex plugin install evidence");
 
   try {
-    const version = run("codex version", codexCli, ["--version"], { capture: true, env });
+    const version = run("codex version", codexCli, ["--version"], codexRunOptions);
     steps.push({
       id: "codex-version",
       command: "codex --version",
@@ -875,7 +923,7 @@ async function buildCodexInstallEvidence({ skip }) {
 
     const marketplaceAdd = parseJsonOutput(
       "codex plugin marketplace add",
-      run("codex marketplace add", codexCli, ["plugin", "marketplace", "add", ".", "--json"], { capture: true, env }),
+      run("codex marketplace add", codexCli, ["plugin", "marketplace", "add", ".", "--json"], codexRunOptions),
     );
     assertEvidence(marketplaceAdd.marketplaceName === "jsonx-local", "Codex marketplace add did not return jsonx-local");
     steps.push({
@@ -886,7 +934,7 @@ async function buildCodexInstallEvidence({ skip }) {
 
     const marketplaces = parseJsonOutput(
       "codex plugin marketplace list",
-      run("codex marketplace list", codexCli, ["plugin", "marketplace", "list", "--json"], { capture: true, env }),
+      run("codex marketplace list", codexCli, ["plugin", "marketplace", "list", "--json"], codexRunOptions),
     );
     assertEvidence(
       marketplaces.marketplaces?.some((marketplace) => marketplace.name === "jsonx-local"),
@@ -900,7 +948,7 @@ async function buildCodexInstallEvidence({ skip }) {
 
     const available = parseJsonOutput(
       "codex plugin list available",
-      run("codex plugin list available", codexCli, ["plugin", "list", "--available", "--json"], { capture: true, env }),
+      run("codex plugin list available", codexCli, ["plugin", "list", "--available", "--json"], codexRunOptions),
     );
     const codexPlugins = [
       {
@@ -934,8 +982,7 @@ async function buildCodexInstallEvidence({ skip }) {
       const pluginAdd = parseJsonOutput(
         `codex plugin add ${expected.pluginId}`,
         run("codex plugin add", codexCli, ["plugin", "add", expected.pluginId, "--json"], {
-          capture: true,
-          env,
+          ...codexRunOptions,
         }),
       );
       assertEvidence(pluginAdd.pluginId === expected.pluginId, `Codex plugin add returned the wrong plugin id for ${expected.pluginId}`);
@@ -949,7 +996,7 @@ async function buildCodexInstallEvidence({ skip }) {
 
     const installed = parseJsonOutput(
       "codex plugin list installed",
-      run("codex plugin list installed", codexCli, ["plugin", "list", "--json"], { capture: true, env }),
+      run("codex plugin list installed", codexCli, ["plugin", "list", "--json"], codexRunOptions),
     );
     const installedPlugins = codexPlugins.map((expected) => {
       const plugin = installed.installed?.find((item) => item.pluginId === expected.pluginId);
@@ -1001,6 +1048,23 @@ async function buildCodexInstallEvidence({ skip }) {
       },
       steps,
     };
+  } catch (error) {
+    const reused = await reusePriorExternalCliEvidence({
+      artifactFileName: "codex-install-evidence.json",
+      source: "codex plugin CLI",
+      error,
+      expectedChecks: [
+        "marketplaceAdded",
+        "availableBeforeInstall",
+        "corePluginInstalled",
+        "generativeUiPluginInstalled",
+        "corePluginEnabled",
+        "generativeUiPluginEnabled",
+        "cachedFilesPresent",
+      ],
+    });
+    if (reused) return reused;
+    throw error;
   } finally {
     await fs.rm(tempHome, { recursive: true, force: true });
   }
@@ -1026,6 +1090,7 @@ async function buildClaudeValidationEvidence({ skip }) {
     [repoRoot, "$REPO_ROOT"],
   ];
   const env = { npm_config_cache: tempCache };
+  const npmExecOptions = { capture: true, env, timeoutMs: externalCliTimeoutMs };
   const pluginTargets = [
     {
       id: "jsonx",
@@ -1047,7 +1112,7 @@ async function buildClaudeValidationEvidence({ skip }) {
       "claude version via npm exec",
       "npm",
       ["exec", "--yes", "--package", claudeCodePackage, "--", "claude", "--version"],
-      { capture: true, env },
+      npmExecOptions,
     );
     assertEvidence(version.includes("Claude Code"), "Claude Code version output did not identify Claude Code");
     steps.push({
@@ -1061,7 +1126,7 @@ async function buildClaudeValidationEvidence({ skip }) {
         `claude plugin validate ${target.commandPath}`,
         "npm",
         ["exec", "--yes", "--package", claudeCodePackage, "--", "claude", "plugin", "validate", target.commandPath],
-        { capture: true, env },
+        npmExecOptions,
       );
       assertEvidence(validation.includes("Validation passed"), `claude plugin validate did not report success for ${target.id}`);
       steps.push({
@@ -1090,6 +1155,15 @@ async function buildClaudeValidationEvidence({ skip }) {
       },
       steps,
     };
+  } catch (error) {
+    const reused = await reusePriorExternalCliEvidence({
+      artifactFileName: "claude-validation-evidence.json",
+      source: "claude plugin validate",
+      error,
+      expectedChecks: ["cliAvailableViaNpmExec", "corePluginValidationPassed", "generativeUiPluginValidationPassed"],
+    });
+    if (reused) return reused;
+    throw error;
   } finally {
     await fs.rm(tempCache, { recursive: true, force: true });
   }
@@ -1134,6 +1208,7 @@ async function buildOpenCodeSkillEvidence({ skip }) {
     OPENCODE_DISABLE_EXTERNAL_SKILLS: "1",
     OPENCODE_DISABLE_CLAUDE_CODE_SKILLS: "1",
   };
+  const npmExecOptions = { cwd: tempProject, capture: true, env, timeoutMs: externalCliTimeoutMs };
   const skillRoot = path.join(tempProject, ".opencode", "skills");
   const steps = [];
 
@@ -1170,7 +1245,7 @@ async function buildOpenCodeSkillEvidence({ skip }) {
       "opencode version via npm exec",
       "npm",
       ["exec", "--yes", "--package", openCodePackage, "--", "opencode", "--version"],
-      { cwd: tempProject, capture: true, env },
+      npmExecOptions,
     );
     assertEvidence(Boolean(version), "OpenCode version output was empty");
     steps.push({
@@ -1183,7 +1258,7 @@ async function buildOpenCodeSkillEvidence({ skip }) {
       "opencode debug skill",
       "npm",
       ["exec", "--yes", "--package", openCodePackage, "--", "opencode", "debug", "skill"],
-      { cwd: tempProject, capture: true, env },
+      npmExecOptions,
     );
     const skills = parseJsonOutput("opencode debug skill", debugOutput);
     const jsonxSkill = skills.find((skill) => skill.name === "jsonx");
@@ -1223,6 +1298,15 @@ async function buildOpenCodeSkillEvidence({ skip }) {
       },
       steps,
     };
+  } catch (error) {
+    const reused = await reusePriorExternalCliEvidence({
+      artifactFileName: "opencode-skill-evidence.json",
+      source: "opencode debug skill",
+      error,
+      expectedChecks: ["cliAvailableViaNpmExec", "projectSkillsInstalled", "debugSkillListedJsonx", "debugSkillListedGenerativeUi"],
+    });
+    if (reused) return reused;
+    throw error;
   } finally {
     await fs.rm(tempProject, { recursive: true, force: true });
     await fs.rm(tempCache, { recursive: true, force: true });
@@ -1336,6 +1420,7 @@ async function buildSubmissionQueue(manifest, externalGateEvidence) {
       externalGatesToRecord: queueTarget.externalGatesToRecord,
       receiptCheck: queueTarget.receiptCheck,
       receiptFields: queueTarget.receiptFields,
+      receiptRecorderCommand: marketplaceReceiptCommand(queueTarget.marketplaceTarget),
       readyChecks: {
         generatedDraftPresent: Boolean(storeListingArtifact?.sha256),
         reviewPackageUrlPresent: typeof publicEvidence.reviewPackage === "string" && publicEvidence.reviewPackage.startsWith("https://jsonx.net/"),
@@ -1350,12 +1435,14 @@ async function buildSubmissionQueue(manifest, externalGateEvidence) {
   return {
     generatedAt: new Date().toISOString(),
     source: "docs/intent/generative-ui-plugin/store-listings/",
-    note: "This queue is generated from the four public store listing drafts. It is a submitter handoff, not proof that any public marketplace submission was sent.",
+    note: "This queue is generated from the four public store listing drafts. It lists packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that any public marketplace submission was sent.",
     externalGateEvidence: manifest.externalGateEvidence?.path,
     externalGateStatus: externalGateEvidence.gateStatus,
     submissionCount: submissions.length,
     receiptRecordedCount: submissions.filter((submission) => submission.status === "receipt-recorded").length,
     pendingSubmissionCount: submissions.filter((submission) => submission.status !== "receipt-recorded").length,
+    externalGateRecorder: externalGateRecorderCommand,
+    externalGateRecorderCommands: externalGateRecorderCommands(),
     submissions,
     receiptEvidenceFile: "docs/intent/generative-ui-plugin/external-gate-evidence.json",
   };
@@ -1369,13 +1456,37 @@ function checklist(items) {
   return items.map((item) => `- [ ] ${item}`).join("\n");
 }
 
+const externalGateRecorderCommand = "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs";
+
+function marketplaceReceiptCommand(target) {
+  return `${externalGateRecorderCommand} marketplace --target ${target} --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>`;
+}
+
+function externalGateRecorderCommands() {
+  return {
+    appIds: [
+      `${externalGateRecorderCommand} app-ids --openai-core-plugin-id <id> --openai-generative-ui-app-id <id> --openai-generative-ui-plugin-id <id> --codex-core-plugin-id <id> --codex-generative-ui-plugin-id <id> --codex-app-metadata-updated`,
+    ],
+    chatgptDeveloperMode: [
+      `${externalGateRecorderCommand} chatgpt --connected-mcp-url ${hostedMcpUrl} --transcript-url <url> --all-prompts-passed`,
+    ],
+    claudeSmoke: [
+      `${externalGateRecorderCommand} claude-smoke --plugin core --authenticated --claude-version <version> --passed`,
+      `${externalGateRecorderCommand} claude-smoke --plugin generative-ui --authenticated --claude-version <version> --passed`,
+    ],
+    policyReview: [
+      `${externalGateRecorderCommand} policy-review --status approved --reviewed-by <name> --reviewed-at <yyyy-mm-dd>`,
+    ],
+  };
+}
+
 async function writeSubmissionQueueMarkdown(queue, filePath) {
   const lines = [
     "# JSONX Public Submission Queue",
     "",
     `Generated: ${queue.generatedAt}`,
     "",
-    "This file is generated from the four store listing drafts. It gives the submitter one place to find packages, public evidence, manual checks, and receipt fields. It is not proof that a public submission was sent.",
+    "This file is generated from the four store listing drafts. It gives the submitter one place to find packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that a public submission was sent.",
     "",
     "## Gate Status",
     "",
@@ -1388,6 +1499,35 @@ async function writeSubmissionQueueMarkdown(queue, filePath) {
     `- Submissions: ${queue.submissionCount}`,
     `- Pending receipts: ${queue.pendingSubmissionCount}`,
     `- Receipt evidence file: \`${queue.receiptEvidenceFile}\``,
+    `- Recorder: \`${queue.externalGateRecorder}\``,
+    "",
+    "## Shared Recorder Commands",
+    "",
+    "Run these only after the matching external evidence exists.",
+    "",
+    "### App IDs",
+    "",
+    "```bash",
+    ...queue.externalGateRecorderCommands.appIds,
+    "```",
+    "",
+    "### ChatGPT Developer Mode",
+    "",
+    "```bash",
+    ...queue.externalGateRecorderCommands.chatgptDeveloperMode,
+    "```",
+    "",
+    "### Claude Code Smoke",
+    "",
+    "```bash",
+    ...queue.externalGateRecorderCommands.claudeSmoke,
+    "```",
+    "",
+    "### Policy Review",
+    "",
+    "```bash",
+    ...queue.externalGateRecorderCommands.policyReview,
+    "```",
     "",
   ];
 
@@ -1417,6 +1557,12 @@ async function writeSubmissionQueueMarkdown(queue, filePath) {
       "### Receipt Fields To Fill",
       "",
       markdownList(submission.receiptFields.map((field) => `\`${field}\``)),
+      "",
+      "### Receipt Recorder Command",
+      "",
+      "```bash",
+      submission.receiptRecorderCommand,
+      "```",
       "",
       "### Source Docs Checked",
       "",
@@ -2935,12 +3081,14 @@ async function main() {
     codexInstallEvidence: {
       ...codexInstallArtifact,
       skipped: codexInstallEvidence.skipped === true,
+      reusedPreviousEvidence: codexInstallEvidence.reusedPreviousEvidence === true,
       stepCount: codexInstallEvidence.steps.length,
       checks: codexInstallEvidence.checks,
     },
     claudeValidationEvidence: {
       ...claudeValidationArtifact,
       skipped: claudeValidationEvidence.skipped === true,
+      reusedPreviousEvidence: claudeValidationEvidence.reusedPreviousEvidence === true,
       stepCount: claudeValidationEvidence.steps.length,
       checks: claudeValidationEvidence.checks,
       claudeCodePackage: claudeValidationEvidence.claudeCodePackage,
@@ -2949,6 +3097,7 @@ async function main() {
     openCodeSkillEvidence: {
       ...openCodeSkillArtifact,
       skipped: openCodeSkillEvidence.skipped === true,
+      reusedPreviousEvidence: openCodeSkillEvidence.reusedPreviousEvidence === true,
       stepCount: openCodeSkillEvidence.steps.length,
       checks: openCodeSkillEvidence.checks,
       openCodePackage: openCodeSkillEvidence.openCodePackage,

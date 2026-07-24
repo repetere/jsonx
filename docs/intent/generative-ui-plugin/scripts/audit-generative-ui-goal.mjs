@@ -141,6 +141,7 @@ as external-gated unless --strict-external is set.
   const externalGateRecorderValidator = await readText("docs/intent/generative-ui-plugin/scripts/validate-external-gate-recorder.mjs");
   const externalGateSource = await readJson("docs/intent/generative-ui-plugin/external-gate-evidence.json");
   const goldenPromptEvidence = await readJson(manifest.goldenPromptEvidence?.path || "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json");
+  const submissionQueue = await readJson(manifest.submissionQueue?.json?.path || "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json");
 
   const skillEntries = new Map(skillsIndex.map((skill) => [skill.name, skill]));
   const splitSkillPaths = surfaces.flatMap((surface) => splitSkills.map((skill) => `skills/${surface}/${skill}/SKILL.md`));
@@ -345,6 +346,17 @@ as external-gated unless --strict-external is set.
         ).every(Boolean),
         generatedStoreListingsOk: storeListingsOk(manifest),
         submissionQueueCoversFour: manifest.submissionQueue?.submissionCount === 4,
+        submissionQueueHasSharedRecorderCommands:
+          Array.isArray(submissionQueue.externalGateRecorderCommands?.appIds) &&
+          Array.isArray(submissionQueue.externalGateRecorderCommands?.chatgptDeveloperMode) &&
+          Array.isArray(submissionQueue.externalGateRecorderCommands?.claudeSmoke) &&
+          Array.isArray(submissionQueue.externalGateRecorderCommands?.policyReview),
+        submissionQueueHasReceiptRecorderCommands:
+          Array.isArray(submissionQueue.submissions) &&
+          submissionQueue.submissions.length === 4 &&
+          submissionQueue.submissions.every((submission) =>
+            submission.receiptRecorderCommand?.includes("record-external-gate-evidence.mjs marketplace --target"),
+          ),
         receiptsStillExplicitlyTracked: manifest.submissionQueue?.pendingSubmissionCount === 4 || manifest.submissionQueue?.receiptRecordedCount === 4,
         externalGateSourcePresent: await fileExists("docs/intent/generative-ui-plugin/external-gate-evidence.json"),
         externalGateSourceSupplied: manifest.externalGateEvidence?.supplied === true,

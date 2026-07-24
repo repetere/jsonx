@@ -27,6 +27,14 @@ const requiredPublicEvidenceKeys = [
 
 const defaultPublicPagePath = path.join("docs", "generative-ui.html");
 const defaultPublicPageUrl = "https://jsonx.net/generative-ui.html";
+const defaultSubmissionQueuePath = path.join(
+  "docs",
+  "intent",
+  "generative-ui-plugin",
+  "submission-artifacts",
+  "current",
+  "submission-queue.json",
+);
 
 const requiredPublicPageText = [
   "JSONX turns AI responses into live interfaces.",
@@ -36,6 +44,7 @@ const requiredPublicPageText = [
   "claude-jsonx-generative-ui-plugin",
   "https://jsonx-renderer-app.netlify.app/mcp",
   "Submission packages, listing drafts, and evidence are published together.",
+  "recorder commands to run",
 ];
 
 const blockedPublicPageText = [
@@ -136,6 +145,10 @@ function resolvePublicPagePath() {
   return path.resolve(repoRoot, argValue("--page") || defaultPublicPagePath);
 }
 
+function resolveSubmissionQueuePath() {
+  return path.resolve(repoRoot, argValue("--queue") || defaultSubmissionQueuePath);
+}
+
 function withCacheBust(urlString) {
   const cacheBust = argValue("--cache-bust") || process.env.GITHUB_SHA || process.env.JSONX_REVIEW_KIT_CACHE_BUST;
   if (!cacheBust) return urlString;
@@ -185,6 +198,35 @@ function validatePublicEvidence(filePath, data) {
     pluginName: data.listing?.pluginName || data.listing?.displayName,
     publicEvidenceCount: Object.keys(publicEvidence).length,
     publicEvidence,
+    errors,
+  };
+}
+
+function validateSubmissionQueue(filePath, data) {
+  const errors = [];
+  const commands = data.externalGateRecorderCommands || {};
+  for (const key of ["appIds", "chatgptDeveloperMode", "claudeSmoke", "policyReview"]) {
+    if (!Array.isArray(commands[key]) || commands[key].length === 0) {
+      errors.push(`externalGateRecorderCommands.${key} must contain at least one command`);
+    } else if (!commands[key].every((command) => command.includes("record-external-gate-evidence.mjs"))) {
+      errors.push(`externalGateRecorderCommands.${key} must use record-external-gate-evidence.mjs`);
+    }
+  }
+
+  if (!Array.isArray(data.submissions) || data.submissions.length !== 4) {
+    errors.push("submissions must contain exactly 4 submissions");
+  } else {
+    for (const submission of data.submissions) {
+      if (!submission.receiptRecorderCommand?.includes("record-external-gate-evidence.mjs marketplace --target")) {
+        errors.push(`${submission.id || "submission"} must include a marketplace receipt recorder command`);
+      }
+    }
+  }
+
+  return {
+    file: relative(filePath),
+    submissionCount: Array.isArray(data.submissions) ? data.submissions.length : 0,
+    sharedRecorderCommandGroupCount: Object.keys(commands).length,
     errors,
   };
 }
@@ -325,6 +367,12 @@ function printHumanReport(report) {
   if (report.publicPage.errors.length) {
     for (const error of report.publicPage.errors) console.log(`publicPageError: ${error}`);
   }
+  console.log(`submissionQueue: ${report.submissionQueue.file}`);
+  console.log(`  submissions: ${report.submissionQueue.submissionCount}`);
+  console.log(`  recorderCommandGroups: ${report.submissionQueue.sharedRecorderCommandGroupCount}`);
+  if (report.submissionQueue.errors.length) {
+    for (const error of report.submissionQueue.errors) console.log(`  error: ${error}`);
+  }
   for (const listing of report.listings) {
     console.log(`${listing.file}`);
     console.log(`  plugin: ${listing.pluginName}`);
@@ -349,6 +397,7 @@ async function main() {
 Options:
   --source       Directory containing the four store listing JSON drafts.
   --page         Public page HTML to validate. Defaults to docs/generative-ui.html.
+  --queue        Submission queue JSON to validate. Defaults to docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json.
   --page-url     Public page URL to fetch with --network. Defaults to https://jsonx.net/generative-ui.html.
   --json         Print a machine-readable report.
   --network      Fetch every publicEvidence URL and report HTTP status.
@@ -361,12 +410,14 @@ Options:
 
   const sourceDir = resolveSourceDir();
   const publicPagePath = resolvePublicPagePath();
+  const submissionQueuePath = resolveSubmissionQueuePath();
   const listings = [];
   for (const file of expectedListingFiles) {
     const filePath = path.join(sourceDir, file);
     listings.push(validatePublicEvidence(filePath, await readJson(filePath)));
   }
   const publicPage = await validatePublicPage(publicPagePath);
+  const submissionQueue = validateSubmissionQueue(submissionQueuePath, await readJson(submissionQueuePath));
 
   const urls = collectUrls(listings);
   const report = {
@@ -374,9 +425,11 @@ Options:
     listingCount: listings.length,
     urlCount: urls.length,
     publicPage,
+    submissionQueue,
     listings,
     errors: [
       ...publicPage.errors.map((error) => `${publicPage.file}: ${error}`),
+      ...submissionQueue.errors.map((error) => `${submissionQueue.file}: ${error}`),
       ...listings.flatMap((listing) => listing.errors.map((error) => `${listing.file}: ${error}`)),
     ],
   };
