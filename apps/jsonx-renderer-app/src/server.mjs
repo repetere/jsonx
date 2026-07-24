@@ -9,6 +9,7 @@ import {
 } from "@modelcontextprotocol/ext-apps/server";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { z } from "zod";
 import {
   RENDERER_RESOURCE_URI,
@@ -145,11 +146,44 @@ function sendText(res, status, body, contentType = "text/plain; charset=utf-8") 
   res.end(body);
 }
 
+function jsonResponse(status, body, headers = {}) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      "content-type": "application/json",
+      ...headers,
+    },
+  });
+}
+
+function textResponse(status, body, contentType = "text/plain; charset=utf-8", headers = {}) {
+  return new Response(body, {
+    status,
+    headers: {
+      "content-type": contentType,
+      ...headers,
+    },
+  });
+}
+
 function setMcpCorsHeaders(res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "content-type, mcp-session-id");
-  res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
+  res.setHeader("Access-Control-Allow-Headers", "content-type, mcp-session-id, mcp-protocol-version, last-event-id");
+  res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id, Mcp-Protocol-Version");
+}
+
+function withMcpCorsHeaders(response) {
+  const headers = new Headers(response.headers);
+  headers.set("Access-Control-Allow-Origin", "*");
+  headers.set("Access-Control-Allow-Methods", "POST, GET, DELETE, OPTIONS");
+  headers.set("Access-Control-Allow-Headers", "content-type, mcp-session-id, mcp-protocol-version, last-event-id");
+  headers.set("Access-Control-Expose-Headers", "Mcp-Session-Id, Mcp-Protocol-Version");
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
 }
 
 async function handleMcpRequest(req, res) {
@@ -181,6 +215,69 @@ async function handleMcpRequest(req, res) {
       });
     }
   }
+}
+
+export async function handleWebRequest(request) {
+  const url = new URL(request.url);
+
+  if (request.method === "OPTIONS" && url.pathname === MCP_PATH) {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, GET, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "content-type, mcp-session-id, mcp-protocol-version, last-event-id",
+        "Access-Control-Expose-Headers": "Mcp-Session-Id, Mcp-Protocol-Version",
+      },
+    });
+  }
+
+  if (request.method === "GET" && url.pathname === "/") {
+    return jsonResponse(200, {
+      name: "jsonx-renderer-app",
+      mcp: MCP_PATH,
+      renderer: RENDERER_RESOURCE_URI,
+    });
+  }
+
+  if (request.method === "GET" && url.pathname === "/healthz") {
+    return jsonResponse(200, { ok: true });
+  }
+
+  if (request.method === "GET" && url.pathname === "/widget") {
+    return textResponse(200, buildWidgetHtml(), RESOURCE_MIME_TYPE);
+  }
+
+  if (url.pathname === MCP_PATH && ["POST", "GET", "DELETE"].includes(request.method)) {
+    const server = createJsonxMcpServer();
+    const transport = new WebStandardStreamableHTTPServerTransport({
+      sessionIdGenerator: undefined,
+      enableJsonResponse: true,
+    });
+
+    try {
+      await server.connect(transport);
+      const response = await transport.handleRequest(request);
+      return withMcpCorsHeaders(response);
+    } catch (error) {
+      console.error("Error handling MCP request:", error);
+      return withMcpCorsHeaders(
+        jsonResponse(500, {
+          jsonrpc: "2.0",
+          error: {
+            code: -32603,
+            message: "Internal server error",
+          },
+          id: null,
+        }),
+      );
+    } finally {
+      await transport.close();
+      await server.close();
+    }
+  }
+
+  return textResponse(404, "Not Found");
 }
 
 export function createHttpServer() {

@@ -46,6 +46,29 @@ Then use:
 https://<subdomain>.ngrok.app/mcp
 ```
 
+## Netlify Deployment
+
+`netlify.toml` and `netlify/functions/jsonx-renderer.mjs` make the app deployable as a Netlify site with a serverless MCP endpoint.
+
+Recommended Git-based setup:
+
+```text
+Base directory: apps/jsonx-renderer-app
+Build command: npm run check
+Publish directory: public
+Functions directory: netlify/functions
+```
+
+After deployment, use these URLs:
+
+```text
+https://<site>.netlify.app/mcp
+https://<site>.netlify.app/healthz
+https://<site>.netlify.app/widget
+```
+
+Set `JSONX_ENABLE_GSAP=1` in the Netlify environment only if the hosted widget should inline the app-local GSAP runtime. Do not put API keys or model credentials in this renderer app.
+
 ## Validation
 
 ```text
@@ -53,11 +76,11 @@ npm run check
 npm run validate:fixtures
 ```
 
-`npm run check` starts a local server on an ephemeral port, lists MCP tools, reads the widget resource, calls `render_jsonx_response`, and verifies invalid payload rejection.
+`npm run check` checks the local server files, the Netlify function entrypoint, the browser widget, the Web-standard handler path, and the Node HTTP server path. It lists MCP tools, reads the widget resource, calls `render_jsonx_response`, and verifies invalid payload rejection.
 
 ## Submission Notes
 
-Public submission still needs a stable HTTPS deployment, final app/plugin metadata, screenshots, privacy and support URLs, and test prompts. Do not add placeholder hosted URLs or app IDs to `.app.json`.
+Public submission still needs a deployed HTTPS URL connected in ChatGPT developer mode, final app/plugin metadata, screenshots, privacy and support URLs, and test prompts. Do not add placeholder hosted URLs or app IDs to `.app.json`.
 
 ## Development Notes
 

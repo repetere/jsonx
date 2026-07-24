@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import { buildWidgetHtml, createHttpServer } from "../src/server.mjs";
+import netlifyHandler from "../netlify/functions/jsonx-renderer.mjs";
+import { buildWidgetHtml, createHttpServer, handleWebRequest } from "../src/server.mjs";
 import { RENDERER_RESOURCE_URI, RENDER_TOOL_NAME } from "../src/render-tool.mjs";
 
 function listen(server) {
@@ -25,6 +26,68 @@ async function main() {
   assert.match(gsapWidgetHtml, /gsapMotion:true/);
   assert.match(gsapWidgetHtml, /jsonx-gsap-runtime/);
   delete process.env.JSONX_ENABLE_GSAP;
+
+  const webHealth = await handleWebRequest(new Request("https://renderer.example/healthz"));
+  assert.equal(webHealth.status, 200);
+  assert.deepEqual(await webHealth.json(), { ok: true });
+
+  const netlifyHealth = await netlifyHandler(new Request("https://renderer.example/healthz"));
+  assert.equal(netlifyHealth.status, 200);
+  assert.deepEqual(await netlifyHealth.json(), { ok: true });
+
+  const webWidget = await handleWebRequest(new Request("https://renderer.example/widget"));
+  assert.equal(webWidget.status, 200);
+  assert.equal(webWidget.headers.get("content-type"), "text/html;profile=mcp-app");
+  assert.match(await webWidget.text(), /jsonx-root/);
+
+  const webPreflight = await handleWebRequest(new Request("https://renderer.example/mcp", { method: "OPTIONS" }));
+  assert.equal(webPreflight.status, 204);
+  assert.equal(webPreflight.headers.get("Access-Control-Allow-Origin"), "*");
+
+  const webInitialize = await handleWebRequest(
+    new Request("https://renderer.example/mcp", {
+      method: "POST",
+      headers: {
+        accept: "application/json, text/event-stream",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 1,
+        method: "initialize",
+        params: {
+          protocolVersion: "2026-01-26",
+          capabilities: {},
+          clientInfo: { name: "jsonx-web-smoke", version: "0.1.0" },
+        },
+      }),
+    }),
+  );
+  assert.equal(webInitialize.status, 200);
+  assert.equal(webInitialize.headers.get("Access-Control-Allow-Origin"), "*");
+  const initializeBody = await webInitialize.json();
+  assert.equal(initializeBody.jsonrpc, "2.0");
+  assert.equal(initializeBody.id, 1);
+  assert.equal(initializeBody.result.serverInfo.name, "jsonx-renderer-app");
+
+  const webTools = await handleWebRequest(
+    new Request("https://renderer.example/mcp", {
+      method: "POST",
+      headers: {
+        accept: "application/json, text/event-stream",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 2,
+        method: "tools/list",
+        params: {},
+      }),
+    }),
+  );
+  assert.equal(webTools.status, 200);
+  const webToolsBody = await webTools.json();
+  assert.ok(webToolsBody.result.tools.some((tool) => tool.name === RENDER_TOOL_NAME));
 
   const httpServer = createHttpServer();
   const port = await listen(httpServer);

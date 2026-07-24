@@ -1,0 +1,14 @@
+[build]
+command = "npm run check"
+publish = "public"
+
+[build.environment]
+NODE_VERSION = "22"
+
+[functions]
+directory = "netlify/functions"
+node_bundler = "esbuild"
+included_files = [
+  "web/**",
+  "node_modules/gsap/dist/gsap.min.js"
+]

@@ -26,6 +26,7 @@ Current implementation baseline:
 
 - `apps/jsonx-renderer-app/` contains a runnable stateless MCP app for local developer-mode testing.
 - `apps/jsonx-renderer-app/` supports optional renderer-owned GSAP motion with `JSONX_ENABLE_GSAP=1`.
+- `apps/jsonx-renderer-app/netlify/functions/jsonx-renderer.mjs` and `apps/jsonx-renderer-app/netlify.toml` provide a Netlify serverless deployment path for HTTPS hosting.
 - `plugins/jsonx-generative-ui-plugin/` contains the Codex plugin package.
 - `plugins/claude-jsonx-plugin/` contains the Claude Code plugin package.
 - `skills/codex/`, `skills/claude/`, and `skills/opencode/` contain installable skill source folders.
@@ -54,7 +55,7 @@ ChatGPT / Apps SDK
   -> widget validates and renders JSONX client-side
 ```
 
-The hosted app should be deployable to Cloudflare Workers, Vercel, Netlify, Fly, Render, or another HTTPS platform. The first implementation should prefer serverless hosting so the team manages code and configuration, not a long-running process.
+The hosted app should be deployable to Cloudflare Workers, Vercel, Netlify, Fly, Render, or another HTTPS platform. The first implementation has a Netlify serverless path so the team manages code and configuration, not a long-running process.
 
 ## Deliverables
 
@@ -174,6 +175,14 @@ Local developer-mode implementation:
 - Health check: `http://localhost:8787/healthz`
 - Widget preview: `http://localhost:8787/widget`
 - Validation command: `npm run check` from `apps/jsonx-renderer-app/`
+
+Netlify deployment path:
+
+- Base directory: `apps/jsonx-renderer-app`
+- Build command: `npm run check`
+- Publish directory: `public`
+- Function entrypoint: `netlify/functions/jsonx-renderer.mjs`
+- Hosted MCP URL after deploy: `https://<site>.netlify.app/mcp`
 
 ### 4. Iframe renderer widget
 
@@ -324,6 +333,7 @@ Exit criteria:
 - Register the renderer HTML resource.
 - Attach `_meta.ui.resourceUri` to the tool descriptor.
 - Return validated `structuredContent` and a short text fallback.
+- Add a Web-standard handler and serverless deployment adapter.
 - Run MCP Inspector against local development.
 
 Exit criteria:
