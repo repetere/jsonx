@@ -14,6 +14,7 @@ const cliArgs = process.argv.slice(2);
 const artifactRoot = resolveArtifactRoot();
 const packagesDir = path.join(artifactRoot, "packages");
 const screenshotsDir = path.join(artifactRoot, "screenshots");
+const storeListingsDir = path.join(artifactRoot, "store-listings");
 
 const hostedWidgetUrl = process.env.JSONX_RENDERER_WIDGET_URL || "https://jsonx-renderer-app.netlify.app/widget";
 const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.netlify.app/mcp";
@@ -35,6 +36,18 @@ const validFixtures = [
 
 const installerSurfaces = ["codex", "claude", "opencode"];
 const installerSkills = ["jsonx", "jsonx-generative-ui", "all"];
+const storeListingSources = [
+  {
+    surface: "OpenAI plugin portal draft",
+    source: path.join(intentRoot, "store-listings", "openai-plugin-submission.json"),
+    outputFile: "openai-plugin-submission.json",
+  },
+  {
+    surface: "Claude Code community submission draft",
+    source: path.join(intentRoot, "store-listings", "claude-code-community-submission.json"),
+    outputFile: "claude-code-community-submission.json",
+  },
+];
 
 function argValue(name) {
   const index = cliArgs.indexOf(name);
@@ -688,6 +701,65 @@ async function buildCodexInstallEvidence({ skip }) {
   }
 }
 
+function validateStoreListing(source, data) {
+  const errors = [];
+  if (data.schemaVersion !== 1) errors.push("schemaVersion must be 1");
+  if (!data.surface) errors.push("surface is required");
+  if (!data.submissionType) errors.push("submissionType is required");
+  if (!data.listing?.pluginName) errors.push("listing.pluginName is required");
+  if (!data.listing?.shortDescription) errors.push("listing.shortDescription is required");
+  if (!data.listing?.longDescription) errors.push("listing.longDescription is required");
+  if (!Array.isArray(data.positiveTestCases) || data.positiveTestCases.length !== 5) {
+    errors.push("positiveTestCases must contain exactly 5 cases");
+  }
+  if (!Array.isArray(data.negativeTestCases) || data.negativeTestCases.length !== 3) {
+    errors.push("negativeTestCases must contain exactly 3 cases");
+  }
+  if (!Array.isArray(data.manualBeforeSubmit) || data.manualBeforeSubmit.length === 0) {
+    errors.push("manualBeforeSubmit must list remaining portal steps");
+  }
+  if (!Array.isArray(data.sourceDocsChecked) || data.sourceDocsChecked.length === 0) {
+    errors.push("sourceDocsChecked must list checked public docs");
+  }
+  if (data.surface === "openai-plugin-portal") {
+    if (data.submissionType !== "app-plus-skills") errors.push("OpenAI draft must be app-plus-skills");
+    if (!data.mcpServer?.url) errors.push("OpenAI draft requires mcpServer.url");
+    if (!Array.isArray(data.bundledSkills) || data.bundledSkills.length !== 2) {
+      errors.push("OpenAI draft must include the two bundled skills");
+    }
+  }
+  if (data.surface === "claude-code-community-marketplace") {
+    if (!data.marketplace?.target) errors.push("Claude draft requires marketplace.target");
+    if (!Array.isArray(data.skills) || data.skills.length !== 2) {
+      errors.push("Claude draft must include the two plugin skills");
+    }
+  }
+  if (errors.length) {
+    throw new Error(`${relative(source)} is not submission-ready: ${errors.join("; ")}`);
+  }
+}
+
+async function copyStoreListingArtifacts() {
+  const artifacts = [];
+  await fs.mkdir(storeListingsDir, { recursive: true });
+  for (const item of storeListingSources) {
+    const data = await readJson(item.source);
+    validateStoreListing(item.source, data);
+    const target = path.join(storeListingsDir, item.outputFile);
+    await fs.copyFile(item.source, target);
+    artifacts.push({
+      surface: item.surface,
+      submissionType: data.submissionType,
+      status: data.status,
+      ...(await hashFile(target)),
+      positiveTestCaseCount: data.positiveTestCases.length,
+      negativeTestCaseCount: data.negativeTestCases.length,
+      manualStepCount: data.manualBeforeSubmit.length,
+    });
+  }
+  return artifacts;
+}
+
 async function buildGoldenPromptEvidence() {
   const { RENDER_TOOL_NAME, renderJsonxResponse } = await import(
     pathToFileURL(path.join(repoRoot, "apps", "jsonx-renderer-app", "src", "render-tool.mjs"))
@@ -964,6 +1036,8 @@ async function buildNpmBoundaryEvidence() {
     "hosted-mcp-transcript",
     "skill-installer-evidence",
     "codex-install-evidence",
+    "openai-plugin-submission",
+    "claude-code-community-submission",
   ];
   const blocked = files.filter(
     (file) => blockedPrefixes.some((prefix) => file.startsWith(prefix)) || blockedTerms.some((term) => file.includes(term)),
@@ -992,6 +1066,15 @@ async function writeReviewSummary(manifest) {
     "| Surface | Artifact | SHA-256 | Bytes |",
     "| --- | --- | --- | ---: |",
     ...manifest.packages.map((item) => `| ${item.surface} | \`${item.path}\` | \`${item.sha256}\` | ${item.bytes} |`),
+    "",
+    "## Store Listings",
+    "",
+    "| Surface | Artifact | Test cases | Manual steps |",
+    "| --- | --- | ---: | ---: |",
+    ...manifest.storeListings.map(
+      (item) =>
+        `| ${item.surface} | \`${item.path}\` | ${item.positiveTestCaseCount} positive, ${item.negativeTestCaseCount} negative | ${item.manualStepCount} |`,
+    ),
     "",
     "## Screenshots",
     "",
@@ -1044,6 +1127,7 @@ async function main() {
   await fs.rm(artifactRoot, { recursive: true, force: true });
   await fs.mkdir(packagesDir, { recursive: true });
   await fs.mkdir(screenshotsDir, { recursive: true });
+  await fs.mkdir(storeListingsDir, { recursive: true });
 
   run("plugin package validation", "node", ["plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs"]);
   run("renderer app check", "npm", ["run", "check"], { cwd: path.join(repoRoot, "apps", "jsonx-renderer-app") });
@@ -1111,6 +1195,7 @@ async function main() {
     surface: "Codex local marketplace",
     ...(await hashFile(marketplaceCopy)),
   });
+  const storeListings = await copyStoreListingArtifacts();
 
   const screenshots = skipScreenshots
     ? []
@@ -1126,6 +1211,7 @@ async function main() {
     publicSiteUrl,
     publicSkillsUrl,
     packages,
+    storeListings,
     screenshots,
     goldenPromptEvidence: {
       ...goldenPromptArtifact,
@@ -1156,6 +1242,7 @@ async function main() {
       "npm run check from apps/jsonx-renderer-app",
       `python3 plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py ${validFixtures.map((name) => `${name}.json`).join(" ")}`,
       "diff -rq skills docs/skills",
+      "store listing draft validation",
       "npm pack --dry-run --json package-boundary check",
       "skill installer dry-run and isolated install evidence",
       ...(codexInstallEvidence.skipped ? [] : ["isolated Codex marketplace install evidence"]),

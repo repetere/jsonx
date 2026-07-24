@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T07:28:16.049Z",
+  "generatedAt": "2026-07-24T07:35:27.341Z",
   "source": "skills/scripts/install-jsonx-skill.mjs",
   "note": "This evidence dry-runs every surface/skill pair and performs isolated installs for all supported surfaces using temporary targets.",
   "checks": {

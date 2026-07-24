@@ -1,21 +1,28 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T07:28:19.725Z
+Generated: 2026-07-24T07:35:31.146Z
 
 ## Packages
 
 | Surface | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| Codex plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `ded21fdd376ec1d93f49aa67363761fb34acc2511d26bca6e15f40b5c7e62d16` | 16854 |
+| Codex plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `b1574f660a0a67d7698f7ad8d4c7c33a4ef674ee990593240f16992d02ae0980` | 16868 |
 | Claude Code plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` | `0a13e035c8e30cd0399b8692f38ba3e765571d87343623f1fe4a5224d2203f0d` | 6231 |
 | ChatGPT app submission | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json` | `a2668c8bc97c732a3a1ba1f62b9f132153ad6b586b3aff9356759a9009b9007b` | 4757 |
 | Codex local marketplace | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/codex-local-marketplace.json` | `78ae20574fd7527ac1c45fda214430c28ad67193cec5ed1babfe021787b559be` | 407 |
+
+## Store Listings
+
+| Surface | Artifact | Test cases | Manual steps |
+| --- | --- | ---: | ---: |
+| OpenAI plugin portal draft | `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-plugin-submission.json` | 5 positive, 3 negative | 6 |
+| Claude Code community submission draft | `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json` | 5 positive, 3 negative | 4 |
 
 ## Screenshots
 
 | Purpose | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `96cf7a60c5f2faf3154a7af98097ecac5b806ebbf564ea389a993f232ff09527` | 209785 |
+| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `474f3f97b95e3a2b158b56dab0a68233a0ae01d6f92dabf05ca0edbb6a03ce56` | 210213 |
 | skills install readme | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-skills-install-readme.png` | `ed40515e133c09f8659b2dbadcaef56135c9cb4ea13b18c4e1043cfb6ad92ebb` | 124032 |
 | renderer widget support triage desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png` | `2c89e93024a1152b7697ea61e00ec7c9f55ba6ad3a0ef888840db48dc042ed51` | 52417 |
 | renderer widget motion desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png` | `b100dfbd51d5e76b8fb9549a6779110ecbff17c705a91f3e65db80d1880c0b29` | 26345 |
@@ -40,6 +47,7 @@ Generated: 2026-07-24T07:28:19.725Z
 - npm run check from apps/jsonx-renderer-app
 - python3 plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py support-triage.json text-block.json checklist.json choice-list.json data-table.json alert.json quiz.json slider-poll.json motion-subtle.json
 - diff -rq skills docs/skills
+- store listing draft validation
 - npm pack --dry-run --json package-boundary check
 - skill installer dry-run and isolated install evidence
 - isolated Codex marketplace install evidence

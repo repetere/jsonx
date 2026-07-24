@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T07:28:19.725Z",
+  "generatedAt": "2026-07-24T07:35:31.146Z",
   "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
   "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
@@ -8,8 +8,8 @@
     {
       "surface": "Codex plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
-      "bytes": 16854,
-      "sha256": "ded21fdd376ec1d93f49aa67363761fb34acc2511d26bca6e15f40b5c7e62d16"
+      "bytes": 16868,
+      "sha256": "b1574f660a0a67d7698f7ad8d4c7c33a4ef674ee990593240f16992d02ae0980"
     },
     {
       "surface": "Claude Code plugin",
@@ -30,12 +30,36 @@
       "sha256": "78ae20574fd7527ac1c45fda214430c28ad67193cec5ed1babfe021787b559be"
     }
   ],
+  "storeListings": [
+    {
+      "surface": "OpenAI plugin portal draft",
+      "submissionType": "app-plus-skills",
+      "status": "draft-ready-requires-portal-access",
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-plugin-submission.json",
+      "bytes": 7536,
+      "sha256": "011af0ab8464a773945b0c7cc10f5a0941739e583caf0a4f05bf51ddc2308cd8",
+      "positiveTestCaseCount": 5,
+      "negativeTestCaseCount": 3,
+      "manualStepCount": 6
+    },
+    {
+      "surface": "Claude Code community submission draft",
+      "submissionType": "skills-plugin",
+      "status": "draft-ready-requires-claude-cli-validation",
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json",
+      "bytes": 6084,
+      "sha256": "69458db323f96e99fb089b0e1559949096daf9a102ca6a55103cb39dc5d1d72d",
+      "positiveTestCaseCount": 5,
+      "negativeTestCaseCount": 3,
+      "manualStepCount": 4
+    }
+  ],
   "screenshots": [
     {
       "purpose": "generative ui page desktop",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png",
-      "bytes": 209785,
-      "sha256": "96cf7a60c5f2faf3154a7af98097ecac5b806ebbf564ea389a993f232ff09527"
+      "bytes": 210213,
+      "sha256": "474f3f97b95e3a2b158b56dab0a68233a0ae01d6f92dabf05ca0edbb6a03ce56"
     },
     {
       "purpose": "skills install readme",
@@ -65,13 +89,13 @@
   "goldenPromptEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "bytes": 7080,
-    "sha256": "ce01bce2531f9ee36a2fc6b259c733f126d82315fdcc63b3d8e77350e41a0cf1",
+    "sha256": "be1317648ad90f365257b5e04cffa18a24820843fb40fb1f941e6e2adece9434",
     "caseCount": 9
   },
   "hostedMcpEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
     "bytes": 4238,
-    "sha256": "1f1b8ac9070c96d23facc0443f200065f0707eb21516eaf46ab097aab33e39b3",
+    "sha256": "d83c96f44d0d1bc4f75c2ced4710376559cab8a59841291a83ed2aeae17d47f2",
     "stepCount": 7,
     "checks": {
       "healthOk": true,
@@ -85,7 +109,7 @@
   "skillInstallerEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
     "bytes": 5009,
-    "sha256": "02f349c7abb0eb70d2ca873747affee3d8c4356727bf93697920972d4bdfa6af",
+    "sha256": "fa53fc20a6ed72684d358f525ae79976222f54e13c476fd27e35b7e7a3ed0bdb",
     "dryRunMatrixCount": 9,
     "installSurfaceCount": 3,
     "checks": {
@@ -98,7 +122,7 @@
   "codexInstallEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
     "bytes": 4350,
-    "sha256": "34f749ae195b60aeffcd2ec0ef209b925e96f8a85dce34d9b125102fc638b749",
+    "sha256": "fb628e3da0c535fb5eaf8e217c5b577f1f9201e836eaa66efc063564ec86b5c6",
     "skipped": false,
     "stepCount": 7,
     "checks": {
@@ -134,7 +158,9 @@
       "golden-prompts",
       "hosted-mcp-transcript",
       "skill-installer-evidence",
-      "codex-install-evidence"
+      "codex-install-evidence",
+      "openai-plugin-submission",
+      "claude-code-community-submission"
     ]
   },
   "validation": [
@@ -142,6 +168,7 @@
     "npm run check from apps/jsonx-renderer-app",
     "python3 plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py support-triage.json text-block.json checklist.json choice-list.json data-table.json alert.json quiz.json slider-poll.json motion-subtle.json",
     "diff -rq skills docs/skills",
+    "store listing draft validation",
     "npm pack --dry-run --json package-boundary check",
     "skill installer dry-run and isolated install evidence",
     "isolated Codex marketplace install evidence",
