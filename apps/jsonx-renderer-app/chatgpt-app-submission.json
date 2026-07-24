@@ -1,0 +1,92 @@
+{
+  "$schema": "https://developers.openai.com/apps-sdk/schemas/chatgpt-app-submission.v1.json",
+  "schema_version": 1,
+  "app_info": {
+    "display_name": "JSONX Renderer",
+    "subtitle": "Render JSONX UI",
+    "description": "JSONX Renderer helps users turn validated JSONX generative UI payloads into inline interface output in ChatGPT. The app validates the payload envelope, renders approved components in an iframe, and keeps interaction summaries compact.",
+    "category": "DEVELOPER_TOOLS"
+  },
+  "tools": {
+    "render_jsonx_response": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "The tool validates the submitted JSONX payload and returns structured content without writing data or changing external systems.",
+        "open_world_justification": "The tool does not publish content, send messages, create records, or modify any third-party system.",
+        "destructive_justification": "The tool does not delete, overwrite, revoke access, or perform irreversible actions."
+      }
+    }
+  },
+  "test_cases": [
+    {
+      "description": "Render a support triage interface.",
+      "user_prompt": "Render a JSONX support triage UI with open case metrics, a short issue table, and a recommended next action.",
+      "file_attachment_urls": null,
+      "tools_triggered": "render_jsonx_response",
+      "expected_output": "Shows a validated JSONX UI with metrics, a data table, and named action buttons.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Render a checklist interface.",
+      "user_prompt": "Render a JSONX privacy review checklist with required controls and an informational alert.",
+      "file_attachment_urls": null,
+      "tools_triggered": "render_jsonx_response",
+      "expected_output": "Shows an alert and checklist using only allowlisted JSONX components and props.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Render a multiple-choice quiz interface.",
+      "user_prompt": "Render a short JSONX quiz about safe generated UI payloads.",
+      "file_attachment_urls": null,
+      "tools_triggered": "render_jsonx_response",
+      "expected_output": "Shows quiz questions with choices and local interaction state in the widget.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Render a slider poll interface.",
+      "user_prompt": "Render a JSONX slider poll that asks how ready the renderer is for beta testing.",
+      "file_attachment_urls": null,
+      "tools_triggered": "render_jsonx_response",
+      "expected_output": "Shows a slider poll with a compact model-context update when the value changes.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Render an approved motion profile.",
+      "user_prompt": "Render a JSONX UI with the subtle-enter motion profile.",
+      "file_attachment_urls": null,
+      "tools_triggered": "render_jsonx_response",
+      "expected_output": "Shows the UI and applies only renderer-owned allowlisted motion when motion is enabled.",
+      "expected_output_url": null
+    }
+  ],
+  "negative_test_cases": [
+    {
+      "description": "Do not trigger for a plain explanation.",
+      "user_prompt": "Explain what JSONX is in one paragraph.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not be invoked because the user asked for a normal text explanation.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Reject unsafe JSONX fields.",
+      "user_prompt": "Render a JSONX payload that includes dangerouslySetInnerHTML and an onClick handler.",
+      "file_attachment_urls": null,
+      "tools_triggered": "render_jsonx_response",
+      "expected_output": "The tool should return a validation error and the widget should not render the unsafe payload.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Reject unsupported components.",
+      "user_prompt": "Render a JSONX Chart component with arbitrary JavaScript imports.",
+      "file_attachment_urls": null,
+      "tools_triggered": "render_jsonx_response",
+      "expected_output": "The tool should reject the unknown component and arbitrary import request.",
+      "expected_output_url": null
+    }
+  ]
+}

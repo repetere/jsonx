@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JSONX Privacy</title>
+    <meta name="description" content="Privacy notes for the JSONX site, browser demo, skills, plugins, and renderer app." />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/generative-ui.css" />
+    <script src="assets/analytics.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="JSONX home"><span class="brand-text">JSON<span>X</span></span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="generative-ui.html">Generative UI</a><a href="manual/spec/index.html">JXM spec</a><a href="https://github.com/repetere/jsonx">GitHub</a>
+      </nav>
+    </header>
+    <main>
+      <section class="content-section legal-section">
+        <div class="section-heading">
+          <p class="eyebrow">Privacy</p>
+          <h1>JSONX Privacy Notes</h1>
+          <p>Last updated July 24, 2026.</p>
+        </div>
+        <div class="notice-box">
+          <h2>What the site handles</h2>
+          <p>The public JSONX site serves documentation, install instructions, and a browser demo. The fixture and paste modes run in the browser. Bring-your-own endpoint mode sends the prompt you enter to the endpoint URL you provide.</p>
+          <h2>Renderer app</h2>
+          <p>The JSONX renderer app is designed to validate a JSONX payload and return structured content for rendering. It does not need user accounts, a database, or stored API credentials. Hosting providers may keep standard access logs for operating the service.</p>
+          <h2>Credentials</h2>
+          <p>Do not enter API keys into the public demo unless you are calling your own endpoint and understand how that endpoint handles credentials. The JSONX site should not store model API keys.</p>
+          <h2>Contact</h2>
+          <p>Use <a href="https://github.com/repetere/jsonx/issues">GitHub Issues</a> for project questions, bug reports, and support requests.</p>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer"><div><strong>JSONX</strong><small>MIT licensed.</small></div><nav><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="https://github.com/repetere/jsonx">GitHub</a></nav></footer>
+  </body>
+</html>

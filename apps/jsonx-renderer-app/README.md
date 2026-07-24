@@ -80,7 +80,9 @@ npm run validate:fixtures
 
 ## Submission Notes
 
-Public submission still needs a deployed HTTPS URL connected in ChatGPT developer mode, final app/plugin metadata, screenshots, privacy and support URLs, and test prompts. Do not add placeholder hosted URLs or app IDs to `.app.json`.
+`chatgpt-app-submission.json` is the current ChatGPT Apps submission draft. It includes app info, tool hint justifications, five positive test cases, and three negative test cases.
+
+Public submission still needs a deployed HTTPS URL connected in ChatGPT developer mode, final app/plugin metadata, screenshots, and hosted test prompt responses. The public site provides privacy and terms pages at `https://jsonx.net/privacy.html` and `https://jsonx.net/terms.html` after GitHub Pages deployment. Use GitHub Issues as the support URL unless a separate support channel is created. Do not add placeholder hosted URLs or app IDs to `.app.json`.
 
 ## Development Notes
 

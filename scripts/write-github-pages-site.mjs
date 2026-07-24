@@ -9,6 +9,8 @@ const files = [
   ["CNAME", "CNAME"],
   ["index.html", "index.html"],
   ["generative-ui.html", "generative-ui.html"],
+  ["privacy.html", "privacy.html"],
+  ["terms.html", "terms.html"],
   ["assets/analytics.js", "assets/analytics.js"],
   ["assets/favicon.svg", "assets/favicon.svg"],
   ["assets/site.css", "assets/site.css"],

@@ -15,7 +15,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | [#1112](https://github.com/repetere/jsonx/issues/1112) | Codex plugin | Local Codex plugin package with separate `jsonx` and `jsonx-generative-ui` skills, fixtures, validation script, and app wiring templates. |
 | [#1113](https://github.com/repetere/jsonx/issues/1113) | Claude Code and OpenCode skills | Installable core JSONX and generative UI skills for Claude Code and OpenCode, a Claude Code plugin package, and installer tooling for personal or project installs. |
 | [#1114](https://github.com/repetere/jsonx/issues/1114) | Renderer motion | Optional renderer-owned GSAP motion profiles with reduced-motion support, CSS fallback motion, and no model-supplied animation code. |
-| [#1115](https://github.com/repetere/jsonx/issues/1115) | Store submission | Codex and Claude Code plugin submission materials, app IDs, screenshots, privacy links, and test prompts. |
+| [#1115](https://github.com/repetere/jsonx/issues/1115) | Store submission | Codex and Claude Code plugin submission materials, ChatGPT app submission JSON, app IDs, screenshots, privacy links, and test prompts. |
 | [#1116](https://github.com/repetere/jsonx/issues/1116) | GitHub Pages | Public install and plugin documentation mirrored from `site/` into `docs/`. |
 | [#1117](https://github.com/repetere/jsonx/issues/1117) | Browser demo | Fixture, paste, and bring-your-own endpoint modes that render the same JSONX generative UI contract. |
 
@@ -30,3 +30,5 @@ Skill installer coverage is tracked under #1113. The installer must support `jso
 Renderer motion coverage is tracked under #1114. GSAP must stay in `apps/jsonx-renderer-app/`, behind renderer-owned code paths, and outside the root npm package.
 
 Hosted renderer deployment coverage is tracked under #1111. The Netlify adapter should provide `/mcp`, `/healthz`, and `/widget` without adding app dependencies to the root package.
+
+Submission support page coverage is tracked under #1115 and #1116. The public site should mirror `privacy.html` and `terms.html` into `docs/`, and the ChatGPT app submission JSON should remain under `apps/jsonx-renderer-app/` so it stays outside the root npm package.
