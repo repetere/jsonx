@@ -16,6 +16,7 @@ const artifactRoot = resolveArtifactRoot();
 const packagesDir = path.join(artifactRoot, "packages");
 const screenshotsDir = path.join(artifactRoot, "screenshots");
 const storeListingsDir = path.join(artifactRoot, "store-listings");
+const submissionFormsDir = path.join(artifactRoot, "submission-forms");
 
 const hostedWidgetUrl = process.env.JSONX_RENDERER_WIDGET_URL || "https://jsonx-renderer-app.netlify.app/widget";
 const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.netlify.app/mcp";
@@ -1390,6 +1391,199 @@ async function copyStoreListingArtifacts() {
   return artifacts;
 }
 
+function publicSubmissionFormUrl(id) {
+  return `https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/${id}.md`;
+}
+
+function markdownValue(value) {
+  if (value === undefined || value === null || value === "") return "";
+  if (Array.isArray(value)) return value.join(", ");
+  if (typeof value === "object") return JSON.stringify(value);
+  return String(value);
+}
+
+function markdownFieldList(fields) {
+  return Object.entries(fields)
+    .filter(([, value]) => {
+      if (Array.isArray(value)) return value.length > 0;
+      return value !== undefined && value !== null && value !== "";
+    })
+    .map(([key, value]) => `- ${key}: ${markdownValue(value)}`)
+    .join("\n");
+}
+
+function codeBlock(language, value) {
+  const text = markdownValue(value);
+  return ["```" + language, text, "```"].join("\n");
+}
+
+function testCaseLines(testCases, mode) {
+  return testCases.flatMap((testCase) => {
+    const lines = [
+      `### ${testCase.id}`,
+      "",
+      "- User prompt:",
+      "",
+      codeBlock("text", testCase.userPrompt),
+      "",
+      `- Expected behavior: ${testCase.expectedBehavior}`,
+    ];
+    if (testCase.expectedResultShape) lines.push(`- Expected result shape: ${testCase.expectedResultShape}`);
+    if (testCase.fixtureData) lines.push(`- Fixture data: \`${testCase.fixtureData}\``);
+    if (testCase.whyNotComplete) lines.push(`- Why not complete: ${testCase.whyNotComplete}`);
+    lines.push("");
+    if (mode === "negative") {
+      lines.push("- Submission expectation: reject, refuse, or answer normally without invoking generated UI.", "");
+    }
+    return lines;
+  });
+}
+
+function recorderCommandsForSubmission(submission, queue) {
+  const commands = [];
+  for (const gate of submission.externalGatesToRecord || []) {
+    if (gate === "appIds") commands.push(...(queue.externalGateRecorderCommands.appIds || []));
+    if (gate === "chatgptDeveloperMode") commands.push(...(queue.externalGateRecorderCommands.chatgptDeveloperMode || []));
+    if (gate === "claudeSmoke") commands.push(...(queue.externalGateRecorderCommands.claudeSmoke || []));
+    if (gate === "marketplaceSubmission") {
+      commands.push(...(queue.externalGateRecorderCommands.policyReview || []), submission.receiptRecorderCommand);
+    }
+  }
+  return [...new Set(commands.filter(Boolean))];
+}
+
+function sourcePackageFields(data) {
+  return {
+    "Plugin package path": data.pluginPackage?.path,
+    "Plugin package entrypoint": data.pluginPackage?.entrypoint,
+    "MCP URL": data.mcpServer?.url,
+    "MCP health URL": data.mcpServer?.healthUrl,
+    "MCP authentication": data.mcpServer?.authentication,
+    "Domain verification required": data.mcpServer?.domainVerificationRequired,
+    "Recommended initial scope": data.availability?.recommendedInitialScope,
+  };
+}
+
+function skillNames(data) {
+  const skills = data.bundledSkills || data.skills || [];
+  return skills.map((skill) => `${skill.name}${skill.path ? ` (${skill.path})` : ""}`);
+}
+
+function writePortalSubmissionFormMarkdown({ data, submission, queue, filePath }) {
+  const listing = data.listing || {};
+  const listingName = listing.displayName || listing.pluginName;
+  const recorderCommands = recorderCommandsForSubmission(submission, queue);
+  const lines = [
+    `# ${submission.label} Portal Packet`,
+    "",
+    `Generated: ${queue.generatedAt}`,
+    "",
+    "Use this packet as copy source for the public submission portal. It is generated from the tracked store listing draft and is not proof that the submission was sent.",
+    "",
+    "## Submission Target",
+    "",
+    markdownFieldList({
+      Surface: submission.surface,
+      "Submission type": submission.submissionType,
+      "Listing name": listingName,
+      Status: submission.status,
+      "Source draft": submission.sourceDraft,
+      "Generated draft": submission.generatedDraft,
+      "Review package": submission.publicReviewPackage,
+      "Public listing copy": submission.publicStoreListing,
+    }),
+    "",
+    "## Listing Copy",
+    "",
+    markdownFieldList({
+      "Plugin name": listing.pluginName,
+      "Display name": listing.displayName,
+      Category: listing.category,
+      Publisher: listing.publisher,
+      License: listing.license,
+      "Logo status": listing.logoStatus,
+    }),
+    "",
+    "### Short Description",
+    "",
+    codeBlock("text", listing.shortDescription),
+    "",
+    "### Long Description",
+    "",
+    codeBlock("text", listing.longDescription),
+    "",
+    "## URLs",
+    "",
+    markdownFieldList({
+      Website: listing.websiteUrl || listing.homepage,
+      Repository: listing.repository,
+      Support: listing.supportUrl,
+      "Privacy policy": listing.privacyPolicyUrl,
+      Terms: listing.termsUrl,
+    }),
+    "",
+    "## Package And App Metadata",
+    "",
+    markdownFieldList(sourcePackageFields(data)) || "- No extra package metadata is required.",
+    "",
+    "## Skills",
+    "",
+    skillNames(data).length ? markdownList(skillNames(data)) : "- No bundled skills listed.",
+    "",
+    "## Starter Prompts",
+    "",
+    Array.isArray(data.starterPrompts) && data.starterPrompts.length ? markdownList(data.starterPrompts) : "- No starter prompts listed.",
+    "",
+    "## Before Submit",
+    "",
+    checklist(data.manualBeforeSubmit || []),
+    "",
+    "## Positive Test Cases",
+    "",
+    ...testCaseLines(data.positiveTestCases || [], "positive"),
+    "## Negative Test Cases",
+    "",
+    ...testCaseLines(data.negativeTestCases || [], "negative"),
+    "## Public Evidence URLs",
+    "",
+    markdownList(Object.entries(submission.publicEvidence).map(([key, value]) => `\`${key}\`: ${value}`)),
+    "",
+    "## Receipt Fields",
+    "",
+    markdownList(submission.receiptFields.map((field) => `\`${field}\``)),
+    "",
+    "## Recorder Commands",
+    "",
+    "Run these only after the matching external evidence exists.",
+    "",
+    codeBlock("bash", recorderCommands.join("\n")),
+    "",
+    "## Source Docs Checked",
+    "",
+    markdownList(data.sourceDocsChecked || []),
+    "",
+  ];
+  return fs.writeFile(filePath, `${lines.join("\n")}\n`);
+}
+
+async function writeSubmissionFormArtifacts(queue) {
+  const artifacts = [];
+  await fs.mkdir(submissionFormsDir, { recursive: true });
+  for (const submission of queue.submissions) {
+    const data = await readJson(path.resolve(repoRoot, submission.sourceDraft));
+    const filePath = path.join(submissionFormsDir, `${submission.id}.md`);
+    await writePortalSubmissionFormMarkdown({ data, submission, queue, filePath });
+    artifacts.push({
+      id: submission.id,
+      label: submission.label,
+      surface: submission.surface,
+      url: submission.portalForm,
+      ...(await hashFile(filePath)),
+    });
+  }
+  return artifacts;
+}
+
 async function buildSubmissionQueue(manifest, externalGateEvidence) {
   const submissions = [];
   for (const item of storeListingSources) {
@@ -1411,6 +1605,7 @@ async function buildSubmissionQueue(manifest, externalGateEvidence) {
       listingName: data.listing?.displayName || data.listing?.pluginName,
       publicReviewPackage: publicEvidence.reviewPackage,
       publicStoreListing: publicEvidence.storeListingCopy,
+      portalForm: publicSubmissionFormUrl(queueTarget.id),
       publicEvidence,
       positiveTestCaseIds: data.positiveTestCases.map((testCase) => testCase.id),
       negativeTestCaseIds: data.negativeTestCases.map((testCase) => testCase.id),
@@ -1441,6 +1636,7 @@ async function buildSubmissionQueue(manifest, externalGateEvidence) {
     submissionCount: submissions.length,
     receiptRecordedCount: submissions.filter((submission) => submission.status === "receipt-recorded").length,
     pendingSubmissionCount: submissions.filter((submission) => submission.status !== "receipt-recorded").length,
+    portalFormCount: submissions.filter((submission) => submission.portalForm).length,
     externalGateRecorder: externalGateRecorderCommand,
     externalGateRecorderCommands: externalGateRecorderCommands(),
     submissions,
@@ -1540,6 +1736,7 @@ async function writeSubmissionQueueMarkdown(queue, filePath) {
       `- Generated draft: \`${submission.generatedDraft}\``,
       `- Review package: ${submission.publicReviewPackage}`,
       `- Public listing copy: ${submission.publicStoreListing}`,
+      `- Portal packet: ${submission.portalForm}`,
       "",
       "### Before Submit",
       "",
@@ -2692,6 +2889,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         manifest.storeListings.find((item) => item.surface === "Claude Code generative UI community submission draft")?.path,
         manifest.submissionQueue?.json?.path,
         manifest.submissionQueue?.markdown?.path,
+        ...(manifest.submissionForms || []).map((item) => item.path),
       ].filter(Boolean),
       checks: {
         openAiCoreDraftPresent: storeListingPresent(manifest, "OpenAI core JSONX plugin portal draft"),
@@ -2699,6 +2897,11 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         claudeCoreDraftPresent: storeListingPresent(manifest, "Claude Code core JSONX community submission draft"),
         claudeGenerativeUiDraftPresent: storeListingPresent(manifest, "Claude Code generative UI community submission draft"),
         submissionQueuePresent: Boolean(manifest.submissionQueue?.json?.sha256),
+        submissionQueueLinksPortalForms: manifest.submissionQueue?.portalFormCount === 4,
+        submissionFormsPresent:
+          Array.isArray(manifest.submissionForms) &&
+          manifest.submissionForms.length === 4 &&
+          manifest.submissionForms.every((form) => form.sha256 && form.path?.includes("submission-forms/")),
       },
     },
     {
@@ -2834,6 +3037,12 @@ async function writeReviewSummary(manifest) {
         `| ${item.surface} | \`${item.path}\` | ${item.positiveTestCaseCount} positive, ${item.negativeTestCaseCount} negative | ${item.manualStepCount} |`,
     ),
     "",
+    "## Portal Packets",
+    "",
+    "| Submission | Artifact | SHA-256 | Bytes |",
+    "| --- | --- | --- | ---: |",
+    ...(manifest.submissionForms || []).map((item) => `| ${item.label} | \`${item.path}\` | \`${item.sha256}\` | ${item.bytes} |`),
+    "",
     "## Submission Queue",
     "",
     manifest.submissionQueue
@@ -2931,6 +3140,7 @@ async function main() {
   await fs.mkdir(packagesDir, { recursive: true });
   await fs.mkdir(screenshotsDir, { recursive: true });
   await fs.mkdir(storeListingsDir, { recursive: true });
+  await fs.mkdir(submissionFormsDir, { recursive: true });
 
   run("plugin package validation", "node", ["plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs"]);
   run("renderer app check", "npm", ["run", "check"], { cwd: path.join(repoRoot, "apps", "jsonx-renderer-app") });
@@ -3136,6 +3346,7 @@ async function main() {
   const submissionQueuePath = path.join(artifactRoot, "submission-queue.json");
   const submissionQueueMarkdownPath = path.join(artifactRoot, "submission-queue.md");
   const submissionQueue = await buildSubmissionQueue(manifest, externalGateEvidence);
+  const submissionForms = await writeSubmissionFormArtifacts(submissionQueue);
   await writeJson(submissionQueuePath, submissionQueue);
   await writeSubmissionQueueMarkdown(submissionQueue, submissionQueueMarkdownPath);
   const submissionQueueArtifact = await hashFile(submissionQueuePath);
@@ -3146,8 +3357,11 @@ async function main() {
     submissionCount: submissionQueue.submissionCount,
     receiptRecordedCount: submissionQueue.receiptRecordedCount,
     pendingSubmissionCount: submissionQueue.pendingSubmissionCount,
+    portalFormCount: submissionQueue.portalFormCount,
   };
+  manifest.submissionForms = submissionForms;
   manifest.validation.push("submission queue generation");
+  manifest.validation.push("portal submission form generation");
 
   const submissionAuditPath = path.join(artifactRoot, "submission-audit.json");
   const submissionAudit = buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot);

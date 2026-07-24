@@ -333,6 +333,7 @@ as external-gated unless --strict-external is set.
         "docs/intent/generative-ui-plugin/scripts/validate-external-gate-recorder.mjs",
         manifest.submissionQueue?.json?.path,
         manifest.submissionQueue?.markdown?.path,
+        ...(manifest.submissionForms || []).map((item) => item.path),
       ].filter(Boolean),
       checks: {
         chatgptSubmissionPresent: await fileExists("apps/jsonx-renderer-app/chatgpt-app-submission.json"),
@@ -356,6 +357,16 @@ as external-gated unless --strict-external is set.
           submissionQueue.submissions.length === 4 &&
           submissionQueue.submissions.every((submission) =>
             submission.receiptRecorderCommand?.includes("record-external-gate-evidence.mjs marketplace --target"),
+          ),
+        submissionFormsGenerated:
+          Array.isArray(manifest.submissionForms) &&
+          manifest.submissionForms.length === 4 &&
+          manifest.submissionForms.every((form) => form.sha256 && form.path?.includes("submission-forms/")),
+        submissionQueueLinksPortalForms:
+          Array.isArray(submissionQueue.submissions) &&
+          submissionQueue.submissions.length === 4 &&
+          submissionQueue.submissions.every((submission) =>
+            submission.portalForm?.startsWith("https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/"),
           ),
         receiptsStillExplicitlyTracked: manifest.submissionQueue?.pendingSubmissionCount === 4 || manifest.submissionQueue?.receiptRecordedCount === 4,
         externalGateSourcePresent: await fileExists("docs/intent/generative-ui-plugin/external-gate-evidence.json"),

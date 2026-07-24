@@ -35,6 +35,14 @@ const defaultSubmissionQueuePath = path.join(
   "current",
   "submission-queue.json",
 );
+const defaultSubmissionFormsDir = path.join(
+  "docs",
+  "intent",
+  "generative-ui-plugin",
+  "submission-artifacts",
+  "current",
+  "submission-forms",
+);
 
 const requiredPublicPageText = [
   "JSONX turns AI responses into live interfaces.",
@@ -67,6 +75,26 @@ const requiredPublicPageLinks = [
     id: "submissionQueueJson",
     href: "intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
     url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
+  },
+  {
+    id: "openAiCorePortalPacket",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
+  },
+  {
+    id: "openAiGenerativeUiPortalPacket",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
+  },
+  {
+    id: "claudeCorePortalPacket",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
+  },
+  {
+    id: "claudeGenerativeUiPortalPacket",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md",
   },
   {
     id: "artifactManifest",
@@ -149,6 +177,13 @@ function resolveSubmissionQueuePath() {
   return path.resolve(repoRoot, argValue("--queue") || defaultSubmissionQueuePath);
 }
 
+function resolveSubmissionFormsDir(queuePath) {
+  const requested = argValue("--forms");
+  if (requested) return path.resolve(repoRoot, requested);
+  if (queuePath === path.resolve(repoRoot, defaultSubmissionQueuePath)) return path.resolve(repoRoot, defaultSubmissionFormsDir);
+  return path.join(path.dirname(queuePath), "submission-forms");
+}
+
 function withCacheBust(urlString) {
   const cacheBust = argValue("--cache-bust") || process.env.GITHUB_SHA || process.env.JSONX_REVIEW_KIT_CACHE_BUST;
   if (!cacheBust) return urlString;
@@ -220,13 +255,60 @@ function validateSubmissionQueue(filePath, data) {
       if (!submission.receiptRecorderCommand?.includes("record-external-gate-evidence.mjs marketplace --target")) {
         errors.push(`${submission.id || "submission"} must include a marketplace receipt recorder command`);
       }
+      if (!submission.portalForm?.startsWith("https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/")) {
+        errors.push(`${submission.id || "submission"} must link to a public portal packet`);
+      }
     }
   }
 
   return {
     file: relative(filePath),
     submissionCount: Array.isArray(data.submissions) ? data.submissions.length : 0,
+    portalFormCount: Array.isArray(data.submissions) ? data.submissions.filter((submission) => submission.portalForm).length : 0,
     sharedRecorderCommandGroupCount: Object.keys(commands).length,
+    errors,
+  };
+}
+
+async function validateSubmissionForms(dirPath, queue) {
+  const errors = [];
+  const files = [];
+  const submissions = Array.isArray(queue.submissions) ? queue.submissions : [];
+
+  for (const submission of submissions) {
+    const filePath = path.join(dirPath, `${submission.id}.md`);
+    let markdown = "";
+    try {
+      markdown = await fs.readFile(filePath, "utf8");
+    } catch (error) {
+      errors.push(`${submission.id || "submission"} portal packet is missing: ${error.message}`);
+      continue;
+    }
+
+    const requiredText = [
+      `# ${submission.label} Portal Packet`,
+      "## Listing Copy",
+      "## Public Evidence URLs",
+      "## Recorder Commands",
+      submission.receiptRecorderCommand,
+    ];
+    for (const text of requiredText) {
+      if (!markdown.includes(text)) errors.push(`${submission.id || "submission"} portal packet missing: ${text}`);
+    }
+
+    files.push({
+      id: submission.id,
+      label: submission.label,
+      file: relative(filePath),
+      bytes: Buffer.byteLength(markdown),
+    });
+  }
+  if (files.length !== 4) errors.push(`portal packet count must be 4, found ${files.length}`);
+
+  return {
+    dir: relative(dirPath),
+    packetCount: files.length,
+    files,
     errors,
   };
 }
@@ -369,9 +451,15 @@ function printHumanReport(report) {
   }
   console.log(`submissionQueue: ${report.submissionQueue.file}`);
   console.log(`  submissions: ${report.submissionQueue.submissionCount}`);
+  console.log(`  portalForms: ${report.submissionQueue.portalFormCount}`);
   console.log(`  recorderCommandGroups: ${report.submissionQueue.sharedRecorderCommandGroupCount}`);
   if (report.submissionQueue.errors.length) {
     for (const error of report.submissionQueue.errors) console.log(`  error: ${error}`);
+  }
+  console.log(`submissionForms: ${report.submissionForms.dir}`);
+  console.log(`  packets: ${report.submissionForms.packetCount}`);
+  if (report.submissionForms.errors.length) {
+    for (const error of report.submissionForms.errors) console.log(`  error: ${error}`);
   }
   for (const listing of report.listings) {
     console.log(`${listing.file}`);
@@ -398,6 +486,7 @@ Options:
   --source       Directory containing the four store listing JSON drafts.
   --page         Public page HTML to validate. Defaults to docs/generative-ui.html.
   --queue        Submission queue JSON to validate. Defaults to docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json.
+  --forms        Directory containing portal packet Markdown files. Defaults to a submission-forms sibling next to --queue.
   --page-url     Public page URL to fetch with --network. Defaults to https://jsonx.net/generative-ui.html.
   --json         Print a machine-readable report.
   --network      Fetch every publicEvidence URL and report HTTP status.
@@ -411,13 +500,16 @@ Options:
   const sourceDir = resolveSourceDir();
   const publicPagePath = resolvePublicPagePath();
   const submissionQueuePath = resolveSubmissionQueuePath();
+  const submissionFormsDir = resolveSubmissionFormsDir(submissionQueuePath);
   const listings = [];
   for (const file of expectedListingFiles) {
     const filePath = path.join(sourceDir, file);
     listings.push(validatePublicEvidence(filePath, await readJson(filePath)));
   }
   const publicPage = await validatePublicPage(publicPagePath);
-  const submissionQueue = validateSubmissionQueue(submissionQueuePath, await readJson(submissionQueuePath));
+  const submissionQueueData = await readJson(submissionQueuePath);
+  const submissionQueue = validateSubmissionQueue(submissionQueuePath, submissionQueueData);
+  const submissionForms = await validateSubmissionForms(submissionFormsDir, submissionQueueData);
 
   const urls = collectUrls(listings);
   const report = {
@@ -426,10 +518,12 @@ Options:
     urlCount: urls.length,
     publicPage,
     submissionQueue,
+    submissionForms,
     listings,
     errors: [
       ...publicPage.errors.map((error) => `${publicPage.file}: ${error}`),
       ...submissionQueue.errors.map((error) => `${submissionQueue.file}: ${error}`),
+      ...submissionForms.errors.map((error) => `${submissionForms.dir}: ${error}`),
       ...listings.flatMap((listing) => listing.errors.map((error) => `${listing.file}: ${error}`)),
     ],
   };
