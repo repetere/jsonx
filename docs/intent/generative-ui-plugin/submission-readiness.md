@@ -13,11 +13,13 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | Codex | `plugins/jsonx-generative-ui-plugin/` | Local plugin package with `jsonx` and `jsonx-generative-ui` skills, fixture validator, app wiring templates, and metadata. |
 | Claude Code | `plugins/claude-jsonx-plugin/` | Local Claude Code plugin package with `jsonx` and `jsonx-generative-ui` skills. |
 | OpenCode | `skills/opencode/` | Skill folders for project or global install. OpenCode does not need a separate plugin for the current scope. |
+| Skill installer | `skills/scripts/install-jsonx-skill.mjs` | Local installer for core JSONX and generative UI skills across Codex, Claude Code, and OpenCode. |
 | ChatGPT Apps SDK | `apps/jsonx-renderer-app/` | Runnable stateless MCP app with `render_jsonx_response`, widget resource, local smoke test, and developer-mode tunnel path. |
 
 ## Ready Now
 
 - Install core and generative UI skills for Codex, Claude Code, and OpenCode.
+- Install skills through `skills/scripts/install-jsonx-skill.mjs` with separate `jsonx`, `jsonx-generative-ui`, and `all` modes.
 - Run the Codex plugin validator locally.
 - Run the JSONX fixture validator locally.
 - Run the Apps SDK renderer locally at `/mcp`.
@@ -59,6 +61,12 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Test with `claude --plugin-dir ./plugins/claude-jsonx-plugin`.
 - Run `/jsonx:jsonx` and `/jsonx:jsonx-generative-ui` smoke prompts.
 - Submit to the Claude community marketplace only after validation, hosted endpoint review, and screenshots are complete.
+
+### Skill Installer
+
+- Dry-run all surface and skill combinations before changing install docs.
+- Test `--target` against a temporary directory so personal skill folders are not touched in CI.
+- Keep the installer under `skills/` so it remains excluded from the npm package.
 
 ## External Documentation Checked
 

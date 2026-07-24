@@ -28,6 +28,7 @@ Current implementation baseline:
 - `plugins/jsonx-generative-ui-plugin/` contains the Codex plugin package.
 - `plugins/claude-jsonx-plugin/` contains the Claude Code plugin package.
 - `skills/codex/`, `skills/claude/`, and `skills/opencode/` contain installable skill source folders.
+- `skills/scripts/install-jsonx-skill.mjs` installs the `jsonx` and `jsonx-generative-ui` skill families for Codex, Claude Code, or OpenCode without mixing the two workflows.
 - `docs/intent/generative-ui-plugin/submission-readiness.md` tracks what remains before public app or plugin submission.
 
 ## Positioning
@@ -72,6 +73,14 @@ Install paths:
 | OpenCode | `.opencode/skills/<name>/SKILL.md` | `~/.config/opencode/skills/<name>/SKILL.md` | OpenCode also discovers `.claude/skills` and `.agents/skills`. |
 
 The repo should keep source skill folders under `skills/<surface>/<skill-name>/` and publish install snippets on the GitHub Pages site. Generated plugin and app assets must stay outside the npm package.
+
+Installer command:
+
+```text
+node skills/scripts/install-jsonx-skill.mjs --surface <codex|claude|opencode> --skill <jsonx|jsonx-generative-ui|all> --scope <personal|project>
+```
+
+The installer should reject existing destination folders unless `--force` is passed. It should support `--dry-run` for documentation and CI checks.
 
 ### 2. Shared JSONX UI contract
 
@@ -355,12 +364,14 @@ Exit criteria:
 - Add `jsonx` and `jsonx-generative-ui` skills for Claude Code.
 - Add `jsonx` and `jsonx-generative-ui` skills for OpenCode.
 - Add install snippets for project and personal installs.
+- Add installer tooling so the two skill families can be copied without manual path mistakes.
 - Keep generated UI instructions separate from core package instructions.
 
 Exit criteria:
 
 - Each surface has installable core JSONX and generative UI skills.
 - The public site explains which skill to install for each workflow.
+- The installer can dry-run and install to a temporary target for each supported surface.
 - Skill validation passes for every `SKILL.md`.
 
 ### Phase 6: Optional Animation Layer

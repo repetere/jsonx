@@ -8,9 +8,14 @@
     "updated": "2026-07-24",
     "surfaces": ["codex", "claude", "opencode"],
     "install": {
-      "codex": "mkdir -p \"$HOME/.agents/skills\"\ncp -R skills/codex/jsonx \"$HOME/.agents/skills/jsonx\"",
-      "claude": "mkdir -p \"$HOME/.claude/skills\"\ncp -R skills/claude/jsonx \"$HOME/.claude/skills/jsonx\"",
-      "opencode": "mkdir -p \"$HOME/.config/opencode/skills\"\ncp -R skills/opencode/jsonx \"$HOME/.config/opencode/skills/jsonx\""
+      "codex": "node skills/scripts/install-jsonx-skill.mjs --surface codex --skill jsonx --scope personal",
+      "claude": "node skills/scripts/install-jsonx-skill.mjs --surface claude --skill jsonx --scope personal",
+      "opencode": "node skills/scripts/install-jsonx-skill.mjs --surface opencode --skill jsonx --scope personal"
+    },
+    "projectInstall": {
+      "codex": "node skills/scripts/install-jsonx-skill.mjs --surface codex --skill jsonx --scope project",
+      "claude": "node skills/scripts/install-jsonx-skill.mjs --surface claude --skill jsonx --scope project",
+      "opencode": "node skills/scripts/install-jsonx-skill.mjs --surface opencode --skill jsonx --scope project"
     }
   },
   {
@@ -22,9 +27,14 @@
     "updated": "2026-07-24",
     "surfaces": ["codex", "claude", "opencode"],
     "install": {
-      "codex": "mkdir -p \"$HOME/.agents/skills\"\ncp -R skills/codex/jsonx-generative-ui \"$HOME/.agents/skills/jsonx-generative-ui\"",
-      "claude": "mkdir -p \"$HOME/.claude/skills\"\ncp -R skills/claude/jsonx-generative-ui \"$HOME/.claude/skills/jsonx-generative-ui\"",
-      "opencode": "mkdir -p \"$HOME/.config/opencode/skills\"\ncp -R skills/opencode/jsonx-generative-ui \"$HOME/.config/opencode/skills/jsonx-generative-ui\""
+      "codex": "node skills/scripts/install-jsonx-skill.mjs --surface codex --skill jsonx-generative-ui --scope personal",
+      "claude": "node skills/scripts/install-jsonx-skill.mjs --surface claude --skill jsonx-generative-ui --scope personal",
+      "opencode": "node skills/scripts/install-jsonx-skill.mjs --surface opencode --skill jsonx-generative-ui --scope personal"
+    },
+    "projectInstall": {
+      "codex": "node skills/scripts/install-jsonx-skill.mjs --surface codex --skill jsonx-generative-ui --scope project",
+      "claude": "node skills/scripts/install-jsonx-skill.mjs --surface claude --skill jsonx-generative-ui --scope project",
+      "opencode": "node skills/scripts/install-jsonx-skill.mjs --surface opencode --skill jsonx-generative-ui --scope project"
     }
   },
   {

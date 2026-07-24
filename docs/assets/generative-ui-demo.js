@@ -531,14 +531,19 @@ function initSkills() {
       grid.innerHTML = skills
         .map(
           (skill) => {
-            const install = Object.entries(skill.install || {})
-              .map(
-                ([surface, command]) =>
-                  `<details><summary>${esc(
-                    surfaceLabels[surface] || surface,
-                  )}</summary><code>${esc(command)}</code></details>`,
-              )
+            const personalInstall = Object.entries(skill.install || {})
+              .map(([surface, command]) => {
+                const label = surfaceLabels[surface] || surface;
+                return `<details><summary>${esc(label)} personal</summary><code>${esc(command)}</code></details>`;
+              })
               .join("");
+            const projectInstall = Object.entries(skill.projectInstall || {})
+              .map(([surface, command]) => {
+                const label = surfaceLabels[surface] || surface;
+                return `<details><summary>${esc(label)} project</summary><code>${esc(command)}</code></details>`;
+              })
+              .join("");
+            const install = personalInstall + projectInstall;
             const surfaces = (skill.surfaces || [])
               .map((surface) => surfaceLabels[surface] || surface)
               .join(", ");

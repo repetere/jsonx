@@ -7,6 +7,21 @@ The skills are split into two families:
 
 Install only the family you need. Core JSONX work does not require the generative UI skill.
 
+Run commands from the repository root.
+
+## Installer
+
+Use the installer when you want a repeatable copy command:
+
+```text
+node skills/scripts/install-jsonx-skill.mjs --surface codex --skill jsonx --scope personal
+node skills/scripts/install-jsonx-skill.mjs --surface codex --skill jsonx-generative-ui --scope personal
+node skills/scripts/install-jsonx-skill.mjs --surface claude --skill all --scope project
+node skills/scripts/install-jsonx-skill.mjs --surface opencode --skill all --scope personal
+```
+
+Use `--scope project` to install into the current project. Use `--scope personal` to install into your user-level skill folder. The installer refuses to overwrite an existing skill unless you pass `--force`.
+
 ## Codex
 
 Project install:

@@ -4,6 +4,13 @@ These skills mirror the Codex skill set and follow a provider-neutral Agent Skil
 
 Use `jsonx` for core package work. Use `jsonx-generative-ui` only when the user wants generated interface output or local `.jsonx/ui/` handoff files.
 
+Installer:
+
+```text
+node skills/scripts/install-jsonx-skill.mjs --surface claude --skill jsonx --scope personal
+node skills/scripts/install-jsonx-skill.mjs --surface claude --skill jsonx-generative-ui --scope personal
+```
+
 Personal install:
 
 ```text
