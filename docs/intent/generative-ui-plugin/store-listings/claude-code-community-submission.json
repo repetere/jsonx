@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "surface": "claude-code-community-marketplace",
   "submissionType": "skills-plugin",
-  "status": "draft-ready-requires-claude-cli-validation",
+  "status": "draft-ready-requires-interactive-smoke-and-submission",
   "listing": {
     "pluginName": "jsonx",
     "displayName": "JSONX",
@@ -103,6 +103,7 @@
   ],
   "evidence": {
     "manifest": "docs/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+    "claudeValidationEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
     "skillInstallerEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
     "goldenPrompts": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "hostedMcpTranscript": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json"
@@ -110,7 +111,7 @@
   "releaseNotes": "Initial community submission of the JSONX Claude Code plugin. It includes core JSONX workflow guidance and a separate generated UI skill for safe JSONX interface payloads.",
   "manualBeforeSubmit": [
     "Install or update Claude Code.",
-    "Run claude plugin validate ./plugins/claude-jsonx-plugin.",
+    "Review the latest claude-validation-evidence.json and rerun claude plugin validate ./plugins/claude-jsonx-plugin before final submission.",
     "Run a local session with claude --plugin-dir ./plugins/claude-jsonx-plugin and smoke test /jsonx:jsonx and /jsonx:jsonx-generative-ui.",
     "Confirm marketplace publisher and support details in the submission form."
   ],

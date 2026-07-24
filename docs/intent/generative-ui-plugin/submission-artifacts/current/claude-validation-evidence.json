@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-07-24T07:44:39.362Z",
+  "source": "claude plugin validate",
+  "note": "This evidence runs Claude Code from the npm package with a temporary npm cache and validates the JSONX Claude Code plugin manifest.",
+  "skipped": false,
+  "claudeCodePackage": "@anthropic-ai/claude-code@2.1.218",
+  "claudeVersion": "2.1.218 (Claude Code)",
+  "pluginPath": "$REPO_ROOT/plugins/claude-jsonx-plugin",
+  "tempNpmCache": "$NPM_CACHE",
+  "checks": {
+    "cliAvailableViaNpmExec": true,
+    "pluginValidationPassed": true
+  },
+  "steps": [
+    {
+      "id": "claude-version",
+      "command": "npm exec --yes --package @anthropic-ai/claude-code@2.1.218 -- claude --version",
+      "stdout": "2.1.218 (Claude Code)"
+    },
+    {
+      "id": "plugin-validate",
+      "command": "npm exec --yes --package @anthropic-ai/claude-code@2.1.218 -- claude plugin validate ./plugins/claude-jsonx-plugin",
+      "stdout": [
+        "Validating plugin manifest: $REPO_ROOT/plugins/claude-jsonx-plugin/.claude-plugin/plugin.json",
+        "✔ Validation passed"
+      ]
+    }
+  ]
+}

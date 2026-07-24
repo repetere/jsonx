@@ -20,7 +20,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | ChatGPT app submission | `apps/jsonx-renderer-app/chatgpt-app-submission.json` | Import-ready submission draft with app info, tool hint justifications, five positive test cases, and three negative test cases. |
 | Store listing drafts | `docs/intent/generative-ui-plugin/store-listings/` | Source drafts for OpenAI app-plus-skills plugin submission and Claude Code community marketplace submission. |
 | Public policy pages | `site/privacy.html`, `site/terms.html` | Public privacy and terms notes for the JSONX site, browser demo, skills, plugins, and renderer app. |
-| Submission artifacts | `docs/intent/generative-ui-plugin/submission-artifacts/current/` | Generated Codex and Claude package zips, ChatGPT submission JSON copy, Codex marketplace copy, store listing copies, screenshots, golden-prompt evidence, hosted MCP transcript evidence, skill installer evidence, isolated Codex marketplace install evidence, hashes, and package-boundary evidence. |
+| Submission artifacts | `docs/intent/generative-ui-plugin/submission-artifacts/current/` | Generated Codex and Claude package zips, ChatGPT submission JSON copy, Codex marketplace copy, store listing copies, screenshots, golden-prompt evidence, hosted MCP transcript evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, hashes, and package-boundary evidence. |
 | CI validation | `.github/workflows/generative-ui-plugin.yml` | Push, pull request, and manual workflow for app checks, plugin metadata checks, fixture validation, package generation, and npm package-boundary enforcement. |
 
 ## Ready Now
@@ -34,6 +34,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
   `codex plugin marketplace add .` then `codex plugin add jsonx-generative-ui-plugin@jsonx-local`.
 - Review isolated Codex marketplace install evidence in `docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json`.
 - Review skill installer evidence for Codex, Claude Code, and OpenCode in `docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json`.
+- Review Claude Code plugin validation evidence in `docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json`.
 - Run the Apps SDK renderer locally at `/mcp`.
 - Test the renderer app with the SDK client smoke test.
 - Enable optional GSAP motion locally with `JSONX_ENABLE_GSAP=1`.
@@ -51,9 +52,9 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 ## Not Ready For Public Submission
 
 - `.app.json` does not yet reference an approved app ID.
-- Public screenshots are captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/`, deterministic tool-call prompt evidence is captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json`, live hosted MCP endpoint evidence is captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json`, installer evidence is captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json`, and isolated Codex marketplace install evidence is captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json`. Live ChatGPT developer-mode transcripts still need to be captured after the hosted app is connected.
+- Public screenshots are captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/`, deterministic tool-call prompt evidence is captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json`, live hosted MCP endpoint evidence is captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json`, installer evidence is captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json`, isolated Codex marketplace install evidence is captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json`, and Claude Code manifest validation evidence is captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json`. Live ChatGPT developer-mode transcripts still need to be captured after the hosted app is connected.
 - Privacy, terms, and support URLs exist, but still need final human or legal review before public submission.
-- `claude plugin validate` has not been run in this environment.
+- Claude Code manifest validation has evidence, but interactive Claude Code smoke prompts have not been run in an authenticated Claude session.
 - Claude community marketplace submission has not been sent.
 - Codex plugin public submission has not been sent.
 
@@ -94,6 +95,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 ### Claude Code Plugin
 
 - Run local plugin validation with Claude Code.
+- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json` as the current `claude plugin validate` record.
 - Test with `claude --plugin-dir ./plugins/claude-jsonx-plugin`.
 - Run `/jsonx:jsonx` and `/jsonx:jsonx-generative-ui` smoke prompts.
 - Review `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json` before opening the Claude Code community marketplace submission.

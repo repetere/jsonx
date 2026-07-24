@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T07:35:31.146Z",
+  "generatedAt": "2026-07-24T07:44:42.996Z",
   "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
   "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
@@ -8,14 +8,14 @@
     {
       "surface": "Codex plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
-      "bytes": 16868,
-      "sha256": "b1574f660a0a67d7698f7ad8d4c7c33a4ef674ee990593240f16992d02ae0980"
+      "bytes": 16913,
+      "sha256": "76d5b6609afaf4d094b859bd38e46647f5ea521ce0395224ada50122a5b25588"
     },
     {
       "surface": "Claude Code plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip",
-      "bytes": 6231,
-      "sha256": "0a13e035c8e30cd0399b8692f38ba3e765571d87343623f1fe4a5224d2203f0d"
+      "bytes": 6220,
+      "sha256": "f552f0695b059fdc7c05c81eec1b7ec5d2a57451bc95d3aaee508a693ec4c012"
     },
     {
       "surface": "ChatGPT app submission",
@@ -45,10 +45,10 @@
     {
       "surface": "Claude Code community submission draft",
       "submissionType": "skills-plugin",
-      "status": "draft-ready-requires-claude-cli-validation",
+      "status": "draft-ready-requires-interactive-smoke-and-submission",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json",
-      "bytes": 6084,
-      "sha256": "69458db323f96e99fb089b0e1559949096daf9a102ca6a55103cb39dc5d1d72d",
+      "bytes": 6304,
+      "sha256": "d2b3fba08d2a67f1998f62f74fad03b9a9b55c85f3751f85921f8f9a3121d13e",
       "positiveTestCaseCount": 5,
       "negativeTestCaseCount": 3,
       "manualStepCount": 4
@@ -58,8 +58,8 @@
     {
       "purpose": "generative ui page desktop",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png",
-      "bytes": 210213,
-      "sha256": "474f3f97b95e3a2b158b56dab0a68233a0ae01d6f92dabf05ca0edbb6a03ce56"
+      "bytes": 209785,
+      "sha256": "96cf7a60c5f2faf3154a7af98097ecac5b806ebbf564ea389a993f232ff09527"
     },
     {
       "purpose": "skills install readme",
@@ -89,13 +89,13 @@
   "goldenPromptEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "bytes": 7080,
-    "sha256": "be1317648ad90f365257b5e04cffa18a24820843fb40fb1f941e6e2adece9434",
+    "sha256": "5067a9a165589b8aebb40a2d95013e137d15187bca7b1705959b5b80eeb41d73",
     "caseCount": 9
   },
   "hostedMcpEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
     "bytes": 4238,
-    "sha256": "d83c96f44d0d1bc4f75c2ced4710376559cab8a59841291a83ed2aeae17d47f2",
+    "sha256": "5eb0809a56bc94e11f0eb45aa7f804d2bb1430be9dc6751d5cccc3e0e7d972e1",
     "stepCount": 7,
     "checks": {
       "healthOk": true,
@@ -109,7 +109,7 @@
   "skillInstallerEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
     "bytes": 5009,
-    "sha256": "fa53fc20a6ed72684d358f525ae79976222f54e13c476fd27e35b7e7a3ed0bdb",
+    "sha256": "e3161b173c7c3576335e0d01fbaf3e5b255dab955ab0295ad87616ff8eac7e77",
     "dryRunMatrixCount": 9,
     "installSurfaceCount": 3,
     "checks": {
@@ -122,7 +122,7 @@
   "codexInstallEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
     "bytes": 4350,
-    "sha256": "fb628e3da0c535fb5eaf8e217c5b577f1f9201e836eaa66efc063564ec86b5c6",
+    "sha256": "077642f2541404f35c26e48faec50aa663787ee0ea627f781814626a5b6176a5",
     "skipped": false,
     "stepCount": 7,
     "checks": {
@@ -132,6 +132,19 @@
       "pluginEnabled": true,
       "cachedFilesPresent": true
     }
+  },
+  "claudeValidationEvidence": {
+    "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
+    "bytes": 1076,
+    "sha256": "01013a8992d31dd5edb62816a566d46146573c82a22ea76faebec7926a0a11f3",
+    "skipped": false,
+    "stepCount": 2,
+    "checks": {
+      "cliAvailableViaNpmExec": true,
+      "pluginValidationPassed": true
+    },
+    "claudeCodePackage": "@anthropic-ai/claude-code@2.1.218",
+    "claudeVersion": "2.1.218 (Claude Code)"
   },
   "npmBoundary": {
     "packageName": "jsonx",
@@ -159,6 +172,7 @@
       "hosted-mcp-transcript",
       "skill-installer-evidence",
       "codex-install-evidence",
+      "claude-validation-evidence",
       "openai-plugin-submission",
       "claude-code-community-submission"
     ]
@@ -172,6 +186,7 @@
     "npm pack --dry-run --json package-boundary check",
     "skill installer dry-run and isolated install evidence",
     "isolated Codex marketplace install evidence",
+    "Claude Code plugin validation evidence",
     "live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp"
   ]
 }

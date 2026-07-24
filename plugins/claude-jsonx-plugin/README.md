@@ -30,7 +30,7 @@ After editing plugin files, run:
 
 Before public submission:
 
-- Run `claude plugin validate` when Claude Code is available locally.
+- Run `claude plugin validate ./plugins/claude-jsonx-plugin`.
 - Confirm the plugin still contains only skills and docs.
 - The hosted renderer MCP endpoint is `https://jsonx-renderer-app.netlify.app/mcp`.
 - Keep hosted renderer app IDs out of the manifest until they are real and reachable.

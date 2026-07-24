@@ -71,6 +71,7 @@ jobs:
           --skip-screenshots
           --skip-hosted-mcp
           --skip-codex-install
+          --skip-claude-validation
           --output /tmp/jsonx-submission-artifacts
 
       - name: Check npm package boundary
@@ -101,6 +102,7 @@ jobs:
             "hosted-mcp-transcript",
             "skill-installer-evidence",
             "codex-install-evidence",
+            "claude-validation-evidence",
           ];
           const blocked = files.filter(
             (file) =>

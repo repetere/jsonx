@@ -19,6 +19,7 @@ const storeListingsDir = path.join(artifactRoot, "store-listings");
 const hostedWidgetUrl = process.env.JSONX_RENDERER_WIDGET_URL || "https://jsonx-renderer-app.netlify.app/widget";
 const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.netlify.app/mcp";
 const codexCliOverride = process.env.JSONX_CODEX_CLI;
+const claudeCodePackage = process.env.JSONX_CLAUDE_CODE_PACKAGE || "@anthropic-ai/claude-code@2.1.218";
 const publicSiteUrl = process.env.JSONX_PUBLIC_SITE_URL || "https://jsonx.net/generative-ui.html";
 const publicSkillsUrl = process.env.JSONX_PUBLIC_SKILLS_URL || "https://jsonx.net/skills/README.md";
 
@@ -701,6 +702,78 @@ async function buildCodexInstallEvidence({ skip }) {
   }
 }
 
+async function buildClaudeValidationEvidence({ skip }) {
+  if (skip) {
+    return {
+      generatedAt: new Date().toISOString(),
+      source: "claude plugin validate",
+      skipped: true,
+      reason: "Skipped by --skip-claude-validation or JSONX_SKIP_CLAUDE_VALIDATION=1.",
+      checks: {},
+      steps: [],
+    };
+  }
+
+  const tempCache = await fs.mkdtemp(path.join(os.tmpdir(), "jsonx-claude-npm."));
+  const realTempCache = await fs.realpath(tempCache);
+  const replacements = [
+    [realTempCache, "$NPM_CACHE"],
+    [tempCache, "$NPM_CACHE"],
+    [repoRoot, "$REPO_ROOT"],
+  ];
+  const env = { npm_config_cache: tempCache };
+  const pluginPath = path.join(repoRoot, "plugins", "claude-jsonx-plugin");
+  const steps = [];
+
+  console.log("capturing Claude Code plugin validation evidence");
+
+  try {
+    const version = run(
+      "claude version via npm exec",
+      "npm",
+      ["exec", "--yes", "--package", claudeCodePackage, "--", "claude", "--version"],
+      { capture: true, env },
+    );
+    assertEvidence(version.includes("Claude Code"), "Claude Code version output did not identify Claude Code");
+    steps.push({
+      id: "claude-version",
+      command: `npm exec --yes --package ${claudeCodePackage} -- claude --version`,
+      stdout: sanitizeEvidence(version, replacements),
+    });
+
+    const validation = run(
+      "claude plugin validate",
+      "npm",
+      ["exec", "--yes", "--package", claudeCodePackage, "--", "claude", "plugin", "validate", "./plugins/claude-jsonx-plugin"],
+      { capture: true, env },
+    );
+    assertEvidence(validation.includes("Validation passed"), "claude plugin validate did not report success");
+    steps.push({
+      id: "plugin-validate",
+      command: `npm exec --yes --package ${claudeCodePackage} -- claude plugin validate ./plugins/claude-jsonx-plugin`,
+      stdout: sanitizeEvidence(validation.split("\n").filter(Boolean), replacements),
+    });
+
+    return {
+      generatedAt: new Date().toISOString(),
+      source: "claude plugin validate",
+      note: "This evidence runs Claude Code from the npm package with a temporary npm cache and validates the JSONX Claude Code plugin manifest.",
+      skipped: false,
+      claudeCodePackage,
+      claudeVersion: version,
+      pluginPath: sanitizeEvidence(pluginPath, replacements),
+      tempNpmCache: "$NPM_CACHE",
+      checks: {
+        cliAvailableViaNpmExec: true,
+        pluginValidationPassed: true,
+      },
+      steps,
+    };
+  } finally {
+    await fs.rm(tempCache, { recursive: true, force: true });
+  }
+}
+
 function validateStoreListing(source, data) {
   const errors = [];
   if (data.schemaVersion !== 1) errors.push("schemaVersion must be 1");
@@ -1036,6 +1109,7 @@ async function buildNpmBoundaryEvidence() {
     "hosted-mcp-transcript",
     "skill-installer-evidence",
     "codex-install-evidence",
+    "claude-validation-evidence",
     "openai-plugin-submission",
     "claude-code-community-submission",
   ];
@@ -1104,6 +1178,11 @@ async function writeReviewSummary(manifest) {
       : manifest.codexInstallEvidence
         ? `- \`${manifest.codexInstallEvidence.path}\` records why Codex CLI install evidence was skipped.`
         : "- Codex install evidence was not generated.",
+    manifest.claudeValidationEvidence && !manifest.claudeValidationEvidence.skipped
+      ? `- \`${manifest.claudeValidationEvidence.path}\` records Claude Code plugin validation with ${manifest.claudeValidationEvidence.stepCount} checks.`
+      : manifest.claudeValidationEvidence
+        ? `- \`${manifest.claudeValidationEvidence.path}\` records why Claude validation evidence was skipped.`
+        : "- Claude validation evidence was not generated.",
     "",
     "## Validation",
     "",
@@ -1112,7 +1191,7 @@ async function writeReviewSummary(manifest) {
     "## Submission Notes",
     "",
     "- Codex development install uses `.agents/plugins/marketplace.json` from the repo root.",
-    "- Claude Code package remains local until `claude plugin validate` and marketplace submission can run in a Claude-enabled environment.",
+    "- Claude Code package remains local until interactive Claude smoke prompts and marketplace submission can run in a Claude-enabled environment.",
     "- ChatGPT app submission starts from `apps/jsonx-renderer-app/chatgpt-app-submission.json` and the hosted MCP endpoint.",
     "- These artifacts live under `docs/intent/`, which is excluded from the root `jsonx` npm package.",
     "",
@@ -1124,6 +1203,7 @@ async function main() {
   const skipScreenshots = hasArg("--skip-screenshots");
   const skipHostedMcp = hasArg("--skip-hosted-mcp") || process.env.JSONX_SKIP_HOSTED_MCP === "1";
   const skipCodexInstall = hasArg("--skip-codex-install") || process.env.JSONX_SKIP_CODEX_INSTALL === "1";
+  const skipClaudeValidation = hasArg("--skip-claude-validation") || process.env.JSONX_SKIP_CLAUDE_VALIDATION === "1";
   await fs.rm(artifactRoot, { recursive: true, force: true });
   await fs.mkdir(packagesDir, { recursive: true });
   await fs.mkdir(screenshotsDir, { recursive: true });
@@ -1161,6 +1241,10 @@ async function main() {
   const codexInstallEvidence = await buildCodexInstallEvidence({ skip: skipCodexInstall });
   await writeJson(codexInstallEvidencePath, codexInstallEvidence);
   const codexInstallArtifact = await hashFile(codexInstallEvidencePath);
+  const claudeValidationEvidencePath = path.join(artifactRoot, "claude-validation-evidence.json");
+  const claudeValidationEvidence = await buildClaudeValidationEvidence({ skip: skipClaudeValidation });
+  await writeJson(claudeValidationEvidencePath, claudeValidationEvidence);
+  const claudeValidationArtifact = await hashFile(claudeValidationEvidencePath);
 
   const packages = [];
   packages.push({
@@ -1236,6 +1320,14 @@ async function main() {
       stepCount: codexInstallEvidence.steps.length,
       checks: codexInstallEvidence.checks,
     },
+    claudeValidationEvidence: {
+      ...claudeValidationArtifact,
+      skipped: claudeValidationEvidence.skipped === true,
+      stepCount: claudeValidationEvidence.steps.length,
+      checks: claudeValidationEvidence.checks,
+      claudeCodePackage: claudeValidationEvidence.claudeCodePackage,
+      claudeVersion: claudeValidationEvidence.claudeVersion,
+    },
     npmBoundary,
     validation: [
       "node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs",
@@ -1246,6 +1338,7 @@ async function main() {
       "npm pack --dry-run --json package-boundary check",
       "skill installer dry-run and isolated install evidence",
       ...(codexInstallEvidence.skipped ? [] : ["isolated Codex marketplace install evidence"]),
+      ...(claudeValidationEvidence.skipped ? [] : ["Claude Code plugin validation evidence"]),
       ...(hostedMcpArtifact ? [`live hosted MCP transcript capture from ${hostedMcpUrl}`] : []),
     ],
   };
