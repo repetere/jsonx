@@ -1,8 +1,8 @@
 # JSONX Public Submission Queue
 
-Generated: 2026-07-24T10:53:04.484Z
+Generated: 2026-07-24T11:12:21.966Z
 
-This file is generated from the four store listing drafts. It gives the submitter one place to find packages, public evidence, manual checks, and receipt fields. It is not proof that a public submission was sent.
+This file is generated from the four store listing drafts. It gives the submitter one place to find packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that a public submission was sent.
 
 ## Gate Status
 
@@ -18,6 +18,36 @@ This file is generated from the four store listing drafts. It gives the submitte
 - Submissions: 4
 - Pending receipts: 4
 - Receipt evidence file: `docs/intent/generative-ui-plugin/external-gate-evidence.json`
+- Recorder: `node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs`
+
+## Shared Recorder Commands
+
+Run these only after the matching external evidence exists.
+
+### App IDs
+
+```bash
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs app-ids --openai-core-plugin-id <id> --openai-generative-ui-app-id <id> --openai-generative-ui-plugin-id <id> --codex-core-plugin-id <id> --codex-generative-ui-plugin-id <id> --codex-app-metadata-updated
+```
+
+### ChatGPT Developer Mode
+
+```bash
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.netlify.app/mcp --transcript-url <url> --all-prompts-passed
+```
+
+### Claude Code Smoke
+
+```bash
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs claude-smoke --plugin core --authenticated --claude-version <version> --passed
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs claude-smoke --plugin generative-ui --authenticated --claude-version <version> --passed
+```
+
+### Policy Review
+
+```bash
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs policy-review --status approved --reviewed-by <name> --reviewed-at <yyyy-mm-dd>
+```
 
 ## OpenAI/Codex core JSONX plugin
 
@@ -59,6 +89,12 @@ This file is generated from the four store listing drafts. It gives the submitte
 - `marketplaceSubmissions.openaiCore.url`
 - `marketplaceSubmissions.openaiCore.status`
 - `marketplaceSubmissions.openaiCore.submittedAt`
+
+### Receipt Recorder Command
+
+```bash
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs marketplace --target openai-core --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>
+```
 
 ### Source Docs Checked
 
@@ -114,6 +150,12 @@ This file is generated from the four store listing drafts. It gives the submitte
 - `marketplaceSubmissions.openaiGenerativeUi.status`
 - `marketplaceSubmissions.openaiGenerativeUi.submittedAt`
 
+### Receipt Recorder Command
+
+```bash
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs marketplace --target openai-generative-ui --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>
+```
+
 ### Source Docs Checked
 
 - https://developers.openai.com/codex/submit-plugins
@@ -159,6 +201,12 @@ This file is generated from the four store listing drafts. It gives the submitte
 - `marketplaceSubmissions.claudeCore.url`
 - `marketplaceSubmissions.claudeCore.status`
 - `marketplaceSubmissions.claudeCore.submittedAt`
+
+### Receipt Recorder Command
+
+```bash
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs marketplace --target claude-core --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>
+```
 
 ### Source Docs Checked
 
@@ -208,6 +256,12 @@ This file is generated from the four store listing drafts. It gives the submitte
 - `marketplaceSubmissions.claudeGenerativeUi.url`
 - `marketplaceSubmissions.claudeGenerativeUi.status`
 - `marketplaceSubmissions.claudeGenerativeUi.submittedAt`
+
+### Receipt Recorder Command
+
+```bash
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs marketplace --target claude-generative-ui --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>
+```
 
 ### Source Docs Checked
 

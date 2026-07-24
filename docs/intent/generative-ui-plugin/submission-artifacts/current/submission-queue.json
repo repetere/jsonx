@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T10:53:04.484Z",
+  "generatedAt": "2026-07-24T11:12:21.966Z",
   "source": "docs/intent/generative-ui-plugin/store-listings/",
-  "note": "This queue is generated from the four public store listing drafts. It is a submitter handoff, not proof that any public marketplace submission was sent.",
+  "note": "This queue is generated from the four public store listing drafts. It lists packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that any public marketplace submission was sent.",
   "externalGateEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
   "externalGateStatus": {
     "appIds": "pending",
@@ -12,6 +12,22 @@
   "submissionCount": 4,
   "receiptRecordedCount": 0,
   "pendingSubmissionCount": 4,
+  "externalGateRecorder": "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs",
+  "externalGateRecorderCommands": {
+    "appIds": [
+      "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs app-ids --openai-core-plugin-id <id> --openai-generative-ui-app-id <id> --openai-generative-ui-plugin-id <id> --codex-core-plugin-id <id> --codex-generative-ui-plugin-id <id> --codex-app-metadata-updated"
+    ],
+    "chatgptDeveloperMode": [
+      "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.netlify.app/mcp --transcript-url <url> --all-prompts-passed"
+    ],
+    "claudeSmoke": [
+      "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs claude-smoke --plugin core --authenticated --claude-version <version> --passed",
+      "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs claude-smoke --plugin generative-ui --authenticated --claude-version <version> --passed"
+    ],
+    "policyReview": [
+      "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs policy-review --status approved --reviewed-by <name> --reviewed-at <yyyy-mm-dd>"
+    ]
+  },
   "submissions": [
     {
       "id": "openai-core-jsonx",
@@ -75,6 +91,7 @@
         "marketplaceSubmissions.openaiCore.status",
         "marketplaceSubmissions.openaiCore.submittedAt"
       ],
+      "receiptRecorderCommand": "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs marketplace --target openai-core --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>",
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
@@ -157,6 +174,7 @@
         "marketplaceSubmissions.openaiGenerativeUi.status",
         "marketplaceSubmissions.openaiGenerativeUi.submittedAt"
       ],
+      "receiptRecorderCommand": "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs marketplace --target openai-generative-ui --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>",
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
@@ -228,6 +246,7 @@
         "marketplaceSubmissions.claudeCore.status",
         "marketplaceSubmissions.claudeCore.submittedAt"
       ],
+      "receiptRecorderCommand": "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs marketplace --target claude-core --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>",
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
@@ -302,6 +321,7 @@
         "marketplaceSubmissions.claudeGenerativeUi.status",
         "marketplaceSubmissions.claudeGenerativeUi.submittedAt"
       ],
+      "receiptRecorderCommand": "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs marketplace --target claude-generative-ui --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>",
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
