@@ -11,6 +11,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | Surface | Artifact | Current state |
 | --- | --- | --- |
 | Codex | `plugins/jsonx-generative-ui-plugin/` | Local plugin package with `jsonx` and `jsonx-generative-ui` skills, fixture validator, app wiring templates, and metadata. |
+| Codex local marketplace | `.agents/plugins/marketplace.json` | Repo-local Codex marketplace entry for development installation of `jsonx-generative-ui-plugin`. |
 | Claude Code | `plugins/claude-jsonx-plugin/` | Local Claude Code plugin package with `jsonx` and `jsonx-generative-ui` skills. |
 | OpenCode | `skills/opencode/` | Skill folders for project or global install. OpenCode does not need a separate plugin for the current scope. |
 | Skill installer | `skills/scripts/install-jsonx-skill.mjs` | Local installer for core JSONX and generative UI skills across Codex, Claude Code, and OpenCode. |
@@ -24,7 +25,10 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Install core and generative UI skills for Codex, Claude Code, and OpenCode.
 - Install skills through `skills/scripts/install-jsonx-skill.mjs` with separate `jsonx`, `jsonx-generative-ui`, and `all` modes.
 - Run the Codex plugin validator locally.
+- Run `node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs`.
 - Run the JSONX fixture validator locally.
+- Install the Codex plugin from the repo-local marketplace in a development profile:
+  `codex plugin marketplace add .` then `codex plugin add jsonx-generative-ui-plugin@jsonx-local`.
 - Run the Apps SDK renderer locally at `/mcp`.
 - Test the renderer app with the SDK client smoke test.
 - Enable optional GSAP motion locally with `JSONX_ENABLE_GSAP=1`.
@@ -65,6 +69,8 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Keep `.app.json` empty until a real app ID exists.
 - Keep `.mcp.json` empty unless the packaged MCP config can run for installed users.
 - Validate the plugin manifest and skills after every metadata change.
+- Validate `.agents/plugins/marketplace.json` and install from the local `jsonx-local` marketplace during development.
+- Re-test the Codex marketplace path with an isolated `CODEX_HOME` before public submission package changes.
 - Confirm `npm pack --dry-run` excludes `plugins/` and `apps/`.
 
 ### Claude Code Plugin

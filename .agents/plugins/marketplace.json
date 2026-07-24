@@ -1,0 +1,20 @@
+{
+  "name": "jsonx-local",
+  "interface": {
+    "displayName": "JSONX Local"
+  },
+  "plugins": [
+    {
+      "name": "jsonx-generative-ui-plugin",
+      "source": {
+        "source": "local",
+        "path": "./plugins/jsonx-generative-ui-plugin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

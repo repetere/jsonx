@@ -24,6 +24,15 @@ Use `--scope project` to install into the current project. Use `--scope personal
 
 ## Codex
 
+Codex can install the full plugin from the repo-local marketplace:
+
+```text
+codex plugin marketplace add .
+codex plugin add jsonx-generative-ui-plugin@jsonx-local
+```
+
+Use direct skill install when you only want skill files without the plugin wrapper.
+
 Project install:
 
 ```text

@@ -13,6 +13,7 @@ Validate the plugin:
 
 ```text
 python3 ~/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py plugins/jsonx-generative-ui-plugin
+node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs
 ```
 
 Validate JSONX generative UI fixtures:
@@ -53,3 +54,16 @@ Use it for ChatGPT developer-mode app setup and hosted smoke tests.
 ## Public Wiring
 
 `.app.json` stays empty until a real Apps SDK app ID exists. `.mcp.json` stays empty in the plugin package so installed users are not pinned to a local path or an endpoint they did not choose. Use the templates in `assets/` for repo-local development wiring.
+
+## Codex Local Marketplace
+
+The repo includes a local Codex marketplace at `.agents/plugins/marketplace.json`.
+
+From the repo root, add the marketplace to a development Codex profile:
+
+```text
+codex plugin marketplace add .
+codex plugin add jsonx-generative-ui-plugin@jsonx-local
+```
+
+Use a fresh Codex task after installing or reinstalling the plugin so new skills and metadata are loaded.
