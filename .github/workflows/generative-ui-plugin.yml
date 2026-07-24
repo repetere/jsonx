@@ -69,6 +69,7 @@ jobs:
         run: >
           node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs
           --skip-screenshots
+          --skip-hosted-mcp
           --output /tmp/jsonx-submission-artifacts
 
       - name: Check npm package boundary
@@ -90,7 +91,7 @@ jobs:
             "vscode-extension/",
             ".github/",
           ];
-          const blockedTerms = ["chatgpt-app-submission", "marketplace.json", "netlify/", "gsap", "golden-prompts"];
+          const blockedTerms = ["chatgpt-app-submission", "marketplace.json", "netlify/", "gsap", "golden-prompts", "hosted-mcp-transcript"];
           const blocked = files.filter(
             (file) =>
               blockedPrefixes.some((prefix) => file.startsWith(prefix)) ||

@@ -24,6 +24,7 @@ Last updated: 2026-07-24
 - `/mcp` responds to CORS preflight with `Access-Control-Allow-Origin: *`.
 - MCP client smoke test can initialize, list `render_jsonx_response`, read `ui://jsonx/renderer-v1.html`, render a valid payload, and reject an unsafe payload.
 - Netlify deploy validation reported no secret scan matches for deploy `6a6305f3ea5f474b412d2f3e`.
+- Current submission artifacts include `docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json`, which records live `/healthz`, CORS preflight, tool listing, renderer resource read, valid render, and invalid render checks from the hosted endpoint.
 
 ## Redeploy Notes
 

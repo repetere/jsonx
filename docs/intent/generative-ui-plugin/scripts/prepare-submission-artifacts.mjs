@@ -14,6 +14,7 @@ const packagesDir = path.join(artifactRoot, "packages");
 const screenshotsDir = path.join(artifactRoot, "screenshots");
 
 const hostedWidgetUrl = process.env.JSONX_RENDERER_WIDGET_URL || "https://jsonx-renderer-app.netlify.app/widget";
+const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.netlify.app/mcp";
 const publicSiteUrl = process.env.JSONX_PUBLIC_SITE_URL || "https://jsonx.net/generative-ui.html";
 const publicSkillsUrl = process.env.JSONX_PUBLIC_SKILLS_URL || "https://jsonx.net/skills/README.md";
 
@@ -86,6 +87,14 @@ async function writeJson(filePath, data) {
   await fs.writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`);
 }
 
+function siblingUrl(urlString, pathname) {
+  const url = new URL(urlString);
+  url.pathname = pathname;
+  url.search = "";
+  url.hash = "";
+  return url.toString();
+}
+
 async function hashFile(filePath) {
   const buffer = await fs.readFile(filePath);
   return {
@@ -148,6 +157,221 @@ function resultSummary(result) {
       payloadComponent: result.structuredContent?.payload?.component,
       childComponents: childComponents(result.structuredContent?.payload),
     },
+  };
+}
+
+function assertHostedCheck(condition, message) {
+  if (!condition) throw new Error(`Hosted MCP evidence failed: ${message}`);
+}
+
+async function fetchWithTimeout(url, options = {}) {
+  return fetch(url, {
+    ...options,
+    signal: AbortSignal.timeout(15000),
+  });
+}
+
+async function readMcpResponse(response) {
+  const text = await response.text();
+  const contentType = response.headers.get("content-type") || "";
+  if (contentType.includes("text/event-stream")) {
+    const eventJson = text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith("data:"))
+      .map((line) => line.slice("data:".length).trim())
+      .find((line) => line.startsWith("{"));
+    assertHostedCheck(eventJson, "MCP event stream did not include a JSON payload");
+    return JSON.parse(eventJson);
+  }
+  return JSON.parse(text);
+}
+
+async function postMcpRpc(id, method, params = {}) {
+  const response = await fetchWithTimeout(hostedMcpUrl, {
+    method: "POST",
+    headers: {
+      accept: "application/json, text/event-stream",
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id,
+      method,
+      params,
+    }),
+  });
+  const body = await readMcpResponse(response);
+  assertHostedCheck(response.status === 200, `${method} returned HTTP ${response.status}`);
+  assertHostedCheck(!body.error, `${method} returned JSON-RPC error ${body.error?.message || "unknown"}`);
+  return {
+    status: response.status,
+    contentType: response.headers.get("content-type"),
+    corsOrigin: response.headers.get("access-control-allow-origin"),
+    body,
+  };
+}
+
+async function buildHostedMcpEvidence() {
+  const startedAt = Date.now();
+  const healthUrl = siblingUrl(hostedMcpUrl, "/healthz");
+  const validInput = renderInputFromFixture(await readJson(fixturePath("support-triage")));
+  const invalidInput = renderInputFromFixture(await readJson(fixturePath("bad-unknown-component")));
+  const steps = [];
+
+  console.log(`capturing hosted MCP transcript from ${hostedMcpUrl}`);
+
+  const health = await fetchWithTimeout(healthUrl);
+  const healthBody = await health.json();
+  assertHostedCheck(health.status === 200, `/healthz returned HTTP ${health.status}`);
+  assertHostedCheck(healthBody.ok === true, "/healthz did not return ok=true");
+  steps.push({
+    id: "healthz",
+    transport: "https",
+    method: "GET",
+    url: healthUrl,
+    status: health.status,
+    body: healthBody,
+  });
+
+  const preflight = await fetchWithTimeout(hostedMcpUrl, {
+    method: "OPTIONS",
+    headers: {
+      "access-control-request-method": "POST",
+      "access-control-request-headers": "content-type,mcp-protocol-version",
+      origin: "https://chatgpt.com",
+    },
+  });
+  const preflightCorsOrigin = preflight.headers.get("access-control-allow-origin");
+  assertHostedCheck(preflight.status === 204, `CORS preflight returned HTTP ${preflight.status}`);
+  assertHostedCheck(preflightCorsOrigin === "*", "CORS preflight did not allow ChatGPT browser calls");
+  steps.push({
+    id: "cors-preflight",
+    transport: "https",
+    method: "OPTIONS",
+    url: hostedMcpUrl,
+    status: preflight.status,
+    corsOrigin: preflightCorsOrigin,
+    allowMethods: preflight.headers.get("access-control-allow-methods"),
+    allowHeaders: preflight.headers.get("access-control-allow-headers"),
+  });
+
+  const initialize = await postMcpRpc(1, "initialize", {
+    protocolVersion: "2026-01-26",
+    capabilities: {},
+    clientInfo: { name: "jsonx-submission-artifacts", version: "0.1.0" },
+  });
+  assertHostedCheck(initialize.body.result?.serverInfo?.name === "jsonx-renderer-app", "initialize did not return the JSONX server name");
+  steps.push({
+    id: "initialize",
+    transport: "mcp-json-rpc",
+    method: "initialize",
+    status: initialize.status,
+    contentType: initialize.contentType,
+    corsOrigin: initialize.corsOrigin,
+    result: {
+      protocolVersion: initialize.body.result?.protocolVersion,
+      serverInfo: initialize.body.result?.serverInfo,
+      capabilities: Object.keys(initialize.body.result?.capabilities || {}),
+      instructionsPresent: typeof initialize.body.result?.instructions === "string",
+    },
+  });
+
+  const tools = await postMcpRpc(2, "tools/list");
+  const listedTools = tools.body.result?.tools || [];
+  const renderTool = listedTools.find((tool) => tool.name === "render_jsonx_response");
+  assertHostedCheck(renderTool, "render_jsonx_response was not listed");
+  assertHostedCheck(renderTool._meta?.ui?.resourceUri === "ui://jsonx/renderer-v1.html", "render tool is not wired to the renderer resource");
+  steps.push({
+    id: "tools-list",
+    transport: "mcp-json-rpc",
+    method: "tools/list",
+    status: tools.status,
+    contentType: tools.contentType,
+    corsOrigin: tools.corsOrigin,
+    result: {
+      toolNames: listedTools.map((tool) => tool.name),
+      renderTool: {
+        title: renderTool.title,
+        readOnlyHint: renderTool.annotations?.readOnlyHint,
+        idempotentHint: renderTool.annotations?.idempotentHint,
+        outputSchemaPresent: Boolean(renderTool.outputSchema),
+        rendererResourceUri: renderTool._meta?.ui?.resourceUri,
+      },
+    },
+  });
+
+  const resource = await postMcpRpc(3, "resources/read", { uri: "ui://jsonx/renderer-v1.html" });
+  const resourceContent = resource.body.result?.contents?.[0];
+  assertHostedCheck(resourceContent?.mimeType === "text/html;profile=mcp-app", "renderer resource did not return the Apps SDK MIME type");
+  assertHostedCheck((resourceContent.text || "").includes("jsonx-root"), "renderer resource did not include the JSONX root");
+  steps.push({
+    id: "renderer-resource",
+    transport: "mcp-json-rpc",
+    method: "resources/read",
+    status: resource.status,
+    contentType: resource.contentType,
+    corsOrigin: resource.corsOrigin,
+    result: {
+      uri: resourceContent.uri,
+      mimeType: resourceContent.mimeType,
+      textBytes: Buffer.byteLength(resourceContent.text || "", "utf8"),
+      hasJsonxRoot: (resourceContent.text || "").includes("jsonx-root"),
+      hasRendererConfig: (resourceContent.text || "").includes("JSONX_RENDERER_CONFIG"),
+    },
+  });
+
+  const valid = await postMcpRpc(4, "tools/call", {
+    name: "render_jsonx_response",
+    arguments: validInput,
+  });
+  assertHostedCheck(valid.body.result?.isError !== true, "valid payload was rejected");
+  assertHostedCheck(valid.body.result?.structuredContent?.schema === "jsonx.generative-ui.v1", "valid payload did not return the JSONX schema");
+  steps.push({
+    id: "valid-render",
+    transport: "mcp-json-rpc",
+    method: "tools/call",
+    status: valid.status,
+    contentType: valid.contentType,
+    corsOrigin: valid.corsOrigin,
+    toolName: "render_jsonx_response",
+    input: payloadSummary(validInput),
+    result: resultSummary(valid.body.result),
+  });
+
+  const invalid = await postMcpRpc(5, "tools/call", {
+    name: "render_jsonx_response",
+    arguments: invalidInput,
+  });
+  assertHostedCheck(invalid.body.result?.isError === true, "invalid payload was not rejected");
+  steps.push({
+    id: "invalid-render",
+    transport: "mcp-json-rpc",
+    method: "tools/call",
+    status: invalid.status,
+    contentType: invalid.contentType,
+    corsOrigin: invalid.corsOrigin,
+    toolName: "render_jsonx_response",
+    input: payloadSummary(invalidInput),
+    result: resultSummary(invalid.body.result),
+  });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    source: "live hosted JSONX renderer MCP endpoint",
+    hostedMcpUrl,
+    healthUrl,
+    note: "This is live endpoint evidence for submission review. It is not a captured ChatGPT developer-mode transcript.",
+    durationMs: Date.now() - startedAt,
+    checks: {
+      healthOk: true,
+      corsPreflightOk: true,
+      toolListed: true,
+      rendererResourceReadable: true,
+      validPayloadRendered: true,
+      invalidPayloadRejected: true,
+    },
+    steps,
   };
 }
 
@@ -418,7 +642,7 @@ async function buildNpmBoundaryEvidence() {
     "vscode-extension/",
     ".github/",
   ];
-  const blockedTerms = ["chatgpt-app-submission", "marketplace.json", "netlify/", "gsap", "golden-prompts"];
+  const blockedTerms = ["chatgpt-app-submission", "marketplace.json", "netlify/", "gsap", "golden-prompts", "hosted-mcp-transcript"];
   const blocked = files.filter(
     (file) => blockedPrefixes.some((prefix) => file.startsWith(prefix)) || blockedTerms.some((term) => file.includes(term)),
   );
@@ -459,6 +683,12 @@ async function writeReviewSummary(manifest) {
       ? `- \`${manifest.goldenPromptEvidence.path}\` covers ${manifest.goldenPromptEvidence.caseCount} prompt outcomes.`
       : "- No golden-prompt evidence was generated.",
     "",
+    "## Hosted MCP",
+    "",
+    manifest.hostedMcpEvidence
+      ? `- \`${manifest.hostedMcpEvidence.path}\` records ${manifest.hostedMcpEvidence.stepCount} live endpoint checks from \`${manifest.hostedMcpUrl}\`.`
+      : "- Hosted MCP evidence was skipped for this artifact run.",
+    "",
     "## Validation",
     "",
     ...manifest.validation.map((item) => `- ${item}`),
@@ -476,6 +706,7 @@ async function writeReviewSummary(manifest) {
 
 async function main() {
   const skipScreenshots = hasArg("--skip-screenshots");
+  const skipHostedMcp = hasArg("--skip-hosted-mcp") || process.env.JSONX_SKIP_HOSTED_MCP === "1";
   await fs.rm(artifactRoot, { recursive: true, force: true });
   await fs.mkdir(packagesDir, { recursive: true });
   await fs.mkdir(screenshotsDir, { recursive: true });
@@ -497,6 +728,13 @@ async function main() {
   const goldenPromptEvidence = await buildGoldenPromptEvidence();
   await writeJson(goldenPromptEvidencePath, goldenPromptEvidence);
   const goldenPromptArtifact = await hashFile(goldenPromptEvidencePath);
+  const hostedMcpEvidencePath = path.join(artifactRoot, "hosted-mcp-transcript.json");
+  const hostedMcpEvidence = skipHostedMcp ? null : await buildHostedMcpEvidence();
+  let hostedMcpArtifact = null;
+  if (hostedMcpEvidence) {
+    await writeJson(hostedMcpEvidencePath, hostedMcpEvidence);
+    hostedMcpArtifact = await hashFile(hostedMcpEvidencePath);
+  }
 
   const packages = [];
   packages.push({
@@ -542,6 +780,7 @@ async function main() {
   const manifest = {
     generatedAt: new Date().toISOString(),
     hostedWidgetUrl,
+    hostedMcpUrl,
     publicSiteUrl,
     publicSkillsUrl,
     packages,
@@ -550,6 +789,13 @@ async function main() {
       ...goldenPromptArtifact,
       caseCount: goldenPromptEvidence.cases.length,
     },
+    hostedMcpEvidence: hostedMcpArtifact
+      ? {
+          ...hostedMcpArtifact,
+          stepCount: hostedMcpEvidence.steps.length,
+          checks: hostedMcpEvidence.checks,
+        }
+      : null,
     npmBoundary,
     validation: [
       "node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs",
@@ -557,6 +803,7 @@ async function main() {
       `python3 plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py ${validFixtures.map((name) => `${name}.json`).join(" ")}`,
       "diff -rq skills docs/skills",
       "npm pack --dry-run --json package-boundary check",
+      ...(hostedMcpArtifact ? [`live hosted MCP transcript capture from ${hostedMcpUrl}`] : []),
     ],
   };
 

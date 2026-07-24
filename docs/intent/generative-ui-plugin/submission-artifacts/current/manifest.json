@@ -1,14 +1,15 @@
 {
-  "generatedAt": "2026-07-24T07:12:02.784Z",
+  "generatedAt": "2026-07-24T07:20:12.837Z",
   "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
+  "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
   "publicSkillsUrl": "https://jsonx.net/skills/README.md",
   "packages": [
     {
       "surface": "Codex plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
-      "bytes": 16727,
-      "sha256": "77afcb9aa8051bd22b8fb004e46903d35982b59f7f5217f7e60a9a5ebf99b55f"
+      "bytes": 16775,
+      "sha256": "175ec204ef18a1efa9de540e10fbbda6deaa0e922269a1ba7561d1f115a2bdfb"
     },
     {
       "surface": "Claude Code plugin",
@@ -64,8 +65,22 @@
   "goldenPromptEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "bytes": 7080,
-    "sha256": "de5081a5b841d1a810597bec119049700f92bbae0ee3b0512ff96b4dd2064793",
+    "sha256": "dddf11d516c302727b74c1e4f3b40c76dca1985f888a735cbe99c50296280511",
     "caseCount": 9
+  },
+  "hostedMcpEvidence": {
+    "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
+    "bytes": 4238,
+    "sha256": "89f2240b875ac20176f9e88982b5c8d35e7aac6b69dff753c47978fc8d7e8a58",
+    "stepCount": 7,
+    "checks": {
+      "healthOk": true,
+      "corsPreflightOk": true,
+      "toolListed": true,
+      "rendererResourceReadable": true,
+      "validPayloadRendered": true,
+      "invalidPayloadRejected": true
+    }
   },
   "npmBoundary": {
     "packageName": "jsonx",
@@ -89,7 +104,8 @@
       "marketplace.json",
       "netlify/",
       "gsap",
-      "golden-prompts"
+      "golden-prompts",
+      "hosted-mcp-transcript"
     ]
   },
   "validation": [
@@ -97,6 +113,7 @@
     "npm run check from apps/jsonx-renderer-app",
     "python3 plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py support-triage.json text-block.json checklist.json choice-list.json data-table.json alert.json quiz.json slider-poll.json motion-subtle.json",
     "diff -rq skills docs/skills",
-    "npm pack --dry-run --json package-boundary check"
+    "npm pack --dry-run --json package-boundary check",
+    "live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp"
   ]
 }

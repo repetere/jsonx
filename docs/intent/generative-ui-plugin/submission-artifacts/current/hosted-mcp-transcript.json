@@ -1,0 +1,150 @@
+{
+  "generatedAt": "2026-07-24T07:20:09.279Z",
+  "source": "live hosted JSONX renderer MCP endpoint",
+  "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
+  "healthUrl": "https://jsonx-renderer-app.netlify.app/healthz",
+  "note": "This is live endpoint evidence for submission review. It is not a captured ChatGPT developer-mode transcript.",
+  "durationMs": 1180,
+  "checks": {
+    "healthOk": true,
+    "corsPreflightOk": true,
+    "toolListed": true,
+    "rendererResourceReadable": true,
+    "validPayloadRendered": true,
+    "invalidPayloadRejected": true
+  },
+  "steps": [
+    {
+      "id": "healthz",
+      "transport": "https",
+      "method": "GET",
+      "url": "https://jsonx-renderer-app.netlify.app/healthz",
+      "status": 200,
+      "body": {
+        "ok": true
+      }
+    },
+    {
+      "id": "cors-preflight",
+      "transport": "https",
+      "method": "OPTIONS",
+      "url": "https://jsonx-renderer-app.netlify.app/mcp",
+      "status": 204,
+      "corsOrigin": "*",
+      "allowMethods": "POST, GET, DELETE, OPTIONS",
+      "allowHeaders": "content-type, mcp-session-id, mcp-protocol-version, last-event-id"
+    },
+    {
+      "id": "initialize",
+      "transport": "mcp-json-rpc",
+      "method": "initialize",
+      "status": 200,
+      "contentType": "application/json",
+      "corsOrigin": "*",
+      "result": {
+        "protocolVersion": "2025-11-25",
+        "serverInfo": {
+          "name": "jsonx-renderer-app",
+          "version": "0.1.0"
+        },
+        "capabilities": [
+          "resources",
+          "tools"
+        ],
+        "instructionsPresent": true
+      }
+    },
+    {
+      "id": "tools-list",
+      "transport": "mcp-json-rpc",
+      "method": "tools/list",
+      "status": 200,
+      "contentType": "application/json",
+      "corsOrigin": "*",
+      "result": {
+        "toolNames": [
+          "render_jsonx_response"
+        ],
+        "renderTool": {
+          "title": "Render JSONX response",
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "outputSchemaPresent": true,
+          "rendererResourceUri": "ui://jsonx/renderer-v1.html"
+        }
+      }
+    },
+    {
+      "id": "renderer-resource",
+      "transport": "mcp-json-rpc",
+      "method": "resources/read",
+      "status": 200,
+      "contentType": "application/json",
+      "corsOrigin": "*",
+      "result": {
+        "uri": "ui://jsonx/renderer-v1.html",
+        "mimeType": "text/html;profile=mcp-app",
+        "textBytes": 19293,
+        "hasJsonxRoot": true,
+        "hasRendererConfig": true
+      }
+    },
+    {
+      "id": "valid-render",
+      "transport": "mcp-json-rpc",
+      "method": "tools/call",
+      "status": 200,
+      "contentType": "application/json",
+      "corsOrigin": "*",
+      "toolName": "render_jsonx_response",
+      "input": {
+        "purpose": "Render a support triage screen for a refund request.",
+        "motionProfile": "none",
+        "payloadComponent": "DemoShell",
+        "childComponents": [
+          "MetricRow",
+          "DataTable",
+          "ActionPanel"
+        ],
+        "payloadBytes": 829
+      },
+      "result": {
+        "isError": false,
+        "contentText": "Rendered JSONX UI.",
+        "structuredContent": {
+          "schema": "jsonx.generative-ui.v1",
+          "purpose": "Render a support triage screen for a refund request.",
+          "motionProfile": "none",
+          "payloadComponent": "DemoShell",
+          "childComponents": [
+            "MetricRow",
+            "DataTable",
+            "ActionPanel"
+          ]
+        }
+      }
+    },
+    {
+      "id": "invalid-render",
+      "transport": "mcp-json-rpc",
+      "method": "tools/call",
+      "status": 200,
+      "contentType": "application/json",
+      "corsOrigin": "*",
+      "toolName": "render_jsonx_response",
+      "input": {
+        "purpose": "Verify unknown components fail closed.",
+        "motionProfile": "none",
+        "payloadComponent": "DemoShell",
+        "childComponents": [
+          "ArbitraryChart"
+        ],
+        "payloadBytes": 240
+      },
+      "result": {
+        "isError": true,
+        "contentText": "Invalid JSONX UI payload: payload.children[0].component must be an allowed component"
+      }
+    }
+  ]
+}
