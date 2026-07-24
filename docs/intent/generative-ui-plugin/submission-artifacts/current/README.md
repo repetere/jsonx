@@ -1,12 +1,12 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T08:12:10.723Z
+Generated: 2026-07-24T08:20:11.869Z
 
 ## Packages
 
 | Surface | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| Codex plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `ad5a4e457e51599cf572e4ccc5fa3893a5bbffe9c6b410fbffefc22115ad9a4c` | 17023 |
+| Codex plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `c600cf607ed92791704f5633a427f93799a4c9dc82db9f222ba313117940d139` | 17023 |
 | Claude Code plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` | `2f4065360a5bb2db4699849eac8e2c623e1e69940b15a78fde0c6c9268b9b2c3` | 6220 |
 | ChatGPT app submission | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json` | `a2668c8bc97c732a3a1ba1f62b9f132153ad6b586b3aff9356759a9009b9007b` | 4757 |
 | Codex local marketplace | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/codex-local-marketplace.json` | `78ae20574fd7527ac1c45fda214430c28ad67193cec5ed1babfe021787b559be` | 407 |
@@ -45,6 +45,10 @@ Generated: 2026-07-24T08:12:10.723Z
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json` records Claude Code plugin validation with 2 checks.
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/opencode-skill-evidence.json` records OpenCode project skill discovery with 3 checks.
 
+## Submission Audit
+
+- `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` maps 14 requirements to evidence, with 10 proved and 4 external-gated.
+
 ## Validation
 
 - node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs
@@ -60,6 +64,7 @@ Generated: 2026-07-24T08:12:10.723Z
 - Claude Code plugin validation evidence
 - OpenCode project skill discovery evidence
 - live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp
+- submission readiness audit
 
 ## Submission Notes
 

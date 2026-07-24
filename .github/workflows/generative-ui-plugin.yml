@@ -109,6 +109,7 @@ jobs:
             "opencode-skill-evidence",
             "motion-profile-evidence",
             "browser-demo-evidence",
+            "submission-audit",
             "openai-plugin-submission",
             "claude-code-community-submission",
           ];

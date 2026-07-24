@@ -1,0 +1,256 @@
+{
+  "generatedAt": "2026-07-24T08:20:11.879Z",
+  "source": "JSONX generative UI submission artifact manifest",
+  "gitCommit": "5ad6b628d165a26f823de8aa45fbc8edf233918d",
+  "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; Codex and Claude plugin packages; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
+  "summary": {
+    "proved": 10,
+    "external-gated": 4
+  },
+  "requirements": [
+    {
+      "id": "REQ-SKILLS-SPLIT",
+      "requirement": "Provide separate core JSONX and generative UI skills for Codex, Claude Code, and OpenCode with install paths documented.",
+      "status": "proved",
+      "githubIssue": "#1113",
+      "evidence": [
+        "skills/codex/jsonx/SKILL.md",
+        "skills/codex/jsonx-generative-ui/SKILL.md",
+        "skills/claude/jsonx/SKILL.md",
+        "skills/claude/jsonx-generative-ui/SKILL.md",
+        "skills/opencode/jsonx/SKILL.md",
+        "skills/opencode/jsonx-generative-ui/SKILL.md",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/opencode-skill-evidence.json",
+        "https://jsonx.net/skills/README.md"
+      ],
+      "checks": {
+        "skillInstallerOk": true,
+        "openCodeProjectDiscoveryOk": true
+      }
+    },
+    {
+      "id": "REQ-CODEX-PLUGIN",
+      "requirement": "Package the JSONX workflow as a Codex plugin with core and generative UI skills, fixtures, validator, and development marketplace entry.",
+      "status": "proved",
+      "githubIssue": "#1112",
+      "evidence": [
+        "plugins/jsonx-generative-ui-plugin/",
+        ".agents/plugins/marketplace.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/codex-local-marketplace.json"
+      ],
+      "checks": {
+        "pluginPackagePresent": true,
+        "marketplacePackagePresent": true,
+        "isolatedInstallOk": true
+      }
+    },
+    {
+      "id": "REQ-CLAUDE-PLUGIN",
+      "requirement": "Package the JSONX workflow as a Claude Code plugin with separate core and generative UI skills.",
+      "status": "proved",
+      "githubIssue": "#1113",
+      "evidence": [
+        "plugins/claude-jsonx-plugin/",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip"
+      ],
+      "checks": {
+        "claudePackagePresent": true,
+        "claudeManifestValidationOk": true
+      }
+    },
+    {
+      "id": "REQ-HOSTED-RENDERER",
+      "requirement": "Provide a hosted stateless Apps SDK renderer with MCP tool metadata, structuredContent output, and widget resource wiring.",
+      "status": "proved",
+      "githubIssue": "#1111",
+      "evidence": [
+        "apps/jsonx-renderer-app/",
+        "https://jsonx-renderer-app.netlify.app/mcp",
+        "https://jsonx-renderer-app.netlify.app/widget",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json"
+      ],
+      "checks": {
+        "hostedMcpOk": true,
+        "chatgptSubmissionPackagePresent": true
+      }
+    },
+    {
+      "id": "REQ-GENERATIVE-UI-CONTRACT",
+      "requirement": "Use one jsonx.generative-ui.v1 contract and allowlist across fixtures, app, plugin, browser demo, and local handoff.",
+      "status": "proved",
+      "githubIssue": "#1110",
+      "evidence": [
+        "apps/jsonx-renderer-app/src/jsonx-validator.mjs",
+        "plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py",
+        "plugins/jsonx-generative-ui-plugin/fixtures/",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/browser-demo-evidence.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json"
+      ],
+      "checks": {
+        "goldenPromptCases": 9,
+        "hostedMcpOk": true,
+        "browserDemoOk": true
+      }
+    },
+    {
+      "id": "REQ-MOTION",
+      "requirement": "Make GSAP-style animation optional and renderer-owned, with reduced-motion behavior and no model-supplied animation code.",
+      "status": "proved",
+      "githubIssue": "#1114",
+      "evidence": [
+        "apps/jsonx-renderer-app/web/widget.js",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
+        "screenshots/jsonx-renderer-widget-motion-desktop.png"
+      ],
+      "checks": {
+        "motionOk": true,
+        "motionCaseCount": 9
+      }
+    },
+    {
+      "id": "REQ-BROWSER-DEMO",
+      "requirement": "Publish a browser demo with fixture, paste, and bring-your-own endpoint modes that render the shared JSONX contract.",
+      "status": "proved",
+      "githubIssue": "#1117",
+      "evidence": [
+        "site/generative-ui.html",
+        "site/assets/generative-ui-demo.js",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/browser-demo-evidence.json",
+        "https://jsonx.net/generative-ui.html"
+      ],
+      "checks": {
+        "browserDemoOk": true,
+        "browserDemoCaseCount": 3
+      }
+    },
+    {
+      "id": "REQ-GITHUB-PAGES",
+      "requirement": "Update the JSONX GitHub Pages site with skills, plugin, renderer, safety, and demo documentation.",
+      "status": "proved",
+      "githubIssue": "#1116",
+      "evidence": [
+        "site/generative-ui.html",
+        "docs/generative-ui.html",
+        "docs/skills/README.md",
+        "https://jsonx.net/generative-ui.html",
+        "https://jsonx.net/skills/README.md",
+        "screenshots/jsonx-generative-ui-page-desktop.png",
+        "screenshots/jsonx-skills-install-readme.png"
+      ],
+      "checks": {
+        "publicSiteScreenshotPresent": true,
+        "skillsReadmeScreenshotPresent": true,
+        "browserDemoOk": true
+      }
+    },
+    {
+      "id": "REQ-STORE-DRAFTS",
+      "requirement": "Prepare development submission material for OpenAI/Codex and Claude Code app or plugin store review.",
+      "status": "proved",
+      "githubIssue": "#1115",
+      "evidence": [
+        "apps/jsonx-renderer-app/chatgpt-app-submission.json",
+        "docs/intent/generative-ui-plugin/store-listings/openai-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/store-listings/claude-code-community-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json"
+      ],
+      "checks": {
+        "openAiDraftPresent": true,
+        "claudeDraftPresent": true
+      }
+    },
+    {
+      "id": "REQ-NPM-BOUNDARY",
+      "requirement": "Keep app, plugin, skill, submission, and GSAP assets out of the root jsonx npm package.",
+      "status": "proved",
+      "githubIssue": "#1115",
+      "evidence": [
+        "npm pack --dry-run --json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/manifest.json"
+      ],
+      "checks": {
+        "packageBoundaryOk": true,
+        "fileCount": 234,
+        "excludedPrefixes": [
+          "apps/",
+          "plugins/",
+          "skills/",
+          ".agents/",
+          ".claude/",
+          ".opencode/",
+          "docs/intent/",
+          "docs/skills/",
+          "vscode-extension/",
+          ".github/"
+        ],
+        "excludedTerms": [
+          "chatgpt-app-submission",
+          "marketplace.json",
+          "netlify/",
+          "gsap",
+          "golden-prompts",
+          "hosted-mcp-transcript",
+          "skill-installer-evidence",
+          "codex-install-evidence",
+          "claude-validation-evidence",
+          "opencode-skill-evidence",
+          "motion-profile-evidence",
+          "browser-demo-evidence",
+          "submission-audit",
+          "openai-plugin-submission",
+          "claude-code-community-submission"
+        ]
+      }
+    },
+    {
+      "id": "GATE-APP-ID",
+      "requirement": "Add approved app/plugin IDs to Codex app metadata after OpenAI submission creates them.",
+      "status": "external-gated",
+      "githubIssue": "#1115",
+      "evidence": [
+        "plugins/jsonx-generative-ui-plugin/.app.json",
+        "docs/intent/generative-ui-plugin/submission-readiness.md"
+      ],
+      "remaining": "Requires approved Apps SDK app/plugin ID from the OpenAI submission flow."
+    },
+    {
+      "id": "GATE-CHATGPT-TRANSCRIPT",
+      "requirement": "Capture live ChatGPT developer-mode transcripts after connecting the hosted MCP app.",
+      "status": "external-gated",
+      "githubIssue": "#1115",
+      "evidence": [
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json"
+      ],
+      "remaining": "Requires a connected ChatGPT developer-mode app session. Current evidence is live MCP plus deterministic tool-call evidence."
+    },
+    {
+      "id": "GATE-CLAUDE-SMOKE",
+      "requirement": "Run authenticated Claude Code smoke prompts for the Claude Code plugin.",
+      "status": "external-gated",
+      "githubIssue": "#1113",
+      "evidence": [
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json"
+      ],
+      "remaining": "Requires an authenticated interactive Claude Code environment. Current evidence proves package validation only."
+    },
+    {
+      "id": "GATE-MARKETPLACE-SUBMISSION",
+      "requirement": "Submit the OpenAI/Codex and Claude Code app or plugin packages to their public review channels.",
+      "status": "external-gated",
+      "githubIssue": "#1115",
+      "evidence": [
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json"
+      ],
+      "remaining": "Requires portal access and final human/legal review before sending public submissions."
+    }
+  ]
+}

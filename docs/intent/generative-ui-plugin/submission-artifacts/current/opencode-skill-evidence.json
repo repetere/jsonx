@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T08:12:06.957Z",
+  "generatedAt": "2026-07-24T08:20:08.573Z",
   "source": "opencode debug skill",
   "note": "This evidence installs the OpenCode JSONX skills into a temporary project and verifies OpenCode can discover both project skills.",
   "skipped": false,

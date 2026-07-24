@@ -360,6 +360,11 @@ function resultSummary(result) {
   };
 }
 
+function allChecksTrue(checks = {}) {
+  const booleanEntries = Object.entries(checks).filter(([, value]) => typeof value === "boolean");
+  return booleanEntries.length > 0 && booleanEntries.every(([, value]) => value === true);
+}
+
 function assertEvidence(condition, message) {
   if (!condition) throw new Error(`Submission evidence failed: ${message}`);
 }
@@ -1817,6 +1822,7 @@ async function buildNpmBoundaryEvidence() {
     "opencode-skill-evidence",
     "motion-profile-evidence",
     "browser-demo-evidence",
+    "submission-audit",
     "openai-plugin-submission",
     "claude-code-community-submission",
   ];
@@ -1833,6 +1839,257 @@ async function buildNpmBoundaryEvidence() {
     packageBytes: data[0].size,
     excludedPrefixes: blockedPrefixes,
     excludedTerms: blockedTerms,
+  };
+}
+
+function packagePresent(manifest, surface) {
+  return manifest.packages.some((item) => item.surface === surface && item.bytes > 0 && item.sha256);
+}
+
+function storeListingPresent(manifest, surface) {
+  return manifest.storeListings.some((item) => item.surface === surface && item.positiveTestCaseCount > 0 && item.negativeTestCaseCount > 0);
+}
+
+function screenshotPresent(manifest, purpose) {
+  return manifest.screenshots.some((item) => item.purpose === purpose && item.bytes > 0 && item.sha256);
+}
+
+function buildSubmissionAudit(manifest) {
+  const gitCommit = run("git commit for submission audit", "git", ["rev-parse", "HEAD"], { capture: true });
+  const browserDemoOk = manifest.browserDemoEvidence && !manifest.browserDemoEvidence.skipped && allChecksTrue(manifest.browserDemoEvidence.checks);
+  const motionOk = manifest.motionProfileEvidence && !manifest.motionProfileEvidence.skipped && allChecksTrue(manifest.motionProfileEvidence.checks);
+  const hostedMcpOk = manifest.hostedMcpEvidence && allChecksTrue(manifest.hostedMcpEvidence.checks);
+  const skillInstallerOk = manifest.skillInstallerEvidence && allChecksTrue(manifest.skillInstallerEvidence.checks);
+  const codexInstallOk = manifest.codexInstallEvidence && !manifest.codexInstallEvidence.skipped && allChecksTrue(manifest.codexInstallEvidence.checks);
+  const claudeValidationOk =
+    manifest.claudeValidationEvidence && !manifest.claudeValidationEvidence.skipped && allChecksTrue(manifest.claudeValidationEvidence.checks);
+  const openCodeOk = manifest.openCodeSkillEvidence && !manifest.openCodeSkillEvidence.skipped && allChecksTrue(manifest.openCodeSkillEvidence.checks);
+  const packageBoundaryOk =
+    manifest.npmBoundary?.packageName === "jsonx" &&
+    manifest.npmBoundary.fileCount === 234 &&
+    manifest.npmBoundary.excludedPrefixes?.includes("apps/") &&
+    manifest.npmBoundary.excludedPrefixes?.includes("plugins/") &&
+    manifest.npmBoundary.excludedPrefixes?.includes("skills/") &&
+    manifest.npmBoundary.excludedTerms?.includes("gsap");
+
+  const requirements = [
+    {
+      id: "REQ-SKILLS-SPLIT",
+      requirement: "Provide separate core JSONX and generative UI skills for Codex, Claude Code, and OpenCode with install paths documented.",
+      status: skillInstallerOk && openCodeOk ? "proved" : "incomplete",
+      githubIssue: "#1113",
+      evidence: [
+        "skills/codex/jsonx/SKILL.md",
+        "skills/codex/jsonx-generative-ui/SKILL.md",
+        "skills/claude/jsonx/SKILL.md",
+        "skills/claude/jsonx-generative-ui/SKILL.md",
+        "skills/opencode/jsonx/SKILL.md",
+        "skills/opencode/jsonx-generative-ui/SKILL.md",
+        manifest.skillInstallerEvidence?.path,
+        manifest.openCodeSkillEvidence?.path,
+        manifest.publicSkillsUrl,
+      ].filter(Boolean),
+      checks: {
+        skillInstallerOk,
+        openCodeProjectDiscoveryOk: openCodeOk,
+      },
+    },
+    {
+      id: "REQ-CODEX-PLUGIN",
+      requirement: "Package the JSONX workflow as a Codex plugin with core and generative UI skills, fixtures, validator, and development marketplace entry.",
+      status: packagePresent(manifest, "Codex plugin") && packagePresent(manifest, "Codex local marketplace") && codexInstallOk ? "proved" : "incomplete",
+      githubIssue: "#1112",
+      evidence: [
+        "plugins/jsonx-generative-ui-plugin/",
+        ".agents/plugins/marketplace.json",
+        manifest.codexInstallEvidence?.path,
+        manifest.packages.find((item) => item.surface === "Codex plugin")?.path,
+        manifest.packages.find((item) => item.surface === "Codex local marketplace")?.path,
+      ].filter(Boolean),
+      checks: {
+        pluginPackagePresent: packagePresent(manifest, "Codex plugin"),
+        marketplacePackagePresent: packagePresent(manifest, "Codex local marketplace"),
+        isolatedInstallOk: codexInstallOk,
+      },
+    },
+    {
+      id: "REQ-CLAUDE-PLUGIN",
+      requirement: "Package the JSONX workflow as a Claude Code plugin with separate core and generative UI skills.",
+      status: packagePresent(manifest, "Claude Code plugin") && claudeValidationOk ? "proved" : "incomplete",
+      githubIssue: "#1113",
+      evidence: [
+        "plugins/claude-jsonx-plugin/",
+        manifest.claudeValidationEvidence?.path,
+        manifest.packages.find((item) => item.surface === "Claude Code plugin")?.path,
+      ].filter(Boolean),
+      checks: {
+        claudePackagePresent: packagePresent(manifest, "Claude Code plugin"),
+        claudeManifestValidationOk: claudeValidationOk,
+      },
+    },
+    {
+      id: "REQ-HOSTED-RENDERER",
+      requirement: "Provide a hosted stateless Apps SDK renderer with MCP tool metadata, structuredContent output, and widget resource wiring.",
+      status: hostedMcpOk ? "proved" : "incomplete",
+      githubIssue: "#1111",
+      evidence: [
+        "apps/jsonx-renderer-app/",
+        manifest.hostedMcpUrl,
+        manifest.hostedWidgetUrl,
+        manifest.hostedMcpEvidence?.path,
+        manifest.packages.find((item) => item.surface === "ChatGPT app submission")?.path,
+      ].filter(Boolean),
+      checks: {
+        hostedMcpOk,
+        chatgptSubmissionPackagePresent: packagePresent(manifest, "ChatGPT app submission"),
+      },
+    },
+    {
+      id: "REQ-GENERATIVE-UI-CONTRACT",
+      requirement: "Use one jsonx.generative-ui.v1 contract and allowlist across fixtures, app, plugin, browser demo, and local handoff.",
+      status: manifest.goldenPromptEvidence?.caseCount >= 9 && hostedMcpOk && browserDemoOk ? "proved" : "incomplete",
+      githubIssue: "#1110",
+      evidence: [
+        "apps/jsonx-renderer-app/src/jsonx-validator.mjs",
+        "plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py",
+        "plugins/jsonx-generative-ui-plugin/fixtures/",
+        manifest.goldenPromptEvidence?.path,
+        manifest.browserDemoEvidence?.path,
+        manifest.hostedMcpEvidence?.path,
+      ].filter(Boolean),
+      checks: {
+        goldenPromptCases: manifest.goldenPromptEvidence?.caseCount,
+        hostedMcpOk,
+        browserDemoOk,
+      },
+    },
+    {
+      id: "REQ-MOTION",
+      requirement: "Make GSAP-style animation optional and renderer-owned, with reduced-motion behavior and no model-supplied animation code.",
+      status: motionOk ? "proved" : "incomplete",
+      githubIssue: "#1114",
+      evidence: ["apps/jsonx-renderer-app/web/widget.js", manifest.motionProfileEvidence?.path, screenshotPresent(manifest, "renderer widget motion desktop") && "screenshots/jsonx-renderer-widget-motion-desktop.png"].filter(Boolean),
+      checks: {
+        motionOk,
+        motionCaseCount: manifest.motionProfileEvidence?.caseCount,
+      },
+    },
+    {
+      id: "REQ-BROWSER-DEMO",
+      requirement: "Publish a browser demo with fixture, paste, and bring-your-own endpoint modes that render the shared JSONX contract.",
+      status: browserDemoOk ? "proved" : "incomplete",
+      githubIssue: "#1117",
+      evidence: ["site/generative-ui.html", "site/assets/generative-ui-demo.js", manifest.browserDemoEvidence?.path, manifest.publicSiteUrl].filter(Boolean),
+      checks: {
+        browserDemoOk,
+        browserDemoCaseCount: manifest.browserDemoEvidence?.caseCount,
+      },
+    },
+    {
+      id: "REQ-GITHUB-PAGES",
+      requirement: "Update the JSONX GitHub Pages site with skills, plugin, renderer, safety, and demo documentation.",
+      status:
+        screenshotPresent(manifest, "generative ui page desktop") &&
+        screenshotPresent(manifest, "skills install readme") &&
+        browserDemoOk
+          ? "proved"
+          : "incomplete",
+      githubIssue: "#1116",
+      evidence: [
+        "site/generative-ui.html",
+        "docs/generative-ui.html",
+        "docs/skills/README.md",
+        manifest.publicSiteUrl,
+        manifest.publicSkillsUrl,
+        screenshotPresent(manifest, "generative ui page desktop") && "screenshots/jsonx-generative-ui-page-desktop.png",
+        screenshotPresent(manifest, "skills install readme") && "screenshots/jsonx-skills-install-readme.png",
+      ].filter(Boolean),
+      checks: {
+        publicSiteScreenshotPresent: screenshotPresent(manifest, "generative ui page desktop"),
+        skillsReadmeScreenshotPresent: screenshotPresent(manifest, "skills install readme"),
+        browserDemoOk,
+      },
+    },
+    {
+      id: "REQ-STORE-DRAFTS",
+      requirement: "Prepare development submission material for OpenAI/Codex and Claude Code app or plugin store review.",
+      status: storeListingPresent(manifest, "OpenAI plugin portal draft") && storeListingPresent(manifest, "Claude Code community submission draft") ? "proved" : "incomplete",
+      githubIssue: "#1115",
+      evidence: [
+        "apps/jsonx-renderer-app/chatgpt-app-submission.json",
+        "docs/intent/generative-ui-plugin/store-listings/openai-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/store-listings/claude-code-community-submission.json",
+        manifest.storeListings.find((item) => item.surface === "OpenAI plugin portal draft")?.path,
+        manifest.storeListings.find((item) => item.surface === "Claude Code community submission draft")?.path,
+      ].filter(Boolean),
+      checks: {
+        openAiDraftPresent: storeListingPresent(manifest, "OpenAI plugin portal draft"),
+        claudeDraftPresent: storeListingPresent(manifest, "Claude Code community submission draft"),
+      },
+    },
+    {
+      id: "REQ-NPM-BOUNDARY",
+      requirement: "Keep app, plugin, skill, submission, and GSAP assets out of the root jsonx npm package.",
+      status: packageBoundaryOk ? "proved" : "incomplete",
+      githubIssue: "#1115",
+      evidence: [manifest.npmBoundary && "npm pack --dry-run --json", "docs/intent/generative-ui-plugin/submission-artifacts/current/manifest.json"].filter(Boolean),
+      checks: {
+        packageBoundaryOk,
+        fileCount: manifest.npmBoundary?.fileCount,
+        excludedPrefixes: manifest.npmBoundary?.excludedPrefixes,
+        excludedTerms: manifest.npmBoundary?.excludedTerms,
+      },
+    },
+    {
+      id: "GATE-APP-ID",
+      requirement: "Add approved app/plugin IDs to Codex app metadata after OpenAI submission creates them.",
+      status: "external-gated",
+      githubIssue: "#1115",
+      evidence: ["plugins/jsonx-generative-ui-plugin/.app.json", "docs/intent/generative-ui-plugin/submission-readiness.md"],
+      remaining: "Requires approved Apps SDK app/plugin ID from the OpenAI submission flow.",
+    },
+    {
+      id: "GATE-CHATGPT-TRANSCRIPT",
+      requirement: "Capture live ChatGPT developer-mode transcripts after connecting the hosted MCP app.",
+      status: "external-gated",
+      githubIssue: "#1115",
+      evidence: [manifest.hostedMcpEvidence?.path, manifest.goldenPromptEvidence?.path].filter(Boolean),
+      remaining: "Requires a connected ChatGPT developer-mode app session. Current evidence is live MCP plus deterministic tool-call evidence.",
+    },
+    {
+      id: "GATE-CLAUDE-SMOKE",
+      requirement: "Run authenticated Claude Code smoke prompts for the Claude Code plugin.",
+      status: "external-gated",
+      githubIssue: "#1113",
+      evidence: [manifest.claudeValidationEvidence?.path].filter(Boolean),
+      remaining: "Requires an authenticated interactive Claude Code environment. Current evidence proves package validation only.",
+    },
+    {
+      id: "GATE-MARKETPLACE-SUBMISSION",
+      requirement: "Submit the OpenAI/Codex and Claude Code app or plugin packages to their public review channels.",
+      status: "external-gated",
+      githubIssue: "#1115",
+      evidence: manifest.storeListings.map((item) => item.path),
+      remaining: "Requires portal access and final human/legal review before sending public submissions.",
+    },
+  ];
+
+  const summary = requirements.reduce(
+    (result, requirement) => {
+      result[requirement.status] = (result[requirement.status] || 0) + 1;
+      return result;
+    },
+    {},
+  );
+
+  return {
+    generatedAt: new Date().toISOString(),
+    source: "JSONX generative UI submission artifact manifest",
+    gitCommit,
+    objective:
+      "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; Codex and Claude plugin packages; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
+    summary,
+    requirements,
   };
 }
 
@@ -1905,6 +2162,12 @@ async function writeReviewSummary(manifest) {
       : manifest.openCodeSkillEvidence
         ? `- \`${manifest.openCodeSkillEvidence.path}\` records why OpenCode skill evidence was skipped.`
         : "- OpenCode skill evidence was not generated.",
+    "",
+    "## Submission Audit",
+    "",
+    manifest.submissionAudit
+      ? `- \`${manifest.submissionAudit.path}\` maps ${manifest.submissionAudit.requirementCount} requirements to evidence, with ${manifest.submissionAudit.provedCount} proved and ${manifest.submissionAudit.externalGatedCount} external-gated.`
+      : "- Submission audit was not generated.",
     "",
     "## Validation",
     "",
@@ -2103,6 +2366,19 @@ async function main() {
       ...(hostedMcpArtifact ? [`live hosted MCP transcript capture from ${hostedMcpUrl}`] : []),
     ],
   };
+
+  const submissionAuditPath = path.join(artifactRoot, "submission-audit.json");
+  const submissionAudit = buildSubmissionAudit(manifest);
+  await writeJson(submissionAuditPath, submissionAudit);
+  const submissionAuditArtifact = await hashFile(submissionAuditPath);
+  manifest.submissionAudit = {
+    ...submissionAuditArtifact,
+    requirementCount: submissionAudit.requirements.length,
+    provedCount: submissionAudit.summary.proved || 0,
+    externalGatedCount: submissionAudit.summary["external-gated"] || 0,
+    incompleteCount: submissionAudit.summary.incomplete || 0,
+  };
+  manifest.validation.push("submission readiness audit");
 
   await writeJson(path.join(artifactRoot, "manifest.json"), manifest);
   await writeReviewSummary(manifest);

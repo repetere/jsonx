@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T08:12:10.723Z",
+  "generatedAt": "2026-07-24T08:20:11.869Z",
   "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
   "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
@@ -9,7 +9,7 @@
       "surface": "Codex plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
       "bytes": 17023,
-      "sha256": "ad5a4e457e51599cf572e4ccc5fa3893a5bbffe9c6b410fbffefc22115ad9a4c"
+      "sha256": "c600cf607ed92791704f5633a427f93799a4c9dc82db9f222ba313117940d139"
     },
     {
       "surface": "Claude Code plugin",
@@ -89,13 +89,13 @@
   "goldenPromptEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "bytes": 7080,
-    "sha256": "2fa39e248fda3e31550e3e9c1638144bc9c7779b757baea7a2c92e2ac8277eeb",
+    "sha256": "58777b6da20c330a752e77e4e0f9c87298b80c9896c440fb03b07af167d85c2c",
     "caseCount": 9
   },
   "motionProfileEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
     "bytes": 4282,
-    "sha256": "a205d6d3d5c25fcdf4acb067856349289c9a2474db0020845ca3271657692dd0",
+    "sha256": "f46f281fa2149c3bc8bcff43819479b993ccb4f492c313bef0cf2bc9eb189aa8",
     "skipped": false,
     "caseCount": 9,
     "profiles": [
@@ -115,7 +115,7 @@
   "browserDemoEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/browser-demo-evidence.json",
     "bytes": 3546,
-    "sha256": "07060106b707a27fa45ee1d4e3a66e03c6cd14b085e66573ab67805f28e3a2ac",
+    "sha256": "51eca2d0741861f61baf8364b46103f02666b916856b14619af2915e3f199487",
     "skipped": false,
     "caseCount": 3,
     "checks": {
@@ -132,7 +132,7 @@
   "hostedMcpEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
     "bytes": 4238,
-    "sha256": "679094b173d88d044d6803bdd8dbb6f0c4d867d3d213aa49d16e73c240b81b18",
+    "sha256": "4245514e650a2aadb06ddcd7b5d3105af42c2604b2e4c738d66b98c6ff79e4a7",
     "stepCount": 7,
     "checks": {
       "healthOk": true,
@@ -146,7 +146,7 @@
   "skillInstallerEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
     "bytes": 5009,
-    "sha256": "1a4f362a5ef3f58369c55f7a55c4bb3611dbed9c3bdfd0e1175acee61735eee8",
+    "sha256": "98678644c219146ef3c471512a6b086ca62292c20fa5d232a78983d851d8c57b",
     "dryRunMatrixCount": 9,
     "installSurfaceCount": 3,
     "checks": {
@@ -159,7 +159,7 @@
   "codexInstallEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
     "bytes": 4350,
-    "sha256": "f1d536feea346dbafb8876d09b6e6d9667223544db835e689603e54c0bde7055",
+    "sha256": "5bb13321bf570a9b1a22c9ff6719a308769035670f34f10e5177406004142bec",
     "skipped": false,
     "stepCount": 7,
     "checks": {
@@ -173,7 +173,7 @@
   "claudeValidationEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
     "bytes": 1076,
-    "sha256": "af8332104cce0a530d28e2cd244b10b42925401c12150250b2d396aa2d1d22f9",
+    "sha256": "cb2438dd8cef23b0b62a0b5e350798eb4072a8d10fe97270b42781c7a5a9f676",
     "skipped": false,
     "stepCount": 2,
     "checks": {
@@ -186,7 +186,7 @@
   "openCodeSkillEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/opencode-skill-evidence.json",
     "bytes": 2597,
-    "sha256": "8a4710cde01a9acd3095333ae61ba85a7df6c8f75eba679f6d340cedd104c82e",
+    "sha256": "6f535cb1f746874e1de6e23419809ddf2c2621a3a40014fbecd2a1686ceca77d",
     "skipped": false,
     "stepCount": 3,
     "checks": {
@@ -228,6 +228,7 @@
       "opencode-skill-evidence",
       "motion-profile-evidence",
       "browser-demo-evidence",
+      "submission-audit",
       "openai-plugin-submission",
       "claude-code-community-submission"
     ]
@@ -245,6 +246,16 @@
     "isolated Codex marketplace install evidence",
     "Claude Code plugin validation evidence",
     "OpenCode project skill discovery evidence",
-    "live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp"
-  ]
+    "live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp",
+    "submission readiness audit"
+  ],
+  "submissionAudit": {
+    "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
+    "bytes": 10653,
+    "sha256": "a546eee28ad382be6d0c6b0d66c3a625d18362568d8797471e98406233a82f1c",
+    "requirementCount": 14,
+    "provedCount": 10,
+    "externalGatedCount": 4,
+    "incompleteCount": 0
+  }
 }
