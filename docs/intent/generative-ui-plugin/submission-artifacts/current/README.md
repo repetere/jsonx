@@ -1,13 +1,13 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T11:23:37.125Z
+Generated: 2026-07-24T11:35:08.756Z
 
 ## Packages
 
 | Surface | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
 | Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip` | `04d726839b08516e040836b16942779a7067e8c788adb430ba3b25316fe25f54` | 2807 |
-| Codex generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `2a8ed8b5367614a63d641a1d61434c96e2e9bad623d64ba2016e348cf0ebbaf7` | 16836 |
+| Codex generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `8d024f2a9a7c004df7b1aba0977d85d8e13e715cd676f7a64b46b9956b0f95cd` | 17460 |
 | Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` | `a9f40a154c5cb7ecb7efc62aaf21333380ce6e2ac0e674d8daecd3afdee61ff6` | 2634 |
 | Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip` | `f8c6bdb4bf642496d19385f9baa295bc7d289ffe70e37512816b3f7ac2c7fc99` | 5049 |
 | ChatGPT app submission | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json` | `a2668c8bc97c732a3a1ba1f62b9f132153ad6b586b3aff9356759a9009b9007b` | 4757 |
@@ -26,10 +26,10 @@ Generated: 2026-07-24T11:23:37.125Z
 
 | Submission | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `1f981b20586a139f402b9523824d71703c0a2c3fd3092f7360216ad89deff30c` | 7089 |
-| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `10787a792b681adbe637753f31ca4c444a24ddf8f113f663c2d063ffe4078a32` | 9642 |
-| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `b0167b4992328874d8fb202b5a0d5c44dd0e894704b6accbc08121f5609e0403` | 6568 |
-| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `d0fc808bb4da16162ed6a4c916d8bc9d014a9545006f955c38de31d3ce58e406` | 7881 |
+| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `b8cb4218a340961298e8e309a615f352bf6185bdef3771d6e29e0a71f2e3c105` | 7089 |
+| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `ce961b9039c87ea21d290e37a8b2c0866d282ac183ddbd7510bdfa66a8536f3a` | 9642 |
+| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `133ed52fb7515111d131173fa419bb1f7a6dcbc4c9f78c5392cfdeda57a4fef7` | 6568 |
+| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `1928609cb3b241f6007a86564af1651f4ce088ab4fac9324dd190f9dba743708` | 7881 |
 
 ## Submission Queue
 
@@ -40,7 +40,7 @@ Generated: 2026-07-24T11:23:37.125Z
 
 | Purpose | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `92e5432370a2b7224786456eee3df44218372b67f1771e244afda0c8e8713474` | 209638 |
+| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `e2e686b78c3764ce261b3c7125969056c4a90b245a9838a57e994b4aa1183a1d` | 209782 |
 | skills install readme | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-skills-install-readme.png` | `f28c2fb3fb165888fa904aa05ee4cdb321d95dc20089051c0a0a5141c2428492` | 124959 |
 | renderer widget support triage desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png` | `2c89e93024a1152b7697ea61e00ec7c9f55ba6ad3a0ef888840db48dc042ed51` | 52417 |
 | renderer widget motion desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png` | `b100dfbd51d5e76b8fb9549a6779110ecbff17c705a91f3e65db80d1880c0b29` | 26345 |
