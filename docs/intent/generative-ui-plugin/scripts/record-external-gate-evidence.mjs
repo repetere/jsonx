@@ -21,6 +21,9 @@ const chatgptPromptIds = [
   "motion-request",
   "bad-motion-request",
 ];
+const chatgptPromptIdSet = new Set(chatgptPromptIds);
+const promptStatusValues = ["pending", "passed", "failed", "blocked"];
+const promptStatusSet = new Set(promptStatusValues);
 
 const marketplaceTargets = {
   "openai-core": "openaiCore",
@@ -90,9 +93,30 @@ function boolArg(name) {
   return ["1", "true", "yes", "passed", "approved"].includes(String(value).toLowerCase());
 }
 
+function allowedList(values) {
+  return Array.from(values).join(", ");
+}
+
+function validateAllowed(value, allowedValues, label) {
+  if (!allowedValues.has(value)) {
+    throw new Error(`${label} must be one of: ${allowedList(allowedValues)}`);
+  }
+}
+
+function normalizePromptStatus(value, label) {
+  const status = String(value).toLowerCase();
+  validateAllowed(status, promptStatusSet, label);
+  return status;
+}
+
 function parsePromptStatus(value) {
-  const [id, status] = value.split("=");
-  if (!id || !status) throw new Error(`Prompt status must use id=status format: ${value}`);
+  const separatorIndex = value.indexOf("=");
+  if (separatorIndex <= 0 || separatorIndex === value.length - 1) {
+    throw new Error(`Prompt status must use id=status format: ${value}`);
+  }
+  const id = value.slice(0, separatorIndex);
+  const status = normalizePromptStatus(value.slice(separatorIndex + 1), `ChatGPT prompt status for ${id}`);
+  validateAllowed(id, chatgptPromptIdSet, "ChatGPT prompt id");
   return { id, status };
 }
 
@@ -152,7 +176,11 @@ function recordClaudeSmoke(data) {
     setIfPresent(section, "claudeVersion", argValue("--claude-version"));
     setIfPresent(section, "command", argValue("--command"));
     const prompts = Array.isArray(section.promptsRun) ? section.promptsRun : [];
-    const status = argValue("--status") || (hasArg("--passed") ? "passed" : undefined);
+    const status = argValue("--status")
+      ? normalizePromptStatus(argValue("--status"), `Claude smoke status for ${promptId}`)
+      : hasArg("--passed")
+        ? "passed"
+        : undefined;
     if (status) upsertPrompt(prompts, promptId, { status });
     setIfPresent(section, "notes", argValue("--notes"));
     section.promptsRun = prompts;
@@ -189,10 +217,64 @@ function recordMarketplace(data) {
   data.marketplaceSubmissions = marketplace;
 }
 
+function validatePromptList(errors, prompts, label, allowedIds, requiredIds) {
+  if (!Array.isArray(prompts)) {
+    errors.push(`${label} must be an array`);
+    return;
+  }
+
+  const seen = new Set();
+  for (const [index, prompt] of prompts.entries()) {
+    if (!prompt || typeof prompt !== "object") {
+      errors.push(`${label}[${index}] must be an object`);
+      continue;
+    }
+    if (!allowedIds.has(prompt.id)) {
+      errors.push(`${label}[${index}].id must be one of: ${allowedList(allowedIds)}`);
+    } else if (seen.has(prompt.id)) {
+      errors.push(`${label} contains duplicate id ${prompt.id}`);
+    } else {
+      seen.add(prompt.id);
+    }
+    if (!promptStatusSet.has(prompt.status)) {
+      errors.push(`${label}[${index}].status must be one of: ${allowedList(promptStatusSet)}`);
+    }
+  }
+
+  for (const id of requiredIds) {
+    if (!seen.has(id)) errors.push(`${label} must include ${id}`);
+  }
+}
+
 function validateShape(data) {
+  const errors = [];
   const requiredTopLevel = ["schemaVersion", "gates", "appIds", "chatgptDeveloperMode", "claudeSmoke", "marketplaceSubmissions"];
   const missing = requiredTopLevel.filter((key) => data[key] === undefined);
-  if (missing.length) throw new Error(`Evidence is missing required fields: ${missing.join(", ")}`);
+  if (missing.length) errors.push(`missing required fields: ${missing.join(", ")}`);
+
+  const chatgpt = data.chatgptDeveloperMode || {};
+  validatePromptList(
+    errors,
+    chatgpt.promptsRun,
+    "chatgptDeveloperMode.promptsRun",
+    chatgptPromptIdSet,
+    chatgptPromptIds,
+  );
+
+  const claude = data.claudeSmoke || {};
+  for (const [key, promptId] of [
+    ["core", "jsonx-core"],
+    ["generativeUi", "jsonx-generative-ui"],
+  ]) {
+    const section = claude[key];
+    if (!section || typeof section !== "object") {
+      errors.push(`claudeSmoke.${key} is required`);
+      continue;
+    }
+    validatePromptList(errors, section.promptsRun, `claudeSmoke.${key}.promptsRun`, new Set([promptId]), [promptId]);
+  }
+
+  if (errors.length) throw new Error(`Evidence is not valid: ${errors.join("; ")}`);
 }
 
 function printHelp() {

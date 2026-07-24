@@ -32,6 +32,23 @@ function run(label, command, args) {
   return result.stdout.trim();
 }
 
+function runFailure(label, command, args, expectedText) {
+  const result = spawnSync(command, args, {
+    cwd: repoRoot,
+    encoding: "utf8",
+    stdio: "pipe",
+  });
+
+  const output = [result.stdout, result.stderr].filter(Boolean).join("\n").trim();
+  if (result.status === 0) {
+    throw new Error(`${label} should have failed but exited zero${output ? `\n${output}` : ""}`);
+  }
+  if (expectedText && !output.includes(expectedText)) {
+    throw new Error(`${label} failed without expected message "${expectedText}"${output ? `\n${output}` : ""}`);
+  }
+  return output;
+}
+
 async function readJson(filePath) {
   return JSON.parse(await fs.readFile(filePath, "utf8"));
 }
@@ -198,6 +215,57 @@ async function main() {
       run(`record ${label}`, process.execPath, args);
     }
 
+    const negativeCommands = [
+      [
+        "invalid ChatGPT prompt id",
+        [
+          recorderPath,
+          "chatgpt",
+          "--target-file",
+          tempEvidencePath,
+          "--prompt",
+          "typo-request=passed",
+          "--dry-run",
+          "--json",
+        ],
+        "ChatGPT prompt id",
+      ],
+      [
+        "invalid ChatGPT prompt status",
+        [
+          recorderPath,
+          "chatgpt",
+          "--target-file",
+          tempEvidencePath,
+          "--prompt",
+          "motion-request=unknown",
+          "--dry-run",
+          "--json",
+        ],
+        "ChatGPT prompt status",
+      ],
+      [
+        "invalid Claude smoke status",
+        [
+          recorderPath,
+          "claude-smoke",
+          "--target-file",
+          tempEvidencePath,
+          "--plugin",
+          "core",
+          "--status",
+          "unknown",
+          "--dry-run",
+          "--json",
+        ],
+        "Claude smoke status",
+      ],
+    ];
+
+    for (const [label, args, expectedText] of negativeCommands) {
+      runFailure(label, process.execPath, args, expectedText);
+    }
+
     const report = JSON.parse(run("check recorded evidence", process.execPath, [checkerPath, "--source", tempEvidencePath, "--json", "--strict"]));
     assertCheck(report.pending.length === 0, `expected no pending gates, got ${report.pending.map((item) => item.gate).join(", ")}`);
     assertCheck(Object.values(report.gates).every((status) => status === "proved"), "expected all external gates to be proved");
@@ -222,6 +290,8 @@ async function main() {
           source: relative(templatePath),
           tempEvidence: tempEvidencePath.replace(tempDir, "$TMPDIR"),
           commandsRun: commands.length,
+          negativeCommandsRun: negativeCommands.length,
+          invalidInputsRejected: true,
           gates: report.gates,
           chatgptPromptCount: promptIds.length,
           trackedEvidenceUnchanged: true,

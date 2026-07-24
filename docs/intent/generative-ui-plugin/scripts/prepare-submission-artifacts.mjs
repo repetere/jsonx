@@ -40,6 +40,20 @@ const validFixtures = [
   "motion-subtle",
 ];
 const motionProfiles = ["none", "subtle-enter", "state-change-highlight", "morph-list-to-detail"];
+const chatgptPromptIds = [
+  "direct-ui-request",
+  "text-only-request",
+  "quiz-request",
+  "poll-request",
+  "blocked-prop-request",
+  "oversized-payload-request",
+  "unsupported-component-request",
+  "motion-request",
+  "bad-motion-request",
+];
+const chatgptPromptIdSet = new Set(chatgptPromptIds);
+const promptStatusValues = ["pending", "passed", "failed", "blocked"];
+const promptStatusSet = new Set(promptStatusValues);
 
 const installerSurfaces = ["codex", "claude", "opencode"];
 const installerSkills = ["jsonx", "jsonx-generative-ui", "all"];
@@ -2201,7 +2215,7 @@ function externalGateChecks(data) {
     codexAppMetadataUpdated,
     chatgptMcpConnected: chatgpt.connectedMcpUrl === hostedMcpUrl,
     chatgptTranscriptCaptured: Boolean(chatgpt.transcriptUrl || chatgpt.transcriptArtifact),
-    chatgptGoldenPromptsPassed: chatgptPrompts.length >= 7 && chatgptPrompts.every((prompt) => prompt.status === "passed"),
+    chatgptGoldenPromptsPassed: chatgptPromptIds.every((id) => promptPassed(chatgptPrompts, id)),
     claudeAuthenticatedSmokeRan: claudeCoreAuthenticated && claudeGenerativeUiAuthenticated,
     claudeSmokePromptsPassed: claudeCorePromptPassed && claudeGenerativeUiPromptPassed,
     openAiCoreSubmissionRecorded,
@@ -2237,6 +2251,39 @@ function summarizeExternalGateEvidence(data, sourceStatus) {
   };
 }
 
+function allowedList(values) {
+  return Array.from(values).join(", ");
+}
+
+function validatePromptList(errors, prompts, label, allowedIds, requiredIds) {
+  if (!Array.isArray(prompts)) {
+    errors.push(`${label} must be an array`);
+    return;
+  }
+
+  const seen = new Set();
+  for (const [index, prompt] of prompts.entries()) {
+    if (!prompt || typeof prompt !== "object") {
+      errors.push(`${label}[${index}] must be an object`);
+      continue;
+    }
+    if (!allowedIds.has(prompt.id)) {
+      errors.push(`${label}[${index}].id must be one of: ${allowedList(allowedIds)}`);
+    } else if (seen.has(prompt.id)) {
+      errors.push(`${label} contains duplicate id ${prompt.id}`);
+    } else {
+      seen.add(prompt.id);
+    }
+    if (!promptStatusSet.has(prompt.status)) {
+      errors.push(`${label}[${index}].status must be one of: ${allowedList(promptStatusSet)}`);
+    }
+  }
+
+  for (const id of requiredIds) {
+    if (!seen.has(id)) errors.push(`${label} must include ${id}`);
+  }
+}
+
 function validateExternalGateEvidence(source, data) {
   const errors = [];
   if (data.schemaVersion !== 1) errors.push("schemaVersion must be 1");
@@ -2258,6 +2305,9 @@ function validateExternalGateEvidence(source, data) {
     errors.push("appIds.codexGenerativeUiAppMetadataUpdated is required");
   }
 
+  const chatgpt = data.chatgptDeveloperMode || {};
+  validatePromptList(errors, chatgpt.promptsRun, "chatgptDeveloperMode.promptsRun", chatgptPromptIdSet, chatgptPromptIds);
+
   const claude = data.claudeSmoke || {};
   for (const [key, promptId] of [
     ["core", "jsonx-core"],
@@ -2268,9 +2318,7 @@ function validateExternalGateEvidence(source, data) {
       errors.push(`claudeSmoke.${key} is required`);
       continue;
     }
-    if (!Array.isArray(section.promptsRun) || !section.promptsRun.some((prompt) => prompt.id === promptId)) {
-      errors.push(`claudeSmoke.${key}.promptsRun must include ${promptId}`);
-    }
+    validatePromptList(errors, section.promptsRun, `claudeSmoke.${key}.promptsRun`, new Set([promptId]), [promptId]);
   }
 
   const marketplace = data.marketplaceSubmissions || {};

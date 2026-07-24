@@ -138,6 +138,7 @@ as external-gated unless --strict-external is set.
   const workflow = await readText(".github/workflows/generative-ui-plugin.yml");
   const issueTracker = await readText("docs/intent/generative-ui-plugin/github-issues.md");
   const readiness = await readText("docs/intent/generative-ui-plugin/submission-readiness.md");
+  const externalGateRecorderValidator = await readText("docs/intent/generative-ui-plugin/scripts/validate-external-gate-recorder.mjs");
   const externalGateSource = await readJson("docs/intent/generative-ui-plugin/external-gate-evidence.json");
   const goldenPromptEvidence = await readJson(manifest.goldenPromptEvidence?.path || "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json");
 
@@ -350,6 +351,9 @@ as external-gated unless --strict-external is set.
         externalGateCoversGoldenPrompts:
           goldenPromptIds.length >= 9 && goldenPromptIds.every((promptId) => externalChatgptPromptIds.has(promptId)),
         recorderValidatorPresent: await fileExists("docs/intent/generative-ui-plugin/scripts/validate-external-gate-recorder.mjs"),
+        recorderRejectsInvalidPromptId: externalGateRecorderValidator.includes("invalid ChatGPT prompt id"),
+        recorderRejectsInvalidPromptStatus: externalGateRecorderValidator.includes("invalid ChatGPT prompt status"),
+        recorderRejectsInvalidClaudeStatus: externalGateRecorderValidator.includes("invalid Claude smoke status"),
       },
     }),
     makeRequirement({
