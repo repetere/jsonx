@@ -26,6 +26,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | Submission queue | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json` and `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md` | Generated submitter handoff for all four public package submissions, including review package URLs, public evidence URLs, manual checks, and receipt fields. |
 | External gate evidence template | `docs/intent/generative-ui-plugin/external-gate-evidence.template.json` | Template for split app/plugin IDs, ChatGPT developer-mode transcript evidence, authenticated Claude Code smoke prompts for both split plugins, human/policy review, and marketplace submission receipts for all four package submissions. |
 | External gate checker | `docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs` | Lightweight init, validation, and pending-field report for external submission evidence. |
+| External gate recorder | `docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs` | Controlled CLI for recording app IDs, ChatGPT transcript status, Claude smoke results, policy review, and marketplace receipts into `external-gate-evidence.json`. |
 | Public review-kit checker | `docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs` | Validates public evidence URL coverage and can verify live `jsonx.net` review-kit URLs after Pages deploys. |
 | CI validation | `.github/workflows/generative-ui-plugin.yml` | Push, pull request, and manual workflow for app checks, plugin metadata checks, fixture validation, package generation, and npm package-boundary enforcement. |
 
@@ -59,7 +60,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/manifest.json` as the current artifact manifest.
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` as the requirement-by-requirement evidence map.
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md` as the submitter checklist when opening OpenAI/Codex and Claude Code marketplace submissions.
-- Copy `docs/intent/generative-ui-plugin/external-gate-evidence.template.json` to `docs/intent/generative-ui-plugin/external-gate-evidence.json` after the external gates produce real IDs, transcripts, split Claude smoke results, and split marketplace receipts. Regenerate artifacts after filling it in.
+- Record external IDs, transcripts, Claude smoke results, policy review, and marketplace receipts with `node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs <command> ...` after those gates produce real evidence. Regenerate artifacts after recording results.
 - Initialize or inspect external gate evidence with `node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs --init` and `node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs`.
 - Validate review-kit public evidence URLs with `node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs` before regenerating artifacts and `node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs --source docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings --network --cache-bust <commit-sha> --strict` after Pages deploys.
 - Run the Generative UI Plugin workflow on GitHub Actions after app, plugin, fixture, or submission package changes.
@@ -91,7 +92,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Review `docs/intent/generative-ui-plugin/submission-artifacts/current/browser-demo-evidence.json` before using browser demo fixture, paste, or endpoint claims in a public app submission.
 - Review `docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json` before using the hosted endpoint in a public app submission.
 - Capture screenshots after the hosted app is connected.
-- Record completed OpenAI/Codex plugin IDs, renderer app ID, and ChatGPT transcript evidence in `docs/intent/generative-ui-plugin/external-gate-evidence.json`.
+- Record completed OpenAI/Codex plugin IDs, renderer app ID, and ChatGPT transcript evidence with `record-external-gate-evidence.mjs`.
 - Review `apps/jsonx-renderer-app/chatgpt-app-submission.json` against the final hosted endpoint, privacy URL, terms URL, support URL, and screenshots before submitting.
 - Review `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json` before opening the OpenAI core plugin portal draft.
 - Review `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json` before opening the OpenAI generative UI plugin portal draft.
@@ -119,7 +120,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Test core JSONX with `claude --plugin-dir ./plugins/claude-jsonx-plugin`.
 - Test generative UI with `claude --plugin-dir ./plugins/claude-jsonx-generative-ui-plugin`.
 - Run `/jsonx:jsonx` and `/jsonx-generative-ui:jsonx-generative-ui` smoke prompts.
-- Record authenticated smoke results for both split plugins in `docs/intent/generative-ui-plugin/external-gate-evidence.json`.
+- Record authenticated smoke results for both split plugins with `record-external-gate-evidence.mjs`.
 - Review `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json` before opening the Claude Code core community marketplace submission.
 - Review `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json` before opening the Claude Code generative UI community marketplace submission.
 - Submit to the Claude community marketplace only after validation, hosted endpoint review, and screenshots are complete.

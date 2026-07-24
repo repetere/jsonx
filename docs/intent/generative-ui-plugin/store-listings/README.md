@@ -25,4 +25,10 @@ After GitHub Pages deploys, verify live URLs:
 node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs --source docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings --network --cache-bust <commit-sha> --strict
 ```
 
+After a portal or marketplace submission returns a receipt, record it through the external gate recorder:
+
+```text
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs marketplace --target openai-core --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>
+```
+
 Regenerate `docs/intent/generative-ui-plugin/submission-artifacts/current/` after editing these files so the review package copies stay current.

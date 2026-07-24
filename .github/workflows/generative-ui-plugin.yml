@@ -68,6 +68,11 @@ jobs:
       - name: Validate external gate evidence template
         run: node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs --source docs/intent/generative-ui-plugin/external-gate-evidence.template.json --json
 
+      - name: Validate external gate recorder
+        run: |
+          node --check docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs
+          node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs --help >/tmp/jsonx-external-gate-recorder-help.txt
+
       - name: Validate public review kit URLs
         run: node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs --json
 
@@ -110,6 +115,7 @@ jobs:
             "golden-prompts",
             "hosted-mcp-transcript",
             "skill-installer-evidence",
+            "submission-queue",
             "codex-install-evidence",
             "claude-validation-evidence",
             "opencode-skill-evidence",

@@ -36,6 +36,7 @@ Current implementation baseline:
 - `docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs` creates review packages, store listing drafts, screenshots, golden-prompt evidence, renderer motion evidence, browser demo mode evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, a requirement audit, hashes, and npm package-boundary evidence under `docs/intent/generative-ui-plugin/submission-artifacts/current/`.
 - The generated `submission-queue.json` and `submission-queue.md` files turn the four store listing drafts into a submitter checklist with package URLs, public evidence URLs, manual checks, and receipt fields.
 - `docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs` initializes, validates, and summarizes the external gate evidence file without running the full artifact generator.
+- `docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs` records external app IDs, transcript status, Claude smoke results, policy review, and marketplace receipts into the same evidence schema.
 - `docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs` validates public evidence URL coverage in store listing drafts and can check live `jsonx.net` URLs after Pages deploys.
 - `.github/workflows/generative-ui-plugin.yml` runs app, plugin, fixture, submission package, and npm package-boundary checks in CI.
 - `docs/intent/generative-ui-plugin/submission-readiness.md` tracks what remains before public app or plugin submission.
@@ -455,6 +456,7 @@ Exit criteria:
 - Add a lightweight external gate evidence checker so submitters can initialize the evidence file and see pending fields without regenerating packages.
 - Add a public review-kit checker so submitters can prove all public evidence URLs are present and reachable after Pages deploys.
 - Add a generated submission queue so public store submissions can be opened from one checklist and receipts can be recorded back into external gate evidence.
+- Add an external gate recorder CLI so submitters can update `external-gate-evidence.json` without hand-editing the schema.
 - Test public submission checks.
 - Add CI checks for app/plugin validation, fixture validation, submission package generation, and npm package-boundary enforcement.
 - Create GitHub issues from this plan.
