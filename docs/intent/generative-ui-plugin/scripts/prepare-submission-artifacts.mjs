@@ -1923,30 +1923,64 @@ function screenshotPresent(manifest, purpose) {
   return manifest.screenshots.some((item) => item.purpose === purpose && item.bytes > 0 && item.sha256);
 }
 
+function submissionRecorded(entry) {
+  return Boolean(entry?.submitted === true && (entry.submissionId || entry.url));
+}
+
+function promptPassed(prompts, id) {
+  return prompts.some((prompt) => prompt.id === id && prompt.status === "passed");
+}
+
 function externalGateChecks(data) {
   const appIds = data?.appIds || {};
   const chatgpt = data?.chatgptDeveloperMode || {};
   const claude = data?.claudeSmoke || {};
   const marketplace = data?.marketplaceSubmissions || {};
 
-  const openAiSubmission = marketplace.openai || {};
-  const claudeSubmission = marketplace.claude || {};
+  const openAiCoreSubmission = marketplace.openaiCore || {};
+  const openAiGenerativeUiSubmission = marketplace.openaiGenerativeUi || marketplace.openai || {};
+  const claudeCoreSubmission = marketplace.claudeCore || {};
+  const claudeGenerativeUiSubmission = marketplace.claudeGenerativeUi || marketplace.claude || {};
   const policyReview = marketplace.policyReview || {};
   const chatgptPrompts = Array.isArray(chatgpt.promptsRun) ? chatgpt.promptsRun : [];
-  const claudePrompts = Array.isArray(claude.promptsRun) ? claude.promptsRun : [];
+  const claudeCore = claude.core || claude;
+  const claudeGenerativeUi = claude.generativeUi || claude;
+  const claudeCorePrompts = Array.isArray(claudeCore.promptsRun) ? claudeCore.promptsRun : [];
+  const claudeGenerativeUiPrompts = Array.isArray(claudeGenerativeUi.promptsRun) ? claudeGenerativeUi.promptsRun : [];
+
+  const appIdsCaptured = Boolean(
+    (appIds.openaiCorePluginId || appIds.openaiPluginId) &&
+      (appIds.openaiGenerativeUiAppId || appIds.openaiAppId) &&
+      (appIds.openaiGenerativeUiPluginId || appIds.openaiPluginId) &&
+      (appIds.codexCorePluginId || appIds.codexPluginId) &&
+      (appIds.codexGenerativeUiPluginId || appIds.codexPluginId),
+  );
+  const codexAppMetadataUpdated = Boolean(
+    appIds.codexGenerativeUiAppMetadataUpdated === true || appIds.codexAppMetadataUpdated === true,
+  );
+  const claudeCoreAuthenticated = claudeCore.authenticated === true;
+  const claudeGenerativeUiAuthenticated = claudeGenerativeUi.authenticated === true;
+  const claudeCorePromptPassed = promptPassed(claudeCorePrompts, "jsonx-core");
+  const claudeGenerativeUiPromptPassed = promptPassed(claudeGenerativeUiPrompts, "jsonx-generative-ui");
+  const openAiCoreSubmissionRecorded = submissionRecorded(openAiCoreSubmission);
+  const openAiGenerativeUiSubmissionRecorded = submissionRecorded(openAiGenerativeUiSubmission);
+  const claudeCoreSubmissionRecorded = submissionRecorded(claudeCoreSubmission);
+  const claudeGenerativeUiSubmissionRecorded = submissionRecorded(claudeGenerativeUiSubmission);
 
   return {
-    appIdsCaptured: Boolean(appIds.openaiAppId && appIds.openaiPluginId),
-    codexAppMetadataUpdated: Boolean(appIds.codexAppMetadataUpdated === true),
+    appIdsCaptured,
+    codexAppMetadataUpdated,
     chatgptMcpConnected: chatgpt.connectedMcpUrl === hostedMcpUrl,
     chatgptTranscriptCaptured: Boolean(chatgpt.transcriptUrl || chatgpt.transcriptArtifact),
     chatgptGoldenPromptsPassed: chatgptPrompts.length >= 7 && chatgptPrompts.every((prompt) => prompt.status === "passed"),
-    claudeAuthenticatedSmokeRan: claude.authenticated === true,
-    claudeSmokePromptsPassed:
-      claudePrompts.some((prompt) => prompt.id === "jsonx-core" && prompt.status === "passed") &&
-      claudePrompts.some((prompt) => prompt.id === "jsonx-generative-ui" && prompt.status === "passed"),
-    openAiSubmissionRecorded: Boolean(openAiSubmission.submitted === true && (openAiSubmission.submissionId || openAiSubmission.url)),
-    claudeSubmissionRecorded: Boolean(claudeSubmission.submitted === true && (claudeSubmission.submissionId || claudeSubmission.url)),
+    claudeAuthenticatedSmokeRan: claudeCoreAuthenticated && claudeGenerativeUiAuthenticated,
+    claudeSmokePromptsPassed: claudeCorePromptPassed && claudeGenerativeUiPromptPassed,
+    openAiCoreSubmissionRecorded,
+    openAiGenerativeUiSubmissionRecorded,
+    claudeCoreSubmissionRecorded,
+    claudeGenerativeUiSubmissionRecorded,
+    openAiSubmissionRecorded: openAiCoreSubmissionRecorded && openAiGenerativeUiSubmissionRecorded,
+    claudeSubmissionRecorded: claudeCoreSubmissionRecorded && claudeGenerativeUiSubmissionRecorded,
     policyReviewRecorded: Boolean(policyReview.status === "approved" && policyReview.reviewedBy && policyReview.reviewedAt),
   };
 }
@@ -1974,12 +2008,57 @@ function summarizeExternalGateEvidence(data, sourceStatus) {
   };
 }
 
+function validateExternalGateEvidence(source, data) {
+  const errors = [];
+  if (data.schemaVersion !== 1) errors.push("schemaVersion must be 1");
+  if (!data.gates || typeof data.gates !== "object") errors.push("gates metadata is required");
+  for (const section of ["appIds", "chatgptDeveloperMode", "claudeSmoke", "marketplaceSubmissions"]) {
+    if (!data[section] || typeof data[section] !== "object") errors.push(`${section} is required`);
+  }
+  const appIds = data.appIds || {};
+  for (const key of [
+    "openaiCorePluginId",
+    "openaiGenerativeUiAppId",
+    "openaiGenerativeUiPluginId",
+    "codexCorePluginId",
+    "codexGenerativeUiPluginId",
+  ]) {
+    if (!(key in appIds)) errors.push(`appIds.${key} is required`);
+  }
+  if (!("codexGenerativeUiAppMetadataUpdated" in appIds) && !("codexAppMetadataUpdated" in appIds)) {
+    errors.push("appIds.codexGenerativeUiAppMetadataUpdated is required");
+  }
+
+  const claude = data.claudeSmoke || {};
+  for (const [key, promptId] of [
+    ["core", "jsonx-core"],
+    ["generativeUi", "jsonx-generative-ui"],
+  ]) {
+    const section = claude[key];
+    if (!section || typeof section !== "object") {
+      errors.push(`claudeSmoke.${key} is required`);
+      continue;
+    }
+    if (!Array.isArray(section.promptsRun) || !section.promptsRun.some((prompt) => prompt.id === promptId)) {
+      errors.push(`claudeSmoke.${key}.promptsRun must include ${promptId}`);
+    }
+  }
+
+  const marketplace = data.marketplaceSubmissions || {};
+  for (const key of ["policyReview", "openaiCore", "openaiGenerativeUi", "claudeCore", "claudeGenerativeUi"]) {
+    if (!marketplace[key] || typeof marketplace[key] !== "object") errors.push(`marketplaceSubmissions.${key} is required`);
+  }
+
+  if (errors.length) {
+    throw new Error(`${relative(source)} is not valid external gate evidence: ${errors.join("; ")}`);
+  }
+}
+
 async function buildExternalGateEvidence() {
   const sourceExists = await fileExists(externalGateEvidenceSource);
   const source = sourceExists ? externalGateEvidenceSource : externalGateEvidenceTemplate;
   const data = await readJson(source);
-  if (data.schemaVersion !== 1) throw new Error(`${relative(source)} must use schemaVersion 1`);
-  if (!data.gates || typeof data.gates !== "object") throw new Error(`${relative(source)} must include gates metadata`);
+  validateExternalGateEvidence(source, data);
   return summarizeExternalGateEvidence(data, sourceExists ? "provided" : "template");
 }
 
@@ -2210,7 +2289,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence) {
     },
     {
       id: "GATE-APP-ID",
-      requirement: "Add approved app/plugin IDs to Codex app metadata after OpenAI submission creates them.",
+      requirement: "Add approved OpenAI/Codex core plugin, generative UI plugin, and renderer app IDs to the recorded evidence and Codex app metadata.",
       status: appIdGateOk ? "proved" : "external-gated",
       githubIssue: "#1115",
       evidence: [
@@ -2222,7 +2301,9 @@ function buildSubmissionAudit(manifest, externalGateEvidence) {
         appIdsCaptured: externalGateEvidence?.checks?.appIdsCaptured === true,
         codexAppMetadataUpdated: externalGateEvidence?.checks?.codexAppMetadataUpdated === true,
       },
-      ...(appIdGateOk ? {} : { remaining: "Requires approved Apps SDK app/plugin ID from the OpenAI submission flow." }),
+      ...(appIdGateOk
+        ? {}
+        : { remaining: "Requires approved core plugin, generative UI plugin, and Apps SDK renderer app IDs from the OpenAI/Codex submission flow." }),
     },
     {
       id: "GATE-CHATGPT-TRANSCRIPT",
@@ -2244,7 +2325,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence) {
     },
     {
       id: "GATE-CLAUDE-SMOKE",
-      requirement: "Run authenticated Claude Code smoke prompts for the Claude Code plugin.",
+      requirement: "Run authenticated Claude Code smoke prompts for the split core JSONX and generative UI plugins.",
       status: claudeSmokeGateOk ? "proved" : "external-gated",
       githubIssue: "#1113",
       evidence: [manifest.claudeValidationEvidence?.path, manifest.externalGateEvidence?.path].filter(Boolean),
@@ -2254,15 +2335,19 @@ function buildSubmissionAudit(manifest, externalGateEvidence) {
       },
       ...(claudeSmokeGateOk
         ? {}
-        : { remaining: "Requires an authenticated interactive Claude Code environment. Current evidence proves package validation only." }),
+        : { remaining: "Requires an authenticated interactive Claude Code environment. Current evidence proves split package validation only." }),
     },
     {
       id: "GATE-MARKETPLACE-SUBMISSION",
-      requirement: "Submit the OpenAI/Codex and Claude Code app or plugin packages to their public review channels.",
+      requirement: "Submit the split OpenAI/Codex and Claude Code core JSONX and generative UI packages to their public review channels.",
       status: marketplaceGateOk ? "proved" : "external-gated",
       githubIssue: "#1115",
       evidence: [...manifest.storeListings.map((item) => item.path), manifest.externalGateEvidence?.path].filter(Boolean),
       checks: {
+        openAiCoreSubmissionRecorded: externalGateEvidence?.checks?.openAiCoreSubmissionRecorded === true,
+        openAiGenerativeUiSubmissionRecorded: externalGateEvidence?.checks?.openAiGenerativeUiSubmissionRecorded === true,
+        claudeCoreSubmissionRecorded: externalGateEvidence?.checks?.claudeCoreSubmissionRecorded === true,
+        claudeGenerativeUiSubmissionRecorded: externalGateEvidence?.checks?.claudeGenerativeUiSubmissionRecorded === true,
         openAiSubmissionRecorded: externalGateEvidence?.checks?.openAiSubmissionRecorded === true,
         claudeSubmissionRecorded: externalGateEvidence?.checks?.claudeSubmissionRecorded === true,
         policyReviewRecorded: externalGateEvidence?.checks?.policyReviewRecorded === true,

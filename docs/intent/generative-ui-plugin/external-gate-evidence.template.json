@@ -1,18 +1,20 @@
 {
   "schemaVersion": 1,
-  "generatedFor": "jsonx-generative-ui-plugin",
+  "generatedFor": "jsonx-plugin-suite",
   "gates": {
-    "appIds": "Approved OpenAI app/plugin IDs and plugin metadata update.",
+    "appIds": "Approved OpenAI/Codex app and plugin IDs plus plugin metadata update.",
     "chatgptDeveloperMode": "Live ChatGPT developer-mode transcript after connecting the hosted MCP app.",
-    "claudeSmoke": "Authenticated Claude Code smoke prompts for both bundled skills.",
-    "marketplaceSubmissions": "OpenAI/Codex and Claude Code marketplace submission receipts after final review."
+    "claudeSmoke": "Authenticated Claude Code smoke prompts for the split core and generative UI plugins.",
+    "marketplaceSubmissions": "OpenAI/Codex and Claude Code marketplace submission receipts for the split core and generative UI packages after final review."
   },
   "appIds": {
-    "openaiAppId": "",
-    "openaiPluginId": "",
-    "codexPluginId": "",
-    "codexAppMetadataUpdated": false,
-    "notes": "Fill after the Apps SDK app/plugin has an approved ID and the Codex plugin app metadata has been updated."
+    "openaiCorePluginId": "",
+    "openaiGenerativeUiAppId": "",
+    "openaiGenerativeUiPluginId": "",
+    "codexCorePluginId": "",
+    "codexGenerativeUiPluginId": "",
+    "codexGenerativeUiAppMetadataUpdated": false,
+    "notes": "Fill after the core plugin, generative UI plugin, and Apps SDK renderer app have approved IDs. Mark codexGenerativeUiAppMetadataUpdated only after plugins/jsonx-generative-ui-plugin/.app.json points to the approved renderer app ID."
   },
   "chatgptDeveloperMode": {
     "connectedMcpUrl": "",
@@ -30,14 +32,23 @@
     "notes": "Set connectedMcpUrl to https://jsonx-renderer-app.netlify.app/mcp and mark each prompt passed only after the live ChatGPT app renders or rejects the expected response."
   },
   "claudeSmoke": {
-    "authenticated": false,
-    "claudeVersion": "",
-    "command": "claude --plugin-dir ./plugins/claude-jsonx-plugin",
-    "promptsRun": [
-      { "id": "jsonx-core", "prompt": "/jsonx:jsonx inspect this repo and summarize how JSONX renders React", "status": "pending" },
-      { "id": "jsonx-generative-ui", "prompt": "/jsonx:jsonx-generative-ui create a support triage JSONX handoff file", "status": "pending" }
-    ],
-    "notes": "Run from an authenticated Claude Code environment before marking either prompt passed."
+    "core": {
+      "authenticated": false,
+      "claudeVersion": "",
+      "command": "claude --plugin-dir ./plugins/claude-jsonx-plugin",
+      "promptsRun": [
+        { "id": "jsonx-core", "prompt": "/jsonx:jsonx inspect this repo and summarize how JSONX renders React", "status": "pending" }
+      ]
+    },
+    "generativeUi": {
+      "authenticated": false,
+      "claudeVersion": "",
+      "command": "claude --plugin-dir ./plugins/claude-jsonx-generative-ui-plugin",
+      "promptsRun": [
+        { "id": "jsonx-generative-ui", "prompt": "/jsonx-generative-ui:jsonx-generative-ui create a support triage JSONX handoff file", "status": "pending" }
+      ]
+    },
+    "notes": "Run both plugin prompts from an authenticated Claude Code environment before marking them passed."
   },
   "marketplaceSubmissions": {
     "policyReview": {
@@ -46,21 +57,37 @@
       "reviewedAt": "",
       "notes": "Record human/legal approval before public submission."
     },
-    "openai": {
+    "openaiCore": {
       "submitted": false,
       "submissionId": "",
       "url": "",
       "status": "pending",
       "submittedAt": "",
-      "notes": "Record the OpenAI/Codex app-plus-skills plugin submission receipt."
+      "notes": "Record the OpenAI/Codex core JSONX plugin submission receipt."
     },
-    "claude": {
+    "openaiGenerativeUi": {
       "submitted": false,
       "submissionId": "",
       "url": "",
       "status": "pending",
       "submittedAt": "",
-      "notes": "Record the Claude Code community marketplace submission receipt."
+      "notes": "Record the OpenAI/Codex generative UI app-plus-skills plugin submission receipt."
+    },
+    "claudeCore": {
+      "submitted": false,
+      "submissionId": "",
+      "url": "",
+      "status": "pending",
+      "submittedAt": "",
+      "notes": "Record the Claude Code core JSONX community marketplace submission receipt."
+    },
+    "claudeGenerativeUi": {
+      "submitted": false,
+      "submissionId": "",
+      "url": "",
+      "status": "pending",
+      "submittedAt": "",
+      "notes": "Record the Claude Code generative UI community marketplace submission receipt."
     }
   }
 }

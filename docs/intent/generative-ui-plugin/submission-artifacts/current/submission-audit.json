@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T08:44:02.384Z",
+  "generatedAt": "2026-07-24T08:54:19.810Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "a73b5aa8873363af5bb4a71d71980c24e4a3fb35+worktree",
+  "gitCommit": "fc37c1e1030ea7cfed56ff67bdfddf19584999fd+worktree",
   "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
   "summary": {
     "proved": 10,
@@ -228,7 +228,7 @@
     },
     {
       "id": "GATE-APP-ID",
-      "requirement": "Add approved app/plugin IDs to Codex app metadata after OpenAI submission creates them.",
+      "requirement": "Add approved OpenAI/Codex core plugin, generative UI plugin, and renderer app IDs to the recorded evidence and Codex app metadata.",
       "status": "external-gated",
       "githubIssue": "#1115",
       "evidence": [
@@ -240,7 +240,7 @@
         "appIdsCaptured": false,
         "codexAppMetadataUpdated": false
       },
-      "remaining": "Requires approved Apps SDK app/plugin ID from the OpenAI submission flow."
+      "remaining": "Requires approved core plugin, generative UI plugin, and Apps SDK renderer app IDs from the OpenAI/Codex submission flow."
     },
     {
       "id": "GATE-CHATGPT-TRANSCRIPT",
@@ -261,7 +261,7 @@
     },
     {
       "id": "GATE-CLAUDE-SMOKE",
-      "requirement": "Run authenticated Claude Code smoke prompts for the Claude Code plugin.",
+      "requirement": "Run authenticated Claude Code smoke prompts for the split core JSONX and generative UI plugins.",
       "status": "external-gated",
       "githubIssue": "#1113",
       "evidence": [
@@ -272,11 +272,11 @@
         "claudeAuthenticatedSmokeRan": false,
         "claudeSmokePromptsPassed": false
       },
-      "remaining": "Requires an authenticated interactive Claude Code environment. Current evidence proves package validation only."
+      "remaining": "Requires an authenticated interactive Claude Code environment. Current evidence proves split package validation only."
     },
     {
       "id": "GATE-MARKETPLACE-SUBMISSION",
-      "requirement": "Submit the OpenAI/Codex and Claude Code app or plugin packages to their public review channels.",
+      "requirement": "Submit the split OpenAI/Codex and Claude Code core JSONX and generative UI packages to their public review channels.",
       "status": "external-gated",
       "githubIssue": "#1115",
       "evidence": [
@@ -287,6 +287,10 @@
         "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
       ],
       "checks": {
+        "openAiCoreSubmissionRecorded": false,
+        "openAiGenerativeUiSubmissionRecorded": false,
+        "claudeCoreSubmissionRecorded": false,
+        "claudeGenerativeUiSubmissionRecorded": false,
         "openAiSubmissionRecorded": false,
         "claudeSubmissionRecorded": false,
         "policyReviewRecorded": false
