@@ -36,6 +36,13 @@ The default run records a live hosted MCP transcript from `https://jsonx-rendere
 
 External portal and authenticated smoke results should be recorded by copying `docs/intent/generative-ui-plugin/external-gate-evidence.template.json` to `docs/intent/generative-ui-plugin/external-gate-evidence.json`, filling in real IDs, transcript links, prompt results, and submission receipts, then regenerating the artifacts.
 
+Initialize or inspect the external gate evidence file without running the full artifact generator:
+
+```text
+node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs --init
+node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs
+```
+
 For CI or temporary package checks, write to a separate output directory:
 
 ```text

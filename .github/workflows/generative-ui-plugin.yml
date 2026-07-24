@@ -65,6 +65,9 @@ jobs:
       - name: Validate mirrored skill docs
         run: diff -rq skills docs/skills
 
+      - name: Validate external gate evidence template
+        run: node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs --source docs/intent/generative-ui-plugin/external-gate-evidence.template.json --json
+
       - name: Generate submission package artifacts
         run: >
           node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs

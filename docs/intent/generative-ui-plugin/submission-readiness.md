@@ -24,6 +24,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | Public policy pages | `site/privacy.html`, `site/terms.html` | Public privacy and terms notes for the JSONX site, browser demo, skills, plugins, and renderer app. |
 | Submission artifacts | `docs/intent/generative-ui-plugin/submission-artifacts/current/` | Generated split Codex and Claude package zips, ChatGPT submission JSON copy, Codex marketplace copy, store listing copies, screenshots, golden-prompt evidence, renderer motion evidence, browser demo mode evidence, hosted MCP transcript evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, submission audit, hashes, and package-boundary evidence. |
 | External gate evidence template | `docs/intent/generative-ui-plugin/external-gate-evidence.template.json` | Template for split app/plugin IDs, ChatGPT developer-mode transcript evidence, authenticated Claude Code smoke prompts for both split plugins, human/policy review, and marketplace submission receipts for all four package submissions. |
+| External gate checker | `docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs` | Lightweight init, validation, and pending-field report for external submission evidence. |
 | CI validation | `.github/workflows/generative-ui-plugin.yml` | Push, pull request, and manual workflow for app checks, plugin metadata checks, fixture validation, package generation, and npm package-boundary enforcement. |
 
 ## Ready Now
@@ -56,6 +57,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/manifest.json` as the current artifact manifest.
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` as the requirement-by-requirement evidence map.
 - Copy `docs/intent/generative-ui-plugin/external-gate-evidence.template.json` to `docs/intent/generative-ui-plugin/external-gate-evidence.json` after the external gates produce real IDs, transcripts, split Claude smoke results, and split marketplace receipts. Regenerate artifacts after filling it in.
+- Initialize or inspect external gate evidence with `node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs --init` and `node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs`.
 - Run the Generative UI Plugin workflow on GitHub Actions after app, plugin, fixture, or submission package changes.
 
 ## Not Ready For Public Submission
