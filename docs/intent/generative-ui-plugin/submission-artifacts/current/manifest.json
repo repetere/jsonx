@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T07:04:00.164Z",
+  "generatedAt": "2026-07-24T07:12:02.784Z",
   "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
   "publicSkillsUrl": "https://jsonx.net/skills/README.md",
@@ -7,8 +7,8 @@
     {
       "surface": "Codex plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
-      "bytes": 16672,
-      "sha256": "70f935163dab4cf3c63293667f16cefeff54536c9abcf800331fea9081562929"
+      "bytes": 16727,
+      "sha256": "77afcb9aa8051bd22b8fb004e46903d35982b59f7f5217f7e60a9a5ebf99b55f"
     },
     {
       "surface": "Claude Code plugin",
@@ -33,8 +33,8 @@
     {
       "purpose": "generative ui page desktop",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png",
-      "bytes": 210213,
-      "sha256": "474f3f97b95e3a2b158b56dab0a68233a0ae01d6f92dabf05ca0edbb6a03ce56"
+      "bytes": 209785,
+      "sha256": "96cf7a60c5f2faf3154a7af98097ecac5b806ebbf564ea389a993f232ff09527"
     },
     {
       "purpose": "skills install readme",
@@ -61,6 +61,12 @@
       "sha256": "0d75c831781c49d18d0613de56a3512fa04108bf5204b8f64eb255e86a4545f7"
     }
   ],
+  "goldenPromptEvidence": {
+    "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
+    "bytes": 7080,
+    "sha256": "de5081a5b841d1a810597bec119049700f92bbae0ee3b0512ff96b4dd2064793",
+    "caseCount": 9
+  },
   "npmBoundary": {
     "packageName": "jsonx",
     "packageVersion": "2.1.1",
@@ -82,7 +88,8 @@
       "chatgpt-app-submission",
       "marketplace.json",
       "netlify/",
-      "gsap"
+      "gsap",
+      "golden-prompts"
     ]
   },
   "validation": [

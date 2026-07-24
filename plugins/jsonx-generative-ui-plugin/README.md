@@ -30,7 +30,7 @@ Generate current submission packages and screenshots from the repository root:
 node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs
 ```
 
-Artifacts are written under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, which is excluded from the root npm package.
+Artifacts are written under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, which is excluded from the root npm package. The generated bundle includes review packages, screenshots, golden-prompt tool-call evidence, and package-boundary evidence.
 
 For CI or temporary package checks, write to a separate output directory:
 

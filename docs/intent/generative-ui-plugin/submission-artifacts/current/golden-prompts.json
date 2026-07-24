@@ -1,0 +1,213 @@
+{
+  "generatedAt": "2026-07-24T07:11:59.269Z",
+  "source": "render_jsonx_response local tool contract",
+  "note": "This is deterministic tool-call evidence for submission review. It is not a captured ChatGPT developer-mode transcript.",
+  "cases": [
+    {
+      "id": "direct-ui-request",
+      "prompt": "Create a JSONX triage view for these support tickets.",
+      "expectedToolCall": true,
+      "toolName": "render_jsonx_response",
+      "expectedOutcome": "valid",
+      "toolInput": {
+        "purpose": "Render a support triage screen for a refund request.",
+        "motionProfile": "none",
+        "payloadComponent": "DemoShell",
+        "childComponents": [
+          "MetricRow",
+          "DataTable",
+          "ActionPanel"
+        ],
+        "payloadBytes": 829
+      },
+      "observed": {
+        "isError": false,
+        "contentText": "Rendered JSONX UI.",
+        "structuredContent": {
+          "schema": "jsonx.generative-ui.v1",
+          "purpose": "Render a support triage screen for a refund request.",
+          "motionProfile": "none",
+          "payloadComponent": "DemoShell",
+          "childComponents": [
+            "MetricRow",
+            "DataTable",
+            "ActionPanel"
+          ]
+        }
+      }
+    },
+    {
+      "id": "text-only-request",
+      "prompt": "Explain what JSONX is in one paragraph.",
+      "expectedToolCall": false,
+      "expectedOutcome": "text-only",
+      "observed": {
+        "toolCalled": false,
+        "assistantText": "JSONX represents React UI as structured JSON data so a host can validate it before rendering approved components."
+      }
+    },
+    {
+      "id": "quiz-request",
+      "prompt": "Make a short practice quiz for the JSONX safe output contract.",
+      "expectedToolCall": true,
+      "toolName": "render_jsonx_response",
+      "expectedOutcome": "valid",
+      "toolInput": {
+        "purpose": "Render a multiple-choice safety quiz.",
+        "motionProfile": "none",
+        "payloadComponent": "DemoShell",
+        "childComponents": [
+          "MultipleChoiceQuiz"
+        ],
+        "payloadBytes": 520
+      },
+      "observed": {
+        "isError": false,
+        "contentText": "Rendered JSONX UI.",
+        "structuredContent": {
+          "schema": "jsonx.generative-ui.v1",
+          "purpose": "Render a multiple-choice safety quiz.",
+          "motionProfile": "none",
+          "payloadComponent": "DemoShell",
+          "childComponents": [
+            "MultipleChoiceQuiz"
+          ]
+        }
+      }
+    },
+    {
+      "id": "poll-request",
+      "prompt": "Create a slider poll to rank implementation priority.",
+      "expectedToolCall": true,
+      "toolName": "render_jsonx_response",
+      "expectedOutcome": "valid",
+      "toolInput": {
+        "purpose": "Render a slider poll for implementation priority.",
+        "motionProfile": "subtle-enter",
+        "payloadComponent": "DemoShell",
+        "childComponents": [
+          "SliderPoll"
+        ],
+        "payloadBytes": 385
+      },
+      "observed": {
+        "isError": false,
+        "contentText": "Rendered JSONX UI.",
+        "structuredContent": {
+          "schema": "jsonx.generative-ui.v1",
+          "purpose": "Render a slider poll for implementation priority.",
+          "motionProfile": "subtle-enter",
+          "payloadComponent": "DemoShell",
+          "childComponents": [
+            "SliderPoll"
+          ]
+        }
+      }
+    },
+    {
+      "id": "blocked-prop-request",
+      "prompt": "Render a JSONX payload that includes dangerouslySetInnerHTML and an onClick handler.",
+      "expectedToolCall": true,
+      "toolName": "render_jsonx_response",
+      "expectedOutcome": "validation-error",
+      "toolInput": {
+        "purpose": "Reject unsafe generated UI fields.",
+        "motionProfile": "none",
+        "payloadComponent": "DemoShell",
+        "childComponents": [],
+        "payloadBytes": 289
+      },
+      "observed": {
+        "isError": true,
+        "contentText": "Invalid JSONX UI payload: payload.props.dangerouslySetInnerHTML is not allowed; payload.props.dangerouslySetInnerHTML.__html is blocked; payload.props.onClick is not allowed"
+      }
+    },
+    {
+      "id": "oversized-payload-request",
+      "prompt": "Render a payload that exceeds the configured size limit.",
+      "expectedToolCall": true,
+      "toolName": "render_jsonx_response",
+      "expectedOutcome": "validation-error",
+      "toolInput": {
+        "purpose": "Reject oversized generated UI payload.",
+        "motionProfile": "none",
+        "payloadComponent": "DemoShell",
+        "childComponents": [
+          "TextBlock"
+        ],
+        "payloadBytes": 70248
+      },
+      "observed": {
+        "isError": true,
+        "contentText": "Invalid JSONX UI payload: document exceeds max size 65536 bytes"
+      }
+    },
+    {
+      "id": "unsupported-component-request",
+      "prompt": "Render a chart component that is not on the allowlist.",
+      "expectedToolCall": true,
+      "toolName": "render_jsonx_response",
+      "expectedOutcome": "validation-error",
+      "toolInput": {
+        "purpose": "Verify unknown components fail closed.",
+        "motionProfile": "none",
+        "payloadComponent": "DemoShell",
+        "childComponents": [
+          "ArbitraryChart"
+        ],
+        "payloadBytes": 240
+      },
+      "observed": {
+        "isError": true,
+        "contentText": "Invalid JSONX UI payload: payload.children[0].component must be an allowed component"
+      }
+    },
+    {
+      "id": "motion-request",
+      "prompt": "Render a JSONX UI with the subtle-enter motion profile.",
+      "expectedToolCall": true,
+      "toolName": "render_jsonx_response",
+      "expectedOutcome": "valid",
+      "toolInput": {
+        "purpose": "Show a renderer-owned motion profile without model-supplied animation code.",
+        "motionProfile": "subtle-enter",
+        "payloadComponent": "DemoShell",
+        "childComponents": [
+          "Alert"
+        ],
+        "payloadBytes": 467
+      },
+      "observed": {
+        "isError": false,
+        "contentText": "Rendered JSONX UI.",
+        "structuredContent": {
+          "schema": "jsonx.generative-ui.v1",
+          "purpose": "Show a renderer-owned motion profile without model-supplied animation code.",
+          "motionProfile": "subtle-enter",
+          "payloadComponent": "DemoShell",
+          "childComponents": [
+            "Alert"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bad-motion-request",
+      "prompt": "Render a JSONX UI with a spin-forever motion profile.",
+      "expectedToolCall": true,
+      "toolName": "render_jsonx_response",
+      "expectedOutcome": "validation-error",
+      "toolInput": {
+        "purpose": "Verify unknown motion profiles fail closed.",
+        "motionProfile": "spin-forever",
+        "payloadComponent": "DemoShell",
+        "childComponents": [],
+        "payloadBytes": 219
+      },
+      "observed": {
+        "isError": true,
+        "contentText": "Invalid JSONX UI payload: motionProfile is not allowed"
+      }
+    }
+  ]
+}

@@ -19,7 +19,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | Hosted renderer | `https://jsonx-renderer-app.netlify.app/mcp` | Netlify-hosted MCP endpoint with live health, widget, CORS, tool listing, resource read, valid render, and invalid payload smoke tests. |
 | ChatGPT app submission | `apps/jsonx-renderer-app/chatgpt-app-submission.json` | Import-ready submission draft with app info, tool hint justifications, five positive test cases, and three negative test cases. |
 | Public policy pages | `site/privacy.html`, `site/terms.html` | Public privacy and terms notes for the JSONX site, browser demo, skills, plugins, and renderer app. |
-| Submission artifacts | `docs/intent/generative-ui-plugin/submission-artifacts/current/` | Generated Codex and Claude package zips, ChatGPT submission JSON copy, Codex marketplace copy, screenshots, hashes, and package-boundary evidence. |
+| Submission artifacts | `docs/intent/generative-ui-plugin/submission-artifacts/current/` | Generated Codex and Claude package zips, ChatGPT submission JSON copy, Codex marketplace copy, screenshots, golden-prompt evidence, hashes, and package-boundary evidence. |
 | CI validation | `.github/workflows/generative-ui-plugin.yml` | Push, pull request, and manual workflow for app checks, plugin metadata checks, fixture validation, package generation, and npm package-boundary enforcement. |
 
 ## Ready Now
@@ -46,7 +46,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 ## Not Ready For Public Submission
 
 - `.app.json` does not yet reference an approved app ID.
-- Public screenshots are captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/`. ChatGPT developer-mode prompt transcripts still need to be captured after the hosted app is connected.
+- Public screenshots are captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/`, and deterministic tool-call prompt evidence is captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json`. Live ChatGPT developer-mode transcripts still need to be captured after the hosted app is connected.
 - Privacy, terms, and support URLs exist, but still need final human or legal review before public submission.
 - `claude plugin validate` has not been run in this environment.
 - Claude community marketplace submission has not been sent.
@@ -65,6 +65,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Connect the hosted `/mcp` URL in ChatGPT developer mode.
 - Run golden prompts for direct UI, text-only fallback, quiz, poll, bad payload, oversized payload, and unsupported component.
 - Run motion prompts for `subtle-enter`, `state-change-highlight`, and `morph-list-to-detail` with and without GSAP enabled.
+- Review `docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json` before using the prompt cases in a public app submission.
 - Capture screenshots after the hosted app is connected.
 - Review `apps/jsonx-renderer-app/chatgpt-app-submission.json` against the final hosted endpoint, privacy URL, terms URL, support URL, and screenshots before submitting.
 - Regenerate `docs/intent/generative-ui-plugin/submission-artifacts/current/` after any renderer, fixture, submission JSON, or public page change.

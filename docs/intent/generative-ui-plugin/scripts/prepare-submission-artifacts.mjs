@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const intentRoot = path.resolve(scriptDir, "..");
@@ -103,6 +103,209 @@ async function zipDirectory(label, sourceDir, outputFile) {
 
 function fixturePath(name) {
   return path.join(repoRoot, "plugins", "jsonx-generative-ui-plugin", "fixtures", `${name}.json`);
+}
+
+function renderInputFromFixture(fixture) {
+  return {
+    purpose: fixture.purpose,
+    motionProfile: fixture.motionProfile,
+    payload: fixture.payload,
+  };
+}
+
+function childComponents(payload) {
+  if (!payload || typeof payload !== "object" || !Array.isArray(payload.children)) return [];
+  return payload.children
+    .filter((child) => child && typeof child === "object")
+    .map((child) => child.component)
+    .filter(Boolean);
+}
+
+function payloadSummary(input) {
+  return {
+    purpose: input.purpose,
+    motionProfile: input.motionProfile || "none",
+    payloadComponent: input.payload?.component,
+    childComponents: childComponents(input.payload),
+    payloadBytes: Buffer.byteLength(JSON.stringify(input), "utf8"),
+  };
+}
+
+function resultSummary(result) {
+  if (result.isError) {
+    return {
+      isError: true,
+      contentText: result.content?.[0]?.text,
+    };
+  }
+  return {
+    isError: false,
+    contentText: result.content?.[0]?.text,
+    structuredContent: {
+      schema: result.structuredContent?.schema,
+      purpose: result.structuredContent?.purpose,
+      motionProfile: result.structuredContent?.motionProfile || "none",
+      payloadComponent: result.structuredContent?.payload?.component,
+      childComponents: childComponents(result.structuredContent?.payload),
+    },
+  };
+}
+
+async function buildGoldenPromptEvidence() {
+  const { RENDER_TOOL_NAME, renderJsonxResponse } = await import(
+    pathToFileURL(path.join(repoRoot, "apps", "jsonx-renderer-app", "src", "render-tool.mjs"))
+  );
+
+  const fixtures = Object.fromEntries(
+    await Promise.all(
+      [
+        "support-triage",
+        "quiz",
+        "slider-poll",
+        "motion-subtle",
+        "bad-unknown-component",
+        "bad-motion-profile",
+      ].map(async (name) => [name, await readJson(fixturePath(name))]),
+    ),
+  );
+
+  const oversizedInput = {
+    purpose: "Reject oversized generated UI payload.",
+    payload: {
+      component: "DemoShell",
+      props: {
+        title: "Oversized Payload",
+        summary: "This generated payload should fail the size limit.",
+      },
+      children: [
+        {
+          component: "TextBlock",
+          props: {
+            text: "x".repeat(70000),
+          },
+        },
+      ],
+    },
+  };
+  const unsafeFieldInput = {
+    purpose: "Reject unsafe generated UI fields.",
+    payload: {
+      component: "DemoShell",
+      props: {
+        title: "Unsafe Payload",
+        summary: "This generated payload should fail the safe output profile.",
+        dangerouslySetInnerHTML: { __html: "<strong>unsafe</strong>" },
+        onClick: "alert(1)",
+      },
+      children: [],
+    },
+  };
+
+  const cases = [
+    {
+      id: "direct-ui-request",
+      prompt: "Create a JSONX triage view for these support tickets.",
+      expectedToolCall: true,
+      expectedOutcome: "valid",
+      input: renderInputFromFixture(fixtures["support-triage"]),
+    },
+    {
+      id: "text-only-request",
+      prompt: "Explain what JSONX is in one paragraph.",
+      expectedToolCall: false,
+      expectedOutcome: "text-only",
+      textResponse:
+        "JSONX represents React UI as structured JSON data so a host can validate it before rendering approved components.",
+    },
+    {
+      id: "quiz-request",
+      prompt: "Make a short practice quiz for the JSONX safe output contract.",
+      expectedToolCall: true,
+      expectedOutcome: "valid",
+      input: renderInputFromFixture(fixtures.quiz),
+    },
+    {
+      id: "poll-request",
+      prompt: "Create a slider poll to rank implementation priority.",
+      expectedToolCall: true,
+      expectedOutcome: "valid",
+      input: renderInputFromFixture(fixtures["slider-poll"]),
+    },
+    {
+      id: "blocked-prop-request",
+      prompt: "Render a JSONX payload that includes dangerouslySetInnerHTML and an onClick handler.",
+      expectedToolCall: true,
+      expectedOutcome: "validation-error",
+      input: unsafeFieldInput,
+    },
+    {
+      id: "oversized-payload-request",
+      prompt: "Render a payload that exceeds the configured size limit.",
+      expectedToolCall: true,
+      expectedOutcome: "validation-error",
+      input: oversizedInput,
+    },
+    {
+      id: "unsupported-component-request",
+      prompt: "Render a chart component that is not on the allowlist.",
+      expectedToolCall: true,
+      expectedOutcome: "validation-error",
+      input: renderInputFromFixture(fixtures["bad-unknown-component"]),
+    },
+    {
+      id: "motion-request",
+      prompt: "Render a JSONX UI with the subtle-enter motion profile.",
+      expectedToolCall: true,
+      expectedOutcome: "valid",
+      input: renderInputFromFixture(fixtures["motion-subtle"]),
+    },
+    {
+      id: "bad-motion-request",
+      prompt: "Render a JSONX UI with a spin-forever motion profile.",
+      expectedToolCall: true,
+      expectedOutcome: "validation-error",
+      input: renderInputFromFixture(fixtures["bad-motion-profile"]),
+    },
+  ];
+
+  const results = cases.map((testCase) => {
+    if (!testCase.expectedToolCall) {
+      return {
+        id: testCase.id,
+        prompt: testCase.prompt,
+        expectedToolCall: false,
+        expectedOutcome: testCase.expectedOutcome,
+        observed: {
+          toolCalled: false,
+          assistantText: testCase.textResponse,
+        },
+      };
+    }
+
+    const result = renderJsonxResponse(testCase.input);
+    const observedError = result.isError === true;
+    const expectedError = testCase.expectedOutcome === "validation-error";
+    if (observedError !== expectedError) {
+      throw new Error(`${testCase.id} expected ${testCase.expectedOutcome} but received ${observedError ? "validation-error" : "valid"}`);
+    }
+
+    return {
+      id: testCase.id,
+      prompt: testCase.prompt,
+      expectedToolCall: true,
+      toolName: RENDER_TOOL_NAME,
+      expectedOutcome: testCase.expectedOutcome,
+      toolInput: payloadSummary(testCase.input),
+      observed: resultSummary(result),
+    };
+  });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    source: "render_jsonx_response local tool contract",
+    note: "This is deterministic tool-call evidence for submission review. It is not a captured ChatGPT developer-mode transcript.",
+    cases: results,
+  };
 }
 
 async function captureScreenshots() {
@@ -215,7 +418,7 @@ async function buildNpmBoundaryEvidence() {
     "vscode-extension/",
     ".github/",
   ];
-  const blockedTerms = ["chatgpt-app-submission", "marketplace.json", "netlify/", "gsap"];
+  const blockedTerms = ["chatgpt-app-submission", "marketplace.json", "netlify/", "gsap", "golden-prompts"];
   const blocked = files.filter(
     (file) => blockedPrefixes.some((prefix) => file.startsWith(prefix)) || blockedTerms.some((term) => file.includes(term)),
   );
@@ -249,6 +452,12 @@ async function writeReviewSummary(manifest) {
     "| Purpose | Artifact | SHA-256 | Bytes |",
     "| --- | --- | --- | ---: |",
     ...manifest.screenshots.map((item) => `| ${item.purpose} | \`${item.path}\` | \`${item.sha256}\` | ${item.bytes} |`),
+    "",
+    "## Golden Prompts",
+    "",
+    manifest.goldenPromptEvidence
+      ? `- \`${manifest.goldenPromptEvidence.path}\` covers ${manifest.goldenPromptEvidence.caseCount} prompt outcomes.`
+      : "- No golden-prompt evidence was generated.",
     "",
     "## Validation",
     "",
@@ -284,6 +493,10 @@ async function main() {
   run("skills docs mirror", "diff", ["-rq", "skills", "docs/skills"]);
 
   const npmBoundary = await buildNpmBoundaryEvidence();
+  const goldenPromptEvidencePath = path.join(artifactRoot, "golden-prompts.json");
+  const goldenPromptEvidence = await buildGoldenPromptEvidence();
+  await writeJson(goldenPromptEvidencePath, goldenPromptEvidence);
+  const goldenPromptArtifact = await hashFile(goldenPromptEvidencePath);
 
   const packages = [];
   packages.push({
@@ -333,6 +546,10 @@ async function main() {
     publicSkillsUrl,
     packages,
     screenshots,
+    goldenPromptEvidence: {
+      ...goldenPromptArtifact,
+      caseCount: goldenPromptEvidence.cases.length,
+    },
     npmBoundary,
     validation: [
       "node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs",

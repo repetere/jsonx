@@ -90,7 +90,7 @@ jobs:
             "vscode-extension/",
             ".github/",
           ];
-          const blockedTerms = ["chatgpt-app-submission", "marketplace.json", "netlify/", "gsap"];
+          const blockedTerms = ["chatgpt-app-submission", "marketplace.json", "netlify/", "gsap", "golden-prompts"];
           const blocked = files.filter(
             (file) =>
               blockedPrefixes.some((prefix) => file.startsWith(prefix)) ||
