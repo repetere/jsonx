@@ -1,6 +1,6 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T12:20:32.546Z
+Generated: 2026-07-24T12:31:39.225Z
 
 ## Packages
 
@@ -26,10 +26,10 @@ Generated: 2026-07-24T12:20:32.546Z
 
 | Submission | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `89f18114a2ba0ba12fd93a18d0a617fb75712a9ec105cfa1ba6744fe2991c842` | 8023 |
-| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `f8821d7191ee3634de263327725181d452cce326b92cf2e7a6cb89aafea07691` | 10669 |
-| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `f3cadf33a373c433ae1a578abe8033b1f3b40f94981b6f0d3e36065c4a3facec` | 7758 |
-| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `ae1758e33fbfd4fde8131a2c8340e76995cee32ce34a2150f6f0098da313f1ed` | 9094 |
+| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `c7bedf52b35ba6290b374b75d5349e304f79f2f5a1b819cf8e5535972b071eee` | 8023 |
+| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `053cab3dc07e764818e44f7f842fd1a0238b68b89c7693eb70f68b266f1365fe` | 10669 |
+| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `298ad436bbb3a9e9d09927706f75dbe828ffa5b8d97d34635bdf9e5f6f01631d` | 7758 |
+| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `4db31e8b61102b6d500dd1e97e653c822393767e4588f7fa0309382b71815678` | 9094 |
 
 ## Submission Queue
 
@@ -79,7 +79,7 @@ Generated: 2026-07-24T12:20:32.546Z
 
 ## Submission Audit
 
-- `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` maps 15 requirements to evidence, with 11 proved and 4 external-gated.
+- `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` maps 17 requirements to evidence. Status: `implementation-complete-external-gated`; 13 proved, 0 incomplete, and 4 external-gated.
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json` records supplied external gate evidence.
 
 ## Validation

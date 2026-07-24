@@ -1,35 +1,51 @@
 {
-  "generatedAt": "2026-07-24T12:20:32.552Z",
+  "generatedAt": "2026-07-24T12:31:39.231Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "544cfa3ed4fb2dde7cb88ad191fcc2f5ac5ceaee+worktree",
+  "gitCommit": "8dbb2086a7d0a3c8dc7c5ca2e7bf52a28ad4240f",
   "sourceGit": {
-    "headCommit": "544cfa3ed4fb2dde7cb88ad191fcc2f5ac5ceaee",
-    "dirty": true,
-    "dirtyStatus": [
-      " M .github/workflows/generative-ui-plugin.yml",
-      " M docs/generative-ui.html",
-      " M docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md",
-      " M docs/intent/generative-ui-plugin/github-issues.md",
-      " M docs/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs",
-      " M docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs",
-      " M docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs",
-      " M docs/intent/generative-ui-plugin/store-listings/README.md",
-      " M docs/intent/generative-ui-plugin/store-listings/claude-code-generative-ui-submission.json",
-      " M docs/intent/generative-ui-plugin/store-listings/claude-code-jsonx-submission.json",
-      " M docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json",
-      " M docs/intent/generative-ui-plugin/store-listings/openai-jsonx-plugin-submission.json",
-      " M docs/intent/generative-ui-plugin/submission-readiness.md",
-      " M site/generative-ui.html",
-      "?? docs/intent/generative-ui-plugin/scripts/check-external-gate-access.mjs"
-    ],
-    "ignoredGeneratedArtifactStatusCount": 0
+    "headCommit": "8dbb2086a7d0a3c8dc7c5ca2e7bf52a28ad4240f",
+    "dirty": false,
+    "dirtyStatus": [],
+    "ignoredGeneratedArtifactStatusCount": 22
   },
   "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
+  "status": "implementation-complete-external-gated",
   "summary": {
-    "proved": 11,
+    "proved": 13,
     "external-gated": 4
   },
+  "normalizedSummary": {
+    "proved": 13,
+    "incomplete": 0,
+    "externalGated": 4
+  },
+  "externalGates": {
+    "appIds": "pending",
+    "chatgptDeveloperMode": "pending",
+    "claudeSmoke": "pending",
+    "marketplaceSubmission": "pending"
+  },
   "requirements": [
+    {
+      "id": "REQ-PLAN",
+      "requirement": "Keep a plan that includes split skill installation, plugin/app submission, optional GSAP motion, GitHub tracking, npm package boundary protection, and GitHub Pages updates.",
+      "status": "proved",
+      "githubIssue": "#1115",
+      "evidence": [
+        "docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md",
+        "docs/intent/generative-ui-plugin/submission-readiness.md"
+      ],
+      "checks": {
+        "planPresent": true,
+        "readinessPresent": true,
+        "mentionsCodex": true,
+        "mentionsClaudeCode": true,
+        "mentionsOpenCode": true,
+        "mentionsGsapMotion": true,
+        "mentionsNpmBoundary": true,
+        "tracksSubmissionGates": true
+      }
+    },
     {
       "id": "REQ-SKILLS-SPLIT",
       "requirement": "Provide separate core JSONX and generative UI skills for Codex, Claude Code, and OpenCode with install paths documented.",
@@ -284,6 +300,30 @@
           "claude-code-jsonx-submission",
           "claude-code-generative-ui-submission"
         ]
+      }
+    },
+    {
+      "id": "REQ-CI-COVERAGE",
+      "requirement": "Run automated checks for the renderer app, plugins, fixtures, public review kit, external gate evidence, GitHub issue tracking, generated packages, and npm package boundary.",
+      "status": "proved",
+      "githubIssue": "#1115",
+      "evidence": [
+        ".github/workflows/generative-ui-plugin.yml"
+      ],
+      "checks": {
+        "workflowPresent": true,
+        "validatesPluginMetadata": true,
+        "validatesRendererApp": true,
+        "validatesFixtures": true,
+        "validatesPublicReviewKit": true,
+        "validatesExternalGateEvidence": true,
+        "validatesExternalGateRecorder": true,
+        "validatesGithubIssueTracking": true,
+        "probesExternalGateAccess": true,
+        "auditsGoalCoverage": true,
+        "validatesGeneratedArtifacts": true,
+        "validatesNpmBoundary": true,
+        "triggersOnSiteChanges": true
       }
     },
     {
