@@ -20,6 +20,14 @@
     "verificationRequired": true,
     "portalRoleRequired": "Apps Management write access"
   },
+  "submissionPortal": {
+    "primaryUrl": "https://platform.openai.com/plugins",
+    "documentedFlow": "https://developers.openai.com/codex/submit-plugins",
+    "appSubmissionFlow": "https://developers.openai.com/apps-sdk/deploy/submission",
+    "requiredAccess": "OpenAI Platform organization owner or Apps Management write access.",
+    "submissionAction": "Create an app-plus-skills plugin draft, enter the hosted MCP URL, scan tools, attach the JSONX Generative UI Codex plugin review package, complete listing fields, and submit for review.",
+    "postApprovalInstall": "Published OpenAI plugins appear in the Plugins Directory for ChatGPT and Codex after approval and publication."
+  },
   "mcpServer": {
     "url": "https://jsonx-renderer-app.netlify.app/mcp",
     "healthUrl": "https://jsonx-renderer-app.netlify.app/healthz",

@@ -1,6 +1,6 @@
 # JSONX External Gate Runbook
 
-Generated: 2026-07-24T11:46:34.241Z
+Generated: 2026-07-24T11:58:31.123Z
 
 This file lists the evidence that must be collected outside the repo before public submission can be marked complete. Use it with the generated submission queue and record results through the controlled evidence recorder.
 
@@ -99,12 +99,12 @@ Complete human or policy review before sending public submissions. After each po
 
 ### Submission Packets
 
-| Submission | Status | Portal Packet | Receipt Check |
-| --- | --- | --- | --- |
-| OpenAI/Codex core JSONX plugin | pending-manual-submission | https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md | `openAiCoreSubmissionRecorded` |
-| OpenAI/Codex generative UI app-plus-skills plugin | pending-manual-submission | https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md | `openAiGenerativeUiSubmissionRecorded` |
-| Claude Code core JSONX plugin | pending-manual-submission | https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md | `claudeCoreSubmissionRecorded` |
-| Claude Code generative UI plugin | pending-manual-submission | https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md | `claudeGenerativeUiSubmissionRecorded` |
+| Submission | Status | Submission Portal | Portal Packet | Receipt Check |
+| --- | --- | --- | --- | --- |
+| OpenAI/Codex core JSONX plugin | pending-manual-submission | https://platform.openai.com/plugins | https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md | `openAiCoreSubmissionRecorded` |
+| OpenAI/Codex generative UI app-plus-skills plugin | pending-manual-submission | https://platform.openai.com/plugins | https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md | `openAiGenerativeUiSubmissionRecorded` |
+| Claude Code core JSONX plugin | pending-manual-submission | https://platform.claude.com/plugins/submit | https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md | `claudeCoreSubmissionRecorded` |
+| Claude Code generative UI plugin | pending-manual-submission | https://platform.claude.com/plugins/submit | https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md | `claudeGenerativeUiSubmissionRecorded` |
 
 ### Recorder Commands
 

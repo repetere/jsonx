@@ -18,7 +18,14 @@
   "developerIdentity": {
     "publisherName": "Repetere",
     "verificationRequired": true,
-    "portalRoleRequired": "Plugin submission access"
+    "portalRoleRequired": "Apps Management write access"
+  },
+  "submissionPortal": {
+    "primaryUrl": "https://platform.openai.com/plugins",
+    "documentedFlow": "https://developers.openai.com/codex/submit-plugins",
+    "requiredAccess": "OpenAI Platform organization owner or Apps Management write access.",
+    "submissionAction": "Create a skills-only plugin draft, attach the JSONX Codex plugin review package, scan or confirm bundled skill metadata, complete listing fields, and submit for review.",
+    "postApprovalInstall": "Published OpenAI plugins appear in the Plugins Directory for ChatGPT and Codex after approval and publication."
   },
   "bundledSkills": [
     {
@@ -107,7 +114,7 @@
   "releaseNotes": "Initial submission of the core JSONX Codex plugin. It includes package workflow guidance only and stays separate from generated UI.",
   "manualBeforeSubmit": [
     "Confirm OpenAI developer or business identity verification.",
-    "Confirm the submitter has plugin submission access.",
+    "Confirm the submitter has Apps Management write access.",
     "Attach the final production logo.",
     "Review privacy policy, terms, and support URLs.",
     "Confirm the separate generative UI plugin remains optional."

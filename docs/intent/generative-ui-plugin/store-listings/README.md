@@ -15,6 +15,8 @@ Each draft also links to the generated submission queue at `https://jsonx.net/in
 
 The generated portal packets live under `https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/`. Use those Markdown files as copy source when filling the OpenAI/Codex and Claude Code portals. They are not proof that a submission was sent.
 
+Use `https://platform.openai.com/plugins` for OpenAI/Codex plugin drafts. Use `https://platform.claude.com/plugins/submit` for Claude Code community submissions, or `https://claude.ai/admin-settings/directory/submissions/plugins/new` when submitting through a Claude Team or Enterprise organization with directory management access.
+
 Validate public evidence coverage and the public review-kit page before regenerating artifacts:
 
 ```text

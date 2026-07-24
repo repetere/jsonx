@@ -23,6 +23,17 @@
     ],
     "expectedInstallAfterApproval": "claude plugin install jsonx-generative-ui@claude-community"
   },
+  "submissionPortal": {
+    "primaryUrl": "https://platform.claude.com/plugins/submit",
+    "alternateUrls": [
+      "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+      "https://clau.de/plugin-directory-submission"
+    ],
+    "documentedFlow": "https://code.claude.com/docs/en/plugins",
+    "requiredAccess": "Claude Console access, or Team/Enterprise directory management access for the claude.ai organization form.",
+    "submissionAction": "Run claude plugin validate, submit the JSONX Generative UI Claude Code plugin package to the claude-community review path, and record the returned receipt.",
+    "postApprovalInstall": "claude plugin marketplace add anthropics/claude-plugins-community && claude plugin install jsonx-generative-ui@claude-community"
+  },
   "pluginPackage": {
     "sourceDirectory": "plugins/claude-jsonx-generative-ui-plugin",
     "reviewZip": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip",
@@ -125,6 +136,8 @@
   ],
   "sourceDocsChecked": [
     "https://code.claude.com/docs/en/plugins",
+    "https://code.claude.com/docs/en/plugin-marketplaces",
+    "https://github.com/anthropics/claude-plugins-community",
     "https://code.claude.com/docs/en/skills",
     "https://code.claude.com/docs/en/cli-reference"
   ]

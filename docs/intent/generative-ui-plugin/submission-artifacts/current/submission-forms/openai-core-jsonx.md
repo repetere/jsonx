@@ -1,6 +1,6 @@
 # OpenAI/Codex core JSONX plugin Portal Packet
 
-Generated: 2026-07-24T11:46:34.241Z
+Generated: 2026-07-24T11:58:31.123Z
 
 Use this packet as copy source for the public submission portal. It is generated from the tracked store listing draft and is not proof that the submission was sent.
 
@@ -14,6 +14,14 @@ Use this packet as copy source for the public submission portal. It is generated
 - Generated draft: docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json
 - Review package: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip
 - Public listing copy: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json
+
+## Submission Portal
+
+- Primary portal: https://platform.openai.com/plugins
+- Documented flow: https://developers.openai.com/codex/submit-plugins
+- Required access: OpenAI Platform organization owner or Apps Management write access.
+- Submission action: Create a skills-only plugin draft, attach the JSONX Codex plugin review package, scan or confirm bundled skill metadata, complete listing fields, and submit for review.
+- Post-approval install: Published OpenAI plugins appear in the Plugins Directory for ChatGPT and Codex after approval and publication.
 
 ## Listing Copy
 
@@ -60,7 +68,7 @@ The JSONX plugin packages the core JSONX skill for package usage, JXM examples, 
 ## Before Submit
 
 - [ ] Confirm OpenAI developer or business identity verification.
-- [ ] Confirm the submitter has plugin submission access.
+- [ ] Confirm the submitter has Apps Management write access.
 - [ ] Attach the final production logo.
 - [ ] Review privacy policy, terms, and support URLs.
 - [ ] Confirm the separate generative UI plugin remains optional.

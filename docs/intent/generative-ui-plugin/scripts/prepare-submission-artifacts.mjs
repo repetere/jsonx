@@ -1341,6 +1341,18 @@ function validateStoreListing(source, data) {
   if (!Array.isArray(data.sourceDocsChecked) || data.sourceDocsChecked.length === 0) {
     errors.push("sourceDocsChecked must list checked public docs");
   }
+  if (!data.submissionPortal?.primaryUrl) {
+    errors.push("submissionPortal.primaryUrl is required");
+  }
+  if (!data.submissionPortal?.documentedFlow) {
+    errors.push("submissionPortal.documentedFlow is required");
+  }
+  if (!data.submissionPortal?.requiredAccess) {
+    errors.push("submissionPortal.requiredAccess is required");
+  }
+  if (!data.submissionPortal?.submissionAction) {
+    errors.push("submissionPortal.submissionAction is required");
+  }
   for (const key of [
     "readinessChecklist",
     "artifactManifest",
@@ -1401,6 +1413,11 @@ async function copyStoreListingArtifacts() {
 
 function publicSubmissionFormUrl(id) {
   return `https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/${id}.md`;
+}
+
+function submissionPortalUrls(data) {
+  const portal = data.submissionPortal || {};
+  return [...new Set([portal.primaryUrl, ...(portal.alternateUrls || [])].filter(Boolean))];
 }
 
 function publicExternalGateRunbookUrl() {
@@ -1476,6 +1493,19 @@ function sourcePackageFields(data) {
   };
 }
 
+function submissionPortalFields(data) {
+  const portal = data.submissionPortal || {};
+  return {
+    "Primary portal": portal.primaryUrl,
+    "Alternate portals": Array.isArray(portal.alternateUrls) ? portal.alternateUrls.join(", ") : undefined,
+    "Documented flow": portal.documentedFlow,
+    "App submission flow": portal.appSubmissionFlow,
+    "Required access": portal.requiredAccess,
+    "Submission action": portal.submissionAction,
+    "Post-approval install": portal.postApprovalInstall,
+  };
+}
+
 function skillNames(data) {
   const skills = data.bundledSkills || data.skills || [];
   return skills.map((skill) => `${skill.name}${skill.path ? ` (${skill.path})` : ""}`);
@@ -1504,6 +1534,10 @@ function writePortalSubmissionFormMarkdown({ data, submission, queue, filePath }
       "Review package": submission.publicReviewPackage,
       "Public listing copy": submission.publicStoreListing,
     }),
+    "",
+    "## Submission Portal",
+    "",
+    markdownFieldList(submissionPortalFields(data)),
     "",
     "## Listing Copy",
     "",
@@ -1618,12 +1652,14 @@ async function buildSubmissionQueue(manifest, externalGateEvidence) {
       publicReviewPackage: publicEvidence.reviewPackage,
       publicStoreListing: publicEvidence.storeListingCopy,
       portalForm: publicSubmissionFormUrl(queueTarget.id),
+      submissionPortal: data.submissionPortal,
+      submissionPortalUrls: submissionPortalUrls(data),
       publicEvidence,
       positiveTestCaseIds: data.positiveTestCases.map((testCase) => testCase.id),
       negativeTestCaseIds: data.negativeTestCases.map((testCase) => testCase.id),
       manualBeforeSubmit: data.manualBeforeSubmit,
       sourceDocsChecked: data.sourceDocsChecked,
-      portalTargets: data.marketplace?.submissionForms || data.sourceDocsChecked,
+      portalTargets: [...submissionPortalUrls(data), ...(data.marketplace?.submissionForms || []), ...(data.sourceDocsChecked || [])],
       externalGatesToRecord: queueTarget.externalGatesToRecord,
       receiptCheck: queueTarget.receiptCheck,
       receiptFields: queueTarget.receiptFields,
@@ -1635,6 +1671,7 @@ async function buildSubmissionQueue(manifest, externalGateEvidence) {
         positiveTestCaseCount: data.positiveTestCases.length,
         negativeTestCaseCount: data.negativeTestCases.length,
         manualStepCount: data.manualBeforeSubmit.length,
+        submissionPortalUrlCount: submissionPortalUrls(data).length,
       },
     });
   }
@@ -1649,6 +1686,8 @@ async function buildSubmissionQueue(manifest, externalGateEvidence) {
     receiptRecordedCount: submissions.filter((submission) => submission.status === "receipt-recorded").length,
     pendingSubmissionCount: submissions.filter((submission) => submission.status !== "receipt-recorded").length,
     portalFormCount: submissions.filter((submission) => submission.portalForm).length,
+    submissionPortalCount: submissions.filter((submission) => submission.submissionPortal?.primaryUrl).length,
+    submissionPortalUrls: [...new Set(submissions.flatMap((submission) => submission.submissionPortalUrls || []))].sort(),
     externalGateRecorder: externalGateRecorderCommand,
     externalGateRecorderCommands: externalGateRecorderCommands(),
     submissions,
@@ -1759,6 +1798,19 @@ async function writeSubmissionQueueMarkdown(queue, filePath) {
       `- Review package: ${submission.publicReviewPackage}`,
       `- Public listing copy: ${submission.publicStoreListing}`,
       `- Portal packet: ${submission.portalForm}`,
+      `- Submission portal: ${submission.submissionPortal?.primaryUrl || "not listed"}`,
+      "",
+      "### Submission Portal",
+      "",
+      markdownFieldList({
+        "Primary portal": submission.submissionPortal?.primaryUrl,
+        "Alternate portals": Array.isArray(submission.submissionPortal?.alternateUrls) ? submission.submissionPortal.alternateUrls.join(", ") : undefined,
+        "Required access": submission.submissionPortal?.requiredAccess,
+        "Documented flow": submission.submissionPortal?.documentedFlow,
+        "App submission flow": submission.submissionPortal?.appSubmissionFlow,
+        "Submission action": submission.submissionPortal?.submissionAction,
+        "Post-approval install": submission.submissionPortal?.postApprovalInstall,
+      }),
       "",
       "### Before Submit",
       "",
@@ -1912,11 +1964,11 @@ async function writeExternalGateRunbookMarkdown({ queue, externalGateEvidence, f
     "",
     "### Submission Packets",
     "",
-    "| Submission | Status | Portal Packet | Receipt Check |",
-    "| --- | --- | --- | --- |",
+    "| Submission | Status | Submission Portal | Portal Packet | Receipt Check |",
+    "| --- | --- | --- | --- | --- |",
     ...queue.submissions.map(
       (submission) =>
-        `| ${tableCell(submission.label)} | ${tableCell(submission.status)} | ${submission.portalForm} | \`${submission.receiptCheck}\` |`,
+        `| ${tableCell(submission.label)} | ${tableCell(submission.status)} | ${submission.submissionPortal?.primaryUrl || "not listed"} | ${submission.portalForm} | \`${submission.receiptCheck}\` |`,
     ),
     "",
     "### Recorder Commands",
@@ -3065,6 +3117,10 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         submissionQueuePresent: Boolean(manifest.submissionQueue?.json?.sha256),
         externalGateRunbookPresent: Boolean(manifest.externalGateRunbook?.sha256),
         submissionQueueLinksPortalForms: manifest.submissionQueue?.portalFormCount === 4,
+        submissionQueueListsSubmissionPortals:
+          manifest.submissionQueue?.submissionPortalCount === 4 &&
+          manifest.submissionQueue?.submissionPortalUrls?.includes("https://platform.openai.com/plugins") &&
+          manifest.submissionQueue?.submissionPortalUrls?.includes("https://platform.claude.com/plugins/submit"),
         submissionFormsPresent:
           Array.isArray(manifest.submissionForms) &&
           manifest.submissionForms.length === 4 &&
@@ -3224,6 +3280,9 @@ async function writeReviewSummary(manifest) {
       : "- Submission queue was not generated.",
     manifest.submissionQueue
       ? `- \`${manifest.submissionQueue.markdown.path}\` is the submitter-facing checklist.`
+      : "",
+    manifest.submissionQueue
+      ? `- Submission portal entrypoints: ${(manifest.submissionQueue.submissionPortalUrls || []).join(", ")}.`
       : "",
     "",
     "## External Gate Runbook",
@@ -3543,6 +3602,8 @@ async function main() {
     receiptRecordedCount: submissionQueue.receiptRecordedCount,
     pendingSubmissionCount: submissionQueue.pendingSubmissionCount,
     portalFormCount: submissionQueue.portalFormCount,
+    submissionPortalCount: submissionQueue.submissionPortalCount,
+    submissionPortalUrls: submissionQueue.submissionPortalUrls,
   };
   manifest.submissionForms = submissionForms;
   manifest.validation.push("submission queue generation");

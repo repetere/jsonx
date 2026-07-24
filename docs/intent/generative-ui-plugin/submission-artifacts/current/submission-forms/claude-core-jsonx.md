@@ -1,6 +1,6 @@
 # Claude Code core JSONX plugin Portal Packet
 
-Generated: 2026-07-24T11:46:34.241Z
+Generated: 2026-07-24T11:58:31.123Z
 
 Use this packet as copy source for the public submission portal. It is generated from the tracked store listing draft and is not proof that the submission was sent.
 
@@ -14,6 +14,15 @@ Use this packet as copy source for the public submission portal. It is generated
 - Generated draft: docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json
 - Review package: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip
 - Public listing copy: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json
+
+## Submission Portal
+
+- Primary portal: https://platform.claude.com/plugins/submit
+- Alternate portals: https://claude.ai/admin-settings/directory/submissions/plugins/new, https://clau.de/plugin-directory-submission
+- Documented flow: https://code.claude.com/docs/en/plugins
+- Required access: Claude Console access, or Team/Enterprise directory management access for the claude.ai organization form.
+- Submission action: Run claude plugin validate, submit the core JSONX Claude Code plugin package to the claude-community review path, and record the returned receipt.
+- Post-approval install: claude plugin marketplace add anthropics/claude-plugins-community && claude plugin install jsonx@claude-community
 
 ## Listing Copy
 
@@ -192,6 +201,8 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 ## Source Docs Checked
 
 - https://code.claude.com/docs/en/plugins
+- https://code.claude.com/docs/en/plugin-marketplaces
+- https://github.com/anthropics/claude-plugins-community
 - https://code.claude.com/docs/en/skills
 - https://code.claude.com/docs/en/cli-reference
 

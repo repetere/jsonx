@@ -70,6 +70,11 @@ const blockedPublicPageText = [
   "Fixture and paste modes need no API key",
 ];
 
+const expectedSubmissionPortals = {
+  "openai-plugin-portal": "https://platform.openai.com/plugins",
+  "claude-code-community-marketplace": "https://platform.claude.com/plugins/submit",
+};
+
 const requiredPublicPageLinks = [
   { id: "demo", href: "#demo" },
   { id: "skills", href: "#skills" },
@@ -246,6 +251,32 @@ function validatePublicEvidence(filePath, data) {
   if (!Array.isArray(data.negativeTestCases) || data.negativeTestCases.length !== 3) {
     errors.push("negativeTestCases must contain exactly 3 cases");
   }
+  if (!data.submissionPortal?.primaryUrl) {
+    errors.push("submissionPortal.primaryUrl is required");
+  } else {
+    const expectedPortal = expectedSubmissionPortals[data.surface];
+    if (expectedPortal && data.submissionPortal.primaryUrl !== expectedPortal) {
+      errors.push(`submissionPortal.primaryUrl must be ${expectedPortal}`);
+    }
+  }
+  if (!data.submissionPortal?.documentedFlow) {
+    errors.push("submissionPortal.documentedFlow is required");
+  }
+  if (!data.submissionPortal?.requiredAccess) {
+    errors.push("submissionPortal.requiredAccess is required");
+  }
+  if (!data.submissionPortal?.submissionAction) {
+    errors.push("submissionPortal.submissionAction is required");
+  }
+  if (data.surface === "claude-code-community-marketplace") {
+    const alternateUrls = data.submissionPortal?.alternateUrls || [];
+    if (!alternateUrls.includes("https://claude.ai/admin-settings/directory/submissions/plugins/new")) {
+      errors.push("Claude submissionPortal.alternateUrls must include the claude.ai organization form");
+    }
+    if (!alternateUrls.includes("https://clau.de/plugin-directory-submission")) {
+      errors.push("Claude submissionPortal.alternateUrls must include the public directory submission redirect");
+    }
+  }
 
   return {
     file: relative(filePath),
@@ -253,6 +284,7 @@ function validatePublicEvidence(filePath, data) {
     submissionType: data.submissionType,
     pluginName: data.listing?.pluginName || data.listing?.displayName,
     publicEvidenceCount: Object.keys(publicEvidence).length,
+    submissionPortal: data.submissionPortal,
     publicEvidence,
     errors,
   };
@@ -279,6 +311,18 @@ function validateSubmissionQueue(filePath, data) {
       if (!submission.portalForm?.startsWith("https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/")) {
         errors.push(`${submission.id || "submission"} must link to a public portal packet`);
       }
+      if (!submission.submissionPortal?.primaryUrl) {
+        errors.push(`${submission.id || "submission"} must include submissionPortal.primaryUrl`);
+      }
+      if (!Array.isArray(submission.submissionPortalUrls) || !submission.submissionPortalUrls.includes(submission.submissionPortal?.primaryUrl)) {
+        errors.push(`${submission.id || "submission"} must include its primary portal in submissionPortalUrls`);
+      }
+      if (submission.id?.startsWith("openai-") && submission.submissionPortal?.primaryUrl !== expectedSubmissionPortals["openai-plugin-portal"]) {
+        errors.push(`${submission.id} must use the OpenAI plugin submission portal`);
+      }
+      if (submission.id?.startsWith("claude-") && submission.submissionPortal?.primaryUrl !== expectedSubmissionPortals["claude-code-community-marketplace"]) {
+        errors.push(`${submission.id} must use the Claude Console plugin submission portal`);
+      }
     }
   }
 
@@ -286,6 +330,7 @@ function validateSubmissionQueue(filePath, data) {
     file: relative(filePath),
     submissionCount: Array.isArray(data.submissions) ? data.submissions.length : 0,
     portalFormCount: Array.isArray(data.submissions) ? data.submissions.filter((submission) => submission.portalForm).length : 0,
+    submissionPortalCount: Array.isArray(data.submissions) ? data.submissions.filter((submission) => submission.submissionPortal?.primaryUrl).length : 0,
     sharedRecorderCommandGroupCount: Object.keys(commands).length,
     errors,
   };
@@ -308,11 +353,13 @@ async function validateSubmissionForms(dirPath, queue) {
 
     const requiredText = [
       `# ${submission.label} Portal Packet`,
+      "## Submission Portal",
+      submission.submissionPortal?.primaryUrl,
       "## Listing Copy",
       "## Public Evidence URLs",
       "## Recorder Commands",
       submission.receiptRecorderCommand,
-    ];
+    ].filter(Boolean);
     for (const text of requiredText) {
       if (!markdown.includes(text)) errors.push(`${submission.id || "submission"} portal packet missing: ${text}`);
     }
@@ -379,6 +426,11 @@ async function validateExternalGateRunbook(filePath, queue) {
   const submissions = Array.isArray(queue.submissions) ? queue.submissions : [];
   for (const submission of submissions) {
     if (!markdown.includes(submission.portalForm)) errors.push(`${submission.id || "submission"} portal packet missing from external gate runbook`);
+    if (!submission.submissionPortal?.primaryUrl) {
+      errors.push(`${submission.id || "submission"} submission portal is missing from queue data`);
+    } else if (!markdown.includes(submission.submissionPortal.primaryUrl)) {
+      errors.push(`${submission.id || "submission"} submission portal missing from external gate runbook`);
+    }
     if (!markdown.includes(submission.receiptRecorderCommand)) {
       errors.push(`${submission.id || "submission"} receipt recorder command missing from external gate runbook`);
     }
@@ -393,6 +445,7 @@ async function validateExternalGateRunbook(filePath, queue) {
       (command) => command && markdown.includes(command),
     ).length,
     portalPacketCount: submissions.filter((submission) => submission.portalForm && markdown.includes(submission.portalForm)).length,
+    submissionPortalCount: submissions.filter((submission) => submission.submissionPortal?.primaryUrl && markdown.includes(submission.submissionPortal.primaryUrl)).length,
     errors,
   };
 }
@@ -536,6 +589,7 @@ function printHumanReport(report) {
   console.log(`submissionQueue: ${report.submissionQueue.file}`);
   console.log(`  submissions: ${report.submissionQueue.submissionCount}`);
   console.log(`  portalForms: ${report.submissionQueue.portalFormCount}`);
+  console.log(`  submissionPortals: ${report.submissionQueue.submissionPortalCount}`);
   console.log(`  recorderCommandGroups: ${report.submissionQueue.sharedRecorderCommandGroupCount}`);
   if (report.submissionQueue.errors.length) {
     for (const error of report.submissionQueue.errors) console.log(`  error: ${error}`);
@@ -549,6 +603,7 @@ function printHumanReport(report) {
   console.log(`  gates: ${report.externalGateRunbook.gateCount}`);
   console.log(`  recorderCommands: ${report.externalGateRunbook.recorderCommandCount}`);
   console.log(`  portalPackets: ${report.externalGateRunbook.portalPacketCount}`);
+  console.log(`  submissionPortals: ${report.externalGateRunbook.submissionPortalCount}`);
   if (report.externalGateRunbook.errors.length) {
     for (const error of report.externalGateRunbook.errors) console.log(`  error: ${error}`);
   }

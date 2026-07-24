@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T11:46:34.241Z",
+  "generatedAt": "2026-07-24T11:58:31.123Z",
   "source": "docs/intent/generative-ui-plugin/store-listings/",
   "note": "This queue is generated from the four public store listing drafts. It lists packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that any public marketplace submission was sent.",
   "externalGateEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
@@ -13,6 +13,13 @@
   "receiptRecordedCount": 0,
   "pendingSubmissionCount": 4,
   "portalFormCount": 4,
+  "submissionPortalCount": 4,
+  "submissionPortalUrls": [
+    "https://clau.de/plugin-directory-submission",
+    "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+    "https://platform.claude.com/plugins/submit",
+    "https://platform.openai.com/plugins"
+  ],
   "externalGateRecorder": "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs",
   "externalGateRecorderCommands": {
     "appIds": [
@@ -43,6 +50,16 @@
       "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip",
       "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
       "portalForm": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
+      "submissionPortal": {
+        "primaryUrl": "https://platform.openai.com/plugins",
+        "documentedFlow": "https://developers.openai.com/codex/submit-plugins",
+        "requiredAccess": "OpenAI Platform organization owner or Apps Management write access.",
+        "submissionAction": "Create a skills-only plugin draft, attach the JSONX Codex plugin review package, scan or confirm bundled skill metadata, complete listing fields, and submit for review.",
+        "postApprovalInstall": "Published OpenAI plugins appear in the Plugins Directory for ChatGPT and Codex after approval and publication."
+      },
+      "submissionPortalUrls": [
+        "https://platform.openai.com/plugins"
+      ],
       "publicEvidence": {
         "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
         "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
@@ -69,7 +86,7 @@
       ],
       "manualBeforeSubmit": [
         "Confirm OpenAI developer or business identity verification.",
-        "Confirm the submitter has plugin submission access.",
+        "Confirm the submitter has Apps Management write access.",
         "Attach the final production logo.",
         "Review privacy policy, terms, and support URLs.",
         "Confirm the separate generative UI plugin remains optional."
@@ -79,6 +96,7 @@
         "https://developers.openai.com/codex/build-plugins"
       ],
       "portalTargets": [
+        "https://platform.openai.com/plugins",
         "https://developers.openai.com/codex/submit-plugins",
         "https://developers.openai.com/codex/build-plugins"
       ],
@@ -101,7 +119,8 @@
         "publicEvidenceUrlCount": 10,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
-        "manualStepCount": 5
+        "manualStepCount": 5,
+        "submissionPortalUrlCount": 1
       }
     },
     {
@@ -117,6 +136,17 @@
       "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
       "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
       "portalForm": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
+      "submissionPortal": {
+        "primaryUrl": "https://platform.openai.com/plugins",
+        "documentedFlow": "https://developers.openai.com/codex/submit-plugins",
+        "appSubmissionFlow": "https://developers.openai.com/apps-sdk/deploy/submission",
+        "requiredAccess": "OpenAI Platform organization owner or Apps Management write access.",
+        "submissionAction": "Create an app-plus-skills plugin draft, enter the hosted MCP URL, scan tools, attach the JSONX Generative UI Codex plugin review package, complete listing fields, and submit for review.",
+        "postApprovalInstall": "Published OpenAI plugins appear in the Plugins Directory for ChatGPT and Codex after approval and publication."
+      },
+      "submissionPortalUrls": [
+        "https://platform.openai.com/plugins"
+      ],
       "publicEvidence": {
         "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
         "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
@@ -162,6 +192,7 @@
         "https://developers.openai.com/apps-sdk/deploy/submission"
       ],
       "portalTargets": [
+        "https://platform.openai.com/plugins",
         "https://developers.openai.com/codex/submit-plugins",
         "https://developers.openai.com/codex/build-plugins",
         "https://developers.openai.com/apps-sdk/deploy/submission"
@@ -186,7 +217,8 @@
         "publicEvidenceUrlCount": 17,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
-        "manualStepCount": 6
+        "manualStepCount": 6,
+        "submissionPortalUrlCount": 1
       }
     },
     {
@@ -202,6 +234,22 @@
       "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip",
       "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
       "portalForm": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
+      "submissionPortal": {
+        "primaryUrl": "https://platform.claude.com/plugins/submit",
+        "alternateUrls": [
+          "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+          "https://clau.de/plugin-directory-submission"
+        ],
+        "documentedFlow": "https://code.claude.com/docs/en/plugins",
+        "requiredAccess": "Claude Console access, or Team/Enterprise directory management access for the claude.ai organization form.",
+        "submissionAction": "Run claude plugin validate, submit the core JSONX Claude Code plugin package to the claude-community review path, and record the returned receipt.",
+        "postApprovalInstall": "claude plugin marketplace add anthropics/claude-plugins-community && claude plugin install jsonx@claude-community"
+      },
+      "submissionPortalUrls": [
+        "https://platform.claude.com/plugins/submit",
+        "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+        "https://clau.de/plugin-directory-submission"
+      ],
       "publicEvidence": {
         "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
         "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
@@ -234,12 +282,22 @@
       ],
       "sourceDocsChecked": [
         "https://code.claude.com/docs/en/plugins",
+        "https://code.claude.com/docs/en/plugin-marketplaces",
+        "https://github.com/anthropics/claude-plugins-community",
         "https://code.claude.com/docs/en/skills",
         "https://code.claude.com/docs/en/cli-reference"
       ],
       "portalTargets": [
+        "https://platform.claude.com/plugins/submit",
         "https://claude.ai/admin-settings/directory/submissions/plugins/new",
-        "https://platform.claude.com/plugins/submit"
+        "https://clau.de/plugin-directory-submission",
+        "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+        "https://platform.claude.com/plugins/submit",
+        "https://code.claude.com/docs/en/plugins",
+        "https://code.claude.com/docs/en/plugin-marketplaces",
+        "https://github.com/anthropics/claude-plugins-community",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/cli-reference"
       ],
       "externalGatesToRecord": [
         "claudeSmoke",
@@ -260,7 +318,8 @@
         "publicEvidenceUrlCount": 10,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
-        "manualStepCount": 4
+        "manualStepCount": 4,
+        "submissionPortalUrlCount": 3
       }
     },
     {
@@ -276,6 +335,22 @@
       "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip",
       "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
       "portalForm": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md",
+      "submissionPortal": {
+        "primaryUrl": "https://platform.claude.com/plugins/submit",
+        "alternateUrls": [
+          "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+          "https://clau.de/plugin-directory-submission"
+        ],
+        "documentedFlow": "https://code.claude.com/docs/en/plugins",
+        "requiredAccess": "Claude Console access, or Team/Enterprise directory management access for the claude.ai organization form.",
+        "submissionAction": "Run claude plugin validate, submit the JSONX Generative UI Claude Code plugin package to the claude-community review path, and record the returned receipt.",
+        "postApprovalInstall": "claude plugin marketplace add anthropics/claude-plugins-community && claude plugin install jsonx-generative-ui@claude-community"
+      },
+      "submissionPortalUrls": [
+        "https://platform.claude.com/plugins/submit",
+        "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+        "https://clau.de/plugin-directory-submission"
+      ],
       "publicEvidence": {
         "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
         "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
@@ -311,12 +386,22 @@
       ],
       "sourceDocsChecked": [
         "https://code.claude.com/docs/en/plugins",
+        "https://code.claude.com/docs/en/plugin-marketplaces",
+        "https://github.com/anthropics/claude-plugins-community",
         "https://code.claude.com/docs/en/skills",
         "https://code.claude.com/docs/en/cli-reference"
       ],
       "portalTargets": [
+        "https://platform.claude.com/plugins/submit",
         "https://claude.ai/admin-settings/directory/submissions/plugins/new",
-        "https://platform.claude.com/plugins/submit"
+        "https://clau.de/plugin-directory-submission",
+        "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+        "https://platform.claude.com/plugins/submit",
+        "https://code.claude.com/docs/en/plugins",
+        "https://code.claude.com/docs/en/plugin-marketplaces",
+        "https://github.com/anthropics/claude-plugins-community",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/cli-reference"
       ],
       "externalGatesToRecord": [
         "claudeSmoke",
@@ -337,7 +422,8 @@
         "publicEvidenceUrlCount": 13,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
-        "manualStepCount": 4
+        "manualStepCount": 4,
+        "submissionPortalUrlCount": 3
       }
     }
   ],

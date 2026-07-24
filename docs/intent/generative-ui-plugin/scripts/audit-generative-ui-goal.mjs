@@ -18,6 +18,10 @@ const invalidFixtures = [
   "bad-oversized",
 ];
 const externalGateNames = ["appIds", "chatgptDeveloperMode", "claudeSmoke", "marketplaceSubmission"];
+const expectedSubmissionPortals = {
+  openai: "https://platform.openai.com/plugins",
+  claude: "https://platform.claude.com/plugins/submit",
+};
 const blockedNpmPrefixes = ["apps/", "plugins/", "skills/", ".agents/", ".claude/", ".opencode/", "docs/intent/", "docs/skills/", "vscode-extension/", ".github/"];
 const blockedNpmTerms = [
   "chatgpt-app-submission",
@@ -389,6 +393,14 @@ as external-gated unless --strict-external is set.
           submissionQueue.submissions.every((submission) =>
             submission.portalForm?.startsWith("https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/"),
           ),
+        submissionQueueListsSubmissionPortals:
+          Array.isArray(submissionQueue.submissions) &&
+          submissionQueue.submissions.length === 4 &&
+          submissionQueue.submissions.every((submission) =>
+            submission.id?.startsWith("openai-")
+              ? submission.submissionPortal?.primaryUrl === expectedSubmissionPortals.openai
+              : submission.submissionPortal?.primaryUrl === expectedSubmissionPortals.claude,
+          ),
         externalGateRunbookPresent,
         externalGateRunbookListsGateStatuses: externalGateNames.every((gate) => externalGateRunbook.includes(`| ${gate} |`)),
         externalGateRunbookListsRecorderCommands:
@@ -401,6 +413,8 @@ as external-gated unless --strict-external is set.
           externalGateRunbook.includes("motion-request") &&
           externalGateRunbook.includes("jsonx-core") &&
           externalGateRunbook.includes("jsonx-generative-ui"),
+        externalGateRunbookListsSubmissionPortals:
+          externalGateRunbook.includes(expectedSubmissionPortals.openai) && externalGateRunbook.includes(expectedSubmissionPortals.claude),
         receiptsStillExplicitlyTracked: manifest.submissionQueue?.pendingSubmissionCount === 4 || manifest.submissionQueue?.receiptRecordedCount === 4,
         externalGateSourcePresent: await fileExists("docs/intent/generative-ui-plugin/external-gate-evidence.json"),
         externalGateSourceSupplied: manifest.externalGateEvidence?.supplied === true,

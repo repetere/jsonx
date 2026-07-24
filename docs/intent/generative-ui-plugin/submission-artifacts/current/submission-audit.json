@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-24T11:46:34.245Z",
+  "generatedAt": "2026-07-24T11:58:31.127Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "376d55a0caf20973cc21417672e5c272a63e65d1+worktree",
+  "gitCommit": "59a4e13e57a4e5d93975b76259eb5c2f15762c4d+worktree",
   "sourceGit": {
-    "headCommit": "376d55a0caf20973cc21417672e5c272a63e65d1",
+    "headCommit": "59a4e13e57a4e5d93975b76259eb5c2f15762c4d",
     "dirty": true,
     "dirtyStatus": [
-      " M docs/generative-ui.html",
       " M docs/intent/generative-ui-plugin/github-issues.md",
+      " M docs/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs",
       " M docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs",
       " M docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs",
       " M docs/intent/generative-ui-plugin/store-listings/README.md",
@@ -15,10 +15,9 @@
       " M docs/intent/generative-ui-plugin/store-listings/claude-code-jsonx-submission.json",
       " M docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json",
       " M docs/intent/generative-ui-plugin/store-listings/openai-jsonx-plugin-submission.json",
-      " M docs/intent/generative-ui-plugin/submission-readiness.md",
-      " M site/generative-ui.html"
+      " M docs/intent/generative-ui-plugin/submission-readiness.md"
     ],
-    "ignoredGeneratedArtifactStatusCount": 0
+    "ignoredGeneratedArtifactStatusCount": 24
   },
   "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
   "summary": {
@@ -210,6 +209,7 @@
         "submissionQueuePresent": true,
         "externalGateRunbookPresent": true,
         "submissionQueueLinksPortalForms": true,
+        "submissionQueueListsSubmissionPortals": true,
         "submissionFormsPresent": true
       }
     },

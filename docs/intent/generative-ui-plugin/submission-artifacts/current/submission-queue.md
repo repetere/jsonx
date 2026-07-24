@@ -1,6 +1,6 @@
 # JSONX Public Submission Queue
 
-Generated: 2026-07-24T11:46:34.241Z
+Generated: 2026-07-24T11:58:31.123Z
 
 This file is generated from the four store listing drafts. It gives the submitter one place to find packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that a public submission was sent.
 
@@ -57,11 +57,20 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - Review package: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip
 - Public listing copy: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json
 - Portal packet: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md
+- Submission portal: https://platform.openai.com/plugins
+
+### Submission Portal
+
+- Primary portal: https://platform.openai.com/plugins
+- Required access: OpenAI Platform organization owner or Apps Management write access.
+- Documented flow: https://developers.openai.com/codex/submit-plugins
+- Submission action: Create a skills-only plugin draft, attach the JSONX Codex plugin review package, scan or confirm bundled skill metadata, complete listing fields, and submit for review.
+- Post-approval install: Published OpenAI plugins appear in the Plugins Directory for ChatGPT and Codex after approval and publication.
 
 ### Before Submit
 
 - [ ] Confirm OpenAI developer or business identity verification.
-- [ ] Confirm the submitter has plugin submission access.
+- [ ] Confirm the submitter has Apps Management write access.
 - [ ] Attach the final production logo.
 - [ ] Review privacy policy, terms, and support URLs.
 - [ ] Confirm the separate generative UI plugin remains optional.
@@ -111,6 +120,16 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - Review package: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip
 - Public listing copy: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json
 - Portal packet: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md
+- Submission portal: https://platform.openai.com/plugins
+
+### Submission Portal
+
+- Primary portal: https://platform.openai.com/plugins
+- Required access: OpenAI Platform organization owner or Apps Management write access.
+- Documented flow: https://developers.openai.com/codex/submit-plugins
+- App submission flow: https://developers.openai.com/apps-sdk/deploy/submission
+- Submission action: Create an app-plus-skills plugin draft, enter the hosted MCP URL, scan tools, attach the JSONX Generative UI Codex plugin review package, complete listing fields, and submit for review.
+- Post-approval install: Published OpenAI plugins appear in the Plugins Directory for ChatGPT and Codex after approval and publication.
 
 ### Before Submit
 
@@ -174,6 +193,16 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - Review package: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip
 - Public listing copy: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json
 - Portal packet: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md
+- Submission portal: https://platform.claude.com/plugins/submit
+
+### Submission Portal
+
+- Primary portal: https://platform.claude.com/plugins/submit
+- Alternate portals: https://claude.ai/admin-settings/directory/submissions/plugins/new, https://clau.de/plugin-directory-submission
+- Required access: Claude Console access, or Team/Enterprise directory management access for the claude.ai organization form.
+- Documented flow: https://code.claude.com/docs/en/plugins
+- Submission action: Run claude plugin validate, submit the core JSONX Claude Code plugin package to the claude-community review path, and record the returned receipt.
+- Post-approval install: claude plugin marketplace add anthropics/claude-plugins-community && claude plugin install jsonx@claude-community
 
 ### Before Submit
 
@@ -217,6 +246,8 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 ### Source Docs Checked
 
 - https://code.claude.com/docs/en/plugins
+- https://code.claude.com/docs/en/plugin-marketplaces
+- https://github.com/anthropics/claude-plugins-community
 - https://code.claude.com/docs/en/skills
 - https://code.claude.com/docs/en/cli-reference
 
@@ -228,6 +259,16 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - Review package: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip
 - Public listing copy: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json
 - Portal packet: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md
+- Submission portal: https://platform.claude.com/plugins/submit
+
+### Submission Portal
+
+- Primary portal: https://platform.claude.com/plugins/submit
+- Alternate portals: https://claude.ai/admin-settings/directory/submissions/plugins/new, https://clau.de/plugin-directory-submission
+- Required access: Claude Console access, or Team/Enterprise directory management access for the claude.ai organization form.
+- Documented flow: https://code.claude.com/docs/en/plugins
+- Submission action: Run claude plugin validate, submit the JSONX Generative UI Claude Code plugin package to the claude-community review path, and record the returned receipt.
+- Post-approval install: claude plugin marketplace add anthropics/claude-plugins-community && claude plugin install jsonx-generative-ui@claude-community
 
 ### Before Submit
 
@@ -274,6 +315,8 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 ### Source Docs Checked
 
 - https://code.claude.com/docs/en/plugins
+- https://code.claude.com/docs/en/plugin-marketplaces
+- https://github.com/anthropics/claude-plugins-community
 - https://code.claude.com/docs/en/skills
 - https://code.claude.com/docs/en/cli-reference
 

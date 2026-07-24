@@ -1,6 +1,6 @@
 # OpenAI/Codex generative UI app-plus-skills plugin Portal Packet
 
-Generated: 2026-07-24T11:46:34.241Z
+Generated: 2026-07-24T11:58:31.123Z
 
 Use this packet as copy source for the public submission portal. It is generated from the tracked store listing draft and is not proof that the submission was sent.
 
@@ -14,6 +14,15 @@ Use this packet as copy source for the public submission portal. It is generated
 - Generated draft: docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json
 - Review package: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip
 - Public listing copy: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json
+
+## Submission Portal
+
+- Primary portal: https://platform.openai.com/plugins
+- Documented flow: https://developers.openai.com/codex/submit-plugins
+- App submission flow: https://developers.openai.com/apps-sdk/deploy/submission
+- Required access: OpenAI Platform organization owner or Apps Management write access.
+- Submission action: Create an app-plus-skills plugin draft, enter the hosted MCP URL, scan tools, attach the JSONX Generative UI Codex plugin review package, complete listing fields, and submit for review.
+- Post-approval install: Published OpenAI plugins appear in the Plugins Directory for ChatGPT and Codex after approval and publication.
 
 ## Listing Copy
 
