@@ -175,6 +175,43 @@ function run(label, command, args, options = {}) {
   return result.stdout?.trim() || "";
 }
 
+function pathFromGitStatusLine(line) {
+  const value = line.slice(3).trim();
+  const renameSeparator = " -> ";
+  const pathValue = value.includes(renameSeparator) ? value.split(renameSeparator).pop() : value;
+  return pathValue.replace(/^"|"$/g, "");
+}
+
+function buildSourceGitSnapshot() {
+  const headCommit = run("git commit for submission audit", "git", ["rev-parse", "HEAD"], { capture: true });
+  const statusResult = spawnSync("git", ["status", "--short"], {
+    cwd: repoRoot,
+    encoding: "utf8",
+    stdio: "pipe",
+  });
+  if (statusResult.status !== 0) {
+    throw new Error(`git worktree status for submission audit failed with exit code ${statusResult.status}`);
+  }
+  const statusLines = statusResult.stdout.split(/\r?\n/).filter(Boolean);
+  const artifactRootRelative = path.relative(repoRoot, artifactRoot);
+  const artifactPrefix =
+    artifactRootRelative && !artifactRootRelative.startsWith("..") && !path.isAbsolute(artifactRootRelative)
+      ? `${artifactRootRelative.replaceAll(path.sep, "/")}/`
+      : null;
+  const sourceStatus = artifactPrefix
+    ? statusLines.filter((line) => {
+        const statusPath = pathFromGitStatusLine(line);
+        return statusPath !== artifactRootRelative && !statusPath.startsWith(artifactPrefix);
+      })
+    : statusLines;
+
+  return {
+    headCommit,
+    dirtyStatus: sourceStatus,
+    ignoredGeneratedArtifactStatusCount: statusLines.length - sourceStatus.length,
+  };
+}
+
 async function readJson(filePath) {
   return JSON.parse(await fs.readFile(filePath, "utf8"));
 }
@@ -2258,10 +2295,10 @@ function gateProved(externalGateEvidence, key) {
   return externalGateEvidence?.gateStatus?.[key] === "proved";
 }
 
-function buildSubmissionAudit(manifest, externalGateEvidence) {
-  const headCommit = run("git commit for submission audit", "git", ["rev-parse", "HEAD"], { capture: true });
-  const dirtyStatus = run("git worktree status for submission audit", "git", ["status", "--short"], { capture: true });
-  const gitCommit = dirtyStatus ? `${headCommit}+worktree` : headCommit;
+function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot) {
+  const gitCommit = sourceGitSnapshot.dirtyStatus.length
+    ? `${sourceGitSnapshot.headCommit}+worktree`
+    : sourceGitSnapshot.headCommit;
   const browserDemoOk = manifest.browserDemoEvidence && !manifest.browserDemoEvidence.skipped && allChecksTrue(manifest.browserDemoEvidence.checks);
   const motionOk = manifest.motionProfileEvidence && !manifest.motionProfileEvidence.skipped && allChecksTrue(manifest.motionProfileEvidence.checks);
   const hostedMcpOk = manifest.hostedMcpEvidence && allChecksTrue(manifest.hostedMcpEvidence.checks);
@@ -2569,6 +2606,12 @@ function buildSubmissionAudit(manifest, externalGateEvidence) {
     generatedAt: new Date().toISOString(),
     source: "JSONX generative UI submission artifact manifest",
     gitCommit,
+    sourceGit: {
+      headCommit: sourceGitSnapshot.headCommit,
+      dirty: sourceGitSnapshot.dirtyStatus.length > 0,
+      dirtyStatus: sourceGitSnapshot.dirtyStatus,
+      ignoredGeneratedArtifactStatusCount: sourceGitSnapshot.ignoredGeneratedArtifactStatusCount,
+    },
     objective:
     "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
     summary,
@@ -2689,6 +2732,7 @@ async function main() {
   const skipOpenCodeValidation = hasArg("--skip-opencode-validation") || process.env.JSONX_SKIP_OPENCODE_VALIDATION === "1";
   const skipMotionEvidence = hasArg("--skip-motion-evidence") || process.env.JSONX_SKIP_MOTION_EVIDENCE === "1";
   const skipBrowserDemo = hasArg("--skip-browser-demo") || process.env.JSONX_SKIP_BROWSER_DEMO === "1";
+  const sourceGitSnapshot = buildSourceGitSnapshot();
   await fs.rm(artifactRoot, { recursive: true, force: true });
   await fs.mkdir(packagesDir, { recursive: true });
   await fs.mkdir(screenshotsDir, { recursive: true });
@@ -2909,7 +2953,7 @@ async function main() {
   manifest.validation.push("submission queue generation");
 
   const submissionAuditPath = path.join(artifactRoot, "submission-audit.json");
-  const submissionAudit = buildSubmissionAudit(manifest, externalGateEvidence);
+  const submissionAudit = buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot);
   await writeJson(submissionAuditPath, submissionAudit);
   const submissionAuditArtifact = await hashFile(submissionAuditPath);
   manifest.submissionAudit = {
