@@ -21,6 +21,7 @@ import { ALLOWED_MOTION_PROFILES, JSONX_UI_SCHEMA } from "./jsonx-validator.mjs"
 const appRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const webRoot = join(appRoot, "web");
 const MCP_PATH = "/mcp";
+const GSAP_RUNTIME_PATH = join(appRoot, "node_modules", "gsap", "dist", "gsap.min.js");
 
 const motionProfileSchema = z.enum(Array.from(ALLOWED_MOTION_PROFILES));
 const payloadSchema = z.record(z.string(), z.unknown());
@@ -42,15 +43,31 @@ function readWebFile(name) {
   return readFileSync(join(webRoot, name), "utf8");
 }
 
+function gsapMotionEnabled() {
+  return ["1", "true", "yes"].includes(String(process.env.JSONX_ENABLE_GSAP ?? "").toLowerCase());
+}
+
+function readGsapRuntime() {
+  if (!gsapMotionEnabled()) return "";
+  try {
+    return readFileSync(GSAP_RUNTIME_PATH, "utf8");
+  } catch {
+    return "";
+  }
+}
+
 export function buildWidgetHtml() {
   const html = readWebFile("widget.html");
   const css = readWebFile("widget.css");
   const js = readWebFile("widget.js");
+  const gsap = readGsapRuntime();
+  const motionConfig = `<script>window.JSONX_RENDERER_CONFIG={gsapMotion:${gsap ? "true" : "false"}};</script>`;
+  const motionRuntime = gsap ? `<script>${gsap}\n//# sourceURL=jsonx-gsap-runtime.js</script>` : "";
   return html
     .replace('<link rel="stylesheet" href="./widget.css" />', `<style>${css}</style>`)
     .replace(
       /<script\s+(?:type="module"\s+src="\.\/widget\.js"|src="\.\/widget\.js"\s+type="module")><\/script>/,
-      `<script type="module">${js}</script>`,
+      `${motionConfig}${motionRuntime}<script type="module">${js}</script>`,
     );
 }
 

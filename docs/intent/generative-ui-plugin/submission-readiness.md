@@ -14,7 +14,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | Claude Code | `plugins/claude-jsonx-plugin/` | Local Claude Code plugin package with `jsonx` and `jsonx-generative-ui` skills. |
 | OpenCode | `skills/opencode/` | Skill folders for project or global install. OpenCode does not need a separate plugin for the current scope. |
 | Skill installer | `skills/scripts/install-jsonx-skill.mjs` | Local installer for core JSONX and generative UI skills across Codex, Claude Code, and OpenCode. |
-| ChatGPT Apps SDK | `apps/jsonx-renderer-app/` | Runnable stateless MCP app with `render_jsonx_response`, widget resource, local smoke test, and developer-mode tunnel path. |
+| ChatGPT Apps SDK | `apps/jsonx-renderer-app/` | Runnable stateless MCP app with `render_jsonx_response`, widget resource, optional GSAP motion, local smoke test, and developer-mode tunnel path. |
 
 ## Ready Now
 
@@ -24,6 +24,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Run the JSONX fixture validator locally.
 - Run the Apps SDK renderer locally at `/mcp`.
 - Test the renderer app with the SDK client smoke test.
+- Enable optional GSAP motion locally with `JSONX_ENABLE_GSAP=1`.
 - Connect the renderer app to ChatGPT developer mode through an HTTPS tunnel.
 
 ## Not Ready For Public Submission
@@ -44,6 +45,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Confirm `/mcp` supports low-latency streaming responses and dependable TLS.
 - Connect the hosted `/mcp` URL in ChatGPT developer mode.
 - Run golden prompts for direct UI, text-only fallback, quiz, poll, bad payload, oversized payload, and unsupported component.
+- Run motion prompts for `subtle-enter`, `state-change-highlight`, and `morph-list-to-detail` with and without GSAP enabled.
 - Capture screenshots after the hosted app is connected.
 - Add the real app ID to plugin app metadata only after the ID exists.
 

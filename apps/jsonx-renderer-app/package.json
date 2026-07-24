@@ -8,11 +8,12 @@
     "start": "node src/server.mjs",
     "check": "node --check src/server.mjs && node --check src/render-tool.mjs && node --check src/jsonx-validator.mjs && node --check web/widget.js && node test/smoke.mjs",
     "smoke": "node test/smoke.mjs",
-    "validate:fixtures": "python3 ../../plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py ../../plugins/jsonx-generative-ui-plugin/fixtures/text-block.json ../../plugins/jsonx-generative-ui-plugin/fixtures/checklist.json ../../plugins/jsonx-generative-ui-plugin/fixtures/choice-list.json ../../plugins/jsonx-generative-ui-plugin/fixtures/data-table.json ../../plugins/jsonx-generative-ui-plugin/fixtures/alert.json ../../plugins/jsonx-generative-ui-plugin/fixtures/quiz.json ../../plugins/jsonx-generative-ui-plugin/fixtures/slider-poll.json"
+    "validate:fixtures": "python3 ../../plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py ../../plugins/jsonx-generative-ui-plugin/fixtures/text-block.json ../../plugins/jsonx-generative-ui-plugin/fixtures/checklist.json ../../plugins/jsonx-generative-ui-plugin/fixtures/choice-list.json ../../plugins/jsonx-generative-ui-plugin/fixtures/data-table.json ../../plugins/jsonx-generative-ui-plugin/fixtures/alert.json ../../plugins/jsonx-generative-ui-plugin/fixtures/quiz.json ../../plugins/jsonx-generative-ui-plugin/fixtures/slider-poll.json ../../plugins/jsonx-generative-ui-plugin/fixtures/motion-subtle.json"
   },
   "dependencies": {
     "@modelcontextprotocol/ext-apps": "^1.7.5",
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "gsap": "^3.15.0",
     "zod": "^4.4.3"
   },
   "overrides": {

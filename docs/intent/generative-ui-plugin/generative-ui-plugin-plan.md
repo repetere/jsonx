@@ -25,6 +25,7 @@ This separation lets users install JSONX help without opting into generated inte
 Current implementation baseline:
 
 - `apps/jsonx-renderer-app/` contains a runnable stateless MCP app for local developer-mode testing.
+- `apps/jsonx-renderer-app/` supports optional renderer-owned GSAP motion with `JSONX_ENABLE_GSAP=1`.
 - `plugins/jsonx-generative-ui-plugin/` contains the Codex plugin package.
 - `plugins/claude-jsonx-plugin/` contains the Claude Code plugin package.
 - `skills/codex/`, `skills/claude/`, and `skills/opencode/` contain installable skill source folders.
@@ -114,7 +115,7 @@ Validation should reject unknown components, unknown props, raw HTML, inline eve
 
 Animation should be optional and renderer-owned. A payload can request a named motion profile only after the schema supports it, but the renderer chooses the implementation. The model must not return GSAP code, CSS animation code, arbitrary easing functions, or raw style values.
 
-Allowed future motion profile examples:
+Allowed motion profile examples:
 
 - `none`
 - `subtle-enter`
@@ -210,10 +211,11 @@ Beta components:
 Optional animation:
 
 - Use GSAP only inside the hosted widget or local preview renderer.
-- Bundle GSAP with the app/plugin asset package or load it from an approved resource domain.
+- Bundle GSAP with the app package or load it from an approved resource domain.
 - Do not add GSAP to the main `jsonx` npm package dependencies.
 - Treat motion as progressive enhancement. Rendering must work with animation disabled.
 - Keep model-visible payloads declarative. Example: `motionProfile: "subtle-enter"`, not animation code.
+- The local renderer enables GSAP with `JSONX_ENABLE_GSAP=1`; otherwise it uses CSS fallback motion.
 
 ### 5. Codex plugin package
 
@@ -387,6 +389,7 @@ Exit criteria:
 - Rendering works with animation enabled or disabled.
 - Motion profiles are allowlisted and validated.
 - Users with reduced motion preferences get minimal or no animation.
+- npm pack checks prove GSAP is not included in the root `jsonx` package.
 
 ### Phase 7: Beta Components and Interaction
 

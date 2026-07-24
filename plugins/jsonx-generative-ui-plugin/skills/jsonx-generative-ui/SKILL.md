@@ -69,7 +69,7 @@ Allowed motion profiles for plugin fixtures:
 - `morph-list-to-detail`
 - `state-change-highlight`
 
-The renderer should use GSAP with reduced-motion support when animation is enabled. Rendering must still work with animation disabled.
+The renderer can use GSAP with reduced-motion support when animation is enabled. Rendering must still work with animation disabled or without GSAP loaded.
 
 ## Validation
 

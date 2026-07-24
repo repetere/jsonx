@@ -74,14 +74,14 @@ Use only these components and props unless the user provides a different host re
 
 Animation is renderer-owned. The agent may request an allowlisted `motionProfile` only when the renderer supports it. Never return GSAP code, CSS animation code, arbitrary easing functions, inline styles, or JavaScript handlers.
 
-Allowed future motion profiles:
+Allowed motion profiles:
 
 - `none`
 - `subtle-enter`
 - `morph-list-to-detail`
 - `state-change-highlight`
 
-The renderer should use GSAP with reduced-motion support when animation is enabled. Rendering must still work with animation disabled.
+The renderer can use GSAP with reduced-motion support when animation is enabled. Rendering must still work with animation disabled or without GSAP loaded.
 
 ## Blocked JSONX Features
 

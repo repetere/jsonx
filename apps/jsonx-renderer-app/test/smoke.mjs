@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import { createHttpServer } from "../src/server.mjs";
+import { buildWidgetHtml, createHttpServer } from "../src/server.mjs";
 import { RENDERER_RESOURCE_URI, RENDER_TOOL_NAME } from "../src/render-tool.mjs";
 
 function listen(server) {
@@ -15,6 +15,17 @@ function listen(server) {
 }
 
 async function main() {
+  delete process.env.JSONX_ENABLE_GSAP;
+  const defaultWidgetHtml = buildWidgetHtml();
+  assert.match(defaultWidgetHtml, /gsapMotion:false/);
+  assert.doesNotMatch(defaultWidgetHtml, /jsonx-gsap-runtime/);
+
+  process.env.JSONX_ENABLE_GSAP = "1";
+  const gsapWidgetHtml = buildWidgetHtml();
+  assert.match(gsapWidgetHtml, /gsapMotion:true/);
+  assert.match(gsapWidgetHtml, /jsonx-gsap-runtime/);
+  delete process.env.JSONX_ENABLE_GSAP;
+
   const httpServer = createHttpServer();
   const port = await listen(httpServer);
   const baseUrl = `http://127.0.0.1:${port}`;

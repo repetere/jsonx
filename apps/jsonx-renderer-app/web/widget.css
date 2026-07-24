@@ -233,14 +233,23 @@ button[aria-pressed="true"] {
   color: var(--danger);
 }
 
-[data-motion="subtle-enter"] .jsonx-shell,
-[data-motion="subtle-enter"] .jsonx-panel {
+[data-motion-engine="css"][data-motion="subtle-enter"] .jsonx-shell,
+[data-motion-engine="css"][data-motion="subtle-enter"] .jsonx-panel,
+[data-motion-engine="css"][data-motion="subtle-enter"] .section-header {
   animation: subtle-enter 180ms ease-out both;
+  will-change: opacity, transform;
 }
 
-[data-motion="state-change-highlight"] .choice[aria-pressed="true"],
-[data-motion="state-change-highlight"] input:checked + span {
+[data-motion-engine="css"][data-motion="state-change-highlight"] .choice[aria-pressed="true"],
+[data-motion-engine="css"][data-motion="state-change-highlight"] input:checked + span {
   background: var(--teal-soft);
+}
+
+[data-motion-engine="css"][data-motion="morph-list-to-detail"] .jsonx-shell,
+[data-motion-engine="css"][data-motion="morph-list-to-detail"] .jsonx-panel,
+[data-motion-engine="css"][data-motion="morph-list-to-detail"] .section-header {
+  animation: morph-list-to-detail 220ms ease-out both;
+  will-change: opacity, transform;
 }
 
 @keyframes subtle-enter {
@@ -251,6 +260,17 @@ button[aria-pressed="true"] {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes morph-list-to-detail {
+  from {
+    opacity: 0;
+    transform: translateX(10px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
   }
 }
 

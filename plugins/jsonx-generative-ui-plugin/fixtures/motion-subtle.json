@@ -1,0 +1,24 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "Motion Profile Demo",
+  "purpose": "Show a renderer-owned motion profile without model-supplied animation code.",
+  "motionProfile": "subtle-enter",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "Motion Profile Demo",
+      "summary": "The renderer may animate this payload with an approved profile."
+    },
+    "children": [
+      {
+        "component": "Alert",
+        "props": {
+          "tone": "info",
+          "title": "Renderer-owned motion"
+        },
+        "children": "The payload names a motion profile. It does not include GSAP code, CSS, or event handlers."
+      }
+    ]
+  }
+}

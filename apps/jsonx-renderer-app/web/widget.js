@@ -11,6 +11,9 @@ const uiState = {
   quiz: {},
   sliders: {},
 };
+const motionState = {
+  timeline: null,
+};
 let currentStructuredContent = null;
 
 function escapeHtml(value) {
@@ -248,13 +251,78 @@ function renderNode(node, path = "root") {
 
 function renderStructuredContent(data) {
   if (!data || data.schema !== JSONX_UI_SCHEMA || !data.payload) {
+    cleanupMotion();
     root.innerHTML = `<section class="error-state"><h1>Invalid JSONX UI</h1><p>The tool result did not include a valid JSONX UI envelope.</p></section>`;
     return;
   }
 
   currentStructuredContent = data;
-  root.dataset.motion = data.motionProfile || "none";
+  cleanupMotion();
   root.innerHTML = renderNode(data.payload);
+  applyMotion(data.motionProfile || "none");
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+}
+
+function cleanupMotion() {
+  if (motionState.timeline) {
+    motionState.timeline.kill();
+    motionState.timeline = null;
+  }
+}
+
+function getGsap() {
+  if (!window.JSONX_RENDERER_CONFIG?.gsapMotion) return null;
+  return window.gsap || null;
+}
+
+function animatedPanels() {
+  return Array.from(root.querySelectorAll(".jsonx-shell, .jsonx-panel, .section-header"));
+}
+
+function runGsapMotion(profile) {
+  const gsap = getGsap();
+  if (!gsap || prefersReducedMotion() || profile === "none") return false;
+
+  const panels = animatedPanels();
+  if (!panels.length) return false;
+
+  const timeline = gsap.timeline({ defaults: { ease: "power1.out", overwrite: "auto" } });
+
+  if (profile === "subtle-enter") {
+    timeline.fromTo(
+      panels,
+      { autoAlpha: 0, y: 8 },
+      { autoAlpha: 1, y: 0, duration: 0.22, stagger: 0.025, clearProps: "opacity,transform,visibility" },
+    );
+  }
+
+  if (profile === "state-change-highlight") {
+    const active = root.querySelectorAll('.choice[aria-pressed="true"], input:checked + span');
+    timeline.fromTo(
+      active.length ? active : panels,
+      { scale: 0.98 },
+      { scale: 1, duration: 0.16, stagger: 0.015, clearProps: "transform" },
+    );
+  }
+
+  if (profile === "morph-list-to-detail") {
+    timeline.fromTo(
+      panels,
+      { autoAlpha: 0, x: 12, scale: 0.99 },
+      { autoAlpha: 1, x: 0, scale: 1, duration: 0.26, stagger: 0.035, clearProps: "opacity,transform,visibility" },
+    );
+  }
+
+  motionState.timeline = timeline;
+  return timeline.getChildren().length > 0;
+}
+
+function applyMotion(profile) {
+  root.dataset.motion = profile;
+  root.dataset.motionEngine = runGsapMotion(profile) ? "gsap" : "css";
 }
 
 function handleRpcResponse(message) {

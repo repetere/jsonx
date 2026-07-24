@@ -124,14 +124,14 @@ Also block inline event handler props such as `onClick`, `onSubmit`, and `onChan
 
 Animation is renderer-owned. The agent may request an allowlisted `motionProfile` only when the renderer supports it. Never return GSAP code, CSS animation code, arbitrary easing functions, inline styles, or JavaScript handlers.
 
-Allowed future motion profiles:
+Allowed motion profiles:
 
 - `none`
 - `subtle-enter`
 - `morph-list-to-detail`
 - `state-change-highlight`
 
-The renderer should use GSAP with reduced-motion support when animation is enabled. Rendering must still work with animation disabled. Keep GSAP out of the core `jsonx` npm package dependencies; it belongs in the hosted renderer, local preview, or plugin asset layer.
+The renderer can use GSAP with reduced-motion support when animation is enabled. Rendering must still work with animation disabled or without GSAP loaded. Keep GSAP out of the core `jsonx` npm package dependencies; it belongs in the hosted renderer, local preview, or plugin asset layer.
 
 ## Examples
 
