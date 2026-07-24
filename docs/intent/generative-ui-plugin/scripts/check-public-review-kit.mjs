@@ -22,6 +22,7 @@ const requiredPublicEvidenceKeys = [
   "reviewPackage",
   "storeListingCopy",
   "githubIssueEvidence",
+  "externalGateAccess",
   "submissionAudit",
   "externalGateEvidence",
   "externalGateRunbook",
@@ -130,6 +131,11 @@ const requiredPublicPageLinks = [
     id: "githubIssueEvidence",
     href: "intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
     url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
+  },
+  {
+    id: "externalGateAccess",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
   },
   {
     id: "openAiCoreListing",
@@ -405,6 +411,7 @@ async function validateExternalGateRunbook(filePath, queue) {
   const requiredText = [
     "# JSONX External Gate Runbook",
     "## Current Gate Status",
+    "## Current Access Probe",
     "## Gate 1: Approved App And Plugin IDs",
     "## Gate 2: ChatGPT Developer Mode Transcript",
     "## Gate 3: Claude Code Authenticated Smoke",
@@ -430,6 +437,9 @@ async function validateExternalGateRunbook(filePath, queue) {
   }
 
   const submissions = Array.isArray(queue.submissions) ? queue.submissions : [];
+  if (queue.externalGateAccess && !markdown.includes(queue.externalGateAccess)) {
+    errors.push("external gate access artifact missing from external gate runbook");
+  }
   for (const submission of submissions) {
     if (!markdown.includes(submission.portalForm)) errors.push(`${submission.id || "submission"} portal packet missing from external gate runbook`);
     if (!submission.submissionPortal?.primaryUrl) {
@@ -452,6 +462,7 @@ async function validateExternalGateRunbook(filePath, queue) {
     ).length,
     portalPacketCount: submissions.filter((submission) => submission.portalForm && markdown.includes(submission.portalForm)).length,
     submissionPortalCount: submissions.filter((submission) => submission.submissionPortal?.primaryUrl && markdown.includes(submission.submissionPortal.primaryUrl)).length,
+    accessProbePresent: Boolean(queue.externalGateAccess && markdown.includes(queue.externalGateAccess)),
     errors,
   };
 }
@@ -607,6 +618,7 @@ function printHumanReport(report) {
   }
   console.log(`externalGates: ${report.externalGateRunbook.file}`);
   console.log(`  gates: ${report.externalGateRunbook.gateCount}`);
+  console.log(`  accessProbe: ${report.externalGateRunbook.accessProbePresent}`);
   console.log(`  recorderCommands: ${report.externalGateRunbook.recorderCommandCount}`);
   console.log(`  portalPackets: ${report.externalGateRunbook.portalPacketCount}`);
   console.log(`  submissionPortals: ${report.externalGateRunbook.submissionPortalCount}`);

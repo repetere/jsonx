@@ -1,6 +1,6 @@
 # JSONX External Gate Runbook
 
-Generated: 2026-07-24T12:09:39.505Z
+Generated: 2026-07-24T12:20:32.548Z
 
 This file lists the evidence that must be collected outside the repo before public submission can be marked complete. Use it with the generated submission queue and record results through the controlled evidence recorder.
 
@@ -12,6 +12,14 @@ This file lists the evidence that must be collected outside the repo before publ
 | chatgptDeveloperMode | pending | `docs/intent/generative-ui-plugin/external-gate-evidence.json` |
 | claudeSmoke | pending | `docs/intent/generative-ui-plugin/external-gate-evidence.json` |
 | marketplaceSubmission | pending | `docs/intent/generative-ui-plugin/external-gate-evidence.json` |
+
+## Current Access Probe
+
+Access probe: `docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json`
+Blocking conditions: 3
+Claude Code CLI available: yes
+Claude Code authenticated: no
+Portal entrypoints reachable: yes
 
 ## Gate 1: Approved App And Plugin IDs
 

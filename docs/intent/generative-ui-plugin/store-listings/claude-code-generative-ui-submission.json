@@ -124,6 +124,7 @@
     "hostedMcpTranscript": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
     "motionEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
     "githubIssueEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
+    "externalGateAccess": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
     "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
     "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
     "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"

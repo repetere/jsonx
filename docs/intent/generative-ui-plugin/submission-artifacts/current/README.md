@@ -1,6 +1,6 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T12:09:39.503Z
+Generated: 2026-07-24T12:20:32.546Z
 
 ## Packages
 
@@ -26,10 +26,10 @@ Generated: 2026-07-24T12:09:39.503Z
 
 | Submission | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `afd08cf4646b004c258f4c4e3d5000738bdd3b31b474d418fbaa1e12497c7761` | 7898 |
-| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `1033a3bc20b6e4893f33108a7bf2f6ac34b6697e738bd546bac45773aae30fe9` | 10544 |
-| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `9c6b2a1de3ece53baf9adafa29ac9bf2ff4a97725882c174ce876eb538b67b49` | 7633 |
-| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `ea15799445aaaa4543bc9171a6cefc0230e3b77e82385ed79234650e8f74497c` | 8969 |
+| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `89f18114a2ba0ba12fd93a18d0a617fb75712a9ec105cfa1ba6744fe2991c842` | 8023 |
+| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `f8821d7191ee3634de263327725181d452cce326b92cf2e7a6cb89aafea07691` | 10669 |
+| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `f3cadf33a373c433ae1a578abe8033b1f3b40f94981b6f0d3e36065c4a3facec` | 7758 |
+| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `ae1758e33fbfd4fde8131a2c8340e76995cee32ce34a2150f6f0098da313f1ed` | 9094 |
 
 ## Submission Queue
 
@@ -46,7 +46,7 @@ Generated: 2026-07-24T12:09:39.503Z
 
 | Purpose | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `f8fa75fb8f4d90690fdede760dd7f07245cfe576fa8c6efc5321fdc010763a23` | 210009 |
+| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `5d11f3c945016017ea18e9f3b07362d8bd4d66c89f34cadb702dc8ed6560f87a` | 209862 |
 | skills install readme | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-skills-install-readme.png` | `f28c2fb3fb165888fa904aa05ee4cdb321d95dc20089051c0a0a5141c2428492` | 124959 |
 | renderer widget support triage desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png` | `2c89e93024a1152b7697ea61e00ec7c9f55ba6ad3a0ef888840db48dc042ed51` | 52417 |
 | renderer widget motion desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png` | `b100dfbd51d5e76b8fb9549a6779110ecbff17c705a91f3e65db80d1880c0b29` | 26345 |
@@ -73,6 +73,10 @@ Generated: 2026-07-24T12:09:39.503Z
 
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json` records 8 open feature enhancement issues for the JSONX generative UI workstreams.
 
+## External Gate Access
+
+- `docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json` records current portal reachability and local auth state for the external gates, with 3 remaining blocking conditions.
+
 ## Submission Audit
 
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` maps 15 requirements to evidence, with 11 proved and 4 external-gated.
@@ -93,6 +97,7 @@ Generated: 2026-07-24T12:09:39.503Z
 - Claude Code plugin validation evidence
 - OpenCode project skill discovery evidence
 - GitHub feature enhancement issue tracking evidence
+- external gate access probe evidence
 - live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp
 - external gate evidence validation
 - submission queue generation

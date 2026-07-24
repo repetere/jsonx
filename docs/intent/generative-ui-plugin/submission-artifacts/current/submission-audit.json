@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-24T12:09:39.509Z",
+  "generatedAt": "2026-07-24T12:20:32.552Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "d96de7385c537833c08ac4dc8e20415a14e273bf+worktree",
+  "gitCommit": "544cfa3ed4fb2dde7cb88ad191fcc2f5ac5ceaee+worktree",
   "sourceGit": {
-    "headCommit": "d96de7385c537833c08ac4dc8e20415a14e273bf",
+    "headCommit": "544cfa3ed4fb2dde7cb88ad191fcc2f5ac5ceaee",
     "dirty": true,
     "dirtyStatus": [
       " M .github/workflows/generative-ui-plugin.yml",
@@ -20,7 +20,7 @@
       " M docs/intent/generative-ui-plugin/store-listings/openai-jsonx-plugin-submission.json",
       " M docs/intent/generative-ui-plugin/submission-readiness.md",
       " M site/generative-ui.html",
-      "?? docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs"
+      "?? docs/intent/generative-ui-plugin/scripts/check-external-gate-access.mjs"
     ],
     "ignoredGeneratedArtifactStatusCount": 0
   },
@@ -294,12 +294,14 @@
       "evidence": [
         "plugins/jsonx-generative-ui-plugin/.app.json",
         "docs/intent/generative-ui-plugin/submission-readiness.md",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
       ],
       "checks": {
         "appIdsCaptured": false,
-        "codexAppMetadataUpdated": false
+        "codexAppMetadataUpdated": false,
+        "submissionPortalsReachable": true
       },
       "remaining": "Requires approved core plugin, generative UI plugin, and Apps SDK renderer app IDs from the OpenAI/Codex submission flow."
     },
@@ -309,6 +311,7 @@
       "status": "external-gated",
       "githubIssue": "#1115",
       "evidence": [
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
@@ -317,7 +320,8 @@
       "checks": {
         "chatgptMcpConnected": false,
         "chatgptTranscriptCaptured": false,
-        "chatgptGoldenPromptsPassed": false
+        "chatgptGoldenPromptsPassed": false,
+        "hostedMcpHealthOk": true
       },
       "remaining": "Requires a connected ChatGPT developer-mode app session. Current evidence is live MCP plus deterministic tool-call evidence."
     },
@@ -328,12 +332,16 @@
       "githubIssue": "#1113",
       "evidence": [
         "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
       ],
       "checks": {
         "claudeAuthenticatedSmokeRan": false,
-        "claudeSmokePromptsPassed": false
+        "claudeSmokePromptsPassed": false,
+        "claudeCodeCliAvailable": true,
+        "claudeCodeAuthStatusReadable": true,
+        "claudeCodeAuthenticated": false
       },
       "remaining": "Requires an authenticated interactive Claude Code environment. Current evidence proves split package validation only."
     },
@@ -347,6 +355,7 @@
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
@@ -359,7 +368,8 @@
         "claudeGenerativeUiSubmissionRecorded": false,
         "openAiSubmissionRecorded": false,
         "claudeSubmissionRecorded": false,
-        "policyReviewRecorded": false
+        "policyReviewRecorded": false,
+        "submissionPortalsReachable": true
       },
       "remaining": "Requires portal access and final human/legal review before sending public submissions."
     }

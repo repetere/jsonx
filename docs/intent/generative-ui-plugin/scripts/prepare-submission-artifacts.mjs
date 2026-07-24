@@ -773,6 +773,19 @@ async function buildGithubIssueEvidence() {
   );
 }
 
+async function buildExternalGateAccessEvidence() {
+  console.log("capturing external gate access evidence");
+  return parseJsonOutput(
+    "external gate access evidence",
+    run(
+      "external gate access evidence",
+      "node",
+      ["docs/intent/generative-ui-plugin/scripts/check-external-gate-access.mjs", "--json"],
+      { capture: true, timeoutMs: externalCliTimeoutMs },
+    ),
+  );
+}
+
 async function buildSkillInstallerEvidence() {
   const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "jsonx-skill-installer."));
   const realTempRoot = await fs.realpath(tempRoot);
@@ -1373,6 +1386,7 @@ function validateStoreListing(source, data) {
     "reviewPackage",
     "storeListingCopy",
     "githubIssueEvidence",
+    "externalGateAccess",
     "submissionAudit",
     "externalGateEvidence",
     "externalGateRunbook",
@@ -1695,6 +1709,7 @@ async function buildSubmissionQueue(manifest, externalGateEvidence) {
     source: "docs/intent/generative-ui-plugin/store-listings/",
     note: "This queue is generated from the four public store listing drafts. It lists packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that any public marketplace submission was sent.",
     externalGateEvidence: manifest.externalGateEvidence?.path,
+    externalGateAccess: manifest.externalGateAccessEvidence?.path,
     externalGateStatus: externalGateEvidence.gateStatus,
     submissionCount: submissions.length,
     receiptRecordedCount: submissions.filter((submission) => submission.status === "receipt-recorded").length,
@@ -1859,7 +1874,7 @@ async function writeSubmissionQueueMarkdown(queue, filePath) {
   await fs.writeFile(filePath, `${lines.join("\n")}\n`);
 }
 
-async function writeExternalGateRunbookMarkdown({ queue, externalGateEvidence, filePath }) {
+async function writeExternalGateRunbookMarkdown({ queue, externalGateEvidence, externalGateAccessEvidence, filePath }) {
   const gateStatus = externalGateEvidence.gateStatus || {};
   const evidence = externalGateEvidence.evidence || externalGateEvidence;
   const appIds = evidence.appIds || {};
@@ -1892,6 +1907,24 @@ async function writeExternalGateRunbookMarkdown({ queue, externalGateEvidence, f
     `| chatgptDeveloperMode | ${tableCell(gateStatus.chatgptDeveloperMode || "pending")} | \`${queue.receiptEvidenceFile}\` |`,
     `| claudeSmoke | ${tableCell(gateStatus.claudeSmoke || "pending")} | \`${queue.receiptEvidenceFile}\` |`,
     `| marketplaceSubmission | ${tableCell(gateStatus.marketplaceSubmission || "pending")} | \`${queue.receiptEvidenceFile}\` |`,
+    "",
+    "## Current Access Probe",
+    "",
+    externalGateAccessEvidence
+      ? `Access probe: \`${queue.externalGateAccess}\``
+      : "Access probe was not generated.",
+    externalGateAccessEvidence
+      ? `Blocking conditions: ${externalGateAccessEvidence.blockingConditions.length}`
+      : "",
+    externalGateAccessEvidence
+      ? `Claude Code CLI available: ${externalGateAccessEvidence.checks?.claudeCodeCliAvailable === true ? "yes" : "no"}`
+      : "",
+    externalGateAccessEvidence
+      ? `Claude Code authenticated: ${externalGateAccessEvidence.checks?.claudeCodeAuthenticated === true ? "yes" : "no"}`
+      : "",
+    externalGateAccessEvidence
+      ? `Portal entrypoints reachable: ${externalGateAccessEvidence.checks?.portalEntryPointsReachable === true ? "yes" : "no"}`
+      : "",
     "",
     "## Gate 1: Approved App And Plugin IDs",
     "",
@@ -3178,12 +3211,14 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
       evidence: [
         "plugins/jsonx-generative-ui-plugin/.app.json",
         "docs/intent/generative-ui-plugin/submission-readiness.md",
+        manifest.externalGateAccessEvidence?.path,
         manifest.externalGateEvidence?.path,
         manifest.externalGateRunbook?.path,
       ].filter(Boolean),
       checks: {
         appIdsCaptured: externalGateEvidence?.checks?.appIdsCaptured === true,
         codexAppMetadataUpdated: externalGateEvidence?.checks?.codexAppMetadataUpdated === true,
+        submissionPortalsReachable: manifest.externalGateAccessEvidence?.checks?.portalEntryPointsReachable === true,
       },
       ...(appIdGateOk
         ? {}
@@ -3195,6 +3230,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
       status: chatgptTranscriptGateOk ? "proved" : "external-gated",
       githubIssue: "#1115",
       evidence: [
+        manifest.externalGateAccessEvidence?.path,
         manifest.hostedMcpEvidence?.path,
         manifest.goldenPromptEvidence?.path,
         manifest.externalGateEvidence?.path,
@@ -3204,6 +3240,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         chatgptMcpConnected: externalGateEvidence?.checks?.chatgptMcpConnected === true,
         chatgptTranscriptCaptured: externalGateEvidence?.checks?.chatgptTranscriptCaptured === true,
         chatgptGoldenPromptsPassed: externalGateEvidence?.checks?.chatgptGoldenPromptsPassed === true,
+        hostedMcpHealthOk: manifest.externalGateAccessEvidence?.checks?.hostedMcpHealthOk === true,
       },
       ...(chatgptTranscriptGateOk
         ? {}
@@ -3217,10 +3254,18 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
       requirement: "Run authenticated Claude Code smoke prompts for the split core JSONX and generative UI plugins.",
       status: claudeSmokeGateOk ? "proved" : "external-gated",
       githubIssue: "#1113",
-      evidence: [manifest.claudeValidationEvidence?.path, manifest.externalGateEvidence?.path, manifest.externalGateRunbook?.path].filter(Boolean),
+      evidence: [
+        manifest.claudeValidationEvidence?.path,
+        manifest.externalGateAccessEvidence?.path,
+        manifest.externalGateEvidence?.path,
+        manifest.externalGateRunbook?.path,
+      ].filter(Boolean),
       checks: {
         claudeAuthenticatedSmokeRan: externalGateEvidence?.checks?.claudeAuthenticatedSmokeRan === true,
         claudeSmokePromptsPassed: externalGateEvidence?.checks?.claudeSmokePromptsPassed === true,
+        claudeCodeCliAvailable: manifest.externalGateAccessEvidence?.checks?.claudeCodeCliAvailable === true,
+        claudeCodeAuthStatusReadable: manifest.externalGateAccessEvidence?.checks?.claudeCodeAuthStatusReadable === true,
+        claudeCodeAuthenticated: manifest.externalGateAccessEvidence?.checks?.claudeCodeAuthenticated === true,
       },
       ...(claudeSmokeGateOk
         ? {}
@@ -3233,6 +3278,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
       githubIssue: "#1115",
       evidence: [
         ...manifest.storeListings.map((item) => item.path),
+        manifest.externalGateAccessEvidence?.path,
         manifest.submissionQueue?.json?.path,
         manifest.submissionQueue?.markdown?.path,
         manifest.externalGateEvidence?.path,
@@ -3246,6 +3292,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         openAiSubmissionRecorded: externalGateEvidence?.checks?.openAiSubmissionRecorded === true,
         claudeSubmissionRecorded: externalGateEvidence?.checks?.claudeSubmissionRecorded === true,
         policyReviewRecorded: externalGateEvidence?.checks?.policyReviewRecorded === true,
+        submissionPortalsReachable: manifest.externalGateAccessEvidence?.checks?.portalEntryPointsReachable === true,
       },
       ...(marketplaceGateOk ? {} : { remaining: "Requires portal access and final human/legal review before sending public submissions." }),
     },
@@ -3377,6 +3424,12 @@ async function writeReviewSummary(manifest) {
       ? `- \`${manifest.githubIssueEvidence.path}\` records ${manifest.githubIssueEvidence.issueCount} open feature enhancement issues for the JSONX generative UI workstreams.`
       : "- GitHub issue tracking evidence was not generated.",
     "",
+    "## External Gate Access",
+    "",
+    manifest.externalGateAccessEvidence
+      ? `- \`${manifest.externalGateAccessEvidence.path}\` records current portal reachability and local auth state for the external gates, with ${manifest.externalGateAccessEvidence.blockingConditionCount} remaining blocking conditions.`
+      : "- External gate access evidence was not generated.",
+    "",
     "## Submission Audit",
     "",
     manifest.submissionAudit
@@ -3470,6 +3523,10 @@ async function main() {
   const githubIssueEvidence = await buildGithubIssueEvidence();
   await writeJson(githubIssueEvidencePath, githubIssueEvidence);
   const githubIssueArtifact = await hashFile(githubIssueEvidencePath);
+  const externalGateAccessEvidencePath = path.join(artifactRoot, "external-gate-access.json");
+  const externalGateAccessEvidence = await buildExternalGateAccessEvidence();
+  await writeJson(externalGateAccessEvidencePath, externalGateAccessEvidence);
+  const externalGateAccessArtifact = await hashFile(externalGateAccessEvidencePath);
 
   const packages = [];
   packages.push({
@@ -3598,6 +3655,11 @@ async function main() {
       issueCount: githubIssueEvidence.issueCount,
       checks: githubIssueEvidence.checks,
     },
+    externalGateAccessEvidence: {
+      ...externalGateAccessArtifact,
+      blockingConditionCount: externalGateAccessEvidence.blockingConditions.length,
+      checks: externalGateAccessEvidence.checks,
+    },
     npmBoundary,
     fixtureValidation: {
       validFixtures,
@@ -3617,6 +3679,7 @@ async function main() {
       ...(claudeValidationEvidence.skipped ? [] : ["Claude Code plugin validation evidence"]),
       ...(openCodeSkillEvidence.skipped ? [] : ["OpenCode project skill discovery evidence"]),
       "GitHub feature enhancement issue tracking evidence",
+      "external gate access probe evidence",
       ...(hostedMcpArtifact ? [`live hosted MCP transcript capture from ${hostedMcpUrl}`] : []),
     ],
   };
@@ -3659,6 +3722,7 @@ async function main() {
   await writeExternalGateRunbookMarkdown({
     queue: submissionQueue,
     externalGateEvidence,
+    externalGateAccessEvidence,
     filePath: externalGateRunbookPath,
   });
   manifest.externalGateRunbook = await hashFile(externalGateRunbookPath);

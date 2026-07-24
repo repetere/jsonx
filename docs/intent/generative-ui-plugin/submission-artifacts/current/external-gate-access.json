@@ -1,0 +1,108 @@
+{
+  "generatedAt": "2026-07-24T12:20:29.271Z",
+  "source": "JSONX external gate access probe",
+  "note": "This probe records local auth and portal reachability without exposing secret values. It is access evidence, not proof that external gates are complete.",
+  "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
+  "hostedMcpHealth": {
+    "url": "https://jsonx-renderer-app.netlify.app/healthz",
+    "status": 200,
+    "ok": true,
+    "body": {
+      "ok": true
+    },
+    "durationMs": 271
+  },
+  "environment": {
+    "anthropicApiKeyPresent": false,
+    "claudeCodeOauthTokenPresent": false,
+    "openaiApiKeyPresent": false
+  },
+  "claude": {
+    "package": "@anthropic-ai/claude-code@2.1.218",
+    "versionCommand": "npm exec --yes --package @anthropic-ai/claude-code@2.1.218 -- claude --version",
+    "versionDetected": "2.1.218 (Claude Code)",
+    "cliAvailable": true,
+    "authCommand": "npm exec --yes --package @anthropic-ai/claude-code@2.1.218 -- claude auth status",
+    "authStatusParsed": true,
+    "loggedIn": false,
+    "authMethod": "none",
+    "apiProvider": "firstParty",
+    "authenticated": false
+  },
+  "submissionPortals": [
+    {
+      "id": "openai-plugin-portal",
+      "url": "https://platform.openai.com/plugins",
+      "status": 403,
+      "ok": true,
+      "location": null,
+      "contentType": "text/html; charset=UTF-8",
+      "durationMs": 146
+    },
+    {
+      "id": "claude-code-community-marketplace",
+      "url": "https://platform.claude.com/plugins/submit",
+      "status": 200,
+      "ok": true,
+      "location": null,
+      "contentType": "text/html; charset=utf-8",
+      "durationMs": 390
+    },
+    {
+      "id": "claude-team-directory-submission",
+      "url": "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+      "status": 403,
+      "ok": true,
+      "location": null,
+      "contentType": "text/html; charset=UTF-8",
+      "durationMs": 193
+    },
+    {
+      "id": "claude-directory-redirect",
+      "url": "https://clau.de/plugin-directory-submission",
+      "status": 302,
+      "ok": true,
+      "location": "https://code.claude.com/docs/en/plugins#submit-your-plugin-to-the-official-marketplace",
+      "contentType": null,
+      "durationMs": 193
+    }
+  ],
+  "currentExternalGates": {
+    "appIds": "pending",
+    "chatgptDeveloperMode": "pending",
+    "claudeSmoke": "pending",
+    "marketplaceSubmission": "pending"
+  },
+  "currentPendingGates": [
+    "appIds",
+    "chatgptDeveloperMode",
+    "claudeSmoke",
+    "marketplaceSubmission"
+  ],
+  "checks": {
+    "probeCompleted": true,
+    "externalGateEvidenceReadable": true,
+    "hostedMcpHealthOk": true,
+    "claudeCodeCliAvailable": true,
+    "claudeCodeAuthStatusReadable": true,
+    "claudeCodeAuthenticated": false,
+    "portalEntryPointsReachable": true
+  },
+  "blockingConditions": [
+    {
+      "gate": "claudeSmoke",
+      "reason": "Claude Code is available, but this environment is not authenticated with Claude Code and has no Anthropic API credential.",
+      "next": "Run `claude auth login` or provide a scoped Anthropic credential in a secure environment, then run the smoke prompts and record the gate."
+    },
+    {
+      "gate": "appIds marketplaceSubmission",
+      "reason": "OpenAI/Codex and Claude Code submissions still require account-gated portal actions and returned IDs or receipts.",
+      "next": "Use the generated portal packets and submission queue, then record receipts with record-external-gate-evidence.mjs."
+    },
+    {
+      "gate": "chatgptDeveloperMode",
+      "reason": "The hosted MCP endpoint is reachable, but a ChatGPT developer-mode transcript has not been recorded.",
+      "next": "Connect the hosted MCP endpoint in ChatGPT developer mode, run the golden prompts, and record the transcript URL or artifact."
+    }
+  ]
+}

@@ -96,6 +96,9 @@ jobs:
       - name: Validate GitHub issue tracking
         run: node docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs --json
 
+      - name: Probe external gate access
+        run: node docs/intent/generative-ui-plugin/scripts/check-external-gate-access.mjs --json
+
       - name: Audit generative UI goal coverage
         run: node docs/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs --json
 

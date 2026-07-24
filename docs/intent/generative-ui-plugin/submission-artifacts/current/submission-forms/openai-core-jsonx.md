@@ -1,6 +1,6 @@
 # OpenAI/Codex core JSONX plugin Portal Packet
 
-Generated: 2026-07-24T12:09:39.505Z
+Generated: 2026-07-24T12:20:32.548Z
 
 Use this packet as copy source for the public submission portal. It is generated from the tracked store listing draft and is not proof that the submission was sent.
 
@@ -181,6 +181,7 @@ Add GSAP motion to the JSONX package.
 - `codexInstallEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json
 - `skillInstallerEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json
 - `githubIssueEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json
+- `externalGateAccess`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
 - `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
