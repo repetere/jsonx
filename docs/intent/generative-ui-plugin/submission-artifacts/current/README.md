@@ -1,6 +1,6 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T10:10:13.172Z
+Generated: 2026-07-24T10:20:26.938Z
 
 ## Packages
 
@@ -31,7 +31,7 @@ Generated: 2026-07-24T10:10:13.172Z
 
 | Purpose | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `2382b10aaeab569e8b85718262fc925b2bfd9587998cc6e6eb4c54750b07bae7` | 210351 |
+| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `e2e686b78c3764ce261b3c7125969056c4a90b245a9838a57e994b4aa1183a1d` | 209782 |
 | skills install readme | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-skills-install-readme.png` | `f28c2fb3fb165888fa904aa05ee4cdb321d95dc20089051c0a0a5141c2428492` | 124959 |
 | renderer widget support triage desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png` | `2c89e93024a1152b7697ea61e00ec7c9f55ba6ad3a0ef888840db48dc042ed51` | 52417 |
 | renderer widget motion desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png` | `b100dfbd51d5e76b8fb9549a6779110ecbff17c705a91f3e65db80d1880c0b29` | 26345 |
