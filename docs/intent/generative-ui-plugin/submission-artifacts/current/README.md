@@ -1,15 +1,15 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T10:31:55.951Z
+Generated: 2026-07-24T10:38:38.280Z
 
 ## Packages
 
 | Surface | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip` | `d52da431234eb069935d213066924573a6a54f53de81cf125b07c9c3542b52b1` | 2807 |
-| Codex generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `fb6044cbec137b6737b3de6fe7d8b3e1996db58dbd81881d4464c0a8a08d01e7` | 16787 |
-| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` | `389bd27032e8215b1f7f4dffea24a00057d7fbf1453c304fc4fa5139a05bff3e` | 2634 |
-| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip` | `502114b9a8f459b53ffebae6fc508b1c3979759d0074ac584845b1e510d8a712` | 5049 |
+| Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip` | `04d726839b08516e040836b16942779a7067e8c788adb430ba3b25316fe25f54` | 2807 |
+| Codex generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `ddce24f362aa862a882d59c96aaaa7e925a35b55d734cd62904a37f20f672240` | 16787 |
+| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` | `a9f40a154c5cb7ecb7efc62aaf21333380ce6e2ac0e674d8daecd3afdee61ff6` | 2634 |
+| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip` | `f8c6bdb4bf642496d19385f9baa295bc7d289ffe70e37512816b3f7ac2c7fc99` | 5049 |
 | ChatGPT app submission | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json` | `a2668c8bc97c732a3a1ba1f62b9f132153ad6b586b3aff9356759a9009b9007b` | 4757 |
 | Codex local marketplace | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/codex-local-marketplace.json` | `2d07c106947daac04653274e25e5bd7ccaa4d68c6908c070f8010991bb4140ad` | 696 |
 
