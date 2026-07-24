@@ -12,14 +12,62 @@ const trackerPath = path.join(intentRoot, "github-issues.md");
 const timeoutMs = Number(process.env.JSONX_GITHUB_ISSUE_TIMEOUT_MS || 15000);
 
 const expectedIssues = [
-  { number: 1110, workstream: "Shared contract" },
-  { number: 1111, workstream: "Hosted renderer app" },
-  { number: 1112, workstream: "Codex plugins" },
-  { number: 1113, workstream: "Claude Code and OpenCode skills" },
-  { number: 1114, workstream: "Renderer motion" },
-  { number: 1115, workstream: "Store submission" },
-  { number: 1116, workstream: "GitHub Pages" },
-  { number: 1117, workstream: "Browser demo" },
+  {
+    number: 1110,
+    workstream: "Shared contract",
+    requirementIds: ["REQ-GENERATIVE-UI-CONTRACT", "REQ-GITHUB-TRACKING"],
+    requirementStatus: "proved",
+  },
+  {
+    number: 1111,
+    workstream: "Hosted renderer app",
+    requirementIds: ["REQ-HOSTED-RENDERER"],
+    requirementStatus: "proved",
+  },
+  {
+    number: 1112,
+    workstream: "Codex plugins",
+    requirementIds: ["REQ-CODEX-PLUGINS"],
+    requirementStatus: "proved",
+  },
+  {
+    number: 1113,
+    workstream: "Claude Code and OpenCode skills",
+    requirementIds: ["REQ-SKILLS-SPLIT", "REQ-CLAUDE-PLUGINS", "GATE-CLAUDE-SMOKE"],
+    requirementStatus: "external-gated",
+  },
+  {
+    number: 1114,
+    workstream: "Renderer motion",
+    requirementIds: ["REQ-MOTION"],
+    requirementStatus: "proved",
+  },
+  {
+    number: 1115,
+    workstream: "Store submission",
+    requirementIds: [
+      "REQ-PLAN",
+      "REQ-STORE-DRAFTS",
+      "REQ-NPM-BOUNDARY",
+      "REQ-CI-COVERAGE",
+      "GATE-APP-IDS",
+      "GATE-CHATGPT-DEVELOPER-MODE",
+      "GATE-MARKETPLACE-SUBMISSIONS",
+    ],
+    requirementStatus: "external-gated",
+  },
+  {
+    number: 1116,
+    workstream: "GitHub Pages",
+    requirementIds: ["REQ-GITHUB-PAGES"],
+    requirementStatus: "proved",
+  },
+  {
+    number: 1117,
+    workstream: "Browser demo",
+    requirementIds: ["REQ-BROWSER-DEMO"],
+    requirementStatus: "proved",
+  },
 ];
 
 function hasArg(name) {
@@ -89,6 +137,17 @@ function buildErrors(checks) {
     .map(([key]) => `${key} failed`);
 }
 
+function statusSection(tracker) {
+  return tracker.split("## Current Requirement Status")[1]?.split(/\n##\s+/)[0] || "";
+}
+
+function statusRowForIssue(section, number) {
+  return section
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .find((line) => line.startsWith(`| [#${number}](`));
+}
+
 function printHumanReport(report) {
   console.log("JSONX GitHub issue tracking");
   console.log(`generatedAt: ${report.generatedAt}`);
@@ -97,8 +156,9 @@ function printHumanReport(report) {
   console.log(`issueCount: ${report.issueCount}`);
   console.log("");
   for (const issue of report.issues) {
-    console.log(`#${issue.number} ${issue.state || "missing"} ${issue.workstream}`);
+    console.log(`#${issue.number} ${issue.state || "missing"} ${issue.workstream} ${issue.requirementStatus || "unknown"}`);
     console.log(`  ${issue.title || issue.error || "No title"}`);
+    console.log(`  requirements: ${(issue.requirementIds || []).join(", ") || "none"}`);
     console.log(`  labels: ${(issue.labels || []).join(", ") || "none"}`);
   }
   if (report.errors.length) {
@@ -119,17 +179,28 @@ feature enhancement issues linked from docs/intent/generative-ui-plugin/github-i
   }
 
   const tracker = await readText(trackerPath);
+  const trackerStatusSection = statusSection(tracker);
   const fetched = await Promise.all(expectedIssues.map((issue) => fetchIssue(issue.number)));
   const issueMap = new Map(fetched.map((issue) => [issue.number, issue]));
   const issues = expectedIssues.map((expected) => {
     const issue = issueMap.get(expected.number) || { number: expected.number, ok: false };
     const expectedUrl = `https://github.com/${repository}/issues/${expected.number}`;
+    const statusRow = statusRowForIssue(trackerStatusSection, expected.number) || "";
     return {
       ...issue,
       workstream: expected.workstream,
+      requirementIds: expected.requirementIds,
+      requirementStatus: expected.requirementStatus,
       expectedUrl,
       trackerListed: tracker.includes(`#${expected.number}`) && tracker.includes(expectedUrl),
       workstreamListed: tracker.includes(expected.workstream),
+      statusRowListed: statusRow.length > 0,
+      requirementIdsListed: expected.requirementIds.every((id) => statusRow.includes(`\`${id}\``)),
+      requirementStatusListed: statusRow.includes(`| ${expected.requirementStatus} |`),
+      remainingNoteListed:
+        expected.requirementStatus === "external-gated"
+          ? statusRow.includes("External gate")
+          : statusRow.includes("No local implementation gap"),
       enhancementLabelPresent: (issue.labels || []).includes("enhancement"),
       codexLabelPresent: (issue.labels || []).includes("codex"),
       urlMatches: issue.htmlUrl === expectedUrl,
@@ -147,6 +218,11 @@ feature enhancement issues linked from docs/intent/generative-ui-plugin/github-i
     allIssuesLabeledCodex: issues.every((issue) => issue.codexLabelPresent),
     allUrlsMatch: issues.every((issue) => issue.urlMatches),
     allTitlesPresent: issues.every((issue) => typeof issue.title === "string" && issue.title.length > 0),
+    statusSectionPresent: trackerStatusSection.includes("| Issue | Requirement IDs | Status | Remaining |"),
+    allRequirementStatusRowsListed: issues.every((issue) => issue.statusRowListed),
+    allRequirementIdsListed: issues.every((issue) => issue.requirementIdsListed),
+    allRequirementStatusesListed: issues.every((issue) => issue.requirementStatusListed),
+    allRemainingNotesListed: issues.every((issue) => issue.remainingNoteListed),
   };
 
   const report = {

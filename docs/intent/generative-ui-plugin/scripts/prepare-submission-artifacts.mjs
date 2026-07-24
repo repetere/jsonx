@@ -3528,7 +3528,7 @@ async function writeReviewSummary(manifest) {
     "## GitHub Issue Tracking",
     "",
     manifest.githubIssueEvidence
-      ? `- \`${manifest.githubIssueEvidence.path}\` records ${manifest.githubIssueEvidence.issueCount} open feature enhancement issues for the JSONX generative UI workstreams.`
+      ? `- \`${manifest.githubIssueEvidence.path}\` records ${manifest.githubIssueEvidence.issueCount} open feature enhancement issues for the JSONX generative UI workstreams and maps each issue to current requirement status.`
       : "- GitHub issue tracking evidence was not generated.",
     "",
     "## External Gate Access",

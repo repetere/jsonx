@@ -39,7 +39,7 @@ Current implementation baseline:
 - `docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs` initializes, validates, and summarizes the external gate evidence file without running the full artifact generator.
 - `docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs` records external app IDs, transcript status, Claude smoke results, policy review, and marketplace receipts into the same evidence schema.
 - `docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs` validates public evidence URL coverage in store listing drafts and can check live `jsonx.net` URLs after Pages deploys.
-- `docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs` validates the live GitHub tracking issues and records whether each workstream issue is open and labeled as an enhancement.
+- `docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs` validates the live GitHub tracking issues and records whether each workstream issue is open, labeled as an enhancement, and mapped to current requirement status.
 - `docs/intent/generative-ui-plugin/scripts/check-external-gate-access.mjs` probes current portal reachability, hosted MCP health, and local Claude Code auth state without exposing credentials.
 - `.github/workflows/generative-ui-plugin.yml` runs app, plugin, fixture, submission package, and npm package-boundary checks in CI.
 - `docs/intent/generative-ui-plugin/submission-readiness.md` tracks what remains before public app or plugin submission.

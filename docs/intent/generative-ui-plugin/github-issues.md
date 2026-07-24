@@ -19,6 +19,21 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | [#1116](https://github.com/repetere/jsonx/issues/1116) | GitHub Pages | Public install, plugin, renderer, and review-kit documentation mirrored from `site/` into `docs/`. |
 | [#1117](https://github.com/repetere/jsonx/issues/1117) | Browser demo | Fixture, paste, and bring-your-own endpoint modes that render the same JSONX generative UI contract. |
 
+## Current Requirement Status
+
+The generated objective audit currently reports `implementation-complete-external-gated`: 13 proved requirements, 0 incomplete requirements, and 4 external-gated requirements.
+
+| Issue | Requirement IDs | Status | Remaining |
+| --- | --- | --- | --- |
+| [#1110](https://github.com/repetere/jsonx/issues/1110) | `REQ-GENERATIVE-UI-CONTRACT`, `REQ-GITHUB-TRACKING` | proved | No local implementation gap. |
+| [#1111](https://github.com/repetere/jsonx/issues/1111) | `REQ-HOSTED-RENDERER` | proved | No local implementation gap. |
+| [#1112](https://github.com/repetere/jsonx/issues/1112) | `REQ-CODEX-PLUGINS` | proved | No local implementation gap. |
+| [#1113](https://github.com/repetere/jsonx/issues/1113) | `REQ-SKILLS-SPLIT`, `REQ-CLAUDE-PLUGINS`, `GATE-CLAUDE-SMOKE` | external-gated | External gate: authenticated Claude Code smoke transcript. |
+| [#1114](https://github.com/repetere/jsonx/issues/1114) | `REQ-MOTION` | proved | No local implementation gap. |
+| [#1115](https://github.com/repetere/jsonx/issues/1115) | `REQ-PLAN`, `REQ-STORE-DRAFTS`, `REQ-NPM-BOUNDARY`, `REQ-CI-COVERAGE`, `GATE-APP-IDS`, `GATE-CHATGPT-DEVELOPER-MODE`, `GATE-MARKETPLACE-SUBMISSIONS` | external-gated | External gates: approved app/plugin IDs, ChatGPT developer-mode transcript, policy review, and marketplace receipts. |
+| [#1116](https://github.com/repetere/jsonx/issues/1116) | `REQ-GITHUB-PAGES` | proved | No local implementation gap. |
+| [#1117](https://github.com/repetere/jsonx/issues/1117) | `REQ-BROWSER-DEMO` | proved | No local implementation gap. |
+
 ## Package Boundary
 
 Keep the generative UI app, plugin, fixtures, and skill packaging outside the main `jsonx` npm package runtime. Use `.npmignore`, package checks, and release review to prevent app or plugin assets from increasing the published library package.
