@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-07-24T11:12:21.967Z",
+  "generatedAt": "2026-07-24T11:23:37.131Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "b2bf182264aa3fe757dcbab5b5d3c7ed388c2a8b",
+  "gitCommit": "e4e3c52d9146b6b041b6d3711fc66a19ea1521c7",
   "sourceGit": {
-    "headCommit": "b2bf182264aa3fe757dcbab5b5d3c7ed388c2a8b",
+    "headCommit": "e4e3c52d9146b6b041b6d3711fc66a19ea1521c7",
     "dirty": false,
     "dirtyStatus": [],
-    "ignoredGeneratedArtifactStatusCount": 15
+    "ignoredGeneratedArtifactStatusCount": 0
   },
   "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
   "summary": {
@@ -177,14 +177,20 @@
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md"
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md"
       ],
       "checks": {
         "openAiCoreDraftPresent": true,
         "openAiGenerativeUiDraftPresent": true,
         "claudeCoreDraftPresent": true,
         "claudeGenerativeUiDraftPresent": true,
-        "submissionQueuePresent": true
+        "submissionQueuePresent": true,
+        "submissionQueueLinksPortalForms": true,
+        "submissionFormsPresent": true
       }
     },
     {

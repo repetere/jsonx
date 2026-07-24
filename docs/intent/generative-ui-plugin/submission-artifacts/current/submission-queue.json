@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T11:12:21.966Z",
+  "generatedAt": "2026-07-24T11:23:37.127Z",
   "source": "docs/intent/generative-ui-plugin/store-listings/",
   "note": "This queue is generated from the four public store listing drafts. It lists packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that any public marketplace submission was sent.",
   "externalGateEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
@@ -12,6 +12,7 @@
   "submissionCount": 4,
   "receiptRecordedCount": 0,
   "pendingSubmissionCount": 4,
+  "portalFormCount": 4,
   "externalGateRecorder": "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs",
   "externalGateRecorderCommands": {
     "appIds": [
@@ -41,6 +42,7 @@
       "listingName": "JSONX",
       "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip",
       "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
+      "portalForm": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
       "publicEvidence": {
         "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
         "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
@@ -113,6 +115,7 @@
       "listingName": "JSONX Generative UI",
       "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
       "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
+      "portalForm": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
       "publicEvidence": {
         "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
         "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
@@ -196,6 +199,7 @@
       "listingName": "JSONX",
       "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip",
       "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
+      "portalForm": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
       "publicEvidence": {
         "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
         "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
@@ -268,6 +272,7 @@
       "listingName": "JSONX Generative UI",
       "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip",
       "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
+      "portalForm": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md",
       "publicEvidence": {
         "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
         "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",

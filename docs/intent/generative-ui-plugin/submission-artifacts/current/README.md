@@ -1,6 +1,6 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T11:12:21.963Z
+Generated: 2026-07-24T11:23:37.125Z
 
 ## Packages
 
@@ -22,6 +22,15 @@ Generated: 2026-07-24T11:12:21.963Z
 | Claude Code core JSONX community submission draft | `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json` | 5 positive, 3 negative | 4 |
 | Claude Code generative UI community submission draft | `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json` | 5 positive, 3 negative | 4 |
 
+## Portal Packets
+
+| Submission | Artifact | SHA-256 | Bytes |
+| --- | --- | --- | ---: |
+| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `1f981b20586a139f402b9523824d71703c0a2c3fd3092f7360216ad89deff30c` | 7089 |
+| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `10787a792b681adbe637753f31ca4c444a24ddf8f113f663c2d063ffe4078a32` | 9642 |
+| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `b0167b4992328874d8fb202b5a0d5c44dd0e894704b6accbc08121f5609e0403` | 6568 |
+| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `d0fc808bb4da16162ed6a4c916d8bc9d014a9545006f955c38de31d3ce58e406` | 7881 |
+
 ## Submission Queue
 
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json` tracks 4 public submission handoffs with 4 pending receipts.
@@ -31,7 +40,7 @@ Generated: 2026-07-24T11:12:21.963Z
 
 | Purpose | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `e2e686b78c3764ce261b3c7125969056c4a90b245a9838a57e994b4aa1183a1d` | 209782 |
+| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `92e5432370a2b7224786456eee3df44218372b67f1771e244afda0c8e8713474` | 209638 |
 | skills install readme | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-skills-install-readme.png` | `f28c2fb3fb165888fa904aa05ee4cdb321d95dc20089051c0a0a5141c2428492` | 124959 |
 | renderer widget support triage desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png` | `2c89e93024a1152b7697ea61e00ec7c9f55ba6ad3a0ef888840db48dc042ed51` | 52417 |
 | renderer widget motion desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png` | `b100dfbd51d5e76b8fb9549a6779110ecbff17c705a91f3e65db80d1880c0b29` | 26345 |
@@ -76,6 +85,7 @@ Generated: 2026-07-24T11:12:21.963Z
 - live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp
 - external gate evidence validation
 - submission queue generation
+- portal submission form generation
 - submission readiness audit
 
 ## Submission Notes

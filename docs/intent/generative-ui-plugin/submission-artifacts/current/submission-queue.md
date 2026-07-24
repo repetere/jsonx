@@ -1,6 +1,6 @@
 # JSONX Public Submission Queue
 
-Generated: 2026-07-24T11:12:21.966Z
+Generated: 2026-07-24T11:23:37.127Z
 
 This file is generated from the four store listing drafts. It gives the submitter one place to find packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that a public submission was sent.
 
@@ -56,6 +56,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - Generated draft: `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json`
 - Review package: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip
 - Public listing copy: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json
+- Portal packet: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md
 
 ### Before Submit
 
@@ -108,6 +109,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - Generated draft: `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json`
 - Review package: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip
 - Public listing copy: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json
+- Portal packet: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md
 
 ### Before Submit
 
@@ -169,6 +171,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - Generated draft: `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json`
 - Review package: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip
 - Public listing copy: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json
+- Portal packet: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md
 
 ### Before Submit
 
@@ -221,6 +224,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - Generated draft: `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json`
 - Review package: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip
 - Public listing copy: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json
+- Portal packet: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md
 
 ### Before Submit
 
