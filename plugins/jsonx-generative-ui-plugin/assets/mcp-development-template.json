@@ -1,11 +1,13 @@
 {
   "mcpServers": {
     "jsonx-renderer-dev": {
-      "command": "node",
+      "command": "npm",
       "args": [
-        "apps/jsonx-renderer-app/src/server.mjs"
+        "--prefix",
+        "apps/jsonx-renderer-app",
+        "start"
       ],
-      "notes": "Enable only when the local Apps SDK renderer server exists and the plugin is installed from this repository."
+      "notes": "Use from a jsonx repo checkout for local development. For ChatGPT developer mode, expose the running server with an HTTPS tunnel and connect to /mcp."
     }
   }
 }

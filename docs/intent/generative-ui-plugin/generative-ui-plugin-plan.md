@@ -1,6 +1,6 @@
 # JSONX Generative UI Plugin Plan
 
-Status: planning
+Status: implementation in progress
 
 Last updated: 2026-07-24
 
@@ -21,6 +21,14 @@ Keep the core JSONX agent workflow separate from the generative UI workflow:
 - Generative UI skills help agents decide when a model response should become a validated UI payload.
 
 This separation lets users install JSONX help without opting into generated interface output.
+
+Current implementation baseline:
+
+- `apps/jsonx-renderer-app/` contains a runnable stateless MCP app for local developer-mode testing.
+- `plugins/jsonx-generative-ui-plugin/` contains the Codex plugin package.
+- `plugins/claude-jsonx-plugin/` contains the Claude Code plugin package.
+- `skills/codex/`, `skills/claude/`, and `skills/opencode/` contain installable skill source folders.
+- `docs/intent/generative-ui-plugin/submission-readiness.md` tracks what remains before public app or plugin submission.
 
 ## Positioning
 
@@ -104,7 +112,7 @@ Allowed future motion profile examples:
 - `morph-list-to-detail`
 - `state-change-highlight`
 
-### 3. Hosted Apps SDK renderer
+### 3. Apps SDK renderer
 
 Build a stateless MCP app with one read-only render tool:
 
@@ -148,6 +156,14 @@ Tool requirements:
 - Keep `structuredContent` compact because the model reads it.
 - Put any widget-only details in `_meta` only when needed.
 - Return clear validation errors for bad payloads.
+
+Local developer-mode implementation:
+
+- Package: `apps/jsonx-renderer-app/`
+- Local MCP URL: `http://localhost:8787/mcp`
+- Health check: `http://localhost:8787/healthz`
+- Widget preview: `http://localhost:8787/widget`
+- Validation command: `npm run check` from `apps/jsonx-renderer-app/`
 
 ### 4. Iframe renderer widget
 
@@ -243,6 +259,7 @@ The plugin should start as a local or workspace plugin. Public submission should
 Package the same workflows for Claude Code and OpenCode:
 
 - Claude Code project skills under `skills/claude/<skill-name>/`.
+- Claude Code plugin under `plugins/claude-jsonx-plugin/`.
 - OpenCode project skills under `skills/opencode/<skill-name>/`.
 - Claude Code plugin submission plan for JSONX core and generative UI when the package format and review path are ready.
 - OpenCode install documentation that uses first-party `SKILL.md` discovery instead of a separate plugin unless there is a real need.
@@ -426,6 +443,8 @@ Exit criteria:
 - [#1115 Prepare Codex and Claude Code plugin submission packages for JSONX](https://github.com/repetere/jsonx/issues/1115)
 - [#1116 Update JSONX GitHub Pages for skills, plugins, and renderer installs](https://github.com/repetere/jsonx/issues/1116)
 - [#1117 Wire browser generative UI demo to fixtures and bring-your-own endpoint mode](https://github.com/repetere/jsonx/issues/1117)
+
+Related readiness doc: `docs/intent/generative-ui-plugin/submission-readiness.md`
 
 ## References
 

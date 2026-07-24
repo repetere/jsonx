@@ -1,0 +1,12 @@
+{
+  "name": "jsonx",
+  "description": "Use JSONX core and generative UI workflows in Claude Code.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Repetere",
+    "url": "https://jsonx.net/"
+  },
+  "homepage": "https://jsonx.net/generative-ui.html",
+  "repository": "https://github.com/repetere/jsonx",
+  "license": "MIT"
+}

@@ -2,11 +2,15 @@
   color-scheme: light;
   --background: #ffffff;
   --panel: #f7faf9;
+  --surface: #ffffff;
   --ink: #06111f;
   --muted: #53616d;
   --line: #d8e1e1;
   --teal: #087b73;
+  --teal-soft: #e3f3f1;
   --danger: #b3261e;
+  --warning: #8a5a00;
+  --success: #166534;
 }
 
 * {
@@ -36,6 +40,11 @@ body {
   padding: 14px;
 }
 
+.jsonx-shell {
+  display: grid;
+  gap: 14px;
+}
+
 h1,
 h2,
 h3,
@@ -43,8 +52,31 @@ p {
   margin-top: 0;
 }
 
+h1 {
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+
+h2 {
+  font-size: 1.1rem;
+}
+
+p,
+li,
+td,
+th,
+button,
+input {
+  font-size: 0.95rem;
+}
+
 .muted {
   color: var(--muted);
+}
+
+.section-header {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
 }
 
 .metric-row {
@@ -53,17 +85,28 @@ p {
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 }
 
-.metric-row span,
+.metric-row article,
 .choice {
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--surface);
   padding: 10px;
+}
+
+.metric-row span,
+.metric-row small {
+  color: var(--muted);
+  display: block;
 }
 
 .metric-row strong {
   display: block;
   font-size: 1.25rem;
+  line-height: 1.15;
+}
+
+.table-panel {
+  overflow-x: auto;
 }
 
 table {
@@ -76,6 +119,7 @@ td {
   border-bottom: 1px solid var(--line);
   padding: 8px;
   text-align: left;
+  vertical-align: top;
 }
 
 button {
@@ -89,7 +133,143 @@ button {
   padding: 9px 12px;
 }
 
+button[aria-pressed="true"] {
+  background: var(--ink);
+}
+
+.choices,
+.action-panel div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.choice {
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.checklist,
+.timeline {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.checklist li,
+.timeline li {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 10px;
+}
+
+.checklist label {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.checklist small {
+  color: var(--muted);
+  display: block;
+  margin-left: 28px;
+}
+
+.quiz fieldset {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 10px;
+}
+
+.quiz legend {
+  font-weight: 800;
+}
+
+.slider-poll input[type="range"] {
+  accent-color: var(--teal);
+  width: 100%;
+}
+
+.range-labels {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.range-labels strong {
+  color: var(--ink);
+  font-size: 1.25rem;
+}
+
+.alert-info {
+  border-color: var(--line);
+}
+
+.alert-warning {
+  border-color: rgba(138, 90, 0, 0.45);
+  color: var(--warning);
+}
+
+.alert-success {
+  border-color: rgba(22, 101, 52, 0.35);
+  color: var(--success);
+}
+
+.alert-danger {
+  border-color: rgba(179, 38, 30, 0.4);
+  color: var(--danger);
+}
+
 .error-state {
   border-color: rgba(179, 38, 30, 0.4);
   color: var(--danger);
+}
+
+[data-motion="subtle-enter"] .jsonx-shell,
+[data-motion="subtle-enter"] .jsonx-panel {
+  animation: subtle-enter 180ms ease-out both;
+}
+
+[data-motion="state-change-highlight"] .choice[aria-pressed="true"],
+[data-motion="state-change-highlight"] input:checked + span {
+  background: var(--teal-soft);
+}
+
+@keyframes subtle-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-motion] * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .jsonx-root {
+    padding: 12px;
+  }
+
+  .jsonx-shell,
+  .jsonx-panel,
+  .empty-state,
+  .error-state {
+    padding: 12px;
+  }
 }

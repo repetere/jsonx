@@ -3,8 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Stateless hosted Apps SDK renderer scaffold for JSONX generative UI.",
+  "description": "Stateless Apps SDK MCP renderer for JSONX generative UI.",
   "scripts": {
+    "start": "node src/server.mjs",
+    "check": "node --check src/server.mjs && node --check src/render-tool.mjs && node --check src/jsonx-validator.mjs && node --check web/widget.js && node test/smoke.mjs",
+    "smoke": "node test/smoke.mjs",
     "validate:fixtures": "python3 ../../plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py ../../plugins/jsonx-generative-ui-plugin/fixtures/text-block.json ../../plugins/jsonx-generative-ui-plugin/fixtures/checklist.json ../../plugins/jsonx-generative-ui-plugin/fixtures/choice-list.json ../../plugins/jsonx-generative-ui-plugin/fixtures/data-table.json ../../plugins/jsonx-generative-ui-plugin/fixtures/alert.json ../../plugins/jsonx-generative-ui-plugin/fixtures/quiz.json ../../plugins/jsonx-generative-ui-plugin/fixtures/slider-poll.json"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^1.7.5",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^4.4.3"
+  },
+  "overrides": {
+    "@hono/node-server": "^2.0.11"
   }
 }

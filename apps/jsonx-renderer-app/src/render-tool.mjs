@@ -1,6 +1,7 @@
+import { ALLOWED_MOTION_PROFILES, JSONX_UI_SCHEMA, normalizeRenderInput } from "./jsonx-validator.mjs";
+
 export const RENDER_TOOL_NAME = "render_jsonx_response";
-export const JSONX_UI_SCHEMA = "jsonx.generative-ui.v1";
-export const RENDERER_RESOURCE_URI = "ui://jsonx/renderer.html";
+export const RENDERER_RESOURCE_URI = "ui://jsonx/renderer-v1.html";
 
 export const renderJsonxResponseTool = {
   name: RENDER_TOOL_NAME,
@@ -19,7 +20,7 @@ export const renderJsonxResponseTool = {
       },
       motionProfile: {
         type: "string",
-        enum: ["none", "subtle-enter", "morph-list-to-detail", "state-change-highlight"],
+        enum: Array.from(ALLOWED_MOTION_PROFILES),
       },
       payload: {
         type: "object",
@@ -39,7 +40,7 @@ export const renderJsonxResponseTool = {
       },
       motionProfile: {
         type: "string",
-        enum: ["none", "subtle-enter", "morph-list-to-detail", "state-change-highlight"],
+        enum: Array.from(ALLOWED_MOTION_PROFILES),
       },
       payload: {
         type: "object",
@@ -57,22 +58,27 @@ export const renderJsonxResponseTool = {
       resourceUri: RENDERER_RESOURCE_URI,
     },
     "openai/outputTemplate": RENDERER_RESOURCE_URI,
+    "openai/toolInvocation/invoking": "Rendering JSONX UI...",
+    "openai/toolInvocation/invoked": "Rendered JSONX UI.",
   },
 };
 
 export function renderJsonxResponse(input) {
-  const result = {
-    schema: JSONX_UI_SCHEMA,
-    purpose: input.purpose,
-    payload: input.payload,
-  };
-
-  if (input.motionProfile) {
-    result.motionProfile = input.motionProfile;
+  const normalized = normalizeRenderInput(input);
+  if (!normalized.ok) {
+    return {
+      isError: true,
+      content: [
+        {
+          type: "text",
+          text: `Invalid JSONX UI payload: ${normalized.errors.join("; ")}`,
+        },
+      ],
+    };
   }
 
   return {
-    structuredContent: result,
+    structuredContent: normalized.document,
     content: [
       {
         type: "text",
