@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T10:38:32.517Z",
+  "generatedAt": "2026-07-24T10:45:02.834Z",
   "source": "opencode debug skill",
   "note": "This evidence installs the OpenCode JSONX skills into a temporary project and verifies OpenCode can discover both project skills.",
   "skipped": false,
@@ -34,8 +34,8 @@
         "totalSkillsListed": 3,
         "skillNames": [
           "customize-opencode",
-          "jsonx-generative-ui",
-          "jsonx"
+          "jsonx",
+          "jsonx-generative-ui"
         ],
         "jsonx": {
           "name": "jsonx",
