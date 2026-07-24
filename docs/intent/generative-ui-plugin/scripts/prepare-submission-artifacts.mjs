@@ -20,6 +20,7 @@ const hostedWidgetUrl = process.env.JSONX_RENDERER_WIDGET_URL || "https://jsonx-
 const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.netlify.app/mcp";
 const codexCliOverride = process.env.JSONX_CODEX_CLI;
 const claudeCodePackage = process.env.JSONX_CLAUDE_CODE_PACKAGE || "@anthropic-ai/claude-code@2.1.218";
+const openCodePackage = process.env.JSONX_OPENCODE_PACKAGE || "opencode-ai@1.18.4";
 const publicSiteUrl = process.env.JSONX_PUBLIC_SITE_URL || "https://jsonx.net/generative-ui.html";
 const publicSkillsUrl = process.env.JSONX_PUBLIC_SKILLS_URL || "https://jsonx.net/skills/README.md";
 
@@ -774,6 +775,140 @@ async function buildClaudeValidationEvidence({ skip }) {
   }
 }
 
+function openCodeSkillSummary(skill, replacements) {
+  const content = skill.content || "";
+  return {
+    name: skill.name,
+    description: skill.description,
+    location: sanitizeEvidence(skill.location, replacements),
+    contentBytes: Buffer.byteLength(content, "utf8"),
+    contentSha256: createHash("sha256").update(content).digest("hex"),
+  };
+}
+
+async function buildOpenCodeSkillEvidence({ skip }) {
+  if (skip) {
+    return {
+      generatedAt: new Date().toISOString(),
+      source: "opencode debug skill",
+      skipped: true,
+      reason: "Skipped by --skip-opencode-validation or JSONX_SKIP_OPENCODE_VALIDATION=1.",
+      checks: {},
+      steps: [],
+    };
+  }
+
+  const tempProject = await fs.mkdtemp(path.join(os.tmpdir(), "jsonx-opencode-project."));
+  const tempCache = await fs.mkdtemp(path.join(os.tmpdir(), "jsonx-opencode-npm."));
+  const realTempProject = await fs.realpath(tempProject);
+  const realTempCache = await fs.realpath(tempCache);
+  const replacements = [
+    [realTempProject, "$OPENCODE_PROJECT"],
+    [tempProject, "$OPENCODE_PROJECT"],
+    [realTempCache, "$NPM_CACHE"],
+    [tempCache, "$NPM_CACHE"],
+    [repoRoot, "$REPO_ROOT"],
+  ];
+  const env = {
+    npm_config_cache: tempCache,
+    OPENCODE_DISABLE_EXTERNAL_SKILLS: "1",
+    OPENCODE_DISABLE_CLAUDE_CODE_SKILLS: "1",
+  };
+  const skillRoot = path.join(tempProject, ".opencode", "skills");
+  const steps = [];
+
+  console.log("capturing OpenCode skill discovery evidence");
+
+  try {
+    const installOutput = run(
+      "opencode skill install",
+      "node",
+      [
+        "skills/scripts/install-jsonx-skill.mjs",
+        "--surface",
+        "opencode",
+        "--skill",
+        "all",
+        "--scope",
+        "project",
+        "--target",
+        skillRoot,
+        "--force",
+      ],
+      { capture: true, env },
+    );
+    for (const skill of ["jsonx", "jsonx-generative-ui"]) {
+      assertEvidence(await fileExists(path.join(skillRoot, skill, "SKILL.md")), `OpenCode temp project missing ${skill}`);
+    }
+    steps.push({
+      id: "install-opencode-skills",
+      command: "node skills/scripts/install-jsonx-skill.mjs --surface opencode --skill all --scope project --target $OPENCODE_PROJECT/.opencode/skills --force",
+      stdout: sanitizeEvidence(installOutput.split("\n").filter(Boolean), replacements),
+    });
+
+    const version = run(
+      "opencode version via npm exec",
+      "npm",
+      ["exec", "--yes", "--package", openCodePackage, "--", "opencode", "--version"],
+      { cwd: tempProject, capture: true, env },
+    );
+    assertEvidence(Boolean(version), "OpenCode version output was empty");
+    steps.push({
+      id: "opencode-version",
+      command: `npm exec --yes --package ${openCodePackage} -- opencode --version`,
+      stdout: sanitizeEvidence(version, replacements),
+    });
+
+    const debugOutput = run(
+      "opencode debug skill",
+      "npm",
+      ["exec", "--yes", "--package", openCodePackage, "--", "opencode", "debug", "skill"],
+      { cwd: tempProject, capture: true, env },
+    );
+    const skills = parseJsonOutput("opencode debug skill", debugOutput);
+    const jsonxSkill = skills.find((skill) => skill.name === "jsonx");
+    const generativeUiSkill = skills.find((skill) => skill.name === "jsonx-generative-ui");
+    assertEvidence(jsonxSkill, "opencode debug skill did not list jsonx");
+    assertEvidence(generativeUiSkill, "opencode debug skill did not list jsonx-generative-ui");
+    assertEvidence(jsonxSkill.location?.includes(tempProject), "jsonx skill was not loaded from the temp OpenCode project");
+    assertEvidence(
+      generativeUiSkill.location?.includes(tempProject),
+      "jsonx-generative-ui skill was not loaded from the temp OpenCode project",
+    );
+    steps.push({
+      id: "debug-skill",
+      command: `npm exec --yes --package ${openCodePackage} -- opencode debug skill`,
+      result: {
+        totalSkillsListed: skills.length,
+        skillNames: skills.map((skill) => skill.name),
+        jsonx: openCodeSkillSummary(jsonxSkill, replacements),
+        jsonxGenerativeUi: openCodeSkillSummary(generativeUiSkill, replacements),
+      },
+    });
+
+    return {
+      generatedAt: new Date().toISOString(),
+      source: "opencode debug skill",
+      note: "This evidence installs the OpenCode JSONX skills into a temporary project and verifies OpenCode can discover both project skills.",
+      skipped: false,
+      openCodePackage,
+      openCodeVersion: version,
+      tempProject: "$OPENCODE_PROJECT",
+      tempNpmCache: "$NPM_CACHE",
+      checks: {
+        cliAvailableViaNpmExec: true,
+        projectSkillsInstalled: true,
+        debugSkillListedJsonx: true,
+        debugSkillListedGenerativeUi: true,
+      },
+      steps,
+    };
+  } finally {
+    await fs.rm(tempProject, { recursive: true, force: true });
+    await fs.rm(tempCache, { recursive: true, force: true });
+  }
+}
+
 function validateStoreListing(source, data) {
   const errors = [];
   if (data.schemaVersion !== 1) errors.push("schemaVersion must be 1");
@@ -1110,6 +1245,7 @@ async function buildNpmBoundaryEvidence() {
     "skill-installer-evidence",
     "codex-install-evidence",
     "claude-validation-evidence",
+    "opencode-skill-evidence",
     "openai-plugin-submission",
     "claude-code-community-submission",
   ];
@@ -1183,6 +1319,11 @@ async function writeReviewSummary(manifest) {
       : manifest.claudeValidationEvidence
         ? `- \`${manifest.claudeValidationEvidence.path}\` records why Claude validation evidence was skipped.`
         : "- Claude validation evidence was not generated.",
+    manifest.openCodeSkillEvidence && !manifest.openCodeSkillEvidence.skipped
+      ? `- \`${manifest.openCodeSkillEvidence.path}\` records OpenCode project skill discovery with ${manifest.openCodeSkillEvidence.stepCount} checks.`
+      : manifest.openCodeSkillEvidence
+        ? `- \`${manifest.openCodeSkillEvidence.path}\` records why OpenCode skill evidence was skipped.`
+        : "- OpenCode skill evidence was not generated.",
     "",
     "## Validation",
     "",
@@ -1204,6 +1345,7 @@ async function main() {
   const skipHostedMcp = hasArg("--skip-hosted-mcp") || process.env.JSONX_SKIP_HOSTED_MCP === "1";
   const skipCodexInstall = hasArg("--skip-codex-install") || process.env.JSONX_SKIP_CODEX_INSTALL === "1";
   const skipClaudeValidation = hasArg("--skip-claude-validation") || process.env.JSONX_SKIP_CLAUDE_VALIDATION === "1";
+  const skipOpenCodeValidation = hasArg("--skip-opencode-validation") || process.env.JSONX_SKIP_OPENCODE_VALIDATION === "1";
   await fs.rm(artifactRoot, { recursive: true, force: true });
   await fs.mkdir(packagesDir, { recursive: true });
   await fs.mkdir(screenshotsDir, { recursive: true });
@@ -1245,6 +1387,10 @@ async function main() {
   const claudeValidationEvidence = await buildClaudeValidationEvidence({ skip: skipClaudeValidation });
   await writeJson(claudeValidationEvidencePath, claudeValidationEvidence);
   const claudeValidationArtifact = await hashFile(claudeValidationEvidencePath);
+  const openCodeSkillEvidencePath = path.join(artifactRoot, "opencode-skill-evidence.json");
+  const openCodeSkillEvidence = await buildOpenCodeSkillEvidence({ skip: skipOpenCodeValidation });
+  await writeJson(openCodeSkillEvidencePath, openCodeSkillEvidence);
+  const openCodeSkillArtifact = await hashFile(openCodeSkillEvidencePath);
 
   const packages = [];
   packages.push({
@@ -1328,6 +1474,14 @@ async function main() {
       claudeCodePackage: claudeValidationEvidence.claudeCodePackage,
       claudeVersion: claudeValidationEvidence.claudeVersion,
     },
+    openCodeSkillEvidence: {
+      ...openCodeSkillArtifact,
+      skipped: openCodeSkillEvidence.skipped === true,
+      stepCount: openCodeSkillEvidence.steps.length,
+      checks: openCodeSkillEvidence.checks,
+      openCodePackage: openCodeSkillEvidence.openCodePackage,
+      openCodeVersion: openCodeSkillEvidence.openCodeVersion,
+    },
     npmBoundary,
     validation: [
       "node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs",
@@ -1339,6 +1493,7 @@ async function main() {
       "skill installer dry-run and isolated install evidence",
       ...(codexInstallEvidence.skipped ? [] : ["isolated Codex marketplace install evidence"]),
       ...(claudeValidationEvidence.skipped ? [] : ["Claude Code plugin validation evidence"]),
+      ...(openCodeSkillEvidence.skipped ? [] : ["OpenCode project skill discovery evidence"]),
       ...(hostedMcpArtifact ? [`live hosted MCP transcript capture from ${hostedMcpUrl}`] : []),
     ],
   };

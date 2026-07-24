@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-07-24T07:53:25.025Z",
+  "source": "opencode debug skill",
+  "note": "This evidence installs the OpenCode JSONX skills into a temporary project and verifies OpenCode can discover both project skills.",
+  "skipped": false,
+  "openCodePackage": "opencode-ai@1.18.4",
+  "openCodeVersion": "1.18.4",
+  "tempProject": "$OPENCODE_PROJECT",
+  "tempNpmCache": "$NPM_CACHE",
+  "checks": {
+    "cliAvailableViaNpmExec": true,
+    "projectSkillsInstalled": true,
+    "debugSkillListedJsonx": true,
+    "debugSkillListedGenerativeUi": true
+  },
+  "steps": [
+    {
+      "id": "install-opencode-skills",
+      "command": "node skills/scripts/install-jsonx-skill.mjs --surface opencode --skill all --scope project --target $OPENCODE_PROJECT/.opencode/skills --force",
+      "stdout": [
+        "installed $OPENCODE_PROJECT/.opencode/skills/jsonx",
+        "installed $OPENCODE_PROJECT/.opencode/skills/jsonx-generative-ui"
+      ]
+    },
+    {
+      "id": "opencode-version",
+      "command": "npm exec --yes --package opencode-ai@1.18.4 -- opencode --version",
+      "stdout": "1.18.4"
+    },
+    {
+      "id": "debug-skill",
+      "command": "npm exec --yes --package opencode-ai@1.18.4 -- opencode debug skill",
+      "result": {
+        "totalSkillsListed": 3,
+        "skillNames": [
+          "customize-opencode",
+          "jsonx",
+          "jsonx-generative-ui"
+        ],
+        "jsonx": {
+          "name": "jsonx",
+          "description": "Work with JSONX/JXM as the core React JSON syntax package. Use when the user asks to render JSONX, create or debug JXM examples, update JSONX source, explain package APIs, write tests, or build docs separate from generative UI workflows.",
+          "location": "$OPENCODE_PROJECT/.opencode/skills/jsonx/SKILL.md",
+          "contentBytes": 1480,
+          "contentSha256": "3ef6dcd68f0370250340664e9641fa50d87dd40cdde5714f359f55764d75ca59"
+        },
+        "jsonxGenerativeUi": {
+          "name": "jsonx-generative-ui",
+          "description": "Generate safe JSONX/JXM UI payloads only when a richer response is useful or explicitly requested. Use for OpenCode sessions connected to an IDE, browser demo, or terminal workflow when the user wants interactive UI, quizzes, polls, sliders, review panels, dashboards, forms, or other generated interface output instead of plain text.",
+          "location": "$OPENCODE_PROJECT/.opencode/skills/jsonx-generative-ui/SKILL.md",
+          "contentBytes": 4509,
+          "contentSha256": "6b4c54cd9f6104a3632018987a168376f3df5b8e9e6ab80c024ef35b7dbd7739"
+        }
+      }
+    }
+  ]
+}

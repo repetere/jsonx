@@ -28,3 +28,11 @@ cp -R skills/opencode/jsonx-generative-ui "$HOME/.config/opencode/skills/jsonx-g
 ```
 
 OpenCode also discovers Claude-compatible `.claude/skills/<skill-name>/SKILL.md` and agent-compatible `.agents/skills/<skill-name>/SKILL.md` folders.
+
+Validate project discovery from the project root:
+
+```text
+npm exec --yes --package opencode-ai -- opencode debug skill
+```
+
+The output should list `jsonx` and `jsonx-generative-ui` with locations under the active project.

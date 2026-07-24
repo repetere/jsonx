@@ -86,3 +86,11 @@ cp -R skills/opencode/jsonx-generative-ui "$HOME/.config/opencode/skills/jsonx-g
 ```
 
 OpenCode also discovers `.claude/skills` and `.agents/skills`, so teams can choose one shared project install path when that is simpler.
+
+Validate OpenCode project discovery:
+
+```text
+npm exec --yes --package opencode-ai -- opencode debug skill
+```
+
+The output should include `jsonx` and `jsonx-generative-ui`.

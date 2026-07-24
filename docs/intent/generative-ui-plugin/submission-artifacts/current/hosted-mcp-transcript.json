@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-07-24T07:44:32.139Z",
+  "generatedAt": "2026-07-24T07:53:08.335Z",
   "source": "live hosted JSONX renderer MCP endpoint",
   "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
   "healthUrl": "https://jsonx-renderer-app.netlify.app/healthz",
   "note": "This is live endpoint evidence for submission review. It is not a captured ChatGPT developer-mode transcript.",
-  "durationMs": 2263,
+  "durationMs": 1665,
   "checks": {
     "healthOk": true,
     "corsPreflightOk": true,

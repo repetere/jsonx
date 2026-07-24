@@ -72,6 +72,7 @@ jobs:
           --skip-hosted-mcp
           --skip-codex-install
           --skip-claude-validation
+          --skip-opencode-validation
           --output /tmp/jsonx-submission-artifacts
 
       - name: Check npm package boundary
@@ -103,6 +104,9 @@ jobs:
             "skill-installer-evidence",
             "codex-install-evidence",
             "claude-validation-evidence",
+            "opencode-skill-evidence",
+            "openai-plugin-submission",
+            "claude-code-community-submission",
           ];
           const blocked = files.filter(
             (file) =>
