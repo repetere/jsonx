@@ -3,6 +3,7 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { constants as fsConstants } from "node:fs";
 import fs from "node:fs/promises";
+import http from "node:http";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -124,6 +125,153 @@ function siblingUrl(urlString, pathname) {
   url.search = "";
   url.hash = "";
   return url.toString();
+}
+
+function contentTypeFor(filePath) {
+  const extension = path.extname(filePath);
+  return (
+    {
+      ".css": "text/css; charset=utf-8",
+      ".html": "text/html; charset=utf-8",
+      ".js": "text/javascript; charset=utf-8",
+      ".json": "application/json; charset=utf-8",
+      ".svg": "image/svg+xml; charset=utf-8",
+    }[extension] || "application/octet-stream"
+  );
+}
+
+async function readRequestBody(request) {
+  const chunks = [];
+  for await (const chunk of request) {
+    chunks.push(Buffer.from(chunk));
+  }
+  return Buffer.concat(chunks).toString("utf8");
+}
+
+async function listenOnLoopback(server) {
+  await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", () => {
+      server.off("error", reject);
+      resolve();
+    });
+  });
+  const address = server.address();
+  assertEvidence(address && typeof address === "object", "local browser demo server did not bind to a port");
+  return `http://127.0.0.1:${address.port}`;
+}
+
+function closeServer(server) {
+  return new Promise((resolve, reject) => {
+    server.close((error) => (error ? reject(error) : resolve()));
+  });
+}
+
+async function startStaticSiteServer() {
+  const siteRoot = path.join(repoRoot, "site");
+  const server = http.createServer(async (request, response) => {
+    try {
+      const requestUrl = new URL(request.url || "/", "http://127.0.0.1");
+      const pathname = decodeURIComponent(requestUrl.pathname === "/" ? "/generative-ui.html" : requestUrl.pathname);
+      const filePath = path.resolve(siteRoot, `.${pathname}`);
+      if (!filePath.startsWith(`${siteRoot}${path.sep}`)) {
+        response.writeHead(403).end("Forbidden");
+        return;
+      }
+      const body = await fs.readFile(filePath);
+      response.writeHead(200, { "content-type": contentTypeFor(filePath) }).end(body);
+    } catch {
+      response.writeHead(404, { "content-type": "text/plain; charset=utf-8" }).end("Not found");
+    }
+  });
+  const origin = await listenOnLoopback(server);
+  return {
+    origin,
+    url: `${origin}/generative-ui.html`,
+    close: () => closeServer(server),
+  };
+}
+
+function browserEndpointPayload() {
+  return {
+    schema: "jsonx.generative-ui.v1",
+    purpose: "Render a browser endpoint JSONX response.",
+    payload: {
+      component: "DemoShell",
+      props: {
+        title: "Endpoint JSONX Response",
+        summary: "Returned by a temporary CORS endpoint during browser evidence capture.",
+      },
+      children: [
+        {
+          component: "ChoiceList",
+          props: {
+            question: "Which follow-up should the agent prepare?",
+            selectionMode: "single",
+            items: [{ label: "Draft response" }, { label: "Open customer timeline" }],
+          },
+        },
+      ],
+    },
+  };
+}
+
+async function startBrowserEndpointServer() {
+  const requests = [];
+  const server = http.createServer(async (request, response) => {
+    const origin = request.headers.origin || "*";
+    const corsHeaders = {
+      "access-control-allow-headers": "content-type,authorization",
+      "access-control-allow-methods": "POST,OPTIONS",
+      "access-control-allow-origin": origin,
+      vary: "Origin",
+    };
+
+    if (request.method === "OPTIONS") {
+      requests.push({
+        method: "OPTIONS",
+        origin,
+        requestedHeaders: request.headers["access-control-request-headers"],
+        requestedMethod: request.headers["access-control-request-method"],
+      });
+      response.writeHead(204, corsHeaders).end();
+      return;
+    }
+
+    if (request.method !== "POST") {
+      response.writeHead(405, corsHeaders).end();
+      return;
+    }
+
+    const body = await readRequestBody(request);
+    let parsedBody = {};
+    try {
+      parsedBody = JSON.parse(body);
+    } catch {
+      parsedBody = {};
+    }
+    requests.push({
+      method: "POST",
+      origin,
+      contentType: request.headers["content-type"],
+      authorizationHeaderPresent: Boolean(request.headers.authorization),
+      authorizationScheme: request.headers.authorization?.split(/\s+/)[0] || null,
+      prompt: parsedBody.prompt,
+    });
+    response
+      .writeHead(200, {
+        ...corsHeaders,
+        "content-type": "application/json; charset=utf-8",
+      })
+      .end(JSON.stringify(browserEndpointPayload()));
+  });
+  const origin = await listenOnLoopback(server);
+  return {
+    origin,
+    url: `${origin}/generate`,
+    requests,
+    close: () => closeServer(server),
+  };
 }
 
 function parseJsonOutput(label, output) {
@@ -1322,6 +1470,230 @@ async function buildMotionEvidence({ skip }) {
   };
 }
 
+async function setDemoValue(page, selector, value) {
+  await page.waitForSelector(selector, { timeout: 10000 });
+  await page.$eval(
+    selector,
+    (element, nextValue) => {
+      element.value = nextValue;
+      element.dispatchEvent(new Event("input", { bubbles: true }));
+    },
+    value,
+  );
+}
+
+async function waitForRenderedTitle(page, title) {
+  await page.waitForFunction(
+    (expectedTitle) => document.querySelector("#generative-ui-demo .generated-shell h3")?.textContent?.includes(expectedTitle),
+    { timeout: 10000 },
+    title,
+  );
+}
+
+async function collectBrowserDemoObservation(page, credential) {
+  return page.evaluate((secret) => {
+    function storageContains(storage) {
+      if (!secret) return false;
+      for (let index = 0; index < storage.length; index += 1) {
+        const key = storage.key(index);
+        if ((key || "").includes(secret) || (storage.getItem(key) || "").includes(secret)) return true;
+      }
+      return false;
+    }
+
+    const documentElement = document.documentElement;
+    const body = document.body;
+    const maxScrollWidth = Math.max(documentElement.scrollWidth, body.scrollWidth);
+    const clientWidth = documentElement.clientWidth;
+    const renderedText = document.querySelector("#generative-ui-demo .demo-output")?.innerText || "";
+    const hasCredential = Boolean(secret);
+
+    return {
+      mode: document.querySelector("#demo-mode")?.value,
+      renderedTitle: document.querySelector("#generative-ui-demo .generated-shell h3")?.textContent?.trim(),
+      validationOk: Boolean(document.querySelector("#generative-ui-demo .validation-ok")),
+      validationText: document.querySelector("#generative-ui-demo .validation-ok, #generative-ui-demo .validation-error")?.textContent?.trim(),
+      actionButtons: Array.from(document.querySelectorAll("#generative-ui-demo [data-action]")).map((button) => button.dataset.action),
+      actionLog: Array.from(document.querySelectorAll("#generative-ui-demo .action-log li")).map((item) => item.textContent.trim()),
+      endpointFieldsHidden: document.querySelector("#endpoint-fields")?.hidden,
+      localStorageKeys: Array.from({ length: localStorage.length }, (_, index) => localStorage.key(index)),
+      sessionStorageKeys: Array.from({ length: sessionStorage.length }, (_, index) => sessionStorage.key(index)),
+      storageContainsCredential: storageContains(localStorage) || storageContains(sessionStorage),
+      pageTextContainsCredential: hasCredential && (renderedText.includes(secret) || document.body.innerText.includes(secret)),
+      horizontalOverflow: maxScrollWidth > clientWidth + 1,
+      clientWidth,
+      scrollWidth: maxScrollWidth,
+    };
+  }, credential);
+}
+
+async function openBrowserDemoPage(browser, siteUrl) {
+  const page = await browser.newPage();
+  page.setDefaultTimeout(12000);
+  page.setDefaultNavigationTimeout(22000);
+  await page.setViewport({ width: 390, height: 900, deviceScaleFactor: 2, isMobile: true });
+  const dialogs = [];
+  page.on("dialog", async (dialog) => {
+    dialogs.push(dialog.message());
+    await dialog.dismiss();
+  });
+  await page.goto(siteUrl, { waitUntil: "domcontentloaded", timeout: 22000 });
+  await page.waitForSelector("#generative-ui-demo #demo-mode", { timeout: 10000 });
+  return { page, dialogs };
+}
+
+async function runBrowserDemoCase(browser, siteUrl, caseConfig) {
+  const { page, dialogs } = await openBrowserDemoPage(browser, siteUrl);
+  try {
+    await caseConfig.run(page);
+    await waitForRenderedTitle(page, caseConfig.expectedTitle);
+    const observed = await collectBrowserDemoObservation(page, caseConfig.credential || "");
+    assertEvidence(observed.validationOk, `${caseConfig.id} did not show validation success`);
+    assertEvidence(observed.renderedTitle === caseConfig.expectedTitle, `${caseConfig.id} rendered ${observed.renderedTitle}`);
+    assertEvidence(!observed.horizontalOverflow, `${caseConfig.id} produced horizontal overflow at mobile width`);
+    assertEvidence(dialogs.length === 0, `${caseConfig.id} opened a browser dialog: ${dialogs.join("; ")}`);
+    return {
+      id: caseConfig.id,
+      mode: caseConfig.mode,
+      viewport: "390x900 mobile",
+      expectedTitle: caseConfig.expectedTitle,
+      observed,
+    };
+  } finally {
+    await page.close();
+  }
+}
+
+function browserPasteEnvelope() {
+  return {
+    schema: "jsonx.generative-ui.v1",
+    purpose: "Render a pasted JSONX payload.",
+    payload: {
+      component: "DemoShell",
+      props: {
+        title: "Pasted JSONX Payload",
+        summary: "The browser demo parsed an envelope pasted into the payload field.",
+      },
+      children: [
+        {
+          component: "TextBlock",
+          props: {
+            text: "Paste mode accepts the shared JSONX generative UI envelope and renders the allowlisted payload.",
+          },
+        },
+      ],
+    },
+  };
+}
+
+async function buildBrowserDemoEvidence({ skip }) {
+  if (skip) {
+    return {
+      generatedAt: new Date().toISOString(),
+      source: "local public browser demo harness",
+      skipped: true,
+      reason: "Skipped by --skip-browser-demo or JSONX_SKIP_BROWSER_DEMO=1.",
+      checks: {},
+      cases: [],
+    };
+  }
+
+  console.log("capturing browser demo mode evidence");
+  const puppeteer = await import("puppeteer");
+  const staticServer = await startStaticSiteServer();
+  const endpointServer = await startBrowserEndpointServer();
+  const browser = await puppeteer.default.launch({
+    headless: "shell",
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+  });
+  const credential = "jsonx-browser-demo-secret";
+  const cases = [];
+
+  try {
+    cases.push(
+      await runBrowserDemoCase(browser, staticServer.url, {
+        id: "fixture-mode-support-triage",
+        mode: "fixture",
+        expectedTitle: "Customer Support Triage",
+        run: async (page) => {
+          await page.select("#fixture", "support");
+          await waitForRenderedTitle(page, "Customer Support Triage");
+          await page.click('[data-action="draft_refund_response"]');
+          await page.waitForFunction(
+            () => document.querySelector("#generative-ui-demo .action-log")?.innerText?.includes("draft_refund_response"),
+            { timeout: 10000 },
+          );
+        },
+      }),
+    );
+
+    cases.push(
+      await runBrowserDemoCase(browser, staticServer.url, {
+        id: "paste-mode-envelope",
+        mode: "paste",
+        expectedTitle: "Pasted JSONX Payload",
+        run: async (page) => {
+          await page.select("#demo-mode", "paste");
+          await setDemoValue(page, "#payload", JSON.stringify(browserPasteEnvelope(), null, 2));
+          await page.click("#run-demo");
+        },
+      }),
+    );
+
+    cases.push(
+      await runBrowserDemoCase(browser, staticServer.url, {
+        id: "endpoint-mode-cors",
+        mode: "endpoint",
+        expectedTitle: "Endpoint JSONX Response",
+        credential,
+        run: async (page) => {
+          await page.select("#demo-mode", "endpoint");
+          await setDemoValue(page, "#prompt", "Create an endpoint supplied choice list.");
+          await setDemoValue(page, "#endpoint", endpointServer.url);
+          await setDemoValue(page, "#credential", credential);
+          await page.click("#call-endpoint");
+        },
+      }),
+    );
+  } finally {
+    await browser.close();
+    await endpointServer.close();
+    await staticServer.close();
+  }
+
+  const endpointPost = endpointServer.requests.find((request) => request.method === "POST");
+  const endpointPreflight = endpointServer.requests.find((request) => request.method === "OPTIONS");
+  const endpointCase = cases.find((item) => item.id === "endpoint-mode-cors");
+
+  assertEvidence(endpointPreflight, "endpoint mode did not trigger a CORS preflight");
+  assertEvidence(endpointPost?.authorizationHeaderPresent, "endpoint mode did not send the optional bearer credential");
+  assertEvidence(endpointPost?.authorizationScheme === "Bearer", "endpoint mode did not send a bearer credential");
+  assertEvidence(endpointPost?.prompt === "Create an endpoint supplied choice list.", "endpoint mode did not send the current prompt");
+  assertEvidence(endpointCase?.observed.storageContainsCredential === false, "endpoint credential was stored in browser storage");
+  assertEvidence(endpointCase?.observed.pageTextContainsCredential === false, "endpoint credential was rendered into page text");
+
+  return {
+    generatedAt: new Date().toISOString(),
+    source: "local public browser demo harness",
+    note: "This evidence serves site/generative-ui.html locally, uses a separate temporary CORS endpoint, and verifies fixture, paste, and endpoint modes at mobile width.",
+    skipped: false,
+    staticSource: "site/generative-ui.html",
+    localSiteUrl: staticServer.url,
+    endpointRequests: endpointServer.requests,
+    checks: {
+      fixtureModeRendered: cases.some((item) => item.id === "fixture-mode-support-triage" && item.observed.renderedTitle === "Customer Support Triage"),
+      pasteModeRendered: cases.some((item) => item.id === "paste-mode-envelope" && item.observed.renderedTitle === "Pasted JSONX Payload"),
+      endpointModeRendered: endpointCase?.observed.renderedTitle === "Endpoint JSONX Response",
+      corsPreflightObserved: Boolean(endpointPreflight),
+      endpointCredentialSentAsBearer: endpointPost?.authorizationHeaderPresent === true && endpointPost.authorizationScheme === "Bearer",
+      credentialNotStoredInBrowserStorage: endpointCase?.observed.storageContainsCredential === false,
+      credentialNotRenderedInPageText: endpointCase?.observed.pageTextContainsCredential === false,
+      noHorizontalOverflowAtMobileWidth: cases.every((item) => item.observed.horizontalOverflow === false),
+    },
+    cases,
+  };
+}
+
 async function captureScreenshots() {
   const puppeteer = await import("puppeteer");
   const browser = await puppeteer.default.launch({
@@ -1444,6 +1816,7 @@ async function buildNpmBoundaryEvidence() {
     "claude-validation-evidence",
     "opencode-skill-evidence",
     "motion-profile-evidence",
+    "browser-demo-evidence",
     "openai-plugin-submission",
     "claude-code-community-submission",
   ];
@@ -1500,6 +1873,11 @@ async function writeReviewSummary(manifest) {
       : manifest.motionProfileEvidence
         ? `- \`${manifest.motionProfileEvidence.path}\` records why renderer motion evidence was skipped.`
         : "- Renderer motion evidence was not generated.",
+    manifest.browserDemoEvidence && !manifest.browserDemoEvidence.skipped
+      ? `- \`${manifest.browserDemoEvidence.path}\` covers ${manifest.browserDemoEvidence.caseCount} browser demo modes.`
+      : manifest.browserDemoEvidence
+        ? `- \`${manifest.browserDemoEvidence.path}\` records why browser demo evidence was skipped.`
+        : "- Browser demo evidence was not generated.",
     "",
     "## Hosted MCP",
     "",
@@ -1550,6 +1928,7 @@ async function main() {
   const skipClaudeValidation = hasArg("--skip-claude-validation") || process.env.JSONX_SKIP_CLAUDE_VALIDATION === "1";
   const skipOpenCodeValidation = hasArg("--skip-opencode-validation") || process.env.JSONX_SKIP_OPENCODE_VALIDATION === "1";
   const skipMotionEvidence = hasArg("--skip-motion-evidence") || process.env.JSONX_SKIP_MOTION_EVIDENCE === "1";
+  const skipBrowserDemo = hasArg("--skip-browser-demo") || process.env.JSONX_SKIP_BROWSER_DEMO === "1";
   await fs.rm(artifactRoot, { recursive: true, force: true });
   await fs.mkdir(packagesDir, { recursive: true });
   await fs.mkdir(screenshotsDir, { recursive: true });
@@ -1576,6 +1955,10 @@ async function main() {
   const motionProfileEvidence = await buildMotionEvidence({ skip: skipMotionEvidence });
   await writeJson(motionProfileEvidencePath, motionProfileEvidence);
   const motionProfileArtifact = await hashFile(motionProfileEvidencePath);
+  const browserDemoEvidencePath = path.join(artifactRoot, "browser-demo-evidence.json");
+  const browserDemoEvidence = await buildBrowserDemoEvidence({ skip: skipBrowserDemo });
+  await writeJson(browserDemoEvidencePath, browserDemoEvidence);
+  const browserDemoArtifact = await hashFile(browserDemoEvidencePath);
   const hostedMcpEvidencePath = path.join(artifactRoot, "hosted-mcp-transcript.json");
   const hostedMcpEvidence = skipHostedMcp ? null : await buildHostedMcpEvidence();
   let hostedMcpArtifact = null;
@@ -1662,6 +2045,12 @@ async function main() {
       profiles: motionProfileEvidence.profiles,
       checks: motionProfileEvidence.checks,
     },
+    browserDemoEvidence: {
+      ...browserDemoArtifact,
+      skipped: browserDemoEvidence.skipped === true,
+      caseCount: browserDemoEvidence.cases.length,
+      checks: browserDemoEvidence.checks,
+    },
     hostedMcpEvidence: hostedMcpArtifact
       ? {
           ...hostedMcpArtifact,
@@ -1707,6 +2096,7 @@ async function main() {
       "npm pack --dry-run --json package-boundary check",
       "skill installer dry-run and isolated install evidence",
       ...(motionProfileEvidence.skipped ? [] : ["renderer motion profile evidence"]),
+      ...(browserDemoEvidence.skipped ? [] : ["browser demo fixture, paste, and endpoint mode evidence"]),
       ...(codexInstallEvidence.skipped ? [] : ["isolated Codex marketplace install evidence"]),
       ...(claudeValidationEvidence.skipped ? [] : ["Claude Code plugin validation evidence"]),
       ...(openCodeSkillEvidence.skipped ? [] : ["OpenCode project skill discovery evidence"]),

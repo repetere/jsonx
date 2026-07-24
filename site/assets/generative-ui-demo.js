@@ -421,6 +421,10 @@ function initDemo() {
   const state = {
     current: fixtures.quiz.payload,
     activeFixture: "quiz",
+    mode: "fixture",
+    prompt: fixtures.quiz.prompt,
+    endpointUrl: "",
+    credential: "",
     log: [],
     quizSelections: new Map(),
     sliderValues: new Map(),
@@ -428,15 +432,25 @@ function initDemo() {
 
   function draw() {
     const errors = validateNode(state.current);
-    root.innerHTML = `<div class="demo-grid"><div class="demo-controls"><label for="demo-mode">Mode</label><select id="demo-mode"><option value="fixture">Fixture mode</option><option value="paste">Paste JSONX mode</option><option value="endpoint">Bring your own endpoint</option></select><label for="fixture">Sample prompt</label><select id="fixture">${Object.entries(
+    root.innerHTML = `<div class="demo-grid"><div class="demo-controls"><label for="demo-mode">Mode</label><select id="demo-mode"><option value="fixture"${
+      state.mode === "fixture" ? " selected" : ""
+    }>Fixture mode</option><option value="paste"${state.mode === "paste" ? " selected" : ""}>Paste JSONX mode</option><option value="endpoint"${
+      state.mode === "endpoint" ? " selected" : ""
+    }>Bring your own endpoint</option></select><label for="fixture">Sample prompt</label><select id="fixture">${Object.entries(
       fixtures,
     )
       .map(([key, value]) => `<option value="${key}"${key === state.activeFixture ? " selected" : ""}>${esc(value.label)}</option>`)
       .join("")}</select><label for="prompt">Prompt</label><textarea id="prompt">${esc(
-      fixtures[state.activeFixture].prompt,
+      state.prompt,
     )}</textarea><label for="payload">JSONX payload or endpoint response</label><textarea id="payload">${esc(
       JSON.stringify(state.current, null, 2),
-    )}</textarea><div id="endpoint-fields" hidden><label for="endpoint">CORS endpoint URL</label><input id="endpoint" placeholder="https://your-endpoint.example/generate"/><label for="credential">Optional bearer credential</label><input id="credential" type="password" autocomplete="off" placeholder="Kept in memory only"/></div><div class="demo-actions"><button id="run-demo">Render payload</button><button class="secondary-button" id="call-endpoint">Call endpoint</button></div></div><div><div class="demo-output"><div class="demo-panel code-panel"><div class="panel-title">Validation</div><p class="${
+    )}</textarea><div id="endpoint-fields"${
+      state.mode === "endpoint" ? "" : " hidden"
+    }><label for="endpoint">CORS endpoint URL</label><input id="endpoint" value="${esc(
+      state.endpointUrl,
+    )}" placeholder="https://your-endpoint.example/generate"/><label for="credential">Optional bearer credential</label><input id="credential" type="password" autocomplete="off" value="${esc(
+      state.credential,
+    )}" placeholder="Kept in memory only"/></div><div class="demo-actions"><button id="run-demo">Render payload</button><button class="secondary-button" id="call-endpoint">Call endpoint</button></div></div><div><div class="demo-output"><div class="demo-panel code-panel"><div class="panel-title">Validation</div><p class="${
       errors.length ? "validation-error" : "validation-ok"
     }">${errors.length ? esc(errors.join("\n")) : "Payload passes the safe generated-output profile."}</p><pre><code>${esc(
       JSON.stringify(state.current, null, 2),
@@ -471,6 +485,8 @@ function initDemo() {
     root.querySelector("#fixture").onchange = (event) => {
       const fixture = fixtures[event.target.value];
       state.activeFixture = event.target.value;
+      state.mode = "fixture";
+      state.prompt = fixture.prompt;
       state.current = fixture.payload;
       state.log = [];
       state.quizSelections.clear();
@@ -480,6 +496,8 @@ function initDemo() {
     root.querySelector("#run-demo").onclick = () => {
       try {
         const parsed = JSON.parse(root.querySelector("#payload").value);
+        state.mode = "paste";
+        state.prompt = root.querySelector("#prompt").value;
         state.current = parsed.payload || parsed;
         state.log = [];
         state.quizSelections.clear();
@@ -491,25 +509,47 @@ function initDemo() {
     };
     const mode = root.querySelector("#demo-mode");
     mode.onchange = () => {
-      root.querySelector("#endpoint-fields").hidden = mode.value !== "endpoint";
+      state.mode = mode.value;
+      state.prompt = root.querySelector("#prompt").value;
+      state.endpointUrl = root.querySelector("#endpoint").value;
+      state.credential = root.querySelector("#credential").value;
+      draw();
+    };
+    root.querySelector("#prompt").oninput = (event) => {
+      state.prompt = event.target.value;
+    };
+    root.querySelector("#endpoint").oninput = (event) => {
+      state.endpointUrl = event.target.value;
+    };
+    root.querySelector("#credential").oninput = (event) => {
+      state.credential = event.target.value;
     };
     root.querySelector("#call-endpoint").onclick = async () => {
-      const url = root.querySelector("#endpoint").value;
+      const url = root.querySelector("#endpoint").value.trim();
       if (!url) return alert("Enter a CORS-enabled endpoint URL.");
+      state.mode = "endpoint";
+      state.prompt = root.querySelector("#prompt").value;
+      state.endpointUrl = url;
+      state.credential = root.querySelector("#credential").value;
       const headers = { "content-type": "application/json" };
-      const token = root.querySelector("#credential").value;
+      const token = state.credential;
       if (token) headers.authorization = `Bearer ${token}`;
-      const response = await fetch(url, {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ prompt: root.querySelector("#prompt").value }),
-      });
-      const parsed = await response.json();
-      state.current = parsed.payload || parsed;
-      state.log = [];
-      state.quizSelections.clear();
-      state.sliderValues.clear();
-      draw();
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ prompt: state.prompt }),
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const parsed = await response.json();
+        state.current = parsed.payload || parsed;
+        state.log = [];
+        state.quizSelections.clear();
+        state.sliderValues.clear();
+        draw();
+      } catch (error) {
+        alert(`Endpoint call failed: ${error.message}`);
+      }
     };
   }
 

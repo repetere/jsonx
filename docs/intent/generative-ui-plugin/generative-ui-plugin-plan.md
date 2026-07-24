@@ -31,7 +31,7 @@ Current implementation baseline:
 - `plugins/claude-jsonx-plugin/` contains the Claude Code plugin package.
 - `skills/codex/`, `skills/claude/`, and `skills/opencode/` contain installable skill source folders.
 - `skills/scripts/install-jsonx-skill.mjs` installs the `jsonx` and `jsonx-generative-ui` skill families for Codex, Claude Code, or OpenCode without mixing the two workflows.
-- `docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs` creates review packages, store listing drafts, screenshots, golden-prompt evidence, renderer motion evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, hashes, and npm package-boundary evidence under `docs/intent/generative-ui-plugin/submission-artifacts/current/`.
+- `docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs` creates review packages, store listing drafts, screenshots, golden-prompt evidence, renderer motion evidence, browser demo mode evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, hashes, and npm package-boundary evidence under `docs/intent/generative-ui-plugin/submission-artifacts/current/`.
 - `.github/workflows/generative-ui-plugin.yml` runs app, plugin, fixture, submission package, and npm package-boundary checks in CI.
 - `docs/intent/generative-ui-plugin/submission-readiness.md` tracks what remains before public app or plugin submission.
 
@@ -424,6 +424,7 @@ Exit criteria:
 - Add privacy policy and terms links.
 - Add screenshots and starter prompts.
 - Add deterministic golden-prompt evidence for valid UI, text fallback, unsafe payloads, oversized payloads, unsupported components, and motion.
+- Add browser demo evidence for fixture, paste, and bring-your-own endpoint modes.
 - Test public submission checks.
 - Add CI checks for app/plugin validation, fixture validation, submission package generation, and npm package-boundary enforcement.
 - Create GitHub issues from this plan.
