@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T07:20:12.837Z",
+  "generatedAt": "2026-07-24T07:28:19.725Z",
   "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
   "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
@@ -8,8 +8,8 @@
     {
       "surface": "Codex plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
-      "bytes": 16775,
-      "sha256": "175ec204ef18a1efa9de540e10fbbda6deaa0e922269a1ba7561d1f115a2bdfb"
+      "bytes": 16854,
+      "sha256": "ded21fdd376ec1d93f49aa67363761fb34acc2511d26bca6e15f40b5c7e62d16"
     },
     {
       "surface": "Claude Code plugin",
@@ -65,13 +65,13 @@
   "goldenPromptEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "bytes": 7080,
-    "sha256": "dddf11d516c302727b74c1e4f3b40c76dca1985f888a735cbe99c50296280511",
+    "sha256": "ce01bce2531f9ee36a2fc6b259c733f126d82315fdcc63b3d8e77350e41a0cf1",
     "caseCount": 9
   },
   "hostedMcpEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
     "bytes": 4238,
-    "sha256": "89f2240b875ac20176f9e88982b5c8d35e7aac6b69dff753c47978fc8d7e8a58",
+    "sha256": "1f1b8ac9070c96d23facc0443f200065f0707eb21516eaf46ab097aab33e39b3",
     "stepCount": 7,
     "checks": {
       "healthOk": true,
@@ -80,6 +80,33 @@
       "rendererResourceReadable": true,
       "validPayloadRendered": true,
       "invalidPayloadRejected": true
+    }
+  },
+  "skillInstallerEvidence": {
+    "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
+    "bytes": 5009,
+    "sha256": "02f349c7abb0eb70d2ca873747affee3d8c4356727bf93697920972d4bdfa6af",
+    "dryRunMatrixCount": 9,
+    "installSurfaceCount": 3,
+    "checks": {
+      "dryRunMatrixCount": 9,
+      "actualInstallSurfaces": 3,
+      "allDryRunsCovered": true,
+      "allSurfaceInstallsPassed": true
+    }
+  },
+  "codexInstallEvidence": {
+    "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
+    "bytes": 4350,
+    "sha256": "34f749ae195b60aeffcd2ec0ef209b925e96f8a85dce34d9b125102fc638b749",
+    "skipped": false,
+    "stepCount": 7,
+    "checks": {
+      "marketplaceAdded": true,
+      "availableBeforeInstall": true,
+      "pluginInstalled": true,
+      "pluginEnabled": true,
+      "cachedFilesPresent": true
     }
   },
   "npmBoundary": {
@@ -105,7 +132,9 @@
       "netlify/",
       "gsap",
       "golden-prompts",
-      "hosted-mcp-transcript"
+      "hosted-mcp-transcript",
+      "skill-installer-evidence",
+      "codex-install-evidence"
     ]
   },
   "validation": [
@@ -114,6 +143,8 @@
     "python3 plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py support-triage.json text-block.json checklist.json choice-list.json data-table.json alert.json quiz.json slider-poll.json motion-subtle.json",
     "diff -rq skills docs/skills",
     "npm pack --dry-run --json package-boundary check",
+    "skill installer dry-run and isolated install evidence",
+    "isolated Codex marketplace install evidence",
     "live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp"
   ]
 }

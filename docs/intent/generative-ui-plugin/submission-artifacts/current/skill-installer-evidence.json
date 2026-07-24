@@ -1,0 +1,159 @@
+{
+  "generatedAt": "2026-07-24T07:28:16.049Z",
+  "source": "skills/scripts/install-jsonx-skill.mjs",
+  "note": "This evidence dry-runs every surface/skill pair and performs isolated installs for all supported surfaces using temporary targets.",
+  "checks": {
+    "dryRunMatrixCount": 9,
+    "actualInstallSurfaces": 3,
+    "allDryRunsCovered": true,
+    "allSurfaceInstallsPassed": true
+  },
+  "dryRuns": [
+    {
+      "surface": "codex",
+      "skill": "jsonx",
+      "target": "$TMPDIR/dry-run/codex/jsonx",
+      "plannedCopies": 1,
+      "output": [
+        "would copy $REPO_ROOT/skills/codex/jsonx -> $TMPDIR/dry-run/codex/jsonx/jsonx"
+      ]
+    },
+    {
+      "surface": "codex",
+      "skill": "jsonx-generative-ui",
+      "target": "$TMPDIR/dry-run/codex/jsonx-generative-ui",
+      "plannedCopies": 1,
+      "output": [
+        "would copy $REPO_ROOT/skills/codex/jsonx-generative-ui -> $TMPDIR/dry-run/codex/jsonx-generative-ui/jsonx-generative-ui"
+      ]
+    },
+    {
+      "surface": "codex",
+      "skill": "all",
+      "target": "$TMPDIR/dry-run/codex/all",
+      "plannedCopies": 2,
+      "output": [
+        "would copy $REPO_ROOT/skills/codex/jsonx -> $TMPDIR/dry-run/codex/all/jsonx",
+        "would copy $REPO_ROOT/skills/codex/jsonx-generative-ui -> $TMPDIR/dry-run/codex/all/jsonx-generative-ui"
+      ]
+    },
+    {
+      "surface": "claude",
+      "skill": "jsonx",
+      "target": "$TMPDIR/dry-run/claude/jsonx",
+      "plannedCopies": 1,
+      "output": [
+        "would copy $REPO_ROOT/skills/claude/jsonx -> $TMPDIR/dry-run/claude/jsonx/jsonx"
+      ]
+    },
+    {
+      "surface": "claude",
+      "skill": "jsonx-generative-ui",
+      "target": "$TMPDIR/dry-run/claude/jsonx-generative-ui",
+      "plannedCopies": 1,
+      "output": [
+        "would copy $REPO_ROOT/skills/claude/jsonx-generative-ui -> $TMPDIR/dry-run/claude/jsonx-generative-ui/jsonx-generative-ui"
+      ]
+    },
+    {
+      "surface": "claude",
+      "skill": "all",
+      "target": "$TMPDIR/dry-run/claude/all",
+      "plannedCopies": 2,
+      "output": [
+        "would copy $REPO_ROOT/skills/claude/jsonx -> $TMPDIR/dry-run/claude/all/jsonx",
+        "would copy $REPO_ROOT/skills/claude/jsonx-generative-ui -> $TMPDIR/dry-run/claude/all/jsonx-generative-ui"
+      ]
+    },
+    {
+      "surface": "opencode",
+      "skill": "jsonx",
+      "target": "$TMPDIR/dry-run/opencode/jsonx",
+      "plannedCopies": 1,
+      "output": [
+        "would copy $REPO_ROOT/skills/opencode/jsonx -> $TMPDIR/dry-run/opencode/jsonx/jsonx"
+      ]
+    },
+    {
+      "surface": "opencode",
+      "skill": "jsonx-generative-ui",
+      "target": "$TMPDIR/dry-run/opencode/jsonx-generative-ui",
+      "plannedCopies": 1,
+      "output": [
+        "would copy $REPO_ROOT/skills/opencode/jsonx-generative-ui -> $TMPDIR/dry-run/opencode/jsonx-generative-ui/jsonx-generative-ui"
+      ]
+    },
+    {
+      "surface": "opencode",
+      "skill": "all",
+      "target": "$TMPDIR/dry-run/opencode/all",
+      "plannedCopies": 2,
+      "output": [
+        "would copy $REPO_ROOT/skills/opencode/jsonx -> $TMPDIR/dry-run/opencode/all/jsonx",
+        "would copy $REPO_ROOT/skills/opencode/jsonx-generative-ui -> $TMPDIR/dry-run/opencode/all/jsonx-generative-ui"
+      ]
+    }
+  ],
+  "installs": [
+    {
+      "surface": "codex",
+      "target": "$TMPDIR/install/codex",
+      "output": [
+        "installed $TMPDIR/install/codex/jsonx",
+        "installed $TMPDIR/install/codex/jsonx-generative-ui"
+      ],
+      "installedSkills": [
+        {
+          "skill": "jsonx",
+          "skillPath": "$TMPDIR/install/codex/jsonx/SKILL.md",
+          "skillMdPresent": true
+        },
+        {
+          "skill": "jsonx-generative-ui",
+          "skillPath": "$TMPDIR/install/codex/jsonx-generative-ui/SKILL.md",
+          "skillMdPresent": true
+        }
+      ]
+    },
+    {
+      "surface": "claude",
+      "target": "$TMPDIR/install/claude",
+      "output": [
+        "installed $TMPDIR/install/claude/jsonx",
+        "installed $TMPDIR/install/claude/jsonx-generative-ui"
+      ],
+      "installedSkills": [
+        {
+          "skill": "jsonx",
+          "skillPath": "$TMPDIR/install/claude/jsonx/SKILL.md",
+          "skillMdPresent": true
+        },
+        {
+          "skill": "jsonx-generative-ui",
+          "skillPath": "$TMPDIR/install/claude/jsonx-generative-ui/SKILL.md",
+          "skillMdPresent": true
+        }
+      ]
+    },
+    {
+      "surface": "opencode",
+      "target": "$TMPDIR/install/opencode",
+      "output": [
+        "installed $TMPDIR/install/opencode/jsonx",
+        "installed $TMPDIR/install/opencode/jsonx-generative-ui"
+      ],
+      "installedSkills": [
+        {
+          "skill": "jsonx",
+          "skillPath": "$TMPDIR/install/opencode/jsonx/SKILL.md",
+          "skillMdPresent": true
+        },
+        {
+          "skill": "jsonx-generative-ui",
+          "skillPath": "$TMPDIR/install/opencode/jsonx-generative-ui/SKILL.md",
+          "skillMdPresent": true
+        }
+      ]
+    }
+  ]
+}

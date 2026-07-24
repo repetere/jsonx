@@ -30,13 +30,13 @@ Generate current submission packages and screenshots from the repository root:
 node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs
 ```
 
-Artifacts are written under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, which is excluded from the root npm package. The generated bundle includes review packages, screenshots, golden-prompt tool-call evidence, and package-boundary evidence.
-The default run also records a live hosted MCP transcript from `https://jsonx-renderer-app.netlify.app/mcp`.
+Artifacts are written under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, which is excluded from the root npm package. The generated bundle includes review packages, screenshots, golden-prompt tool-call evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, and package-boundary evidence.
+The default run records a live hosted MCP transcript from `https://jsonx-renderer-app.netlify.app/mcp` and installs this plugin from the repo-local marketplace using a temporary `CODEX_HOME` when the Codex CLI is available.
 
 For CI or temporary package checks, write to a separate output directory:
 
 ```text
-node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs --skip-screenshots --skip-hosted-mcp --output /tmp/jsonx-submission-artifacts
+node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs --skip-screenshots --skip-hosted-mcp --skip-codex-install --output /tmp/jsonx-submission-artifacts
 ```
 
 ## Renderer App

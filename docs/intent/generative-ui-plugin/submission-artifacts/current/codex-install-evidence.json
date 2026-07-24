@@ -1,0 +1,139 @@
+{
+  "generatedAt": "2026-07-24T07:28:16.265Z",
+  "source": "codex plugin CLI",
+  "note": "This evidence installs the repo-local JSONX Codex plugin from the repo-local marketplace using an isolated CODEX_HOME.",
+  "skipped": false,
+  "codexCli": "/Applications/ChatGPT.app/Contents/Resources/codex",
+  "tempHome": "$CODEX_HOME",
+  "checks": {
+    "marketplaceAdded": true,
+    "availableBeforeInstall": true,
+    "pluginInstalled": true,
+    "pluginEnabled": true,
+    "cachedFilesPresent": true
+  },
+  "steps": [
+    {
+      "id": "codex-version",
+      "command": "codex --version",
+      "stdout": "codex-cli 0.145.0-alpha.27"
+    },
+    {
+      "id": "marketplace-add",
+      "command": "codex plugin marketplace add . --json",
+      "result": {
+        "marketplaceName": "jsonx-local",
+        "installedRoot": "$REPO_ROOT",
+        "alreadyAdded": false
+      }
+    },
+    {
+      "id": "marketplace-list",
+      "command": "codex plugin marketplace list --json",
+      "result": {
+        "marketplaces": [
+          {
+            "name": "jsonx-local",
+            "root": "$REPO_ROOT",
+            "marketplaceSource": {
+              "sourceType": "local",
+              "source": "$REPO_ROOT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "available-list",
+      "command": "codex plugin list --available --json",
+      "result": {
+        "plugin": {
+          "pluginId": "jsonx-generative-ui-plugin@jsonx-local",
+          "name": "jsonx-generative-ui-plugin",
+          "marketplaceName": "jsonx-local",
+          "version": "0.1.0",
+          "installed": false,
+          "enabled": false,
+          "source": {
+            "source": "local",
+            "path": "$REPO_ROOT/plugins/jsonx-generative-ui-plugin"
+          },
+          "marketplaceSource": {
+            "sourceType": "local",
+            "source": "$REPO_ROOT"
+          },
+          "installPolicy": "AVAILABLE",
+          "authPolicy": "ON_INSTALL"
+        }
+      }
+    },
+    {
+      "id": "plugin-add",
+      "command": "codex plugin add jsonx-generative-ui-plugin@jsonx-local --json",
+      "result": {
+        "pluginId": "jsonx-generative-ui-plugin@jsonx-local",
+        "name": "jsonx-generative-ui-plugin",
+        "marketplaceName": "jsonx-local",
+        "version": "0.1.0",
+        "installedPath": "$CODEX_HOME/plugins/cache/jsonx-local/jsonx-generative-ui-plugin/0.1.0",
+        "authPolicy": "ON_INSTALL"
+      }
+    },
+    {
+      "id": "installed-list",
+      "command": "codex plugin list --json",
+      "result": {
+        "plugin": {
+          "pluginId": "jsonx-generative-ui-plugin@jsonx-local",
+          "name": "jsonx-generative-ui-plugin",
+          "marketplaceName": "jsonx-local",
+          "version": "0.1.0",
+          "installed": true,
+          "enabled": true,
+          "source": {
+            "source": "local",
+            "path": "$REPO_ROOT/plugins/jsonx-generative-ui-plugin"
+          },
+          "marketplaceSource": {
+            "sourceType": "local",
+            "source": "$REPO_ROOT"
+          },
+          "installPolicy": "AVAILABLE",
+          "authPolicy": "ON_INSTALL"
+        }
+      }
+    },
+    {
+      "id": "cache-files",
+      "command": "inspect installed plugin cache",
+      "result": {
+        "cachedFileChecks": [
+          {
+            "path": "$CODEX_HOME/plugins/cache/jsonx-local/jsonx-generative-ui-plugin/0.1.0/.codex-plugin/plugin.json",
+            "present": true
+          },
+          {
+            "path": "$CODEX_HOME/plugins/cache/jsonx-local/jsonx-generative-ui-plugin/0.1.0/README.md",
+            "present": true
+          },
+          {
+            "path": "$CODEX_HOME/plugins/cache/jsonx-local/jsonx-generative-ui-plugin/0.1.0/skills/jsonx/SKILL.md",
+            "present": true
+          },
+          {
+            "path": "$CODEX_HOME/plugins/cache/jsonx-local/jsonx-generative-ui-plugin/0.1.0/skills/jsonx-generative-ui/SKILL.md",
+            "present": true
+          },
+          {
+            "path": "$CODEX_HOME/plugins/cache/jsonx-local/jsonx-generative-ui-plugin/0.1.0/fixtures/support-triage.json",
+            "present": true
+          },
+          {
+            "path": "$CODEX_HOME/plugins/cache/jsonx-local/jsonx-generative-ui-plugin/0.1.0/scripts/validate-jsonx-ui.py",
+            "present": true
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
+import { constants as fsConstants } from "node:fs";
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -15,6 +17,7 @@ const screenshotsDir = path.join(artifactRoot, "screenshots");
 
 const hostedWidgetUrl = process.env.JSONX_RENDERER_WIDGET_URL || "https://jsonx-renderer-app.netlify.app/widget";
 const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.netlify.app/mcp";
+const codexCliOverride = process.env.JSONX_CODEX_CLI;
 const publicSiteUrl = process.env.JSONX_PUBLIC_SITE_URL || "https://jsonx.net/generative-ui.html";
 const publicSkillsUrl = process.env.JSONX_PUBLIC_SKILLS_URL || "https://jsonx.net/skills/README.md";
 
@@ -29,6 +32,9 @@ const validFixtures = [
   "slider-poll",
   "motion-subtle",
 ];
+
+const installerSurfaces = ["codex", "claude", "opencode"];
+const installerSkills = ["jsonx", "jsonx-generative-ui", "all"];
 
 function argValue(name) {
   const index = cliArgs.indexOf(name);
@@ -87,12 +93,42 @@ async function writeJson(filePath, data) {
   await fs.writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`);
 }
 
+async function fileExists(filePath, mode = fsConstants.F_OK) {
+  try {
+    await fs.access(filePath, mode);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function siblingUrl(urlString, pathname) {
   const url = new URL(urlString);
   url.pathname = pathname;
   url.search = "";
   url.hash = "";
   return url.toString();
+}
+
+function parseJsonOutput(label, output) {
+  try {
+    return JSON.parse(output);
+  } catch (error) {
+    throw new Error(`${label} did not return valid JSON: ${error.message}`);
+  }
+}
+
+function sanitizeEvidence(value, replacements) {
+  if (typeof value === "string") {
+    return replacements.reduce((result, [from, to]) => (from ? result.replaceAll(from, to) : result), value);
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => sanitizeEvidence(item, replacements));
+  }
+  if (value && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, sanitizeEvidence(item, replacements)]));
+  }
+  return value;
 }
 
 async function hashFile(filePath) {
@@ -160,8 +196,8 @@ function resultSummary(result) {
   };
 }
 
-function assertHostedCheck(condition, message) {
-  if (!condition) throw new Error(`Hosted MCP evidence failed: ${message}`);
+function assertEvidence(condition, message) {
+  if (!condition) throw new Error(`Submission evidence failed: ${message}`);
 }
 
 async function fetchWithTimeout(url, options = {}) {
@@ -181,7 +217,7 @@ async function readMcpResponse(response) {
       .filter((line) => line.startsWith("data:"))
       .map((line) => line.slice("data:".length).trim())
       .find((line) => line.startsWith("{"));
-    assertHostedCheck(eventJson, "MCP event stream did not include a JSON payload");
+    assertEvidence(eventJson, "MCP event stream did not include a JSON payload");
     return JSON.parse(eventJson);
   }
   return JSON.parse(text);
@@ -202,8 +238,8 @@ async function postMcpRpc(id, method, params = {}) {
     }),
   });
   const body = await readMcpResponse(response);
-  assertHostedCheck(response.status === 200, `${method} returned HTTP ${response.status}`);
-  assertHostedCheck(!body.error, `${method} returned JSON-RPC error ${body.error?.message || "unknown"}`);
+  assertEvidence(response.status === 200, `${method} returned HTTP ${response.status}`);
+  assertEvidence(!body.error, `${method} returned JSON-RPC error ${body.error?.message || "unknown"}`);
   return {
     status: response.status,
     contentType: response.headers.get("content-type"),
@@ -223,8 +259,8 @@ async function buildHostedMcpEvidence() {
 
   const health = await fetchWithTimeout(healthUrl);
   const healthBody = await health.json();
-  assertHostedCheck(health.status === 200, `/healthz returned HTTP ${health.status}`);
-  assertHostedCheck(healthBody.ok === true, "/healthz did not return ok=true");
+  assertEvidence(health.status === 200, `/healthz returned HTTP ${health.status}`);
+  assertEvidence(healthBody.ok === true, "/healthz did not return ok=true");
   steps.push({
     id: "healthz",
     transport: "https",
@@ -243,8 +279,8 @@ async function buildHostedMcpEvidence() {
     },
   });
   const preflightCorsOrigin = preflight.headers.get("access-control-allow-origin");
-  assertHostedCheck(preflight.status === 204, `CORS preflight returned HTTP ${preflight.status}`);
-  assertHostedCheck(preflightCorsOrigin === "*", "CORS preflight did not allow ChatGPT browser calls");
+  assertEvidence(preflight.status === 204, `CORS preflight returned HTTP ${preflight.status}`);
+  assertEvidence(preflightCorsOrigin === "*", "CORS preflight did not allow ChatGPT browser calls");
   steps.push({
     id: "cors-preflight",
     transport: "https",
@@ -261,7 +297,7 @@ async function buildHostedMcpEvidence() {
     capabilities: {},
     clientInfo: { name: "jsonx-submission-artifacts", version: "0.1.0" },
   });
-  assertHostedCheck(initialize.body.result?.serverInfo?.name === "jsonx-renderer-app", "initialize did not return the JSONX server name");
+  assertEvidence(initialize.body.result?.serverInfo?.name === "jsonx-renderer-app", "initialize did not return the JSONX server name");
   steps.push({
     id: "initialize",
     transport: "mcp-json-rpc",
@@ -280,8 +316,8 @@ async function buildHostedMcpEvidence() {
   const tools = await postMcpRpc(2, "tools/list");
   const listedTools = tools.body.result?.tools || [];
   const renderTool = listedTools.find((tool) => tool.name === "render_jsonx_response");
-  assertHostedCheck(renderTool, "render_jsonx_response was not listed");
-  assertHostedCheck(renderTool._meta?.ui?.resourceUri === "ui://jsonx/renderer-v1.html", "render tool is not wired to the renderer resource");
+  assertEvidence(renderTool, "render_jsonx_response was not listed");
+  assertEvidence(renderTool._meta?.ui?.resourceUri === "ui://jsonx/renderer-v1.html", "render tool is not wired to the renderer resource");
   steps.push({
     id: "tools-list",
     transport: "mcp-json-rpc",
@@ -303,8 +339,8 @@ async function buildHostedMcpEvidence() {
 
   const resource = await postMcpRpc(3, "resources/read", { uri: "ui://jsonx/renderer-v1.html" });
   const resourceContent = resource.body.result?.contents?.[0];
-  assertHostedCheck(resourceContent?.mimeType === "text/html;profile=mcp-app", "renderer resource did not return the Apps SDK MIME type");
-  assertHostedCheck((resourceContent.text || "").includes("jsonx-root"), "renderer resource did not include the JSONX root");
+  assertEvidence(resourceContent?.mimeType === "text/html;profile=mcp-app", "renderer resource did not return the Apps SDK MIME type");
+  assertEvidence((resourceContent.text || "").includes("jsonx-root"), "renderer resource did not include the JSONX root");
   steps.push({
     id: "renderer-resource",
     transport: "mcp-json-rpc",
@@ -325,8 +361,8 @@ async function buildHostedMcpEvidence() {
     name: "render_jsonx_response",
     arguments: validInput,
   });
-  assertHostedCheck(valid.body.result?.isError !== true, "valid payload was rejected");
-  assertHostedCheck(valid.body.result?.structuredContent?.schema === "jsonx.generative-ui.v1", "valid payload did not return the JSONX schema");
+  assertEvidence(valid.body.result?.isError !== true, "valid payload was rejected");
+  assertEvidence(valid.body.result?.structuredContent?.schema === "jsonx.generative-ui.v1", "valid payload did not return the JSONX schema");
   steps.push({
     id: "valid-render",
     transport: "mcp-json-rpc",
@@ -343,7 +379,7 @@ async function buildHostedMcpEvidence() {
     name: "render_jsonx_response",
     arguments: invalidInput,
   });
-  assertHostedCheck(invalid.body.result?.isError === true, "invalid payload was not rejected");
+  assertEvidence(invalid.body.result?.isError === true, "invalid payload was not rejected");
   steps.push({
     id: "invalid-render",
     transport: "mcp-json-rpc",
@@ -373,6 +409,283 @@ async function buildHostedMcpEvidence() {
     },
     steps,
   };
+}
+
+async function buildSkillInstallerEvidence() {
+  const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "jsonx-skill-installer."));
+  const realTempRoot = await fs.realpath(tempRoot);
+  const replacements = [
+    [realTempRoot, "$TMPDIR"],
+    [tempRoot, "$TMPDIR"],
+    [repoRoot, "$REPO_ROOT"],
+  ];
+  const dryRuns = [];
+  const installs = [];
+
+  console.log("capturing skill installer evidence");
+
+  try {
+    for (const surface of installerSurfaces) {
+      for (const skill of installerSkills) {
+        const target = path.join(tempRoot, "dry-run", surface, skill);
+        const output = run(
+          `skill installer dry-run ${surface}/${skill}`,
+          "node",
+          [
+            "skills/scripts/install-jsonx-skill.mjs",
+            "--surface",
+            surface,
+            "--skill",
+            skill,
+            "--target",
+            target,
+            "--dry-run",
+          ],
+          { capture: true },
+        );
+        dryRuns.push({
+          surface,
+          skill,
+          target: sanitizeEvidence(target, replacements),
+          plannedCopies: output.split("\n").filter(Boolean).length,
+          output: sanitizeEvidence(output.split("\n").filter(Boolean), replacements),
+        });
+      }
+    }
+
+    for (const surface of installerSurfaces) {
+      const target = path.join(tempRoot, "install", surface);
+      const output = run(
+        `skill installer install ${surface}/all`,
+        "node",
+        [
+          "skills/scripts/install-jsonx-skill.mjs",
+          "--surface",
+          surface,
+          "--skill",
+          "all",
+          "--target",
+          target,
+          "--force",
+        ],
+        { capture: true },
+      );
+      const installedSkills = [];
+      for (const skill of ["jsonx", "jsonx-generative-ui"]) {
+        const skillPath = path.join(target, skill, "SKILL.md");
+        const present = await fileExists(skillPath);
+        assertEvidence(present, `skill installer did not create ${surface}/${skill}`);
+        installedSkills.push({
+          skill,
+          skillPath: sanitizeEvidence(skillPath, replacements),
+          skillMdPresent: present,
+        });
+      }
+      installs.push({
+        surface,
+        target: sanitizeEvidence(target, replacements),
+        output: sanitizeEvidence(output.split("\n").filter(Boolean), replacements),
+        installedSkills,
+      });
+    }
+
+    return {
+      generatedAt: new Date().toISOString(),
+      source: "skills/scripts/install-jsonx-skill.mjs",
+      note: "This evidence dry-runs every surface/skill pair and performs isolated installs for all supported surfaces using temporary targets.",
+      checks: {
+        dryRunMatrixCount: dryRuns.length,
+        actualInstallSurfaces: installs.length,
+        allDryRunsCovered: dryRuns.length === installerSurfaces.length * installerSkills.length,
+        allSurfaceInstallsPassed: installs.every((item) => item.installedSkills.every((skill) => skill.skillMdPresent)),
+      },
+      dryRuns,
+      installs,
+    };
+  } finally {
+    await fs.rm(tempRoot, { recursive: true, force: true });
+  }
+}
+
+async function findCodexCli() {
+  const candidates = [];
+  if (codexCliOverride) {
+    candidates.push(codexCliOverride);
+  }
+  const pathLookup = spawnSync("sh", ["-lc", "command -v codex || true"], {
+    cwd: repoRoot,
+    encoding: "utf8",
+    stdio: "pipe",
+    env: {
+      ...process.env,
+      PATH: `${process.env.HOME}/.nvm/versions/node/v22.21.1/bin:${process.env.PATH}`,
+    },
+  });
+  const pathCandidate = pathLookup.stdout?.trim();
+  if (pathCandidate) {
+    candidates.push(pathCandidate);
+  }
+  candidates.push("/Applications/ChatGPT.app/Contents/Resources/codex");
+
+  for (const candidate of [...new Set(candidates.filter(Boolean))]) {
+    if (await fileExists(candidate, fsConstants.X_OK)) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
+async function buildCodexInstallEvidence({ skip }) {
+  if (skip) {
+    return {
+      generatedAt: new Date().toISOString(),
+      source: "codex plugin CLI",
+      skipped: true,
+      reason: "Skipped by --skip-codex-install or JSONX_SKIP_CODEX_INSTALL=1.",
+      checks: {},
+      steps: [],
+    };
+  }
+
+  const codexCli = await findCodexCli();
+  if (!codexCli) {
+    return {
+      generatedAt: new Date().toISOString(),
+      source: "codex plugin CLI",
+      skipped: true,
+      reason: "Codex CLI was not found on PATH or at the ChatGPT app bundled path.",
+      checks: {},
+      steps: [],
+    };
+  }
+
+  const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "jsonx-codex-home."));
+  const realTempHome = await fs.realpath(tempHome);
+  const replacements = [
+    [realTempHome, "$CODEX_HOME"],
+    [tempHome, "$CODEX_HOME"],
+    [repoRoot, "$REPO_ROOT"],
+  ];
+  const env = { CODEX_HOME: tempHome };
+  const steps = [];
+
+  console.log("capturing isolated Codex plugin install evidence");
+
+  try {
+    const version = run("codex version", codexCli, ["--version"], { capture: true, env });
+    steps.push({
+      id: "codex-version",
+      command: "codex --version",
+      stdout: version,
+    });
+
+    const marketplaceAdd = parseJsonOutput(
+      "codex plugin marketplace add",
+      run("codex marketplace add", codexCli, ["plugin", "marketplace", "add", ".", "--json"], { capture: true, env }),
+    );
+    assertEvidence(marketplaceAdd.marketplaceName === "jsonx-local", "Codex marketplace add did not return jsonx-local");
+    steps.push({
+      id: "marketplace-add",
+      command: "codex plugin marketplace add . --json",
+      result: sanitizeEvidence(marketplaceAdd, replacements),
+    });
+
+    const marketplaces = parseJsonOutput(
+      "codex plugin marketplace list",
+      run("codex marketplace list", codexCli, ["plugin", "marketplace", "list", "--json"], { capture: true, env }),
+    );
+    assertEvidence(
+      marketplaces.marketplaces?.some((marketplace) => marketplace.name === "jsonx-local"),
+      "Codex marketplace list did not include jsonx-local",
+    );
+    steps.push({
+      id: "marketplace-list",
+      command: "codex plugin marketplace list --json",
+      result: sanitizeEvidence(marketplaces, replacements),
+    });
+
+    const available = parseJsonOutput(
+      "codex plugin list available",
+      run("codex plugin list available", codexCli, ["plugin", "list", "--available", "--json"], { capture: true, env }),
+    );
+    const availablePlugin = available.available?.find((plugin) => plugin.pluginId === "jsonx-generative-ui-plugin@jsonx-local");
+    assertEvidence(availablePlugin, "Codex available list did not include jsonx-generative-ui-plugin@jsonx-local");
+    steps.push({
+      id: "available-list",
+      command: "codex plugin list --available --json",
+      result: sanitizeEvidence({ plugin: availablePlugin }, replacements),
+    });
+
+    const pluginAdd = parseJsonOutput(
+      "codex plugin add",
+      run("codex plugin add", codexCli, ["plugin", "add", "jsonx-generative-ui-plugin@jsonx-local", "--json"], {
+        capture: true,
+        env,
+      }),
+    );
+    assertEvidence(pluginAdd.pluginId === "jsonx-generative-ui-plugin@jsonx-local", "Codex plugin add returned the wrong plugin id");
+    steps.push({
+      id: "plugin-add",
+      command: "codex plugin add jsonx-generative-ui-plugin@jsonx-local --json",
+      result: sanitizeEvidence(pluginAdd, replacements),
+    });
+
+    const installed = parseJsonOutput(
+      "codex plugin list installed",
+      run("codex plugin list installed", codexCli, ["plugin", "list", "--json"], { capture: true, env }),
+    );
+    const installedPlugin = installed.installed?.find((plugin) => plugin.pluginId === "jsonx-generative-ui-plugin@jsonx-local");
+    assertEvidence(installedPlugin?.enabled === true, "Codex installed list did not show the plugin enabled");
+    steps.push({
+      id: "installed-list",
+      command: "codex plugin list --json",
+      result: sanitizeEvidence({ plugin: installedPlugin }, replacements),
+    });
+
+    const installedPath = pluginAdd.installedPath;
+    const cachedFiles = [
+      ".codex-plugin/plugin.json",
+      "README.md",
+      "skills/jsonx/SKILL.md",
+      "skills/jsonx-generative-ui/SKILL.md",
+      "fixtures/support-triage.json",
+      "scripts/validate-jsonx-ui.py",
+    ];
+    const cachedFileChecks = [];
+    for (const file of cachedFiles) {
+      const filePath = path.join(installedPath, file);
+      const present = await fileExists(filePath);
+      assertEvidence(present, `Codex plugin cache is missing ${file}`);
+      cachedFileChecks.push({
+        path: sanitizeEvidence(filePath, replacements),
+        present,
+      });
+    }
+    steps.push({
+      id: "cache-files",
+      command: "inspect installed plugin cache",
+      result: { cachedFileChecks },
+    });
+
+    return {
+      generatedAt: new Date().toISOString(),
+      source: "codex plugin CLI",
+      note: "This evidence installs the repo-local JSONX Codex plugin from the repo-local marketplace using an isolated CODEX_HOME.",
+      skipped: false,
+      codexCli: sanitizeEvidence(codexCli, replacements),
+      tempHome: "$CODEX_HOME",
+      checks: {
+        marketplaceAdded: true,
+        availableBeforeInstall: true,
+        pluginInstalled: true,
+        pluginEnabled: true,
+        cachedFilesPresent: true,
+      },
+      steps,
+    };
+  } finally {
+    await fs.rm(tempHome, { recursive: true, force: true });
+  }
 }
 
 async function buildGoldenPromptEvidence() {
@@ -642,7 +955,16 @@ async function buildNpmBoundaryEvidence() {
     "vscode-extension/",
     ".github/",
   ];
-  const blockedTerms = ["chatgpt-app-submission", "marketplace.json", "netlify/", "gsap", "golden-prompts", "hosted-mcp-transcript"];
+  const blockedTerms = [
+    "chatgpt-app-submission",
+    "marketplace.json",
+    "netlify/",
+    "gsap",
+    "golden-prompts",
+    "hosted-mcp-transcript",
+    "skill-installer-evidence",
+    "codex-install-evidence",
+  ];
   const blocked = files.filter(
     (file) => blockedPrefixes.some((prefix) => file.startsWith(prefix)) || blockedTerms.some((term) => file.includes(term)),
   );
@@ -689,6 +1011,17 @@ async function writeReviewSummary(manifest) {
       ? `- \`${manifest.hostedMcpEvidence.path}\` records ${manifest.hostedMcpEvidence.stepCount} live endpoint checks from \`${manifest.hostedMcpUrl}\`.`
       : "- Hosted MCP evidence was skipped for this artifact run.",
     "",
+    "## Install Evidence",
+    "",
+    manifest.skillInstallerEvidence
+      ? `- \`${manifest.skillInstallerEvidence.path}\` covers ${manifest.skillInstallerEvidence.dryRunMatrixCount} installer dry-runs and ${manifest.skillInstallerEvidence.installSurfaceCount} isolated installs.`
+      : "- Skill installer evidence was not generated.",
+    manifest.codexInstallEvidence && !manifest.codexInstallEvidence.skipped
+      ? `- \`${manifest.codexInstallEvidence.path}\` records an isolated Codex marketplace install with ${manifest.codexInstallEvidence.stepCount} checks.`
+      : manifest.codexInstallEvidence
+        ? `- \`${manifest.codexInstallEvidence.path}\` records why Codex CLI install evidence was skipped.`
+        : "- Codex install evidence was not generated.",
+    "",
     "## Validation",
     "",
     ...manifest.validation.map((item) => `- ${item}`),
@@ -707,6 +1040,7 @@ async function writeReviewSummary(manifest) {
 async function main() {
   const skipScreenshots = hasArg("--skip-screenshots");
   const skipHostedMcp = hasArg("--skip-hosted-mcp") || process.env.JSONX_SKIP_HOSTED_MCP === "1";
+  const skipCodexInstall = hasArg("--skip-codex-install") || process.env.JSONX_SKIP_CODEX_INSTALL === "1";
   await fs.rm(artifactRoot, { recursive: true, force: true });
   await fs.mkdir(packagesDir, { recursive: true });
   await fs.mkdir(screenshotsDir, { recursive: true });
@@ -735,6 +1069,14 @@ async function main() {
     await writeJson(hostedMcpEvidencePath, hostedMcpEvidence);
     hostedMcpArtifact = await hashFile(hostedMcpEvidencePath);
   }
+  const skillInstallerEvidencePath = path.join(artifactRoot, "skill-installer-evidence.json");
+  const skillInstallerEvidence = await buildSkillInstallerEvidence();
+  await writeJson(skillInstallerEvidencePath, skillInstallerEvidence);
+  const skillInstallerArtifact = await hashFile(skillInstallerEvidencePath);
+  const codexInstallEvidencePath = path.join(artifactRoot, "codex-install-evidence.json");
+  const codexInstallEvidence = await buildCodexInstallEvidence({ skip: skipCodexInstall });
+  await writeJson(codexInstallEvidencePath, codexInstallEvidence);
+  const codexInstallArtifact = await hashFile(codexInstallEvidencePath);
 
   const packages = [];
   packages.push({
@@ -796,6 +1138,18 @@ async function main() {
           checks: hostedMcpEvidence.checks,
         }
       : null,
+    skillInstallerEvidence: {
+      ...skillInstallerArtifact,
+      dryRunMatrixCount: skillInstallerEvidence.dryRuns.length,
+      installSurfaceCount: skillInstallerEvidence.installs.length,
+      checks: skillInstallerEvidence.checks,
+    },
+    codexInstallEvidence: {
+      ...codexInstallArtifact,
+      skipped: codexInstallEvidence.skipped === true,
+      stepCount: codexInstallEvidence.steps.length,
+      checks: codexInstallEvidence.checks,
+    },
     npmBoundary,
     validation: [
       "node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs",
@@ -803,6 +1157,8 @@ async function main() {
       `python3 plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py ${validFixtures.map((name) => `${name}.json`).join(" ")}`,
       "diff -rq skills docs/skills",
       "npm pack --dry-run --json package-boundary check",
+      "skill installer dry-run and isolated install evidence",
+      ...(codexInstallEvidence.skipped ? [] : ["isolated Codex marketplace install evidence"]),
       ...(hostedMcpArtifact ? [`live hosted MCP transcript capture from ${hostedMcpUrl}`] : []),
     ],
   };
