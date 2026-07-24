@@ -1,6 +1,6 @@
 # JSONX Public Submission Queue
 
-Generated: 2026-07-24T11:35:08.758Z
+Generated: 2026-07-24T11:46:34.241Z
 
 This file is generated from the four store listing drafts. It gives the submitter one place to find packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that a public submission was sent.
 
@@ -77,6 +77,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `skillInstallerEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
+- `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
 
 ### Test Cases
 
@@ -138,6 +139,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `quizMobileScreenshot`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-quiz-mobile.png
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
+- `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
 
 ### Test Cases
 
@@ -191,6 +193,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `skillInstallerEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
+- `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
 
 ### Test Cases
 
@@ -247,6 +250,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `motionEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
+- `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
 
 ### Test Cases
 

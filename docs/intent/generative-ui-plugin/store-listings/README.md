@@ -11,7 +11,7 @@ They are source drafts, not proof that a public marketplace submission was sent.
 
 Each draft includes local `evidence` paths for repo review and `publicEvidence` URLs for portal reviewers. Keep both in sync when adding packages, screenshots, or audit files.
 
-Each draft also links to the generated submission queue at `https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json`. The queue gives submitters one file with the review package, portal packet URL, public evidence URLs, manual checks, and external-gate receipt fields for all four submissions.
+Each draft also links to the generated submission queue at `https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json` and the external gate runbook at `https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md`. The queue gives submitters one file with the review package, portal packet URL, public evidence URLs, manual checks, and receipt fields for all four submissions. The runbook lists the app IDs, ChatGPT transcript, Claude Code smoke, policy review, and receipt evidence still collected outside the repo.
 
 The generated portal packets live under `https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/`. Use those Markdown files as copy source when filling the OpenAI/Codex and Claude Code portals. They are not proof that a submission was sent.
 

@@ -101,7 +101,8 @@
     "codexInstallEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
     "skillInstallerEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
     "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
-    "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+    "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
+    "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
   },
   "releaseNotes": "Initial submission of the core JSONX Codex plugin. It includes package workflow guidance only and stays separate from generated UI.",
   "manualBeforeSubmit": [

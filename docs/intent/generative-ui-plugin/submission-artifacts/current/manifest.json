@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T11:35:08.756Z",
+  "generatedAt": "2026-07-24T11:46:34.239Z",
   "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
   "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
@@ -48,8 +48,8 @@
       "submissionType": "skills-plugin",
       "status": "draft-ready-requires-portal-access",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
-      "bytes": 6250,
-      "sha256": "b8da7c3bf6c7925ead3c715fa6725b7e091688c6033f59b45fb6a38f3adc1540",
+      "bytes": 6373,
+      "sha256": "4ec46e2aa5661642bab2cee7bccbddc380410048753f1097847224dbed14bfbe",
       "positiveTestCaseCount": 5,
       "negativeTestCaseCount": 3,
       "manualStepCount": 5
@@ -59,8 +59,8 @@
       "submissionType": "app-plus-skills",
       "status": "draft-ready-requires-portal-access",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
-      "bytes": 9488,
-      "sha256": "895a99e3987e07a8941ca836606351e6af83f444324ebd28c2c263bd9d37e211",
+      "bytes": 9611,
+      "sha256": "7c9fe2ef00243b58cb3430e27e121a263528cd40cf5c3f46048bbe12d6beb209",
       "positiveTestCaseCount": 5,
       "negativeTestCaseCount": 3,
       "manualStepCount": 6
@@ -70,8 +70,8 @@
       "submissionType": "skills-plugin",
       "status": "draft-ready-requires-interactive-smoke-and-submission",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
-      "bytes": 6142,
-      "sha256": "4c9723d59809e4af5e505ebff5a83ef4bd5c2f1aaf1394c252f056a4f580c5b4",
+      "bytes": 6265,
+      "sha256": "d80ff72c586cc93ef34aec1f168f142fa5f085d04115068e54522c7a24b27cf6",
       "positiveTestCaseCount": 5,
       "negativeTestCaseCount": 3,
       "manualStepCount": 4
@@ -81,8 +81,8 @@
       "submissionType": "skills-plugin",
       "status": "draft-ready-requires-interactive-smoke-and-submission",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
-      "bytes": 7756,
-      "sha256": "d913d973f20e475aa13f5ab02f1f8e97f283f48f8ee23fdc05387008639eed9f",
+      "bytes": 7879,
+      "sha256": "50c4b6bea30fe8a7e6b7e0c719bf5f089c669d7f29c771385fdf2c884db7ee34",
       "positiveTestCaseCount": 5,
       "negativeTestCaseCount": 3,
       "manualStepCount": 4
@@ -123,13 +123,13 @@
   "goldenPromptEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "bytes": 8274,
-    "sha256": "d9bf012a053e5d2f5ee123ad004ea0044b0a100fc28661c214c34f238a0c06b2",
+    "sha256": "11a8623ff8fd5bd978f98050ec582840b485f8187dab13f2c284e6cd65a60b2a",
     "caseCount": 9
   },
   "motionProfileEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
     "bytes": 4282,
-    "sha256": "894f438e21b3d53c8c590d3c2661afc09dfb8d10036a5f49a639fb06326cafb2",
+    "sha256": "2d2e3ec80198d28b15f491775bfeb77a6be82a8b78b0c441eb41775fb0d2dddd",
     "skipped": false,
     "caseCount": 9,
     "profiles": [
@@ -149,7 +149,7 @@
   "browserDemoEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/browser-demo-evidence.json",
     "bytes": 3546,
-    "sha256": "8e3c45518a303b6e3788d3c9b4a6911b03ba15651ce81789646f3df26ce0af5f",
+    "sha256": "d0b030cf93f37f99cd6fdb39faf07c3b0ee8e18f3b3431dd1a09c63413a767b7",
     "skipped": false,
     "caseCount": 3,
     "checks": {
@@ -166,7 +166,7 @@
   "hostedMcpEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
     "bytes": 4238,
-    "sha256": "a1b2fe3a043db83bbb00106196137fbe41d4f7fb0766be82ddc603a5f545282e",
+    "sha256": "7c109937e7c06556e810ab5327faa4e95b0c8ac385f3312ad8c61e06ec8baa4a",
     "stepCount": 7,
     "checks": {
       "healthOk": true,
@@ -180,7 +180,7 @@
   "skillInstallerEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
     "bytes": 5009,
-    "sha256": "dcf272eb3fa240720b7d0db2cc18ce0d24974b9367a49a1cbd946a2e7265ac96",
+    "sha256": "33c14160a4a5a2630ed7704d3b15da3143d041a01f54f5c6833f49cc18a0850c",
     "dryRunMatrixCount": 9,
     "installSurfaceCount": 3,
     "checks": {
@@ -193,7 +193,7 @@
   "codexInstallEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
     "bytes": 7195,
-    "sha256": "7859ef8795a4c86e231bb215dc0eb67c1ad9b38dcdd7954c4bbb18cbdb81569b",
+    "sha256": "0a1aba449d1f73de10846b3341c2ac924576c7e37b70ea63ec2ad252b33570d9",
     "skipped": false,
     "reusedPreviousEvidence": false,
     "stepCount": 8,
@@ -210,7 +210,7 @@
   "claudeValidationEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
     "bytes": 1715,
-    "sha256": "ad347d1c4d6da70d6a69c53553bdc962d807c4c4d1494efdd50240a935d9d998",
+    "sha256": "f417fc32f067d1a6c53273be6c6f6f26f3abf2124bec3d96624d1ecc284df7ab",
     "skipped": false,
     "reusedPreviousEvidence": false,
     "stepCount": 3,
@@ -225,7 +225,7 @@
   "openCodeSkillEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/opencode-skill-evidence.json",
     "bytes": 2597,
-    "sha256": "9029dc60c03e40e8339d3dd5237911f9bc716ebd1b92d9d19a20c828ceb7f685",
+    "sha256": "075e61e7918970915a293f88454a6f65dbddb352647ee9447c98e72703a2e3e8",
     "skipped": false,
     "reusedPreviousEvidence": false,
     "stepCount": 3,
@@ -242,7 +242,7 @@
     "packageName": "jsonx",
     "packageVersion": "2.1.1",
     "fileCount": 234,
-    "packageBytes": 6478903,
+    "packageBytes": 6478943,
     "excludedPrefixes": [
       "apps/",
       "plugins/",
@@ -271,6 +271,7 @@
       "browser-demo-evidence",
       "submission-audit",
       "external-gate-evidence",
+      "external-gates",
       "openai-plugin-submission",
       "openai-jsonx-plugin-submission",
       "openai-generative-ui-plugin-submission",
@@ -316,12 +317,13 @@
     "external gate evidence validation",
     "submission queue generation",
     "portal submission form generation",
+    "external gate runbook generation",
     "submission readiness audit"
   ],
   "externalGateEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
     "bytes": 5460,
-    "sha256": "74dffb90b259bdfc6bdec9ef42b44c0a8f91a5bd6724b726698fd7a826e5532c",
+    "sha256": "e655503f8b7c158cc2d58e9b365762c9e5b7cb1aae55081ffa14456a90c41d84",
     "supplied": true,
     "gateStatus": {
       "appIds": "pending",
@@ -349,13 +351,13 @@
   "submissionQueue": {
     "json": {
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
-      "bytes": 21103,
-      "sha256": "efb253c54490870741d89776e9264ba31613584ff65208346e8e9c5afd9fd071"
+      "bytes": 21613,
+      "sha256": "f26059824649472219c726521f2d939b315a6b41c5289dc210811a73b04b91ea"
     },
     "markdown": {
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md",
-      "bytes": 15843,
-      "sha256": "0bef85766aefb39dc821e0693aa802175a126b1bbc8d9bdbcaae64e7990ee1c7"
+      "bytes": 16315,
+      "sha256": "a7cd12cf790f9cb4fb0b726327127802cfbb2b2d49a1cd86102168b5513ff297"
     },
     "submissionCount": 4,
     "receiptRecordedCount": 0,
@@ -369,8 +371,8 @@
       "surface": "OpenAI core JSONX plugin portal draft",
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
-      "bytes": 7089,
-      "sha256": "b8cb4218a340961298e8e309a615f352bf6185bdef3771d6e29e0a71f2e3c105"
+      "bytes": 7207,
+      "sha256": "46014db5ce9e41b37ec6ab503e10a7cbbfe1f69224849a3561a2b1c3f5bf2f6b"
     },
     {
       "id": "openai-generative-ui",
@@ -378,8 +380,8 @@
       "surface": "OpenAI generative UI plugin portal draft",
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
-      "bytes": 9642,
-      "sha256": "ce961b9039c87ea21d290e37a8b2c0866d282ac183ddbd7510bdfa66a8536f3a"
+      "bytes": 9760,
+      "sha256": "0a4a3fc38a563e2be910a9263fb8318211a3dc2da3719e58f998a84a7c0c2038"
     },
     {
       "id": "claude-core-jsonx",
@@ -387,8 +389,8 @@
       "surface": "Claude Code core JSONX community submission draft",
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
-      "bytes": 6568,
-      "sha256": "133ed52fb7515111d131173fa419bb1f7a6dcbc4c9f78c5392cfdeda57a4fef7"
+      "bytes": 6686,
+      "sha256": "2ff3d6eae6330a48c6975e19c998ef266e2253ceb08289797f818798b6c74650"
     },
     {
       "id": "claude-generative-ui",
@@ -396,14 +398,19 @@
       "surface": "Claude Code generative UI community submission draft",
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md",
-      "bytes": 7881,
-      "sha256": "1928609cb3b241f6007a86564af1651f4ce088ab4fac9324dd190f9dba743708"
+      "bytes": 7999,
+      "sha256": "75889af7c807665b3d7d29bc025a840df6e4c2f387e0715e2c6ba9e3a18b78cd"
     }
   ],
+  "externalGateRunbook": {
+    "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
+    "bytes": 8305,
+    "sha256": "f6ae95a6b4513cc37f6ff902283d940dadb774f024bf077a4c5b3166d7ffceab"
+  },
   "submissionAudit": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
-    "bytes": 15064,
-    "sha256": "950de5ca0c7265fb2191eed7e514d8f54024b7f634437e84c4cb9506cb19bf26",
+    "bytes": 16438,
+    "sha256": "e07758ad1faada5a888445f0f3b09f4f6846359d777e59f40d84b91d3b763d2f",
     "requirementCount": 14,
     "provedCount": 10,
     "externalGatedCount": 4,

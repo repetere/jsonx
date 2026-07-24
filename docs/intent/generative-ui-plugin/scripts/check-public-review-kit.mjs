@@ -23,6 +23,7 @@ const requiredPublicEvidenceKeys = [
   "storeListingCopy",
   "submissionAudit",
   "externalGateEvidence",
+  "externalGateRunbook",
 ];
 
 const defaultPublicPagePath = path.join("docs", "generative-ui.html");
@@ -34,6 +35,14 @@ const defaultSubmissionQueuePath = path.join(
   "submission-artifacts",
   "current",
   "submission-queue.json",
+);
+const defaultExternalGateRunbookPath = path.join(
+  "docs",
+  "intent",
+  "generative-ui-plugin",
+  "submission-artifacts",
+  "current",
+  "external-gates.md",
 );
 const defaultSubmissionFormsDir = path.join(
   "docs",
@@ -75,6 +84,11 @@ const requiredPublicPageLinks = [
     id: "submissionQueueJson",
     href: "intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
     url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
+  },
+  {
+    id: "externalGateRunbook",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
   },
   {
     id: "openAiCorePortalPacket",
@@ -182,6 +196,13 @@ function resolveSubmissionFormsDir(queuePath) {
   if (requested) return path.resolve(repoRoot, requested);
   if (queuePath === path.resolve(repoRoot, defaultSubmissionQueuePath)) return path.resolve(repoRoot, defaultSubmissionFormsDir);
   return path.join(path.dirname(queuePath), "submission-forms");
+}
+
+function resolveExternalGateRunbookPath(queuePath) {
+  const requested = argValue("--gates");
+  if (requested) return path.resolve(repoRoot, requested);
+  if (queuePath === path.resolve(repoRoot, defaultSubmissionQueuePath)) return path.resolve(repoRoot, defaultExternalGateRunbookPath);
+  return path.join(path.dirname(queuePath), "external-gates.md");
 }
 
 function withCacheBust(urlString) {
@@ -309,6 +330,69 @@ async function validateSubmissionForms(dirPath, queue) {
     dir: relative(dirPath),
     packetCount: files.length,
     files,
+    errors,
+  };
+}
+
+async function validateExternalGateRunbook(filePath, queue) {
+  const errors = [];
+  let markdown = "";
+  try {
+    markdown = await fs.readFile(filePath, "utf8");
+  } catch (error) {
+    return {
+      file: relative(filePath),
+      gateCount: 0,
+      recorderCommandCount: 0,
+      portalPacketCount: 0,
+      errors: [`external gate runbook is missing: ${error.message}`],
+    };
+  }
+
+  const requiredText = [
+    "# JSONX External Gate Runbook",
+    "## Current Gate Status",
+    "## Gate 1: Approved App And Plugin IDs",
+    "## Gate 2: ChatGPT Developer Mode Transcript",
+    "## Gate 3: Claude Code Authenticated Smoke",
+    "## Gate 4: Policy Review And Marketplace Receipts",
+    "record-external-gate-evidence.mjs",
+    "direct-ui-request",
+    "motion-request",
+    "jsonx-core",
+    "jsonx-generative-ui",
+  ];
+  for (const text of requiredText) {
+    if (!markdown.includes(text)) errors.push(`external gate runbook missing: ${text}`);
+  }
+
+  for (const gate of ["appIds", "chatgptDeveloperMode", "claudeSmoke", "marketplaceSubmission"]) {
+    if (!markdown.includes(`| ${gate} |`)) errors.push(`external gate runbook missing gate row: ${gate}`);
+  }
+
+  const commandGroups = queue.externalGateRecorderCommands || {};
+  const sharedCommands = Object.values(commandGroups).flat().filter(Boolean);
+  for (const command of sharedCommands) {
+    if (!markdown.includes(command)) errors.push(`external gate runbook missing recorder command: ${command}`);
+  }
+
+  const submissions = Array.isArray(queue.submissions) ? queue.submissions : [];
+  for (const submission of submissions) {
+    if (!markdown.includes(submission.portalForm)) errors.push(`${submission.id || "submission"} portal packet missing from external gate runbook`);
+    if (!markdown.includes(submission.receiptRecorderCommand)) {
+      errors.push(`${submission.id || "submission"} receipt recorder command missing from external gate runbook`);
+    }
+  }
+
+  return {
+    file: relative(filePath),
+    gateCount: ["appIds", "chatgptDeveloperMode", "claudeSmoke", "marketplaceSubmission"].filter((gate) =>
+      markdown.includes(`| ${gate} |`),
+    ).length,
+    recorderCommandCount: [...new Set([...sharedCommands, ...submissions.map((submission) => submission.receiptRecorderCommand)])].filter(
+      (command) => command && markdown.includes(command),
+    ).length,
+    portalPacketCount: submissions.filter((submission) => submission.portalForm && markdown.includes(submission.portalForm)).length,
     errors,
   };
 }
@@ -461,6 +545,13 @@ function printHumanReport(report) {
   if (report.submissionForms.errors.length) {
     for (const error of report.submissionForms.errors) console.log(`  error: ${error}`);
   }
+  console.log(`externalGates: ${report.externalGateRunbook.file}`);
+  console.log(`  gates: ${report.externalGateRunbook.gateCount}`);
+  console.log(`  recorderCommands: ${report.externalGateRunbook.recorderCommandCount}`);
+  console.log(`  portalPackets: ${report.externalGateRunbook.portalPacketCount}`);
+  if (report.externalGateRunbook.errors.length) {
+    for (const error of report.externalGateRunbook.errors) console.log(`  error: ${error}`);
+  }
   for (const listing of report.listings) {
     console.log(`${listing.file}`);
     console.log(`  plugin: ${listing.pluginName}`);
@@ -487,6 +578,7 @@ Options:
   --page         Public page HTML to validate. Defaults to docs/generative-ui.html.
   --queue        Submission queue JSON to validate. Defaults to docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json.
   --forms        Directory containing portal packet Markdown files. Defaults to a submission-forms sibling next to --queue.
+  --gates        External gate runbook Markdown to validate. Defaults to an external-gates.md sibling next to --queue.
   --page-url     Public page URL to fetch with --network. Defaults to https://jsonx.net/generative-ui.html.
   --json         Print a machine-readable report.
   --network      Fetch every publicEvidence URL and report HTTP status.
@@ -501,6 +593,7 @@ Options:
   const publicPagePath = resolvePublicPagePath();
   const submissionQueuePath = resolveSubmissionQueuePath();
   const submissionFormsDir = resolveSubmissionFormsDir(submissionQueuePath);
+  const externalGateRunbookPath = resolveExternalGateRunbookPath(submissionQueuePath);
   const listings = [];
   for (const file of expectedListingFiles) {
     const filePath = path.join(sourceDir, file);
@@ -510,6 +603,7 @@ Options:
   const submissionQueueData = await readJson(submissionQueuePath);
   const submissionQueue = validateSubmissionQueue(submissionQueuePath, submissionQueueData);
   const submissionForms = await validateSubmissionForms(submissionFormsDir, submissionQueueData);
+  const externalGateRunbook = await validateExternalGateRunbook(externalGateRunbookPath, submissionQueueData);
 
   const urls = collectUrls(listings);
   const report = {
@@ -519,11 +613,13 @@ Options:
     publicPage,
     submissionQueue,
     submissionForms,
+    externalGateRunbook,
     listings,
     errors: [
       ...publicPage.errors.map((error) => `${publicPage.file}: ${error}`),
       ...submissionQueue.errors.map((error) => `${submissionQueue.file}: ${error}`),
       ...submissionForms.errors.map((error) => `${submissionForms.dir}: ${error}`),
+      ...externalGateRunbook.errors.map((error) => `${externalGateRunbook.file}: ${error}`),
       ...listings.flatMap((listing) => listing.errors.map((error) => `${listing.file}: ${error}`)),
     ],
   };

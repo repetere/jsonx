@@ -1,12 +1,24 @@
 {
-  "generatedAt": "2026-07-24T11:35:08.761Z",
+  "generatedAt": "2026-07-24T11:46:34.245Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "0ebdb18bc83f1c7dbd1e562b6a8161043e515117",
+  "gitCommit": "376d55a0caf20973cc21417672e5c272a63e65d1+worktree",
   "sourceGit": {
-    "headCommit": "0ebdb18bc83f1c7dbd1e562b6a8161043e515117",
-    "dirty": false,
-    "dirtyStatus": [],
-    "ignoredGeneratedArtifactStatusCount": 20
+    "headCommit": "376d55a0caf20973cc21417672e5c272a63e65d1",
+    "dirty": true,
+    "dirtyStatus": [
+      " M docs/generative-ui.html",
+      " M docs/intent/generative-ui-plugin/github-issues.md",
+      " M docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs",
+      " M docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs",
+      " M docs/intent/generative-ui-plugin/store-listings/README.md",
+      " M docs/intent/generative-ui-plugin/store-listings/claude-code-generative-ui-submission.json",
+      " M docs/intent/generative-ui-plugin/store-listings/claude-code-jsonx-submission.json",
+      " M docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json",
+      " M docs/intent/generative-ui-plugin/store-listings/openai-jsonx-plugin-submission.json",
+      " M docs/intent/generative-ui-plugin/submission-readiness.md",
+      " M site/generative-ui.html"
+    ],
+    "ignoredGeneratedArtifactStatusCount": 0
   },
   "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
   "summary": {
@@ -184,6 +196,7 @@
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
@@ -195,6 +208,7 @@
         "claudeCoreDraftPresent": true,
         "claudeGenerativeUiDraftPresent": true,
         "submissionQueuePresent": true,
+        "externalGateRunbookPresent": true,
         "submissionQueueLinksPortalForms": true,
         "submissionFormsPresent": true
       }
@@ -239,6 +253,7 @@
           "browser-demo-evidence",
           "submission-audit",
           "external-gate-evidence",
+          "external-gates",
           "openai-plugin-submission",
           "openai-jsonx-plugin-submission",
           "openai-generative-ui-plugin-submission",
@@ -256,7 +271,8 @@
       "evidence": [
         "plugins/jsonx-generative-ui-plugin/.app.json",
         "docs/intent/generative-ui-plugin/submission-readiness.md",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
       ],
       "checks": {
         "appIdsCaptured": false,
@@ -272,7 +288,8 @@
       "evidence": [
         "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
       ],
       "checks": {
         "chatgptMcpConnected": false,
@@ -288,7 +305,8 @@
       "githubIssue": "#1113",
       "evidence": [
         "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
       ],
       "checks": {
         "claudeAuthenticatedSmokeRan": false,
@@ -308,7 +326,8 @@
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
       ],
       "checks": {
         "openAiCoreSubmissionRecorded": false,

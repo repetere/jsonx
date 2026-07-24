@@ -1,6 +1,6 @@
 # OpenAI/Codex generative UI app-plus-skills plugin Portal Packet
 
-Generated: 2026-07-24T11:35:08.758Z
+Generated: 2026-07-24T11:46:34.241Z
 
 Use this packet as copy source for the public submission portal. It is generated from the tracked store listing draft and is not proof that the submission was sent.
 
@@ -191,6 +191,7 @@ Render a chart component that is not on the allowlist.
 - `quizMobileScreenshot`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-quiz-mobile.png
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
+- `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
 
 ## Receipt Fields
 

@@ -35,6 +35,7 @@ const blockedNpmTerms = [
   "browser-demo-evidence",
   "submission-audit",
   "external-gate-evidence",
+  "external-gates",
   "openai-jsonx-plugin-submission",
   "openai-generative-ui-plugin-submission",
   "claude-code-jsonx-submission",
@@ -149,6 +150,9 @@ as external-gated unless --strict-external is set.
   const externalGateSource = await readJson("docs/intent/generative-ui-plugin/external-gate-evidence.json");
   const goldenPromptEvidence = await readJson(manifest.goldenPromptEvidence?.path || "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json");
   const submissionQueue = await readJson(manifest.submissionQueue?.json?.path || "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json");
+  const externalGateRunbookPath = manifest.externalGateRunbook?.path || "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md";
+  const externalGateRunbookPresent = await fileExists(externalGateRunbookPath);
+  const externalGateRunbook = externalGateRunbookPresent ? await readText(externalGateRunbookPath) : "";
 
   const skillEntries = new Map(skillsIndex.map((skill) => [skill.name, skill]));
   const splitSkillPaths = surfaces.flatMap((surface) => splitSkills.map((skill) => `skills/${surface}/${skill}/SKILL.md`));
@@ -333,6 +337,7 @@ as external-gated unless --strict-external is set.
         docsPagePresent: await fileExists("docs/generative-ui.html"),
         mirroredPageMatches: await sameText("site/generative-ui.html", "docs/generative-ui.html"),
         publicPageHasReviewKit: publicPage.includes("Submission packages, listing drafts, and evidence are published together."),
+        publicPageLinksExternalGateRunbook: publicPage.includes("intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"),
         publicPageHasSkills: publicPage.includes("jsonx-codex-plugin") && publicPage.includes("claude-jsonx-generative-ui-plugin"),
         publicPageHasSafety: publicPage.includes("Safe generated-output profile"),
       },
@@ -348,6 +353,7 @@ as external-gated unless --strict-external is set.
         "docs/intent/generative-ui-plugin/scripts/validate-external-gate-recorder.mjs",
         manifest.submissionQueue?.json?.path,
         manifest.submissionQueue?.markdown?.path,
+        manifest.externalGateRunbook?.path,
         ...(manifest.submissionForms || []).map((item) => item.path),
       ].filter(Boolean),
       checks: {
@@ -383,6 +389,18 @@ as external-gated unless --strict-external is set.
           submissionQueue.submissions.every((submission) =>
             submission.portalForm?.startsWith("https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/"),
           ),
+        externalGateRunbookPresent,
+        externalGateRunbookListsGateStatuses: externalGateNames.every((gate) => externalGateRunbook.includes(`| ${gate} |`)),
+        externalGateRunbookListsRecorderCommands:
+          externalGateRunbook.includes("record-external-gate-evidence.mjs app-ids") &&
+          externalGateRunbook.includes("record-external-gate-evidence.mjs chatgpt") &&
+          externalGateRunbook.includes("record-external-gate-evidence.mjs claude-smoke") &&
+          externalGateRunbook.includes("record-external-gate-evidence.mjs marketplace"),
+        externalGateRunbookListsPromptChecks:
+          externalGateRunbook.includes("direct-ui-request") &&
+          externalGateRunbook.includes("motion-request") &&
+          externalGateRunbook.includes("jsonx-core") &&
+          externalGateRunbook.includes("jsonx-generative-ui"),
         receiptsStillExplicitlyTracked: manifest.submissionQueue?.pendingSubmissionCount === 4 || manifest.submissionQueue?.receiptRecordedCount === 4,
         externalGateSourcePresent: await fileExists("docs/intent/generative-ui-plugin/external-gate-evidence.json"),
         externalGateSourceSupplied: manifest.externalGateEvidence?.supplied === true,
@@ -429,7 +447,7 @@ as external-gated unless --strict-external is set.
       id: "GATE-APP-IDS",
       requirement: "Record approved OpenAI/Codex app and plugin IDs, then update Codex app metadata.",
       githubIssue: "#1115",
-      evidence: [manifest.externalGateEvidence?.path, "plugins/jsonx-generative-ui-plugin/.app.json"].filter(Boolean),
+      evidence: [manifest.externalGateEvidence?.path, manifest.externalGateRunbook?.path, "plugins/jsonx-generative-ui-plugin/.app.json"].filter(Boolean),
       external: true,
       remaining: "Requires approved OpenAI/Codex plugin IDs and renderer app ID from the public submission flow.",
       checks: {
@@ -442,7 +460,12 @@ as external-gated unless --strict-external is set.
       id: "GATE-CHATGPT-DEVELOPER-MODE",
       requirement: "Capture live ChatGPT developer-mode transcripts after connecting the hosted MCP app.",
       githubIssue: "#1115",
-      evidence: [manifest.externalGateEvidence?.path, manifest.hostedMcpEvidence?.path, manifest.goldenPromptEvidence?.path].filter(Boolean),
+      evidence: [
+        manifest.externalGateEvidence?.path,
+        manifest.externalGateRunbook?.path,
+        manifest.hostedMcpEvidence?.path,
+        manifest.goldenPromptEvidence?.path,
+      ].filter(Boolean),
       external: true,
       remaining: "Requires connecting the hosted MCP endpoint in ChatGPT developer mode and recording transcript evidence.",
       checks: {
@@ -456,7 +479,7 @@ as external-gated unless --strict-external is set.
       id: "GATE-CLAUDE-SMOKE",
       requirement: "Run authenticated Claude Code smoke prompts for both split Claude plugins.",
       githubIssue: "#1113",
-      evidence: [manifest.externalGateEvidence?.path, manifest.claudeValidationEvidence?.path].filter(Boolean),
+      evidence: [manifest.externalGateEvidence?.path, manifest.externalGateRunbook?.path, manifest.claudeValidationEvidence?.path].filter(Boolean),
       external: true,
       remaining: "Requires an authenticated interactive Claude Code session.",
       checks: {
@@ -469,7 +492,12 @@ as external-gated unless --strict-external is set.
       id: "GATE-MARKETPLACE-SUBMISSIONS",
       requirement: "Submit the split OpenAI/Codex and Claude Code packages to public review channels and record receipts after policy review.",
       githubIssue: "#1115",
-      evidence: [manifest.externalGateEvidence?.path, manifest.submissionQueue?.json?.path, manifest.submissionQueue?.markdown?.path].filter(Boolean),
+      evidence: [
+        manifest.externalGateEvidence?.path,
+        manifest.externalGateRunbook?.path,
+        manifest.submissionQueue?.json?.path,
+        manifest.submissionQueue?.markdown?.path,
+      ].filter(Boolean),
       external: true,
       remaining: "Requires portal access, policy review, and public marketplace submission receipts.",
       checks: {

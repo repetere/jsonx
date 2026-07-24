@@ -1349,6 +1349,7 @@ function validateStoreListing(source, data) {
     "storeListingCopy",
     "submissionAudit",
     "externalGateEvidence",
+    "externalGateRunbook",
   ]) {
     const url = data.publicEvidence?.[key];
     if (!url || typeof url !== "string" || !url.startsWith("https://jsonx.net/")) {
@@ -1400,6 +1401,10 @@ async function copyStoreListingArtifacts() {
 
 function publicSubmissionFormUrl(id) {
   return `https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/${id}.md`;
+}
+
+function publicExternalGateRunbookUrl() {
+  return "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md";
 }
 
 function markdownValue(value) {
@@ -1659,6 +1664,16 @@ function checklist(items) {
   return items.map((item) => `- [ ] ${item}`).join("\n");
 }
 
+function tableCell(value) {
+  return String(value ?? "").replaceAll("|", "\\|").replace(/\r?\n/g, " ");
+}
+
+function pendingValue(value) {
+  if (value === true) return "recorded";
+  if (typeof value === "string" && value.trim()) return "recorded";
+  return "pending";
+}
+
 const externalGateRecorderCommand = "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs";
 
 function marketplaceReceiptCommand(target) {
@@ -1774,6 +1789,159 @@ async function writeSubmissionQueueMarkdown(queue, filePath) {
       "",
     );
   }
+
+  await fs.writeFile(filePath, `${lines.join("\n")}\n`);
+}
+
+async function writeExternalGateRunbookMarkdown({ queue, externalGateEvidence, filePath }) {
+  const gateStatus = externalGateEvidence.gateStatus || {};
+  const evidence = externalGateEvidence.evidence || externalGateEvidence;
+  const appIds = evidence.appIds || {};
+  const chatgpt = evidence.chatgptDeveloperMode || {};
+  const claudeSmoke = evidence.claudeSmoke || {};
+  const marketplace = evidence.marketplaceSubmissions || {};
+  const chatgptPrompts = Array.isArray(chatgpt.promptsRun) ? chatgpt.promptsRun : [];
+  const claudeCorePrompts = Array.isArray(claudeSmoke.core?.promptsRun) ? claudeSmoke.core.promptsRun : [];
+  const claudeGenerativeUiPrompts = Array.isArray(claudeSmoke.generativeUi?.promptsRun) ? claudeSmoke.generativeUi.promptsRun : [];
+  const recorderCommands = [
+    ...(queue.externalGateRecorderCommands.appIds || []),
+    ...(queue.externalGateRecorderCommands.chatgptDeveloperMode || []),
+    ...(queue.externalGateRecorderCommands.claudeSmoke || []),
+    ...(queue.externalGateRecorderCommands.policyReview || []),
+    ...queue.submissions.map((submission) => submission.receiptRecorderCommand),
+  ];
+
+  const lines = [
+    "# JSONX External Gate Runbook",
+    "",
+    `Generated: ${queue.generatedAt}`,
+    "",
+    "This file lists the evidence that must be collected outside the repo before public submission can be marked complete. Use it with the generated submission queue and record results through the controlled evidence recorder.",
+    "",
+    "## Current Gate Status",
+    "",
+    "| Gate | Status | Evidence Source |",
+    "| --- | --- | --- |",
+    `| appIds | ${tableCell(gateStatus.appIds || "pending")} | \`${queue.receiptEvidenceFile}\` |`,
+    `| chatgptDeveloperMode | ${tableCell(gateStatus.chatgptDeveloperMode || "pending")} | \`${queue.receiptEvidenceFile}\` |`,
+    `| claudeSmoke | ${tableCell(gateStatus.claudeSmoke || "pending")} | \`${queue.receiptEvidenceFile}\` |`,
+    `| marketplaceSubmission | ${tableCell(gateStatus.marketplaceSubmission || "pending")} | \`${queue.receiptEvidenceFile}\` |`,
+    "",
+    "## Gate 1: Approved App And Plugin IDs",
+    "",
+    `Status: ${gateStatus.appIds || "pending"}`,
+    "",
+    "Record IDs after the OpenAI/Codex core plugin, the OpenAI/Codex generative UI plugin, and the renderer app have approved identifiers. Update the Codex app metadata before marking this gate complete.",
+    "",
+    "### Fields",
+    "",
+    markdownList([
+      `\`appIds.openaiCorePluginId\`: ${pendingValue(appIds.openaiCorePluginId)}`,
+      `\`appIds.openaiGenerativeUiAppId\`: ${pendingValue(appIds.openaiGenerativeUiAppId)}`,
+      `\`appIds.openaiGenerativeUiPluginId\`: ${pendingValue(appIds.openaiGenerativeUiPluginId)}`,
+      `\`appIds.codexCorePluginId\`: ${pendingValue(appIds.codexCorePluginId)}`,
+      `\`appIds.codexGenerativeUiPluginId\`: ${pendingValue(appIds.codexGenerativeUiPluginId)}`,
+      `\`appIds.codexGenerativeUiAppMetadataUpdated\`: ${pendingValue(appIds.codexGenerativeUiAppMetadataUpdated)}`,
+    ]),
+    "",
+    "### Recorder Command",
+    "",
+    "```bash",
+    ...queue.externalGateRecorderCommands.appIds,
+    "```",
+    "",
+    "## Gate 2: ChatGPT Developer Mode Transcript",
+    "",
+    `Status: ${gateStatus.chatgptDeveloperMode || "pending"}`,
+    "",
+    `Connect the hosted MCP app at \`${hostedMcpUrl}\`, run the golden prompts in ChatGPT developer mode, and record the transcript URL after every prompt has the expected outcome.`,
+    "",
+    "### Prompt Checklist",
+    "",
+    "| Prompt | Status |",
+    "| --- | --- |",
+    ...chatgptPrompts.map((prompt) => `| ${tableCell(prompt.id)} | ${tableCell(prompt.status || "pending")} |`),
+    "",
+    "### Recorder Command",
+    "",
+    "```bash",
+    ...queue.externalGateRecorderCommands.chatgptDeveloperMode,
+    "```",
+    "",
+    "## Gate 3: Claude Code Authenticated Smoke",
+    "",
+    `Status: ${gateStatus.claudeSmoke || "pending"}`,
+    "",
+    "Run both split Claude Code plugins from an authenticated Claude Code environment. The package validator proves the manifests are shaped correctly, but this gate needs a real interactive Claude run.",
+    "",
+    "### Core Plugin Prompt",
+    "",
+    "| Prompt | Command | Status |",
+    "| --- | --- | --- |",
+    ...claudeCorePrompts.map(
+      (prompt) => `| ${tableCell(prompt.id)} | \`${tableCell(prompt.prompt)}\` | ${tableCell(prompt.status || "pending")} |`,
+    ),
+    "",
+    "### Generative UI Plugin Prompt",
+    "",
+    "| Prompt | Command | Status |",
+    "| --- | --- | --- |",
+    ...claudeGenerativeUiPrompts.map(
+      (prompt) => `| ${tableCell(prompt.id)} | \`${tableCell(prompt.prompt)}\` | ${tableCell(prompt.status || "pending")} |`,
+    ),
+    "",
+    "### Recorder Commands",
+    "",
+    "```bash",
+    ...queue.externalGateRecorderCommands.claudeSmoke,
+    "```",
+    "",
+    "## Gate 4: Policy Review And Marketplace Receipts",
+    "",
+    `Status: ${gateStatus.marketplaceSubmission || "pending"}`,
+    "",
+    "Complete human or policy review before sending public submissions. After each portal returns a receipt, record the matching submission ID, receipt URL, status, and submitted date.",
+    "",
+    "### Policy Review",
+    "",
+    markdownList([
+      `\`marketplaceSubmissions.policyReview.status\`: ${marketplace.policyReview?.status || "pending"}`,
+      `\`marketplaceSubmissions.policyReview.reviewedBy\`: ${pendingValue(marketplace.policyReview?.reviewedBy)}`,
+      `\`marketplaceSubmissions.policyReview.reviewedAt\`: ${pendingValue(marketplace.policyReview?.reviewedAt)}`,
+    ]),
+    "",
+    "### Submission Packets",
+    "",
+    "| Submission | Status | Portal Packet | Receipt Check |",
+    "| --- | --- | --- | --- |",
+    ...queue.submissions.map(
+      (submission) =>
+        `| ${tableCell(submission.label)} | ${tableCell(submission.status)} | ${submission.portalForm} | \`${submission.receiptCheck}\` |`,
+    ),
+    "",
+    "### Recorder Commands",
+    "",
+    "```bash",
+    ...queue.externalGateRecorderCommands.policyReview,
+    ...queue.submissions.map((submission) => submission.receiptRecorderCommand),
+    "```",
+    "",
+    "## Public Handoff Links",
+    "",
+    markdownList([
+      `Submission queue Markdown: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md`,
+      `Submission queue JSON: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json`,
+      `External gate evidence JSON: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json`,
+      `External gate runbook: ${publicExternalGateRunbookUrl()}`,
+    ]),
+    "",
+    "## Full Recorder Command Set",
+    "",
+    "```bash",
+    ...[...new Set(recorderCommands)],
+    "```",
+    "",
+  ];
 
   await fs.writeFile(filePath, `${lines.join("\n")}\n`);
 }
@@ -2464,6 +2632,7 @@ async function buildNpmBoundaryEvidence() {
     "browser-demo-evidence",
     "submission-audit",
     "external-gate-evidence",
+    "external-gates",
     "openai-plugin-submission",
     "openai-jsonx-plugin-submission",
     "openai-generative-ui-plugin-submission",
@@ -2868,7 +3037,8 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         storeListingPresent(manifest, "OpenAI generative UI plugin portal draft") &&
         storeListingPresent(manifest, "Claude Code core JSONX community submission draft") &&
         storeListingPresent(manifest, "Claude Code generative UI community submission draft") &&
-        Boolean(manifest.submissionQueue?.json?.sha256)
+        Boolean(manifest.submissionQueue?.json?.sha256) &&
+        Boolean(manifest.externalGateRunbook?.sha256)
           ? "proved"
           : "incomplete",
       githubIssue: "#1115",
@@ -2884,6 +3054,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         manifest.storeListings.find((item) => item.surface === "Claude Code generative UI community submission draft")?.path,
         manifest.submissionQueue?.json?.path,
         manifest.submissionQueue?.markdown?.path,
+        manifest.externalGateRunbook?.path,
         ...(manifest.submissionForms || []).map((item) => item.path),
       ].filter(Boolean),
       checks: {
@@ -2892,6 +3063,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         claudeCoreDraftPresent: storeListingPresent(manifest, "Claude Code core JSONX community submission draft"),
         claudeGenerativeUiDraftPresent: storeListingPresent(manifest, "Claude Code generative UI community submission draft"),
         submissionQueuePresent: Boolean(manifest.submissionQueue?.json?.sha256),
+        externalGateRunbookPresent: Boolean(manifest.externalGateRunbook?.sha256),
         submissionQueueLinksPortalForms: manifest.submissionQueue?.portalFormCount === 4,
         submissionFormsPresent:
           Array.isArray(manifest.submissionForms) &&
@@ -2921,6 +3093,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         "plugins/jsonx-generative-ui-plugin/.app.json",
         "docs/intent/generative-ui-plugin/submission-readiness.md",
         manifest.externalGateEvidence?.path,
+        manifest.externalGateRunbook?.path,
       ].filter(Boolean),
       checks: {
         appIdsCaptured: externalGateEvidence?.checks?.appIdsCaptured === true,
@@ -2935,7 +3108,12 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
       requirement: "Capture live ChatGPT developer-mode transcripts after connecting the hosted MCP app.",
       status: chatgptTranscriptGateOk ? "proved" : "external-gated",
       githubIssue: "#1115",
-      evidence: [manifest.hostedMcpEvidence?.path, manifest.goldenPromptEvidence?.path, manifest.externalGateEvidence?.path].filter(Boolean),
+      evidence: [
+        manifest.hostedMcpEvidence?.path,
+        manifest.goldenPromptEvidence?.path,
+        manifest.externalGateEvidence?.path,
+        manifest.externalGateRunbook?.path,
+      ].filter(Boolean),
       checks: {
         chatgptMcpConnected: externalGateEvidence?.checks?.chatgptMcpConnected === true,
         chatgptTranscriptCaptured: externalGateEvidence?.checks?.chatgptTranscriptCaptured === true,
@@ -2953,7 +3131,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
       requirement: "Run authenticated Claude Code smoke prompts for the split core JSONX and generative UI plugins.",
       status: claudeSmokeGateOk ? "proved" : "external-gated",
       githubIssue: "#1113",
-      evidence: [manifest.claudeValidationEvidence?.path, manifest.externalGateEvidence?.path].filter(Boolean),
+      evidence: [manifest.claudeValidationEvidence?.path, manifest.externalGateEvidence?.path, manifest.externalGateRunbook?.path].filter(Boolean),
       checks: {
         claudeAuthenticatedSmokeRan: externalGateEvidence?.checks?.claudeAuthenticatedSmokeRan === true,
         claudeSmokePromptsPassed: externalGateEvidence?.checks?.claudeSmokePromptsPassed === true,
@@ -2972,6 +3150,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         manifest.submissionQueue?.json?.path,
         manifest.submissionQueue?.markdown?.path,
         manifest.externalGateEvidence?.path,
+        manifest.externalGateRunbook?.path,
       ].filter(Boolean),
       checks: {
         openAiCoreSubmissionRecorded: externalGateEvidence?.checks?.openAiCoreSubmissionRecorded === true,
@@ -3046,6 +3225,13 @@ async function writeReviewSummary(manifest) {
     manifest.submissionQueue
       ? `- \`${manifest.submissionQueue.markdown.path}\` is the submitter-facing checklist.`
       : "",
+    "",
+    "## External Gate Runbook",
+    "",
+    manifest.externalGateRunbook
+      ? `- \`${manifest.externalGateRunbook.path}\` lists the app ID, ChatGPT transcript, Claude smoke, policy review, and marketplace receipt steps that need external evidence.`
+      : "- External gate runbook was not generated.",
+    manifest.externalGateRunbook ? `- Public URL: ${publicExternalGateRunbookUrl()}` : "",
     "",
     "## Screenshots",
     "",
@@ -3361,6 +3547,15 @@ async function main() {
   manifest.submissionForms = submissionForms;
   manifest.validation.push("submission queue generation");
   manifest.validation.push("portal submission form generation");
+
+  const externalGateRunbookPath = path.join(artifactRoot, "external-gates.md");
+  await writeExternalGateRunbookMarkdown({
+    queue: submissionQueue,
+    externalGateEvidence,
+    filePath: externalGateRunbookPath,
+  });
+  manifest.externalGateRunbook = await hashFile(externalGateRunbookPath);
+  manifest.validation.push("external gate runbook generation");
 
   const submissionAuditPath = path.join(artifactRoot, "submission-audit.json");
   const submissionAudit = buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot);

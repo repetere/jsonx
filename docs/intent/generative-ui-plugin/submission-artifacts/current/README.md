@@ -1,6 +1,6 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T11:35:08.756Z
+Generated: 2026-07-24T11:46:34.239Z
 
 ## Packages
 
@@ -26,15 +26,20 @@ Generated: 2026-07-24T11:35:08.756Z
 
 | Submission | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `b8cb4218a340961298e8e309a615f352bf6185bdef3771d6e29e0a71f2e3c105` | 7089 |
-| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `ce961b9039c87ea21d290e37a8b2c0866d282ac183ddbd7510bdfa66a8536f3a` | 9642 |
-| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `133ed52fb7515111d131173fa419bb1f7a6dcbc4c9f78c5392cfdeda57a4fef7` | 6568 |
-| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `1928609cb3b241f6007a86564af1651f4ce088ab4fac9324dd190f9dba743708` | 7881 |
+| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `46014db5ce9e41b37ec6ab503e10a7cbbfe1f69224849a3561a2b1c3f5bf2f6b` | 7207 |
+| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `0a4a3fc38a563e2be910a9263fb8318211a3dc2da3719e58f998a84a7c0c2038` | 9760 |
+| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `2ff3d6eae6330a48c6975e19c998ef266e2253ceb08289797f818798b6c74650` | 6686 |
+| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `75889af7c807665b3d7d29bc025a840df6e4c2f387e0715e2c6ba9e3a18b78cd` | 7999 |
 
 ## Submission Queue
 
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json` tracks 4 public submission handoffs with 4 pending receipts.
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md` is the submitter-facing checklist.
+
+## External Gate Runbook
+
+- `docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md` lists the app ID, ChatGPT transcript, Claude smoke, policy review, and marketplace receipt steps that need external evidence.
+- Public URL: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
 
 ## Screenshots
 
@@ -86,6 +91,7 @@ Generated: 2026-07-24T11:35:08.756Z
 - external gate evidence validation
 - submission queue generation
 - portal submission form generation
+- external gate runbook generation
 - submission readiness audit
 
 ## Submission Notes
