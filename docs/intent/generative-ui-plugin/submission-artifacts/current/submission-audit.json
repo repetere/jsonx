@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-07-24T12:37:45.159Z",
+  "generatedAt": "2026-07-24T12:47:27.854Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "9361cd9ceaba24700870b3e2ca5a7ab17bffba68",
+  "gitCommit": "bfc89c9d13023aae008799b566619acfd687634b",
   "sourceGit": {
-    "headCommit": "9361cd9ceaba24700870b3e2ca5a7ab17bffba68",
+    "headCommit": "bfc89c9d13023aae008799b566619acfd687634b",
     "dirty": false,
     "dirtyStatus": [],
-    "ignoredGeneratedArtifactStatusCount": 0
+    "ignoredGeneratedArtifactStatusCount": 36
   },
   "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
   "status": "implementation-complete-external-gated",
@@ -228,6 +228,7 @@
         "docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json",
         "docs/intent/generative-ui-plugin/store-listings/claude-code-jsonx-submission.json",
         "docs/intent/generative-ui-plugin/store-listings/claude-code-generative-ui-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
@@ -245,6 +246,7 @@
         "openAiGenerativeUiDraftPresent": true,
         "claudeCoreDraftPresent": true,
         "claudeGenerativeUiDraftPresent": true,
+        "sourceDocsEvidencePassed": true,
         "submissionQueuePresent": true,
         "externalGateRunbookPresent": true,
         "submissionQueueLinksPortalForms": true,
@@ -290,6 +292,7 @@
           "opencode-skill-evidence",
           "motion-profile-evidence",
           "browser-demo-evidence",
+          "source-docs-evidence",
           "submission-audit",
           "external-gate-evidence",
           "external-gates",
@@ -304,7 +307,7 @@
     },
     {
       "id": "REQ-CI-COVERAGE",
-      "requirement": "Run automated checks for the renderer app, plugins, fixtures, public review kit, external gate evidence, GitHub issue tracking, generated packages, and npm package boundary.",
+      "requirement": "Run automated checks for the renderer app, plugins, fixtures, public review kit, source documentation links, external gate evidence, GitHub issue tracking, generated packages, and npm package boundary.",
       "status": "proved",
       "githubIssue": "#1115",
       "evidence": [
@@ -319,6 +322,7 @@
         "validatesExternalGateEvidence": true,
         "validatesExternalGateRecorder": true,
         "validatesGithubIssueTracking": true,
+        "validatesSubmissionSourceDocs": true,
         "probesExternalGateAccess": true,
         "auditsGoalCoverage": true,
         "validatesGeneratedArtifacts": true,

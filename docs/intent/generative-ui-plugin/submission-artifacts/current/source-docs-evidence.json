@@ -1,0 +1,167 @@
+{
+  "generatedAt": "2026-07-24T12:47:22.227Z",
+  "source": "store listing sourceDocsChecked URLs",
+  "listingsDir": "docs/intent/generative-ui-plugin/store-listings",
+  "listingCount": 4,
+  "sourceDocUrlCount": 8,
+  "checks": {
+    "expectedListingCount": true,
+    "allListingsHaveSourceDocs": true,
+    "allRequiredDocsListed": true,
+    "allDocsUseAllowedHosts": true,
+    "allFinalDocUrlsUseAllowedHosts": true,
+    "allSourceDocsReachable": true
+  },
+  "errors": [],
+  "missingRequiredDocs": [],
+  "listings": [
+    {
+      "file": "docs/intent/generative-ui-plugin/store-listings/openai-jsonx-plugin-submission.json",
+      "surface": "openai-plugin-portal",
+      "submissionType": "skills-plugin",
+      "listingName": "JSONX",
+      "sourceDocsChecked": [
+        "https://developers.openai.com/codex/submit-plugins",
+        "https://developers.openai.com/codex/build-plugins"
+      ],
+      "requiredDocs": [
+        "https://developers.openai.com/codex/submit-plugins",
+        "https://developers.openai.com/codex/build-plugins"
+      ],
+      "missingRequiredDocs": []
+    },
+    {
+      "file": "docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json",
+      "surface": "openai-plugin-portal",
+      "submissionType": "app-plus-skills",
+      "listingName": "JSONX Generative UI",
+      "sourceDocsChecked": [
+        "https://developers.openai.com/codex/submit-plugins",
+        "https://developers.openai.com/codex/build-plugins",
+        "https://developers.openai.com/apps-sdk/deploy/submission"
+      ],
+      "requiredDocs": [
+        "https://developers.openai.com/codex/submit-plugins",
+        "https://developers.openai.com/codex/build-plugins",
+        "https://developers.openai.com/apps-sdk/deploy/submission"
+      ],
+      "missingRequiredDocs": []
+    },
+    {
+      "file": "docs/intent/generative-ui-plugin/store-listings/claude-code-jsonx-submission.json",
+      "surface": "claude-code-community-marketplace",
+      "submissionType": "skills-plugin",
+      "listingName": "jsonx",
+      "sourceDocsChecked": [
+        "https://code.claude.com/docs/en/plugins",
+        "https://code.claude.com/docs/en/plugin-marketplaces",
+        "https://github.com/anthropics/claude-plugins-community",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/cli-reference"
+      ],
+      "requiredDocs": [
+        "https://code.claude.com/docs/en/plugins",
+        "https://code.claude.com/docs/en/plugin-marketplaces",
+        "https://github.com/anthropics/claude-plugins-community",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/cli-reference"
+      ],
+      "missingRequiredDocs": []
+    },
+    {
+      "file": "docs/intent/generative-ui-plugin/store-listings/claude-code-generative-ui-submission.json",
+      "surface": "claude-code-community-marketplace",
+      "submissionType": "skills-plugin",
+      "listingName": "jsonx-generative-ui",
+      "sourceDocsChecked": [
+        "https://code.claude.com/docs/en/plugins",
+        "https://code.claude.com/docs/en/plugin-marketplaces",
+        "https://github.com/anthropics/claude-plugins-community",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/cli-reference"
+      ],
+      "requiredDocs": [
+        "https://code.claude.com/docs/en/plugins",
+        "https://code.claude.com/docs/en/plugin-marketplaces",
+        "https://github.com/anthropics/claude-plugins-community",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/cli-reference"
+      ],
+      "missingRequiredDocs": []
+    }
+  ],
+  "sourceDocs": [
+    {
+      "url": "https://code.claude.com/docs/en/cli-reference",
+      "finalUrl": "https://code.claude.com/docs/en/cli-reference",
+      "redirected": false,
+      "status": 200,
+      "ok": true,
+      "contentType": "text/html; charset=utf-8",
+      "durationMs": 137
+    },
+    {
+      "url": "https://code.claude.com/docs/en/plugin-marketplaces",
+      "finalUrl": "https://code.claude.com/docs/en/plugin-marketplaces",
+      "redirected": false,
+      "status": 200,
+      "ok": true,
+      "contentType": "text/html; charset=utf-8",
+      "durationMs": 121
+    },
+    {
+      "url": "https://code.claude.com/docs/en/plugins",
+      "finalUrl": "https://code.claude.com/docs/en/plugins",
+      "redirected": false,
+      "status": 200,
+      "ok": true,
+      "contentType": "text/html; charset=utf-8",
+      "durationMs": 135
+    },
+    {
+      "url": "https://code.claude.com/docs/en/skills",
+      "finalUrl": "https://code.claude.com/docs/en/skills",
+      "redirected": false,
+      "status": 200,
+      "ok": true,
+      "contentType": "text/html; charset=utf-8",
+      "durationMs": 158
+    },
+    {
+      "url": "https://developers.openai.com/apps-sdk/deploy/submission",
+      "finalUrl": "https://developers.openai.com/apps-sdk/deploy/submission",
+      "redirected": false,
+      "status": 200,
+      "ok": true,
+      "contentType": "text/html; charset=utf-8",
+      "durationMs": 442
+    },
+    {
+      "url": "https://developers.openai.com/codex/build-plugins",
+      "finalUrl": "https://learn.chatgpt.com/docs/build-plugins",
+      "redirected": true,
+      "status": 200,
+      "ok": true,
+      "contentType": "text/html; charset=utf-8",
+      "durationMs": 311
+    },
+    {
+      "url": "https://developers.openai.com/codex/submit-plugins",
+      "finalUrl": "https://learn.chatgpt.com/docs/submit-plugins",
+      "redirected": true,
+      "status": 200,
+      "ok": true,
+      "contentType": "text/html; charset=utf-8",
+      "durationMs": 311
+    },
+    {
+      "url": "https://github.com/anthropics/claude-plugins-community",
+      "finalUrl": "https://github.com/anthropics/claude-plugins-community",
+      "redirected": false,
+      "status": 200,
+      "ok": true,
+      "contentType": "text/html; charset=utf-8",
+      "durationMs": 428
+    }
+  ]
+}

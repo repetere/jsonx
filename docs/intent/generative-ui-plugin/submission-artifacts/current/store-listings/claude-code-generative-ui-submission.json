@@ -127,7 +127,8 @@
     "externalGateAccess": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
     "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
     "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
-    "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
+    "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
+    "sourceDocsEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json"
   },
   "releaseNotes": "Initial community submission of the JSONX Generative UI Claude Code plugin.",
   "manualBeforeSubmit": [

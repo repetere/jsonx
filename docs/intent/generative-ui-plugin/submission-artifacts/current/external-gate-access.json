@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T12:37:41.921Z",
+  "generatedAt": "2026-07-24T12:47:24.360Z",
   "source": "JSONX external gate access probe",
   "note": "This probe records local auth and portal reachability without exposing secret values. It is access evidence, not proof that external gates are complete.",
   "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
@@ -10,7 +10,7 @@
     "body": {
       "ok": true
     },
-    "durationMs": 258
+    "durationMs": 232
   },
   "environment": {
     "anthropicApiKeyPresent": false,
@@ -37,7 +37,7 @@
       "ok": true,
       "location": null,
       "contentType": "text/html; charset=UTF-8",
-      "durationMs": 173
+      "durationMs": 155
     },
     {
       "id": "claude-code-community-marketplace",
@@ -46,7 +46,7 @@
       "ok": true,
       "location": null,
       "contentType": "text/html; charset=utf-8",
-      "durationMs": 365
+      "durationMs": 346
     },
     {
       "id": "claude-team-directory-submission",
@@ -55,7 +55,7 @@
       "ok": true,
       "location": null,
       "contentType": "text/html; charset=UTF-8",
-      "durationMs": 160
+      "durationMs": 163
     },
     {
       "id": "claude-directory-redirect",
@@ -64,7 +64,7 @@
       "ok": true,
       "location": "https://code.claude.com/docs/en/plugins#submit-your-plugin-to-the-official-marketplace",
       "contentType": null,
-      "durationMs": 227
+      "durationMs": 211
     }
   ],
   "currentExternalGates": {

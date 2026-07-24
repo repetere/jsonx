@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T12:37:21.809Z",
+  "generatedAt": "2026-07-24T12:47:02.639Z",
   "source": "local renderer widget motion harness",
   "note": "This evidence loads the widget locally with and without JSONX_ENABLE_GSAP and verifies renderer-owned motion profiles through DOM state. It does not rely on model-supplied animation code.",
   "skipped": false,

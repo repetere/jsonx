@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T12:37:45.154Z",
+  "generatedAt": "2026-07-24T12:47:27.848Z",
   "source": "docs/intent/generative-ui-plugin/store-listings/",
   "note": "This queue is generated from the four public store listing drafts. It lists packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that any public marketplace submission was sent.",
   "externalGateEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
@@ -73,7 +73,8 @@
         "externalGateAccess": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
         "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
         "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
-        "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
+        "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
+        "sourceDocsEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json"
       },
       "positiveTestCaseIds": [
         "jxm-review",
@@ -119,7 +120,7 @@
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
-        "publicEvidenceUrlCount": 12,
+        "publicEvidenceUrlCount": 13,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
         "manualStepCount": 5,
@@ -169,7 +170,8 @@
         "externalGateAccess": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
         "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
         "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
-        "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
+        "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
+        "sourceDocsEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json"
       },
       "positiveTestCaseIds": [
         "direct-ui-request",
@@ -219,7 +221,7 @@
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
-        "publicEvidenceUrlCount": 19,
+        "publicEvidenceUrlCount": 20,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
         "manualStepCount": 6,
@@ -267,7 +269,8 @@
         "externalGateAccess": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
         "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
         "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
-        "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
+        "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
+        "sourceDocsEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json"
       },
       "positiveTestCaseIds": [
         "core-jsonx-review",
@@ -322,7 +325,7 @@
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
-        "publicEvidenceUrlCount": 12,
+        "publicEvidenceUrlCount": 13,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
         "manualStepCount": 4,
@@ -373,7 +376,8 @@
         "externalGateAccess": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
         "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
         "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
-        "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
+        "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
+        "sourceDocsEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json"
       },
       "positiveTestCaseIds": [
         "generative-ui-handoff",
@@ -428,7 +432,7 @@
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
-        "publicEvidenceUrlCount": 15,
+        "publicEvidenceUrlCount": 16,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
         "manualStepCount": 4,

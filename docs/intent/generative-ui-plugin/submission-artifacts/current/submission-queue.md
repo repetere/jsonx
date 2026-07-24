@@ -1,6 +1,6 @@
 # JSONX Public Submission Queue
 
-Generated: 2026-07-24T12:37:45.154Z
+Generated: 2026-07-24T12:47:27.848Z
 
 This file is generated from the four store listing drafts. It gives the submitter one place to find packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that a public submission was sent.
 
@@ -89,6 +89,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
 - `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
+- `sourceDocsEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json
 
 ### Test Cases
 
@@ -163,6 +164,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
 - `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
+- `sourceDocsEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json
 
 ### Test Cases
 
@@ -229,6 +231,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
 - `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
+- `sourceDocsEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json
 
 ### Test Cases
 
@@ -300,6 +303,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
 - `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
+- `sourceDocsEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json
 
 ### Test Cases
 

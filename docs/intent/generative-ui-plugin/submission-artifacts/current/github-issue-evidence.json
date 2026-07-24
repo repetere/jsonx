@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T12:37:39.776Z",
+  "generatedAt": "2026-07-24T12:47:21.708Z",
   "source": "GitHub Issues API",
   "repository": "repetere/jsonx",
   "tracker": "docs/intent/generative-ui-plugin/github-issues.md",
@@ -47,7 +47,7 @@
       "apiUrl": "https://api.github.com/repos/repetere/jsonx/issues/1110",
       "status": 200,
       "ok": true,
-      "durationMs": 418,
+      "durationMs": 347,
       "workstream": "Shared contract",
       "requirementIds": [
         "REQ-GENERATIVE-UI-CONTRACT",
@@ -79,7 +79,7 @@
       "apiUrl": "https://api.github.com/repos/repetere/jsonx/issues/1111",
       "status": 200,
       "ok": true,
-      "durationMs": 226,
+      "durationMs": 303,
       "workstream": "Hosted renderer app",
       "requirementIds": [
         "REQ-HOSTED-RENDERER"
@@ -110,7 +110,7 @@
       "apiUrl": "https://api.github.com/repos/repetere/jsonx/issues/1112",
       "status": 200,
       "ok": true,
-      "durationMs": 225,
+      "durationMs": 323,
       "workstream": "Codex plugins",
       "requirementIds": [
         "REQ-CODEX-PLUGINS"
@@ -141,7 +141,7 @@
       "apiUrl": "https://api.github.com/repos/repetere/jsonx/issues/1113",
       "status": 200,
       "ok": true,
-      "durationMs": 217,
+      "durationMs": 517,
       "workstream": "Claude Code and OpenCode skills",
       "requirementIds": [
         "REQ-SKILLS-SPLIT",
@@ -174,7 +174,7 @@
       "apiUrl": "https://api.github.com/repos/repetere/jsonx/issues/1114",
       "status": 200,
       "ok": true,
-      "durationMs": 235,
+      "durationMs": 306,
       "workstream": "Renderer motion",
       "requirementIds": [
         "REQ-MOTION"
@@ -201,11 +201,11 @@
         "enhancement"
       ],
       "createdAt": "2026-07-24T05:04:31Z",
-      "updatedAt": "2026-07-24T12:34:21Z",
+      "updatedAt": "2026-07-24T12:40:50Z",
       "apiUrl": "https://api.github.com/repos/repetere/jsonx/issues/1115",
       "status": 200,
       "ok": true,
-      "durationMs": 220,
+      "durationMs": 307,
       "workstream": "Store submission",
       "requirementIds": [
         "REQ-PLAN",
@@ -238,11 +238,11 @@
         "enhancement"
       ],
       "createdAt": "2026-07-24T05:04:39Z",
-      "updatedAt": "2026-07-24T12:34:22Z",
+      "updatedAt": "2026-07-24T12:40:51Z",
       "apiUrl": "https://api.github.com/repos/repetere/jsonx/issues/1116",
       "status": 200,
       "ok": true,
-      "durationMs": 235,
+      "durationMs": 296,
       "workstream": "GitHub Pages",
       "requirementIds": [
         "REQ-GITHUB-PAGES"
@@ -273,7 +273,7 @@
       "apiUrl": "https://api.github.com/repos/repetere/jsonx/issues/1117",
       "status": 200,
       "ok": true,
-      "durationMs": 214,
+      "durationMs": 296,
       "workstream": "Browser demo",
       "requirementIds": [
         "REQ-BROWSER-DEMO"

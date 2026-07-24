@@ -1,6 +1,6 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T12:37:45.151Z
+Generated: 2026-07-24T12:47:27.846Z
 
 ## Packages
 
@@ -26,10 +26,10 @@ Generated: 2026-07-24T12:37:45.151Z
 
 | Submission | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `e772b457dade02a79ec61569cc105a9e26c8d4133c819e284155699e5879bdca` | 8023 |
-| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `e66adddbc2b12df9a19c9df20eab395afefc138c470be93ae4401e8da1783002` | 10669 |
-| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `c3f51a88d218076a96d2c3b4cbe9a55a41fba5096d96fd01646f77a7953912c1` | 7758 |
-| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `1539416f3811ce057e44f6c26839a7079e5b3663222d3fbbfc819db96bcfa4ac` | 9094 |
+| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `3c39380bbe315cf01647ecc273c3ac22af7100070e328d6aee873e4fbea2e61f` | 8148 |
+| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `52c61ed17a062c05c080891f314a2d7afe96710617a23215fefe25f8d93dce12` | 10794 |
+| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `5d3a60d53b9f6f284b21a49f144ebf7d626a3c8011ba3d1a68c573535462c0b4` | 7883 |
+| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `0d05aa48d6282e37d2e07797173290dfefdf40a4a7b50ef1bef6b75983d49dcc` | 9219 |
 
 ## Submission Queue
 
@@ -46,7 +46,7 @@ Generated: 2026-07-24T12:37:45.151Z
 
 | Purpose | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `f8fa75fb8f4d90690fdede760dd7f07245cfe576fa8c6efc5321fdc010763a23` | 210009 |
+| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `516e726b44cbae7d73177b072b53fa523f36f579d960d47045b318149de8560f` | 209806 |
 | skills install readme | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-skills-install-readme.png` | `f28c2fb3fb165888fa904aa05ee4cdb321d95dc20089051c0a0a5141c2428492` | 124959 |
 | renderer widget support triage desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png` | `2c89e93024a1152b7697ea61e00ec7c9f55ba6ad3a0ef888840db48dc042ed51` | 52417 |
 | renderer widget motion desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png` | `b100dfbd51d5e76b8fb9549a6779110ecbff17c705a91f3e65db80d1880c0b29` | 26345 |
@@ -72,6 +72,7 @@ Generated: 2026-07-24T12:37:45.151Z
 ## GitHub Issue Tracking
 
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json` records 8 open feature enhancement issues for the JSONX generative UI workstreams and maps each issue to current requirement status.
+- `docs/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json` verifies 8 public source documentation URLs referenced by the store listing drafts.
 
 ## External Gate Access
 
@@ -97,6 +98,7 @@ Generated: 2026-07-24T12:37:45.151Z
 - Claude Code plugin validation evidence
 - OpenCode project skill discovery evidence
 - GitHub feature enhancement issue tracking evidence
+- submission source documentation evidence
 - external gate access probe evidence
 - live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp
 - external gate evidence validation

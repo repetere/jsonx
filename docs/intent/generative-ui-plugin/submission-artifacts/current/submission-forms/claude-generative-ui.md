@@ -1,6 +1,6 @@
 # Claude Code generative UI plugin Portal Packet
 
-Generated: 2026-07-24T12:37:45.154Z
+Generated: 2026-07-24T12:47:27.848Z
 
 Use this packet as copy source for the public submission portal. It is generated from the tracked store listing draft and is not proof that the submission was sent.
 
@@ -183,6 +183,7 @@ Explain JSONX in one paragraph.
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
 - `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
+- `sourceDocsEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json
 
 ## Receipt Fields
 

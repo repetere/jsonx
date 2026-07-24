@@ -1,6 +1,6 @@
 # JSONX External Gate Runbook
 
-Generated: 2026-07-24T12:37:45.154Z
+Generated: 2026-07-24T12:47:27.848Z
 
 This file lists the evidence that must be collected outside the repo before public submission can be marked complete. Use it with the generated submission queue and record results through the controlled evidence recorder.
 
