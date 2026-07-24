@@ -138,6 +138,8 @@ as external-gated unless --strict-external is set.
   const workflow = await readText(".github/workflows/generative-ui-plugin.yml");
   const issueTracker = await readText("docs/intent/generative-ui-plugin/github-issues.md");
   const readiness = await readText("docs/intent/generative-ui-plugin/submission-readiness.md");
+  const externalGateSource = await readJson("docs/intent/generative-ui-plugin/external-gate-evidence.json");
+  const goldenPromptEvidence = await readJson(manifest.goldenPromptEvidence?.path || "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json");
 
   const skillEntries = new Map(skillsIndex.map((skill) => [skill.name, skill]));
   const splitSkillPaths = surfaces.flatMap((surface) => splitSkills.map((skill) => `skills/${surface}/${skill}/SKILL.md`));
@@ -156,6 +158,10 @@ as external-gated unless --strict-external is set.
   const marketplacePlugins = new Set((marketplace.plugins || []).map((plugin) => plugin.name));
   const externalChecks = externalGateEvidence.checks || {};
   const gateStatus = externalGateEvidence.gateStatus || {};
+  const externalChatgptPromptIds = new Set(
+    (externalGateSource.chatgptDeveloperMode?.promptsRun || []).map((prompt) => prompt.id),
+  );
+  const goldenPromptIds = (goldenPromptEvidence.cases || []).map((prompt) => prompt.id);
 
   const requirements = [
     makeRequirement({
@@ -267,6 +273,8 @@ as external-gated unless --strict-external is set.
           ["none", "subtle-enter", "state-change-highlight", "morph-list-to-detail"].every((profile) => manifest.motionProfileEvidence.profiles.includes(profile)),
         motionChecksPassed: allObjectValuesTrue(manifest.motionProfileEvidence?.checks),
         packageBoundaryMentionsGsap: manifest.npmBoundary?.excludedTerms?.includes("gsap") === true,
+        chatgptGateCoversMotionPrompts:
+          externalChatgptPromptIds.has("motion-request") && externalChatgptPromptIds.has("bad-motion-request"),
       },
     }),
     makeRequirement({
@@ -338,6 +346,8 @@ as external-gated unless --strict-external is set.
         receiptsStillExplicitlyTracked: manifest.submissionQueue?.pendingSubmissionCount === 4 || manifest.submissionQueue?.receiptRecordedCount === 4,
         externalGateSourcePresent: await fileExists("docs/intent/generative-ui-plugin/external-gate-evidence.json"),
         externalGateSourceSupplied: manifest.externalGateEvidence?.supplied === true,
+        externalGateCoversGoldenPrompts:
+          goldenPromptIds.length >= 9 && goldenPromptIds.every((promptId) => externalChatgptPromptIds.has(promptId)),
       },
     }),
     makeRequirement({

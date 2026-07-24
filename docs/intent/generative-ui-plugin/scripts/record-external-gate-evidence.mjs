@@ -15,9 +15,11 @@ const chatgptPromptIds = [
   "text-only-request",
   "quiz-request",
   "poll-request",
-  "bad-payload-request",
+  "blocked-prop-request",
   "oversized-payload-request",
   "unsupported-component-request",
+  "motion-request",
+  "bad-motion-request",
 ];
 
 const marketplaceTargets = {

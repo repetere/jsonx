@@ -30,6 +30,7 @@ Codex local marketplace coverage is tracked under #1112. The repo-local marketpl
 Skill installer coverage is tracked under #1113. The installer must support `jsonx`, `jsonx-generative-ui`, and `all` modes for Codex, Claude Code, and OpenCode without writing into the `jsonx` npm package. Current generated artifacts include `skill-installer-evidence.json`, which dry-runs every surface and skill pair and performs isolated installs for all supported surfaces. Claude Code validation coverage is recorded in `claude-validation-evidence.json`. OpenCode project skill discovery coverage is recorded in `opencode-skill-evidence.json`.
 
 Renderer motion coverage is tracked under #1114. GSAP must stay in `apps/jsonx-renderer-app/`, behind renderer-owned code paths, and outside the root npm package. Current generated artifacts include `motion-profile-evidence.json`, which exercises all allowlisted motion profiles with CSS fallback and GSAP-enabled widget HTML.
+The ChatGPT developer-mode external gate also includes the approved `motion-request` and rejected `bad-motion-request` golden prompts so renderer-owned animation is covered before public submission.
 
 Hosted renderer deployment coverage is tracked under #1111. The Netlify adapter provides `/mcp`, `/healthz`, and `/widget` at `https://jsonx-renderer-app.netlify.app` without adding app dependencies to the root package.
 

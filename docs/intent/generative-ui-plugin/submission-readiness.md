@@ -88,7 +88,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - For Netlify redeploys, use base directory `apps/jsonx-renderer-app`, build command `npm run check`, publish directory `public`, and the hosted `/mcp` path.
 - Confirm `/mcp` supports low-latency streaming responses and dependable TLS after each deploy.
 - Connect the hosted `/mcp` URL in ChatGPT developer mode.
-- Run golden prompts for direct UI, text-only fallback, quiz, poll, bad payload, oversized payload, and unsupported component.
+- Run golden prompts for direct UI, text-only fallback, quiz, poll, blocked unsafe props, oversized payload, unsupported component, approved motion profile, and rejected motion profile.
 - Run motion prompts for `subtle-enter`, `state-change-highlight`, and `morph-list-to-detail` with and without GSAP enabled.
 - Review `docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json` before using the prompt cases in a public app submission.
 - Review `docs/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json` before using motion screenshots or claims in a public app submission.
