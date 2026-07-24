@@ -129,7 +129,10 @@
     "goldenPrompts": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "motionEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
     "browserDemoEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/browser-demo-evidence.json",
-    "screenshotsDirectory": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/",
+    "siteScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png",
+    "supportTriageScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png",
+    "motionScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png",
+    "quizMobileScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-quiz-mobile.png",
     "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
     "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
   },

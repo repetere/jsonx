@@ -43,6 +43,13 @@ node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs -
 node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs
 ```
 
+Validate the public review kit before portal submission:
+
+```text
+node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs
+node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs --source docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings --network --cache-bust <commit-sha> --strict
+```
+
 For CI or temporary package checks, write to a separate output directory:
 
 ```text

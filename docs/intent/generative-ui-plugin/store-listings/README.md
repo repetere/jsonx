@@ -11,4 +11,16 @@ They are source drafts, not proof that a public marketplace submission was sent.
 
 Each draft includes local `evidence` paths for repo review and `publicEvidence` URLs for portal reviewers. Keep both in sync when adding packages, screenshots, or audit files.
 
+Validate public evidence coverage before regenerating artifacts:
+
+```text
+node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs
+```
+
+After GitHub Pages deploys, verify live URLs:
+
+```text
+node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs --source docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings --network --cache-bust <commit-sha> --strict
+```
+
 Regenerate `docs/intent/generative-ui-plugin/submission-artifacts/current/` after editing these files so the review package copies stay current.

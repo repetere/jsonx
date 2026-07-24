@@ -1,13 +1,13 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T09:18:00.859Z
+Generated: 2026-07-24T09:25:20.469Z
 
 ## Packages
 
 | Surface | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
 | Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip` | `d52da431234eb069935d213066924573a6a54f53de81cf125b07c9c3542b52b1` | 2807 |
-| Codex generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `474594ae82a62807bd473131aec6650b7aca946681426ffea01a9521c49d3479` | 16557 |
+| Codex generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `f477872de137f57189754ea8ae575358546620ad66241e23e9b9c6469b96f7c8` | 16641 |
 | Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` | `389bd27032e8215b1f7f4dffea24a00057d7fbf1453c304fc4fa5139a05bff3e` | 2634 |
 | Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip` | `502114b9a8f459b53ffebae6fc508b1c3979759d0074ac584845b1e510d8a712` | 5049 |
 | ChatGPT app submission | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json` | `a2668c8bc97c732a3a1ba1f62b9f132153ad6b586b3aff9356759a9009b9007b` | 4757 |

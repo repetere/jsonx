@@ -35,6 +35,7 @@ Current implementation baseline:
 - `skills/scripts/install-jsonx-skill.mjs` installs the `jsonx` and `jsonx-generative-ui` skill families for Codex, Claude Code, or OpenCode without mixing the two workflows.
 - `docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs` creates review packages, store listing drafts, screenshots, golden-prompt evidence, renderer motion evidence, browser demo mode evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, a requirement audit, hashes, and npm package-boundary evidence under `docs/intent/generative-ui-plugin/submission-artifacts/current/`.
 - `docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs` initializes, validates, and summarizes the external gate evidence file without running the full artifact generator.
+- `docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs` validates public evidence URL coverage in store listing drafts and can check live `jsonx.net` URLs after Pages deploys.
 - `.github/workflows/generative-ui-plugin.yml` runs app, plugin, fixture, submission package, and npm package-boundary checks in CI.
 - `docs/intent/generative-ui-plugin/submission-readiness.md` tracks what remains before public app or plugin submission.
 
@@ -451,6 +452,7 @@ Exit criteria:
 - Add a requirement-by-requirement submission audit that separates proved internal work from external submission gates.
 - Add an external gate evidence template so app IDs, ChatGPT transcripts, Claude smoke prompts, and marketplace submission receipts can be recorded after those external steps happen.
 - Add a lightweight external gate evidence checker so submitters can initialize the evidence file and see pending fields without regenerating packages.
+- Add a public review-kit checker so submitters can prove all public evidence URLs are present and reachable after Pages deploys.
 - Test public submission checks.
 - Add CI checks for app/plugin validation, fixture validation, submission package generation, and npm package-boundary enforcement.
 - Create GitHub issues from this plan.
