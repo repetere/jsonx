@@ -25,6 +25,87 @@ const requiredPublicEvidenceKeys = [
   "externalGateEvidence",
 ];
 
+const defaultPublicPagePath = path.join("docs", "generative-ui.html");
+const defaultPublicPageUrl = "https://jsonx.net/generative-ui.html";
+
+const requiredPublicPageText = [
+  "JSONX turns AI responses into live interfaces.",
+  "jsonx-codex-plugin",
+  "jsonx-generative-ui-plugin",
+  "claude-jsonx-plugin",
+  "claude-jsonx-generative-ui-plugin",
+  "https://jsonx-renderer-app.netlify.app/mcp",
+  "Submission packages, listing drafts, and evidence are published together.",
+];
+
+const blockedPublicPageText = [
+  "without this site running a backend",
+  "no MCP server exists",
+  "Fixture and paste modes need no API key",
+];
+
+const requiredPublicPageLinks = [
+  { id: "demo", href: "#demo" },
+  { id: "skills", href: "#skills" },
+  { id: "plugins", href: "#plugins" },
+  { id: "review", href: "#review" },
+  {
+    id: "submissionQueueMarkdown",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md",
+  },
+  {
+    id: "submissionQueueJson",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
+  },
+  {
+    id: "artifactManifest",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+  },
+  {
+    id: "submissionAudit",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
+  },
+  {
+    id: "openAiCoreListing",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
+  },
+  {
+    id: "openAiGenerativeUiListing",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
+  },
+  {
+    id: "claudeCoreListing",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
+  },
+  {
+    id: "claudeGenerativeUiListing",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
+  },
+  {
+    id: "receiptRecorder",
+    href: "intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs",
+    url: "https://jsonx.net/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs",
+  },
+  {
+    id: "externalGateChecker",
+    href: "intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs",
+    url: "https://jsonx.net/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs",
+  },
+  {
+    id: "publicUrlChecker",
+    href: "intent/generative-ui-plugin/scripts/check-public-review-kit.mjs",
+    url: "https://jsonx.net/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs",
+  },
+];
+
 function hasArg(name) {
   return args.includes(name);
 }
@@ -44,6 +125,10 @@ async function readJson(filePath) {
 
 function resolveSourceDir() {
   return path.resolve(repoRoot, argValue("--source") || path.join("docs", "intent", "generative-ui-plugin", "store-listings"));
+}
+
+function resolvePublicPagePath() {
+  return path.resolve(repoRoot, argValue("--page") || defaultPublicPagePath);
 }
 
 function withCacheBust(urlString) {
@@ -99,6 +184,34 @@ function validatePublicEvidence(filePath, data) {
   };
 }
 
+async function validatePublicPage(filePath) {
+  const html = await fs.readFile(filePath, "utf8");
+  const errors = [];
+
+  for (const text of requiredPublicPageText) {
+    if (!html.includes(text)) errors.push(`missing required public page text: ${text}`);
+  }
+
+  for (const text of blockedPublicPageText) {
+    if (html.includes(text)) errors.push(`blocked public page text is present: ${text}`);
+  }
+
+  for (const link of requiredPublicPageLinks) {
+    if (!html.includes(`href="${link.href}"`) && !html.includes(`href='${link.href}'`)) {
+      errors.push(`missing required public page link ${link.id}: ${link.href}`);
+    }
+  }
+
+  return {
+    file: relative(filePath),
+    requiredTextCount: requiredPublicPageText.length,
+    requiredLinkCount: requiredPublicPageLinks.length,
+    publicLinkedUrlCount: requiredPublicPageLinks.filter((link) => link.url).length,
+    blockedTextCount: blockedPublicPageText.length,
+    errors,
+  };
+}
+
 async function fetchUrl(urlString, timeoutMs) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
@@ -133,12 +246,66 @@ async function fetchUrl(urlString, timeoutMs) {
   }
 }
 
+async function fetchPublicPage(urlString, timeoutMs) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  const startedAt = Date.now();
+  try {
+    const response = await fetch(withCacheBust(urlString), {
+      headers: {
+        "User-Agent": "jsonx-review-kit-check",
+        "Cache-Control": "no-cache",
+      },
+      signal: controller.signal,
+    });
+    const contentType = response.headers.get("content-type") || "";
+    const html = await response.text();
+    const errors = [];
+
+    if (!response.ok) errors.push(`HTTP ${response.status}`);
+    for (const text of requiredPublicPageText) {
+      if (!html.includes(text)) errors.push(`missing required public page text: ${text}`);
+    }
+    for (const text of blockedPublicPageText) {
+      if (html.includes(text)) errors.push(`blocked public page text is present: ${text}`);
+    }
+    for (const link of requiredPublicPageLinks) {
+      if (!html.includes(`href="${link.href}"`) && !html.includes(`href='${link.href}'`)) {
+        errors.push(`missing required public page link ${link.id}: ${link.href}`);
+      }
+    }
+
+    return {
+      url: urlString,
+      status: response.status,
+      ok: response.ok && errors.length === 0,
+      contentType,
+      durationMs: Date.now() - startedAt,
+      errors,
+    };
+  } catch (error) {
+    return {
+      url: urlString,
+      status: 0,
+      ok: false,
+      error: error.name === "AbortError" ? "timeout" : error.message,
+      durationMs: Date.now() - startedAt,
+      errors: [error.name === "AbortError" ? "timeout" : error.message],
+    };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 function collectUrls(listings) {
   return [
     ...new Set(
-      listings.flatMap((listing) =>
-        Object.values(listing.publicEvidence || {}).filter((value) => typeof value === "string" && value.startsWith("https://jsonx.net/")),
-      ),
+      [
+        ...listings.flatMap((listing) =>
+          Object.values(listing.publicEvidence || {}).filter((value) => typeof value === "string" && value.startsWith("https://jsonx.net/")),
+        ),
+        ...requiredPublicPageLinks.map((link) => link.url).filter(Boolean),
+      ],
     ),
   ].sort();
 }
@@ -148,7 +315,11 @@ function printHumanReport(report) {
   console.log(`source: ${report.source}`);
   console.log(`listingCount: ${report.listingCount}`);
   console.log(`urlCount: ${report.urlCount}`);
+  console.log(`publicPage: ${report.publicPage.file}`);
   console.log("");
+  if (report.publicPage.errors.length) {
+    for (const error of report.publicPage.errors) console.log(`publicPageError: ${error}`);
+  }
   for (const listing of report.listings) {
     console.log(`${listing.file}`);
     console.log(`  plugin: ${listing.pluginName}`);
@@ -161,9 +332,7 @@ function printHumanReport(report) {
     console.log("");
     console.log(`networkChecked: ${report.network.checked}`);
     console.log(`networkPassed: ${report.network.passed}`);
-    for (const result of report.network.results.filter((item) => !item.ok)) {
-      console.log(`networkError: ${result.status} ${result.url}${result.error ? ` (${result.error})` : ""}`);
-    }
+    for (const error of report.network.errors) console.log(`networkError: ${error}`);
   }
 }
 
@@ -174,6 +343,8 @@ async function main() {
 
 Options:
   --source       Directory containing the four store listing JSON drafts.
+  --page         Public page HTML to validate. Defaults to docs/generative-ui.html.
+  --page-url     Public page URL to fetch with --network. Defaults to https://jsonx.net/generative-ui.html.
   --json         Print a machine-readable report.
   --network      Fetch every publicEvidence URL and report HTTP status.
   --strict       Exit non-zero if any listing error or network error is present.
@@ -184,32 +355,46 @@ Options:
   }
 
   const sourceDir = resolveSourceDir();
+  const publicPagePath = resolvePublicPagePath();
   const listings = [];
   for (const file of expectedListingFiles) {
     const filePath = path.join(sourceDir, file);
     listings.push(validatePublicEvidence(filePath, await readJson(filePath)));
   }
+  const publicPage = await validatePublicPage(publicPagePath);
 
   const urls = collectUrls(listings);
   const report = {
     source: relative(sourceDir),
     listingCount: listings.length,
     urlCount: urls.length,
+    publicPage,
     listings,
-    errors: listings.flatMap((listing) => listing.errors.map((error) => `${listing.file}: ${error}`)),
+    errors: [
+      ...publicPage.errors.map((error) => `${publicPage.file}: ${error}`),
+      ...listings.flatMap((listing) => listing.errors.map((error) => `${listing.file}: ${error}`)),
+    ],
   };
 
   if (hasArg("--network")) {
     const timeoutMs = Number(argValue("--timeout-ms") || 10000);
+    const pageUrl = argValue("--page-url") || defaultPublicPageUrl;
+    const pageNetwork = await fetchPublicPage(pageUrl, timeoutMs);
     const results = [];
     for (const url of urls) {
       results.push(await fetchUrl(url, timeoutMs));
     }
     report.network = {
-      checked: results.length,
-      passed: results.filter((result) => result.ok).length,
+      checked: results.length + 1,
+      passed: results.filter((result) => result.ok).length + (pageNetwork.ok ? 1 : 0),
+      publicPage: pageNetwork,
       results,
-      errors: results.filter((result) => !result.ok).map((result) => `${result.status} ${result.url}${result.error ? ` (${result.error})` : ""}`),
+      errors: [
+        ...(pageNetwork.ok
+          ? []
+          : [`${pageNetwork.status} ${pageNetwork.url}${pageNetwork.errors.length ? ` (${pageNetwork.errors.join("; ")})` : ""}`]),
+        ...results.filter((result) => !result.ok).map((result) => `${result.status} ${result.url}${result.error ? ` (${result.error})` : ""}`),
+      ],
     };
   }
 

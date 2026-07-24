@@ -13,13 +13,13 @@ Each draft includes local `evidence` paths for repo review and `publicEvidence` 
 
 Each draft also links to the generated submission queue at `https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json`. The queue gives submitters one file with the review package, public evidence URLs, manual checks, and external-gate receipt fields for all four submissions.
 
-Validate public evidence coverage before regenerating artifacts:
+Validate public evidence coverage and the public review-kit page before regenerating artifacts:
 
 ```text
 node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs
 ```
 
-After GitHub Pages deploys, verify live URLs:
+After GitHub Pages deploys, verify the live page and public URLs:
 
 ```text
 node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs --source docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings --network --cache-bust <commit-sha> --strict
