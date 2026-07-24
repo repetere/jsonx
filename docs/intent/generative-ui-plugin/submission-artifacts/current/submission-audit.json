@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T09:25:20.505Z",
+  "generatedAt": "2026-07-24T09:36:40.103Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "3d67fd71e56863d06dc3e0d03b7e2ce962e94906+worktree",
+  "gitCommit": "f1e6ca039bb9103b12d826192fec84d58d658f97+worktree",
   "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
   "summary": {
     "proved": 10,
@@ -169,13 +169,16 @@
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json"
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md"
       ],
       "checks": {
         "openAiCoreDraftPresent": true,
         "openAiGenerativeUiDraftPresent": true,
         "claudeCoreDraftPresent": true,
-        "claudeGenerativeUiDraftPresent": true
+        "claudeGenerativeUiDraftPresent": true,
+        "submissionQueuePresent": true
       }
     },
     {
@@ -210,6 +213,7 @@
           "golden-prompts",
           "hosted-mcp-transcript",
           "skill-installer-evidence",
+          "submission-queue",
           "codex-install-evidence",
           "claude-validation-evidence",
           "opencode-skill-evidence",
@@ -284,6 +288,8 @@
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
       ],
       "checks": {

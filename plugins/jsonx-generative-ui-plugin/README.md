@@ -50,6 +50,12 @@ node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs
 node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs --source docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings --network --cache-bust <commit-sha> --strict
 ```
 
+Use the generated submission queue when opening portal submissions:
+
+```text
+docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md
+```
+
 For CI or temporary package checks, write to a separate output directory:
 
 ```text

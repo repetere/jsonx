@@ -95,6 +95,7 @@
   "publicEvidence": {
     "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
     "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+    "submissionQueue": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
     "reviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip",
     "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
     "codexInstallEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",

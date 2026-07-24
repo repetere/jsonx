@@ -122,6 +122,7 @@
   "publicEvidence": {
     "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
     "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+    "submissionQueue": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
     "reviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
     "appSubmission": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json",
     "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",

@@ -104,6 +104,7 @@
   "publicEvidence": {
     "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
     "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+    "submissionQueue": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
     "reviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip",
     "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
     "claudeValidationEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",

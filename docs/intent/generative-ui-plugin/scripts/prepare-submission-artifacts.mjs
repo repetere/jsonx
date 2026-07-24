@@ -66,6 +66,61 @@ const storeListingSources = [
   },
 ];
 
+const submissionQueueTargets = {
+  "openai-jsonx-plugin-submission.json": {
+    id: "openai-core-jsonx",
+    submitterLabel: "OpenAI/Codex core JSONX plugin",
+    receiptCheck: "openAiCoreSubmissionRecorded",
+    receiptFields: [
+      "marketplaceSubmissions.openaiCore.submitted",
+      "marketplaceSubmissions.openaiCore.submissionId",
+      "marketplaceSubmissions.openaiCore.url",
+      "marketplaceSubmissions.openaiCore.status",
+      "marketplaceSubmissions.openaiCore.submittedAt",
+    ],
+    externalGatesToRecord: ["appIds", "marketplaceSubmission"],
+  },
+  "openai-generative-ui-plugin-submission.json": {
+    id: "openai-generative-ui",
+    submitterLabel: "OpenAI/Codex generative UI app-plus-skills plugin",
+    receiptCheck: "openAiGenerativeUiSubmissionRecorded",
+    receiptFields: [
+      "marketplaceSubmissions.openaiGenerativeUi.submitted",
+      "marketplaceSubmissions.openaiGenerativeUi.submissionId",
+      "marketplaceSubmissions.openaiGenerativeUi.url",
+      "marketplaceSubmissions.openaiGenerativeUi.status",
+      "marketplaceSubmissions.openaiGenerativeUi.submittedAt",
+    ],
+    externalGatesToRecord: ["appIds", "chatgptDeveloperMode", "marketplaceSubmission"],
+  },
+  "claude-code-jsonx-submission.json": {
+    id: "claude-core-jsonx",
+    submitterLabel: "Claude Code core JSONX plugin",
+    receiptCheck: "claudeCoreSubmissionRecorded",
+    receiptFields: [
+      "marketplaceSubmissions.claudeCore.submitted",
+      "marketplaceSubmissions.claudeCore.submissionId",
+      "marketplaceSubmissions.claudeCore.url",
+      "marketplaceSubmissions.claudeCore.status",
+      "marketplaceSubmissions.claudeCore.submittedAt",
+    ],
+    externalGatesToRecord: ["claudeSmoke", "marketplaceSubmission"],
+  },
+  "claude-code-generative-ui-submission.json": {
+    id: "claude-generative-ui",
+    submitterLabel: "Claude Code generative UI plugin",
+    receiptCheck: "claudeGenerativeUiSubmissionRecorded",
+    receiptFields: [
+      "marketplaceSubmissions.claudeGenerativeUi.submitted",
+      "marketplaceSubmissions.claudeGenerativeUi.submissionId",
+      "marketplaceSubmissions.claudeGenerativeUi.url",
+      "marketplaceSubmissions.claudeGenerativeUi.status",
+      "marketplaceSubmissions.claudeGenerativeUi.submittedAt",
+    ],
+    externalGatesToRecord: ["claudeSmoke", "marketplaceSubmission"],
+  },
+};
+
 function argValue(name) {
   const index = cliArgs.indexOf(name);
   return index >= 0 ? cliArgs[index + 1] : undefined;
@@ -1143,7 +1198,15 @@ function validateStoreListing(source, data) {
   if (!Array.isArray(data.sourceDocsChecked) || data.sourceDocsChecked.length === 0) {
     errors.push("sourceDocsChecked must list checked public docs");
   }
-  for (const key of ["readinessChecklist", "artifactManifest", "reviewPackage", "storeListingCopy", "submissionAudit", "externalGateEvidence"]) {
+  for (const key of [
+    "readinessChecklist",
+    "artifactManifest",
+    "submissionQueue",
+    "reviewPackage",
+    "storeListingCopy",
+    "submissionAudit",
+    "externalGateEvidence",
+  ]) {
     const url = data.publicEvidence?.[key];
     if (!url || typeof url !== "string" || !url.startsWith("https://jsonx.net/")) {
       errors.push(`publicEvidence.${key} must be a https://jsonx.net/ URL`);
@@ -1190,6 +1253,128 @@ async function copyStoreListingArtifacts() {
     });
   }
   return artifacts;
+}
+
+async function buildSubmissionQueue(manifest, externalGateEvidence) {
+  const submissions = [];
+  for (const item of storeListingSources) {
+    const data = await readJson(item.source);
+    const queueTarget = submissionQueueTargets[item.outputFile];
+    assertEvidence(queueTarget, `submission queue target is missing for ${item.outputFile}`);
+    const storeListingArtifact = manifest.storeListings.find((listing) => listing.surface === item.surface);
+    const receiptRecorded = externalGateEvidence.checks?.[queueTarget.receiptCheck] === true;
+    const publicEvidence = data.publicEvidence || {};
+    submissions.push({
+      id: queueTarget.id,
+      label: queueTarget.submitterLabel,
+      surface: item.surface,
+      sourceDraft: relative(item.source),
+      generatedDraft: storeListingArtifact?.path,
+      status: receiptRecorded ? "receipt-recorded" : "pending-manual-submission",
+      submissionStatus: data.status,
+      submissionType: data.submissionType,
+      listingName: data.listing?.displayName || data.listing?.pluginName,
+      publicReviewPackage: publicEvidence.reviewPackage,
+      publicStoreListing: publicEvidence.storeListingCopy,
+      publicEvidence,
+      positiveTestCaseIds: data.positiveTestCases.map((testCase) => testCase.id),
+      negativeTestCaseIds: data.negativeTestCases.map((testCase) => testCase.id),
+      manualBeforeSubmit: data.manualBeforeSubmit,
+      sourceDocsChecked: data.sourceDocsChecked,
+      portalTargets: data.marketplace?.submissionForms || data.sourceDocsChecked,
+      externalGatesToRecord: queueTarget.externalGatesToRecord,
+      receiptCheck: queueTarget.receiptCheck,
+      receiptFields: queueTarget.receiptFields,
+      readyChecks: {
+        generatedDraftPresent: Boolean(storeListingArtifact?.sha256),
+        reviewPackageUrlPresent: typeof publicEvidence.reviewPackage === "string" && publicEvidence.reviewPackage.startsWith("https://jsonx.net/"),
+        publicEvidenceUrlCount: Object.keys(publicEvidence).length,
+        positiveTestCaseCount: data.positiveTestCases.length,
+        negativeTestCaseCount: data.negativeTestCases.length,
+        manualStepCount: data.manualBeforeSubmit.length,
+      },
+    });
+  }
+
+  return {
+    generatedAt: new Date().toISOString(),
+    source: "docs/intent/generative-ui-plugin/store-listings/",
+    note: "This queue is generated from the four public store listing drafts. It is a submitter handoff, not proof that any public marketplace submission was sent.",
+    externalGateEvidence: manifest.externalGateEvidence?.path,
+    externalGateStatus: externalGateEvidence.gateStatus,
+    submissionCount: submissions.length,
+    receiptRecordedCount: submissions.filter((submission) => submission.status === "receipt-recorded").length,
+    pendingSubmissionCount: submissions.filter((submission) => submission.status !== "receipt-recorded").length,
+    submissions,
+    receiptEvidenceFile: "docs/intent/generative-ui-plugin/external-gate-evidence.json",
+  };
+}
+
+function markdownList(items) {
+  return items.map((item) => `- ${item}`).join("\n");
+}
+
+function checklist(items) {
+  return items.map((item) => `- [ ] ${item}`).join("\n");
+}
+
+async function writeSubmissionQueueMarkdown(queue, filePath) {
+  const lines = [
+    "# JSONX Public Submission Queue",
+    "",
+    `Generated: ${queue.generatedAt}`,
+    "",
+    "This file is generated from the four store listing drafts. It gives the submitter one place to find packages, public evidence, manual checks, and receipt fields. It is not proof that a public submission was sent.",
+    "",
+    "## Gate Status",
+    "",
+    "| Gate | Status |",
+    "| --- | --- |",
+    ...Object.entries(queue.externalGateStatus).map(([gate, status]) => `| ${gate} | ${status} |`),
+    "",
+    "## Queue Summary",
+    "",
+    `- Submissions: ${queue.submissionCount}`,
+    `- Pending receipts: ${queue.pendingSubmissionCount}`,
+    `- Receipt evidence file: \`${queue.receiptEvidenceFile}\``,
+    "",
+  ];
+
+  for (const submission of queue.submissions) {
+    lines.push(
+      `## ${submission.label}`,
+      "",
+      `- Status: ${submission.status}`,
+      `- Source draft: \`${submission.sourceDraft}\``,
+      `- Generated draft: \`${submission.generatedDraft}\``,
+      `- Review package: ${submission.publicReviewPackage}`,
+      `- Public listing copy: ${submission.publicStoreListing}`,
+      "",
+      "### Before Submit",
+      "",
+      checklist(submission.manualBeforeSubmit),
+      "",
+      "### Evidence URLs",
+      "",
+      markdownList(Object.entries(submission.publicEvidence).map(([key, value]) => `\`${key}\`: ${value}`)),
+      "",
+      "### Test Cases",
+      "",
+      `- Positive: ${submission.positiveTestCaseIds.join(", ")}`,
+      `- Negative: ${submission.negativeTestCaseIds.join(", ")}`,
+      "",
+      "### Receipt Fields To Fill",
+      "",
+      markdownList(submission.receiptFields.map((field) => `\`${field}\``)),
+      "",
+      "### Source Docs Checked",
+      "",
+      markdownList(submission.sourceDocsChecked),
+      "",
+    );
+  }
+
+  await fs.writeFile(filePath, `${lines.join("\n")}\n`);
 }
 
 async function buildGoldenPromptEvidence() {
@@ -1887,6 +2072,7 @@ async function buildNpmBoundaryEvidence() {
     "golden-prompts",
     "hosted-mcp-transcript",
     "skill-installer-evidence",
+    "submission-queue",
     "codex-install-evidence",
     "claude-validation-evidence",
     "opencode-skill-evidence",
@@ -2258,7 +2444,8 @@ function buildSubmissionAudit(manifest, externalGateEvidence) {
         storeListingPresent(manifest, "OpenAI core JSONX plugin portal draft") &&
         storeListingPresent(manifest, "OpenAI generative UI plugin portal draft") &&
         storeListingPresent(manifest, "Claude Code core JSONX community submission draft") &&
-        storeListingPresent(manifest, "Claude Code generative UI community submission draft")
+        storeListingPresent(manifest, "Claude Code generative UI community submission draft") &&
+        Boolean(manifest.submissionQueue?.json?.sha256)
           ? "proved"
           : "incomplete",
       githubIssue: "#1115",
@@ -2272,12 +2459,15 @@ function buildSubmissionAudit(manifest, externalGateEvidence) {
         manifest.storeListings.find((item) => item.surface === "OpenAI generative UI plugin portal draft")?.path,
         manifest.storeListings.find((item) => item.surface === "Claude Code core JSONX community submission draft")?.path,
         manifest.storeListings.find((item) => item.surface === "Claude Code generative UI community submission draft")?.path,
+        manifest.submissionQueue?.json?.path,
+        manifest.submissionQueue?.markdown?.path,
       ].filter(Boolean),
       checks: {
         openAiCoreDraftPresent: storeListingPresent(manifest, "OpenAI core JSONX plugin portal draft"),
         openAiGenerativeUiDraftPresent: storeListingPresent(manifest, "OpenAI generative UI plugin portal draft"),
         claudeCoreDraftPresent: storeListingPresent(manifest, "Claude Code core JSONX community submission draft"),
         claudeGenerativeUiDraftPresent: storeListingPresent(manifest, "Claude Code generative UI community submission draft"),
+        submissionQueuePresent: Boolean(manifest.submissionQueue?.json?.sha256),
       },
     },
     {
@@ -2348,7 +2538,12 @@ function buildSubmissionAudit(manifest, externalGateEvidence) {
       requirement: "Submit the split OpenAI/Codex and Claude Code core JSONX and generative UI packages to their public review channels.",
       status: marketplaceGateOk ? "proved" : "external-gated",
       githubIssue: "#1115",
-      evidence: [...manifest.storeListings.map((item) => item.path), manifest.externalGateEvidence?.path].filter(Boolean),
+      evidence: [
+        ...manifest.storeListings.map((item) => item.path),
+        manifest.submissionQueue?.json?.path,
+        manifest.submissionQueue?.markdown?.path,
+        manifest.externalGateEvidence?.path,
+      ].filter(Boolean),
       checks: {
         openAiCoreSubmissionRecorded: externalGateEvidence?.checks?.openAiCoreSubmissionRecorded === true,
         openAiGenerativeUiSubmissionRecorded: externalGateEvidence?.checks?.openAiGenerativeUiSubmissionRecorded === true,
@@ -2401,6 +2596,15 @@ async function writeReviewSummary(manifest) {
       (item) =>
         `| ${item.surface} | \`${item.path}\` | ${item.positiveTestCaseCount} positive, ${item.negativeTestCaseCount} negative | ${item.manualStepCount} |`,
     ),
+    "",
+    "## Submission Queue",
+    "",
+    manifest.submissionQueue
+      ? `- \`${manifest.submissionQueue.json.path}\` tracks ${manifest.submissionQueue.submissionCount} public submission handoffs with ${manifest.submissionQueue.pendingSubmissionCount} pending receipts.`
+      : "- Submission queue was not generated.",
+    manifest.submissionQueue
+      ? `- \`${manifest.submissionQueue.markdown.path}\` is the submitter-facing checklist.`
+      : "",
     "",
     "## Screenshots",
     "",
@@ -2687,6 +2891,22 @@ async function main() {
     checks: externalGateEvidence.checks,
   };
   manifest.validation.push("external gate evidence validation");
+
+  const submissionQueuePath = path.join(artifactRoot, "submission-queue.json");
+  const submissionQueueMarkdownPath = path.join(artifactRoot, "submission-queue.md");
+  const submissionQueue = await buildSubmissionQueue(manifest, externalGateEvidence);
+  await writeJson(submissionQueuePath, submissionQueue);
+  await writeSubmissionQueueMarkdown(submissionQueue, submissionQueueMarkdownPath);
+  const submissionQueueArtifact = await hashFile(submissionQueuePath);
+  const submissionQueueMarkdownArtifact = await hashFile(submissionQueueMarkdownPath);
+  manifest.submissionQueue = {
+    json: submissionQueueArtifact,
+    markdown: submissionQueueMarkdownArtifact,
+    submissionCount: submissionQueue.submissionCount,
+    receiptRecordedCount: submissionQueue.receiptRecordedCount,
+    pendingSubmissionCount: submissionQueue.pendingSubmissionCount,
+  };
+  manifest.validation.push("submission queue generation");
 
   const submissionAuditPath = path.join(artifactRoot, "submission-audit.json");
   const submissionAudit = buildSubmissionAudit(manifest, externalGateEvidence);

@@ -1,0 +1,316 @@
+{
+  "generatedAt": "2026-07-24T09:36:40.056Z",
+  "source": "docs/intent/generative-ui-plugin/store-listings/",
+  "note": "This queue is generated from the four public store listing drafts. It is a submitter handoff, not proof that any public marketplace submission was sent.",
+  "externalGateEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
+  "externalGateStatus": {
+    "appIds": "pending",
+    "chatgptDeveloperMode": "pending",
+    "claudeSmoke": "pending",
+    "marketplaceSubmission": "pending"
+  },
+  "submissionCount": 4,
+  "receiptRecordedCount": 0,
+  "pendingSubmissionCount": 4,
+  "submissions": [
+    {
+      "id": "openai-core-jsonx",
+      "label": "OpenAI/Codex core JSONX plugin",
+      "surface": "OpenAI core JSONX plugin portal draft",
+      "sourceDraft": "docs/intent/generative-ui-plugin/store-listings/openai-jsonx-plugin-submission.json",
+      "generatedDraft": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
+      "status": "pending-manual-submission",
+      "submissionStatus": "draft-ready-requires-portal-access",
+      "submissionType": "skills-plugin",
+      "listingName": "JSONX",
+      "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip",
+      "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
+      "publicEvidence": {
+        "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
+        "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+        "submissionQueue": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
+        "reviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip",
+        "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
+        "codexInstallEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
+        "skillInstallerEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
+        "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
+        "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+      },
+      "positiveTestCaseIds": [
+        "jxm-review",
+        "small-example",
+        "api-explanation",
+        "debug-render",
+        "test-guidance"
+      ],
+      "negativeTestCaseIds": [
+        "generated-ui-request",
+        "apps-sdk-request",
+        "animation-request"
+      ],
+      "manualBeforeSubmit": [
+        "Confirm OpenAI developer or business identity verification.",
+        "Confirm the submitter has plugin submission access.",
+        "Attach the final production logo.",
+        "Review privacy policy, terms, and support URLs.",
+        "Confirm the separate generative UI plugin remains optional."
+      ],
+      "sourceDocsChecked": [
+        "https://developers.openai.com/codex/submit-plugins",
+        "https://developers.openai.com/codex/build-plugins"
+      ],
+      "portalTargets": [
+        "https://developers.openai.com/codex/submit-plugins",
+        "https://developers.openai.com/codex/build-plugins"
+      ],
+      "externalGatesToRecord": [
+        "appIds",
+        "marketplaceSubmission"
+      ],
+      "receiptCheck": "openAiCoreSubmissionRecorded",
+      "receiptFields": [
+        "marketplaceSubmissions.openaiCore.submitted",
+        "marketplaceSubmissions.openaiCore.submissionId",
+        "marketplaceSubmissions.openaiCore.url",
+        "marketplaceSubmissions.openaiCore.status",
+        "marketplaceSubmissions.openaiCore.submittedAt"
+      ],
+      "readyChecks": {
+        "generatedDraftPresent": true,
+        "reviewPackageUrlPresent": true,
+        "publicEvidenceUrlCount": 9,
+        "positiveTestCaseCount": 5,
+        "negativeTestCaseCount": 3,
+        "manualStepCount": 5
+      }
+    },
+    {
+      "id": "openai-generative-ui",
+      "label": "OpenAI/Codex generative UI app-plus-skills plugin",
+      "surface": "OpenAI generative UI plugin portal draft",
+      "sourceDraft": "docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json",
+      "generatedDraft": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
+      "status": "pending-manual-submission",
+      "submissionStatus": "draft-ready-requires-portal-access",
+      "submissionType": "app-plus-skills",
+      "listingName": "JSONX Generative UI",
+      "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
+      "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
+      "publicEvidence": {
+        "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
+        "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+        "submissionQueue": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
+        "reviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
+        "appSubmission": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json",
+        "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
+        "hostedMcpTranscript": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
+        "goldenPrompts": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
+        "motionEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
+        "browserDemoEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/browser-demo-evidence.json",
+        "siteScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png",
+        "supportTriageScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png",
+        "motionScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png",
+        "quizMobileScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-quiz-mobile.png",
+        "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
+        "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+      },
+      "positiveTestCaseIds": [
+        "direct-ui-request",
+        "quiz-request",
+        "poll-request",
+        "motion-request",
+        "handoff-request"
+      ],
+      "negativeTestCaseIds": [
+        "text-only-request",
+        "unsafe-fields-request",
+        "unsupported-component-request"
+      ],
+      "manualBeforeSubmit": [
+        "Confirm OpenAI developer or business identity verification.",
+        "Confirm the submitter has Apps Management write access.",
+        "Complete domain verification for jsonx-renderer-app.netlify.app or move the MCP endpoint to a verified jsonx.net subdomain.",
+        "Attach the final production logo.",
+        "Review privacy policy, terms, and support URLs.",
+        "Capture live ChatGPT developer-mode transcript evidence after connecting the hosted MCP endpoint."
+      ],
+      "sourceDocsChecked": [
+        "https://developers.openai.com/codex/submit-plugins",
+        "https://developers.openai.com/codex/build-plugins",
+        "https://developers.openai.com/apps-sdk/deploy/submission"
+      ],
+      "portalTargets": [
+        "https://developers.openai.com/codex/submit-plugins",
+        "https://developers.openai.com/codex/build-plugins",
+        "https://developers.openai.com/apps-sdk/deploy/submission"
+      ],
+      "externalGatesToRecord": [
+        "appIds",
+        "chatgptDeveloperMode",
+        "marketplaceSubmission"
+      ],
+      "receiptCheck": "openAiGenerativeUiSubmissionRecorded",
+      "receiptFields": [
+        "marketplaceSubmissions.openaiGenerativeUi.submitted",
+        "marketplaceSubmissions.openaiGenerativeUi.submissionId",
+        "marketplaceSubmissions.openaiGenerativeUi.url",
+        "marketplaceSubmissions.openaiGenerativeUi.status",
+        "marketplaceSubmissions.openaiGenerativeUi.submittedAt"
+      ],
+      "readyChecks": {
+        "generatedDraftPresent": true,
+        "reviewPackageUrlPresent": true,
+        "publicEvidenceUrlCount": 16,
+        "positiveTestCaseCount": 5,
+        "negativeTestCaseCount": 3,
+        "manualStepCount": 6
+      }
+    },
+    {
+      "id": "claude-core-jsonx",
+      "label": "Claude Code core JSONX plugin",
+      "surface": "Claude Code core JSONX community submission draft",
+      "sourceDraft": "docs/intent/generative-ui-plugin/store-listings/claude-code-jsonx-submission.json",
+      "generatedDraft": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
+      "status": "pending-manual-submission",
+      "submissionStatus": "draft-ready-requires-interactive-smoke-and-submission",
+      "submissionType": "skills-plugin",
+      "listingName": "JSONX",
+      "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip",
+      "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
+      "publicEvidence": {
+        "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
+        "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+        "submissionQueue": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
+        "reviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip",
+        "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
+        "claudeValidationEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
+        "skillInstallerEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
+        "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
+        "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+      },
+      "positiveTestCaseIds": [
+        "core-jsonx-review",
+        "small-example",
+        "api-guidance",
+        "debug-render",
+        "test-plan"
+      ],
+      "negativeTestCaseIds": [
+        "generative-ui",
+        "apps-sdk",
+        "motion"
+      ],
+      "manualBeforeSubmit": [
+        "Install or update Claude Code.",
+        "Review the latest claude-validation-evidence.json and rerun claude plugin validate ./plugins/claude-jsonx-plugin before final submission.",
+        "Run a local session with claude --plugin-dir ./plugins/claude-jsonx-plugin and smoke test /jsonx:jsonx.",
+        "Confirm marketplace publisher and support details in the submission form."
+      ],
+      "sourceDocsChecked": [
+        "https://code.claude.com/docs/en/plugins",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/cli-reference"
+      ],
+      "portalTargets": [
+        "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+        "https://platform.claude.com/plugins/submit"
+      ],
+      "externalGatesToRecord": [
+        "claudeSmoke",
+        "marketplaceSubmission"
+      ],
+      "receiptCheck": "claudeCoreSubmissionRecorded",
+      "receiptFields": [
+        "marketplaceSubmissions.claudeCore.submitted",
+        "marketplaceSubmissions.claudeCore.submissionId",
+        "marketplaceSubmissions.claudeCore.url",
+        "marketplaceSubmissions.claudeCore.status",
+        "marketplaceSubmissions.claudeCore.submittedAt"
+      ],
+      "readyChecks": {
+        "generatedDraftPresent": true,
+        "reviewPackageUrlPresent": true,
+        "publicEvidenceUrlCount": 9,
+        "positiveTestCaseCount": 5,
+        "negativeTestCaseCount": 3,
+        "manualStepCount": 4
+      }
+    },
+    {
+      "id": "claude-generative-ui",
+      "label": "Claude Code generative UI plugin",
+      "surface": "Claude Code generative UI community submission draft",
+      "sourceDraft": "docs/intent/generative-ui-plugin/store-listings/claude-code-generative-ui-submission.json",
+      "generatedDraft": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
+      "status": "pending-manual-submission",
+      "submissionStatus": "draft-ready-requires-interactive-smoke-and-submission",
+      "submissionType": "skills-plugin",
+      "listingName": "JSONX Generative UI",
+      "publicReviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip",
+      "publicStoreListing": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
+      "publicEvidence": {
+        "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
+        "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+        "submissionQueue": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
+        "reviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip",
+        "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
+        "claudeValidationEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
+        "skillInstallerEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
+        "goldenPrompts": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
+        "hostedMcpTranscript": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
+        "motionEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
+        "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
+        "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+      },
+      "positiveTestCaseIds": [
+        "generative-ui-handoff",
+        "quiz-payload",
+        "slider-poll",
+        "motion-profile",
+        "text-only-fallback"
+      ],
+      "negativeTestCaseIds": [
+        "unsafe-html",
+        "inline-handler",
+        "unknown-component"
+      ],
+      "manualBeforeSubmit": [
+        "Install or update Claude Code.",
+        "Review the latest claude-validation-evidence.json and rerun claude plugin validate ./plugins/claude-jsonx-generative-ui-plugin before final submission.",
+        "Run a local session with claude --plugin-dir ./plugins/claude-jsonx-generative-ui-plugin and smoke test /jsonx-generative-ui:jsonx-generative-ui.",
+        "Confirm marketplace publisher and support details in the submission form."
+      ],
+      "sourceDocsChecked": [
+        "https://code.claude.com/docs/en/plugins",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/cli-reference"
+      ],
+      "portalTargets": [
+        "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+        "https://platform.claude.com/plugins/submit"
+      ],
+      "externalGatesToRecord": [
+        "claudeSmoke",
+        "marketplaceSubmission"
+      ],
+      "receiptCheck": "claudeGenerativeUiSubmissionRecorded",
+      "receiptFields": [
+        "marketplaceSubmissions.claudeGenerativeUi.submitted",
+        "marketplaceSubmissions.claudeGenerativeUi.submissionId",
+        "marketplaceSubmissions.claudeGenerativeUi.url",
+        "marketplaceSubmissions.claudeGenerativeUi.status",
+        "marketplaceSubmissions.claudeGenerativeUi.submittedAt"
+      ],
+      "readyChecks": {
+        "generatedDraftPresent": true,
+        "reviewPackageUrlPresent": true,
+        "publicEvidenceUrlCount": 12,
+        "positiveTestCaseCount": 5,
+        "negativeTestCaseCount": 3,
+        "manualStepCount": 4
+      }
+    }
+  ],
+  "receiptEvidenceFile": "docs/intent/generative-ui-plugin/external-gate-evidence.json"
+}

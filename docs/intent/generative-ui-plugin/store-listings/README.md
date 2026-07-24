@@ -11,6 +11,8 @@ They are source drafts, not proof that a public marketplace submission was sent.
 
 Each draft includes local `evidence` paths for repo review and `publicEvidence` URLs for portal reviewers. Keep both in sync when adding packages, screenshots, or audit files.
 
+Each draft also links to the generated submission queue at `https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json`. The queue gives submitters one file with the review package, public evidence URLs, manual checks, and external-gate receipt fields for all four submissions.
+
 Validate public evidence coverage before regenerating artifacts:
 
 ```text

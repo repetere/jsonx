@@ -18,6 +18,7 @@ const expectedListingFiles = [
 const requiredPublicEvidenceKeys = [
   "readinessChecklist",
   "artifactManifest",
+  "submissionQueue",
   "reviewPackage",
   "storeListingCopy",
   "submissionAudit",
