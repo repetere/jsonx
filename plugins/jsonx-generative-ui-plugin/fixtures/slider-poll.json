@@ -1,0 +1,28 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "Priority Poll",
+  "purpose": "Render a slider poll for implementation priority.",
+  "motionProfile": "subtle-enter",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "Priority Poll",
+      "summary": "Capture a simple priority rating."
+    },
+    "children": [
+      {
+        "component": "SliderPoll",
+        "props": {
+          "question": "How important is the hosted renderer?",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "value": 4,
+          "leftLabel": "Later",
+          "rightLabel": "Now"
+        }
+      }
+    ]
+  }
+}

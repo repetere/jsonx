@@ -1,0 +1,15 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "Bad Motion Profile",
+  "purpose": "Verify unknown motion profiles fail closed.",
+  "motionProfile": "spin-forever",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "Bad Motion Profile",
+      "summary": "This fixture should not pass."
+    },
+    "children": []
+  }
+}

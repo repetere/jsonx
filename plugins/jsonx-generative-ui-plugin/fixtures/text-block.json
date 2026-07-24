@@ -1,0 +1,21 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "Short Explanation",
+  "purpose": "Render one safe paragraph.",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "Short Explanation",
+      "summary": "A compact text response rendered as UI."
+    },
+    "children": [
+      {
+        "component": "TextBlock",
+        "props": {
+          "text": "JSONX can render structured interface output through an approved component registry."
+        }
+      }
+    ]
+  }
+}

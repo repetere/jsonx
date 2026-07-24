@@ -1,0 +1,25 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "Release Checklist",
+  "purpose": "Render release readiness items.",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "Release Checklist",
+      "summary": "Review the minimum work before publishing the renderer."
+    },
+    "children": [
+      {
+        "component": "Checklist",
+        "props": {
+          "items": [
+            { "label": "Schema fixtures pass validation", "status": "done" },
+            { "label": "Widget renders unsupported payloads as errors", "status": "open" },
+            { "label": "Install instructions are published", "status": "open" }
+          ]
+        }
+      }
+    ]
+  }
+}

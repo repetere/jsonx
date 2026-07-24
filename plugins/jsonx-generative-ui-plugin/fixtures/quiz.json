@@ -1,0 +1,33 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "JSONX Safety Quiz",
+  "purpose": "Render a multiple-choice safety quiz.",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "JSONX Safety Quiz",
+      "summary": "Check whether the user understands the safe output profile."
+    },
+    "children": [
+      {
+        "component": "MultipleChoiceQuiz",
+        "props": {
+          "questions": [
+            {
+              "id": "q1",
+              "prompt": "Which payload behavior is allowed?",
+              "choices": [
+                "A raw HTML string",
+                "A validated allowlisted component",
+                "An inline JavaScript click handler"
+              ],
+              "answer": 1,
+              "explanation": "The renderer accepts allowlisted components and blocks code."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

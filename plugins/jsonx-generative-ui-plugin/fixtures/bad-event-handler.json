@@ -1,0 +1,15 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "Bad Event Handler",
+  "purpose": "Verify event handler props fail closed.",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "Bad Event Handler",
+      "summary": "This fixture should not pass.",
+      "OnClick": "alert(1)"
+    },
+    "children": []
+  }
+}

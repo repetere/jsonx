@@ -1,0 +1,21 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "Bad Component",
+  "purpose": "Verify unknown components fail closed.",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "Bad Component",
+      "summary": "This fixture should not pass."
+    },
+    "children": [
+      {
+        "component": "ArbitraryChart",
+        "props": {
+          "title": "Unsupported"
+        }
+      }
+    ]
+  }
+}

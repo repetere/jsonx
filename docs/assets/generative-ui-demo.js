@@ -519,20 +519,39 @@ function initDemo() {
 function initSkills() {
   const grid = document.getElementById("skills-grid");
   if (!grid) return;
+  const surfaceLabels = {
+    codex: "Codex",
+    claude: "Claude Code",
+    opencode: "OpenCode",
+  };
   fetch("skills/index.json")
     .then((response) => response.json())
     .catch(() => [])
     .then((skills) => {
       grid.innerHTML = skills
         .map(
-          (skill) =>
-            `<article class="skill-card"><h3>${esc(skill.name)}</h3><p>${esc(
+          (skill) => {
+            const install = Object.entries(skill.install || {})
+              .map(
+                ([surface, command]) =>
+                  `<details><summary>${esc(
+                    surfaceLabels[surface] || surface,
+                  )}</summary><code>${esc(command)}</code></details>`,
+              )
+              .join("");
+            const surfaces = (skill.surfaces || [])
+              .map((surface) => surfaceLabels[surface] || surface)
+              .join(", ");
+            return `<article class="skill-card"><p class="skill-family">${esc(
+              skill.family || "Skill",
+            )}</p><h3>${esc(skill.name)}</h3><p>${esc(
               skill.purpose,
-            )}</p><code>mkdir -p "$HOME/.agents/skills"\ncp -R skills/codex/${esc(
-              skill.name,
-            )} "$HOME/.agents/skills/${esc(skill.name)}"</code><p><strong>Example:</strong> ${esc(
+            )}</p>${install}<p><strong>Example:</strong> ${esc(
               skill.example,
-            )}</p><small>Version ${esc(skill.version)} · Updated ${esc(skill.updated)}</small></article>`,
+            )}</p><small>${esc(surfaces)} · Version ${esc(
+              skill.version,
+            )} · Updated ${esc(skill.updated)}</small></article>`;
+          },
         )
         .join("");
     });

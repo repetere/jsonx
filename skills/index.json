@@ -1,30 +1,69 @@
 [
   {
+    "name": "jsonx",
+    "family": "Core JSONX",
+    "purpose": "Use JSONX/JXM for React, JSX, HTML, Express rendering, examples, tests, and package docs.",
+    "example": "Use jsonx to review this JXM payload and explain how it renders.",
+    "version": "0.1.0",
+    "updated": "2026-07-24",
+    "surfaces": ["codex", "claude", "opencode"],
+    "install": {
+      "codex": "mkdir -p \"$HOME/.agents/skills\"\ncp -R skills/codex/jsonx \"$HOME/.agents/skills/jsonx\"",
+      "claude": "mkdir -p \"$HOME/.claude/skills\"\ncp -R skills/claude/jsonx \"$HOME/.claude/skills/jsonx\"",
+      "opencode": "mkdir -p \"$HOME/.config/opencode/skills\"\ncp -R skills/opencode/jsonx \"$HOME/.config/opencode/skills/jsonx\""
+    }
+  },
+  {
     "name": "jsonx-generative-ui",
+    "family": "Generative UI",
     "purpose": "Decide when UI is warranted, then generate a safe JSONX/JXM payload or IDE handoff file.",
     "example": "Use jsonx-generative-ui to ask whether a study user wants a quiz UI, then write .jsonx/ui/practice-quiz.json.",
     "version": "0.1.0",
-    "updated": "2026-06-30"
+    "updated": "2026-07-24",
+    "surfaces": ["codex", "claude", "opencode"],
+    "install": {
+      "codex": "mkdir -p \"$HOME/.agents/skills\"\ncp -R skills/codex/jsonx-generative-ui \"$HOME/.agents/skills/jsonx-generative-ui\"",
+      "claude": "mkdir -p \"$HOME/.claude/skills\"\ncp -R skills/claude/jsonx-generative-ui \"$HOME/.claude/skills/jsonx-generative-ui\"",
+      "opencode": "mkdir -p \"$HOME/.config/opencode/skills\"\ncp -R skills/opencode/jsonx-generative-ui \"$HOME/.config/opencode/skills/jsonx-generative-ui\""
+    }
   },
   {
     "name": "jsonx-component-registry",
+    "family": "Generative UI support",
     "purpose": "Design or audit the allowed component registry for generated UI.",
     "example": "Use jsonx-component-registry to review whether MetricRow props are safe.",
     "version": "0.1.0",
-    "updated": "2026-06-29"
+    "updated": "2026-06-29",
+    "surfaces": ["codex", "claude"],
+    "install": {
+      "codex": "mkdir -p \"$HOME/.agents/skills\"\ncp -R skills/codex/jsonx-component-registry \"$HOME/.agents/skills/jsonx-component-registry\"",
+      "claude": "mkdir -p \"$HOME/.claude/skills\"\ncp -R skills/claude/jsonx-component-registry \"$HOME/.claude/skills/jsonx-component-registry\""
+    }
   },
   {
     "name": "jsonx-demo-builder",
+    "family": "Generative UI support",
     "purpose": "Build a local prompt-to-JSONX demo using the repo site conventions.",
     "example": "Use jsonx-demo-builder to add a fixture prompt and rendered demo panel.",
     "version": "0.1.0",
-    "updated": "2026-06-29"
+    "updated": "2026-06-29",
+    "surfaces": ["codex", "claude"],
+    "install": {
+      "codex": "mkdir -p \"$HOME/.agents/skills\"\ncp -R skills/codex/jsonx-demo-builder \"$HOME/.agents/skills/jsonx-demo-builder\"",
+      "claude": "mkdir -p \"$HOME/.claude/skills\"\ncp -R skills/claude/jsonx-demo-builder \"$HOME/.claude/skills/jsonx-demo-builder\""
+    }
   },
   {
     "name": "jsonx-safety-review",
+    "family": "Generative UI support",
     "purpose": "Review JSONX payload validation, blocked props, and action mapping.",
     "example": "Use jsonx-safety-review to check a public demo for dangerous JSONX features.",
     "version": "0.1.0",
-    "updated": "2026-06-29"
+    "updated": "2026-06-29",
+    "surfaces": ["codex", "claude"],
+    "install": {
+      "codex": "mkdir -p \"$HOME/.agents/skills\"\ncp -R skills/codex/jsonx-safety-review \"$HOME/.agents/skills/jsonx-safety-review\"",
+      "claude": "mkdir -p \"$HOME/.claude/skills\"\ncp -R skills/claude/jsonx-safety-review \"$HOME/.claude/skills/jsonx-safety-review\""
+    }
   }
 ]

@@ -1,0 +1,9 @@
+{
+  "apps": {
+    "jsonx-renderer": {
+      "id": "plugin_asdk_app_replace_after_approval",
+      "name": "JSONX Renderer",
+      "notes": "Copy the approved Apps SDK app ID into .app.json after the hosted renderer is created in developer mode or approved for release."
+    }
+  }
+}

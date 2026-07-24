@@ -1,0 +1,23 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "Safety Notice",
+  "purpose": "Render a blocked feature notice.",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "Safety Notice",
+      "summary": "Show a safety rule inside the renderer."
+    },
+    "children": [
+      {
+        "component": "Alert",
+        "props": {
+          "tone": "warning",
+          "title": "Renderer-owned behavior only"
+        },
+        "children": "Generated payloads can request approved components, but they cannot provide code."
+      }
+    ]
+  }
+}

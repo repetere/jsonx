@@ -1,0 +1,26 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "Surface Matrix",
+  "purpose": "Render supported agent install surfaces.",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "Surface Matrix",
+      "summary": "Compare how JSONX skills install across agents."
+    },
+    "children": [
+      {
+        "component": "DataTable",
+        "props": {
+          "columns": ["Surface", "Project path", "Personal path"],
+          "rows": [
+            ["Codex", ".agents/skills", "~/.agents/skills"],
+            ["Claude Code", ".claude/skills", "~/.claude/skills"],
+            ["OpenCode", ".opencode/skills", "~/.config/opencode/skills"]
+          ]
+        }
+      }
+    ]
+  }
+}

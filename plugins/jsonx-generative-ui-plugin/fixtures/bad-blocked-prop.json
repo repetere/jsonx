@@ -1,0 +1,17 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "Bad Prop",
+  "purpose": "Verify blocked props fail closed.",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "Bad Prop",
+      "summary": "This fixture should not pass.",
+      "style": {
+        "color": "red"
+      }
+    },
+    "children": []
+  }
+}

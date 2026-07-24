@@ -120,6 +120,19 @@ Never use these fields for generated UI payloads:
 
 Also block inline event handler props such as `onClick`, `onSubmit`, and `onChange`; raw HTML; external URLs; arbitrary CSS; and unknown components or props.
 
+## Optional Motion
+
+Animation is renderer-owned. The agent may request an allowlisted `motionProfile` only when the renderer supports it. Never return GSAP code, CSS animation code, arbitrary easing functions, inline styles, or JavaScript handlers.
+
+Allowed future motion profiles:
+
+- `none`
+- `subtle-enter`
+- `morph-list-to-detail`
+- `state-change-highlight`
+
+The renderer should use GSAP with reduced-motion support when animation is enabled. Rendering must still work with animation disabled. Keep GSAP out of the core `jsonx` npm package dependencies; it belongs in the hosted renderer, local preview, or plugin asset layer.
+
 ## Examples
 
 ### Multiple-choice Quiz UI
@@ -197,7 +210,7 @@ Before handing off a payload, verify that:
 
 1. The user actually benefits from UI or asked for it.
 2. The JSON parses.
-3. Every component, prop, and action is allowlisted.
+3. Every component, prop, action, and motion profile is allowlisted.
 4. No blocked JSONX field or inline event handler is present.
 5. The payload is saved to `.jsonx/ui/` when an IDE handoff is available.
 
