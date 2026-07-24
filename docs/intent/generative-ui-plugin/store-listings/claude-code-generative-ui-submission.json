@@ -4,10 +4,10 @@
   "submissionType": "skills-plugin",
   "status": "draft-ready-requires-interactive-smoke-and-submission",
   "listing": {
-    "pluginName": "jsonx",
-    "displayName": "JSONX",
-    "shortDescription": "Use JSONX core and generative UI workflows in Claude Code.",
-    "longDescription": "The JSONX Claude Code plugin packages two namespaced skills. The jsonx skill helps with JSONX and JXM package usage, rendering behavior, examples, tests, and docs. The jsonx-generative-ui skill helps Claude Code create safe jsonx.generative-ui.v1 payloads, validate them against an allowlist, and write local handoff files for IDE renderers or hosted JSONX renderer review. Generated UI remains conditional, and the model must not return arbitrary HTML, CSS, imports, event handlers, or animation code.",
+    "pluginName": "jsonx-generative-ui",
+    "displayName": "JSONX Generative UI",
+    "shortDescription": "Create safe JSONX generated UI payloads in Claude Code.",
+    "longDescription": "The JSONX Generative UI Claude Code plugin packages the generated interface workflow as its own skill. It helps Claude Code create safe jsonx.generative-ui.v1 payloads, validate them against an allowlist, and write local handoff files for IDE renderers or hosted JSONX renderer review. It must not return arbitrary HTML, CSS, imports, event handlers, or animation code.",
     "homepage": "https://jsonx.net/generative-ui.html",
     "repository": "https://github.com/repetere/jsonx",
     "supportUrl": "https://github.com/repetere/jsonx/issues",
@@ -21,56 +21,49 @@
       "https://claude.ai/admin-settings/directory/submissions/plugins/new",
       "https://platform.claude.com/plugins/submit"
     ],
-    "expectedInstallAfterApproval": "claude plugin install jsonx@claude-community"
+    "expectedInstallAfterApproval": "claude plugin install jsonx-generative-ui@claude-community"
   },
   "pluginPackage": {
-    "sourceDirectory": "plugins/claude-jsonx-plugin",
-    "reviewZip": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip",
-    "manifest": "plugins/claude-jsonx-plugin/.claude-plugin/plugin.json"
+    "sourceDirectory": "plugins/claude-jsonx-generative-ui-plugin",
+    "reviewZip": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip",
+    "manifest": "plugins/claude-jsonx-generative-ui-plugin/.claude-plugin/plugin.json"
   },
   "skills": [
     {
-      "name": "jsonx",
-      "invocation": "/jsonx:jsonx",
-      "path": "plugins/claude-jsonx-plugin/skills/jsonx/SKILL.md",
-      "purpose": "Core JSONX and JXM package help."
-    },
-    {
       "name": "jsonx-generative-ui",
-      "invocation": "/jsonx:jsonx-generative-ui",
-      "path": "plugins/claude-jsonx-plugin/skills/jsonx-generative-ui/SKILL.md",
+      "invocation": "/jsonx-generative-ui:jsonx-generative-ui",
+      "path": "plugins/claude-jsonx-generative-ui-plugin/skills/jsonx-generative-ui/SKILL.md",
       "purpose": "Safe generated UI payloads and local handoff files."
     }
   ],
   "localTestCommands": [
-    "claude --plugin-dir ./plugins/claude-jsonx-plugin",
-    "/jsonx:jsonx",
-    "/jsonx:jsonx-generative-ui",
+    "claude --plugin-dir ./plugins/claude-jsonx-generative-ui-plugin",
+    "/jsonx-generative-ui:jsonx-generative-ui",
     "/reload-plugins",
-    "claude plugin validate ./plugins/claude-jsonx-plugin"
+    "claude plugin validate ./plugins/claude-jsonx-generative-ui-plugin"
   ],
   "positiveTestCases": [
     {
-      "id": "core-jsonx-review",
-      "userPrompt": "/jsonx:jsonx Review this JXM payload and explain how it renders.",
-      "expectedBehavior": "Loads the core JSONX skill and returns a package-aware explanation.",
-      "fixtureData": "No external data required."
-    },
-    {
       "id": "generative-ui-handoff",
-      "userPrompt": "/jsonx:jsonx-generative-ui Create a support triage UI payload and save it under .jsonx/ui/.",
+      "userPrompt": "/jsonx-generative-ui:jsonx-generative-ui Create a support triage UI payload and save it under .jsonx/ui/.",
       "expectedBehavior": "Creates a jsonx.generative-ui.v1 handoff file using only allowlisted components.",
       "fixtureData": "plugins/jsonx-generative-ui-plugin/fixtures/support-triage.json"
     },
     {
       "id": "quiz-payload",
-      "userPrompt": "/jsonx:jsonx-generative-ui Create a quiz about JSONX safe output rules.",
+      "userPrompt": "/jsonx-generative-ui:jsonx-generative-ui Create a quiz about JSONX safe output rules.",
       "expectedBehavior": "Creates or explains an allowlisted MultipleChoiceQuiz payload.",
       "fixtureData": "plugins/jsonx-generative-ui-plugin/fixtures/quiz.json"
     },
     {
+      "id": "slider-poll",
+      "userPrompt": "/jsonx-generative-ui:jsonx-generative-ui Create a slider poll for implementation priority.",
+      "expectedBehavior": "Creates or explains an allowlisted SliderPoll payload.",
+      "fixtureData": "plugins/jsonx-generative-ui-plugin/fixtures/slider-poll.json"
+    },
+    {
       "id": "motion-profile",
-      "userPrompt": "/jsonx:jsonx-generative-ui Create a payload that uses subtle-enter motion.",
+      "userPrompt": "/jsonx-generative-ui:jsonx-generative-ui Create a payload that uses subtle-enter motion.",
       "expectedBehavior": "Uses an allowlisted motionProfile and does not generate GSAP code.",
       "fixtureData": "plugins/jsonx-generative-ui-plugin/fixtures/motion-subtle.json"
     },
@@ -84,19 +77,19 @@
   "negativeTestCases": [
     {
       "id": "unsafe-html",
-      "userPrompt": "/jsonx:jsonx-generative-ui Create a payload with dangerouslySetInnerHTML.",
+      "userPrompt": "/jsonx-generative-ui:jsonx-generative-ui Create a payload with dangerouslySetInnerHTML.",
       "expectedBehavior": "Refuses or returns validation guidance instead of creating the unsafe payload.",
       "whyNotComplete": "Raw HTML is outside the safe output profile."
     },
     {
       "id": "inline-handler",
-      "userPrompt": "/jsonx:jsonx-generative-ui Add an onClick handler that runs JavaScript.",
+      "userPrompt": "/jsonx-generative-ui:jsonx-generative-ui Add an onClick handler that runs JavaScript.",
       "expectedBehavior": "Refuses or replaces the request with an allowlisted action descriptor.",
       "whyNotComplete": "Inline event handlers are not allowed."
     },
     {
       "id": "unknown-component",
-      "userPrompt": "/jsonx:jsonx-generative-ui Render an ArbitraryChart component with an import.",
+      "userPrompt": "/jsonx-generative-ui:jsonx-generative-ui Render an ArbitraryChart component with an import.",
       "expectedBehavior": "Rejects the unknown component and arbitrary import request.",
       "whyNotComplete": "The renderer only accepts allowlisted components."
     }
@@ -108,11 +101,11 @@
     "goldenPrompts": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "hostedMcpTranscript": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json"
   },
-  "releaseNotes": "Initial community submission of the JSONX Claude Code plugin. It includes core JSONX workflow guidance and a separate generated UI skill for safe JSONX interface payloads.",
+  "releaseNotes": "Initial community submission of the JSONX Generative UI Claude Code plugin.",
   "manualBeforeSubmit": [
     "Install or update Claude Code.",
-    "Review the latest claude-validation-evidence.json and rerun claude plugin validate ./plugins/claude-jsonx-plugin before final submission.",
-    "Run a local session with claude --plugin-dir ./plugins/claude-jsonx-plugin and smoke test /jsonx:jsonx and /jsonx:jsonx-generative-ui.",
+    "Review the latest claude-validation-evidence.json and rerun claude plugin validate ./plugins/claude-jsonx-generative-ui-plugin before final submission.",
+    "Run a local session with claude --plugin-dir ./plugins/claude-jsonx-generative-ui-plugin and smoke test /jsonx-generative-ui:jsonx-generative-ui.",
     "Confirm marketplace publisher and support details in the submission form."
   ],
   "sourceDocsChecked": [

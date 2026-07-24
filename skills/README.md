@@ -24,10 +24,11 @@ Use `--scope project` to install into the current project. Use `--scope personal
 
 ## Codex
 
-Codex can install the full plugin from the repo-local marketplace:
+Codex can install the core package plugin or the generative UI plugin from the repo-local marketplace:
 
 ```text
 codex plugin marketplace add .
+codex plugin add jsonx-codex-plugin@jsonx-local
 codex plugin add jsonx-generative-ui-plugin@jsonx-local
 ```
 

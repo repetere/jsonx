@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-24T08:28:47.360Z",
+  "generatedAt": "2026-07-24T08:44:02.384Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "495577272afd4309fc8d2eebd4eee839c24e9cda+worktree",
-  "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; Codex and Claude plugin packages; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
+  "gitCommit": "a73b5aa8873363af5bb4a71d71980c24e4a3fb35+worktree",
+  "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
   "summary": {
     "proved": 10,
     "external-gated": 4
@@ -31,34 +31,40 @@
     },
     {
       "id": "REQ-CODEX-PLUGIN",
-      "requirement": "Package the JSONX workflow as a Codex plugin with core and generative UI skills, fixtures, validator, and development marketplace entry.",
+      "requirement": "Package the core JSONX workflow and generative UI workflow as separate Codex plugins with development marketplace entries.",
       "status": "proved",
       "githubIssue": "#1112",
       "evidence": [
+        "plugins/jsonx-codex-plugin/",
         "plugins/jsonx-generative-ui-plugin/",
         ".agents/plugins/marketplace.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/codex-local-marketplace.json"
       ],
       "checks": {
-        "pluginPackagePresent": true,
+        "corePluginPackagePresent": true,
+        "generativeUiPluginPackagePresent": true,
         "marketplacePackagePresent": true,
         "isolatedInstallOk": true
       }
     },
     {
       "id": "REQ-CLAUDE-PLUGIN",
-      "requirement": "Package the JSONX workflow as a Claude Code plugin with separate core and generative UI skills.",
+      "requirement": "Package the core JSONX workflow and generative UI workflow as separate Claude Code plugins.",
       "status": "proved",
       "githubIssue": "#1113",
       "evidence": [
         "plugins/claude-jsonx-plugin/",
+        "plugins/claude-jsonx-generative-ui-plugin/",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip"
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip"
       ],
       "checks": {
-        "claudePackagePresent": true,
+        "claudeCorePackagePresent": true,
+        "claudeGenerativeUiPackagePresent": true,
         "claudeManifestValidationOk": true
       }
     },
@@ -151,19 +157,25 @@
     },
     {
       "id": "REQ-STORE-DRAFTS",
-      "requirement": "Prepare development submission material for OpenAI/Codex and Claude Code app or plugin store review.",
+      "requirement": "Prepare development submission material for OpenAI/Codex and Claude Code review with separate core JSONX and generative UI plugin drafts.",
       "status": "proved",
       "githubIssue": "#1115",
       "evidence": [
         "apps/jsonx-renderer-app/chatgpt-app-submission.json",
-        "docs/intent/generative-ui-plugin/store-listings/openai-plugin-submission.json",
-        "docs/intent/generative-ui-plugin/store-listings/claude-code-community-submission.json",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-plugin-submission.json",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json"
+        "docs/intent/generative-ui-plugin/store-listings/openai-jsonx-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/store-listings/claude-code-jsonx-submission.json",
+        "docs/intent/generative-ui-plugin/store-listings/claude-code-generative-ui-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json"
       ],
       "checks": {
-        "openAiDraftPresent": true,
-        "claudeDraftPresent": true
+        "openAiCoreDraftPresent": true,
+        "openAiGenerativeUiDraftPresent": true,
+        "claudeCoreDraftPresent": true,
+        "claudeGenerativeUiDraftPresent": true
       }
     },
     {
@@ -206,7 +218,11 @@
           "submission-audit",
           "external-gate-evidence",
           "openai-plugin-submission",
-          "claude-code-community-submission"
+          "openai-jsonx-plugin-submission",
+          "openai-generative-ui-plugin-submission",
+          "claude-code-community-submission",
+          "claude-code-jsonx-submission",
+          "claude-code-generative-ui-submission"
         ]
       }
     },
@@ -264,8 +280,10 @@
       "status": "external-gated",
       "githubIssue": "#1115",
       "evidence": [
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-plugin-submission.json",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
       ],
       "checks": {

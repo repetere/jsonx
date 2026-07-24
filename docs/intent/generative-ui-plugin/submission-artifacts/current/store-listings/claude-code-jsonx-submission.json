@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "surface": "claude-code-community-marketplace",
+  "submissionType": "skills-plugin",
+  "status": "draft-ready-requires-interactive-smoke-and-submission",
+  "listing": {
+    "pluginName": "jsonx",
+    "displayName": "JSONX",
+    "shortDescription": "Use core JSONX and JXM workflows in Claude Code.",
+    "longDescription": "The JSONX Claude Code plugin packages the core jsonx skill for JSONX and JXM package usage, rendering behavior, examples, tests, and docs. It stays separate from generated UI so teams can install package help without enabling interface-output guidance.",
+    "homepage": "https://jsonx.net/generative-ui.html#skills",
+    "repository": "https://github.com/repetere/jsonx",
+    "supportUrl": "https://github.com/repetere/jsonx/issues",
+    "license": "MIT",
+    "publisher": "Repetere"
+  },
+  "marketplace": {
+    "target": "claude-community",
+    "catalogRepository": "anthropics/claude-plugins-community",
+    "submissionForms": [
+      "https://claude.ai/admin-settings/directory/submissions/plugins/new",
+      "https://platform.claude.com/plugins/submit"
+    ],
+    "expectedInstallAfterApproval": "claude plugin install jsonx@claude-community"
+  },
+  "pluginPackage": {
+    "sourceDirectory": "plugins/claude-jsonx-plugin",
+    "reviewZip": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip",
+    "manifest": "plugins/claude-jsonx-plugin/.claude-plugin/plugin.json"
+  },
+  "skills": [
+    {
+      "name": "jsonx",
+      "invocation": "/jsonx:jsonx",
+      "path": "plugins/claude-jsonx-plugin/skills/jsonx/SKILL.md",
+      "purpose": "Core JSONX and JXM package help."
+    }
+  ],
+  "localTestCommands": [
+    "claude --plugin-dir ./plugins/claude-jsonx-plugin",
+    "/jsonx:jsonx",
+    "/reload-plugins",
+    "claude plugin validate ./plugins/claude-jsonx-plugin"
+  ],
+  "positiveTestCases": [
+    {
+      "id": "core-jsonx-review",
+      "userPrompt": "/jsonx:jsonx Review this JXM payload and explain how it renders.",
+      "expectedBehavior": "Loads the core JSONX skill and returns a package-aware explanation.",
+      "fixtureData": "No external data required."
+    },
+    {
+      "id": "small-example",
+      "userPrompt": "/jsonx:jsonx Create a small JXM example for a React button.",
+      "expectedBehavior": "Creates a concise package example.",
+      "fixtureData": "No external data required."
+    },
+    {
+      "id": "api-guidance",
+      "userPrompt": "/jsonx:jsonx Explain outputJSON versus outputHTML.",
+      "expectedBehavior": "Explains core package APIs.",
+      "fixtureData": "No external data required."
+    },
+    {
+      "id": "debug-render",
+      "userPrompt": "/jsonx:jsonx Help debug a JSONX child rendering issue.",
+      "expectedBehavior": "Gives package-aware debugging steps.",
+      "fixtureData": "No external data required."
+    },
+    {
+      "id": "test-plan",
+      "userPrompt": "/jsonx:jsonx Suggest tests for a render helper change.",
+      "expectedBehavior": "Suggests focused package validation.",
+      "fixtureData": "No external data required."
+    }
+  ],
+  "negativeTestCases": [
+    {
+      "id": "generative-ui",
+      "userPrompt": "/jsonx:jsonx Create an interactive quiz UI.",
+      "expectedBehavior": "Route to the separate jsonx-generative-ui plugin.",
+      "whyNotComplete": "Generated UI belongs to the separate plugin."
+    },
+    {
+      "id": "apps-sdk",
+      "userPrompt": "/jsonx:jsonx Connect this to ChatGPT Apps SDK.",
+      "expectedBehavior": "Explain that hosted renderer setup belongs to the generative UI plugin.",
+      "whyNotComplete": "Apps SDK wiring is outside the core plugin."
+    },
+    {
+      "id": "motion",
+      "userPrompt": "/jsonx:jsonx Add GSAP to the core package.",
+      "expectedBehavior": "Keep GSAP out of the core npm package.",
+      "whyNotComplete": "Animation belongs in the renderer layer."
+    }
+  ],
+  "evidence": {
+    "manifest": "docs/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+    "claudeValidationEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
+    "skillInstallerEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json"
+  },
+  "releaseNotes": "Initial community submission of the core JSONX Claude Code plugin.",
+  "manualBeforeSubmit": [
+    "Install or update Claude Code.",
+    "Review the latest claude-validation-evidence.json and rerun claude plugin validate ./plugins/claude-jsonx-plugin before final submission.",
+    "Run a local session with claude --plugin-dir ./plugins/claude-jsonx-plugin and smoke test /jsonx:jsonx.",
+    "Confirm marketplace publisher and support details in the submission form."
+  ],
+  "sourceDocsChecked": [
+    "https://code.claude.com/docs/en/plugins",
+    "https://code.claude.com/docs/en/skills",
+    "https://code.claude.com/docs/en/cli-reference"
+  ]
+}

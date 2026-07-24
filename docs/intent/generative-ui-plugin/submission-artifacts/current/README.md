@@ -1,22 +1,26 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T08:28:47.324Z
+Generated: 2026-07-24T08:44:02.346Z
 
 ## Packages
 
 | Surface | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| Codex plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `ea15205d5c34ce9e4f33a52a2badcf72a20d3e23d84f1f82005c8b92dc571ca2` | 17152 |
-| Claude Code plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` | `2f4065360a5bb2db4699849eac8e2c623e1e69940b15a78fde0c6c9268b9b2c3` | 6220 |
+| Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip` | `5859d3a168af46a20136b59da48dea7eb4c46145ac6dbda9d1c5d5ff6adc837a` | 2807 |
+| Codex generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `d7ac479f32c095c89293f06a86c6c280105a9e1a6cc2442c8d7ac064d99ab68b` | 16499 |
+| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` | `530107716501fcfdd0b67c52d7882229cd7f806f1476ac8e938628bffa6b25a1` | 2634 |
+| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip` | `52ca379876a2c62a85b00f947df45643b07c6025a5d871eba4b22271cd8b0e67` | 5049 |
 | ChatGPT app submission | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json` | `a2668c8bc97c732a3a1ba1f62b9f132153ad6b586b3aff9356759a9009b9007b` | 4757 |
-| Codex local marketplace | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/codex-local-marketplace.json` | `78ae20574fd7527ac1c45fda214430c28ad67193cec5ed1babfe021787b559be` | 407 |
+| Codex local marketplace | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/codex-local-marketplace.json` | `2d07c106947daac04653274e25e5bd7ccaa4d68c6908c070f8010991bb4140ad` | 696 |
 
 ## Store Listings
 
 | Surface | Artifact | Test cases | Manual steps |
 | --- | --- | ---: | ---: |
-| OpenAI plugin portal draft | `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-plugin-submission.json` | 5 positive, 3 negative | 6 |
-| Claude Code community submission draft | `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json` | 5 positive, 3 negative | 4 |
+| OpenAI core JSONX plugin portal draft | `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json` | 5 positive, 3 negative | 5 |
+| OpenAI generative UI plugin portal draft | `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json` | 5 positive, 3 negative | 6 |
+| Claude Code core JSONX community submission draft | `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json` | 5 positive, 3 negative | 4 |
+| Claude Code generative UI community submission draft | `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json` | 5 positive, 3 negative | 4 |
 
 ## Screenshots
 
@@ -41,8 +45,8 @@ Generated: 2026-07-24T08:28:47.324Z
 ## Install Evidence
 
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json` covers 9 installer dry-runs and 3 isolated installs.
-- `docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json` records an isolated Codex marketplace install with 7 checks.
-- `docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json` records Claude Code plugin validation with 2 checks.
+- `docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json` records isolated Codex marketplace installs for the core and generative UI plugins with 8 checks.
+- `docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json` records Claude Code plugin validation for the core and generative UI plugins with 3 checks.
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/opencode-skill-evidence.json` records OpenCode project skill discovery with 3 checks.
 
 ## Submission Audit
@@ -70,7 +74,7 @@ Generated: 2026-07-24T08:28:47.324Z
 
 ## Submission Notes
 
-- Codex development install uses `.agents/plugins/marketplace.json` from the repo root.
-- Claude Code package remains local until interactive Claude smoke prompts and marketplace submission can run in a Claude-enabled environment.
+- Codex development installs use `.agents/plugins/marketplace.json` from the repo root.
+- Claude Code packages remain local until interactive Claude smoke prompts and marketplace submission can run in a Claude-enabled environment.
 - ChatGPT app submission starts from `apps/jsonx-renderer-app/chatgpt-app-submission.json` and the hosted MCP endpoint.
 - These artifacts live under `docs/intent/`, which is excluded from the root `jsonx` npm package.

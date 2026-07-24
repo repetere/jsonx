@@ -1,7 +1,7 @@
 {
   "name": "jsonx-generative-ui-plugin",
   "version": "0.1.0",
-  "description": "Package JSONX core and generative UI agent workflows for Codex.",
+  "description": "Package the JSONX generative UI agent workflow for Codex.",
   "author": {
     "name": "Repetere",
     "url": "https://jsonx.net/"
@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "JSONX Generative UI",
     "shortDescription": "Generate and validate JSONX UI payloads.",
-    "longDescription": "Use JSONX core and generative UI skills with fixtures and validation scripts. Generate local handoff files for IDE renderers and prepare payloads for the hosted JSONX Apps SDK renderer.",
+    "longDescription": "Use the JSONX generative UI skill with fixtures and validation scripts. Generate local handoff files for IDE renderers and prepare payloads for the hosted JSONX Apps SDK renderer. Install the JSONX core plugin separately for package API work.",
     "developerName": "Repetere",
     "category": "Developer Tools",
     "capabilities": [
@@ -29,8 +29,7 @@
     ],
     "websiteURL": "https://jsonx.net/generative-ui.html",
     "defaultPrompt": [
-      "Use JSONX Generative UI to create a safe JSONX handoff file for a support triage screen.",
-      "Use JSONX to review this JXM payload and explain how it renders."
+      "Use JSONX Generative UI to create a safe JSONX handoff file for a support triage screen."
     ],
     "brandColor": "#087B73"
   },

@@ -1,9 +1,10 @@
 # JSONX Generative UI Codex Plugin
 
-This Codex plugin packages the JSONX workflow around two skills:
+This Codex plugin packages the JSONX generative UI workflow:
 
-- `jsonx`: core JSONX/JXM package work.
 - `jsonx-generative-ui`: safe JSONX generative UI payloads, fixtures, validation, and local `.jsonx/ui/` handoff files.
+
+Use `jsonx-codex-plugin` when you only want core JSONX/JXM package help.
 
 The plugin does not make Codex an inline UI host. Codex generates and validates the payload. The Apps SDK renderer app under `apps/jsonx-renderer-app/` is the ChatGPT inline UI path.
 
@@ -31,7 +32,7 @@ node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs
 ```
 
 Artifacts are written under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, which is excluded from the root npm package. The generated bundle includes review packages, store listing drafts, screenshots, golden-prompt tool-call evidence, renderer motion evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, a submission audit, and package-boundary evidence.
-The default run records a live hosted MCP transcript from `https://jsonx-renderer-app.netlify.app/mcp`, verifies renderer motion profiles with CSS fallback and GSAP-enabled widget HTML, installs this plugin from the repo-local marketplace using a temporary `CODEX_HOME` when the Codex CLI is available, validates the Claude Code plugin with `claude plugin validate` through a temporary npm cache, and verifies OpenCode can discover the project skills with `opencode debug skill`.
+The default run records a live hosted MCP transcript from `https://jsonx-renderer-app.netlify.app/mcp`, verifies renderer motion profiles with CSS fallback and GSAP-enabled widget HTML, installs the core and generative UI Codex plugins from the repo-local marketplace using a temporary `CODEX_HOME` when the Codex CLI is available, validates the core and generative UI Claude Code plugins with `claude plugin validate` through a temporary npm cache, and verifies OpenCode can discover the project skills with `opencode debug skill`.
 
 External portal and authenticated smoke results should be recorded by copying `docs/intent/generative-ui-plugin/external-gate-evidence.template.json` to `docs/intent/generative-ui-plugin/external-gate-evidence.json`, filling in real IDs, transcript links, prompt results, and submission receipts, then regenerating the artifacts.
 

@@ -112,7 +112,11 @@ jobs:
             "submission-audit",
             "external-gate-evidence",
             "openai-plugin-submission",
+            "openai-jsonx-plugin-submission",
+            "openai-generative-ui-plugin-submission",
             "claude-code-community-submission",
+            "claude-code-jsonx-submission",
+            "claude-code-generative-ui-submission",
           ];
           const blocked = files.filter(
             (file) =>

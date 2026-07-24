@@ -1,15 +1,25 @@
 {
-  "generatedAt": "2026-07-24T08:28:34.617Z",
+  "generatedAt": "2026-07-24T08:43:50.207Z",
   "source": "claude plugin validate",
-  "note": "This evidence runs Claude Code from the npm package with a temporary npm cache and validates the JSONX Claude Code plugin manifest.",
+  "note": "This evidence runs Claude Code from the npm package with a temporary npm cache and validates the core JSONX and generative UI Claude Code plugin manifests.",
   "skipped": false,
   "claudeCodePackage": "@anthropic-ai/claude-code@2.1.218",
   "claudeVersion": "2.1.218 (Claude Code)",
-  "pluginPath": "$REPO_ROOT/plugins/claude-jsonx-plugin",
+  "plugins": [
+    {
+      "id": "jsonx",
+      "path": "$REPO_ROOT/plugins/claude-jsonx-plugin"
+    },
+    {
+      "id": "jsonx-generative-ui",
+      "path": "$REPO_ROOT/plugins/claude-jsonx-generative-ui-plugin"
+    }
+  ],
   "tempNpmCache": "$NPM_CACHE",
   "checks": {
     "cliAvailableViaNpmExec": true,
-    "pluginValidationPassed": true
+    "corePluginValidationPassed": true,
+    "generativeUiPluginValidationPassed": true
   },
   "steps": [
     {
@@ -18,10 +28,18 @@
       "stdout": "2.1.218 (Claude Code)"
     },
     {
-      "id": "plugin-validate",
+      "id": "plugin-validate-jsonx",
       "command": "npm exec --yes --package @anthropic-ai/claude-code@2.1.218 -- claude plugin validate ./plugins/claude-jsonx-plugin",
       "stdout": [
         "Validating plugin manifest: $REPO_ROOT/plugins/claude-jsonx-plugin/.claude-plugin/plugin.json",
+        "✔ Validation passed"
+      ]
+    },
+    {
+      "id": "plugin-validate-jsonx-generative-ui",
+      "command": "npm exec --yes --package @anthropic-ai/claude-code@2.1.218 -- claude plugin validate ./plugins/claude-jsonx-generative-ui-plugin",
+      "stdout": [
+        "Validating plugin manifest: $REPO_ROOT/plugins/claude-jsonx-generative-ui-plugin/.claude-plugin/plugin.json",
         "✔ Validation passed"
       ]
     }

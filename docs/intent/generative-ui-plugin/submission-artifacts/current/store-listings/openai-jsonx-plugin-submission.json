@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "surface": "openai-plugin-portal",
+  "submissionType": "skills-plugin",
+  "status": "draft-ready-requires-portal-access",
+  "listing": {
+    "pluginName": "JSONX",
+    "shortDescription": "Use JSONX and JXM package workflows in Codex.",
+    "longDescription": "The JSONX plugin packages the core JSONX skill for package usage, JXM examples, rendering behavior, source changes, tests, and docs. It does not include generated UI workflow instructions or Apps SDK renderer wiring.",
+    "category": "Developer Tools",
+    "websiteUrl": "https://jsonx.net/generative-ui.html#skills",
+    "supportUrl": "https://github.com/repetere/jsonx/issues",
+    "privacyPolicyUrl": "https://jsonx.net/privacy.html",
+    "termsUrl": "https://jsonx.net/terms.html",
+    "publisher": "Repetere",
+    "logoStatus": "Use the production JSONX brand asset before portal submission."
+  },
+  "developerIdentity": {
+    "publisherName": "Repetere",
+    "verificationRequired": true,
+    "portalRoleRequired": "Plugin submission access"
+  },
+  "bundledSkills": [
+    {
+      "name": "jsonx",
+      "path": "plugins/jsonx-codex-plugin/skills/jsonx/SKILL.md",
+      "purpose": "Core JSONX and JXM package work."
+    }
+  ],
+  "starterPrompts": [
+    "Use JSONX to review this JXM payload and explain how it renders.",
+    "Use JSONX to create a small JXM example for a React component.",
+    "Use JSONX to explain the difference between outputHTML and outputJSX.",
+    "Use JSONX to identify why this payload does not render.",
+    "Use JSONX to suggest a focused test for this rendering change."
+  ],
+  "positiveTestCases": [
+    {
+      "id": "jxm-review",
+      "userPrompt": "Use JSONX to review this JXM payload and explain how it renders.",
+      "expectedBehavior": "Loads the core JSONX skill and returns a package-aware explanation.",
+      "fixtureData": "No external data required."
+    },
+    {
+      "id": "small-example",
+      "userPrompt": "Use JSONX to create a small JXM example for a button with text.",
+      "expectedBehavior": "Creates a concise JSONX/JXM example without generated UI handoff fields.",
+      "fixtureData": "No external data required."
+    },
+    {
+      "id": "api-explanation",
+      "userPrompt": "Explain when to use outputHTML instead of outputJSX.",
+      "expectedBehavior": "Answers with package API context and does not invoke any renderer app.",
+      "fixtureData": "No external data required."
+    },
+    {
+      "id": "debug-render",
+      "userPrompt": "Use JSONX to debug why this payload is not rendering children.",
+      "expectedBehavior": "Inspects JSONX rendering behavior and recommends source or fixture checks.",
+      "fixtureData": "No external data required."
+    },
+    {
+      "id": "test-guidance",
+      "userPrompt": "Use JSONX to suggest a test for this render helper change.",
+      "expectedBehavior": "Suggests focused package tests without creating generative UI artifacts.",
+      "fixtureData": "No external data required."
+    }
+  ],
+  "negativeTestCases": [
+    {
+      "id": "generated-ui-request",
+      "userPrompt": "Create an interactive JSONX quiz UI.",
+      "expectedBehavior": "Route to the separate JSONX Generative UI plugin or explain that this core plugin does not package generated UI.",
+      "whyNotComplete": "Generated interface output belongs to the separate generative UI workflow."
+    },
+    {
+      "id": "apps-sdk-request",
+      "userPrompt": "Connect this response to the Apps SDK renderer.",
+      "expectedBehavior": "Route to the JSONX Generative UI plugin or hosted renderer setup.",
+      "whyNotComplete": "Apps SDK wiring is outside the core JSONX plugin."
+    },
+    {
+      "id": "animation-request",
+      "userPrompt": "Add GSAP motion to the JSONX package.",
+      "expectedBehavior": "Explain that GSAP belongs in the renderer or plugin app layer, not the core npm package.",
+      "whyNotComplete": "Animation is not a core package dependency."
+    }
+  ],
+  "evidence": {
+    "manifest": "docs/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+    "codexPluginPackage": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip",
+    "codexInstallEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
+    "skillInstallerEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json"
+  },
+  "releaseNotes": "Initial submission of the core JSONX Codex plugin. It includes package workflow guidance only and stays separate from generated UI.",
+  "manualBeforeSubmit": [
+    "Confirm OpenAI developer or business identity verification.",
+    "Confirm the submitter has plugin submission access.",
+    "Attach the final production logo.",
+    "Review privacy policy, terms, and support URLs.",
+    "Confirm the separate generative UI plugin remains optional."
+  ],
+  "sourceDocsChecked": [
+    "https://developers.openai.com/codex/submit-plugins",
+    "https://developers.openai.com/codex/build-plugins"
+  ]
+}

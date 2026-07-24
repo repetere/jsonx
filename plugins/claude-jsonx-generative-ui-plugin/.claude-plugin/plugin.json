@@ -1,6 +1,6 @@
 {
-  "name": "jsonx",
-  "description": "Use core JSONX and JXM workflows in Claude Code.",
+  "name": "jsonx-generative-ui",
+  "description": "Use JSONX generative UI workflows in Claude Code.",
   "version": "0.1.0",
   "author": {
     "name": "Repetere",

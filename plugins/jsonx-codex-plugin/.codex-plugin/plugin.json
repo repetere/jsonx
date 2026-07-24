@@ -1,0 +1,35 @@
+{
+  "name": "jsonx-codex-plugin",
+  "version": "0.1.0",
+  "description": "Package the core JSONX and JXM agent workflow for Codex.",
+  "author": {
+    "name": "Repetere",
+    "url": "https://jsonx.net/"
+  },
+  "homepage": "https://jsonx.net/generative-ui.html#skills",
+  "repository": "https://github.com/repetere/jsonx",
+  "license": "MIT",
+  "keywords": [
+    "jsonx",
+    "jxm",
+    "agent-skills",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "JSONX",
+    "shortDescription": "Work with JSONX and JXM package APIs.",
+    "longDescription": "Use the core JSONX skill for package usage, JXM examples, rendering behavior, source changes, tests, and docs. This plugin does not include generated UI workflow instructions.",
+    "developerName": "Repetere",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://jsonx.net/generative-ui.html#skills",
+    "defaultPrompt": [
+      "Use JSONX to review this JXM payload and explain how it renders."
+    ],
+    "brandColor": "#087B73"
+  }
+}

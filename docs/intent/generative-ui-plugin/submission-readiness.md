@@ -10,17 +10,19 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 
 | Surface | Artifact | Current state |
 | --- | --- | --- |
-| Codex | `plugins/jsonx-generative-ui-plugin/` | Local plugin package with `jsonx` and `jsonx-generative-ui` skills, fixture validator, app wiring templates, and metadata. |
-| Codex local marketplace | `.agents/plugins/marketplace.json` | Repo-local Codex marketplace entry for development installation of `jsonx-generative-ui-plugin`. |
-| Claude Code | `plugins/claude-jsonx-plugin/` | Local Claude Code plugin package with `jsonx` and `jsonx-generative-ui` skills. |
+| Codex core | `plugins/jsonx-codex-plugin/` | Local plugin package with only the `jsonx` core package skill. |
+| Codex generative UI | `plugins/jsonx-generative-ui-plugin/` | Local plugin package with the `jsonx-generative-ui` skill, fixture validator, app wiring templates, and metadata. |
+| Codex local marketplace | `.agents/plugins/marketplace.json` | Repo-local Codex marketplace entries for development installation of `jsonx-codex-plugin` and `jsonx-generative-ui-plugin`. |
+| Claude Code core | `plugins/claude-jsonx-plugin/` | Local Claude Code plugin package with only the `jsonx` core package skill. |
+| Claude Code generative UI | `plugins/claude-jsonx-generative-ui-plugin/` | Local Claude Code plugin package with only the `jsonx-generative-ui` skill. |
 | OpenCode | `skills/opencode/` | Skill folders for project or global install. OpenCode does not need a separate plugin for the current scope. |
 | Skill installer | `skills/scripts/install-jsonx-skill.mjs` | Local installer for core JSONX and generative UI skills across Codex, Claude Code, and OpenCode. |
 | ChatGPT Apps SDK | `apps/jsonx-renderer-app/` | Runnable stateless MCP app with `render_jsonx_response`, widget resource, optional GSAP motion, local smoke test, developer-mode tunnel path, and Netlify serverless adapter. |
 | Hosted renderer | `https://jsonx-renderer-app.netlify.app/mcp` | Netlify-hosted MCP endpoint with live health, widget, CORS, tool listing, resource read, valid render, and invalid payload smoke tests. |
 | ChatGPT app submission | `apps/jsonx-renderer-app/chatgpt-app-submission.json` | Import-ready submission draft with app info, tool hint justifications, five positive test cases, and three negative test cases. |
-| Store listing drafts | `docs/intent/generative-ui-plugin/store-listings/` | Source drafts for OpenAI app-plus-skills plugin submission and Claude Code community marketplace submission. |
+| Store listing drafts | `docs/intent/generative-ui-plugin/store-listings/` | Source drafts for OpenAI and Claude Code core JSONX and generative UI plugin submissions. |
 | Public policy pages | `site/privacy.html`, `site/terms.html` | Public privacy and terms notes for the JSONX site, browser demo, skills, plugins, and renderer app. |
-| Submission artifacts | `docs/intent/generative-ui-plugin/submission-artifacts/current/` | Generated Codex and Claude package zips, ChatGPT submission JSON copy, Codex marketplace copy, store listing copies, screenshots, golden-prompt evidence, renderer motion evidence, browser demo mode evidence, hosted MCP transcript evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, submission audit, hashes, and package-boundary evidence. |
+| Submission artifacts | `docs/intent/generative-ui-plugin/submission-artifacts/current/` | Generated split Codex and Claude package zips, ChatGPT submission JSON copy, Codex marketplace copy, store listing copies, screenshots, golden-prompt evidence, renderer motion evidence, browser demo mode evidence, hosted MCP transcript evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, submission audit, hashes, and package-boundary evidence. |
 | External gate evidence template | `docs/intent/generative-ui-plugin/external-gate-evidence.template.json` | Template for app IDs, ChatGPT developer-mode transcript evidence, authenticated Claude Code smoke prompts, human/policy review, and marketplace submission receipts. |
 | CI validation | `.github/workflows/generative-ui-plugin.yml` | Push, pull request, and manual workflow for app checks, plugin metadata checks, fixture validation, package generation, and npm package-boundary enforcement. |
 
@@ -31,8 +33,8 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Run the Codex plugin validator locally.
 - Run `node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs`.
 - Run the JSONX fixture validator locally.
-- Install the Codex plugin from the repo-local marketplace in a development profile:
-  `codex plugin marketplace add .` then `codex plugin add jsonx-generative-ui-plugin@jsonx-local`.
+- Install the Codex plugins from the repo-local marketplace in a development profile:
+  `codex plugin marketplace add .` then `codex plugin add jsonx-codex-plugin@jsonx-local` or `codex plugin add jsonx-generative-ui-plugin@jsonx-local`.
 - Review isolated Codex marketplace install evidence in `docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json`.
 - Review skill installer evidence for Codex, Claude Code, and OpenCode in `docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json`.
 - Review Claude Code plugin validation evidence in `docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json`.
@@ -44,8 +46,10 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Use the hosted Netlify renderer at `https://jsonx-renderer-app.netlify.app/mcp`.
 - Deploy a new renderer app build to Netlify from `apps/jsonx-renderer-app` after source changes.
 - Use `apps/jsonx-renderer-app/chatgpt-app-submission.json` as the starting point for the ChatGPT Apps submission form.
-- Use `docs/intent/generative-ui-plugin/store-listings/openai-plugin-submission.json` as the OpenAI plugin portal draft for an app-plus-skills submission.
-- Use `docs/intent/generative-ui-plugin/store-listings/claude-code-community-submission.json` as the Claude Code community marketplace draft.
+- Use `docs/intent/generative-ui-plugin/store-listings/openai-jsonx-plugin-submission.json` as the OpenAI core JSONX plugin portal draft.
+- Use `docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json` as the OpenAI generative UI app-plus-skills portal draft.
+- Use `docs/intent/generative-ui-plugin/store-listings/claude-code-jsonx-submission.json` as the Claude Code core JSONX community marketplace draft.
+- Use `docs/intent/generative-ui-plugin/store-listings/claude-code-generative-ui-submission.json` as the Claude Code generative UI community marketplace draft.
 - Use `https://jsonx.net/privacy.html`, `https://jsonx.net/terms.html`, and GitHub Issues as public submission URLs.
 - Generate current submission packages and screenshots:
   `node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs`.
@@ -83,12 +87,13 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Capture screenshots after the hosted app is connected.
 - Record completed app IDs and ChatGPT transcript evidence in `docs/intent/generative-ui-plugin/external-gate-evidence.json`.
 - Review `apps/jsonx-renderer-app/chatgpt-app-submission.json` against the final hosted endpoint, privacy URL, terms URL, support URL, and screenshots before submitting.
-- Review `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-plugin-submission.json` before opening the OpenAI plugin portal draft.
+- Review `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json` before opening the OpenAI core plugin portal draft.
+- Review `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json` before opening the OpenAI generative UI plugin portal draft.
 - Regenerate `docs/intent/generative-ui-plugin/submission-artifacts/current/` after any renderer, fixture, submission JSON, or public page change.
 - Confirm `.github/workflows/generative-ui-plugin.yml` passes before public submission package review.
 - Add the real app ID to plugin app metadata only after the ID exists.
 
-### Codex Plugin
+### Codex Plugins
 
 - Keep the plugin package self-contained.
 - Keep `.app.json` empty until a real app ID exists.
@@ -98,18 +103,22 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Review the OpenAI plugin listing draft before public submission.
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json` as the current isolated `CODEX_HOME` install record, and re-test it before any public submission package change.
 - Confirm `npm pack --dry-run` excludes `plugins/` and `apps/`.
-- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` as the current review package.
+- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip` as the current core review package.
+- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` as the current generative UI review package.
 
-### Claude Code Plugin
+### Claude Code Plugins
 
 - Run local plugin validation with Claude Code.
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json` as the current `claude plugin validate` record.
-- Test with `claude --plugin-dir ./plugins/claude-jsonx-plugin`.
-- Run `/jsonx:jsonx` and `/jsonx:jsonx-generative-ui` smoke prompts.
+- Test core JSONX with `claude --plugin-dir ./plugins/claude-jsonx-plugin`.
+- Test generative UI with `claude --plugin-dir ./plugins/claude-jsonx-generative-ui-plugin`.
+- Run `/jsonx:jsonx` and `/jsonx-generative-ui:jsonx-generative-ui` smoke prompts.
 - Record authenticated smoke results in `docs/intent/generative-ui-plugin/external-gate-evidence.json`.
-- Review `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json` before opening the Claude Code community marketplace submission.
+- Review `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json` before opening the Claude Code core community marketplace submission.
+- Review `docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json` before opening the Claude Code generative UI community marketplace submission.
 - Submit to the Claude community marketplace only after validation, hosted endpoint review, and screenshots are complete.
-- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` as the current review package.
+- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` as the current core review package.
+- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip` as the current generative UI review package.
 
 ### Skill Installer
 

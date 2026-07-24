@@ -6,7 +6,7 @@
   "listing": {
     "pluginName": "JSONX Generative UI",
     "shortDescription": "Generate, validate, and render JSONX UI payloads.",
-    "longDescription": "JSONX Generative UI packages two workflows. The core JSONX skill helps agents work with JSONX and JXM package usage, examples, rendering behavior, and tests. The generative UI skill helps agents create safe jsonx.generative-ui.v1 payloads, validate them against an allowlist, write local handoff files for IDE renderers, and send approved payloads to the hosted JSONX renderer. The renderer app is stateless and treats JSONX as data, not code.",
+    "longDescription": "JSONX Generative UI packages the generated interface workflow as a separate skill and Codex plugin. It helps agents create safe jsonx.generative-ui.v1 payloads, validate them against an allowlist, write local handoff files for IDE renderers, and send approved payloads to the hosted JSONX renderer. The renderer app is stateless and treats JSONX as data, not code.",
     "category": "Developer Tools",
     "websiteUrl": "https://jsonx.net/generative-ui.html",
     "supportUrl": "https://github.com/repetere/jsonx/issues",
@@ -37,22 +37,17 @@
   },
   "bundledSkills": [
     {
-      "name": "jsonx",
-      "path": "plugins/jsonx-generative-ui-plugin/skills/jsonx/SKILL.md",
-      "purpose": "Core JSONX and JXM package work."
-    },
-    {
       "name": "jsonx-generative-ui",
       "path": "plugins/jsonx-generative-ui-plugin/skills/jsonx-generative-ui/SKILL.md",
       "purpose": "Conditional generated UI payload creation, validation, and handoff."
     }
   ],
   "starterPrompts": [
-    "Use JSONX to review this JXM payload and explain how it renders.",
     "Use JSONX Generative UI to create a safe JSONX handoff file for a support triage screen.",
     "Render a JSONX support triage UI with metrics, a short table, and two actions.",
     "Create a JSONX checklist for a privacy review workflow.",
-    "Create a JSONX quiz that teaches the safe generated-output profile."
+    "Create a JSONX quiz that teaches the safe generated-output profile.",
+    "Render a JSONX UI with the subtle-enter motion profile."
   ],
   "positiveTestCases": [
     {
@@ -84,11 +79,11 @@
       "fixtureData": "plugins/jsonx-generative-ui-plugin/fixtures/motion-subtle.json"
     },
     {
-      "id": "core-jsonx-request",
-      "userPrompt": "Use JSONX to explain how this JXM payload would render in React.",
-      "expectedBehavior": "Uses the core JSONX skill without invoking the renderer app unless the user asks for generated UI.",
-      "expectedResultShape": "Plain text explanation with file or code references when relevant.",
-      "fixtureData": "No external data required."
+      "id": "handoff-request",
+      "userPrompt": "Create a JSONX generated UI file under .jsonx/ui/ for a checklist.",
+      "expectedBehavior": "Writes a validated handoff file with the jsonx.generative-ui.v1 envelope.",
+      "expectedResultShape": "DemoShell containing Checklist or Alert components.",
+      "fixtureData": "plugins/jsonx-generative-ui-plugin/fixtures/checklist.json"
     }
   ],
   "negativeTestCases": [
@@ -124,7 +119,7 @@
     "skillInstallerEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
     "screenshotsDirectory": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/"
   },
-  "releaseNotes": "Initial submission of the JSONX Generative UI app-plus-skills plugin. It includes core JSONX workflow help, safe generated UI payload creation, validation fixtures, local handoff support, and a stateless hosted MCP renderer app.",
+  "releaseNotes": "Initial submission of the JSONX Generative UI app-plus-skills plugin. It includes safe generated UI payload creation, validation fixtures, local handoff support, optional renderer-owned motion, and a stateless hosted MCP renderer app.",
   "manualBeforeSubmit": [
     "Confirm OpenAI developer or business identity verification.",
     "Confirm the submitter has Apps Management write access.",

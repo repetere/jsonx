@@ -45,14 +45,24 @@ const installerSurfaces = ["codex", "claude", "opencode"];
 const installerSkills = ["jsonx", "jsonx-generative-ui", "all"];
 const storeListingSources = [
   {
-    surface: "OpenAI plugin portal draft",
-    source: path.join(intentRoot, "store-listings", "openai-plugin-submission.json"),
-    outputFile: "openai-plugin-submission.json",
+    surface: "OpenAI core JSONX plugin portal draft",
+    source: path.join(intentRoot, "store-listings", "openai-jsonx-plugin-submission.json"),
+    outputFile: "openai-jsonx-plugin-submission.json",
   },
   {
-    surface: "Claude Code community submission draft",
-    source: path.join(intentRoot, "store-listings", "claude-code-community-submission.json"),
-    outputFile: "claude-code-community-submission.json",
+    surface: "OpenAI generative UI plugin portal draft",
+    source: path.join(intentRoot, "store-listings", "openai-generative-ui-plugin-submission.json"),
+    outputFile: "openai-generative-ui-plugin-submission.json",
+  },
+  {
+    surface: "Claude Code core JSONX community submission draft",
+    source: path.join(intentRoot, "store-listings", "claude-code-jsonx-submission.json"),
+    outputFile: "claude-code-jsonx-submission.json",
+  },
+  {
+    surface: "Claude Code generative UI community submission draft",
+    source: path.join(intentRoot, "store-listings", "claude-code-generative-ui-submission.json"),
+    outputFile: "claude-code-generative-ui-submission.json",
   },
 ];
 
@@ -786,58 +796,79 @@ async function buildCodexInstallEvidence({ skip }) {
       "codex plugin list available",
       run("codex plugin list available", codexCli, ["plugin", "list", "--available", "--json"], { capture: true, env }),
     );
-    const availablePlugin = available.available?.find((plugin) => plugin.pluginId === "jsonx-generative-ui-plugin@jsonx-local");
-    assertEvidence(availablePlugin, "Codex available list did not include jsonx-generative-ui-plugin@jsonx-local");
+    const codexPlugins = [
+      {
+        pluginId: "jsonx-codex-plugin@jsonx-local",
+        cachedFiles: [".codex-plugin/plugin.json", "README.md", "skills/jsonx/SKILL.md"],
+      },
+      {
+        pluginId: "jsonx-generative-ui-plugin@jsonx-local",
+        cachedFiles: [
+          ".codex-plugin/plugin.json",
+          "README.md",
+          "skills/jsonx-generative-ui/SKILL.md",
+          "fixtures/support-triage.json",
+          "scripts/validate-jsonx-ui.py",
+        ],
+      },
+    ];
+    const availablePlugins = codexPlugins.map((expected) => {
+      const plugin = available.available?.find((item) => item.pluginId === expected.pluginId);
+      assertEvidence(plugin, `Codex available list did not include ${expected.pluginId}`);
+      return plugin;
+    });
     steps.push({
       id: "available-list",
       command: "codex plugin list --available --json",
-      result: sanitizeEvidence({ plugin: availablePlugin }, replacements),
+      result: sanitizeEvidence({ plugins: availablePlugins }, replacements),
     });
 
-    const pluginAdd = parseJsonOutput(
-      "codex plugin add",
-      run("codex plugin add", codexCli, ["plugin", "add", "jsonx-generative-ui-plugin@jsonx-local", "--json"], {
-        capture: true,
-        env,
-      }),
-    );
-    assertEvidence(pluginAdd.pluginId === "jsonx-generative-ui-plugin@jsonx-local", "Codex plugin add returned the wrong plugin id");
-    steps.push({
-      id: "plugin-add",
-      command: "codex plugin add jsonx-generative-ui-plugin@jsonx-local --json",
-      result: sanitizeEvidence(pluginAdd, replacements),
-    });
+    const installedPaths = new Map();
+    for (const expected of codexPlugins) {
+      const pluginAdd = parseJsonOutput(
+        `codex plugin add ${expected.pluginId}`,
+        run("codex plugin add", codexCli, ["plugin", "add", expected.pluginId, "--json"], {
+          capture: true,
+          env,
+        }),
+      );
+      assertEvidence(pluginAdd.pluginId === expected.pluginId, `Codex plugin add returned the wrong plugin id for ${expected.pluginId}`);
+      installedPaths.set(expected.pluginId, pluginAdd.installedPath);
+      steps.push({
+        id: `plugin-add-${expected.pluginId.replace(/[@.]/g, "-")}`,
+        command: `codex plugin add ${expected.pluginId} --json`,
+        result: sanitizeEvidence(pluginAdd, replacements),
+      });
+    }
 
     const installed = parseJsonOutput(
       "codex plugin list installed",
       run("codex plugin list installed", codexCli, ["plugin", "list", "--json"], { capture: true, env }),
     );
-    const installedPlugin = installed.installed?.find((plugin) => plugin.pluginId === "jsonx-generative-ui-plugin@jsonx-local");
-    assertEvidence(installedPlugin?.enabled === true, "Codex installed list did not show the plugin enabled");
+    const installedPlugins = codexPlugins.map((expected) => {
+      const plugin = installed.installed?.find((item) => item.pluginId === expected.pluginId);
+      assertEvidence(plugin?.enabled === true, `Codex installed list did not show ${expected.pluginId} enabled`);
+      return plugin;
+    });
     steps.push({
       id: "installed-list",
       command: "codex plugin list --json",
-      result: sanitizeEvidence({ plugin: installedPlugin }, replacements),
+      result: sanitizeEvidence({ plugins: installedPlugins }, replacements),
     });
 
-    const installedPath = pluginAdd.installedPath;
-    const cachedFiles = [
-      ".codex-plugin/plugin.json",
-      "README.md",
-      "skills/jsonx/SKILL.md",
-      "skills/jsonx-generative-ui/SKILL.md",
-      "fixtures/support-triage.json",
-      "scripts/validate-jsonx-ui.py",
-    ];
     const cachedFileChecks = [];
-    for (const file of cachedFiles) {
-      const filePath = path.join(installedPath, file);
-      const present = await fileExists(filePath);
-      assertEvidence(present, `Codex plugin cache is missing ${file}`);
-      cachedFileChecks.push({
-        path: sanitizeEvidence(filePath, replacements),
-        present,
-      });
+    for (const expected of codexPlugins) {
+      const installedPath = installedPaths.get(expected.pluginId);
+      for (const file of expected.cachedFiles) {
+        const filePath = path.join(installedPath, file);
+        const present = await fileExists(filePath);
+        assertEvidence(present, `Codex plugin cache for ${expected.pluginId} is missing ${file}`);
+        cachedFileChecks.push({
+          pluginId: expected.pluginId,
+          path: sanitizeEvidence(filePath, replacements),
+          present,
+        });
+      }
     }
     steps.push({
       id: "cache-files",
@@ -848,15 +879,18 @@ async function buildCodexInstallEvidence({ skip }) {
     return {
       generatedAt: new Date().toISOString(),
       source: "codex plugin CLI",
-      note: "This evidence installs the repo-local JSONX Codex plugin from the repo-local marketplace using an isolated CODEX_HOME.",
+      note: "This evidence installs the repo-local core JSONX and generative UI Codex plugins from the repo-local marketplace using an isolated CODEX_HOME.",
       skipped: false,
       codexCli: sanitizeEvidence(codexCli, replacements),
       tempHome: "$CODEX_HOME",
+      pluginIds: codexPlugins.map((plugin) => plugin.pluginId),
       checks: {
         marketplaceAdded: true,
         availableBeforeInstall: true,
-        pluginInstalled: true,
-        pluginEnabled: true,
+        corePluginInstalled: true,
+        generativeUiPluginInstalled: true,
+        corePluginEnabled: true,
+        generativeUiPluginEnabled: true,
         cachedFilesPresent: true,
       },
       steps,
@@ -886,7 +920,18 @@ async function buildClaudeValidationEvidence({ skip }) {
     [repoRoot, "$REPO_ROOT"],
   ];
   const env = { npm_config_cache: tempCache };
-  const pluginPath = path.join(repoRoot, "plugins", "claude-jsonx-plugin");
+  const pluginTargets = [
+    {
+      id: "jsonx",
+      path: path.join(repoRoot, "plugins", "claude-jsonx-plugin"),
+      commandPath: "./plugins/claude-jsonx-plugin",
+    },
+    {
+      id: "jsonx-generative-ui",
+      path: path.join(repoRoot, "plugins", "claude-jsonx-generative-ui-plugin"),
+      commandPath: "./plugins/claude-jsonx-generative-ui-plugin",
+    },
+  ];
   const steps = [];
 
   console.log("capturing Claude Code plugin validation evidence");
@@ -905,31 +950,37 @@ async function buildClaudeValidationEvidence({ skip }) {
       stdout: sanitizeEvidence(version, replacements),
     });
 
-    const validation = run(
-      "claude plugin validate",
-      "npm",
-      ["exec", "--yes", "--package", claudeCodePackage, "--", "claude", "plugin", "validate", "./plugins/claude-jsonx-plugin"],
-      { capture: true, env },
-    );
-    assertEvidence(validation.includes("Validation passed"), "claude plugin validate did not report success");
-    steps.push({
-      id: "plugin-validate",
-      command: `npm exec --yes --package ${claudeCodePackage} -- claude plugin validate ./plugins/claude-jsonx-plugin`,
-      stdout: sanitizeEvidence(validation.split("\n").filter(Boolean), replacements),
-    });
+    for (const target of pluginTargets) {
+      const validation = run(
+        `claude plugin validate ${target.commandPath}`,
+        "npm",
+        ["exec", "--yes", "--package", claudeCodePackage, "--", "claude", "plugin", "validate", target.commandPath],
+        { capture: true, env },
+      );
+      assertEvidence(validation.includes("Validation passed"), `claude plugin validate did not report success for ${target.id}`);
+      steps.push({
+        id: `plugin-validate-${target.id}`,
+        command: `npm exec --yes --package ${claudeCodePackage} -- claude plugin validate ${target.commandPath}`,
+        stdout: sanitizeEvidence(validation.split("\n").filter(Boolean), replacements),
+      });
+    }
 
     return {
       generatedAt: new Date().toISOString(),
       source: "claude plugin validate",
-      note: "This evidence runs Claude Code from the npm package with a temporary npm cache and validates the JSONX Claude Code plugin manifest.",
+      note: "This evidence runs Claude Code from the npm package with a temporary npm cache and validates the core JSONX and generative UI Claude Code plugin manifests.",
       skipped: false,
       claudeCodePackage,
       claudeVersion: version,
-      pluginPath: sanitizeEvidence(pluginPath, replacements),
+      plugins: pluginTargets.map((target) => ({
+        id: target.id,
+        path: sanitizeEvidence(target.path, replacements),
+      })),
       tempNpmCache: "$NPM_CACHE",
       checks: {
         cliAvailableViaNpmExec: true,
-        pluginValidationPassed: true,
+        corePluginValidationPassed: true,
+        generativeUiPluginValidationPassed: true,
       },
       steps,
     };
@@ -1093,16 +1144,20 @@ function validateStoreListing(source, data) {
     errors.push("sourceDocsChecked must list checked public docs");
   }
   if (data.surface === "openai-plugin-portal") {
-    if (data.submissionType !== "app-plus-skills") errors.push("OpenAI draft must be app-plus-skills");
-    if (!data.mcpServer?.url) errors.push("OpenAI draft requires mcpServer.url");
-    if (!Array.isArray(data.bundledSkills) || data.bundledSkills.length !== 2) {
-      errors.push("OpenAI draft must include the two bundled skills");
+    if (!["skills-plugin", "app-plus-skills"].includes(data.submissionType)) {
+      errors.push("OpenAI draft must be skills-plugin or app-plus-skills");
+    }
+    if (data.submissionType === "app-plus-skills" && !data.mcpServer?.url) {
+      errors.push("OpenAI app-plus-skills draft requires mcpServer.url");
+    }
+    if (!Array.isArray(data.bundledSkills) || data.bundledSkills.length < 1) {
+      errors.push("OpenAI draft must include at least one bundled skill");
     }
   }
   if (data.surface === "claude-code-community-marketplace") {
     if (!data.marketplace?.target) errors.push("Claude draft requires marketplace.target");
-    if (!Array.isArray(data.skills) || data.skills.length !== 2) {
-      errors.push("Claude draft must include the two plugin skills");
+    if (!Array.isArray(data.skills) || data.skills.length < 1) {
+      errors.push("Claude draft must include at least one plugin skill");
     }
   }
   if (errors.length) {
@@ -1834,7 +1889,11 @@ async function buildNpmBoundaryEvidence() {
     "submission-audit",
     "external-gate-evidence",
     "openai-plugin-submission",
+    "openai-jsonx-plugin-submission",
+    "openai-generative-ui-plugin-submission",
     "claude-code-community-submission",
+    "claude-code-jsonx-submission",
+    "claude-code-generative-ui-submission",
   ];
   const blocked = files.filter(
     (file) => blockedPrefixes.some((prefix) => file.startsWith(prefix)) || blockedTerms.some((term) => file.includes(term)),
@@ -1976,34 +2035,51 @@ function buildSubmissionAudit(manifest, externalGateEvidence) {
     },
     {
       id: "REQ-CODEX-PLUGIN",
-      requirement: "Package the JSONX workflow as a Codex plugin with core and generative UI skills, fixtures, validator, and development marketplace entry.",
-      status: packagePresent(manifest, "Codex plugin") && packagePresent(manifest, "Codex local marketplace") && codexInstallOk ? "proved" : "incomplete",
+      requirement: "Package the core JSONX workflow and generative UI workflow as separate Codex plugins with development marketplace entries.",
+      status:
+        packagePresent(manifest, "Codex core JSONX plugin") &&
+        packagePresent(manifest, "Codex generative UI plugin") &&
+        packagePresent(manifest, "Codex local marketplace") &&
+        codexInstallOk
+          ? "proved"
+          : "incomplete",
       githubIssue: "#1112",
       evidence: [
+        "plugins/jsonx-codex-plugin/",
         "plugins/jsonx-generative-ui-plugin/",
         ".agents/plugins/marketplace.json",
         manifest.codexInstallEvidence?.path,
-        manifest.packages.find((item) => item.surface === "Codex plugin")?.path,
+        manifest.packages.find((item) => item.surface === "Codex core JSONX plugin")?.path,
+        manifest.packages.find((item) => item.surface === "Codex generative UI plugin")?.path,
         manifest.packages.find((item) => item.surface === "Codex local marketplace")?.path,
       ].filter(Boolean),
       checks: {
-        pluginPackagePresent: packagePresent(manifest, "Codex plugin"),
+        corePluginPackagePresent: packagePresent(manifest, "Codex core JSONX plugin"),
+        generativeUiPluginPackagePresent: packagePresent(manifest, "Codex generative UI plugin"),
         marketplacePackagePresent: packagePresent(manifest, "Codex local marketplace"),
         isolatedInstallOk: codexInstallOk,
       },
     },
     {
       id: "REQ-CLAUDE-PLUGIN",
-      requirement: "Package the JSONX workflow as a Claude Code plugin with separate core and generative UI skills.",
-      status: packagePresent(manifest, "Claude Code plugin") && claudeValidationOk ? "proved" : "incomplete",
+      requirement: "Package the core JSONX workflow and generative UI workflow as separate Claude Code plugins.",
+      status:
+        packagePresent(manifest, "Claude Code core JSONX plugin") &&
+        packagePresent(manifest, "Claude Code generative UI plugin") &&
+        claudeValidationOk
+          ? "proved"
+          : "incomplete",
       githubIssue: "#1113",
       evidence: [
         "plugins/claude-jsonx-plugin/",
+        "plugins/claude-jsonx-generative-ui-plugin/",
         manifest.claudeValidationEvidence?.path,
-        manifest.packages.find((item) => item.surface === "Claude Code plugin")?.path,
+        manifest.packages.find((item) => item.surface === "Claude Code core JSONX plugin")?.path,
+        manifest.packages.find((item) => item.surface === "Claude Code generative UI plugin")?.path,
       ].filter(Boolean),
       checks: {
-        claudePackagePresent: packagePresent(manifest, "Claude Code plugin"),
+        claudeCorePackagePresent: packagePresent(manifest, "Claude Code core JSONX plugin"),
+        claudeGenerativeUiPackagePresent: packagePresent(manifest, "Claude Code generative UI plugin"),
         claudeManifestValidationOk: claudeValidationOk,
       },
     },
@@ -2092,19 +2168,31 @@ function buildSubmissionAudit(manifest, externalGateEvidence) {
     },
     {
       id: "REQ-STORE-DRAFTS",
-      requirement: "Prepare development submission material for OpenAI/Codex and Claude Code app or plugin store review.",
-      status: storeListingPresent(manifest, "OpenAI plugin portal draft") && storeListingPresent(manifest, "Claude Code community submission draft") ? "proved" : "incomplete",
+      requirement: "Prepare development submission material for OpenAI/Codex and Claude Code review with separate core JSONX and generative UI plugin drafts.",
+      status:
+        storeListingPresent(manifest, "OpenAI core JSONX plugin portal draft") &&
+        storeListingPresent(manifest, "OpenAI generative UI plugin portal draft") &&
+        storeListingPresent(manifest, "Claude Code core JSONX community submission draft") &&
+        storeListingPresent(manifest, "Claude Code generative UI community submission draft")
+          ? "proved"
+          : "incomplete",
       githubIssue: "#1115",
       evidence: [
         "apps/jsonx-renderer-app/chatgpt-app-submission.json",
-        "docs/intent/generative-ui-plugin/store-listings/openai-plugin-submission.json",
-        "docs/intent/generative-ui-plugin/store-listings/claude-code-community-submission.json",
-        manifest.storeListings.find((item) => item.surface === "OpenAI plugin portal draft")?.path,
-        manifest.storeListings.find((item) => item.surface === "Claude Code community submission draft")?.path,
+        "docs/intent/generative-ui-plugin/store-listings/openai-jsonx-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json",
+        "docs/intent/generative-ui-plugin/store-listings/claude-code-jsonx-submission.json",
+        "docs/intent/generative-ui-plugin/store-listings/claude-code-generative-ui-submission.json",
+        manifest.storeListings.find((item) => item.surface === "OpenAI core JSONX plugin portal draft")?.path,
+        manifest.storeListings.find((item) => item.surface === "OpenAI generative UI plugin portal draft")?.path,
+        manifest.storeListings.find((item) => item.surface === "Claude Code core JSONX community submission draft")?.path,
+        manifest.storeListings.find((item) => item.surface === "Claude Code generative UI community submission draft")?.path,
       ].filter(Boolean),
       checks: {
-        openAiDraftPresent: storeListingPresent(manifest, "OpenAI plugin portal draft"),
-        claudeDraftPresent: storeListingPresent(manifest, "Claude Code community submission draft"),
+        openAiCoreDraftPresent: storeListingPresent(manifest, "OpenAI core JSONX plugin portal draft"),
+        openAiGenerativeUiDraftPresent: storeListingPresent(manifest, "OpenAI generative UI plugin portal draft"),
+        claudeCoreDraftPresent: storeListingPresent(manifest, "Claude Code core JSONX community submission draft"),
+        claudeGenerativeUiDraftPresent: storeListingPresent(manifest, "Claude Code generative UI community submission draft"),
       },
     },
     {
@@ -2196,7 +2284,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence) {
     source: "JSONX generative UI submission artifact manifest",
     gitCommit,
     objective:
-      "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; Codex and Claude plugin packages; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
+    "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
     summary,
     requirements,
   };
@@ -2257,12 +2345,12 @@ async function writeReviewSummary(manifest) {
       ? `- \`${manifest.skillInstallerEvidence.path}\` covers ${manifest.skillInstallerEvidence.dryRunMatrixCount} installer dry-runs and ${manifest.skillInstallerEvidence.installSurfaceCount} isolated installs.`
       : "- Skill installer evidence was not generated.",
     manifest.codexInstallEvidence && !manifest.codexInstallEvidence.skipped
-      ? `- \`${manifest.codexInstallEvidence.path}\` records an isolated Codex marketplace install with ${manifest.codexInstallEvidence.stepCount} checks.`
+      ? `- \`${manifest.codexInstallEvidence.path}\` records isolated Codex marketplace installs for the core and generative UI plugins with ${manifest.codexInstallEvidence.stepCount} checks.`
       : manifest.codexInstallEvidence
         ? `- \`${manifest.codexInstallEvidence.path}\` records why Codex CLI install evidence was skipped.`
         : "- Codex install evidence was not generated.",
     manifest.claudeValidationEvidence && !manifest.claudeValidationEvidence.skipped
-      ? `- \`${manifest.claudeValidationEvidence.path}\` records Claude Code plugin validation with ${manifest.claudeValidationEvidence.stepCount} checks.`
+      ? `- \`${manifest.claudeValidationEvidence.path}\` records Claude Code plugin validation for the core and generative UI plugins with ${manifest.claudeValidationEvidence.stepCount} checks.`
       : manifest.claudeValidationEvidence
         ? `- \`${manifest.claudeValidationEvidence.path}\` records why Claude validation evidence was skipped.`
         : "- Claude validation evidence was not generated.",
@@ -2289,8 +2377,8 @@ async function writeReviewSummary(manifest) {
     "",
     "## Submission Notes",
     "",
-    "- Codex development install uses `.agents/plugins/marketplace.json` from the repo root.",
-    "- Claude Code package remains local until interactive Claude smoke prompts and marketplace submission can run in a Claude-enabled environment.",
+    "- Codex development installs use `.agents/plugins/marketplace.json` from the repo root.",
+    "- Claude Code packages remain local until interactive Claude smoke prompts and marketplace submission can run in a Claude-enabled environment.",
     "- ChatGPT app submission starts from `apps/jsonx-renderer-app/chatgpt-app-submission.json` and the hosted MCP endpoint.",
     "- These artifacts live under `docs/intent/`, which is excluded from the root `jsonx` npm package.",
     "",
@@ -2362,19 +2450,35 @@ async function main() {
 
   const packages = [];
   packages.push({
-    surface: "Codex plugin",
+    surface: "Codex core JSONX plugin",
     ...(await zipDirectory(
-      "Codex plugin",
+      "Codex core JSONX plugin",
+      path.join(repoRoot, "plugins", "jsonx-codex-plugin"),
+      path.join(packagesDir, "jsonx-codex-plugin.zip"),
+    )),
+  });
+  packages.push({
+    surface: "Codex generative UI plugin",
+    ...(await zipDirectory(
+      "Codex generative UI plugin",
       path.join(repoRoot, "plugins", "jsonx-generative-ui-plugin"),
       path.join(packagesDir, "jsonx-generative-ui-codex-plugin.zip"),
     )),
   });
   packages.push({
-    surface: "Claude Code plugin",
+    surface: "Claude Code core JSONX plugin",
     ...(await zipDirectory(
-      "Claude Code plugin",
+      "Claude Code core JSONX plugin",
       path.join(repoRoot, "plugins", "claude-jsonx-plugin"),
       path.join(packagesDir, "jsonx-claude-code-plugin.zip"),
+    )),
+  });
+  packages.push({
+    surface: "Claude Code generative UI plugin",
+    ...(await zipDirectory(
+      "Claude Code generative UI plugin",
+      path.join(repoRoot, "plugins", "claude-jsonx-generative-ui-plugin"),
+      path.join(packagesDir, "jsonx-generative-ui-claude-code-plugin.zip"),
     )),
   });
 

@@ -27,8 +27,10 @@ Current implementation baseline:
 - `apps/jsonx-renderer-app/` contains a runnable stateless MCP app for local developer-mode testing.
 - `apps/jsonx-renderer-app/` supports optional renderer-owned GSAP motion with `JSONX_ENABLE_GSAP=1`.
 - `apps/jsonx-renderer-app/netlify/functions/jsonx-renderer.mjs` and `apps/jsonx-renderer-app/netlify.toml` provide a Netlify serverless deployment path for HTTPS hosting.
-- `plugins/jsonx-generative-ui-plugin/` contains the Codex plugin package.
-- `plugins/claude-jsonx-plugin/` contains the Claude Code plugin package.
+- `plugins/jsonx-codex-plugin/` contains the core JSONX Codex plugin package.
+- `plugins/jsonx-generative-ui-plugin/` contains the JSONX generative UI Codex plugin package.
+- `plugins/claude-jsonx-plugin/` contains the core JSONX Claude Code plugin package.
+- `plugins/claude-jsonx-generative-ui-plugin/` contains the JSONX generative UI Claude Code plugin package.
 - `skills/codex/`, `skills/claude/`, and `skills/opencode/` contain installable skill source folders.
 - `skills/scripts/install-jsonx-skill.mjs` installs the `jsonx` and `jsonx-generative-ui` skill families for Codex, Claude Code, or OpenCode without mixing the two workflows.
 - `docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs` creates review packages, store listing drafts, screenshots, golden-prompt evidence, renderer motion evidence, browser demo mode evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, a requirement audit, hashes, and npm package-boundary evidence under `docs/intent/generative-ui-plugin/submission-artifacts/current/`.
@@ -106,6 +108,7 @@ Core allowlist:
 - `SliderPoll`
 - `ChoiceList`
 - `DemoShell`
+- `SectionHeader`
 - `MetricRow`
 - `DataTable`
 - `Checklist`
@@ -228,19 +231,31 @@ Optional animation:
 - Keep model-visible payloads declarative. Example: `motionProfile: "subtle-enter"`, not animation code.
 - The local renderer enables GSAP with `JSONX_ENABLE_GSAP=1`; otherwise it uses CSS fallback motion.
 
-### 5. Codex plugin package
+### 5. Codex plugin packages
 
-The Codex plugin should package the workflow around the hosted renderer and local file handoff.
+Codex should have two installable plugin packages so users can install core JSONX help without generated UI instructions:
 
-Proposed layout:
+- `jsonx-codex-plugin`: core JSONX/JXM package workflow.
+- `jsonx-generative-ui-plugin`: generated UI workflow, fixtures, validator, hosted renderer handoff, and optional app wiring notes.
+
+Core package layout:
+
+```text
+jsonx-codex-plugin/
+  .codex-plugin/
+    plugin.json
+  skills/
+    jsonx/
+      SKILL.md
+```
+
+Generative UI package layout:
 
 ```text
 jsonx-generative-ui-plugin/
   .codex-plugin/
     plugin.json
   skills/
-    jsonx/
-      SKILL.md
     jsonx-generative-ui/
       SKILL.md
   .app.json
@@ -263,9 +278,14 @@ jsonx-generative-ui-plugin/
     bad-oversized.json
 ```
 
-Plugin responsibilities:
+Core plugin responsibilities:
 
-- Keep `jsonx` and `jsonx-generative-ui` as separate skills.
+- Keep `jsonx` as the only bundled skill.
+- Help Codex work with package APIs, JXM examples, rendering behavior, tests, and docs.
+- Avoid Apps SDK app wiring, generated UI fixtures, hosted renderer assumptions, and GSAP guidance.
+
+Generative UI plugin responsibilities:
+
 - Tell Codex when to generate UI and when to answer normally.
 - Generate `jsonx.generative-ui.v1` payloads.
 - Validate payloads before presenting them as usable output.
@@ -273,6 +293,7 @@ Plugin responsibilities:
 - Reference the hosted Apps SDK app through `.app.json` once the approved app ID exists.
 - Optionally include `.mcp.json` for local validation or development workflows.
 - Include fixtures and a validation script so users can test the contract without ChatGPT inline UI.
+- Remain installable separately from the core JSONX plugin.
 
 The plugin should start as a local or workspace plugin. Public submission should wait until the hosted app has screenshots, test prompts, privacy policy, terms link, and stable metadata.
 
@@ -281,9 +302,10 @@ The plugin should start as a local or workspace plugin. Public submission should
 Package the same workflows for Claude Code and OpenCode:
 
 - Claude Code project skills under `skills/claude/<skill-name>/`.
-- Claude Code plugin under `plugins/claude-jsonx-plugin/`.
+- Core Claude Code plugin under `plugins/claude-jsonx-plugin/`.
+- Generative UI Claude Code plugin under `plugins/claude-jsonx-generative-ui-plugin/`.
 - OpenCode project skills under `skills/opencode/<skill-name>/`.
-- Claude Code plugin submission plan for JSONX core and generative UI when the package format and review path are ready.
+- Separate Claude Code plugin submission plans for JSONX core and generative UI when the package format and review path are ready.
 - OpenCode install documentation that uses first-party `SKILL.md` discovery instead of a separate plugin unless there is a real need.
 
 Submission work should keep the surfaces separate:
@@ -307,7 +329,7 @@ Update the JSONX GitHub Pages site after the new skills, plugin scaffold, and ho
 
 - Add install snippets for Codex, Claude Code, and OpenCode.
 - Split core JSONX skills from generative UI skills.
-- Link to the Codex plugin folder once it is in the repo.
+- Link to the core and generative UI plugin folders once they are in the repo.
 - Describe the hosted Apps SDK renderer as the inline UI path.
 - Mention optional renderer-owned animation as a plugin/app feature, not a core package dependency.
 
@@ -469,7 +491,7 @@ Exit criteria:
 
 - [#1110 Create shared jsonx.generative-ui.v1 schema and fixture validation suite](https://github.com/repetere/jsonx/issues/1110)
 - [#1111 Build hosted JSONX Apps SDK renderer app](https://github.com/repetere/jsonx/issues/1111)
-- [#1112 Package JSONX Codex plugin with core and generative UI skills](https://github.com/repetere/jsonx/issues/1112)
+- [#1112 Package JSONX Codex plugins for core and generative UI workflows](https://github.com/repetere/jsonx/issues/1112)
 - [#1113 Add Claude Code and OpenCode installable skills for JSONX](https://github.com/repetere/jsonx/issues/1113)
 - [#1114 Add optional renderer-owned GSAP motion profiles for generated UI](https://github.com/repetere/jsonx/issues/1114)
 - [#1115 Prepare Codex and Claude Code plugin submission packages for JSONX](https://github.com/repetere/jsonx/issues/1115)

@@ -2,8 +2,10 @@
 
 These files collect the form-ready listing inputs for the public plugin submission paths:
 
-- `openai-plugin-submission.json` for the OpenAI plugin portal.
-- `claude-code-community-submission.json` for the Claude Code community marketplace.
+- `openai-jsonx-plugin-submission.json` for the OpenAI core JSONX plugin portal draft.
+- `openai-generative-ui-plugin-submission.json` for the OpenAI generative UI app-plus-skills portal draft.
+- `claude-code-jsonx-submission.json` for the Claude Code core JSONX community marketplace draft.
+- `claude-code-generative-ui-submission.json` for the Claude Code generative UI community marketplace draft.
 
 They are source drafts, not proof that a public marketplace submission was sent. Portal submission still requires account access, publisher verification, final logo review, policy attestations, and hosted app review where applicable.
 
