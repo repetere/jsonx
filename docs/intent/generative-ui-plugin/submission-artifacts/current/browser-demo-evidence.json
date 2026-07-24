@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-07-24T09:36:18.283Z",
+  "generatedAt": "2026-07-24T09:51:18.829Z",
   "source": "local public browser demo harness",
   "note": "This evidence serves site/generative-ui.html locally, uses a separate temporary CORS endpoint, and verifies fixture, paste, and endpoint modes at mobile width.",
   "skipped": false,
   "staticSource": "site/generative-ui.html",
-  "localSiteUrl": "http://127.0.0.1:60848/generative-ui.html",
+  "localSiteUrl": "http://127.0.0.1:61847/generative-ui.html",
   "endpointRequests": [
     {
       "method": "OPTIONS",
-      "origin": "http://127.0.0.1:60848",
+      "origin": "http://127.0.0.1:61847",
       "requestedHeaders": "authorization,content-type",
       "requestedMethod": "POST"
     },
     {
       "method": "POST",
-      "origin": "http://127.0.0.1:60848",
+      "origin": "http://127.0.0.1:61847",
       "contentType": "application/json",
       "authorizationHeaderPresent": true,
       "authorizationScheme": "Bearer",
@@ -47,7 +47,7 @@
           "open_customer_timeline"
         ],
         "actionLog": [
-          "5:36:18 AM draft_refund_response"
+          "5:51:18 AM draft_refund_response"
         ],
         "endpointFieldsHidden": true,
         "localStorageKeys": [],

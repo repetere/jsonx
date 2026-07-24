@@ -10,3 +10,5 @@ html,body{max-width:100%;overflow-x:hidden}.hero,.content-section,.site-footer,.
 .legal-section{max-width:980px}.legal-section h1{font-size:clamp(38px,5vw,58px)}.legal-section .section-heading p{font-size:18px}.legal-section .notice-box{margin-top:28px}.legal-section .notice-box h2{font-size:22px;line-height:1.2;margin-top:22px}.legal-section .notice-box h2:first-child{margin-top:0}.legal-section .notice-box p{color:var(--muted);line-height:1.65;margin-top:8px}.legal-section .notice-box a{color:var(--teal-dark);font-weight:750}
 
 .skill-family{color:var(--teal-dark);font-size:12px;font-weight:850;letter-spacing:.08em;margin-bottom:8px;text-transform:uppercase}.skill-card details{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}.skill-card summary{cursor:pointer;font-weight:800}.skill-card details code{margin-top:8px}
+
+.review-grid p{line-height:1.55}.review-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.review-links a{border:1px solid var(--line);border-radius:8px;color:var(--teal-dark);font-weight:750;padding:9px 11px;text-decoration:none}.review-links a:hover{border-color:rgba(8,123,115,.45);background:var(--teal-soft)}
