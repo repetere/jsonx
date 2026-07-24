@@ -110,6 +110,7 @@ jobs:
             "motion-profile-evidence",
             "browser-demo-evidence",
             "submission-audit",
+            "external-gate-evidence",
             "openai-plugin-submission",
             "claude-code-community-submission",
           ];

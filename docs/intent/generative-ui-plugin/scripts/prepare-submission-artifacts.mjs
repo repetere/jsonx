@@ -24,6 +24,9 @@ const claudeCodePackage = process.env.JSONX_CLAUDE_CODE_PACKAGE || "@anthropic-a
 const openCodePackage = process.env.JSONX_OPENCODE_PACKAGE || "opencode-ai@1.18.4";
 const publicSiteUrl = process.env.JSONX_PUBLIC_SITE_URL || "https://jsonx.net/generative-ui.html";
 const publicSkillsUrl = process.env.JSONX_PUBLIC_SKILLS_URL || "https://jsonx.net/skills/README.md";
+const externalGateEvidenceSource =
+  process.env.JSONX_EXTERNAL_GATE_EVIDENCE || path.join(intentRoot, "external-gate-evidence.json");
+const externalGateEvidenceTemplate = path.join(intentRoot, "external-gate-evidence.template.json");
 
 const validFixtures = [
   "support-triage",
@@ -77,6 +80,12 @@ function artifactPath(filePath) {
     return path.relative(artifactRoot, filePath);
   }
   return relative(filePath);
+}
+
+function evidenceSourcePath(filePath) {
+  const repoRelative = path.relative(repoRoot, filePath);
+  if (!repoRelative.startsWith("..") && !path.isAbsolute(repoRelative)) return repoRelative;
+  return artifactPath(filePath);
 }
 
 function run(label, command, args, options = {}) {
@@ -1823,6 +1832,7 @@ async function buildNpmBoundaryEvidence() {
     "motion-profile-evidence",
     "browser-demo-evidence",
     "submission-audit",
+    "external-gate-evidence",
     "openai-plugin-submission",
     "claude-code-community-submission",
   ];
@@ -1854,8 +1864,74 @@ function screenshotPresent(manifest, purpose) {
   return manifest.screenshots.some((item) => item.purpose === purpose && item.bytes > 0 && item.sha256);
 }
 
-function buildSubmissionAudit(manifest) {
-  const gitCommit = run("git commit for submission audit", "git", ["rev-parse", "HEAD"], { capture: true });
+function externalGateChecks(data) {
+  const appIds = data?.appIds || {};
+  const chatgpt = data?.chatgptDeveloperMode || {};
+  const claude = data?.claudeSmoke || {};
+  const marketplace = data?.marketplaceSubmissions || {};
+
+  const openAiSubmission = marketplace.openai || {};
+  const claudeSubmission = marketplace.claude || {};
+  const policyReview = marketplace.policyReview || {};
+  const chatgptPrompts = Array.isArray(chatgpt.promptsRun) ? chatgpt.promptsRun : [];
+  const claudePrompts = Array.isArray(claude.promptsRun) ? claude.promptsRun : [];
+
+  return {
+    appIdsCaptured: Boolean(appIds.openaiAppId && appIds.openaiPluginId),
+    codexAppMetadataUpdated: Boolean(appIds.codexAppMetadataUpdated === true),
+    chatgptMcpConnected: chatgpt.connectedMcpUrl === hostedMcpUrl,
+    chatgptTranscriptCaptured: Boolean(chatgpt.transcriptUrl || chatgpt.transcriptArtifact),
+    chatgptGoldenPromptsPassed: chatgptPrompts.length >= 7 && chatgptPrompts.every((prompt) => prompt.status === "passed"),
+    claudeAuthenticatedSmokeRan: claude.authenticated === true,
+    claudeSmokePromptsPassed:
+      claudePrompts.some((prompt) => prompt.id === "jsonx-core" && prompt.status === "passed") &&
+      claudePrompts.some((prompt) => prompt.id === "jsonx-generative-ui" && prompt.status === "passed"),
+    openAiSubmissionRecorded: Boolean(openAiSubmission.submitted === true && (openAiSubmission.submissionId || openAiSubmission.url)),
+    claudeSubmissionRecorded: Boolean(claudeSubmission.submitted === true && (claudeSubmission.submissionId || claudeSubmission.url)),
+    policyReviewRecorded: Boolean(policyReview.status === "approved" && policyReview.reviewedBy && policyReview.reviewedAt),
+  };
+}
+
+function summarizeExternalGateEvidence(data, sourceStatus) {
+  const checks = externalGateChecks(data);
+  return {
+    generatedAt: new Date().toISOString(),
+    source: sourceStatus === "provided" ? evidenceSourcePath(externalGateEvidenceSource) : evidenceSourcePath(externalGateEvidenceTemplate),
+    supplied: sourceStatus === "provided",
+    note:
+      sourceStatus === "provided"
+        ? "External gate evidence was supplied and copied into the generated submission artifacts."
+        : "No external gate evidence file was supplied. Copy external-gate-evidence.template.json to external-gate-evidence.json after portal and authenticated smoke steps are complete.",
+    checks,
+    gateStatus: {
+      appIds: checks.appIdsCaptured && checks.codexAppMetadataUpdated ? "proved" : "pending",
+      chatgptDeveloperMode:
+        checks.chatgptMcpConnected && checks.chatgptTranscriptCaptured && checks.chatgptGoldenPromptsPassed ? "proved" : "pending",
+      claudeSmoke: checks.claudeAuthenticatedSmokeRan && checks.claudeSmokePromptsPassed ? "proved" : "pending",
+      marketplaceSubmission:
+        checks.openAiSubmissionRecorded && checks.claudeSubmissionRecorded && checks.policyReviewRecorded ? "proved" : "pending",
+    },
+    evidence: data,
+  };
+}
+
+async function buildExternalGateEvidence() {
+  const sourceExists = await fileExists(externalGateEvidenceSource);
+  const source = sourceExists ? externalGateEvidenceSource : externalGateEvidenceTemplate;
+  const data = await readJson(source);
+  if (data.schemaVersion !== 1) throw new Error(`${relative(source)} must use schemaVersion 1`);
+  if (!data.gates || typeof data.gates !== "object") throw new Error(`${relative(source)} must include gates metadata`);
+  return summarizeExternalGateEvidence(data, sourceExists ? "provided" : "template");
+}
+
+function gateProved(externalGateEvidence, key) {
+  return externalGateEvidence?.gateStatus?.[key] === "proved";
+}
+
+function buildSubmissionAudit(manifest, externalGateEvidence) {
+  const headCommit = run("git commit for submission audit", "git", ["rev-parse", "HEAD"], { capture: true });
+  const dirtyStatus = run("git worktree status for submission audit", "git", ["status", "--short"], { capture: true });
+  const gitCommit = dirtyStatus ? `${headCommit}+worktree` : headCommit;
   const browserDemoOk = manifest.browserDemoEvidence && !manifest.browserDemoEvidence.skipped && allChecksTrue(manifest.browserDemoEvidence.checks);
   const motionOk = manifest.motionProfileEvidence && !manifest.motionProfileEvidence.skipped && allChecksTrue(manifest.motionProfileEvidence.checks);
   const hostedMcpOk = manifest.hostedMcpEvidence && allChecksTrue(manifest.hostedMcpEvidence.checks);
@@ -1871,6 +1947,10 @@ function buildSubmissionAudit(manifest) {
     manifest.npmBoundary.excludedPrefixes?.includes("plugins/") &&
     manifest.npmBoundary.excludedPrefixes?.includes("skills/") &&
     manifest.npmBoundary.excludedTerms?.includes("gsap");
+  const appIdGateOk = gateProved(externalGateEvidence, "appIds");
+  const chatgptTranscriptGateOk = gateProved(externalGateEvidence, "chatgptDeveloperMode");
+  const claudeSmokeGateOk = gateProved(externalGateEvidence, "claudeSmoke");
+  const marketplaceGateOk = gateProved(externalGateEvidence, "marketplaceSubmission");
 
   const requirements = [
     {
@@ -2043,34 +2123,63 @@ function buildSubmissionAudit(manifest) {
     {
       id: "GATE-APP-ID",
       requirement: "Add approved app/plugin IDs to Codex app metadata after OpenAI submission creates them.",
-      status: "external-gated",
+      status: appIdGateOk ? "proved" : "external-gated",
       githubIssue: "#1115",
-      evidence: ["plugins/jsonx-generative-ui-plugin/.app.json", "docs/intent/generative-ui-plugin/submission-readiness.md"],
-      remaining: "Requires approved Apps SDK app/plugin ID from the OpenAI submission flow.",
+      evidence: [
+        "plugins/jsonx-generative-ui-plugin/.app.json",
+        "docs/intent/generative-ui-plugin/submission-readiness.md",
+        manifest.externalGateEvidence?.path,
+      ].filter(Boolean),
+      checks: {
+        appIdsCaptured: externalGateEvidence?.checks?.appIdsCaptured === true,
+        codexAppMetadataUpdated: externalGateEvidence?.checks?.codexAppMetadataUpdated === true,
+      },
+      ...(appIdGateOk ? {} : { remaining: "Requires approved Apps SDK app/plugin ID from the OpenAI submission flow." }),
     },
     {
       id: "GATE-CHATGPT-TRANSCRIPT",
       requirement: "Capture live ChatGPT developer-mode transcripts after connecting the hosted MCP app.",
-      status: "external-gated",
+      status: chatgptTranscriptGateOk ? "proved" : "external-gated",
       githubIssue: "#1115",
-      evidence: [manifest.hostedMcpEvidence?.path, manifest.goldenPromptEvidence?.path].filter(Boolean),
-      remaining: "Requires a connected ChatGPT developer-mode app session. Current evidence is live MCP plus deterministic tool-call evidence.",
+      evidence: [manifest.hostedMcpEvidence?.path, manifest.goldenPromptEvidence?.path, manifest.externalGateEvidence?.path].filter(Boolean),
+      checks: {
+        chatgptMcpConnected: externalGateEvidence?.checks?.chatgptMcpConnected === true,
+        chatgptTranscriptCaptured: externalGateEvidence?.checks?.chatgptTranscriptCaptured === true,
+        chatgptGoldenPromptsPassed: externalGateEvidence?.checks?.chatgptGoldenPromptsPassed === true,
+      },
+      ...(chatgptTranscriptGateOk
+        ? {}
+        : {
+            remaining:
+              "Requires a connected ChatGPT developer-mode app session. Current evidence is live MCP plus deterministic tool-call evidence.",
+          }),
     },
     {
       id: "GATE-CLAUDE-SMOKE",
       requirement: "Run authenticated Claude Code smoke prompts for the Claude Code plugin.",
-      status: "external-gated",
+      status: claudeSmokeGateOk ? "proved" : "external-gated",
       githubIssue: "#1113",
-      evidence: [manifest.claudeValidationEvidence?.path].filter(Boolean),
-      remaining: "Requires an authenticated interactive Claude Code environment. Current evidence proves package validation only.",
+      evidence: [manifest.claudeValidationEvidence?.path, manifest.externalGateEvidence?.path].filter(Boolean),
+      checks: {
+        claudeAuthenticatedSmokeRan: externalGateEvidence?.checks?.claudeAuthenticatedSmokeRan === true,
+        claudeSmokePromptsPassed: externalGateEvidence?.checks?.claudeSmokePromptsPassed === true,
+      },
+      ...(claudeSmokeGateOk
+        ? {}
+        : { remaining: "Requires an authenticated interactive Claude Code environment. Current evidence proves package validation only." }),
     },
     {
       id: "GATE-MARKETPLACE-SUBMISSION",
       requirement: "Submit the OpenAI/Codex and Claude Code app or plugin packages to their public review channels.",
-      status: "external-gated",
+      status: marketplaceGateOk ? "proved" : "external-gated",
       githubIssue: "#1115",
-      evidence: manifest.storeListings.map((item) => item.path),
-      remaining: "Requires portal access and final human/legal review before sending public submissions.",
+      evidence: [...manifest.storeListings.map((item) => item.path), manifest.externalGateEvidence?.path].filter(Boolean),
+      checks: {
+        openAiSubmissionRecorded: externalGateEvidence?.checks?.openAiSubmissionRecorded === true,
+        claudeSubmissionRecorded: externalGateEvidence?.checks?.claudeSubmissionRecorded === true,
+        policyReviewRecorded: externalGateEvidence?.checks?.policyReviewRecorded === true,
+      },
+      ...(marketplaceGateOk ? {} : { remaining: "Requires portal access and final human/legal review before sending public submissions." }),
     },
   ];
 
@@ -2168,6 +2277,11 @@ async function writeReviewSummary(manifest) {
     manifest.submissionAudit
       ? `- \`${manifest.submissionAudit.path}\` maps ${manifest.submissionAudit.requirementCount} requirements to evidence, with ${manifest.submissionAudit.provedCount} proved and ${manifest.submissionAudit.externalGatedCount} external-gated.`
       : "- Submission audit was not generated.",
+    manifest.externalGateEvidence?.supplied
+      ? `- \`${manifest.externalGateEvidence.path}\` records supplied external gate evidence.`
+      : manifest.externalGateEvidence
+        ? `- \`${manifest.externalGateEvidence.path}\` is a pending external gate evidence template copy.`
+        : "- External gate evidence was not generated.",
     "",
     "## Validation",
     "",
@@ -2367,8 +2481,20 @@ async function main() {
     ],
   };
 
+  const externalGateEvidencePath = path.join(artifactRoot, "external-gate-evidence.json");
+  const externalGateEvidence = await buildExternalGateEvidence();
+  await writeJson(externalGateEvidencePath, externalGateEvidence);
+  const externalGateEvidenceArtifact = await hashFile(externalGateEvidencePath);
+  manifest.externalGateEvidence = {
+    ...externalGateEvidenceArtifact,
+    supplied: externalGateEvidence.supplied === true,
+    gateStatus: externalGateEvidence.gateStatus,
+    checks: externalGateEvidence.checks,
+  };
+  manifest.validation.push("external gate evidence validation");
+
   const submissionAuditPath = path.join(artifactRoot, "submission-audit.json");
-  const submissionAudit = buildSubmissionAudit(manifest);
+  const submissionAudit = buildSubmissionAudit(manifest, externalGateEvidence);
   await writeJson(submissionAuditPath, submissionAudit);
   const submissionAuditArtifact = await hashFile(submissionAuditPath);
   manifest.submissionAudit = {

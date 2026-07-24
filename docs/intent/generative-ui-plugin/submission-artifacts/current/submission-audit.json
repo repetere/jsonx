@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T08:20:11.879Z",
+  "generatedAt": "2026-07-24T08:28:47.360Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "5ad6b628d165a26f823de8aa45fbc8edf233918d",
+  "gitCommit": "495577272afd4309fc8d2eebd4eee839c24e9cda+worktree",
   "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; Codex and Claude plugin packages; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
   "summary": {
     "proved": 10,
@@ -204,6 +204,7 @@
           "motion-profile-evidence",
           "browser-demo-evidence",
           "submission-audit",
+          "external-gate-evidence",
           "openai-plugin-submission",
           "claude-code-community-submission"
         ]
@@ -216,8 +217,13 @@
       "githubIssue": "#1115",
       "evidence": [
         "plugins/jsonx-generative-ui-plugin/.app.json",
-        "docs/intent/generative-ui-plugin/submission-readiness.md"
+        "docs/intent/generative-ui-plugin/submission-readiness.md",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
       ],
+      "checks": {
+        "appIdsCaptured": false,
+        "codexAppMetadataUpdated": false
+      },
       "remaining": "Requires approved Apps SDK app/plugin ID from the OpenAI submission flow."
     },
     {
@@ -227,8 +233,14 @@
       "githubIssue": "#1115",
       "evidence": [
         "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json"
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
       ],
+      "checks": {
+        "chatgptMcpConnected": false,
+        "chatgptTranscriptCaptured": false,
+        "chatgptGoldenPromptsPassed": false
+      },
       "remaining": "Requires a connected ChatGPT developer-mode app session. Current evidence is live MCP plus deterministic tool-call evidence."
     },
     {
@@ -237,8 +249,13 @@
       "status": "external-gated",
       "githubIssue": "#1113",
       "evidence": [
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json"
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
       ],
+      "checks": {
+        "claudeAuthenticatedSmokeRan": false,
+        "claudeSmokePromptsPassed": false
+      },
       "remaining": "Requires an authenticated interactive Claude Code environment. Current evidence proves package validation only."
     },
     {
@@ -248,8 +265,14 @@
       "githubIssue": "#1115",
       "evidence": [
         "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-plugin-submission.json",
-        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json"
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-community-submission.json",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
       ],
+      "checks": {
+        "openAiSubmissionRecorded": false,
+        "claudeSubmissionRecorded": false,
+        "policyReviewRecorded": false
+      },
       "remaining": "Requires portal access and final human/legal review before sending public submissions."
     }
   ]

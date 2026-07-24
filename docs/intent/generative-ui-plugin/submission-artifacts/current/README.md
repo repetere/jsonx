@@ -1,12 +1,12 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T08:20:11.869Z
+Generated: 2026-07-24T08:28:47.324Z
 
 ## Packages
 
 | Surface | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| Codex plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `c600cf607ed92791704f5633a427f93799a4c9dc82db9f222ba313117940d139` | 17023 |
+| Codex plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `ea15205d5c34ce9e4f33a52a2badcf72a20d3e23d84f1f82005c8b92dc571ca2` | 17152 |
 | Claude Code plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` | `2f4065360a5bb2db4699849eac8e2c623e1e69940b15a78fde0c6c9268b9b2c3` | 6220 |
 | ChatGPT app submission | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json` | `a2668c8bc97c732a3a1ba1f62b9f132153ad6b586b3aff9356759a9009b9007b` | 4757 |
 | Codex local marketplace | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/codex-local-marketplace.json` | `78ae20574fd7527ac1c45fda214430c28ad67193cec5ed1babfe021787b559be` | 407 |
@@ -22,7 +22,7 @@ Generated: 2026-07-24T08:20:11.869Z
 
 | Purpose | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `474f3f97b95e3a2b158b56dab0a68233a0ae01d6f92dabf05ca0edbb6a03ce56` | 210213 |
+| generative ui page desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png` | `96cf7a60c5f2faf3154a7af98097ecac5b806ebbf564ea389a993f232ff09527` | 209785 |
 | skills install readme | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-skills-install-readme.png` | `ed40515e133c09f8659b2dbadcaef56135c9cb4ea13b18c4e1043cfb6ad92ebb` | 124032 |
 | renderer widget support triage desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png` | `2c89e93024a1152b7697ea61e00ec7c9f55ba6ad3a0ef888840db48dc042ed51` | 52417 |
 | renderer widget motion desktop | `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png` | `b100dfbd51d5e76b8fb9549a6779110ecbff17c705a91f3e65db80d1880c0b29` | 26345 |
@@ -48,6 +48,7 @@ Generated: 2026-07-24T08:20:11.869Z
 ## Submission Audit
 
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` maps 14 requirements to evidence, with 10 proved and 4 external-gated.
+- `docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json` is a pending external gate evidence template copy.
 
 ## Validation
 
@@ -64,6 +65,7 @@ Generated: 2026-07-24T08:20:11.869Z
 - Claude Code plugin validation evidence
 - OpenCode project skill discovery evidence
 - live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp
+- external gate evidence validation
 - submission readiness audit
 
 ## Submission Notes

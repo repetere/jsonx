@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T08:20:11.869Z",
+  "generatedAt": "2026-07-24T08:28:47.324Z",
   "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
   "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
@@ -8,8 +8,8 @@
     {
       "surface": "Codex plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
-      "bytes": 17023,
-      "sha256": "c600cf607ed92791704f5633a427f93799a4c9dc82db9f222ba313117940d139"
+      "bytes": 17152,
+      "sha256": "ea15205d5c34ce9e4f33a52a2badcf72a20d3e23d84f1f82005c8b92dc571ca2"
     },
     {
       "surface": "Claude Code plugin",
@@ -58,8 +58,8 @@
     {
       "purpose": "generative ui page desktop",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png",
-      "bytes": 210213,
-      "sha256": "474f3f97b95e3a2b158b56dab0a68233a0ae01d6f92dabf05ca0edbb6a03ce56"
+      "bytes": 209785,
+      "sha256": "96cf7a60c5f2faf3154a7af98097ecac5b806ebbf564ea389a993f232ff09527"
     },
     {
       "purpose": "skills install readme",
@@ -89,13 +89,13 @@
   "goldenPromptEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "bytes": 7080,
-    "sha256": "58777b6da20c330a752e77e4e0f9c87298b80c9896c440fb03b07af167d85c2c",
+    "sha256": "6645dffdd0370fc02c96be9c65066b344ed611e06a8a8b54998a6d349abaf824",
     "caseCount": 9
   },
   "motionProfileEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
     "bytes": 4282,
-    "sha256": "f46f281fa2149c3bc8bcff43819479b993ccb4f492c313bef0cf2bc9eb189aa8",
+    "sha256": "c84464a0d52c9b95a5d72abf881ed578d40396d717bf8e2574b888e6e62b47a8",
     "skipped": false,
     "caseCount": 9,
     "profiles": [
@@ -115,7 +115,7 @@
   "browserDemoEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/browser-demo-evidence.json",
     "bytes": 3546,
-    "sha256": "51eca2d0741861f61baf8364b46103f02666b916856b14619af2915e3f199487",
+    "sha256": "32705eb11938eda6c7c454534a9a3f92b202708897c380315a153b62848612bb",
     "skipped": false,
     "caseCount": 3,
     "checks": {
@@ -132,7 +132,7 @@
   "hostedMcpEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
     "bytes": 4238,
-    "sha256": "4245514e650a2aadb06ddcd7b5d3105af42c2604b2e4c738d66b98c6ff79e4a7",
+    "sha256": "e94cb77088b9921cb847de0f7b9b976a64f0b539639380776c9b23d0c234d8f0",
     "stepCount": 7,
     "checks": {
       "healthOk": true,
@@ -146,7 +146,7 @@
   "skillInstallerEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
     "bytes": 5009,
-    "sha256": "98678644c219146ef3c471512a6b086ca62292c20fa5d232a78983d851d8c57b",
+    "sha256": "1034c03ec8ab43ffc913652080e0ddb91252c8370be9a6ebb104b3c17bd39c01",
     "dryRunMatrixCount": 9,
     "installSurfaceCount": 3,
     "checks": {
@@ -159,7 +159,7 @@
   "codexInstallEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
     "bytes": 4350,
-    "sha256": "5bb13321bf570a9b1a22c9ff6719a308769035670f34f10e5177406004142bec",
+    "sha256": "1023e344ea4738163955fd3a6ea28f276cbef0c58cf7be4f6a95aff8ca98e789",
     "skipped": false,
     "stepCount": 7,
     "checks": {
@@ -173,7 +173,7 @@
   "claudeValidationEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
     "bytes": 1076,
-    "sha256": "cb2438dd8cef23b0b62a0b5e350798eb4072a8d10fe97270b42781c7a5a9f676",
+    "sha256": "b652cddf5a5671b14ffb065c440f4017b21e9e04fe526bf1eae57848513674e6",
     "skipped": false,
     "stepCount": 2,
     "checks": {
@@ -186,7 +186,7 @@
   "openCodeSkillEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/opencode-skill-evidence.json",
     "bytes": 2597,
-    "sha256": "6f535cb1f746874e1de6e23419809ddf2c2621a3a40014fbecd2a1686ceca77d",
+    "sha256": "9eb50f1a9f9aaa65f4c340cd2af40af80b38ae3f7d40f7b87684839f7eaa01e8",
     "skipped": false,
     "stepCount": 3,
     "checks": {
@@ -229,6 +229,7 @@
       "motion-profile-evidence",
       "browser-demo-evidence",
       "submission-audit",
+      "external-gate-evidence",
       "openai-plugin-submission",
       "claude-code-community-submission"
     ]
@@ -247,12 +248,37 @@
     "Claude Code plugin validation evidence",
     "OpenCode project skill discovery evidence",
     "live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp",
+    "external gate evidence validation",
     "submission readiness audit"
   ],
+  "externalGateEvidence": {
+    "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
+    "bytes": 3989,
+    "sha256": "34f29206aecac20cbfe286f99791e45059a33c08f8698bf41d0f9fef95fdfef0",
+    "supplied": false,
+    "gateStatus": {
+      "appIds": "pending",
+      "chatgptDeveloperMode": "pending",
+      "claudeSmoke": "pending",
+      "marketplaceSubmission": "pending"
+    },
+    "checks": {
+      "appIdsCaptured": false,
+      "codexAppMetadataUpdated": false,
+      "chatgptMcpConnected": false,
+      "chatgptTranscriptCaptured": false,
+      "chatgptGoldenPromptsPassed": false,
+      "claudeAuthenticatedSmokeRan": false,
+      "claudeSmokePromptsPassed": false,
+      "openAiSubmissionRecorded": false,
+      "claudeSubmissionRecorded": false,
+      "policyReviewRecorded": false
+    }
+  },
   "submissionAudit": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
-    "bytes": 10653,
-    "sha256": "a546eee28ad382be6d0c6b0d66c3a625d18362568d8797471e98406233a82f1c",
+    "bytes": 11622,
+    "sha256": "94d5e3b3264e7808e763f42eb367f05d9f0bfa3b3d9d2c698e88d232a7d97857",
     "requirementCount": 14,
     "provedCount": 10,
     "externalGatedCount": 4,

@@ -1,0 +1,119 @@
+{
+  "generatedAt": "2026-07-24T08:28:47.325Z",
+  "source": "docs/intent/generative-ui-plugin/external-gate-evidence.template.json",
+  "supplied": false,
+  "note": "No external gate evidence file was supplied. Copy external-gate-evidence.template.json to external-gate-evidence.json after portal and authenticated smoke steps are complete.",
+  "checks": {
+    "appIdsCaptured": false,
+    "codexAppMetadataUpdated": false,
+    "chatgptMcpConnected": false,
+    "chatgptTranscriptCaptured": false,
+    "chatgptGoldenPromptsPassed": false,
+    "claudeAuthenticatedSmokeRan": false,
+    "claudeSmokePromptsPassed": false,
+    "openAiSubmissionRecorded": false,
+    "claudeSubmissionRecorded": false,
+    "policyReviewRecorded": false
+  },
+  "gateStatus": {
+    "appIds": "pending",
+    "chatgptDeveloperMode": "pending",
+    "claudeSmoke": "pending",
+    "marketplaceSubmission": "pending"
+  },
+  "evidence": {
+    "schemaVersion": 1,
+    "generatedFor": "jsonx-generative-ui-plugin",
+    "gates": {
+      "appIds": "Approved OpenAI app/plugin IDs and plugin metadata update.",
+      "chatgptDeveloperMode": "Live ChatGPT developer-mode transcript after connecting the hosted MCP app.",
+      "claudeSmoke": "Authenticated Claude Code smoke prompts for both bundled skills.",
+      "marketplaceSubmissions": "OpenAI/Codex and Claude Code marketplace submission receipts after final review."
+    },
+    "appIds": {
+      "openaiAppId": "",
+      "openaiPluginId": "",
+      "codexPluginId": "",
+      "codexAppMetadataUpdated": false,
+      "notes": "Fill after the Apps SDK app/plugin has an approved ID and the Codex plugin app metadata has been updated."
+    },
+    "chatgptDeveloperMode": {
+      "connectedMcpUrl": "",
+      "transcriptUrl": "",
+      "transcriptArtifact": "",
+      "promptsRun": [
+        {
+          "id": "direct-ui-request",
+          "status": "pending"
+        },
+        {
+          "id": "text-only-request",
+          "status": "pending"
+        },
+        {
+          "id": "quiz-request",
+          "status": "pending"
+        },
+        {
+          "id": "poll-request",
+          "status": "pending"
+        },
+        {
+          "id": "bad-payload-request",
+          "status": "pending"
+        },
+        {
+          "id": "oversized-payload-request",
+          "status": "pending"
+        },
+        {
+          "id": "unsupported-component-request",
+          "status": "pending"
+        }
+      ],
+      "notes": "Set connectedMcpUrl to https://jsonx-renderer-app.netlify.app/mcp and mark each prompt passed only after the live ChatGPT app renders or rejects the expected response."
+    },
+    "claudeSmoke": {
+      "authenticated": false,
+      "claudeVersion": "",
+      "command": "claude --plugin-dir ./plugins/claude-jsonx-plugin",
+      "promptsRun": [
+        {
+          "id": "jsonx-core",
+          "prompt": "/jsonx:jsonx inspect this repo and summarize how JSONX renders React",
+          "status": "pending"
+        },
+        {
+          "id": "jsonx-generative-ui",
+          "prompt": "/jsonx:jsonx-generative-ui create a support triage JSONX handoff file",
+          "status": "pending"
+        }
+      ],
+      "notes": "Run from an authenticated Claude Code environment before marking either prompt passed."
+    },
+    "marketplaceSubmissions": {
+      "policyReview": {
+        "status": "pending",
+        "reviewedBy": "",
+        "reviewedAt": "",
+        "notes": "Record human/legal approval before public submission."
+      },
+      "openai": {
+        "submitted": false,
+        "submissionId": "",
+        "url": "",
+        "status": "pending",
+        "submittedAt": "",
+        "notes": "Record the OpenAI/Codex app-plus-skills plugin submission receipt."
+      },
+      "claude": {
+        "submitted": false,
+        "submissionId": "",
+        "url": "",
+        "status": "pending",
+        "submittedAt": "",
+        "notes": "Record the Claude Code community marketplace submission receipt."
+      }
+    }
+  }
+}
