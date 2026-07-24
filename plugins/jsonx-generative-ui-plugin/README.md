@@ -24,6 +24,14 @@ python3 plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py plugins/
 
 The command above should fail when invalid fixtures are included. Use the valid fixture set for a passing check.
 
+Generate current submission packages and screenshots from the repository root:
+
+```text
+node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs
+```
+
+Artifacts are written under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, which is excluded from the root npm package.
+
 ## Renderer App
 
 Run the local Apps SDK renderer from the repository root:

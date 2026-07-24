@@ -1,0 +1,94 @@
+{
+  "generatedAt": "2026-07-24T06:56:34.554Z",
+  "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
+  "publicSiteUrl": "https://jsonx.net/generative-ui.html",
+  "publicSkillsUrl": "https://jsonx.net/skills/README.md",
+  "packages": [
+    {
+      "surface": "Codex plugin",
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
+      "bytes": 16598,
+      "sha256": "2f61b88942c6c18867a56564ae76c90bc00d8ef61b98702ad6a011fc51543596"
+    },
+    {
+      "surface": "Claude Code plugin",
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip",
+      "bytes": 6231,
+      "sha256": "0a13e035c8e30cd0399b8692f38ba3e765571d87343623f1fe4a5224d2203f0d"
+    },
+    {
+      "surface": "ChatGPT app submission",
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json",
+      "bytes": 4757,
+      "sha256": "a2668c8bc97c732a3a1ba1f62b9f132153ad6b586b3aff9356759a9009b9007b"
+    },
+    {
+      "surface": "Codex local marketplace",
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/codex-local-marketplace.json",
+      "bytes": 407,
+      "sha256": "78ae20574fd7527ac1c45fda214430c28ad67193cec5ed1babfe021787b559be"
+    }
+  ],
+  "screenshots": [
+    {
+      "purpose": "generative ui page desktop",
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png",
+      "bytes": 209785,
+      "sha256": "96cf7a60c5f2faf3154a7af98097ecac5b806ebbf564ea389a993f232ff09527"
+    },
+    {
+      "purpose": "skills install readme",
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-skills-install-readme.png",
+      "bytes": 124032,
+      "sha256": "ed40515e133c09f8659b2dbadcaef56135c9cb4ea13b18c4e1043cfb6ad92ebb"
+    },
+    {
+      "purpose": "renderer widget support triage desktop",
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png",
+      "bytes": 52417,
+      "sha256": "2c89e93024a1152b7697ea61e00ec7c9f55ba6ad3a0ef888840db48dc042ed51"
+    },
+    {
+      "purpose": "renderer widget motion desktop",
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png",
+      "bytes": 26345,
+      "sha256": "b100dfbd51d5e76b8fb9549a6779110ecbff17c705a91f3e65db80d1880c0b29"
+    },
+    {
+      "purpose": "renderer widget quiz mobile",
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-quiz-mobile.png",
+      "bytes": 30379,
+      "sha256": "0d75c831781c49d18d0613de56a3512fa04108bf5204b8f64eb255e86a4545f7"
+    }
+  ],
+  "npmBoundary": {
+    "packageName": "jsonx",
+    "packageVersion": "2.1.1",
+    "fileCount": 238,
+    "packageBytes": 6479809,
+    "excludedPrefixes": [
+      "apps/",
+      "plugins/",
+      "skills/",
+      ".agents/",
+      ".claude/",
+      ".opencode/",
+      "docs/intent/",
+      "docs/skills/",
+      "vscode-extension/"
+    ],
+    "excludedTerms": [
+      "chatgpt-app-submission",
+      "marketplace.json",
+      "netlify/",
+      "gsap"
+    ]
+  },
+  "validation": [
+    "node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs",
+    "npm run check from apps/jsonx-renderer-app",
+    "python3 plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py support-triage.json text-block.json checklist.json choice-list.json data-table.json alert.json quiz.json slider-poll.json motion-subtle.json",
+    "diff -rq skills docs/skills",
+    "npm pack --dry-run --json package-boundary check"
+  ]
+}

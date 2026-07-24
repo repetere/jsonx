@@ -19,6 +19,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | Hosted renderer | `https://jsonx-renderer-app.netlify.app/mcp` | Netlify-hosted MCP endpoint with live health, widget, CORS, tool listing, resource read, valid render, and invalid payload smoke tests. |
 | ChatGPT app submission | `apps/jsonx-renderer-app/chatgpt-app-submission.json` | Import-ready submission draft with app info, tool hint justifications, five positive test cases, and three negative test cases. |
 | Public policy pages | `site/privacy.html`, `site/terms.html` | Public privacy and terms notes for the JSONX site, browser demo, skills, plugins, and renderer app. |
+| Submission artifacts | `docs/intent/generative-ui-plugin/submission-artifacts/current/` | Generated Codex and Claude package zips, ChatGPT submission JSON copy, Codex marketplace copy, screenshots, hashes, and package-boundary evidence. |
 
 ## Ready Now
 
@@ -36,11 +37,14 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Deploy a new renderer app build to Netlify from `apps/jsonx-renderer-app` after source changes.
 - Use `apps/jsonx-renderer-app/chatgpt-app-submission.json` as the starting point for the ChatGPT Apps submission form.
 - Use `https://jsonx.net/privacy.html`, `https://jsonx.net/terms.html`, and GitHub Issues as public submission URLs.
+- Generate current submission packages and screenshots:
+  `node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs`.
+- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/manifest.json` as the current artifact manifest.
 
 ## Not Ready For Public Submission
 
 - `.app.json` does not yet reference an approved app ID.
-- Public screenshots and test prompt responses still need to be captured from the hosted app.
+- Public screenshots are captured in `docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/`. ChatGPT developer-mode prompt transcripts still need to be captured after the hosted app is connected.
 - Privacy, terms, and support URLs exist, but still need final human or legal review before public submission.
 - `claude plugin validate` has not been run in this environment.
 - Claude community marketplace submission has not been sent.
@@ -61,6 +65,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Run motion prompts for `subtle-enter`, `state-change-highlight`, and `morph-list-to-detail` with and without GSAP enabled.
 - Capture screenshots after the hosted app is connected.
 - Review `apps/jsonx-renderer-app/chatgpt-app-submission.json` against the final hosted endpoint, privacy URL, terms URL, support URL, and screenshots before submitting.
+- Regenerate `docs/intent/generative-ui-plugin/submission-artifacts/current/` after any renderer, fixture, submission JSON, or public page change.
 - Add the real app ID to plugin app metadata only after the ID exists.
 
 ### Codex Plugin
@@ -72,6 +77,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Validate `.agents/plugins/marketplace.json` and install from the local `jsonx-local` marketplace during development.
 - Re-test the Codex marketplace path with an isolated `CODEX_HOME` before public submission package changes.
 - Confirm `npm pack --dry-run` excludes `plugins/` and `apps/`.
+- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` as the current review package.
 
 ### Claude Code Plugin
 
@@ -79,6 +85,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Test with `claude --plugin-dir ./plugins/claude-jsonx-plugin`.
 - Run `/jsonx:jsonx` and `/jsonx:jsonx-generative-ui` smoke prompts.
 - Submit to the Claude community marketplace only after validation, hosted endpoint review, and screenshots are complete.
+- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` as the current review package.
 
 ### Skill Installer
 

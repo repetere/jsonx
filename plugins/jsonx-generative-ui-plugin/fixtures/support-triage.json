@@ -1,0 +1,44 @@
+{
+  "schema": "jsonx.generative-ui.v1",
+  "source": "fixture",
+  "title": "Customer Support Triage",
+  "purpose": "Render a support triage screen for a refund request.",
+  "payload": {
+    "component": "DemoShell",
+    "props": {
+      "title": "Customer Support Triage",
+      "summary": "Refund request from a high-value customer with a delayed shipment."
+    },
+    "children": [
+      {
+        "component": "MetricRow",
+        "props": {
+          "items": [
+            { "label": "Open cases", "value": "18", "status": "watch" },
+            { "label": "Refund risk", "value": "Medium", "status": "warn" },
+            { "label": "SLA", "value": "4h left", "status": "watch" }
+          ]
+        }
+      },
+      {
+        "component": "DataTable",
+        "props": {
+          "columns": ["Signal", "Detail", "Priority"],
+          "rows": [
+            ["Order delay", "Package is 6 days late", "High"],
+            ["Customer tier", "Enterprise buyer", "High"],
+            ["Policy fit", "Refund exception may apply", "Medium"]
+          ]
+        }
+      },
+      {
+        "component": "ActionPanel",
+        "props": {
+          "title": "Recommended next step",
+          "primaryAction": "draft_refund_response",
+          "secondaryAction": "open_customer_timeline"
+        }
+      }
+    ]
+  }
+}

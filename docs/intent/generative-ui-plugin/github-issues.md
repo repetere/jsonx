@@ -15,7 +15,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | [#1112](https://github.com/repetere/jsonx/issues/1112) | Codex plugin | Local Codex plugin package with separate `jsonx` and `jsonx-generative-ui` skills, fixtures, validation script, app wiring templates, and repo-local Codex marketplace entry. |
 | [#1113](https://github.com/repetere/jsonx/issues/1113) | Claude Code and OpenCode skills | Installable core JSONX and generative UI skills for Claude Code and OpenCode, a Claude Code plugin package, and installer tooling for personal or project installs. |
 | [#1114](https://github.com/repetere/jsonx/issues/1114) | Renderer motion | Optional renderer-owned GSAP motion profiles with reduced-motion support, CSS fallback motion, and no model-supplied animation code. |
-| [#1115](https://github.com/repetere/jsonx/issues/1115) | Store submission | Codex and Claude Code plugin submission materials, ChatGPT app submission JSON, app IDs, screenshots, privacy links, and test prompts. |
+| [#1115](https://github.com/repetere/jsonx/issues/1115) | Store submission | Codex and Claude Code plugin submission materials, generated review packages, ChatGPT app submission JSON, app IDs, screenshots, privacy links, and test prompts. |
 | [#1116](https://github.com/repetere/jsonx/issues/1116) | GitHub Pages | Public install and plugin documentation mirrored from `site/` into `docs/`. |
 | [#1117](https://github.com/repetere/jsonx/issues/1117) | Browser demo | Fixture, paste, and bring-your-own endpoint modes that render the same JSONX generative UI contract. |
 
@@ -34,3 +34,5 @@ Renderer motion coverage is tracked under #1114. GSAP must stay in `apps/jsonx-r
 Hosted renderer deployment coverage is tracked under #1111. The Netlify adapter provides `/mcp`, `/healthz`, and `/widget` at `https://jsonx-renderer-app.netlify.app` without adding app dependencies to the root package.
 
 Submission support page coverage is tracked under #1115 and #1116. The public site should mirror `privacy.html` and `terms.html` into `docs/`, and the ChatGPT app submission JSON should remain under `apps/jsonx-renderer-app/` so it stays outside the root npm package.
+
+Submission artifact coverage is tracked under #1115. Current generated artifacts live under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, including plugin review zips, screenshot evidence, a copied ChatGPT submission JSON, a copied Codex marketplace file, hashes, and npm package-boundary evidence. Regenerate with `node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs`.

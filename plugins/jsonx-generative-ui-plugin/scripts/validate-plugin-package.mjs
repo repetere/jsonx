@@ -61,6 +61,7 @@ const codexMcp = readJson("plugins/jsonx-generative-ui-plugin/.mcp.json");
 assert.deepEqual(codexMcp, { mcpServers: {} });
 
 for (const fixture of [
+  "support-triage",
   "text-block",
   "checklist",
   "choice-list",

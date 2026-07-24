@@ -31,6 +31,7 @@ Current implementation baseline:
 - `plugins/claude-jsonx-plugin/` contains the Claude Code plugin package.
 - `skills/codex/`, `skills/claude/`, and `skills/opencode/` contain installable skill source folders.
 - `skills/scripts/install-jsonx-skill.mjs` installs the `jsonx` and `jsonx-generative-ui` skill families for Codex, Claude Code, or OpenCode without mixing the two workflows.
+- `docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs` creates review packages, screenshots, hashes, and npm package-boundary evidence under `docs/intent/generative-ui-plugin/submission-artifacts/current/`.
 - `docs/intent/generative-ui-plugin/submission-readiness.md` tracks what remains before public app or plugin submission.
 
 ## Positioning
@@ -423,6 +424,7 @@ Exit criteria:
 - Add screenshots and starter prompts.
 - Test public submission checks.
 - Create GitHub issues from this plan.
+- Generate submission artifacts with `node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs`.
 
 Exit criteria:
 
