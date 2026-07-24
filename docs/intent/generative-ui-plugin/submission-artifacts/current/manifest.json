@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T06:56:34.554Z",
+  "generatedAt": "2026-07-24T07:04:00.164Z",
   "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
   "publicSkillsUrl": "https://jsonx.net/skills/README.md",
@@ -7,8 +7,8 @@
     {
       "surface": "Codex plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
-      "bytes": 16598,
-      "sha256": "2f61b88942c6c18867a56564ae76c90bc00d8ef61b98702ad6a011fc51543596"
+      "bytes": 16672,
+      "sha256": "70f935163dab4cf3c63293667f16cefeff54536c9abcf800331fea9081562929"
     },
     {
       "surface": "Claude Code plugin",
@@ -33,8 +33,8 @@
     {
       "purpose": "generative ui page desktop",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png",
-      "bytes": 209785,
-      "sha256": "96cf7a60c5f2faf3154a7af98097ecac5b806ebbf564ea389a993f232ff09527"
+      "bytes": 210213,
+      "sha256": "474f3f97b95e3a2b158b56dab0a68233a0ae01d6f92dabf05ca0edbb6a03ce56"
     },
     {
       "purpose": "skills install readme",
@@ -64,8 +64,8 @@
   "npmBoundary": {
     "packageName": "jsonx",
     "packageVersion": "2.1.1",
-    "fileCount": 238,
-    "packageBytes": 6479809,
+    "fileCount": 234,
+    "packageBytes": 6477496,
     "excludedPrefixes": [
       "apps/",
       "plugins/",
@@ -75,7 +75,8 @@
       ".opencode/",
       "docs/intent/",
       "docs/skills/",
-      "vscode-extension/"
+      "vscode-extension/",
+      ".github/"
     ],
     "excludedTerms": [
       "chatgpt-app-submission",

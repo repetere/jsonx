@@ -8,7 +8,8 @@ import { fileURLToPath } from "node:url";
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const intentRoot = path.resolve(scriptDir, "..");
 const repoRoot = path.resolve(intentRoot, "..", "..", "..");
-const artifactRoot = path.join(intentRoot, "submission-artifacts", "current");
+const cliArgs = process.argv.slice(2);
+const artifactRoot = resolveArtifactRoot();
 const packagesDir = path.join(artifactRoot, "packages");
 const screenshotsDir = path.join(artifactRoot, "screenshots");
 
@@ -28,8 +29,30 @@ const validFixtures = [
   "motion-subtle",
 ];
 
+function argValue(name) {
+  const index = cliArgs.indexOf(name);
+  return index >= 0 ? cliArgs[index + 1] : undefined;
+}
+
+function hasArg(name) {
+  return cliArgs.includes(name);
+}
+
+function resolveArtifactRoot() {
+  const output = argValue("--output") || process.env.JSONX_SUBMISSION_ARTIFACT_ROOT;
+  return output ? path.resolve(repoRoot, output) : path.join(intentRoot, "submission-artifacts", "current");
+}
+
 function relative(filePath) {
   return path.relative(repoRoot, filePath);
+}
+
+function artifactPath(filePath) {
+  const repoRelativeArtifactRoot = path.relative(repoRoot, artifactRoot);
+  if (repoRelativeArtifactRoot.startsWith("..") || path.isAbsolute(repoRelativeArtifactRoot)) {
+    return path.relative(artifactRoot, filePath);
+  }
+  return relative(filePath);
 }
 
 function run(label, command, args, options = {}) {
@@ -66,7 +89,7 @@ async function writeJson(filePath, data) {
 async function hashFile(filePath) {
   const buffer = await fs.readFile(filePath);
   return {
-    path: relative(filePath),
+    path: artifactPath(filePath),
     bytes: buffer.length,
     sha256: createHash("sha256").update(buffer).digest("hex"),
   };
@@ -172,7 +195,7 @@ async function captureWidget(browser, structuredContent, options) {
 async function saveScreenshot(page, filePath, options) {
   await Promise.race([
     page.screenshot({ path: filePath, ...options }),
-    new Promise((_, reject) => setTimeout(() => reject(new Error(`Timed out capturing ${relative(filePath)}`)), 15000)),
+    new Promise((_, reject) => setTimeout(() => reject(new Error(`Timed out capturing ${artifactPath(filePath)}`)), 15000)),
   ]);
 }
 
@@ -190,6 +213,7 @@ async function buildNpmBoundaryEvidence() {
     "docs/intent/",
     "docs/skills/",
     "vscode-extension/",
+    ".github/",
   ];
   const blockedTerms = ["chatgpt-app-submission", "marketplace.json", "netlify/", "gsap"];
   const blocked = files.filter(
@@ -242,7 +266,7 @@ async function writeReviewSummary(manifest) {
 }
 
 async function main() {
-  const skipScreenshots = process.argv.includes("--skip-screenshots");
+  const skipScreenshots = hasArg("--skip-screenshots");
   await fs.rm(artifactRoot, { recursive: true, force: true });
   await fs.mkdir(packagesDir, { recursive: true });
   await fs.mkdir(screenshotsDir, { recursive: true });
@@ -321,7 +345,7 @@ async function main() {
 
   await writeJson(path.join(artifactRoot, "manifest.json"), manifest);
   await writeReviewSummary(manifest);
-  console.log(`submission artifacts written to ${relative(artifactRoot)}`);
+  console.log(`submission artifacts written to ${artifactPath(artifactRoot) || "."}`);
 }
 
 main().catch((error) => {

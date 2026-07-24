@@ -26,6 +26,7 @@ typings/
 *.tgz
 .env
 .gitpod.yml
+.github/
 
 # Agent, plugin, hosted app, and planning artifacts are not part of the npm package.
 apps/

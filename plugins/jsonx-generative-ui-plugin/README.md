@@ -32,6 +32,12 @@ node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs
 
 Artifacts are written under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, which is excluded from the root npm package.
 
+For CI or temporary package checks, write to a separate output directory:
+
+```text
+node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs --skip-screenshots --output /tmp/jsonx-submission-artifacts
+```
+
 ## Renderer App
 
 Run the local Apps SDK renderer from the repository root:

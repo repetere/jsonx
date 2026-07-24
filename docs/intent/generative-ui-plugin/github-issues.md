@@ -36,3 +36,5 @@ Hosted renderer deployment coverage is tracked under #1111. The Netlify adapter 
 Submission support page coverage is tracked under #1115 and #1116. The public site should mirror `privacy.html` and `terms.html` into `docs/`, and the ChatGPT app submission JSON should remain under `apps/jsonx-renderer-app/` so it stays outside the root npm package.
 
 Submission artifact coverage is tracked under #1115. Current generated artifacts live under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, including plugin review zips, screenshot evidence, a copied ChatGPT submission JSON, a copied Codex marketplace file, hashes, and npm package-boundary evidence. Regenerate with `node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs`.
+
+CI coverage is tracked under #1115. `.github/workflows/generative-ui-plugin.yml` validates plugin metadata, renderer checks, fixtures, mirrored skill docs, generated submission packages, and npm package exclusions on push, pull request, and manual dispatch.

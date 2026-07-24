@@ -105,7 +105,18 @@ assert.match(readiness, /ChatGPT developer mode/);
 assert.match(readiness, /Claude community marketplace/);
 
 const npmIgnore = fs.readFileSync(path.join(repoRoot, ".npmignore"), "utf8");
-for (const entry of ["apps/", "plugins/", "skills/", ".agents/", ".claude/", ".opencode/", "docs/intent/", "docs/skills/", "vscode-extension/"]) {
+for (const entry of [
+  "apps/",
+  "plugins/",
+  "skills/",
+  ".agents/",
+  ".claude/",
+  ".opencode/",
+  "docs/intent/",
+  "docs/skills/",
+  "vscode-extension/",
+  ".github/",
+]) {
   assert.match(npmIgnore, new RegExp(`(^|\\n)${entry.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`), `.npmignore must exclude ${entry}`);
 }
 

@@ -20,6 +20,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | ChatGPT app submission | `apps/jsonx-renderer-app/chatgpt-app-submission.json` | Import-ready submission draft with app info, tool hint justifications, five positive test cases, and three negative test cases. |
 | Public policy pages | `site/privacy.html`, `site/terms.html` | Public privacy and terms notes for the JSONX site, browser demo, skills, plugins, and renderer app. |
 | Submission artifacts | `docs/intent/generative-ui-plugin/submission-artifacts/current/` | Generated Codex and Claude package zips, ChatGPT submission JSON copy, Codex marketplace copy, screenshots, hashes, and package-boundary evidence. |
+| CI validation | `.github/workflows/generative-ui-plugin.yml` | Push, pull request, and manual workflow for app checks, plugin metadata checks, fixture validation, package generation, and npm package-boundary enforcement. |
 
 ## Ready Now
 
@@ -40,6 +41,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Generate current submission packages and screenshots:
   `node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs`.
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/manifest.json` as the current artifact manifest.
+- Run the Generative UI Plugin workflow on GitHub Actions after app, plugin, fixture, or submission package changes.
 
 ## Not Ready For Public Submission
 
@@ -66,6 +68,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Capture screenshots after the hosted app is connected.
 - Review `apps/jsonx-renderer-app/chatgpt-app-submission.json` against the final hosted endpoint, privacy URL, terms URL, support URL, and screenshots before submitting.
 - Regenerate `docs/intent/generative-ui-plugin/submission-artifacts/current/` after any renderer, fixture, submission JSON, or public page change.
+- Confirm `.github/workflows/generative-ui-plugin.yml` passes before public submission package review.
 - Add the real app ID to plugin app metadata only after the ID exists.
 
 ### Codex Plugin

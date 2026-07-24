@@ -32,6 +32,7 @@ Current implementation baseline:
 - `skills/codex/`, `skills/claude/`, and `skills/opencode/` contain installable skill source folders.
 - `skills/scripts/install-jsonx-skill.mjs` installs the `jsonx` and `jsonx-generative-ui` skill families for Codex, Claude Code, or OpenCode without mixing the two workflows.
 - `docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs` creates review packages, screenshots, hashes, and npm package-boundary evidence under `docs/intent/generative-ui-plugin/submission-artifacts/current/`.
+- `.github/workflows/generative-ui-plugin.yml` runs app, plugin, fixture, submission package, and npm package-boundary checks in CI.
 - `docs/intent/generative-ui-plugin/submission-readiness.md` tracks what remains before public app or plugin submission.
 
 ## Positioning
@@ -423,6 +424,7 @@ Exit criteria:
 - Add privacy policy and terms links.
 - Add screenshots and starter prompts.
 - Test public submission checks.
+- Add CI checks for app/plugin validation, fixture validation, submission package generation, and npm package-boundary enforcement.
 - Create GitHub issues from this plan.
 - Generate submission artifacts with `node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs`.
 

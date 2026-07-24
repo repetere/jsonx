@@ -1,0 +1,109 @@
+name: Generative UI Plugin
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".agents/plugins/**"
+      - ".github/workflows/generative-ui-plugin.yml"
+      - "apps/jsonx-renderer-app/**"
+      - "docs/intent/generative-ui-plugin/**"
+      - "docs/skills/**"
+      - "plugins/**"
+      - "skills/**"
+      - ".npmignore"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".agents/plugins/**"
+      - ".github/workflows/generative-ui-plugin.yml"
+      - "apps/jsonx-renderer-app/**"
+      - "docs/intent/generative-ui-plugin/**"
+      - "docs/skills/**"
+      - "plugins/**"
+      - "skills/**"
+      - ".npmignore"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate app, plugins, and package boundary
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            apps/jsonx-renderer-app/package-lock.json
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install renderer dependencies
+        run: npm ci
+        working-directory: apps/jsonx-renderer-app
+
+      - name: Validate plugin package metadata
+        run: node plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs
+
+      - name: Validate renderer app
+        run: npm run check
+        working-directory: apps/jsonx-renderer-app
+
+      - name: Validate generative UI fixtures
+        run: npm run validate:fixtures
+        working-directory: apps/jsonx-renderer-app
+
+      - name: Validate mirrored skill docs
+        run: diff -rq skills docs/skills
+
+      - name: Generate submission package artifacts
+        run: >
+          node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs
+          --skip-screenshots
+          --output /tmp/jsonx-submission-artifacts
+
+      - name: Check npm package boundary
+        run: |
+          npm pack --dry-run --json > /tmp/jsonx-pack-dry-run.json
+          node - <<'NODE'
+          const fs = require("fs");
+          const data = JSON.parse(fs.readFileSync("/tmp/jsonx-pack-dry-run.json", "utf8"));
+          const files = data[0].files.map((file) => file.path);
+          const blockedPrefixes = [
+            "apps/",
+            "plugins/",
+            "skills/",
+            ".agents/",
+            ".claude/",
+            ".opencode/",
+            "docs/intent/",
+            "docs/skills/",
+            "vscode-extension/",
+            ".github/",
+          ];
+          const blockedTerms = ["chatgpt-app-submission", "marketplace.json", "netlify/", "gsap"];
+          const blocked = files.filter(
+            (file) =>
+              blockedPrefixes.some((prefix) => file.startsWith(prefix)) ||
+              blockedTerms.some((term) => file.includes(term)),
+          );
+          if (blocked.length) {
+            throw new Error(`npm pack includes blocked files: ${blocked.join(", ")}`);
+          }
+          console.log(`npm pack boundary ok: ${files.length} files, ${data[0].size} bytes`);
+          NODE
+
+      - name: Upload generated submission package artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: jsonx-generative-ui-submission-artifacts
+          path: /tmp/jsonx-submission-artifacts
