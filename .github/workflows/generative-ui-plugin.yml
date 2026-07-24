@@ -95,6 +95,8 @@ jobs:
 
       - name: Validate GitHub issue tracking
         run: node docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs --json
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Validate submission source docs
         run: node docs/intent/generative-ui-plugin/scripts/check-submission-source-docs.mjs --json
@@ -116,6 +118,8 @@ jobs:
           --skip-motion-evidence
           --skip-browser-demo
           --output /tmp/jsonx-submission-artifacts
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Check npm package boundary
         run: |
