@@ -73,6 +73,7 @@ jobs:
           --skip-codex-install
           --skip-claude-validation
           --skip-opencode-validation
+          --skip-motion-evidence
           --output /tmp/jsonx-submission-artifacts
 
       - name: Check npm package boundary
@@ -105,6 +106,7 @@ jobs:
             "codex-install-evidence",
             "claude-validation-evidence",
             "opencode-skill-evidence",
+            "motion-profile-evidence",
             "openai-plugin-submission",
             "claude-code-community-submission",
           ];

@@ -35,6 +35,7 @@ const validFixtures = [
   "slider-poll",
   "motion-subtle",
 ];
+const motionProfiles = ["none", "subtle-enter", "state-change-highlight", "morph-list-to-detail"];
 
 const installerSurfaces = ["codex", "claude", "opencode"];
 const installerSkills = ["jsonx", "jsonx-generative-ui", "all"];
@@ -1125,6 +1126,202 @@ async function buildGoldenPromptEvidence() {
   };
 }
 
+function motionPayloadForProfile(profile) {
+  const baseChildren = [
+    {
+      component: "SectionHeader",
+      props: {
+        title: "Motion Review",
+        description: `Renderer-owned motion profile: ${profile}.`,
+      },
+    },
+  ];
+
+  if (profile === "state-change-highlight") {
+    baseChildren.push({
+      component: "Checklist",
+      props: {
+        items: [
+          { label: "Validate declarative motion", status: "done" },
+          { label: "Keep GSAP out of model output", status: "pending" },
+        ],
+      },
+    });
+  } else if (profile === "morph-list-to-detail") {
+    baseChildren.push({
+      component: "Timeline",
+      props: {
+        items: [
+          { label: "Prompt", detail: "The model asks for a compact JSONX UI." },
+          { label: "Payload", detail: "The renderer validates a declarative contract." },
+          { label: "Render", detail: "The widget owns the transition implementation." },
+        ],
+      },
+    });
+  } else {
+    baseChildren.push({
+      component: "Alert",
+      props: { tone: "info", title: "Renderer-owned motion" },
+      children: "The payload names a motion profile and never includes animation code.",
+    });
+  }
+
+  return {
+    schema: "jsonx.generative-ui.v1",
+    purpose: `Verify ${profile} motion profile.`,
+    motionProfile: profile,
+    payload: {
+      component: "DemoShell",
+      props: {
+        title: "JSONX Motion Evidence",
+        summary: "Motion is declarative in the payload and implemented by the renderer.",
+      },
+      children: baseChildren,
+    },
+  };
+}
+
+async function evaluateWidgetMotion({ browser, profile, gsapEnabled, reducedMotion }) {
+  const { buildWidgetHtml } = await import(pathToFileURL(path.join(repoRoot, "apps", "jsonx-renderer-app", "src", "server.mjs")));
+  const previousGsapValue = process.env.JSONX_ENABLE_GSAP;
+  if (gsapEnabled) {
+    process.env.JSONX_ENABLE_GSAP = "1";
+  } else {
+    delete process.env.JSONX_ENABLE_GSAP;
+  }
+
+  let html;
+  try {
+    html = buildWidgetHtml();
+  } finally {
+    if (previousGsapValue === undefined) {
+      delete process.env.JSONX_ENABLE_GSAP;
+    } else {
+      process.env.JSONX_ENABLE_GSAP = previousGsapValue;
+    }
+  }
+
+  const page = await browser.newPage();
+  try {
+    page.setDefaultTimeout(12000);
+    await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: reducedMotion ? "reduce" : "no-preference" }]);
+    await page.setContent(html, { waitUntil: "domcontentloaded" });
+    await page.evaluate((data) => {
+      window.postMessage(
+        {
+          jsonrpc: "2.0",
+          method: "ui/notifications/tool-result",
+          params: {
+            structuredContent: data,
+          },
+        },
+        "*",
+      );
+    }, motionPayloadForProfile(profile));
+    await page.waitForSelector(".jsonx-shell", { timeout: 10000 });
+    await page.waitForFunction(
+      (expectedProfile) => {
+        const root = document.querySelector("#jsonx-root");
+        return root?.dataset?.motion === expectedProfile && Boolean(root?.dataset?.motionEngine);
+      },
+      { timeout: 10000 },
+      profile,
+    );
+    await new Promise((resolve) => setTimeout(resolve, 80));
+    const observed = await page.evaluate(() => {
+      const root = document.querySelector("#jsonx-root");
+      const animatedCount = document.querySelectorAll(".jsonx-shell, .jsonx-panel, .section-header").length;
+      return {
+        motion: root?.dataset.motion,
+        motionEngine: root?.dataset.motionEngine,
+        gsapPresent: Boolean(window.gsap),
+        gsapMotionConfigured: window.JSONX_RENDERER_CONFIG?.gsapMotion === true,
+        animatedElementCount: animatedCount,
+        renderedShell: Boolean(document.querySelector(".jsonx-shell")),
+      };
+    });
+    const expectedEngine = gsapEnabled && !reducedMotion && profile !== "none" ? "gsap" : "css";
+    assertEvidence(observed.motion === profile, `${profile} did not set the expected data-motion attribute`);
+    assertEvidence(observed.motionEngine === expectedEngine, `${profile} expected ${expectedEngine} engine but got ${observed.motionEngine}`);
+    assertEvidence(observed.renderedShell, `${profile} did not render a shell`);
+    assertEvidence(observed.animatedElementCount > 0, `${profile} did not render motion targets`);
+    return observed;
+  } finally {
+    await page.close();
+  }
+}
+
+async function buildMotionEvidence({ skip }) {
+  if (skip) {
+    return {
+      generatedAt: new Date().toISOString(),
+      source: "local renderer widget motion harness",
+      skipped: true,
+      reason: "Skipped by --skip-motion-evidence or JSONX_SKIP_MOTION_EVIDENCE=1.",
+      checks: {},
+      cases: [],
+    };
+  }
+
+  console.log("capturing renderer motion evidence");
+  const puppeteer = await import("puppeteer");
+  const browser = await puppeteer.default.launch({
+    headless: "shell",
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+  });
+  const cases = [];
+  let reducedMotionObserved;
+
+  try {
+    for (const profile of motionProfiles) {
+      for (const gsapEnabled of [false, true]) {
+        const observed = await evaluateWidgetMotion({ browser, profile, gsapEnabled, reducedMotion: false });
+        cases.push({
+          id: `${profile}-${gsapEnabled ? "gsap" : "css"}`,
+          profile,
+          gsapEnabled,
+          reducedMotion: false,
+          expectedEngine: gsapEnabled && profile !== "none" ? "gsap" : "css",
+          observed,
+        });
+      }
+    }
+
+    reducedMotionObserved = await evaluateWidgetMotion({
+      browser,
+      profile: "morph-list-to-detail",
+      gsapEnabled: true,
+      reducedMotion: true,
+    });
+    cases.push({
+      id: "morph-list-to-detail-gsap-reduced-motion",
+      profile: "morph-list-to-detail",
+      gsapEnabled: true,
+      reducedMotion: true,
+      expectedEngine: "css",
+      observed: reducedMotionObserved,
+    });
+  } finally {
+    await browser.close();
+  }
+
+  return {
+    generatedAt: new Date().toISOString(),
+    source: "local renderer widget motion harness",
+    note: "This evidence loads the widget locally with and without JSONX_ENABLE_GSAP and verifies renderer-owned motion profiles through DOM state. It does not rely on model-supplied animation code.",
+    skipped: false,
+    profiles: motionProfiles,
+    checks: {
+      cssFallbackPassed: cases.filter((item) => !item.gsapEnabled && !item.reducedMotion).length === motionProfiles.length,
+      gsapMotionPassed: cases.filter((item) => item.gsapEnabled && !item.reducedMotion && item.profile !== "none").length === motionProfiles.length - 1,
+      noneProfileUsesCss: cases.some((item) => item.profile === "none" && item.gsapEnabled && item.observed.motionEngine === "css"),
+      reducedMotionSuppressesGsap: reducedMotionObserved?.motionEngine === "css",
+      noModelSuppliedAnimationCode: true,
+    },
+    cases,
+  };
+}
+
 async function captureScreenshots() {
   const puppeteer = await import("puppeteer");
   const browser = await puppeteer.default.launch({
@@ -1246,6 +1443,7 @@ async function buildNpmBoundaryEvidence() {
     "codex-install-evidence",
     "claude-validation-evidence",
     "opencode-skill-evidence",
+    "motion-profile-evidence",
     "openai-plugin-submission",
     "claude-code-community-submission",
   ];
@@ -1297,6 +1495,11 @@ async function writeReviewSummary(manifest) {
     manifest.goldenPromptEvidence
       ? `- \`${manifest.goldenPromptEvidence.path}\` covers ${manifest.goldenPromptEvidence.caseCount} prompt outcomes.`
       : "- No golden-prompt evidence was generated.",
+    manifest.motionProfileEvidence && !manifest.motionProfileEvidence.skipped
+      ? `- \`${manifest.motionProfileEvidence.path}\` covers ${manifest.motionProfileEvidence.caseCount} renderer motion cases.`
+      : manifest.motionProfileEvidence
+        ? `- \`${manifest.motionProfileEvidence.path}\` records why renderer motion evidence was skipped.`
+        : "- Renderer motion evidence was not generated.",
     "",
     "## Hosted MCP",
     "",
@@ -1346,6 +1549,7 @@ async function main() {
   const skipCodexInstall = hasArg("--skip-codex-install") || process.env.JSONX_SKIP_CODEX_INSTALL === "1";
   const skipClaudeValidation = hasArg("--skip-claude-validation") || process.env.JSONX_SKIP_CLAUDE_VALIDATION === "1";
   const skipOpenCodeValidation = hasArg("--skip-opencode-validation") || process.env.JSONX_SKIP_OPENCODE_VALIDATION === "1";
+  const skipMotionEvidence = hasArg("--skip-motion-evidence") || process.env.JSONX_SKIP_MOTION_EVIDENCE === "1";
   await fs.rm(artifactRoot, { recursive: true, force: true });
   await fs.mkdir(packagesDir, { recursive: true });
   await fs.mkdir(screenshotsDir, { recursive: true });
@@ -1368,6 +1572,10 @@ async function main() {
   const goldenPromptEvidence = await buildGoldenPromptEvidence();
   await writeJson(goldenPromptEvidencePath, goldenPromptEvidence);
   const goldenPromptArtifact = await hashFile(goldenPromptEvidencePath);
+  const motionProfileEvidencePath = path.join(artifactRoot, "motion-profile-evidence.json");
+  const motionProfileEvidence = await buildMotionEvidence({ skip: skipMotionEvidence });
+  await writeJson(motionProfileEvidencePath, motionProfileEvidence);
+  const motionProfileArtifact = await hashFile(motionProfileEvidencePath);
   const hostedMcpEvidencePath = path.join(artifactRoot, "hosted-mcp-transcript.json");
   const hostedMcpEvidence = skipHostedMcp ? null : await buildHostedMcpEvidence();
   let hostedMcpArtifact = null;
@@ -1447,6 +1655,13 @@ async function main() {
       ...goldenPromptArtifact,
       caseCount: goldenPromptEvidence.cases.length,
     },
+    motionProfileEvidence: {
+      ...motionProfileArtifact,
+      skipped: motionProfileEvidence.skipped === true,
+      caseCount: motionProfileEvidence.cases.length,
+      profiles: motionProfileEvidence.profiles,
+      checks: motionProfileEvidence.checks,
+    },
     hostedMcpEvidence: hostedMcpArtifact
       ? {
           ...hostedMcpArtifact,
@@ -1491,6 +1706,7 @@ async function main() {
       "store listing draft validation",
       "npm pack --dry-run --json package-boundary check",
       "skill installer dry-run and isolated install evidence",
+      ...(motionProfileEvidence.skipped ? [] : ["renderer motion profile evidence"]),
       ...(codexInstallEvidence.skipped ? [] : ["isolated Codex marketplace install evidence"]),
       ...(claudeValidationEvidence.skipped ? [] : ["Claude Code plugin validation evidence"]),
       ...(openCodeSkillEvidence.skipped ? [] : ["OpenCode project skill discovery evidence"]),

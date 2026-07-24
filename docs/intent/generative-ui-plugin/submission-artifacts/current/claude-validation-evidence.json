@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T07:53:15.908Z",
+  "generatedAt": "2026-07-24T08:00:53.246Z",
   "source": "claude plugin validate",
   "note": "This evidence runs Claude Code from the npm package with a temporary npm cache and validates the JSONX Claude Code plugin manifest.",
   "skipped": false,

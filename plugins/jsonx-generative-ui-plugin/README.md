@@ -30,13 +30,13 @@ Generate current submission packages and screenshots from the repository root:
 node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs
 ```
 
-Artifacts are written under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, which is excluded from the root npm package. The generated bundle includes review packages, store listing drafts, screenshots, golden-prompt tool-call evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, and package-boundary evidence.
-The default run records a live hosted MCP transcript from `https://jsonx-renderer-app.netlify.app/mcp`, installs this plugin from the repo-local marketplace using a temporary `CODEX_HOME` when the Codex CLI is available, validates the Claude Code plugin with `claude plugin validate` through a temporary npm cache, and verifies OpenCode can discover the project skills with `opencode debug skill`.
+Artifacts are written under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, which is excluded from the root npm package. The generated bundle includes review packages, store listing drafts, screenshots, golden-prompt tool-call evidence, renderer motion evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, and package-boundary evidence.
+The default run records a live hosted MCP transcript from `https://jsonx-renderer-app.netlify.app/mcp`, verifies renderer motion profiles with CSS fallback and GSAP-enabled widget HTML, installs this plugin from the repo-local marketplace using a temporary `CODEX_HOME` when the Codex CLI is available, validates the Claude Code plugin with `claude plugin validate` through a temporary npm cache, and verifies OpenCode can discover the project skills with `opencode debug skill`.
 
 For CI or temporary package checks, write to a separate output directory:
 
 ```text
-node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs --skip-screenshots --skip-hosted-mcp --skip-codex-install --skip-claude-validation --skip-opencode-validation --output /tmp/jsonx-submission-artifacts
+node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs --skip-screenshots --skip-hosted-mcp --skip-codex-install --skip-claude-validation --skip-opencode-validation --skip-motion-evidence --output /tmp/jsonx-submission-artifacts
 ```
 
 ## Renderer App

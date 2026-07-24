@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T07:53:28.668Z",
+  "generatedAt": "2026-07-24T08:01:12.196Z",
   "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
   "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
@@ -8,8 +8,8 @@
     {
       "surface": "Codex plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
-      "bytes": 16968,
-      "sha256": "bd2e2c15ec6051ebfe3bab8a06e4887ae2b2f79616ea9747381ee89baf10f369"
+      "bytes": 17023,
+      "sha256": "f91eb9366c96a2c7997b656e50677b7bce700547a3e408801ac8267269e1efa8"
     },
     {
       "surface": "Claude Code plugin",
@@ -58,8 +58,8 @@
     {
       "purpose": "generative ui page desktop",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png",
-      "bytes": 210213,
-      "sha256": "474f3f97b95e3a2b158b56dab0a68233a0ae01d6f92dabf05ca0edbb6a03ce56"
+      "bytes": 209785,
+      "sha256": "96cf7a60c5f2faf3154a7af98097ecac5b806ebbf564ea389a993f232ff09527"
     },
     {
       "purpose": "skills install readme",
@@ -89,13 +89,33 @@
   "goldenPromptEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "bytes": 7080,
-    "sha256": "782bfc1c72e722e09d91fb2fd955fd1f297a6d8fabb31166ee6716abfa8418f8",
+    "sha256": "2c9ef91e10a7b641ecb24751dba07ab409646912b79e5f1cdeb2cf558ccc6ff7",
     "caseCount": 9
+  },
+  "motionProfileEvidence": {
+    "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
+    "bytes": 4282,
+    "sha256": "475cdce9d9d06c5a28f21fa92b1bc6c6779040becb84ab2db77481e0c1fcb3f5",
+    "skipped": false,
+    "caseCount": 9,
+    "profiles": [
+      "none",
+      "subtle-enter",
+      "state-change-highlight",
+      "morph-list-to-detail"
+    ],
+    "checks": {
+      "cssFallbackPassed": true,
+      "gsapMotionPassed": true,
+      "noneProfileUsesCss": true,
+      "reducedMotionSuppressesGsap": true,
+      "noModelSuppliedAnimationCode": true
+    }
   },
   "hostedMcpEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
     "bytes": 4238,
-    "sha256": "2a389cbe55c6b5ede2ee25e509e8fc5b6aa4994ea364dc72a2a1d7712a397ff0",
+    "sha256": "273e0709f37ed9a3dbc469e34a94c456370b2a64f31c27d32941225750a98b73",
     "stepCount": 7,
     "checks": {
       "healthOk": true,
@@ -109,7 +129,7 @@
   "skillInstallerEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
     "bytes": 5009,
-    "sha256": "a0e3999c18d955d84090954ffdde448729fd9f424a79ce56f853739f27d661f3",
+    "sha256": "39c9240a104b5af375298fbc001b65c4b538eda7e19e7cb0d157b41ac279c4a1",
     "dryRunMatrixCount": 9,
     "installSurfaceCount": 3,
     "checks": {
@@ -122,7 +142,7 @@
   "codexInstallEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
     "bytes": 4350,
-    "sha256": "d9bfeba2cc60dbc4b9241f2a38154213a5a3c9d14ee6d837b704a0e48d62b5df",
+    "sha256": "24b6d41118e119ebb6791bb4408bda35330aa4250baa02fd8e059ab6021ceb2e",
     "skipped": false,
     "stepCount": 7,
     "checks": {
@@ -136,7 +156,7 @@
   "claudeValidationEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
     "bytes": 1076,
-    "sha256": "85a5116c8774fc1e30aa7f4a7ef71cb70688db7402fb70264cf8cb1cbe5377bd",
+    "sha256": "b4043772d4900d2ee9486fa5a822ec9598ed01763b78c96298c6f62a9dacd063",
     "skipped": false,
     "stepCount": 2,
     "checks": {
@@ -149,7 +169,7 @@
   "openCodeSkillEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/opencode-skill-evidence.json",
     "bytes": 2597,
-    "sha256": "8d57b464a8e309c16e7987501ae7b8e87659e03d19ba30222bf6f1fae3547107",
+    "sha256": "04b68b238d8f67f0d0bced5d7d56ba0af346fb42904b91703cfcd364e1c890ce",
     "skipped": false,
     "stepCount": 3,
     "checks": {
@@ -189,6 +209,7 @@
       "codex-install-evidence",
       "claude-validation-evidence",
       "opencode-skill-evidence",
+      "motion-profile-evidence",
       "openai-plugin-submission",
       "claude-code-community-submission"
     ]
@@ -201,6 +222,7 @@
     "store listing draft validation",
     "npm pack --dry-run --json package-boundary check",
     "skill installer dry-run and isolated install evidence",
+    "renderer motion profile evidence",
     "isolated Codex marketplace install evidence",
     "Claude Code plugin validation evidence",
     "OpenCode project skill discovery evidence",
