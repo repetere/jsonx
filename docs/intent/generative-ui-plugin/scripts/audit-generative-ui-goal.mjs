@@ -37,6 +37,7 @@ const blockedNpmTerms = [
   "opencode-skill-evidence",
   "motion-profile-evidence",
   "browser-demo-evidence",
+  "source-docs-evidence",
   "submission-audit",
   "external-gate-evidence",
   "external-gates",
@@ -355,6 +356,7 @@ as external-gated unless --strict-external is set.
       evidence: [
         "apps/jsonx-renderer-app/chatgpt-app-submission.json",
         "docs/intent/generative-ui-plugin/store-listings/",
+        manifest.sourceDocsEvidence?.path,
         "docs/intent/generative-ui-plugin/external-gate-evidence.json",
         "docs/intent/generative-ui-plugin/scripts/validate-external-gate-recorder.mjs",
         manifest.submissionQueue?.json?.path,
@@ -373,6 +375,7 @@ as external-gated unless --strict-external is set.
           ].map(fileExists))
         ).every(Boolean),
         generatedStoreListingsOk: storeListingsOk(manifest),
+        sourceDocsEvidencePassed: allObjectValuesTrue(manifest.sourceDocsEvidence?.checks),
         submissionQueueCoversFour: manifest.submissionQueue?.submissionCount === 4,
         submissionQueueHasSharedRecorderCommands:
           Array.isArray(submissionQueue.externalGateRecorderCommands?.appIds) &&
@@ -443,7 +446,8 @@ as external-gated unless --strict-external is set.
     }),
     makeRequirement({
       id: "REQ-CI-COVERAGE",
-      requirement: "Run automated checks for app, plugins, fixtures, public review-kit page, generated submission packages, and npm package boundary on relevant changes.",
+      requirement:
+        "Run automated checks for app, plugins, fixtures, public review-kit page, source documentation links, generated submission packages, and npm package boundary on relevant changes.",
       githubIssue: "#1115",
       evidence: [".github/workflows/generative-ui-plugin.yml"],
       checks: {
@@ -455,6 +459,7 @@ as external-gated unless --strict-external is set.
           workflow.includes("Validate tracked external gate evidence") && workflow.includes("check-external-gate-evidence.mjs --json"),
         validatesExternalGateRecorderFlow: workflow.includes("validate-external-gate-recorder.mjs"),
         validatesGithubIssueTracking: workflow.includes("check-github-issue-tracking.mjs"),
+        validatesSubmissionSourceDocs: workflow.includes("check-submission-source-docs.mjs"),
         validatesGeneratedArtifacts: workflow.includes("prepare-submission-artifacts.mjs"),
         validatesNpmBoundary: workflow.includes("npm pack --dry-run --json"),
         triggersOnSiteChanges: workflow.includes('"site/**"') || workflow.includes("- \"site/**\""),

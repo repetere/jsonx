@@ -96,6 +96,9 @@ jobs:
       - name: Validate GitHub issue tracking
         run: node docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs --json
 
+      - name: Validate submission source docs
+        run: node docs/intent/generative-ui-plugin/scripts/check-submission-source-docs.mjs --json
+
       - name: Probe external gate access
         run: node docs/intent/generative-ui-plugin/scripts/check-external-gate-access.mjs --json
 
@@ -147,6 +150,7 @@ jobs:
             "opencode-skill-evidence",
             "motion-profile-evidence",
             "browser-demo-evidence",
+            "source-docs-evidence",
             "submission-audit",
             "external-gate-evidence",
             "openai-plugin-submission",

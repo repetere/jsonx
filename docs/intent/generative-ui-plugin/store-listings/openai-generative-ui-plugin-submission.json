@@ -146,7 +146,8 @@
     "externalGateAccess": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
     "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
     "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
-    "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
+    "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
+    "sourceDocsEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json"
   },
   "releaseNotes": "Initial submission of the JSONX Generative UI app-plus-skills plugin. It includes safe generated UI payload creation, validation fixtures, local handoff support, optional renderer-owned motion, and a stateless hosted MCP renderer app.",
   "manualBeforeSubmit": [

@@ -29,6 +29,12 @@ Validate live GitHub issue tracking before submission review:
 node docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs --json
 ```
 
+Validate the public documentation links referenced by the submission drafts:
+
+```text
+node docs/intent/generative-ui-plugin/scripts/check-submission-source-docs.mjs --json
+```
+
 Probe external gate access before submission review:
 
 ```text

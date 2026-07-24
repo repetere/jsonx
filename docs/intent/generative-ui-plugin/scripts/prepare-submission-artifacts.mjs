@@ -789,6 +789,19 @@ async function buildGithubIssueEvidence() {
   );
 }
 
+async function buildSourceDocsEvidence() {
+  console.log("capturing submission source docs evidence");
+  return parseJsonOutput(
+    "submission source docs evidence",
+    run(
+      "submission source docs evidence",
+      "node",
+      ["docs/intent/generative-ui-plugin/scripts/check-submission-source-docs.mjs", "--json"],
+      { capture: true, timeoutMs: externalCliTimeoutMs },
+    ),
+  );
+}
+
 async function buildExternalGateAccessEvidence() {
   console.log("capturing external gate access evidence");
   return parseJsonOutput(
@@ -1401,6 +1414,7 @@ function validateStoreListing(source, data) {
     "submissionQueue",
     "reviewPackage",
     "storeListingCopy",
+    "sourceDocsEvidence",
     "githubIssueEvidence",
     "externalGateAccess",
     "submissionAudit",
@@ -2745,6 +2759,7 @@ async function buildNpmBoundaryEvidence() {
     "opencode-skill-evidence",
     "motion-profile-evidence",
     "browser-demo-evidence",
+    "source-docs-evidence",
     "submission-audit",
     "external-gate-evidence",
     "external-gates",
@@ -2976,6 +2991,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
     manifest.claudeValidationEvidence && !manifest.claudeValidationEvidence.skipped && allChecksTrue(manifest.claudeValidationEvidence.checks);
   const openCodeOk = manifest.openCodeSkillEvidence && !manifest.openCodeSkillEvidence.skipped && allChecksTrue(manifest.openCodeSkillEvidence.checks);
   const githubIssueTrackingOk = manifest.githubIssueEvidence && allChecksTrue(manifest.githubIssueEvidence.checks);
+  const sourceDocsOk = manifest.sourceDocsEvidence && allChecksTrue(manifest.sourceDocsEvidence.checks);
   const packageBoundaryOk =
     manifest.npmBoundary?.packageName === "jsonx" &&
     manifest.npmBoundary.fileCount === 234 &&
@@ -3202,6 +3218,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         storeListingPresent(manifest, "OpenAI generative UI plugin portal draft") &&
         storeListingPresent(manifest, "Claude Code core JSONX community submission draft") &&
         storeListingPresent(manifest, "Claude Code generative UI community submission draft") &&
+        sourceDocsOk &&
         Boolean(manifest.submissionQueue?.json?.sha256) &&
         Boolean(manifest.externalGateRunbook?.sha256)
           ? "proved"
@@ -3213,6 +3230,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         "docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json",
         "docs/intent/generative-ui-plugin/store-listings/claude-code-jsonx-submission.json",
         "docs/intent/generative-ui-plugin/store-listings/claude-code-generative-ui-submission.json",
+        manifest.sourceDocsEvidence?.path,
         manifest.storeListings.find((item) => item.surface === "OpenAI core JSONX plugin portal draft")?.path,
         manifest.storeListings.find((item) => item.surface === "OpenAI generative UI plugin portal draft")?.path,
         manifest.storeListings.find((item) => item.surface === "Claude Code core JSONX community submission draft")?.path,
@@ -3227,6 +3245,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         openAiGenerativeUiDraftPresent: storeListingPresent(manifest, "OpenAI generative UI plugin portal draft"),
         claudeCoreDraftPresent: storeListingPresent(manifest, "Claude Code core JSONX community submission draft"),
         claudeGenerativeUiDraftPresent: storeListingPresent(manifest, "Claude Code generative UI community submission draft"),
+        sourceDocsEvidencePassed: sourceDocsOk,
         submissionQueuePresent: Boolean(manifest.submissionQueue?.json?.sha256),
         externalGateRunbookPresent: Boolean(manifest.externalGateRunbook?.sha256),
         submissionQueueLinksPortalForms: manifest.submissionQueue?.portalFormCount === 4,
@@ -3256,7 +3275,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
     {
       id: "REQ-CI-COVERAGE",
       requirement:
-        "Run automated checks for the renderer app, plugins, fixtures, public review kit, external gate evidence, GitHub issue tracking, generated packages, and npm package boundary.",
+        "Run automated checks for the renderer app, plugins, fixtures, public review kit, source documentation links, external gate evidence, GitHub issue tracking, generated packages, and npm package boundary.",
       status:
         sourceFileExists(".github/workflows/generative-ui-plugin.yml") &&
         workflow.includes("validate-plugin-package.mjs") &&
@@ -3266,6 +3285,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         workflow.includes("check-external-gate-evidence.mjs") &&
         workflow.includes("validate-external-gate-recorder.mjs") &&
         workflow.includes("check-github-issue-tracking.mjs") &&
+        workflow.includes("check-submission-source-docs.mjs") &&
         workflow.includes("check-external-gate-access.mjs") &&
         workflow.includes("audit-generative-ui-goal.mjs") &&
         workflow.includes("prepare-submission-artifacts.mjs") &&
@@ -3284,6 +3304,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
         validatesExternalGateEvidence: workflow.includes("check-external-gate-evidence.mjs"),
         validatesExternalGateRecorder: workflow.includes("validate-external-gate-recorder.mjs"),
         validatesGithubIssueTracking: workflow.includes("check-github-issue-tracking.mjs"),
+        validatesSubmissionSourceDocs: workflow.includes("check-submission-source-docs.mjs"),
         probesExternalGateAccess: workflow.includes("check-external-gate-access.mjs"),
         auditsGoalCoverage: workflow.includes("audit-generative-ui-goal.mjs"),
         validatesGeneratedArtifacts: workflow.includes("prepare-submission-artifacts.mjs"),
@@ -3530,6 +3551,9 @@ async function writeReviewSummary(manifest) {
     manifest.githubIssueEvidence
       ? `- \`${manifest.githubIssueEvidence.path}\` records ${manifest.githubIssueEvidence.issueCount} open feature enhancement issues for the JSONX generative UI workstreams and maps each issue to current requirement status.`
       : "- GitHub issue tracking evidence was not generated.",
+    manifest.sourceDocsEvidence
+      ? `- \`${manifest.sourceDocsEvidence.path}\` verifies ${manifest.sourceDocsEvidence.urlCount} public source documentation URLs referenced by the store listing drafts.`
+      : "- Submission source documentation evidence was not generated.",
     "",
     "## External Gate Access",
     "",
@@ -3630,6 +3654,10 @@ async function main() {
   const githubIssueEvidence = await buildGithubIssueEvidence();
   await writeJson(githubIssueEvidencePath, githubIssueEvidence);
   const githubIssueArtifact = await hashFile(githubIssueEvidencePath);
+  const sourceDocsEvidencePath = path.join(artifactRoot, "source-docs-evidence.json");
+  const sourceDocsEvidence = await buildSourceDocsEvidence();
+  await writeJson(sourceDocsEvidencePath, sourceDocsEvidence);
+  const sourceDocsArtifact = await hashFile(sourceDocsEvidencePath);
   const externalGateAccessEvidencePath = path.join(artifactRoot, "external-gate-access.json");
   const externalGateAccessEvidence = await buildExternalGateAccessEvidence();
   await writeJson(externalGateAccessEvidencePath, externalGateAccessEvidence);
@@ -3762,6 +3790,12 @@ async function main() {
       issueCount: githubIssueEvidence.issueCount,
       checks: githubIssueEvidence.checks,
     },
+    sourceDocsEvidence: {
+      ...sourceDocsArtifact,
+      listingCount: sourceDocsEvidence.listingCount,
+      urlCount: sourceDocsEvidence.sourceDocUrlCount,
+      checks: sourceDocsEvidence.checks,
+    },
     externalGateAccessEvidence: {
       ...externalGateAccessArtifact,
       blockingConditionCount: externalGateAccessEvidence.blockingConditions.length,
@@ -3786,6 +3820,7 @@ async function main() {
       ...(claudeValidationEvidence.skipped ? [] : ["Claude Code plugin validation evidence"]),
       ...(openCodeSkillEvidence.skipped ? [] : ["OpenCode project skill discovery evidence"]),
       "GitHub feature enhancement issue tracking evidence",
+      "submission source documentation evidence",
       "external gate access probe evidence",
       ...(hostedMcpArtifact ? [`live hosted MCP transcript capture from ${hostedMcpUrl}`] : []),
     ],

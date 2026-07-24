@@ -21,6 +21,7 @@ const requiredPublicEvidenceKeys = [
   "submissionQueue",
   "reviewPackage",
   "storeListingCopy",
+  "sourceDocsEvidence",
   "githubIssueEvidence",
   "externalGateAccess",
   "submissionAudit",
@@ -131,6 +132,11 @@ const requiredPublicPageLinks = [
     id: "githubIssueEvidence",
     href: "intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
     url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
+  },
+  {
+    id: "sourceDocsEvidence",
+    href: "intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json",
+    url: "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json",
   },
   {
     id: "externalGateAccess",
