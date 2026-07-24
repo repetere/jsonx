@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T12:31:39.225Z",
+  "generatedAt": "2026-07-24T12:37:45.151Z",
   "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
   "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
@@ -92,8 +92,8 @@
     {
       "purpose": "generative ui page desktop",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png",
-      "bytes": 209862,
-      "sha256": "5d11f3c945016017ea18e9f3b07362d8bd4d66c89f34cadb702dc8ed6560f87a"
+      "bytes": 210009,
+      "sha256": "f8fa75fb8f4d90690fdede760dd7f07245cfe576fa8c6efc5321fdc010763a23"
     },
     {
       "purpose": "skills install readme",
@@ -123,13 +123,13 @@
   "goldenPromptEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "bytes": 8274,
-    "sha256": "051a51e4409dbbbc8767e77f93947748cbe47ecd070b4463663044b6ba902d03",
+    "sha256": "fe49ac9c330945ad875becc3174f7739ef8a6a6030cae0d91f0939559c63257d",
     "caseCount": 9
   },
   "motionProfileEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
     "bytes": 4282,
-    "sha256": "387c824a8d7f8fa6faabbaec4003985a4a75dece20dba22bbf1704c0e32b48f7",
+    "sha256": "4c488613a3b22bfc88cc73ba0feff4c557c09a92b5784c8a27f69ef18a3a19ab",
     "skipped": false,
     "caseCount": 9,
     "profiles": [
@@ -149,7 +149,7 @@
   "browserDemoEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/browser-demo-evidence.json",
     "bytes": 3546,
-    "sha256": "1926dbec0518926593347b78dc9800730d9c7e6df5b9a5e711d791e4a4e603f3",
+    "sha256": "9e33284a1578792b7e42be2d511a25fa5030c80482d5e09753738f479ad7fa1a",
     "skipped": false,
     "caseCount": 3,
     "checks": {
@@ -166,7 +166,7 @@
   "hostedMcpEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
     "bytes": 4238,
-    "sha256": "3060089132b54bc8ab9d208fe0f37a5d6e7052905786cba55d5f89c36298866d",
+    "sha256": "d142ec9ebcae9e298cef25ff4c1374e07a10caa6beb1b010d0e2c280b85bebb3",
     "stepCount": 7,
     "checks": {
       "healthOk": true,
@@ -180,7 +180,7 @@
   "skillInstallerEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
     "bytes": 5009,
-    "sha256": "488038e0648a50becfea046c9059013b4c82139c3932b06ffd475e717b61e63e",
+    "sha256": "e45dd6ebce1ecfea39fcb4d023020c1cacf0c9aa6fb5cdf1549c46c0f896bec2",
     "dryRunMatrixCount": 9,
     "installSurfaceCount": 3,
     "checks": {
@@ -193,7 +193,7 @@
   "codexInstallEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
     "bytes": 7195,
-    "sha256": "032264cbcef0d9efb06f868254aa8a8799612b215a0cbacc893f5dc692eb3fe8",
+    "sha256": "a003a047628803a55f7f6eed70f7c39f90411bac1682cc2a49cad08c9acccdd8",
     "skipped": false,
     "reusedPreviousEvidence": false,
     "stepCount": 8,
@@ -210,7 +210,7 @@
   "claudeValidationEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
     "bytes": 1715,
-    "sha256": "b4950780e582f949a96b6dc87728fb4bcc1ff6fb4297959a982c6f1372bbf379",
+    "sha256": "6bf0a03415cbdb975e49c892e74859b3f017031861ad900d577c73328f991ab9",
     "skipped": false,
     "reusedPreviousEvidence": false,
     "stepCount": 3,
@@ -225,7 +225,7 @@
   "openCodeSkillEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/opencode-skill-evidence.json",
     "bytes": 2597,
-    "sha256": "abc3bdb214351201a12a174301069c4a23366c19fb0c500022105df165da0bef",
+    "sha256": "63377ad84a1ec84d4c7ea475188c03e82bcf82a6cfdacd6feb695b5efd945af6",
     "skipped": false,
     "reusedPreviousEvidence": false,
     "stepCount": 3,
@@ -240,8 +240,8 @@
   },
   "githubIssueEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
-    "bytes": 6886,
-    "sha256": "2d9896abeeb3da5e4d63e72077d8b73bc60b1bc5a5917bc26e144c43100605a4",
+    "bytes": 9292,
+    "sha256": "f4134ef88bce4524c102682bcabbe6a0bba1e6ffed484f72df130ed31319bd32",
     "issueCount": 8,
     "checks": {
       "trackerFileReadable": true,
@@ -253,13 +253,18 @@
       "allIssuesLabeledEnhancement": true,
       "allIssuesLabeledCodex": true,
       "allUrlsMatch": true,
-      "allTitlesPresent": true
+      "allTitlesPresent": true,
+      "statusSectionPresent": true,
+      "allRequirementStatusRowsListed": true,
+      "allRequirementIdsListed": true,
+      "allRequirementStatusesListed": true,
+      "allRemainingNotesListed": true
     }
   },
   "externalGateAccessEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
     "bytes": 3818,
-    "sha256": "1e480b123e00373124b2701e577a53c4b9d7f58a1604f2411292d4abca431701",
+    "sha256": "00f2663c73c6eac0ed8213c1baae7bafed99d81b0a6557e99de3e15906a69015",
     "blockingConditionCount": 3,
     "checks": {
       "probeCompleted": true,
@@ -275,7 +280,7 @@
     "packageName": "jsonx",
     "packageVersion": "2.1.1",
     "fileCount": 234,
-    "packageBytes": 6479024,
+    "packageBytes": 6479030,
     "excludedPrefixes": [
       "apps/",
       "plugins/",
@@ -358,7 +363,7 @@
   "externalGateEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
     "bytes": 5460,
-    "sha256": "a7470080cf816eadc58152566dfa993ca4d205bee1ff0ffa162c9c858f7b58d5",
+    "sha256": "21cda2dcc9495154bbc15b67ef4022fda97998c8ce13a57d9328345518ad3ef1",
     "supplied": true,
     "gateStatus": {
       "appIds": "pending",
@@ -387,12 +392,12 @@
     "json": {
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
       "bytes": 28161,
-      "sha256": "cba172f24b4ae81c50bfdca1717de2cd68d835f1303d0c2847c7f377ca28a03f"
+      "sha256": "e5c97142a1b9d194cb1f37553d70bc07c66c84468a48159eb1f012f428698ff0"
     },
     "markdown": {
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md",
       "bytes": 20453,
-      "sha256": "3120363837a8db2f3d88573294e204275fc6f7f323b833e557acaab1329fa944"
+      "sha256": "370b08746e65df0e7277b7925783653fbd66d5d44c16edc1dad63212aef70471"
     },
     "submissionCount": 4,
     "receiptRecordedCount": 0,
@@ -414,7 +419,7 @@
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
       "bytes": 8023,
-      "sha256": "c7bedf52b35ba6290b374b75d5349e304f79f2f5a1b819cf8e5535972b071eee"
+      "sha256": "e772b457dade02a79ec61569cc105a9e26c8d4133c819e284155699e5879bdca"
     },
     {
       "id": "openai-generative-ui",
@@ -423,7 +428,7 @@
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
       "bytes": 10669,
-      "sha256": "053cab3dc07e764818e44f7f842fd1a0238b68b89c7693eb70f68b266f1365fe"
+      "sha256": "e66adddbc2b12df9a19c9df20eab395afefc138c470be93ae4401e8da1783002"
     },
     {
       "id": "claude-core-jsonx",
@@ -432,7 +437,7 @@
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
       "bytes": 7758,
-      "sha256": "298ad436bbb3a9e9d09927706f75dbe828ffa5b8d97d34635bdf9e5f6f01631d"
+      "sha256": "c3f51a88d218076a96d2c3b4cbe9a55a41fba5096d96fd01646f77a7953912c1"
     },
     {
       "id": "claude-generative-ui",
@@ -441,18 +446,18 @@
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md",
       "bytes": 9094,
-      "sha256": "4db31e8b61102b6d500dd1e97e653c822393767e4588f7fa0309382b71815678"
+      "sha256": "1539416f3811ce057e44f6c26839a7079e5b3663222d3fbbfc819db96bcfa4ac"
     }
   ],
   "externalGateRunbook": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
     "bytes": 8745,
-    "sha256": "f65cacaa3a1e10d74b2bf9b71a27c73318631fbad6cb76f461e8ae16f1da1588"
+    "sha256": "688a85dffebddecee01787494b89b7ded7204a0849968631c3a297befc2a1dce"
   },
   "submissionAudit": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
-    "bytes": 19019,
-    "sha256": "be4ea74a5e9c4fa47219369a228eb71a1e0c62778f57213b3f49d321fe61eb70",
+    "bytes": 19018,
+    "sha256": "d6e80d5a2c40cfae42767eca1894da4c2cd4cd889a025e3aa9fc6892bd450ee9",
     "status": "implementation-complete-external-gated",
     "requirementCount": 17,
     "provedCount": 13,
