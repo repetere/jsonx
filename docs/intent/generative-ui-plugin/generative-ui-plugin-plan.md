@@ -33,7 +33,7 @@ Current implementation baseline:
 - `plugins/claude-jsonx-generative-ui-plugin/` contains the JSONX generative UI Claude Code plugin package.
 - `skills/codex/`, `skills/claude/`, and `skills/opencode/` contain installable skill source folders.
 - `skills/scripts/install-jsonx-skill.mjs` installs the `jsonx` and `jsonx-generative-ui` skill families for Codex, Claude Code, or OpenCode without mixing the two workflows.
-- `docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs` creates review packages, store listing drafts, portal submission packets, screenshots, golden-prompt evidence, renderer motion evidence, browser demo mode evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, a requirement audit, hashes, and npm package-boundary evidence under `docs/intent/generative-ui-plugin/submission-artifacts/current/`.
+- `docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs` creates review packages, store listing drafts, portal submission packets, screenshots, golden-prompt evidence, renderer motion evidence, browser demo mode evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, a full-objective requirement audit, hashes, and npm package-boundary evidence under `docs/intent/generative-ui-plugin/submission-artifacts/current/`.
 - The generated `submission-queue.json` and `submission-queue.md` files turn the four store listing drafts into a submitter checklist with package URLs, portal packet URLs, public evidence URLs, manual checks, receipt fields, and recorder commands.
 - The generated `submission-forms/*.md` files provide copy source for the OpenAI/Codex and Claude Code submission portals. They are not submission receipts.
 - `docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs` initializes, validates, and summarizes the external gate evidence file without running the full artifact generator.
@@ -456,7 +456,7 @@ Exit criteria:
 - Add browser demo evidence for fixture, paste, and bring-your-own endpoint modes.
 - Add GitHub issue evidence for the live feature enhancement issues that track contract, renderer, plugins, skills, motion, submission, Pages, and browser demo work.
 - Add external gate access evidence so submitters can see whether the current environment can reach the portals and run authenticated Claude Code smoke prompts.
-- Add a requirement-by-requirement submission audit that separates proved internal work from external submission gates.
+- Add a full-objective requirement-by-requirement submission audit that separates proved internal work from external submission gates.
 - Add an external gate evidence template so app IDs, ChatGPT transcripts, Claude smoke prompts, and marketplace submission receipts can be recorded after those external steps happen.
 - Add a lightweight external gate evidence checker so submitters can initialize the evidence file and see pending fields without regenerating packages.
 - Add a public review-kit checker so submitters can prove all public evidence URLs are present and reachable after Pages deploys.

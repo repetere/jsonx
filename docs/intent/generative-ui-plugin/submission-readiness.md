@@ -35,7 +35,8 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | Public review-kit checker | `docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs` | Validates store listing public evidence, the `docs/generative-ui.html` review-kit links, and live `jsonx.net` review-kit URLs after Pages deploys. |
 | GitHub issue tracker checker | `docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs` | Validates that the live workstream issues #1110 through #1117 are open, linked from the local tracker, and labeled `enhancement` and `codex`. |
 | External gate access checker | `docs/intent/generative-ui-plugin/scripts/check-external-gate-access.mjs` | Probes hosted MCP health, account-gated portal reachability, and local Claude Code auth state without printing credential values. |
-| Goal completion audit | `docs/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs` | Audits the full generative UI objective against current repo files and generated evidence, while reporting external gates separately. |
+| Submission audit | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` | Generated full-objective evidence map with implementation status, proved requirements, incomplete requirements, and external gates. |
+| Goal completion checker | `docs/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs` | Audits the full generative UI objective against current repo files and generated evidence, while reporting external gates separately. |
 | CI validation | `.github/workflows/generative-ui-plugin.yml` | Push, pull request, and manual workflow for app checks, plugin metadata checks, fixture validation, package generation, and npm package-boundary enforcement. |
 
 ## Ready Now
@@ -66,7 +67,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Generate current submission packages and screenshots:
   `node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs`.
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/manifest.json` as the current artifact manifest.
-- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` as the requirement-by-requirement evidence map.
+- Use `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` as the full-objective requirement-by-requirement evidence map.
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md` as the submitter checklist for the four marketplace packages.
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md` as the checklist for app IDs, ChatGPT developer-mode transcripts, Claude Code smoke results, policy review, and submission receipts.
 - Use `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/` as the copy source for filling the OpenAI/Codex and Claude Code submission portals.

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { constants as fsConstants } from "node:fs";
+import { constants as fsConstants, existsSync, readFileSync } from "node:fs";
 import fs from "node:fs/promises";
 import http from "node:http";
 import os from "node:os";
@@ -178,6 +178,22 @@ function evidenceSourcePath(filePath) {
   const repoRelative = path.relative(repoRoot, filePath);
   if (!repoRelative.startsWith("..") && !path.isAbsolute(repoRelative)) return repoRelative;
   return artifactPath(filePath);
+}
+
+function sourcePath(filePath) {
+  return path.join(repoRoot, filePath);
+}
+
+function sourceFileExists(filePath) {
+  return existsSync(sourcePath(filePath));
+}
+
+function sourceText(filePath) {
+  try {
+    return readFileSync(sourcePath(filePath), "utf8");
+  } catch {
+    return "";
+  }
 }
 
 function run(label, command, args, options = {}) {
@@ -2948,6 +2964,9 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
   const gitCommit = sourceGitSnapshot.dirtyStatus.length
     ? `${sourceGitSnapshot.headCommit}+worktree`
     : sourceGitSnapshot.headCommit;
+  const plan = sourceText("docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md");
+  const readiness = sourceText("docs/intent/generative-ui-plugin/submission-readiness.md");
+  const workflow = sourceText(".github/workflows/generative-ui-plugin.yml");
   const browserDemoOk = manifest.browserDemoEvidence && !manifest.browserDemoEvidence.skipped && allChecksTrue(manifest.browserDemoEvidence.checks);
   const motionOk = manifest.motionProfileEvidence && !manifest.motionProfileEvidence.skipped && allChecksTrue(manifest.motionProfileEvidence.checks);
   const hostedMcpOk = manifest.hostedMcpEvidence && allChecksTrue(manifest.hostedMcpEvidence.checks);
@@ -2973,6 +2992,37 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
   const marketplaceGateOk = gateProved(externalGateEvidence, "marketplaceSubmission");
 
   const requirements = [
+    {
+      id: "REQ-PLAN",
+      requirement:
+        "Keep a plan that includes split skill installation, plugin/app submission, optional GSAP motion, GitHub tracking, npm package boundary protection, and GitHub Pages updates.",
+      status:
+        sourceFileExists("docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md") &&
+        sourceFileExists("docs/intent/generative-ui-plugin/submission-readiness.md") &&
+        plan.includes("Codex") &&
+        plan.includes("Claude Code") &&
+        plan.includes("OpenCode") &&
+        plan.includes("GSAP") &&
+        plan.includes("npm package") &&
+        readiness.includes("Submission Gates")
+          ? "proved"
+          : "incomplete",
+      githubIssue: "#1115",
+      evidence: [
+        "docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md",
+        "docs/intent/generative-ui-plugin/submission-readiness.md",
+      ],
+      checks: {
+        planPresent: sourceFileExists("docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md"),
+        readinessPresent: sourceFileExists("docs/intent/generative-ui-plugin/submission-readiness.md"),
+        mentionsCodex: plan.includes("Codex") || readiness.includes("Codex"),
+        mentionsClaudeCode: plan.includes("Claude Code") || readiness.includes("Claude Code"),
+        mentionsOpenCode: plan.includes("OpenCode") || readiness.includes("OpenCode"),
+        mentionsGsapMotion: plan.includes("GSAP") || readiness.includes("GSAP"),
+        mentionsNpmBoundary: plan.includes("npm package") || readiness.includes("npm package"),
+        tracksSubmissionGates: readiness.includes("Submission Gates"),
+      },
+    },
     {
       id: "REQ-SKILLS-SPLIT",
       requirement: "Provide separate core JSONX and generative UI skills for Codex, Claude Code, and OpenCode with install paths documented.",
@@ -3204,6 +3254,44 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
       },
     },
     {
+      id: "REQ-CI-COVERAGE",
+      requirement:
+        "Run automated checks for the renderer app, plugins, fixtures, public review kit, external gate evidence, GitHub issue tracking, generated packages, and npm package boundary.",
+      status:
+        sourceFileExists(".github/workflows/generative-ui-plugin.yml") &&
+        workflow.includes("validate-plugin-package.mjs") &&
+        workflow.includes("Validate renderer app") &&
+        workflow.includes("Validate generative UI fixtures") &&
+        workflow.includes("check-public-review-kit.mjs") &&
+        workflow.includes("check-external-gate-evidence.mjs") &&
+        workflow.includes("validate-external-gate-recorder.mjs") &&
+        workflow.includes("check-github-issue-tracking.mjs") &&
+        workflow.includes("check-external-gate-access.mjs") &&
+        workflow.includes("audit-generative-ui-goal.mjs") &&
+        workflow.includes("prepare-submission-artifacts.mjs") &&
+        workflow.includes("npm pack --dry-run --json") &&
+        workflow.includes('"site/**"')
+          ? "proved"
+          : "incomplete",
+      githubIssue: "#1115",
+      evidence: [".github/workflows/generative-ui-plugin.yml"],
+      checks: {
+        workflowPresent: sourceFileExists(".github/workflows/generative-ui-plugin.yml"),
+        validatesPluginMetadata: workflow.includes("validate-plugin-package.mjs"),
+        validatesRendererApp: workflow.includes("Validate renderer app"),
+        validatesFixtures: workflow.includes("Validate generative UI fixtures"),
+        validatesPublicReviewKit: workflow.includes("check-public-review-kit.mjs"),
+        validatesExternalGateEvidence: workflow.includes("check-external-gate-evidence.mjs"),
+        validatesExternalGateRecorder: workflow.includes("validate-external-gate-recorder.mjs"),
+        validatesGithubIssueTracking: workflow.includes("check-github-issue-tracking.mjs"),
+        probesExternalGateAccess: workflow.includes("check-external-gate-access.mjs"),
+        auditsGoalCoverage: workflow.includes("audit-generative-ui-goal.mjs"),
+        validatesGeneratedArtifacts: workflow.includes("prepare-submission-artifacts.mjs"),
+        validatesNpmBoundary: workflow.includes("npm pack --dry-run --json"),
+        triggersOnSiteChanges: workflow.includes('"site/**"') || workflow.includes("- \"site/**\""),
+      },
+    },
+    {
       id: "GATE-APP-ID",
       requirement: "Add approved OpenAI/Codex core plugin, generative UI plugin, and renderer app IDs to the recorded evidence and Codex app metadata.",
       status: appIdGateOk ? "proved" : "external-gated",
@@ -3305,6 +3393,17 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
     },
     {},
   );
+  const normalizedSummary = {
+    proved: summary.proved || 0,
+    incomplete: summary.incomplete || 0,
+    externalGated: summary["external-gated"] || 0,
+  };
+  const status =
+    normalizedSummary.incomplete > 0
+      ? "implementation-incomplete"
+      : normalizedSummary.externalGated > 0
+        ? "implementation-complete-external-gated"
+        : "complete";
 
   return {
     generatedAt: new Date().toISOString(),
@@ -3318,7 +3417,15 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
     },
     objective:
     "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
+    status,
     summary,
+    normalizedSummary,
+    externalGates: {
+      appIds: externalGateEvidence?.gateStatus?.appIds || "pending",
+      chatgptDeveloperMode: externalGateEvidence?.gateStatus?.chatgptDeveloperMode || "pending",
+      claudeSmoke: externalGateEvidence?.gateStatus?.claudeSmoke || "pending",
+      marketplaceSubmission: externalGateEvidence?.gateStatus?.marketplaceSubmission || "pending",
+    },
     requirements,
   };
 }
@@ -3433,7 +3540,7 @@ async function writeReviewSummary(manifest) {
     "## Submission Audit",
     "",
     manifest.submissionAudit
-      ? `- \`${manifest.submissionAudit.path}\` maps ${manifest.submissionAudit.requirementCount} requirements to evidence, with ${manifest.submissionAudit.provedCount} proved and ${manifest.submissionAudit.externalGatedCount} external-gated.`
+      ? `- \`${manifest.submissionAudit.path}\` maps ${manifest.submissionAudit.requirementCount} requirements to evidence. Status: \`${manifest.submissionAudit.status}\`; ${manifest.submissionAudit.provedCount} proved, ${manifest.submissionAudit.incompleteCount} incomplete, and ${manifest.submissionAudit.externalGatedCount} external-gated.`
       : "- Submission audit was not generated.",
     manifest.externalGateEvidence?.supplied
       ? `- \`${manifest.externalGateEvidence.path}\` records supplied external gate evidence.`
@@ -3734,6 +3841,7 @@ async function main() {
   const submissionAuditArtifact = await hashFile(submissionAuditPath);
   manifest.submissionAudit = {
     ...submissionAuditArtifact,
+    status: submissionAudit.status,
     requirementCount: submissionAudit.requirements.length,
     provedCount: submissionAudit.summary.proved || 0,
     externalGatedCount: submissionAudit.summary["external-gated"] || 0,
