@@ -171,6 +171,30 @@ function buildStatus(data) {
   return { checks, gates };
 }
 
+function recorderCommandsForGate(gate) {
+  const recorder = "node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs";
+  const commands = {
+    appIds: [
+      `${recorder} app-ids --openai-core-plugin-id <id> --openai-generative-ui-app-id <id> --openai-generative-ui-plugin-id <id> --codex-core-plugin-id <id> --codex-generative-ui-plugin-id <id> --codex-app-metadata-updated`,
+    ],
+    chatgptDeveloperMode: [
+      `${recorder} chatgpt --connected-mcp-url ${hostedMcpUrl} --transcript-url <url> --all-prompts-passed`,
+    ],
+    claudeSmoke: [
+      `${recorder} claude-smoke --plugin core --authenticated --claude-version <version> --passed`,
+      `${recorder} claude-smoke --plugin generative-ui --authenticated --claude-version <version> --passed`,
+    ],
+    marketplaceSubmission: [
+      `${recorder} policy-review --status approved --reviewed-by <name> --reviewed-at <yyyy-mm-dd>`,
+      `${recorder} marketplace --target openai-core --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>`,
+      `${recorder} marketplace --target openai-generative-ui --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>`,
+      `${recorder} marketplace --target claude-core --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>`,
+      `${recorder} marketplace --target claude-generative-ui --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>`,
+    ],
+  };
+  return commands[gate] || [];
+}
+
 function pendingActions(status) {
   const actions = [];
   const { checks, gates } = status;
@@ -187,7 +211,12 @@ function pendingActions(status) {
       );
     }
     if (!checks.codexAppMetadataUpdated) missing.push("appIds.codexGenerativeUiAppMetadataUpdated");
-    actions.push({ gate: "appIds", action: "Record approved app/plugin IDs and update generative UI Codex app metadata.", fields: missing });
+    actions.push({
+      gate: "appIds",
+      action: "Record approved app/plugin IDs and update generative UI Codex app metadata.",
+      fields: missing,
+      recorderCommands: recorderCommandsForGate("appIds"),
+    });
   }
 
   if (gates.chatgptDeveloperMode !== "proved") {
@@ -195,6 +224,7 @@ function pendingActions(status) {
       gate: "chatgptDeveloperMode",
       action: `Connect ${hostedMcpUrl} in ChatGPT developer mode, run the golden prompts, and record transcript evidence.`,
       fields: ["chatgptDeveloperMode.connectedMcpUrl", "chatgptDeveloperMode.transcriptUrl", "chatgptDeveloperMode.promptsRun"],
+      recorderCommands: recorderCommandsForGate("chatgptDeveloperMode"),
     });
   }
 
@@ -203,6 +233,7 @@ function pendingActions(status) {
       gate: "claudeSmoke",
       action: "Run authenticated Claude Code smoke prompts for both split Claude plugin packages.",
       fields: ["claudeSmoke.core", "claudeSmoke.generativeUi"],
+      recorderCommands: recorderCommandsForGate("claudeSmoke"),
     });
   }
 
@@ -217,6 +248,7 @@ function pendingActions(status) {
         "marketplaceSubmissions.claudeCore",
         "marketplaceSubmissions.claudeGenerativeUi",
       ],
+      recorderCommands: recorderCommandsForGate("marketplaceSubmission"),
     });
   }
 
@@ -246,6 +278,10 @@ function printHumanReport(report) {
   for (const item of report.pending) {
     console.log(`- ${item.gate}: ${item.action}`);
     console.log(`  fields: ${item.fields.join(", ")}`);
+    if (item.recorderCommands?.length) {
+      console.log("  recorder commands:");
+      for (const command of item.recorderCommands) console.log(`    ${command}`);
+    }
   }
   console.log("");
   console.log("After updating evidence, regenerate artifacts:");

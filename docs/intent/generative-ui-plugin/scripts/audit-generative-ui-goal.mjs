@@ -319,6 +319,7 @@ as external-gated unless --strict-external is set.
       evidence: [
         "apps/jsonx-renderer-app/chatgpt-app-submission.json",
         "docs/intent/generative-ui-plugin/store-listings/",
+        "docs/intent/generative-ui-plugin/external-gate-evidence.json",
         manifest.submissionQueue?.json?.path,
         manifest.submissionQueue?.markdown?.path,
       ].filter(Boolean),
@@ -335,6 +336,8 @@ as external-gated unless --strict-external is set.
         generatedStoreListingsOk: storeListingsOk(manifest),
         submissionQueueCoversFour: manifest.submissionQueue?.submissionCount === 4,
         receiptsStillExplicitlyTracked: manifest.submissionQueue?.pendingSubmissionCount === 4 || manifest.submissionQueue?.receiptRecordedCount === 4,
+        externalGateSourcePresent: await fileExists("docs/intent/generative-ui-plugin/external-gate-evidence.json"),
+        externalGateSourceSupplied: manifest.externalGateEvidence?.supplied === true,
       },
     }),
     makeRequirement({
@@ -359,6 +362,9 @@ as external-gated unless --strict-external is set.
         workflowPresent: await fileExists(".github/workflows/generative-ui-plugin.yml"),
         validatesPluginMetadata: workflow.includes("validate-plugin-package.mjs"),
         validatesPublicReviewKit: workflow.includes("check-public-review-kit.mjs"),
+        validatesExternalGateTemplate: workflow.includes("external-gate-evidence.template.json"),
+        validatesTrackedExternalGateEvidence:
+          workflow.includes("Validate tracked external gate evidence") && workflow.includes("check-external-gate-evidence.mjs --json"),
         validatesGeneratedArtifacts: workflow.includes("prepare-submission-artifacts.mjs"),
         validatesNpmBoundary: workflow.includes("npm pack --dry-run --json"),
         triggersOnSiteChanges: workflow.includes('"site/**"') || workflow.includes("- \"site/**\""),

@@ -80,6 +80,9 @@ jobs:
       - name: Validate external gate evidence template
         run: node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs --source docs/intent/generative-ui-plugin/external-gate-evidence.template.json --json
 
+      - name: Validate tracked external gate evidence
+        run: node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs --json
+
       - name: Validate external gate recorder
         run: |
           node --check docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs
