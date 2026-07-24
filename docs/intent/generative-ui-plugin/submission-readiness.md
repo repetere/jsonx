@@ -15,6 +15,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | OpenCode | `skills/opencode/` | Skill folders for project or global install. OpenCode does not need a separate plugin for the current scope. |
 | Skill installer | `skills/scripts/install-jsonx-skill.mjs` | Local installer for core JSONX and generative UI skills across Codex, Claude Code, and OpenCode. |
 | ChatGPT Apps SDK | `apps/jsonx-renderer-app/` | Runnable stateless MCP app with `render_jsonx_response`, widget resource, optional GSAP motion, local smoke test, developer-mode tunnel path, and Netlify serverless adapter. |
+| Hosted renderer | `https://jsonx-renderer-app.netlify.app/mcp` | Netlify-hosted MCP endpoint with live health, widget, CORS, tool listing, resource read, valid render, and invalid payload smoke tests. |
 | ChatGPT app submission | `apps/jsonx-renderer-app/chatgpt-app-submission.json` | Import-ready submission draft with app info, tool hint justifications, five positive test cases, and three negative test cases. |
 | Public policy pages | `site/privacy.html`, `site/terms.html` | Public privacy and terms notes for the JSONX site, browser demo, skills, plugins, and renderer app. |
 
@@ -27,13 +28,13 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Run the Apps SDK renderer locally at `/mcp`.
 - Test the renderer app with the SDK client smoke test.
 - Enable optional GSAP motion locally with `JSONX_ENABLE_GSAP=1`.
-- Deploy the renderer app to Netlify from `apps/jsonx-renderer-app` or connect it to ChatGPT developer mode through an HTTPS tunnel.
+- Use the hosted Netlify renderer at `https://jsonx-renderer-app.netlify.app/mcp`.
+- Deploy a new renderer app build to Netlify from `apps/jsonx-renderer-app` after source changes.
 - Use `apps/jsonx-renderer-app/chatgpt-app-submission.json` as the starting point for the ChatGPT Apps submission form.
-- Use `https://jsonx.net/privacy.html`, `https://jsonx.net/terms.html`, and GitHub Issues as public submission URLs after the GitHub Pages deployment updates.
+- Use `https://jsonx.net/privacy.html`, `https://jsonx.net/terms.html`, and GitHub Issues as public submission URLs.
 
 ## Not Ready For Public Submission
 
-- The Apps SDK app does not yet have a stable production HTTPS endpoint.
 - `.app.json` does not yet reference an approved app ID.
 - Public screenshots and test prompt responses still need to be captured from the hosted app.
 - Privacy, terms, and support URLs exist, but still need final human or legal review before public submission.
@@ -45,9 +46,12 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 
 ### Apps SDK Renderer
 
-- Deploy the MCP server to a stable HTTPS host.
-- For Netlify, use base directory `apps/jsonx-renderer-app`, build command `npm run check`, publish directory `public`, and the hosted `/mcp` path.
-- Confirm `/mcp` supports low-latency streaming responses and dependable TLS.
+- Current Netlify site id: `210939ba-0ffe-4c5d-8074-bbc195518c1c`.
+- Current Netlify project: `https://app.netlify.com/projects/jsonx-renderer-app`.
+- Current production endpoint: `https://jsonx-renderer-app.netlify.app/mcp`.
+- Latest verified deploy id: `6a6305f3ea5f474b412d2f3e`.
+- For Netlify redeploys, use base directory `apps/jsonx-renderer-app`, build command `npm run check`, publish directory `public`, and the hosted `/mcp` path.
+- Confirm `/mcp` supports low-latency streaming responses and dependable TLS after each deploy.
 - Connect the hosted `/mcp` URL in ChatGPT developer mode.
 - Run golden prompts for direct UI, text-only fallback, quiz, poll, bad payload, oversized payload, and unsupported component.
 - Run motion prompts for `subtle-enter`, `state-change-highlight`, and `morph-list-to-detail` with and without GSAP enabled.

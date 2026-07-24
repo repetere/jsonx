@@ -32,5 +32,6 @@ Before public submission:
 
 - Run `claude plugin validate` when Claude Code is available locally.
 - Confirm the plugin still contains only skills and docs.
-- Keep hosted renderer app IDs and MCP endpoint URLs out of the manifest until they are real and reachable.
+- The hosted renderer MCP endpoint is `https://jsonx-renderer-app.netlify.app/mcp`.
+- Keep hosted renderer app IDs out of the manifest until they are real and reachable.
 - Submit through the Claude community marketplace flow after validation passes.

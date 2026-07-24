@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
@@ -19,7 +19,8 @@ import {
 } from "./render-tool.mjs";
 import { ALLOWED_MOTION_PROFILES, JSONX_UI_SCHEMA } from "./jsonx-validator.mjs";
 
-const appRoot = dirname(dirname(fileURLToPath(import.meta.url)));
+const moduleDir = dirname(fileURLToPath(import.meta.url));
+const appRoot = findAppRoot();
 const webRoot = join(appRoot, "web");
 const MCP_PATH = "/mcp";
 const GSAP_RUNTIME_PATH = join(appRoot, "node_modules", "gsap", "dist", "gsap.min.js");
@@ -39,6 +40,16 @@ const renderOutputSchema = {
   motionProfile: motionProfileSchema.optional(),
   payload: payloadSchema,
 };
+
+function findAppRoot() {
+  const candidates = [dirname(moduleDir), dirname(dirname(moduleDir)), process.cwd()];
+  for (const candidate of [...new Set(candidates)]) {
+    if (existsSync(join(candidate, "web", "widget.html"))) {
+      return candidate;
+    }
+  }
+  return dirname(moduleDir);
+}
 
 function readWebFile(name) {
   return readFileSync(join(webRoot, name), "utf8");

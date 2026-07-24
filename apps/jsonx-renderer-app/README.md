@@ -50,6 +50,19 @@ https://<subdomain>.ngrok.app/mcp
 
 `netlify.toml` and `netlify/functions/jsonx-renderer.mjs` make the app deployable as a Netlify site with a serverless MCP endpoint.
 
+Current hosted endpoint:
+
+```text
+https://jsonx-renderer-app.netlify.app/mcp
+```
+
+Current health and widget URLs:
+
+```text
+https://jsonx-renderer-app.netlify.app/healthz
+https://jsonx-renderer-app.netlify.app/widget
+```
+
 Recommended Git-based setup:
 
 ```text
@@ -59,12 +72,12 @@ Publish directory: public
 Functions directory: netlify/functions
 ```
 
-After deployment, use these URLs:
+After a new deployment, use these URLs:
 
 ```text
-https://<site>.netlify.app/mcp
 https://<site>.netlify.app/healthz
 https://<site>.netlify.app/widget
+https://<site>.netlify.app/mcp
 ```
 
 Set `JSONX_ENABLE_GSAP=1` in the Netlify environment only if the hosted widget should inline the app-local GSAP runtime. Do not put API keys or model credentials in this renderer app.
@@ -82,7 +95,9 @@ npm run validate:fixtures
 
 `chatgpt-app-submission.json` is the current ChatGPT Apps submission draft. It includes app info, tool hint justifications, five positive test cases, and three negative test cases.
 
-Public submission still needs a deployed HTTPS URL connected in ChatGPT developer mode, final app/plugin metadata, screenshots, and hosted test prompt responses. The public site provides privacy and terms pages at `https://jsonx.net/privacy.html` and `https://jsonx.net/terms.html` after GitHub Pages deployment. Use GitHub Issues as the support URL unless a separate support channel is created. Do not add placeholder hosted URLs or app IDs to `.app.json`.
+Public submission still needs the hosted `/mcp` URL connected in ChatGPT developer mode, final app/plugin metadata, screenshots, and hosted test prompt responses. The public site provides privacy and terms pages at `https://jsonx.net/privacy.html` and `https://jsonx.net/terms.html`. Use GitHub Issues as the support URL unless a separate support channel is created. Do not add placeholder app IDs to `.app.json`.
+
+The hosted Netlify endpoint is live and smoke-tested, but it has not yet been submitted or approved as a ChatGPT app.
 
 ## Development Notes
 

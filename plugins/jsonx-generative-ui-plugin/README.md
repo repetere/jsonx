@@ -42,6 +42,14 @@ http://localhost:8787/mcp
 
 For ChatGPT developer mode, expose the server through an HTTPS tunnel and use the tunneled `/mcp` URL.
 
+The hosted renderer endpoint is:
+
+```text
+https://jsonx-renderer-app.netlify.app/mcp
+```
+
+Use it for ChatGPT developer-mode app setup and hosted smoke tests.
+
 ## Public Wiring
 
-`.app.json` stays empty until a real hosted Apps SDK app ID exists. `.mcp.json` stays empty in the plugin package so it does not point to a local path that will fail for installed users. Use the templates in `assets/` for repo-local development wiring.
+`.app.json` stays empty until a real Apps SDK app ID exists. `.mcp.json` stays empty in the plugin package so installed users are not pinned to a local path or an endpoint they did not choose. Use the templates in `assets/` for repo-local development wiring.

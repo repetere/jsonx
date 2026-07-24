@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { cp, mkdir, rm } from "node:fs/promises";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import netlifyHandler from "../netlify/functions/jsonx-renderer.mjs";
@@ -39,6 +40,23 @@ async function main() {
   assert.equal(webWidget.status, 200);
   assert.equal(webWidget.headers.get("content-type"), "text/html;profile=mcp-app");
   assert.match(await webWidget.text(), /jsonx-root/);
+
+  const bundleFixture = new URL("./.tmp-netlify-bundle/", import.meta.url);
+  try {
+    await rm(bundleFixture, { recursive: true, force: true });
+    await mkdir(new URL("netlify/functions/", bundleFixture), { recursive: true });
+    await cp(new URL("../web/", import.meta.url), new URL("web/", bundleFixture), { recursive: true });
+    await cp(new URL("../src/jsonx-validator.mjs", import.meta.url), new URL("netlify/functions/jsonx-validator.mjs", bundleFixture));
+    await cp(new URL("../src/render-tool.mjs", import.meta.url), new URL("netlify/functions/render-tool.mjs", bundleFixture));
+    await cp(new URL("../src/server.mjs", import.meta.url), new URL("netlify/functions/server.mjs", bundleFixture));
+
+    const bundledServer = await import(`${new URL("netlify/functions/server.mjs", bundleFixture).href}?smoke=${Date.now()}`);
+    const bundledWidget = await bundledServer.handleWebRequest(new Request("https://renderer.example/widget"));
+    assert.equal(bundledWidget.status, 200);
+    assert.match(await bundledWidget.text(), /jsonx-root/);
+  } finally {
+    await rm(bundleFixture, { recursive: true, force: true });
+  }
 
   const webPreflight = await handleWebRequest(new Request("https://renderer.example/mcp", { method: "OPTIONS" }));
   assert.equal(webPreflight.status, 204);
