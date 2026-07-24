@@ -95,6 +95,11 @@ const requiredPublicPageLinks = [
     url: "https://jsonx.net/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs",
   },
   {
+    id: "goalAudit",
+    href: "intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs",
+    url: "https://jsonx.net/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs",
+  },
+  {
     id: "externalGateChecker",
     href: "intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs",
     url: "https://jsonx.net/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs",

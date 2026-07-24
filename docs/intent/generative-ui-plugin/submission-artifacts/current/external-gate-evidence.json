@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T09:51:41.274Z",
+  "generatedAt": "2026-07-24T10:10:13.173Z",
   "source": "docs/intent/generative-ui-plugin/external-gate-evidence.template.json",
   "supplied": false,
   "note": "No external gate evidence file was supplied. Copy external-gate-evidence.template.json to external-gate-evidence.json after portal and authenticated smoke steps are complete.",

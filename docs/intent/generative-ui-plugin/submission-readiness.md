@@ -28,6 +28,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | External gate checker | `docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs` | Lightweight init, validation, and pending-field report for external submission evidence. |
 | External gate recorder | `docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs` | Controlled CLI for recording app IDs, ChatGPT transcript status, Claude smoke results, policy review, and marketplace receipts into `external-gate-evidence.json`. |
 | Public review-kit checker | `docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs` | Validates store listing public evidence, the `docs/generative-ui.html` review-kit links, and live `jsonx.net` review-kit URLs after Pages deploys. |
+| Goal completion audit | `docs/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs` | Audits the full generative UI objective against current repo files and generated evidence, while reporting external gates separately. |
 | CI validation | `.github/workflows/generative-ui-plugin.yml` | Push, pull request, and manual workflow for app checks, plugin metadata checks, fixture validation, package generation, and npm package-boundary enforcement. |
 
 ## Ready Now
@@ -63,6 +64,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Record external IDs, transcripts, Claude smoke results, policy review, and marketplace receipts with `node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs <command> ...` after those gates produce real evidence. Regenerate artifacts after recording results.
 - Initialize or inspect external gate evidence with `node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs --init` and `node docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs`.
 - Validate review-kit public evidence and page links with `node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs` before regenerating artifacts and `node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs --source docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings --network --cache-bust <commit-sha> --strict` after Pages deploys.
+- Audit implementation completion with `node docs/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs`. Use `--strict-external` only after app IDs, transcripts, authenticated Claude smoke runs, policy review, and marketplace receipts have been recorded.
 - Run the Generative UI Plugin workflow on GitHub Actions after app, plugin, fixture, or submission package changes.
 
 ## Not Ready For Public Submission

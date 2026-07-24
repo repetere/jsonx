@@ -19,6 +19,12 @@ Validate public evidence coverage and the public review-kit page before regenera
 node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs
 ```
 
+Audit the full implementation goal before submission review:
+
+```text
+node docs/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs
+```
+
 After GitHub Pages deploys, verify the live page and public URLs:
 
 ```text
@@ -32,3 +38,5 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 ```
 
 Regenerate `docs/intent/generative-ui-plugin/submission-artifacts/current/` after editing these files so the review package copies stay current.
+
+After all external IDs, transcripts, smoke results, policy review, and receipts are recorded, rerun the audit with `--strict-external`.
