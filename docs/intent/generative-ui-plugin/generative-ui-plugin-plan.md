@@ -39,6 +39,7 @@ Current implementation baseline:
 - `docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs` initializes, validates, and summarizes the external gate evidence file without running the full artifact generator.
 - `docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs` records external app IDs, transcript status, Claude smoke results, policy review, and marketplace receipts into the same evidence schema.
 - `docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs` validates public evidence URL coverage in store listing drafts and can check live `jsonx.net` URLs after Pages deploys.
+- `docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs` validates the live GitHub tracking issues and records whether each workstream issue is open and labeled as an enhancement.
 - `.github/workflows/generative-ui-plugin.yml` runs app, plugin, fixture, submission package, and npm package-boundary checks in CI.
 - `docs/intent/generative-ui-plugin/submission-readiness.md` tracks what remains before public app or plugin submission.
 
@@ -452,6 +453,7 @@ Exit criteria:
 - Add screenshots and starter prompts.
 - Add deterministic golden-prompt evidence for valid UI, text fallback, unsafe payloads, oversized payloads, unsupported components, and motion.
 - Add browser demo evidence for fixture, paste, and bring-your-own endpoint modes.
+- Add GitHub issue evidence for the live feature enhancement issues that track contract, renderer, plugins, skills, motion, submission, Pages, and browser demo work.
 - Add a requirement-by-requirement submission audit that separates proved internal work from external submission gates.
 - Add an external gate evidence template so app IDs, ChatGPT transcripts, Claude smoke prompts, and marketplace submission receipts can be recorded after those external steps happen.
 - Add a lightweight external gate evidence checker so submitters can initialize the evidence file and see pending fields without regenerating packages.

@@ -1,6 +1,6 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T11:58:31.121Z
+Generated: 2026-07-24T12:09:39.503Z
 
 ## Packages
 
@@ -26,10 +26,10 @@ Generated: 2026-07-24T11:58:31.121Z
 
 | Submission | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `eee4e810f1eadaa6a1b9e6d53f2b978adba2f4c5351726337940b5c014c64506` | 7771 |
-| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `4d57825809ad7702da7f3b1e51738a4ff7a996a80d65c7ebf523d0f78d75680c` | 10417 |
-| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `c26345c5299778290a4e16a056ae33f045f938e9851a24d5bc510e1b9ee94601` | 7506 |
-| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `7e43bbe5de48b8990c39bdd780ec9480712533b1ac26ac09fc102e4ded429f21` | 8842 |
+| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `afd08cf4646b004c258f4c4e3d5000738bdd3b31b474d418fbaa1e12497c7761` | 7898 |
+| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `1033a3bc20b6e4893f33108a7bf2f6ac34b6697e738bd546bac45773aae30fe9` | 10544 |
+| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `9c6b2a1de3ece53baf9adafa29ac9bf2ff4a97725882c174ce876eb538b67b49` | 7633 |
+| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `ea15799445aaaa4543bc9171a6cefc0230e3b77e82385ed79234650e8f74497c` | 8969 |
 
 ## Submission Queue
 
@@ -69,9 +69,13 @@ Generated: 2026-07-24T11:58:31.121Z
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json` records Claude Code plugin validation for the core and generative UI plugins with 3 checks.
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/opencode-skill-evidence.json` records OpenCode project skill discovery with 3 checks.
 
+## GitHub Issue Tracking
+
+- `docs/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json` records 8 open feature enhancement issues for the JSONX generative UI workstreams.
+
 ## Submission Audit
 
-- `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` maps 14 requirements to evidence, with 10 proved and 4 external-gated.
+- `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json` maps 15 requirements to evidence, with 11 proved and 4 external-gated.
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json` records supplied external gate evidence.
 
 ## Validation
@@ -88,6 +92,7 @@ Generated: 2026-07-24T11:58:31.121Z
 - isolated Codex marketplace install evidence
 - Claude Code plugin validation evidence
 - OpenCode project skill discovery evidence
+- GitHub feature enhancement issue tracking evidence
 - live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp
 - external gate evidence validation
 - submission queue generation

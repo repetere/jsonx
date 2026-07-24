@@ -760,6 +760,19 @@ async function buildHostedMcpEvidence() {
   };
 }
 
+async function buildGithubIssueEvidence() {
+  console.log("capturing GitHub issue tracking evidence");
+  return parseJsonOutput(
+    "GitHub issue tracking evidence",
+    run(
+      "GitHub issue tracking evidence",
+      "node",
+      ["docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs", "--json"],
+      { capture: true, timeoutMs: externalCliTimeoutMs },
+    ),
+  );
+}
+
 async function buildSkillInstallerEvidence() {
   const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "jsonx-skill-installer."));
   const realTempRoot = await fs.realpath(tempRoot);
@@ -1359,6 +1372,7 @@ function validateStoreListing(source, data) {
     "submissionQueue",
     "reviewPackage",
     "storeListingCopy",
+    "githubIssueEvidence",
     "submissionAudit",
     "externalGateEvidence",
     "externalGateRunbook",
@@ -2909,6 +2923,7 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
   const claudeValidationOk =
     manifest.claudeValidationEvidence && !manifest.claudeValidationEvidence.skipped && allChecksTrue(manifest.claudeValidationEvidence.checks);
   const openCodeOk = manifest.openCodeSkillEvidence && !manifest.openCodeSkillEvidence.skipped && allChecksTrue(manifest.openCodeSkillEvidence.checks);
+  const githubIssueTrackingOk = manifest.githubIssueEvidence && allChecksTrue(manifest.githubIssueEvidence.checks);
   const packageBoundaryOk =
     manifest.npmBoundary?.packageName === "jsonx" &&
     manifest.npmBoundary.fileCount === 234 &&
@@ -3054,6 +3069,21 @@ function buildSubmissionAudit(manifest, externalGateEvidence, sourceGitSnapshot)
       checks: {
         browserDemoOk,
         browserDemoCaseCount: manifest.browserDemoEvidence?.caseCount,
+      },
+    },
+    {
+      id: "REQ-GITHUB-TRACKING",
+      requirement: "Track the work in GitHub as open feature enhancement issues across contract, renderer, plugins, skills, motion, submission, Pages, and browser demo workstreams.",
+      status: githubIssueTrackingOk ? "proved" : "incomplete",
+      githubIssue: "#1110-#1117",
+      evidence: ["docs/intent/generative-ui-plugin/github-issues.md", manifest.githubIssueEvidence?.path].filter(Boolean),
+      checks: {
+        githubIssueTrackingOk,
+        issueCount: manifest.githubIssueEvidence?.issueCount,
+        allIssueNumbersListed: manifest.githubIssueEvidence?.checks?.allIssueNumbersListed,
+        allIssuesOpen: manifest.githubIssueEvidence?.checks?.allIssuesOpen,
+        allIssuesLabeledEnhancement: manifest.githubIssueEvidence?.checks?.allIssuesLabeledEnhancement,
+        allIssuesLabeledCodex: manifest.githubIssueEvidence?.checks?.allIssuesLabeledCodex,
       },
     },
     {
@@ -3341,6 +3371,12 @@ async function writeReviewSummary(manifest) {
         ? `- \`${manifest.openCodeSkillEvidence.path}\` records why OpenCode skill evidence was skipped.`
         : "- OpenCode skill evidence was not generated.",
     "",
+    "## GitHub Issue Tracking",
+    "",
+    manifest.githubIssueEvidence
+      ? `- \`${manifest.githubIssueEvidence.path}\` records ${manifest.githubIssueEvidence.issueCount} open feature enhancement issues for the JSONX generative UI workstreams.`
+      : "- GitHub issue tracking evidence was not generated.",
+    "",
     "## Submission Audit",
     "",
     manifest.submissionAudit
@@ -3430,6 +3466,10 @@ async function main() {
   const openCodeSkillEvidence = await buildOpenCodeSkillEvidence({ skip: skipOpenCodeValidation });
   await writeJson(openCodeSkillEvidencePath, openCodeSkillEvidence);
   const openCodeSkillArtifact = await hashFile(openCodeSkillEvidencePath);
+  const githubIssueEvidencePath = path.join(artifactRoot, "github-issue-evidence.json");
+  const githubIssueEvidence = await buildGithubIssueEvidence();
+  await writeJson(githubIssueEvidencePath, githubIssueEvidence);
+  const githubIssueArtifact = await hashFile(githubIssueEvidencePath);
 
   const packages = [];
   packages.push({
@@ -3553,6 +3593,11 @@ async function main() {
       openCodePackage: openCodeSkillEvidence.openCodePackage,
       openCodeVersion: openCodeSkillEvidence.openCodeVersion,
     },
+    githubIssueEvidence: {
+      ...githubIssueArtifact,
+      issueCount: githubIssueEvidence.issueCount,
+      checks: githubIssueEvidence.checks,
+    },
     npmBoundary,
     fixtureValidation: {
       validFixtures,
@@ -3571,6 +3616,7 @@ async function main() {
       ...(codexInstallEvidence.skipped ? [] : ["isolated Codex marketplace install evidence"]),
       ...(claudeValidationEvidence.skipped ? [] : ["Claude Code plugin validation evidence"]),
       ...(openCodeSkillEvidence.skipped ? [] : ["OpenCode project skill discovery evidence"]),
+      "GitHub feature enhancement issue tracking evidence",
       ...(hostedMcpArtifact ? [`live hosted MCP transcript capture from ${hostedMcpUrl}`] : []),
     ],
   };

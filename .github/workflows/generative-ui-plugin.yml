@@ -93,6 +93,9 @@ jobs:
       - name: Validate public review kit URLs
         run: node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs --json
 
+      - name: Validate GitHub issue tracking
+        run: node docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs --json
+
       - name: Audit generative UI goal coverage
         run: node docs/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs --json
 

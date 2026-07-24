@@ -23,6 +23,12 @@ Validate public evidence coverage and the public review-kit page before regenera
 node docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs
 ```
 
+Validate live GitHub issue tracking before submission review:
+
+```text
+node docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs --json
+```
+
 Audit the full implementation goal before submission review:
 
 ```text

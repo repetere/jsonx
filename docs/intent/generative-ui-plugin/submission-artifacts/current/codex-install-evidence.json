@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T11:58:13.361Z",
+  "generatedAt": "2026-07-24T12:09:19.720Z",
   "source": "codex plugin CLI",
   "note": "This evidence installs the repo-local core JSONX and generative UI Codex plugins from the repo-local marketplace using an isolated CODEX_HOME.",
   "skipped": false,

@@ -1,11 +1,14 @@
 {
-  "generatedAt": "2026-07-24T11:58:31.127Z",
+  "generatedAt": "2026-07-24T12:09:39.509Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "59a4e13e57a4e5d93975b76259eb5c2f15762c4d+worktree",
+  "gitCommit": "d96de7385c537833c08ac4dc8e20415a14e273bf+worktree",
   "sourceGit": {
-    "headCommit": "59a4e13e57a4e5d93975b76259eb5c2f15762c4d",
+    "headCommit": "d96de7385c537833c08ac4dc8e20415a14e273bf",
     "dirty": true,
     "dirtyStatus": [
+      " M .github/workflows/generative-ui-plugin.yml",
+      " M docs/generative-ui.html",
+      " M docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md",
       " M docs/intent/generative-ui-plugin/github-issues.md",
       " M docs/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs",
       " M docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs",
@@ -15,13 +18,15 @@
       " M docs/intent/generative-ui-plugin/store-listings/claude-code-jsonx-submission.json",
       " M docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json",
       " M docs/intent/generative-ui-plugin/store-listings/openai-jsonx-plugin-submission.json",
-      " M docs/intent/generative-ui-plugin/submission-readiness.md"
+      " M docs/intent/generative-ui-plugin/submission-readiness.md",
+      " M site/generative-ui.html",
+      "?? docs/intent/generative-ui-plugin/scripts/check-github-issue-tracking.mjs"
     ],
-    "ignoredGeneratedArtifactStatusCount": 24
+    "ignoredGeneratedArtifactStatusCount": 0
   },
   "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
   "summary": {
-    "proved": 10,
+    "proved": 11,
     "external-gated": 4
   },
   "requirements": [
@@ -156,6 +161,24 @@
       "checks": {
         "browserDemoOk": true,
         "browserDemoCaseCount": 3
+      }
+    },
+    {
+      "id": "REQ-GITHUB-TRACKING",
+      "requirement": "Track the work in GitHub as open feature enhancement issues across contract, renderer, plugins, skills, motion, submission, Pages, and browser demo workstreams.",
+      "status": "proved",
+      "githubIssue": "#1110-#1117",
+      "evidence": [
+        "docs/intent/generative-ui-plugin/github-issues.md",
+        "docs/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json"
+      ],
+      "checks": {
+        "githubIssueTrackingOk": true,
+        "issueCount": 8,
+        "allIssueNumbersListed": true,
+        "allIssuesOpen": true,
+        "allIssuesLabeledEnhancement": true,
+        "allIssuesLabeledCodex": true
       }
     },
     {

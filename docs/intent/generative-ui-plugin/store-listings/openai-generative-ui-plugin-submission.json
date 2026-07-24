@@ -142,6 +142,7 @@
     "supportTriageScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png",
     "motionScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png",
     "quizMobileScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-quiz-mobile.png",
+    "githubIssueEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
     "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
     "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
     "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"

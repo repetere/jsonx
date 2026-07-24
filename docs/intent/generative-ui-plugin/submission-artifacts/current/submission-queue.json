@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T11:58:31.123Z",
+  "generatedAt": "2026-07-24T12:09:39.505Z",
   "source": "docs/intent/generative-ui-plugin/store-listings/",
   "note": "This queue is generated from the four public store listing drafts. It lists packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that any public marketplace submission was sent.",
   "externalGateEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
@@ -68,6 +68,7 @@
         "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
         "codexInstallEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
         "skillInstallerEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
+        "githubIssueEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
         "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
         "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
         "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
@@ -116,7 +117,7 @@
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
-        "publicEvidenceUrlCount": 10,
+        "publicEvidenceUrlCount": 11,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
         "manualStepCount": 5,
@@ -162,6 +163,7 @@
         "supportTriageScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png",
         "motionScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png",
         "quizMobileScreenshot": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-quiz-mobile.png",
+        "githubIssueEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
         "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
         "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
         "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
@@ -214,7 +216,7 @@
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
-        "publicEvidenceUrlCount": 17,
+        "publicEvidenceUrlCount": 18,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
         "manualStepCount": 6,
@@ -258,6 +260,7 @@
         "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json",
         "claudeValidationEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
         "skillInstallerEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
+        "githubIssueEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
         "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
         "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
         "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
@@ -315,7 +318,7 @@
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
-        "publicEvidenceUrlCount": 10,
+        "publicEvidenceUrlCount": 11,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
         "manualStepCount": 4,
@@ -362,6 +365,7 @@
         "goldenPrompts": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
         "hostedMcpTranscript": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
         "motionEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
+        "githubIssueEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
         "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
         "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
         "externalGateRunbook": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md"
@@ -419,7 +423,7 @@
       "readyChecks": {
         "generatedDraftPresent": true,
         "reviewPackageUrlPresent": true,
-        "publicEvidenceUrlCount": 13,
+        "publicEvidenceUrlCount": 14,
         "positiveTestCaseCount": 5,
         "negativeTestCaseCount": 3,
         "manualStepCount": 4,

@@ -320,7 +320,7 @@ as external-gated unless --strict-external is set.
       id: "REQ-GITHUB-TRACKING",
       requirement: "Track the work in GitHub as feature enhancement issues across contract, renderer, plugins, skills, motion, submission, Pages, and browser demo workstreams.",
       githubIssue: "#1110-#1117",
-      evidence: ["docs/intent/generative-ui-plugin/github-issues.md"],
+      evidence: ["docs/intent/generative-ui-plugin/github-issues.md", manifest.githubIssueEvidence?.path].filter(Boolean),
       checks: {
         issueTrackerPresent: await fileExists("docs/intent/generative-ui-plugin/github-issues.md"),
         allIssueNumbersListed: [1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117].every((issue) => issueTracker.includes(`#${issue}`)),
@@ -329,6 +329,8 @@ as external-gated unless --strict-external is set.
           issueTracker.includes("Hosted renderer app") &&
           issueTracker.includes("Store submission") &&
           issueTracker.includes("GitHub Pages"),
+        githubIssueEvidencePresent: Boolean(manifest.githubIssueEvidence?.path),
+        githubIssueEvidencePassed: allObjectValuesTrue(manifest.githubIssueEvidence?.checks),
       },
     }),
     makeRequirement({
@@ -452,6 +454,7 @@ as external-gated unless --strict-external is set.
         validatesTrackedExternalGateEvidence:
           workflow.includes("Validate tracked external gate evidence") && workflow.includes("check-external-gate-evidence.mjs --json"),
         validatesExternalGateRecorderFlow: workflow.includes("validate-external-gate-recorder.mjs"),
+        validatesGithubIssueTracking: workflow.includes("check-github-issue-tracking.mjs"),
         validatesGeneratedArtifacts: workflow.includes("prepare-submission-artifacts.mjs"),
         validatesNpmBoundary: workflow.includes("npm pack --dry-run --json"),
         triggersOnSiteChanges: workflow.includes('"site/**"') || workflow.includes("- \"site/**\""),

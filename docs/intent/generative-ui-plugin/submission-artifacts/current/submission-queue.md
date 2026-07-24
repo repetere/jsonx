@@ -1,6 +1,6 @@
 # JSONX Public Submission Queue
 
-Generated: 2026-07-24T11:58:31.123Z
+Generated: 2026-07-24T12:09:39.505Z
 
 This file is generated from the four store listing drafts. It gives the submitter one place to find packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that a public submission was sent.
 
@@ -84,6 +84,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `storeListingCopy`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json
 - `codexInstallEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json
 - `skillInstallerEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json
+- `githubIssueEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
 - `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
@@ -156,6 +157,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `supportTriageScreenshot`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png
 - `motionScreenshot`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png
 - `quizMobileScreenshot`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-quiz-mobile.png
+- `githubIssueEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
 - `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
@@ -220,6 +222,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `storeListingCopy`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-jsonx-submission.json
 - `claudeValidationEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json
 - `skillInstallerEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json
+- `githubIssueEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
 - `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
@@ -289,6 +292,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 - `goldenPrompts`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json
 - `hostedMcpTranscript`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json
 - `motionEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json
+- `githubIssueEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json
 - `submissionAudit`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json
 - `externalGateEvidence`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json
 - `externalGateRunbook`: https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md
