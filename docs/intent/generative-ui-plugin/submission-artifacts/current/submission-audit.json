@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T09:08:54.865Z",
+  "generatedAt": "2026-07-24T09:18:00.897Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "2684a50e8929cc949afee8731a70dcf1df9be456+worktree",
+  "gitCommit": "bb15e6d2fdc9f577a50145666df5a1e528559c88+worktree",
   "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
   "summary": {
     "proved": 10,

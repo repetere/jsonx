@@ -119,6 +119,20 @@
     "skillInstallerEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
     "screenshotsDirectory": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/"
   },
+  "publicEvidence": {
+    "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
+    "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+    "reviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
+    "appSubmission": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json",
+    "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
+    "hostedMcpTranscript": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
+    "goldenPrompts": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
+    "motionEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
+    "browserDemoEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/browser-demo-evidence.json",
+    "screenshotsDirectory": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/screenshots/",
+    "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
+    "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+  },
   "releaseNotes": "Initial submission of the JSONX Generative UI app-plus-skills plugin. It includes safe generated UI payload creation, validation fixtures, local handoff support, optional renderer-owned motion, and a stateless hosted MCP renderer app.",
   "manualBeforeSubmit": [
     "Confirm OpenAI developer or business identity verification.",

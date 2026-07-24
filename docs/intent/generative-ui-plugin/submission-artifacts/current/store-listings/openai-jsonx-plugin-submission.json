@@ -92,6 +92,16 @@
     "codexInstallEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
     "skillInstallerEvidence": "docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json"
   },
+  "publicEvidence": {
+    "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
+    "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+    "reviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip",
+    "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-jsonx-plugin-submission.json",
+    "codexInstallEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
+    "skillInstallerEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
+    "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
+    "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+  },
   "releaseNotes": "Initial submission of the core JSONX Codex plugin. It includes package workflow guidance only and stays separate from generated UI.",
   "manualBeforeSubmit": [
     "Confirm OpenAI developer or business identity verification.",

@@ -101,6 +101,19 @@
     "goldenPrompts": "docs/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
     "hostedMcpTranscript": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json"
   },
+  "publicEvidence": {
+    "readinessChecklist": "https://jsonx.net/intent/generative-ui-plugin/submission-readiness.md",
+    "artifactManifest": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/manifest.json",
+    "reviewPackage": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip",
+    "storeListingCopy": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/store-listings/claude-code-generative-ui-submission.json",
+    "claudeValidationEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
+    "skillInstallerEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json",
+    "goldenPrompts": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/golden-prompts.json",
+    "hostedMcpTranscript": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
+    "motionEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/motion-profile-evidence.json",
+    "submissionAudit": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
+    "externalGateEvidence": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json"
+  },
   "releaseNotes": "Initial community submission of the JSONX Generative UI Claude Code plugin.",
   "manualBeforeSubmit": [
     "Install or update Claude Code.",

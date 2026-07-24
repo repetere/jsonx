@@ -1143,6 +1143,12 @@ function validateStoreListing(source, data) {
   if (!Array.isArray(data.sourceDocsChecked) || data.sourceDocsChecked.length === 0) {
     errors.push("sourceDocsChecked must list checked public docs");
   }
+  for (const key of ["readinessChecklist", "artifactManifest", "reviewPackage", "storeListingCopy", "submissionAudit", "externalGateEvidence"]) {
+    const url = data.publicEvidence?.[key];
+    if (!url || typeof url !== "string" || !url.startsWith("https://jsonx.net/")) {
+      errors.push(`publicEvidence.${key} must be a https://jsonx.net/ URL`);
+    }
+  }
   if (data.surface === "openai-plugin-portal") {
     if (!["skills-plugin", "app-plus-skills"].includes(data.submissionType)) {
       errors.push("OpenAI draft must be skills-plugin or app-plus-skills");
