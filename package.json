@@ -55,7 +55,7 @@
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/jsdom-global": "3.0.7",
-    "@types/luxon": "3.7.4",
+    "@types/luxon": "3.7.5",
     "@types/memory-cache": "0.2.6",
     "@types/numeral": "2.0.5",
     "@types/react": "^19.2.17",
