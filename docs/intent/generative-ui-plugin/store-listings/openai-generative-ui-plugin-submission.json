@@ -29,8 +29,8 @@
     "postApprovalInstall": "Published OpenAI plugins appear in the Plugins Directory for ChatGPT and Codex after approval and publication."
   },
   "mcpServer": {
-    "url": "https://jsonx-renderer-app.netlify.app/mcp",
-    "healthUrl": "https://jsonx-renderer-app.netlify.app/healthz",
+    "url": "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp",
+    "healthUrl": "https://jsonx-renderer-app.gpdoc-management.workers.dev/healthz",
     "authentication": "none",
     "domainVerificationRequired": true,
     "tools": [
@@ -153,7 +153,7 @@
   "manualBeforeSubmit": [
     "Confirm OpenAI developer or business identity verification.",
     "Confirm the submitter has Apps Management write access.",
-    "Complete domain verification for jsonx-renderer-app.netlify.app or move the MCP endpoint to a verified jsonx.net subdomain.",
+    "Complete domain verification for jsonx-renderer-app.gpdoc-management.workers.dev or move the MCP endpoint to a verified jsonx.net subdomain.",
     "Attach the final production logo.",
     "Review privacy policy, terms, and support URLs.",
     "Capture live ChatGPT developer-mode transcript evidence after connecting the hosted MCP endpoint."

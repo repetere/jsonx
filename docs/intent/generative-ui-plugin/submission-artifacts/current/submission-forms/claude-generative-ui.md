@@ -1,6 +1,8 @@
 # Claude Code generative UI plugin Portal Packet
 
-Generated: 2026-07-24T12:47:27.848Z
+Generated: 2026-10-02T10:08:42.626Z
+
+Hosting refresh only: endpoint URLs and submission instructions were refreshed on 2026-10-02. Linked CLI/install, screenshots, portal reachability, and authentication evidence retain their original July dates unless explicitly marked as a new hosted check. No new account access, app grants, or authenticated prompt tests are claimed.
 
 Use this packet as copy source for the public submission portal. It is generated from the tracked store listing draft and is not proof that the submission was sent.
 

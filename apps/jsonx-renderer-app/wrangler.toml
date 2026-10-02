@@ -1,0 +1,15 @@
+name = "jsonx-renderer-app"
+main = ".worker-build/worker.mjs"
+compatibility_date = "2026-10-02"
+workers_dev = true
+preview_urls = false
+no_bundle = true
+
+[build]
+command = "npm run bundle:worker"
+watch_dir = ["src", "web", "scripts/build-worker.mjs"]
+
+[vars]
+JSONX_ENABLE_GSAP = "0"
+# Optional: set only to an approved Apps SDK widget domain.
+# JSONX_WIDGET_DOMAIN = "https://your-approved-widget-domain.example"

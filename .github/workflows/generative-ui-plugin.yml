@@ -7,6 +7,7 @@ on:
     paths:
       - ".agents/plugins/**"
       - ".github/workflows/generative-ui-plugin.yml"
+      - ".github/workflows/deploy-jsonx-renderer.yml"
       - "apps/jsonx-renderer-app/**"
       - "docs/intent/generative-ui-plugin/**"
       - "docs/assets/generative-ui.css"
@@ -25,6 +26,7 @@ on:
     paths:
       - ".agents/plugins/**"
       - ".github/workflows/generative-ui-plugin.yml"
+      - ".github/workflows/deploy-jsonx-renderer.yml"
       - "apps/jsonx-renderer-app/**"
       - "docs/intent/generative-ui-plugin/**"
       - "docs/assets/generative-ui.css"
@@ -69,6 +71,12 @@ jobs:
       - name: Validate renderer app
         run: npm run check
         working-directory: apps/jsonx-renderer-app
+
+      - name: Validate Cloudflare deployment bundle (no upload)
+        run: npm run deploy:dry-run
+        working-directory: apps/jsonx-renderer-app
+        env:
+          WRANGLER_SEND_METRICS: "false"
 
       - name: Validate generative UI fixtures
         run: npm run validate:fixtures

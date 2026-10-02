@@ -1,16 +1,15 @@
 {
-  "generatedAt": "2026-07-24T12:47:24.360Z",
+  "generatedAt": "2026-10-02T10:08:42.608Z",
   "source": "JSONX external gate access probe",
-  "note": "This probe records local auth and portal reachability without exposing secret values. It is access evidence, not proof that external gates are complete.",
-  "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
+  "note": "Hosting-only refresh. Cloudflare health was checked at 2026-10-02T10:08:42.608Z. Portal reachability, local CLI/auth observations, and their checks retain evidence from 2026-07-24T12:47:24.360Z; they were not re-probed for this hosting migration. This is not proof that external gates are complete.",
+  "hostedMcpUrl": "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp",
   "hostedMcpHealth": {
-    "url": "https://jsonx-renderer-app.netlify.app/healthz",
+    "url": "https://jsonx-renderer-app.gpdoc-management.workers.dev/healthz",
     "status": 200,
     "ok": true,
     "body": {
       "ok": true
-    },
-    "durationMs": 232
+    }
   },
   "environment": {
     "anthropicApiKeyPresent": false,
@@ -104,5 +103,6 @@
       "reason": "The hosted MCP endpoint is reachable, but a ChatGPT developer-mode transcript has not been recorded.",
       "next": "Connect the hosted MCP endpoint in ChatGPT developer mode, run the golden prompts, and record the transcript URL or artifact."
     }
-  ]
+  ],
+  "retainedNonHostingProbeGeneratedAt": "2026-07-24T12:47:24.360Z"
 }

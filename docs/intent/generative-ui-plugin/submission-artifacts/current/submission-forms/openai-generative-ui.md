@@ -1,6 +1,8 @@
 # OpenAI/Codex generative UI app-plus-skills plugin Portal Packet
 
-Generated: 2026-07-24T12:47:27.848Z
+Generated: 2026-10-02T10:08:42.626Z
+
+Hosting refresh only: endpoint URLs and submission instructions were refreshed on 2026-10-02. Linked CLI/install, screenshots, portal reachability, and authentication evidence retain their original July dates unless explicitly marked as a new hosted check. No new account access, app grants, or authenticated prompt tests are claimed.
 
 Use this packet as copy source for the public submission portal. It is generated from the tracked store listing draft and is not proof that the submission was sent.
 
@@ -52,8 +54,8 @@ JSONX Generative UI packages the generated interface workflow as a separate skil
 
 ## Package And App Metadata
 
-- MCP URL: https://jsonx-renderer-app.netlify.app/mcp
-- MCP health URL: https://jsonx-renderer-app.netlify.app/healthz
+- MCP URL: https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp
+- MCP health URL: https://jsonx-renderer-app.gpdoc-management.workers.dev/healthz
 - MCP authentication: none
 - Domain verification required: true
 - Recommended initial scope: United States
@@ -74,7 +76,7 @@ JSONX Generative UI packages the generated interface workflow as a separate skil
 
 - [ ] Confirm OpenAI developer or business identity verification.
 - [ ] Confirm the submitter has Apps Management write access.
-- [ ] Complete domain verification for jsonx-renderer-app.netlify.app or move the MCP endpoint to a verified jsonx.net subdomain.
+- [ ] Complete domain verification for jsonx-renderer-app.gpdoc-management.workers.dev or move the MCP endpoint to a verified jsonx.net subdomain.
 - [ ] Attach the final production logo.
 - [ ] Review privacy policy, terms, and support URLs.
 - [ ] Capture live ChatGPT developer-mode transcript evidence after connecting the hosted MCP endpoint.
@@ -219,7 +221,7 @@ Run these only after the matching external evidence exists.
 
 ```bash
 node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs app-ids --openai-core-plugin-id <id> --openai-generative-ui-app-id <id> --openai-generative-ui-plugin-id <id> --codex-core-plugin-id <id> --codex-generative-ui-plugin-id <id> --codex-app-metadata-updated
-node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.netlify.app/mcp --transcript-url <url> --all-prompts-passed
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp --transcript-url <url> --all-prompts-passed
 node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs policy-review --status approved --reviewed-by <name> --reviewed-at <yyyy-mm-dd>
 node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs marketplace --target openai-generative-ui --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>
 ```

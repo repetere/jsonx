@@ -18,8 +18,8 @@ const screenshotsDir = path.join(artifactRoot, "screenshots");
 const storeListingsDir = path.join(artifactRoot, "store-listings");
 const submissionFormsDir = path.join(artifactRoot, "submission-forms");
 
-const hostedWidgetUrl = process.env.JSONX_RENDERER_WIDGET_URL || "https://jsonx-renderer-app.netlify.app/widget";
-const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.netlify.app/mcp";
+const hostedWidgetUrl = process.env.JSONX_RENDERER_WIDGET_URL || "https://jsonx-renderer-app.gpdoc-management.workers.dev/widget";
+const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp";
 const codexCliOverride = process.env.JSONX_CODEX_CLI;
 const claudeCodePackage = process.env.JSONX_CLAUDE_CODE_PACKAGE || "@anthropic-ai/claude-code@2.1.218";
 const openCodePackage = process.env.JSONX_OPENCODE_PACKAGE || "opencode-ai@1.18.4";

@@ -6,9 +6,16 @@
   "description": "Stateless Apps SDK MCP renderer for JSONX generative UI.",
   "scripts": {
     "start": "node src/server.mjs",
-    "check": "node --check src/server.mjs && node --check src/render-tool.mjs && node --check src/jsonx-validator.mjs && node --check web/widget.js && node --check netlify/functions/jsonx-renderer.mjs && node --check test/fixtures.mjs && node test/fixtures.mjs && node test/smoke.mjs",
+    "check": "npm run check:node && npm run check:worker",
     "smoke": "node test/smoke.mjs",
-    "validate:fixtures": "python3 ../../plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py ../../plugins/jsonx-generative-ui-plugin/fixtures/support-triage.json ../../plugins/jsonx-generative-ui-plugin/fixtures/text-block.json ../../plugins/jsonx-generative-ui-plugin/fixtures/checklist.json ../../plugins/jsonx-generative-ui-plugin/fixtures/choice-list.json ../../plugins/jsonx-generative-ui-plugin/fixtures/data-table.json ../../plugins/jsonx-generative-ui-plugin/fixtures/alert.json ../../plugins/jsonx-generative-ui-plugin/fixtures/quiz.json ../../plugins/jsonx-generative-ui-plugin/fixtures/slider-poll.json ../../plugins/jsonx-generative-ui-plugin/fixtures/motion-subtle.json && node test/fixtures.mjs"
+    "validate:fixtures": "python3 ../../plugins/jsonx-generative-ui-plugin/scripts/validate-jsonx-ui.py ../../plugins/jsonx-generative-ui-plugin/fixtures/support-triage.json ../../plugins/jsonx-generative-ui-plugin/fixtures/text-block.json ../../plugins/jsonx-generative-ui-plugin/fixtures/checklist.json ../../plugins/jsonx-generative-ui-plugin/fixtures/choice-list.json ../../plugins/jsonx-generative-ui-plugin/fixtures/data-table.json ../../plugins/jsonx-generative-ui-plugin/fixtures/alert.json ../../plugins/jsonx-generative-ui-plugin/fixtures/quiz.json ../../plugins/jsonx-generative-ui-plugin/fixtures/slider-poll.json ../../plugins/jsonx-generative-ui-plugin/fixtures/motion-subtle.json && node test/fixtures.mjs",
+    "check:node": "node --check src/server.mjs && node --check src/app.mjs && node --check src/worker.mjs && node --check scripts/build-worker.mjs && node --check test/worker-smoke.mjs && node --check test/endpoint-smoke.mjs && node --check src/render-tool.mjs && node --check src/jsonx-validator.mjs && node --check web/widget.js && node --check netlify/functions/jsonx-renderer.mjs && node --check test/fixtures.mjs && node test/fixtures.mjs && node test/smoke.mjs",
+    "bundle:worker": "node scripts/build-worker.mjs",
+    "dev:worker": "wrangler dev --local",
+    "check:worker": "npm run bundle:worker && node test/worker-smoke.mjs",
+    "deploy:dry-run": "wrangler deploy --dry-run --outdir .worker-build/deploy",
+    "deploy:worker": "wrangler deploy",
+    "smoke:hosted": "node test/endpoint-smoke.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/ext-apps": "^1.7.5",
@@ -18,5 +25,12 @@
   },
   "overrides": {
     "@hono/node-server": "^2.0.11"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "devDependencies": {
+    "wrangler": "4.146.0",
+    "esbuild": "0.28.1"
   }
 }

@@ -9,7 +9,7 @@ const intentRoot = path.resolve(scriptDir, "..");
 const repoRoot = path.resolve(intentRoot, "..", "..", "..");
 const args = process.argv.slice(2);
 const claudeCodePackage = process.env.JSONX_CLAUDE_CODE_PACKAGE || "@anthropic-ai/claude-code@2.1.218";
-const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.netlify.app/mcp";
+const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp";
 const timeoutMs = Number(process.env.JSONX_EXTERNAL_GATE_ACCESS_TIMEOUT_MS || 15000);
 
 const portalUrls = [

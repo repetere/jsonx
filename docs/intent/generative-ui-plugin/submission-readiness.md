@@ -2,7 +2,7 @@
 
 Status: implementation complete with external submission gates pending
 
-Last updated: 2026-07-24
+Last updated: 2026-10-02
 
 Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 
@@ -17,8 +17,8 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | Claude Code generative UI | `plugins/claude-jsonx-generative-ui-plugin/` | Local Claude Code plugin package with only the `jsonx-generative-ui` skill. |
 | OpenCode | `skills/opencode/` | Skill folders for project or global install. OpenCode does not need a separate plugin for the current scope. |
 | Skill installer | `skills/scripts/install-jsonx-skill.mjs` | Local installer for core JSONX and generative UI skills across Codex, Claude Code, and OpenCode. |
-| ChatGPT Apps SDK | `apps/jsonx-renderer-app/` | Runnable stateless MCP app with `render_jsonx_response`, widget resource, optional GSAP motion, local smoke test, developer-mode tunnel path, and Netlify serverless adapter. |
-| Hosted renderer | `https://jsonx-renderer-app.netlify.app/mcp` | Netlify-hosted MCP endpoint with live health, widget, CORS, tool listing, resource read, valid render, and invalid payload smoke tests. |
+| ChatGPT Apps SDK | `apps/jsonx-renderer-app/` | Runnable stateless MCP app with `render_jsonx_response`, widget resource, optional GSAP motion, local smoke test, developer-mode tunnel path, Cloudflare Workers deployment, and retained Netlify rollback adapter. |
+| Hosted renderer | `https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp` | Cloudflare Workers MCP endpoint with live health, widget, CORS, tool listing, resource read, valid render, and invalid payload smoke tests. |
 | ChatGPT app submission | `apps/jsonx-renderer-app/chatgpt-app-submission.json` | Import-ready submission draft with app info, tool hint justifications, five positive test cases, and three negative test cases. |
 | Store listing drafts | `docs/intent/generative-ui-plugin/store-listings/` | Source drafts for OpenAI and Claude Code core JSONX and generative UI plugin submissions. |
 | Submission portals | `https://platform.openai.com/plugins`, `https://platform.claude.com/plugins/submit` | Account-gated portals for OpenAI/Codex plugin drafts and Claude Code community marketplace submissions. Claude Team or Enterprise submitters can also use `https://claude.ai/admin-settings/directory/submissions/plugins/new`. |
@@ -57,8 +57,8 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 - Run the Apps SDK renderer locally at `/mcp`.
 - Test the renderer app with the SDK client smoke test.
 - Enable optional GSAP motion locally with `JSONX_ENABLE_GSAP=1`.
-- Use the hosted Netlify renderer at `https://jsonx-renderer-app.netlify.app/mcp`.
-- Deploy a new renderer app build to Netlify from `apps/jsonx-renderer-app` after source changes.
+- Use the hosted Cloudflare renderer at `https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp`.
+- Deploy an authorized new renderer build to Cloudflare Workers from `apps/jsonx-renderer-app` after source changes and rerun the hosted smoke test.
 - Use `apps/jsonx-renderer-app/chatgpt-app-submission.json` as the starting point for the ChatGPT Apps submission form.
 - Use `docs/intent/generative-ui-plugin/store-listings/openai-jsonx-plugin-submission.json` as the OpenAI core JSONX plugin portal draft.
 - Use `docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json` as the OpenAI generative UI app-plus-skills portal draft.
@@ -96,11 +96,11 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 
 ### Apps SDK Renderer
 
-- Current Netlify site id: `210939ba-0ffe-4c5d-8074-bbc195518c1c`.
-- Current Netlify project: `https://app.netlify.com/projects/jsonx-renderer-app`.
-- Current production endpoint: `https://jsonx-renderer-app.netlify.app/mcp`.
-- Latest verified deploy id: `6a6305f3ea5f474b412d2f3e`.
-- For Netlify redeploys, use base directory `apps/jsonx-renderer-app`, build command `npm run check`, publish directory `public`, and the hosted `/mcp` path.
+- Current provider: Cloudflare Workers (`jsonx-renderer-app`).
+- Current production endpoint: `https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp`.
+- Verified Cloudflare version: `5ab29f03-146e-4b99-9c5c-1d50666ac44b` on 2026-10-02, with GSAP disabled.
+- Run `npm run smoke:hosted -- --url https://jsonx-renderer-app.gpdoc-management.workers.dev` after each authorized deployment.
+- Historical Netlify deployment and rollback details remain in `hosted-renderer-deployment.md`; the old evidence is preserved in Git history.
 - Confirm `/mcp` supports low-latency streaming responses and dependable TLS after each deploy.
 - Connect the hosted `/mcp` URL in ChatGPT developer mode.
 - Run golden prompts for direct UI, text-only fallback, quiz, poll, blocked unsafe props, oversized payload, unsupported component, approved motion profile, and rejected motion profile.
