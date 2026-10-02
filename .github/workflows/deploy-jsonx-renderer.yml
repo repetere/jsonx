@@ -53,7 +53,35 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: npm run deploy:worker
+          WRANGLER_OUTPUT_FILE_PATH: ${{ runner.temp }}/jsonx-deploy.jsonl
+        run: |
+          rm -f "$WRANGLER_OUTPUT_FILE_PATH"
+          npm run deploy:worker
+      - name: Match smoke origin to the completed deployment
+        env:
+          EXPECTED_ORIGIN: ${{ inputs.expected_origin }}
+          DEPLOY_OUTPUT_FILE: ${{ runner.temp }}/jsonx-deploy.jsonl
+        run: |
+          node --input-type=module <<'JS'
+          import assert from "node:assert/strict";
+          import { readFileSync } from "node:fs";
+          const origin = new URL(process.env.EXPECTED_ORIGIN);
+          assert.equal(origin.protocol, "https:", "Smoke origin must use HTTPS");
+          assert.equal(origin.username, "", "Smoke origin must not include credentials");
+          assert.equal(origin.password, "", "Smoke origin must not include credentials");
+          assert.equal(origin.href, `${origin.origin}/`, "Supply an origin without a path, query, or fragment");
+          const records = readFileSync(process.env.DEPLOY_OUTPUT_FILE, "utf8")
+            .split("\n").filter((line) => line.trim()).map((line) => JSON.parse(line));
+          const deployments = records.filter((record) => record.type === "deploy");
+          assert.equal(deployments.length, 1, "Expected exactly one completed Wrangler deployment");
+          const deployment = deployments[0];
+          assert.equal(deployment.version, 1, "Unsupported Wrangler deployment record version");
+          assert.equal(deployment.worker_name, "jsonx-renderer-app");
+          assert.equal(typeof deployment.version_id, "string", "Missing deployed Worker version");
+          assert.ok(deployment.version_id.length > 0, "Missing deployed Worker version");
+          assert.ok(deployment.targets?.includes(origin.origin), "Smoke origin is not a target of this deployment");
+          console.log(`Verified deployment ${deployment.version_id} at ${origin.origin}`);
+          JS
       - name: Verify live endpoint
         env:
           EXPECTED_ORIGIN: ${{ inputs.expected_origin }}
