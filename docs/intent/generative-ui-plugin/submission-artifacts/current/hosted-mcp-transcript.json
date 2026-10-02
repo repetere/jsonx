@@ -1,24 +1,35 @@
 {
-  "generatedAt": "2026-07-24T12:47:05.472Z",
+  "generatedAt": "2026-10-02T10:08:32.432Z",
   "source": "live hosted JSONX renderer MCP endpoint",
-  "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
-  "healthUrl": "https://jsonx-renderer-app.netlify.app/healthz",
+  "hostedMcpUrl": "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp",
+  "healthUrl": "https://jsonx-renderer-app.gpdoc-management.workers.dev/healthz",
   "note": "This is live endpoint evidence for submission review. It is not a captured ChatGPT developer-mode transcript.",
-  "durationMs": 2380,
+  "durationMs": 11286,
   "checks": {
     "healthOk": true,
     "corsPreflightOk": true,
     "toolListed": true,
     "rendererResourceReadable": true,
     "validPayloadRendered": true,
-    "invalidPayloadRejected": true
+    "invalidPayloadRejected": true,
+    "rootAndHealth": true,
+    "selfContainedWidget": true,
+    "gsapDisabled": true,
+    "cors": true,
+    "initializeAndNotification": true,
+    "toolAndResourceMetadata": true,
+    "allValidFixturesRendered": true,
+    "allUnsafeFixturesRejected": true,
+    "malformedJsonRejected": true,
+    "getDeleteAndMissingRoute": true,
+    "concurrentStatelessCalls": true
   },
   "steps": [
     {
       "id": "healthz",
       "transport": "https",
       "method": "GET",
-      "url": "https://jsonx-renderer-app.netlify.app/healthz",
+      "url": "https://jsonx-renderer-app.gpdoc-management.workers.dev/healthz",
       "status": 200,
       "body": {
         "ok": true
@@ -28,7 +39,7 @@
       "id": "cors-preflight",
       "transport": "https",
       "method": "OPTIONS",
-      "url": "https://jsonx-renderer-app.netlify.app/mcp",
+      "url": "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp",
       "status": 204,
       "corsOrigin": "*",
       "allowMethods": "POST, GET, DELETE, OPTIONS",
@@ -146,5 +157,24 @@
         "contentText": "Invalid JSONX UI payload: payload.children[0].component must be an allowed component"
       }
     }
-  ]
+  ],
+  "fullContract": {
+    "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-endpoint-smoke.json",
+    "bytes": 12761,
+    "sha256": "7b744dca0133fe3425a92ec79d0a65a37cdfaf1a7cc9e9cd52e8d0bae1ad8877",
+    "stepCount": 29,
+    "checks": {
+      "rootAndHealth": true,
+      "selfContainedWidget": true,
+      "gsapDisabled": true,
+      "cors": true,
+      "initializeAndNotification": true,
+      "toolAndResourceMetadata": true,
+      "allValidFixturesRendered": true,
+      "allUnsafeFixturesRejected": true,
+      "malformedJsonRejected": true,
+      "getDeleteAndMissingRoute": true,
+      "concurrentStatelessCalls": true
+    }
+  }
 }

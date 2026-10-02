@@ -12,7 +12,7 @@ const templatePath = path.join(intentRoot, "external-gate-evidence.template.json
 const recorderPath = path.join(scriptDir, "record-external-gate-evidence.mjs");
 const checkerPath = path.join(scriptDir, "check-external-gate-evidence.mjs");
 const trackedEvidencePath = path.join(intentRoot, "external-gate-evidence.json");
-const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.netlify.app/mcp";
+const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp";
 
 function relative(filePath) {
   return path.relative(repoRoot, filePath);

@@ -62,7 +62,7 @@ const requiredPublicPageText = [
   "jsonx-generative-ui-plugin",
   "claude-jsonx-plugin",
   "claude-jsonx-generative-ui-plugin",
-  "https://jsonx-renderer-app.netlify.app/mcp",
+  "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp",
   "Submission packages, listing drafts, and evidence are published together.",
   "recorder commands to run",
 ];

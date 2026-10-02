@@ -32,7 +32,7 @@ node docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs
 ```
 
 Artifacts are written under `docs/intent/generative-ui-plugin/submission-artifacts/current/`, which is excluded from the root npm package. The generated bundle includes review packages, store listing drafts, screenshots, golden-prompt tool-call evidence, renderer motion evidence, hosted MCP evidence, skill installer evidence, isolated Codex marketplace install evidence, Claude Code validation evidence, OpenCode skill discovery evidence, external gate evidence, a submission audit, and package-boundary evidence.
-The default run records a live hosted MCP transcript from `https://jsonx-renderer-app.netlify.app/mcp`, verifies renderer motion profiles with CSS fallback and GSAP-enabled widget HTML, installs the core and generative UI Codex plugins from the repo-local marketplace using a temporary `CODEX_HOME` when the Codex CLI is available, validates the core and generative UI Claude Code plugins with `claude plugin validate` through a temporary npm cache, and verifies OpenCode can discover the project skills with `opencode debug skill`.
+The default run records a live hosted MCP transcript from `https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp`, verifies renderer motion profiles with CSS fallback and GSAP-enabled widget HTML, installs the core and generative UI Codex plugins from the repo-local marketplace using a temporary `CODEX_HOME` when the Codex CLI is available, validates the core and generative UI Claude Code plugins with `claude plugin validate` through a temporary npm cache, and verifies OpenCode can discover the project skills with `opencode debug skill`.
 
 External portal and authenticated smoke results should be recorded with `docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs`, then regenerated into the submission artifacts. The tracked pending evidence source is `docs/intent/generative-ui-plugin/external-gate-evidence.json`.
 
@@ -51,7 +51,7 @@ node docs/intent/generative-ui-plugin/scripts/validate-external-gate-recorder.mj
 Record external gate evidence after portal or authenticated smoke steps:
 
 ```text
-node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.netlify.app/mcp --transcript-url <url> --all-prompts-passed
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp --transcript-url <url> --all-prompts-passed
 node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs claude-smoke --plugin both --authenticated --claude-version <version> --passed
 node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs marketplace --target openai-core --submitted --submission-id <id> --url <url> --status submitted --submitted-at <yyyy-mm-dd>
 ```
@@ -97,7 +97,7 @@ For ChatGPT developer mode, expose the server through an HTTPS tunnel and use th
 The hosted renderer endpoint is:
 
 ```text
-https://jsonx-renderer-app.netlify.app/mcp
+https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp
 ```
 
 Use it for ChatGPT developer-mode app setup and hosted smoke tests.

@@ -1,6 +1,6 @@
 # JSONX External Gate Runbook
 
-Generated: 2026-07-24T12:47:27.848Z
+Generated: 2026-10-02T10:08:42.626Z
 
 This file lists the evidence that must be collected outside the repo before public submission can be marked complete. Use it with the generated submission queue and record results through the controlled evidence recorder.
 
@@ -14,6 +14,8 @@ This file lists the evidence that must be collected outside the repo before publ
 | marketplaceSubmission | pending | `docs/intent/generative-ui-plugin/external-gate-evidence.json` |
 
 ## Current Access Probe
+
+Only the hosted Cloudflare health check was refreshed on 2026-10-02. The CLI availability, authentication, portal reachability, and blocking observations below are retained from 2026-07-24T12:47:24.360Z and were not re-probed for this migration. Verify account access before using those observations for submission.
 
 Access probe: `docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json`
 Blocking conditions: 3
@@ -46,7 +48,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 
 Status: pending
 
-Connect the hosted MCP app at `https://jsonx-renderer-app.netlify.app/mcp`, run the golden prompts in ChatGPT developer mode, and record the transcript URL after every prompt has the expected outcome.
+Connect the hosted MCP app at `https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp`, run the golden prompts in ChatGPT developer mode, and record the transcript URL after every prompt has the expected outcome.
 
 ### Prompt Checklist
 
@@ -65,7 +67,7 @@ Connect the hosted MCP app at `https://jsonx-renderer-app.netlify.app/mcp`, run 
 ### Recorder Command
 
 ```bash
-node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.netlify.app/mcp --transcript-url <url> --all-prompts-passed
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp --transcript-url <url> --all-prompts-passed
 ```
 
 ## Gate 3: Claude Code Authenticated Smoke
@@ -135,7 +137,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 
 ```bash
 node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs app-ids --openai-core-plugin-id <id> --openai-generative-ui-app-id <id> --openai-generative-ui-plugin-id <id> --codex-core-plugin-id <id> --codex-generative-ui-plugin-id <id> --codex-app-metadata-updated
-node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.netlify.app/mcp --transcript-url <url> --all-prompts-passed
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp --transcript-url <url> --all-prompts-passed
 node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs claude-smoke --plugin core --authenticated --claude-version <version> --passed
 node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs claude-smoke --plugin generative-ui --authenticated --claude-version <version> --passed
 node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs policy-review --status approved --reviewed-by <name> --reviewed-at <yyyy-mm-dd>

@@ -48,7 +48,7 @@ https://<subdomain>.ngrok.app/mcp
 
 ## Cloudflare Workers deployment
 
-Migration status: the Workers adapter is implemented; production deployment and endpoint cutover are pending. Adding this configuration does not deploy a Worker or change the active endpoint.
+Production MCP endpoint: `https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp`. Cloudflare version `5ab29f03-146e-4b99-9c5c-1d50666ac44b` passed the complete live endpoint smoke contract on 2026-10-02 with GSAP disabled.
 
 Use Node 22. Wrangler and the bundler are pinned in this app's development dependencies. The shared `src/app.mjs` owns MCP registration, widget assembly, and Web Request/Response routing. `src/server.mjs` supplies the filesystem and Node HTTP adapter. `src/worker.mjs` imports the same assets and optional GSAP at build time, with no Node compatibility flags, storage bindings, model credentials, or runtime CDN requests.
 
@@ -66,7 +66,7 @@ After deployment is authorized and an existing Cloudflare login or deployment to
 
 ```text
 npm run deploy:worker
-npm run smoke:hosted -- --url https://<verified-worker-origin>
+npm run smoke:hosted -- --url https://jsonx-renderer-app.gpdoc-management.workers.dev
 ```
 
 Use the actual origin returned by Cloudflare. Routes remain `/`, `/healthz`, `/widget`, and `/mcp`. Set `JSONX_ENABLE_GSAP=1` (or `true`/`yes`) in `wrangler.toml` to inline GSAP; the default is off and CSS fallback motion remains available. For GSAP-enabled deployment, add `--gsap` to the smoke command. If `JSONX_WIDGET_DOMAIN` is configured, add `--widget-domain <domain>`.
@@ -100,7 +100,7 @@ npm run validate:fixtures
 
 Public submission still needs the hosted `/mcp` URL connected in ChatGPT developer mode, final app/plugin metadata, screenshots, and hosted test prompt responses. The public site provides privacy and terms pages at `https://jsonx.net/privacy.html` and `https://jsonx.net/terms.html`. Use GitHub Issues as the support URL unless a separate support channel is created. Do not add placeholder app IDs to `.app.json`.
 
-Existing submission evidence records Netlify. Cloudflare production verification and ChatGPT developer-mode reconnection remain pending; local tests do not satisfy those external gates.
+Current hosted MCP evidence records Cloudflare verification. Historical Netlify evidence is preserved in Git history with its July timestamps. ChatGPT developer-mode connection and prompt capture remain pending; live endpoint smoke tests do not satisfy those external gates.
 
 ## Development Notes
 

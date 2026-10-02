@@ -58,7 +58,7 @@
         "status": "pending"
       }
     ],
-    "notes": "Set connectedMcpUrl to https://jsonx-renderer-app.netlify.app/mcp and mark each prompt passed only after the live ChatGPT app renders or rejects the expected response, including approved and rejected motion-profile cases."
+    "notes": "Set connectedMcpUrl to https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp and mark each prompt passed only after the live ChatGPT app renders or rejects the expected response, including approved and rejected motion-profile cases."
   },
   "claudeSmoke": {
     "core": {

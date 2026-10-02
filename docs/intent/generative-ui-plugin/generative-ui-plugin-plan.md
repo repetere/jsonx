@@ -2,7 +2,7 @@
 
 Status: implementation complete with external submission gates pending
 
-Last updated: 2026-07-24
+Last updated: 2026-10-02
 
 Related plan: `docs/intent/generative-ui-site/generative-ui-site-plan.md`
 
@@ -26,7 +26,7 @@ Current implementation baseline:
 
 - `apps/jsonx-renderer-app/` contains a runnable stateless MCP app for local developer-mode testing.
 - `apps/jsonx-renderer-app/` supports optional renderer-owned GSAP motion with `JSONX_ENABLE_GSAP=1`.
-- `apps/jsonx-renderer-app/netlify/functions/jsonx-renderer.mjs` and `apps/jsonx-renderer-app/netlify.toml` provide a Netlify serverless deployment path for HTTPS hosting.
+- `apps/jsonx-renderer-app/src/worker.mjs` and `apps/jsonx-renderer-app/wrangler.toml` provide the active Cloudflare Workers HTTPS deployment. The Netlify adapter is retained for rollback.
 - `plugins/jsonx-codex-plugin/` contains the core JSONX Codex plugin package.
 - `plugins/jsonx-generative-ui-plugin/` contains the JSONX generative UI Codex plugin package.
 - `plugins/claude-jsonx-plugin/` contains the core JSONX Claude Code plugin package.
@@ -67,7 +67,7 @@ ChatGPT / Apps SDK
   -> widget validates and renders JSONX client-side
 ```
 
-The hosted app should be deployable to Cloudflare Workers, Vercel, Netlify, Fly, Render, or another HTTPS platform. The first implementation has a Netlify serverless path so the team manages code and configuration, not a long-running process.
+The active hosted app runs on Cloudflare Workers. The shared Web-standard request handler and retained Node/Netlify adapters keep deployment portable without a long-running process to manage.
 
 ## Deliverables
 
@@ -189,13 +189,14 @@ Local developer-mode implementation:
 - Widget preview: `http://localhost:8787/widget`
 - Validation command: `npm run check` from `apps/jsonx-renderer-app/`
 
-Netlify deployment path:
+Cloudflare Workers deployment path:
 
 - Base directory: `apps/jsonx-renderer-app`
-- Build command: `npm run check`
-- Publish directory: `public`
-- Function entrypoint: `netlify/functions/jsonx-renderer.mjs`
-- Hosted MCP URL after deploy: `https://<site>.netlify.app/mcp`
+- Validation: `npm run check` and `npm run deploy:dry-run`
+- Worker entrypoint: `.worker-build/worker.mjs`
+- Authorized deployment: `npm run deploy:worker`
+- Hosted MCP URL: `https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp`
+- Deployment record and rollback: `hosted-renderer-deployment.md`
 
 ### 4. Iframe renderer widget
 
@@ -498,7 +499,7 @@ Exit criteria:
 
 - Keep the shared generated UI validator in the app and plugin workspace first. Do not move it into the root JSONX package until the contract is stable enough to become part of the public library surface.
 - Keep the hosted renderer app in this repo under `apps/jsonx-renderer-app/` so the source, skills, fixtures, and submission artifacts can be reviewed together.
-- Use Netlify as the first hosted MCP target. Other serverless platforms can be added later if there is a distribution need.
+- Use Cloudflare Workers for the hosted MCP endpoint as of 2026-10-02. Retain the historical Netlify deployment only for rollback and preserve unrelated Netlify sites and domains.
 - Ship the first public generative UI plugin with empty app wiring placeholders. Add the approved app ID to `.app.json` only after the hosted app is accepted and an ID exists.
 - Keep the first VS Code renderer install path as source checkout/local development. Package or marketplace release can be a separate follow-up after the plugin/app submission work is accepted.
 

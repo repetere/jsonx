@@ -1,15 +1,24 @@
 # JSONX Submission Artifacts
 
-Generated: 2026-07-24T12:47:27.846Z
+Generated: 2026-10-02T10:08:42.632Z
+
+## Hosting Migration Evidence
+
+Only live hosted endpoint evidence, hosted health, endpoint-bearing packages/listings, pending instructions, queue/runbook/forms, and derived hashes/audit were refreshed. Other evidence and screenshots retain their original dates and content; they do not prove the new public page or ChatGPT connection. App IDs and real developer-mode prompts remain pending.
+
+- Cloudflare version: `5ab29f03-146e-4b99-9c5c-1d50666ac44b`
+- Full live endpoint contract: `docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-endpoint-smoke.json`, 29 requests, nine valid and five unsafe fixtures
+- Previous manifest: 2026-07-24T12:47:27.846Z; original Netlify evidence is preserved in Git commit `33821e12d969792cadd8b4029608877c2db01330`
+- Original validation entries below are retained historical evidence unless covered by this hosting refresh
 
 ## Packages
 
 | Surface | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
 | Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-codex-plugin.zip` | `04d726839b08516e040836b16942779a7067e8c788adb430ba3b25316fe25f54` | 2807 |
-| Codex generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `8d024f2a9a7c004df7b1aba0977d85d8e13e715cd676f7a64b46b9956b0f95cd` | 17460 |
+| Codex generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip` | `661280d4208361fbc89ab679eafef17be37ebe00cdf8f67d366087aadb3ff2ca` | 17488 |
 | Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-claude-code-plugin.zip` | `a9f40a154c5cb7ecb7efc62aaf21333380ce6e2ac0e674d8daecd3afdee61ff6` | 2634 |
-| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip` | `f8c6bdb4bf642496d19385f9baa295bc7d289ffe70e37512816b3f7ac2c7fc99` | 5049 |
+| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip` | `22033cf271ada43cf12f819adaff7ab4d52693e123e50efe5e101589a1148099` | 5059 |
 | ChatGPT app submission | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json` | `a2668c8bc97c732a3a1ba1f62b9f132153ad6b586b3aff9356759a9009b9007b` | 4757 |
 | Codex local marketplace | `docs/intent/generative-ui-plugin/submission-artifacts/current/packages/codex-local-marketplace.json` | `2d07c106947daac04653274e25e5bd7ccaa4d68c6908c070f8010991bb4140ad` | 696 |
 
@@ -26,10 +35,10 @@ Generated: 2026-07-24T12:47:27.846Z
 
 | Submission | Artifact | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `3c39380bbe315cf01647ecc273c3ac22af7100070e328d6aee873e4fbea2e61f` | 8148 |
-| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `52c61ed17a062c05c080891f314a2d7afe96710617a23215fefe25f8d93dce12` | 10794 |
-| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `5d3a60d53b9f6f284b21a49f144ebf7d626a3c8011ba3d1a68c573535462c0b4` | 7883 |
-| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `0d05aa48d6282e37d2e07797173290dfefdf40a4a7b50ef1bef6b75983d49dcc` | 9219 |
+| OpenAI/Codex core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md` | `5b807ce181908c6155fa236ab45dd5819e6efe4ad6c6aed36c0351e98d93b536` | 8484 |
+| OpenAI/Codex generative UI app-plus-skills plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md` | `06176150d9c0cb7db29e514549f2a8921c0d34f7e51d1de8a9fc6fe41e368d87` | 11198 |
+| Claude Code core JSONX plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md` | `c0e8e6370cca95061452d37fd0c66a9cd0addbcb0a55ca18ed610456b0a15397` | 8219 |
+| Claude Code generative UI plugin | `docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md` | `4297d1a7a1203d385cbd26b6894e147b03dfb7b4118ff681ca27f2d29aee5590` | 9555 |
 
 ## Submission Queue
 
@@ -60,9 +69,11 @@ Generated: 2026-07-24T12:47:27.846Z
 
 ## Hosted MCP
 
-- `docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json` records 7 live endpoint checks from `https://jsonx-renderer-app.netlify.app/mcp`.
+- `docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json` records 7 live endpoint checks from `https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp`.
 
 ## Install Evidence
+
+These CLI/install records retain their original July dates and were not re-run for this hosting refresh. Their original `skipped` and `reusedPreviousEvidence` flags describe those historical runs.
 
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/skill-installer-evidence.json` covers 9 installer dry-runs and 3 isolated installs.
 - `docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json` records isolated Codex marketplace installs for the core and generative UI plugins with 8 checks.
@@ -100,7 +111,7 @@ Generated: 2026-07-24T12:47:27.846Z
 - GitHub feature enhancement issue tracking evidence
 - submission source documentation evidence
 - external gate access probe evidence
-- live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp
+- live hosted MCP transcript capture from https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp
 - external gate evidence validation
 - submission queue generation
 - portal submission form generation

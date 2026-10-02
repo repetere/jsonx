@@ -32,6 +32,6 @@ Before public submission:
 
 - Run `claude plugin validate ./plugins/claude-jsonx-generative-ui-plugin`.
 - Confirm the plugin does not include the core JSONX skill.
-- The hosted renderer MCP endpoint is `https://jsonx-renderer-app.netlify.app/mcp`.
+- The hosted renderer MCP endpoint is `https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp`.
 - Keep hosted renderer app IDs out of the manifest until they are real and reachable.
 - Submit through the Claude community marketplace flow after validation and smoke prompts pass.

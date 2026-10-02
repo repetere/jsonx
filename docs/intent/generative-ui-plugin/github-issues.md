@@ -11,7 +11,7 @@ Plan source: `docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md`
 | Issue | Workstream | Outcome |
 | --- | --- | --- |
 | [#1110](https://github.com/repetere/jsonx/issues/1110) | Shared contract | One `jsonx.generative-ui.v1` schema and validator for fixtures, app, plugin, browser demo, and local handoff files. |
-| [#1111](https://github.com/repetere/jsonx/issues/1111) | Hosted renderer app | Runnable stateless Apps SDK MCP app with `render_jsonx_response`, schema validation, iframe resource wiring, optional GSAP motion, Netlify serverless adapter, local SDK smoke test, and live Netlify MCP endpoint. |
+| [#1111](https://github.com/repetere/jsonx/issues/1111) | Hosted renderer app | Runnable stateless Apps SDK MCP app with `render_jsonx_response`, schema validation, iframe resource wiring, optional GSAP motion, Cloudflare Workers adapter, local SDK smoke test, and live Cloudflare MCP endpoint. |
 | [#1112](https://github.com/repetere/jsonx/issues/1112) | Codex plugins | Separate local Codex plugin packages for core JSONX and generative UI, plus fixtures, validation script, app wiring templates, and repo-local Codex marketplace entries. |
 | [#1113](https://github.com/repetere/jsonx/issues/1113) | Claude Code and OpenCode skills | Installable core JSONX and generative UI skills for Claude Code and OpenCode, separate Claude Code plugin packages, and installer tooling for personal or project installs. |
 | [#1114](https://github.com/repetere/jsonx/issues/1114) | Renderer motion | Optional renderer-owned GSAP motion profiles with reduced-motion support, CSS fallback motion, and no model-supplied animation code. |
@@ -47,7 +47,7 @@ Skill installer coverage is tracked under #1113. The installer must support `jso
 Renderer motion coverage is tracked under #1114. GSAP must stay in `apps/jsonx-renderer-app/`, behind renderer-owned code paths, and outside the root npm package. Current generated artifacts include `motion-profile-evidence.json`, which exercises all allowlisted motion profiles with CSS fallback and GSAP-enabled widget HTML.
 The ChatGPT developer-mode external gate also includes the approved `motion-request` and rejected `bad-motion-request` golden prompts so renderer-owned animation is covered before public submission.
 
-Hosted renderer deployment coverage is tracked under #1111. The Netlify adapter provides `/mcp`, `/healthz`, and `/widget` at `https://jsonx-renderer-app.netlify.app` without adding app dependencies to the root package.
+Hosted renderer deployment coverage is tracked under #1111. The Cloudflare Worker provides `/mcp`, `/healthz`, and `/widget` at `https://jsonx-renderer-app.gpdoc-management.workers.dev` without adding app dependencies to the root package.
 
 Submission support page coverage is tracked under #1115 and #1116. The public site should mirror `privacy.html` and `terms.html` into `docs/`, and the ChatGPT app submission JSON should remain under `apps/jsonx-renderer-app/` so it stays outside the root npm package.
 

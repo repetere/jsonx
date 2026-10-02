@@ -10,7 +10,7 @@ const repoRoot = path.resolve(intentRoot, "..", "..", "..");
 const templatePath = path.join(intentRoot, "external-gate-evidence.template.json");
 const defaultEvidencePath = path.join(intentRoot, "external-gate-evidence.json");
 const args = process.argv.slice(2);
-const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.netlify.app/mcp";
+const hostedMcpUrl = process.env.JSONX_RENDERER_MCP_URL || "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp";
 
 const chatgptPromptIds = [
   "direct-ui-request",

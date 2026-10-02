@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T12:47:27.846Z",
-  "hostedWidgetUrl": "https://jsonx-renderer-app.netlify.app/widget",
-  "hostedMcpUrl": "https://jsonx-renderer-app.netlify.app/mcp",
+  "generatedAt": "2026-10-02T10:08:42.632Z",
+  "hostedWidgetUrl": "https://jsonx-renderer-app.gpdoc-management.workers.dev/widget",
+  "hostedMcpUrl": "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp",
   "publicSiteUrl": "https://jsonx.net/generative-ui.html",
   "publicSkillsUrl": "https://jsonx.net/skills/README.md",
   "packages": [
@@ -14,8 +14,8 @@
     {
       "surface": "Codex generative UI plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-codex-plugin.zip",
-      "bytes": 17460,
-      "sha256": "8d024f2a9a7c004df7b1aba0977d85d8e13e715cd676f7a64b46b9956b0f95cd"
+      "bytes": 17488,
+      "sha256": "661280d4208361fbc89ab679eafef17be37ebe00cdf8f67d366087aadb3ff2ca"
     },
     {
       "surface": "Claude Code core JSONX plugin",
@@ -26,8 +26,8 @@
     {
       "surface": "Claude Code generative UI plugin",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/jsonx-generative-ui-claude-code-plugin.zip",
-      "bytes": 5049,
-      "sha256": "f8c6bdb4bf642496d19385f9baa295bc7d289ffe70e37512816b3f7ac2c7fc99"
+      "bytes": 5059,
+      "sha256": "22033cf271ada43cf12f819adaff7ab4d52693e123e50efe5e101589a1148099"
     },
     {
       "surface": "ChatGPT app submission",
@@ -59,8 +59,8 @@
       "submissionType": "app-plus-skills",
       "status": "draft-ready-requires-portal-access",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/store-listings/openai-generative-ui-plugin-submission.json",
-      "bytes": 10696,
-      "sha256": "cdd63df83179d893ee5119dba38cf682c324352c0f867a2e8a669fa623f3dd04",
+      "bytes": 10747,
+      "sha256": "3dcea9fc8dfa3d7978f57f2b0514239231a10b3dd613a8ff49696552ab69243e",
       "positiveTestCaseCount": 5,
       "negativeTestCaseCount": 3,
       "manualStepCount": 6
@@ -93,31 +93,41 @@
       "purpose": "generative ui page desktop",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-generative-ui-page-desktop.png",
       "bytes": 209806,
-      "sha256": "516e726b44cbae7d73177b072b53fa523f36f579d960d47045b318149de8560f"
+      "sha256": "516e726b44cbae7d73177b072b53fa523f36f579d960d47045b318149de8560f",
+      "retainedEvidenceGeneratedAt": "2026-07-24T12:47:27.846Z",
+      "refreshedForHostingMigration": false
     },
     {
       "purpose": "skills install readme",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-skills-install-readme.png",
       "bytes": 124959,
-      "sha256": "f28c2fb3fb165888fa904aa05ee4cdb321d95dc20089051c0a0a5141c2428492"
+      "sha256": "f28c2fb3fb165888fa904aa05ee4cdb321d95dc20089051c0a0a5141c2428492",
+      "retainedEvidenceGeneratedAt": "2026-07-24T12:47:27.846Z",
+      "refreshedForHostingMigration": false
     },
     {
       "purpose": "renderer widget support triage desktop",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-support-triage-desktop.png",
       "bytes": 52417,
-      "sha256": "2c89e93024a1152b7697ea61e00ec7c9f55ba6ad3a0ef888840db48dc042ed51"
+      "sha256": "2c89e93024a1152b7697ea61e00ec7c9f55ba6ad3a0ef888840db48dc042ed51",
+      "retainedEvidenceGeneratedAt": "2026-07-24T12:47:27.846Z",
+      "refreshedForHostingMigration": false
     },
     {
       "purpose": "renderer widget motion desktop",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-motion-desktop.png",
       "bytes": 26345,
-      "sha256": "b100dfbd51d5e76b8fb9549a6779110ecbff17c705a91f3e65db80d1880c0b29"
+      "sha256": "b100dfbd51d5e76b8fb9549a6779110ecbff17c705a91f3e65db80d1880c0b29",
+      "retainedEvidenceGeneratedAt": "2026-07-24T12:47:27.846Z",
+      "refreshedForHostingMigration": false
     },
     {
       "purpose": "renderer widget quiz mobile",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/screenshots/jsonx-renderer-widget-quiz-mobile.png",
       "bytes": 30379,
-      "sha256": "0d75c831781c49d18d0613de56a3512fa04108bf5204b8f64eb255e86a4545f7"
+      "sha256": "0d75c831781c49d18d0613de56a3512fa04108bf5204b8f64eb255e86a4545f7",
+      "retainedEvidenceGeneratedAt": "2026-07-24T12:47:27.846Z",
+      "refreshedForHostingMigration": false
     }
   ],
   "goldenPromptEvidence": {
@@ -144,7 +154,9 @@
       "noneProfileUsesCss": true,
       "reducedMotionSuppressesGsap": true,
       "noModelSuppliedAnimationCode": true
-    }
+    },
+    "retainedEvidenceGeneratedAt": "2026-07-24T12:47:02.639Z",
+    "refreshedForHostingMigration": false
   },
   "browserDemoEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/browser-demo-evidence.json",
@@ -161,12 +173,14 @@
       "credentialNotStoredInBrowserStorage": true,
       "credentialNotRenderedInPageText": true,
       "noHorizontalOverflowAtMobileWidth": true
-    }
+    },
+    "retainedEvidenceGeneratedAt": "2026-07-24T12:47:03.092Z",
+    "refreshedForHostingMigration": false
   },
   "hostedMcpEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
-    "bytes": 4238,
-    "sha256": "18534963b9e5418080c710662505ff3a400490e1422a6c0189e9d9f5395a517c",
+    "bytes": 5338,
+    "sha256": "765ceb152033f1258ac425be7ca0a0268a2b311f4e82ae6d0aa7df10270fd411",
     "stepCount": 7,
     "checks": {
       "healthOk": true,
@@ -174,7 +188,37 @@
       "toolListed": true,
       "rendererResourceReadable": true,
       "validPayloadRendered": true,
-      "invalidPayloadRejected": true
+      "invalidPayloadRejected": true,
+      "rootAndHealth": true,
+      "selfContainedWidget": true,
+      "gsapDisabled": true,
+      "cors": true,
+      "initializeAndNotification": true,
+      "toolAndResourceMetadata": true,
+      "allValidFixturesRendered": true,
+      "allUnsafeFixturesRejected": true,
+      "malformedJsonRejected": true,
+      "getDeleteAndMissingRoute": true,
+      "concurrentStatelessCalls": true
+    },
+    "fullContract": {
+      "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-endpoint-smoke.json",
+      "bytes": 12761,
+      "sha256": "7b744dca0133fe3425a92ec79d0a65a37cdfaf1a7cc9e9cd52e8d0bae1ad8877",
+      "stepCount": 29,
+      "checks": {
+        "rootAndHealth": true,
+        "selfContainedWidget": true,
+        "gsapDisabled": true,
+        "cors": true,
+        "initializeAndNotification": true,
+        "toolAndResourceMetadata": true,
+        "allValidFixturesRendered": true,
+        "allUnsafeFixturesRejected": true,
+        "malformedJsonRejected": true,
+        "getDeleteAndMissingRoute": true,
+        "concurrentStatelessCalls": true
+      }
     }
   },
   "skillInstallerEvidence": {
@@ -188,7 +232,9 @@
       "actualInstallSurfaces": 3,
       "allDryRunsCovered": true,
       "allSurfaceInstallsPassed": true
-    }
+    },
+    "retainedEvidenceGeneratedAt": "2026-07-24T12:47:05.786Z",
+    "refreshedForHostingMigration": false
   },
   "codexInstallEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/codex-install-evidence.json",
@@ -205,7 +251,9 @@
       "corePluginEnabled": true,
       "generativeUiPluginEnabled": true,
       "cachedFilesPresent": true
-    }
+    },
+    "retainedEvidenceGeneratedAt": "2026-07-24T12:47:06.022Z",
+    "refreshedForHostingMigration": false
   },
   "claudeValidationEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/claude-validation-evidence.json",
@@ -220,7 +268,9 @@
       "generativeUiPluginValidationPassed": true
     },
     "claudeCodePackage": "@anthropic-ai/claude-code@2.1.218",
-    "claudeVersion": "2.1.218 (Claude Code)"
+    "claudeVersion": "2.1.218 (Claude Code)",
+    "retainedEvidenceGeneratedAt": "2026-07-24T12:47:13.309Z",
+    "refreshedForHostingMigration": false
   },
   "openCodeSkillEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/opencode-skill-evidence.json",
@@ -236,7 +286,9 @@
       "debugSkillListedGenerativeUi": true
     },
     "openCodePackage": "opencode-ai@1.18.4",
-    "openCodeVersion": "1.18.4"
+    "openCodeVersion": "1.18.4",
+    "retainedEvidenceGeneratedAt": "2026-07-24T12:47:21.131Z",
+    "refreshedForHostingMigration": false
   },
   "githubIssueEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/github-issue-evidence.json",
@@ -259,7 +311,9 @@
       "allRequirementIdsListed": true,
       "allRequirementStatusesListed": true,
       "allRemainingNotesListed": true
-    }
+    },
+    "retainedEvidenceGeneratedAt": "2026-07-24T12:47:21.708Z",
+    "refreshedForHostingMigration": false
   },
   "sourceDocsEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/source-docs-evidence.json",
@@ -274,12 +328,14 @@
       "allDocsUseAllowedHosts": true,
       "allFinalDocUrlsUseAllowedHosts": true,
       "allSourceDocsReachable": true
-    }
+    },
+    "retainedEvidenceGeneratedAt": "2026-07-24T12:47:22.227Z",
+    "refreshedForHostingMigration": false
   },
   "externalGateAccessEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-access.json",
-    "bytes": 3818,
-    "sha256": "af1598a49325336966bb0fbf9a2e431344d1ad7d1275a627a83bdbda0a410214",
+    "bytes": 4043,
+    "sha256": "59da6d9bbd84baee8185b6f7397d5409c0dad4cc4b9c3c0ad8060e84c7fc2290",
     "blockingConditionCount": 3,
     "checks": {
       "probeCompleted": true,
@@ -289,7 +345,8 @@
       "claudeCodeAuthStatusReadable": true,
       "claudeCodeAuthenticated": false,
       "portalEntryPointsReachable": true
-    }
+    },
+    "retainedNonHostingProbeGeneratedAt": "2026-07-24T12:47:24.360Z"
   },
   "npmBoundary": {
     "packageName": "jsonx",
@@ -370,7 +427,7 @@
     "GitHub feature enhancement issue tracking evidence",
     "submission source documentation evidence",
     "external gate access probe evidence",
-    "live hosted MCP transcript capture from https://jsonx-renderer-app.netlify.app/mcp",
+    "live hosted MCP transcript capture from https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp",
     "external gate evidence validation",
     "submission queue generation",
     "portal submission form generation",
@@ -379,8 +436,8 @@
   ],
   "externalGateEvidence": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gate-evidence.json",
-    "bytes": 5460,
-    "sha256": "65c99defe25202f35ede5654accd50f8564b2de7af4a8c130aa206d05ad0b85d",
+    "bytes": 5477,
+    "sha256": "acc92e1427b5b392e64b79b61466b2d87124b41261d64ebd5985bfdeb5450ffe",
     "supplied": true,
     "gateStatus": {
       "appIds": "pending",
@@ -408,13 +465,13 @@
   "submissionQueue": {
     "json": {
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.json",
-      "bytes": 28697,
-      "sha256": "4250bd6f605c580ecae9eccb403dd50226be50da12e883d0d097476fa61df642"
+      "bytes": 28731,
+      "sha256": "7f2a623bc6b9a092f6e958fe5b592cd21a411fb0b0837e8081d0de36896d59a7"
     },
     "markdown": {
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-queue.md",
-      "bytes": 20953,
-      "sha256": "23c00741856acb7eaaf0de8291212cf3667ae5d40b4a99258ec3d72f9550babf"
+      "bytes": 20987,
+      "sha256": "0ea861840f24a37dcd0d276c6d9df0f1bebce990013333593b45c1b2e600e874"
     },
     "submissionCount": 4,
     "receiptRecordedCount": 0,
@@ -435,8 +492,8 @@
       "surface": "OpenAI core JSONX plugin portal draft",
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-core-jsonx.md",
-      "bytes": 8148,
-      "sha256": "3c39380bbe315cf01647ecc273c3ac22af7100070e328d6aee873e4fbea2e61f"
+      "bytes": 8484,
+      "sha256": "5b807ce181908c6155fa236ab45dd5819e6efe4ad6c6aed36c0351e98d93b536"
     },
     {
       "id": "openai-generative-ui",
@@ -444,8 +501,8 @@
       "surface": "OpenAI generative UI plugin portal draft",
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/openai-generative-ui.md",
-      "bytes": 10794,
-      "sha256": "52c61ed17a062c05c080891f314a2d7afe96710617a23215fefe25f8d93dce12"
+      "bytes": 11198,
+      "sha256": "06176150d9c0cb7db29e514549f2a8921c0d34f7e51d1de8a9fc6fe41e368d87"
     },
     {
       "id": "claude-core-jsonx",
@@ -453,8 +510,8 @@
       "surface": "Claude Code core JSONX community submission draft",
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-core-jsonx.md",
-      "bytes": 7883,
-      "sha256": "5d3a60d53b9f6f284b21a49f144ebf7d626a3c8011ba3d1a68c573535462c0b4"
+      "bytes": 8219,
+      "sha256": "c0e8e6370cca95061452d37fd0c66a9cd0addbcb0a55ca18ed610456b0a15397"
     },
     {
       "id": "claude-generative-ui",
@@ -462,23 +519,34 @@
       "surface": "Claude Code generative UI community submission draft",
       "url": "https://jsonx.net/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md",
       "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-forms/claude-generative-ui.md",
-      "bytes": 9219,
-      "sha256": "0d05aa48d6282e37d2e07797173290dfefdf40a4a7b50ef1bef6b75983d49dcc"
+      "bytes": 9555,
+      "sha256": "4297d1a7a1203d385cbd26b6894e147b03dfb7b4118ff681ca27f2d29aee5590"
     }
   ],
   "externalGateRunbook": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/external-gates.md",
-    "bytes": 8745,
-    "sha256": "f20312f29cff381c958a08fb235fbec8a2fb07004890e7b2cdb9fb7d9f7abd92"
+    "bytes": 9113,
+    "sha256": "ea6fa5ccb2551d767b5aa2a78bbfa78c37a7b1988319aa98f2d7406eaf6bb56e"
   },
   "submissionAudit": {
     "path": "docs/intent/generative-ui-plugin/submission-artifacts/current/submission-audit.json",
-    "bytes": 19269,
-    "sha256": "587017cf030310a67b0b61a48b9ba5d2dac2082f6569807da5b35ccbb9ca2172",
+    "bytes": 22585,
+    "sha256": "3adba5b4b0b3b54313426a733da2952edbc0156723c07bdde97c6c567cee2579",
     "status": "implementation-complete-external-gated",
     "requirementCount": 17,
     "provedCount": 13,
     "externalGatedCount": 4,
     "incompleteCount": 0
+  },
+  "hostingRefresh": {
+    "generatedAt": "2026-10-02T10:08:42.632Z",
+    "previousManifestGeneratedAt": "2026-07-24T12:47:27.846Z",
+    "historicalEvidenceCommit": "33821e12d969792cadd8b4029608877c2db01330",
+    "provider": "Cloudflare Workers",
+    "workerVersion": "5ab29f03-146e-4b99-9c5c-1d50666ac44b",
+    "runtimeSourceCommit": "db5d7d1",
+    "bundleSha256": "4d264fb0df819b23a025e392e4db46d7ff105e296b54a9fbf81824d53b4ca022",
+    "note": "Only live hosted endpoint evidence, hosted health, endpoint-bearing packages/listings, pending instructions, queue/runbook/forms, and derived hashes/audit were refreshed. Other evidence and screenshots retain their original dates and content; they do not prove the new public page or ChatGPT connection. App IDs and real developer-mode prompts remain pending.",
+    "retainedFlagSemantics": "Copied skipped/reusedPreviousEvidence flags describe each original dated evidence run, not whether that evidence was re-run during the hosting refresh. See retainedEvidenceGeneratedAt and refreshedForHostingMigration on retained manifest entries."
   }
 }

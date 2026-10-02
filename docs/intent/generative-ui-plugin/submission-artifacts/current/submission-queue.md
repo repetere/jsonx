@@ -1,6 +1,6 @@
 # JSONX Public Submission Queue
 
-Generated: 2026-07-24T12:47:27.848Z
+Generated: 2026-10-02T10:08:42.626Z
 
 This file is generated from the four store listing drafts. It gives the submitter one place to find packages, public evidence, manual checks, receipt fields, and recorder commands. It is not proof that a public submission was sent.
 
@@ -33,7 +33,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 ### ChatGPT Developer Mode
 
 ```bash
-node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.netlify.app/mcp --transcript-url <url> --all-prompts-passed
+node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs chatgpt --connected-mcp-url https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp --transcript-url <url> --all-prompts-passed
 ```
 
 ### Claude Code Smoke
@@ -138,7 +138,7 @@ node docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs 
 
 - [ ] Confirm OpenAI developer or business identity verification.
 - [ ] Confirm the submitter has Apps Management write access.
-- [ ] Complete domain verification for jsonx-renderer-app.netlify.app or move the MCP endpoint to a verified jsonx.net subdomain.
+- [ ] Complete domain verification for jsonx-renderer-app.gpdoc-management.workers.dev or move the MCP endpoint to a verified jsonx.net subdomain.
 - [ ] Attach the final production logo.
 - [ ] Review privacy policy, terms, and support URLs.
 - [ ] Capture live ChatGPT developer-mode transcript evidence after connecting the hosted MCP endpoint.

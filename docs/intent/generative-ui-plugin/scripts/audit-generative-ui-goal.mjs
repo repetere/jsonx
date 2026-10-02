@@ -143,6 +143,7 @@ as external-gated unless --strict-external is set.
   }
 
   const manifest = await readJson("docs/intent/generative-ui-plugin/submission-artifacts/current/manifest.json");
+  const hostedMcpTranscript = await readJson(manifest.hostedMcpEvidence?.path || "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json");
   const externalGateEvidence = getExternalGateEvidence(manifest);
   const skillsIndex = await readJson("skills/index.json");
   const marketplace = await readJson(".agents/plugins/marketplace.json");
@@ -258,8 +259,10 @@ as external-gated unless --strict-external is set.
       checks: {
         appSourcePresent: await fileExists("apps/jsonx-renderer-app/src/server.mjs"),
         widgetPresent: await fileExists("apps/jsonx-renderer-app/web/widget.js"),
-        netlifyAdapterPresent: await fileExists("apps/jsonx-renderer-app/netlify/functions/jsonx-renderer.mjs"),
-        hostedMcpUrlRecorded: manifest.hostedMcpUrl === "https://jsonx-renderer-app.netlify.app/mcp",
+        cloudflareWorkerPresent: await fileExists("apps/jsonx-renderer-app/src/worker.mjs"),
+        cloudflareConfigPresent: await fileExists("apps/jsonx-renderer-app/wrangler.toml"),
+        hostedMcpUrlRecorded: manifest.hostedMcpUrl === "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp",
+        hostedMcpTranscriptMatches: hostedMcpTranscript.hostedMcpUrl === manifest.hostedMcpUrl && hostedMcpTranscript.source === "live hosted JSONX renderer MCP endpoint",
         hostedMcpEvidencePassed: allObjectValuesTrue(manifest.hostedMcpEvidence?.checks),
         chatgptSubmissionPackagePresent: packageSurfaces(manifest, ["ChatGPT app submission"]),
       },

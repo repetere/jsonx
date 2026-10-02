@@ -1,12 +1,47 @@
 {
-  "generatedAt": "2026-07-24T12:47:27.854Z",
+  "generatedAt": "2026-10-02T10:08:42.641Z",
   "source": "JSONX generative UI submission artifact manifest",
-  "gitCommit": "bfc89c9d13023aae008799b566619acfd687634b",
+  "gitCommit": "33821e12d969792cadd8b4029608877c2db01330+worktree",
   "sourceGit": {
-    "headCommit": "bfc89c9d13023aae008799b566619acfd687634b",
-    "dirty": false,
-    "dirtyStatus": [],
-    "ignoredGeneratedArtifactStatusCount": 36
+    "headCommit": "33821e12d969792cadd8b4029608877c2db01330",
+    "dirty": true,
+    "dirtyStatus": [
+      " M .github/workflows/generative-ui-plugin.yml",
+      " M apps/jsonx-renderer-app/README.md",
+      " M apps/jsonx-renderer-app/netlify.toml",
+      " M apps/jsonx-renderer-app/package-lock.json",
+      " M apps/jsonx-renderer-app/package.json",
+      " M apps/jsonx-renderer-app/src/server.mjs",
+      " M apps/jsonx-renderer-app/test/smoke.mjs",
+      " M docs/generative-ui.html",
+      " M docs/intent/generative-ui-plugin/external-gate-evidence.json",
+      " M docs/intent/generative-ui-plugin/external-gate-evidence.template.json",
+      " M docs/intent/generative-ui-plugin/generative-ui-plugin-plan.md",
+      " M docs/intent/generative-ui-plugin/github-issues.md",
+      " M docs/intent/generative-ui-plugin/hosted-renderer-deployment.md",
+      " M docs/intent/generative-ui-plugin/scripts/audit-generative-ui-goal.mjs",
+      " M docs/intent/generative-ui-plugin/scripts/check-external-gate-access.mjs",
+      " M docs/intent/generative-ui-plugin/scripts/check-external-gate-evidence.mjs",
+      " M docs/intent/generative-ui-plugin/scripts/check-public-review-kit.mjs",
+      " M docs/intent/generative-ui-plugin/scripts/prepare-submission-artifacts.mjs",
+      " M docs/intent/generative-ui-plugin/scripts/record-external-gate-evidence.mjs",
+      " M docs/intent/generative-ui-plugin/scripts/validate-external-gate-recorder.mjs",
+      " M docs/intent/generative-ui-plugin/store-listings/openai-generative-ui-plugin-submission.json",
+      " M docs/intent/generative-ui-plugin/submission-readiness.md",
+      " M plugins/claude-jsonx-generative-ui-plugin/README.md",
+      " M plugins/jsonx-generative-ui-plugin/README.md",
+      " M plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs",
+      " M site/generative-ui.html",
+      "?? .github/workflows/deploy-jsonx-renderer.yml",
+      "?? apps/jsonx-renderer-app/.gitignore",
+      "?? apps/jsonx-renderer-app/scripts/",
+      "?? apps/jsonx-renderer-app/src/app.mjs",
+      "?? apps/jsonx-renderer-app/src/worker.mjs",
+      "?? apps/jsonx-renderer-app/test/endpoint-smoke.mjs",
+      "?? apps/jsonx-renderer-app/test/worker-smoke.mjs",
+      "?? apps/jsonx-renderer-app/wrangler.toml"
+    ],
+    "ignoredGeneratedArtifactStatusCount": 0
   },
   "objective": "Installable JSONX and generative UI skills for Codex, Claude Code, and OpenCode; separate core and generative UI plugin packages for Codex and Claude Code; hosted Apps SDK renderer; optional renderer-owned GSAP motion; GitHub issue tracking; GitHub Pages updates; npm package boundary protection.",
   "status": "implementation-complete-external-gated",
@@ -113,8 +148,8 @@
       "githubIssue": "#1111",
       "evidence": [
         "apps/jsonx-renderer-app/",
-        "https://jsonx-renderer-app.netlify.app/mcp",
-        "https://jsonx-renderer-app.netlify.app/widget",
+        "https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp",
+        "https://jsonx-renderer-app.gpdoc-management.workers.dev/widget",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/hosted-mcp-transcript.json",
         "docs/intent/generative-ui-plugin/submission-artifacts/current/packages/chatgpt-app-submission.json"
       ],
@@ -417,5 +452,16 @@
       },
       "remaining": "Requires portal access and final human/legal review before sending public submissions."
     }
-  ]
+  ],
+  "hostingRefresh": {
+    "generatedAt": "2026-10-02T10:08:42.632Z",
+    "previousManifestGeneratedAt": "2026-07-24T12:47:27.846Z",
+    "historicalEvidenceCommit": "33821e12d969792cadd8b4029608877c2db01330",
+    "provider": "Cloudflare Workers",
+    "workerVersion": "5ab29f03-146e-4b99-9c5c-1d50666ac44b",
+    "runtimeSourceCommit": "db5d7d1",
+    "bundleSha256": "4d264fb0df819b23a025e392e4db46d7ff105e296b54a9fbf81824d53b4ca022",
+    "note": "Only live hosted endpoint evidence, hosted health, endpoint-bearing packages/listings, pending instructions, queue/runbook/forms, and derived hashes/audit were refreshed. Other evidence and screenshots retain their original dates and content; they do not prove the new public page or ChatGPT connection. App IDs and real developer-mode prompts remain pending.",
+    "retainedFlagSemantics": "Copied skipped/reusedPreviousEvidence flags describe each original dated evidence run, not whether that evidence was re-run during the hosting refresh. See retainedEvidenceGeneratedAt and refreshedForHostingMigration on retained manifest entries."
+  }
 }

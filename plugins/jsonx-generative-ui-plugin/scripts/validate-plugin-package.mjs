@@ -136,7 +136,7 @@ assert.equal(submission.test_cases.length, 5);
 assert.equal(submission.negative_test_cases.length, 3);
 
 const readiness = fs.readFileSync(path.join(repoRoot, "docs/intent/generative-ui-plugin/submission-readiness.md"), "utf8");
-assert.match(readiness, /https:\/\/jsonx-renderer-app\.netlify\.app\/mcp/);
+assert.match(readiness, /https:\/\/jsonx-renderer-app\.gpdoc-management\.workers\.dev\/mcp/);
 assert.match(readiness, /ChatGPT developer mode/);
 assert.match(readiness, /Claude community marketplace/);
 

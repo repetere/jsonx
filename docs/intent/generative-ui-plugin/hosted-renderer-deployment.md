@@ -1,6 +1,6 @@
 # JSONX Hosted Renderer Deployment
 
-Status: Cloudflare Workers adapter implemented; production deployment and endpoint cutover pending
+Status: Cloudflare Workers deployed and live MCP verified; repository/public-page cutover in progress
 
 Last updated: 2026-10-02
 
@@ -11,13 +11,19 @@ The Worker lives in `apps/jsonx-renderer-app/src/worker.mjs`, with app-local `wr
 | Item | Value |
 | --- | --- |
 | Worker name | `jsonx-renderer-app` |
-| Production URL | Pending actual Cloudflare deployment |
+| Production URL | `https://jsonx-renderer-app.gpdoc-management.workers.dev` |
+| MCP URL | `https://jsonx-renderer-app.gpdoc-management.workers.dev/mcp` |
+| Active version | `5ab29f03-146e-4b99-9c5c-1d50666ac44b` |
+| Runtime source commit | `db5d7d1` |
+| Bundle SHA-256 | `4d264fb0df819b23a025e392e4db46d7ff105e296b54a9fbf81824d53b4ca022` |
+| Live smoke verified | `2026-10-02`, approximately `10:03 UTC` |
+| Deployed settings | GSAP disabled; previews disabled; no bindings, compatibility flags, custom domains, or routes |
 | Compatibility date | `2026-10-02` |
 | Entry point | `.worker-build/worker.mjs` |
 | Routes | `/`, `/healthz`, `/widget`, `/mcp` |
 | Optional variables | `JSONX_ENABLE_GSAP`, `JSONX_WIDGET_DOMAIN` |
 
-This document does not claim a Cloudflare endpoint is live. Active source endpoint defaults and July submission evidence still refer to Netlify until the replacement is deployed and verified.
+The deployed Worker passed the complete live endpoint contract under Node 22: health, widget, CORS, MCP tool/resource metadata, all nine valid and five unsafe fixtures, malformed requests, route behavior, and concurrent stateless calls. Active endpoint references now target Cloudflare. The July Netlify evidence remains historical and is not relabeled as Cloudflare evidence.
 
 ## Build, test, and authorized deployment
 
@@ -39,7 +45,7 @@ Only after deployment access and authorization are available:
 
 ```text
 npm run deploy:worker
-npm run smoke:hosted -- --url https://<actual-worker-origin>
+npm run smoke:hosted -- --url https://jsonx-renderer-app.gpdoc-management.workers.dev
 ```
 
 Use the origin from the verified deployment result. For GSAP-enabled deployment add `--gsap`; if a widget domain is configured add `--widget-domain <domain>`. Keep `wrangler.toml` variables aligned with deployment settings.
@@ -59,7 +65,7 @@ The manual workflow `.github/workflows/deploy-jsonx-renderer.yml` deploys only f
 
 ### Active reference inventory
 
-Update after a real Cloudflare URL is known:
+Updated to the verified Cloudflare origin:
 
 - `apps/jsonx-renderer-app/README.md`
 - `site/generative-ui.html` and its generated `docs/generative-ui.html` mirror
@@ -71,7 +77,7 @@ Update after a real Cloudflare URL is known:
 - The example URL in `record-external-gate-evidence.mjs`
 - Assertions in `check-public-review-kit.mjs`, `audit-generative-ui-goal.mjs`, and `plugins/jsonx-generative-ui-plugin/scripts/validate-plugin-package.mjs`
 
-Scripts above live in `docs/intent/generative-ui-plugin/scripts/` unless another path is given. The goal audit currently checks a Netlify manifest and adapter; change it to distinguish current Cloudflare verification from dated historical evidence during cutover. The app submission draft contains no Netlify endpoint and needs no invented app ID. Package-boundary exclusions of `netlify/` remain useful safeguards.
+Scripts above live in `docs/intent/generative-ui-plugin/scripts/` unless another path is given. The goal audit checks the Cloudflare Worker/config and requires the current manifest and live transcript to agree on the active endpoint, so historical Netlify evidence cannot prove the new deployment. The app submission draft contains no Netlify endpoint and needs no invented app ID. Package-boundary exclusions of `netlify/` remain useful safeguards.
 
 ## Historical Netlify deployment and rollback
 
@@ -88,13 +94,14 @@ Recorded verification: 2026-07-24. Retained for rollback during migration.
 | Widget URL | `https://jsonx-renderer-app.netlify.app/widget` |
 | Recorded verified deploy | `6a6305f3ea5f474b412d2f3e` |
 
-Recorded checks covered health, widget, CORS, MCP initialize/list/read, valid renders, unsafe rejection, and Netlify secret scanning. `submission-artifacts/current/hosted-mcp-transcript.json` and companion manifests, access checks, generated listings, queues, and archives document those Netlify runs. Preserve their dates/content until a new evidence set is generated.
+Recorded checks covered health, widget, CORS, MCP initialize/list/read, valid renders, unsafe rejection, and Netlify secret scanning. The original transcript, manifests, access checks, listings, and queues are preserved with their original July dates in [the pre-migration Git snapshot](https://github.com/repetere/jsonx/tree/33821e12d969792cadd8b4029608877c2db01330/docs/intent/generative-ui-plugin/submission-artifacts/current). The new current evidence identifies which hosting artifacts were refreshed and which unrelated evidence retains its original date.
 
 Run rollback builds from `apps/jsonx-renderer-app` using retained `netlify.toml` and its Node-only check command. The historical Netlify MCP upload flow required normalizing `//proxy/` to `/proxy/` after a 404. This procedure does not itself authorize deployment or cancellation.
 
 ## Open submission work
 
-- Complete Cloudflare deployment and the cutover checklist
+- Publish the endpoint-reference/evidence cutover and verify the public page
+- Verify Netlify downgrade terms preserve remaining sites and custom domains before canceling the paid plan
 - Connect the verified new MCP URL in ChatGPT developer mode and capture prompts
 - Add the approved app ID to `plugins/jsonx-generative-ui-plugin/.app.json` only after the app exists
 - Run authenticated Claude Code smoke prompts for both split plugins before submission
