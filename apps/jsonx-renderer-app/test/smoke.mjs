@@ -48,6 +48,7 @@ async function main() {
     await cp(new URL("../web/", import.meta.url), new URL("web/", bundleFixture), { recursive: true });
     await cp(new URL("../src/jsonx-validator.mjs", import.meta.url), new URL("netlify/functions/jsonx-validator.mjs", bundleFixture));
     await cp(new URL("../src/render-tool.mjs", import.meta.url), new URL("netlify/functions/render-tool.mjs", bundleFixture));
+    await cp(new URL("../src/app.mjs", import.meta.url), new URL("netlify/functions/app.mjs", bundleFixture));
     await cp(new URL("../src/server.mjs", import.meta.url), new URL("netlify/functions/server.mjs", bundleFixture));
 
     const bundledServer = await import(`${new URL("netlify/functions/server.mjs", bundleFixture).href}?smoke=${Date.now()}`);

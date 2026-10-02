@@ -1,5 +1,6 @@
 [build]
-command = "npm run check"
+# Legacy rollback path; Workers validation runs separately in CI.
+command = "npm run check:node"
 publish = "public"
 
 [build.environment]
