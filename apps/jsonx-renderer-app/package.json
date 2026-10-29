@@ -30,7 +30,7 @@
     "node": "22.x"
   },
   "devDependencies": {
-    "wrangler": "4.149.0",
+    "wrangler": "4.155.0",
     "esbuild": "0.28.1"
   }
 }
