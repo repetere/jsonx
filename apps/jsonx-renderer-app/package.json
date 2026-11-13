@@ -24,7 +24,7 @@
     "zod": "^4.6.7"
   },
   "overrides": {
-    "@hono/node-server": "^2.1.5"
+    "@hono/node-server": "^2.1.8"
   },
   "engines": {
     "node": "22.x"
